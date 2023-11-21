@@ -12,6 +12,7 @@ import Customeranalysis from './components/customer/Customeranalysis.js'
 import Drugsprescriptions from './components/customer/Drugsprescriptions.js'
 import Examinationreports from './components/customer/Examinationreports.js'
 import Medicalscans from './components/customer/Medicalscans.js'
+import Analysis from "./pages/fixedData/analysis.js";
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
             <Route path="/cities" element={<Cities />} />
             <Route path="/countries" element={<Countries />} />
             <Route path="/currency" element={<Currency />} />
+            <Route path="/analysis" element={<Analysis />} />
             <Route path='/customer' element={<Customer />}/>
             <Route path='/customeranalysis' element={<Customeranalysis />}/>
             <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>
