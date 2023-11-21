@@ -31,12 +31,13 @@ function Analysis(props) {
             return(<AnalysisCard key={idx} fetchData={fetchData} setEditting={setEditting} analysis={analysis}/>)
         })}
         {JSON.stringify(props.user)}
+        {JSON.stringify(props.model)}
     </div>
   )
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user.data,
+    user: state.user,
     model:state.model
 });
 const mapDispatchToProps = { set,setAddingCity };
