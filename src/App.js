@@ -6,6 +6,12 @@ import LoginPage from "./pages/login";
 import Signup from "./pages/signup";
 import Cities from "./pages/fixedData/locationInfo/cities.js";
 import Countries from "./pages/fixedData/locationInfo/countries.js";
+import Customer from "./components/customer/Customer.js";
+import Customeranalysis from './components/customer/Customeranalysis.js'
+import Drugsprescriptions from './components/customer/Drugsprescriptions.js'
+import Examinationreports from './components/customer/Examinationreports.js'
+import Medicalscans from './components/customer/Medicalscans.js'
+
 
 function App() {
   return (
@@ -17,6 +23,11 @@ function App() {
             <Route path="/signin" element={<LoginPage />} />
             <Route path="/cities" element={<Cities />} />
             <Route path="/countries" element={<Countries />} />
+            <Route path='/customer' element={<Customer />}/>
+            <Route path='/customeranalysis' element={<Customeranalysis />}/>
+            <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>
+            <Route path='/examinationreports' element={<Examinationreports />}/>
+            <Route path='/edicalscans' element={<Medicalscans />}/>
           </Routes>
         </BrowserRouter>
       </Provider>
