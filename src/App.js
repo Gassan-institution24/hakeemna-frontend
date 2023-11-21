@@ -15,6 +15,9 @@ import Medicalscans from './components/customer/Medicalscans.js'
 import Analysis from "./pages/fixedData/analysis.js";
 import Diets from "./pages/fixedData/diets.js";
 
+import Stakeholdertypes from "./components/stakeholder/Stakeholdertypes.js";
+import Stackholder from "./components/stakeholder/Stackholder.js";
+import Suppliersoffers from "./components/stakeholder/Suppliersoffers.js";
 
 function App() {
   return (
@@ -34,6 +37,9 @@ function App() {
             <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>
             <Route path='/examinationreports' element={<Examinationreports />}/>
             <Route path='/edicalscans' element={<Medicalscans />}/>
+            <Route path='/stakeholdertypes' element={<Stakeholdertypes />}/>
+            <Route path='/stakeholder' element={<Stackholder />}/>
+            <Route path='/suppliersoffers' element={<Suppliersoffers />}/>
           </Routes>
         </BrowserRouter>
       </Provider>
