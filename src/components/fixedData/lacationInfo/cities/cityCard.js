@@ -13,7 +13,7 @@ function CityCard({city,setEditingCity,fetchData}) {
                 <h3> {city.code}</h3>
                 <h3>{city.name_english}</h3>
                 <h3>{city.name_arabic} </h3>
-                <p>{city.country.name_english} {city.country.code}</p>
+                <p>{city?.country?.name_english} {city?.country?.code}</p>
                 <button onClick={()=>{setEditingCity(city._id)}}>Edit</button>
                 <button onClick={deleteHandler}>Delete</button>
             </div>
