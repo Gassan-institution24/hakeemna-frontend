@@ -2,35 +2,25 @@ import React, { useState, useEffect } from "react";
 import axiosHandler from "../../handlers/axiosHandler";
 
 const Stackholder = () => {
-  useEffect(() => {
-    // gat all stakeholder
-    axiosHandler({
-      setData: setResponse,
-      setError,
-      method: "GET",
-      path: "stackholder/",
-      data: customerInfo,
-    });
-  }, []);
 
-  const [customerInfo, setCustomerInfo] = useState({});
+  const [stakeholderInfo, setstakeholderInfo] = useState({});
   const [response, setResponse] = useState();
   const [error, setError] = useState();
   function changeHandler(e) {
     const { name, value } = e.target;
-    setCustomerInfo({ ...customerInfo, [name]: value });
+    setstakeholderInfo({ ...stakeholderInfo, [name]: value });
   }
   const createStakeholder = async () => {
     await axiosHandler({
-      setData: setResponse,
       setError,
       method: "POST",
       path: "stackholder/",
-      data: customerInfo,
+      data: stakeholderInfo,
     });
     alert("done");
   };
   return (
+    <>
     <div>
       <div>
         <input
@@ -45,6 +35,7 @@ const Stackholder = () => {
       </div>
       <hr />
     </div>
+</>
   );
 };
 
