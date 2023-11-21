@@ -1,54 +1,44 @@
-import React, { useState } from 'react'
-import { connect } from "react-redux";
-import { set } from '../../../store/user.store';
+import React, { useEffect, useState } from 'react'
+// import { connect } from "react-redux";
+// import { set } from '../../../store/user.store';
+// import { setAddingCity } from '../../../store/addingAndEditing.store';
 import axiosHandler from '../../../handlers/axiosHandler';
+import AddCountry from '../../../components/fixedData/lacationInfo/countries/AddCountry';
+import CountryCard from '../../../components/fixedData/lacationInfo/countries/CountryCard';
+import EditCountry from '../../../components/fixedData/lacationInfo/countries/EditCountry';
 
-function Countries(props) {
-    const [userInfo,setUserInfo] = useState({name:'',email:'',password:'',confirmPassword:'',role:''})
+function Countries() {
+    const [isAdding,setIsAdding]=useState(false)
+    const [editting,setEditting]=useState('')
+    const [countries,setCountries] = useState()
     const [error,setError] = useState()
-    function changeHandler (e){
-        const {name,value} = e.target
-        setUserInfo({...userInfo,[name]:value})
+
+
+    const fetchData = async()=>{
+        await axiosHandler({setData:setCountries,setError:setError,method:'GET',path:'countries/'}) 
     }
-    async function submitHandler (e){
-        e.preventDefault()
-        await axiosHandler({setData:props.set,setError,method:'POST',path:'users/Country',data:userInfo})
-        setUserInfo({name:'',email:'',password:'',confirmPassword:'',role:''})
-        console.log(props.user);
-    }
-    console.log(props.user);
-    
+    console.log('Countries', countries)
+    useEffect(()=>{
+        fetchData()
+    },[])
     
   return (
-    <div>Country
-        <form onSubmit={submitHandler}>
-            <label>name</label>
-            <input type='text' value={userInfo.name} onChange={changeHandler} name='name'/>
-            <label>email</label>
-            <input type='email' value={userInfo.email} onChange={changeHandler} name='email' />
-            <label>password</label>
-            <input type='password' value={userInfo.password} onChange={changeHandler} name='password'/>
-            <label>confirmPassword</label>
-            <input type='password' value={userInfo.confirmPassword} onChange={changeHandler} name='confirmPassword'/>
-            <label>role</label>
-            <select value={userInfo.role} onChange={changeHandler} name='role'>
-                <option defaultChecked >customer</option>
-                <option>admin</option>
-                <option>super admin</option>
-                <option>stakeholder</option>
-                <option>insurance</option>
-            </select>
-            <button type='submit'>Submit</button>
-        </form>
-        {JSON.stringify(error)}
-        {JSON.stringify(props.user)}
+    <div>Countries
+        {isAdding && <AddCountry setIsAdding ={setIsAdding} fetchData={fetchData}/>}
+        {editting && <EditCountry setEditting={setEditting} editting={editting} fetchData={fetchData}/>}
+        <button onClick={()=>{setIsAdding(!isAdding)}}>Add</button>
+        {countries?.map((country,idx)=>{
+            return(<CountryCard key={idx} setEditting={setEditting} fetchData={fetchData} country={country}/>)
+        })}
 
     </div>
   )
 }
 
-const mapStateToProps = (state) => ({
-    user: state.user
-});
-const mapDispatchToProps = { set };
-export default connect(mapStateToProps, mapDispatchToProps)(Countries);
+// const mapStateToProps = (state) => ({
+//     user: state.user,
+//     model:state.model
+// });
+// const mapDispatchToProps = { set,setAddingCity };
+// export default connect(mapStateToProps, mapDispatchToProps)(Countries);
+export default Countries

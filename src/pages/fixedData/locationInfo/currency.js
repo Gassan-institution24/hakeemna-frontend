@@ -1,54 +1,35 @@
-import React, { useState } from 'react'
-import { connect } from "react-redux";
-import { set } from '../../../store/user.store';
+import React, { useEffect, useState } from 'react'
 import axiosHandler from '../../../handlers/axiosHandler';
+import AddCurrency from '../../../components/fixedData/lacationInfo/currency/AddCurrency';
+import CurrencyCard from '../../../components/fixedData/lacationInfo/currency/CurrencyCard';
+import EditCurrency from '../../../components/fixedData/lacationInfo/currency/EditCurrency';
 
-function Currency(props) {
-    const [userInfo,setUserInfo] = useState({name:'',email:'',password:'',confirmPassword:'',role:''})
+function Currency() {
+    const [isAdding,setIsAdding]=useState(false)
+    const [editting,setEditting]=useState('')
+    const [currency,setCurrency] = useState()
     const [error,setError] = useState()
-    function changeHandler (e){
-        const {name,value} = e.target
-        setUserInfo({...userInfo,[name]:value})
+
+
+    const fetchData = async()=>{
+        await axiosHandler({setData:setCurrency,setError:setError,method:'GET',path:'currency/'}) 
     }
-    async function submitHandler (e){
-        e.preventDefault()
-        await axiosHandler({setData:props.set,setError,method:'POST',path:'users/Currency',data:userInfo})
-        setUserInfo({name:'',email:'',password:'',confirmPassword:'',role:''})
-        console.log(props.user);
-    }
-    console.log(props.user);
-    
+    console.log('currency', currency)
+    useEffect(()=>{
+        fetchData()
+    },[])
     
   return (
-    <div>Currency
-        <form onSubmit={submitHandler}>
-            <label>name</label>
-            <input type='text' value={userInfo.name} onChange={changeHandler} name='name'/>
-            <label>email</label>
-            <input type='email' value={userInfo.email} onChange={changeHandler} name='email' />
-            <label>password</label>
-            <input type='password' value={userInfo.password} onChange={changeHandler} name='password'/>
-            <label>confirmPassword</label>
-            <input type='password' value={userInfo.confirmPassword} onChange={changeHandler} name='confirmPassword'/>
-            <label>role</label>
-            <select value={userInfo.role} onChange={changeHandler} name='role'>
-                <option defaultChecked >customer</option>
-                <option>admin</option>
-                <option>super admin</option>
-                <option>stakeholder</option>
-                <option>insurance</option>
-            </select>
-            <button type='submit'>Submit</button>
-        </form>
-        {JSON.stringify(error)}
-        {JSON.stringify(props.user)}
+    <div>currency
+        {isAdding && <AddCurrency setIsAdding ={setIsAdding} fetchData={fetchData}/>}
+        {editting && <EditCurrency setEditting={setEditting} editting={editting} fetchData={fetchData}/>}
+        <button onClick={()=>{setIsAdding(!isAdding)}}>Add</button>
+        {currency?.map((currency,idx)=>{
+            return(<CurrencyCard key={idx} setEditting={setEditting} fetchData={fetchData} currency={currency}/>)
+        })}
 
     </div>
   )
 }
 
-const mapStateToProps = (state) => ({
-    user: state.user
-});
-const mapDispatchToProps = { set };
-export default connect(mapStateToProps, mapDispatchToProps)(Currency);
+export default Currency
