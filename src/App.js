@@ -12,7 +12,7 @@ import Drugsprescriptions from './components/customer/Drugsprescriptions.js'
 import Examinationreports from './components/customer/Examinationreports.js'
 import Medicalscans from './components/customer/Medicalscans.js'
 import Stakeholdertypes from "./components/stakeholder/Stakeholdertypes.js";
-import Stackholder from "./components/stakeholder/Stackholder.js";
+import Stackholder from "./pages/stackholders/Stackholder.js";
 import Suppliersoffers from "./components/stakeholder/Suppliersoffers.js";
 
 function App() {
