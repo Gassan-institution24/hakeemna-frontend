@@ -14,10 +14,16 @@ import Examinationreports from './components/customer/Examinationreports.js'
 import Medicalscans from './components/customer/Medicalscans.js'
 import Analysis from "./pages/fixedData/analysis.js";
 import Diets from "./pages/fixedData/diets.js";
-
+import Diseases from "./pages/fixedData/diseases.js";
 import Stakeholdertypes from "./pages/stackholders/Stakeholdertypes.js"
 import Stackholder from "./pages/stackholders/Stackholder.js";
 import Suppliersoffers from "./pages/stackholders/Suppliersoffers.js";
+import Diseases from "./pages/fixedData/diseases.js";
+import MedicalCategories from "./pages/fixedData/medicalCategories.js";
+import Medicines from "./pages/fixedData/medicines.js";
+import MedicinesFamilies from "./pages/fixedData/medicinesFamilies.js";
+import Specialities from "./pages/fixedData/specialities.js";
+import SubSpecialities from "./pages/fixedData/subSpecialities.js";
 
 function App() {
   return (
@@ -32,6 +38,12 @@ function App() {
             <Route path="/currency" element={<Currency />} />
             <Route path="/analysis" element={<Analysis />} />
             <Route path="/diets" element={<Diets />} />
+            <Route path="/diseases" element={<Diseases />} />
+            <Route path="/medcats" element={<MedicalCategories />} />
+            <Route path="/medicines" element={<Medicines />} />
+            <Route path="/medFamilies" element={<MedicinesFamilies />} />
+            <Route path="/specialities" element={<Specialities />} />
+            <Route path="/subspecialities" element={<SubSpecialities />} />
             <Route path='/customer' element={<Customer />}/>
             <Route path='/customeranalysis' element={<Customeranalysis />}/>
             <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>
