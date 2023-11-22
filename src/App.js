@@ -19,6 +19,7 @@ import Stakeholdertypes from "./components/stakeholder/Stakeholdertypes.js";
 import Stackholder from "./pages/stackholders/Stackholder.js";
 import Suppliersoffers from "./components/stakeholder/Suppliersoffers.js";
 import MedicalCategories from "./pages/fixedData/medicalCategories.js";
+import Medicines from "./pages/fixedData/medicines.js";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Route path="/diets" element={<Diets />} />
             <Route path="/diseases" element={<Diseases />} />
             <Route path="/medcats" element={<MedicalCategories />} />
+            <Route path="/medicines" element={<Medicines />} />
             <Route path='/customer' element={<Customer />}/>
             <Route path='/customeranalysis' element={<Customeranalysis />}/>
             <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>
