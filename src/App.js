@@ -14,7 +14,7 @@ import Examinationreports from './components/customer/Examinationreports.js'
 import Medicalscans from './components/customer/Medicalscans.js'
 import Analysis from "./pages/fixedData/analysis.js";
 import Diets from "./pages/fixedData/diets.js";
-
+import Diseases from "./pages/fixedData/diseases.js";
 import Stakeholdertypes from "./components/stakeholder/Stakeholdertypes.js";
 import Stackholder from "./pages/stackholders/Stackholder.js";
 import Suppliersoffers from "./components/stakeholder/Suppliersoffers.js";
@@ -32,6 +32,7 @@ function App() {
             <Route path="/currency" element={<Currency />} />
             <Route path="/analysis" element={<Analysis />} />
             <Route path="/diets" element={<Diets />} />
+            <Route path="/diseases" element={<Diseases />} />
             <Route path='/customer' element={<Customer />}/>
             <Route path='/customeranalysis' element={<Customeranalysis />}/>
             <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>
