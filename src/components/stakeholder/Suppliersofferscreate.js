@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosHandler from "../../handlers/axiosHandler";
 
-const Suppliersoffers = () => {
+const Suppliersofferscreate = () => {
     useEffect(() => {
         // gat all suppliersoffers
       axiosHandler({setData:setResponse, setError, method:"GET", path:"suppliersoffers/", data:suppliersoffersInfo});
@@ -36,4 +36,4 @@ const Suppliersoffers = () => {
       );
 }
 
-export default Suppliersoffers
+export default Suppliersofferscreate

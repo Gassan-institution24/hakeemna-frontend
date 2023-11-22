@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axiosHandler from "../../handlers/axiosHandler";
 
-const Stakeholdertypes = () => {
-    useEffect(() => {
-        // gat all stakeholders
-      axiosHandler({setData:setResponse, setError, method:"GET", path:"stackholdertype/", data:stakeholderInfo});
-      }, []);
-    
+const Stakeholdertypescreate = () => {
+ 
       const [stakeholderInfo, setstakeholderInfo] = useState({});
       const [response, setResponse] = useState();
       const [error, setError] = useState();
@@ -15,7 +11,7 @@ const Stakeholdertypes = () => {
         setstakeholderInfo({ ...stakeholderInfo, [name]: value });
       }
       const createStakeholder = async () => {
-        await axiosHandler({setData:setResponse, setError, method:"POST", path:"stackholdertype/", data:stakeholderInfo});
+        await axiosHandler({ setError, method:"POST", path:"stackholdertype/", data:stakeholderInfo});
         alert("done")
       };
       return (
@@ -36,4 +32,4 @@ const Stakeholdertypes = () => {
       );
 }
 
-export default Stakeholdertypes
+export default Stakeholdertypescreate

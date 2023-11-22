@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import axiosHandler from "../../handlers/axiosHandler";
-const Stackholderupdate = ({ info }) => {
+const Stakeholdertypesupdate = ({ info }) => {
   const [data, setData] = useState();
   const [error, setError] = useState();
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/stackholder/")
+      .get("http://localhost:3000/api/stackholdertype/")
       .then((response) => {
         setData(response.data);
       })
@@ -15,17 +15,18 @@ const Stackholderupdate = ({ info }) => {
       });
   }, []);
 
-  const update = (e, id) => {
+  const update = (id) => {
     axiosHandler({
-      data: { stakeholder_name: data },
+      data: { Place_of_service: data },
       setError,
       method: "PATCH",
-      path: `stackholder/${id}`,
+      path: `stackholdertype/${id}`,
     });
+    console.log({ Place_of_service: data });
   };
   return (
-    <>
-      <form onSubmit={(e) => update(e, info._id)}>
+    <div>
+      <form onSubmit={() => update(info._id)}>
         <input
           onChange={(e) => {
             setData(e.target.value);
@@ -33,8 +34,8 @@ const Stackholderupdate = ({ info }) => {
         />
         <button>ubdate</button>
       </form>
-    </>
+    </div>
   );
 };
 
-export default Stackholderupdate;
+export default Stakeholdertypesupdate;

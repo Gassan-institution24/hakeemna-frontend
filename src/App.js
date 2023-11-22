@@ -15,9 +15,9 @@ import Medicalscans from './components/customer/Medicalscans.js'
 import Analysis from "./pages/fixedData/analysis.js";
 import Diets from "./pages/fixedData/diets.js";
 
-import Stakeholdertypes from "./components/stakeholder/Stakeholdertypes.js";
+import Stakeholdertypes from "./pages/stackholders/Stakeholdertypes.js"
 import Stackholder from "./pages/stackholders/Stackholder.js";
-import Suppliersoffers from "./components/stakeholder/Suppliersoffers.js";
+import Suppliersoffers from "./pages/stackholders/Suppliersoffers.js";
 
 function App() {
   return (

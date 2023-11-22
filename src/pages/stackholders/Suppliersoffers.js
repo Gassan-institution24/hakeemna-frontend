@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axiosHandler from "../../handlers/axiosHandler";
-import Stackholderupdate from "../../components/stakeholder/Stackholderupdate";
-import Stackholdercreate from "../../components/stakeholder/Stackholdercreate";
-const Stackholder = () => {
-  const [stakeholderInfo, setstakeholderInfo] = useState([]);
+import Suppliersofferscreate from "../../components/stakeholder/Suppliersofferscreate";
+import Suppliersoffersupdate from "../../components/stakeholder/Suppliersoffersupdate";
+const Suppliersoffers = () => {
+  const [suppliersoffersInfo, setsuppliersoffersInfo] = useState([]);
+  const [response, setResponse] = useState();
   const [error, setError] = useState();
   const [updating, setUpdating] = useState(false);
   const [adding, setAdding] = useState(false);
-
   useEffect(() => {
     // gat all stakeholder
-
     axiosHandler({
-      setData: setstakeholderInfo,
+      setData: setsuppliersoffersInfo,
       setError,
       method: "GET",
-      path: "stackholder/",
+      path: "suppliersoffers/",
     });
   }, []);
 
@@ -23,18 +22,17 @@ const Stackholder = () => {
     axiosHandler({
       setError,
       method: "DELETE",
-      path: `stackholder/${id}`,
+      path: `suppliersoffers/${id}`,
     });
   };
-
   return (
     <>
-      {stakeholderInfo?.map((info, i) => {
+      {suppliersoffersInfo?.map((info, i) => {
         return (
           <div key={i}>
-            {info.stakeholder_name}
-            {updating && <Stackholderupdate info={info} />}
-            {adding && <Stackholdercreate />}
+            {info.Offer_name}
+            {updating && <Suppliersoffersupdate info={info} />}
+            {adding && <Suppliersofferscreate />}
             <button onClick={() => Delete(info._id)}>Delete</button>
             <button
               onClick={() => {
@@ -57,4 +55,4 @@ const Stackholder = () => {
   );
 };
 
-export default Stackholder;
+export default Suppliersoffers;
