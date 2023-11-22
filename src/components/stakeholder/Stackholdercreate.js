@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosHandler from "../../handlers/axiosHandler";
 
-const Stackholder = () => {
+const Stackholdercreate = () => {
 
   const [stakeholderInfo, setstakeholderInfo] = useState({});
   const [response, setResponse] = useState();
@@ -17,7 +17,6 @@ const Stackholder = () => {
       path: "stackholder/",
       data: stakeholderInfo,
     });
-    alert("done");
   };
   return (
     <>
@@ -39,4 +38,4 @@ const Stackholder = () => {
   );
 };
 
-export default Stackholder;
+export default Stackholdercreate;

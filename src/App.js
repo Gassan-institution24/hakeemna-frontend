@@ -15,9 +15,10 @@ import Medicalscans from './components/customer/Medicalscans.js'
 import Analysis from "./pages/fixedData/analysis.js";
 import Diets from "./pages/fixedData/diets.js";
 import Diseases from "./pages/fixedData/diseases.js";
-import Stakeholdertypes from "./components/stakeholder/Stakeholdertypes.js";
+import Stakeholdertypes from "./pages/stackholders/Stakeholdertypes.js"
 import Stackholder from "./pages/stackholders/Stackholder.js";
-import Suppliersoffers from "./components/stakeholder/Suppliersoffers.js";
+import Suppliersoffers from "./pages/stackholders/Suppliersoffers.js";
+import Diseases from "./pages/fixedData/diseases.js";
 import MedicalCategories from "./pages/fixedData/medicalCategories.js";
 import Medicines from "./pages/fixedData/medicines.js";
 import MedicinesFamilies from "./pages/fixedData/medicinesFamilies.js";
