@@ -20,6 +20,7 @@ import Stackholder from "./pages/stackholders/Stackholder.js";
 import Suppliersoffers from "./components/stakeholder/Suppliersoffers.js";
 import MedicalCategories from "./pages/fixedData/medicalCategories.js";
 import Medicines from "./pages/fixedData/medicines.js";
+import MedicinesFamilies from "./pages/fixedData/medicinesFamilies.js";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="/diseases" element={<Diseases />} />
             <Route path="/medcats" element={<MedicalCategories />} />
             <Route path="/medicines" element={<Medicines />} />
+            <Route path="/medFamilies" element={<MedicinesFamilies />} />
             <Route path='/customer' element={<Customer />}/>
             <Route path='/customeranalysis' element={<Customeranalysis />}/>
             <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>
