@@ -1,54 +1,41 @@
-import React, { useState, useEffect } from "react";
-import axiosHandler from "../../handlers/axiosHandler";
+import React, { useEffect, useState } from 'react'
+import { connect } from "react-redux";
+import axiosHandler from '../../handlers/axiosHandler';
+import AddModel from '../../handlers/AddModel';
+import EditModel from '../../handlers/EditModel';
+import ModelCard from '../../handlers/ModelCard';
 
-const Added_value_tax_GD = () => {
-    const [taxGD, setTaxGD] = useState([]);
-    const [error, setError] = useState([]);
-    useEffect(() => {
-        // gat all stakeholder
-        axiosHandler({
-          setData: setTaxGD,
-          setError,
-          method: "GET",
-          path: "addedvaluetaxgd",
-        });
-      }, []);
-      const Delete = (id) => {
-        axiosHandler({
-          setError,
-          method: "DELETE",
-          path: `stackholder/${id}`,
-        });
-      };
+function Added_value_tax_GD(props) {
+    const [data,setData] = useState()
+    const [isAdding,setIsAdding] = useState(false)
+    const [editting,setEditting] = useState('')
+    const [error,setError] = useState()
+
+
+    const fetchData = async()=>{
+        await axiosHandler({setData,setError,method:'GET',path:'addedvaluetaxgd/'}) 
+    }
+    useEffect(()=>{
+        fetchData()
+    },[])
+    
   return (
-    <>
-    {taxGD?.map((tax, i) => {
-      return (
-        <div key={i}>
-          {tax.TAX_code}
-          <button onClick={() => Delete(tax._id)}>Delete</button>
-          {/* {updating && <Stackholderupdate tax={tax} />}
-          {adding && <Stackholdercreate />} */}
-          {/* <button onClick={() => Delete(tax._id)}>Delete</button>
-          <button
-            onClick={() => {
-              setUpdating(!updating);
-            }}
-          >
-            Update
-          </button>
-          <button
-            onClick={() => {
-              setAdding(!adding);
-            }}
-          >
-            create
-          </button> */}
-        </div>
-      );
-    })}
-  </>
+    <div>Surgeries
+        {isAdding && <AddModel textDetails={[{name:'TAX_code',nameShown:'TAX_code'}]}   path={'addedvaluetaxgd'} selectDetails={[{name:"unit_service",nameShown:"unit service", path:"unitservice"}]} setIsAdding ={setIsAdding} fetchData={fetchData}/>}
+        {editting && <EditModel textDetails={[{name:'TAX_code',nameShown:'TAX_code'}]}  path={`addedvaluetaxgd`} selectDetails={[{name:"unit_service",nameShown:"unit service", path:"unitservice"}]} editting={editting} fetchData={fetchData}/>}
+        <button onClick={()=>{setIsAdding(!isAdding)}}>Add</button>
+        {data?.map((one,idx)=>{
+            return(<ModelCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one} path={'addedvaluetaxgd'} h2items={['TAX_code','unit_service']}/>)
+        })}
+        {JSON.stringify(data)}
+        {JSON.stringify(props.model)}
+    </div>
   )
 }
 
-export default Added_value_tax_GD
+const mapStateToProps = (state) => ({
+    user: state.user,
+    model:state.model
+});
+const mapDispatchToProps = {};
+export default connect(mapStateToProps, mapDispatchToProps)(Added_value_tax_GD);
