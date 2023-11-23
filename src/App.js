@@ -18,12 +18,12 @@ import Diseases from "./pages/fixedData/diseases.js";
 import Stakeholdertypes from "./pages/stackholders/Stakeholdertypes.js"
 import Stackholder from "./pages/stackholders/Stackholder.js";
 import Suppliersoffers from "./pages/stackholders/Suppliersoffers.js";
-import Diseases from "./pages/fixedData/diseases.js";
 import MedicalCategories from "./pages/fixedData/medicalCategories.js";
 import Medicines from "./pages/fixedData/medicines.js";
 import MedicinesFamilies from "./pages/fixedData/medicinesFamilies.js";
 import Specialities from "./pages/fixedData/specialities.js";
 import SubSpecialities from "./pages/fixedData/subSpecialities.js";
+import Added_value_tax_GD from "./pages/accounting/Added_value_tax_GD.js";
 
 function App() {
   return (
@@ -52,6 +52,7 @@ function App() {
             <Route path='/stakeholdertypes' element={<Stakeholdertypes />}/>
             <Route path='/stakeholder' element={<Stackholder />}/>
             <Route path='/suppliersoffers' element={<Suppliersoffers />}/>
+            <Route path='/taxgd' element={<Added_value_tax_GD />}/>
           </Routes>
         </BrowserRouter>
       </Provider>

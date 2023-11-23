@@ -4,7 +4,6 @@ import axiosHandler from "../../handlers/axiosHandler";
 const Stakeholdertypescreate = () => {
  
       const [stakeholderInfo, setstakeholderInfo] = useState({});
-      const [response, setResponse] = useState();
       const [error, setError] = useState();
       function changeHandler(e) {
         const { name, value } = e.target;
