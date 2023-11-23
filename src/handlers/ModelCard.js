@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import axiosHandler from "./axiosHandler";
 
 function ModelCard({ one, fetchData, setEditting, path, h2items, pitems }) {
+    const [error,setError]=useState()
   async function deleteHandler() {
-    await axiosHandler({ method: "DELETE", path: `${path}/${one._id}` });
+    await axiosHandler({ method: "DELETE",setError, path: `${path}/${one._id}` });
     fetchData();
   }
   return (

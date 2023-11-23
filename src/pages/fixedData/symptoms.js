@@ -13,7 +13,7 @@ function Symptoms(props) {
 
 
     const fetchData = async()=>{
-        await axiosHandler({setData,setError,method:'GET',path:'surgeries/'}) 
+        await axiosHandler({setData,setError,method:'GET',path:'symptoms/'}) 
     }
     useEffect(()=>{
         fetchData()
@@ -22,10 +22,10 @@ function Symptoms(props) {
   return (
     <div>Symptoms
         {isAdding && <AddModel textDetails={[{name:'name',nameShown:'name'},{name:'description',nameShown:'description'}]} path={'symptoms'} setIsAdding ={setIsAdding} fetchData={fetchData}/>}
-        {editting && <EditModel textDetails={[{name:'name',nameShown:'name'},{name:'description',nameShown:'description'}]} path={'symptoms'} editting={editting} fetchData={fetchData}/>}
+        {editting && <EditModel textDetails={[{name:"name",nameShown:'name'},{name:"description",nameShown:'description'}]} path={'symptoms'} editting={editting} fetchData={fetchData}/>}
         <button onClick={()=>{setIsAdding(!isAdding)}}>Add</button>
         {data?.map((one,idx)=>{
-            return(<ModelCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one} path={'/symptoms'} h2items={['name']} pitems={['description']}/>)
+            return(<ModelCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one} path={'symptoms'} h2items={['name']} pitems={['description']}/>)
         })}
         {JSON.stringify(data)}
         {JSON.stringify(props.model)}

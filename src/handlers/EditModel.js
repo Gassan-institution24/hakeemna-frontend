@@ -55,7 +55,7 @@ function EditModel({
     e.preventDefault();
     await axiosHandler({
       setError,
-      method: "POST",
+      method: "PATCH",
       path: path,
       data: info,
     });
@@ -122,7 +122,7 @@ function EditModel({
               <label>{detail?.nameShown}</label>
               <input
                 type={detail.type || "text"}
-                value={info?.name}
+                // value={info[detail?.name] || ''}
                 onChange={changeHandler}
                 name={detail?.name}
               />
