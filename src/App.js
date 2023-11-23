@@ -26,7 +26,8 @@ import SubSpecialities from "./pages/fixedData/subSpecialities.js";
 import Added_value_tax_GD from "./pages/accounting/Added_value_tax_GD.js";
 import Surgeries from "./pages/fixedData/surgeries.js";
 import Symptoms from "./pages/fixedData/symptoms.js";
-
+import Valuetax from "./pages/accounting/Valuetax.js";
+import Deductionamount from "./pages/accounting/Deductionamount.js";
 function App() {
   return ( 
     <div className="App">
@@ -57,6 +58,8 @@ function App() {
             <Route path='/stakeholder' element={<Stackholder />}/>
             <Route path='/suppliersoffers' element={<Suppliersoffers />}/>
             <Route path='/taxgd' element={<Added_value_tax_GD />}/>
+            <Route path='/valuetax' element={<Valuetax />}/>
+            <Route path='/deductionamount' element={<Deductionamount />}/>
           </Routes>
         </BrowserRouter>
       </Provider>
