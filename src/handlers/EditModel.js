@@ -10,9 +10,10 @@ function EditModel({
   multiSelectDetails,
   path,
   fetchData,
-  editting
+  editting,
+  selectDetailsManually
 }) {
-  const [info, setInfo] = useState();
+  const [info, setInfo] = useState({});
   const [data, setData] = useState({});
   const [selected, setSelected] = useState({});
   // const [checkedData,setCheckedData] =useState([])
@@ -25,10 +26,12 @@ function EditModel({
   function checkHandler(e, category) {
     const { checked, value } = e.target;
     if (checked) {
+        console.log('checked')
       let selectedCategory = info[category] || [];
       setInfo({ ...info, [category]: [...selectedCategory, value] });
     } else {
-      const data = info[category].filter((item) => item !== value);
+        console.log("not checked")
+      const data = info[category].filter((item) => item !== value&&item._id !== value);
       setInfo({ ...info, [category]: data });
     }
   }
@@ -56,9 +59,10 @@ function EditModel({
     await axiosHandler({
       setError,
       method: "PATCH",
-      path: path,
+      path: `${path}/${editting}`,
       data: info,
     });
+    setInfo({})
     clearForm();
     fetchData();
   }
@@ -110,7 +114,7 @@ function EditModel({
     });
   }, []);
   useEffect(() => {
-    setInfo(selected);
+    setInfo(selected)
   }, [selected]);
   return (
     <div>
@@ -122,10 +126,27 @@ function EditModel({
               <label>{detail?.nameShown}</label>
               <input
                 type={detail.type || "text"}
-                // value={info[detail?.name] || ''}
+                value={info[detail?.name] || ''}
                 onChange={changeHandler}
                 name={detail?.name}
               />
+            </>
+          );
+        })}
+        {selectDetailsManually?.map((detail) => {
+          return (
+            <>
+              <label>{detail?.nameShown}</label>
+              <select onChange={changeHandler} name={detail?.name}>
+                <option></option>
+                {detail?.options?.map((obj) => {
+                  return (
+                    <option value={obj.name}>
+                      {obj.nameShown}
+                    </option>
+                  );
+                })}
+              </select>
             </>
           );
         })}
@@ -158,7 +179,7 @@ function EditModel({
                       type="checkbox"
                       id={one.name}
                       name={one.name}
-                      checked={info[detail.name]?.includes(one._id)||info[detail.name]?.map((name)=>{if(name==detail.name){return true}})}
+                      checked={info[detail.name]?.includes(one._id) || info[detail.name]?.some((model) => model._id === one._id)}
                       onChange={(e) => checkHandler(e, detail.name)}
                       value={one._id}
                     />

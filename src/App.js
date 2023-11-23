@@ -26,6 +26,9 @@ import SubSpecialities from "./pages/fixedData/subSpecialities.js";
 import Added_value_tax_GD from "./pages/accounting/Added_value_tax_GD.js";
 import Surgeries from "./pages/fixedData/surgeries.js";
 import Symptoms from "./pages/fixedData/symptoms.js";
+import AppointmentTypes from "./pages/shared/AppointmentTypes.js";
+import Appointments from "./pages/shared/Appointments.js";
+
 import Valuetax from "./pages/accounting/Valuetax.js";
 import Deductionamount from "./pages/accounting/Deductionamount.js";
 function App() {
@@ -49,6 +52,8 @@ function App() {
             <Route path="/subspecialities" element={<SubSpecialities />} />
             <Route path="/surgeries" element={<Surgeries />} />
             <Route path="/symptoms" element={<Symptoms />} />
+            <Route path="/appointypes" element={<AppointmentTypes />} />
+            <Route path="/appointments" element={<Appointments />} />
             <Route path='/customer' element={<Customer />}/>
             <Route path='/customeranalysis' element={<Customeranalysis />}/>
             <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>

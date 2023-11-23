@@ -25,7 +25,7 @@ function Surgeries(props) {
         {editting && <EditModel textDetails={[{name:'name',nameShown:'name'},{name:'description',nameShown:'description'}]} multiSelectDetails={[{name:'diseases',path:'diseases'}]} path={'surgeries'} editting={editting} fetchData={fetchData}/>}
         <button onClick={()=>{setIsAdding(!isAdding)}}>Add</button>
         {data?.map((one,idx)=>{
-            return(<ModelCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one} path={'/surgeries'} h2items={['name']} pitems={['description']}/>)
+            return(<ModelCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one} path={'surgeries'} h2items={['name']} pitems={['description']}/>)
         })}
         {JSON.stringify(data)}
         {JSON.stringify(props.model)}
