@@ -108,12 +108,12 @@ function AddModel({
         {textDetails?.map((detail) => {
           return (
             <>
-              <label>{detail?.name}</label>
+              <label>{detail?.nameShown}</label>
               <input
                 type={detail.type || "text"}
-                value={info?.detail?.nameDB}
+                value={info?.detail?.name}
                 onChange={changeHandler}
-                name={detail?.nameDB}
+                name={detail?.name}
               />
             </>
           );
@@ -121,8 +121,8 @@ function AddModel({
         {selectDetails?.map((detail) => {
           return (
             <>
-              <label>{detail?.name}</label>
-              <select onChange={changeHandler} name={detail?.nameDB}>
+              <label>{detail?.nameShown}</label>
+              <select onChange={changeHandler} name={detail?.name}>
                 <option></option>
                 {data[detail?.name]?.map((obj) => {
                   return (
@@ -138,7 +138,7 @@ function AddModel({
         {multiSelectDetails?.map((detail) => {
           return (
             <>
-              <label>{detail.name}</label>
+              <label>{detail.nameShown}</label>
               {data[detail?.name]?.map((one) => {
                 return (
                   <>
@@ -146,7 +146,7 @@ function AddModel({
                     <input
                       type="checkbox"
                       id={one.name}
-                      name={one.nameDB}
+                      name={one.name}
                       onChange={(e) => checkHandler(e, detail.name)}
                       value={one._id}
                     />

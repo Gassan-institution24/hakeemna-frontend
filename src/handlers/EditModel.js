@@ -119,12 +119,12 @@ function EditModel({
         {textDetails?.map((detail) => {
           return (
             <>
-              <label>{detail?.name}</label>
+              <label>{detail?.nameShown}</label>
               <input
                 type={detail.type || "text"}
                 value={info?.name}
                 onChange={changeHandler}
-                name={detail?.nameDB}
+                name={detail?.name}
               />
             </>
           );
@@ -132,7 +132,7 @@ function EditModel({
         {selectDetails?.map((detail) => {
           return (
             <>
-              <label>{detail?.name}</label>
+              <label>{detail?.nameShown}</label>
               <select onChange={changeHandler} name={detail?.name}>
                 <option></option>
                 {data[detail?.name]?.map((obj) => {
@@ -149,7 +149,7 @@ function EditModel({
         {multiSelectDetails?.map((detail) => {
           return (
             <>
-              <label>{detail.name}</label>
+              <label>{detail.nameShown}</label>
               {data[detail?.name]?.map((one) => {
                 return (
                   <>
@@ -157,7 +157,7 @@ function EditModel({
                     <input
                       type="checkbox"
                       id={one.name}
-                      name={one.nameDB}
+                      name={one.name}
                       checked={info[detail.name]?.includes(one._id)||info[detail.name]?.map((name)=>{if(name==detail.name){return true}})}
                       onChange={(e) => checkHandler(e, detail.name)}
                       value={one._id}
