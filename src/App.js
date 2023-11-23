@@ -24,9 +24,11 @@ import MedicinesFamilies from "./pages/fixedData/medicinesFamilies.js";
 import Specialities from "./pages/fixedData/specialities.js";
 import SubSpecialities from "./pages/fixedData/subSpecialities.js";
 import Added_value_tax_GD from "./pages/accounting/Added_value_tax_GD.js";
+import Surgeries from "./pages/fixedData/surgeries.js";
+import Symptoms from "./pages/fixedData/symptoms.js";
 
 function App() {
-  return (
+  return ( 
     <div className="App">
       <Provider store={Store}>
         <BrowserRouter>
@@ -44,6 +46,8 @@ function App() {
             <Route path="/medFamilies" element={<MedicinesFamilies />} />
             <Route path="/specialities" element={<Specialities />} />
             <Route path="/subspecialities" element={<SubSpecialities />} />
+            <Route path="/surgeries" element={<Surgeries />} />
+            <Route path="/symptoms" element={<Symptoms />} />
             <Route path='/customer' element={<Customer />}/>
             <Route path='/customeranalysis' element={<Customeranalysis />}/>
             <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>
