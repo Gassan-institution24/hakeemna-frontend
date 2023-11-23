@@ -85,8 +85,8 @@ function AddModel({
     }
   }
   useEffect(() => {
-    selectDetails?.map((detail) => {
-      getFromDB({
+    selectDetails?.map(async(detail) => {
+      await getFromDB({
         topic: detail?.name,
         setError,
         method: "GET",
