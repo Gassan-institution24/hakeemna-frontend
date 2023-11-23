@@ -4,7 +4,8 @@ import axiosHandler from "../../handlers/axiosHandler";
 const Stackholdercreate = () => {
 
   const [stakeholderInfo, setstakeholderInfo] = useState({});
-  const [response, setResponse] = useState();
+  const [unitservice, setUnitservice] = useState([]);
+  const [stackholdertype, setStackholdertype] = useState([]);
   const [error, setError] = useState();
   function changeHandler(e) {
     const { name, value } = e.target;
@@ -18,6 +19,12 @@ const Stackholdercreate = () => {
       data: stakeholderInfo,
     });
   };
+  useEffect(()=>{
+    axiosHandler({setData:setUnitservice,setError,method:'GET',path:'unitservice'})
+},[])
+  useEffect(()=>{
+    axiosHandler({setData:setStackholdertype,setError,method:'GET',path:'stackholdertype'})
+},[])
   return (
     <>
     <div>
@@ -30,6 +37,26 @@ const Stackholdercreate = () => {
         />
         <br />
         <br />
+        <select>
+          <option>Select unitservice</option>
+          {unitservice.map((unit,i)=>{
+                    return(
+                        <option value={unit._id} key={i}>
+                          {unit.name_english}
+                        </option>
+                    )
+                })}
+        </select>
+        <select>
+          <option>Select stackholdertype</option>
+          {stackholdertype.map((stack,i)=>{
+                    return(
+                        <option value={stack._id} key={i}>
+                          {stack.type}
+                        </option>
+                    )
+                })}
+        </select>
         <button onClick={createStakeholder}>CREATE</button>
       </div>
       <hr />
