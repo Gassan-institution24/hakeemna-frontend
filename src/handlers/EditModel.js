@@ -10,7 +10,8 @@ function EditModel({
   multiSelectDetails,
   path,
   fetchData,
-  editting
+  editting,
+  selectDetailsManually
 }) {
   const [info, setInfo] = useState({});
   const [data, setData] = useState({});
@@ -129,6 +130,23 @@ function EditModel({
                 onChange={changeHandler}
                 name={detail?.name}
               />
+            </>
+          );
+        })}
+        {selectDetailsManually?.map((detail) => {
+          return (
+            <>
+              <label>{detail?.nameShown}</label>
+              <select onChange={changeHandler} name={detail?.name}>
+                <option></option>
+                {detail?.options?.map((obj) => {
+                  return (
+                    <option value={obj.name}>
+                      {obj.nameShown}
+                    </option>
+                  );
+                })}
+              </select>
             </>
           );
         })}

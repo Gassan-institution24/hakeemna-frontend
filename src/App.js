@@ -25,6 +25,7 @@ import Specialities from "./pages/fixedData/specialities.js";
 import SubSpecialities from "./pages/fixedData/subSpecialities.js";
 import Surgeries from "./pages/fixedData/surgeries.js";
 import Symptoms from "./pages/fixedData/symptoms.js";
+import AppointmentTypes from "./pages/shared/AppointmentTypes.js";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
             <Route path="/subspecialities" element={<SubSpecialities />} />
             <Route path="/surgeries" element={<Surgeries />} />
             <Route path="/symptoms" element={<Symptoms />} />
+            <Route path="/appointypes" element={<AppointmentTypes />} />
             <Route path='/customer' element={<Customer />}/>
             <Route path='/customeranalysis' element={<Customeranalysis />}/>
             <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>

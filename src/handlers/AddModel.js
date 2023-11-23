@@ -10,6 +10,7 @@ function AddModel({
   multiSelectDetails,
   path,
   fetchData,
+  selectDetailsManually
 }) {
   const [info, setInfo] = useState();
   const [data, setData] = useState({});
@@ -118,6 +119,23 @@ function AddModel({
             </>
           );
         })}
+        {selectDetailsManually?.map((detail) => {
+          return (
+            <>
+              <label>{detail?.nameShown}</label>
+              <select onChange={changeHandler} name={detail?.name}>
+                <option></option>
+                {detail?.options?.map((option) => {
+                  return (
+                    <option value={option.name}>
+                      {option.nameShown}
+                    </option>
+                  );
+                })}
+              </select>
+            </>
+          );
+        })}
         {selectDetails?.map((detail) => {
           return (
             <>
@@ -159,6 +177,7 @@ function AddModel({
         <button type="submit">Submit</button>
         {JSON.stringify(data)}
       </form>
+      {JSON.stringify(info)}
     </div>
   );
 }
