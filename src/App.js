@@ -18,7 +18,6 @@ import Diseases from "./pages/fixedData/diseases.js";
 import Stakeholdertypes from "./pages/stackholders/Stakeholdertypes.js"
 import Stackholder from "./pages/stackholders/Stackholder.js";
 import Suppliersoffers from "./pages/stackholders/Suppliersoffers.js";
-import Diseases from "./pages/fixedData/diseases.js";
 import MedicalCategories from "./pages/fixedData/medicalCategories.js";
 import Medicines from "./pages/fixedData/medicines.js";
 import MedicinesFamilies from "./pages/fixedData/medicinesFamilies.js";
