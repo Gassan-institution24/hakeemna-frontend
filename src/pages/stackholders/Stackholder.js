@@ -10,7 +10,6 @@ const Stackholder = () => {
 
   useEffect(() => {
     // gat all stakeholder
-
     axiosHandler({
       setData: setstakeholderInfo,
       setError,

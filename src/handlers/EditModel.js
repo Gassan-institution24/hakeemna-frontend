@@ -4,15 +4,17 @@ import { connect } from "react-redux";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-function AddModel({
+function EditModel({
   textDetails,
   selectDetails,
   multiSelectDetails,
   path,
   fetchData,
+  editting
 }) {
   const [info, setInfo] = useState();
   const [data, setData] = useState({});
+  const [selected, setSelected] = useState({});
   // const [checkedData,setCheckedData] =useState([])
   const [error, setError] = useState();
 
@@ -53,7 +55,7 @@ function AddModel({
     e.preventDefault();
     await axiosHandler({
       setError,
-      method: "POST",
+      method: "PATCH",
       path: path,
       data: info,
     });
@@ -100,10 +102,19 @@ function AddModel({
         path: detail?.path,
       });
     });
+    axiosHandler({
+      setData: setSelected,
+      setError,
+      method: "GET",
+      path: `${path}/${editting}`,
+    });
   }, []);
+  useEffect(() => {
+    setInfo(selected);
+  }, [selected]);
   return (
     <div>
-      AddModel
+      EditModel
       <form id="myForm" onSubmit={submitHandler}>
         {textDetails?.map((detail) => {
           return (
@@ -111,7 +122,7 @@ function AddModel({
               <label>{detail?.nameShown}</label>
               <input
                 type={detail.type || "text"}
-                value={info?.detail?.name}
+                // value={info[detail?.name] || ''}
                 onChange={changeHandler}
                 name={detail?.name}
               />
@@ -126,7 +137,7 @@ function AddModel({
                 <option></option>
                 {data[detail?.name]?.map((obj) => {
                   return (
-                    <option value={obj._id}>
+                    <option selected={info[detail?.name]===obj.id} value={obj._id}>
                       {obj.name_english || obj.name}
                     </option>
                   );
@@ -147,6 +158,7 @@ function AddModel({
                       type="checkbox"
                       id={one.name}
                       name={one.name}
+                      checked={info[detail.name]?.includes(one._id)||info[detail.name]?.map((name)=>{if(name==detail.name){return true}})}
                       onChange={(e) => checkHandler(e, detail.name)}
                       value={one._id}
                     />
@@ -158,6 +170,8 @@ function AddModel({
         })}
         <button type="submit">Submit</button>
         {JSON.stringify(data)}
+        <p>info</p>
+        {JSON.stringify(info)}
       </form>
     </div>
   );
@@ -168,4 +182,4 @@ const mapStateToProps = (state) => ({
   model: state.model,
 });
 const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(AddModel);
+export default connect(mapStateToProps, mapDispatchToProps)(EditModel);
