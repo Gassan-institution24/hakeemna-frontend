@@ -12,7 +12,7 @@ function ModelCard({ one, fetchData, setEditting, path, h2items, pitems }) {
     <div className="border">
       {h2items?.map((item) => {
         return(
-            <h2>{item}:{one[item]}</h2>
+            <h2>{item}:{JSON.stringify(one[item])}</h2>
         )
       })}
       {pitems?.map((item) => {

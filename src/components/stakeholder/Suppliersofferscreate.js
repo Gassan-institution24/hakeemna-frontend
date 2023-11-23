@@ -6,13 +6,22 @@ const Suppliersofferscreate = () => {
         // gat all suppliersoffers
       axiosHandler({setData:setResponse, setError, method:"GET", path:"suppliersoffers/", data:suppliersoffersInfo});
       }, []);
+    useEffect(() => {
+      axiosHandler({setData:setEmployeetype, setError, method:"GET", path:"employeetypes"});
+      }, []);
     
-      const [suppliersoffersInfo, setsuppliersoffersInfo] = useState({});
+    useEffect(() => {
+      axiosHandler({setData:setEmployeetype, setError, method:"GET", path:"stackholder"});
+      }, []);
+    
+      const [employeetype, setEmployeetype] = useState([]);
+      const [suppliersoffersInfo, setSuppliersoffersInfo] = useState([]);
+      const [stakeholder, setStakeholder] = useState([]);
       const [response, setResponse] = useState();
       const [error, setError] = useState();
       function changeHandler(e) {
         const { name, value } = e.target;
-        setsuppliersoffersInfo({ ...suppliersoffersInfo, [name]: value });
+        setSuppliersoffersInfo({ ...suppliersoffersInfo, [name]: value });
       }
       const createSuppliersoffers= async () => {
         await axiosHandler({setData:setResponse, setError, method:"POST", path:"suppliersoffers/", data:suppliersoffersInfo});
@@ -29,6 +38,26 @@ const Suppliersofferscreate = () => {
             />
             <br />
             <br />
+            <select>
+          <option>Select employeetype</option>
+          {employeetype.map((employeetype,i)=>{
+                    return(
+                        <option value={employeetype._id} key={i}>
+                          {employeetype.name_english}
+                        </option>
+                    )
+                })}
+        </select>
+        <select>
+          <option>Select stakeholder</option>
+          {stakeholder.map((stakeholder,i)=>{
+                    return(
+                        <option value={stakeholder._id} key={i}>
+                          {stakeholder.type}
+                        </option>
+                    )
+                })}
+        </select>
             <button onClick={createSuppliersoffers}>CREATE</button>
           </div>
           <hr />

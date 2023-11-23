@@ -5,7 +5,7 @@ import AddModel from '../../handlers/AddModel';
 import EditModel from '../../handlers/EditModel';
 import ModelCard from '../../handlers/ModelCard';
 
-function Surgeries(props) {
+function Valuetax(props) {
     const [data,setData] = useState()
     const [isAdding,setIsAdding] = useState(false)
     const [editting,setEditting] = useState('')
@@ -13,19 +13,19 @@ function Surgeries(props) {
 
 
     const fetchData = async()=>{
-        await axiosHandler({setData,setError,method:'GET',path:'surgeries/'}) 
+        await axiosHandler({setData,setError,method:'GET',path:'addedvaluetax/'}) 
     }
     useEffect(()=>{
         fetchData()
     },[])
     
   return (
-    <div>Surgeries
-        {isAdding && <AddModel textDetails={[{name:'name',nameShown:'name'},{name:'description',nameShown:'description'}]} multiSelectDetails={[{name:'diseases',path:'diseases'}]} selectDetails={[]} path={'surgeries'} setIsAdding ={setIsAdding} fetchData={fetchData}/>}
-        {editting && <EditModel textDetails={[{name:'name',nameShown:'name'},{name:'description',nameShown:'description'}]} multiSelectDetails={[{name:'diseases',path:'diseases'}]} path={'surgeries'} editting={editting} fetchData={fetchData}/>}
+    <div>Valuetax
+        {isAdding && <AddModel textDetails={[{name:'place_of_sevice',nameShown:'place of sevice'}]}   path={'addedvaluetax'} selectDetails={[{name:"unit_service",nameShown:"unit service", path:"unitservice"}]} setIsAdding ={setIsAdding} fetchData={fetchData}/>}
+        {editting && <EditModel textDetails={[{name:'place_of_sevice',nameShown:'place of sevice'}]}  path={`addedvaluetax`} selectDetails={[{name:"unit_service",nameShown:"unit service", path:"unitservice"}]} editting={editting} fetchData={fetchData}/>}
         <button onClick={()=>{setIsAdding(!isAdding)}}>Add</button>
         {data?.map((one,idx)=>{
-            return(<ModelCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one} path={'surgeries'} h2items={['name']} pitems={['description']}/>)
+            return(<ModelCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one} path={'addedvaluetax'} h2items={['place_of_sevice','unit_service']}/>)
         })}
         {JSON.stringify(data)}
         {JSON.stringify(props.model)}
@@ -38,4 +38,4 @@ const mapStateToProps = (state) => ({
     model:state.model
 });
 const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(Surgeries);
+export default connect(mapStateToProps, mapDispatchToProps)(Valuetax);
