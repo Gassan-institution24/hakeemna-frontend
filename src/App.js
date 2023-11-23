@@ -23,11 +23,12 @@ import Medicines from "./pages/fixedData/medicines.js";
 import MedicinesFamilies from "./pages/fixedData/medicinesFamilies.js";
 import Specialities from "./pages/fixedData/specialities.js";
 import SubSpecialities from "./pages/fixedData/subSpecialities.js";
+import Added_value_tax_GD from "./pages/accounting/Added_value_tax_GD.js";
 import Surgeries from "./pages/fixedData/surgeries.js";
 import Symptoms from "./pages/fixedData/symptoms.js";
 
 function App() {
-  return (
+  return ( 
     <div className="App">
       <Provider store={Store}>
         <BrowserRouter>
@@ -55,6 +56,7 @@ function App() {
             <Route path='/stakeholdertypes' element={<Stakeholdertypes />}/>
             <Route path='/stakeholder' element={<Stackholder />}/>
             <Route path='/suppliersoffers' element={<Suppliersoffers />}/>
+            <Route path='/taxgd' element={<Added_value_tax_GD />}/>
           </Routes>
         </BrowserRouter>
       </Provider>
