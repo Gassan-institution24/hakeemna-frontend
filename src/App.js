@@ -28,9 +28,12 @@ import Surgeries from "./pages/fixedData/surgeries.js";
 import Symptoms from "./pages/fixedData/symptoms.js";
 import AppointmentTypes from "./pages/shared/AppointmentTypes.js";
 import Appointments from "./pages/shared/Appointments.js";
-
 import Valuetax from "./pages/accounting/Valuetax.js";
 import Deductionamount from "./pages/accounting/Deductionamount.js";
+import Deductionconfig from "./pages/accounting/Deductionconfig.js";
+import Hospital from "./pages/accounting/Hospital.js";
+import Incomepayment from "./pages/accounting/Incomepayment.js";
+import Licensmovment from "./pages/accounting/Licensmovment.js";
 function App() {
   return ( 
     <div className="App">
@@ -65,6 +68,10 @@ function App() {
             <Route path='/taxgd' element={<Added_value_tax_GD />}/>
             <Route path='/valuetax' element={<Valuetax />}/>
             <Route path='/deductionamount' element={<Deductionamount />}/>
+            <Route path='/deductionconfig' element={<Deductionconfig />}/>
+            <Route path='/hospital' element={<Hospital />}/>
+            <Route path='/incomepayment' element={<Incomepayment />}/>
+            <Route path='/licensmovment' element={<Licensmovment />}/>
           </Routes>
         </BrowserRouter>
       </Provider>
