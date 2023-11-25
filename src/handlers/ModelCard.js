@@ -10,20 +10,21 @@ function ModelCard({ one, fetchData, setEditting, path, h2items, pitems }) {
   }
   return (
     <div className="border">
-      {h2items?.map((item) => {
+      {h2items?.map((item,i) => {
         return(
-            <h2>{item}:{JSON.stringify(one[item])}</h2>
+            <h2 key={i}>{item}:{JSON.stringify(one[item])}</h2>
         )
       })}
-      {pitems?.map((item) => {
+      {pitems?.map((item,i) => {
         return(
-            <p>{item}:{one[item]}</p>
+            <p key={i}>{item}:{one[item]}</p>
         )
       })}
 
       <button
         onClick={() => {
           setEditting(one._id);
+
         }}
       >
         Edit

@@ -85,7 +85,7 @@ function AddModel({
     }
   }
   useEffect(() => {
-    selectDetails?.map(async(detail) => {
+    selectDetails?.map(async(detail,i) => {
       await getFromDB({
         topic: detail?.name,
         setError,
@@ -93,7 +93,7 @@ function AddModel({
         path: detail?.path,
       });
     });
-    multiSelectDetails?.map(async (detail) => {
+    multiSelectDetails?.map(async (detail,i) => {
       await getFromDB({
         topic: detail?.name,
         setError,
@@ -106,9 +106,9 @@ function AddModel({
     <div>
       AddModel
       <form id="myForm" onSubmit={submitHandler}>
-        {textDetails?.map((detail) => {
+        {textDetails?.map((detail,i) => {
           return (
-            <>
+            <div key={i}>
               <label>{detail?.nameShown}</label>
               <input
                 type={detail.type || "text"}
@@ -116,50 +116,50 @@ function AddModel({
                 onChange={changeHandler}
                 name={detail?.name}
               />
-            </>
+            </div>
           );
         })}
-        {selectDetailsManually?.map((detail) => {
+        {selectDetailsManually?.map((detail,i) => {
           return (
-            <>
+            <div key={i}>
               <label>{detail?.nameShown}</label>
               <select onChange={changeHandler} name={detail?.name}>
                 <option></option>
-                {detail?.options?.map((option) => {
+                {detail?.options?.map((option,i) => {
                   return (
-                    <option value={option.name}>
+                    <option key={i} value={option.name}>
                       {option.nameShown}
                     </option>
                   );
                 })}
               </select>
-            </>
+            </div>
           );
         })}
-        {selectDetails?.map((detail) => {
+        {selectDetails?.map((detail,i) => {
           return (
-            <>
+            <div key={i}>
               <label>{detail?.nameShown}</label>
               <select onChange={changeHandler} name={detail?.name}>
                 <option></option>
-                {data[detail?.name]?.map((obj) => {
+                {data[detail?.name]?.map((obj,i) => {
                   return (
-                    <option value={obj._id}>
+                    <option key={i} value={obj._id}>
                       {obj.name_english || obj.name}
                     </option>
                   );
                 })}
               </select>
-            </>
+            </div>
           );
         })}
-        {multiSelectDetails?.map((detail) => {
+        {multiSelectDetails?.map((detail,i) => {
           return (
-            <>
+            <div key={i}>
               <label>{detail.nameShown}</label>
-              {data[detail?.name]?.map((one) => {
+              {data[detail?.name]?.map((one,i) => {
                 return (
-                  <>
+                  <div key={i}>
                     <label>{one.name || one.name_english}</label>
                     <input
                       type="checkbox"
@@ -168,10 +168,10 @@ function AddModel({
                       onChange={(e) => checkHandler(e, detail.name)}
                       value={one._id}
                     />
-                  </>
+                  </div>
                 );
               })}
-            </>
+            </div>
           );
         })}
         <button type="submit">Submit</button>
