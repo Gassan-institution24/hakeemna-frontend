@@ -104,7 +104,6 @@ function AddModel({
   }, []);
   return (
     <div>
-      AddModel
       <form id="myForm" onSubmit={submitHandler}>
         {textDetails?.map((detail,i) => {
           return (
@@ -175,7 +174,7 @@ function AddModel({
           );
         })}
         <button type="submit">Submit</button>
-        {JSON.stringify(data)}
+        {/* {JSON.stringify(data)} */}
       </form>
       {JSON.stringify(info)}
     </div>

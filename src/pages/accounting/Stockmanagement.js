@@ -5,7 +5,7 @@ import AddModel from "../../handlers/AddModel";
 import EditModel from "../../handlers/EditModel";
 import ModelCard from "../../handlers/ModelCard";
 
-const Licensmovment = (props) => {
+const Stockmanagement = (props) => {
   const [data, setData] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [editting, setEditting] = useState("");
@@ -15,32 +15,28 @@ const Licensmovment = (props) => {
       setData,
       setError,
       method: "GET",
-      path: "licensemovements",
+      path: "stockmanagement",
     });
   };
   useEffect(() => {
     fetchData();
   }, []);
-
   return (
     <div>
-      licensemovements
       {isAdding && (
         <AddModel
           textDetails={[
             {
-              name: "Users_num_license_name",
-              nameShown: "Users_num_license_name",
+              name: "test",
+              nameShown: "test",
             },
-          ]}
-          path={"licensemovements"}
-          selectDetails={[
             {
-              name: "unit_service",
-              nameShown: "unit service",
-              path: "unitservice",
+              name: "code",
+              nameShown: "code",
+              type : "number"
             },
           ]}
+          path={"stockmanagement"}
           setIsAdding={setIsAdding}
           fetchData={fetchData}
         />
@@ -49,22 +45,21 @@ const Licensmovment = (props) => {
         <EditModel
           textDetails={[
             {
-              name: "Users_num_license_name",
-              nameShown: "Users_num_license_name",
+              name: "test",
+              nameShown: "test",
             },
-          ]}
-          path={`licensemovements`}
-          selectDetails={[
             {
-              name: "unit_service",
-              nameShown: "unit service",
-              path: "unitservice",
+              name: "code",
+              nameShown: "code",
+              type : "number"
             },
           ]}
+          path={`stockmanagement`}
           editting={editting}
           fetchData={fetchData}
         />
       )}
+
       <button
         onClick={() => {
           setIsAdding(!isAdding);
@@ -79,12 +74,11 @@ const Licensmovment = (props) => {
             fetchData={fetchData}
             setEditting={setEditting}
             one={one}
-            path={"licensemovements"}
-            h2items={["Users_num_license_name", "unit_service"]}
+            path={"stockmanagement"}
+            h2items={["test"]}
           />
         );
       })}
-      {JSON.stringify(data)}
       {JSON.stringify(data)}
       {JSON.stringify(props.model)}
     </div>
@@ -96,5 +90,4 @@ const mapStateToProps = (state) => ({
   model: state.model,
 });
 const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(Licensmovment);
-
+export default connect(mapStateToProps, mapDispatchToProps)(Stockmanagement);
