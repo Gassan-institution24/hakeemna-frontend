@@ -19,6 +19,7 @@ function Appointments(props) {
       path: "appointments",
     });
   };
+  console.log(props)
   useEffect(() => {
     fetchData();
   }, []);
@@ -50,6 +51,11 @@ function Appointments(props) {
           ]}
           selectDetails={[
             {
+              name: "appointment_type",
+              nameShown: "appointment type",
+              path: "appointments/types",
+            },
+            {
               name: "unit_service",
               nameShown: "unit service",
               path: "unitservice",
@@ -68,11 +74,6 @@ function Appointments(props) {
               name: "work_shift",
               nameShown: "work shift",
               path: "wshifts",
-            },
-            {
-              name: "appointment_type",
-              nameShown: "appointment type",
-              path: "appointments/types",
             },
             {
               name: "customer",
@@ -159,12 +160,14 @@ function Appointments(props) {
             setEditting={setEditting}
             one={one}
             path={"appointments"}
-            h2items={["name",'description','start_date','end_date']}
+            h2items={["name",'description','start_time','end_time']}
           />
         );
       })}
       {JSON.stringify(data)}
-      {JSON.stringify(props.model)}
+      <p>user</p>
+      {JSON.stringify('useeeerrrrrr',props.user)}
+      {JSON.stringify('proops',props)}
     </div>
   );
 }

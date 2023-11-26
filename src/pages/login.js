@@ -1,6 +1,6 @@
 import React,{ useState } from 'react'
 import { connect } from "react-redux";
-import { set } from '../store/user.store';
+import { setToken } from '../store/user.store';
 import axiosHandler from '../handlers/axiosHandler'
 
 function Login(props) {
@@ -12,10 +12,10 @@ function Login(props) {
     }
     async function submitHandler (e){
         e.preventDefault()
-        await axiosHandler({setData:props.set,setError,method:'POST',path:'users/login',data:userInfo})
+        await axiosHandler({setData:props.setToken,setError,method:'POST',path:'users/login',data:userInfo})
         setUserInfo({email:'',password:''})
-    }
-  return (
+      }
+      return (
     <div>welcome
       <form onSubmit={submitHandler}>
             <label>email</label>
@@ -35,5 +35,5 @@ function Login(props) {
 const mapStateToProps = (state) => ({
   user: state.user
 });
-const mapDispatchToProps = {set};
+const mapDispatchToProps = {setToken};
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

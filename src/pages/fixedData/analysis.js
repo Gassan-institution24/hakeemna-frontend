@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from "react-redux";
-import { set } from '../../store/user.store';
 import { setAddingCity } from '../../store/addingAndEditing.store';
 import axiosHandler from '../../handlers/axiosHandler';
 import AddAnalysis from '../../components/fixedData/analysis/AddAnalysis';
@@ -40,5 +39,5 @@ const mapStateToProps = (state) => ({
     user: state.user,
     model:state.model
 });
-const mapDispatchToProps = { set,setAddingCity };
+const mapDispatchToProps = { setAddingCity };
 export default connect(mapStateToProps, mapDispatchToProps)(Analysis);
