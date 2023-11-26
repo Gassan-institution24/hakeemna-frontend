@@ -41,3 +41,9 @@
   padding: 10px;
   margin: 10px;
 }
+.navbar{
+  display: flex;
+  gap: 2rem;
+  border-bottom: 1px solid;
+  padding-bottom: 20px;
+}

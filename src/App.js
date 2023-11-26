@@ -1,7 +1,6 @@
 import "./App.css";
+import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Provider } from "react-redux";
-import Store from "./store/index.js";
 import LoginPage from "./pages/login";
 import Signup from "./pages/signup";
 import Cities from "./pages/fixedData/locationInfo/cities.js";
@@ -27,6 +26,10 @@ import AppointmentTypes from "./pages/shared/AppointmentTypes.js";
 import Appointments from "./pages/shared/Appointments.js";
 import Valuetax from "./pages/accounting/Valuetax.js";
 import Deductionamount from "./pages/accounting/Deductionamount.js";
+import ManagementTables from "./pages/superAdmin/ManagementTables.js";
+import Navbar from "./components/navbar/navbar.js";
+import { connect } from "react-redux";
+import { fetchUserData } from "./store/user.store.js";
 import Deductionconfig from "./pages/accounting/Deductionconfig.js";
 import Hospital from "./pages/accounting/Hospital.js";
 import Incomepayment from "./pages/accounting/Incomepayment.js";
@@ -39,14 +42,18 @@ import Receiptpaymentvoucher from "./pages/accounting/Receiptpaymentvoucher.js";
 import Servicetypes from "./pages/accounting/Servicetypes.js";
 import Stockmanagement from "./pages/accounting/Stockmanagement.js"
 import Totalprice from "./pages/accounting/Totalprice.js";
-function App() {
+  function App(props) {
+    useEffect(() => {
+      props.fetchUserData();
+    }, []);
   return ( 
     <div className="App">
-      <Provider store={Store}>
+      <Navbar/>
         <BrowserRouter>
           <Routes>
             <Route path="/signup" element={<Signup />} />
             <Route path="/signin" element={<LoginPage />} />
+            <Route path="/managementtables" element={<ManagementTables />} />
             <Route path="/cities" element={<Cities />} />
             <Route path="/countries" element={<Countries />} />
             <Route path="/currency" element={<Currency />} />
@@ -89,9 +96,13 @@ function App() {
             <Route path='/totalprice' element={<Totalprice />}/>
           </Routes>
         </BrowserRouter>
-      </Provider>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  user: state.user,
+  model: state.model,
+});
+const mapDispatchToProps = {fetchUserData};
+export default connect(mapStateToProps, mapDispatchToProps)(App);

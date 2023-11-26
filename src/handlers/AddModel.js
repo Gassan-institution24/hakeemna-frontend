@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Cookies from "js-cookie";
 import axios from "axios";
 
+
 function AddModel({
   textDetails,
   selectDetails,
@@ -31,25 +32,6 @@ function AddModel({
       setInfo({ ...info, [category]: data });
     }
   }
-  function clearForm() {
-    // Get the form element
-    var form = document.getElementById("myForm");
-
-    // Iterate through all form elements
-    for (var i = 0; i < form.elements.length; i++) {
-      var element = form.elements[i];
-
-      // Check if the element is an input field
-      if (
-        element.type !== "button" &&
-        element.type !== "submit" &&
-        element.type !== "reset"
-      ) {
-        // Set the value to an empty string
-        element.value = "";
-      }
-    }
-  }
   async function submitHandler(e) {
     e.preventDefault();
     await axiosHandler({
@@ -58,7 +40,7 @@ function AddModel({
       path: path,
       data: info,
     });
-    clearForm();
+    e.target.reset()
     fetchData();
   }
   async function getFromDB({ path, method, data, topic }) {
@@ -74,7 +56,8 @@ function AddModel({
         data: data,
       });
       if (response.status === 200) {
-        setData({ ...data, [topic]: response.data });
+        // setData({ ...data, [topic]: response.data });
+        return response.data
       } else {
         if (setError) {
           setError(response.data);
@@ -85,23 +68,40 @@ function AddModel({
     }
   }
   useEffect(() => {
-    selectDetails?.map(async(detail,i) => {
-      await getFromDB({
-        topic: detail?.name,
-        setError,
-        method: "GET",
-        path: detail?.path,
+    const fetchData = async () => {
+      const obj = {};
+      const promises = [];
+  
+      // Fetch data for selectDetails
+      selectDetails?.forEach((detail) => {
+        const promise = getFromDB({
+          setError,
+          method: "GET",
+          path: detail?.path,
+        });
+        promises.push(promise.then((data) => obj[detail.name] = data));
       });
-    });
-    multiSelectDetails?.map(async (detail,i) => {
-      await getFromDB({
-        topic: detail?.name,
-        setError,
-        method: "GET",
-        path: detail?.path,
+  
+      // Fetch data for multiSelectDetails
+      multiSelectDetails?.forEach((detail) => {
+        const promise = getFromDB({
+          setError,
+          method: "GET",
+          path: detail?.path,
+        });
+        promises.push(promise);
       });
-    });
+  
+      // Wait for all promises to resolve
+      await Promise.all(promises);
+  
+      // Update the state after all promises have resolved
+      setData(obj);
+    };
+  
+    fetchData();
   }, []);
+  console.log('dataaaaaaa',data)
   return (
     <div>
       <form id="myForm" onSubmit={submitHandler}>
@@ -173,8 +173,10 @@ function AddModel({
             </div>
           );
         })}
+        <button type="reset">reset</button>
         <button type="submit">Submit</button>
-        {/* {JSON.stringify(data)} */}
+        <p>data</p>
+        {JSON.stringify(data)}
       </form>
       {JSON.stringify(info)}
     </div>

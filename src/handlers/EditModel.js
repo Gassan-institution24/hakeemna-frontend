@@ -34,25 +34,6 @@ function EditModel({
       setInfo({ ...info, [category]: data });
     }
   }
-  function clearForm() {
-    // Get the form element
-    var form = document.getElementById("myForm");
-
-    // Iterate through all form elements
-    for (var i = 0; i < form.elements.length; i++) {
-      var element = form.elements[i];
-
-      // Check if the element is an input field
-      if (
-        element.type !== "button" &&
-        element.type !== "submit" &&
-        element.type !== "reset"
-      ) {
-        // Set the value to an empty string
-        element.value = "";
-      }
-    }
-  }
   async function submitHandler(e) {
     e.preventDefault();
     await axiosHandler({
@@ -62,7 +43,7 @@ function EditModel({
       data: info,
     });
     setInfo({})
-    clearForm();
+    e.target.reset()
     fetchData();
   }
   async function getFromDB({ path, method, data, topic }) {
@@ -89,31 +70,50 @@ function EditModel({
     }
   }
   useEffect(() => {
-    selectDetails?.map((detail,i) => {
-      getFromDB({
-        topic: detail?.name,
+    const fetchData = async () => {
+      const promises = [];
+  
+      // Fetch data for selectDetails
+      selectDetails?.forEach((detail) => {
+        const promise = getFromDB({
+          topic: detail?.name,
+          setError,
+          method: "GET",
+          path: detail?.path,
+        });
+        promises.push(promise);
+      });
+  
+      // Fetch data for multiSelectDetails
+      multiSelectDetails?.forEach((detail) => {
+        const promise = getFromDB({
+          topic: detail?.name,
+          setError,
+          method: "GET",
+          path: detail?.path,
+        });
+        promises.push(promise);
+      });
+  
+      // Wait for all promises to resolve
+      await Promise.all(promises);
+  
+      // Fetch additional data using axiosHandler
+      const selectedData = await axiosHandler({
         setError,
         method: "GET",
-        path: detail?.path,
+        path: `${path}/${editting}`,
       });
-    });
-    multiSelectDetails?.map(async (detail,i) => {
-      await getFromDB({
-        topic: detail?.name,
-        setError,
-        method: "GET",
-        path: detail?.path,
-      });
-    });
-    axiosHandler({
-      setData: setSelected,
-      setError,
-      method: "GET",
-      path: `${path}/${editting}`,
-    });
-  }, []);
+  
+      // Update the state after all promises have resolved
+      setSelected(selectedData);
+    };
+  
+    fetchData();
+  }, [editting]); // Add editting to the dependency array to re-run the effect when it changes
+  
   useEffect(() => {
-    setInfo(selected)
+    setInfo(selected);
   }, [selected]);
   return (
     <div>

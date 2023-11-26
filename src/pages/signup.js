@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { connect } from "react-redux";
-import { set } from '../store/user.store';
+import { setToken } from '../store/user.store';
 import axiosHandler from '../handlers/axiosHandler'
 
 function Signup(props) {
-    const [userInfo,setUserInfo] = useState({name:'',email:'',password:'',confirmPassword:'',role:''})
+    const [userInfo,setUserInfo] = useState({})
     const [error,setError] = useState()
     function changeHandler (e){
         const {name,value} = e.target
@@ -12,7 +12,7 @@ function Signup(props) {
     }
     async function submitHandler (e){
         e.preventDefault()
-        await axiosHandler({setData:props.set,setError,method:'POST',path:'users/signup',data:userInfo})
+        await axiosHandler({setData:props.setToken,setError,method:'POST',path:'users/signup',data:userInfo})
         setUserInfo({name:'',email:'',password:'',confirmPassword:'',role:''})
         console.log(props.user);
     }
@@ -50,5 +50,5 @@ function Signup(props) {
 const mapStateToProps = (state) => ({
     user: state.user
 });
-const mapDispatchToProps = { set };
+const mapDispatchToProps = { setToken };
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);
