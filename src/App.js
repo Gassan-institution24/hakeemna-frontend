@@ -6,11 +6,8 @@ import Signup from "./pages/signup";
 import Cities from "./pages/fixedData/locationInfo/cities.js";
 import Countries from "./pages/fixedData/locationInfo/countries.js";
 import Currency from "./pages/fixedData/locationInfo/currency.js";
-import Customer from "./components/customer/Customer.js";
-import Customeranalysis from './components/customer/Customeranalysis.js'
-import Drugsprescriptions from './components/customer/Drugsprescriptions.js'
-import Examinationreports from './components/customer/Examinationreports.js'
-import Medicalscans from './components/customer/Medicalscans.js'
+import Customer from "./pages/customer/Customer.js";
+import Medicalscans from "./pages/customer/Medicalscans.js";
 import Analysis from "./pages/fixedData/analysis.js";
 import Diets from "./pages/fixedData/diets.js";
 import Diseases from "./pages/fixedData/diseases.js";
@@ -33,10 +30,22 @@ import ManagementTables from "./pages/superAdmin/ManagementTables.js";
 import Navbar from "./components/navbar/navbar.js";
 import { connect } from "react-redux";
 import { fetchUserData } from "./store/user.store.js";
-function App(props) {
-  useEffect(() => {
-    props.fetchUserData();
-  }, []);
+import Deductionconfig from "./pages/accounting/Deductionconfig.js";
+import Hospital from "./pages/accounting/Hospital.js";
+import Incomepayment from "./pages/accounting/Incomepayment.js";
+import Licensmovment from "./pages/accounting/Licensmovment.js";
+import Measurementtypes from "./pages/accounting/Measurementtypes.js";
+import Paymentmethod from "./pages/accounting/Paymentmethod.js";
+import Pricequotation from "./pages/accounting/Pricequotation.js";
+import Providedservicemovement from "./pages/accounting/Providedservicemovement.js";
+import Receiptpaymentvoucher from "./pages/accounting/Receiptpaymentvoucher.js";
+import Servicetypes from "./pages/accounting/Servicetypes.js";
+import Stockmanagement from "./pages/accounting/Stockmanagement.js"
+import Totalprice from "./pages/accounting/Totalprice.js";
+  function App(props) {
+    useEffect(() => {
+      props.fetchUserData();
+    }, []);
   return ( 
     <div className="App">
       <Navbar/>
@@ -61,16 +70,30 @@ function App(props) {
             <Route path="/appointypes" element={<AppointmentTypes />} />
             <Route path="/appointments" element={<Appointments />} />
             <Route path='/customer' element={<Customer />}/>
+            
+            {/* 
             <Route path='/customeranalysis' element={<Customeranalysis />}/>
             <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>
-            <Route path='/examinationreports' element={<Examinationreports />}/>
-            <Route path='/edicalscans' element={<Medicalscans />}/>
+            <Route path='/examinationreports' element={<Examinationreports />}/> */}
+            <Route path='/medicalscans' element={<Medicalscans />}/>
             <Route path='/stakeholdertypes' element={<Stakeholdertypes />}/>
             <Route path='/stakeholder' element={<Stackholder />}/>
             <Route path='/suppliersoffers' element={<Suppliersoffers />}/>
             <Route path='/taxgd' element={<Added_value_tax_GD />}/>
             <Route path='/valuetax' element={<Valuetax />}/>
             <Route path='/deductionamount' element={<Deductionamount />}/>
+            <Route path='/deductionconfig' element={<Deductionconfig />}/>
+            <Route path='/hospital' element={<Hospital />}/>
+            <Route path='/incomepayment' element={<Incomepayment />}/>
+            <Route path='/licensmovment' element={<Licensmovment />}/>
+            <Route path='/measurementtypes' element={<Measurementtypes />}/>
+            <Route path='/paymentmethod' element={<Paymentmethod />}/>
+            <Route path='/pricequotation' element={<Pricequotation />}/>
+            <Route path='/providedservicemovement' element={<Providedservicemovement />}/>
+            <Route path='/receiptpaymentvoucher' element={<Receiptpaymentvoucher />}/>
+            <Route path='/servicetypes' element={<Servicetypes />}/>
+            <Route path='/stockmanagement' element={<Stockmanagement />}/>
+            <Route path='/totalprice' element={<Totalprice />}/>
           </Routes>
         </BrowserRouter>
     </div>

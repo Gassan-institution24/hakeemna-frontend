@@ -4,8 +4,9 @@ import axiosHandler from "../../handlers/axiosHandler";
 import AddModel from "../../handlers/AddModel";
 import EditModel from "../../handlers/EditModel";
 import ModelCard from "../../handlers/ModelCard";
-function Deductionamount(props) {
-  const [data, setData] = useState();
+
+const Licensmovment = (props) => {
+  const [data, setData] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [editting, setEditting] = useState("");
   const [error, setError] = useState();
@@ -14,7 +15,7 @@ function Deductionamount(props) {
       setData,
       setError,
       method: "GET",
-      path: "deductionamount",
+      path: "licensemovements",
     });
   };
   useEffect(() => {
@@ -23,17 +24,16 @@ function Deductionamount(props) {
 
   return (
     <div>
-      Deductionamount
+      licensemovements
       {isAdding && (
         <AddModel
           textDetails={[
             {
-              name: "movements_year",
-              nameShown: "movements_year",
-              type: "number",
+              name: "Users_num_license_name",
+              nameShown: "Users_num_license_name",
             },
           ]}
-          path={"deductionamount"}
+          path={"licensemovements"}
           selectDetails={[
             {
               name: "unit_service",
@@ -45,7 +45,26 @@ function Deductionamount(props) {
           fetchData={fetchData}
         />
       )}
-      {editting && (<EditModel textDetails={[{name: "movements_year",nameShown: "movements_year",type: "number",},]}path={`deductionamount`}selectDetails={[{name: "unit_service",nameShown: "unit service", path: "unitservice", },]} editting={editting} fetchData={fetchData}/>)}
+      {editting && (
+        <EditModel
+          textDetails={[
+            {
+              name: "Users_num_license_name",
+              nameShown: "Users_num_license_name",
+            },
+          ]}
+          path={`licensemovements`}
+          selectDetails={[
+            {
+              name: "unit_service",
+              nameShown: "unit service",
+              path: "unitservice",
+            },
+          ]}
+          editting={editting}
+          fetchData={fetchData}
+        />
+      )}
       <button
         onClick={() => {
           setIsAdding(!isAdding);
@@ -60,20 +79,22 @@ function Deductionamount(props) {
             fetchData={fetchData}
             setEditting={setEditting}
             one={one}
-            path={"deductionamount"}
-            h2items={["movements_year", "unit_service"]}
+            path={"licensemovements"}
+            h2items={["Users_num_license_name", "unit_service"]}
           />
         );
       })}
       {JSON.stringify(data)}
+      {JSON.stringify(data)}
       {JSON.stringify(props.model)}
     </div>
   );
-}
+};
 
 const mapStateToProps = (state) => ({
   user: state.user,
   model: state.model,
 });
 const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(Deductionamount);
+export default connect(mapStateToProps, mapDispatchToProps)(Licensmovment);
+

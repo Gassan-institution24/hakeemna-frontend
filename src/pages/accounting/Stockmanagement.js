@@ -4,8 +4,9 @@ import axiosHandler from "../../handlers/axiosHandler";
 import AddModel from "../../handlers/AddModel";
 import EditModel from "../../handlers/EditModel";
 import ModelCard from "../../handlers/ModelCard";
-function Deductionamount(props) {
-  const [data, setData] = useState();
+
+const Stockmanagement = (props) => {
+  const [data, setData] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [editting, setEditting] = useState("");
   const [error, setError] = useState();
@@ -14,38 +15,51 @@ function Deductionamount(props) {
       setData,
       setError,
       method: "GET",
-      path: "deductionamount",
+      path: "stockmanagement",
     });
   };
   useEffect(() => {
     fetchData();
   }, []);
-
   return (
     <div>
-      Deductionamount
       {isAdding && (
         <AddModel
           textDetails={[
             {
-              name: "movements_year",
-              nameShown: "movements_year",
-              type: "number",
+              name: "test",
+              nameShown: "test",
             },
-          ]}
-          path={"deductionamount"}
-          selectDetails={[
             {
-              name: "unit_service",
-              nameShown: "unit service",
-              path: "unitservice",
+              name: "code",
+              nameShown: "code",
+              type : "number"
             },
           ]}
+          path={"stockmanagement"}
           setIsAdding={setIsAdding}
           fetchData={fetchData}
         />
       )}
-      {editting && (<EditModel textDetails={[{name: "movements_year",nameShown: "movements_year",type: "number",},]}path={`deductionamount`}selectDetails={[{name: "unit_service",nameShown: "unit service", path: "unitservice", },]} editting={editting} fetchData={fetchData}/>)}
+      {editting && (
+        <EditModel
+          textDetails={[
+            {
+              name: "test",
+              nameShown: "test",
+            },
+            {
+              name: "code",
+              nameShown: "code",
+              type : "number"
+            },
+          ]}
+          path={`stockmanagement`}
+          editting={editting}
+          fetchData={fetchData}
+        />
+      )}
+
       <button
         onClick={() => {
           setIsAdding(!isAdding);
@@ -60,8 +74,8 @@ function Deductionamount(props) {
             fetchData={fetchData}
             setEditting={setEditting}
             one={one}
-            path={"deductionamount"}
-            h2items={["movements_year", "unit_service"]}
+            path={"stockmanagement"}
+            h2items={["test"]}
           />
         );
       })}
@@ -69,11 +83,11 @@ function Deductionamount(props) {
       {JSON.stringify(props.model)}
     </div>
   );
-}
+};
 
 const mapStateToProps = (state) => ({
   user: state.user,
   model: state.model,
 });
 const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(Deductionamount);
+export default connect(mapStateToProps, mapDispatchToProps)(Stockmanagement);
