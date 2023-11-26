@@ -5,7 +5,7 @@ import AddModel from "../../handlers/AddModel";
 import EditModel from "../../handlers/EditModel";
 import ModelCard from "../../handlers/ModelCard";
 
-const Licensmovment = (props) => {
+const Servicetypes = (props) => {
   const [data, setData] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [editting, setEditting] = useState("");
@@ -15,25 +15,27 @@ const Licensmovment = (props) => {
       setData,
       setError,
       method: "GET",
-      path: "licensemovements",
+      path: "servicetypes",
     });
   };
   useEffect(() => {
     fetchData();
   }, []);
-
   return (
     <div>
-      licensemovements
       {isAdding && (
         <AddModel
           textDetails={[
             {
-              name: "Users_num_license_name",
-              nameShown: "Users_num_license_name",
+              name: "Filter_2",
+              nameShown: "Filter_2",
+            },
+            {
+              name: "Filter_3",
+              nameShown: "Filter_3",
             },
           ]}
-          path={"licensemovements"}
+          path={"servicetypes"}
           selectDetails={[
             {
               name: "unit_service",
@@ -49,11 +51,15 @@ const Licensmovment = (props) => {
         <EditModel
           textDetails={[
             {
-              name: "Users_num_license_name",
-              nameShown: "Users_num_license_name",
+              name: "Filter_2",
+              nameShown: "Filter_2",
+            },
+            {
+              name: "Filter_3",
+              nameShown: "Filter_3",
             },
           ]}
-          path={`licensemovements`}
+          path={`servicetypes`}
           selectDetails={[
             {
               name: "unit_service",
@@ -65,6 +71,7 @@ const Licensmovment = (props) => {
           fetchData={fetchData}
         />
       )}
+
       <button
         onClick={() => {
           setIsAdding(!isAdding);
@@ -79,12 +86,11 @@ const Licensmovment = (props) => {
             fetchData={fetchData}
             setEditting={setEditting}
             one={one}
-            path={"licensemovements"}
-            h2items={["Users_num_license_name", "unit_service"]}
+            path={"servicetypes"}
+            h2items={["Filter_2", "Filter_3", "unit_service"]}
           />
         );
       })}
-      {JSON.stringify(data)}
       {JSON.stringify(data)}
       {JSON.stringify(props.model)}
     </div>
@@ -96,5 +102,4 @@ const mapStateToProps = (state) => ({
   model: state.model,
 });
 const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(Licensmovment);
-
+export default connect(mapStateToProps, mapDispatchToProps)(Servicetypes);
