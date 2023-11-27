@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import axiosHandler from "./axiosHandler";
+import axiosHandler from "../axiosHandler";
 
 function ModelCard({ one, fetchData, setEditting, path, h2items, pitems ,hideButtons}) {
     const [error,setError]=useState()
+    const [show,setShow]=useState(false)
   async function deleteHandler() {
     await axiosHandler({ method: "DELETE",setError, path: `${path}/${one._id}` });
     fetchData();
   }
  
   return (
-    <div className="border">
+
+<div className="border">
       {h2items?.map((item,i) => {
         return(
             <h2 key={i}>{item}:{JSON.stringify(one[item])}</h2>
@@ -18,7 +20,7 @@ function ModelCard({ one, fetchData, setEditting, path, h2items, pitems ,hideBut
       })}
       {pitems?.map((item,i) => {
         return(
-            <p key={i}>{item}:{one[item]}</p>
+            <p key={i}>{item}:{JSON.stringify(one[item])}</p>
         )
       })}
       {!hideButtons&&<button

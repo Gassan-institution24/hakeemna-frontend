@@ -5,7 +5,7 @@ import AddModel from "../../../handlers/modelComponents/AddModel";
 import EditModel from "../../../handlers/modelComponents/EditModel";
 import ModelCard from "../../../handlers/modelComponents/ModelCard";
 
-function Activities(props) {
+function Cities(props) {
   const [data, setData] = useState();
   const [isAdding, setIsAdding] = useState(false);
   const [editting, setEditting] = useState("");
@@ -16,7 +16,7 @@ function Activities(props) {
       setData,
       setError,
       method: "GET",
-      path: "activities",
+      path: "cities",
     });
   };
   useEffect(() => {
@@ -25,23 +25,18 @@ function Activities(props) {
 
   return (
     <div>
-      Activities
+      cities
       {isAdding && (
         <AddModel
           textDetails={[
-            { name: "name", nameShown: "name" },
-            { name: "details", nameShown: "details" },
+            { name: "name_arabic", nameShown: "name_arabic" },
+            { name: "name_english", nameShown: "name_english" },
           ]}
           selectDetails={[
             {
-              name: "unit_service",
-              nameShown: "unit service",
-              path: "unitservice",
-            },
-            {
-              name: "department",
-              nameShown: "department",
-              path: "departments",
+              name: "country",
+              nameShown: "unit country",
+              path: "countries",
             },
           ]}
           selectDetailsManually={[
@@ -54,27 +49,22 @@ function Activities(props) {
               ],
             },
           ]}
-          path={"activities"}
+          path={"cities"}
           setIsAdding={setIsAdding}
           fetchData={fetchData}
         />
       )}
       {editting && (
         <EditModel
-          textDetails={[
-            { name: "name", nameShown: "name" },
-            { name: "details", nameShown: "details" },
+        textDetails={[
+            { name: "name_arabic", nameShown: "name_arabic" },
+            { name: "name_english", nameShown: "name_english" },
           ]}
           selectDetails={[
             {
-              name: "unit_service",
-              nameShown: "unit service",
-              path: "unitservice",
-            },
-            {
-              name: "department",
-              nameShown: "department",
-              path: "departments",
+              name: "country",
+              nameShown: "unit country",
+              path: "countries",
             },
           ]}
           selectDetailsManually={[
@@ -87,7 +77,7 @@ function Activities(props) {
               ],
             },
           ]}
-          path={"activities"}
+          path={"cities"}
           editting={editting}
           fetchData={fetchData}
         />
@@ -106,8 +96,8 @@ function Activities(props) {
             fetchData={fetchData}
             setEditting={setEditting}
             one={one}
-            path={"activities"}
-            h2items={["name", "details"]}
+            path={"cities"}
+            h2items={["name_arabic", "name_english",'country']}
           />
         );
       })}
@@ -122,4 +112,4 @@ const mapStateToProps = (state) => ({
   model: state.model,
 });
 const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(Activities);
+export default connect(mapStateToProps, mapDispatchToProps)(Cities);

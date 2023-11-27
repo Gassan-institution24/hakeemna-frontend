@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axiosHandler from "./axiosHandler";
+import axiosHandler from "../axiosHandler";
 import { connect } from "react-redux";
 import Cookies from "js-cookie";
 import axios from "axios";

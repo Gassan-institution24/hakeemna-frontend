@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import axiosHandler from "../../handlers/axiosHandler";
-import AddModel from "../../handlers/AddModel";
-import EditModel from "../../handlers/EditModel";
-import ModelCard from "../../handlers/ModelCard";
+import AddModel from "../../handlers/modelComponents/AddModel";
+import EditModel from "../../handlers/modelComponents/EditModel";
+import ModelCard from "../../handlers/modelComponents/ModelCard";
 
 
 const Providedservicemovement = (props) => {

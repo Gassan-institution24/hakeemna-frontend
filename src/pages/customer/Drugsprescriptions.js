@@ -4,9 +4,7 @@ import axiosHandler from "../../handlers/axiosHandler";
 import AddModel from "../../handlers/modelComponents/AddModel";
 import EditModel from "../../handlers/modelComponents/EditModel";
 import ModelCard from "../../handlers/modelComponents/ModelCard";
-
-
-const Medicalscans = (props) => {
+const Drugsprescriptions = (props) => {
   const [data, setData] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [editting, setEditting] = useState("");
@@ -16,24 +14,29 @@ const Medicalscans = (props) => {
       setData,
       setError,
       method: "GET",
-      path: "medicalScan",
+      path: "drugs",
     });
   };
   useEffect(() => {
     fetchData();
   }, []);
 return (
-  <div>
+  <div className="back">
     {isAdding && (
       <AddModel
         textDetails={[
           {
-            name: "file",
-            nameShown: "file",
-            type: "text"
-          }
+            name: "Start_time",
+            nameShown: "Start time",
+            type: "date"
+          },
+          {
+            name: "End_time",
+            nameShown: "End time",
+            type: "date"
+          },
         ]}
-        path={"medicalScan"}
+        path={"drugs"}
         selectDetails={[
           { name: "unit_service", nameShown: "unit service", path: "unitservice" },
         ]}
@@ -45,12 +48,17 @@ return (
       <EditModel
         textDetails={[
           {
-            name: "file",
-            nameShown: "file",
-            type: "text"
+            name: "Start_time",
+            nameShown: "Start time",
+            type: "date"
+          },
+          {
+            name: "End_time",
+            nameShown: "End time",
+            type: "date"
           },
         ]}
-        path={`medicalScan`}
+        path={`drugs`}
         selectDetails={[
           { name: "unit_service", nameShown: "unit service", path: "unitservice" },
         ]}
@@ -73,8 +81,8 @@ return (
           fetchData={fetchData}
           setEditting={setEditting}
           one={one}
-          path={"medicalScan"}
-          h2items={["file","unit_service"]}
+          path={"drugs"}
+          h2items={["Start_time", "End_time", "unit service"]}
         />
       );
     })}
@@ -82,12 +90,11 @@ return (
     
   </div>
 )
-}
+};
 
 const mapStateToProps = (state) => ({
   user: state.user,
   model: state.model,
 });
 const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(Medicalscans);
-
+export default connect(mapStateToProps, mapDispatchToProps)(Drugsprescriptions);

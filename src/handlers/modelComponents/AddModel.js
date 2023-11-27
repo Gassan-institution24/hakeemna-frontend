@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axiosHandler from "./axiosHandler";
+import axiosHandler from "../axiosHandler";
 import { connect } from "react-redux";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -117,6 +117,8 @@ function AddModel({
   }, []);
   //console.log("dataaaaaaa", data);
   return (
+    <div>
+    <div className="bluredBG"></div>
     <div className="addform">
       <form id="myForm" onSubmit={submitHandler}>
         {textDetails?.map((detail, i) => {
@@ -225,6 +227,7 @@ function AddModel({
         <button type="reset">reset</button>
         <button type="submit" className="subbtn">Submit</button>
       </form>
+    </div>
     </div>
   );
 }
