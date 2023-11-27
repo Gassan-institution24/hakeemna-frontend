@@ -13,7 +13,7 @@ export default async function axiosHandler({setData:setData,setError:setError,me
           },
           data: data,
       });
-        if(response.status ===200){
+        if(response.status ===200||304){
           if(setData){
             setData(response.data)
           }

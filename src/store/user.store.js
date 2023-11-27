@@ -12,7 +12,7 @@ const userSlice = createSlice({
       Cookies.set('user_token', action.payload.token);
     },
     setUser: (state, action) => {
-      state.data = action.payload;
+      state.data = action.payload.user;
       state.loading = false;
       state.error = null;
       //console.log(action)

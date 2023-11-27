@@ -47,7 +47,9 @@ import Stockmanagement from "./pages/accounting/Stockmanagement.js"
 import Totalprice from "./pages/accounting/Totalprice.js";
   function App(props) {
     useEffect(() => {
-      props.fetchUserData();
+      if(!props.user.data){
+        props.fetchUserData();
+      }
     }, []);
   return ( 
     <div className="App">
@@ -73,10 +75,6 @@ import Totalprice from "./pages/accounting/Totalprice.js";
             <Route path="/appointypes" element={<AppointmentTypes />} />
             <Route path="/appointments" element={<Appointments />} /> */}
             <Route path='/customer' element={<Customer />}/>
-            <Route path='/customeranalysis' element={<Customeranalysis />}/>
-            <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>
-            <Route path='/examinationreports' element={<Examinationreports />}/>
-            <Route path='/medicalscans' element={<Medicalscans />}/>
             <Route path='/stakeholdertypes' element={<Stakeholdertypes />}/>
             <Route path='/stakeholder' element={<Stackholder />}/>
             <Route path='/suppliersoffers' element={<Suppliersoffers />}/>
