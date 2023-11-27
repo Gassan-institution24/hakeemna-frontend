@@ -19,7 +19,7 @@ function Appointments(props) {
       path: "appointments",
     });
   };
-  console.log(props)
+  //console.log(props)
   useEffect(() => {
     fetchData();
   }, []);

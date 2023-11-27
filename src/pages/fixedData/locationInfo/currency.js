@@ -14,7 +14,7 @@ function Currency() {
     const fetchData = async()=>{
         await axiosHandler({setData:setCurrency,setError:setError,method:'GET',path:'currency/'}) 
     }
-    console.log('currency', currency)
+    //console.log('currency', currency)
     useEffect(()=>{
         fetchData()
     },[])

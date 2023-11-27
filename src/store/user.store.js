@@ -15,7 +15,7 @@ const userSlice = createSlice({
       state.data = action.payload;
       state.loading = false;
       state.error = null;
-      console.log(action)
+      //console.log(action)
     },
     setLoading: (state) => {
       state.loading = true;
@@ -31,18 +31,20 @@ export const { setToken,setUser, setLoading, setError } = userSlice.actions;
 
 export const fetchUserData = () => async (dispatch) => {
   dispatch(setLoading());
-//   try {
-    // const userToken = Cookies.get('user_token');
-    // const decodedToken = jwtDecode(userToken);
-    // const response = await axiosHandler({
-    //   method: 'GET',
-    //   path: `users/${decodedToken.id}`,
-    // });
-    // console.log(response)
-    // dispatch(setUser(response.data));
-//   } catch (error) {
-//     dispatch(setError(error.message));
-//   }
+  try {
+    const userToken = Cookies.get('user_token');
+    if(userToken){
+      const decodedToken = jwtDecode(userToken);
+      const response = await axiosHandler({
+        method: 'GET',
+        path: `users/${decodedToken.id}`,
+      });
+      //console.log(response)
+      dispatch(setUser(response.data));
+    }
+  } catch (error) {
+    dispatch(setError(error.message));
+  }
 };
 
 export default userSlice.reducer;

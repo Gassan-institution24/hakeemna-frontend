@@ -48,6 +48,43 @@
   padding-bottom: 20px;
 }
 
+
+.css-1w7lnam {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+}
+* {
+    box-sizing: border-box;
+}
+*, ::before, ::after {
+  box-sizing: inherit;
+}
+.css-1tbxfp6 {
+  margin: 0px;
+  font: inherit;
+  color: rgb(255, 48, 48);
+  text-decoration: none;
+  display: contents;
+}
+.css-syvkei {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 480px;
+}
+@media (min-width: 0px){
+  .css-syvkei {
+      padding: 120px 16px;
+    }
+
+}
+@media (min-width: 900px){
+.css-syvkei {
+    padding: 160px 64px 0px;
+}}
 .input{
   width: 150px;
   height: 20px;

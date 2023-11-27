@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import axiosHandler from "../../handlers/axiosHandler";
-import AddModel from "../../handlers/AddModel";
-import EditModel from "../../handlers/EditModel";
-import ModelCard from "../../handlers/ModelCard";
+import axiosHandler from "../../../handlers/axiosHandler";
+import AddModel from "../../../handlers/AddModel";
+import EditModel from "../../../handlers/EditModel";
+import ModelCard from "../../../handlers/ModelCard";
 
 function UnitServices(props) {
   const [data, setData] = useState();
@@ -32,17 +32,50 @@ function UnitServices(props) {
             { name: "name_arabic", nameShown: "name_arabic" },
             { name: "name_english", nameShown: "name_english" },
             { name: "general_work_area", nameShown: "general_work_area" },
-            { name: "general_work_area", nameShown: "general_work_area" },
+            {
+              name: "subscription_period_months",
+              nameShown: "subscription_period_months",
+              type: "number",
+            },
+            { name: "tax", nameShown: "tax" },
+            { name: "identification_num", nameShown: "identification_num" },
+            { name: "address", nameShown: "address" },
+            { name: "email", nameShown: "email" },
+            { name: "web_page", nameShown: "web_page" },
+            { name: "company_logo", nameShown: "company_logo" },
+            { name: "phone", nameShown: "phone" },
+            { name: "mobile_num", nameShown: "mobile_num" },
+            { name: "introduction_letter", nameShown: "introduction_letter" },
+            { name: "other_information", nameShown: "other_information" },
           ]}
           selectDetailsManually={[
             {
               name: "status",
               nameShown: "Status",
               options: [
-                { name: "Active", nameShown: "Active" },
-                { name: "Not active", nameShown: "Not active" },
+                { name: "active", nameShown: "Active" },
+                { name: "not active", nameShown: "Not active" },
               ],
             },
+            {
+              name: "sector_type",
+              nameShown: "sector type",
+              options: [
+                { name: "public", nameShown: "public" },
+                { name: "privet", nameShown: "privet" },
+                { name: "charity", nameShown: "charity" },
+              ],
+            },
+          ]}
+          selectDetails={[
+            {
+              name: "speciality",
+              nameShown: "speciality",
+              path: "specialities",
+            },
+          ]}
+          multiSelectDetails={[
+            { name: "package", nameShown: "package", path: "backages" },
           ]}
           path={"unitservice"}
           setIsAdding={setIsAdding}
@@ -51,16 +84,54 @@ function UnitServices(props) {
       )}
       {editting && (
         <EditModel
-          textDetails={[{ name: "name", nameShown: "name" }]}
+          textDetails={[
+            { name: "name_arabic", nameShown: "name_arabic" },
+            { name: "name_english", nameShown: "name_english" },
+            { name: "general_work_area", nameShown: "general_work_area" },
+            {
+              name: "subscription_period_months",
+              nameShown: "subscription_period_months",
+              type: "number",
+            },
+            { name: "tax", nameShown: "tax" },
+            { name: "identification_num", nameShown: "identification_num" },
+            { name: "address", nameShown: "address" },
+            { name: "email", nameShown: "email" },
+            { name: "web_page", nameShown: "web_page" },
+            { name: "company_logo", nameShown: "company_logo" },
+            { name: "phone", nameShown: "phone" },
+            { name: "mobile_num", nameShown: "mobile_num" },
+            { name: "introduction_letter", nameShown: "introduction_letter" },
+            { name: "other_information", nameShown: "other_information" },
+          ]}
           selectDetailsManually={[
             {
               name: "status",
               nameShown: "Status",
               options: [
-                { name: "Active", nameShown: "Active" },
-                { name: "Not active", nameShown: "Not active" },
+                { name: "active", nameShown: "Active" },
+                { name: "not active", nameShown: "Not active" },
               ],
             },
+            {
+              name: "sector_type",
+              nameShown: "sector type",
+              options: [
+                { name: "public", nameShown: "public" },
+                { name: "privet", nameShown: "privet" },
+                { name: "charity", nameShown: "charity" },
+              ],
+            },
+          ]}
+          selectDetails={[
+            {
+              name: "speciality",
+              nameShown: "speciality",
+              path: "specialities",
+            },
+          ]}
+          multiSelectDetails={[
+            { name: "packages", nameShown: "packages", path: "backages" },
           ]}
           path={"unitservice"}
           editting={editting}
@@ -82,7 +153,22 @@ function UnitServices(props) {
             setEditting={setEditting}
             one={one}
             path={"unitservice"}
-            h2items={["name"]}
+            h2items={[
+              "name_arabic",
+              "name_english",
+              "general_work_area",
+              "subscription_period_months",
+              "tax",
+              "identification_num",
+              "address",
+              "email",
+              "web_page",
+              "company_logo",
+              "phone",
+              "mobile_num",
+              "introduction_letter",
+              "other_information",
+            ]}
           />
         );
       })}

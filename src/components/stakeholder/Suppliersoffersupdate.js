@@ -11,7 +11,7 @@ const Suppliersofferscreate = ({ info }) => {
         setData(response.data);
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   }, []);
 

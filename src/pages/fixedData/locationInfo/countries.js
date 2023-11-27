@@ -17,7 +17,7 @@ function Countries() {
     const fetchData = async()=>{
         await axiosHandler({setData:setCountries,setError:setError,method:'GET',path:'countries/'}) 
     }
-    console.log('Countries', countries)
+    //console.log('Countries', countries)
     useEffect(()=>{
         fetchData()
     },[])
