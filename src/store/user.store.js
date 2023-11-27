@@ -32,14 +32,14 @@ export const { setToken,setUser, setLoading, setError } = userSlice.actions;
 export const fetchUserData = () => async (dispatch) => {
   dispatch(setLoading());
 //   try {
-    const userToken = Cookies.get('user_token');
-    const decodedToken = jwtDecode(userToken);
-    const response = await axiosHandler({
-      method: 'GET',
-      path: `users/${decodedToken.id}`,
-    });
-    console.log(response)
-    dispatch(setUser(response.data));
+    // const userToken = Cookies.get('user_token');
+    // const decodedToken = jwtDecode(userToken);
+    // const response = await axiosHandler({
+    //   method: 'GET',
+    //   path: `users/${decodedToken.id}`,
+    // });
+    // console.log(response)
+    // dispatch(setUser(response.data));
 //   } catch (error) {
 //     dispatch(setError(error.message));
 //   }
