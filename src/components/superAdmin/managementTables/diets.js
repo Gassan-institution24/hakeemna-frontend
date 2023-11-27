@@ -1,65 +1,55 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import axiosHandler from "../../handlers/axiosHandler";
-import AddModel from "../../handlers/modelComponents/AddModel";
-import EditModel from "../../handlers/modelComponents/EditModel";
-import ModelCard from "../../handlers/modelComponents/ModelCard";
+import axiosHandler from "../../../handlers/axiosHandler";
+import AddModel from "../../../handlers/modelComponents/AddModel";
+import EditModel from "../../../handlers/modelComponents/EditModel";
+import ModelCard from "../../../handlers/modelComponents/ModelCard";
 
-const Stockmanagement = (props) => {
-  const [data, setData] = useState([]);
+function Diets(props) {
+  const [data, setData] = useState();
   const [isAdding, setIsAdding] = useState(false);
   const [editting, setEditting] = useState("");
   const [error, setError] = useState();
+
   const fetchData = async () => {
     await axiosHandler({
       setData,
       setError,
       method: "GET",
-      path: "stockmanagement",
+      path: "diets",
     });
   };
   useEffect(() => {
     fetchData();
   }, []);
+
   return (
     <div>
+      diets
       {isAdding && (
         <AddModel
           textDetails={[
-            {
-              name: "test",
-              nameShown: "test",
-            },
-            {
-              name: "code",
-              nameShown: "code",
-              type : "number"
-            },
+            { name: "name", nameShown: "name" },
+            { name: "description", nameShown: "description" },
+            { name: "duration", nameShown: "duration" },
           ]}
-          path={"stockmanagement"}
+          path={"diets"}
           setIsAdding={setIsAdding}
           fetchData={fetchData}
         />
       )}
       {editting && (
         <EditModel
-          textDetails={[
-            {
-              name: "test",
-              nameShown: "test",
-            },
-            {
-              name: "code",
-              nameShown: "code",
-              type : "number"
-            },
+        textDetails={[
+            { name: "name", nameShown: "name" },
+            { name: "description", nameShown: "description" },
+            { name: "duration", nameShown: "duration" },
           ]}
-          path={`stockmanagement`}
+          path={"diets"}
           editting={editting}
           fetchData={fetchData}
         />
       )}
-
       <button
         onClick={() => {
           setIsAdding(!isAdding);
@@ -74,8 +64,9 @@ const Stockmanagement = (props) => {
             fetchData={fetchData}
             setEditting={setEditting}
             one={one}
-            path={"stockmanagement"}
-            h2items={["test"]}
+            path={"diets"}
+            h2items={["name"]}
+            pitems={["description",'duration']}
           />
         );
       })}
@@ -83,11 +74,11 @@ const Stockmanagement = (props) => {
       
     </div>
   );
-};
+}
 
 const mapStateToProps = (state) => ({
   user: state.user,
   model: state.model,
 });
 const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(Stockmanagement);
+export default connect(mapStateToProps, mapDispatchToProps)(Diets);

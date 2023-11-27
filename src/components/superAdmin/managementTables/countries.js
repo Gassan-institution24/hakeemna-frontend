@@ -16,7 +16,7 @@ function Activities(props) {
       setData,
       setError,
       method: "GET",
-      path: "activities",
+      path: "countries",
     });
   };
   useEffect(() => {
@@ -25,24 +25,12 @@ function Activities(props) {
 
   return (
     <div>
-      Activities
+      countries
       {isAdding && (
         <AddModel
           textDetails={[
-            { name: "name", nameShown: "name" },
-            { name: "details", nameShown: "details" },
-          ]}
-          selectDetails={[
-            {
-              name: "unit_service",
-              nameShown: "unit service",
-              path: "unitservice",
-            },
-            {
-              name: "department",
-              nameShown: "department",
-              path: "departments",
-            },
+            { name: "name_arabic", nameShown: "name_arabic" },
+            { name: "name_english", nameShown: "name_english" },
           ]}
           selectDetailsManually={[
             {
@@ -54,28 +42,16 @@ function Activities(props) {
               ],
             },
           ]}
-          path={"activities"}
+          path={"countries"}
           setIsAdding={setIsAdding}
           fetchData={fetchData}
         />
       )}
       {editting && (
         <EditModel
-          textDetails={[
-            { name: "name", nameShown: "name" },
-            { name: "details", nameShown: "details" },
-          ]}
-          selectDetails={[
-            {
-              name: "unit_service",
-              nameShown: "unit service",
-              path: "unitservice",
-            },
-            {
-              name: "department",
-              nameShown: "department",
-              path: "departments",
-            },
+        textDetails={[
+            { name: "name_arabic", nameShown: "name_arabic" },
+            { name: "name_english", nameShown: "name_english" },
           ]}
           selectDetailsManually={[
             {
@@ -87,7 +63,7 @@ function Activities(props) {
               ],
             },
           ]}
-          path={"activities"}
+          path={"countries"}
           editting={editting}
           fetchData={fetchData}
         />
@@ -106,8 +82,8 @@ function Activities(props) {
             fetchData={fetchData}
             setEditting={setEditting}
             one={one}
-            path={"activities"}
-            h2items={["name", "details"]}
+            path={"countries"}
+            h2items={["name_arabic", "name_english"]}
           />
         );
       })}

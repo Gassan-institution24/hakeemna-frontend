@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import axiosHandler from "../../handlers/axiosHandler";
-import AddModel from "../../handlers/modelComponents/AddModel";
-import EditModel from "../../handlers/modelComponents/EditModel";
-import ModelCard from "../../handlers/modelComponents/ModelCard";
+import axiosHandler from "../../../handlers/axiosHandler";
+import AddModel from "../../../handlers/modelComponents/AddModel";
+import EditModel from "../../../handlers/modelComponents/EditModel";
+import ModelCard from "../../../handlers/modelComponents/ModelCard";
 
-function AppointmentsTypes(props) {
+function Currency(props) {
   const [data, setData] = useState();
   const [isAdding, setIsAdding] = useState(false);
   const [editting, setEditting] = useState("");
@@ -16,7 +16,7 @@ function AppointmentsTypes(props) {
       setData,
       setError,
       method: "GET",
-      path: "appointments/types",
+      path: "currency",
     });
   };
   useEffect(() => {
@@ -25,39 +25,37 @@ function AppointmentsTypes(props) {
 
   return (
     <div>
-      appointmentstypes
+      currency
       {isAdding && (
         <AddModel
-          textDetails={[{ name: "name", nameShown: "name" }]}
-          selectDetailsManually={[
+          textDetails={[
+            { name: "name_arabic", nameShown: "name_arabic" },
+            { name: "name_english", nameShown: "name_english" },
+            { name: "symbol", nameShown: "symbol" },
             {
-              name: "status",
-              nameShown: "Status",
-              options: [
-                { name: "Active", nameShown: "Active" },
-                { name: "Not active", nameShown: "Not active" },
-              ],
+              name: "relation_to_dollar",
+              nameShown: "relation_to_dollar",
+              type: "number",
             },
           ]}
-          path={"appointments/types"}
+          path={"currency"}
           setIsAdding={setIsAdding}
           fetchData={fetchData}
         />
       )}
       {editting && (
         <EditModel
-          textDetails={[{ name: "name", nameShown: "name" }]}
-          selectDetailsManually={[
+        textDetails={[
+            { name: "name_arabic", nameShown: "name_arabic" },
+            { name: "name_english", nameShown: "name_english" },
+            { name: "symbol", nameShown: "symbol" },
             {
-              name: "status",
-              nameShown: "Status",
-              options: [
-                { name: "Active", nameShown: "Active" },
-                { name: "Not active", nameShown: "Not active" },
-              ],
+              name: "relation_to_dollar",
+              nameShown: "relation_to_dollar",
+              type: "number",
             },
           ]}
-          path={"appointments/types"}
+          path={"currency"}
           editting={editting}
           fetchData={fetchData}
         />
@@ -76,8 +74,9 @@ function AppointmentsTypes(props) {
             fetchData={fetchData}
             setEditting={setEditting}
             one={one}
-            path={"appointments/types"}
-            h2items={["name"]}
+            path={"currency"}
+            h2items={["name_arabic", "name_english"]}
+            pitems={["symbol", "relation_to_dollar"]}
           />
         );
       })}
@@ -90,4 +89,4 @@ const mapStateToProps = (state) => ({
   model: state.model,
 });
 const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(AppointmentsTypes);
+export default connect(mapStateToProps, mapDispatchToProps)(Currency);

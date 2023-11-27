@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axiosHandler from "./axiosHandler";
+import axiosHandler from "../axiosHandler";
 import { connect } from "react-redux";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-function EditModel({
+function AddModel({
   textDetails,
   selectDetails,
   selectDetailsRelated,
@@ -12,29 +12,16 @@ function EditModel({
   multiSelectDetails,
   path,
   fetchData,
-  editting,
-  selectDetailsManually
+  selectDetailsManually,
 }) {
-  const [info, setInfo] = useState({});
+  const [info, setInfo] = useState();
   const [data, setData] = useState({});
-  const [selected, setSelected] = useState({});
+  // const [checkedData,setCheckedData] =useState([])
   const [error, setError] = useState();
 
   function changeHandler(e) {
     const { name, value } = e.target;
     setInfo({ ...info, [name]: value });
-  }
-  function checkHandler(e, category) {
-    const { checked, value } = e.target;
-    if (checked) {
-        //console.log('checked')
-      let selectedCategory = info[category] || [];
-      setInfo({ ...info, [category]: [...selectedCategory, value] });
-    } else {
-        //console.log("not checked")
-      const data = info[category].filter((item) => item !== value&&item._id !== value);
-      setInfo({ ...info, [category]: data });
-    }
   }
   async function changeRelayedHandler(e) {
     const { name, value } = e.target;
@@ -62,103 +49,100 @@ function EditModel({
   
     setData(obj);
   }
+  function checkHandler(e, category) {
+    const { checked, value } = e.target;
+    if (checked) {
+      let selectedCategory = info[category] || [];
+      setInfo({ ...info, [category]: [...selectedCategory, value] });
+    } else {
+      const data = info[category].filter((item) => item !== value);
+      setInfo({ ...info, [category]: data });
+    }
+  }
   async function submitHandler(e) {
     e.preventDefault();
+    //console.log('infooooooooooo',info)
     await axiosHandler({
       setError,
-      method: "PATCH",
-      path: `${path}/${editting}`,
+      method: "POST",
+      path: path,
       data: info,
     });
-    setInfo({})
-    e.target.reset()
+    e.target.reset();
     fetchData();
   }
+  const fetchRequiredData = async () => {
+    const obj = {};
+    const promises = [];
 
-  useEffect(() => {
-    const fetchRequiredData = async () => {
-      const obj = {};
-      const promises = [];
-  
-      // Fetch data for selectDetails
-      selectDetails?.forEach((detail) => {
-        const promise = axiosHandler({
-          setError,
-          method: "GET",
-          path: detail?.path,
-        });
-        promises.push(promise.then((data) => (obj[detail.name] = data.data)));
-      });
-  
-      selectDetailsRelayed?.forEach((detail) => {
-        const promise = axiosHandler({
-          setError,
-          method: "GET",
-          path: detail?.path,
-        });
-        promises.push(promise.then((data) => (obj[detail.name] = data.data)));
-      });
-  
-      // Fetch data for multiSelectDetails
-      multiSelectDetails?.forEach((detail) => {
-        const promise = axiosHandler({
-          setError,
-          method: "GET",
-          path: detail?.path,
-        });
-        promises.push(promise.data);
-      });
-  
-      // Wait for all promises to resolve
-      await Promise.all(promises);
-  
-      // Update the state after all promises have resolved
-      setData(obj);
-
-      await axiosHandler({
-        setData:setSelected,
+    // Fetch data for selectDetails
+    selectDetails?.forEach((detail) => {
+      const promise = axiosHandler({
         setError,
         method: "GET",
-        path: `${path}/${editting}`,
+        path: detail?.path,
       });
-    };
-      // Fetch additional data using axiosHandler
-  
-    fetchRequiredData();
-  }, []); // Add editting to the dependency array to re-run the effect when it changes
-  
+      promises.push(promise.then((data) => (obj[detail.name] = data.data)));
+    });
+
+    selectDetailsRelayed?.forEach((detail) => {
+      const promise = axiosHandler({
+        setError,
+        method: "GET",
+        path: detail?.path,
+      });
+      promises.push(promise.then((data) => (obj[detail.name] = data.data)));
+    });
+
+    // Fetch data for multiSelectDetails
+    multiSelectDetails?.forEach((detail) => {
+      const promise = axiosHandler({
+        setError,
+        method: "GET",
+        path: detail?.path,
+      });
+      promises.push(promise.data);
+    });
+
+    // Wait for all promises to resolve
+    await Promise.all(promises);
+
+    // Update the state after all promises have resolved
+    setData(obj);
+  };
   useEffect(() => {
-    setInfo(selected);
-    //console.log(selected)
-    //console.log('infooooo',info)
-  }, [selected]);
+    fetchRequiredData();
+  }, []);
+  //console.log("dataaaaaaa", data);
   return (
     <div>
-      EditModel
+    <div className="bluredBG"></div>
+    <div className="addform">
       <form id="myForm" onSubmit={submitHandler}>
-        {textDetails?.map((detail,i) => {
+        {textDetails?.map((detail, i) => {
           return (
-            <div key={i}>
+            <div key={i} className="insidaddform">
               <label>{detail?.nameShown}</label>
-              <input
+              <br/>
+              <input className="input"
                 type={detail.type || "text"}
-                value={info[detail?.name] || ''}
+                value={info?.detail?.name}
                 onChange={changeHandler}
                 name={detail?.name}
               />
             </div>
           );
         })}
-        {selectDetailsManually?.map((detail,i) => {
+        {selectDetailsManually?.map((detail, i) => {
           return (
-            <div key={i}>
+            <div key={i} >
               <label>{detail?.nameShown}</label>
-              <select value={info[detail.name]} onChange={changeHandler} name={detail?.name}>
+              <select onChange={changeHandler} name={detail?.name}>
                 <option></option>
-                {detail?.options?.map((obj,i) => {
+                {detail?.options?.map((option, i) => {
                   return (
-                    <option key={i} value={obj.name}>
-                      {obj.nameShown}
+                    <option key={i} value={option.name}>
+                      {option.nameShown}
                     </option>
                   );
                 })}
@@ -166,30 +150,13 @@ function EditModel({
             </div>
           );
         })}
-        {selectDetails?.map((detail,i) => {
+        {selectDetails?.map((detail, i) => {
           return (
             <div key={i}>
               <label>{detail?.nameShown}</label>
-              <select value={info[detail.name||detail.name_english]?._id||info[detail.name]} onChange={changeHandler} name={detail?.name}>
+              <select onChange={changeHandler} name={detail?.name}>
                 <option></option>
-                {data[detail?.name]?.map((obj,i) => {
-                  return (
-                    <option key={i}  value={obj._id}>
-                      {obj.name_english || obj.name}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-          );
-        })}
-        {selectDetailsRelayed?.map((detail,i) => {
-          return (
-            <div key={i}>
-              <label>{detail?.nameShown}</label>
-              <select value={info[detail.name||detail.name_english]?._id||info[detail.name]} onChange={changeRelayedHandler} name={detail?.name}>
-                <option></option>
-                {data[detail?.name]?.map((obj,i) => {
+                {data[detail?.name]?.map((obj, i) => {
                   return (
                     <option key={i} value={obj._id}>
                       {obj.name_english || obj.name}
@@ -200,13 +167,13 @@ function EditModel({
             </div>
           );
         })}
-        {selectDetailsRelated?.map((detail,i) => {
+        {selectDetailsRelayed?.map((detail, i) => {
           return (
             <div key={i}>
               <label>{detail?.nameShown}</label>
-              <select value={info[detail.name||detail.name_english]?._id||info[detail.name]} onChange={changeHandler} name={detail?.name}>
+              <select onChange={changeRelayedHandler} name={detail?.name}>
                 <option></option>
-                {data[detail?.name]?.map((obj,i) => {
+                {data[detail?.name]?.map((obj, i) => {
                   return (
                     <option key={i} value={obj._id}>
                       {obj.name_english || obj.name}
@@ -217,11 +184,28 @@ function EditModel({
             </div>
           );
         })}
-        {multiSelectDetails?.map((detail,i) => {
+        {selectDetailsRelated?.map((detail, i) => {
+          return (
+            <div key={i}>
+              <label>{detail?.nameShown}</label>
+              <select onChange={changeHandler} name={detail?.name}>
+                <option></option>
+                {data[detail?.name]?.map((obj, i) => {
+                  return (
+                    <option key={i} value={obj._id}>
+                      {obj.name_english || obj.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          );
+        })}
+        {multiSelectDetails?.map((detail, i) => {
           return (
             <div key={i}>
               <label>{detail.nameShown}</label>
-              {data[detail?.name]?.map((one,i) => {
+              {data[detail?.name]?.map((one, i) => {
                 return (
                   <div key={i}>
                     <label>{one.name || one.name_english}</label>
@@ -229,7 +213,6 @@ function EditModel({
                       type="checkbox"
                       id={one.name}
                       name={one.name}
-                      checked={info[detail.name]?.includes(one._id) || info[detail.name]?.some((model) => model._id === one._id)}
                       onChange={(e) => checkHandler(e, detail.name)}
                       value={one._id}
                     />
@@ -239,10 +222,12 @@ function EditModel({
             </div>
           );
         })}
+        <button type="reset">reset</button>
         <button type="submit">Submit</button>
+        <p>data</p>
         
-        <p>info</p>
       </form>
+    </div>
     </div>
   );
 }
@@ -252,4 +237,4 @@ const mapStateToProps = (state) => ({
   model: state.model,
 });
 const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(EditModel);
+export default connect(mapStateToProps, mapDispatchToProps)(AddModel);
