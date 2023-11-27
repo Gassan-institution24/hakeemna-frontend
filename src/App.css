@@ -85,3 +85,20 @@
 .css-syvkei {
     padding: 160px 64px 0px;
 }}
+.input{
+  width: 150px;
+  height: 20px;
+  position: relative;
+  top: 8px;
+  border-radius: 20px;
+}
+.addform{
+  border: 3px solid red;
+  border-radius: 20px;
+  width: 10%;
+  height: auto;
+  position: relative;
+  left: 45%;
+  top: 10px;
+}
+

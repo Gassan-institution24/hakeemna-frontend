@@ -90,4 +90,9 @@ const Customer = (props) => {
   )
 };
 
-export default Customer;
+const mapStateToProps = (state) => ({
+  user: state.user,
+  model: state.model,
+});
+const mapDispatchToProps = {};
+export default connect(mapStateToProps, mapDispatchToProps)(Customer);
