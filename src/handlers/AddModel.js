@@ -103,13 +103,14 @@ function AddModel({
   }, []);
   console.log('dataaaaaaa',data)
   return (
-    <div>
+    <div className="addform">
       <form id="myForm" onSubmit={submitHandler}>
         {textDetails?.map((detail,i) => {
           return (
-            <div key={i}>
+            <div key={i} className="insidaddform">
               <label>{detail?.nameShown}</label>
-              <input
+              <br/>
+              <input className="input"
                 type={detail.type || "text"}
                 value={info?.detail?.name}
                 onChange={changeHandler}
@@ -120,7 +121,7 @@ function AddModel({
         })}
         {selectDetailsManually?.map((detail,i) => {
           return (
-            <div key={i}>
+            <div key={i} >
               <label>{detail?.nameShown}</label>
               <select onChange={changeHandler} name={detail?.name}>
                 <option></option>
