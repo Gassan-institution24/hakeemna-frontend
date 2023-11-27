@@ -3,28 +3,28 @@ import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/login";
 import Signup from "./pages/signup";
-import Cities from "./pages/fixedData/locationInfo/cities.js";
-import Countries from "./pages/fixedData/locationInfo/countries.js";
-import Currency from "./pages/fixedData/locationInfo/currency.js";
+// import Cities from "./pages/fixedData/locationInfo/cities.js";
+// import Countries from "./pages/fixedData/locationInfo/countries.js";
+// import Currency from "./pages/fixedData/locationInfo/currency.js";
 import Customeranalysis from "./pages/customer/Customeranalysis.js";
 import Customer from "./pages/customer/Customer.js";
 import Drugsprescriptions from "./pages/customer/Drugsprescriptions.js";
 import Medicalscans from "./pages/customer/Medicalscans.js";
-import Analysis from "./pages/fixedData/analysis.js";
+// import Analysis from "./pages/fixedData/analysis.js";
 import Examinationreports from "./pages/customer/Examinationreports.js";
-import Diets from "./pages/fixedData/diets.js";
-import Diseases from "./pages/fixedData/diseases.js";
+// import Diets from "./pages/fixedData/diets.js";
+// import Diseases from "./pages/fixedData/diseases.js";
 import Stakeholdertypes from "./pages/stackholders/Stakeholdertypes.js"
 import Stackholder from "./pages/stackholders/Stackholder.js";
 import Suppliersoffers from "./pages/stackholders/Suppliersoffers.js";
-import MedicalCategories from "./pages/fixedData/medicalCategories.js";
-import Medicines from "./pages/fixedData/medicines.js";
-import MedicinesFamilies from "./pages/fixedData/medicinesFamilies.js";
-import Specialities from "./pages/fixedData/specialities.js";
-import SubSpecialities from "./pages/fixedData/subSpecialities.js";
+// import MedicalCategories from "./pages/fixedData/medicalCategories.js";
+// import Medicines from "./pages/fixedData/medicines.js";
+// import MedicinesFamilies from "./pages/fixedData/medicinesFamilies.js";
+// import Specialities from "./pages/fixedData/specialities.js";
+// import SubSpecialities from "./pages/fixedData/subSpecialities.js";
 import Added_value_tax_GD from "./pages/accounting/Added_value_tax_GD.js";
-import Surgeries from "./pages/fixedData/surgeries.js";
-import Symptoms from "./pages/fixedData/symptoms.js";
+// import Surgeries from "./pages/fixedData/surgeries.js";
+// import Symptoms from "./pages/fixedData/symptoms.js";
 import AppointmentTypes from "./pages/shared/AppointmentTypes.js";
 import Appointments from "./pages/shared/Appointments.js";
 import Valuetax from "./pages/accounting/Valuetax.js";
@@ -57,7 +57,7 @@ import Totalprice from "./pages/accounting/Totalprice.js";
             <Route path="/signup" element={<Signup />} />
             <Route path="/signin" element={<LoginPage />} />
             <Route path="/managementtables" element={<ManagementTables />} />
-            <Route path="/cities" element={<Cities />} />
+            {/* <Route path="/cities" element={<Cities />} />
             <Route path="/countries" element={<Countries />} />
             <Route path="/currency" element={<Currency />} />
             <Route path="/analysis" element={<Analysis />} />
@@ -71,7 +71,7 @@ import Totalprice from "./pages/accounting/Totalprice.js";
             <Route path="/surgeries" element={<Surgeries />} />
             <Route path="/symptoms" element={<Symptoms />} />
             <Route path="/appointypes" element={<AppointmentTypes />} />
-            <Route path="/appointments" element={<Appointments />} />
+            <Route path="/appointments" element={<Appointments />} /> */}
             <Route path='/customer' element={<Customer />}/>
             <Route path='/customeranalysis' element={<Customeranalysis />}/>
             <Route path='/drugsprescriptions' element={<Drugsprescriptions />}/>
