@@ -37,7 +37,6 @@
   }
 }
 .border{
-  border: 3px solid greenyellow;
   padding: 10px;
   margin: 10px;
 }
@@ -95,10 +94,30 @@
 .addform{
   border: 3px solid red;
   border-radius: 20px;
-  width: 10%;
-  height: auto;
-  position: relative;
-  left: 45%;
-  top: 10px;
 }
 
+.subbtn{
+  margin-bottom: 15px;
+}
+
+.profile{
+  font-size: 30px;
+  position: relative;
+  top: 10px;
+  left: 10px;
+  float: left;
+  cursor: pointer;
+  color: rgb(111, 111, 207);
+}
+.profile:hover{
+  color: blue;
+}
+
+.medicines{
+  border: 1px rgb(111, 111, 207) solid;
+  border-radius: 20px;
+  width: 30%;
+  position: relative;
+  left: 35%;
+  
+}

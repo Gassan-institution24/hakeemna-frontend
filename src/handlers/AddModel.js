@@ -14,7 +14,7 @@ function AddModel({
   fetchData,
   selectDetailsManually,
 }) {
-  const [info, setInfo] = useState();
+  const [info, setInfo] = useState({});
   const [data, setData] = useState({});
   // const [checkedData,setCheckedData] =useState([])
   const [error, setError] = useState();
@@ -101,7 +101,8 @@ function AddModel({
         method: "GET",
         path: detail?.path,
       });
-      promises.push(promise.data);
+      console.log(promise)
+      promises.push(promise.then((data) => (obj[detail.name] = data.data)));
     });
 
     // Wait for all promises to resolve
@@ -109,6 +110,7 @@ function AddModel({
 
     // Update the state after all promises have resolved
     setData(obj);
+    console.log(obj)
   };
   useEffect(() => {
     fetchRequiredData();
@@ -157,7 +159,7 @@ function AddModel({
                 {data[detail?.name]?.map((obj, i) => {
                   return (
                     <option key={i} value={obj._id}>
-                      {obj.name_english || obj.name}
+                      {obj.name_english || obj.name||obj.trade_name}
                     </option>
                   );
                 })}
@@ -202,16 +204,16 @@ function AddModel({
         {multiSelectDetails?.map((detail, i) => {
           return (
             <div key={i}>
-              <label>{detail.nameShown}</label>
+              <label>{detail?.nameShown}</label>
               {data[detail?.name]?.map((one, i) => {
                 return (
                   <div key={i}>
-                    <label>{one.name || one.name_english}</label>
+                    <label>{one?.name || one?.name_english||one?.trade_name}</label>
                     <input
                       type="checkbox"
                       id={one.name}
-                      name={one.name}
-                      onChange={(e) => checkHandler(e, detail.name)}
+                      name={one?.name}
+                      onChange={(e) => checkHandler(e, detail?.name)}
                       value={one._id}
                     />
                   </div>
@@ -221,9 +223,7 @@ function AddModel({
           );
         })}
         <button type="reset">reset</button>
-        <button type="submit">Submit</button>
-        <p>data</p>
-        
+        <button type="submit" className="subbtn">Submit</button>
       </form>
     </div>
   );
