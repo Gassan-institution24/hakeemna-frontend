@@ -26,7 +26,6 @@ function AddCountry({fetchData}) {
             <input type='text' value={countryInfo.name_arabic} onChange={changeHandler} name='name_arabic'/>
             <button type='submit'>Submit</button>
         </form>
-        {JSON.stringify(error)}
 
     </div>
   )

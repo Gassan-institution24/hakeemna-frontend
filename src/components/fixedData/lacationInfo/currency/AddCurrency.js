@@ -28,7 +28,6 @@ function AddCurrency({fetchData}) {
             <input type='text' value={currencyInfo.symbol} onChange={changeHandler} name='symbol'/>
             <button type='submit'>Submit</button>
         </form>
-        {JSON.stringify(error)}
 
     </div>
   )

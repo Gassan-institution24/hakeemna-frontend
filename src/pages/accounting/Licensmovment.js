@@ -84,9 +84,9 @@ const Licensmovment = (props) => {
           />
         );
       })}
-      {JSON.stringify(data)}
-      {JSON.stringify(data)}
-      {JSON.stringify(props.model)}
+      
+      
+      
     </div>
   );
 };

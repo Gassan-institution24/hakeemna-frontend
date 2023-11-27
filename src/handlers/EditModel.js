@@ -240,9 +240,8 @@ function EditModel({
           );
         })}
         <button type="submit">Submit</button>
-        {JSON.stringify(data)}
+        
         <p>info</p>
-        {JSON.stringify(info)}
       </form>
     </div>
   );

@@ -28,7 +28,7 @@ function Diseases(props) {
         {data?.map((one,idx)=>{
             return(<MedicineCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one}/>)
         })}
-        {JSON.stringify(data)}
+        
     </div>
   )
 }

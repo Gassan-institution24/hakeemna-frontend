@@ -104,8 +104,8 @@ function EditMedicine(props) {
             </select>
             <button type='submit'>Submit</button>
         </form>
-        {JSON.stringify(error)}
-        {JSON.stringify(props.user)}
+        
+        
 
     </div>
   )

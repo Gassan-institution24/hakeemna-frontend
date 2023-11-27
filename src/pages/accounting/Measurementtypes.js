@@ -84,8 +84,8 @@ const Measurementtypes = (props) => {
           />
         );
       })}
-      {JSON.stringify(data)}
-      {JSON.stringify(props.model)}
+      
+      
     </div>
   )
 }

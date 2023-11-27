@@ -28,8 +28,7 @@ function Diets(props) {
         {diets?.map((one,idx)=>{
             return(<DietCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one}/>)
         })}
-        {JSON.stringify(props.user)}
-        {JSON.stringify(props.model)}
+        
     </div>
   )
 }

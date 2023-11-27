@@ -87,8 +87,8 @@ const Receiptpaymentvoucher = (props) => {
           />
         );
       })}
-      {JSON.stringify(data)}
-      {JSON.stringify(props.model)}
+      
+      
     </div>
   )
 }

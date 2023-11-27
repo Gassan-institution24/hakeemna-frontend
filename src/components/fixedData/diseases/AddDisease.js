@@ -57,7 +57,6 @@ function AddDisease(props) {
             })}
             <button type='submit'>Submit</button>
         </form>
-        {JSON.stringify(error)}
 
     </div>
   )

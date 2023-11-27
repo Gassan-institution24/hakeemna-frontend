@@ -91,8 +91,8 @@ const Servicetypes = (props) => {
           />
         );
       })}
-      {JSON.stringify(data)}
-      {JSON.stringify(props.model)}
+      
+      
     </div>
   );
 };

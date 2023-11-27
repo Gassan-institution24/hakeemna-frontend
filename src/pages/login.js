@@ -33,9 +33,9 @@ function Login(props) {
         </form>
     </div>
 
-        {JSON.stringify(props.user)}
+        
         <p>this</p>
-        {JSON.stringify(error)}
+        
     </div>
   )
 }

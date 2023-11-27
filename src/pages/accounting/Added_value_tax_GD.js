@@ -27,8 +27,8 @@ function Added_value_tax_GD(props) {
         {data?.map((one,idx)=>{
             return(<ModelCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one} path={'addedvaluetaxgd'} h2items={['TAX_code','unit_service']}/>)
         })}
-        {JSON.stringify(data)}
-        {JSON.stringify(props.model)}
+        
+        
     </div>
   )
 }

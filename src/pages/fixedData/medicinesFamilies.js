@@ -29,8 +29,6 @@ function MedicalCategories(props) {
         {data?.map((one,idx)=>{
             return(<FamilyCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one}/>)
         })}
-        {JSON.stringify(data)}
-        {JSON.stringify(props.model)}
     </div>
   )
 }

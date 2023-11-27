@@ -37,8 +37,6 @@ function EditAnalysis(props) {
             <input type='text' value={analysisInfo.description} onChange={changeHandler} name='description'/>
             <button type='submit'>Submit</button>
         </form>
-        {JSON.stringify(error)}
-        {JSON.stringify(props.user)}
 
     </div>
   )
