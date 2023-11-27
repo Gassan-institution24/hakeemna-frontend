@@ -11,7 +11,7 @@ const Stakeholdertypesupdate = ({ info }) => {
         setData(response.data);
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   }, []);
 
@@ -22,7 +22,7 @@ const Stakeholdertypesupdate = ({ info }) => {
       method: "PATCH",
       path: `stackholdertype/${id}`,
     });
-    console.log({ Place_of_service: data });
+    //console.log({ Place_of_service: data });
   };
   return (
     <div>

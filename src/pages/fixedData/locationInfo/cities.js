@@ -15,7 +15,7 @@ function Cities(props) {
     const fetchData = async()=>{
         await axiosHandler({setData:setCities,setError:setError,method:'GET',path:'cities/'}) 
     }
-    console.log('cities', cities)
+    //console.log('cities', cities)
     useEffect(()=>{
         fetchData()
     },[])

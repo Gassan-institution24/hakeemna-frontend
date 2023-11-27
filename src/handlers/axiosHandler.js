@@ -20,12 +20,12 @@ export default async function axiosHandler({setData:setData,setError:setError,me
           return response
         }else{
           if(setError){
-            console.log(response)
+            //console.log(response)
             setError(response.data)
           }
         }
     } catch(err){
-        console.log(err)
+        //console.log(err)
         if(setError){
           setError(err.message)
         }

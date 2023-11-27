@@ -14,9 +14,9 @@ function Signup(props) {
         e.preventDefault()
         await axiosHandler({setData:props.setToken,setError,method:'POST',path:'users/signup',data:userInfo})
         setUserInfo({name:'',email:'',password:'',confirmPassword:'',role:''})
-        console.log(props.user);
+        //console.log(props.user);
     }
-    console.log(props.user);
+    //console.log(props.user);
     
     
   return (

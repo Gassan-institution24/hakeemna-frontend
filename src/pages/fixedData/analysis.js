@@ -16,7 +16,7 @@ function Analysis(props) {
     const fetchData = async()=>{
         await axiosHandler({setData:setAnalysis,setError:setError,method:'GET',path:'analysis/'}) 
     }
-    console.log('analysis', analysis)
+    //console.log('analysis', analysis)
     useEffect(()=>{
         fetchData()
     },[])

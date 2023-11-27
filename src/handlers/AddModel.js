@@ -4,14 +4,15 @@ import { connect } from "react-redux";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-
 function AddModel({
   textDetails,
   selectDetails,
+  selectDetailsRelated,
+  selectDetailsRelayed,
   multiSelectDetails,
   path,
   fetchData,
-  selectDetailsManually
+  selectDetailsManually,
 }) {
   const [info, setInfo] = useState();
   const [data, setData] = useState({});
@@ -21,6 +22,32 @@ function AddModel({
   function changeHandler(e) {
     const { name, value } = e.target;
     setInfo({ ...info, [name]: value });
+  }
+  async function changeRelayedHandler(e) {
+    const { name, value } = e.target;
+    setInfo({ ...info, [name]: value });
+  
+    const obj = { ...data };
+    const promises = [];
+  
+    selectDetailsRelated?.forEach((detail) => {
+      const promise = axiosHandler({
+        setError,
+        method: "GET",
+        path: `${detail?.path}/${value}`,
+      });
+      promises.push(promise);
+    });
+  
+    // Wait for all promises to resolve
+    const resolvedDataArray = await Promise.all(promises);
+  
+    // Update the state after all promises have resolved
+    resolvedDataArray.forEach((resolvedData, index) => {
+      obj[selectDetailsRelated[index].name] = resolvedData.data;
+    });
+  
+    setData(obj);
   }
   function checkHandler(e, category) {
     const { checked, value } = e.target;
@@ -34,78 +61,63 @@ function AddModel({
   }
   async function submitHandler(e) {
     e.preventDefault();
+    //console.log('infooooooooooo',info)
     await axiosHandler({
       setError,
       method: "POST",
       path: path,
       data: info,
     });
-    e.target.reset()
+    e.target.reset();
     fetchData();
   }
-  async function getFromDB({ path, method, data, topic }) {
-    try {
-      const url = "http://localhost:3000/api/" + path;
-      const token = Cookies.get("user_token");
-      const response = await axios({
-        method: method,
-        url: url,
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        data: data,
+  const fetchRequiredData = async () => {
+    const obj = {};
+    const promises = [];
+
+    // Fetch data for selectDetails
+    selectDetails?.forEach((detail) => {
+      const promise = axiosHandler({
+        setError,
+        method: "GET",
+        path: detail?.path,
       });
-      if (response.status === 200) {
-        // setData({ ...data, [topic]: response.data });
-        return response.data
-      } else {
-        if (setError) {
-          setError(response.data);
-        }
-      }
-    } catch (err) {
-      setError(err.message);
-    }
-  }
+      promises.push(promise.then((data) => (obj[detail.name] = data.data)));
+    });
+
+    selectDetailsRelayed?.forEach((detail) => {
+      const promise = axiosHandler({
+        setError,
+        method: "GET",
+        path: detail?.path,
+      });
+      promises.push(promise.then((data) => (obj[detail.name] = data.data)));
+    });
+
+    // Fetch data for multiSelectDetails
+    multiSelectDetails?.forEach((detail) => {
+      const promise = axiosHandler({
+        setError,
+        method: "GET",
+        path: detail?.path,
+      });
+      promises.push(promise.data);
+    });
+
+    // Wait for all promises to resolve
+    await Promise.all(promises);
+
+    // Update the state after all promises have resolved
+    setData(obj);
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      const obj = {};
-      const promises = [];
-  
-      // Fetch data for selectDetails
-      selectDetails?.forEach((detail) => {
-        const promise = getFromDB({
-          setError,
-          method: "GET",
-          path: detail?.path,
-        });
-        promises.push(promise.then((data) => obj[detail.name] = data));
-      });
-  
-      // Fetch data for multiSelectDetails
-      multiSelectDetails?.forEach((detail) => {
-        const promise = getFromDB({
-          setError,
-          method: "GET",
-          path: detail?.path,
-        });
-        promises.push(promise);
-      });
-  
-      // Wait for all promises to resolve
-      await Promise.all(promises);
-  
-      // Update the state after all promises have resolved
-      setData(obj);
-    };
-  
-    fetchData();
+    fetchRequiredData();
   }, []);
-  console.log('dataaaaaaa',data)
+  //console.log("dataaaaaaa", data);
   return (
     <div>
       <form id="myForm" onSubmit={submitHandler}>
-        {textDetails?.map((detail,i) => {
+        {textDetails?.map((detail, i) => {
           return (
             <div key={i}>
               <label>{detail?.nameShown}</label>
@@ -118,13 +130,13 @@ function AddModel({
             </div>
           );
         })}
-        {selectDetailsManually?.map((detail,i) => {
+        {selectDetailsManually?.map((detail, i) => {
           return (
             <div key={i}>
               <label>{detail?.nameShown}</label>
               <select onChange={changeHandler} name={detail?.name}>
                 <option></option>
-                {detail?.options?.map((option,i) => {
+                {detail?.options?.map((option, i) => {
                   return (
                     <option key={i} value={option.name}>
                       {option.nameShown}
@@ -135,13 +147,13 @@ function AddModel({
             </div>
           );
         })}
-        {selectDetails?.map((detail,i) => {
+        {selectDetails?.map((detail, i) => {
           return (
             <div key={i}>
               <label>{detail?.nameShown}</label>
               <select onChange={changeHandler} name={detail?.name}>
                 <option></option>
-                {data[detail?.name]?.map((obj,i) => {
+                {data[detail?.name]?.map((obj, i) => {
                   return (
                     <option key={i} value={obj._id}>
                       {obj.name_english || obj.name}
@@ -152,11 +164,45 @@ function AddModel({
             </div>
           );
         })}
-        {multiSelectDetails?.map((detail,i) => {
+        {selectDetailsRelayed?.map((detail, i) => {
+          return (
+            <div key={i}>
+              <label>{detail?.nameShown}</label>
+              <select onChange={changeRelayedHandler} name={detail?.name}>
+                <option></option>
+                {data[detail?.name]?.map((obj, i) => {
+                  return (
+                    <option key={i} value={obj._id}>
+                      {obj.name_english || obj.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          );
+        })}
+        {selectDetailsRelated?.map((detail, i) => {
+          return (
+            <div key={i}>
+              <label>{detail?.nameShown}</label>
+              <select onChange={changeHandler} name={detail?.name}>
+                <option></option>
+                {data[detail?.name]?.map((obj, i) => {
+                  return (
+                    <option key={i} value={obj._id}>
+                      {obj.name_english || obj.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          );
+        })}
+        {multiSelectDetails?.map((detail, i) => {
           return (
             <div key={i}>
               <label>{detail.nameShown}</label>
-              {data[detail?.name]?.map((one,i) => {
+              {data[detail?.name]?.map((one, i) => {
                 return (
                   <div key={i}>
                     <label>{one.name || one.name_english}</label>

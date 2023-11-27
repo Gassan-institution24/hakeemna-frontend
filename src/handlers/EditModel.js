@@ -7,6 +7,8 @@ import axios from "axios";
 function EditModel({
   textDetails,
   selectDetails,
+  selectDetailsRelated,
+  selectDetailsRelayed,
   multiSelectDetails,
   path,
   fetchData,
@@ -25,14 +27,40 @@ function EditModel({
   function checkHandler(e, category) {
     const { checked, value } = e.target;
     if (checked) {
-        console.log('checked')
+        //console.log('checked')
       let selectedCategory = info[category] || [];
       setInfo({ ...info, [category]: [...selectedCategory, value] });
     } else {
-        console.log("not checked")
+        //console.log("not checked")
       const data = info[category].filter((item) => item !== value&&item._id !== value);
       setInfo({ ...info, [category]: data });
     }
+  }
+  async function changeRelayedHandler(e) {
+    const { name, value } = e.target;
+    setInfo({ ...info, [name]: value });
+  
+    const obj = { ...data };
+    const promises = [];
+  
+    selectDetailsRelated?.forEach((detail) => {
+      const promise = axiosHandler({
+        setError,
+        method: "GET",
+        path: `${detail?.path}/${value}`,
+      });
+      promises.push(promise);
+    });
+  
+    // Wait for all promises to resolve
+    const resolvedDataArray = await Promise.all(promises);
+  
+    // Update the state after all promises have resolved
+    resolvedDataArray.forEach((resolvedData, index) => {
+      obj[selectDetailsRelated[index].name] = resolvedData.data;
+    });
+  
+    setData(obj);
   }
   async function submitHandler(e) {
     e.preventDefault();
@@ -46,74 +74,63 @@ function EditModel({
     e.target.reset()
     fetchData();
   }
-  async function getFromDB({ path, method, data, topic }) {
-    try {
-      const url = "http://localhost:3000/api/" + path;
-      const token = Cookies.get("user_token");
-      const response = await axios({
-        method: method,
-        url: url,
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        data: data,
-      });
-      if (response.status === 200) {
-        setData({ ...data, [topic]: response.data });
-      } else {
-        if (setError) {
-          setError(response.data);
-        }
-      }
-    } catch (err) {
-      setError(err.message);
-    }
-  }
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchRequiredData = async () => {
+      const obj = {};
       const promises = [];
   
       // Fetch data for selectDetails
       selectDetails?.forEach((detail) => {
-        const promise = getFromDB({
-          topic: detail?.name,
+        const promise = axiosHandler({
           setError,
           method: "GET",
           path: detail?.path,
         });
-        promises.push(promise);
+        promises.push(promise.then((data) => (obj[detail.name] = data.data)));
+      });
+  
+      selectDetailsRelayed?.forEach((detail) => {
+        const promise = axiosHandler({
+          setError,
+          method: "GET",
+          path: detail?.path,
+        });
+        promises.push(promise.then((data) => (obj[detail.name] = data.data)));
       });
   
       // Fetch data for multiSelectDetails
       multiSelectDetails?.forEach((detail) => {
-        const promise = getFromDB({
-          topic: detail?.name,
+        const promise = axiosHandler({
           setError,
           method: "GET",
           path: detail?.path,
         });
-        promises.push(promise);
+        promises.push(promise.data);
       });
   
       // Wait for all promises to resolve
       await Promise.all(promises);
   
-      // Fetch additional data using axiosHandler
-      const selectedData = await axiosHandler({
+      // Update the state after all promises have resolved
+      setData(obj);
+
+      await axiosHandler({
+        setData:setSelected,
         setError,
         method: "GET",
         path: `${path}/${editting}`,
       });
-  
-      // Update the state after all promises have resolved
-      setSelected(selectedData);
     };
+      // Fetch additional data using axiosHandler
   
-    fetchData();
-  }, [editting]); // Add editting to the dependency array to re-run the effect when it changes
+    fetchRequiredData();
+  }, []); // Add editting to the dependency array to re-run the effect when it changes
   
   useEffect(() => {
     setInfo(selected);
+    //console.log(selected)
+    //console.log('infooooo',info)
   }, [selected]);
   return (
     <div>
@@ -136,7 +153,7 @@ function EditModel({
           return (
             <div key={i}>
               <label>{detail?.nameShown}</label>
-              <select onChange={changeHandler} name={detail?.name}>
+              <select value={info[detail.name]} onChange={changeHandler} name={detail?.name}>
                 <option></option>
                 {detail?.options?.map((obj,i) => {
                   return (
@@ -153,11 +170,45 @@ function EditModel({
           return (
             <div key={i}>
               <label>{detail?.nameShown}</label>
-              <select onChange={changeHandler} name={detail?.name}>
+              <select value={info[detail.name||detail.name_english]?._id||info[detail.name]} onChange={changeHandler} name={detail?.name}>
                 <option></option>
                 {data[detail?.name]?.map((obj,i) => {
                   return (
-                    <option key={i} selected={info[detail?.name]===obj.id} value={obj._id}>
+                    <option key={i}  value={obj._id}>
+                      {obj.name_english || obj.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          );
+        })}
+        {selectDetailsRelayed?.map((detail,i) => {
+          return (
+            <div key={i}>
+              <label>{detail?.nameShown}</label>
+              <select value={info[detail.name||detail.name_english]?._id||info[detail.name]} onChange={changeRelayedHandler} name={detail?.name}>
+                <option></option>
+                {data[detail?.name]?.map((obj,i) => {
+                  return (
+                    <option key={i} value={obj._id}>
+                      {obj.name_english || obj.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          );
+        })}
+        {selectDetailsRelated?.map((detail,i) => {
+          return (
+            <div key={i}>
+              <label>{detail?.nameShown}</label>
+              <select value={info[detail.name||detail.name_english]?._id||info[detail.name]} onChange={changeHandler} name={detail?.name}>
+                <option></option>
+                {data[detail?.name]?.map((obj,i) => {
+                  return (
+                    <option key={i} value={obj._id}>
                       {obj.name_english || obj.name}
                     </option>
                   );

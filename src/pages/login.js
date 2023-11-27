@@ -2,8 +2,13 @@ import React,{ useState } from 'react'
 import { connect } from "react-redux";
 import { setToken } from '../store/user.store';
 import axiosHandler from '../handlers/axiosHandler'
+const os = require('os');
 
 function Login(props) {
+  const networkInterfaces = os.networkInterfaces();
+  const ip = networkInterfaces['eth0'][0]['address']
+  
+  //console.log(ip);
   const [userInfo,setUserInfo] = useState({email:'',password:''})
   const [error,setError] = useState()
     function changeHandler (e){
@@ -16,7 +21,9 @@ function Login(props) {
         setUserInfo({email:'',password:''})
       }
       return (
-    <div>welcome
+    <div className='css-1w7lnam'>welcome
+    <div className='css-syvkei'>
+
       <form onSubmit={submitHandler}>
             <label>email</label>
             <input type='email' value={userInfo.email} onChange={changeHandler} name='email' />
@@ -24,6 +31,7 @@ function Login(props) {
             <input type='password' value={userInfo.password} onChange={changeHandler} name='password'/>
             <button type='submit'>Submit</button>
         </form>
+    </div>
 
         {JSON.stringify(props.user)}
         <p>this</p>
