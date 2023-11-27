@@ -42,7 +42,6 @@ function AddSubSpeciality(props) {
             </select>
             <button type='submit'>Submit</button>
         </form>
-        {JSON.stringify(specialites)}
 
     </div>
   )

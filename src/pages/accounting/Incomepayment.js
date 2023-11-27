@@ -87,8 +87,8 @@ const Incomepayment = (props) => {
           />
         );
       })}
-      {JSON.stringify(data)}
-      {JSON.stringify(props.model)}
+      
+      
     </div>
   );
 };

@@ -37,9 +37,6 @@ function EditCategory(props) {
             <input type='text' value={info.description} onChange={changeHandler} name='description'/>
             <button type='submit'>Submit</button>
         </form>
-        {JSON.stringify(error)}
-        {JSON.stringify(props.user)}
-
     </div>
   )
 }

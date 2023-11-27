@@ -223,9 +223,8 @@ function AddModel({
         <button type="reset">reset</button>
         <button type="submit">Submit</button>
         <p>data</p>
-        {JSON.stringify(data)}
+        
       </form>
-      {JSON.stringify(info)}
     </div>
   );
 }

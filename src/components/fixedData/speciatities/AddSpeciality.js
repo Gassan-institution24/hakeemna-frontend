@@ -28,7 +28,7 @@ function AddSpeciality(props) {
             <input type='text' value={info.description} onChange={changeHandler} name='description'/>
             <button type='submit'>Submit</button>
         </form>
-        {JSON.stringify(error)}
+        
 
     </div>
   )

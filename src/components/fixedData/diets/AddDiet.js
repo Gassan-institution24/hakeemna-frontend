@@ -28,7 +28,6 @@ function AddDiet(props) {
             <input type='number' value={info.duration} onChange={changeHandler} name='duration'/>
             <button type='submit'>Submit</button>
         </form>
-        {JSON.stringify(error)}
 
     </div>
   )

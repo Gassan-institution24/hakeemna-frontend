@@ -89,8 +89,8 @@ return (
         />
       );
     })}
-    {JSON.stringify(data)}
-    {JSON.stringify(props.model)}
+    
+    
   </div>
 )
 };

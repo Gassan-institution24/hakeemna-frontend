@@ -27,8 +27,6 @@ function Surgeries(props) {
         {data?.map((one,idx)=>{
             return(<ModelCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one} path={'surgeries'} h2items={['name']} pitems={['description']}/>)
         })}
-        {JSON.stringify(data)}
-        {JSON.stringify(props.model)}
     </div>
   )
 }

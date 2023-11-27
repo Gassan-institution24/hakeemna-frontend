@@ -29,8 +29,8 @@ function Analysis(props) {
         {analysis?.map((analysis,idx)=>{
             return(<AnalysisCard key={idx} fetchData={fetchData} setEditting={setEditting} analysis={analysis}/>)
         })}
-        {JSON.stringify(props.user)}
-        {JSON.stringify(props.model)}
+        
+        
     </div>
   )
 }

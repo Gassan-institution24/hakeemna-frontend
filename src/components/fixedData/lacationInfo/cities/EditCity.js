@@ -35,8 +35,6 @@ function EditCity(props) {
             <input type='text' value={cityInfo.name_arabic} onChange={changeHandler} name='name_arabic'/>
             <button type='submit'>Submit</button>
         </form>
-        {JSON.stringify(error)}
-        {JSON.stringify(props.user)}
 
     </div>
   )

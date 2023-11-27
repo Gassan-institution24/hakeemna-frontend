@@ -24,8 +24,8 @@ const Hospital = (props) => {
     {data?.map((one,idx)=>{
         return(<ModelCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one} path={'hospital'} h2items={['Hospital_department_name_English','Hospital_department_name_Arabic','City']}/>)
     })}
-    {JSON.stringify(data)}
-    {JSON.stringify(props.model)}
+    
+    
 </div>
   )
 

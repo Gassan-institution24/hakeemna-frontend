@@ -195,7 +195,6 @@ function AddMedicine(props) {
         </select>
         <button type="submit">Submit</button>
       </form>
-      {JSON.stringify(countries)}
     </div>
   );
 }

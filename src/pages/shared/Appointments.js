@@ -164,10 +164,8 @@ function Appointments(props) {
           />
         );
       })}
-      {JSON.stringify(data)}
+      
       <p>user</p>
-      {JSON.stringify('useeeerrrrrr',props.user)}
-      {JSON.stringify('proops',props)}
     </div>
   );
 }

@@ -27,8 +27,8 @@ function Valuetax(props) {
         {data?.map((one,idx)=>{
             return(<ModelCard key={idx} fetchData={fetchData} setEditting={setEditting} one={one} path={'addedvaluetax'} h2items={['place_of_sevice','unit_service']}/>)
         })}
-        {JSON.stringify(data)}
-        {JSON.stringify(props.model)}
+        
+        
     </div>
   )
 }
