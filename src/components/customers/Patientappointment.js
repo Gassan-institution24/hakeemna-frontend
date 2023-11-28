@@ -4,7 +4,7 @@ import axiosHandler from "../../handlers/axiosHandler";
 import AddModel from "../../handlers/modelComponents/AddModel";
 import EditModel from "../../handlers/modelComponents/EditModel";
 import ModelCard from "../../handlers/modelComponents/ModelCard";
-const Drugsprescriptions = (props) => {
+const Patientappointment = (props) => {
   const [data, setData] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [editting, setEditting] = useState("");
@@ -12,11 +12,12 @@ const Drugsprescriptions = (props) => {
   const fetchData = async () => {
     if (props.user.data) {
       const user = await props.user.data;
+
       await axiosHandler({
         setData,
         setError,
         method: "GET",
-        path: `customer/${user.customer?._id}`,
+        path: `appointments/customer/${user.customer?._id}`,
       });
     }
   };
@@ -25,25 +26,23 @@ const Drugsprescriptions = (props) => {
   }, [props.user]);
   return (
     <div>
-      <h1>current medicines</h1>
+      <h1>current appointments</h1>
       <table>
         <thead>
           <tr>
             <th>name</th>
-            <th>dose</th>
-            <th>duration</th>
-            <th>frequently</th>
+            <th>start time</th>
+            <th>end time</th>
           </tr>
         </thead>
 
-        {data?.current_medications?.map((one, idx) => {
+        {data?.map((one, idx) => {
           return (
             <tbody key={idx}>
               <tr>
-                <td>{one.medicine.trade_name}</td>
-                <td>{one.dose}</td>
-                <td>{one.frequently}</td>
-                <td>{one.duration}</td>
+                <td>{one?.name}</td>
+                <td>{one?.start_time}</td>
+                <td>{one?.end_time}</td>
               </tr>
             </tbody>
           );
@@ -58,4 +57,4 @@ const mapStateToProps = (state) => ({
   model: state.model,
 });
 const mapDispatchToProps = {};
-export default connect(mapStateToProps, mapDispatchToProps)(Drugsprescriptions);
+export default connect(mapStateToProps, mapDispatchToProps)(Patientappointment);
