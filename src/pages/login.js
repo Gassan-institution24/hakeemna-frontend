@@ -5,10 +5,9 @@ import axiosHandler from '../handlers/axiosHandler'
 const os = require('os');
 
 function Login(props) {
-  const networkInterfaces = os.networkInterfaces();
-  const ip = networkInterfaces['eth0'][0]['address']
-  
-  //console.log(ip);
+  // const networkInterfaces = os.networkInterfaces();
+  // const ip = networkInterfaces['eth0'][0]['address']
+
   const [userInfo,setUserInfo] = useState({email:'',password:''})
   const [error,setError] = useState()
     function changeHandler (e){

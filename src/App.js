@@ -3,28 +3,11 @@ import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/login";
 import Signup from "./pages/signup";
-// import Cities from "./pages/fixedData/locationInfo/cities.js";
-// import Countries from "./pages/fixedData/locationInfo/countries.js";
-// import Currency from "./pages/fixedData/locationInfo/currency.js";
-import Customeranalysis from "./pages/customer/Customeranalysis.js";
 import Customer from "./pages/customer/Customer.js";
-import Drugsprescriptions from "./pages/customer/Drugsprescriptions.js";
-import Medicalscans from "./pages/customer/Medicalscans.js";
-// import Analysis from "./pages/fixedData/analysis.js";
-import Examinationreports from "./pages/customer/Examinationreports.js";
-// import Diets from "./pages/fixedData/diets.js";
-// import Diseases from "./pages/fixedData/diseases.js";
 import Stakeholdertypes from "./pages/stackholders/Stakeholdertypes.js"
 import Stackholder from "./pages/stackholders/Stackholder.js";
 import Suppliersoffers from "./pages/stackholders/Suppliersoffers.js";
-// import MedicalCategories from "./pages/fixedData/medicalCategories.js";
-// import Medicines from "./pages/fixedData/medicines.js";
-// import MedicinesFamilies from "./pages/fixedData/medicinesFamilies.js";
-// import Specialities from "./pages/fixedData/specialities.js";
-// import SubSpecialities from "./pages/fixedData/subSpecialities.js";
 import Added_value_tax_GD from "./pages/accounting/Added_value_tax_GD.js";
-// import Surgeries from "./pages/fixedData/surgeries.js";
-// import Symptoms from "./pages/fixedData/symptoms.js";
 import AppointmentTypes from "./pages/shared/AppointmentTypes.js";
 import Appointments from "./pages/shared/Appointments.js";
 import Valuetax from "./pages/accounting/Valuetax.js";
@@ -45,6 +28,7 @@ import Receiptpaymentvoucher from "./pages/accounting/Receiptpaymentvoucher.js";
 import Servicetypes from "./pages/accounting/Servicetypes.js";
 import Stockmanagement from "./pages/accounting/Stockmanagement.js"
 import Totalprice from "./pages/accounting/Totalprice.js";
+import Profile from "./components/customers/Profile.js";
   function App(props) {
     useEffect(() => {
       if(!props.user.data){
@@ -59,21 +43,6 @@ import Totalprice from "./pages/accounting/Totalprice.js";
             <Route path="/signup" element={<Signup />} />
             <Route path="/signin" element={<LoginPage />} />
             <Route path="/managementtables" element={<ManagementTables />} />
-            {/* <Route path="/cities" element={<Cities />} />
-            <Route path="/countries" element={<Countries />} />
-            <Route path="/currency" element={<Currency />} />
-            <Route path="/analysis" element={<Analysis />} />
-            <Route path="/diets" element={<Diets />} />
-            <Route path="/diseases" element={<Diseases />} />
-            <Route path="/medcats" element={<MedicalCategories />} />
-            <Route path="/medicines" element={<Medicines />} />
-            <Route path="/medFamilies" element={<MedicinesFamilies />} />
-            <Route path="/specialities" element={<Specialities />} />
-            <Route path="/subspecialities" element={<SubSpecialities />} />
-            <Route path="/surgeries" element={<Surgeries />} />
-            <Route path="/symptoms" element={<Symptoms />} />
-            <Route path="/appointypes" element={<AppointmentTypes />} />
-            <Route path="/appointments" element={<Appointments />} /> */}
             <Route path='/customer' element={<Customer />}/>
             <Route path='/stakeholdertypes' element={<Stakeholdertypes />}/>
             <Route path='/stakeholder' element={<Stackholder />}/>
@@ -93,6 +62,8 @@ import Totalprice from "./pages/accounting/Totalprice.js";
             <Route path='/servicetypes' element={<Servicetypes />}/>
             <Route path='/stockmanagement' element={<Stockmanagement />}/>
             <Route path='/totalprice' element={<Totalprice />}/>
+            <Route path='/appointments' element={<Appointments />}/>
+            <Route path='/pofile' element={<Profile />}/>
           </Routes>
         </BrowserRouter>
     </div>
