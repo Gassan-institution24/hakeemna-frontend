@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
+import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useMockedUser } from 'src/hooks/use-mocked-user';
@@ -16,6 +17,7 @@ import { useMockedUser } from 'src/hooks/use-mocked-user';
 import { useAuthContext } from 'src/auth/hooks';
 
 import { varHover } from 'src/components/animate';
+import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
@@ -27,11 +29,11 @@ const OPTIONS = [
   },
   {
     label: 'Profile',
-    linkTo: '/#1',
+    linkTo: paths.dashboard.user.profile,
   },
   {
     label: 'Settings',
-    linkTo: '/#2',
+    linkTo: paths.dashboard.user.account,
   },
 ];
 
@@ -44,6 +46,8 @@ export default function AccountPopover() {
 
   const { logout } = useAuthContext();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const popover = usePopover();
 
   const handleLogout = async () => {
@@ -53,6 +57,7 @@ export default function AccountPopover() {
       router.replace('/');
     } catch (error) {
       console.error(error);
+      enqueueSnackbar('Unable to logout!', { variant: 'error' });
     }
   };
 
