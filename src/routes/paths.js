@@ -12,6 +12,7 @@ const ROOTS = {
   AUTH: '/auth',
   AUTH_DEMO: '/auth-demo',
   DASHBOARD: '/dashboard',
+  SUPERADMIN: '/super',
 };
 
 // ----------------------------------------------------------------------
@@ -174,6 +175,93 @@ export const paths = {
       demo: {
         details: `${ROOTS.DASHBOARD}/tour/${MOCK_ID}`,
         edit: `${ROOTS.DASHBOARD}/tour/${MOCK_ID}/edit`,
+      },
+    },
+  },
+  superadmin: {
+    root: ROOTS.SUPERADMIN,
+    mail: `${ROOTS.SUPERADMIN}/mail`,
+    chat: `${ROOTS.SUPERADMIN}/chat`,
+    blank: `${ROOTS.SUPERADMIN}/blank`,
+    kanban: `${ROOTS.SUPERADMIN}/kanban`,
+    calendar: `${ROOTS.SUPERADMIN}/calendar`,
+    fileManager: `${ROOTS.SUPERADMIN}/file-manager`,
+    permission: `${ROOTS.SUPERADMIN}/permission`,
+    general: {
+      app: `${ROOTS.SUPERADMIN}/app`,
+      ecommerce: `${ROOTS.SUPERADMIN}/ecommerce`,
+      analytics: `${ROOTS.SUPERADMIN}/analytics`,
+      banking: `${ROOTS.SUPERADMIN}/banking`,
+      booking: `${ROOTS.SUPERADMIN}/booking`,
+      file: `${ROOTS.SUPERADMIN}/file`,
+    },
+    user: {
+      root: `${ROOTS.SUPERADMIN}/user`,
+      new: `${ROOTS.SUPERADMIN}/user/new`,
+      list: `${ROOTS.SUPERADMIN}/user/list`,
+      cards: `${ROOTS.SUPERADMIN}/management`,
+      profile: `${ROOTS.SUPERADMIN}/user/profile`,
+      account: `${ROOTS.SUPERADMIN}/user/account`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/user/${id}/edit`,
+      demo: {
+        edit: `${ROOTS.SUPERADMIN}/user/${MOCK_ID}/edit`,
+      },
+    },
+    product: {
+      root: `${ROOTS.SUPERADMIN}/product`,
+      new: `${ROOTS.SUPERADMIN}/product/new`,
+      details: (id) => `${ROOTS.SUPERADMIN}/product/${id}`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/product/${id}/edit`,
+      demo: {
+        details: `${ROOTS.SUPERADMIN}/product/${MOCK_ID}`,
+        edit: `${ROOTS.SUPERADMIN}/product/${MOCK_ID}/edit`,
+      },
+    },
+    invoice: {
+      root: `${ROOTS.SUPERADMIN}/invoice`,
+      new: `${ROOTS.SUPERADMIN}/invoice/new`,
+      details: (id) => `${ROOTS.SUPERADMIN}/invoice/${id}`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/invoice/${id}/edit`,
+      demo: {
+        details: `${ROOTS.SUPERADMIN}/invoice/${MOCK_ID}`,
+        edit: `${ROOTS.SUPERADMIN}/invoice/${MOCK_ID}/edit`,
+      },
+    },
+    post: {
+      root: `${ROOTS.SUPERADMIN}/post`,
+      new: `${ROOTS.SUPERADMIN}/post/new`,
+      details: (title) => `${ROOTS.SUPERADMIN}/post/${paramCase(title)}`,
+      edit: (title) => `${ROOTS.SUPERADMIN}/post/${paramCase(title)}/edit`,
+      demo: {
+        details: `${ROOTS.SUPERADMIN}/post/${paramCase(MOCK_TITLE)}`,
+        edit: `${ROOTS.SUPERADMIN}/post/${paramCase(MOCK_TITLE)}/edit`,
+      },
+    },
+    order: {
+      root: `${ROOTS.SUPERADMIN}/tables`,
+      details: (id) => `${ROOTS.SUPERADMIN}/order/${id}`,
+      demo: {
+        details: `${ROOTS.SUPERADMIN}/order/${MOCK_ID}`,
+      },
+    },
+    job: {
+      root: `${ROOTS.SUPERADMIN}/job`,
+      new: `${ROOTS.SUPERADMIN}/job/new`,
+      details: (id) => `${ROOTS.SUPERADMIN}/job/${id}`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/job/${id}/edit`,
+      demo: {
+        details: `${ROOTS.SUPERADMIN}/job/${MOCK_ID}`,
+        edit: `${ROOTS.SUPERADMIN}/job/${MOCK_ID}/edit`,
+      },
+    },
+    tour: {
+      root: `${ROOTS.SUPERADMIN}/tour`,
+      new: `${ROOTS.SUPERADMIN}/tour/new`,
+      details: (id) => `${ROOTS.SUPERADMIN}/tour/${id}`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/tour/${id}/edit`,
+      demo: {
+        details: `${ROOTS.SUPERADMIN}/tour/${MOCK_ID}`,
+        edit: `${ROOTS.SUPERADMIN}/tour/${MOCK_ID}/edit`,
       },
     },
   },

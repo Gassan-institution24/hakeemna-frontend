@@ -63,8 +63,8 @@ export function useNavData() {
             icon: ICONS.dashboard,
           },
           {
-            title: t('ecommerce'),
-            path: paths.dashboard.general.ecommerce,
+            title: t('management tables'),
+            path: paths.superadmin.order.root,
             icon: ICONS.ecommerce,
           },
           {

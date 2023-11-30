@@ -58,7 +58,7 @@ export default function OrderTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-        <DatePicker
+        {/* <DatePicker
           label="Start date"
           value={filters.startDate}
           onChange={handleFilterStartDate}
@@ -80,14 +80,14 @@ export default function OrderTableToolbar({
           sx={{
             maxWidth: { md: 200 },
           }}
-        />
+        /> */}
 
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Search customer or order number..."
+            placeholder="Search table name..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -96,10 +96,9 @@ export default function OrderTableToolbar({
               ),
             }}
           />
-
-          <IconButton onClick={popover.onOpen}>
+          {/* <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+          </IconButton> */}
         </Stack>
 
         {canReset && (
@@ -114,7 +113,7 @@ export default function OrderTableToolbar({
         )}
       </Stack>
 
-      <CustomPopover
+      {/* <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
@@ -146,7 +145,7 @@ export default function OrderTableToolbar({
           <Iconify icon="solar:export-bold" />
           Export
         </MenuItem>
-      </CustomPopover>
+      </CustomPopover> */}
     </>
   );
 }

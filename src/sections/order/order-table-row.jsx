@@ -26,7 +26,17 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, onDeleteRow }) {
-  const { items, status, orderNumber, createdAt, customer, totalQuantity, subTotal } = row;
+  const {
+    tableName,
+    documents,
+    status,
+    orderNumber,
+    createdAt,
+    customer,
+    totalQuantity,
+    subTotal,
+  } = row;
+  console.log(row);
 
   const confirm = useBoolean();
 
@@ -34,11 +44,39 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
 
   const popover = usePopover();
 
+  function stackComponent ({arr,idx})  {
+    return(
+      <Stack
+        key={idx}
+        direction="row"
+        alignItems="center"
+        sx={{
+          p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
+          '&:not(:last-of-type)': {
+            borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
+          },
+        }}
+      >
+        {arr?.map((item)=> <Box>{item}</Box>)}
+        
+      </Stack>
+    )
+  };
+
+  function timeFormatte(time) {
+    // Extracting date
+    const formattedDate = time.split('T')[0];
+
+    // Extracting time without seconds
+    const formattedTime = time.split('T')[1].slice(0, 5);
+    return `${formattedTime} || ${formattedDate}`;
+  }
+
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
+      {/* <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell>
+      </TableCell> */}
 
       <TableCell>
         <Box
@@ -50,25 +88,15 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
             },
           }}
         >
-          {orderNumber}
+          {tableName}
         </Box>
       </TableCell>
 
-      <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-        <Avatar alt={customer.name} src={customer.avatarUrl} sx={{ mr: 2 }} />
-
-        <ListItemText
-          primary={customer.name}
-          secondary={customer.email}
-          primaryTypographyProps={{ typography: 'body2' }}
-          secondaryTypographyProps={{
-            component: 'span',
-            color: 'text.disabled',
-          }}
-        />
+      <TableCell>
+        <Box>Note</Box>
       </TableCell>
 
-      <TableCell>
+      {/* <TableCell>
         <ListItemText
           primary={format(new Date(createdAt), 'dd MMM yyyy')}
           secondary={format(new Date(createdAt), 'p')}
@@ -97,7 +125,7 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
         >
           {status}
         </Label>
-      </TableCell>
+      </TableCell> */}
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton
@@ -112,8 +140,8 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
           <Iconify icon="eva:arrow-ios-downward-fill" />
         </IconButton>
 
-        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-          <Iconify icon="eva:more-vertical-fill" />
+        <IconButton color={popover.open ? 'inherit' : 'default'}>
+          <Iconify icon="majesticons:open" />
         </IconButton>
       </TableCell>
     </TableRow>
@@ -128,44 +156,24 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
           unmountOnExit
           sx={{ bgcolor: 'background.neutral' }}
         >
-          <Stack component={Paper} sx={{ m: 1.5 }}>
-            {items.map((item) => (
-              <Stack
-                key={item.id}
-                direction="row"
-                alignItems="center"
-                sx={{
-                  p: (theme) => theme.spacing(1.5, 2, 1.5, 1.5),
-                  '&:not(:last-of-type)': {
-                    borderBottom: (theme) => `solid 2px ${theme.palette.background.neutral}`,
-                  },
-                }}
-              >
-                <Avatar
-                  src={item.coverUrl}
-                  variant="rounded"
-                  sx={{ width: 48, height: 48, mr: 2 }}
-                />
-
-                <ListItemText
-                  primary={item.name}
-                  secondary={item.sku}
-                  primaryTypographyProps={{
-                    typography: 'body2',
-                  }}
-                  secondaryTypographyProps={{
-                    component: 'span',
-                    color: 'text.disabled',
-                    mt: 0.5,
-                  }}
-                />
-
-                <Box>x{item.quantity}</Box>
-
-                <Box sx={{ width: 110, textAlign: 'right' }}>{fCurrency(item.price)}</Box>
-              </Stack>
-            ))}
-          </Stack>
+          {tableName === 'countries' && <Stack component={Paper} sx={{ m: 1.5 }}>
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.name_english,item.status,timeFormatte(item.created_at),timeFormatte(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'cities' && <Stack component={Paper} sx={{ m: 1.5 }}>
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.name_english,item.status,item.country?.name_english,item.user_creation?.firstname,item.user_modification?.firstname,timeFormatte(item.created_at),timeFormatte(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'surgeries' && <Stack component={Paper} sx={{ m: 1.5 }}>
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.name,item.description,item.user_creation?.firstname,item.user_modification?.firstname,timeFormatte(item.created_at),timeFormatte(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'diseases' && <Stack component={Paper} sx={{ m: 1.5 }}>
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.name,item.description,item.category?.name,item.user_creation?.firstname,item.user_modification?.firstname,timeFormatte(item.created_at),timeFormatte(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'specialities' && <Stack component={Paper} sx={{ m: 1.5 }}>
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.name_english,item.description,item.user_creation?.firstname,item.user_modification?.firstname,timeFormatte(item.created_at),timeFormatte(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'sub_specialities' && <Stack component={Paper} sx={{ m: 1.5 }}>
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.name_english,item.description,item.user_creation?.firstname,item.user_modification?.firstname,timeFormatte(item.created_at),timeFormatte(item.updated_at)]}))}
+          </Stack>}
         </Collapse>
       </TableCell>
     </TableRow>
@@ -177,7 +185,7 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
 
       {renderSecondary}
 
-      <CustomPopover
+      {/* <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
@@ -190,7 +198,7 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
           }}
           sx={{ color: 'error.main' }}
         >
-          <Iconify icon="solar:trash-bin-trash-bold" />
+          <Iconify icon="majesticons:open" />
           Delete
         </MenuItem>
 
@@ -203,9 +211,9 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
           <Iconify icon="solar:eye-bold" />
           View
         </MenuItem>
-      </CustomPopover>
+      </CustomPopover> */}
 
-      <ConfirmDialog
+      {/* <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
         title="Delete"
@@ -215,7 +223,7 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
             Delete
           </Button>
         }
-      />
+      /> */}
     </>
   );
 }
