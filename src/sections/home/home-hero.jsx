@@ -21,7 +21,7 @@ import { bgBlur, bgGradient, textGradient } from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
 import { varFade, MotionContainer } from 'src/components/animate';
-
+import { PATH_AFTER_LOGIN } from 'src/config-global';
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
@@ -182,8 +182,8 @@ export default function HomeHero() {
             textAlign: 'center',
           }}
         >
-          Start a <br />
-          New Project with
+          Keep in <br />
+          Health with
         </Typography>
       </m.div>
 
@@ -197,17 +197,17 @@ export default function HomeHero() {
             repeat: Infinity,
           }}
         >
-          Minimal
+          Doctorna
         </StyledTextGradient>
       </m.div>
 
       <m.div variants={varFade().in}>
         <Typography variant="body2" sx={{ textAlign: 'center' }}>
-          The starting point for your next project is based on MUI.Easy customization Helps you
-          build apps faster and better.
+        where administrative and tax needs of medical institutions harmonize  across all devices, embracing simplicity and universal compatibility.
         </Typography>
       </m.div>
-
+      <br/>
+{/* 
       <m.div variants={varFade().in}>
         <Stack
           spacing={0.75}
@@ -224,11 +224,11 @@ export default function HomeHero() {
             (99+ reviews)
           </Typography>
         </Stack>
-      </m.div>
+      </m.div> */}
 
       <m.div variants={varFade().in}>
         <Stack spacing={1.5} direction={{ xs: 'column-reverse', sm: 'row' }} sx={{ mb: 5 }}>
-          <Stack alignItems="center" spacing={2}>
+          {/* <Stack alignItems="center" spacing={2}>
             <Button
               component={RouterLink}
               href={paths.dashboard.root}
@@ -255,7 +255,7 @@ export default function HomeHero() {
               <Iconify icon="eva:external-link-fill" width={16} sx={{ mr: 0.5 }} />
               Get Free Version
             </Link>
-          </Stack>
+          </Stack> */}
 
           <Button
             color="inherit"
@@ -264,33 +264,31 @@ export default function HomeHero() {
             startIcon={<Iconify icon="eva:external-link-fill" width={24} />}
             target="_blank"
             rel="noopener"
-            href={paths.figma}
+            href={PATH_AFTER_LOGIN}
             sx={{ borderColor: 'text.primary' }}
           >
-            Design Preview
+            Git Started
           </Button>
         </Stack>
       </m.div>
 
       <Stack spacing={3} sx={{ textAlign: 'center' }}>
-        <m.div variants={varFade().in}>
+        {/* <m.div variants={varFade().in}>
           <Typography variant="overline" sx={{ opacity: 0.48 }}>
             Available For
           </Typography>
-        </m.div>
+        </m.div> */}
 
-        <Stack spacing={2} direction="row" justifyContent="center">
-          {['js', 'ts', 'figma', 'nextjs', 'vite'].map((icon) => (
-            <m.div key={icon} variants={varFade().in}>
-              <Box
-                component="img"
-                alt={icon}
-                src={`/assets/icons/platforms/ic_${icon}.svg`}
-                sx={{ width: 24, height: 24 }}
-              />
+       
+            <m.div variants={varFade().in}>
+                <Iconify icon='noto:hospital'   width={30} sx={{ m: 0.5 }}/>
+                <Iconify icon='solar:health-broken' color='green' width={30} sx={{ m: 0.5 }}/>
+                <Iconify icon='ri:mental-health-line' color='lightblue' width={30} sx={{ m: 0.5 }}/>
+                <Iconify icon='pajamas:status-health' color='red' width={30} sx={{ m: 0.5 }}/>
+                <Iconify icon='icon-park:medicine-bottle'  width={30} sx={{ m: 0.5 }}/>
             </m.div>
-          ))}
-        </Stack>
+        
+     
       </Stack>
     </Stack>
   );
@@ -317,30 +315,23 @@ export default function HomeHero() {
           position: 'relative',
         }}
       >
-        <Box
+        {/* <Box
           component={m.img}
           animate={{ y: ['0%', '100%'] }}
           transition={transition}
           alt={lightMode ? 'light_1' : 'dark_1'}
-          src={
-            lightMode
-              ? `/assets/images/home/hero/light_1.webp`
-              : `/assets/images/home/hero/dark_1.webp`
-          }
+          src='https://i.pinimg.com/originals/b8/23/e3/b823e38cc01fdb9278b6f7faa2feda6d.gif'
           sx={{ position: 'absolute', mt: -5 }}
-        />
+        /> */}
+       {/* 
         <Box
           component={m.img}
           animate={{ y: ['-100%', '0%'] }}
           transition={transition}
           alt={lightMode ? 'light_1' : 'dark_1'}
-          src={
-            lightMode
-              ? `/assets/images/home/hero/light_1.webp`
-              : `/assets/images/home/hero/dark_1.webp`
-          }
+          src='https://i.pinimg.com/originals/ea/7f/2d/ea7f2dd47969349da148ea0b4ec56815.gif'
           sx={{ position: 'absolute' }}
-        />
+        />  */}
       </Stack>
 
       <Stack
@@ -348,16 +339,12 @@ export default function HomeHero() {
         variants={varFade().in}
         sx={{ width: 720, position: 'relative', ml: -5 }}
       >
-        <Box
+         <Box
           component={m.img}
           animate={{ y: ['100%', '0%'] }}
           transition={transition}
           alt={lightMode ? 'light_2' : 'dark_2'}
-          src={
-            lightMode
-              ? `/assets/images/home/hero/light_2.webp`
-              : `/assets/images/home/hero/dark_2.webp`
-          }
+          src='https://cdn.dribbble.com/users/3726898/screenshots/15468954/media/b3a0f8865b485187e200839facdc22ac.gif'
           sx={{ position: 'absolute', mt: -5 }}
         />
         <Box
@@ -365,11 +352,15 @@ export default function HomeHero() {
           animate={{ y: ['0%', '-100%'] }}
           transition={transition}
           alt={lightMode ? 'light_2' : 'dark_2'}
-          src={
-            lightMode
-              ? `/assets/images/home/hero/light_2.webp`
-              : `/assets/images/home/hero/dark_2.webp`
-          }
+          src='https://cdn.dribbble.com/users/856306/screenshots/4120104/medical_building_800x600.gif'
+          sx={{ position: 'absolute' }}
+        /> 
+                <Box
+          component={m.img}
+          animate={{ y: ['0%', '-100%'] }}
+          transition={transition}
+          alt={lightMode ? 'light_2' : 'dark_2'}
+          src='https://cdn.dribbble.com/users/856306/screenshots/4120104/medical_building_800x600.gif'
           sx={{ position: 'absolute' }}
         />
       </Stack>

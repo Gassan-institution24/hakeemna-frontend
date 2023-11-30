@@ -36,13 +36,13 @@ export default function HomePricing() {
     <Stack spacing={3} sx={{ mb: 10, textAlign: 'center' }}>
       <m.div variants={varFade().inUp}>
         <Typography component="div" variant="overline" sx={{ mb: 2, color: 'text.disabled' }}>
-          pricing plans
+        Subscriptions
         </Typography>
       </m.div>
 
       <m.div variants={varFade().inDown}>
         <Typography variant="h2">
-          The right plan for <br /> your business
+          The right plan to manage <br /> your ......
         </Typography>
       </m.div>
 
