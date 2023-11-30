@@ -13,19 +13,18 @@ import { varFade, MotionViewport } from 'src/components/animate';
 
 const CARDS = [
   {
-    icon: ' /assets/icons/home/ic_make_brand.svg',
-    title: 'Branding',
-    description: 'Consistent design makes it easy to brand your own.',
+    icon: "https://www.aha.org/sites/default/files/2023-04/Hospital2_icon.png",
+    title: 'MedicalHub',
+    description: 'An integrated platform that brings both medical service providers and beneficiaries in one place',
   },
   {
-    icon: ' /assets/icons/home/ic_design.svg',
-    title: 'UI & UX Design',
-    description:
-      'The kit is built on the principles of the atomic design system. It helps you to create projects fastest and easily customized packages for your projects.',
+    icon: 'https://static.vecteezy.com/system/resources/thumbnails/004/607/791/small/man-face-emotive-icon-smiling-male-character-in-blue-shirt-flat-illustration-isolated-on-white-happy-human-psychological-portrait-positive-emotions-user-avatar-for-app-web-design-vector.jpg',
+    title: 'User-friendly',
+    description: 'The kit is built on the principles of the atomic design system. It helps you to create projects fastest and easily customized packages for your projects.',
   },
   {
-    icon: ' /assets/icons/home/ic_development.svg',
-    title: 'Development',
+    icon: 'https://logodix.com/logo/366948.png',
+    title: 'interactive use',
     description: 'Easy to customize and extend, saving you time and money.',
   },
 ];
@@ -49,13 +48,13 @@ export default function HomeMinimal() {
       >
         <m.div variants={varFade().inUp}>
           <Typography component="div" variant="overline" sx={{ color: 'text.disabled' }}>
-            Minimal UI
+            Doctona Online
           </Typography>
         </m.div>
 
         <m.div variants={varFade().inDown}>
           <Typography variant="h2">
-            What Minimal <br /> helps you?
+            What Doctorna <br /> helps you?
           </Typography>
         </m.div>
       </Stack>
@@ -96,7 +95,7 @@ export default function HomeMinimal() {
               />
 
               <Typography variant="h5" sx={{ mt: 8, mb: 2 }}>
-                {card.title}
+              {card.title}
               </Typography>
 
               <Typography sx={{ color: 'text.secondary' }}>{card.description}</Typography>
