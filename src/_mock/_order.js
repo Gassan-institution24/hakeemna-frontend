@@ -1,28 +1,9 @@
-import useSWR from 'swr';
-import { useMemo } from 'react';
 
-import { fetcher, endpoints } from 'src/utils/axios';
 import { _mock } from './_mock';
 // ----------------------------------------------------------------------
 
 
-export function useGetTables() {
-  const URL = endpoints.allTables;
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      tableData: data || [],
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-
-  return memoizedValue;
-}
   
 
 export const ORDER_STATUS_OPTIONS = [

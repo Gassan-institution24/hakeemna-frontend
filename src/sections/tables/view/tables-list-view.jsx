@@ -14,7 +14,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { useGetTables } from 'src/_mock';
+import { useGetTables } from 'src/api/tables';
 
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -111,8 +111,8 @@ export default function TablesListView() {
   }, []);
 
   const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.superadmin.tables.details(id));
+    (tablename) => {
+      router.push(paths.superadmin.tables.details(tablename));
     },
     [router]
   );

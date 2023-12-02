@@ -20,9 +20,9 @@ const ProductDetailsPage = lazy(() => import('src/pages/dashboard/product/detail
 const ProductListPage = lazy(() => import('src/pages/dashboard/product/list'));
 const ProductCreatePage = lazy(() => import('src/pages/dashboard/product/new'));
 const ProductEditPage = lazy(() => import('src/pages/dashboard/product/edit'));
-// ORDER
-const OrderListPage = lazy(() => import('src/pages/dashboard/tables/list'));
-const OrderDetailsPage = lazy(() => import('src/pages/dashboard/tables/details'));
+// TABLES
+const TablesListPage = lazy(() => import('src/pages/dashboard/tables/list'));
+const TableDetailsPage = lazy(() => import('src/pages/dashboard/tables/details'));
 // INVOICE
 const InvoiceListPage = lazy(() => import('src/pages/dashboard/invoice/list'));
 const InvoiceDetailsPage = lazy(() => import('src/pages/dashboard/invoice/details'));
@@ -108,9 +108,9 @@ export const dashboardRoutes = [
       {
         path: 'tables',
         children: [
-          { element: <OrderListPage />, index: true },
-          { path: 'list', element: <OrderListPage /> },
-          { path: ':id', element: <OrderDetailsPage /> },
+          { element: <TablesListPage />, index: true },
+          { path: 'list', element: <TablesListPage /> },
+          { path: ':tablename', element: <TableDetailsPage /> },
         ],
       },
       {

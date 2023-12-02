@@ -178,6 +178,7 @@ export const paths = {
       },
     },
   },
+  // super adnim
   superadmin: {
     root: ROOTS.SUPERADMIN,
     mail: `${ROOTS.SUPERADMIN}/mail`,
@@ -239,7 +240,7 @@ export const paths = {
     },
     tables: {
       root: `${ROOTS.SUPERADMIN}/tables`,
-      details: (id) => `${ROOTS.SUPERADMIN}/tables/${id}`,
+      details: (tablename) => `${ROOTS.SUPERADMIN}/tables/${tablename}`,
       demo: {
         details: `${ROOTS.SUPERADMIN}/order/${MOCK_ID}`,
       },
