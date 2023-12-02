@@ -38,6 +38,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { useGetCities } from 'src/api/tables';
 import OrderTableRow from '../table-details-row';
 import OrderTableToolbar from '../table-details-toolbar';
 import OrderTableFiltersResult from '../table-details-filters-result';
@@ -47,26 +48,29 @@ import OrderTableFiltersResult from '../table-details-filters-result';
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'orderNumber', label: 'Order', width: 116 },
-  { id: 'name', label: 'Customer' },
-  { id: 'createdAt', label: 'Date', width: 140 },
-  { id: 'totalQuantity', label: 'Items', width: 120, align: 'center' },
-  { id: 'totalAmount', label: 'Price', width: 140 },
-  { id: 'status', label: 'Status', width: 110 },
+  { id: 'code', label: 'Code' },
+  { id: 'name', label: 'name' },
+  { id: 'country', label: 'Country' },
+  { id: 'status', label: 'Status' },
+  { id: 'created_at', label: 'Date Of Creation' },
+  { id: 'user_creation', label: 'Creater' },
+  { id: 'ip_address_user_creation', label: 'IP Of Creator' },
+  { id: 'updated_at', label: 'Date Of Updating' },
+  { id: 'user_modification', label: 'Last Modifier' },
+  { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
+  { id: 'modifications_nums', label: 'No Of Modifications' },
   { id: '', width: 88 },
 ];
 
 const defaultFilters = {
   name: '',
   status: 'all',
-  startDate: null,
-  endDate: null,
 };
 
 // ----------------------------------------------------------------------
 
 export default function TableDetailsView(props) {
-  const table = useTable({ defaultOrderBy: 'orderNumber' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   const settings = useSettingsContext();
 
@@ -74,7 +78,8 @@ export default function TableDetailsView(props) {
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(_orders);
+  const {tableData} = useGetCities();
+  console.log('city tabl data',tableData)
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -98,7 +103,7 @@ export default function TableDetailsView(props) {
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
+    !!filters?.name || filters.status !== 'all' ;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -116,7 +121,7 @@ export default function TableDetailsView(props) {
   const handleDeleteRow = useCallback(
     (id) => {
       const deleteRow = tableData.filter((row) => row.id !== id);
-      setTableData(deleteRow);
+      // setTableData(deleteRow);
 
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -125,7 +130,7 @@ export default function TableDetailsView(props) {
 
   const handleDeleteRows = useCallback(() => {
     const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
-    setTableData(deleteRows);
+    // setTableData(deleteRows);
 
     table.onUpdatePageDeleteRows({
       totalRows: tableData.length,
@@ -156,17 +161,17 @@ export default function TableDetailsView(props) {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="List"
+          // heading={'tatestble'}
           links={[
             {
-              name: 'Dashboard',
-              href: paths.dashboard.root,
+              name: 'Super',
+              href: paths.superadmin.root,
             },
             {
-              name: 'Order',
-              href: paths.dashboard.order.root,
+              name: 'Tables',
+              href: paths.superadmin.tables.root,
             },
-            { name: 'List' },
+            { name:'table'},
           ]}
           sx={{
             mb: { xs: 3, md: 5 },
@@ -194,22 +199,16 @@ export default function TableDetailsView(props) {
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
                     color={
-                      (tab.value === 'completed' && 'success') ||
-                      (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'cancelled' && 'error') ||
+                      (tab.value === 'active' && 'success') ||
+                      (tab.value === 'inactive' && 'error') ||
                       'default'
                     }
                   >
                     {tab.value === 'all' && _orders.length}
-                    {tab.value === 'completed' &&
-                      _orders.filter((order) => order.status === 'completed').length}
-
-                    {tab.value === 'pending' &&
-                      _orders.filter((order) => order.status === 'pending').length}
-                    {tab.value === 'cancelled' &&
-                      _orders.filter((order) => order.status === 'cancelled').length}
-                    {tab.value === 'refunded' &&
-                      _orders.filter((order) => order.status === 'refunded').length}
+                    {tab.value === 'active' &&
+                      _orders.filter((order) => order.status === 'active').length}
+                    {tab.value === 'inactive' &&
+                      _orders.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
@@ -236,7 +235,7 @@ export default function TableDetailsView(props) {
             />
           )}
 
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+          <TableContainer>
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
@@ -257,7 +256,7 @@ export default function TableDetailsView(props) {
             />
 
             <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+              <Table size={table.dense ? 'small' : 'medium'}>
                 <TableHeadCustom
                   order={table.order}
                   orderBy={table.orderBy}
@@ -281,12 +280,12 @@ export default function TableDetailsView(props) {
                     )
                     .map((row) => (
                       <OrderTableRow
-                        key={row.id}
+                        key={row._id}
                         row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onViewRow={() => handleViewRow(row.id)}
+                        selected={table.selected.includes(row._id)}
+                        onSelectRow={() => table.onSelectRow(row._id)}
+                        onDeleteRow={() => handleDeleteRow(row._id)}
+                        onViewRow={() => handleViewRow(row._id)}
                       />
                     ))}
 
@@ -343,7 +342,7 @@ export default function TableDetailsView(props) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name, startDate, endDate } = filters;
+  const { status, name } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -358,24 +357,14 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (order) =>
-        order.orderNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.customer.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        order?.customer?.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        order?.code?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
     inputData = inputData.filter((order) => order.status === status);
-  }
-
-  if (!dateError) {
-    if (startDate && endDate) {
-      inputData = inputData.filter(
-        (order) =>
-          fTimestamp(order.createdAt) >= fTimestamp(startDate) &&
-          fTimestamp(order.createdAt) <= fTimestamp(endDate)
-      );
-    }
   }
 
   return inputData;
