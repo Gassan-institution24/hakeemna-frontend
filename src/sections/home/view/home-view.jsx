@@ -10,7 +10,7 @@ import HomeMinimal from '../home-minimal';
 import HomePricing from '../home-pricing';
 import HomeDarkMode from '../home-dark-mode';
 import HomeLookingFor from '../home-looking-for';
-import HomeForDesigner from '../home-for-designer';
+// import HomeForDesigner from '../home-for-designer';
 import HomeColorPresets from '../home-color-presets';
 import HomeAdvertisement from '../home-advertisement';
 import HomeCleanInterfaces from '../home-clean-interfaces';
@@ -60,11 +60,11 @@ export default function HomeView() {
 
         <HomeHugePackElements />
 
-        <Box sx={{ position: 'relative' }}>
+        {/* <Box sx={{ position: 'relative' }}>
           <StyledPolygon />
           <HomeForDesigner />
           <StyledPolygon anchor="bottom" />
-        </Box>
+        </Box> */}
 
         <HomeDarkMode />
 

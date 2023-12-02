@@ -2,6 +2,9 @@ import axios from 'axios';
 
 import { HOST_API } from 'src/config-global';
 
+
+
+// https://axios-http.com/docs/instance
 // ----------------------------------------------------------------------
 
 const axiosInstance = axios.create({ baseURL: HOST_API });
