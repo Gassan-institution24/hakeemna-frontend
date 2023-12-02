@@ -20,9 +20,9 @@ const ProductDetailsPage = lazy(() => import('src/pages/dashboard/product/detail
 const ProductListPage = lazy(() => import('src/pages/dashboard/product/list'));
 const ProductCreatePage = lazy(() => import('src/pages/dashboard/product/new'));
 const ProductEditPage = lazy(() => import('src/pages/dashboard/product/edit'));
-// ORDER
-const OrderListPage = lazy(() => import('src/pages/dashboard/order/list'));
-const OrderDetailsPage = lazy(() => import('src/pages/dashboard/order/details'));
+// TABLES
+const TablesListPage = lazy(() => import('src/pages/dashboard/tables/list'));
+const TableDetailsPage = lazy(() => import('src/pages/dashboard/tables/details'));
 // INVOICE
 const InvoiceListPage = lazy(() => import('src/pages/dashboard/invoice/list'));
 const InvoiceDetailsPage = lazy(() => import('src/pages/dashboard/invoice/details'));
@@ -66,19 +66,19 @@ const BlankPage = lazy(() => import('src/pages/dashboard/blank'));
 
 export const dashboardRoutes = [
   {
-    path: 'dashboard',
+    path: 'super',
     element: (
-      <AuthGuard>
+      // <AuthGuard>
         <DashboardLayout>
           <Suspense fallback={<LoadingScreen />}>
             <Outlet />
           </Suspense>
         </DashboardLayout>
-      </AuthGuard>
+      // </AuthGuard>
     ),
     children: [
       { element: <IndexPage />, index: true },
-      { path: 'ecommerce', element: <OverviewEcommercePage /> },
+      // { path: '', element: < /> },
       { path: 'analytics', element: <OverviewAnalyticsPage /> },
       { path: 'banking', element: <OverviewBankingPage /> },
       { path: 'booking', element: <OverviewBookingPage /> },
@@ -88,7 +88,7 @@ export const dashboardRoutes = [
         children: [
           { element: <UserProfilePage />, index: true },
           { path: 'profile', element: <UserProfilePage /> },
-          { path: 'cards', element: <UserCardsPage /> },
+          { path: 'ecommerce', element: <OverviewEcommercePage /> },
           { path: 'list', element: <UserListPage /> },
           { path: 'new', element: <UserCreatePage /> },
           { path: ':id/edit', element: <UserEditPage /> },
@@ -106,11 +106,11 @@ export const dashboardRoutes = [
         ],
       },
       {
-        path: 'order',
+        path: 'tables',
         children: [
-          { element: <OrderListPage />, index: true },
-          { path: 'list', element: <OrderListPage /> },
-          { path: ':id', element: <OrderDetailsPage /> },
+          { element: <TablesListPage />, index: true },
+          { path: 'list', element: <TablesListPage /> },
+          { path: ':tablename', element: <TableDetailsPage /> },
         ],
       },
       {

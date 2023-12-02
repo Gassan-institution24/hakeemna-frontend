@@ -34,19 +34,19 @@ export default function OrderDetailsHistory({ history }) {
     >
       <Stack spacing={0.5}>
         <Box sx={{ color: 'text.disabled' }}>Order time</Box>
-        {fDateTime(history.orderTime)}
+        {fDateTime(history?.orderTime)}
       </Stack>
       <Stack spacing={0.5}>
         <Box sx={{ color: 'text.disabled' }}>Payment time</Box>
-        {fDateTime(history.orderTime)}
+        {fDateTime(history?.orderTime)}
       </Stack>
       <Stack spacing={0.5}>
         <Box sx={{ color: 'text.disabled' }}>Delivery time for the carrier</Box>
-        {fDateTime(history.orderTime)}
+        {fDateTime(history?.orderTime)}
       </Stack>
       <Stack spacing={0.5}>
         <Box sx={{ color: 'text.disabled' }}>Completion time</Box>
-        {fDateTime(history.orderTime)}
+        {fDateTime(history?.orderTime)}
       </Stack>
     </Stack>
   );
@@ -62,10 +62,10 @@ export default function OrderDetailsHistory({ history }) {
         },
       }}
     >
-      {history.timeline.map((item, index) => {
+      {history?.timeline?.map((item, index) => {
         const firstTimeline = index === 0;
 
-        const lastTimeline = index === history.timeline.length - 1;
+        const lastTimeline = index === history.timeline.length - 1 ;
 
         return (
           <TimelineItem key={item.title}>

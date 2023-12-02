@@ -19,6 +19,8 @@ export default axiosInstance;
 // ----------------------------------------------------------------------
 
 export const fetcher = async (args) => {
+  console.log('args',args)
+  console.log('api',HOST_API)
   const [url, config] = Array.isArray(args) ? args : [args];
 
   const res = await axiosInstance.get(url, { ...config });
@@ -29,6 +31,13 @@ export const fetcher = async (args) => {
 // ----------------------------------------------------------------------
 
 export const endpoints = {
+  allTables:'/tables',
+  tables:{
+    countries:`/api/countries`,
+    cities:'/api/cities',
+    unitservices:'/api/unitservice',
+    departments:'/api/departments',
+  },
   chat: '/api/chat',
   kanban: '/api/kanban',
   calendar: '/api/calendar',

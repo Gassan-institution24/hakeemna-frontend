@@ -63,8 +63,8 @@ export function useNavData() {
             icon: ICONS.dashboard,
           },
           {
-            title: t('ecommerce'),
-            path: paths.dashboard.general.ecommerce,
+            title: t('management tables'),
+            path: paths.superadmin.tables.root,
             icon: ICONS.ecommerce,
           },
           {
@@ -127,15 +127,33 @@ export function useNavData() {
           },
 
           // ORDER
-          {
-            title: t('order'),
-            path: paths.dashboard.order.root,
-            icon: ICONS.order,
-            children: [
-              { title: t('list'), path: paths.dashboard.order.root },
-              { title: t('details'), path: paths.dashboard.order.demo.details },
-            ],
-          },
+          // {
+          //   title: t('management tables'),
+          //   path: paths.superadmin.tables.root,
+          //   icon: ICONS.order,
+          //   children: [
+          //     { title: t('list'), path: paths.superadmin.tables.root },
+          //     { title: t('cities'), path: paths.dashboard.order.demo.details },
+          //     { title: t('countries'), path: paths.dashboard.order.demo.details },
+          //     { title: t('currency'), path: paths.dashboard.order.demo.details },
+          //     { title: t('surgeries'), path: paths.dashboard.order.demo.details },
+          //     { title: t('medical categories'), path: paths.dashboard.order.demo.details },
+          //     { title: t('diseases'), path: paths.dashboard.order.demo.details },
+          //     { title: t('medicines families'), path: paths.dashboard.order.demo.details },
+          //     { title: t('medicines'), path: paths.dashboard.order.demo.details },
+          //     { title: t('symptoms'), path: paths.dashboard.order.demo.details },
+          //     { title: t('diets'), path: paths.dashboard.order.demo.details },
+          //     { title: t('analyses'), path: paths.dashboard.order.demo.details },
+          //     { title: t('insurance_companies'), path: paths.dashboard.order.demo.details },
+          //     { title: t('unit_services'), path: paths.dashboard.order.demo.details },
+          //     { title: t('departments'), path: paths.dashboard.order.demo.details },
+          //     { title: t('specialities'), path: paths.dashboard.order.demo.details },
+          //     { title: t('sub_specialities'), path: paths.dashboard.order.demo.details },
+          //     { title: t('appointment_types'), path: paths.dashboard.order.demo.details },
+          //     { title: t('free_subscriptions'), path: paths.dashboard.order.demo.details },
+          //     { title: t('added_value_taxes'), path: paths.dashboard.order.demo.details },
+          //   ],
+          // },
 
           // INVOICE
           {
