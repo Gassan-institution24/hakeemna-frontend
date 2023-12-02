@@ -1,17 +1,11 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
-import { fData } from 'src/utils/format-number';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -20,10 +14,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { _orders, ORDER_STATUS_OPTIONS, useGetTables } from 'src/_mock';
+import { useGetTables } from 'src/api/tables';
 
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
@@ -34,30 +26,14 @@ import {
   TableNoData,
   getComparator,
   TableEmptyRows,
-  TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { setDate } from 'date-fns';
-
-import OrderTableRow from '../order-table-row';
-import OrderTableToolbar from '../order-table-toolbar';
-import OrderTableFiltersResult from '../order-table-filters-result';
+import TablesTableRow from '../tables-table-row';
+import TablesTableToolbar from '../tables-table-toolbar';
+import TablesTableFiltersResult from '../tables-table-filters-result';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
-
-const TABLE_HEAD = [
-  { id: 'orderNumber', label: 'Code', width: 116 },
-  { id: 'name', label: 'Name' },
-  { id: 'createdAt', label: 'Date', width: 140 },
-  { id: 'totalQuantity', label: 'Items', width: 120, align: 'center' },
-  { id: 'totalAmount', label: 'Price', width: 140 },
-  { id: 'status', label: 'Status', width: 110 },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -66,7 +42,7 @@ const defaultFilters = {
   endDate: null,
 };
 
-export default function OrderListView() {
+export default function TablesListView() {
   const table = useTable({ defaultOrderBy: 'orderNumber' });
 
   const settings = useSettingsContext();
@@ -111,10 +87,6 @@ export default function OrderListView() {
     filters,
     dateError,
   });
-  const dataInPage = dataFiltered?.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
 
   const denseHeight = table.dense ? 52 : 72;
 
@@ -134,44 +106,17 @@ export default function OrderListView() {
     [table]
   );
 
-  // const handleDeleteRow = useCallback(
-  //   (id) => {
-  //     const deleteRow = tableData?.filter((row) => row.id !== id);
-  //     setTableData(deleteRow);
-
-  //     table.onUpdatePageDeleteRow(dataInPage.length);
-  //   },
-  //   [dataInPage.length, table, tableData]
-  // );
-
-  // const handleDeleteRows = useCallback(() => {
-  //   const deleteRows = tableData?.filter((row) => !table.selected.includes(row.id));
-  //   setTableData(deleteRows);
-
-  //   table.onUpdatePageDeleteRows({
-  //     totalRows: tableData?.length,
-  //     totalRowsInPage: dataInPage.length,
-  //     totalRowsFiltered: tableData?.length,
-  //   });
-  // }, [dataInPage.length, table, tableData]);
-
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
 
   const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.superadmin.tables.details(id));
+    (tablename) => {
+      router.push(paths.superadmin.tables.details(tablename));
     },
     [router]
   );
 
-  // const handleFilterStatus = useCallback(
-  //   (event, newValue) => {
-  //     handleFilters('status', newValue);
-  //   },
-  //   [handleFilters]
-  // );
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -194,7 +139,7 @@ export default function OrderListView() {
         />
 
         <Card>
-          <OrderTableToolbar
+          <TablesTableToolbar
             filters={filters}
             onFilters={handleFilters}
             //
@@ -203,7 +148,7 @@ export default function OrderListView() {
           />
 
           {canReset && (
-            <OrderTableFiltersResult
+            <TablesTableFiltersResult
               filters={filters}
               onFilters={handleFilters}
               //
@@ -215,41 +160,9 @@ export default function OrderListView() {
           )}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            {/* <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={tableData?.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  tableData?.map((row) => row.id)
-                )
-              }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
-              }
-            /> */}
 
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'}>
-                {/* <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={tableData?.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      tableData?.map((row) => row.id)
-                    )
-                  }
-                /> */}
 
                 <TableBody>
                   {dataFiltered
@@ -258,12 +171,10 @@ export default function OrderListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     ?.map((row, idx) => (
-                      <OrderTableRow
+                      <TablesTableRow
                         key={idx}
                         row={row}
                         selected={table.selected.includes(row.id)}
-                        // onSelectRow={() => table.onSelectRow(row.tableName)}
-                        // onDeleteRow={() => handleDeleteRow(row.id)}
                         onViewRow={() => handleViewRow(row.tableName)}
                       />
                     ))}
@@ -306,7 +217,6 @@ export default function OrderListView() {
             variant="contained"
             color="error"
             onClick={() => {
-              // handleDeleteRows();
               confirm.onFalse();
             }}
           >

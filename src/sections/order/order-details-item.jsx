@@ -87,7 +87,7 @@ export default function OrderDetailsItems({
         }}
       >
         <Scrollbar>
-          {items.map((item) => (
+          {items?.map((item) => (
             <Stack
               key={item.id}
               direction="row"

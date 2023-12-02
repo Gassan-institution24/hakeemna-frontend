@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { OrderListView } from 'src/sections/order/view';
+import {TablesListView} from 'src/sections/tables/view';
 
 // ----------------------------------------------------------------------
 
-export default function OrderListPage() {
+export default function TablesListPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Order List</title>
+        <title> Super Admin: Tables List</title>
       </Helmet>
 
-      <OrderListView />
+      <TablesListView />
     </>
   );
 }
