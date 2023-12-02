@@ -16,7 +16,7 @@ import ListItemText from '@mui/material/ListItemText';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fCurrency } from 'src/utils/format-number';
+import { fCurrency,fData } from 'src/utils/format-number';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -157,7 +157,7 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
           sx={{ bgcolor: 'background.neutral' }}
         >
           {tableName === 'countries' && <Stack component={Paper} sx={{ m: 1.5 }}>
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.name_english,item.status,timeFormatte(item.created_at),timeFormatte(item.updated_at)]}))}
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.name_english,item.status,fData(item.created_at),fData(item.updated_at)]}))}
           </Stack>}
           {tableName === 'cities' && <Stack component={Paper} sx={{ m: 1.5 }}>
               {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.name_english,item.status,item.country?.name_english,item.user_creation?.firstname,item.user_modification?.firstname,timeFormatte(item.created_at),timeFormatte(item.updated_at)]}))}
