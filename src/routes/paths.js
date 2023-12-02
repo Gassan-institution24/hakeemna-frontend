@@ -237,9 +237,9 @@ export const paths = {
         edit: `${ROOTS.SUPERADMIN}/post/${paramCase(MOCK_TITLE)}/edit`,
       },
     },
-    order: {
+    tables: {
       root: `${ROOTS.SUPERADMIN}/tables`,
-      details: (id) => `${ROOTS.SUPERADMIN}/order/${id}`,
+      details: (id) => `${ROOTS.SUPERADMIN}/tables/${id}`,
       demo: {
         details: `${ROOTS.SUPERADMIN}/order/${MOCK_ID}`,
       },

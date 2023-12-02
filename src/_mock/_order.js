@@ -10,7 +10,6 @@ export function useGetTables() {
   const URL = endpoints.allTables;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  console.log('dataa from useGeteTable',data)
   const memoizedValue = useMemo(
     () => ({
       tableData: data || [],
