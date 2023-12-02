@@ -1,5 +1,5 @@
 import { _mock } from 'src/_mock';
-
+import { useGetUser } from 'src/api/user';
 // TO GET THE USER FROM THE AUTHCONTEXT, YOU CAN USE
 
 // CHANGE:
@@ -12,14 +12,17 @@ import { _mock } from 'src/_mock';
 
 // ----------------------------------------------------------------------
 
+
+
 export function useMockedUser() {
+  const { data } = useGetUser();
   const user = {
-    id: '8864c717-587d-472a-929a-8e5f298024da-0',
-    displayName: 'Jaydon Frankie',
-    email: 'demo@minimals.cc',
+    id:`${data._id}`,
+    displayName: `${data.first_name} ${data.second_name}`,
+    email: `${data.email}`,
     password: 'demo1234',
-    photoURL: _mock.image.avatar(24),
-    phoneNumber: '+40 777666555',
+    photoURL: `${data.profile_picture}`,
+    phoneNumber: `${data.mobile_num1}`,
     country: 'United States',
     address: '90210 Broadway Blvd',
     state: 'California',

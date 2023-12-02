@@ -7,6 +7,14 @@ import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Badge, { badgeClasses } from '@mui/material/Badge';
+// dark mode
+import { m } from 'framer-motion';
+import Switch from '@mui/material/Switch';
+
+
+import Image from 'src/components/image';
+import { useSettingsContext } from 'src/components/settings';
+import { varFade, MotionViewport } from 'src/components/animate';
 
 import { paths } from 'src/routes/paths';
 
@@ -24,11 +32,10 @@ import { HEADER } from '../config-layout';
 import { navConfig } from './config-navigation';
 import LoginButton from '../common/login-button';
 import HeaderShadow from '../common/header-shadow';
-import SettingsButton from '../common/settings-button';
-
 // ----------------------------------------------------------------------
 
 export default function Header() {
+  const settings = useSettingsContext();
   const theme = useTheme();
 
   const mdUp = useResponsive('up', 'md');
@@ -78,15 +85,17 @@ export default function Header() {
             <Button variant="contained" target="_blank" rel="noopener" href={paths.minimalUI}>
               Purchase Now
             </Button>
-
+            {/* login in navbar */}
             {mdUp && <LoginButton />}
 
-            <SettingsButton
-              sx={{
-                ml: { xs: 1, md: 0 },
-                mr: { md: 2 },
-              }}
-            />
+            <m.div variants={varFade().inUp}>
+              <Switch
+                checked={settings.themeMode === 'dark'}
+                onClick={() =>
+                  settings.onUpdate('themeMode', settings.themeMode === 'light' ? 'dark' : 'light')
+                }
+              />
+            </m.div>
 
             {!mdUp && <NavMobile data={navConfig} />}
           </Stack>
@@ -94,6 +103,7 @@ export default function Header() {
       </Toolbar>
 
       {offsetTop && <HeaderShadow />}
+      
     </AppBar>
   );
 }

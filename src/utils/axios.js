@@ -53,4 +53,7 @@ export const endpoints = {
     details: '/api/product/details',
     search: '/api/product/search',
   },
+  patients:{
+    onepatients: '/api/patient/',
+  }
 };

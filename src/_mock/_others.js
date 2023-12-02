@@ -150,7 +150,7 @@ export const _socials = [
 // ----------------------------------------------------------------------
 
 export const _homePlans = [...Array(3)].map((_, index) => ({
-  license: ['Standard', 'Standard Plus', 'Extended'][index],
+  license: ['Standard', 'Plus', 'Extended'][index],
   commons: ['One end products', '12 months updates', '6 months of support'],
   options: [
     'JavaScript version',
