@@ -119,7 +119,7 @@ export default function HomePricing() {
 
           <m.div variants={varFade().inDown}>
             <Typography sx={{ mt: 2, mb: 5, color: 'text.secondary' }}>
-              Please describe your case to receive the most accurate advice.
+              Please describe your case to receive the most accurate respons.
             </Typography>
           </m.div>
 
@@ -128,7 +128,7 @@ export default function HomePricing() {
               color="inherit"
               size="large"
               variant="contained"
-              href="mailto:support@minimals.cc?subject=[Feedback] from Customer"
+              href="mailto:doctorna2023@gmail.com?subject=[Feedback] from Customer"
             >
               Contact us
             </Button>
@@ -161,7 +161,7 @@ function PlanCard({ plan, sx, ...other }) {
 
   const standardLicense = license === 'Standard';
 
-  const plusLicense = license === 'Standard Plus';
+  const plusLicense = license === 'Plus';
 
   return (
     <Stack
@@ -200,7 +200,9 @@ function PlanCard({ plan, sx, ...other }) {
         </Box>
       </Stack>
 
-      {standardLicense ? (
+
+{/* icons: figma-js-ts */}
+      {/* {standardLicense ? (
         <Box component="img" alt={icons[1]} src={icons[1]} sx={{ width: 20, height: 20 }} />
       ) : (
         <Stack direction="row" spacing={2}>
@@ -208,7 +210,7 @@ function PlanCard({ plan, sx, ...other }) {
             <Box component="img" key={icon} alt={icon} src={icon} sx={{ width: 20, height: 20 }} />
           ))}
         </Stack>
-      )}
+      )} */}
 
       <Stack spacing={2.5}>
         {commons.map((option) => (

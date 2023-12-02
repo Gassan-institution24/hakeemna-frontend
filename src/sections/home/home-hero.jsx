@@ -267,7 +267,7 @@ export default function HomeHero() {
             href={PATH_AFTER_LOGIN}
             sx={{ borderColor: 'text.primary' }}
           >
-            Git Started
+            Get Started
           </Button>
         </Stack>
       </m.div>
