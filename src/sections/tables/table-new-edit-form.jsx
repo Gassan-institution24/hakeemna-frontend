@@ -1,0 +1,130 @@
+import * as Yup from 'yup';
+import PropTypes from 'prop-types';
+import { useMemo, useCallback } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Switch from '@mui/material/Switch';
+import Grid from '@mui/material/Unstable_Grid2';
+import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
+import { useGetCountries } from 'src/api/tables';
+
+import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, {
+  RHFSwitch,
+  RHFSelect,
+  RHFTextField,
+  RHFUploadAvatar,
+  RHFAutocomplete,
+} from 'src/components/hook-form';
+import axiosHandler from 'src/utils/axios-handler';
+
+// ----------------------------------------------------------------------
+
+export default function TableNewEditForm({ currentCity }) {
+  const router = useRouter();
+
+  const {tableData}=useGetCountries()
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const NewUserSchema = Yup.object().shape({
+    name_arabic: Yup.string().required('Name is required'),
+    name_english: Yup.string().required('Name is required'),
+    country: Yup.string().required('Country is required'),
+  });
+
+  const defaultValues = useMemo(
+    () => ({
+      name_arabic: currentCity?.name_arabic || '',
+      name_english: currentCity?.name_english || '',
+      country: currentCity?.country?._id || '',
+    }),
+    [currentCity]
+    );
+    console.log(currentCity)
+    console.log(defaultValues)
+
+  const methods = useForm({
+    resolver: yupResolver(NewUserSchema),
+    defaultValues,
+  });
+
+  const {
+    reset,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      if(currentCity){
+        console.log('dataaaaa',data)
+        const response = await axiosHandler({method:'PATCH',path:`cities/${currentCity._id}`,data});
+        console.log('resssponssseee',response)
+      }else{
+        const response = await axiosHandler({method:'POST',path:'cities',data});
+      }
+      reset();
+      enqueueSnackbar(currentCity ? 'Update success!' : 'Create success!');
+      router.push(paths.superadmin.tables.city);
+      console.info('DATA', data);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+
+  return (
+    <FormProvider methods={methods} onSubmit={onSubmit}>
+       <Grid container spacing={3}>
+        <Grid xs={12} md={8}>
+          <Card sx={{ p: 3 }}>
+            <Box
+              rowGap={3}
+              columnGap={2}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
+              }}
+            >
+              <RHFTextField name="name_english" label="name english" />
+              <RHFTextField name="name_arabic" label="name arabic" />
+
+              <RHFSelect native name="country" label="Country" >
+                <option> </option>
+                {tableData.map((country) => (
+                    <option key={country._id} value={country._id}>
+                      {country.name_english}
+                    </option>
+                ))}
+              </RHFSelect>
+            </Box>
+
+            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                {!currentCity ? 'Create User' : 'Save Changes'}
+              </LoadingButton>
+            </Stack>
+          </Card>
+        </Grid>
+      </Grid>
+    </FormProvider>
+  );
+}
+
+TableNewEditForm.propTypes = {
+  currentCity: PropTypes.object,
+};

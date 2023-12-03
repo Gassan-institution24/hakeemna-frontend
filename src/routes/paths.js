@@ -240,6 +240,10 @@ export const paths = {
     },
     tables: {
       root: `${ROOTS.SUPERADMIN}/tables`,
+      list: `${ROOTS.SUPERADMIN}/tables/list`,
+      city: `${ROOTS.SUPERADMIN}/tables/cities`,
+      new: (tablename)=>`${ROOTS.SUPERADMIN}/tables/${tablename}/new`,
+      edit: (tablename,id) => `${ROOTS.SUPERADMIN}/tables/${tablename}/edit/${id}`,
       details: (tablename) => `${ROOTS.SUPERADMIN}/tables/${tablename}`,
       demo: {
         details: `${ROOTS.SUPERADMIN}/order/${MOCK_ID}`,

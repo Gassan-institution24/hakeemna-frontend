@@ -13,6 +13,7 @@ export default function TableSelectedAction({
   numSelected,
   onSelectAllRows,
   sx,
+  color,
   ...other
 }) {
   if (!numSelected) {
@@ -32,7 +33,8 @@ export default function TableSelectedAction({
         zIndex: 9,
         height: 58,
         position: 'absolute',
-        bgcolor: 'primary.lighter',
+      
+        bgcolor:`${color}.lighter`,
         ...(dense && {
           height: 38,
         }),
@@ -51,7 +53,7 @@ export default function TableSelectedAction({
         sx={{
           ml: 2,
           flexGrow: 1,
-          color: 'primary.main',
+          color: `${color}.main`,
           ...(dense && {
             ml: 3,
           }),
@@ -72,4 +74,5 @@ TableSelectedAction.propTypes = {
   onSelectAllRows: PropTypes.func,
   rowCount: PropTypes.number,
   sx: PropTypes.object,
+  color: PropTypes.string,
 };
