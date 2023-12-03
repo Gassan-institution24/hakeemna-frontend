@@ -1,121 +1,65 @@
-import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
-
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import ListItemText from '@mui/material/ListItemText';
-
-import Iconify from 'src/components/iconify';
-
+import { useGetUser } from 'src/api/user';
 // ----------------------------------------------------------------------
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
-export default function ProfileFollowers({ followers }) {
-  const _mockFollowed = followers.slice(4, 8).map((i) => i.id);
+export default function ProfileFollowers() {
+  const { data } = useGetUser();
 
-  const [followed, setFollowed] = useState(_mockFollowed);
-
-  const handleClick = useCallback(
-    (item) => {
-      const selected = followed.includes(item)
-        ? followed.filter((value) => value !== item)
-        : [...followed, item];
-
-      setFollowed(selected);
-    },
-    [followed]
-  );
-
-  return (
+   return (
     <>
-      <Typography variant="h4" sx={{ my: 5 }}>
-        Followers
-      </Typography>
+       <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>name</TableCell>
+            <TableCell align="right">frequently</TableCell>
+            <TableCell align="right">dose</TableCell>
+            <TableCell align="right">duration</TableCell>
+            <TableCell align="right">price</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.current_medications.map((med) => (
+            <TableRow
+              key={med.name}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {med.medicine.trade_name}
+              </TableCell>
+              <TableCell align="right">{med.frequently}</TableCell>
+              <TableCell align="right">{med.dose}</TableCell>
+              <TableCell align="right">{med.duration}</TableCell>
+              <TableCell align="right"> {med.medicine.price_1}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
 
-      <Box
-        gap={3}
-        display="grid"
-        gridTemplateColumns={{
-          xs: 'repeat(1, 1fr)',
-          sm: 'repeat(2, 1fr)',
-          md: 'repeat(3, 1fr)',
-        }}
-      >
-        {followers.map((follower) => (
-          <FollowerItem
-            key={follower.id}
-            follower={follower}
-            selected={followed.includes(follower.id)}
-            onSelected={() => handleClick(follower.id)}
-          />
-        ))}
-      </Box>
-    </>
+
+
+
+
+
+
+
+
+
+
+
+  </>
+      
   );
 }
 
-ProfileFollowers.propTypes = {
-  followers: PropTypes.array,
-};
-
-// ----------------------------------------------------------------------
-
-function FollowerItem({ follower, selected, onSelected }) {
-  const { name, country, avatarUrl } = follower;
-
-  return (
-    <Card
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        p: (theme) => theme.spacing(3, 2, 3, 3),
-      }}
-    >
-      <Avatar alt={name} src={avatarUrl} sx={{ width: 48, height: 48, mr: 2 }} />
-
-      <ListItemText
-        primary={name}
-        secondary={
-          <>
-            <Iconify icon="mingcute:location-fill" width={16} sx={{ flexShrink: 0, mr: 0.5 }} />
-            {country} country country country country country country country country country
-          </>
-        }
-        primaryTypographyProps={{
-          noWrap: true,
-          typography: 'subtitle2',
-        }}
-        secondaryTypographyProps={{
-          mt: 0.5,
-          noWrap: true,
-          display: 'flex',
-          component: 'span',
-          alignItems: 'center',
-          typography: 'caption',
-          color: 'text.disabled',
-        }}
-      />
-
-      <Button
-        size="small"
-        variant={selected ? 'text' : 'outlined'}
-        color={selected ? 'success' : 'inherit'}
-        startIcon={
-          selected ? <Iconify width={18} icon="eva:checkmark-fill" sx={{ mr: -0.75 }} /> : null
-        }
-        onClick={onSelected}
-        sx={{ flexShrink: 0, ml: 1.5 }}
-      >
-        {selected ? 'Followed' : 'Follow'}
-      </Button>
-    </Card>
-  );
-}
-
-FollowerItem.propTypes = {
-  follower: PropTypes.object,
-  onSelected: PropTypes.func,
-  selected: PropTypes.bool,
-};
+//    <Typography variant="h4" sx={{ my: 5 }}>
+//     current medicines
+//    </Typography>
