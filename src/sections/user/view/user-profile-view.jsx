@@ -18,7 +18,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import ProfileHome from '../profile-home';
 import ProfileCover from '../profile-cover';
 import ProfileFriends from '../profile-friends';
-import ProfileGallery from '../profile-gallery';
+// import ProfileGallery from '../profile-gallery';
 import ProfileFollowers from '../profile-followers';
 
 // ----------------------------------------------------------------------
@@ -30,19 +30,14 @@ const TABS = [
     icon: <Iconify icon="solar:user-id-bold" width={24} />,
   },
   {
-    value: 'followers',
-    label: 'Followers',
-    icon: <Iconify icon="solar:heart-bold" width={24} />,
+    value: 'current medications',
+    label: 'Current Medications',
+    icon: <Iconify icon="icon-park-outline:medicine-chest" width={24} />,
   },
   {
-    value: 'friends',
-    label: 'Friends',
-    icon: <Iconify icon="solar:users-group-rounded-bold" width={24} />,
-  },
-  {
-    value: 'gallery',
-    label: 'Gallery',
-    icon: <Iconify icon="solar:gallery-wide-bold" width={24} />,
+    value: 'appointments',
+    label: 'Appointments',
+    icon: <Iconify icon="teenyicons:appointments-outline" width={24} />,
   },
 ];
 
@@ -118,17 +113,9 @@ export default function UserProfileView() {
 
       {currentTab === 'profile' && <ProfileHome info={_userAbout} posts={_userFeeds} />}
 
-      {currentTab === 'followers' && <ProfileFollowers followers={_userFollowers} />}
+      {currentTab === 'current medications' && <ProfileFollowers current medications={_userFollowers} />}
 
-      {currentTab === 'friends' && (
-        <ProfileFriends
-          friends={_userFriends}
-          searchFriends={searchFriends}
-          onSearchFriends={handleSearchFriends}
-        />
-      )}
-
-      {currentTab === 'gallery' && <ProfileGallery gallery={_userGallery} />}
+      {currentTab === 'appointments' && <ProfileFriends appointments={_userFriends}/>}
     </Container>
   );
 }

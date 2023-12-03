@@ -23,6 +23,7 @@ import Iconify from 'src/components/iconify';
 
 import { useGetUser } from 'src/api/user';
 
+
 // import ProfilePostItem from './profile-post-item';
 
 // ----------------------------------------------------------------------
@@ -30,6 +31,7 @@ import { useGetUser } from 'src/api/user';
 export default function ProfileHome({ info, posts }) {
   const fileRef = useRef(null);
   const { data } = useGetUser();
+
   const handleAttach = () => {
     if (fileRef.current) {
       fileRef.current.click();
@@ -37,6 +39,7 @@ export default function ProfileHome({ info, posts }) {
   };
 
   const renderAbout = (
+   
     <>
       {' '}
       <Card>

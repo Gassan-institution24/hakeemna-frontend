@@ -20,8 +20,7 @@ export default axiosInstance;
 // ----------------------------------------------------------------------
 
 export const fetcher = async (args) => {
-  console.log('args',args)
-  console.log('api',HOST_API)
+
   const [url, config] = Array.isArray(args) ? args : [args];
 
   const res = await axiosInstance.get(url, { ...config });
@@ -65,6 +64,9 @@ export const endpoints = {
     search: '/api/product/search',
   },
   patients:{
-    onepatients: '/api/patient/',
+    onepatients: '/api/patient',
+  },
+  appointment:{
+    patientsappointments: '/api/appointments/patient/656c76046ceed235b42948a0',
   }
 };
