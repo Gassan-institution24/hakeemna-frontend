@@ -66,7 +66,7 @@ const BlankPage = lazy(() => import('src/pages/dashboard/blank'));
 
 export const dashboardRoutes = [
   {
-    path: 'super',
+    path: 'dashboard',
     element: (
       // <AuthGuard>
         <DashboardLayout>
@@ -90,6 +90,7 @@ export const dashboardRoutes = [
           { path: 'profile', element: <UserProfilePage /> },
           { path: 'ecommerce', element: <OverviewEcommercePage /> },
           { path: 'list', element: <UserListPage /> },
+          { path: 'cards', element: <UserCardsPage /> },
           { path: 'new', element: <UserCreatePage /> },
           { path: ':id/edit', element: <UserEditPage /> },
           { path: 'account', element: <UserAccountPage /> },
