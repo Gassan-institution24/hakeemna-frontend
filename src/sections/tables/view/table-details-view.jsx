@@ -11,6 +11,7 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
+import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -39,6 +40,7 @@ import {
 } from 'src/components/table';
 
 import { useGetCities } from 'src/api/tables';
+import axiosHandler from 'src/utils/axios-handler';
 import OrderTableRow from '../table-details-row';
 import OrderTableToolbar from '../table-details-toolbar';
 import OrderTableFiltersResult from '../table-details-filters-result';
@@ -69,17 +71,17 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function TableDetailsView(props) {
+export default function TableDetailsView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const settings = useSettingsContext();
 
   const router = useRouter();
 
-  const confirm = useBoolean();
+  const confirmActivate = useBoolean();
+  const confirmInactivate = useBoolean();
 
-  const {tableData} = useGetCities();
-  console.log('city tabl data',tableData)
+  const { tableData,refetch } = useGetCities();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -99,13 +101,16 @@ export default function TableDetailsView(props) {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
+  console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset =
-    !!filters?.name || filters.status !== 'all' ;
+  const canReset = !!filters?.name || filters.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+
+  const printHandler = ()=>{
+    window.print();
+  }
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -118,37 +123,61 @@ export default function TableDetailsView(props) {
     [table]
   );
 
-  const handleDeleteRow = useCallback(
-    (id) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-      // setTableData(deleteRow);
-
+  const handleActivate = useCallback(
+    async(id) => {
+      await axiosHandler({method:'PATCH',path:`cities/${id}/updatestatus`,data:{'status':'active'}})
+      refetch()
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, tableData]
+    [dataInPage.length, table,refetch]
+  );
+  const handleInactivate = useCallback(
+    async(id) => {
+      await axiosHandler({method:'PATCH',path:`cities/${id}/updatestatus`,data:{'status':'inactive'}})
+      refetch()
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table,refetch]
   );
 
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
-    // setTableData(deleteRows);
-
+  const handleActivateRows = useCallback(async() => {
+      await axiosHandler({method:'PATCH',path:`cities/updatemanystatus`,data:{'status':'active','ids':table.selected}})
+      refetch()
     table.onUpdatePageDeleteRows({
       totalRows: tableData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
+  }, [dataFiltered.length, dataInPage.length, table, tableData,refetch]);
+  
+  const handleInactivateRows = useCallback(async() => {
+      await axiosHandler({method:'PATCH',path:`cities/updatemanystatus`,data:{'status':'inactive','ids':table.selected}})
+      refetch()
+    table.onUpdatePageDeleteRows({
+      totalRows: tableData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [dataFiltered.length, dataInPage.length, table, tableData,refetch]);
+
+
+  const handleEditRow = useCallback(
+    (id) => {
+      router.push(paths.superadmin.tables.edit('cities', id));
+    },
+    [router]
+  );
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
 
-  const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.order.details(id));
-    },
-    [router]
-  );
+  // const handleViewRow = useCallback(
+  //   (id) => {
+  //     router.push(paths.dashboard.order.details(id));
+  //   },
+  //   [router]
+  // );
 
   const handleFilterStatus = useCallback(
     (event, newValue) => {
@@ -156,12 +185,11 @@ export default function TableDetailsView(props) {
     },
     [handleFilters]
   );
-
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth={false}>
         <CustomBreadcrumbs
-          // heading={'tatestble'}
+          heading="Cities"
           links={[
             {
               name: 'Super',
@@ -169,10 +197,20 @@ export default function TableDetailsView(props) {
             },
             {
               name: 'Tables',
-              href: paths.superadmin.tables.root,
+              href: paths.superadmin.tables.list,
             },
-            { name:'table'},
+            { name: 'table' },
           ]}
+          action={
+            <Button
+              component={RouterLink}
+              href={paths.superadmin.tables.new('cities')}
+              variant="contained"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+            >
+              New City
+            </Button>
+          }
           sx={{
             mb: { xs: 3, md: 5 },
           }}
@@ -204,11 +242,11 @@ export default function TableDetailsView(props) {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && _orders.length}
+                    {tab.value === 'all' && tableData.length}
                     {tab.value === 'active' &&
-                      _orders.filter((order) => order.status === 'active').length}
+                      tableData.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      _orders.filter((order) => order.status === 'inactive').length}
+                      tableData.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
@@ -216,6 +254,7 @@ export default function TableDetailsView(props) {
           </Tabs>
 
           <OrderTableToolbar
+            onPrint={printHandler}
             filters={filters}
             onFilters={handleFilters}
             //
@@ -237,21 +276,40 @@ export default function TableDetailsView(props) {
 
           <TableContainer>
             <TableSelectedAction
-              dense={table.dense}
+              // dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={tableData.length}
+              rowCount={dataFiltered.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  tableData.map((row) => row.id)
+                  dataFiltered.map((row) => row._id)
                 )
               }
               action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
+                <>
+                  {dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'inactive') ? (
+                    <Tooltip title="Activate all">
+                      <IconButton color="primary" onClick={confirmActivate.onTrue}>
+                        <Iconify icon="codicon:run-all" />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Inactivate all">
+                      <IconButton color="error" onClick={confirmInactivate.onTrue}>
+                        <Iconify icon="iconoir:pause-solid" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </>
+              }
+              color={
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'inactive')
+                  ? 'primary'
+                  : 'error'
               }
             />
 
@@ -261,13 +319,13 @@ export default function TableDetailsView(props) {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
+                  rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      tableData.map((row) => row.id)
+                      dataFiltered.map((row) => row._id)
                     )
                   }
                 />
@@ -284,8 +342,9 @@ export default function TableDetailsView(props) {
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onDeleteRow={() => handleDeleteRow(row._id)}
-                        onViewRow={() => handleViewRow(row._id)}
+                        onActivate={() => handleActivate(row._id)}
+                        onInactivate={() => handleInactivate(row._id)}
+                        onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}
 
@@ -314,12 +373,12 @@ export default function TableDetailsView(props) {
       </Container>
 
       <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
+        open={confirmInactivate.value}
+        onClose={confirmInactivate.onFalse}
         title="Delete"
         content={
           <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
+            Are you sure want to Inactivate <strong> {table.selected.length} </strong> items?
           </>
         }
         action={
@@ -327,11 +386,33 @@ export default function TableDetailsView(props) {
             variant="contained"
             color="error"
             onClick={() => {
-              handleDeleteRows();
-              confirm.onFalse();
+              handleInactivateRows();
+              confirmInactivate.onFalse();
             }}
           >
-            Delete
+            Inactivate
+          </Button>
+        }
+      />
+      <ConfirmDialog
+        open={confirmActivate.value}
+        onClose={confirmActivate.onFalse}
+        title="Delete"
+        content={
+          <>
+            Are you sure want to Activate <strong> {table.selected.length} </strong> items?
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              handleActivateRows();
+              confirmActivate.onFalse();
+            }}
+          >
+            Activate
           </Button>
         }
       />

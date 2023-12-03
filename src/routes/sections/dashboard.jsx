@@ -5,6 +5,8 @@ import { AuthGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
+import TableCreatePage from 'src/pages/dashboard/tables/new';
+import TableEditPage from 'src/pages/dashboard/tables/edit';
 
 // ----------------------------------------------------------------------
 
@@ -111,6 +113,8 @@ export const dashboardRoutes = [
         children: [
           { element: <TablesListPage />, index: true },
           { path: 'list', element: <TablesListPage /> },
+          { path: ':tablename/new', element: <TableCreatePage /> },
+          { path: ':tablename/edit/:id', element: <TableEditPage /> },
           { path: ':tablename', element: <TableDetailsPage /> },
         ],
       },

@@ -16,6 +16,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 export default function OrderTableToolbar({
   filters,
   onFilters,
+  onPrint,
   //
   canReset,
   onResetFilters,
@@ -83,6 +84,7 @@ export default function OrderTableToolbar({
       >
         <MenuItem
           onClick={() => {
+            onPrint();
             popover.onClose();
           }}
         >
@@ -117,4 +119,5 @@ OrderTableToolbar.propTypes = {
   filters: PropTypes.object,
   onFilters: PropTypes.func,
   onResetFilters: PropTypes.func,
+  onPrint: PropTypes.func,
 };

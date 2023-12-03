@@ -184,7 +184,7 @@ export default function OrderListView() {
             },
             {
               name: 'management tables',
-              href: paths.superadmin.tables.root,
+              href: paths.superadmin.tables.list,
             },
             { name: 'tables' },
           ]}
