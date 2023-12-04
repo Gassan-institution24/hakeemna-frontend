@@ -18,14 +18,14 @@ export default function TourCreateView() {
         heading="Create a new offer"
         links={[
           {
-            name: 'Dashboard',
+            name: 'user',
             href: paths.dashboard.root,
           },
           {
-            name: 'Tour',
+            name: 'offer',
             href: paths.dashboard.tour.root,
           },
-          { name: 'New tour' },
+          { name: 'New offer' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

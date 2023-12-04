@@ -16,7 +16,7 @@ export default function TourItem() {
         <Card key={i} sx={{ maxWidth: 345 }}>
           <CardMedia
             sx={{ height: 140 }}
-            image="/static/images/cards/contemplative-reptile.jpg"
+            image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtDtbLv0nahOvocANADAbJ1l94OYSiqoSHhw&usqp=CAU"
             title="offer img"
           />
           <CardContent>

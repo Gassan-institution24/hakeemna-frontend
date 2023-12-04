@@ -2,8 +2,13 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
-import { useMemo, useEffect, useCallback } from 'react';
+import React,{ useMemo, useEffect, useCallback,useState } from 'react';
 
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -15,10 +20,9 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // import FormControlLabel from '@mui/material/FormControlLabel';
-
+import axiosHandler from 'src/utils/axios-handler';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { countries } from 'src/assets/data';
@@ -37,11 +41,45 @@ import FormProvider, {
 // ----------------------------------------------------------------------
 
 export default function TourNewEditForm({ currentTour }) {
+
+const [stakeholderInfo, setstakeholderInfo] = useState({});
+const [errors, setError] = useState();
+const [unitservice, setUnitservice] = useState([]);
+const [cities, setCities] = useState([]);
+
+function changeHandler(e) {
+  const { name, value } = e.target;
+  setstakeholderInfo({ ...stakeholderInfo, [name]: value });
+}
+
+useEffect(()=>{
+  axiosHandler({setData:setUnitservice,setError,method:'GET',path:'employeetypes'})
+},[])
+
+useEffect(()=>{
+  axiosHandler({setData:setCities,setError,method:'GET',path:'cities'})
+},[])
+
+const createOffer = async () => {
+  await axiosHandler({
+    setError,
+    method: "POST",
+    path: "suppliersoffers/",
+    data: stakeholderInfo,
+  });
+};
+
+
+
+
+
+
+
   const router = useRouter();
 
   const mdUp = useResponsive('up', 'md');
 
-  const { enqueueSnackbar } = useSnackbar();
+
 
   const NewTourSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
@@ -53,17 +91,16 @@ export default function TourNewEditForm({ currentTour }) {
     tags: Yup.array().min(2, 'Must have at least 2 tags'),
     services: Yup.array().min(2, 'Must have at least 2 services'),
     destination: Yup.string().required('Destination is required'),
-    available: Yup.object().shape({
-      startDate: Yup.mixed().nullable().required('Start date is required'),
-      endDate: Yup.mixed()
-        .required('End date is required')
-        .test(
+    startDate: Yup.date().nullable().required('Start date is required'),
+    endDate: Yup.date()
+      .required('End date is required')
+      .test(
           'date-min',
           'End date must be later than start date',
           (value, { parent }) => value.getTime() > parent.startDate.getTime()
         ),
-    }),
   });
+
 
   const defaultValues = useMemo(
     () => ({
@@ -91,32 +128,26 @@ export default function TourNewEditForm({ currentTour }) {
 
   const {
     watch,
-    reset,
     control,
     setValue,
-    handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
   const values = watch();
 
-  useEffect(() => {
-    if (currentTour) {
-      reset(defaultValues);
-    }
-  }, [currentTour, defaultValues, reset]);
 
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(currentTour ? 'Update success!' : 'Create success!');
-      router.push(paths.dashboard.tour.root);
-      console.info('DATA', data);
-    } catch (error) {
-      console.error(error);
-    }
-  });
+  // const onSubmit = handleSubmit(async (data) => {
+  //   try {
+  //     await new Promise((resolve) => setTimeout(resolve, 500));
+  //     reset();
+  //     enqueueSnackbar(currentTour ? 'Update success!' : 'Create success!');
+  //     router.push(paths.dashboard.tour.root);
+  //     console.info('DATA', data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // });
+
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -149,7 +180,7 @@ export default function TourNewEditForm({ currentTour }) {
     <>
       {mdUp && (
         <Grid md={4}>
-          <Typography variant="h6" sx={{ mb: 0.5 }}>
+          <Typography sx={{ mb: 0.5 }}>
             Details
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -165,12 +196,16 @@ export default function TourNewEditForm({ currentTour }) {
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Name</Typography>
-              <RHFTextField name="name" placeholder="Ex: Adventure Seekers Expedition..." />
+              <input name="Offer_name" onChange={changeHandler}/>
             </Stack>
 
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Content</Typography>
-              <RHFEditor simple name="content" />
+              <input name="Offer_comment" onChange={changeHandler}/>
+            </Stack>
+            <Stack spacing={1.5}>
+              <Typography variant="subtitle2">Price</Typography>
+              <input name="Offer_price" onChange={changeHandler}/>
             </Stack>
 
             <Stack spacing={1.5}>
@@ -189,11 +224,7 @@ export default function TourNewEditForm({ currentTour }) {
           </Stack>
         </Card>
       </Grid>
-    </>
-  );
-
-  const renderProperties = (
-    <>
+      {/* //////////////////////////////////////// */}
       {mdUp && (
         <Grid md={4}>
           <Typography variant="h6" sx={{ mb: 0.5 }}>
@@ -212,49 +243,29 @@ export default function TourNewEditForm({ currentTour }) {
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack>
               <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-                Tour Guide
+              employee type
               </Typography>
+            
+              <Box >
+      <FormControl fullWidth>
+        <Select>
+          {unitservice.map((unit) => (
+            <MenuItem key={unit._id} value={unit._id} name="employee_type">
+              {unit.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
 
-              <RHFAutocomplete
-                multiple
-                name="tourGuides"
-                placeholder="+ Tour Guides"
-                disableCloseOnSelect
-                options={_tourGuides}
-                getOptionLabel={(option) => option.name}
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-                renderOption={(props, tourGuide) => (
-                  <li {...props} key={tourGuide.id}>
-                    <Avatar
-                      key={tourGuide.id}
-                      alt={tourGuide.avatarUrl}
-                      src={tourGuide.avatarUrl}
-                      sx={{ width: 24, height: 24, flexShrink: 0, mr: 1 }}
-                    />
 
-                    {tourGuide.name}
-                  </li>
-                )}
-                renderTags={(selected, getTagProps) =>
-                  selected.map((tourGuide, index) => (
-                    <Chip
-                      {...getTagProps({ index })}
-                      key={tourGuide.id}
-                      size="small"
-                      variant="soft"
-                      label={tourGuide.name}
-                      avatar={<Avatar alt={tourGuide.name} src={tourGuide.avatarUrl} />}
-                    />
-                  ))
-                }
-              />
             </Stack>
 
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Available</Typography>
               <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                 <Controller
-                  name="available.startDate"
+                  name="Offer_start_date"
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
@@ -271,7 +282,7 @@ export default function TourNewEditForm({ currentTour }) {
                   )}
                 />
                 <Controller
-                  name="available.endDate"
+                  name="Offer_end_date"
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
@@ -292,58 +303,23 @@ export default function TourNewEditForm({ currentTour }) {
 
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">City</Typography>
-              <RHFAutocomplete
-                name="destination"
-                placeholder="+ City"
-                options={countries.map((option) => option.label)}
-                getOptionLabel={(option) => option}
-                renderOption={(props, option) => {
-                  const { code, label, phone } = countries.filter(
-                    (country) => country.label === option
-                  )[0];
-
-                  if (!label) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={label}>
-                      <Iconify
-                        key={label}
-                        icon={`circle-flags:${code.toLowerCase()}`}
-                        width={28}
-                        sx={{ mr: 1 }}
-                      />
-                      {label} ({code}) +{phone}
-                    </li>
-                  );
-                }}
-              />
+              <Box >
+      <FormControl fullWidth>
+        <Select>
+          {cities.map((unit) => (
+            <MenuItem key={unit._id} value={unit._id}  name="cities">
+              {unit.name_english}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
             </Stack>
-
-            <Stack spacing={1}>
-              <Typography variant="subtitle2">Services</Typography>
-              <RHFMultiCheckbox
-                name="services"
-                // from roles
-                options={TOUR_SERVICE_OPTIONS}
-                sx={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                }}
-              />
-            </Stack>
-
-        
           </Stack>
         </Card>
       </Grid>
-    </>
-  );
-
-  const renderActions = (
-    <>
-      {mdUp && <Grid md={4} />}
+      {/* ////////////////////////////////////////////////// */}
+       {mdUp && <Grid md={4} />}
       <Grid xs={12} md={8} sx={{ display: 'flex', alignItems: 'center' }}>
         <LoadingButton
           type="submit"
@@ -352,20 +328,20 @@ export default function TourNewEditForm({ currentTour }) {
           loading={isSubmitting}
           sx={{ ml: 2 }}
         >
-          {!currentTour ? 'Create Tour' : 'Save Changes'}
+          {!currentTour ? 'Create Offer' : 'Save Changes'}
         </LoadingButton>
       </Grid>
     </>
   );
 
+
+
+
+
   return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
+    <FormProvider methods={methods} onSubmit={createOffer}>
       <Grid container spacing={3}>
         {renderDetails}
-
-        {renderProperties}
-
-        {renderActions}
       </Grid>
     </FormProvider>
   );
@@ -374,3 +350,7 @@ export default function TourNewEditForm({ currentTour }) {
 TourNewEditForm.propTypes = {
   currentTour: PropTypes.object,
 };
+
+
+
+
