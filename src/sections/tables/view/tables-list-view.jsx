@@ -52,6 +52,7 @@ export default function TablesListView() {
   const confirm = useBoolean();
 
   const { tableData } = useGetTables();
+  
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -112,7 +113,7 @@ export default function TablesListView() {
 
   const handleViewRow = useCallback(
     (tablename) => {
-      router.push(paths.superadmin.tables.details(tablename));
+      router.push(paths.superadmin.tables.cities);
     },
     [router]
   );

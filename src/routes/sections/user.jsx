@@ -5,8 +5,8 @@ import { AuthGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import TableCreatePage from 'src/pages/dashboard/tables/new';
-import TableEditPage from 'src/pages/dashboard/tables/edit';
+// import TableCreatePage from 'src/pages/dashboard/tables/new';
+// import TableEditPage from 'src/pages/dashboard/tables/edit';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ const ProductCreatePage = lazy(() => import('src/pages/dashboard/product/new'));
 const ProductEditPage = lazy(() => import('src/pages/dashboard/product/edit'));
 // TABLES
 const TablesListPage = lazy(() => import('src/pages/dashboard/tables/list'));
-const TableDetailsPage = lazy(() => import('src/pages/dashboard/tables/details'));
+// const TableDetailsPage = lazy(() => import('src/pages/dashboard/tables/details'));
 // INVOICE
 const InvoiceListPage = lazy(() => import('src/pages/dashboard/invoice/list'));
 const InvoiceDetailsPage = lazy(() => import('src/pages/dashboard/invoice/details'));
@@ -108,16 +108,16 @@ export const userRoutes = [
           { path: ':id/edit', element: <ProductEditPage /> },
         ],
       },
-      {
-        path: 'tables',
-        children: [
-          { element: <TablesListPage />, index: true },
-          { path: 'list', element: <TablesListPage /> },
-          { path: ':tablename/new', element: <TableCreatePage /> },
-          { path: ':tablename/edit/:id', element: <TableEditPage /> },
-          { path: ':tablename', element: <TableDetailsPage /> },
-        ],
-      },
+      // {
+      //   path: 'tables',
+      //   children: [
+      //     { element: <TablesListPage />, index: true },
+      //     { path: 'list', element: <TablesListPage /> },
+      //     { path: ':tablename/new', element: <TableCreatePage /> },
+      //     { path: ':tablename/edit/:id', element: <TableEditPage /> },
+      //     { path: ':tablename', element: <TableDetailsPage /> },
+      //   ],
+      // },
       {
         path: 'invoice',
         children: [

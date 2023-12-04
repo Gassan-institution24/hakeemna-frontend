@@ -33,7 +33,7 @@ export default function TableEditView() {
           },
           {
             name: 'cities',
-            href: paths.superadmin.tables.city,
+            href: paths.superadmin.tables.cities,
           },
           { name: 'Update city' },
         ]}

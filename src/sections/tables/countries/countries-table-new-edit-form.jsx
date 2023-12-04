@@ -66,7 +66,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
-      router.push(paths.superadmin.tables.city);
+      router.push(paths.superadmin.tables.cities);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);

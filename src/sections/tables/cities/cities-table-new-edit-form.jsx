@@ -62,15 +62,13 @@ export default function CitiesNewEditForm({ currentCity }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if(currentCity){
-        console.log('dataaaaa',data)
-        const response = await axiosHandler({method:'PATCH',path:`cities/${currentCity._id}`,data});
-        console.log('resssponssseee',response)
+       await axiosHandler({method:'PATCH',path:`cities/${currentCity._id}`,data});
       }else{
-        const response = await axiosHandler({method:'POST',path:'cities',data});
+       await axiosHandler({method:'POST',path:'cities',data});
       }
       reset();
       enqueueSnackbar(currentCity ? 'Update success!' : 'Create success!');
-      router.push(paths.superadmin.tables.city);
+      router.push(paths.superadmin.tables.cities.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
