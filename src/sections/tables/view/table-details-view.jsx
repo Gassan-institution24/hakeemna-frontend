@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -19,6 +19,9 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
+import { useReactToPrint } from 'react-to-print';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
 
@@ -74,6 +77,8 @@ const defaultFilters = {
 export default function TableDetailsView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
+  const componentRef = useRef();
+
   const settings = useSettingsContext();
 
   const router = useRouter();
@@ -81,7 +86,7 @@ export default function TableDetailsView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { tableData,refetch } = useGetCities();
+  const { tableData, refetch } = useGetCities();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -108,9 +113,29 @@ export default function TableDetailsView() {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const printHandler = ()=>{
-    window.print();
-  }
+  const printHandler = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  const handleDownload = () => {
+    const excelBody = dataFiltered.reduce((acc, data) => {
+      acc.push({
+        code: data.code,
+        name: data.name_english,
+        country: data.country?.name_english,
+        status: data.status
+      });
+      return acc;
+    }, []);
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(excelBody);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+    saveAs(data, 'citiesTable.xlsx');
+  };
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -124,42 +149,57 @@ export default function TableDetailsView() {
   );
 
   const handleActivate = useCallback(
-    async(id) => {
-      await axiosHandler({method:'PATCH',path:`cities/${id}/updatestatus`,data:{'status':'active'}})
-      refetch()
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `cities/${id}/updatestatus`,
+        data: { status: 'active' },
+      });
+      refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table,refetch]
+    [dataInPage.length, table, refetch]
   );
   const handleInactivate = useCallback(
-    async(id) => {
-      await axiosHandler({method:'PATCH',path:`cities/${id}/updatestatus`,data:{'status':'inactive'}})
-      refetch()
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `cities/${id}/updatestatus`,
+        data: { status: 'inactive' },
+      });
+      refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table,refetch]
+    [dataInPage.length, table, refetch]
   );
 
-  const handleActivateRows = useCallback(async() => {
-      await axiosHandler({method:'PATCH',path:`cities/updatemanystatus`,data:{'status':'active','ids':table.selected}})
-      refetch()
+  const handleActivateRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `cities/updatemanystatus`,
+      data: { status: 'active', ids: table.selected },
+    });
+    refetch();
     table.onUpdatePageDeleteRows({
       totalRows: tableData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, tableData,refetch]);
-  
-  const handleInactivateRows = useCallback(async() => {
-      await axiosHandler({method:'PATCH',path:`cities/updatemanystatus`,data:{'status':'inactive','ids':table.selected}})
-      refetch()
-    table.onUpdatePageDeleteRows({
-      totalRows: tableData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, tableData,refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, tableData, refetch]);
 
+  const handleInactivateRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `cities/updatemanystatus`,
+      data: { status: 'inactive', ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: tableData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [dataFiltered.length, dataInPage.length, table, tableData, refetch]);
 
   const handleEditRow = useCallback(
     (id) => {
@@ -257,6 +297,7 @@ export default function TableDetailsView() {
             onPrint={printHandler}
             filters={filters}
             onFilters={handleFilters}
+            onDownload={handleDownload}
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}
@@ -314,7 +355,7 @@ export default function TableDetailsView() {
             />
 
             <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'}>
+              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
                 <TableHeadCustom
                   order={table.order}
                   orderBy={table.orderBy}
@@ -437,10 +478,11 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   if (name) {
     inputData = inputData.filter(
-      (order) =>
-        order?.customer?.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order?.code?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (data) =>
+        data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.country?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.country?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { HOST_API } from 'src/config-global';
-import { idText } from 'typescript';
+// import { idText } from 'typescript';
 
 
 
