@@ -15,7 +15,7 @@ export default function TourCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new tour"
+        heading="Create a new offer"
         links={[
           {
             name: 'Dashboard',

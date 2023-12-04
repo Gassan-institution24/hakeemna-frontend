@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { HOST_API } from 'src/config-global';
-import { idText } from 'typescript';
+// import { idText } from 'typescript';
 
 
 
@@ -68,5 +68,8 @@ export const endpoints = {
   },
   appointment:{
     patientsappointments: '/api/appointments/patient/656c76046ceed235b42948a0',
-  }
+  },
+  offers:{
+    getoffers: '/api/suppliersoffers',
+  },
 };
