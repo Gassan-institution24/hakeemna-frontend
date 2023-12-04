@@ -115,13 +115,6 @@ export default function TourListView() {
       alignItems={{ xs: 'flex-end', sm: 'center' }}
       direction={{ xs: 'column', sm: 'row' }}
     >
-      <TourSearch
-        query={search.query}
-        results={search.results}
-        onSearch={handleSearch}
-        hrefItem={(id) => paths.dashboard.tour.details(id)}
-      />
-
       <Stack direction="row" spacing={1} flexShrink={0}>
         <TourFilters
           open={openFilters.value}
@@ -161,14 +154,14 @@ export default function TourListView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="List"
+        heading="offers"
         links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
+          { name: 'user', href: paths.dashboard.root },
           {
             name: 'Tour',
             href: paths.dashboard.tour.root,
           },
-          { name: 'List' },
+          { name: 'offers' },
         ]}
         action={
           <Button
@@ -177,7 +170,7 @@ export default function TourListView() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-      hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+            Add New
           </Button>
         }
         sx={{
@@ -208,7 +201,7 @@ export default function TourListView() {
 const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
   const { services, destination, startDate, endDate, tourGuides } = filters;
 
-  const tourGuideIds = tourGuides.map((tourGuide) => tourGuide.id);
+  // const tourGuideIds = tourGuides.map((tourGuide) => tourGuide.id);
 
   // SORT BY
   if (sortBy === 'latest') {
@@ -234,19 +227,19 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
     }
   }
 
-  if (destination.length) {
-    inputData = inputData.filter((tour) => destination.includes(tour.destination));
-  }
+  // if (destination.length) {
+  //   inputData = inputData.filter((tour) => destination.includes(tour.destination));
+  // }
 
-  if (tourGuideIds.length) {
-    inputData = inputData.filter((tour) =>
-      tour.tourGuides.some((filterItem) => tourGuideIds.includes(filterItem.id))
-    );
-  }
+  // if (tourGuideIds.length) {
+  //   inputData = inputData.filter((tour) =>
+  //     tour.tourGuides.some((filterItem) => tourGuideIds.includes(filterItem.id))
+  //   );
+  // }
 
-  if (services.length) {
-    inputData = inputData.filter((tour) => tour.services.some((item) => services.includes(item)));
-  }
+  // if (services.length) {
+  //   inputData = inputData.filter((tour) => tour.services.some((item) => services.includes(item)));
+  // }
 
   return inputData;
 };

@@ -68,5 +68,8 @@ export const endpoints = {
   },
   appointment:{
     patientsappointments: '/api/appointments/patient/656c76046ceed235b42948a0',
-  }
+  },
+  offers:{
+    getoffers: '/api/suppliersoffers',
+  },
 };

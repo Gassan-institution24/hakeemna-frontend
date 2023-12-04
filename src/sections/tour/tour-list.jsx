@@ -43,28 +43,12 @@ export default function TourList({ tours }) {
           md: 'repeat(3, 1fr)',
         }}
       >
-        {tours.map((tour) => (
-          <TourItem
-            key={tour.id}
-            tour={tour}
-            onView={() => handleView(tour.id)}
-            onEdit={() => handleEdit(tour.id)}
-            onDelete={() => handleDelete(tour.id)}
-          />
-        ))}
+     
+          <TourItem/>
+       
       </Box>
 
-      {tours.length > 8 && (
-        <Pagination
-          count={8}
-          sx={{
-            mt: 8,
-            [`& .${paginationClasses.ul}`]: {
-              justifyContent: 'center',
-            },
-          }}
-        />
-      )}
+     
     </>
   );
 }
