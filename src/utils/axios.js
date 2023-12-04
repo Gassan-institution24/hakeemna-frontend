@@ -34,6 +34,7 @@ export const endpoints = {
   allTables:'/tables',
   tables:{
     countries:`/api/countries`,
+    country:(id)=>`/api/countries/${id}`,
     cities:'/api/cities',
     city:(id)=>`/api/cities/${id}`,
     unitservices:'/api/unitservice',

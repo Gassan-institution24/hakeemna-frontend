@@ -36,7 +36,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
     name_english: Yup.string().required('Name is required'),
   });
 
-  const defaultValues = useMemo(                                                  ///edit
+  const defaultValues = useMemo(                                                  /// edit
     () => ({
       name_arabic: currentSelected?.name_arabic || '',
       name_english: currentSelected?.name_english || '',
@@ -62,11 +62,11 @@ export default function CountriesNewEditForm({ currentSelected }) {
       if(currentSelected){
         await axiosHandler({method:'PATCH',path:`countries/${currentSelected._id}`,data});      /// edit
       }else{
-        await axiosHandler({method:'POST',path:'countries',data});                                  //// edit
+        await axiosHandler({method:'POST',path:'countries',data});                                  /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
-      router.push(paths.superadmin.tables.cities);
+      router.push(paths.superadmin.tables.countries.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);

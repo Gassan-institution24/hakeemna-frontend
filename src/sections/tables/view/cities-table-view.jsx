@@ -482,7 +482,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.country?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.country?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        data?.country?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?._id.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        JSON.stringify(data.code) === name
     );
   }
 

@@ -5,17 +5,17 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import TableNewEditForm from '../cities/cities-table-new-edit-form';
+import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableCreateView() {
+export default function CountryCreateView() {
   const settings = useSettingsContext();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new city"
+        heading="Create a new Country" /// edit
         links={[
           {
             name: 'Dashboard',
@@ -26,10 +26,10 @@ export default function TableCreateView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'cities',
-            href: paths.superadmin.tables.city,
+            name: 'countries',                   /// edit
+            href: paths.superadmin.tables.countries.root,
           },
-          { name: 'New city' },
+          { name: 'New country' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

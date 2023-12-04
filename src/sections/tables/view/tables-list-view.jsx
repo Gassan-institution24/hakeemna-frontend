@@ -113,7 +113,7 @@ export default function TablesListView() {
 
   const handleViewRow = useCallback(
     (tablename) => {
-      router.push(paths.superadmin.tables.cities);
+      router.push(paths.superadmin.tables.details(tablename));
     },
     [router]
   );
