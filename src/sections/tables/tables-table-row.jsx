@@ -19,7 +19,6 @@ import { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 export default function TablesTableRow({ row, selected, onViewRow }) {
-  console.log('onviewrowwwww',onViewRow)
   const {
     tableName,
     documents,

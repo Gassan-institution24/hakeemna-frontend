@@ -17,6 +17,7 @@ export default function OrderTableToolbar({
   filters,
   onFilters,
   onPrint,
+  onDownload,
   //
   canReset,
   onResetFilters,
@@ -94,6 +95,7 @@ export default function OrderTableToolbar({
 
         <MenuItem
           onClick={() => {
+            onDownload()
             popover.onClose();
           }}
         >
@@ -101,14 +103,16 @@ export default function OrderTableToolbar({
           Import
         </MenuItem>
 
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
+            onDownload()
             popover.onClose();
+
           }}
         >
           <Iconify icon="solar:export-bold" />
           Export
-        </MenuItem>
+        </MenuItem> */}
       </CustomPopover>
     </>
   );
@@ -120,4 +124,5 @@ OrderTableToolbar.propTypes = {
   onFilters: PropTypes.func,
   onResetFilters: PropTypes.func,
   onPrint: PropTypes.func,
+  onDownload: PropTypes.func,
 };

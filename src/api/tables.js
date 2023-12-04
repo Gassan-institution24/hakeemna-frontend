@@ -59,6 +59,7 @@ export function useGetCity(id) {
   
     return memoizedValue;
   }
+  
 export function useGetCountries() {
     const URL = endpoints.tables.countries;
   
