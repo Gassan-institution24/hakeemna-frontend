@@ -1,38 +1,30 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useMemo, useCallback } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
-import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useGetCountries } from 'src/api/tables';
 
-import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
-  RHFSwitch,
   RHFSelect,
   RHFTextField,
-  RHFUploadAvatar,
-  RHFAutocomplete,
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
 
 // ----------------------------------------------------------------------
 
-export default function TableNewEditForm({ currentCity }) {
+export default function CitiesNewEditForm({ currentCity }) {
   const router = useRouter();
 
   const {tableData}=useGetCountries()
@@ -125,6 +117,6 @@ export default function TableNewEditForm({ currentCity }) {
   );
 }
 
-TableNewEditForm.propTypes = {
+CitiesNewEditForm.propTypes = {
   currentCity: PropTypes.object,
 };

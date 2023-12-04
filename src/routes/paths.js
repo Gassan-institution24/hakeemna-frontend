@@ -182,92 +182,106 @@ export const paths = {
   superadmin: {
     root: ROOTS.SUPERADMIN,
     mail: `${ROOTS.SUPERADMIN}/mail`,
-    chat: `${ROOTS.SUPERADMIN}/chat`,
-    blank: `${ROOTS.SUPERADMIN}/blank`,
-    kanban: `${ROOTS.SUPERADMIN}/kanban`,
-    calendar: `${ROOTS.SUPERADMIN}/calendar`,
-    fileManager: `${ROOTS.SUPERADMIN}/file-manager`,
-    permission: `${ROOTS.SUPERADMIN}/permission`,
-    general: {
-      app: `${ROOTS.SUPERADMIN}/app`,
-      ecommerce: `${ROOTS.SUPERADMIN}/ecommerce`,
-      analytics: `${ROOTS.SUPERADMIN}/analytics`,
-      banking: `${ROOTS.SUPERADMIN}/banking`,
-      booking: `${ROOTS.SUPERADMIN}/booking`,
-      file: `${ROOTS.SUPERADMIN}/file`,
-    },
-    user: {
-      root: `${ROOTS.SUPERADMIN}/user`,
-      new: `${ROOTS.SUPERADMIN}/user/new`,
-      list: `${ROOTS.SUPERADMIN}/user/list`,
-      cards: `${ROOTS.SUPERADMIN}/management`,
-      profile: `${ROOTS.SUPERADMIN}/user/profile`,
-      account: `${ROOTS.SUPERADMIN}/user/account`,
-      edit: (id) => `${ROOTS.SUPERADMIN}/user/${id}/edit`,
-      demo: {
-        edit: `${ROOTS.SUPERADMIN}/user/${MOCK_ID}/edit`,
-      },
-    },
-    product: {
-      root: `${ROOTS.SUPERADMIN}/product`,
-      new: `${ROOTS.SUPERADMIN}/product/new`,
-      details: (id) => `${ROOTS.SUPERADMIN}/product/${id}`,
-      edit: (id) => `${ROOTS.SUPERADMIN}/product/${id}/edit`,
-      demo: {
-        details: `${ROOTS.SUPERADMIN}/product/${MOCK_ID}`,
-        edit: `${ROOTS.SUPERADMIN}/product/${MOCK_ID}/edit`,
-      },
-    },
-    invoice: {
-      root: `${ROOTS.SUPERADMIN}/invoice`,
-      new: `${ROOTS.SUPERADMIN}/invoice/new`,
-      details: (id) => `${ROOTS.SUPERADMIN}/invoice/${id}`,
-      edit: (id) => `${ROOTS.SUPERADMIN}/invoice/${id}/edit`,
-      demo: {
-        details: `${ROOTS.SUPERADMIN}/invoice/${MOCK_ID}`,
-        edit: `${ROOTS.SUPERADMIN}/invoice/${MOCK_ID}/edit`,
-      },
-    },
-    post: {
-      root: `${ROOTS.SUPERADMIN}/post`,
-      new: `${ROOTS.SUPERADMIN}/post/new`,
-      details: (title) => `${ROOTS.SUPERADMIN}/post/${paramCase(title)}`,
-      edit: (title) => `${ROOTS.SUPERADMIN}/post/${paramCase(title)}/edit`,
-      demo: {
-        details: `${ROOTS.SUPERADMIN}/post/${paramCase(MOCK_TITLE)}`,
-        edit: `${ROOTS.SUPERADMIN}/post/${paramCase(MOCK_TITLE)}/edit`,
-      },
-    },
+    
     tables: {
       root: `${ROOTS.SUPERADMIN}/tables`,
       list: `${ROOTS.SUPERADMIN}/tables/list`,
-      city: `${ROOTS.SUPERADMIN}/tables/cities`,
-      new: (tablename)=>`${ROOTS.SUPERADMIN}/tables/${tablename}/new`,
-      edit: (tablename,id) => `${ROOTS.SUPERADMIN}/tables/${tablename}/edit/${id}`,
-      details: (tablename) => `${ROOTS.SUPERADMIN}/tables/${tablename}`,
-      demo: {
-        details: `${ROOTS.SUPERADMIN}/order/${MOCK_ID}`,
+      cities:{
+        root: `${ROOTS.SUPERADMIN}/tables/cities`,
+        new: `${ROOTS.SUPERADMIN}/tables/cities/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/cities/edit/${id}`,
+      },
+      countries:{
+        root: `${ROOTS.SUPERADMIN}/tables/countries`,
+        new: `${ROOTS.SUPERADMIN}/tables/countries/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/countries/edit/${id}`,
+      },
+      taxes:{
+        root: `${ROOTS.SUPERADMIN}/tables/taxes`,
+        new: `${ROOTS.SUPERADMIN}/tables/taxes/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/taxes/edit/${id}`,
+      },
+      analysis:{
+        root: `${ROOTS.SUPERADMIN}/tables/analysis`,
+        new: `${ROOTS.SUPERADMIN}/tables/analysis/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/analysis/edit/${id}`,
+      },
+      appointypes:{
+        root: `${ROOTS.SUPERADMIN}/tables/appointypes`,
+        new: `${ROOTS.SUPERADMIN}/tables/appointypes/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/appointypes/edit/${id}`,
+      },
+      currency:{
+        root: `${ROOTS.SUPERADMIN}/tables/currency`,
+        new: `${ROOTS.SUPERADMIN}/tables/currency/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/currency/edit/${id}`,
+      },
+      departments:{
+        root: `${ROOTS.SUPERADMIN}/tables/departments`,
+        new: `${ROOTS.SUPERADMIN}/tables/departments/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/departments/edit/${id}`,
+      },
+      diets:{
+        root: `${ROOTS.SUPERADMIN}/tables/diets`,
+        new: `${ROOTS.SUPERADMIN}/tables/diets/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/diets/edit/${id}`,
+      },
+      diseases:{
+        root: `${ROOTS.SUPERADMIN}/tables/diseases`,
+        new: `${ROOTS.SUPERADMIN}/tables/diseases/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/diseases/edit/${id}`,
+      },
+      freesub:{
+        root: `${ROOTS.SUPERADMIN}/tables/freesub`,
+        new: `${ROOTS.SUPERADMIN}/tables/freesub/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/freesub/edit/${id}`,
+      },
+      insurancecomapnies:{
+        root: `${ROOTS.SUPERADMIN}/tables/insurance/comapnies`,
+        new: `${ROOTS.SUPERADMIN}/tables/insurance/comapnies/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/insurance/comapnies/edit/${id}`,
+      },
+      medcategories:{
+        root: `${ROOTS.SUPERADMIN}/tables/medcategories`,
+        new: `${ROOTS.SUPERADMIN}/tables/medcategories/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/medcategories/edit/${id}`,
+      },
+      medicines:{
+        root: `${ROOTS.SUPERADMIN}/tables/medicines`,
+        new: `${ROOTS.SUPERADMIN}/tables/medicines/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/medicines/edit/${id}`,
+      },
+      medfamilies:{
+        root: `${ROOTS.SUPERADMIN}/tables/medfamilies`,
+        new: `${ROOTS.SUPERADMIN}/tables/medfamilies/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/medfamilies/edit/${id}`,
+      },
+      specialities:{
+        root: `${ROOTS.SUPERADMIN}/tables/specialities`,
+        new: `${ROOTS.SUPERADMIN}/tables/specialities/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/specialities/edit/${id}`,
+      },
+      subspecialities:{
+        root: `${ROOTS.SUPERADMIN}/tables/subspecialities`,
+        new: `${ROOTS.SUPERADMIN}/tables/subspecialities/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/subspecialities/edit/${id}`,
+      },
+      surgeries:{
+        root: `${ROOTS.SUPERADMIN}/tables/surgeries`,
+        new: `${ROOTS.SUPERADMIN}/tables/surgeries/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/surgeries/edit/${id}`,
+      },
+      symptoms:{
+        root: `${ROOTS.SUPERADMIN}/tables/symptoms`,
+        new: `${ROOTS.SUPERADMIN}/tables/symptoms/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/symptoms/edit/${id}`,
+      },
+      unitservices:{
+        root: `${ROOTS.SUPERADMIN}/tables/unitservices`,
+        new: `${ROOTS.SUPERADMIN}/tables/unitservices/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/unitservices/edit/${id}`,
       },
     },
-    job: {
-      root: `${ROOTS.SUPERADMIN}/job`,
-      new: `${ROOTS.SUPERADMIN}/job/new`,
-      details: (id) => `${ROOTS.SUPERADMIN}/job/${id}`,
-      edit: (id) => `${ROOTS.SUPERADMIN}/job/${id}/edit`,
-      demo: {
-        details: `${ROOTS.SUPERADMIN}/job/${MOCK_ID}`,
-        edit: `${ROOTS.SUPERADMIN}/job/${MOCK_ID}/edit`,
-      },
-    },
-    tour: {
-      root: `${ROOTS.SUPERADMIN}/tour`,
-      new: `${ROOTS.SUPERADMIN}/tour/new`,
-      details: (id) => `${ROOTS.SUPERADMIN}/tour/${id}`,
-      edit: (id) => `${ROOTS.SUPERADMIN}/tour/${id}/edit`,
-      demo: {
-        details: `${ROOTS.SUPERADMIN}/tour/${MOCK_ID}`,
-        edit: `${ROOTS.SUPERADMIN}/tour/${MOCK_ID}/edit`,
-      },
-    },
+    
   },
 };

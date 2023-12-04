@@ -42,20 +42,19 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetCities } from 'src/api/tables';
+import { useGetCountries } from 'src/api/tables';                                                           ///// to edit
 import axiosHandler from 'src/utils/axios-handler';
-import OrderTableRow from '../table-details-row';
-import OrderTableToolbar from '../table-details-toolbar';
-import OrderTableFiltersResult from '../table-details-filters-result';
+import TableDetailRow from '../countries/countries-table-details-row'                                             //// to edit
+import TableDetailToolbar from '../table-details-toolbar';
+import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
 
-const TABLE_HEAD = [
+const TABLE_HEAD = [                                                                           //// to edit
   { id: 'code', label: 'Code' },
   { id: 'name', label: 'name' },
-  { id: 'country', label: 'Country' },
   { id: 'status', label: 'Status' },
   { id: 'created_at', label: 'Date Of Creation' },
   { id: 'user_creation', label: 'Creater' },
@@ -74,7 +73,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function TableDetailsView() {
+export default function CitiesTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -86,7 +85,7 @@ export default function TableDetailsView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { tableData, refetch } = useGetCities();
+  const { tableData, refetch } = useGetCountries();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -123,7 +122,7 @@ export default function TableDetailsView() {
         code: data.code,
         name: data.name_english,
         country: data.country?.name_english,
-        status: data.status
+        status: data.status,
       });
       return acc;
     }, []);
@@ -148,11 +147,11 @@ export default function TableDetailsView() {
     [table]
   );
 
-  const handleActivate = useCallback(
+  const handleActivate = useCallback(                                       
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `cities/${id}/updatestatus`,
+        path: `countries/${id}/updatestatus`,            /// to edit
         data: { status: 'active' },
       });
       refetch();
@@ -160,11 +159,12 @@ export default function TableDetailsView() {
     },
     [dataInPage.length, table, refetch]
   );
-  const handleInactivate = useCallback(
+
+  const handleInactivate = useCallback(                                    
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `cities/${id}/updatestatus`,
+        path: `countries/${id}/updatestatus`,                /// to edit
         data: { status: 'inactive' },
       });
       refetch();
@@ -176,7 +176,7 @@ export default function TableDetailsView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `cities/updatemanystatus`,
+      path: `countries/updatestatus`,                       /// to edit
       data: { status: 'active', ids: table.selected },
     });
     refetch();
@@ -190,7 +190,7 @@ export default function TableDetailsView() {
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `cities/updatemanystatus`,
+      path: `countries/updatestatus`,                   /// edit
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();
@@ -203,7 +203,7 @@ export default function TableDetailsView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.edit('cities', id));
+      router.push(paths.superadmin.tables.edit('countries', id));      /// edit
     },
     [router]
   );
@@ -229,7 +229,7 @@ export default function TableDetailsView() {
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Cities"
+          heading="Countries"                           //// edit
           links={[
             {
               name: 'Super',
@@ -239,17 +239,17 @@ export default function TableDetailsView() {
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'table' },
+            { name: 'countries' },                             //// edit
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.new('cities')}
+              href={paths.superadmin.tables.countries.new}             /// edit
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New City
-            </Button>
+            >                                                        
+              New Country                                 
+            </Button>                            /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -293,7 +293,7 @@ export default function TableDetailsView() {
             ))}
           </Tabs>
 
-          <OrderTableToolbar
+          <TableDetailToolbar
             onPrint={printHandler}
             filters={filters}
             onFilters={handleFilters}
@@ -304,7 +304,7 @@ export default function TableDetailsView() {
           />
 
           {canReset && (
-            <OrderTableFiltersResult
+            <TableDetailFiltersResult
               filters={filters}
               onFilters={handleFilters}
               //
@@ -378,7 +378,7 @@ export default function TableDetailsView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <OrderTableRow
+                      <TableDetailRow
                         key={row._id}
                         row={row}
                         selected={table.selected.includes(row._id)}
@@ -416,7 +416,7 @@ export default function TableDetailsView() {
       <ConfirmDialog
         open={confirmInactivate.value}
         onClose={confirmInactivate.onFalse}
-        title="Delete"
+        title="Inactivate"
         content={
           <>
             Are you sure want to Inactivate <strong> {table.selected.length} </strong> items?
@@ -438,7 +438,7 @@ export default function TableDetailsView() {
       <ConfirmDialog
         open={confirmActivate.value}
         onClose={confirmActivate.onFalse}
-        title="Delete"
+        title="Activate"
         content={
           <>
             Are you sure want to Activate <strong> {table.selected.length} </strong> items?

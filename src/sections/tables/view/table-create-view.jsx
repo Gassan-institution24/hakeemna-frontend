@@ -5,7 +5,7 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import TableNewEditForm from '../table-new-edit-form';
+import TableNewEditForm from '../cities/cities-table-new-edit-form';
 
 // ----------------------------------------------------------------------
 

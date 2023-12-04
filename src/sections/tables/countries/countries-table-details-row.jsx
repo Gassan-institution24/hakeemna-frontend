@@ -1,22 +1,15 @@
-import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import Collapse from '@mui/material/Collapse';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import ListItemText from '@mui/material/ListItemText';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fCurrency } from 'src/utils/format-number';
 import { fDateTime } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
@@ -26,11 +19,10 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function OrderTableRow({ row, selected, onEditRow, onSelectRow, onInactivate,onActivate }) {
+export default function CountriesTableRow({ row, selected, onEditRow, onSelectRow, onInactivate,onActivate }) {
   const {
     code,
     name_english,
-    country,
     status,
     created_at,
     user_creation,
@@ -42,8 +34,6 @@ export default function OrderTableRow({ row, selected, onEditRow, onSelectRow, o
   } = row;
 
   const confirm = useBoolean();
-
-  const collapse = useBoolean();
 
   const popover = usePopover();
 
@@ -59,7 +49,6 @@ export default function OrderTableRow({ row, selected, onEditRow, onSelectRow, o
 
       <TableCell>{name_english}</TableCell>
 
-      <TableCell>{country?.name_english}</TableCell>
       <TableCell>
         <Label
           variant="soft"
@@ -159,7 +148,7 @@ export default function OrderTableRow({ row, selected, onEditRow, onSelectRow, o
   );
 }
 
-OrderTableRow.propTypes = {
+CountriesTableRow.propTypes = {
   onInactivate: PropTypes.func,
   onActivate: PropTypes.func,
   onSelectRow: PropTypes.func,

@@ -9,7 +9,7 @@ import { useParams } from 'src/routes/hooks';
 
 import { useGetCity } from 'src/api/tables';
 
-import TableNewEditForm from '../table-new-edit-form';
+import TableNewEditForm from '../cities/cities-table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ export default function TableEditView() {
   const settings = useSettingsContext();
   const params = useParams();
   const { id } = params;
-  const {data}=useGetCity(id)
+  const { data } = useGetCity(id);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -41,8 +41,7 @@ export default function TableEditView() {
           mb: { xs: 3, md: 5 },
         }}
       />
-      {data &&<TableNewEditForm currentCity={data}/>}
-      
+      {data && <TableNewEditForm currentCity={data} />}
     </Container>
   );
 }
