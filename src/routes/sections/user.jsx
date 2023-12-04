@@ -66,9 +66,9 @@ const BlankPage = lazy(() => import('src/pages/dashboard/blank'));
 
 // ----------------------------------------------------------------------
 
-export const dashboardRoutes = [
+export const userRoutes = [
   {
-    path: 'super',
+    path: 'user',
     element: (
       // <AuthGuard>
         <DashboardLayout>

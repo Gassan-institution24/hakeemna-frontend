@@ -8,6 +8,7 @@ import { authDemoRoutes } from './auth-demo';
 import { HomePage, mainRoutes } from './main';
 import { dashboardRoutes } from './dashboard';
 import { componentsRoutes } from './components';
+import { userRoutes } from './user';
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +44,9 @@ export default function Router() {
 
     // Components routes
     ...componentsRoutes,
+
+    // user routes
+    ...userRoutes,
 
     // No match 404
     // { path: '*', element: <Navigate to="/404" replace /> },

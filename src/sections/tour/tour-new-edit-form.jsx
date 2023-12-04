@@ -8,13 +8,13 @@ import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
-import Switch from '@mui/material/Switch';
+// import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import FormControlLabel from '@mui/material/FormControlLabel';
+// import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -153,7 +153,7 @@ export default function TourNewEditForm({ currentTour }) {
             Details
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Title, short description, image...
+            Add the offer details
           </Typography>
         </Grid>
       )}
@@ -291,15 +291,10 @@ export default function TourNewEditForm({ currentTour }) {
             </Stack>
 
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Duration</Typography>
-              <RHFTextField name="durations" placeholder="Ex: 2 days, 4 days 3 nights..." />
-            </Stack>
-
-            <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Destination</Typography>
+              <Typography variant="subtitle2">City</Typography>
               <RHFAutocomplete
                 name="destination"
-                placeholder="+ Destination"
+                placeholder="+ City"
                 options={countries.map((option) => option.label)}
                 getOptionLabel={(option) => option}
                 renderOption={(props, option) => {
@@ -330,6 +325,7 @@ export default function TourNewEditForm({ currentTour }) {
               <Typography variant="subtitle2">Services</Typography>
               <RHFMultiCheckbox
                 name="services"
+                // from roles
                 options={TOUR_SERVICE_OPTIONS}
                 sx={{
                   display: 'grid',
@@ -338,34 +334,7 @@ export default function TourNewEditForm({ currentTour }) {
               />
             </Stack>
 
-            <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Tags</Typography>
-              <RHFAutocomplete
-                name="tags"
-                placeholder="+ Tags"
-                multiple
-                freeSolo
-                options={_tags.map((option) => option)}
-                getOptionLabel={(option) => option}
-                renderOption={(props, option) => (
-                  <li {...props} key={option}>
-                    {option}
-                  </li>
-                )}
-                renderTags={(selected, getTagProps) =>
-                  selected.map((option, index) => (
-                    <Chip
-                      {...getTagProps({ index })}
-                      key={option}
-                      label={option}
-                      size="small"
-                      color="info"
-                      variant="soft"
-                    />
-                  ))
-                }
-              />
-            </Stack>
+        
           </Stack>
         </Card>
       </Grid>
@@ -376,12 +345,6 @@ export default function TourNewEditForm({ currentTour }) {
     <>
       {mdUp && <Grid md={4} />}
       <Grid xs={12} md={8} sx={{ display: 'flex', alignItems: 'center' }}>
-        <FormControlLabel
-          control={<Switch defaultChecked />}
-          label="Publish"
-          sx={{ flexGrow: 1, pl: 3 }}
-        />
-
         <LoadingButton
           type="submit"
           variant="contained"

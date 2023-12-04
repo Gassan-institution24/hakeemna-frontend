@@ -34,6 +34,23 @@ export function useGetpatientAppointment() {
       }),
       [data, error, isLoading, isValidating]
     );
-    console.log(data);
+    
+    return memoizedValue;
+  }
+
+
+export function useGetOffers() {
+    const URL = `${endpoints.offers.getoffers}`;
+    const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+ 
+    const memoizedValue = useMemo(
+      () => ({
+        data: data || [],
+        Loading: isLoading,
+        error,
+        validating: isValidating,
+      }),
+      [data, error, isLoading, isValidating]
+    );
     return memoizedValue;
   }
