@@ -7,11 +7,11 @@ import Pagination, { paginationClasses } from '@mui/material/Pagination';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import TourItem from './tour-item';
+import TourItem from './offer-item';
 
 // ----------------------------------------------------------------------
 
-export default function TourList({ tours }) {
+export default function TourList({ offers }) {
   const router = useRouter();
 
   const handleView = useCallback(
@@ -43,16 +43,32 @@ export default function TourList({ tours }) {
           md: 'repeat(3, 1fr)',
         }}
       >
-     
-          <TourItem/>
-       
+        {offers.map((tour) => (
+          <TourItem
+            key={tour.id}
+            tour={tour}
+            onView={() => handleView(tour._id)}
+            onEdit={() => handleEdit(tour._id)}
+            onDelete={() => handleDelete(tour._id)}
+          />
+        ))}
       </Box>
 
-     
+      {/* {offers.length > 8 && (
+        <Pagination
+          count={8}
+          sx={{
+            mt: 8,
+            [`& .${paginationClasses.ul}`]: {
+              justifyContent: 'center',
+            },
+          }}
+        />
+      )} */}
     </>
   );
 }
 
 TourList.propTypes = {
-  tours: PropTypes.array,
+  offers: PropTypes.array,
 };

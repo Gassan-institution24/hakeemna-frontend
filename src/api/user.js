@@ -54,3 +54,18 @@ export function useGetOffers() {
     );
     return memoizedValue;
   }
+export function useGetOffer(id) {
+    const URL = endpoints.offers.getoffer(id);
+    const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+ 
+    const memoizedValue = useMemo(
+      () => ({
+        data: data || [],
+        Loading: isLoading,
+        error,
+        validating: isValidating,
+      }),
+      [data, error, isLoading, isValidating]
+    );
+    return memoizedValue;
+  }
