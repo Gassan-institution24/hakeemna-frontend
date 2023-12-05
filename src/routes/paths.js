@@ -242,9 +242,9 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/insurance_companies/edit/${id}`,
       },
       medcategories:{
-        root: `${ROOTS.SUPERADMIN}/tables/medcategories`,
-        new: `${ROOTS.SUPERADMIN}/tables/medcategories/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/medcategories/edit/${id}`,
+        root: `${ROOTS.SUPERADMIN}/tables/medical_categories`,
+        new: `${ROOTS.SUPERADMIN}/tables/medical_categories/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/medical_categories/edit/${id}`,
       },
       medicines:{
         root: `${ROOTS.SUPERADMIN}/tables/medicines`,
