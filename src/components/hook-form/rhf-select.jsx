@@ -82,7 +82,7 @@ export function RHFMultiSelect({
   const { control } = useFormContext();
 
   const renderValues = (selectedIds) => {
-    const selectedItems = options.filter((item) => selectedIds.includes(item.value));
+    const selectedItems = options.filter((item) => selectedIds?.includes(item.value));
 
     if (!selectedItems.length && placeholder) {
       return <Box sx={{ color: 'text.disabled' }}>{placeholder}</Box>;
@@ -119,7 +119,7 @@ export function RHFMultiSelect({
             renderValue={renderValues}
           >
             {options.map((option) => {
-              const selected = field.value.includes(option.value);
+              const selected = field?.value?.includes(option.value);
 
               return (
                 <MenuItem key={option.value} value={option.value}>

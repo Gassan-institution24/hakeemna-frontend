@@ -42,9 +42,9 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetCities } from 'src/api/tables';
+import { useGetSurgeries } from 'src/api/tables';                                                           /// edit
 import axiosHandler from 'src/utils/axios-handler';
-import TableDetailRow from '../cities/cities-table-details-row';
+import TableDetailRow from '../surgeries/table-details-row'                                             /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -52,11 +52,11 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
 
-const TABLE_HEAD = [
+const TABLE_HEAD = [                                                                           /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name', label: 'name' },
-  { id: 'country', label: 'Country' },
-  { id: 'status', label: 'Status' },
+  { id: 'description', label: 'description' },
+  { id: 'diseases', label: 'diseases' },
   { id: 'created_at', label: 'Date Of Creation' },
   { id: 'user_creation', label: 'Creater' },
   { id: 'ip_address_user_creation', label: 'IP Of Creator' },
@@ -74,7 +74,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function CitiesTableView() {
+export default function SurgeriesTableView() {                       /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -86,7 +86,7 @@ export default function CitiesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { tableData, refetch } = useGetCities();
+  const { tableData, refetch } = useGetSurgeries();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -134,7 +134,7 @@ export default function CitiesTableView() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'citiesTable.xlsx');
+    saveAs(data, 'surgeriesTable.xlsx');                                         /// edit
   };
 
   const handleFilters = useCallback(
@@ -148,62 +148,9 @@ export default function CitiesTableView() {
     [table]
   );
 
-  const handleActivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `cities/${id}/updatestatus`,
-        data: { status: 'active' },
-      });
-      refetch();
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, refetch]
-  );
-  const handleInactivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `cities/${id}/updatestatus`,
-        data: { status: 'inactive' },
-      });
-      refetch();
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, refetch]
-  );
-
-  const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `cities/updatemanystatus`,
-      data: { status: 'active', ids: table.selected },
-    });
-    refetch();
-    table.onUpdatePageDeleteRows({
-      totalRows: tableData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, tableData, refetch]);
-
-  const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `cities/updatemanystatus`,
-      data: { status: 'inactive', ids: table.selected },
-    });
-    refetch();
-    table.onUpdatePageDeleteRows({
-      totalRows: tableData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, tableData, refetch]);
-
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.cities.edit(id));
+      router.push(paths.superadmin.tables.surgeries.edit(id));      /// edit
     },
     [router]
   );
@@ -212,24 +159,11 @@ export default function CitiesTableView() {
     setFilters(defaultFilters);
   }, []);
 
-  // const handleViewRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.order.details(id));
-  //   },
-  //   [router]
-  // );
-
-  const handleFilterStatus = useCallback(
-    (event, newValue) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
-  );
   return (
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Cities"
+          heading="Surgeries"                           /// edit
           links={[
             {
               name: 'Super',
@@ -239,17 +173,17 @@ export default function CitiesTableView() {
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'cities' },
+            { name: 'Surgeries' },                             /// edit
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.cities.new}
+              href={paths.superadmin.tables.surgeries.new}             /// edit
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New City
-            </Button>
+            >                                                        
+              New Surgery                                 
+            </Button>                            /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -257,42 +191,6 @@ export default function CitiesTableView() {
         />
 
         <Card>
-          <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === 'active' && 'success') ||
-                      (tab.value === 'inactive' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {tab.value === 'all' && tableData.length}
-                    {tab.value === 'active' &&
-                      tableData.filter((order) => order.status === 'active').length}
-                    {tab.value === 'inactive' &&
-                      tableData.filter((order) => order.status === 'inactive').length}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
-
           <TableDetailToolbar
             onPrint={printHandler}
             filters={filters}
@@ -316,44 +214,6 @@ export default function CitiesTableView() {
           )}
 
           <TableContainer>
-            <TableSelectedAction
-              // dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={dataFiltered.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  dataFiltered.map((row) => row._id)
-                )
-              }
-              action={
-                <>
-                  {dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'inactive') ? (
-                    <Tooltip title="Activate all">
-                      <IconButton color="primary" onClick={confirmActivate.onTrue}>
-                        <Iconify icon="codicon:run-all" />
-                      </IconButton>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip title="Inactivate all">
-                      <IconButton color="error" onClick={confirmInactivate.onTrue}>
-                        <Iconify icon="iconoir:pause-solid" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </>
-              }
-              color={
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'inactive')
-                  ? 'primary'
-                  : 'error'
-              }
-            />
-
             <Scrollbar>
               <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
                 <TableHeadCustom
@@ -363,12 +223,7 @@ export default function CitiesTableView() {
                   rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      dataFiltered.map((row) => row._id)
-                    )
-                  }
+                  onSelectAllRows={false}
                 />
 
                 <TableBody>
@@ -383,8 +238,6 @@ export default function CitiesTableView() {
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row._id)}
-                        onInactivate={() => handleInactivate(row._id)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}
@@ -412,51 +265,6 @@ export default function CitiesTableView() {
           />
         </Card>
       </Container>
-
-      <ConfirmDialog
-        open={confirmInactivate.value}
-        onClose={confirmInactivate.onFalse}
-        title="Inactivate"
-        content={
-          <>
-            Are you sure want to Inactivate <strong> {table.selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleInactivateRows();
-              confirmInactivate.onFalse();
-            }}
-          >
-            Inactivate
-          </Button>
-        }
-      />
-      <ConfirmDialog
-        open={confirmActivate.value}
-        onClose={confirmActivate.onFalse}
-        title="Activate"
-        content={
-          <>
-            Are you sure want to Activate <strong> {table.selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              handleActivateRows();
-              confirmActivate.onFalse();
-            }}
-          >
-            Activate
-          </Button>
-        }
-      />
     </>
   );
 }
@@ -479,10 +287,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.country?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.country?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.diseases?.some((disease)=>disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        data?.diseases?.some((disease)=>disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         JSON.stringify(data.code) === name
     );

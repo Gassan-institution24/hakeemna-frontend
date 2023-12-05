@@ -27,7 +27,7 @@ export default function TableCreateView() {
           },
           {
             name: 'cities',
-            href: paths.superadmin.tables.cities,
+            href: paths.superadmin.tables.cities.root,
           },
           { name: 'New city' },
         ]}
