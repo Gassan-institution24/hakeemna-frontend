@@ -181,7 +181,6 @@ export const paths = {
   // super adnim
   superadmin: {
     root: ROOTS.SUPERADMIN,
-    mail: `${ROOTS.SUPERADMIN}/mail`,
     
     tables: {
       root: `${ROOTS.SUPERADMIN}/tables`,
