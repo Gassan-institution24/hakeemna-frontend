@@ -13,8 +13,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetCountries } from 'src/api/tables';
-
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFSelect,
@@ -26,8 +24,6 @@ import axiosHandler from 'src/utils/axios-handler';
 
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
-
-  const {tableData}=useGetCountries()
 
   const { enqueueSnackbar } = useSnackbar();
 

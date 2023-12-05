@@ -2,14 +2,14 @@ import { useState, useCallback, useRef } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import Tooltip from '@mui/material/Tooltip';
+import { alpha } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 import { RouterLink } from 'src/routes/components';
 
@@ -18,12 +18,9 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fTimestamp } from 'src/utils/format-time';
 import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-
-import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -42,20 +39,21 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetCountries } from 'src/api/tables';                                                           /// edit
+import { useGetMedicines } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
-import TableDetailRow from '../countries/table-details-row'                                             /// edit
+import TableDetailRow from '../medicines/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
-
-const TABLE_HEAD = [                                                                           /// to edit
+const TABLE_HEAD = [
+  /// to edit
   { id: 'code', label: 'Code' },
-  { id: 'name', label: 'name' },
-  { id: 'status', label: 'Status' },
+  { id: 'scientific_name', label: 'scientific_name' },
+  { id: 'trade_name', label: 'trade name' },
+  { id: 'family', label: 'family' },
+  { id: 'status', label: 'status' },
   { id: 'created_at', label: 'Date Of Creation' },
   { id: 'user_creation', label: 'Creater' },
   { id: 'ip_address_user_creation', label: 'IP Of Creator' },
@@ -72,20 +70,21 @@ const defaultFilters = {
 };
 
 // ----------------------------------------------------------------------
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' },{ value: 'active', label: 'Active' },
+{ value: 'inactive', label: 'Inactive' },];
 
-export default function CountriesTableView() {                       /// edit
+export default function MedicinesTableView() {
+  /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
 
-  const settings = useSettingsContext();
-
-  const router = useRouter();
-
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { countriesData, refetch } = useGetCountries();
+  const router = useRouter();
+
+  const { medicines,refetch } = useGetMedicines();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -95,7 +94,7 @@ export default function CountriesTableView() {                       /// edit
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: countriesData,
+    inputData: medicines,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -105,7 +104,7 @@ export default function CountriesTableView() {                       /// edit
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-  console.log(dataFiltered);
+
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.status !== 'all';
@@ -121,8 +120,8 @@ export default function CountriesTableView() {                       /// edit
       acc.push({
         code: data.code,
         name: data.name_english,
-        country: data.country?.name_english,
-        status: data.status,
+        category: data.category?.name_english,
+        symptoms: data.symptoms?.map((symptom) => symptom?.name_english),
       });
       return acc;
     }, []);
@@ -133,8 +132,60 @@ export default function CountriesTableView() {                       /// edit
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'countriesTable.xlsx');                                         /// edit
+    saveAs(data, 'medicinesTable.xlsx'); /// edit
   };
+  const handleActivate = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `medicines/${id}/updatestatus`,
+        data: { status: 'active' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
+  );
+  const handleInactivate = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `medicines/${id}/updatestatus`,
+        data: { status: 'inactive' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
+  );
+
+  const handleActivateRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `medicines/updatestatus`,
+      data: { status: 'active', ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: medicines.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [dataFiltered.length, dataInPage.length, table, medicines, refetch]);
+
+  const handleInactivateRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `medicines/updatestatus`,
+      data: { status: 'inactive', ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: medicines.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [dataFiltered.length, dataInPage.length, table, medicines, refetch]);
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -147,63 +198,9 @@ export default function CountriesTableView() {                       /// edit
     [table]
   );
 
-  const handleActivate = useCallback(                                       
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `countries/${id}/updatestatus`,            /// to edit
-        data: { status: 'active' },
-      });
-      refetch();
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, refetch]
-  );
-
-  const handleInactivate = useCallback(                                    
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `countries/${id}/updatestatus`,                /// to edit
-        data: { status: 'inactive' },
-      });
-      refetch();
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, refetch]
-  );
-
-  const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `countries/updatestatus`,                       /// to edit
-      data: { status: 'active', ids: table.selected },
-    });
-    refetch();
-    table.onUpdatePageDeleteRows({
-      totalRows: countriesData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, countriesData, refetch]);
-
-  const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `countries/updatestatus`,                   /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
-    refetch();
-    table.onUpdatePageDeleteRows({
-      totalRows: countriesData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, countriesData, refetch]);
-
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.countries.edit(id));      /// edit
+      router.push(paths.superadmin.tables.medicines.edit(id)); /// edit
     },
     [router]
   );
@@ -218,7 +215,6 @@ export default function CountriesTableView() {                       /// edit
   //   },
   //   [router]
   // );
-
   const handleFilterStatus = useCallback(
     (event, newValue) => {
       handleFilters('status', newValue);
@@ -229,7 +225,7 @@ export default function CountriesTableView() {                       /// edit
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Countries"                           /// edit
+          heading="Medicines" /// edit
           links={[
             {
               name: 'Super',
@@ -239,17 +235,17 @@ export default function CountriesTableView() {                       /// edit
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'countries' },                             /// edit
+            { name: 'Medicines' }, /// edit
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.countries.new}             /// edit
+              href={paths.superadmin.tables.medicines.new} /// edit
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
-            >                                                        
-              New Country                                 
-            </Button>                            /// edit
+            >
+              New Medicine
+            </Button> /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -257,7 +253,7 @@ export default function CountriesTableView() {                       /// edit
         />
 
         <Card>
-          <Tabs
+        <Tabs
             value={filters.status}
             onChange={handleFilterStatus}
             sx={{
@@ -282,17 +278,16 @@ export default function CountriesTableView() {                       /// edit
                       'default'
                     }
                   >
-                    {tab.value === 'all' && countriesData.length}
+                    {tab.value === 'all' && medicines.length}
                     {tab.value === 'active' &&
-                      countriesData.filter((order) => order.status === 'active').length}
+                      medicines.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      countriesData.filter((order) => order.status === 'inactive').length}
+                      medicines.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
             ))}
           </Tabs>
-
           <TableDetailToolbar
             onPrint={printHandler}
             filters={filters}
@@ -391,7 +386,7 @@ export default function CountriesTableView() {                       /// edit
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, countriesData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, medicines.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -466,7 +461,7 @@ export default function CountriesTableView() {                       /// edit
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -479,10 +474,17 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.category?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.symptoms?.some(
+          (disease) => disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        ) ||
+        data?.symptoms?.some(
+          (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        ) ||
         data?._id === name ||
-        JSON.stringify(data.code) === name 
+        JSON.stringify(data.code) === name
     );
   }
 

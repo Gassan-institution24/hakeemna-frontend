@@ -49,6 +49,8 @@ export const endpoints = {
     currency:(id)=>`/api/currency/${id}`,
     medfamilies:'/api/drugfamilies',
     medfamily:(id)=>`/api/drugfamilies/${id}`,
+    medicines:'/api/medicines',
+    medicine:(id)=>`/api/medicines/${id}`,
     unitservices:'/api/unitservice',
     departments:'/api/departments',
   },

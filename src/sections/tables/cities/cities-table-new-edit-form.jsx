@@ -27,8 +27,7 @@ import axiosHandler from 'src/utils/axios-handler';
 export default function CitiesNewEditForm({ currentCity }) {
   const router = useRouter();
 
-  const {tableData}=useGetCountries()
-  const {categories}=useGetCategories()
+  const {countriesData}=useGetCountries()
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -96,7 +95,7 @@ export default function CitiesNewEditForm({ currentCity }) {
 
               <RHFSelect native name="country" label="Country" >
                 <option> </option>
-                {categories.map((category) => (
+                {countriesData.map((category) => (
                     <option key={category._id} value={category._id}>
                       {category.name_english}
                     </option>
