@@ -1,15 +1,10 @@
 import { useState, useCallback, useRef } from 'react';
 
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 import { RouterLink } from 'src/routes/components';
 
@@ -18,17 +13,14 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fTimestamp } from 'src/utils/format-time';
 import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
 import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -38,13 +30,11 @@ import {
   getComparator,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetSurgeries } from 'src/api/tables';                                                           /// edit
-import axiosHandler from 'src/utils/axios-handler';
-import TableDetailRow from '../surgeries/table-details-row'                                             /// edit
+import { useGetSymptoms } from 'src/api/tables';                                                           /// edit
+import TableDetailRow from '../symptoms/table-details-row'                                             /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -54,9 +44,8 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS]
 
 const TABLE_HEAD = [                                                                           /// to edit
   { id: 'code', label: 'Code' },
-  { id: 'name', label: 'name' },
+  { id: 'name_english', label: 'name' },
   { id: 'description', label: 'description' },
-  { id: 'diseases', label: 'diseases' },
   { id: 'created_at', label: 'Date Of Creation' },
   { id: 'user_creation', label: 'Creater' },
   { id: 'ip_address_user_creation', label: 'IP Of Creator' },
@@ -74,14 +63,19 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function SurgeriesTableView() {                       /// edit
+export default function SymptomsTableView() {                       /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
 
+  const settings = useSettingsContext();
+
   const router = useRouter();
 
-  const { tableData, refetch } = useGetSurgeries();
+  const confirmActivate = useBoolean();
+  const confirmInactivate = useBoolean();
+
+  const { tableData, refetch } = useGetSymptoms();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -117,8 +111,7 @@ export default function SurgeriesTableView() {                       /// edit
       acc.push({
         code: data.code,
         name: data.name_english,
-        description: data.description,
-        diseases: data.diseases?.map((disease)=>disease.name_english),
+        description: data.description,     /// edit
       });
       return acc;
     }, []);
@@ -129,7 +122,7 @@ export default function SurgeriesTableView() {                       /// edit
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'surgeriesTable.xlsx');                                         /// edit
+    saveAs(data, 'symptomsTable.xlsx');                                         /// edit
   };
 
   const handleFilters = useCallback(
@@ -145,7 +138,7 @@ export default function SurgeriesTableView() {                       /// edit
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.surgeries.edit(id));      /// edit
+      router.push(paths.superadmin.tables.symptoms.edit(id));      /// edit
     },
     [router]
   );
@@ -154,11 +147,18 @@ export default function SurgeriesTableView() {                       /// edit
     setFilters(defaultFilters);
   }, []);
 
+  // const handleViewRow = useCallback(
+  //   (id) => {
+  //     router.push(paths.dashboard.order.details(id));
+  //   },
+  //   [router]
+  // );
+
   return (
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Surgeries"                           /// edit
+          heading="Symptoms"                           /// edit
           links={[
             {
               name: 'Super',
@@ -168,16 +168,16 @@ export default function SurgeriesTableView() {                       /// edit
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Surgeries' },                             /// edit
+            { name: 'Symptoms' },                             /// edit
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.surgeries.new}             /// edit
+              href={paths.superadmin.tables.symptoms.new}             /// edit
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >                                                        
-              New Surgery                                 
+              New Symptom                                 
             </Button>                            /// edit
           }
           sx={{
@@ -284,10 +284,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       (data) =>
         data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.diseases?.some((disease)=>disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        data?.diseases?.some((disease)=>disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
-        JSON.stringify(data.code) === name
+        JSON.stringify(data.code) === name 
     );
   }
 

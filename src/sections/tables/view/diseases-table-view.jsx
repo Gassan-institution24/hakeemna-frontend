@@ -66,12 +66,7 @@ export default function DiseasesTableView() {                       /// edit
 
   const componentRef = useRef();
 
-  const settings = useSettingsContext();
-
   const router = useRouter();
-
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
 
   const { tableData } = useGetDiseases();
 
@@ -104,8 +99,8 @@ export default function DiseasesTableView() {                       /// edit
       acc.push({
         code: data.code,
         name: data.name_english,
-        country: data.country?.name_english,
-        status: data.status,
+        category: data.category?.name_english,
+        symptoms: data.symptoms?.map((symptom)=>symptom?.name_english),
       });
       return acc;
     }, []);
@@ -313,12 +308,12 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.category?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.symptoms?.some((disease)=>disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?.symptoms?.some((disease)=>disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        data?._id.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?._id === name ||
         JSON.stringify(data.code) === name 
     );
   }

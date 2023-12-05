@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import TableCreateView from 'src/sections/tables/cities/table-create-view';
+import TableCreateView from 'src/sections/tables/symptoms/table-create-view';
 
 // ----------------------------------------------------------------------
 
@@ -8,7 +8,7 @@ export default function TableCreatePage() {
   return (
     <>
       <Helmet>
-        <title> super: Create a new city</title>
+        <title> super: Create a new Symptom</title>
       </Helmet>
 
       <TableCreateView />

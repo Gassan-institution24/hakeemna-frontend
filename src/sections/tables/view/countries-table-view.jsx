@@ -481,7 +481,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       (data) =>
         data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?._id.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?._id === name ||
         JSON.stringify(data.code) === name 
     );
   }
