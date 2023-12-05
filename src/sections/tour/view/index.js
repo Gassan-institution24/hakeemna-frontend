@@ -1,4 +1,4 @@
-export { default as TourListView } from './tour-list-view';
-export { default as TourEditView } from './tour-edit-view';
-export { default as TourCreateView } from './tour-create-view';
-export { default as TourDetailsView } from './tour-details-view';
+export { default as TourListView } from './offer-list-view';
+export { default as TourEditView } from './offer-edit-view';
+export { default as TourCreateView } from './offer-create-view';
+export { default as TourDetailsView } from './offer-details-view';

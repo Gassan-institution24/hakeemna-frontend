@@ -86,5 +86,6 @@ export const endpoints = {
   },
   offers:{
     getoffers: '/api/suppliersoffers',
+    getoffer:(id)=> `/api/suppliersoffers/${id}`,
   },
 };

@@ -13,6 +13,7 @@ const ROOTS = {
   AUTH_DEMO: '/auth-demo',
   DASHBOARD: '/dashboard',
   SUPERADMIN: '/super',
+  USER: '/user',
 };
 
 // ----------------------------------------------------------------------
@@ -168,13 +169,13 @@ export const paths = {
       },
     },
     tour: {
-      root: `${ROOTS.DASHBOARD}/tour`,
-      new: `${ROOTS.DASHBOARD}/tour/new`,
-      details: (id) => `${ROOTS.DASHBOARD}/tour/${id}`,
-      edit: (id) => `${ROOTS.DASHBOARD}/tour/${id}/edit`,
+      root: `${ROOTS.USER}/tour`,
+      new: `${ROOTS.USER}/tour/new`,
+      details: (id) => `${ROOTS.USER}/tour/${id}`,
+      edit: (id) => `${ROOTS.USER}/tour/${id}/edit`,
       demo: {
-        details: `${ROOTS.DASHBOARD}/tour/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/tour/${MOCK_ID}/edit`,
+        details: `${ROOTS.USER}/tour/${MOCK_ID}`,
+        edit: `${ROOTS.USER}/tour/${MOCK_ID}/edit`,
       },
     },
   },

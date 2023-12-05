@@ -2,19 +2,19 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
-import { useMemo, useEffect, useCallback } from 'react';
+import { useMemo, useEffect, useCallback, useState } from 'react';
 
 import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
-// import Switch from '@mui/material/Switch';
+import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -33,20 +33,42 @@ import FormProvider, {
   RHFAutocomplete,
   RHFMultiCheckbox,
 } from 'src/components/hook-form';
+import axiosHandler from 'src/utils/axios-handler';
 
 // ----------------------------------------------------------------------
 
 export default function TourNewEditForm({ currentTour }) {
+  const [offerInfo, setOfferInfo] = useState({});
+  const [isAdding, setIsAdding] = useState(false);
+  const [editting, setEditting] = useState('');
+  const [error, setError] = useState();
+  // console.log("sfsdfs", currentTour);
   const router = useRouter();
 
   const mdUp = useResponsive('up', 'md');
 
   const { enqueueSnackbar } = useSnackbar();
 
+
+  const editfunc = (id) =>{
+   axiosHandler({
+    setError, method:"POST", path:"suppliersoffers/", data:offerInfo
+  })
+  }
+  const addfunc = () =>{
+    axiosHandler({
+      setError, method:"POST", path:"suppliersoffers/", data:offerInfo
+    });
+  }
+
+
+
+
   const NewTourSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    content: Yup.string().required('Content is required'),
-    images: Yup.array().min(1, 'Images is required'),
+    Offer_name: Yup.string().required('Name is required'),
+    Offer_comment: Yup.string().required('Content is required'),
+    // Offer_img: Yup.array().min(1, 'Images is required'),
+    Offer_price: Yup.string().required('Price is required'),
     //
     tourGuides: Yup.array().min(1, 'Must have at least 1 guide'),
     durations: Yup.string().required('Duration is required'),
@@ -54,22 +76,24 @@ export default function TourNewEditForm({ currentTour }) {
     services: Yup.array().min(2, 'Must have at least 2 services'),
     destination: Yup.string().required('Destination is required'),
     available: Yup.object().shape({
-      startDate: Yup.mixed().nullable().required('Start date is required'),
+      created_at: Yup.mixed().nullable().required('Start date is required'),
       endDate: Yup.mixed()
         .required('End date is required')
         .test(
           'date-min',
           'End date must be later than start date',
-          (value, { parent }) => value.getTime() > parent.startDate.getTime()
+          (value, { parent }) => value.getTime() > parent.created_at.getTime()
         ),
     }),
   });
+  
 
   const defaultValues = useMemo(
     () => ({
-      name: currentTour?.name || '',
-      content: currentTour?.content || '',
-      images: currentTour?.images || [],
+      Offer_name: currentTour?.name || '',
+      Offer_comment: currentTour?.content || '',
+      // Offer_img: currentTour?.images || [],
+      Offer_price: currentTour?.price || '',
       //
       tourGuides: currentTour?.tourGuides || [],
       tags: currentTour?.tags || [],
@@ -77,8 +101,8 @@ export default function TourNewEditForm({ currentTour }) {
       destination: currentTour?.destination || '',
       services: currentTour?.services || [],
       available: {
-        startDate: currentTour?.available.startDate || null,
-        endDate: currentTour?.available.endDate || null,
+        created_at: currentTour?.created_at || null,
+        endDate: currentTour?.endDate || null,
       },
     }),
     [currentTour]
@@ -108,13 +132,14 @@ export default function TourNewEditForm({ currentTour }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      <>
+      {currentTour?editfunc():addfunc()}
+      </>
       reset();
       enqueueSnackbar(currentTour ? 'Update success!' : 'Create success!');
       router.push(paths.dashboard.tour.root);
-      console.info('DATA', data);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     }
   });
 
@@ -153,7 +178,7 @@ export default function TourNewEditForm({ currentTour }) {
             Details
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Add the offer details
+            Title, short description, image...
           </Typography>
         </Grid>
       )}
@@ -165,33 +190,36 @@ export default function TourNewEditForm({ currentTour }) {
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Name</Typography>
-              <RHFTextField name="name" placeholder="Ex: Adventure Seekers Expedition..." />
+              <RHFTextField name="Offer_name" placeholder="Offer Name..." />
+            </Stack>
+            <Stack spacing={1.5}>
+              <Typography variant="subtitle2">Name</Typography>
+              <RHFTextField name="Offer_price" placeholder="Price..." />
             </Stack>
 
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Content</Typography>
-              <RHFEditor simple name="content" />
+              <RHFEditor simple name="Offer_comment" />
             </Stack>
 
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Images</Typography>
-              <RHFUpload
+              {/* <RHFUpload
                 multiple
                 thumbnail
-                name="images"
+                name="Offer_img"
                 maxSize={3145728}
                 onDrop={handleDrop}
                 onRemove={handleRemoveFile}
                 onRemoveAll={handleRemoveAllFiles}
                 onUpload={() => console.info('ON UPLOAD')}
-              />
+              /> */}
             </Stack>
           </Stack>
         </Card>
       </Grid>
     </>
   );
-
   const renderProperties = (
     <>
       {mdUp && (
@@ -254,17 +282,17 @@ export default function TourNewEditForm({ currentTour }) {
               <Typography variant="subtitle2">Available</Typography>
               <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                 <Controller
-                  name="available.startDate"
+                  name="created_at"
                   control={control}
-                  render={({ field, fieldState: { error } }) => (
+                  render={({ field, fieldState: { err } }) => (
                     <DatePicker
                       {...field}
                       format="dd/MM/yyyy"
                       slotProps={{
                         textField: {
                           fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
+                          err: !!err,
+                          helperText: err?.message,
                         },
                       }}
                     />
@@ -273,7 +301,7 @@ export default function TourNewEditForm({ currentTour }) {
                 <Controller
                   name="available.endDate"
                   control={control}
-                  render={({ field, fieldState: { error } }) => (
+                  render={({ field, fieldState: { err } }) => (
                     <DatePicker
                       {...field}
                       format="dd/MM/yyyy"
@@ -291,10 +319,15 @@ export default function TourNewEditForm({ currentTour }) {
             </Stack>
 
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">City</Typography>
+              <Typography variant="subtitle2">Duration</Typography>
+              <RHFTextField name="durations" placeholder="Ex: 2 days, 4 days 3 nights..." />
+            </Stack>
+
+            <Stack spacing={1.5}>
+              <Typography variant="subtitle2">Destination</Typography>
               <RHFAutocomplete
                 name="destination"
-                placeholder="+ City"
+                placeholder="+ Destination"
                 options={countries.map((option) => option.label)}
                 getOptionLabel={(option) => option}
                 renderOption={(props, option) => {
@@ -325,7 +358,6 @@ export default function TourNewEditForm({ currentTour }) {
               <Typography variant="subtitle2">Services</Typography>
               <RHFMultiCheckbox
                 name="services"
-                // from roles
                 options={TOUR_SERVICE_OPTIONS}
                 sx={{
                   display: 'grid',
@@ -334,7 +366,34 @@ export default function TourNewEditForm({ currentTour }) {
               />
             </Stack>
 
-        
+            <Stack spacing={1.5}>
+              <Typography variant="subtitle2">Tags</Typography>
+              <RHFAutocomplete
+                name="tags"
+                placeholder="+ Tags"
+                multiple
+                freeSolo
+                options={_tags.map((option) => option)}
+                getOptionLabel={(option) => option}
+                renderOption={(props, option) => (
+                  <li {...props} key={option}>
+                    {option}
+                  </li>
+                )}
+                renderTags={(selected, getTagProps) =>
+                  selected.map((option, index) => (
+                    <Chip
+                      {...getTagProps({ index })}
+                      key={option}
+                      label={option}
+                      size="small"
+                      color="info"
+                      variant="soft"
+                    />
+                  ))
+                }
+              />
+            </Stack>
           </Stack>
         </Card>
       </Grid>
@@ -345,6 +404,12 @@ export default function TourNewEditForm({ currentTour }) {
     <>
       {mdUp && <Grid md={4} />}
       <Grid xs={12} md={8} sx={{ display: 'flex', alignItems: 'center' }}>
+        <FormControlLabel
+          control={<Switch defaultChecked />}
+          label="Publish"
+          sx={{ flexGrow: 1, pl: 3 }}
+        />
+
         <LoadingButton
           type="submit"
           variant="contained"
