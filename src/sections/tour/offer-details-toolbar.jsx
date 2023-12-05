@@ -62,7 +62,7 @@ export default function TourDetailsToolbar({
           </IconButton>
         </Tooltip>
 
-        <LoadingButton
+        {/* <LoadingButton
           color="inherit"
           variant="contained"
           loading={!publish}
@@ -72,7 +72,7 @@ export default function TourDetailsToolbar({
           sx={{ textTransform: 'capitalize' }}
         >
           {publish}
-        </LoadingButton>
+        </LoadingButton> */}
       </Stack>
 
       <CustomPopover

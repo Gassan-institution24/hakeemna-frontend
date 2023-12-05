@@ -11,19 +11,17 @@ import { _tours, TOUR_DETAILS_TABS, TOUR_PUBLISH_OPTIONS } from 'src/_mock';
 
 import Label from 'src/components/label';
 import { useSettingsContext } from 'src/components/settings';
-
-import TourDetailsToolbar from '../tour-details-toolbar';
-import TourDetailsContent from '../tour-details-content';
-import TourDetailsBookers from '../tour-details-bookers';
+import { useGetOffer } from 'src/api/user';
+import TourDetailsToolbar from '../offer-details-toolbar';
+import TourDetailsContent from '../offer-details-content';
+import TourDetailsBookers from '../offer-details-bookers';
 
 // ----------------------------------------------------------------------
 
 export default function TourDetailsView({ id }) {
   const settings = useSettingsContext();
-
-  const currentTour = _tours.filter((tour) => tour.id === id)[0];
-
-  const [publish, setPublish] = useState(currentTour?.publish);
+  const {data} = useGetOffer(id)
+  const [publish, setPublish] = useState(data?.publish);
 
   const [currentTab, setCurrentTab] = useState('content');
 
@@ -43,7 +41,7 @@ export default function TourDetailsView({ id }) {
         mb: { xs: 3, md: 5 },
       }}
     >
-      {TOUR_DETAILS_TABS.map((tab) => (
+      {/* {TOUR_DETAILS_TABS.map((tab) => (
         <Tab
           key={tab.value}
           iconPosition="end"
@@ -51,13 +49,13 @@ export default function TourDetailsView({ id }) {
           label={tab.label}
           icon={
             tab.value === 'bookers' ? (
-              <Label variant="filled">{currentTour?.bookers.length}</Label>
+              <Label variant="filled">{data?.bookers?.length}</Label>
             ) : (
               ''
             )
           }
         />
-      ))}
+      ))} */}
     </Tabs>
   );
 
@@ -65,7 +63,7 @@ export default function TourDetailsView({ id }) {
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <TourDetailsToolbar
         backLink={paths.dashboard.tour.root}
-        editLink={paths.dashboard.tour.edit(`${currentTour?.id}`)}
+        editLink={paths.dashboard.tour.edit(id)}
         liveLink="#"
         publish={publish || ''}
         onChangePublish={handleChangePublish}
@@ -73,9 +71,9 @@ export default function TourDetailsView({ id }) {
       />
       {renderTabs}
 
-      {currentTab === 'content' && <TourDetailsContent tour={currentTour} />}
+      {currentTab === 'content' && <TourDetailsContent tour={data} />}
 
-      {currentTab === 'bookers' && <TourDetailsBookers bookers={currentTour?.bookers} />}
+      {/* {currentTab === 'bookers' && <TourDetailsBookers bookers={data?.bookers} />} */}
     </Container>
   );
 }
