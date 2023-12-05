@@ -45,6 +45,8 @@ export const endpoints = {
     symptom:(id)=>`/api/symptoms/${id}`,
     categories:'/api/medcategories',
     category:(id)=>`/api/medcategories/${id}`,
+    currencies:'/api/currency',
+    currency:(id)=>`/api/currency/${id}`,
     unitservices:'/api/unitservice',
     departments:'/api/departments',
   },
