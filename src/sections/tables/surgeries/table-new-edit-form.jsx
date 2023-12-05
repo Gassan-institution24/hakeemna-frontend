@@ -13,12 +13,12 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetCountries } from 'src/api/tables';
+import { useGetDiseases } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
-  RHFSelect,
   RHFTextField,
+  RHFMultiSelect,
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
 
@@ -27,24 +27,34 @@ import axiosHandler from 'src/utils/axios-handler';
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
 
-  const {tableData}=useGetCountries()
+  const {tableData}=useGetDiseases()
 
+  const diseasesMultiSelect = tableData?.reduce((acc, data) => {
+    acc.push({
+      value: data._id,
+      label: data.name_english || data.name,
+    });
+    return acc;
+  }, []);
+  console.log('multiii',diseasesMultiSelect)
   const { enqueueSnackbar } = useSnackbar();
 
   const NewSchema = Yup.object().shape({
-    name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
+    name_arabic: Yup.string().required('Name is required'),
+    description: Yup.string().required('Description is required'),
+    diseases: Yup.array(),
   });
 
-  const defaultValues = useMemo(                                                  ///edit
+  const defaultValues = useMemo(                                                  /// edit
     () => ({
       name_arabic: currentSelected?.name_arabic || '',
       name_english: currentSelected?.name_english || '',
+      description: currentSelected?.description || '',
+      diseases: currentSelected?.diseases?.map((disease)=>disease._id) || [],
     }),
     [currentSelected]
     );
-    console.log(currentSelected)
-    console.log(defaultValues)
 
   const methods = useForm({
     resolver: yupResolver(NewSchema),
@@ -60,13 +70,13 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if(currentSelected){
-        await axiosHandler({method:'PATCH',path:`countries/${currentSelected._id}`,data});      /// edit
+        await axiosHandler({method:'PATCH',path:`surgeries/${currentSelected._id}`,data});      /// edit
       }else{
-        await axiosHandler({method:'POST',path:'countries',data});                                  //// edit
+        await axiosHandler({method:'POST',path:'surgeries',data});                                  /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
-      router.push(paths.superadmin.tables.city);
+      router.push(paths.superadmin.tables.surgeries.root);               /// edit
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
@@ -90,7 +100,24 @@ export default function CountriesNewEditForm({ currentSelected }) {
             >                                            
               <RHFTextField name="name_english" label="name english" />
               <RHFTextField name="name_arabic" label="name arabic" />
-            </Box>
+              </Box>
+              
+              <Box rowGap={3}
+              columnGap={2}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(1, 1fr)',
+              }}              >
+              <RHFTextField sx={{ mt: 3 }} name="description" label="description" multiline colSpan={14} rows={4} />
+
+              {diseasesMultiSelect&&<RHFMultiSelect
+                checkbox
+                name="diseases"
+                label="diseases"
+                options={diseasesMultiSelect}
+              />}
+              </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

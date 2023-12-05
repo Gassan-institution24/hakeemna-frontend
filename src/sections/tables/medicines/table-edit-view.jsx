@@ -7,9 +7,9 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import { useParams } from 'src/routes/hooks';
 
-import { useGetCity } from 'src/api/tables';
+import { useGetMedicine } from 'src/api/tables';
 
-import TableNewEditForm from '../cities/cities-table-new-edit-form';
+import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
@@ -17,31 +17,31 @@ export default function TableEditView() {
   const settings = useSettingsContext();
   const params = useParams();
   const { id } = params;
-  const { data } = useGetCity(id);
+  const { data } = useGetMedicine(id);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Update city"
+        heading="Update Medicine"
         links={[
           {
             name: 'Dashboard',
             href: paths.superadmin,
           },
           {
-            name: 'tables',
+            name: 'Tables',
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'cities',
-            href: paths.superadmin.tables.city,
+            name: 'Medicines',
+            href: paths.superadmin.tables.diseases.root,
           },
-          { name: 'Update city' },
+          { name: 'Update Medicine' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
-      {data && <TableNewEditForm currentCity={data} />}
+      {data && <TableNewEditForm currentSelected={data} />}
     </Container>
   );
 }

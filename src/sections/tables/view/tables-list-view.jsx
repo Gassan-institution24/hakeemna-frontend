@@ -27,6 +27,7 @@ import {
   getComparator,
   TableEmptyRows,
   TablePaginationCustom,
+  TableHeadCustom,
 } from 'src/components/table';
 
 import TablesTableRow from '../tables-table-row';
@@ -52,7 +53,14 @@ export default function TablesListView() {
   const confirm = useBoolean();
 
   const { tableData } = useGetTables();
+  
   const [filters, setFilters] = useState(defaultFilters);
+
+  const TABLE_HEAD = [                                                                           /// to edit
+  { id: 'Table Name', label: 'Table Name' },
+  { id: 'Notes', label: 'Notes' },
+  { id: '', width: 190 },
+];
 
   const dateError =
     filters.startDate && filters.endDate
@@ -163,7 +171,15 @@ export default function TablesListView() {
 
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'}>
-
+              <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={dataFiltered.length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                  onSelectAllRows={false}
+                />
                 <TableBody>
                   {dataFiltered
                     .slice(

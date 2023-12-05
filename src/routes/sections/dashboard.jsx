@@ -166,9 +166,8 @@ export const dashboardRoutes = [
       // </AuthGuard>
     ),
     children: [
-      { element: <IndexPage />, index: true },
+      // { element: <IndexPage />, index: true },
       // { path: '', element: < /> },
-      { path: 'analytics', element: <OverviewAnalyticsPage /> },
       {
         path: 'tables',
         children: [
@@ -193,7 +192,7 @@ export const dashboardRoutes = [
             ],
           },
           {
-            path: 'taxes',
+            path: 'added_value_taxes',
             children: [
               { element: <TaxesTablePage />, index: true },
               { path: 'list', element: <TaxesTablePage /> },
@@ -202,7 +201,7 @@ export const dashboardRoutes = [
             ],
           },
           {
-            path: 'analysis',
+            path: 'analyses',
             children: [
               { element: <AnalysisTablePage />, index: true },
               { path: 'list', element: <AnalysisTablePage /> },
@@ -211,7 +210,7 @@ export const dashboardRoutes = [
             ],
           },
           {
-            path: 'appointypes',
+            path: 'appointment_types',
             children: [
               { element: <AppoinTypesTablePage />, index: true },
               { path: 'list', element: <AppoinTypesTablePage /> },
@@ -220,7 +219,7 @@ export const dashboardRoutes = [
             ],
           },
           {
-            path: 'currency',
+            path: 'currencies',
             children: [
               { element: <CurrencyTablePage />, index: true },
               { path: 'list', element: <CurrencyTablePage /> },
@@ -256,7 +255,7 @@ export const dashboardRoutes = [
             ],
           },
           {
-            path: 'freesub',
+            path: 'free_subscriptions',
             children: [
               { element: <FreeSubTablePage />, index: true },
               { path: 'list', element: <FreeSubTablePage /> },
@@ -265,7 +264,7 @@ export const dashboardRoutes = [
             ],
           },
           {
-            path: 'insurance/comapnies',
+            path: 'insurance_companies',
             children: [
               { element: <InsuranceCoTablePage />, index: true },
               { path: 'list', element: <InsuranceCoTablePage /> },
@@ -274,7 +273,7 @@ export const dashboardRoutes = [
             ],
           },
           {
-            path: 'medcategories',
+            path: 'medical_categories',
             children: [
               { element: <MedCatTablePage />, index: true },
               { path: 'list', element: <MedCatTablePage /> },
@@ -292,7 +291,7 @@ export const dashboardRoutes = [
             ],
           },
           {
-            path: 'medfamilies',
+            path: 'medicines_families',
             children: [
               { element: <MedFamiliesTablePage />, index: true },
               { path: 'list', element: <MedFamiliesTablePage /> },
@@ -310,7 +309,7 @@ export const dashboardRoutes = [
             ],
           },
           {
-            path: 'subspecialities',
+            path: 'sub_specialities',
             children: [
               { element: <SubspecialitiesTablePage />, index: true },
               { path: 'list', element: <SubspecialitiesTablePage /> },
@@ -337,7 +336,7 @@ export const dashboardRoutes = [
             ],
           },
           {
-            path: 'unitservices',
+            path: 'unit_services',
             children: [
               { element: <USsTablePage />, index: true },
               { path: 'list', element: <USsTablePage /> },

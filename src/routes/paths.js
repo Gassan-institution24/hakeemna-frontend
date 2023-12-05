@@ -182,11 +182,11 @@ export const paths = {
   // super adnim
   superadmin: {
     root: ROOTS.SUPERADMIN,
-    mail: `${ROOTS.SUPERADMIN}/mail`,
     
     tables: {
       root: `${ROOTS.SUPERADMIN}/tables`,
       list: `${ROOTS.SUPERADMIN}/tables/list`,
+      details:(tablename)=> `${ROOTS.SUPERADMIN}/tables/${tablename}`,
       cities:{
         root: `${ROOTS.SUPERADMIN}/tables/cities`,
         new: `${ROOTS.SUPERADMIN}/tables/cities/new`,
@@ -198,24 +198,24 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/countries/edit/${id}`,
       },
       taxes:{
-        root: `${ROOTS.SUPERADMIN}/tables/taxes`,
-        new: `${ROOTS.SUPERADMIN}/tables/taxes/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/taxes/edit/${id}`,
+        root: `${ROOTS.SUPERADMIN}/tables/added_value_taxes`,
+        new: `${ROOTS.SUPERADMIN}/tables/added_value_taxes/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/added_value_taxes/edit/${id}`,
       },
       analysis:{
-        root: `${ROOTS.SUPERADMIN}/tables/analysis`,
-        new: `${ROOTS.SUPERADMIN}/tables/analysis/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/analysis/edit/${id}`,
+        root: `${ROOTS.SUPERADMIN}/tables/analyses`,
+        new: `${ROOTS.SUPERADMIN}/tables/analyses/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/analyses/edit/${id}`,
       },
       appointypes:{
-        root: `${ROOTS.SUPERADMIN}/tables/appointypes`,
-        new: `${ROOTS.SUPERADMIN}/tables/appointypes/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/appointypes/edit/${id}`,
+        root: `${ROOTS.SUPERADMIN}/tables/appointment_types`,
+        new: `${ROOTS.SUPERADMIN}/tables/appointment_types/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/appointment_types/edit/${id}`,
       },
       currency:{
-        root: `${ROOTS.SUPERADMIN}/tables/currency`,
-        new: `${ROOTS.SUPERADMIN}/tables/currency/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/currency/edit/${id}`,
+        root: `${ROOTS.SUPERADMIN}/tables/currencies`,
+        new: `${ROOTS.SUPERADMIN}/tables/currencies/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/currencies/edit/${id}`,
       },
       departments:{
         root: `${ROOTS.SUPERADMIN}/tables/departments`,
@@ -233,19 +233,19 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/diseases/edit/${id}`,
       },
       freesub:{
-        root: `${ROOTS.SUPERADMIN}/tables/freesub`,
-        new: `${ROOTS.SUPERADMIN}/tables/freesub/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/freesub/edit/${id}`,
+        root: `${ROOTS.SUPERADMIN}/tables/free_subscriptions`,
+        new: `${ROOTS.SUPERADMIN}/tables/free_subscriptions/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/free_subscriptions/edit/${id}`,
       },
       insurancecomapnies:{
-        root: `${ROOTS.SUPERADMIN}/tables/insurance/comapnies`,
-        new: `${ROOTS.SUPERADMIN}/tables/insurance/comapnies/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/insurance/comapnies/edit/${id}`,
+        root: `${ROOTS.SUPERADMIN}/tables/insurance_companies`,
+        new: `${ROOTS.SUPERADMIN}/tables/insurance_companies/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/insurance_companies/edit/${id}`,
       },
       medcategories:{
-        root: `${ROOTS.SUPERADMIN}/tables/medcategories`,
-        new: `${ROOTS.SUPERADMIN}/tables/medcategories/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/medcategories/edit/${id}`,
+        root: `${ROOTS.SUPERADMIN}/tables/medical_categories`,
+        new: `${ROOTS.SUPERADMIN}/tables/medical_categories/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/medical_categories/edit/${id}`,
       },
       medicines:{
         root: `${ROOTS.SUPERADMIN}/tables/medicines`,
@@ -253,9 +253,9 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/medicines/edit/${id}`,
       },
       medfamilies:{
-        root: `${ROOTS.SUPERADMIN}/tables/medfamilies`,
-        new: `${ROOTS.SUPERADMIN}/tables/medfamilies/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/medfamilies/edit/${id}`,
+        root: `${ROOTS.SUPERADMIN}/tables/medicines_families`,
+        new: `${ROOTS.SUPERADMIN}/tables/medicines_families/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/medicines_families/edit/${id}`,
       },
       specialities:{
         root: `${ROOTS.SUPERADMIN}/tables/specialities`,
@@ -263,9 +263,9 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/specialities/edit/${id}`,
       },
       subspecialities:{
-        root: `${ROOTS.SUPERADMIN}/tables/subspecialities`,
-        new: `${ROOTS.SUPERADMIN}/tables/subspecialities/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/subspecialities/edit/${id}`,
+        root: `${ROOTS.SUPERADMIN}/tables/sub_specialities`,
+        new: `${ROOTS.SUPERADMIN}/tables/sub_specialities/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/sub_specialities/edit/${id}`,
       },
       surgeries:{
         root: `${ROOTS.SUPERADMIN}/tables/surgeries`,
@@ -278,9 +278,9 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/symptoms/edit/${id}`,
       },
       unitservices:{
-        root: `${ROOTS.SUPERADMIN}/tables/unitservices`,
-        new: `${ROOTS.SUPERADMIN}/tables/unitservices/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/unitservices/edit/${id}`,
+        root: `${ROOTS.SUPERADMIN}/tables/unit_services`,
+        new: `${ROOTS.SUPERADMIN}/tables/unit_services/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/unit_services/edit/${id}`,
       },
     },
     

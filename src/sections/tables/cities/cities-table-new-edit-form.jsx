@@ -13,7 +13,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetCountries } from 'src/api/tables';
+import { useGetCountries,useGetCategories } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
@@ -27,7 +27,7 @@ import axiosHandler from 'src/utils/axios-handler';
 export default function CitiesNewEditForm({ currentCity }) {
   const router = useRouter();
 
-  const {tableData}=useGetCountries()
+  const {countriesData}=useGetCountries()
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -62,15 +62,13 @@ export default function CitiesNewEditForm({ currentCity }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if(currentCity){
-        console.log('dataaaaa',data)
-        const response = await axiosHandler({method:'PATCH',path:`cities/${currentCity._id}`,data});
-        console.log('resssponssseee',response)
+       await axiosHandler({method:'PATCH',path:`cities/${currentCity._id}`,data});
       }else{
-        const response = await axiosHandler({method:'POST',path:'cities',data});
+       await axiosHandler({method:'POST',path:'cities',data});
       }
       reset();
       enqueueSnackbar(currentCity ? 'Update success!' : 'Create success!');
-      router.push(paths.superadmin.tables.city);
+      router.push(paths.superadmin.tables.cities.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
@@ -97,9 +95,9 @@ export default function CitiesNewEditForm({ currentCity }) {
 
               <RHFSelect native name="country" label="Country" >
                 <option> </option>
-                {tableData.map((country) => (
-                    <option key={country._id} value={country._id}>
-                      {country.name_english}
+                {countriesData.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.name_english}
                     </option>
                 ))}
               </RHFSelect>

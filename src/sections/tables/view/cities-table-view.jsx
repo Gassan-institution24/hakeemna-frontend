@@ -203,7 +203,7 @@ export default function CitiesTableView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.edit('cities', id));
+      router.push(paths.superadmin.tables.cities.edit(id));
     },
     [router]
   );
@@ -482,7 +482,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.country?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.country?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        data?.country?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?._id === name ||
+        JSON.stringify(data.code) === name
     );
   }
 

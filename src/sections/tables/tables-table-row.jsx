@@ -81,7 +81,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
           <Iconify icon="eva:arrow-ios-downward-fill" />
         </IconButton>
 
-        <IconButton color={popover.open ? 'inherit' : 'default'}>
+        <IconButton onClick={onViewRow} color={popover.open ? 'inherit' : 'default'}>
           <Iconify icon="majesticons:open" />
         </IconButton>
       </TableCell>

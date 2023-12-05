@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import {TablesDetailsView } from 'src/sections/tables/view';
+import SymptomsTableView from 'src/sections/tables/view/symptoms-table-view';
 
 // ----------------------------------------------------------------------
 
@@ -8,10 +8,10 @@ export default function TableDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Cities Table</title>
+        <title> Dashboard: Symptoms Table</title>
       </Helmet>
 
-      <TablesDetailsView />
+      <SymptomsTableView />
     </>
   );
 }

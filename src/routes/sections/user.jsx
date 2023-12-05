@@ -22,7 +22,9 @@ const ProductDetailsPage = lazy(() => import('src/pages/dashboard/product/detail
 const ProductListPage = lazy(() => import('src/pages/dashboard/product/list'));
 const ProductCreatePage = lazy(() => import('src/pages/dashboard/product/new'));
 const ProductEditPage = lazy(() => import('src/pages/dashboard/product/edit'));
-
+// TABLES
+const TablesListPage = lazy(() => import('src/pages/dashboard/tables/list'));
+// const TableDetailsPage = lazy(() => import('src/pages/dashboard/tables/details'));
 // INVOICE
 const InvoiceListPage = lazy(() => import('src/pages/dashboard/invoice/list'));
 const InvoiceDetailsPage = lazy(() => import('src/pages/dashboard/invoice/details'));
