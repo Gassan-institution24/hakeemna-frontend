@@ -59,9 +59,10 @@ export const endpoints = {
     insuranceCo:(id)=>`/api/insurance/companies/${id}`,
     insuranceTypes:'/api/insurance/types',
     insuranceType:(id)=>`/api/insurance/types/${id}`,
-
     unitservices:'/api/unitservice',
+    unitservice:(id)=>`/api/unitservice/${id}`,
     departments:'/api/departments',
+    department:(id)=>`/api/departments/${id}`,
   },
   chat: '/api/chat',
   kanban: '/api/kanban',
