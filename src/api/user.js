@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import useSWR,{mutate} from 'swr';
 import { useMemo } from 'react';
 
 import { fetcher, endpoints } from 'src/utils/axios';
@@ -52,8 +52,43 @@ export function useGetOffers() {
       }),
       [data, error, isLoading, isValidating]
     );
-    return memoizedValue;
+    const refetch = async ()=>{
+      await mutate(URL)
+    }
+    return {...memoizedValue,refetch};
   }
+
+
+export function useGetStackholder() {
+    const URL = `${endpoints.stackholder.getstackholder}`;
+    const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+ 
+    const memoizedValue = useMemo(
+      () => ({
+        stackholder: data || [],
+        Loading: isLoading,
+        error,
+        validating: isValidating,
+      }),
+      [data, error, isLoading, isValidating]
+    );
+    const refetch = async ()=>{
+      await mutate(URL)
+    }
+    return {...memoizedValue,refetch};
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 export function useGetOffer(id) {
     const URL = endpoints.offers.getoffer(id);
     const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
