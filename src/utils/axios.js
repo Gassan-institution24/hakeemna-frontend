@@ -51,6 +51,9 @@ export const endpoints = {
     medfamily:(id)=>`/api/drugfamilies/${id}`,
     medicines:'/api/medicines',
     medicine:(id)=>`/api/medicines/${id}`,
+    diets:'/api/diets',
+    diet:(id)=>`/api/diets/${id}`,
+
     unitservices:'/api/unitservice',
     departments:'/api/departments',
   },
