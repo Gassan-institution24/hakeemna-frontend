@@ -34,57 +34,48 @@ import FormProvider, {
   RHFMultiCheckbox,
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
-
+import { useGetCities } from 'src/api/tables';
+import { useGetStackholder } from 'src/api/user';
 // ----------------------------------------------------------------------
 
 export default function TourNewEditForm({ currentTour }) {
-  const [offerInfo, setOfferInfo] = useState({});
-  const [isAdding, setIsAdding] = useState(false);
-  const [editting, setEditting] = useState('');
   const [error, setError] = useState();
-  // console.log("sfsdfs", currentTour);
+  const [city, setCity] = useState();
   const router = useRouter();
-
   const mdUp = useResponsive('up', 'md');
-
   const { enqueueSnackbar } = useSnackbar();
-
-
-  const editfunc = (id) =>{
+  const editfunc = (id,data) =>{
    axiosHandler({
-    setError, method:"POST", path:"suppliersoffers/", data:offerInfo
-  })
+    setError, method:"PATCH", path:`suppliersoffers/${currentTour._id}`, data
+  });
   }
-  const addfunc = () =>{
+  const addfunc = (data) =>{
     axiosHandler({
-      setError, method:"POST", path:"suppliersoffers/", data:offerInfo
+      setError, method:"POST", path:"suppliersoffers/", data
     });
   }
+  
 
-
-
+const {tableData} = useGetCities()
+const {stackholder} = useGetStackholder()
+console.log(stackholder);
+const stackholdersMultiSelectOptions = stackholder?.reduce((acc,data)=>{
+acc.push({value:data._id,label:data.stakeholder_name})
+return acc
+},[])
 
   const NewTourSchema = Yup.object().shape({
     Offer_name: Yup.string().required('Name is required'),
     Offer_comment: Yup.string().required('Content is required'),
-    // Offer_img: Yup.array().min(1, 'Images is required'),
-    Offer_price: Yup.string().required('Price is required'),
+    Offer_img: Yup.string().min(1, 'Images is required'),
+    cities: Yup.string(),
+    Offer_price: Yup.number(),
     //
     tourGuides: Yup.array().min(1, 'Must have at least 1 guide'),
-    durations: Yup.string().required('Duration is required'),
-    tags: Yup.array().min(2, 'Must have at least 2 tags'),
-    services: Yup.array().min(2, 'Must have at least 2 services'),
-    destination: Yup.string().required('Destination is required'),
-    available: Yup.object().shape({
-      created_at: Yup.mixed().nullable().required('Start date is required'),
-      endDate: Yup.mixed()
-        .required('End date is required')
-        .test(
-          'date-min',
-          'End date must be later than start date',
-          (value, { parent }) => value.getTime() > parent.created_at.getTime()
-        ),
-    }),
+    Stakeholder: Yup.array(),
+    destination: Yup.string(),
+    Offer_start_date: Yup.date(),
+    Offer_end_date: Yup.date()
   });
   
 
@@ -92,18 +83,16 @@ export default function TourNewEditForm({ currentTour }) {
     () => ({
       Offer_name: currentTour?.name || '',
       Offer_comment: currentTour?.content || '',
-      // Offer_img: currentTour?.images || [],
+      Offer_img: currentTour?.images || '',
       Offer_price: currentTour?.price || '',
+      cities: currentTour?.cities?._id || '',
       //
-      tourGuides: currentTour?.tourGuides || [],
-      tags: currentTour?.tags || [],
       durations: currentTour?.durations || '',
       destination: currentTour?.destination || '',
-      services: currentTour?.services || [],
-      available: {
-        created_at: currentTour?.created_at || null,
-        endDate: currentTour?.endDate || null,
-      },
+      Stakeholder: currentTour?.Stakeholder?._id || [],
+      Offer_start_date: currentTour?.Offer_start_date || null,
+      Offer_end_date: currentTour?.Offer_end_date || null,
+    
     }),
     [currentTour]
   );
@@ -131,10 +120,9 @@ export default function TourNewEditForm({ currentTour }) {
   }, [currentTour, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log('dataaaaa',data)
     try {
-      <>
-      {currentTour?editfunc():addfunc()}
-      </>
+      if(currentTour){editfunc(currentTour._id,data)}else{addfunc(data)}
       reset();
       enqueueSnackbar(currentTour ? 'Update success!' : 'Create success!');
       router.push(paths.dashboard.tour.root);
@@ -142,33 +130,6 @@ export default function TourNewEditForm({ currentTour }) {
       console.error(err);
     }
   });
-
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const files = values.images || [];
-
-      const newFiles = acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        })
-      );
-
-      setValue('images', [...files, ...newFiles], { shouldValidate: true });
-    },
-    [setValue, values.images]
-  );
-
-  const handleRemoveFile = useCallback(
-    (inputFile) => {
-      const filtered = values.images && values.images?.filter((file) => file !== inputFile);
-      setValue('images', filtered);
-    },
-    [setValue, values.images]
-  );
-
-  const handleRemoveAllFiles = useCallback(() => {
-    setValue('images', []);
-  }, [setValue]);
 
   const renderDetails = (
     <>
@@ -190,7 +151,7 @@ export default function TourNewEditForm({ currentTour }) {
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Name</Typography>
-              <RHFTextField name="Offer_name" placeholder="Offer Name..." />
+              <RHFTextField name="Offer_name" placeholder="Offer Name..."  />
             </Stack>
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Name</Typography>
@@ -204,7 +165,7 @@ export default function TourNewEditForm({ currentTour }) {
 
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Images</Typography>
-              {/* <RHFUpload
+               {/* <RHFUpload
                 multiple
                 thumbnail
                 name="Offer_img"
@@ -213,7 +174,9 @@ export default function TourNewEditForm({ currentTour }) {
                 onRemove={handleRemoveFile}
                 onRemoveAll={handleRemoveAllFiles}
                 onUpload={() => console.info('ON UPLOAD')}
-              /> */}
+              />  */}
+               {/* <RHFEditor simple name="" /> */}
+               <RHFTextField name="Offer_img" placeholder="Price..." />
             </Stack>
           </Stack>
         </Card>
@@ -238,51 +201,11 @@ export default function TourNewEditForm({ currentTour }) {
           {!mdUp && <CardHeader title="Properties" />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <Stack>
-              <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-                Tour Guide
-              </Typography>
-
-              <RHFAutocomplete
-                multiple
-                name="tourGuides"
-                placeholder="+ Tour Guides"
-                disableCloseOnSelect
-                options={_tourGuides}
-                getOptionLabel={(option) => option.name}
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-                renderOption={(props, tourGuide) => (
-                  <li {...props} key={tourGuide.id}>
-                    <Avatar
-                      key={tourGuide.id}
-                      alt={tourGuide.avatarUrl}
-                      src={tourGuide.avatarUrl}
-                      sx={{ width: 24, height: 24, flexShrink: 0, mr: 1 }}
-                    />
-
-                    {tourGuide.name}
-                  </li>
-                )}
-                renderTags={(selected, getTagProps) =>
-                  selected.map((tourGuide, index) => (
-                    <Chip
-                      {...getTagProps({ index })}
-                      key={tourGuide.id}
-                      size="small"
-                      variant="soft"
-                      label={tourGuide.name}
-                      avatar={<Avatar alt={tourGuide.name} src={tourGuide.avatarUrl} />}
-                    />
-                  ))
-                }
-              />
-            </Stack>
-
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Available</Typography>
               <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                 <Controller
-                  name="created_at"
+                  name="Offer_start_date"
                   control={control}
                   render={({ field, fieldState: { err } }) => (
                     <DatePicker
@@ -299,7 +222,7 @@ export default function TourNewEditForm({ currentTour }) {
                   )}
                 />
                 <Controller
-                  name="available.endDate"
+                  name="Offer_end_date"
                   control={control}
                   render={({ field, fieldState: { err } }) => (
                     <DatePicker
@@ -324,30 +247,24 @@ export default function TourNewEditForm({ currentTour }) {
             </Stack>
 
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Destination</Typography>
+              <Typography variant="subtitle2">City</Typography>
               <RHFAutocomplete
-                name="destination"
-                placeholder="+ Destination"
-                options={countries.map((option) => option.label)}
+                name="cities"
+                placeholder="city"
+                options={tableData.map((option) => option._id)}
                 getOptionLabel={(option) => option}
                 renderOption={(props, option) => {
-                  const { code, label, phone } = countries.filter(
-                    (country) => country.label === option
+                  const { _id,name_english } = tableData.filter(
+                    (data) => data._id === option
                   )[0];
 
-                  if (!label) {
+                  if (!_id) {
                     return null;
                   }
 
                   return (
-                    <li {...props} key={label}>
-                      <Iconify
-                        key={label}
-                        icon={`circle-flags:${code.toLowerCase()}`}
-                        width={28}
-                        sx={{ mr: 1 }}
-                      />
-                      {label} ({code}) +{phone}
+                    <li {...props} key={_id}>
+                      {name_english} 
                     </li>
                   );
                 }}
@@ -357,41 +274,12 @@ export default function TourNewEditForm({ currentTour }) {
             <Stack spacing={1}>
               <Typography variant="subtitle2">Services</Typography>
               <RHFMultiCheckbox
-                name="services"
-                options={TOUR_SERVICE_OPTIONS}
+                name="Stakeholder"
+                options={stackholdersMultiSelectOptions}
                 sx={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(2, 1fr)',
                 }}
-              />
-            </Stack>
-
-            <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Tags</Typography>
-              <RHFAutocomplete
-                name="tags"
-                placeholder="+ Tags"
-                multiple
-                freeSolo
-                options={_tags.map((option) => option)}
-                getOptionLabel={(option) => option}
-                renderOption={(props, option) => (
-                  <li {...props} key={option}>
-                    {option}
-                  </li>
-                )}
-                renderTags={(selected, getTagProps) =>
-                  selected.map((option, index) => (
-                    <Chip
-                      {...getTagProps({ index })}
-                      key={option}
-                      label={option}
-                      size="small"
-                      color="info"
-                      variant="soft"
-                    />
-                  ))
-                }
               />
             </Stack>
           </Stack>
@@ -404,11 +292,11 @@ export default function TourNewEditForm({ currentTour }) {
     <>
       {mdUp && <Grid md={4} />}
       <Grid xs={12} md={8} sx={{ display: 'flex', alignItems: 'center' }}>
-        <FormControlLabel
+        {/* <FormControlLabel
           control={<Switch defaultChecked />}
           label="Publish"
           sx={{ flexGrow: 1, pl: 3 }}
-        />
+        /> */}
 
         <LoadingButton
           type="submit"

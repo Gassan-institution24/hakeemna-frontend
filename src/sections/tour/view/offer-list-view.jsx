@@ -21,7 +21,6 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import { useGetOffers } from 'src/api/user';
-
 import TourList from '../offer-list';
 import TourSort from '../offer-sort';
 import TourSearch from '../offer-search';
@@ -59,7 +58,7 @@ export default function TourListView() {
       ? filters.startDate.getTime() > filters.endDate.getTime()
       : false;
 
-  const {data} = useGetOffers()
+  const {data,refetch} = useGetOffers()
   const dataFiltered = applyFilter({
     inputData: data,
     filters,
@@ -201,7 +200,7 @@ export default function TourListView() {
 
       {notFound && <EmptyContent title="No Data" filled sx={{ py: 10 }} />}
 
-      <TourList offers={dataFiltered} />
+      <TourList refetch={refetch} offers={dataFiltered} />
     </Container>
   );
 }
