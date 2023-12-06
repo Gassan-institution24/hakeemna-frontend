@@ -55,6 +55,10 @@ export const endpoints = {
     diet:(id)=>`/api/diets/${id}`,
     analyses:'/api/analysis',
     analysis:(id)=>`/api/analysis/${id}`,
+    insuranceCos:'/api/insurance/companies',
+    insuranceCo:(id)=>`/api/insurance/companies/${id}`,
+    insuranceTypes:'/api/insurance/types',
+    insuranceType:(id)=>`/api/insurance/types/${id}`,
 
     unitservices:'/api/unitservice',
     departments:'/api/departments',
