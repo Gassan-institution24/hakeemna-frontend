@@ -21,7 +21,7 @@ import DetailsModal from './table-show-modal';
 
 // ----------------------------------------------------------------------
 
-export default function CountriesTableRow({ row, selected, onEditRow,onSelectRow,onActivate,onInactivate }) {
+export default function CountriesTableRow({ row, selected, onEditRow,onSelectRow,onActivate,onInactivate,setFilters,filters }) {
   const {
     code,
     scientific_name,
@@ -51,8 +51,8 @@ export default function CountriesTableRow({ row, selected, onEditRow,onSelectRow
       <TableCell>
         {code}
       </TableCell>
-      <TableCell>{scientific_name}</TableCell>
       <TableCell>{trade_name}</TableCell>
+      <TableCell onClick={()=>setFilters({...filters,name:scientific_name})}>{scientific_name}</TableCell>
       <TableCell>{family?.name_english}</TableCell>
       <TableCell>
         <Label
@@ -140,9 +140,11 @@ export default function CountriesTableRow({ row, selected, onEditRow,onSelectRow
 
 CountriesTableRow.propTypes = {
   onSelectRow: PropTypes.func,
+  setFilters: PropTypes.func,
   onActivate: PropTypes.func,
   onInactivate: PropTypes.func,
   onEditRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
+  filters: PropTypes.object,
 };

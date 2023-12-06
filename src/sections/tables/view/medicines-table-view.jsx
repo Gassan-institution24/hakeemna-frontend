@@ -50,8 +50,8 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
-  { id: 'scientific_name', label: 'scientific_name' },
   { id: 'trade_name', label: 'trade name' },
+  { id: 'scientific_name', label: 'scientific name' },
   { id: 'family', label: 'family' },
   { id: 'status', label: 'status' },
   { id: 'created_at', label: 'Date Of Creation' },
@@ -376,6 +376,8 @@ export default function MedicinesTableView() {
                       <TableDetailRow
                         key={row._id}
                         row={row}
+                        filters={filters}
+                        setFilters={setFilters}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row._id)}
@@ -474,15 +476,13 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.category?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.symptoms?.some(
-          (disease) => disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1
-        ) ||
-        data?.symptoms?.some(
-          (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
-        ) ||
+        data?.trade_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.scientific_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.family?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.family?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        // data?.symptoms?.some(
+        //   (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        // ) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
