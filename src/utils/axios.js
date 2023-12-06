@@ -88,4 +88,7 @@ export const endpoints = {
     getoffers: '/api/suppliersoffers',
     getoffer:(id)=> `/api/suppliersoffers/${id}`,
   },
+  stackholder:{
+    getstackholder: '/api/stackholder',
+  },
 };

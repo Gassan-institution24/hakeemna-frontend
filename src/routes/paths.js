@@ -1,10 +1,12 @@
 import { paramCase } from 'src/utils/change-case';
 
 import { _id, _postTitles } from 'src/_mock/assets';
-
+import { useParams } from 'react-router';
 // ----------------------------------------------------------------------
 
 const MOCK_ID = _id[1];
+
+
 
 const MOCK_TITLE = _postTitles[2];
 
@@ -19,6 +21,7 @@ const ROOTS = {
 // ----------------------------------------------------------------------
 
 export const paths = {
+  
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
   pricing: '/pricing',

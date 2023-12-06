@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-
+import { useParams } from 'react-router';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
@@ -23,7 +23,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function TourItem({ tour, onView, onEdit, onDelete }) {
   const popover = usePopover();
-
+ 
   const {
     code,
     Offer_name,
@@ -174,7 +174,7 @@ export default function TourItem({ tour, onView, onEdit, onDelete }) {
         <MenuItem
           onClick={() => {
             popover.onClose();
-            onEdit();
+            onEdit(tour._id);
           }}
         >
           <Iconify icon="solar:pen-bold" />
@@ -184,7 +184,7 @@ export default function TourItem({ tour, onView, onEdit, onDelete }) {
         <MenuItem
           onClick={() => {
             popover.onClose();
-            onDelete();
+            onDelete(tour._id);
           }}
           sx={{ color: 'error.main' }}
         >
@@ -194,7 +194,9 @@ export default function TourItem({ tour, onView, onEdit, onDelete }) {
       </CustomPopover>
     </>
   );
+  
 }
+
 
 TourItem.propTypes = {
   onDelete: PropTypes.func,
