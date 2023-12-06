@@ -65,6 +65,8 @@ export const endpoints = {
     department:(id)=>`/api/departments/${id}`,
     specialities:'/api/specialities',
     speciality:(id)=>`/api/specialities/${id}`,
+    subspecialties:'/api/subspecialities',
+    subspeciality:(id)=>`/api/subspecialities/${id}`,
   },
   chat: '/api/chat',
   kanban: '/api/kanban',
