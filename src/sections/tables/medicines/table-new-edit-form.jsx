@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -16,8 +17,15 @@ import { useRouter } from 'src/routes/hooks';
 import { useGetCountries, useGetMedFamilies, useGetSymptoms } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFTextField, RHFMultiSelect, RHFSelect } from 'src/components/hook-form';
+import FormProvider, {
+  RHFTextField,
+  RHFMultiSelect,
+  RHFSelect,
+  RHFAutocomplete,
+} from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
+
+const DefaultDoses = ['5 mg','10 mg','50 mg']
 
 // ----------------------------------------------------------------------
 
@@ -25,8 +33,8 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
 
   const { tableData } = useGetSymptoms();
-  const {countriesData} = useGetCountries()
-  const {families} = useGetMedFamilies()
+  const { countriesData } = useGetCountries();
+  const { families } = useGetMedFamilies();
 
   const sideEffectsMultiSelect = tableData?.reduce((acc, data) => {
     acc.push({
@@ -35,13 +43,13 @@ export default function CountriesNewEditForm({ currentSelected }) {
     });
     return acc;
   }, []);
-  console.log('multiii', sideEffectsMultiSelect);
+  console.log('multiii', sideEffectsMultiSelect.length > 0 && sideEffectsMultiSelect);
   const { enqueueSnackbar } = useSnackbar();
 
   const NewSchema = Yup.object().shape({
     country: Yup.string().required('country is required'),
     trade_name: Yup.string().required('trade_name is required'),
-    concentrations: Yup.string().required('concentrations is required'),
+    concentrations: Yup.array(),
     agent: Yup.string(),
     price_1: Yup.string(),
     price_2: Yup.string(),
@@ -56,9 +64,9 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const defaultValues = useMemo(
     /// edit
     () => ({
-      country: currentSelected?.country?.name_english || '',
+      country: currentSelected?.country?._id || '',
       trade_name: currentSelected?.trade_name || '',
-      concentrations: currentSelected?.concentrations || '',
+      concentrations: currentSelected?.concentrations || [],
       agent: currentSelected?.agent || '',
       price_1: currentSelected?.price_1 || '',
       price_2: currentSelected?.price_2 || '',
@@ -67,7 +75,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
       scientific_name: currentSelected?.scientific_name || '',
       barcode: currentSelected?.barcode || '',
       side_effects: currentSelected?.side_effects?.map((disease) => disease._id) || [],
-      family: currentSelected?.family?.name_english || '',
+      family: currentSelected?.family?._id || '',
     }),
     [currentSelected]
   );
@@ -85,6 +93,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      console.log('dataaaaaa',data)
       if (currentSelected) {
         await axiosHandler({ method: 'PATCH', path: `medicines/${currentSelected._id}`, data }); /// edit
       } else {
@@ -92,7 +101,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
-      router.push(paths.superadmin.tables.diseases.root); /// edit
+      router.push(paths.superadmin.tables.medicines.root); /// edit
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
@@ -115,15 +124,10 @@ export default function CountriesNewEditForm({ currentSelected }) {
             >
               <RHFTextField name="trade_name" label="trade name" />
               <RHFTextField name="scientific_name" label="scientific name" />
-              <RHFTextField name="agent" label="agent" />
-              <RHFTextField name="price_1" label="price_1" />
-              <RHFTextField name="price_2" label="price_2" />
-              <RHFTextField name="ATCCODE" label="ATCCODE" />
-              <RHFTextField name="packaging" label="packaging" />
-              <RHFTextField name="barcode" label="barcode" />
-            </Box>
+              </Box>
 
-            <Box
+              <Box
+              sx={{ my: 2 }}
               rowGap={3}
               columnGap={2}
               display="grid"
@@ -132,23 +136,60 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
-              <RHFTextField
-                sx={{ mt: 3 }}
-                name="description"
-                label="description"
-                multiline
-                colSpan={14}
-                rows={3}
+              <RHFAutocomplete
+                name="concentrations"
+                label="concentrations"
+                placeholder="+ concentration"
+                multiple
+                freeSolo
+                options={DefaultDoses.map((option) => option)}
+                getOptionLabel={(option) => option}
+                renderOption={(props, option) => (
+                  <li {...props} key={option}>
+                    {option}
+                  </li>
+                )}
+                renderTags={(selected, getTagProps) =>
+                  selected.map((option, index) => (
+                    <Chip
+                      {...getTagProps({ index })}
+                      key={option}
+                      label={option}
+                      size="small"
+                      color="info"
+                      variant="soft"
+                    />
+                  ))
+                }
               />
-              <RHFTextField
-                sx={{ mt: 3 }}
-                name="description_arabic"
-                label="description arabic"
-                multiline
-                colSpan={14}
-                rows={3}
-              />
+              </Box>
 
+              <Box
+              rowGap={3}
+              columnGap={2}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
+              }} /// edit
+            >
+              <RHFTextField name="agent" label="agent" />
+              <RHFTextField name="price_1" label="price_1" />
+              <RHFTextField name="price_2" label="price_2" />
+              <RHFTextField name="ATCCODE" label="ATCCODE" />
+              <RHFTextField name="packaging" label="packaging" />
+              <RHFTextField name="barcode" label="barcode" />
+              </Box>
+            <Box
+              sx={{ my: 3 }}
+              rowGap={3}
+              columnGap={2}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(1, 1fr)',
+              }}
+            >
               <RHFSelect native name="country" label="country">
                 <option> </option>
                 {countriesData.map((country) => (
@@ -170,8 +211,8 @@ export default function CountriesNewEditForm({ currentSelected }) {
               {sideEffectsMultiSelect.length > 0 && (
                 <RHFMultiSelect
                   checkbox
-                  name="symptoms"
-                  label="symptoms"
+                  name="side_effects"
+                  label="side_effects"
                   options={sideEffectsMultiSelect}
                 />
               )}
