@@ -73,6 +73,8 @@ export const endpoints = {
     freesubscription:(id)=>`/api/freesubscription/${id}`,
     unitservicetypes:'/api/ustypes',
     unitservicetype:(id)=>`/api/ustypes/${id}`,
+    taxes:'/api/taxes',
+    tax:(id)=>`/api/taxes/${id}`,
   },
   chat: '/api/chat',
   kanban: '/api/kanban',

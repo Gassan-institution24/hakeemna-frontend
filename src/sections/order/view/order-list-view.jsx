@@ -92,7 +92,7 @@ export default function OrderListView() {
         'specialities',//
         'sub_specialities',//
         'countries',//
-        'added_value_taxes',
+        'added_value_tax_GD',
         'departments',//
         'medicines',//
         'unit_services',//

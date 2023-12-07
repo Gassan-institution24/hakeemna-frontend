@@ -192,7 +192,7 @@ export const dashboardRoutes = [
             ],
           },
           {
-            path: 'added_value_taxes',
+            path: 'added_value_tax_GD',
             children: [
               { element: <TaxesTablePage />, index: true },
               { path: 'list', element: <TaxesTablePage /> },

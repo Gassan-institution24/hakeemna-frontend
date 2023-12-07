@@ -125,7 +125,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
           {stackComponent({arr:['Code','Name','Country','Status','Created At','Updated At']})}
               {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name,item.country?.name,item.status,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
           </Stack>}
-          {tableName === 'added_value_taxes' && <Stack component={Paper} sx={{ m: 1.5 }}>
+          {tableName === 'added_value_tax_GD' && <Stack component={Paper} sx={{ m: 1.5 }}>
           {stackComponent({arr:['Code','Name','Created At','Updated At']})}
               {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.tax_name,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
           </Stack>}

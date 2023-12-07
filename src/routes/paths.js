@@ -201,9 +201,9 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/countries/edit/${id}`,
       },
       taxes:{
-        root: `${ROOTS.SUPERADMIN}/tables/added_value_taxes`,
-        new: `${ROOTS.SUPERADMIN}/tables/added_value_taxes/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/added_value_taxes/edit/${id}`,
+        root: `${ROOTS.SUPERADMIN}/tables/added_value_tax_GD`,
+        new: `${ROOTS.SUPERADMIN}/tables/added_value_tax_GD/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/added_value_tax_GD/edit/${id}`,
       },
       analysis:{
         root: `${ROOTS.SUPERADMIN}/tables/analyses`,
