@@ -57,7 +57,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function CategoriesTableView() {                       /// edit
+export default function USTypesTableView() {                       /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();

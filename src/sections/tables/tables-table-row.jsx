@@ -177,6 +177,50 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
           {stackComponent({arr:['Code','Name','Created At','Updated At']})}
               {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
           </Stack>}
+          {tableName === 'unit_service_types' && <Stack component={Paper} sx={{ m: 1.5 }}>
+          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'activities' && <Stack component={Paper} sx={{ m: 1.5 }}>
+          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'employee_types' && <Stack component={Paper} sx={{ m: 1.5 }}>
+          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'payment_methods' && <Stack component={Paper} sx={{ m: 1.5 }}>
+          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'stakeholder_types' && <Stack component={Paper} sx={{ m: 1.5 }}>
+          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'work_shifts' && <Stack component={Paper} sx={{ m: 1.5 }}>
+          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'service_types' && <Stack component={Paper} sx={{ m: 1.5 }}>
+          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'measurement_types' && <Stack component={Paper} sx={{ m: 1.5 }}>
+          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'hospital_list' && <Stack component={Paper} sx={{ m: 1.5 }}>
+          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'deduction_config' && <Stack component={Paper} sx={{ m: 1.5 }}>
+          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
+          </Stack>}
+          {tableName === 'rooms' && <Stack component={Paper} sx={{ m: 1.5 }}>
+          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
+              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
+          </Stack>}
         </Collapse>
       </TableCell>
     </TableRow>

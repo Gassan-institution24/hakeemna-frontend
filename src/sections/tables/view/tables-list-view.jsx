@@ -53,7 +53,7 @@ export default function TablesListView() {
   const confirm = useBoolean();
 
   const { tableData } = useGetTables();
-  
+  console.log('all tablessss',tableData)
   const [filters, setFilters] = useState(defaultFilters);
 
   const TABLE_HEAD = [                                                                           /// to edit
@@ -73,6 +73,17 @@ export default function TablesListView() {
         'surgeries',//
         'diseases',//
         'insurance_companies',//
+        'unit_service_types',
+        'activities',
+        'employee_types',
+        'payment_methods',
+        'stakeholder_types',
+        'work_shifts',
+        'service_types',
+        'measurement_types',
+        'hospital_list',
+        'deduction_config',
+        'rooms',
         'specialities',//
         'sub_specialities',//
         'countries',//

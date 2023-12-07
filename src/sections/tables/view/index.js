@@ -1,2 +1,12 @@
 export { default as TablesListView } from './tables-list-view';
 export { default as TablesDetailsView } from './cities-table-view';
+export { default as ActivitiesDetailsView } from './activities-table-view';
+export { default as EmployeeTypesDetailsView } from './EmployeeTypes-table-view';
+export { default as PaymentMethodsDetailsView } from './payment-methods-table-view';
+export { default as StakeholderTypesDetailsView } from './stakeholder-types-table-view';
+export { default as WorkShiftsDetailsView } from './work-shifts-table-view';
+export { default as ServiceTypesDetailsView } from './service-types-table-view';
+export { default as MeasurmentTypesDetailsView } from './measurement-types-table-view';
+export { default as HospitalsDetailsView } from './hospitals-table-view';
+export { default as DeductionConfigDetailsView } from './deduction-config-table-view';
+export { default as RoomsDetailsView } from './rooms-table-view';

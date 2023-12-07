@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import TableEditView from 'src/sections/tables/symptoms/table-edit-view';
+import TableEditView from 'src/sections/tables/payment_methods/table-edit-view';
 
 // ----------------------------------------------------------------------
 
@@ -8,7 +8,7 @@ export default function TableEditPage() {
   return (
     <>
       <Helmet>
-        <title> super: Edit Symptom</title>
+        <title> super: Edit Payment Method</title>
       </Helmet>
 
       <TableEditView />
