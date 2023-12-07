@@ -73,13 +73,18 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      let response
       if(currentTable){
-       await axiosHandler({method:'PATCH',path:`insurance/companies/${currentTable._id}`,data});
+       response = await axiosHandler({method:'PATCH',path:`insurance/companies/${currentTable._id}`,data});
       }else{
-       await axiosHandler({method:'POST',path:'insurance/companies',data});
+       response = await axiosHandler({method:'POST',path:'insurance/companies',data});
       }
       reset();
-      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      if(response.status.includes(200,304)){
+        enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      }else{enqueueSnackbar('Please try again later!', {
+        variant: 'error',
+      })}
       router.push(paths.superadmin.tables.insurancecomapnies.root);
       console.info('DATA', data);
     } catch (error) {

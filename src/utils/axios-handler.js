@@ -8,7 +8,6 @@ export default async function axiosHandler({
   path,
   data,
 }) {
-  try {
     const url = `http://localhost:3000/api/${path}`;
     const token = Cookies.get('user_token');
     const response = await axios({
@@ -29,11 +28,4 @@ export default async function axiosHandler({
       setError(response.data);
     }
     return response;
-  } catch (err) {
-    // console.log(err)
-    if (setError) {
-      setError(err.message);
-    }
-    return err
-  }
 }
