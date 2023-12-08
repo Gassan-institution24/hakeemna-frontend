@@ -22,7 +22,7 @@ import { useState, useRef } from 'react';
 
 // ----------------------------------------------------------------------
 
-export default function TourItem({ tour, onView, onEdit, onDelete }) {
+export default function TourItem({ tour, onView, onEdit, onStatusChange }) {
   const popover = usePopover();
   const [timeDifference, setTimeDifference] = useState('');
   const ref = useRef();
@@ -224,12 +224,13 @@ export default function TourItem({ tour, onView, onEdit, onDelete }) {
         <MenuItem
           onClick={() => {
             popover.onClose();
-            onDelete(tour._id);
+            // onStatusChange(tour._id,tour.status === "active" ? "inactive" : "active");
+            onStatusChange()
           }}
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
+          {tour.status === "active" ? "Deactivate" : "Activate"}
         </MenuItem>
       </CustomPopover>
     </>
@@ -237,7 +238,7 @@ export default function TourItem({ tour, onView, onEdit, onDelete }) {
 }
 
 TourItem.propTypes = {
-  onDelete: PropTypes.func,
+  onStatusChange: PropTypes.func,
   onEdit: PropTypes.func,
   onView: PropTypes.func,
   tour: PropTypes.object,

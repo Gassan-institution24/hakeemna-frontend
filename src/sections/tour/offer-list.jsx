@@ -36,9 +36,9 @@ const [status,setStatus] = useState()
 
 
 
-  const handleDelete = useCallback((id) => {
+  const handleStatusChange = useCallback((id,newStatus) => {
     axiosHandler({
-     method:"PATCH", path:`suppliersoffers/${id}`,data:{status:'active'}
+     method:"PATCH", path:`suppliersoffers/${id}`,data:{newStatus}
     })
     refetch()
   }, [refetch]);
@@ -60,7 +60,7 @@ const [status,setStatus] = useState()
             tour={tour}
             onView={() => handleView(tour._id)}
             onEdit={() => handleEdit(tour._id)}
-            onDelete={() => handleDelete(tour._id)}
+            onStatusChange={() => handleStatusChange(tour._id,tour.status === "active" ? "inactive" : "active")}
           />
         ))}
       </Box>
