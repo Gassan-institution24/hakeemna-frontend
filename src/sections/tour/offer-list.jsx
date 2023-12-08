@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
+import { useCallback,useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Pagination, { paginationClasses } from '@mui/material/Pagination';
@@ -13,8 +13,8 @@ import TourItem from './offer-item';
 
 export default function TourList({ offers,refetch }) {
   const router = useRouter();
-
-
+const [status,setStatus] = useState()
+// offers.map((info)=> setStatus(info.status))
 
 
   const handleView = useCallback(
@@ -38,7 +38,7 @@ export default function TourList({ offers,refetch }) {
 
   const handleDelete = useCallback((id) => {
     axiosHandler({
-     method:"DELETE", path:`suppliersoffers/${id}`
+     method:"PATCH", path:`suppliersoffers/${id}`,data:{status:'active'}
     })
     refetch()
   }, [refetch]);

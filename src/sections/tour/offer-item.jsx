@@ -18,23 +18,36 @@ import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useState, useRef } from 'react';
 
 // ----------------------------------------------------------------------
 
 export default function TourItem({ tour, onView, onEdit, onDelete }) {
   const popover = usePopover();
- 
+  const [timeDifference, setTimeDifference] = useState('');
+  const ref = useRef();
   const {
     code,
     Offer_name,
     Offer_price,
     created_at,
     Offer_img,
+    Offer_start_date,
+    Offer_end_date,
+    status,
   } = tour;
-
+ 
   // const shortLabel = shortDateLabel(available.startDate, available.endDate);
 
+  function differenceBetweenDates(date1, date2) {
+    const startDate = new Date(date1);
+    const endDate = new Date(date2);
+    const difference = Math.abs(endDate.getTime() - startDate.getTime());
+    const millisecondsInDay = 1000 * 60 * 60 * 24;
+    const daysDifference = Math.floor(difference / millisecondsInDay);
 
+    return daysDifference;
+  }
 
   const renderPrice = (
     <Stack
@@ -52,12 +65,46 @@ export default function TourItem({ tour, onView, onEdit, onDelete }) {
         typography: 'subtitle2',
       }}
     >
-      {/* {!!priceSale && (
-        <Box component="span" sx={{ color: 'grey.500', mr: 0.25, textDecoration: 'line-through' }}>
-          {fCurrency(priceSale)}
+      {fCurrency(Offer_price)}
+    </Stack>
+  );
+  const renderStatus = (
+    <Stack>
+      {tour.status === 'active' ? (
+        <Box
+          ref={ref}
+          sx={{
+            top: 8,
+            right: 8,
+            zIndex: 9,
+            borderRadius: 1,
+            bgcolor: 'green',
+            position: 'absolute',
+            p: '2px 6px 2px 4px',
+            color: 'common.white',
+            typography: 'subtitle2',
+          }}
+        >
+          {tour.status}
         </Box>
-      )} */}
-       {fCurrency(Offer_price)}
+      ) : (
+        <Box
+          ref={ref}
+          sx={{
+            top: 8,
+            right: 8,
+            zIndex: 9,
+            borderRadius: 1,
+            bgcolor: 'red',
+            position: 'absolute',
+            p: '2px 6px 2px 4px',
+            color: 'common.white',
+            typography: 'subtitle2',
+          }}
+        >
+          {tour.status}
+        </Box>
+      )}
     </Stack>
   );
 
@@ -69,16 +116,13 @@ export default function TourItem({ tour, onView, onEdit, onDelete }) {
         p: (theme) => theme.spacing(1, 1, 0, 1),
       }}
     >
-       <Stack flexGrow={1} sx={{ position: 'relative' }}>
+      <Stack flexGrow={1} sx={{ position: 'relative' }}>
         {renderPrice}
+        {renderStatus}
         <Image alt="img" src={Offer_img} sx={{ borderRadius: 1, height: 164, width: 1 }} />
       </Stack>
-      {/* <Stack spacing={0.5}>
-        <Image alt="img" src={Offer_img} ratio="1/1" sx={{ borderRadius: 1, width: 80 }} />
-        <Image alt="img" src={Offer_img} ratio="1/1" sx={{ borderRadius: 1, width: 80 }} />
-      </Stack> */}
     </Stack>
-  ); 
+  );
 
   const renderTexts = (
     <ListItemText
@@ -88,7 +132,7 @@ export default function TourItem({ tour, onView, onEdit, onDelete }) {
       primary={`Posted date: ${fDateTime(created_at)}`}
       secondary={
         <Link component={RouterLink} href={paths.dashboard.tour.details} color="inherit">
-         {Offer_name}
+          {Offer_name}
         </Link>
       }
       primaryTypographyProps={{
@@ -119,16 +163,12 @@ export default function TourItem({ tour, onView, onEdit, onDelete }) {
 
       {[
         {
-          // label: destination,
+          label: tour.cities?.name_english,
           icon: <Iconify icon="mingcute:location-fill" sx={{ color: 'error.main' }} />,
         },
         {
-          // label: shortLabel,
+          label: `${differenceBetweenDates(tour.Offer_start_date, tour.Offer_end_date)} Days`,
           icon: <Iconify icon="solar:clock-circle-bold" sx={{ color: 'info.main' }} />,
-        },
-        {
-          // label: `${bookers.length} Booked`,
-          icon: <Iconify icon="solar:users-group-rounded-bold" sx={{ color: 'primary.main' }} />,
         },
       ].map((item) => (
         <Stack
@@ -164,7 +204,7 @@ export default function TourItem({ tour, onView, onEdit, onDelete }) {
         <MenuItem
           onClick={() => {
             popover.onClose();
-            onView();
+            onView(tour._id);
           }}
         >
           <Iconify icon="solar:eye-bold" />
@@ -194,9 +234,7 @@ export default function TourItem({ tour, onView, onEdit, onDelete }) {
       </CustomPopover>
     </>
   );
-  
 }
-
 
 TourItem.propTypes = {
   onDelete: PropTypes.func,

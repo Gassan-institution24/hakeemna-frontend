@@ -20,7 +20,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
 import FormProvider, {
   RHFEditor,
-  RHFSelect,
   RHFUpload,
   RHFSwitch,
   RHFSlider,
@@ -30,6 +29,7 @@ import FormProvider, {
   RHFMultiSelect,
   RHFAutocomplete,
   RHFMultiCheckbox,
+  RHFSelect
 } from 'src/components/hook-form';
 
 import { FormSchema } from './schema';

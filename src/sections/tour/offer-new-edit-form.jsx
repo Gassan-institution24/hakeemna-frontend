@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
-import { useMemo, useEffect, useCallback, useState } from 'react';
+import { useMemo, useEffect, useCallback, useState, useRef  } from 'react';
 
 import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
@@ -23,7 +23,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { countries } from 'src/assets/data';
 import { _tags, _tourGuides, TOUR_SERVICE_OPTIONS } from 'src/_mock';
-
+import { MenuItem } from '@mui/material';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
@@ -32,6 +32,7 @@ import FormProvider, {
   RHFTextField,
   RHFAutocomplete,
   RHFMultiCheckbox,
+  RHFSelect
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
 import { useGetCities } from 'src/api/tables';
@@ -39,60 +40,62 @@ import { useGetStackholder } from 'src/api/user';
 // ----------------------------------------------------------------------
 
 export default function TourNewEditForm({ currentTour }) {
+  const ref = useRef();
   const [error, setError] = useState();
   const [city, setCity] = useState();
   const router = useRouter();
   const mdUp = useResponsive('up', 'md');
   const { enqueueSnackbar } = useSnackbar();
-  const editfunc = (id,data) =>{
-   axiosHandler({
-    setError, method:"PATCH", path:`suppliersoffers/${currentTour._id}`, data
-  });
-  }
-  const addfunc = (data) =>{
+  const editfunc = (data) => {
     axiosHandler({
-      setError, method:"POST", path:"suppliersoffers/", data
+      setError,
+      method: 'PATCH',
+      path: `suppliersoffers/${currentTour._id}`,
+      data,
     });
-  }
-  
+  };
+  const addfunc = (data) => {
+    axiosHandler({
+      setError,
+      method: 'POST',
+      path: 'suppliersoffers/',
+      data,
+    });
+  };
 
-const {tableData} = useGetCities()
-const {stackholder} = useGetStackholder()
-console.log(stackholder);
-const stackholdersMultiSelectOptions = stackholder?.reduce((acc,data)=>{
-acc.push({value:data._id,label:data.stakeholder_name})
-return acc
-},[])
+  const { tableData } = useGetCities();
+  const { stackholder } = useGetStackholder();
+
+  const stackholdersMultiSelectOptions = stackholder?.reduce((acc, data) => {
+    acc.push({ value: data._id, label: data.stakeholder_name });
+    return acc;
+  }, []);
 
   const NewTourSchema = Yup.object().shape({
     Offer_name: Yup.string().required('Name is required'),
     Offer_comment: Yup.string().required('Content is required'),
     Offer_img: Yup.string().min(1, 'Images is required'),
-    cities: Yup.string(),
+    cities: Yup.string().nullable(),
     Offer_price: Yup.number(),
     //
-    tourGuides: Yup.array().min(1, 'Must have at least 1 guide'),
-    Stakeholder: Yup.array(),
-    destination: Yup.string(),
-    Offer_start_date: Yup.date(),
-    Offer_end_date: Yup.date()
+    // tourGuides: Yup.array().min(1, 'Must have at least 1 guide'),
+    Stakeholder: Yup.string().nullable(),
+    Offer_start_date: Yup.date().required('Start date is required'),
+    Offer_end_date: Yup.date().required('End date is required'),
   });
-  
 
   const defaultValues = useMemo(
     () => ({
-      Offer_name: currentTour?.name || '',
-      Offer_comment: currentTour?.content || '',
-      Offer_img: currentTour?.images || '',
-      Offer_price: currentTour?.price || '',
-      cities: currentTour?.cities?._id || '',
+      Offer_name: currentTour?.Offer_name || '',
+      Offer_comment: currentTour?.Offer_comment || '',
+      Offer_img: currentTour?.Offer_img || '',
+      Offer_price: currentTour?.Offer_price || '',
+      cities: currentTour?.cities?._id || null,
       //
       durations: currentTour?.durations || '',
-      destination: currentTour?.destination || '',
-      Stakeholder: currentTour?.Stakeholder?._id || [],
+      Stakeholder: currentTour?.Stakeholder?._id || null,
       Offer_start_date: currentTour?.Offer_start_date || null,
       Offer_end_date: currentTour?.Offer_end_date || null,
-    
     }),
     [currentTour]
   );
@@ -120,9 +123,13 @@ return acc
   }, [currentTour, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('dataaaaa',data)
+    console.log('dataaaaa', data);
     try {
-      if(currentTour){editfunc(currentTour._id,data)}else{addfunc(data)}
+      if (currentTour) {
+        editfunc(data);
+      } else {
+        addfunc(data);
+      }
       reset();
       enqueueSnackbar(currentTour ? 'Update success!' : 'Create success!');
       router.push(paths.dashboard.tour.root);
@@ -151,21 +158,20 @@ return acc
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Name</Typography>
-              <RHFTextField name="Offer_name" placeholder="Offer Name..."  />
+              <RHFTextField name="Offer_name" placeholder="Offer Name..." />
             </Stack>
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Name</Typography>
+              <Typography variant="subtitle2">Price</Typography>
               <RHFTextField name="Offer_price" placeholder="Price..." />
             </Stack>
-
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Content</Typography>
-              <RHFEditor simple name="Offer_comment" />
+              <RHFTextField name="Offer_comment" placeholder="Content..." />
             </Stack>
 
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Images</Typography>
-               {/* <RHFUpload
+              {/* <RHFUpload
                 multiple
                 thumbnail
                 name="Offer_img"
@@ -175,8 +181,8 @@ return acc
                 onRemoveAll={handleRemoveAllFiles}
                 onUpload={() => console.info('ON UPLOAD')}
               />  */}
-               {/* <RHFEditor simple name="" /> */}
-               <RHFTextField name="Offer_img" placeholder="Price..." />
+              {/* <RHFEditor simple name="" /> */}
+              <RHFTextField name="Offer_img" placeholder="image..." />
             </Stack>
           </Stack>
         </Card>
@@ -204,83 +210,64 @@ return acc
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Available</Typography>
               <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                <Controller
+                <DatePicker
                   name="Offer_start_date"
-                  control={control}
-                  render={({ field, fieldState: { err } }) => (
-                    <DatePicker
-                      {...field}
-                      format="dd/MM/yyyy"
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          err: !!err,
-                          helperText: err?.message,
-                        },
-                      }}
-                    />
-                  )}
+                  label="offer date"
+                  onChange={(date) =>
+                    methods.setValue('Offer_start_date', date, { shouldValidate: true })
+                  }
+                  // Parse the UTC date string to a JavaScript Date object
+                  value={
+                    methods.getValues('Offer_start_date')
+                      ? new Date(methods.getValues('Offer_start_date'))
+                      : null
+                  }
                 />
-                <Controller
+                <DatePicker
                   name="Offer_end_date"
-                  control={control}
-                  render={({ field, fieldState: { err } }) => (
-                    <DatePicker
-                      {...field}
-                      format="dd/MM/yyyy"
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
-                        },
-                      }}
-                    />
-                  )}
+                  label="offer date"
+                  onChange={(date) =>
+                    methods.setValue('Offer_end_date', date, { shouldValidate: true })
+                  }
+                  // Parse the UTC date string to a JavaScript Date object
+                  value={
+                    methods.getValues('Offer_end_date')
+                      ? new Date(methods.getValues('Offer_end_date'))
+                      : null
+                  }
                 />
               </Stack>
             </Stack>
-
-            <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Duration</Typography>
-              <RHFTextField name="durations" placeholder="Ex: 2 days, 4 days 3 nights..." />
-            </Stack>
-
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">City</Typography>
-              <RHFAutocomplete
+              <RHFSelect
+                fullWidth
                 name="cities"
-                placeholder="city"
-                options={tableData.map((option) => option._id)}
-                getOptionLabel={(option) => option}
-                renderOption={(props, option) => {
-                  const { _id,name_english } = tableData.filter(
-                    (data) => data._id === option
-                  )[0];
-
-                  if (!_id) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={_id}>
-                      {name_english} 
-                    </li>
-                  );
-                }}
-              />
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {tableData.map((option) => (
+                  <MenuItem key={option._id} value={option._id}>
+                    {option.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
             </Stack>
 
             <Stack spacing={1}>
               <Typography variant="subtitle2">Services</Typography>
-              <RHFMultiCheckbox
-                name="Stakeholder"
-                options={stackholdersMultiSelectOptions}
-                sx={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                }}
-              />
+                <RHFSelect
+                fullWidth
+                name="stakeholder"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {stackholder.map((option) => (
+                  <MenuItem key={option._id} value={option._id}>
+                    {option.stakeholder_name}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
             </Stack>
           </Stack>
         </Card>
