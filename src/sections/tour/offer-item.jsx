@@ -36,7 +36,7 @@ export default function TourItem({ tour, onView, onEdit, onStatusChange }) {
     Offer_end_date,
     status,
   } = tour;
- 
+
   // const shortLabel = shortDateLabel(available.startDate, available.endDate);
 
   function differenceBetweenDates(date1, date2) {
@@ -224,13 +224,21 @@ export default function TourItem({ tour, onView, onEdit, onStatusChange }) {
         <MenuItem
           onClick={() => {
             popover.onClose();
-            // onStatusChange(tour._id,tour.status === "active" ? "inactive" : "active");
-            onStatusChange()
+            onStatusChange();
           }}
           sx={{ color: 'error.main' }}
         >
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          {tour.status === "active" ? "Deactivate" : "Activate"}
+          {tour.status === 'active' ? (
+            <>
+              <Iconify icon="lets-icons:stop-fill" />
+              Deactivate
+            </>
+          ) : (
+            <>
+              <Iconify icon="ri:play-fill" />
+              Activate
+            </>
+          )}
         </MenuItem>
       </CustomPopover>
     </>

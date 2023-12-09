@@ -255,7 +255,7 @@ export default function TourNewEditForm({ currentTour }) {
             </Stack>
 
             <Stack spacing={1}>
-              <Typography variant="subtitle2">Services</Typography>
+              <Typography variant="subtitle2">Stackholder</Typography>
                 <RHFSelect
                 fullWidth
                 name="stakeholder"
