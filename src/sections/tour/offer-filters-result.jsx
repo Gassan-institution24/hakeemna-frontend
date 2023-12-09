@@ -9,6 +9,8 @@ import Avatar from '@mui/material/Avatar';
 
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
+import { useGetAnalyses, useGetCities } from 'src/api/tables';
+import { useGetStackholder } from 'src/api/user';
 
 // ----------------------------------------------------------------------
 
@@ -24,9 +26,10 @@ export default function TourFiltersResult({
 }) {
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
+  const { stackholder } = useGetStackholder();
   const handleRemoveServices = (inputValue) => {
-    const newValue = filters.services.filter((item) => item !== inputValue);
-    onFilters('services', newValue);
+    const newValue = filters.stackholder.filter((item) => item._id !== inputValue._id);
+    onFilters('stackholder', newValue);
   };
 
   const handleRemoveAvailable = () => {
@@ -34,20 +37,17 @@ export default function TourFiltersResult({
     onFilters('endDate', null);
   };
 
-  const handleRemoveTourGuide = (inputValue) => {
-    const newValue = filters.tourGuides.filter((item) => item.name !== inputValue.name);
-    onFilters('tourGuides', newValue);
-  };
 
+  const { tableData } = useGetCities();
   const handleRemoveDestination = (inputValue) => {
-    const newValue = filters.destination.filter((item) => item !== inputValue);
-    onFilters('destination', newValue);
+    const newValue = filters.cities.filter((item) => item._id !== inputValue._id);
+    onFilters('cities', newValue);
   };
 
   return (
     <Stack spacing={1.5} {...other}>
       <Box sx={{ typography: 'body2' }}>
-        <strong>{results}</strong>
+        <strong>{results.length}</strong>
         <Box component="span" sx={{ color: 'text.secondary', ml: 0.25 }}>
           results found
         </Box>
@@ -60,43 +60,35 @@ export default function TourFiltersResult({
           </Block>
         )}
 
-        {!!filters.services.length && (
-          <Block label="Services:">
-            {filters.services.map((item) => (
-              <Chip
-                key={item}
-                label={item}
-                size="small"
-                onDelete={() => handleRemoveServices(item)}
-              />
-            ))}
-          </Block>
-        )}
+      
 
-        {!!filters.tourGuides.length && (
-          <Block label="Tour guide:">
-            {filters.tourGuides.map((item) => (
-              <Chip
-                key={item.id}
-                size="small"
-                avatar={<Avatar alt={item.name} src={item.avatarUrl} />}
-                label={item.name}
-                onDelete={() => handleRemoveTourGuide(item)}
-              />
-            ))}
-          </Block>
-        )}
-
-        {!!filters.destination.length && (
+        {!!filters.cities && (
           <Block label="Destination:">
-            {filters.destination.map((item) => (
-              <Chip
-                key={item}
-                label={item}
-                size="small"
-                onDelete={() => handleRemoveDestination(item)}
-              />
-            ))}
+            {tableData
+              .filter((data) => filters.cities.includes(data._id))
+              .map((item) => (
+                <Chip
+                  key={item._id}
+                  label={item.name_english}
+                  size="small"
+                  onDelete={() => handleRemoveDestination(item.name_english)}
+                />
+              ))}
+          </Block>
+        )}
+
+{!!filters.stackholder && (
+          <Block label="stackholder:">
+            {stackholder
+              .filter((data) => filters.stackholder.includes(data._id))
+              .map((item) => (
+                <Chip
+                  key={item._id}
+                  label={item.stakeholder_name}
+                  size="small"
+                  onDelete={() => handleRemoveServices(item.stakeholder_name)}
+                />
+              ))}
           </Block>
         )}
 

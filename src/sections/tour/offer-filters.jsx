@@ -16,9 +16,10 @@ import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
+import { useGetCities } from 'src/api/tables';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { useGetStackholder } from 'src/api/user';
 
 // ----------------------------------------------------------------------
 
@@ -33,42 +34,49 @@ export default function TourFilters({
   canReset,
   onResetFilters,
   //
-  destinationOptions,
+  citiesOptions,
   tourGuideOptions,
   serviceOptions,
   //
   dateError,
 }) {
-  const handleFilterServices = useCallback(
+
+  const { tableData } = useGetCities();
+  const {stackholder} = useGetStackholder()
+  console.log(stackholder);
+  const handleFilterStack = useCallback(
     (newValue) => {
-      const checked = filters.services.includes(newValue)
-        ? filters.services.filter((value) => value !== newValue)
-        : [...filters.services, newValue];
-      onFilters('services', checked);
+      const checked = filters.stackholder.includes(newValue)
+        ? filters.stackholder.filter((value) => value !== newValue)
+        : [...filters.stackholder, newValue];
+      onFilters('stackholder', checked);
     },
-    [filters.services, onFilters]
+    [filters.stackholder, onFilters]
+  );
+  const handleFilterCities = useCallback(
+    (newValue) => {
+      const checked = filters.cities.includes(newValue)
+        ? filters.cities.filter((value) => value !== newValue)
+        : [...filters.cities, newValue];
+      onFilters('cities', checked);
+    },
+    [filters.cities, onFilters]
   );
 
   const handleFilterStartDate = useCallback(
     (newValue) => {
-      onFilters('startDate', newValue);
+      onFilters('Offer_start_date', newValue);
     },
     [onFilters]
   );
 
   const handleFilterEndDate = useCallback(
     (newValue) => {
-      onFilters('endDate', newValue);
+      onFilters('Offer_end_date', newValue);
     },
     [onFilters]
   );
 
-  const handleFilterDestination = useCallback(
-    (newValue) => {
-      onFilters('destination', newValue);
-    },
-    [onFilters]
-  );
 
   const handleFilterTourGuide = useCallback(
     (newValue) => {
@@ -108,11 +116,11 @@ export default function TourFilters({
         Durations
       </Typography>
       <Stack spacing={2.5}>
-        <DatePicker label="Start date" value={filters.startDate} onChange={handleFilterStartDate} />
+        <DatePicker label="Start date" value={filters.Offer_start_date} onChange={handleFilterStartDate} />
 
         <DatePicker
           label="End date"
-          value={filters.endDate}
+          value={filters.Offer_end_date}
           onChange={handleFilterEndDate}
           slotProps={{
             textField: {
@@ -125,113 +133,84 @@ export default function TourFilters({
     </Stack>
   );
 
-  const renderDestination = (
+  const rendercities = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-        Destination
+        cities
       </Typography>
-
-      <Autocomplete
-        multiple
-        disableCloseOnSelect
-        options={destinationOptions.map((option) => option.label)}
-        getOptionLabel={(option) => option}
-        value={filters.destination}
-        onChange={(event, newValue) => handleFilterDestination(newValue)}
-        renderInput={(params) => <TextField placeholder="Select Destination" {...params} />}
-        renderOption={(props, option) => {
-          const { code, label, phone } = destinationOptions.filter(
-            (country) => country.label === option
-          )[0];
-
-          if (!label) {
-            return null;
-          }
-
-          return (
-            <li {...props} key={label}>
-              <Iconify
-                key={label}
-                icon={`circle-flags:${code.toLowerCase()}`}
-                width={28}
-                sx={{ mr: 1 }}
-              />
-              {label} ({code}) +{phone}
-            </li>
-          );
-        }}
-        renderTags={(selected, getTagProps) =>
-          selected.map((option, index) => (
-            <Chip
-              {...getTagProps({ index })}
-              key={option}
-              label={option}
-              size="small"
-              variant="soft"
+      {tableData.map((option) => (
+        <FormControlLabel
+          key={option?.key}
+          control={
+            <Checkbox
+              checked={filters.cities.includes(option._id)}
+              onClick={() => handleFilterCities(option._id)}
             />
-          ))
-        }
-      />
+          }
+          label={option?.name_english}
+        />
+      ))}
     </Stack>
   );
 
   const renderTourGuide = (
-    <Stack>
-      <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-        Tour Guide
-      </Typography>
+    // <Stack>
+    //   <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
+    //     Tour Guide
+    //   </Typography>
 
-      <Autocomplete
-        multiple
-        disableCloseOnSelect
-        options={tourGuideOptions}
-        value={filters.tourGuides}
-        onChange={(event, newValue) => handleFilterTourGuide(newValue)}
-        getOptionLabel={(option) => option.name}
-        renderInput={(params) => <TextField placeholder="Select Tour Guides" {...params} />}
-        renderOption={(props, tourGuide) => (
-          <li {...props} key={tourGuide.id}>
-            <Avatar
-              key={tourGuide.id}
-              alt={tourGuide.avatarUrl}
-              src={tourGuide.avatarUrl}
-              sx={{ width: 24, height: 24, flexShrink: 0, mr: 1 }}
-            />
+    //   <Autocomplete
+    //     multiple
+    //     disableCloseOnSelect
+    //     options={tourGuideOptions}
+    //     value={filters.tourGuides}
+    //     onChange={(event, newValue) => handleFilterTourGuide(newValue)}
+    //     getOptionLabel={(option) => option.name}
+    //     renderInput={(params) => <TextField placeholder="Select Tour Guides" {...params} />}
+    //     renderOption={(props, tourGuide) => (
+    //       <li {...props} key={tourGuide.id}>
+    //         <Avatar
+    //           key={tourGuide.id}
+    //           alt={tourGuide.avatarUrl}
+    //           src={tourGuide.avatarUrl}
+    //           sx={{ width: 24, height: 24, flexShrink: 0, mr: 1 }}
+    //         />
 
-            {tourGuide.name}
-          </li>
-        )}
-        renderTags={(selected, getTagProps) =>
-          selected.map((tourGuide, index) => (
-            <Chip
-              {...getTagProps({ index })}
-              key={tourGuide.id}
-              size="small"
-              variant="soft"
-              label={tourGuide.name}
-              avatar={<Avatar alt={tourGuide.name} src={tourGuide.avatarUrl} />}
-            />
-          ))
-        }
-      />
-    </Stack>
+    //         {tourGuide.name}
+    //       </li>
+    //     )}
+    //     renderTags={(selected, getTagProps) =>
+    //       selected.map((tourGuide, index) => (
+    //         <Chip
+    //           {...getTagProps({ index })}
+    //           key={tourGuide.id}
+    //           size="small"
+    //           variant="soft"
+    //           label={tourGuide.name}
+    //           avatar={<Avatar alt={tourGuide.name} src={tourGuide.avatarUrl} />}
+    //         />
+    //       ))
+    //     }
+    //   />
+    // </Stack>
+    <></>
   );
 
   const renderServices = (
     <Stack>
-      <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Services
+      <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
+        stackholder
       </Typography>
-      {serviceOptions.map((option) => (
+      {stackholder.map((option) => (
         <FormControlLabel
-          key={option}
+          key={option?.key}
           control={
             <Checkbox
-              checked={filters.services.includes(option)}
-              onClick={() => handleFilterServices(option)}
+              checked={filters.stackholder.includes(option._id)}
+              onClick={() => handleFilterStack(option._id)}
             />
           }
-          label={option}
+          label={option?.stakeholder_name}
         />
       ))}
     </Stack>
@@ -271,9 +250,9 @@ export default function TourFilters({
           <Stack spacing={3}>
             {renderDateRange}
 
-            {renderDestination}
+            {rendercities}
 
-            {renderTourGuide}
+            {/* {renderTourGuide} */}
 
             {renderServices}
           </Stack>
@@ -286,7 +265,7 @@ export default function TourFilters({
 TourFilters.propTypes = {
   canReset: PropTypes.bool,
   dateError: PropTypes.bool,
-  destinationOptions: PropTypes.array,
+  citiesOptions: PropTypes.array,
   filters: PropTypes.object,
   onClose: PropTypes.func,
   onFilters: PropTypes.func,

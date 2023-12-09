@@ -25,14 +25,9 @@ export default function TourEditView({ id }) {
         heading="Edit"
         links={[
           {
-            name: 'Dashboard',
-            href: paths.dashboard.root,
-          },
-          {
-            name: 'Tour',
+            name: 'Offer',
             href: paths.dashboard.tour.root,
           },
-          { name: data?.name },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
