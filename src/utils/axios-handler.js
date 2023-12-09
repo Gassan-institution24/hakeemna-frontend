@@ -8,7 +8,7 @@ export default async function axiosHandler({
   path,
   data,
 }) {
-    const url = `http://localhost:3000/api/${path}`;
+    const url = `http://localhost:3000${path}`;
     const token = Cookies.get('user_token');
     const response = await axios({
       method,

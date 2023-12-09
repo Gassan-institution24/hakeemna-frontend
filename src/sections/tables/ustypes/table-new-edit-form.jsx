@@ -19,6 +19,7 @@ import FormProvider, {
   RHFTextField,
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
+import { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -31,16 +32,12 @@ export default function TableNewEditForm({ currentSelected }) {
   const NewSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
-    description: Yup.string(),
-    description_arabic: Yup.string(),
   });
 
   const defaultValues = useMemo(                                                  /// edit
     () => ({
       name_arabic: currentSelected?.name_arabic || '',
       name_english: currentSelected?.name_english || '',
-      description: currentSelected?.description || '',
-      description_arabic: currentSelected?.description_arabic || '',
     }),
     [currentSelected]
     );
@@ -59,13 +56,13 @@ export default function TableNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if(currentSelected){
-        await axiosHandler({method:'PATCH',path:`medcategories/${currentSelected._id}`,data});      /// edit
+        await axiosHandler({method:'PATCH',path:`${endpoints.tables.unitservicetype(currentSelected._id)}`,data});      /// edit
       }else{
-        await axiosHandler({method:'POST',path:'medcategories',data});                                  /// edit
+        await axiosHandler({method:'POST',path:`${endpoints.tables.unitservicetypes}`,data});                                  /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
-      router.push(paths.superadmin.tables.medcategories.root);
+      router.push(paths.superadmin.tables.unitservicetypes.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
@@ -90,16 +87,6 @@ export default function TableNewEditForm({ currentSelected }) {
               <RHFTextField name="name_english" label="name english" />
               <RHFTextField name="name_arabic" label="name arabic" />
             </Box>
-            <Box rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(1, 1fr)',
-              }}              >
-              <RHFTextField sx={{ mt: 3 }} name="description" label="description" multiline colSpan={14} rows={4} />
-              <RHFTextField sx={{ mt: 3 }} name="description_arabic" label="description arabic" multiline colSpan={14} rows={4} />
-              </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 {!currentSelected ? 'Create One' : 'Save Changes'}

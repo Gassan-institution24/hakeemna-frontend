@@ -42,9 +42,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetTaxes } from 'src/api/tables';
+import { useGetEmployeeTypes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
-import TableDetailRow from '../taxes/table-details-row';
+import { endpoints } from 'src/utils/axios';
+import TableDetailRow from '../employee_types/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -86,7 +87,7 @@ export default function EmployeeTypesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { taxesData, refetch } = useGetTaxes();
+  const { employeeTypesData, refetch } = useGetEmployeeTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -96,7 +97,7 @@ export default function EmployeeTypesTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: taxesData,
+    inputData: employeeTypesData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -133,7 +134,7 @@ export default function EmployeeTypesTableView() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'TaxesTable.xlsx');
+    saveAs(data, 'EmployeeTypesData.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -151,7 +152,7 @@ export default function EmployeeTypesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `taxes/${id}/updatestatus`,
+        path: `${endpoints.tables.employeetype(id)}/updatestatus`, /// edit
         data: { status: 'active' },
       });
       refetch();
@@ -163,7 +164,7 @@ export default function EmployeeTypesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `taxes/${id}/updatestatus`,
+        path: `${endpoints.tables.employeetype(id)}/updatestatus`, /// edit
         data: { status: 'inactive' },
       });
       refetch();
@@ -175,34 +176,34 @@ export default function EmployeeTypesTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `taxes/updatemanystatus`,
+      path: `${endpoints.tables.employeetypes}/updatestatus`, /// edit
       data: { status: 'active', ids: table.selected },
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: taxesData.length,
+      totalRows: employeeTypesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, taxesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, employeeTypesData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `taxes/updatemanystatus`,
+      path: `${endpoints.tables.employeetypes}/updatestatus`, /// edit
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: taxesData.length,
+      totalRows: employeeTypesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, taxesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, employeeTypesData, refetch]);
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.taxes.edit(id));
+      router.push(paths.superadmin.tables.employeetypes.edit(id));
     },
     [router]
   );
@@ -228,7 +229,7 @@ export default function EmployeeTypesTableView() {
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Taxes"
+          heading="Employee Types" /// edit
           links={[
             {
               name: 'Super',
@@ -238,16 +239,16 @@ export default function EmployeeTypesTableView() {
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Taxes' },
+            { name: 'Employee Types' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.taxes.new}
+              href={paths.superadmin.tables.employeetypes.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Tax
+              New Employee Type
             </Button>
           }
           sx={{
@@ -281,11 +282,11 @@ export default function EmployeeTypesTableView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && taxesData.length}
+                    {tab.value === 'all' && employeeTypesData.length}
                     {tab.value === 'active' &&
-                      taxesData.filter((order) => order.status === 'active').length}
+                      employeeTypesData.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      taxesData.filter((order) => order.status === 'inactive').length}
+                      employeeTypesData.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
@@ -390,7 +391,7 @@ export default function EmployeeTypesTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, taxesData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, employeeTypesData.length)}
                   />
 
                   <TableNoData notFound={notFound} />

@@ -21,7 +21,6 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { countries } from 'src/assets/data';
 import { _tags, _tourGuides, TOUR_SERVICE_OPTIONS } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
@@ -44,25 +43,30 @@ export default function TourNewEditForm({ currentTour }) {
   const router = useRouter();
   const mdUp = useResponsive('up', 'md');
   const { enqueueSnackbar } = useSnackbar();
-  const editfunc = (id,data) =>{
-   axiosHandler({
-    setError, method:"PATCH", path:`suppliersoffers/${currentTour._id}`, data
-  });
-  }
-  const addfunc = (data) =>{
+  const editfunc = (id, data) => {
     axiosHandler({
-      setError, method:"POST", path:"suppliersoffers/", data
+      setError,
+      method: 'PATCH',
+      path: `suppliersoffers/${currentTour._id}`,
+      data,
     });
-  }
-  
+  };
+  const addfunc = (data) => {
+    axiosHandler({
+      setError,
+      method: 'POST',
+      path: 'suppliersoffers/',
+      data,
+    });
+  };
 
-const {tableData} = useGetCities()
-const {stackholder} = useGetStackholder()
-console.log(stackholder);
-const stackholdersMultiSelectOptions = stackholder?.reduce((acc,data)=>{
-acc.push({value:data._id,label:data.stakeholder_name})
-return acc
-},[])
+  const { tableData } = useGetCities();
+  const { stackholder } = useGetStackholder();
+  console.log(stackholder);
+  const stackholdersMultiSelectOptions = stackholder?.reduce((acc, data) => {
+    acc.push({ value: data._id, label: data.stakeholder_name });
+    return acc;
+  }, []);
 
   const NewTourSchema = Yup.object().shape({
     Offer_name: Yup.string().required('Name is required'),
@@ -75,9 +79,8 @@ return acc
     Stakeholder: Yup.array(),
     destination: Yup.string(),
     Offer_start_date: Yup.date(),
-    Offer_end_date: Yup.date()
+    Offer_end_date: Yup.date(),
   });
-  
 
   const defaultValues = useMemo(
     () => ({
@@ -92,7 +95,6 @@ return acc
       Stakeholder: currentTour?.Stakeholder?._id || [],
       Offer_start_date: currentTour?.Offer_start_date || null,
       Offer_end_date: currentTour?.Offer_end_date || null,
-    
     }),
     [currentTour]
   );
@@ -120,9 +122,13 @@ return acc
   }, [currentTour, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('dataaaaa',data)
+    console.log('dataaaaa', data);
     try {
-      if(currentTour){editfunc(currentTour._id,data)}else{addfunc(data)}
+      if (currentTour) {
+        editfunc(currentTour._id, data);
+      } else {
+        addfunc(data);
+      }
       reset();
       enqueueSnackbar(currentTour ? 'Update success!' : 'Create success!');
       router.push(paths.dashboard.tour.root);
@@ -151,7 +157,7 @@ return acc
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Name</Typography>
-              <RHFTextField name="Offer_name" placeholder="Offer Name..."  />
+              <RHFTextField name="Offer_name" placeholder="Offer Name..." />
             </Stack>
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Name</Typography>
@@ -165,7 +171,7 @@ return acc
 
             <Stack spacing={1.5}>
               <Typography variant="subtitle2">Images</Typography>
-               {/* <RHFUpload
+              {/* <RHFUpload
                 multiple
                 thumbnail
                 name="Offer_img"
@@ -175,8 +181,8 @@ return acc
                 onRemoveAll={handleRemoveAllFiles}
                 onUpload={() => console.info('ON UPLOAD')}
               />  */}
-               {/* <RHFEditor simple name="" /> */}
-               <RHFTextField name="Offer_img" placeholder="Price..." />
+              {/* <RHFEditor simple name="" /> */}
+              <RHFTextField name="Offer_img" placeholder="Price..." />
             </Stack>
           </Stack>
         </Card>
@@ -254,9 +260,7 @@ return acc
                 options={tableData.map((option) => option._id)}
                 getOptionLabel={(option) => option}
                 renderOption={(props, option) => {
-                  const { _id,name_english } = tableData.filter(
-                    (data) => data._id === option
-                  )[0];
+                  const { _id, name_english } = tableData.filter((data) => data._id === option)[0];
 
                   if (!_id) {
                     return null;
@@ -264,7 +268,7 @@ return acc
 
                   return (
                     <li {...props} key={_id}>
-                      {name_english} 
+                      {name_english}
                     </li>
                   );
                 }}

@@ -7,7 +7,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import { useParams } from 'src/routes/hooks';
 
-import { useGetCategory } from 'src/api/tables';
+import { useGetUSType } from 'src/api/tables';
 
 import TableNewEditForm from './table-new-edit-form';
 
@@ -17,12 +17,12 @@ export default function TableEditView() {
   const settings = useSettingsContext();
   const params = useParams();
   const { id } = params;
-  const { data } = useGetCategory(id);
+  const { data } = useGetUSType(id);
   console.log(data)
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Update Medical Categories"
+        heading="Update Unit Service Type"
         links={[
           {
             name: 'Dashboard',
@@ -33,10 +33,10 @@ export default function TableEditView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Medical Categories',
-            href: paths.superadmin.tables.medcategories.root,
+            name: 'Unit Service Types',
+            href: paths.superadmin.tables.unitservicetypes.root,
           },
-          { name: 'Update Medical Categories' },
+          { name: 'Update Unit Service Type' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

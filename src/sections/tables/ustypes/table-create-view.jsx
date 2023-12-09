@@ -15,7 +15,7 @@ export default function TableCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new Medical Categories" /// edit
+        heading="Create a new Unit Service Type" /// edit
         links={[
           {
             name: 'Dashboard',
@@ -26,10 +26,10 @@ export default function TableCreateView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Medical Categories',                   /// edit
-            href: paths.superadmin.tables.medcategories.root,
+            name: 'Unit Service Types',                   /// edit
+            href: paths.superadmin.tables.unitservicetypes.root,
           },
-          { name: 'New Medical Categories' },
+          { name: 'New Unit Service Type' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

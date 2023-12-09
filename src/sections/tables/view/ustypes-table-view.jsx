@@ -1,22 +1,35 @@
 import { useState, useCallback, useRef } from 'react';
 
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
+import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { useBoolean } from 'src/hooks/use-boolean';
+
+import { fTimestamp } from 'src/utils/format-time';
 import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
+
+import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { ConfirmDialog } from 'src/components/custom-dialog';
+import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -25,21 +38,25 @@ import {
   getComparator,
   TableEmptyRows,
   TableHeadCustom,
+  TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetCategories } from 'src/api/tables';                                                           /// edit
-import TableDetailRow from '../medCategories/table-details-row'                                             /// edit
+import { useGetUSTypes } from 'src/api/tables'; /// edit
+import axiosHandler from 'src/utils/axios-handler';
+import { endpoints } from 'src/utils/axios';
+import TableDetailRow from '../ustypes/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
 
-const TABLE_HEAD = [                                                                           /// to edit
+const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'name' },
-  { id: 'description', label: 'description' },
+  { id: 'name', label: 'Name' },
+  { id: 'status', label: 'Status' },
   { id: 'created_at', label: 'Date Of Creation' },
   { id: 'user_creation', label: 'Creater' },
   { id: 'ip_address_user_creation', label: 'IP Of Creator' },
@@ -57,14 +74,19 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function USTypesTableView() {                       /// edit
+export default function WorkShiftsTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
 
+  const settings = useSettingsContext();
+
   const router = useRouter();
 
-  const { categories, refetch } = useGetCategories();
+  const confirmActivate = useBoolean();
+  const confirmInactivate = useBoolean();
+
+  const { unitserviceTypesData, refetch } = useGetUSTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -74,7 +96,7 @@ export default function USTypesTableView() {                       /// edit
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: categories,
+    inputData: unitserviceTypesData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -84,7 +106,6 @@ export default function USTypesTableView() {                       /// edit
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-  console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.status !== 'all';
@@ -100,7 +121,8 @@ export default function USTypesTableView() {                       /// edit
       acc.push({
         code: data.code,
         name: data.name_english,
-        description: data.description,     /// edit
+        country: data.country?.name_english,
+        status: data.status,
       });
       return acc;
     }, []);
@@ -111,7 +133,7 @@ export default function USTypesTableView() {                       /// edit
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'categoriesTable.xlsx');                                         /// edit
+    saveAs(data, 'UnitServiceTypesTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -125,9 +147,62 @@ export default function USTypesTableView() {                       /// edit
     [table]
   );
 
+  const handleActivate = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.unitservicetype(id)}/updatestatus`, /// edit
+        data: { status: 'active' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
+  );
+  const handleInactivate = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.unitservicetype(id)}/updatestatus`, /// edit
+        data: { status: 'inactive' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
+  );
+
+  const handleActivateRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.unitservicetypes}/updatestatus`, /// edit
+      data: { status: 'active', ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: unitserviceTypesData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [dataFiltered.length, dataInPage.length, table, unitserviceTypesData, refetch]);
+
+  const handleInactivateRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.unitservicetypes}/updatestatus`, /// edit
+      data: { status: 'inactive', ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: unitserviceTypesData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [dataFiltered.length, dataInPage.length, table, unitserviceTypesData, refetch]);
+
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.medcategories.edit(id));      /// edit
+      router.push(paths.superadmin.tables.unitservicetypes.edit(id));
     },
     [router]
   );
@@ -143,11 +218,17 @@ export default function USTypesTableView() {                       /// edit
   //   [router]
   // );
 
+  const handleFilterStatus = useCallback(
+    (event, newValue) => {
+      handleFilters('status', newValue);
+    },
+    [handleFilters]
+  );
   return (
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Medical Categories"                           /// edit
+          heading="Unit Service Types" /// edit
           links={[
             {
               name: 'Super',
@@ -157,17 +238,17 @@ export default function USTypesTableView() {                       /// edit
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Medical Categories' },                             /// edit
+            { name: 'Unit Service Types' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.medcategories.new}             /// edit
+              href={paths.superadmin.tables.unitservicetypes.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
-            >                                                        
-              New Category                                 
-            </Button>                            /// edit
+            >
+              New Unit Service Type
+            </Button>
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -175,6 +256,42 @@ export default function USTypesTableView() {                       /// edit
         />
 
         <Card>
+          <Tabs
+            value={filters.status}
+            onChange={handleFilterStatus}
+            sx={{
+              px: 2.5,
+              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+            }}
+          >
+            {STATUS_OPTIONS.map((tab) => (
+              <Tab
+                key={tab.value}
+                iconPosition="end"
+                value={tab.value}
+                label={tab.label}
+                icon={
+                  <Label
+                    variant={
+                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                    }
+                    color={
+                      (tab.value === 'active' && 'success') ||
+                      (tab.value === 'inactive' && 'error') ||
+                      'default'
+                    }
+                  >
+                    {tab.value === 'all' && unitserviceTypesData.length}
+                    {tab.value === 'active' &&
+                      unitserviceTypesData.filter((order) => order.status === 'active').length}
+                    {tab.value === 'inactive' &&
+                      unitserviceTypesData.filter((order) => order.status === 'inactive').length}
+                  </Label>
+                }
+              />
+            ))}
+          </Tabs>
+
           <TableDetailToolbar
             onPrint={printHandler}
             filters={filters}
@@ -198,6 +315,44 @@ export default function USTypesTableView() {                       /// edit
           )}
 
           <TableContainer>
+            <TableSelectedAction
+              // dense={table.dense}
+              numSelected={table.selected.length}
+              rowCount={dataFiltered.length}
+              onSelectAllRows={(checked) =>
+                table.onSelectAllRows(
+                  checked,
+                  dataFiltered.map((row) => row._id)
+                )
+              }
+              action={
+                <>
+                  {dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'inactive') ? (
+                    <Tooltip title="Activate all">
+                      <IconButton color="primary" onClick={confirmActivate.onTrue}>
+                        <Iconify icon="codicon:run-all" />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Inactivate all">
+                      <IconButton color="error" onClick={confirmInactivate.onTrue}>
+                        <Iconify icon="iconoir:pause-solid" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </>
+              }
+              color={
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'inactive')
+                  ? 'primary'
+                  : 'error'
+              }
+            />
+
             <Scrollbar>
               <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
                 <TableHeadCustom
@@ -207,7 +362,12 @@ export default function USTypesTableView() {                       /// edit
                   rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  onSelectAllRows={false}
+                  onSelectAllRows={(checked) =>
+                    table.onSelectAllRows(
+                      checked,
+                      dataFiltered.map((row) => row._id)
+                    )
+                  }
                 />
 
                 <TableBody>
@@ -222,13 +382,15 @@ export default function USTypesTableView() {                       /// edit
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
+                        onActivate={() => handleActivate(row._id)}
+                        onInactivate={() => handleInactivate(row._id)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, categories.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, unitserviceTypesData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -249,6 +411,51 @@ export default function USTypesTableView() {                       /// edit
           />
         </Card>
       </Container>
+
+      <ConfirmDialog
+        open={confirmInactivate.value}
+        onClose={confirmInactivate.onFalse}
+        title="Inactivate"
+        content={
+          <>
+            Are you sure want to Inactivate <strong> {table.selected.length} </strong> items?
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              handleInactivateRows();
+              confirmInactivate.onFalse();
+            }}
+          >
+            Inactivate
+          </Button>
+        }
+      />
+      <ConfirmDialog
+        open={confirmActivate.value}
+        onClose={confirmActivate.onFalse}
+        title="Activate"
+        content={
+          <>
+            Are you sure want to Activate <strong> {table.selected.length} </strong> items?
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              handleActivateRows();
+              confirmActivate.onFalse();
+            }}
+          >
+            Activate
+          </Button>
+        }
+      />
     </>
   );
 }
@@ -271,10 +478,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?._id === name ||
-        JSON.stringify(data.code) === name 
+        JSON.stringify(data.code) === name
     );
   }
 

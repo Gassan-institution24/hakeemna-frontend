@@ -42,9 +42,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetTaxes } from 'src/api/tables';
+import { useGetStakeholderTypes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
-import TableDetailRow from '../taxes/table-details-row';
+import { endpoints } from 'src/utils/axios';
+import TableDetailRow from '../stakeholder_types/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -56,6 +57,8 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'name', label: 'Name' },
   { id: 'unit_service', label: 'Unit Service' },
+  { id: 'service', label: 'Service' },
+  { id: 'description', label: 'Description' },
   { id: 'status', label: 'Status' },
   { id: 'created_at', label: 'Date Of Creation' },
   { id: 'user_creation', label: 'Creater' },
@@ -86,7 +89,7 @@ export default function StakeholderTypesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { taxesData, refetch } = useGetTaxes();
+  const { stakeholderTypesData, refetch } = useGetStakeholderTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -96,7 +99,7 @@ export default function StakeholderTypesTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: taxesData,
+    inputData: stakeholderTypesData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -133,7 +136,7 @@ export default function StakeholderTypesTableView() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'TaxesTable.xlsx');
+    saveAs(data, 'StakeholderTypesTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -151,7 +154,7 @@ export default function StakeholderTypesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `taxes/${id}/updatestatus`,
+        path: `${endpoints.tables.stakeholdertype(id)}/updatestatus`, /// edit
         data: { status: 'active' },
       });
       refetch();
@@ -163,7 +166,7 @@ export default function StakeholderTypesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `taxes/${id}/updatestatus`,
+        path: `${endpoints.tables.stakeholdertype(id)}/updatestatus`, /// edit
         data: { status: 'inactive' },
       });
       refetch();
@@ -175,34 +178,34 @@ export default function StakeholderTypesTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `taxes/updatemanystatus`,
+      path: `${endpoints.tables.stakeholdertypes}/updatestatus`, /// edit
       data: { status: 'active', ids: table.selected },
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: taxesData.length,
+      totalRows: stakeholderTypesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, taxesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, stakeholderTypesData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `taxes/updatemanystatus`,
+      path: `${endpoints.tables.stakeholdertypes}/updatestatus`, /// edit
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: taxesData.length,
+      totalRows: stakeholderTypesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, taxesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, stakeholderTypesData, refetch]);
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.taxes.edit(id));
+      router.push(paths.superadmin.tables.stakeholdertypes.edit(id));
     },
     [router]
   );
@@ -228,7 +231,7 @@ export default function StakeholderTypesTableView() {
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Taxes"
+          heading="Stakeholder Types" /// edit
           links={[
             {
               name: 'Super',
@@ -238,16 +241,16 @@ export default function StakeholderTypesTableView() {
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Taxes' },
+            { name: 'Stakeholder Types' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.taxes.new}
+              href={paths.superadmin.tables.stakeholdertypes.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Tax
+              New Stakeholder Type
             </Button>
           }
           sx={{
@@ -281,11 +284,11 @@ export default function StakeholderTypesTableView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && taxesData.length}
+                    {tab.value === 'all' && stakeholderTypesData.length}
                     {tab.value === 'active' &&
-                      taxesData.filter((order) => order.status === 'active').length}
+                      stakeholderTypesData.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      taxesData.filter((order) => order.status === 'inactive').length}
+                      stakeholderTypesData.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
@@ -390,7 +393,7 @@ export default function StakeholderTypesTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, taxesData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, stakeholderTypesData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -482,6 +485,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

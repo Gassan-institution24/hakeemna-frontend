@@ -42,9 +42,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetTaxes } from 'src/api/tables';
+import { useGetWorkShifts } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
-import TableDetailRow from '../taxes/table-details-row';
+import { endpoints } from 'src/utils/axios';
+import TableDetailRow from '../work_shifts/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -56,6 +57,8 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'name', label: 'Name' },
   { id: 'unit_service', label: 'Unit Service' },
+  { id: 'start_date', label: 'Start Date' },
+  { id: 'end_date', label: 'End Date' },
   { id: 'status', label: 'Status' },
   { id: 'created_at', label: 'Date Of Creation' },
   { id: 'user_creation', label: 'Creater' },
@@ -86,7 +89,7 @@ export default function WorkShiftsTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { taxesData, refetch } = useGetTaxes();
+  const { workShiftsData, refetch } = useGetWorkShifts();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -96,7 +99,7 @@ export default function WorkShiftsTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: taxesData,
+    inputData: workShiftsData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -133,7 +136,7 @@ export default function WorkShiftsTableView() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'TaxesTable.xlsx');
+    saveAs(data, 'WorkShiftsTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -151,7 +154,7 @@ export default function WorkShiftsTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `taxes/${id}/updatestatus`,
+        path: `${endpoints.tables.workshift(id)}/updatestatus`, /// edit
         data: { status: 'active' },
       });
       refetch();
@@ -163,7 +166,7 @@ export default function WorkShiftsTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `taxes/${id}/updatestatus`,
+        path: `${endpoints.tables.workshift(id)}/updatestatus`, /// edit
         data: { status: 'inactive' },
       });
       refetch();
@@ -175,34 +178,34 @@ export default function WorkShiftsTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `taxes/updatemanystatus`,
+      path: `${endpoints.tables.workshifts}/updatestatus`, /// edit
       data: { status: 'active', ids: table.selected },
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: taxesData.length,
+      totalRows: workShiftsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, taxesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, workShiftsData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `taxes/updatemanystatus`,
+      path: `${endpoints.tables.workshifts}/updatestatus`, /// edit
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: taxesData.length,
+      totalRows: workShiftsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, taxesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, workShiftsData, refetch]);
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.taxes.edit(id));
+      router.push(paths.superadmin.tables.workshifts.edit(id));
     },
     [router]
   );
@@ -228,7 +231,7 @@ export default function WorkShiftsTableView() {
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Taxes"
+          heading="Work Shifts" /// edit
           links={[
             {
               name: 'Super',
@@ -238,16 +241,16 @@ export default function WorkShiftsTableView() {
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Taxes' },
+            { name: 'Work Shifts' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.taxes.new}
+              href={paths.superadmin.tables.workshifts.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Tax
+              New Work Shift
             </Button>
           }
           sx={{
@@ -281,11 +284,11 @@ export default function WorkShiftsTableView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && taxesData.length}
+                    {tab.value === 'all' && workShiftsData.length}
                     {tab.value === 'active' &&
-                      taxesData.filter((order) => order.status === 'active').length}
+                      workShiftsData.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      taxesData.filter((order) => order.status === 'inactive').length}
+                      workShiftsData.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
@@ -390,7 +393,7 @@ export default function WorkShiftsTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, taxesData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, workShiftsData.length)}
                   />
 
                   <TableNoData notFound={notFound} />

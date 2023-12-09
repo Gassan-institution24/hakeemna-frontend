@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import WorkShiftsTableView from 'src/sections/tables/view';
+import {WorkShiftsTableView} from 'src/sections/tables/view';
 
 // ----------------------------------------------------------------------
 

@@ -42,9 +42,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetTaxes } from 'src/api/tables';
+import { useGetDeductions } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
-import TableDetailRow from '../taxes/table-details-row';
+import { endpoints } from 'src/utils/axios';
+import TableDetailRow from '../deduction_config/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -56,6 +57,13 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'name', label: 'Name' },
   { id: 'unit_service', label: 'Unit Service' },
+  { id: 'Employee', label: 'Employee' },
+  { id: 'Service', label: 'Service' },
+  { id: 'type', label: 'type' },
+  { id: 'Comment', label: 'Comment' },
+  // { id: 'Ledger_account_1', label: 'Ledger_account_1' },
+  // { id: 'Ledger_account_2', label: 'Ledger_account_2' },
+  { id: 'percentage', label: 'percentage' },
   { id: 'status', label: 'Status' },
   { id: 'created_at', label: 'Date Of Creation' },
   { id: 'user_creation', label: 'Creater' },
@@ -86,7 +94,7 @@ export default function DeductionConfigTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { taxesData, refetch } = useGetTaxes();
+  const { deductionsData, refetch } = useGetDeductions();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -96,7 +104,7 @@ export default function DeductionConfigTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: taxesData,
+    inputData: deductionsData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -133,7 +141,7 @@ export default function DeductionConfigTableView() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'TaxesTable.xlsx');
+    saveAs(data, 'DeductionsTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -151,7 +159,7 @@ export default function DeductionConfigTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `taxes/${id}/updatestatus`,
+        path: `${endpoints.tables.deduction(id)}/updatestatus`, /// edit
         data: { status: 'active' },
       });
       refetch();
@@ -163,7 +171,7 @@ export default function DeductionConfigTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `taxes/${id}/updatestatus`,
+        path: `${endpoints.tables.deduction(id)}/updatestatus`, /// edit
         data: { status: 'inactive' },
       });
       refetch();
@@ -175,34 +183,34 @@ export default function DeductionConfigTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `taxes/updatemanystatus`,
+      path: `${endpoints.tables.deductions}/updatestatus`, /// edit
       data: { status: 'active', ids: table.selected },
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: taxesData.length,
+      totalRows: deductionsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, taxesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, deductionsData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `taxes/updatemanystatus`,
+      path: `${endpoints.tables.deductions}/updatestatus`, /// edit
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: taxesData.length,
+      totalRows: deductionsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, taxesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, deductionsData, refetch]);
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.taxes.edit(id));
+      router.push(paths.superadmin.tables.deductionconfig.edit(id));
     },
     [router]
   );
@@ -228,7 +236,7 @@ export default function DeductionConfigTableView() {
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Taxes"
+          heading="Deduction Config" /// edit
           links={[
             {
               name: 'Super',
@@ -238,16 +246,16 @@ export default function DeductionConfigTableView() {
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Taxes' },
+            { name: 'Deduction Config' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.taxes.new}
+              href={paths.superadmin.tables.deductionconfig.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Tax
+              New Deduction Config
             </Button>
           }
           sx={{
@@ -281,11 +289,11 @@ export default function DeductionConfigTableView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && taxesData.length}
+                    {tab.value === 'all' && deductionsData.length}
                     {tab.value === 'active' &&
-                      taxesData.filter((order) => order.status === 'active').length}
+                      deductionsData.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      taxesData.filter((order) => order.status === 'inactive').length}
+                      deductionsData.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
@@ -390,7 +398,7 @@ export default function DeductionConfigTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, taxesData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, deductionsData.length)}
                   />
 
                   <TableNoData notFound={notFound} />

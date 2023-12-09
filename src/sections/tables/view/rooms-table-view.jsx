@@ -42,9 +42,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetTaxes } from 'src/api/tables';
+import { useGetRooms } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
-import TableDetailRow from '../taxes/table-details-row';
+import { endpoints } from 'src/utils/axios';
+import TableDetailRow from '../rooms/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -55,7 +56,8 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS]
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'name', label: 'Name' },
-  { id: 'unit_service', label: 'Unit Service' },
+  { id: 'department', label: 'Department' },
+  { id: 'general_info', label: 'general_info' },
   { id: 'status', label: 'Status' },
   { id: 'created_at', label: 'Date Of Creation' },
   { id: 'user_creation', label: 'Creater' },
@@ -86,7 +88,7 @@ export default function RoomsTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { taxesData, refetch } = useGetTaxes();
+  const { roomsData, refetch } = useGetRooms();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -96,7 +98,7 @@ export default function RoomsTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: taxesData,
+    inputData: roomsData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -133,7 +135,7 @@ export default function RoomsTableView() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'TaxesTable.xlsx');
+    saveAs(data, 'RoomsTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -151,7 +153,7 @@ export default function RoomsTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `taxes/${id}/updatestatus`,
+        path: `${endpoints.tables.room(id)}/updatestatus`, /// edit
         data: { status: 'active' },
       });
       refetch();
@@ -163,7 +165,7 @@ export default function RoomsTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `taxes/${id}/updatestatus`,
+        path: `${endpoints.tables.room(id)}/updatestatus`, /// edit
         data: { status: 'inactive' },
       });
       refetch();
@@ -175,34 +177,34 @@ export default function RoomsTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `taxes/updatemanystatus`,
+      path: `${endpoints.tables.rooms}/updatestatus`, /// edit
       data: { status: 'active', ids: table.selected },
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: taxesData.length,
+      totalRows: roomsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, taxesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `taxes/updatemanystatus`,
+      path: `${endpoints.tables.rooms}/updatestatus`, /// edit
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: taxesData.length,
+      totalRows: roomsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, taxesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch]);
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.taxes.edit(id));
+      router.push(paths.superadmin.tables.rooms.edit(id));
     },
     [router]
   );
@@ -228,7 +230,7 @@ export default function RoomsTableView() {
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Taxes"
+          heading="Rooms" /// edit
           links={[
             {
               name: 'Super',
@@ -238,16 +240,16 @@ export default function RoomsTableView() {
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Taxes' },
+            { name: 'Rooms' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.taxes.new}
+              href={paths.superadmin.tables.rooms.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Tax
+              New Room
             </Button>
           }
           sx={{
@@ -281,11 +283,11 @@ export default function RoomsTableView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && taxesData.length}
+                    {tab.value === 'all' && roomsData.length}
                     {tab.value === 'active' &&
-                      taxesData.filter((order) => order.status === 'active').length}
+                      roomsData.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      taxesData.filter((order) => order.status === 'inactive').length}
+                      roomsData.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
@@ -390,7 +392,7 @@ export default function RoomsTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, taxesData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, roomsData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -480,8 +482,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       (data) =>
         data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.department?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.department?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

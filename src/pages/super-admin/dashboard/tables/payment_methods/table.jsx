@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import PaymentMethodsTableView from 'src/sections/tables/view/';
+import {PaymentMethodsTableView} from 'src/sections/tables/view/';
 
 // ----------------------------------------------------------------------
 

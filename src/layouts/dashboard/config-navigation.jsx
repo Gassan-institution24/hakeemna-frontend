@@ -54,19 +54,19 @@ export function useNavData() {
     () => [
       // OVERVIEW
       // ----------------------------------------------------------------------
-      // {
-      //   subheader: t('overview'),
-      //   items: [
-      //     {
+      {
+        subheader: t('overview'),
+        items: [
+          // {
       //       title: t('app'),
       //       path: paths.dashboard.root,
       //       icon: ICONS.dashboard,
       //     },
-      //     // {
-      //     //   title: t('management tables'),
-      //     //   path: paths.superadmin.tables.root,
-      //     //   icon: ICONS.ecommerce,
-      //     // },
+          {
+            title: t('management tables'),
+            path: paths.superadmin.tables.root,
+            icon: ICONS.ecommerce,
+          },
       //     {
       //       title: t('analytics'),
       //       path: paths.dashboard.general.analytics,
@@ -87,8 +87,8 @@ export function useNavData() {
       //       path: paths.dashboard.general.file,
       //       icon: ICONS.file,
       //     },
-      //   ],
-      // },
+        ],
+      },
 
       // MANAGEMENT
       // ----------------------------------------------------------------------
@@ -152,6 +152,17 @@ export function useNavData() {
               { title: t('appointment types'), path: paths.superadmin.tables.appointypes.root },
               { title: t('free subscriptions'), path: paths.superadmin.tables.freesub.root },
               { title: t('added value taxes'), path: paths.superadmin.tables.taxes.root },
+              { title: t('unit service types'), path: paths.superadmin.tables.unitservicetypes.root },
+              { title: t('activities'), path: paths.superadmin.tables.activities.root },
+              { title: t('employee types'), path: paths.superadmin.tables.employeetypes.root },
+              { title: t('payment methods'), path: paths.superadmin.tables.paymentmethods.root },
+              { title: t('stakeholder types'), path: paths.superadmin.tables.stakeholdertypes.root },
+              { title: t('work shifts'), path: paths.superadmin.tables.workshifts.root },
+              { title: t('service types'), path: paths.superadmin.tables.servicetypes.root },
+              { title: t('measurement types'), path: paths.superadmin.tables.measurementtypes.root },
+              { title: t('hospital list'), path: paths.superadmin.tables.hospitallist.root },
+              { title: t('deduction config'), path: paths.superadmin.tables.deductionconfig.root },
+              { title: t('rooms'), path: paths.superadmin.tables.rooms.root },
             ],
           },
           {

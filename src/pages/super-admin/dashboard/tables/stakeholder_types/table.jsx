@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import StackholderTypesTableView from 'src/sections/tables/view';
+import {StackholderTypesTableView} from 'src/sections/tables/view';
 
 // ----------------------------------------------------------------------
 

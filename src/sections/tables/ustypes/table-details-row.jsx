@@ -8,18 +8,22 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
+import { useBoolean } from 'src/hooks/use-boolean';
+
 import { fDateTime } from 'src/utils/format-time';
 
+import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow }) {
+export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow, onInactivate,onActivate,filters,setFilters }) {
   const {
     code,
     name_english,
-    description,
+    status,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -29,20 +33,30 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
     modifications_nums,
   } = row;
 
+  const confirm = useBoolean();
+
   const popover = usePopover();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
+      <TableCell padding="checkbox">
+        <Checkbox checked={selected} onClick={onSelectRow} />
+      </TableCell>
 
       <TableCell>
         <Box>{code}</Box>
       </TableCell>
 
       <TableCell>{name_english}</TableCell>
-
       <TableCell>
-
-          {description}
+        <Label
+          variant="soft"
+          color={
+            (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
+          }
+        >
+          {status}
+        </Label>
       </TableCell>
       <TableCell>{fDateTime(created_at)}</TableCell>
       <TableCell>{user_creation?.email}</TableCell>
@@ -54,6 +68,18 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
       <TableCell> {modifications_nums} </TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        {/* <IconButton
+          color={collapse.value ? 'inherit' : 'default'}
+          onClick={collapse.onToggle}
+          sx={{
+            ...(collapse.value && {
+              bgcolor: 'action.hover',
+            }),
+          }}
+        >
+          <Iconify icon="eva:arrow-ios-downward-fill" />
+        </IconButton> */}
+
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -71,6 +97,30 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
         arrow="right-top"
         sx={{ width: 140 }}
       >
+        {status === 'active' ? (
+          <MenuItem
+            onClick={() => {
+              onInactivate();
+              popover.onClose();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="solar:pause-bold" />
+            Inactivate
+          </MenuItem>
+        ) : (
+          <MenuItem
+            onClick={() => {
+              onActivate();
+              popover.onClose();
+            }}
+            sx={{ color: 'success.main' }}
+          >
+            <Iconify icon="ph:play-fill" />
+            activate
+          </MenuItem>
+        )}
+
         <MenuItem
           onClick={() => {
             onEditRow();
@@ -82,13 +132,28 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
         </MenuItem>
       </CustomPopover>
 
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Delete"
+        content="Are you sure want to delete?"
+        action={
+          <Button variant="contained" color="error" onClick={onInactivate}>
+            Delete
+          </Button>
+        }
+      />
     </>
   );
 }
 
 TableDetailsRow.propTypes = {
+  onInactivate: PropTypes.func,
+  onActivate: PropTypes.func,
   onSelectRow: PropTypes.func,
+  setFilters: PropTypes.func,
   onEditRow: PropTypes.func,
   row: PropTypes.object,
+  filters: PropTypes.object,
   selected: PropTypes.bool,
 };

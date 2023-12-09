@@ -42,9 +42,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetTaxes } from 'src/api/tables';
+import { useGetActivities } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
-import TableDetailRow from '../taxes/table-details-row';
+import { endpoints } from 'src/utils/axios';
+import TableDetailRow from '../activities/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -56,6 +57,7 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'name', label: 'Name' },
   { id: 'unit_service', label: 'Unit Service' },
+  { id: 'department', label: 'Department' },
   { id: 'status', label: 'Status' },
   { id: 'created_at', label: 'Date Of Creation' },
   { id: 'user_creation', label: 'Creater' },
@@ -86,7 +88,7 @@ export default function ActivitesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { taxesData, refetch } = useGetTaxes();
+  const { activitiesData, refetch } = useGetActivities();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -96,7 +98,7 @@ export default function ActivitesTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: taxesData,
+    inputData: activitiesData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -133,7 +135,7 @@ export default function ActivitesTableView() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'TaxesTable.xlsx');
+    saveAs(data, 'ActivitiesTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -151,7 +153,7 @@ export default function ActivitesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `taxes/${id}/updatestatus`,
+        path: `${endpoints.tables.activity(id)}/updatestatus`, /// edit
         data: { status: 'active' },
       });
       refetch();
@@ -163,7 +165,7 @@ export default function ActivitesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `taxes/${id}/updatestatus`,
+        path: `${endpoints.tables.activity(id)}/updatestatus`, /// edit
         data: { status: 'inactive' },
       });
       refetch();
@@ -175,34 +177,34 @@ export default function ActivitesTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `taxes/updatemanystatus`,
+      path: `${endpoints.tables.activities}/updatestatus`, /// edit
       data: { status: 'active', ids: table.selected },
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: taxesData.length,
+      totalRows: activitiesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, taxesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, activitiesData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `taxes/updatemanystatus`,
+      path: `${endpoints.tables.activities}/updatestatus`, /// edit
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: taxesData.length,
+      totalRows: activitiesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, taxesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, activitiesData, refetch]);
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.taxes.edit(id));
+      router.push(paths.superadmin.tables.activities.edit(id));
     },
     [router]
   );
@@ -228,7 +230,7 @@ export default function ActivitesTableView() {
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Taxes"
+          heading="Activities" /// edit
           links={[
             {
               name: 'Super',
@@ -238,16 +240,16 @@ export default function ActivitesTableView() {
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Taxes' },
+            { name: 'Activities' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.taxes.new}
+              href={paths.superadmin.tables.activities.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Tax
+              New Activity
             </Button>
           }
           sx={{
@@ -281,11 +283,11 @@ export default function ActivitesTableView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && taxesData.length}
+                    {tab.value === 'all' && activitiesData.length}
                     {tab.value === 'active' &&
-                      taxesData.filter((order) => order.status === 'active').length}
+                      activitiesData.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      taxesData.filter((order) => order.status === 'inactive').length}
+                      activitiesData.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
@@ -390,7 +392,7 @@ export default function ActivitesTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, taxesData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, activitiesData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -482,6 +484,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.department?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        data?.department?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

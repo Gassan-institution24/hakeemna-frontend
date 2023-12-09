@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import RoomsTableView from 'src/sections/tables/view';
+import {RoomsTableView} from 'src/sections/tables/view';
 
 // ----------------------------------------------------------------------
 
