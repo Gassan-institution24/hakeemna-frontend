@@ -66,32 +66,44 @@ export default function TableDetailsRow({
 
       <TableCell>{name_english}</TableCell>
 
-      <TableCell sx={{
+      <TableCell
+        sx={{
           cursor: 'pointer',
           color: 'blue',
           textDecoration: 'underline',
-        }} onClick={() => setFilters({ ...filters, name: country.name_english })}>
+        }}
+        onClick={() => setFilters({ ...filters, name: country.name_english })}
+      >
         {country?.name_english}
       </TableCell>
-      <TableCell sx={{
+      <TableCell
+        sx={{
           cursor: 'pointer',
           color: 'blue',
           textDecoration: 'underline',
-        }} onClick={() => setFilters({ ...filters, name: city.name_english })}>
+        }}
+        onClick={() => setFilters({ ...filters, name: city.name_english })}
+      >
         {city?.name_english}
       </TableCell>
-      <TableCell sx={{
+      <TableCell
+        sx={{
           cursor: 'pointer',
           color: 'blue',
           textDecoration: 'underline',
-        }} onClick={() => setFilters({ ...filters, name: US_type.name_english })}>
+        }}
+        onClick={() => setFilters({ ...filters, name: US_type.name_english })}
+      >
         {US_type?.name_english}
       </TableCell>
-      <TableCell sx={{
+      <TableCell
+        sx={{
           cursor: 'pointer',
           color: 'blue',
           textDecoration: 'underline',
-        }} onClick={() => setFilters({ ...filters, name: speciality.name_english })}>
+        }}
+        onClick={() => setFilters({ ...filters, name: speciality.name_english })}
+      >
         {speciality?.name_english}
       </TableCell>
       <TableCell>{fDateTime(offer_date)}</TableCell>
@@ -149,7 +161,7 @@ export default function TableDetailsRow({
             }}
             sx={{ color: 'error.main' }}
           >
-            <Iconify icon="solar:pause-bold" />
+            <Iconify icon="ic:baseline-pause" />
             Inactivate
           </MenuItem>
         ) : (
@@ -160,7 +172,7 @@ export default function TableDetailsRow({
             }}
             sx={{ color: 'success.main' }}
           >
-            <Iconify icon="ph:play-fill" />
+            <Iconify icon="bi:play-fill" />
             activate
           </MenuItem>
         )}
