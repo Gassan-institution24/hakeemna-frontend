@@ -30,11 +30,11 @@ import TourFiltersResult from '../offer-filters-result';
 // ----------------------------------------------------------------------
 
 const defaultFilters = {
-  destination: [],
+  cities: [],
   tourGuides: [],
-  services: [],
-  startDate: null,
-  endDate: null,
+  stackholder: [],
+  Offer_start_date: null,
+  Offer_end_date: null,
 };
 
 // ----------------------------------------------------------------------
@@ -54,8 +54,8 @@ export default function TourListView() {
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
-    filters.startDate && filters.endDate
-      ? filters.startDate.getTime() > filters.endDate.getTime()
+    filters.Offer_start_date && filters.Offer_end_date
+      ? filters.Offer_start_date.getTime() > filters.Offer_end_date.getTime()
       : false;
 
   const {data,refetch} = useGetOffers()
@@ -65,12 +65,11 @@ export default function TourListView() {
     sortBy,
     dateError,
   });
-
   const canReset =
-    !!filters.destination.length ||
+    !!filters.cities.length ||
     !!filters.tourGuides.length ||
-    !!filters.services.length ||
-    (!!filters.startDate && !!filters.endDate);
+    !!filters.stackholder.length ||
+    (!!filters.Offer_start_date && !!filters.Offer_end_date);
 
   const notFound = !dataFiltered.length && canReset;
 
@@ -136,9 +135,9 @@ export default function TourListView() {
           canReset={canReset}
           onResetFilters={handleResetFilters}
           //
-          serviceOptions={TOUR_SERVICE_OPTIONS.map((option) => option.label)}
+         
           tourGuideOptions={_tourGuides}
-          destinationOptions={countries}
+          // citiesOptions={countries}
           //
           dateError={dateError}
         />
@@ -156,7 +155,7 @@ export default function TourListView() {
       canReset={canReset}
       onFilters={handleFilters}
       //
-      results={dataFiltered.length}
+      results={dataFiltered}
     />
   );
 
@@ -208,7 +207,7 @@ export default function TourListView() {
 // ----------------------------------------------------------------------
 
 const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
-  const { services, destination, startDate, endDate, tourGuides } = filters;
+  const { stackholder, cities, Offer_start_date, Offer_end_date, tourGuides } = filters;
 
   const tourGuideIds = tourGuides.map((tourGuide) => tourGuide.id);
 
@@ -227,17 +226,17 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
 
   // FILTERS
   if (!dateError) {
-    if (startDate && endDate) {
+    if (Offer_start_date && Offer_end_date) {
       inputData = inputData.filter(
         (tour) =>
-          fTimestamp(tour.available.startDate) >= fTimestamp(startDate) &&
-          fTimestamp(tour.available.endDate) <= fTimestamp(endDate)
+          fTimestamp(tour.Offer_start_date) >= fTimestamp(Offer_start_date) &&
+          fTimestamp(tour.Offer_end_date) <= fTimestamp(Offer_end_date)
       );
     }
   }
 
-  if (destination.length) {
-    inputData = inputData.filter((tour) => destination.includes(tour.destination));
+  if (cities.length) {
+    inputData = inputData.filter((tour) => cities.includes(tour.cities._id));
   }
 
   if (tourGuideIds.length) {
@@ -246,8 +245,8 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
     );
   }
 
-  if (services.length) {
-    inputData = inputData.filter((tour) => tour.services.some((item) => services.includes(item)));
+  if (stackholder.length) {
+    inputData = inputData.filter((tour) =>  stackholder.includes(tour.stackholder));
   }
 
   return inputData;
