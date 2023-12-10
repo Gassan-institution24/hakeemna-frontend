@@ -19,6 +19,7 @@ import FormProvider, {
   RHFTextField,
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
+import { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -59,9 +60,9 @@ export default function TableNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if(currentSelected){
-        await axiosHandler({method:'PATCH',path:`currency/${currentSelected._id}`,data});      /// edit
+        await axiosHandler({method:'PATCH',path:endpoints.tables.currency(currentSelected._id),data});      /// edit
       }else{
-        await axiosHandler({method:'POST',path:'currency',data});                                  /// edit
+        await axiosHandler({method:'POST',path:endpoints.tables.currencies,data});                                  /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

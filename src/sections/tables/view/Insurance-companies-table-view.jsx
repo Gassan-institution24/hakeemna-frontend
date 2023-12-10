@@ -44,6 +44,7 @@ import {
 
 import { useGetInsuranceCos } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
+import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../insuranceCompanies/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
@@ -158,7 +159,7 @@ export default function InsuranceCompaniesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `insurance/companies/${id}/updatestatus`, /// edit
+        path: `${endpoints.tables.insuranceCo(id)}/updatestatus`, /// edit
         data: { status: 'active' },
       });
       refetch();
@@ -170,7 +171,7 @@ export default function InsuranceCompaniesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `insurance/companies/${id}/updatestatus`, /// edit
+        path: `${endpoints.tables.insuranceCo(id)}/updatestatus`, /// edit
         data: { status: 'inactive' },
       });
       refetch();
@@ -182,7 +183,7 @@ export default function InsuranceCompaniesTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `insurance/companies/updatestatus`, /// edit
+      path: `${endpoints.tables.insuranceCos}/updatestatus`, /// edit
       data: { status: 'active', ids: table.selected },
     });
     refetch();
@@ -196,7 +197,7 @@ export default function InsuranceCompaniesTableView() {
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `insurance/companies/updatestatus`, /// edit
+      path: `${endpoints.tables.insuranceCos}/updatestatus`, /// edit
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();

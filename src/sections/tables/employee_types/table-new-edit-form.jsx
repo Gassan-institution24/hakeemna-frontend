@@ -61,13 +61,13 @@ export default function TableNewEditForm({ currentTable }) {
       if (currentTable) {
         response = await axiosHandler({
           method: 'PATCH',
-          path: `${endpoints.tables.employeetype(currentTable._id)}`,
+          path: endpoints.tables.employeetype(currentTable._id),
           data,
         });
       } else {
         response = await axiosHandler({
           method: 'POST',
-          path: `${endpoints.tables.employeetypes}`,
+          path: endpoints.tables.employeetypes,
           data,
         });
       }

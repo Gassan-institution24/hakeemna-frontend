@@ -43,6 +43,7 @@ import {
 } from 'src/components/table';
 
 import { useGetCities } from 'src/api/tables';
+import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from '../cities/cities-table-details-row';
 import TableDetailToolbar from '../table-details-toolbar';
@@ -152,7 +153,7 @@ export default function CitiesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `cities/${id}/updatestatus`,
+        path: `${endpoints.tables.city(id)}/updatestatus`,
         data: { status: 'active' },
       });
       refetch();
@@ -164,7 +165,7 @@ export default function CitiesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `cities/${id}/updatestatus`,
+        path: `${endpoints.tables.city(id)}/updatestatus`,
         data: { status: 'inactive' },
       });
       refetch();
@@ -176,7 +177,7 @@ export default function CitiesTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `cities/updatemanystatus`,
+      path: `${endpoints.tables.cities}/updatemanystatus`,
       data: { status: 'active', ids: table.selected },
     });
     refetch();
@@ -190,7 +191,7 @@ export default function CitiesTableView() {
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `cities/updatemanystatus`,
+      path: `${endpoints.tables.cities}/updatemanystatus`,
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();

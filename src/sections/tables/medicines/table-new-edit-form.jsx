@@ -24,6 +24,7 @@ import FormProvider, {
   RHFAutocomplete,
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
+import { endpoints } from 'src/utils/axios';
 
 const DefaultDoses = ['5 mg','10 mg','50 mg']
 
@@ -95,9 +96,9 @@ export default function CountriesNewEditForm({ currentSelected }) {
     try {
       console.log('dataaaaaa',data)
       if (currentSelected) {
-        await axiosHandler({ method: 'PATCH', path: `medicines/${currentSelected._id}`, data }); /// edit
+        await axiosHandler({ method: 'PATCH', path: endpoints.tables.medicine(currentSelected._id), data }); /// edit
       } else {
-        await axiosHandler({ method: 'POST', path: 'medicines', data }); /// edit
+        await axiosHandler({ method: 'POST', path: endpoints.tables.medicines, data }); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

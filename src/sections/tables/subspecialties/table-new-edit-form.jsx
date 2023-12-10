@@ -18,6 +18,7 @@ import { useGetSpecialties } from 'src/api/tables';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
+import { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -64,9 +65,9 @@ export default function TableNewEditForm({ currentTable }) {
     console.log('from handle submit',data)
     try {
       if (currentTable) {
-        await axiosHandler({ method: 'PATCH', path: `subspecialities/${currentTable._id}`, data });
+        await axiosHandler({ method: 'PATCH', path: endpoints.tables.subspeciality(currentTable._id), data });
       } else {
-        await axiosHandler({ method: 'POST', path: 'subspecialities', data });
+        await axiosHandler({ method: 'POST', path: endpoints.tables.subspecialties, data });
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');

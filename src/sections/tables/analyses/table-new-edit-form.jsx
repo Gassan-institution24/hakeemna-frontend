@@ -15,6 +15,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
 // ----------------------------------------------------------------------
@@ -56,9 +57,9 @@ export default function TableNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentSelected) {
-        await axiosHandler({ method: 'PATCH', path: `analysis/${currentSelected._id}`, data }); /// edit
+        await axiosHandler({ method: 'PATCH', path: endpoints.tables.analysis(currentSelected._id), data }); /// edit
       } else {
-        await axiosHandler({ method: 'POST', path: 'analysis', data }); /// edit
+        await axiosHandler({ method: 'POST', path: endpoints.tables.analyses, data }); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

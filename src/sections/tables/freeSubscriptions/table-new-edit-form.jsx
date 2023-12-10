@@ -19,6 +19,7 @@ import { useGetCountries, useGetCities, useGetSpecialties, useGetUSTypes } from 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
+import { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -80,11 +81,11 @@ export default function TableNewEditForm({ currentTable }) {
       if (currentTable) {
         await axiosHandler({
           method: 'PATCH',
-          path: `freesubscription/${currentTable._id}`,
+          path: endpoints.tables.freesubscription(currentTable._id),
           data,
         });
       } else {
-        await axiosHandler({ method: 'POST', path: 'freesubscription', data });
+        await axiosHandler({ method: 'POST', path: endpoints.tables.freesubscriptions, data });
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');

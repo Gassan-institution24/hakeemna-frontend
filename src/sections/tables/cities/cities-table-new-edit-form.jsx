@@ -21,6 +21,7 @@ import FormProvider, {
   RHFTextField,
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
+import { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -62,9 +63,9 @@ export default function CitiesNewEditForm({ currentCity }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if(currentCity){
-       await axiosHandler({method:'PATCH',path:`cities/${currentCity._id}`,data});
+       await axiosHandler({method:'PATCH',path:endpoints.tables.city(currentCity._id),data});
       }else{
-       await axiosHandler({method:'POST',path:'cities',data});
+       await axiosHandler({method:'POST',path:endpoints.tables.cities,data});
       }
       reset();
       enqueueSnackbar(currentCity ? 'Update success!' : 'Create success!');

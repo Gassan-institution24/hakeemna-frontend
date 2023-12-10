@@ -21,6 +21,7 @@ import FormProvider, {
   RHFTextField,
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
+import { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -64,9 +65,9 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if(currentTable){
-       await axiosHandler({method:'PATCH',path:`specialities/${currentTable._id}`,data});
+       await axiosHandler({method:'PATCH',path:endpoints.tables.speciality(currentTable._id),data});
       }else{
-       await axiosHandler({method:'POST',path:'specialities',data});
+       await axiosHandler({method:'POST',path:endpoints.tables.specialities,data});
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
