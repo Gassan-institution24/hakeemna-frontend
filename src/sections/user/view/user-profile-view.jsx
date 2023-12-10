@@ -19,7 +19,7 @@ import ProfileHome from '../profile-home';
 import ProfileCover from '../profile-cover';
 import ProfileFriends from '../profile-friends';
 // import ProfileGallery from '../profile-gallery';
-import ProfileFollowers from '../profile-followers';
+import ProfileFollowers from '../currentmedicine';
 
 // ----------------------------------------------------------------------
 

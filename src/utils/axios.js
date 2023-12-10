@@ -123,7 +123,7 @@ export const endpoints = {
     search: '/api/product/search',
   },
   patients:{
-    onepatients: '/api/patient',
+    onepatients: '/api/patient/656af6ccac70bc1aa4120dad',
   },
   appointment:{
     patientsappointments: '/api/appointments/patient/656c76046ceed235b42948a0',
@@ -134,5 +134,8 @@ export const endpoints = {
   },
   stackholder:{
     getstackholder: '/api/stackholder',
+  },
+  posts:{
+    getAll: '/api/post'
   },
 };
