@@ -33,36 +33,20 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
 
   const popover = usePopover();
   const DDL = usePopover();
+  const details = usePopover();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-
       <TableCell>
         <Box>{code}</Box>
       </TableCell>
 
       <TableCell>{symbol}</TableCell>
 
-      <TableCell>
-
-          {name_english}
-      </TableCell>
-      <TableCell>
-
-          {relation_to_dollar}
-      </TableCell>
+      <TableCell>{name_english}</TableCell>
+      <TableCell>{relation_to_dollar}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-      <Label
-          variant="soft"
-          color="default"
-          sx={{
-            cursor: 'pointer',
-          }}
-          onClick={DDL.onOpen}
-        >
-          DDL
-        </Label>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -88,6 +72,10 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
         >
           <Iconify icon="fluent:edit-32-filled" />
           Edit
+        </MenuItem>
+        <MenuItem onClick={DDL.onOpen}>
+          <Iconify icon="carbon:data-quality-definition" />
+          DDL
         </MenuItem>
       </CustomPopover>
 
@@ -118,7 +106,6 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
         <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No:</Box>
         <Box>{modifications_nums}</Box>
       </CustomPopover>
-
     </>
   );
 }

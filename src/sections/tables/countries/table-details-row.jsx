@@ -19,7 +19,14 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function CountriesTableRow({ row, selected, onEditRow, onSelectRow, onInactivate,onActivate }) {
+export default function CountriesTableRow({
+  row,
+  selected,
+  onEditRow,
+  onSelectRow,
+  onInactivate,
+  onActivate,
+}) {
   const {
     code,
     name_english,
@@ -34,6 +41,7 @@ export default function CountriesTableRow({ row, selected, onEditRow, onSelectRo
   } = row;
 
   const DDL = usePopover();
+  const details = usePopover();
   const popover = usePopover();
 
   const renderPrimary = (
@@ -71,16 +79,6 @@ export default function CountriesTableRow({ row, selected, onEditRow, onSelectRo
         >
           <Iconify icon="eva:arrow-ios-downward-fill" />
         </IconButton> */}
-        <Label
-          variant="soft"
-          color="default"
-          sx={{
-            cursor: 'pointer',
-          }}
-          onClick={DDL.onOpen}
-        >
-          DDL
-        </Label>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -131,8 +129,12 @@ export default function CountriesTableRow({ row, selected, onEditRow, onSelectRo
           <Iconify icon="fluent:edit-32-filled" />
           Edit
         </MenuItem>
+        <MenuItem onClick={DDL.onOpen}>
+          <Iconify icon="carbon:data-quality-definition" />
+          DDL
+        </MenuItem>
       </CustomPopover>
-      
+
       <CustomPopover
         open={DDL.open}
         onClose={DDL.onClose}
@@ -160,7 +162,6 @@ export default function CountriesTableRow({ row, selected, onEditRow, onSelectRo
         <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No:</Box>
         <Box>{modifications_nums}</Box>
       </CustomPopover>
-
     </>
   );
 }

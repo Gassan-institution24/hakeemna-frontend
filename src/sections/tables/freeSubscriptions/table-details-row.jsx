@@ -51,6 +51,7 @@ export default function TableDetailsRow({
   } = row;
 
   const DDL = usePopover();
+  const details = usePopover();
   const popover = usePopover();
 
   const renderPrimary = (
@@ -81,10 +82,7 @@ export default function TableDetailsRow({
       <TableCell>{period_in_months}</TableCell>
       <TableCell>{concept}</TableCell>
       <TableCell>
-        <Iconify
-          icon={!general ? 'mingcute:close-line' : 'eva:checkmark-fill'}
-          width={16}
-        />
+        <Iconify icon={!general ? 'mingcute:close-line' : 'eva:checkmark-fill'} width={16} />
       </TableCell>
       <TableCell>
         <Label
@@ -109,16 +107,7 @@ export default function TableDetailsRow({
         >
           <Iconify icon="eva:arrow-ios-downward-fill" />
         </IconButton> */}
-        <Label
-          variant="soft"
-          color="default"
-          sx={{
-            cursor: 'pointer',
-          }}
-          onClick={DDL.onOpen}
-        >
-          DDL
-        </Label>
+
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -168,6 +157,10 @@ export default function TableDetailsRow({
         >
           <Iconify icon="fluent:edit-32-filled" />
           Edit
+        </MenuItem>
+        <MenuItem onClick={DDL.onOpen}>
+          <Iconify icon="carbon:data-quality-definition" />
+          DDL
         </MenuItem>
       </CustomPopover>
 

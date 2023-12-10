@@ -19,7 +19,16 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow, onInactivate,onActivate,filters,setFilters }) {
+export default function TableDetailsRow({
+  row,
+  selected,
+  onEditRow,
+  onSelectRow,
+  onInactivate,
+  onActivate,
+  filters,
+  setFilters,
+}) {
   const {
     code,
     name_english,
@@ -40,6 +49,7 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow,
   } = row;
 
   const DDL = usePopover();
+  const details = usePopover();
   const popover = usePopover();
 
   const renderPrimary = (
@@ -54,9 +64,15 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow,
 
       <TableCell>{name_english}</TableCell>
 
-      <TableCell onClick={()=>setFilters({...filters,name:country.name_english})}>{country?.name_english}</TableCell>
-      <TableCell onClick={()=>setFilters({...filters,name:city.name_english})}>{city?.name_english}</TableCell>
-      <TableCell onClick={()=>setFilters({...filters,name:type.name_english})}>{type?.name_english}</TableCell>
+      <TableCell onClick={() => setFilters({ ...filters, name: country.name_english })}>
+        {country?.name_english}
+      </TableCell>
+      <TableCell onClick={() => setFilters({ ...filters, name: city.name_english })}>
+        {city?.name_english}
+      </TableCell>
+      <TableCell onClick={() => setFilters({ ...filters, name: type.name_english })}>
+        {type?.name_english}
+      </TableCell>
       <TableCell>{webpage}</TableCell>
       <TableCell>{phone}</TableCell>
       <TableCell>{address}</TableCell>
@@ -83,16 +99,7 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow,
         >
           <Iconify icon="eva:arrow-ios-downward-fill" />
         </IconButton> */}
-        <Label
-          variant="soft"
-          color="default"
-          sx={{
-            cursor: 'pointer',
-          }}
-          onClick={DDL.onOpen}
-        >
-          DDL
-        </Label>
+
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -142,6 +149,10 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow,
         >
           <Iconify icon="fluent:edit-32-filled" />
           Edit
+        </MenuItem>
+        <MenuItem onClick={DDL.onOpen}>
+          <Iconify icon="carbon:data-quality-definition" />
+          DDL
         </MenuItem>
       </CustomPopover>
 

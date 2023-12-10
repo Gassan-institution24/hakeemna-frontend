@@ -50,10 +50,12 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
-  { id: 'trade_name', label: 'trade name' },
-  { id: 'scientific_name', label: 'scientific name' },
-  { id: 'family', label: 'family' },
-  { id: 'status', label: 'status' },
+  { id: 'trade_name', label: 'Trade name' },
+  { id: 'scientific_name', label: 'Scientific name' },
+  { id: 'family', label: 'Family' },
+  { id: 'status', label: 'Status' },
+  { id: 'country', label: 'Country' },
+  { id: 'ATCCODE', label: 'ATCCODE' },
   // { id: 'created_at', label: 'Date Of Creation' },
   // { id: 'user_creation', label: 'Creater' },
   // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
