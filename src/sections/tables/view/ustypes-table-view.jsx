@@ -390,7 +390,11 @@ export default function WorkShiftsTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, unitserviceTypesData.length)}
+                    emptyRows={emptyRows(
+                      table.page,
+                      table.rowsPerPage,
+                      unitserviceTypesData.length
+                    )}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -479,7 +483,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter(
       (data) =>
         data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

@@ -28,15 +28,15 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetCategories } from 'src/api/tables';                                                           /// edit
-import TableDetailRow from '../medCategories/table-details-row'                                             /// edit
+import { useGetCategories } from 'src/api/tables'; /// edit
+import TableDetailRow from '../medCategories/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-
-const TABLE_HEAD = [                                                                           /// to edit
+const TABLE_HEAD = [
+  /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'name' },
   { id: 'description', label: 'description' },
@@ -57,7 +57,8 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function CategoriesTableView() {                       /// edit
+export default function CategoriesTableView() {
+  /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -100,7 +101,7 @@ export default function CategoriesTableView() {                       /// edit
       acc.push({
         code: data.code,
         name: data.name_english,
-        description: data.description,     /// edit
+        description: data.description, /// edit
       });
       return acc;
     }, []);
@@ -111,7 +112,7 @@ export default function CategoriesTableView() {                       /// edit
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'categoriesTable.xlsx');                                         /// edit
+    saveAs(data, 'categoriesTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -127,7 +128,7 @@ export default function CategoriesTableView() {                       /// edit
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.medcategories.edit(id));      /// edit
+      router.push(paths.superadmin.tables.medcategories.edit(id)); /// edit
     },
     [router]
   );
@@ -147,7 +148,7 @@ export default function CategoriesTableView() {                       /// edit
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Medical Categories"                           /// edit
+          heading="Medical Categories" /// edit
           links={[
             {
               name: 'Super',
@@ -157,17 +158,17 @@ export default function CategoriesTableView() {                       /// edit
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Medical Categories' },                             /// edit
+            { name: 'Medical Categories' }, /// edit
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.medcategories.new}             /// edit
+              href={paths.superadmin.tables.medcategories.new} /// edit
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
-            >                                                        
-              New Category                                 
-            </Button>                            /// edit
+            >
+              New Category
+            </Button> /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -271,10 +272,12 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        (data?.name_english &&
+          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
-        JSON.stringify(data.code) === name 
+        JSON.stringify(data.code) === name
     );
   }
 

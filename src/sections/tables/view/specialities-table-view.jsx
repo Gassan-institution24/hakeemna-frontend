@@ -476,8 +476,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        (data?.name_english &&
+          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

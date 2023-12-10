@@ -31,14 +31,15 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetCurrencies } from 'src/api/tables';                                                           /// edit
-import TableDetailRow from '../currency/table-details-row'                                             /// edit
+import { useGetCurrencies } from 'src/api/tables'; /// edit
+import TableDetailRow from '../currency/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [                                                                           /// to edit
+const TABLE_HEAD = [
+  /// to edit
   { id: 'code', label: 'Code' },
   { id: 'symbol', label: 'symbol' },
   { id: 'name_english', label: 'name' },
@@ -60,7 +61,8 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function CurrencyTableView() {                       /// edit
+export default function CurrencyTableView() {
+  /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -106,7 +108,7 @@ export default function CurrencyTableView() {                       /// edit
         code: data.code,
         symbol: data.symbol,
         name: data.name_english,
-        relation_to_dollar: data.relation_to_dollar,     /// edit
+        relation_to_dollar: data.relation_to_dollar, /// edit
       });
       return acc;
     }, []);
@@ -117,7 +119,7 @@ export default function CurrencyTableView() {                       /// edit
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'CurrenciesTable.xlsx');                                         /// edit
+    saveAs(data, 'CurrenciesTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -133,7 +135,7 @@ export default function CurrencyTableView() {                       /// edit
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.currency.edit(id));      /// edit
+      router.push(paths.superadmin.tables.currency.edit(id)); /// edit
     },
     [router]
   );
@@ -153,7 +155,7 @@ export default function CurrencyTableView() {                       /// edit
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Currency"                           /// edit
+          heading="Currency" /// edit
           links={[
             {
               name: 'Super',
@@ -163,17 +165,17 @@ export default function CurrencyTableView() {                       /// edit
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Currency' },                             /// edit
+            { name: 'Currency' }, /// edit
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.currency.new}             /// edit
+              href={paths.superadmin.tables.currency.new} /// edit
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
-            >                                                        
-              New Currency                                 
-            </Button>                            /// edit
+            >
+              New Currency
+            </Button> /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -277,11 +279,13 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        (data?.name_english &&
+          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         data?.symbol === name ||
-        JSON.stringify(data.code) === name 
+        JSON.stringify(data.code) === name
     );
   }
 

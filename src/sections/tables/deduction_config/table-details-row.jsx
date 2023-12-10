@@ -64,16 +64,32 @@ export default function TableDetailsRow({
 
       <TableCell>{name_english}</TableCell>
 
-      <TableCell onClick={() => setFilters({ ...filters, name: unit_service?.name_english })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: unit_service?.name_english })}>
         {unit_service?.name_english}
       </TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: Employee?.name_english })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: Employee?.name_english })}>
         {Employee?.name_english}
       </TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: Service?.name_english })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: Service?.name_english })}>
         {Service?.name_english}
       </TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: type })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: type })}>
         {type?.name_english}
       </TableCell>
       <TableCell>{Comment}</TableCell>

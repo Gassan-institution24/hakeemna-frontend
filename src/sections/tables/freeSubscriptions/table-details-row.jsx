@@ -66,16 +66,32 @@ export default function TableDetailsRow({
 
       <TableCell>{name_english}</TableCell>
 
-      <TableCell onClick={() => setFilters({ ...filters, name: country.name_english })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: country.name_english })}>
         {country?.name_english}
       </TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: city.name_english })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: city.name_english })}>
         {city?.name_english}
       </TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: US_type.name_english })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: US_type.name_english })}>
         {US_type?.name_english}
       </TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: speciality.name_english })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: speciality.name_english })}>
         {speciality?.name_english}
       </TableCell>
       <TableCell>{fDateTime(offer_date)}</TableCell>

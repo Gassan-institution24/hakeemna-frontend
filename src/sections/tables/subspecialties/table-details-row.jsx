@@ -62,7 +62,11 @@ export default function TableDetailsRow({
 
       <TableCell>{name_english}</TableCell>
 
-      <TableCell onClick={() => setFilters({ ...filters, name: specialty.name_english })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: specialty.name_english })}>
         {specialty?.name_english}
       </TableCell>
       <TableCell>{description}</TableCell>

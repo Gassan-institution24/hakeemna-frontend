@@ -66,10 +66,18 @@ export default function CountriesTableRow({
       </TableCell>
       <TableCell>{code}</TableCell>
       <TableCell>{trade_name}</TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: scientific_name })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: scientific_name })}>
         {scientific_name}
       </TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: family?.name_english })}>{family?.name_english}</TableCell>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: family?.name_english })}>{family?.name_english}</TableCell>
       <TableCell>
         <Label
           variant="soft"
@@ -80,7 +88,11 @@ export default function CountriesTableRow({
           {status}
         </Label>
       </TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: country?.name_english })}>{country?.name_english}</TableCell>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: country?.name_english })}>{country?.name_english}</TableCell>
       <TableCell>{ATCCODE}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
@@ -94,7 +106,7 @@ export default function CountriesTableRow({
   return (
     <>
       {renderPrimary}
-      
+
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}

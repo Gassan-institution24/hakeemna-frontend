@@ -64,14 +64,26 @@ export default function TableDetailsRow({
 
       <TableCell>{name_english}</TableCell>
 
-      <TableCell onClick={() => setFilters({ ...filters, name: unit_service.name_english })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: unit_service.name_english })}>
         {unit_service?.name_english}
       </TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: work_shift.name_english })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: work_shift.name_english })}>
         {work_shift?.name_english}
       </TableCell>
       <TableCell>{Price_per_unit}</TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: Measurement_type.name_english })}>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }} onClick={() => setFilters({ ...filters, name: Measurement_type.name_english })}>
         {Measurement_type?.name_english}
       </TableCell>
       <TableCell>

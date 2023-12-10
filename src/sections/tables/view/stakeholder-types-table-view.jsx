@@ -393,7 +393,11 @@ export default function StakeholderTypesTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, stakeholderTypesData.length)}
+                    emptyRows={emptyRows(
+                      table.page,
+                      table.rowsPerPage,
+                      stakeholderTypesData.length
+                    )}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -482,11 +486,15 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter(
       (data) =>
         data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.unit_service?.name_english &&
+          data?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.unit_service?.name_arabic &&
+          data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.service?.name_english &&
+          data?.service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.service?.name_arabic && data?.service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

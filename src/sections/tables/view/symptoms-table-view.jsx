@@ -33,8 +33,8 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetSymptoms } from 'src/api/tables';                                                           /// edit
-import TableDetailRow from '../symptoms/table-details-row'                                             /// edit
+import { useGetSymptoms } from 'src/api/tables'; /// edit
+import TableDetailRow from '../symptoms/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -42,7 +42,8 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
 
-const TABLE_HEAD = [                                                                           /// to edit
+const TABLE_HEAD = [
+  /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'name' },
   { id: 'description', label: 'description' },
@@ -63,7 +64,8 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function SymptomsTableView() {                       /// edit
+export default function SymptomsTableView() {
+  /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -111,7 +113,7 @@ export default function SymptomsTableView() {                       /// edit
       acc.push({
         code: data.code,
         name: data.name_english,
-        description: data.description,     /// edit
+        description: data.description, /// edit
       });
       return acc;
     }, []);
@@ -122,7 +124,7 @@ export default function SymptomsTableView() {                       /// edit
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'symptomsTable.xlsx');                                         /// edit
+    saveAs(data, 'symptomsTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -138,7 +140,7 @@ export default function SymptomsTableView() {                       /// edit
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.symptoms.edit(id));      /// edit
+      router.push(paths.superadmin.tables.symptoms.edit(id)); /// edit
     },
     [router]
   );
@@ -158,7 +160,7 @@ export default function SymptomsTableView() {                       /// edit
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Symptoms"                           /// edit
+          heading="Symptoms" /// edit
           links={[
             {
               name: 'Super',
@@ -168,17 +170,17 @@ export default function SymptomsTableView() {                       /// edit
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Symptoms' },                             /// edit
+            { name: 'Symptoms' }, /// edit
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.symptoms.new}             /// edit
+              href={paths.superadmin.tables.symptoms.new} /// edit
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
-            >                                                        
-              New Symptom                                 
-            </Button>                            /// edit
+            >
+              New Symptom
+            </Button> /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -282,10 +284,12 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        (data?.name_english &&
+          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
-        JSON.stringify(data.code) === name 
+        JSON.stringify(data.code) === name
     );
   }
 

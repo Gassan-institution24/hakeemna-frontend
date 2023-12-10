@@ -383,6 +383,8 @@ export default function ActivitesTableView() {
                         key={row._id}
                         row={row}
                         selected={table.selected.includes(row._id)}
+                        setFilters={setFilters}
+                        filters={filters}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row._id)}
                         onInactivate={() => handleInactivate(row._id)}
@@ -480,12 +482,12 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.department?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.department?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        (data?.name_english && data?.name_english?.toLowerCase()?.indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic && data?.name_arabic?.toLowerCase()?.indexOf(name.toLowerCase()) !== -1) ||
+        (data?.unit_service?.name_english && data?.unit_service?.name_english?.toLowerCase()?.indexOf(name.toLowerCase()) !== -1 )||
+        (data?.unit_service?.name_arabic && data?.unit_service?.name_arabic?.toLowerCase()?.indexOf(name.toLowerCase()) !== -1) ||
+        (data?.department?.name_english && data?.department?.name_english?.toLowerCase()?.indexOf(name.toLowerCase()) !== -1) ||
+        (data?.department?.name_english && data?.department?.name_arabic?.toLowerCase()?.indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
