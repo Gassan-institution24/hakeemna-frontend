@@ -20,8 +20,8 @@ import FormProvider, {
   RHFSelect,
   RHFTextField,
 } from 'src/components/hook-form';
-import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
 
 // ----------------------------------------------------------------------
 

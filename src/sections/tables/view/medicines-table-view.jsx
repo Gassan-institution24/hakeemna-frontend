@@ -40,6 +40,7 @@ import {
 } from 'src/components/table';
 
 import { useGetMedicines } from 'src/api/tables'; /// edit
+import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from '../medicines/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -140,7 +141,7 @@ export default function MedicinesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `medicines/${id}/updatestatus`,
+        path: `${endpoints.tables.medicine(id)}/updatestatus`,
         data: { status: 'active' },
       });
       refetch();
@@ -152,7 +153,7 @@ export default function MedicinesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `medicines/${id}/updatestatus`,
+        path: `${endpoints.tables.medicine(id)}/updatestatus`,
         data: { status: 'inactive' },
       });
       refetch();
@@ -164,7 +165,7 @@ export default function MedicinesTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `medicines/updatestatus`,
+      path: `${endpoints.tables.medicines}/updatestatus`,
       data: { status: 'active', ids: table.selected },
     });
     refetch();
@@ -178,7 +179,7 @@ export default function MedicinesTableView() {
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `medicines/updatestatus`,
+      path: `${endpoints.tables.medicines}/updatestatus`,
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();

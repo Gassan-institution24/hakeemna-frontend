@@ -43,6 +43,7 @@ import {
 } from 'src/components/table';
 
 import { useGetFreeSubscriptions } from 'src/api/tables'; /// edit
+import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from '../freeSubscriptions/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -160,7 +161,7 @@ export default function FreeSubscriptionTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `freesubscription/${id}/updatestatus`, /// edit
+        path: `${endpoints.tables.freesubscription(id)}/updatestatus`, /// edit
         data: { status: 'active' },
       });
       refetch();
@@ -172,7 +173,7 @@ export default function FreeSubscriptionTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `freesubscription/${id}/updatestatus`, /// edit
+        path: `${endpoints.tables.freesubscription(id)}/updatestatus`, /// edit
         data: { status: 'inactive' },
       });
       refetch();
@@ -184,7 +185,7 @@ export default function FreeSubscriptionTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `freesubscription/updatestatus`, /// edit
+      path: `${endpoints.tables.freesubscriptions}/updatestatus`, /// edit
       data: { status: 'active', ids: table.selected },
     });
     refetch();
@@ -198,7 +199,7 @@ export default function FreeSubscriptionTableView() {
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `freesubscription/updatestatus`, /// edit
+      path: `${endpoints.tables.freesubscriptions}/updatestatus`, /// edit
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();

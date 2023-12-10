@@ -21,6 +21,7 @@ import FormProvider, {
   RHFMultiSelect,
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
+import { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -70,9 +71,9 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if(currentSelected){
-        await axiosHandler({method:'PATCH',path:`surgeries/${currentSelected._id}`,data});      /// edit
+        await axiosHandler({method:'PATCH',path:endpoints.tables.surgery(currentSelected._id),data});      /// edit
       }else{
-        await axiosHandler({method:'POST',path:'surgeries',data});                                  /// edit
+        await axiosHandler({method:'POST',path: endpoints.tables.surgeries,data});                                  /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

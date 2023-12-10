@@ -43,6 +43,7 @@ import {
 } from 'src/components/table';
 
 import { useGetCountries } from 'src/api/tables'; /// edit
+import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from '../countries/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -153,7 +154,7 @@ export default function CountriesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `countries/${id}/updatestatus`, /// to edit
+        path: `${endpoints.tables.country(id)}/updatestatus`, /// to edit
         data: { status: 'active' },
       });
       refetch();
@@ -166,7 +167,7 @@ export default function CountriesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `countries/${id}/updatestatus`, /// to edit
+        path: `${endpoints.tables.country(id)}/updatestatus`, /// to edit
         data: { status: 'inactive' },
       });
       refetch();
@@ -178,7 +179,7 @@ export default function CountriesTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `countries/updatestatus`, /// to edit
+      path: `${endpoints.tables.countries}/updatestatus`, /// to edit
       data: { status: 'active', ids: table.selected },
     });
     refetch();
@@ -192,7 +193,7 @@ export default function CountriesTableView() {
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `countries/updatestatus`, /// edit
+      path: `${endpoints.tables.countries}/updatestatus`, /// edit
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();

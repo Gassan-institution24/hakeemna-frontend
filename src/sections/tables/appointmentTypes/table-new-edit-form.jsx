@@ -20,6 +20,7 @@ import FormProvider, {
   RHFSelect,
   RHFTextField,
 } from 'src/components/hook-form';
+import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
 // ----------------------------------------------------------------------
@@ -62,9 +63,9 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if(currentTable){
-       await axiosHandler({method:'PATCH',path:`appointments/types/${currentTable._id}`,data});
+       await axiosHandler({method:'PATCH',path:endpoints.tables.appointmenttype(currentTable._id),data});
       }else{
-       await axiosHandler({method:'POST',path:'appointments/types',data});
+       await axiosHandler({method:'POST',path:endpoints.tables.appointmenttypes,data});
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');

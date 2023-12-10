@@ -68,13 +68,13 @@ export default function TableNewEditForm({ currentTable }) {
       if (currentTable) {
         response = await axiosHandler({
           method: 'PATCH',
-          path: `${endpoints.tables.stakeholdertype(currentTable._id)}`,
+          path: endpoints.tables.stakeholdertype(currentTable._id),
           data,
         });
       } else {
         response = await axiosHandler({
           method: 'POST',
-          path: `${endpoints.tables.stakeholdertypes}`,
+          path: endpoints.tables.stakeholdertypes,
           data,
         });
       }
