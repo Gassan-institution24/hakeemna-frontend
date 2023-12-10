@@ -38,7 +38,7 @@ const [status,setStatus] = useState()
 
   const handleStatusChange = useCallback((id,newStatus) => {
     axiosHandler({
-     method:"PATCH", path:`suppliersoffers/${id}`,data:{status:newStatus}
+     method:"PATCH", path:`/api/suppliersoffers/${id}`,data:{status:newStatus}
     })
     refetch()
   }, [refetch]);

@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetUser() {
-    const URL = `${endpoints.patients.onepatients}/656af6ccac70bc1aa4120dad`;
+    const URL = `${endpoints.patients.onepatients}`;
     const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   
     const memoizedValue = useMemo(
@@ -79,14 +79,24 @@ export function useGetStackholder() {
   }
 
 
-
-
-
-
-
-
-
-
+export function useGetPosts() {
+    const URL = `${endpoints.posts.getAll}`;
+    const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+ 
+    const memoizedValue = useMemo(
+      () => ({
+        posts: data || [],
+        Loading: isLoading,
+        error,
+        validating: isValidating,
+      }),
+      [data, error, isLoading, isValidating]
+    );
+    const refetch = async ()=>{
+      await mutate(URL)
+    }
+    return {...memoizedValue,refetch};
+  }
 
 
 export function useGetOffer(id) {
