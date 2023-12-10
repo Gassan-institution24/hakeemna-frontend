@@ -41,6 +41,7 @@ import {
 
 import { useGetUnitservices } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
+import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../unitservices/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
@@ -51,17 +52,21 @@ const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'name' },
+  { id: 'status', label: 'status' },
+  { id: 'identification_num', label: 'Identification num' },
+  { id: 'email', label: 'email' },
   { id: 'country', label: 'country' },
   { id: 'city', label: 'city' },
+  { id: 'US_type', label: 'US type' },
   { id: 'sector_type', label: 'sector type' },
-  { id: 'status', label: 'status' },
-  { id: 'created_at', label: 'Date Of Creation' },
-  { id: 'user_creation', label: 'Creater' },
-  { id: 'ip_address_user_creation', label: 'IP Of Creator' },
-  { id: 'updated_at', label: 'Date Of Updating' },
-  { id: 'user_modification', label: 'Last Modifier' },
-  { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
-  { id: 'modifications_nums', label: 'No Of Modifications' },
+  { id: 'speciality', label: 'speciality' },
+  // { id: 'created_at', label: 'Date Of Creation' },
+  // { id: 'user_creation', label: 'Creater' },
+  // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
+  // { id: 'updated_at', label: 'Date Of Updating' },
+  // { id: 'user_modification', label: 'Last Modifier' },
+  // { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
+  // { id: 'modifications_nums', label: 'No Of Modifications' },
   { id: '', width: 88 },
 ];
 
@@ -145,7 +150,7 @@ export default function UnitServicesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `unitservice/${id}/updatestatus`,
+        path: `${endpoints.tables.unitservice(id)}/updatestatus`,
         data: { status: 'active' },
       });
       refetch();
@@ -157,7 +162,7 @@ export default function UnitServicesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `unitservice/${id}/updatestatus`,
+        path: `${endpoints.tables.unitservice(id)}/updatestatus`,
         data: { status: 'inactive' },
       });
       refetch();
@@ -169,7 +174,7 @@ export default function UnitServicesTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `unitservice/updatestatus`,
+      path: `${endpoints.tables.unitservices}`,
       data: { status: 'active', ids: table.selected },
     });
     refetch();
@@ -183,7 +188,7 @@ export default function UnitServicesTableView() {
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `unitservice/updatestatus`,
+      path: `${endpoints.tables.unitservices}`,
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();
@@ -245,16 +250,16 @@ export default function UnitServicesTableView() {
             },
             { name: 'Unit Services' }, /// edit
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.superadmin.tables.unitservices.new} /// edit
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Unit Service
-            </Button> /// edit
-          }
+          // action={
+          //   <Button
+          //     component={RouterLink}
+          //     href={paths.superadmin.tables.unitservices.new} /// edit
+          //     variant="contained"
+          //     startIcon={<Iconify icon="mingcute:add-line" />}
+          //   >
+          //     New Unit Service
+          //   </Button> /// edit
+          // }
           sx={{
             mb: { xs: 3, md: 5 },
           }}

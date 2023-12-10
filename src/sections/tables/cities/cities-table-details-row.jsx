@@ -19,7 +19,14 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function CitiesTableRow({ row, selected, onEditRow, onSelectRow, onInactivate,onActivate }) {
+export default function CitiesTableRow({
+  row,
+  selected,
+  onEditRow,
+  onSelectRow,
+  onInactivate,
+  onActivate,
+}) {
   const {
     code,
     name_english,
@@ -37,6 +44,9 @@ export default function CitiesTableRow({ row, selected, onEditRow, onSelectRow, 
   const confirm = useBoolean();
 
   const popover = usePopover();
+
+  const DDL = usePopover();
+  const details = usePopover();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -61,14 +71,6 @@ export default function CitiesTableRow({ row, selected, onEditRow, onSelectRow, 
           {status}
         </Label>
       </TableCell>
-      <TableCell>{fDateTime(created_at)}</TableCell>
-      <TableCell>{user_creation?.email}</TableCell>
-      <TableCell>{ip_address_user_creation}</TableCell>
-      <TableCell>{fDateTime(updated_at)}</TableCell>
-      <TableCell>{user_modification?.email}</TableCell>
-      <TableCell>{ip_address_user_modification}</TableCell>
-
-      <TableCell> {modifications_nums} </TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         {/* <IconButton
@@ -82,7 +84,6 @@ export default function CitiesTableRow({ row, selected, onEditRow, onSelectRow, 
         >
           <Iconify icon="eva:arrow-ios-downward-fill" />
         </IconButton> */}
-
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -133,6 +134,38 @@ export default function CitiesTableRow({ row, selected, onEditRow, onSelectRow, 
           <Iconify icon="fluent:edit-32-filled" />
           Edit
         </MenuItem>
+        <MenuItem onClick={DDL.onOpen}>
+          <Iconify icon="carbon:data-quality-definition" />
+          DDL
+        </MenuItem>
+      </CustomPopover>
+
+      <CustomPopover
+        open={DDL.open}
+        onClose={DDL.onClose}
+        arrow="right-top"
+        sx={{
+          padding: 2,
+          fontSize: '14px',
+        }}
+      >
+        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
+
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+          {ip_address_user_modification}
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No:</Box>
+        <Box>{modifications_nums}</Box>
       </CustomPopover>
 
       <ConfirmDialog

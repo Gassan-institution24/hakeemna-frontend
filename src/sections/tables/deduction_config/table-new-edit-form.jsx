@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -13,12 +13,13 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetUnitservices, useGetServiceTypes, useGetEmployeeTypes } from 'src/api/tables';
+import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
+
+import { useGetUnitservices, useGetServiceTypes, useGetEmployees } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import axiosHandler from 'src/utils/axios-handler';
-import { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +27,7 @@ export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
   const { unitservicesData } = useGetUnitservices();
-  const { employeeTypesData } = useGetEmployeeTypes();
+  const { employeesData } = useGetEmployees();
   const { serviceTypesData } = useGetServiceTypes();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -39,7 +40,7 @@ export default function TableNewEditForm({ currentTable }) {
     Service: Yup.string().nullable(),
     Place_of_service: Yup.string(),
     type: Yup.string(),
-    percentage: Yup.string(),
+    percentage: Yup.number(),
     Comment: Yup.string(),
   });
 
@@ -73,15 +74,14 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      let response;
       if (currentTable) {
-        response = await axiosHandler({
+         await axiosHandler({
           method: 'PATCH',
           path: `${endpoints.tables.deduction(currentTable._id)}`,
           data,
         });
       } else {
-        response = await axiosHandler({
+         await axiosHandler({
           method: 'POST',
           path: `${endpoints.tables.deductions}`,
           data,
@@ -129,7 +129,7 @@ export default function TableNewEditForm({ currentTable }) {
               </RHFSelect>
               <RHFSelect native name="Employee" label="Employee">
                 <option> </option>
-                {employeeTypesData.map((Employee) => (
+                {employeesData.map((Employee) => (
                   <option key={Employee._id} value={Employee._id}>
                     {Employee.name_english}
                   </option>
@@ -149,7 +149,7 @@ export default function TableNewEditForm({ currentTable }) {
                 <option value="from sales">from sales </option>
               </RHFSelect>
               <RHFTextField name="Place_of_service" label="Place of service" />
-              <RHFTextField name="percentage" label="percentage" />
+              <RHFTextField type='number' name="percentage" label="percentage %" />
               <RHFTextField name="Comment" label="Comment" />
             </Box>
 

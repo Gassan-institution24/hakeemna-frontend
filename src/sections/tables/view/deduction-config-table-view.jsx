@@ -65,13 +65,13 @@ const TABLE_HEAD = [
   // { id: 'Ledger_account_2', label: 'Ledger_account_2' },
   { id: 'percentage', label: 'percentage' },
   { id: 'status', label: 'Status' },
-  { id: 'created_at', label: 'Date Of Creation' },
-  { id: 'user_creation', label: 'Creater' },
-  { id: 'ip_address_user_creation', label: 'IP Of Creator' },
-  { id: 'updated_at', label: 'Date Of Updating' },
-  { id: 'user_modification', label: 'Last Modifier' },
-  { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
-  { id: 'modifications_nums', label: 'No Of Modifications' },
+  // { id: 'created_at', label: 'Date Of Creation' },
+  // { id: 'user_creation', label: 'Creater' },
+  // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
+  // { id: 'updated_at', label: 'Date Of Updating' },
+  // { id: 'user_modification', label: 'Last Modifier' },
+  // { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
+  // { id: 'modifications_nums', label: 'No Of Modifications' },
   { id: '', width: 88 },
 ];
 
@@ -473,7 +473,7 @@ export default function DeductionConfigTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);

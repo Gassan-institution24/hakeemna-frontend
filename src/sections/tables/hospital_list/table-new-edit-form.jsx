@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useEffect, useMemo,useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -24,11 +24,15 @@ import axiosHandler from 'src/utils/axios-handler';
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
-
+  console.log('currr',currentTable)
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
-
+  const [selectedCountry, setSelectedCountry] = useState(
+    currentTable?.country?._id || null
+  );
+  const [cities,setCities]= useState([])
   const { enqueueSnackbar } = useSnackbar();
+  console.log('test',cities)
 
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
@@ -57,6 +61,13 @@ export default function TableNewEditForm({ currentTable }) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const handleCountryChange = (event) => {
+    const selectedCountryId = event.target.value;
+    methods.setValue('country', selectedCountryId, { shouldValidate: true })
+    setSelectedCountry(selectedCountryId);
+    // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
+  };
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -88,7 +99,9 @@ export default function TableNewEditForm({ currentTable }) {
       console.error(error);
     }
   });
-
+  useEffect(()=>{
+    setCities(selectedCountry?tableData.filter((data)=>data?.country?._id === selectedCountry):tableData)
+  },[tableData,selectedCountry])
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
@@ -106,7 +119,7 @@ export default function TableNewEditForm({ currentTable }) {
               <RHFTextField name="name_english" label="name english" />
               <RHFTextField name="name_arabic" label="name arabic" />
 
-              <RHFSelect native name="country" label="Country">
+              <RHFSelect native onChange={handleCountryChange} name="country" label="Country">
                 <option> </option>
                 {countriesData.map((country) => (
                   <option key={country._id} value={country._id}>
@@ -116,7 +129,7 @@ export default function TableNewEditForm({ currentTable }) {
               </RHFSelect>
               <RHFSelect native name="city" label="City">
                 <option> </option>
-                {tableData.map((city) => (
+                {cities.map((city) => (
                   <option key={city._id} value={city._id}>
                     {city.name_english}
                   </option>

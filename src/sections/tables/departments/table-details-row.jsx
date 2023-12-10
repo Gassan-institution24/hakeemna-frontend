@@ -7,6 +7,7 @@ import TableRow from '@mui/material/TableRow';
 // import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+import Label from 'src/components/label/label';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -19,7 +20,16 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow, onInactivate,onActivate,filters,setFilters }) {
+export default function TableDetailsRow({
+  row,
+  selected,
+  onEditRow,
+  onSelectRow,
+  onInactivate,
+  onActivate,
+  filters,
+  setFilters,
+}) {
   const {
     code,
     name_english,
@@ -34,8 +44,8 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow,
     modifications_nums,
   } = row;
 
-  const confirm = useBoolean();
-
+  const DDL = usePopover();
+  const details = usePopover();
   const popover = usePopover();
 
   const renderPrimary = (
@@ -50,16 +60,10 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow,
 
       <TableCell>{name_english}</TableCell>
 
-      <TableCell onClick={()=>setFilters({...filters,name:unit_service.name_english})}>{unit_service?.name_english}</TableCell>
+      <TableCell onClick={() => setFilters({ ...filters, name: unit_service.name_english })}>
+        {unit_service?.name_english}
+      </TableCell>
       <TableCell>{general_info}</TableCell>
-      <TableCell>{fDateTime(created_at)}</TableCell>
-      <TableCell>{user_creation?.email}</TableCell>
-      <TableCell>{ip_address_user_creation}</TableCell>
-      <TableCell>{fDateTime(updated_at)}</TableCell>
-      <TableCell>{user_modification?.email}</TableCell>
-      <TableCell>{ip_address_user_modification}</TableCell>
-
-      <TableCell> {modifications_nums} </TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         {/* <IconButton
@@ -124,19 +128,39 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow,
           <Iconify icon="fluent:edit-32-filled" />
           Edit
         </MenuItem>
+        <MenuItem onClick={DDL.onOpen}>
+          <Iconify icon="carbon:data-quality-definition" />
+          DDL
+        </MenuItem>
       </CustomPopover>
 
-      {/* <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content="Are you sure want to delete?"
-        action={
-          <Button variant="contained" color="error" onClick={onInactivate}>
-            Delete
-          </Button>
-        }
-      /> */}
+      <CustomPopover
+        open={DDL.open}
+        onClose={DDL.onClose}
+        arrow="right-top"
+        sx={{
+          padding: 2,
+          fontSize: '14px',
+        }}
+      >
+        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
+
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+          {ip_address_user_modification}
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No:</Box>
+        <Box>{modifications_nums}</Box>
+      </CustomPopover>
     </>
   );
 }

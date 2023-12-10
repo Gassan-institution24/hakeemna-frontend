@@ -24,7 +24,7 @@ import { endpoints } from 'src/utils/axios';
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
-
+  console.log('currentt',currentTable)
   const { unitservicesData } = useGetUnitservices();
   const { measurmentTypesData } = useGetMeasurmentTypes();
   const { workShiftsData } = useGetWorkShifts();
@@ -73,13 +73,13 @@ export default function TableNewEditForm({ currentTable }) {
       if (currentTable) {
         response = await axiosHandler({
           method: 'PATCH',
-          path: `${endpoints.tables.activity(currentTable._id)}`,
+          path: `${endpoints.tables.servicetype(currentTable._id)}`,
           data,
         });
       } else {
         response = await axiosHandler({
           method: 'POST',
-          path: `${endpoints.tables.activities}`,
+          path: `${endpoints.tables.servicetypes}`,
           data,
         });
       }
