@@ -478,10 +478,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.trade_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.scientific_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.family?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.family?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        (data?.trade_name && data?.trade_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.scientific_name && data?.scientific_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.family?.name_english && data?.family?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.family?.name_arabic && data?.family?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         // data?.symptoms?.some(
         //   (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
         // ) ||

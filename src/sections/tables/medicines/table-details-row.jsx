@@ -66,21 +66,46 @@ export default function CountriesTableRow({
       </TableCell>
       <TableCell>{code}</TableCell>
       <TableCell>{trade_name}</TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: scientific_name })}>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }}
+        onClick={() => setFilters({ ...filters, name: scientific_name })}
+      >
         {scientific_name}
       </TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: family?.name_english })}>{family?.name_english}</TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }}
+        onClick={() => setFilters({ ...filters, name: family?.name_english })}
+      >
+        {family?.name_english}
+      </TableCell>
       <TableCell>
         <Label
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
-          >
+        >
           {status}
         </Label>
       </TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: country?.name_english })}>{country?.name_english}</TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }}
+        onClick={() => setFilters({ ...filters, name: country?.name_english })}
+      >
+        {country?.name_english}
+      </TableCell>
       <TableCell>{ATCCODE}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
@@ -94,7 +119,7 @@ export default function CountriesTableRow({
   return (
     <>
       {renderPrimary}
-      
+
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
@@ -109,7 +134,7 @@ export default function CountriesTableRow({
             }}
             sx={{ color: 'error.main' }}
           >
-            <Iconify icon="solar:pause-bold" />
+            <Iconify icon="ic:baseline-pause" />
             Inactivate
           </MenuItem>
         ) : (
@@ -120,7 +145,7 @@ export default function CountriesTableRow({
             }}
             sx={{ color: 'success.main' }}
           >
-            <Iconify icon="ph:play-fill" />
+            <Iconify icon="bi:play-fill" />
             activate
           </MenuItem>
         )}
@@ -133,9 +158,7 @@ export default function CountriesTableRow({
           <Iconify icon="fluent:edit-32-filled" />
           Edit
         </MenuItem>
-        <MenuItem
-          onClick={details.onOpen}
-        >
+        <MenuItem onClick={details.onOpen}>
           <Iconify icon="gg:details-more" />
           Details
         </MenuItem>
@@ -182,7 +205,6 @@ export default function CountriesTableRow({
           fontSize: '14px',
         }}
       >
-
         <Box sx={{ fontWeight: 600 }}>Agent:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{agent}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Packaging:</Box>
@@ -196,10 +218,14 @@ export default function CountriesTableRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{barcode}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Concentrations:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-        {concentrations.map((one)=>(<>{one} / </>) )}
+          {concentrations.map((one) => (
+            <>{one} / </>
+          ))}
         </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Side Effects:</Box>
-        {side_effects.map((one)=><Box sx={{ pb: 1 }}>{one?.name_english}</Box>)}
+        {side_effects.map((one) => (
+          <Box sx={{ pb: 1 }}>{one?.name_english}</Box>
+        ))}
       </CustomPopover>
     </>
   );

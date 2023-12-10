@@ -42,9 +42,9 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetSurgeries } from 'src/api/tables';                                                           /// edit
+import { useGetSurgeries } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
-import TableDetailRow from '../surgeries/table-details-row'                                             /// edit
+import TableDetailRow from '../surgeries/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -52,7 +52,8 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
 
-const TABLE_HEAD = [                                                                           /// to edit
+const TABLE_HEAD = [
+  /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name', label: 'name' },
   { id: 'description', label: 'description' },
@@ -74,7 +75,8 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function SurgeriesTableView() {                       /// edit
+export default function SurgeriesTableView() {
+  /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -118,7 +120,7 @@ export default function SurgeriesTableView() {                       /// edit
         code: data.code,
         name: data.name_english,
         description: data.description,
-        diseases: data.diseases?.map((disease)=>disease.name_english),
+        diseases: data.diseases?.map((disease) => disease.name_english),
       });
       return acc;
     }, []);
@@ -129,7 +131,7 @@ export default function SurgeriesTableView() {                       /// edit
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'surgeriesTable.xlsx');                                         /// edit
+    saveAs(data, 'surgeriesTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -145,7 +147,7 @@ export default function SurgeriesTableView() {                       /// edit
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.surgeries.edit(id));      /// edit
+      router.push(paths.superadmin.tables.surgeries.edit(id)); /// edit
     },
     [router]
   );
@@ -158,7 +160,7 @@ export default function SurgeriesTableView() {                       /// edit
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Surgeries"                           /// edit
+          heading="Surgeries" /// edit
           links={[
             {
               name: 'Super',
@@ -168,17 +170,17 @@ export default function SurgeriesTableView() {                       /// edit
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Surgeries' },                             /// edit
+            { name: 'Surgeries' }, /// edit
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.surgeries.new}             /// edit
+              href={paths.superadmin.tables.surgeries.new} /// edit
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
-            >                                                        
-              New Surgery                                 
-            </Button>                            /// edit
+            >
+              New Surgery
+            </Button> /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -282,10 +284,16 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.diseases?.some((disease)=>disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        data?.diseases?.some((disease)=>disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_english &&
+          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.diseases[0] && data?.diseases?.some(
+          (disease) => disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        )) ||
+        (data?.diseases[0] && data?.diseases?.some(
+          (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        )) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

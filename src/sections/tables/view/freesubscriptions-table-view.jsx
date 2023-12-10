@@ -401,7 +401,11 @@ export default function FreeSubscriptionTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, freeSubscriptionsData.length)}
+                    emptyRows={emptyRows(
+                      table.page,
+                      table.rowsPerPage,
+                      freeSubscriptionsData.length
+                    )}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -489,16 +493,26 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.country?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.country?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.city?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.city?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.US_type?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.US_type?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.speciality?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.speciality?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        (data?.name_english &&
+          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.country?.name_english &&
+          data?.country?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.country?.name_arabic &&
+          data?.country?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city?.name_english &&
+          data?.city?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city?.name_arabic &&
+          data?.city?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.US_type?.name_english &&
+          data?.US_type?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.US_type?.name_arabic &&
+          data?.US_type?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.speciality?.name_english &&
+          data?.speciality?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.speciality?.name_arabic &&
+          data?.speciality?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

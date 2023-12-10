@@ -63,10 +63,24 @@ export default function TableDetailsRow({
 
       <TableCell>{name_english}</TableCell>
 
-      <TableCell onClick={() => setFilters({ ...filters, name: unit_service.name_english })}>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }}
+        onClick={() => setFilters({ ...filters, name: unit_service.name_english })}
+      >
         {unit_service?.name_english}
       </TableCell>
-      <TableCell onClick={() => setFilters({ ...filters, name: service.name_english })}>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }}
+        onClick={() => setFilters({ ...filters, name: service.name_english })}
+      >
         {service?.name_english}
       </TableCell>
       <TableCell>{description}</TableCell>
@@ -119,7 +133,7 @@ export default function TableDetailsRow({
             }}
             sx={{ color: 'error.main' }}
           >
-            <Iconify icon="solar:pause-bold" />
+            <Iconify icon="ic:baseline-pause" />
             Inactivate
           </MenuItem>
         ) : (
@@ -130,7 +144,7 @@ export default function TableDetailsRow({
             }}
             sx={{ color: 'success.main' }}
           >
-            <Iconify icon="ph:play-fill" />
+            <Iconify icon="bi:play-fill" />
             activate
           </MenuItem>
         )}

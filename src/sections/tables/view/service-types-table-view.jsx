@@ -483,11 +483,15 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter(
       (data) =>
         data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.unit_service?.name_english &&
+          data?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.unit_service?.name_arabic &&
+          data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.work_shift?.name_english &&
+          data?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.work_shift?.name_arabic && data?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

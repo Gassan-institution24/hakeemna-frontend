@@ -42,9 +42,9 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetCountries } from 'src/api/tables';                                                           /// edit
+import { useGetCountries } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
-import TableDetailRow from '../countries/table-details-row'                                             /// edit
+import TableDetailRow from '../countries/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -52,7 +52,8 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
 
-const TABLE_HEAD = [                                                                           /// to edit
+const TABLE_HEAD = [
+  /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name', label: 'name' },
   { id: 'status', label: 'Status' },
@@ -73,7 +74,8 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function CountriesTableView() {                       /// edit
+export default function CountriesTableView() {
+  /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -133,7 +135,7 @@ export default function CountriesTableView() {                       /// edit
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'countriesTable.xlsx');                                         /// edit
+    saveAs(data, 'countriesTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -147,11 +149,11 @@ export default function CountriesTableView() {                       /// edit
     [table]
   );
 
-  const handleActivate = useCallback(                                       
+  const handleActivate = useCallback(
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `countries/${id}/updatestatus`,            /// to edit
+        path: `countries/${id}/updatestatus`, /// to edit
         data: { status: 'active' },
       });
       refetch();
@@ -160,11 +162,11 @@ export default function CountriesTableView() {                       /// edit
     [dataInPage.length, table, refetch]
   );
 
-  const handleInactivate = useCallback(                                    
+  const handleInactivate = useCallback(
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `countries/${id}/updatestatus`,                /// to edit
+        path: `countries/${id}/updatestatus`, /// to edit
         data: { status: 'inactive' },
       });
       refetch();
@@ -176,7 +178,7 @@ export default function CountriesTableView() {                       /// edit
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `countries/updatestatus`,                       /// to edit
+      path: `countries/updatestatus`, /// to edit
       data: { status: 'active', ids: table.selected },
     });
     refetch();
@@ -190,7 +192,7 @@ export default function CountriesTableView() {                       /// edit
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `countries/updatestatus`,                   /// edit
+      path: `countries/updatestatus`, /// edit
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();
@@ -203,7 +205,7 @@ export default function CountriesTableView() {                       /// edit
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.countries.edit(id));      /// edit
+      router.push(paths.superadmin.tables.countries.edit(id)); /// edit
     },
     [router]
   );
@@ -229,7 +231,7 @@ export default function CountriesTableView() {                       /// edit
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Countries"                           /// edit
+          heading="Countries" /// edit
           links={[
             {
               name: 'Super',
@@ -239,17 +241,17 @@ export default function CountriesTableView() {                       /// edit
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'countries' },                             /// edit
+            { name: 'countries' }, /// edit
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.countries.new}             /// edit
+              href={paths.superadmin.tables.countries.new} /// edit
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
-            >                                                        
-              New Country                                 
-            </Button>                            /// edit
+            >
+              New Country
+            </Button> /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -480,9 +482,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter(
       (data) =>
         data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
-        JSON.stringify(data.code) === name 
+        JSON.stringify(data.code) === name
     );
   }
 

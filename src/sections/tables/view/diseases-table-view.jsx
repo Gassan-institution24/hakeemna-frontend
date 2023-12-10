@@ -31,14 +31,15 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetDiseases } from 'src/api/tables';                                                           /// edit
-import TableDetailRow from '../diseases/table-details-row'                                             /// edit
+import { useGetDiseases } from 'src/api/tables'; /// edit
+import TableDetailRow from '../diseases/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [                                                                           /// to edit
+const TABLE_HEAD = [
+  /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'Name' },
   { id: 'category', label: 'Category' },
@@ -61,7 +62,8 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function DiseasesTableView() {                       /// edit
+export default function DiseasesTableView() {
+  /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -100,7 +102,7 @@ export default function DiseasesTableView() {                       /// edit
         code: data.code,
         name: data.name_english,
         category: data.category?.name_english,
-        symptoms: data.symptoms?.map((symptom)=>symptom?.name_english),
+        symptoms: data.symptoms?.map((symptom) => symptom?.name_english),
       });
       return acc;
     }, []);
@@ -111,7 +113,7 @@ export default function DiseasesTableView() {                       /// edit
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'diseasesTable.xlsx');                                         /// edit
+    saveAs(data, 'diseasesTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -127,7 +129,7 @@ export default function DiseasesTableView() {                       /// edit
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.diseases.edit(id));      /// edit
+      router.push(paths.superadmin.tables.diseases.edit(id)); /// edit
     },
     [router]
   );
@@ -147,7 +149,7 @@ export default function DiseasesTableView() {                       /// edit
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Diseases"                           /// edit
+          heading="Diseases" /// edit
           links={[
             {
               name: 'Super',
@@ -157,17 +159,17 @@ export default function DiseasesTableView() {                       /// edit
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Diseases' },                             /// edit
+            { name: 'Diseases' }, /// edit
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.tables.diseases.new}             /// edit
+              href={paths.superadmin.tables.diseases.new} /// edit
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
-            >                                                        
-              New Disease                                 
-            </Button>                            /// edit
+            >
+              New Disease
+            </Button> /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -175,7 +177,6 @@ export default function DiseasesTableView() {                       /// edit
         />
 
         <Card>
-
           <TableDetailToolbar
             onPrint={printHandler}
             filters={filters}
@@ -308,13 +309,19 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.category?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        data?.symptoms?.some((disease)=>disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        data?.symptoms?.some((disease)=>disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_english &&
+          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.category?.name_english && data?.category?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.symptoms[0] && data?.symptoms?.some(
+          (disease) => disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        )) ||
+        (data?.symptoms[0] && data?.symptoms?.some(
+          (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        )) ||
         data?._id === name ||
-        JSON.stringify(data.code) === name 
+        JSON.stringify(data.code) === name
     );
   }
 

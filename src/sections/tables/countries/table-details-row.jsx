@@ -104,7 +104,7 @@ export default function CountriesTableRow({
             }}
             sx={{ color: 'error.main' }}
           >
-            <Iconify icon="solar:pause-bold" />
+            <Iconify icon="ic:baseline-pause" />
             Inactivate
           </MenuItem>
         ) : (
@@ -115,7 +115,7 @@ export default function CountriesTableRow({
             }}
             sx={{ color: 'success.main' }}
           >
-            <Iconify icon="ph:play-fill" />
+            <Iconify icon="bi:play-fill" />
             activate
           </MenuItem>
         )}
