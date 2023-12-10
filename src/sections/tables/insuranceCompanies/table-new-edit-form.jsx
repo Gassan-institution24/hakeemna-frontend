@@ -13,23 +13,21 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetCountries,useGetCities,useGetInsuranceTypes } from 'src/api/tables';
+import { useGetCountries, useGetCities, useGetInsuranceTypes } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFSelect,
-  RHFTextField,
-} from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
+import { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const {countriesData}=useGetCountries()
-  const {insuranseTypesData}=useGetInsuranceTypes()
-  const {tableData}=useGetCities()
+  const { countriesData } = useGetCountries();
+  const { insuranseTypesData } = useGetInsuranceTypes();
+  const { tableData } = useGetCities();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -56,9 +54,9 @@ export default function TableNewEditForm({ currentTable }) {
       address: currentTable?.address || '',
     }),
     [currentTable]
-    );
-    console.log(currentTable)
-    console.log(defaultValues)
+  );
+  console.log(currentTable);
+  console.log(defaultValues);
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -73,13 +71,28 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if(currentTable){
-       await axiosHandler({method:'PATCH',path:`insurance/companies/${currentTable._id}`,data});
-      }else{
-       await axiosHandler({method:'POST',path:'insurance/companies',data});
+      let response;
+      if (currentTable) {
+        response = await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.activity(currentTable._id)}`,
+          data,
+        });
+      } else {
+        response = await axiosHandler({
+          method: 'POST',
+          path: `${endpoints.tables.activities}`,
+          data,
+        });
       }
       reset();
-      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      // if (response.status.includes(200, 304)) {
+        enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      // } else {
+      //   enqueueSnackbar('Please try again later!', {
+      //     variant: 'error',
+      //   });
+      // }
       router.push(paths.superadmin.tables.insurancecomapnies.root);
       console.info('DATA', data);
     } catch (error) {
@@ -87,10 +100,9 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
-
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-       <Grid container spacing={3}>
+      <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Box
@@ -105,28 +117,28 @@ export default function TableNewEditForm({ currentTable }) {
               <RHFTextField name="name_english" label="name english" />
               <RHFTextField name="name_arabic" label="name arabic" />
 
-              <RHFSelect native name="country" label="Country" >
+              <RHFSelect native name="country" label="Country">
                 <option> </option>
                 {countriesData.map((country) => (
                   <option key={country._id} value={country._id}>
-                      {country.name_english}
-                    </option>
+                    {country.name_english}
+                  </option>
                 ))}
-                </RHFSelect>
-              <RHFSelect native name="city" label="city" >
+              </RHFSelect>
+              <RHFSelect native name="city" label="city">
                 <option> </option>
                 {tableData.map((city) => (
                   <option key={city._id} value={city._id}>
-                      {city.name_english}
-                    </option>
+                    {city.name_english}
+                  </option>
                 ))}
-                </RHFSelect>
-              <RHFSelect native name="type" label="type" >
+              </RHFSelect>
+              <RHFSelect native name="type" label="type">
                 <option> </option>
                 {insuranseTypesData.map((type) => (
                   <option key={type._id} value={type._id}>
-                      {type.name_english}
-                    </option>
+                    {type.name_english}
+                  </option>
                 ))}
               </RHFSelect>
               <RHFTextField name="webpage" label="web page link" />

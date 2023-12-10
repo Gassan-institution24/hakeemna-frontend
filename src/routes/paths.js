@@ -6,8 +6,6 @@ import { useParams } from 'react-router';
 
 const MOCK_ID = _id[1];
 
-
-
 const MOCK_TITLE = _postTitles[2];
 
 const ROOTS = {
@@ -21,7 +19,6 @@ const ROOTS = {
 // ----------------------------------------------------------------------
 
 export const paths = {
-  
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
   pricing: '/pricing',
@@ -185,107 +182,161 @@ export const paths = {
   // super adnim
   superadmin: {
     root: ROOTS.SUPERADMIN,
-    
+
     tables: {
       root: `${ROOTS.SUPERADMIN}/tables`,
       list: `${ROOTS.SUPERADMIN}/tables/list`,
-      details:(tablename)=> `${ROOTS.SUPERADMIN}/tables/${tablename}`,
-      cities:{
+      details: (tablename) => `${ROOTS.SUPERADMIN}/tables/${tablename}`,
+      cities: {
         root: `${ROOTS.SUPERADMIN}/tables/cities`,
         new: `${ROOTS.SUPERADMIN}/tables/cities/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/cities/edit/${id}`,
       },
-      countries:{
+      countries: {
         root: `${ROOTS.SUPERADMIN}/tables/countries`,
         new: `${ROOTS.SUPERADMIN}/tables/countries/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/countries/edit/${id}`,
       },
-      taxes:{
-        root: `${ROOTS.SUPERADMIN}/tables/added_value_taxes`,
-        new: `${ROOTS.SUPERADMIN}/tables/added_value_taxes/new`,
-        edit: (id) => `${ROOTS.SUPERADMIN}/tables/added_value_taxes/edit/${id}`,
+      taxes: {
+        root: `${ROOTS.SUPERADMIN}/tables/added_value_tax_GD`,
+        new: `${ROOTS.SUPERADMIN}/tables/added_value_tax_GD/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/added_value_tax_GD/edit/${id}`,
       },
-      analysis:{
+      analysis: {
         root: `${ROOTS.SUPERADMIN}/tables/analyses`,
         new: `${ROOTS.SUPERADMIN}/tables/analyses/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/analyses/edit/${id}`,
       },
-      appointypes:{
+      appointypes: {
         root: `${ROOTS.SUPERADMIN}/tables/appointment_types`,
         new: `${ROOTS.SUPERADMIN}/tables/appointment_types/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/appointment_types/edit/${id}`,
       },
-      currency:{
+      currency: {
         root: `${ROOTS.SUPERADMIN}/tables/currencies`,
         new: `${ROOTS.SUPERADMIN}/tables/currencies/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/currencies/edit/${id}`,
       },
-      departments:{
+      departments: {
         root: `${ROOTS.SUPERADMIN}/tables/departments`,
         new: `${ROOTS.SUPERADMIN}/tables/departments/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/departments/edit/${id}`,
       },
-      diets:{
+      diets: {
         root: `${ROOTS.SUPERADMIN}/tables/diets`,
         new: `${ROOTS.SUPERADMIN}/tables/diets/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/diets/edit/${id}`,
       },
-      diseases:{
+      diseases: {
         root: `${ROOTS.SUPERADMIN}/tables/diseases`,
         new: `${ROOTS.SUPERADMIN}/tables/diseases/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/diseases/edit/${id}`,
       },
-      freesub:{
+      freesub: {
         root: `${ROOTS.SUPERADMIN}/tables/free_subscriptions`,
         new: `${ROOTS.SUPERADMIN}/tables/free_subscriptions/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/free_subscriptions/edit/${id}`,
       },
-      insurancecomapnies:{
+      insurancecomapnies: {
         root: `${ROOTS.SUPERADMIN}/tables/insurance_companies`,
         new: `${ROOTS.SUPERADMIN}/tables/insurance_companies/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/insurance_companies/edit/${id}`,
       },
-      medcategories:{
+      medcategories: {
         root: `${ROOTS.SUPERADMIN}/tables/medical_categories`,
         new: `${ROOTS.SUPERADMIN}/tables/medical_categories/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/medical_categories/edit/${id}`,
       },
-      medicines:{
+      medicines: {
         root: `${ROOTS.SUPERADMIN}/tables/medicines`,
         new: `${ROOTS.SUPERADMIN}/tables/medicines/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/medicines/edit/${id}`,
       },
-      medfamilies:{
+      medfamilies: {
         root: `${ROOTS.SUPERADMIN}/tables/medicines_families`,
         new: `${ROOTS.SUPERADMIN}/tables/medicines_families/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/medicines_families/edit/${id}`,
       },
-      specialities:{
+      specialities: {
         root: `${ROOTS.SUPERADMIN}/tables/specialities`,
         new: `${ROOTS.SUPERADMIN}/tables/specialities/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/specialities/edit/${id}`,
       },
-      subspecialities:{
+      subspecialities: {
         root: `${ROOTS.SUPERADMIN}/tables/sub_specialities`,
         new: `${ROOTS.SUPERADMIN}/tables/sub_specialities/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/sub_specialities/edit/${id}`,
       },
-      surgeries:{
+      surgeries: {
         root: `${ROOTS.SUPERADMIN}/tables/surgeries`,
         new: `${ROOTS.SUPERADMIN}/tables/surgeries/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/surgeries/edit/${id}`,
       },
-      symptoms:{
+      symptoms: {
         root: `${ROOTS.SUPERADMIN}/tables/symptoms`,
         new: `${ROOTS.SUPERADMIN}/tables/symptoms/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/symptoms/edit/${id}`,
       },
-      unitservices:{
+      unitservices: {
         root: `${ROOTS.SUPERADMIN}/tables/unit_services`,
         new: `${ROOTS.SUPERADMIN}/tables/unit_services/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/unit_services/edit/${id}`,
       },
+      unitservicetypes: {
+        root: `${ROOTS.SUPERADMIN}/tables/unit_service_types`,
+        new: `${ROOTS.SUPERADMIN}/tables/unit_service_types/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/unit_service_types/edit/${id}`,
+      },
+      activities: {
+        root: `${ROOTS.SUPERADMIN}/tables/activities`,
+        new: `${ROOTS.SUPERADMIN}/tables/activities/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/activities/edit/${id}`,
+      },
+      employeetypes: {
+        root: `${ROOTS.SUPERADMIN}/tables/employee_types`,
+        new: `${ROOTS.SUPERADMIN}/tables/employee_types/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/employee_types/edit/${id}`,
+      },
+      paymentmethods: {
+        root: `${ROOTS.SUPERADMIN}/tables/payment_methods`,
+        new: `${ROOTS.SUPERADMIN}/tables/payment_methods/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/payment_methods/edit/${id}`,
+      },
+      stakeholdertypes: {
+        root: `${ROOTS.SUPERADMIN}/tables/stakeholder_types`,
+        new: `${ROOTS.SUPERADMIN}/tables/stakeholder_types/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/stakeholder_types/edit/${id}`,
+      },
+      workshifts: {
+        root: `${ROOTS.SUPERADMIN}/tables/work_shifts`,
+        new: `${ROOTS.SUPERADMIN}/tables/work_shifts/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/work_shifts/edit/${id}`,
+      },
+      servicetypes: {
+        root: `${ROOTS.SUPERADMIN}/tables/service_types`,
+        new: `${ROOTS.SUPERADMIN}/tables/service_types/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/service_types/edit/${id}`,
+      },
+      measurementtypes: {
+        root: `${ROOTS.SUPERADMIN}/tables/measurement_types`,
+        new: `${ROOTS.SUPERADMIN}/tables/measurement_types/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/measurement_types/edit/${id}`,
+      },
+      hospitallist: {
+        root: `${ROOTS.SUPERADMIN}/tables/hospital_list`,
+        new: `${ROOTS.SUPERADMIN}/tables/hospital_list/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/hospital_list/edit/${id}`,
+      },
+      deductionconfig: {
+        root: `${ROOTS.SUPERADMIN}/tables/deduction_config`,
+        new: `${ROOTS.SUPERADMIN}/tables/deduction_config/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/deduction_config/edit/${id}`,
+      },
+      rooms: {
+        root: `${ROOTS.SUPERADMIN}/tables/rooms`,
+        new: `${ROOTS.SUPERADMIN}/tables/rooms/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/rooms/edit/${id}`,
+      },
     },
-    
   },
 };

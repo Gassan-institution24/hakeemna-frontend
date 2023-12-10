@@ -21,7 +21,6 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { countries } from 'src/assets/data';
 import { _tags, _tourGuides, TOUR_SERVICE_OPTIONS } from 'src/_mock';
 import { MenuItem } from '@mui/material';
 import Iconify from 'src/components/iconify';
@@ -65,7 +64,6 @@ export default function TourNewEditForm({ currentTour }) {
 
   const { tableData } = useGetCities();
   const { stackholder } = useGetStackholder();
-
   const stackholdersMultiSelectOptions = stackholder?.reduce((acc, data) => {
     acc.push({ value: data._id, label: data.stakeholder_name });
     return acc;

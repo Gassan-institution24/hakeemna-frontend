@@ -1,0 +1,17 @@
+import { Helmet } from 'react-helmet-async';
+
+import TableEditView from 'src/sections/tables/countries/table-edit-view';
+
+// ----------------------------------------------------------------------
+
+export default function TableEditPage() {
+  return (
+    <>
+      <Helmet>
+        <title> super: Create a new Country</title>
+      </Helmet>
+
+      <TableEditView />
+    </>
+  );
+}
