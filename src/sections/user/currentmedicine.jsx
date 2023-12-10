@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState,useEffect , useCallback } from 'react';
 import { useGetUser } from 'src/api/user';
 // ----------------------------------------------------------------------
 import Table from '@mui/material/Table';
@@ -9,8 +9,28 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+const currentDate = new Date();
+
 export default function ProfileFollowers() {
   const { data } = useGetUser();
+  function distanceToNow(date1) {
+    const startdate = new Date(date1);
+    const now = new Date();
+    const difference = Math.abs(now.getTime() - startdate.getTime());
+    const millisecondsInDay = 1000 * 60 * 60 * 24;
+    const daysDifference = Math.floor(difference / millisecondsInDay);
+
+    return daysDifference;
+  }
+  function differenceBetweenDates(date1, date2) {
+    const startdate = new Date(date1);
+    const enddate = new Date(date2);
+    const difference = Math.abs(enddate.getTime() - startdate.getTime());
+    const millisecondsInDay = 1000 * 60 * 60 * 24;
+    const daysDifference = Math.floor(difference / millisecondsInDay);
+
+    return daysDifference;
+  }
 
    return (
     <>
@@ -31,13 +51,11 @@ export default function ProfileFollowers() {
               key={med.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {med.medicine.trade_name}
-              </TableCell>
+              <TableCell>{med.medicine.trade_name}</TableCell>
               <TableCell align="right">{med.frequently}</TableCell>
               <TableCell align="right">{med.dose}</TableCell>
-              <TableCell align="right">{med.duration}</TableCell>
-              <TableCell align="right"> {med.medicine.price_1}</TableCell>
+              <TableCell align="right">{`${new Date(med.startdate) < currentDate && new Date(med.enddate) > currentDate  ? distanceToNow(med.enddate) :''} Days`} </TableCell>
+              <TableCell align="right">$ {med.medicine.price_1}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -46,6 +64,7 @@ export default function ProfileFollowers() {
 
 
 
+    
 
 
 
@@ -56,8 +75,9 @@ export default function ProfileFollowers() {
 
 
   </>
-      
-  );
+
+  );    
+
 }
 
 //    <Typography variant="h4" sx={{ my: 5 }}>

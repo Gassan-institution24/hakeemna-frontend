@@ -1,5 +1,7 @@
 import { _mock } from 'src/_mock';
+import { useGetCities } from 'src/api/tables';
 import { useGetUser } from 'src/api/user';
+import { useState } from 'react';
 // TO GET THE USER FROM THE AUTHCONTEXT, YOU CAN USE
 
 // CHANGE:
@@ -19,18 +21,17 @@ export function useMockedUser() {
   const user = {
     id:`${data._id}`,
     displayName: `${data.first_name} ${data.second_name}`,
-    email: `${data.email}`,
-    password: 'demo1234',
+    // email: `${data.email}`,
+    // password: 'demo1234',
     photoURL: `${data.profile_picture}`,
-    phoneNumber: `${data.mobile_num1}`,
-    country: 'United States',
-    address: '90210 Broadway Blvd',
-    state: 'California',
-    city: 'San Francisco',
-    zipCode: '94116',
-    about: 'Praesent turpis. Phasellus viverra nulla ut metus varius laoreet. Phasellus tempus.',
-    role: 'admin',
-    isPublic: true,
+    // phoneNumber: `${data.mobile_num1}`,
+    // country:`${data.nationality}`,
+    // address: `${data.address}`,
+    // state: 'California',
+    // city: 'San Francisco',
+    // zipCode: '94116',
+    // role: 'admin',
+    // isPublic: true,
   };
 
   return { user };
