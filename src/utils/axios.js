@@ -79,6 +79,8 @@ export const endpoints = {
     activity:(id)=>`/api/activities/${id}`,
     employeetypes:'/api/employeetypes',
     employeetype:(id)=>`/api/employeetypes/${id}`,
+    employees:'/api/employees',
+    employee:(id)=>`/api/employees/${id}`,
     paymentmethods:'/api/paymentmethod',
     paymentmethod:(id)=>`/api/paymentmethod/${id}`,
     stakeholdertypes:'/api/stakeholdertype',

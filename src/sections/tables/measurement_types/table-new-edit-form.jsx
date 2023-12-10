@@ -60,13 +60,13 @@ export default function TableNewEditForm({ currentTable }) {
       if (currentTable) {
         response = await axiosHandler({
           method: 'PATCH',
-          path: `${endpoints.tables.activity(currentTable._id)}`,
+          path: `${endpoints.tables.measurmenttype(currentTable._id)}`,
           data,
         });
       } else {
         response = await axiosHandler({
           method: 'POST',
-          path: `${endpoints.tables.activities}`,
+          path: `${endpoints.tables.measurmenttypes}`,
           data,
         });
       }
@@ -78,7 +78,7 @@ export default function TableNewEditForm({ currentTable }) {
       //     variant: 'error',
       //   });
       // }
-      router.push(paths.superadmin.tables.insurancecomapnies.root);
+      router.push(paths.superadmin.tables.measurementtypes.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);

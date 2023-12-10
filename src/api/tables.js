@@ -53,3 +53,4 @@ export * from './tables/symptoms';
 export * from './tables/unit_service_types';
 export * from './tables/unit_services';
 export * from './tables/work_shifts';
+export * from './tables/employees';
