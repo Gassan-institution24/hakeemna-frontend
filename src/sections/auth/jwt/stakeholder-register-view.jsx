@@ -22,7 +22,7 @@ import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField, RHFSelect } from 'src/components/hook-form';
-import { useGetCities, useGetCountries } from 'src/api/tables';
+import { useGetCities, useGetCountries, useGetSpecialties, useGetUSTypes } from 'src/api/tables';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +41,10 @@ export default function JwtRegisterView() {
 
   const { tableData } = useGetCities();
 
+  const {unitserviceTypesData} = useGetUSTypes()
+
+  const {specialtiesData} = useGetSpecialties()
+
   const searchParams = useSearchParams();
 
   const returnTo = searchParams.get('returnTo');
@@ -48,27 +52,31 @@ export default function JwtRegisterView() {
   const password = useBoolean();
 
   const RegisterSchema = Yup.object().shape({
-    first_name: Yup.string().required('First name required'),
-    last_name: Yup.string().required('Last name required'),
+    name_arabic: Yup.string().required('name is required'),
+    name_english: Yup.string().required('name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string().required('confirm Password is required'),
     identification_num: Yup.string().required('Identification number is required'),
-    gender: Yup.string().required('Gender is required'),
     country: Yup.string().required('Country is required'),
     city: Yup.string().required('City is required'),
+    US_type: Yup.string().required('Unit Service type is required'),
+    speciality: Yup.string().nullable(),
+    sector_type: Yup.string().required('Sector type is required'),
   });
 
   const defaultValues = {
-    first_name: '',
-    last_name: '',
+    name_arabic: '',
+    name_english: '',
     email: '',
     password: '',
     confirmPassword: '',
     identification_num: '',
-    gender: '',
     country: null,
     city: null,
+    US_type: null,
+    speciality: null,
+    sector_type: '',
   };
 
   const methods = useForm({
@@ -93,7 +101,7 @@ export default function JwtRegisterView() {
     try {
       console.log(data);
       await register?.(
-        {userName:`${data.first_name} ${data.last_name}`,...data}
+        {role:'admin',userName:data.name_english,...data}
       );
 
       router.push(returnTo || PATH_AFTER_LOGIN);
@@ -144,12 +152,12 @@ export default function JwtRegisterView() {
 
   const renderForm = (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Stack spacing={2.5}>
+      <Stack spacing={2}>
         {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFTextField name="first_name" label="First name" />
-          <RHFTextField name="last_name" label="Last name" />
+          <RHFTextField name="name_english" label="Name in english" />
+          <RHFTextField name="name_arabic" label="Name in arabic" />
         </Stack>
 
         <RHFTextField name="email" label="Email address" />
@@ -171,16 +179,40 @@ export default function JwtRegisterView() {
               </option>
             ))}
           </RHFSelect>
-          <RHFSelect native name="gender" label="Gender">
+        </Stack>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <RHFSelect native name="US_type" label="Unit Service Type">
             <option>{null}</option>
-              <option value='male'>
-                Male
+            {unitserviceTypesData.map((type) => (
+              <option key={type._id} value={type._id}>
+                {type.name_english}
               </option>
-              <option value='female'>
-                Female
+            ))}
+          </RHFSelect>
+          <RHFSelect native name="speciality" label="Speciality">
+            <option>{null}</option>
+            {specialtiesData.map((specialty) => (
+              <option key={specialty._id} value={specialty._id}>
+                {specialty.name_english}
+              </option>
+            ))}
+          </RHFSelect>
+        </Stack>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <RHFSelect native name="sector_type" label="Sector type">
+            <option>{null}</option>
+              <option value='public'>
+              Public
+              </option>
+              <option value='privet'>
+              Privet
+              </option>
+              <option value='charity'>
+              Charity
               </option>
           </RHFSelect>
         </Stack>
+          
         <RHFTextField
           name="password"
           label="Password"

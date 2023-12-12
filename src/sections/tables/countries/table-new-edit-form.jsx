@@ -20,11 +20,14 @@ import FormProvider, {
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
+
+  const {user} = useAuthContext()
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -57,9 +60,9 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if(currentSelected){
-        await axiosHandler({method:'PATCH',path:endpoints.tables.country(currentSelected._id),data});      /// edit
+        await axiosHandler({method:'PATCH',path:endpoints.tables.country(currentSelected._id),data:{user_modification:user._id,...data}});      /// edit
       }else{
-        await axiosHandler({method:'POST',path:endpoints.tables.countries,data});                                  /// edit
+        await axiosHandler({method:'POST',path:endpoints.tables.countries,data:{user_creation:user._id,...data}});                                  /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

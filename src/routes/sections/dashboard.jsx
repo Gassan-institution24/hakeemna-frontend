@@ -23,37 +23,69 @@ const CitiesTablePage = lazy(() => import('src/pages/super-admin/dashboard/table
 const CityCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/cities/new'));
 const CityEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/cities/edit'));
 // COUNTRIES
-const CountriesTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/countries/table'));
-const CountryCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/countries/new'));
+const CountriesTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/countries/table')
+);
+const CountryCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/countries/new')
+);
 const CountryEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/countries/edit'));
 // COURENCY
-const CurrencyTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/currency/table'));
-const CurrencyCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/currency/new'));
+const CurrencyTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/currency/table')
+);
+const CurrencyCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/currency/new')
+);
 const CurrencyEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/currency/edit'));
 // SURGERIES
-const SurgeriesTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/surgeries/table'));
-const SurgeryCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/surgeries/new'));
+const SurgeriesTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/surgeries/table')
+);
+const SurgeryCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/surgeries/new')
+);
 const SurgeryEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/surgeries/edit'));
 // MEDICAL CATEEGORIES
-const MedCatTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/medical-categories/table'));
-const MedCatCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/medical-categories/new'));
-const MedCatEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/medical-categories/edit'));
+const MedCatTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/medical-categories/table')
+);
+const MedCatCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/medical-categories/new')
+);
+const MedCatEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/medical-categories/edit')
+);
 // DISEASES
-const DiseasesTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/diseases/table'));
+const DiseasesTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/diseases/table')
+);
 const DiseaseCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/diseases/new'));
 const DiseaseEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/diseases/edit'));
 // MEDICINES FAMILIES
 const MedFamiliesTablePage = lazy(() =>
   import('src/pages/super-admin/dashboard/tables/medicines-families/table')
 );
-const MedFamilyCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/medicines-families/new'));
-const MedFamilyEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/medicines-families/edit'));
+const MedFamilyCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/medicines-families/new')
+);
+const MedFamilyEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/medicines-families/edit')
+);
 // MEDICINES
-const MedicinesTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/medicines/table'));
-const MedicineCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/medicines/new'));
-const MedicineEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/medicines/edit'));
+const MedicinesTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/medicines/table')
+);
+const MedicineCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/medicines/new')
+);
+const MedicineEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/medicines/edit')
+);
 // SYMPTOMS
-const SymptomsTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/symptoms/table'));
+const SymptomsTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/symptoms/table')
+);
 const SymptomCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/symptoms/new'));
 const SymptomEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/symptoms/edit'));
 // DIETS
@@ -61,8 +93,12 @@ const DietsTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables
 const DietCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/diets/new'));
 const DietEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/diets/edit'));
 // ANALYSIS
-const AnalysisTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/analysis/table'));
-const AnalysisCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/analysis/new'));
+const AnalysisTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/analysis/table')
+);
+const AnalysisCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/analysis/new')
+);
 const AnalysisEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/analysis/edit'));
 // INSURANCE COMPANIES
 const InsuranceCoTablePage = lazy(() =>
@@ -75,17 +111,31 @@ const InsuranceCoEditPage = lazy(() =>
   import('src/pages/super-admin/dashboard/tables/insurance-companies/edit')
 );
 // UNIT SERVICES
-const USsTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/unit-services/table'));
+const USsTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/unit-services/table')
+);
 const USCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/unit-services/new'));
 const USEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/unit-services/edit'));
 // DEPARTMENTS
-const DepartmentsTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/departments/table'));
-const DepartmentCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/departments/new'));
-const DepartmentEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/departments/edit'));
+const DepartmentsTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/departments/table')
+);
+const DepartmentCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/departments/new')
+);
+const DepartmentEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/departments/edit')
+);
 // SPECIALITIES
-const SpecialitiesTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/specialities/table'));
-const SpecialityCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/specialities/new'));
-const SpecialityEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/specialities/edit'));
+const SpecialitiesTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/specialities/table')
+);
+const SpecialityCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/specialities/new')
+);
+const SpecialityEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/specialities/edit')
+);
 // SUBSPECIALITIES
 const SubspecialitiesTablePage = lazy(() =>
   import('src/pages/super-admin/dashboard/tables/subspecialities/table')
@@ -93,61 +143,133 @@ const SubspecialitiesTablePage = lazy(() =>
 const SubspecialityCreatePage = lazy(() =>
   import('src/pages/super-admin/dashboard/tables/subspecialities/new')
 );
-const SubspecialityEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/subspecialities/edit'));
+const SubspecialityEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/subspecialities/edit')
+);
 // APPOINTMENT TYPES
 const AppoinTypesTablePage = lazy(() =>
   import('src/pages/super-admin/dashboard/tables/appointment-types/table')
 );
-const AppoinTypeCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/appointment-types/new'));
-const AppoinTypeEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/appointment-types/edit'));
+const AppoinTypeCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/appointment-types/new')
+);
+const AppoinTypeEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/appointment-types/edit')
+);
 // FREE SUBSCRIPTIONS
-const FreeSubTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/free-subscriptions/table'));
-const FreeSubCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/free-subscriptions/new'));
-const FreeSubEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/free-subscriptions/edit'));
+const FreeSubTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/free-subscriptions/table')
+);
+const FreeSubCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/free-subscriptions/new')
+);
+const FreeSubEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/free-subscriptions/edit')
+);
 // ADDED VALUE TAXES
-const TaxesTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/added-value-taxes/table'));
-const TaxCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/added-value-taxes/new'));
-const TaxEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/added-value-taxes/edit'));
+const TaxesTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/added-value-taxes/table')
+);
+const TaxCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/added-value-taxes/new')
+);
+const TaxEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/added-value-taxes/edit')
+);
 // UNIT SERVICE TYPES
 const USTypesTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/ustypes/table'));
 const USTypeCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/ustypes/new'));
 const USTypeEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/ustypes/edit'));
 // ACTIVITIES
-const ActivitiesTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/activities/table'));
-const ActivityCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/activities/new'));
-const ActivityEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/activities/edit'));
+const ActivitiesTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/activities/table')
+);
+const ActivityCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/activities/new')
+);
+const ActivityEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/activities/edit')
+);
 // EMPLOYEE TYPES
-const EmployeeTypesTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/employee_types/table'));
-const EmployeeTypeCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/employee_types/new'));
-const EmployeeTypeEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/employee_types/edit'));
+const EmployeeTypesTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/employee_types/table')
+);
+const EmployeeTypeCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/employee_types/new')
+);
+const EmployeeTypeEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/employee_types/edit')
+);
 // PAYMENT METHODS
-const PaymentMethodsTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/payment_methods/table'));
-const PaymentMethodCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/payment_methods/new'));
-const PaymentMethodEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/payment_methods/edit'));
+const PaymentMethodsTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/payment_methods/table')
+);
+const PaymentMethodCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/payment_methods/new')
+);
+const PaymentMethodEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/payment_methods/edit')
+);
 // STAKEHOLDER TYPES
-const StakeholderTypesTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/stakeholder_types/table'));
-const StackholderTypeCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/stakeholder_types/new'));
-const StackholderTypeEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/stakeholder_types/edit'));
+const StakeholderTypesTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/stakeholder_types/table')
+);
+const StackholderTypeCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/stakeholder_types/new')
+);
+const StackholderTypeEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/stakeholder_types/edit')
+);
 // WORK SHIFTS
-const WorkShiftsTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/work_shifts/table'));
-const WorkShiftCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/work_shifts/new'));
-const WorkShiftEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/work_shifts/edit'));
+const WorkShiftsTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/work_shifts/table')
+);
+const WorkShiftCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/work_shifts/new')
+);
+const WorkShiftEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/work_shifts/edit')
+);
 // SERVICE TYPES
-const ServiceTypesTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/service_types/table'));
-const ServiceTypeCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/service_types/new'));
-const ServiceTypeEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/service_types/edit'));
+const ServiceTypesTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/service_types/table')
+);
+const ServiceTypeCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/service_types/new')
+);
+const ServiceTypeEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/service_types/edit')
+);
 // MEASURMENT TYPES
-const MeasurmentTypesTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/measurement_types/table'));
-const MeasurmentTypeCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/measurement_types/new'));
-const MeasurmentTypeEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/measurement_types/edit'));
+const MeasurmentTypesTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/measurement_types/table')
+);
+const MeasurmentTypeCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/measurement_types/new')
+);
+const MeasurmentTypeEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/measurement_types/edit')
+);
 // HOSPITAL LIST
-const HospitalListTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/hospital_list/table'));
-const HospitalListCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/hospital_list/new'));
-const HospitalListEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/hospital_list/edit'));
+const HospitalListTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/hospital_list/table')
+);
+const HospitalListCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/hospital_list/new')
+);
+const HospitalListEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/hospital_list/edit')
+);
 // DEDUTION CONFIG
-const DeductionConfigTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/deduction_config/table'));
-const DeductionConfigCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/deduction_config/new'));
-const DeductionConfigEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/deduction_config/edit'));
+const DeductionConfigTablePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/deduction_config/table')
+);
+const DeductionConfigCreatePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/deduction_config/new')
+);
+const DeductionConfigEditPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/tables/deduction_config/edit')
+);
 // ROOMS
 const RoomsTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/table'));
 const RoomCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/new'));
@@ -170,13 +292,13 @@ export const dashboardRoutes = [
   {
     path: 'super',
     element: (
-      // <AuthGuard>
-      <DashboardLayout>
-        <Suspense fallback={<LoadingScreen />}>
-          <Outlet />
-        </Suspense>
-      </DashboardLayout>
-      // </AuthGuard>
+      <AuthGuard>
+        <DashboardLayout>
+          <Suspense fallback={<LoadingScreen />}>
+            <Outlet />
+          </Suspense>
+        </DashboardLayout>
+      </AuthGuard>
     ),
     children: [
       // { element: <IndexPage />, index: true },

@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { AmplifyRegisterView } from 'src/sections/auth/amplify';
+import { JwtForgetPasswordView } from 'src/sections/auth/jwt';
 
 // ----------------------------------------------------------------------
 
-export default function RegisterPage() {
+export default function ForgotPasswordPage() {
   return (
     <>
       <Helmet>
-        <title> Amplify: Register</title>
+        <title> Forgot Password</title>
       </Helmet>
 
-      <AmplifyRegisterView />
+      <JwtForgetPasswordView />
     </>
   );
 }

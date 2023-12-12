@@ -122,13 +122,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   // REGISTER
-  const register = useCallback(async (email, password, firstName, lastName) => {
-    const data = {
-      email,
-      password,
-      firstName,
-      lastName,
-    };
+  const register = useCallback(async (data) => {
+    console.log('user dataaaaa', data);
 
     const response = await axios.post(endpoints.auth.register, data);
 
@@ -145,6 +140,57 @@ export function AuthProvider({ children }) {
         },
       },
     });
+  }, []);
+  // const registerAsUS = useCallback(async (info) => {
+  //   const data = {
+  //     email:info.email,
+  //     password:info.password,
+  //     confirmPassword:info.confirmPassword,
+  //     first_name: info.firstName,
+  //     last_name: info.lastName,
+  //     userName: `${info.firstName} ${info.lastName}`,
+  //     identification_num:info.identification_num,
+  //     gender:info.gender,
+  //     country:info.country,
+  //     city:info.city
+  //   };
+  //   console.log('user dataaaaa', data);
+
+  //   const response = await axios.post(endpoints.auth.register, data);
+
+  //   const { accessToken, user } = response.data;
+
+  //   sessionStorage.setItem(STORAGE_KEY, accessToken);
+
+  //   dispatch({
+  //     type: 'REGISTER',
+  //     payload: {
+  //       user: {
+  //         ...user,
+  //         accessToken,
+  //       },
+  //     },
+  //   });
+  // }, []);
+
+  // CONFIRM REGISTER
+  const confirmRegister = useCallback(async (email, code) => {
+    // await Auth.confirmSignUp(email, code);
+  }, []);
+
+  // RESEND CODE REGISTER
+  const resendCodeRegister = useCallback(async (email) => {
+    // await Auth.resendSignUp(email);
+  }, []);
+
+  // FORGOT PASSWORD
+  const forgotPassword = useCallback(async (email) => {
+    // await Auth.forgotPassword(email);
+  }, []);
+
+  // NEW PASSWORD
+  const newPassword = useCallback(async (email, code, password) => {
+    // await Auth.forgotPasswordSubmit(email, code, password);
   }, []);
 
   // LOGOUT
@@ -171,9 +217,25 @@ export function AuthProvider({ children }) {
       //
       login,
       register,
+      // registerAsUS,
+      confirmRegister,
+      resendCodeRegister,
+      forgotPassword,
+      newPassword,
       logout,
     }),
-    [login, logout, register, state.user, status]
+    [
+      login,
+      logout,
+      register,
+      // registerAsUS,
+      confirmRegister,
+      resendCodeRegister,
+      forgotPassword,
+      newPassword,
+      state.user,
+      status,
+    ]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

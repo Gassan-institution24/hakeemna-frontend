@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { FirebaseRegisterView } from 'src/sections/auth/firebase';
+import { JwtStakeholderRegisterView } from 'src/sections/auth/jwt'
 
 // ----------------------------------------------------------------------
 
@@ -8,10 +8,10 @@ export default function RegisterPage() {
   return (
     <>
       <Helmet>
-        <title> Firebase: Register</title>
+        <title> Register As Stakeholder</title>
       </Helmet>
 
-      <FirebaseRegisterView />
+      <JwtStakeholderRegisterView />
     </>
   );
 }
