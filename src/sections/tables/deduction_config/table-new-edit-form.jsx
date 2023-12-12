@@ -20,11 +20,14 @@ import { useGetUnitservices, useGetServiceTypes, useGetEmployees } from 'src/api
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
+
+  const {user} = useAuthContext()
 
   const { unitservicesData } = useGetUnitservices();
   const { employeesData } = useGetEmployees();
@@ -78,13 +81,13 @@ export default function TableNewEditForm({ currentTable }) {
          await axiosHandler({
           method: 'PATCH',
           path: `${endpoints.tables.deduction(currentTable._id)}`,
-          data,
+          data:{user_modification:user._id,...data},
         });
       } else {
          await axiosHandler({
           method: 'POST',
           path: `${endpoints.tables.deductions}`,
-          data,
+          data:{user_creation:user._id,...data},
         });
       }
       reset();

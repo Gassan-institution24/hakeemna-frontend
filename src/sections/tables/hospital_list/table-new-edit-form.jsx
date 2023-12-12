@@ -19,11 +19,15 @@ import { endpoints } from 'src/utils/axios';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
+
+  const {user} = useAuthContext()
+  
   console.log('currr',currentTable)
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
@@ -76,13 +80,13 @@ export default function TableNewEditForm({ currentTable }) {
         response = await axiosHandler({
           method: 'PATCH',
           path: endpoints.tables.hospital(currentTable._id),
-          data,
+          data:{user_modification:user._id,...data},
         });
       } else {
         response = await axiosHandler({
           method: 'POST',
           path: endpoints.tables.hospitals,
-          data,
+          data:{user_creation:user._id,...data},
         });
       }
       reset();

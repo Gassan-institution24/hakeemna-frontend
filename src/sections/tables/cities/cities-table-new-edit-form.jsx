@@ -22,11 +22,14 @@ import FormProvider, {
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function CitiesNewEditForm({ currentCity }) {
   const router = useRouter();
+
+  const {user} = useAuthContext()
 
   const {countriesData}=useGetCountries()
 
@@ -63,9 +66,9 @@ export default function CitiesNewEditForm({ currentCity }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if(currentCity){
-       await axiosHandler({method:'PATCH',path:endpoints.tables.city(currentCity._id),data});
+       await axiosHandler({method:'PATCH',path:endpoints.tables.city(currentCity._id),data:{user_modification:user._id,...data}});
       }else{
-       await axiosHandler({method:'POST',path:endpoints.tables.cities,data});
+       await axiosHandler({method:'POST',path:endpoints.tables.cities,data:{user_creation:user._id,...data}});
       }
       reset();
       enqueueSnackbar(currentCity ? 'Update success!' : 'Create success!');

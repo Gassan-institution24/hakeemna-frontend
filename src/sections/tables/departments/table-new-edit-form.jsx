@@ -22,11 +22,14 @@ import FormProvider, {
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
+
+  const {user} = useAuthContext()
 
   const {unitservicesData}=useGetUnitservices()
 
@@ -65,9 +68,9 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if(currentTable){
-       await axiosHandler({method:'PATCH',path:endpoints.tables.department(currentTable._id),data});
+       await axiosHandler({method:'PATCH',path:endpoints.tables.department(currentTable._id),data:{user_modification:user._id,...data}});
       }else{
-       await axiosHandler({method:'POST',path:endpoints.tables.departments,data});
+       await axiosHandler({method:'POST',path:endpoints.tables.departments,data:{user_creation:user._id,...data}});
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');

@@ -25,6 +25,7 @@ import FormProvider, {
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/hooks';
 
 const DefaultDoses = ['5 mg','10 mg','50 mg']
 
@@ -32,6 +33,8 @@ const DefaultDoses = ['5 mg','10 mg','50 mg']
 
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
+
+  const {user} = useAuthContext()
 
   const { tableData } = useGetSymptoms();
   const { countriesData } = useGetCountries();
@@ -96,9 +99,9 @@ export default function CountriesNewEditForm({ currentSelected }) {
     try {
       console.log('dataaaaaa',data)
       if (currentSelected) {
-        await axiosHandler({ method: 'PATCH', path: endpoints.tables.medicine(currentSelected._id), data }); /// edit
+        await axiosHandler({ method: 'PATCH', path: endpoints.tables.medicine(currentSelected._id), data:{user_modification:user._id,...data} }); /// edit
       } else {
-        await axiosHandler({ method: 'POST', path: endpoints.tables.medicines, data }); /// edit
+        await axiosHandler({ method: 'POST', path: endpoints.tables.medicines, data:{user_creation:user._id,...data} }); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

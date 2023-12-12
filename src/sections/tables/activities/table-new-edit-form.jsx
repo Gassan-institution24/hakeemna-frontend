@@ -13,23 +13,24 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetUnitservices,useGetDepartments } from 'src/api/tables';
+import { useGetUnitservices, useGetDepartments } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFSelect,
-  RHFTextField,
-} from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
+import axios from 'axios';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const {unitservicesData}=useGetUnitservices()
-  const {departmentsData}=useGetDepartments()
+  const { user } = useAuthContext();
+
+  const { unitservicesData } = useGetUnitservices();
+  const { departmentsData } = useGetDepartments();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -52,7 +53,7 @@ export default function TableNewEditForm({ currentTable }) {
       details_arabic: currentTable?.details_arabic || '',
     }),
     [currentTable]
-    );
+  );
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -67,18 +68,28 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      let response
-      if(currentTable){
-       response = await axiosHandler({method:'PATCH',path:`${endpoints.tables.activity(currentTable._id)}`,data});
-      }else{
-       response = await axiosHandler({method:'POST',path:`${endpoints.tables.activities}`,data});
+      let response;
+      if (currentTable) {
+        const address = await axios.get('https://geolocation-db.com/json/');
+        console.log('ipadress', address.data.IPv4);
+        response = await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.activity(currentTable._id)}`,
+          data: { user_modification: user._id, ...data },
+        });
+      } else {
+        response = await axiosHandler({
+          method: 'POST',
+          path: `${endpoints.tables.activities}`,
+          data: { user_creation: user._id, ...data },
+        });
       }
       reset();
       router.push(paths.superadmin.tables.activities.root);
       // if(response.status.includes([200,304])){
-        enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
       // }else{enqueueSnackbar('Please try again later!', {
-        // variant: 'error',
+      // variant: 'error',
       // })}
       console.info('DATA', data);
     } catch (error) {
@@ -86,10 +97,9 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
-
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-       <Grid container spacing={3}>
+      <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Box
@@ -104,22 +114,22 @@ export default function TableNewEditForm({ currentTable }) {
               <RHFTextField name="name_english" label="name english" />
               <RHFTextField name="name_arabic" label="name arabic" />
 
-              <RHFSelect native name="unit_service" label="Unit Service" >
+              <RHFSelect native name="unit_service" label="Unit Service">
                 <option> </option>
                 {unitservicesData.map((unit_service) => (
                   <option key={unit_service._id} value={unit_service._id}>
-                      {unit_service.name_english}
-                    </option>
+                    {unit_service.name_english}
+                  </option>
                 ))}
-                </RHFSelect>
-              <RHFSelect native name="department" label="Department" >
+              </RHFSelect>
+              <RHFSelect native name="department" label="Department">
                 <option> </option>
                 {departmentsData.map((department) => (
                   <option key={department._id} value={department._id}>
-                      {department.name_english}
-                    </option>
+                    {department.name_english}
+                  </option>
                 ))}
-                </RHFSelect>
+              </RHFSelect>
               <RHFTextField name="details" label="Details" />
               <RHFTextField name="details_arabic" label="Details Arabic" />
             </Box>

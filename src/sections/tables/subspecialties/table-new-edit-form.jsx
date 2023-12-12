@@ -19,12 +19,15 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
-  console.log('subbbbbbbbb',currentTable)
+
+  const {user} = useAuthContext()
+
   const { specialtiesData } = useGetSpecialties();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -65,9 +68,9 @@ export default function TableNewEditForm({ currentTable }) {
     console.log('from handle submit',data)
     try {
       if (currentTable) {
-        await axiosHandler({ method: 'PATCH', path: endpoints.tables.subspeciality(currentTable._id), data });
+        await axiosHandler({ method: 'PATCH', path: endpoints.tables.subspeciality(currentTable._id), data:{user_modification:user._id,...data} });
       } else {
-        await axiosHandler({ method: 'POST', path: endpoints.tables.subspecialties, data });
+        await axiosHandler({ method: 'POST', path: endpoints.tables.subspecialties, data:{user_creation:user._id,...data} });
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');

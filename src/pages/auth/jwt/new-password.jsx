@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { FirebaseLoginView } from 'src/sections/auth/firebase';
+import { JwtNewPasswordView } from 'src/sections/auth/jwt';
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+export default function NewPasswordPage() {
   return (
     <>
       <Helmet>
-        <title> Firebase: Login</title>
+        <title> New Password</title>
       </Helmet>
 
-      <FirebaseLoginView />
+      <JwtNewPasswordView />
     </>
   );
 }

@@ -19,7 +19,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function AmplifyForgotPasswordView() {
+export default function ForgotPasswordView() {
   const { forgotPassword } = useAuthContext();
 
   const router = useRouter();
@@ -50,7 +50,7 @@ export default function AmplifyForgotPasswordView() {
         email: data.email,
       }).toString();
 
-      const href = `${paths.auth.amplify.newPassword}?${searchParams}`;
+      const href = `${paths.auth.jwt.newPassword}?${searchParams}`;
       router.push(href);
     } catch (error) {
       console.error(error);
@@ -73,7 +73,7 @@ export default function AmplifyForgotPasswordView() {
 
       <Link
         component={RouterLink}
-        href={paths.auth.amplify.login}
+        href={paths.auth.jwt.login}
         color="inherit"
         variant="subtitle2"
         sx={{

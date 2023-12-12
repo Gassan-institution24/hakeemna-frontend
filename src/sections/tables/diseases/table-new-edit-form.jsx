@@ -19,11 +19,15 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFMultiSelect, RHFSelect } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/hooks';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
+
+  const {user} = useAuthContext();
 
   const { tableData } = useGetSymptoms();
 
@@ -73,9 +77,13 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentSelected) {
-        await axiosHandler({ method: 'PATCH', path: endpoints.tables.disease(currentSelected._id), data }); /// edit
+        const address =await axios.get('https://geolocation-db.com/json/')
+        console.log('ipadress',address.data)
+        await axiosHandler({ method: 'PATCH', path: endpoints.tables.disease(currentSelected._id), data:{user_modification:user._id,...data} }); /// edit
       } else {
-        await axiosHandler({ method: 'POST', path: endpoints.tables.diseases, data }); /// edit
+        const address =await axios.get('https://geolocation-db.com/json/')
+        console.log('ipadress',address.data)
+        await axiosHandler({ method: 'POST', path: endpoints.tables.diseases, data:{user_creation:user._id,...data} }); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

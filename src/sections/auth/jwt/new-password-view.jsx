@@ -25,7 +25,7 @@ import FormProvider, { RHFCode, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function AmplifyNewPasswordView() {
+export default function NewPasswordView() {
   const { newPassword, forgotPassword } = useAuthContext();
 
   const router = useRouter();

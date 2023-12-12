@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { FirebaseVerifyView } from 'src/sections/auth/firebase';
+import { JwtUSRegisterView } from 'src/sections/auth/jwt';
 
 // ----------------------------------------------------------------------
 
-export default function VerifyPage() {
+export default function RegisterPage() {
   return (
     <>
       <Helmet>
-        <title> Firebase: Verify</title>
+        <title> Register As Unit Service</title>
       </Helmet>
 
-      <FirebaseVerifyView />
+      <JwtUSRegisterView />
     </>
   );
 }

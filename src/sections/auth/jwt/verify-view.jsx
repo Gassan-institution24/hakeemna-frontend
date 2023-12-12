@@ -22,7 +22,7 @@ import FormProvider, { RHFCode, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function AmplifyVerifyView() {
+export default function VerifyView() {
   const router = useRouter();
 
   const searchParams = useSearchParams();
