@@ -17,7 +17,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import ProfileHome from '../profile-home';
 import ProfileCover from '../profile-cover';
-import ProfileFriends from '../profile-friends';
+import ProfileFriends from '../patientappointment';
 // import ProfileGallery from '../profile-gallery';
 import ProfileFollowers from '../currentmedicine';
 

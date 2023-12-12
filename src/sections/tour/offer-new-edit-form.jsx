@@ -121,7 +121,6 @@ export default function TourNewEditForm({ currentTour }) {
   }, [currentTour, defaultValues, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('dataaaaa', data);
     try {
       if (currentTour) {
         editfunc(data);
