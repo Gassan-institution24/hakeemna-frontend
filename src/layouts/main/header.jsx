@@ -22,7 +22,7 @@ import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgBlur } from 'src/theme/css';
-
+import { Spacing } from '@mui/system';
 import Logo from 'src/components/logo';
 import Label from 'src/components/label';
 
@@ -49,7 +49,7 @@ export default function Header() {
         sx={{
           height: {
             xs: HEADER.H_MOBILE,
-            md: HEADER.H_DESKTOP,
+            md: HEADER.H_DESKTOP
           },
           transition: theme.transitions.create(['height'], {
             easing: theme.transitions.easing.easeInOut,
@@ -82,9 +82,9 @@ export default function Header() {
           {mdUp && <NavDesktop data={navConfig} />}
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
-            <Button variant="contained" target="_blank" rel="noopener" href={paths.minimalUI}>
+            {/* <Button variant="contained" target="_blank" rel="noopener" href={paths.minimalUI}>
               Purchase Now
-            </Button>
+            </Button> */}
             {/* login in navbar */}
             {mdUp && <LoginButton />}
 

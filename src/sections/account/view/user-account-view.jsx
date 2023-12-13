@@ -14,7 +14,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import AccountGeneral from '../account-general';
 import AccountBilling from '../account-billing';
-import AccountSocialLinks from '../account-social-links';
+import AccountSocialLinks from '../cotactus';
 import AccountNotifications from '../account-notifications';
 import AccountChangePassword from '../account-change-password';
 import MedicalReport from '../medicalreport';

@@ -114,3 +114,19 @@ export function useGetOffer(id) {
     );
     return memoizedValue;
   }
+
+
+export function useGetCountries() {
+    const URL =`${endpoints.countries.getAllcountries}`;
+    const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+    const memoizedValue = useMemo(
+      () => ({
+        countries: data || [],
+        Loading: isLoading,
+        error,
+        validating: isValidating,
+      }),
+      [data, error, isLoading, isValidating]
+    );
+    return memoizedValue;
+  }

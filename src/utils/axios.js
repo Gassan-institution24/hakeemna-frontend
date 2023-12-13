@@ -144,4 +144,7 @@ export const endpoints = {
   posts:{
     getAll: '/api/post'
   },
+  countries:{
+    getAllcountries: '/api/countries/'
+  },
 };

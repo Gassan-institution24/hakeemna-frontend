@@ -15,17 +15,18 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 // import { fData } from 'src/utils/format-number';
 
-// import { countries } from 'src/assets/data';
-
-// import Iconify from 'src/components/iconify';
+import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
+import { MenuItem } from '@mui/material';
+
 import FormProvider, {
   // RHFSwitch,
   RHFTextField,
   // RHFUploadAvatar,
-  // RHFAutocomplete,
+  RHFSelect,
+  RHFAutocomplete,
 } from 'src/components/hook-form';
-import { useGetUser } from 'src/api/user';
+import { useGetCountries, useGetUser } from 'src/api/user';
 import { useGetCities } from 'src/api/tables';
 import axiosHandler from 'src/utils/axios-handler';
 // ----------------------------------------------------------------------
@@ -33,17 +34,17 @@ import axiosHandler from 'src/utils/axios-handler';
 export default function AccountGeneral() {
   const { enqueueSnackbar } = useSnackbar();
   const [error, setError] = useState();
-  
-  // const {tableData} = useGetCities();
+  const {countries} = useGetCountries()
+  const {tableData} = useGetCities();
   const {data} = useGetUser();
-  // console.log(data ,"ljlljlljjl");
+
   const UpdateUserSchema = Yup.object().shape({
     first_name: Yup.string(),
     family_name: Yup.string(),
     email: Yup.string(),
-    mobile_num1: Yup.number()
+    mobile_num1: Yup.number(),
+    nationality: Yup.string().nullable(),
     // photoURL: Yup.mixed().nullable(),
-    // country: Yup.string().required('Country is required'),
     // address: Yup.string().required('Address is required'),
     // state: Yup.string().required('State is required'),
     // city: Yup.string().required('City is required'),
@@ -59,7 +60,7 @@ export default function AccountGeneral() {
     email: data?.email || '',
     mobile_num1: data?.mobile_num1 || '',
     // photoURL: data?.photoURL || null,
-    // country: data?.country || '',
+    nationality: data?.nationality._id || null,
     // address: data?.address || '',
     // state: data?.state || '',
     // city: data?.city || '',
@@ -80,26 +81,31 @@ export default function AccountGeneral() {
   } = methods;
 
   
+
+
+
+
+
+
   const onSubmit = handleSubmit(async (info) => {
     try {
-      console.log('Form Data:', info)
       const response = await axiosHandler({
         setError,
         method: 'PATCH',
-        path: `patient/656af6ccac70bc1aa4120dad`,
-        info,
+        path: `/api/patient/656af6ccac70bc1aa4120dad`,
+        data : info,
       });
   
       // Handle the response accordingly
       if (response) {
         enqueueSnackbar('Profile updated successfully', { variant: 'success' });
         // Optionally, you can update the local state or perform additional actions upon successful update
-      } else {
-        enqueueSnackbar('Failed to update profile', { variant: 'error' });
+        console.log(response);
       }
     } catch (err) {
       setError(err.message);
       enqueueSnackbar('Failed to update profile', { variant: 'error' });
+      console.log(err.message);
     }
   });
 
@@ -173,34 +179,23 @@ export default function AccountGeneral() {
               <RHFTextField name="email" label="Email Address" />
               <RHFTextField name="mobile_num1" label="Phone Number" />
               {/* <RHFTextField name="address" label="Address" /> */}
-{/* 
-              <RHFAutocomplete
-                name="country"
-                label="Country"
-                options={tableData.map((city) => city.name_english)}
-                getOptionLabel={(option) => option}
-                renderOption={(props, option) => {
-                  const { name_english } = tableData.filter(
-                    (country) => country.name_english === option
-                  )[0];
 
-                  if (!name_english) {
-                    return null;
-                  }
 
-                  return (
-                    <li {...props} key={name_english}>
-                      {/* <Iconify
-                        key={name_english}
-                        icon={`circle-flags:${code.toLowerCase()}`}
-                        width={28}
-                        sx={{ mr: 1 }}
-                      /> */}
-                      {/* {name_english} */}
-                    {/* </li> */}
-                  {/* ); */}
-                {/* }} */}
-              {/* /> */}
+
+              <RHFSelect
+                label="nationality"
+                fullWidth
+                name="nationality"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {countries.map((option) => (
+                  <MenuItem key={option._id} value={option._id}>
+                    {option.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+               
              
 
               {/* <RHFTextField name="state" name_english="State/Region" /> */}
@@ -210,7 +205,6 @@ export default function AccountGeneral() {
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               {/* <RHFTextField name="about" multiline rows={4} label="About" /> */}
-
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 Save Changes
               </LoadingButton>

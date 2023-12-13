@@ -20,7 +20,7 @@ export function useMockedUser() {
   const { data } = useGetUser();
   const user = {
     id:`${data._id}`,
-    displayName: `${data.first_name} ${data.second_name}`,
+    displayName: `${data.first_name} ${data.family_name}`,
     // email: `${data.email}`,
     // password: 'demo1234',
     photoURL: `${data.profile_picture}`,

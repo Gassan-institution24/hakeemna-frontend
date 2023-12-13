@@ -49,7 +49,7 @@ export default function TourNewEditForm({ currentTour }) {
     axiosHandler({
       setError,
       method: 'PATCH',
-      path: `suppliersoffers/${currentTour._id}`,
+      path: `/api/suppliersoffers/${currentTour._id}`,
       data,
     });
   };
@@ -57,7 +57,7 @@ export default function TourNewEditForm({ currentTour }) {
     axiosHandler({
       setError,
       method: 'POST',
-      path: 'suppliersoffers/',
+      path: '/api/suppliersoffers/',
       data,
     });
   };
