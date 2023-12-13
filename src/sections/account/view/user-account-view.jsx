@@ -14,10 +14,10 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import AccountGeneral from '../account-general';
 import AccountBilling from '../account-billing';
-import AccountSocialLinks from '../account-social-links';
+import AccountSocialLinks from '../cotactus';
 import AccountNotifications from '../account-notifications';
 import AccountChangePassword from '../account-change-password';
-
+import MedicalReport from '../medicalreport';
 // ----------------------------------------------------------------------
 
 const TABS = [
@@ -37,9 +37,14 @@ const TABS = [
     icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
   },
   {
+    value: 'MedicalReport',
+    label: 'MedicalReport',
+    icon: <Iconify icon="carbon:report" width={24} />,
+  },
+  {
     value: 'social',
-    label: 'Social links',
-    icon: <Iconify icon="solar:share-bold" width={24} />,
+    label: 'Support Team',
+    icon: <Iconify icon="material-symbols:contact-support" width={24} />,
   },
   {
     value: 'security',
@@ -97,6 +102,7 @@ export default function AccountView() {
       )}
 
       {currentTab === 'notifications' && <AccountNotifications />}
+      {currentTab === 'MedicalReport' && <MedicalReport />}
 
       {currentTab === 'social' && <AccountSocialLinks socialLinks={_userAbout.socialLinks} />}
 

@@ -132,6 +132,10 @@ export const endpoints = {
     details: '/api/product/details',
     search: '/api/product/search',
   },
+
+
+
+  
   patients:{
     onepatients: '/api/patient/656af6ccac70bc1aa4120dad',
   },
@@ -147,5 +151,8 @@ export const endpoints = {
   },
   posts:{
     getAll: '/api/post'
+  },
+  countries:{
+    getAllcountries: '/api/countries/'
   },
 };

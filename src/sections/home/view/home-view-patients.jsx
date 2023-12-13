@@ -40,7 +40,7 @@ const StyledPolygon = styled('div')(({ anchor = 'top', theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function HomeView() {
+export default function HomeViewPatient() {
   const { scrollYProgress } = useScroll();
 
   return (
