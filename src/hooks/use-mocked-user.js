@@ -14,12 +14,10 @@ import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
-
-
 export function useMockedUser() {
   const { data } = useGetUser();
   const user = {
-    id:`${data._id}`,
+    id: `${data._id}`,
     displayName: `${data.first_name} ${data.second_name}`,
     // email: `${data.email}`,
     // password: 'demo1234',

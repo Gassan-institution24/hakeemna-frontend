@@ -275,6 +275,13 @@ const RoomsTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables
 const RoomCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/new'));
 const RoomEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/edit'));
 
+const UnitservicesPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/home'));
+const UnitserviceAccountingPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/accounting/accounting'));
+const UnitserviceAddAccountingPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/accounting/addAccounting'));
+const UnitserviceEditAccountingPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/accounting/editAccounting'));
+const UnitserviceCommunicationsPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/communications/communications'));
+const UnitserviceFeedbackPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/feedback/feedback'));
+const UnitserviceInsurancePage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/insurance/insurance'));
 // FILE MANAGER
 // const FileManagerPage = lazy(() => import('src/pages/super-admin/dashboard/file-manager'));
 // APP
@@ -303,6 +310,24 @@ export const dashboardRoutes = [
     children: [
       // { element: <IndexPage />, index: true },
       // { path: '', element: < /> },
+      {
+        path: 'unitservices',
+        children: [
+          { element: <UnitservicesPage />, index: true },
+          // { path: 'list', element: <UnitservicesPage /> },
+          {
+            path: ':id/accounting',
+            children: [
+              { element: <UnitserviceAccountingPage />, index: true },
+              { path: 'new', element: <UnitserviceAddAccountingPage /> },
+              { path: ':acid/edit', element: <UnitserviceEditAccountingPage /> },
+            ],
+          },
+          { path: ':id/communications', element: <UnitserviceCommunicationsPage /> },
+          { path: ':id/feedback', element: <UnitserviceFeedbackPage /> },
+          { path: ':id/insurance', element: <UnitserviceInsurancePage /> },
+        ],
+      },
       {
         path: 'tables',
         children: [

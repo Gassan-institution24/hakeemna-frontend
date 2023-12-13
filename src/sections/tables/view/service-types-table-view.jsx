@@ -491,7 +491,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.work_shift?.name_english &&
           data?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.work_shift?.name_arabic && data?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.work_shift?.name_arabic &&
+          data?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

@@ -187,18 +187,18 @@ export function useNavData() {
       //       ],
       //     },
 
-      //     // BLOG
-      //     {
-      //       title: t('blog'),
-      //       path: paths.dashboard.post.root,
-      //       icon: ICONS.blog,
-      //       children: [
-      //         { title: t('list'), path: paths.dashboard.post.root },
-      //         { title: t('details'), path: paths.dashboard.post.demo.details },
-      //         { title: t('create'), path: paths.dashboard.post.new },
-      //         { title: t('edit'), path: paths.dashboard.post.demo.edit },
-      //       ],
-      //     },
+          // BLOG
+          {
+            title: t('quality control'),
+            path: paths.dashboard.post.root,
+            icon: ICONS.blog,
+            children: [
+              { title: t('Doctorna online'), path: paths.dashboard.post.root },
+              { title: t('unitservices'), path: paths.dashboard.post.demo.details },
+              { title: t('stakeholders'), path: paths.dashboard.post.new },
+              { title: t('other'), path: paths.dashboard.post.demo.edit },
+            ],
+          },
 
       //     // JOB
       //     {

@@ -37,7 +37,6 @@ export default function TourFiltersResult({
     onFilters('endDate', null);
   };
 
-
   const { tableData } = useGetCities();
   const handleRemoveDestination = (inputValue) => {
     const newValue = filters.cities.filter((item) => item._id !== inputValue._id);
@@ -60,8 +59,6 @@ export default function TourFiltersResult({
           </Block>
         )}
 
-      
-
         {!!filters.cities && (
           <Block label="Destination:">
             {tableData
@@ -77,7 +74,7 @@ export default function TourFiltersResult({
           </Block>
         )}
 
-{!!filters.stackholder && (
+        {!!filters.stackholder && (
           <Block label="stackholder:">
             {stackholder
               .filter((data) => filters.stackholder.includes(data._id))

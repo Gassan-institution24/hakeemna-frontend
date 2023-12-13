@@ -73,8 +73,11 @@ const defaultFilters = {
 };
 
 // ----------------------------------------------------------------------
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' },{ value: 'active', label: 'Active' },
-{ value: 'inactive', label: 'Inactive' },];
+const STATUS_OPTIONS = [
+  { value: 'all', label: 'All' },
+  { value: 'active', label: 'Active' },
+  { value: 'inactive', label: 'Inactive' },
+];
 
 export default function MedicinesTableView() {
   /// edit
@@ -87,7 +90,7 @@ export default function MedicinesTableView() {
 
   const router = useRouter();
 
-  const { medicines,refetch } = useGetMedicines();
+  const { medicines, refetch } = useGetMedicines();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -256,7 +259,7 @@ export default function MedicinesTableView() {
         />
 
         <Card>
-        <Tabs
+          <Tabs
             value={filters.status}
             onChange={handleFilterStatus}
             sx={{
@@ -480,9 +483,12 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter(
       (data) =>
         (data?.trade_name && data?.trade_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.scientific_name && data?.scientific_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.family?.name_english && data?.family?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.family?.name_arabic && data?.family?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.scientific_name &&
+          data?.scientific_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.family?.name_english &&
+          data?.family?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.family?.name_arabic &&
+          data?.family?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         // data?.symptoms?.some(
         //   (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
         // ) ||

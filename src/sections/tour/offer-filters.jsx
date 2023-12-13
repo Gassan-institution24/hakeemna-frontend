@@ -40,9 +40,8 @@ export default function TourFilters({
   //
   dateError,
 }) {
-
   const { tableData } = useGetCities();
-  const {stackholder} = useGetStackholder()
+  const { stackholder } = useGetStackholder();
   console.log(stackholder);
   const handleFilterStack = useCallback(
     (newValue) => {
@@ -76,7 +75,6 @@ export default function TourFilters({
     },
     [onFilters]
   );
-
 
   const handleFilterTourGuide = useCallback(
     (newValue) => {
@@ -116,7 +114,11 @@ export default function TourFilters({
         Durations
       </Typography>
       <Stack spacing={2.5}>
-        <DatePicker label="Start date" value={filters.Offer_start_date} onChange={handleFilterStartDate} />
+        <DatePicker
+          label="Start date"
+          value={filters.Offer_start_date}
+          onChange={handleFilterStartDate}
+        />
 
         <DatePicker
           label="End date"

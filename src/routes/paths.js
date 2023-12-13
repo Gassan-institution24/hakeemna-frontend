@@ -185,7 +185,21 @@ export const paths = {
   // super adnim
   superadmin: {
     root: ROOTS.SUPERADMIN,
-
+    unitservices: {
+      root: `${ROOTS.SUPERADMIN}/unitservices`,
+      list: `${ROOTS.SUPERADMIN}/unitservices/list`,
+      accounting: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/accounting`,
+      newAccounting: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/accounting/new`,
+      editAccounting: (id,ID) => `${ROOTS.SUPERADMIN}/unitservices/${id}/accounting/${ID}/edit`,
+      communications: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/communications`,
+      feedback: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/feedback`,
+      insurance: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/insurance`,
+      // cities: {
+      //   root: `${ROOTS.SUPERADMIN}/tables/cities`,
+      //   new: `${ROOTS.SUPERADMIN}/tables/cities/new`,
+      //   edit: (id) => `${ROOTS.SUPERADMIN}/tables/cities/edit/${id}`,
+      // },
+    },
     tables: {
       root: `${ROOTS.SUPERADMIN}/tables`,
       list: `${ROOTS.SUPERADMIN}/tables/list`,
@@ -341,15 +355,6 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/rooms/edit/${id}`,
       },
     },
-    unitservices: {
-      root: `${ROOTS.SUPERADMIN}/unitservices`,
-      list: `${ROOTS.SUPERADMIN}/unitservices/list`,
-      details: (name) => `${ROOTS.SUPERADMIN}/unitservices/${name}`,
-      // cities: {
-      //   root: `${ROOTS.SUPERADMIN}/tables/cities`,
-      //   new: `${ROOTS.SUPERADMIN}/tables/cities/new`,
-      //   edit: (id) => `${ROOTS.SUPERADMIN}/tables/cities/edit/${id}`,
-      // },
-    }
+    
   },
 };

@@ -32,18 +32,18 @@ export default function JwtRegisterView() {
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
-  
+
   const [selectedCountry, setSelectedCountry] = useState('');
-  
+
   const [cities, setCities] = useState([]);
-  
+
   const { countriesData } = useGetCountries();
 
   const { tableData } = useGetCities();
 
-  const {unitserviceTypesData} = useGetUSTypes()
+  const { unitserviceTypesData } = useGetUSTypes();
 
-  const {specialtiesData} = useGetSpecialties()
+  const { specialtiesData } = useGetSpecialties();
 
   const searchParams = useSearchParams();
 
@@ -92,7 +92,7 @@ export default function JwtRegisterView() {
 
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
-    methods.setValue('country', selectedCountryId, { shouldValidate: true })
+    methods.setValue('country', selectedCountryId, { shouldValidate: true });
     setSelectedCountry(selectedCountryId);
     // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
   };
@@ -100,9 +100,7 @@ export default function JwtRegisterView() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       console.log(data);
-      await register?.(
-        {role:'admin',userName:data.name_english,...data}
-      );
+      await register?.({ role: 'admin', userName: data.name_english, ...data });
 
       router.push(returnTo || PATH_AFTER_LOGIN);
     } catch (error) {
@@ -111,9 +109,13 @@ export default function JwtRegisterView() {
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
-  useEffect(()=>{
-    setCities(selectedCountry?tableData.filter((data)=>data?.country?._id === selectedCountry):tableData)
-  },[tableData,selectedCountry])
+  useEffect(() => {
+    setCities(
+      selectedCountry
+        ? tableData.filter((data) => data?.country?._id === selectedCountry)
+        : tableData
+    );
+  }, [tableData, selectedCountry]);
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
       <Typography variant="h4">Get started absolutely free</Typography>
@@ -201,18 +203,12 @@ export default function JwtRegisterView() {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect native name="sector_type" label="Sector type">
             <option>{null}</option>
-              <option value='public'>
-              Public
-              </option>
-              <option value='privet'>
-              Privet
-              </option>
-              <option value='charity'>
-              Charity
-              </option>
+            <option value="public">Public</option>
+            <option value="privet">Privet</option>
+            <option value="charity">Charity</option>
           </RHFSelect>
         </Stack>
-          
+
         <RHFTextField
           name="password"
           label="Password"

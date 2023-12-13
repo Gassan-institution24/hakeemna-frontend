@@ -502,14 +502,20 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.name_english &&
           data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.sector_type && data?.sector_type?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.country?.name_english && data?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.country?.name_arabic && data?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.city?.name_english && data?.city?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.city?.name_arabic && data?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.packages[0] && data?.packages?.some(
-          (one) => one?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
-        )) ||
+        (data?.sector_type &&
+          data?.sector_type?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.country?.name_english &&
+          data?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.country?.name_arabic &&
+          data?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city?.name_english &&
+          data?.city?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city?.name_arabic &&
+          data?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.packages[0] &&
+          data?.packages?.some(
+            (one) => one?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+          )) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
