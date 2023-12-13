@@ -16,10 +16,8 @@ import { useRouter } from 'src/routes/hooks';
 import { useGetDiseases } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFTextField,
-  RHFMultiSelect,
-} from 'src/components/hook-form';
+import FormProvider, { RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
+import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
@@ -29,9 +27,9 @@ import { useAuthContext } from 'src/auth/hooks';
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
-  const {tableData}=useGetDiseases()
+  const { tableData } = useGetDiseases();
 
   const diseasesMultiSelect = tableData?.reduce((acc, data) => {
     acc.push({
@@ -40,7 +38,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
     });
     return acc;
   }, []);
-  console.log('multiii',diseasesMultiSelect)
+  console.log('multiii', diseasesMultiSelect);
   const { enqueueSnackbar } = useSnackbar();
 
   const NewSchema = Yup.object().shape({
@@ -50,15 +48,16 @@ export default function CountriesNewEditForm({ currentSelected }) {
     diseases: Yup.array(),
   });
 
-  const defaultValues = useMemo(                                                  /// edit
+  const defaultValues = useMemo(
+    /// edit
     () => ({
       name_arabic: currentSelected?.name_arabic || '',
       name_english: currentSelected?.name_english || '',
       description: currentSelected?.description || '',
-      diseases: currentSelected?.diseases?.map((disease)=>disease._id) || [],
+      diseases: currentSelected?.diseases?.map((disease) => disease._id) || [],
     }),
     [currentSelected]
-    );
+  );
 
   const methods = useForm({
     resolver: yupResolver(NewSchema),
@@ -73,24 +72,37 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if(currentSelected){
-        await axiosHandler({method:'PATCH',path:endpoints.tables.surgery(currentSelected._id),data:{user_modification:user._id,...data}});      /// edit
-      }else{
-        await axiosHandler({method:'POST',path: endpoints.tables.surgeries,data:{user_creation:user._id,...data}});                                  /// edit
+      const address = await axios.get('https://geolocation-db.com/json/');
+      if (currentSelected) {
+        await axiosHandler({
+          method: 'PATCH',
+          path: endpoints.tables.surgery(currentSelected._id),
+          data: {
+            modifications_nums: (currentSelected.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
+        }); /// edit
+      } else {
+        await axiosHandler({
+          method: 'POST',
+          path: endpoints.tables.surgeries,
+          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
+        }); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
-      router.push(paths.superadmin.tables.surgeries.root);               /// edit
+      router.push(paths.superadmin.tables.surgeries.root); /// edit
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
   });
 
-
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-       <Grid container spacing={3}>
+      <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Box
@@ -100,28 +112,39 @@ export default function CountriesNewEditForm({ currentSelected }) {
               gridTemplateColumns={{
                 xs: 'repeat(1, 1fr)',
                 sm: 'repeat(2, 1fr)',
-              }}                                                                          /// edit
-            >                                            
+              }} /// edit
+            >
               <RHFTextField name="name_english" label="name english" />
               <RHFTextField name="name_arabic" label="name arabic" />
-              </Box>
-              
-              <Box rowGap={3}
+            </Box>
+
+            <Box
+              rowGap={3}
               columnGap={2}
               display="grid"
               gridTemplateColumns={{
                 xs: 'repeat(1, 1fr)',
                 sm: 'repeat(1, 1fr)',
-              }}              >
-              <RHFTextField sx={{ mt: 3 }} name="description" label="description" multiline colSpan={14} rows={4} />
+              }}
+            >
+              <RHFTextField
+                sx={{ mt: 3 }}
+                name="description"
+                label="description"
+                multiline
+                colSpan={14}
+                rows={4}
+              />
 
-              {diseasesMultiSelect&&<RHFMultiSelect
-                checkbox
-                name="diseases"
-                label="diseases"
-                options={diseasesMultiSelect}
-              />}
-              </Box>
+              {diseasesMultiSelect && (
+                <RHFMultiSelect
+                  checkbox
+                  name="diseases"
+                  label="diseases"
+                  options={diseasesMultiSelect}
+                />
+              )}
+            </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

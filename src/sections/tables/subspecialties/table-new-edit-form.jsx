@@ -17,6 +17,8 @@ import { useGetSpecialties } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+
+import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
@@ -26,7 +28,7 @@ import { useAuthContext } from 'src/auth/hooks';
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const { specialtiesData } = useGetSpecialties();
 
@@ -50,8 +52,6 @@ export default function TableNewEditForm({ currentTable }) {
     }),
     [currentTable]
   );
-  console.log(currentTable);
-  console.log(defaultValues);
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -65,12 +65,25 @@ export default function TableNewEditForm({ currentTable }) {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('from handle submit',data)
     try {
+      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
-        await axiosHandler({ method: 'PATCH', path: endpoints.tables.subspeciality(currentTable._id), data:{user_modification:user._id,...data} });
+        await axiosHandler({
+          method: 'PATCH',
+          path: endpoints.tables.subspeciality(currentTable._id),
+          data: {
+            modifications_nums: (currentTable.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
+        });
       } else {
-        await axiosHandler({ method: 'POST', path: endpoints.tables.subspecialties, data:{user_creation:user._id,...data} });
+        await axiosHandler({
+          method: 'POST',
+          path: endpoints.tables.subspecialties,
+          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
+        });
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');

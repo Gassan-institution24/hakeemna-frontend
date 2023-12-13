@@ -23,18 +23,20 @@ import FormProvider, {
   RHFSelect,
   RHFAutocomplete,
 } from 'src/components/hook-form';
+
+import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 
-const DefaultDoses = ['5 mg','10 mg','50 mg']
+const DefaultDoses = ['5 mg', '10 mg', '50 mg'];
 
 // ----------------------------------------------------------------------
 
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const { tableData } = useGetSymptoms();
   const { countriesData } = useGetCountries();
@@ -97,11 +99,24 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('dataaaaaa',data)
+      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentSelected) {
-        await axiosHandler({ method: 'PATCH', path: endpoints.tables.medicine(currentSelected._id), data:{user_modification:user._id,...data} }); /// edit
+        await axiosHandler({
+          method: 'PATCH',
+          path: endpoints.tables.medicine(currentSelected._id),
+          data: {
+            modifications_nums: (currentSelected.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
+        }); /// edit
       } else {
-        await axiosHandler({ method: 'POST', path: endpoints.tables.medicines , data:{user_creation:user._id,...data} }); /// edit
+        await axiosHandler({
+          method: 'POST',
+          path: endpoints.tables.medicines,
+          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
+        }); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
@@ -128,9 +143,9 @@ export default function CountriesNewEditForm({ currentSelected }) {
             >
               <RHFTextField name="trade_name" label="trade name" />
               <RHFTextField name="scientific_name" label="scientific name" />
-              </Box>
+            </Box>
 
-              <Box
+            <Box
               sx={{ my: 2 }}
               rowGap={3}
               columnGap={2}
@@ -166,9 +181,9 @@ export default function CountriesNewEditForm({ currentSelected }) {
                   ))
                 }
               />
-              </Box>
+            </Box>
 
-              <Box
+            <Box
               rowGap={3}
               columnGap={2}
               display="grid"
@@ -183,7 +198,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
               <RHFTextField name="ATCCODE" label="ATCCODE" />
               <RHFTextField name="packaging" label="packaging" />
               <RHFTextField name="barcode" label="barcode" />
-              </Box>
+            </Box>
             <Box
               sx={{ my: 3 }}
               rowGap={3}

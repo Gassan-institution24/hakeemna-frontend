@@ -18,6 +18,8 @@ import { useGetCountries, useGetCities, useGetSpecialties, useGetUSTypes } from 
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+
+import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
@@ -27,7 +29,7 @@ import { useAuthContext } from 'src/auth/hooks';
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const { countriesData } = useGetCountries();
   const { unitserviceTypesData } = useGetUSTypes();
@@ -64,7 +66,7 @@ export default function TableNewEditForm({ currentTable }) {
     }),
     [currentTable]
   );
-  console.log('currrrent',currentTable);
+  console.log('currrrent', currentTable);
   console.log(defaultValues);
 
   const methods = useForm({
@@ -79,16 +81,25 @@ export default function TableNewEditForm({ currentTable }) {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('dataaaaa', data);
+    const address = await axios.get('https://geolocation-db.com/json/');
     try {
       if (currentTable) {
         await axiosHandler({
           method: 'PATCH',
           path: endpoints.tables.freesubscription(currentTable._id),
-          data:{user_modification:user._id,...data},
+          data: {
+            modifications_nums: (currentTable.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
         });
       } else {
-        await axiosHandler({ method: 'POST', path: endpoints.tables.freesubscriptions, data:{user_creation:user._id,...data} });
+        await axiosHandler({
+          method: 'POST',
+          path: endpoints.tables.freesubscriptions,
+          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
+        });
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
@@ -158,7 +169,9 @@ export default function TableNewEditForm({ currentTable }) {
                 label="offer date"
                 onChange={(date) => methods.setValue('offer_date', date, { shouldValidate: true })}
                 // Parse the UTC date string to a JavaScript Date object
-                value={methods.getValues('offer_date') ? new Date(methods.getValues('offer_date')) : null}
+                value={
+                  methods.getValues('offer_date') ? new Date(methods.getValues('offer_date')) : null
+                }
               />
               <RHFTextField type="number" name="period_in_months" label="period in months" />
               <RHFTextField name="concept" label="concept" />

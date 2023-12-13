@@ -16,10 +16,8 @@ import { useRouter } from 'src/routes/hooks';
 // import { useGetUnitservices } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFSelect,
-  RHFTextField,
-} from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import axios from 'axios';
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useAuthContext } from 'src/auth/hooks';
@@ -29,7 +27,7 @@ import { useAuthContext } from 'src/auth/hooks';
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   // const {unitservicesData}=useGetUnitservices()
 
@@ -50,7 +48,7 @@ export default function TableNewEditForm({ currentTable }) {
       description_arabic: currentTable?.description_arabic || null,
     }),
     [currentTable]
-    );
+  );
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -65,10 +63,24 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if(currentTable){
-       await axiosHandler({method:'PATCH',path:endpoints.tables.appointmenttype(currentTable._id),data:{user_modification:user._id,...data}});
-      }else{
-       await axiosHandler({method:'POST',path:endpoints.tables.appointmenttypes,data:{user_creation:user._id,...data}});
+      const address = await axios.get('https://geolocation-db.com/json/');
+      if (currentTable) {
+        await axiosHandler({
+          method: 'PATCH',
+          path: endpoints.tables.appointmenttype(currentTable._id),
+          data: {
+            modifications_nums: (currentTable.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
+        });
+      } else {
+        await axiosHandler({
+          method: 'POST',
+          path: endpoints.tables.appointmenttypes,
+          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
+        });
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
@@ -79,10 +91,9 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
-
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-       <Grid container spacing={3}>
+      <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Box
@@ -96,7 +107,6 @@ export default function TableNewEditForm({ currentTable }) {
             >
               <RHFTextField name="name_english" label="name english" />
               <RHFTextField name="name_arabic" label="name arabic" />
-              
 
               {/* <RHFSelect native name="unit_service" label="unit_service" >
                 <option> </option>
@@ -107,16 +117,32 @@ export default function TableNewEditForm({ currentTable }) {
                 ))}
               </RHFSelect> */}
             </Box>
-            <Box rowGap={3}
+            <Box
+              rowGap={3}
               columnGap={2}
               display="grid"
               gridTemplateColumns={{
                 xs: 'repeat(1, 1fr)',
                 sm: 'repeat(1, 1fr)',
-              }}              >
-              <RHFTextField sx={{ mt: 3 }} name="description" label="description" multiline colSpan={14} rows={4} />
-              <RHFTextField sx={{ mt: 3 }} name="description_arabic" label="description arabic" multiline colSpan={14} rows={4} />
-              </Box>
+              }}
+            >
+              <RHFTextField
+                sx={{ mt: 3 }}
+                name="description"
+                label="description"
+                multiline
+                colSpan={14}
+                rows={4}
+              />
+              <RHFTextField
+                sx={{ mt: 3 }}
+                name="description_arabic"
+                label="description arabic"
+                multiline
+                colSpan={14}
+                rows={4}
+              />
+            </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

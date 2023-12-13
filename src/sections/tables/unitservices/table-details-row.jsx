@@ -87,32 +87,44 @@ export default function CountriesTableRow({
       </TableCell>
       <TableCell>{identification_num}</TableCell>
       <TableCell>{email}</TableCell>
-      <TableCell sx={{
+      <TableCell
+        sx={{
           cursor: 'pointer',
           color: 'blue',
           textDecoration: 'underline',
-        }} onClick={() => setFilters({ ...filters, name: country?.name_english })}>
+        }}
+        onClick={() => setFilters({ ...filters, name: country?.name_english })}
+      >
         {country?.name_english}
       </TableCell>
-      <TableCell sx={{
+      <TableCell
+        sx={{
           cursor: 'pointer',
           color: 'blue',
           textDecoration: 'underline',
-        }} onClick={() => setFilters({ ...filters, name: city?.name_english })}>
+        }}
+        onClick={() => setFilters({ ...filters, name: city?.name_english })}
+      >
         {city?.name_english}
       </TableCell>
-      <TableCell sx={{
+      <TableCell
+        sx={{
           cursor: 'pointer',
           color: 'blue',
           textDecoration: 'underline',
-        }} onClick={() => setFilters({ ...filters, name: US_type?.name_english })}>
+        }}
+        onClick={() => setFilters({ ...filters, name: US_type?.name_english })}
+      >
         {US_type?.name_english}
       </TableCell>
-      <TableCell sx={{
+      <TableCell
+        sx={{
           cursor: 'pointer',
           color: 'blue',
           textDecoration: 'underline',
-        }} onClick={() => setFilters({ ...filters, name: sector_type })}>
+        }}
+        onClick={() => setFilters({ ...filters, name: sector_type })}
+      >
         <Label
           variant="soft"
           color={
@@ -124,16 +136,18 @@ export default function CountriesTableRow({
           {sector_type}
         </Label>
       </TableCell>
-      <TableCell sx={{
+      <TableCell
+        sx={{
           cursor: 'pointer',
           color: 'blue',
           textDecoration: 'underline',
-        }} onClick={() => setFilters({ ...filters, name: speciality?.name_english })}>
+        }}
+        onClick={() => setFilters({ ...filters, name: speciality?.name_english })}
+      >
         {speciality?.name_english}
       </TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -175,18 +189,13 @@ export default function CountriesTableRow({
             activate
           </MenuItem>
         )}
-        <MenuItem
-          onClick={details.onOpen}
-        >
+        <MenuItem onClick={details.onOpen}>
           <Iconify icon="gg:details-more" />
           Details
         </MenuItem>
-        <MenuItem
-          onClick={DDL.onOpen}
-        >
+        <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
-        
         </MenuItem>
       </CustomPopover>
 
@@ -214,8 +223,7 @@ export default function CountriesTableRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No:</Box>
-        <Box>{modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
       </CustomPopover>
 
       <CustomPopover
@@ -228,7 +236,9 @@ export default function CountriesTableRow({
         }}
       >
         <Box sx={{ fontWeight: 600 }}>Subscription Period:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{subscription_period_months} months</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          {subscription_period_months} months
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Tax:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{tax}</Box>
 
@@ -239,18 +249,20 @@ export default function CountriesTableRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>Phone no:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{phone}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Mobile no:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-          {mobile_num}
-        </Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{mobile_num}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>IP Address:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Users no:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{users_num}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Packages:</Box>
-        {packages.map((one)=><Box sx={{ pb: 1 }}>{one?.name_english}</Box>)}
+        {packages.map((one) => (
+          <Box sx={{ pb: 1 }}>{one?.name_english}</Box>
+        ))}
         <Box sx={{ pt: 1, fontWeight: 600 }}>Insurance:</Box>
-        {insurance.map((one)=><Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{one?.name_english}</Box>)}
-        
+        {insurance.map((one) => (
+          <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{one?.name_english}</Box>
+        ))}
+
         <Box sx={{ pt: 1, fontWeight: 600 }}>Last Internet Connection:</Box>
         <Box>{last_internet_connection}</Box>
       </CustomPopover>

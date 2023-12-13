@@ -341,5 +341,15 @@ export const paths = {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/rooms/edit/${id}`,
       },
     },
+    unitservices: {
+      root: `${ROOTS.SUPERADMIN}/unitservices`,
+      list: `${ROOTS.SUPERADMIN}/unitservices/list`,
+      details: (name) => `${ROOTS.SUPERADMIN}/unitservices/${name}`,
+      // cities: {
+      //   root: `${ROOTS.SUPERADMIN}/tables/cities`,
+      //   new: `${ROOTS.SUPERADMIN}/tables/cities/new`,
+      //   edit: (id) => `${ROOTS.SUPERADMIN}/tables/cities/edit/${id}`,
+      // },
+    }
   },
 };

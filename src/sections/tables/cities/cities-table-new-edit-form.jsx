@@ -13,13 +13,11 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetCountries,useGetCategories } from 'src/api/tables';
+import { useGetCountries, useGetCategories } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFSelect,
-  RHFTextField,
-} from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
@@ -29,9 +27,9 @@ import { useAuthContext } from 'src/auth/hooks';
 export default function CitiesNewEditForm({ currentCity }) {
   const router = useRouter();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
-  const {countriesData}=useGetCountries()
+  const { countriesData } = useGetCountries();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -48,9 +46,9 @@ export default function CitiesNewEditForm({ currentCity }) {
       country: currentCity?.country?._id || '',
     }),
     [currentCity]
-    );
-    console.log(currentCity)
-    console.log(defaultValues)
+  );
+  console.log(currentCity);
+  console.log(defaultValues);
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -65,10 +63,24 @@ export default function CitiesNewEditForm({ currentCity }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if(currentCity){
-       await axiosHandler({method:'PATCH',path:endpoints.tables.city(currentCity._id),data:{user_modification:user._id,...data}});
-      }else{
-       await axiosHandler({method:'POST',path:endpoints.tables.cities,data:{user_creation:user._id,...data}});
+      const address = await axios.get('https://geolocation-db.com/json/');
+      if (currentCity) {
+        await axiosHandler({
+          method: 'PATCH',
+          path: endpoints.tables.city(currentCity._id),
+          data: {
+            modifications_nums: (currentCity.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
+        });
+      } else {
+        await axiosHandler({
+          method: 'POST',
+          path: endpoints.tables.cities,
+          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
+        });
       }
       reset();
       enqueueSnackbar(currentCity ? 'Update success!' : 'Create success!');
@@ -79,10 +91,9 @@ export default function CitiesNewEditForm({ currentCity }) {
     }
   });
 
-
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-       <Grid container spacing={3}>
+      <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Box
@@ -97,12 +108,12 @@ export default function CitiesNewEditForm({ currentCity }) {
               <RHFTextField name="name_english" label="name english" />
               <RHFTextField name="name_arabic" label="name arabic" />
 
-              <RHFSelect native name="country" label="Country" >
+              <RHFSelect native name="country" label="Country">
                 <option> </option>
                 {countriesData.map((category) => (
-                    <option key={category._id} value={category._id}>
-                      {category.name_english}
-                    </option>
+                  <option key={category._id} value={category._id}>
+                    {category.name_english}
+                  </option>
                 ))}
               </RHFSelect>
             </Box>

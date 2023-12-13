@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo,useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -18,6 +18,8 @@ import { endpoints } from 'src/utils/axios';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+
+import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -26,17 +28,15 @@ import { useAuthContext } from 'src/auth/hooks';
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const {user} = useAuthContext()
-  
-  console.log('currr',currentTable)
+  const { user } = useAuthContext();
+
+  console.log('currr', currentTable);
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
-  const [selectedCountry, setSelectedCountry] = useState(
-    currentTable?.country?._id || null
-  );
-  const [cities,setCities]= useState([])
+  const [selectedCountry, setSelectedCountry] = useState(currentTable?.country?._id || null);
+  const [cities, setCities] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  console.log('test',cities)
+  console.log('test', cities);
 
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
@@ -68,30 +68,35 @@ export default function TableNewEditForm({ currentTable }) {
 
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
-    methods.setValue('country', selectedCountryId, { shouldValidate: true })
+    methods.setValue('country', selectedCountryId, { shouldValidate: true });
     setSelectedCountry(selectedCountryId);
     // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
   };
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      let response;
+      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
-        response = await axiosHandler({
+        await axiosHandler({
           method: 'PATCH',
           path: endpoints.tables.hospital(currentTable._id),
-          data:{user_modification:user._id,...data},
+          data: {
+            modifications_nums: (currentTable.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
         });
       } else {
-        response = await axiosHandler({
+        await axiosHandler({
           method: 'POST',
           path: endpoints.tables.hospitals,
-          data:{user_creation:user._id,...data},
+          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
         });
       }
       reset();
       // if (response.status.includes(200, 304)) {
-        enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
       // } else {
       //   enqueueSnackbar('Please try again later!', {
       //     variant: 'error',
@@ -103,9 +108,13 @@ export default function TableNewEditForm({ currentTable }) {
       console.error(error);
     }
   });
-  useEffect(()=>{
-    setCities(selectedCountry?tableData.filter((data)=>data?.country?._id === selectedCountry):tableData)
-  },[tableData,selectedCountry])
+  useEffect(() => {
+    setCities(
+      selectedCountry
+        ? tableData.filter((data) => data?.country?._id === selectedCountry)
+        : tableData
+    );
+  }, [tableData, selectedCountry]);
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
