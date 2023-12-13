@@ -18,7 +18,7 @@ export default function TableEditView() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetUSType(id);
-  console.log(data)
+  console.log(data);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

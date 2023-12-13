@@ -18,12 +18,12 @@ export default function CountryEditView() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetSurgery(id);
-  console.log(data)
+  console.log(data);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Update Surgery"             /// edit
-        links={[ 
+        heading="Update Surgery" /// edit
+        links={[
           {
             name: 'Dashboard',
             href: paths.superadmin,
@@ -34,7 +34,7 @@ export default function CountryEditView() {
           },
           {
             name: 'Surgeries',
-            href: paths.superadmin.tables.surgeries.root,    /// edit
+            href: paths.superadmin.tables.surgeries.root, /// edit
           },
           { name: 'Update Surgery' },
         ]}

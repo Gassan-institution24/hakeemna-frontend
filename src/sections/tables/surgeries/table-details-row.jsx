@@ -171,8 +171,7 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No:</Box>
-        <Box>{modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
       </CustomPopover>
     </>
   );

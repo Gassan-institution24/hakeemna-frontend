@@ -502,7 +502,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.city?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.type?.name_english &&
           data?.type?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.type?.name_arabic && data?.type?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.type?.name_arabic &&
+          data?.type?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

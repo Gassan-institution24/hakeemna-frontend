@@ -14,8 +14,6 @@ import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
-
-
 export function useMockedUser() {
   const { data } = useGetUser();
   const user = {

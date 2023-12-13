@@ -15,6 +15,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import axios from 'axios';
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useAuthContext } from 'src/auth/hooks';
@@ -24,7 +25,7 @@ import { useAuthContext } from 'src/auth/hooks';
 export default function TableNewEditForm({ currentSelected }) {
   const router = useRouter();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -59,10 +60,24 @@ export default function TableNewEditForm({ currentSelected }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentSelected) {
-        await axiosHandler({ method: 'PATCH', path: endpoints.tables.analysis(currentSelected._id), data:{user_modification:user._id,...data} }); /// edit
+        await axiosHandler({
+          method: 'PATCH',
+          path: endpoints.tables.analysis(currentSelected._id),
+          data: {
+            modifications_nums: (currentSelected.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
+        }); /// edit
       } else {
-        await axiosHandler({ method: 'POST', path: endpoints.tables.analyses, data:{user_creation:user._id,...data} }); /// edit
+        await axiosHandler({
+          method: 'POST',
+          path: endpoints.tables.analyses,
+          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
+        }); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

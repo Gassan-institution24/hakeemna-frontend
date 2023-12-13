@@ -15,6 +15,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+
+import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
@@ -22,10 +24,10 @@ import { useAuthContext } from 'src/auth/hooks';
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
-  console.log('methods',currentTable)
+  console.log('methods', currentTable);
   const router = useRouter();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -55,23 +57,28 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      let response;
+      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
-        response = await axiosHandler({
+        await axiosHandler({
           method: 'PATCH',
           path: endpoints.tables.paymentmethod(currentTable._id),
-          data:{user_modification:user._id,...data},
+          data: {
+            modifications_nums: (currentTable.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
         });
       } else {
-        response = await axiosHandler({
+        await axiosHandler({
           method: 'POST',
           path: endpoints.tables.paymentmethods,
-          data:{user_creation:user._id,...data},
+          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
         });
       }
       reset();
       // if (response.status.includes(200, 304)) {
-        enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
       // } else {
       //   enqueueSnackbar('Please try again later!', {
       //     variant: 'error',

@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
-import { useMemo, useEffect, useCallback, useState, useRef  } from 'react';
+import { useMemo, useEffect, useCallback, useState, useRef } from 'react';
 
 import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
@@ -31,7 +31,7 @@ import FormProvider, {
   RHFTextField,
   RHFAutocomplete,
   RHFMultiCheckbox,
-  RHFSelect
+  RHFSelect,
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
 import { useGetCities } from 'src/api/tables';
@@ -253,7 +253,7 @@ export default function TourNewEditForm({ currentTour }) {
 
             <Stack spacing={1}>
               <Typography variant="subtitle2">Stackholder</Typography>
-                <RHFSelect
+              <RHFSelect
                 fullWidth
                 name="stakeholder"
                 InputLabelProps={{ shrink: true }}

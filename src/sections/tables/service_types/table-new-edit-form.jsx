@@ -17,6 +17,8 @@ import { useGetUnitservices, useGetWorkShifts, useGetMeasurmentTypes } from 'src
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+
+import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
@@ -26,9 +28,9 @@ import { useAuthContext } from 'src/auth/hooks';
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const {user} = useAuthContext()
-  
-  console.log('currentt',currentTable)
+  const { user } = useAuthContext();
+
+  console.log('currentt', currentTable);
   const { unitservicesData } = useGetUnitservices();
   const { measurmentTypesData } = useGetMeasurmentTypes();
   const { workShiftsData } = useGetWorkShifts();
@@ -57,8 +59,6 @@ export default function TableNewEditForm({ currentTable }) {
     }),
     [currentTable]
   );
-  console.log(currentTable);
-  console.log(defaultValues);
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -73,23 +73,28 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      let response;
+      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
-        response = await axiosHandler({
+        await axiosHandler({
           method: 'PATCH',
           path: endpoints.tables.servicetype(currentTable._id),
-          data:{user_modification:user._id,...data},
+          data: {
+            modifications_nums: (currentTable.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
         });
       } else {
-        response = await axiosHandler({
+        await axiosHandler({
           method: 'POST',
           path: endpoints.tables.servicetypes,
-          data:{user_creation:user._id,...data},
+          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
         });
       }
       reset();
       // if (response.status.includes(200, 304)) {
-        enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
       // } else {
       //   enqueueSnackbar('Please try again later!', {
       //     variant: 'error',
@@ -143,7 +148,7 @@ export default function TableNewEditForm({ currentTable }) {
                   </option>
                 ))}
               </RHFSelect>
-              <RHFTextField type='number' name="Price_per_unit" label="Price Per Unit" />
+              <RHFTextField type="number" name="Price_per_unit" label="Price Per Unit" />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

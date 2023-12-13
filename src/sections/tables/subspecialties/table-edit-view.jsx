@@ -18,7 +18,7 @@ export default function TableEditView() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetSubSpecialty(id);
-  console.log('subbbbb',data)
+  console.log('subbbbb', data);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

@@ -485,7 +485,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.department?.name_english &&
           data?.department?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.department?.name_arabic &&data?.department?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.department?.name_arabic &&
+          data?.department?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

@@ -288,12 +288,14 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.name_arabic &&
           data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.diseases[0] && data?.diseases?.some(
-          (disease) => disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1
-        )) ||
-        (data?.diseases[0] && data?.diseases?.some(
-          (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
-        )) ||
+        (data?.diseases[0] &&
+          data?.diseases?.some(
+            (disease) => disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+          )) ||
+        (data?.diseases[0] &&
+          data?.diseases?.some(
+            (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+          )) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

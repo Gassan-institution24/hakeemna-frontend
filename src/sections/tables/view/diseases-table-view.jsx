@@ -313,13 +313,16 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.name_arabic &&
           data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.category?.name_english && data?.category?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.symptoms[0] && data?.symptoms?.some(
-          (disease) => disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1
-        )) ||
-        (data?.symptoms[0] && data?.symptoms?.some(
-          (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
-        )) ||
+        (data?.category?.name_english &&
+          data?.category?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.symptoms[0] &&
+          data?.symptoms?.some(
+            (disease) => disease?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+          )) ||
+        (data?.symptoms[0] &&
+          data?.symptoms?.some(
+            (disease) => disease?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
+          )) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

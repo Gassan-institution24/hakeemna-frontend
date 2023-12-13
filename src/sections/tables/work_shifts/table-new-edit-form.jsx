@@ -14,11 +14,13 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetUnitservices} from 'src/api/tables';
+import { useGetUnitservices } from 'src/api/tables';
 import { endpoints } from 'src/utils/axios';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+
+import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -27,7 +29,7 @@ import { useAuthContext } from 'src/auth/hooks';
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const { unitservicesData } = useGetUnitservices();
 
@@ -65,23 +67,28 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      let response;
+      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
-        response = await axiosHandler({
+        await axiosHandler({
           method: 'PATCH',
           path: `${endpoints.tables.workshift(currentTable._id)}`,
-          data:{user_modification:user._id,...data},
+          data: {
+            modifications_nums: (currentTable.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
         });
       } else {
-        response = await axiosHandler({
+        await axiosHandler({
           method: 'POST',
           path: `${endpoints.tables.workshifts}`,
-          data:{user_creation:user._id,...data},
+          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
         });
       }
       reset();
       // if (response.status.includes(200, 304)) {
-        enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
       // } else {
       //   enqueueSnackbar('Please try again later!', {
       //     variant: 'error',
@@ -124,14 +131,18 @@ export default function TableNewEditForm({ currentTable }) {
                 label="Start date"
                 onChange={(date) => methods.setValue('start_date', date, { shouldValidate: true })}
                 // Parse the UTC date string to a JavaScript Date object
-                value={methods.getValues('start_date') ? new Date(methods.getValues('start_date')) : null}
+                value={
+                  methods.getValues('start_date') ? new Date(methods.getValues('start_date')) : null
+                }
               />
               <DatePicker
                 name="end_date"
                 label="End date"
                 onChange={(date) => methods.setValue('end_date', date, { shouldValidate: true })}
                 // Parse the UTC date string to a JavaScript Date object
-                value={methods.getValues('end_date') ? new Date(methods.getValues('end_date')) : null}
+                value={
+                  methods.getValues('end_date') ? new Date(methods.getValues('end_date')) : null
+                }
               />
             </Box>
 

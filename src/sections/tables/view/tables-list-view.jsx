@@ -53,14 +53,15 @@ export default function TablesListView() {
   const confirm = useBoolean();
 
   const { tableData } = useGetTables();
-  console.log('all tablessss',tableData)
+  console.log('all tablessss', tableData);
   const [filters, setFilters] = useState(defaultFilters);
 
-  const TABLE_HEAD = [                                                                           /// to edit
-  { id: 'Table Name', label: 'Table Name' },
-  { id: 'Notes', label: 'Notes' },
-  { id: '', width: 190 },
-];
+  const TABLE_HEAD = [
+    /// to edit
+    { id: 'Table Name', label: 'Table Name' },
+    { id: 'Notes', label: 'Notes' },
+    { id: '', width: 190 },
+  ];
 
   const dateError =
     filters.startDate && filters.endDate
@@ -69,10 +70,10 @@ export default function TablesListView() {
   const dataFiltered = applyFilter({
     inputData: tableData.filter((data) =>
       [
-        'cities',//
-        'surgeries',//
-        'diseases',//
-        'insurance_companies',//
+        'cities', //
+        'surgeries', //
+        'diseases', //
+        'insurance_companies', //
         'unit_service_types',
         'activities',
         'employee_types',
@@ -84,22 +85,22 @@ export default function TablesListView() {
         'hospital_list',
         'deduction_config',
         'rooms',
-        'specialities',//
-        'sub_specialities',//
-        'countries',//
+        'specialities', //
+        'sub_specialities', //
+        'countries', //
         'added_value_tax_GD',
-        'departments',//
-        'medicines',//
-        'unit_services',//
-        'appointment_types',//
-        'free_subscriptions',//
-        'symptoms',//
+        'departments', //
+        'medicines', //
+        'unit_services', //
+        'appointment_types', //
+        'free_subscriptions', //
+        'symptoms', //
         'patients',
-        'diets',//
-        'currencies',//
-        'analyses',//
-        'medical_categories',//
-        'medicines_families',//
+        'diets', //
+        'currencies', //
+        'analyses', //
+        'medical_categories', //
+        'medicines_families', //
       ].includes(data.tableName)
     ),
     comparator: getComparator(table.order, table.orderBy),
@@ -179,10 +180,9 @@ export default function TablesListView() {
           )}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'}>
-              <TableHeadCustom
+                <TableHeadCustom
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}

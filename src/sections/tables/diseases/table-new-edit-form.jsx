@@ -27,7 +27,7 @@ import axios from 'axios';
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
 
-  const {user} = useAuthContext();
+  const { user } = useAuthContext();
 
   const { tableData } = useGetSymptoms();
 
@@ -76,14 +76,24 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentSelected) {
-        const address =await axios.get('https://geolocation-db.com/json/')
-        console.log('ipadress',address.data)
-        await axiosHandler({ method: 'PATCH', path: endpoints.tables.disease(currentSelected._id), data:{user_modification:user._id,...data} }); /// edit
+        await axiosHandler({
+          method: 'PATCH',
+          path: endpoints.tables.disease(currentSelected._id),
+          data: {
+            modifications_nums: (currentSelected.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
+        }); /// edit
       } else {
-        const address =await axios.get('https://geolocation-db.com/json/')
-        console.log('ipadress',address.data)
-        await axiosHandler({ method: 'POST', path: endpoints.tables.diseases, data:{user_creation:user._id,...data} }); /// edit
+        await axiosHandler({
+          method: 'POST',
+          path: endpoints.tables.diseases,
+          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
+        }); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
