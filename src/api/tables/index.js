@@ -56,3 +56,4 @@ export * from './work_shifts';
 export * from './employees';
 export * from './license_movements'
 export * from './packages'
+export * from './feedback'

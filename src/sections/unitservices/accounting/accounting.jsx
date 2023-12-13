@@ -175,7 +175,7 @@ export default function UnitServicesAccountingView({unitServiceData}) {
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading={`${unitserviceName}`} /// edit
+          heading={`${unitserviceName} accounting`} /// edit
           links={[
             {
               name: 'Super',
@@ -185,7 +185,7 @@ export default function UnitServicesAccountingView({unitServiceData}) {
               name: 'Unit Services',
               href: paths.superadmin.unitservices.root,
             },
-            { name: t(`${unitserviceName}`) }, /// edit
+            { name: t(`${unitserviceName} accounting`) }, /// edit
           ]}
           action={
             <Button
