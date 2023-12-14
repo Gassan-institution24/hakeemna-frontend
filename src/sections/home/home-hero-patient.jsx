@@ -119,7 +119,7 @@ const StyledPolygon = styled('div')(({ opacity = 1, anchor = 'left', theme }) =>
 
 // ----------------------------------------------------------------------
 
-export default function HomeHero() {
+export default function HomeHeroPatient() {
   const mdUp = useResponsive('up', 'md');
 
   const theme = useTheme();
@@ -182,8 +182,8 @@ export default function HomeHero() {
             textAlign: 'center',
           }}
         >
-          Manage your  <br />
-          work with
+          Keep in <br />
+          Health with
         </Typography>
       </m.div>
 
@@ -202,8 +202,11 @@ export default function HomeHero() {
       </m.div>
 
       <m.div variants={varFade().in}>
-        <Typography variant="body2" sx={{ textAlign: 'center' }}>
-        where administrative and tax needs of medical institutions harmonize  across all devices, embracing simplicity and universal compatibility.
+        {/* <Typography variant="body2" sx={{ textAlign: 'center' }}>
+        Imagine a detailed storybook filled with all the chapters of your health history, painting a clear picture of your well-being journey.
+        </Typography> */}
+        <Typography variant="body1" sx={{ textAlign: 'center' }}>
+              electronic health care record(EHCR)- personal health recordes (PHR)
         </Typography>
       </m.div>
       <br/>
@@ -264,7 +267,7 @@ export default function HomeHero() {
             startIcon={<Iconify icon="eva:external-link-fill" width={24} />}
             target="_blank"
             rel="noopener"
-            href={PATH_AFTER_LOGIN}
+            href= {paths.auth.jwt.register}
             sx={{ borderColor: 'text.primary' }}
           >
             Get Started
