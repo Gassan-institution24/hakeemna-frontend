@@ -323,9 +323,9 @@ export const dashboardRoutes = [
               { path: ':acid/edit', element: <UnitserviceEditAccountingPage /> },
             ],
           },
+          {path: ':id/insurance',element: <UnitserviceInsurancePage />},
           { path: ':id/communications', element: <UnitserviceCommunicationsPage /> },
           { path: ':id/feedback', element: <UnitserviceFeedbackPage /> },
-          { path: ':id/insurance', element: <UnitserviceInsurancePage /> },
         ],
       },
       {

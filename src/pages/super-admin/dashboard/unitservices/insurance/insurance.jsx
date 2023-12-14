@@ -1,17 +1,23 @@
 import { Helmet } from 'react-helmet-async';
 
 import UnitServiceInsurance from 'src/sections/unitservices/insurance/insurance';
+import { useGetUnitservice } from 'src/api/tables';
+import { useParams } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function TableCreatePage() {
+export default function TableEditPage() {
+  const params = useParams();
+  const { id } = params;
+  const { data,refetch } = useGetUnitservice(id);
+  const unitServiceName = data?.name_english || 'unit service'
   return (
     <>
       <Helmet>
-        <title> Unit Service Insurance </title>
+        <title> {unitServiceName} Accounting</title>
       </Helmet>
 
-      <UnitServiceInsurance />
+      <UnitServiceInsurance  unitServiceData={data} refetch={refetch} />
     </>
   );
 }
