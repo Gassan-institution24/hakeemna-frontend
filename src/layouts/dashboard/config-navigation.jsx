@@ -92,6 +92,17 @@ export function useNavData() {
             path: paths.dashboard.general.banking,
             icon: ICONS.banking,
           },
+          {
+            title: t('quality control'),
+            path: paths.dashboard.post.root,
+            icon: ICONS.blog,
+            children: [
+              { title: t('Doctorna online'), path: paths.dashboard.post.root },
+              { title: t('unitservices'), path: paths.dashboard.post.demo.details },
+              { title: t('stakeholders'), path: paths.dashboard.post.new },
+              { title: t('other'), path: paths.dashboard.post.demo.edit },
+            ],
+          },
         ],
       },
     ];
