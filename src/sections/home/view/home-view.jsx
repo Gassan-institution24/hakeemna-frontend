@@ -5,16 +5,16 @@ import { styled } from '@mui/material/styles';
 
 import ScrollProgress from 'src/components/scroll-progress';
 
-import HomeHeroPatient from '../home-hero-patient';
-import HomeMinimalpatient from '../home-minimal-patient';
-// import HomePricing from '../home-pricing';
-// import HomeDarkMode from '../home-dark-mode';
-// import HomeLookingFor from '../home-looking-for';
-// import HomeForDesigner from '../home-for-designer';
-// import HomeColorPresets from '../home-color-presets';
-// // import HomeAdvertisement from '../home-advertisement';
-// import HomeCleanInterfaces from '../home-clean-interfaces';
-// import HomeHugePackElements from '../home-hugepack-elements';
+import HomeHero from '../home-hero';
+import HomeMinimal from '../home-minimal';
+import HomePricing from '../home-pricing';
+import HomeDarkMode from '../home-dark-mode';
+import HomeLookingFor from '../home-looking-for';
+import HomeForDesigner from '../home-for-designer';
+import HomeColorPresets from '../home-color-presets';
+import HomeAdvertisement from '../home-advertisement';
+import HomeCleanInterfaces from '../home-clean-interfaces';
+import HomeHugePackElements from '../home-hugepack-elements';
 
 // ----------------------------------------------------------------------
 
@@ -40,14 +40,14 @@ const StyledPolygon = styled('div')(({ anchor = 'top', theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function HomeViewPatient() {
+export default function HomeView() {
   const { scrollYProgress } = useScroll();
 
   return (
     <>
       <ScrollProgress scrollYProgress={scrollYProgress} />
 
-      <HomeHeroPatient />
+      <HomeHero />
 
       <Box
         sx={{
@@ -55,28 +55,25 @@ export default function HomeViewPatient() {
           position: 'relative',
           bgcolor: 'background.default',
         }}
-      >
-        <HomeMinimalpatient />
+      > 
+      <HomeMinimal />
+        {/*
 
-        {/* <HomeHugePackElements /> */}
+        <HomeHugePackElements /> 
 
-        {/* <Box sx={{ position: 'relative' }}>
+        <Box sx={{ position: 'relative' }}>
           <StyledPolygon />
           <HomeForDesigner />
           <StyledPolygon anchor="bottom" />
-        </Box> */}
+        </Box> 
 
-        {/* <HomeDarkMode /> */}
-{/* 
+        <HomeDarkMode /> */}
+ 
         <HomeColorPresets />
 
-        <HomeCleanInterfaces /> */}
+        <HomeCleanInterfaces />
 
         {/* <HomePricing /> */}
-
-        {/* <HomeLookingFor /> */}
-
-        {/* <HomeAdvertisement /> */}
       </Box>
     </>
   );
