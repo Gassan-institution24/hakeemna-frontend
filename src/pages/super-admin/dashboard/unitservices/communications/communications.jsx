@@ -1,17 +1,23 @@
 import { Helmet } from 'react-helmet-async';
 
-import UnitServiceCommunications from 'src/sections/unitservices/communications/communications';
+import {CommunicationListView} from 'src/sections/unitservices/communications/view';
+import { useGetUnitservice } from 'src/api/tables';
+import { useParams } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function TableCreatePage() {
+  const params = useParams();
+  const { id } = params;
+  const { data } = useGetUnitservice(id);
+  const unitServiceName = data?.name_english || 'unit service'
   return (
     <>
       <Helmet>
-        <title> Unit Service Communications </title>
+        <title> {unitServiceName} Communications </title>
       </Helmet>
 
-      <UnitServiceCommunications />
+      <CommunicationListView unitServiceData={data}/>
     </>
   );
 }
