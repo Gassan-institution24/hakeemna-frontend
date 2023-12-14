@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-
+import Button from '@mui/material/Button';
 import { varFade, MotionViewport } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
@@ -31,7 +31,7 @@ const CARDS = [
 
 // ----------------------------------------------------------------------
 
-export default function HomeMinimal() {
+export default function HomeMinimalpatient() {
   return (
     <Container
       component={MotionViewport}
@@ -54,7 +54,7 @@ export default function HomeMinimal() {
 
         <m.div variants={varFade().inDown}>
           <Typography variant="h2">
-            Why Doctorna ?
+            What Doctorna <br /> helps you?
           </Typography>
         </m.div>
       </Stack>
@@ -103,6 +103,38 @@ export default function HomeMinimal() {
           </m.div>
         ))}
       </Box>
+      <m.div variants={varFade().in}>
+        <Box
+          sx={{
+            textAlign: 'center',
+            mt: {
+              xs: 5,
+              md: 10,
+            },
+          }}
+        >
+          <m.div variants={varFade().inDown}>
+            <Typography variant="h4">Still have questions?</Typography>
+          </m.div>
+
+          <m.div variants={varFade().inDown}>
+            <Typography sx={{ mt: 2, mb: 5, color: 'text.secondary' }}>
+              Please describe your case to receive the most accurate respons.
+            </Typography>
+          </m.div>
+
+          <m.div variants={varFade().inUp}>
+            <Button
+              color="inherit"
+              size="large"
+              variant="contained"
+              href="mailto:doctorna2023@gmail.com?subject=[Feedback] from Customer"
+            >
+              Contact us
+            </Button>
+          </m.div>
+        </Box>
+      </m.div>
     </Container>
   );
 }
