@@ -110,7 +110,7 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'all' || filters.rate.length > 0;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
