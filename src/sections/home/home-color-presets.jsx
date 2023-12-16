@@ -22,7 +22,7 @@ export default function HomeColorPresets() {
   const renderDescription = (
     <Stack spacing={3} sx={{ textAlign: 'center' }}>
       <m.div variants={varFade().inDown}>
-        <Typography variant="h2"> Who are we <span style={{ color: 'green'}}>?</span></Typography>
+        <Typography variant="h2">Why Doctorna <span style={{ color: 'green'}}>?</span></Typography>
         <br/>
         <br/>
         <br/>

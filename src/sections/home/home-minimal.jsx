@@ -54,7 +54,7 @@ export default function HomeMinimal() {
 
         <m.div variants={varFade().inDown}>
           <Typography variant="h2">
-            Why Doctorna ?
+          Who are we  ?
           </Typography>
         </m.div>
       </Stack>
