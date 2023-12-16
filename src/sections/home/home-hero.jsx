@@ -21,7 +21,8 @@ import { bgBlur, bgGradient, textGradient } from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
 import { varFade, MotionContainer } from 'src/components/animate';
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+import { PATH_BEFORE_LOGIN } from 'src/config-global';
+import yourroll from './view/yourrole';
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
@@ -264,7 +265,7 @@ export default function HomeHero() {
             startIcon={<Iconify icon="eva:external-link-fill" width={24} />}
             target="_blank"
             rel="noopener"
-            href={PATH_AFTER_LOGIN}
+            href={PATH_BEFORE_LOGIN}
             sx={{ borderColor: 'text.primary' }}
           >
             Get Started
