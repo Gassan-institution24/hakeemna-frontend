@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
+import { useAuthContext } from 'src/auth/hooks';
 
 import { useGetContacts, useGetConversation, useGetConversations } from 'src/api/chat';
 
@@ -26,7 +26,7 @@ import ChatHeaderCompose from '../chat-header-compose';
 export default function ChatView() {
   const router = useRouter();
 
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
 
   const settings = useSettingsContext();
 

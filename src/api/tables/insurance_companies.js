@@ -24,13 +24,14 @@ export function useGetInsuranceCos() {
 
   return { ...memoizedValue, refetch };
 }
+
 export function useGetInsuranceCo(id) {
   const URL = endpoints.tables.insuranceCo(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      data,
+      isuranceData:data,
       loading: isLoading,
       error,
       validating: isValidating,

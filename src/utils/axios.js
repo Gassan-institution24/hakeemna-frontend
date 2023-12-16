@@ -136,9 +136,9 @@ export const endpoints = {
 
 
   
-  patients:{
-    onepatients: '/api/patient/656af6ccac70bc1aa4120dad',
-  },
+  // patients:{
+  //   onepatients: '/api/patient/656af6ccac70bc1aa4120dad',
+  // },
   appointment:{
     patientsappointments: '/api/appointments/patient/656c76046ceed235b42948a0',
   },

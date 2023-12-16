@@ -17,7 +17,7 @@ export default function TableEditView() {
   const settings = useSettingsContext();
   const params = useParams();
   const { id } = params;
-  const { data } = useGetInsuranceCo(id);
+  const { isuranceData } = useGetInsuranceCo(id);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -41,7 +41,7 @@ export default function TableEditView() {
           mb: { xs: 3, md: 5 },
         }}
       />
-      {data && <TableNewEditForm currentTable={data} />}
+      {isuranceData && <TableNewEditForm currentTable={isuranceData} />}
     </Container>
   );
 }

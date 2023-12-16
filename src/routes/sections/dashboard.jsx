@@ -274,30 +274,54 @@ const DeductionConfigEditPage = lazy(() =>
 const RoomsTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/table'));
 const RoomCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/new'));
 const RoomEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/edit'));
-
+// UNITSERVICES SIDEBAR OPTIONS
 const UnitservicesPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/home'));
-const UnitserviceAccountingPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/accounting/accounting'));
-const UnitserviceAddAccountingPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/accounting/addAccounting'));
-const UnitserviceEditAccountingPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/accounting/editAccounting'));
-const UnitserviceCommunicationsPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/communications/communications'));
-const UnitserviceFeedbackPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/feedback/feedback'));
-const UnitserviceInsurancePage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/insurance/insurance'));
-// FILE MANAGER
-// const FileManagerPage = lazy(() => import('src/pages/super-admin/dashboard/file-manager'));
-// APP
-// const ChatPage = lazy(() => import('src/pages/super-admin/dashboard/chat'));
-// const MailPage = lazy(() => import('src/pages/super-admin/dashboard/mail'));
-// const CalendarPage = lazy(() => import('src/pages/super-admin/dashboard/calendar'));
-// TEST RENDER PAGE BY ROLE
-// const PermissionDeniedPage = lazy(() => import('src/pages/super-admin/dashboard/permission'));
-// BLANK PAGE
-// const BlankPage = lazy(() => import('src/pages/super-admin/dashboard/blank'));
+// UNITSERVICES ACCOUNTING
+const UnitserviceAccountingPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/unitservices/accounting/accounting')
+);
+const UnitserviceAddAccountingPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/unitservices/accounting/addAccounting')
+);
+const UnitserviceEditAccountingPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/unitservices/accounting/editAccounting')
+);
+// UNITSERVICES COMMUNICATIONS
+const UnitserviceCommunicationsPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/unitservices/communications/communications')
+);
+// UNITSERVICES FEEDBACK
+const UnitserviceFeedbackPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/unitservices/feedback/feedback')
+);
+// UNITSERVICES INSURANCE
+const UnitserviceInsurancePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/unitservices/insurance/insurance')
+);
+
+// PATIENTS
+const PatientsHomePage = lazy(() => import('src/pages/super-admin/dashboard/patients/home'));
+const PatientsAddPage = lazy(() => import('src/pages/super-admin/dashboard/patients/add'));
+const PatientsEditPage = lazy(() => import('src/pages/super-admin/dashboard/patients/edit'));
+const PatientsInfoPage = lazy(() => import('src/pages/super-admin/dashboard/patients/info'));
+const PatientsHistoryPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/patients/history/history')
+);
+const PatientsInsurancePage = lazy(() =>
+  import('src/pages/super-admin/dashboard/patients/insurance/insurance')
+);
+const PatientsCommunicationsPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/patients/communications/communications')
+);
+const PatientsFeedbackPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/patients/feedback/feedback')
+);
 
 // ----------------------------------------------------------------------
 
 export const dashboardRoutes = [
   {
-    path: 'super',
+    path: 'dashboard',
     element: (
       <AuthGuard>
         <DashboardLayout>
@@ -323,9 +347,22 @@ export const dashboardRoutes = [
               { path: ':acid/edit', element: <UnitserviceEditAccountingPage /> },
             ],
           },
+          { path: ':id/insurance', element: <UnitserviceInsurancePage /> },
           { path: ':id/communications', element: <UnitserviceCommunicationsPage /> },
           { path: ':id/feedback', element: <UnitserviceFeedbackPage /> },
-          { path: ':id/insurance', element: <UnitserviceInsurancePage /> },
+        ],
+      },
+      {
+        path: 'patients',
+        children: [
+          { element: <PatientsHomePage />, index: true },
+          { path: ':id/info', element: <PatientsInfoPage /> },
+          { path: 'add', element: <PatientsAddPage /> },
+          { path: ':id/edit', element: <PatientsEditPage /> },
+          { path: ':id/history', element: <PatientsHistoryPage /> },
+          { path: ':id/insurance', element: <PatientsInsurancePage /> },
+          { path: ':id/communications', element: <PatientsCommunicationsPage /> },
+          { path: ':id/feedback', element: <PatientsFeedbackPage /> },
         ],
       },
       {
@@ -339,7 +376,7 @@ export const dashboardRoutes = [
               { element: <CitiesTablePage />, index: true },
               { path: 'list', element: <CitiesTablePage /> },
               { path: 'new', element: <CityCreatePage /> },
-              { path: 'edit/:id', element: <CityEditPage /> },
+              { path: ':id/edit', element: <CityEditPage /> },
             ],
           },
           {
@@ -348,7 +385,7 @@ export const dashboardRoutes = [
               { element: <CountriesTablePage />, index: true },
               { path: 'list', element: <CountriesTablePage /> },
               { path: 'new', element: <CountryCreatePage /> },
-              { path: 'edit/:id', element: <CountryEditPage /> },
+              { path: ':id/edit', element: <CountryEditPage /> },
             ],
           },
           {
@@ -357,7 +394,7 @@ export const dashboardRoutes = [
               { element: <TaxesTablePage />, index: true },
               { path: 'list', element: <TaxesTablePage /> },
               { path: 'new', element: <TaxCreatePage /> },
-              { path: 'edit/:id', element: <TaxEditPage /> },
+              { path: ':id/edit', element: <TaxEditPage /> },
             ],
           },
           {
@@ -366,7 +403,7 @@ export const dashboardRoutes = [
               { element: <AnalysisTablePage />, index: true },
               { path: 'list', element: <AnalysisTablePage /> },
               { path: 'new', element: <AnalysisCreatePage /> },
-              { path: 'edit/:id', element: <AnalysisEditPage /> },
+              { path: ':id/edit', element: <AnalysisEditPage /> },
             ],
           },
           {
@@ -375,7 +412,7 @@ export const dashboardRoutes = [
               { element: <AppoinTypesTablePage />, index: true },
               { path: 'list', element: <AppoinTypesTablePage /> },
               { path: 'new', element: <AppoinTypeCreatePage /> },
-              { path: 'edit/:id', element: <AppoinTypeEditPage /> },
+              { path: ':id/edit', element: <AppoinTypeEditPage /> },
             ],
           },
           {
@@ -384,7 +421,7 @@ export const dashboardRoutes = [
               { element: <CurrencyTablePage />, index: true },
               { path: 'list', element: <CurrencyTablePage /> },
               { path: 'new', element: <CurrencyCreatePage /> },
-              { path: 'edit/:id', element: <CurrencyEditPage /> },
+              { path: ':id/edit', element: <CurrencyEditPage /> },
             ],
           },
           {
@@ -393,7 +430,7 @@ export const dashboardRoutes = [
               { element: <DepartmentsTablePage />, index: true },
               { path: 'list', element: <DepartmentsTablePage /> },
               { path: 'new', element: <DepartmentCreatePage /> },
-              { path: 'edit/:id', element: <DepartmentEditPage /> },
+              { path: ':id/edit', element: <DepartmentEditPage /> },
             ],
           },
           {
@@ -402,7 +439,7 @@ export const dashboardRoutes = [
               { element: <DietsTablePage />, index: true },
               { path: 'list', element: <DietsTablePage /> },
               { path: 'new', element: <DietCreatePage /> },
-              { path: 'edit/:id', element: <DietEditPage /> },
+              { path: ':id/edit', element: <DietEditPage /> },
             ],
           },
           {
@@ -411,7 +448,7 @@ export const dashboardRoutes = [
               { element: <DiseasesTablePage />, index: true },
               { path: 'list', element: <DiseasesTablePage /> },
               { path: 'new', element: <DiseaseCreatePage /> },
-              { path: 'edit/:id', element: <DiseaseEditPage /> },
+              { path: ':id/edit', element: <DiseaseEditPage /> },
             ],
           },
           {
@@ -420,7 +457,7 @@ export const dashboardRoutes = [
               { element: <FreeSubTablePage />, index: true },
               { path: 'list', element: <FreeSubTablePage /> },
               { path: 'new', element: <FreeSubCreatePage /> },
-              { path: 'edit/:id', element: <FreeSubEditPage /> },
+              { path: ':id/edit', element: <FreeSubEditPage /> },
             ],
           },
           {
@@ -429,7 +466,7 @@ export const dashboardRoutes = [
               { element: <InsuranceCoTablePage />, index: true },
               { path: 'list', element: <InsuranceCoTablePage /> },
               { path: 'new', element: <InsuranceCoCreatePage /> },
-              { path: 'edit/:id', element: <InsuranceCoEditPage /> },
+              { path: ':id/edit', element: <InsuranceCoEditPage /> },
             ],
           },
           {
@@ -438,7 +475,7 @@ export const dashboardRoutes = [
               { element: <MedCatTablePage />, index: true },
               { path: 'list', element: <MedCatTablePage /> },
               { path: 'new', element: <MedCatCreatePage /> },
-              { path: 'edit/:id', element: <MedCatEditPage /> },
+              { path: ':id/edit', element: <MedCatEditPage /> },
             ],
           },
           {
@@ -447,7 +484,7 @@ export const dashboardRoutes = [
               { element: <MedicinesTablePage />, index: true },
               { path: 'list', element: <MedicinesTablePage /> },
               { path: 'new', element: <MedicineCreatePage /> },
-              { path: 'edit/:id', element: <MedicineEditPage /> },
+              { path: ':id/edit', element: <MedicineEditPage /> },
             ],
           },
           {
@@ -456,7 +493,7 @@ export const dashboardRoutes = [
               { element: <MedFamiliesTablePage />, index: true },
               { path: 'list', element: <MedFamiliesTablePage /> },
               { path: 'new', element: <MedFamilyCreatePage /> },
-              { path: 'edit/:id', element: <MedFamilyEditPage /> },
+              { path: ':id/edit', element: <MedFamilyEditPage /> },
             ],
           },
           {
@@ -465,7 +502,7 @@ export const dashboardRoutes = [
               { element: <SpecialitiesTablePage />, index: true },
               { path: 'list', element: <SpecialitiesTablePage /> },
               { path: 'new', element: <SpecialityCreatePage /> },
-              { path: 'edit/:id', element: <SpecialityEditPage /> },
+              { path: ':id/edit', element: <SpecialityEditPage /> },
             ],
           },
           {
@@ -474,7 +511,7 @@ export const dashboardRoutes = [
               { element: <SubspecialitiesTablePage />, index: true },
               { path: 'list', element: <SubspecialitiesTablePage /> },
               { path: 'new', element: <SubspecialityCreatePage /> },
-              { path: 'edit/:id', element: <SubspecialityEditPage /> },
+              { path: ':id/edit', element: <SubspecialityEditPage /> },
             ],
           },
           {
@@ -483,7 +520,7 @@ export const dashboardRoutes = [
               { element: <SurgeriesTablePage />, index: true },
               { path: 'list', element: <SurgeriesTablePage /> },
               { path: 'new', element: <SurgeryCreatePage /> },
-              { path: 'edit/:id', element: <SurgeryEditPage /> },
+              { path: ':id/edit', element: <SurgeryEditPage /> },
             ],
           },
           {
@@ -492,7 +529,7 @@ export const dashboardRoutes = [
               { element: <SymptomsTablePage />, index: true },
               { path: 'list', element: <SymptomsTablePage /> },
               { path: 'new', element: <SymptomCreatePage /> },
-              { path: 'edit/:id', element: <SymptomEditPage /> },
+              { path: ':id/edit', element: <SymptomEditPage /> },
             ],
           },
           {
@@ -501,7 +538,7 @@ export const dashboardRoutes = [
               { element: <USsTablePage />, index: true },
               { path: 'list', element: <USsTablePage /> },
               { path: 'new', element: <USCreatePage /> },
-              { path: 'edit/:id', element: <USEditPage /> },
+              { path: ':id/edit', element: <USEditPage /> },
             ],
           },
           {
@@ -510,7 +547,7 @@ export const dashboardRoutes = [
               { element: <USTypesTablePage />, index: true },
               { path: 'list', element: <USTypesTablePage /> },
               { path: 'new', element: <USTypeCreatePage /> },
-              { path: 'edit/:id', element: <USTypeEditPage /> },
+              { path: ':id/edit', element: <USTypeEditPage /> },
             ],
           },
           {
@@ -519,7 +556,7 @@ export const dashboardRoutes = [
               { element: <ActivitiesTablePage />, index: true },
               { path: 'list', element: <ActivitiesTablePage /> },
               { path: 'new', element: <ActivityCreatePage /> },
-              { path: 'edit/:id', element: <ActivityEditPage /> },
+              { path: ':id/edit', element: <ActivityEditPage /> },
             ],
           },
           {
@@ -528,7 +565,7 @@ export const dashboardRoutes = [
               { element: <EmployeeTypesTablePage />, index: true },
               { path: 'list', element: <EmployeeTypesTablePage /> },
               { path: 'new', element: <EmployeeTypeCreatePage /> },
-              { path: 'edit/:id', element: <EmployeeTypeEditPage /> },
+              { path: ':id/edit', element: <EmployeeTypeEditPage /> },
             ],
           },
           {
@@ -537,7 +574,7 @@ export const dashboardRoutes = [
               { element: <PaymentMethodsTablePage />, index: true },
               { path: 'list', element: <PaymentMethodsTablePage /> },
               { path: 'new', element: <PaymentMethodCreatePage /> },
-              { path: 'edit/:id', element: <PaymentMethodEditPage /> },
+              { path: ':id/edit', element: <PaymentMethodEditPage /> },
             ],
           },
           {
@@ -546,7 +583,7 @@ export const dashboardRoutes = [
               { element: <StakeholderTypesTablePage />, index: true },
               { path: 'list', element: <StakeholderTypesTablePage /> },
               { path: 'new', element: <StackholderTypeCreatePage /> },
-              { path: 'edit/:id', element: <StackholderTypeEditPage /> },
+              { path: ':id/edit', element: <StackholderTypeEditPage /> },
             ],
           },
           {
@@ -555,7 +592,7 @@ export const dashboardRoutes = [
               { element: <WorkShiftsTablePage />, index: true },
               { path: 'list', element: <WorkShiftsTablePage /> },
               { path: 'new', element: <WorkShiftCreatePage /> },
-              { path: 'edit/:id', element: <WorkShiftEditPage /> },
+              { path: ':id/edit', element: <WorkShiftEditPage /> },
             ],
           },
           {
@@ -564,7 +601,7 @@ export const dashboardRoutes = [
               { element: <ServiceTypesTablePage />, index: true },
               { path: 'list', element: <ServiceTypesTablePage /> },
               { path: 'new', element: <ServiceTypeCreatePage /> },
-              { path: 'edit/:id', element: <ServiceTypeEditPage /> },
+              { path: ':id/edit', element: <ServiceTypeEditPage /> },
             ],
           },
           {
@@ -573,7 +610,7 @@ export const dashboardRoutes = [
               { element: <MeasurmentTypesTablePage />, index: true },
               { path: 'list', element: <MeasurmentTypesTablePage /> },
               { path: 'new', element: <MeasurmentTypeCreatePage /> },
-              { path: 'edit/:id', element: <MeasurmentTypeEditPage /> },
+              { path: ':id/edit', element: <MeasurmentTypeEditPage /> },
             ],
           },
           {
@@ -582,7 +619,7 @@ export const dashboardRoutes = [
               { element: <HospitalListTablePage />, index: true },
               { path: 'list', element: <HospitalListTablePage /> },
               { path: 'new', element: <HospitalListCreatePage /> },
-              { path: 'edit/:id', element: <HospitalListEditPage /> },
+              { path: ':id/edit', element: <HospitalListEditPage /> },
             ],
           },
           {
@@ -591,7 +628,7 @@ export const dashboardRoutes = [
               { element: <DeductionConfigTablePage />, index: true },
               { path: 'list', element: <DeductionConfigTablePage /> },
               { path: 'new', element: <DeductionConfigCreatePage /> },
-              { path: 'edit/:id', element: <DeductionConfigEditPage /> },
+              { path: ':id/edit', element: <DeductionConfigEditPage /> },
             ],
           },
           {
@@ -600,7 +637,7 @@ export const dashboardRoutes = [
               { element: <RoomsTablePage />, index: true },
               { path: 'list', element: <RoomsTablePage /> },
               { path: 'new', element: <RoomCreatePage /> },
-              { path: 'edit/:id', element: <RoomEditPage /> },
+              { path: ':id/edit', element: <RoomEditPage /> },
             ],
           },
         ],

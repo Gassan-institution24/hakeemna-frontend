@@ -27,6 +27,7 @@ export function useGetPatients() {
   
   export function useGetPatient(id) {
     const URL = endpoints.tables.patient(id);
+    console.log('urll',URL)
   
     const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
     const memoizedValue = useMemo(

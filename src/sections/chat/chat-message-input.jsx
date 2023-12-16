@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
+import { useAuthContext } from 'src/auth/hooks';
 
 import uuidv4 from 'src/utils/uuidv4';
 
@@ -28,7 +28,7 @@ export default function ChatMessageInput({
 }) {
   const router = useRouter();
 
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
 
   const fileRef = useRef(null);
 

@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -49,19 +50,18 @@ const ICONS = {
 
 export function useNavData() {
   const { t } = useTranslate();
+  const { user } = useAuthContext();
 
-  const data = useMemo(
-    () => [
-      // OVERVIEW
-      // ----------------------------------------------------------------------
+  const data = useMemo(() => {
+    const superAdminItems = [
       {
         subheader: t('overview'),
         items: [
-          {
-            title: t('app'),
-            path: paths.dashboard.root,
-            icon: ICONS.dashboard,
-          },
+          // {
+          //   title: t('app'),
+          //   path: paths.dashboard.root,
+          //   icon: ICONS.dashboard,
+          // },
           {
             title: t('management tables'),
             path: paths.superadmin.tables.root,
@@ -73,35 +73,36 @@ export function useNavData() {
             icon: ICONS.analytics,
           },
           {
-            title: t('banking'),
+            title: t('patients'),
+            path: paths.superadmin.patients.root,
+            icon: ICONS.booking,
+          },
+          // {
+          //   title: t('file'),
+          //   path: paths.dashboard.general.file,
+          //   icon: ICONS.file,
+          // },
+          {
+            title: t('Adjustable Services Control'),
             path: paths.dashboard.general.banking,
             icon: ICONS.banking,
           },
           {
-            title: t('booking'),
-            path: paths.dashboard.general.booking,
-            icon: ICONS.booking,
-          },
-          {
-            title: t('file'),
-            path: paths.dashboard.general.file,
-            icon: ICONS.file,
+            title: t('quality control'),
+            path: paths.dashboard.post.root,
+            icon: ICONS.blog,
+            children: [
+              { title: t('Doctorna online'), path: paths.dashboard.post.root },
+              { title: t('unitservices'), path: paths.dashboard.post.demo.details },
+              { title: t('stakeholders'), path: paths.dashboard.post.new },
+              { title: t('other'), path: paths.dashboard.post.demo.edit },
+            ],
           },
         ],
       },
+    ];
 
-
-
-
-
-
-
-
-
-
-
-      // MANAGEMENT
-      // ----------------------------------------------------------------------
+    const userItems = [
       {
         subheader: t('management'),
         items: [
@@ -119,250 +120,18 @@ export function useNavData() {
               { title: t('account'), path: paths.dashboard.user.account },
             ],
           },
-
-          // PRODUCT
-          // {
-          //   title: t('product'),
-          //   path: paths.dashboard.product.root,
-          //   icon: ICONS.product,
-          //   children: [
-          //     { title: t('list'), path: paths.dashboard.product.root },
-          //     {
-          //       title: t('details'),
-          //       path: paths.dashboard.product.demo.details,
-          //     },
-          //     { title: t('create'), path: paths.dashboard.product.new },
-          //     { title: t('edit'), path: paths.dashboard.product.demo.edit },
-          //   ],
-          // },
-
-          // ORDER
-          // {
-          //   title: t('management tables'),
-          //   path: paths.superadmin.tables.root,
-          //   icon: ICONS.order,
-          //   children: [
-          //     { title: t('list'), path: paths.superadmin.tables.list },
-          //     { title: t('cities'), path: paths.superadmin.tables.cities.root },
-          //     { title: t('countries'), path: paths.superadmin.tables.countries.root },
-          //     { title: t('currency'), path: paths.superadmin.tables.currency.root },
-          //     { title: t('surgeries'), path: paths.superadmin.tables.surgeries.root },
-          //     { title: t('medical categories'), path: paths.superadmin.tables.medcategories.root },
-          //     { title: t('diseases'), path: paths.superadmin.tables.diseases.root },
-          //     { title: t('medicines families'), path: paths.superadmin.tables.medfamilies.root },
-          //     { title: t('medicines'), path: paths.superadmin.tables.medicines.root },
-          //     { title: t('symptoms'), path: paths.superadmin.tables.symptoms.root },
-          //     { title: t('diets'), path: paths.superadmin.tables.diets.root },
-          //     { title: t('analyses'), path: paths.superadmin.tables.analysis.root },
-          //     { title: t('insurance companies'), path: paths.superadmin.tables.insurancecomapnies.root },
-          //     { title: t('unit services'), path: paths.superadmin.tables.unitservices.root },
-          //     { title: t('departments'), path: paths.superadmin.tables.departments.root },
-          //     { title: t('specialities'), path: paths.superadmin.tables.specialities.root },
-          //     { title: t('subspecialities'), path: paths.superadmin.tables.subspecialities.root },
-          //     { title: t('appointment types'), path: paths.superadmin.tables.appointypes.root },
-          //     { title: t('free subscriptions'), path: paths.superadmin.tables.freesub.root },
-          //     { title: t('added value taxes'), path: paths.superadmin.tables.taxes.root },
-          //     { title: t('unit service types'), path: paths.superadmin.tables.unitservicetypes.root },
-          //     { title: t('activities'), path: paths.superadmin.tables.activities.root },
-          //     { title: t('employee types'), path: paths.superadmin.tables.employeetypes.root },
-          //     { title: t('payment methods'), path: paths.superadmin.tables.paymentmethods.root },
-          //     { title: t('stakeholder types'), path: paths.superadmin.tables.stakeholdertypes.root },
-          //     { title: t('work shifts'), path: paths.superadmin.tables.workshifts.root },
-          //     { title: t('service types'), path: paths.superadmin.tables.servicetypes.root },
-          //     { title: t('measurement types'), path: paths.superadmin.tables.measurementtypes.root },
-          //     { title: t('hospital list'), path: paths.superadmin.tables.hospitallist.root },
-          //     { title: t('deduction config'), path: paths.superadmin.tables.deductionconfig.root },
-          //     { title: t('rooms'), path: paths.superadmin.tables.rooms.root },
-          //   ],
-          // },
-          {
-                  title: t('Adjustable Services Control'),
-                  path: paths.dashboard.general.banking,
-                  icon: ICONS.banking,
-          },
-
-          // INVOICE
-      //     {
-      //       title: t('invoice'),
-      //       path: paths.dashboard.invoice.root,
-      //       icon: ICONS.invoice,
-      //       children: [
-      //         { title: t('list'), path: paths.dashboard.invoice.root },
-      //         {
-      //           title: t('details'),
-      //           path: paths.dashboard.invoice.demo.details,
-      //         },
-      //         { title: t('create'), path: paths.dashboard.invoice.new },
-      //         { title: t('edit'), path: paths.dashboard.invoice.demo.edit },
-      //       ],
-      //     },
-
-          // BLOG
-          {
-            title: t('quality control'),
-            path: paths.dashboard.post.root,
-            icon: ICONS.blog,
-            children: [
-              { title: t('Doctorna online'), path: paths.dashboard.post.root },
-              { title: t('unitservices'), path: paths.dashboard.post.demo.details },
-              { title: t('stakeholders'), path: paths.dashboard.post.new },
-              { title: t('other'), path: paths.dashboard.post.demo.edit },
-            ],
-          },
-
-      //     // JOB
-      //     {
-      //       title: t('job'),
-      //       path: paths.dashboard.job.root,
-      //       icon: ICONS.job,
-      //       children: [
-      //         { title: t('list'), path: paths.dashboard.job.root },
-      //         { title: t('details'), path: paths.dashboard.job.demo.details },
-      //         { title: t('create'), path: paths.dashboard.job.new },
-      //         { title: t('edit'), path: paths.dashboard.job.demo.edit },
-      //       ],
-      //     },
-
-      //     // TOUR
-      //     {
-      //       title: t('tour'),
-      //       path: paths.dashboard.tour.root,
-      //       icon: ICONS.tour,
-      //       children: [
-      //         { title: t('list'), path: paths.dashboard.tour.root },
-      //         { title: t('details'), path: paths.dashboard.tour.demo.details },
-      //         { title: t('create'), path: paths.dashboard.tour.new },
-      //         { title: t('edit'), path: paths.dashboard.tour.demo.edit },
-          //   ],
-          // },
-
-      //     // FILE MANAGER
-      //     {
-      //       title: t('file_manager'),
-      //       path: paths.dashboard.fileManager,
-      //       icon: ICONS.folder,
-      //     },
-
-      //     // MAIL
-      //     {
-      //       title: t('mail'),
-      //       path: paths.dashboard.mail,
-      //       icon: ICONS.mail,
-      //       info: <Label color="error">+32</Label>,
-      //     },
-
-      //     // CHAT
-      //     {
-      //       title: t('chat'),
-      //       path: paths.dashboard.chat,
-      //       icon: ICONS.chat,
-      //     },
-
-      //     // CALENDAR
-      //     {
-      //       title: t('calendar'),
-      //       path: paths.dashboard.calendar,
-      //       icon: ICONS.calendar,
-      //     },
-
-      //     // KANBAN
-      //     {
-      //       title: t('kanban'),
-      //       path: paths.dashboard.kanban,
-      //       icon: ICONS.kanban,
-      //     },
         ],
       },
+    ];
 
-      // DEMO MENU STATES
-      // {
-      //   subheader: t(t('other_cases')),
-      //   items: [
-      //     {
-      //       // default roles : All roles can see this entry.
-      //       // roles: ['user'] Only users can see this item.
-      //       // roles: ['admin'] Only admin can see this item.
-      //       // roles: ['admin', 'manager'] Only admin/manager can see this item.
-      //       // Reference from 'src/guards/RoleBasedGuard'.
-      //       title: t('item_by_roles'),
-      //       path: paths.dashboard.permission,
-      //       icon: ICONS.lock,
-      //       roles: ['admin', 'manager'],
-      //       caption: t('only_admin_can_see_this_item'),
-      //     },
-      //     {
-      //       title: t('menu_level'),
-      //       path: '#/dashboard/menu_level',
-      //       icon: ICONS.menuItem,
-      //       children: [
-      //         {
-      //           title: t('menu_level_1a'),
-      //           path: '#/dashboard/menu_level/menu_level_1a',
-      //         },
-      //         {
-      //           title: t('menu_level_1b'),
-      //           path: '#/dashboard/menu_level/menu_level_1b',
-      //           children: [
-      //             {
-      //               title: t('menu_level_2a'),
-      //               path: '#/dashboard/menu_level/menu_level_1b/menu_level_2a',
-      //             },
-      //             {
-      //               title: t('menu_level_2b'),
-      //               path: '#/dashboard/menu_level/menu_level_1b/menu_level_2b',
-      //               children: [
-      //                 {
-      //                   title: t('menu_level_3a'),
-      //                   path: '#/dashboard/menu_level/menu_level_1b/menu_level_2b/menu_level_3a',
-      //                 },
-      //                 {
-      //                   title: t('menu_level_3b'),
-      //                   path: '#/dashboard/menu_level/menu_level_1b/menu_level_2b/menu_level_3b',
-      //                 },
-      //               ],
-      //             },
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //     {
-      //       title: t('item_disabled'),
-      //       path: '#disabled',
-      //       icon: ICONS.disabled,
-      //       disabled: true,
-      //     },
-      //     {
-      //       title: t('item_label'),
-      //       path: '#label',
-      //       icon: ICONS.label,
-      //       info: (
-      //         <Label color="info" startIcon={<Iconify icon="solar:bell-bing-bold-duotone" />}>
-      //           NEW
-      //         </Label>
-      //       ),
-      //     },
-      //     {
-      //       title: t('item_caption'),
-      //       path: '#caption',
-      //       icon: ICONS.menuItem,
-      //       caption:
-      //         'Quisque malesuada placerat nisl. In hac habitasse platea dictumst. Cras id dui. Pellentesque commodo eros a enim. Morbi mollis tellus ac sapien.',
-      //     },
-      //     {
-      //       title: t('item_external_link'),
-      //       path: 'https://www.google.com/',
-      //       icon: ICONS.external,
-      //     },
-      //     {
-      //       title: t('blank'),
-      //       path: paths.dashboard.blank,
-      //       icon: ICONS.blank,
-      //     },
-      //   ],
-      // },
-    ],
-    [t]
-  );
+    if (user.role === 'superadmin') {
+      return superAdminItems;
+    }
+    if (user.role === 'admin') {
+      return [...superAdminItems];
+    }
+    return [...userItems];
+  }, [t, user]);
 
   return data;
 }
