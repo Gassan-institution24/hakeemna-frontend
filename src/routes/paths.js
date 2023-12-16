@@ -14,6 +14,7 @@ const ROOTS = {
   DASHBOARD: '/dashboard',
   SUPERADMIN: '/dashboard',
   USER: '/user',
+  BETWEEN: '/between'
 };
 
 // ----------------------------------------------------------------------
@@ -94,6 +95,14 @@ export const paths = {
       verify: `${ROOTS.AUTH_DEMO}/modern/verify`,
     },
   },
+
+// PAGES BETWEEN
+between: {
+  root: ROOTS.BETWEEN,
+  page: `${ROOTS.BETWEEN}/pages`,
+},
+
+
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
