@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
+import { useAuthContext } from 'src/auth/hooks';
 
 import { MotivationIllustration } from 'src/assets/illustrations';
 import {
@@ -28,7 +28,7 @@ import EcommerceCurrentBalance from '../ecommerce-current-balance';
 // ----------------------------------------------------------------------
 
 export default function OverviewEcommerceView() {
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
 
   const theme = useTheme();
 

@@ -6,7 +6,7 @@ import { useParams } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function TableEditPage() {
+export default function UnitServiceAccountingPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetUnitservice(id);

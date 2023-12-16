@@ -57,11 +57,11 @@ export function useNavData() {
       {
         subheader: t('overview'),
         items: [
-          {
-            title: t('app'),
-            path: paths.dashboard.root,
-            icon: ICONS.dashboard,
-          },
+          // {
+          //   title: t('app'),
+          //   path: paths.dashboard.root,
+          //   icon: ICONS.dashboard,
+          // },
           {
             title: t('management tables'),
             path: paths.superadmin.tables.root,
@@ -73,20 +73,15 @@ export function useNavData() {
             icon: ICONS.analytics,
           },
           {
-            title: t('banking'),
-            path: paths.dashboard.general.banking,
-            icon: ICONS.banking,
-          },
-          {
-            title: t('booking'),
-            path: paths.dashboard.general.booking,
+            title: t('patients'),
+            path: paths.superadmin.patients.root,
             icon: ICONS.booking,
           },
-          {
-            title: t('file'),
-            path: paths.dashboard.general.file,
-            icon: ICONS.file,
-          },
+          // {
+          //   title: t('file'),
+          //   path: paths.dashboard.general.file,
+          //   icon: ICONS.file,
+          // },
           {
             title: t('Adjustable Services Control'),
             path: paths.dashboard.general.banking,

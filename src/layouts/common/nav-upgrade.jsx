@@ -6,14 +6,14 @@ import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
+import { useAuthContext } from 'src/auth/hooks';
 
 import Label from 'src/components/label';
 
 // ----------------------------------------------------------------------
 
 export default function NavUpgrade() {
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
 
   return (
     <Stack
