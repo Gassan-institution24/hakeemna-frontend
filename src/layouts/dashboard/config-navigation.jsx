@@ -44,6 +44,7 @@ const ICONS = {
   ecommerce: icon('ic_ecommerce'),
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
+  profile: icon('iconamoon:profile-bold'),
 };
 
 // ----------------------------------------------------------------------
@@ -104,22 +105,31 @@ export function useNavData() {
 
     const userItems = [
       {
-        subheader: t('management'),
+        subheader: t('user'),
         items: [
           // USER
           {
-            title: t('user'),
+            title: t('profile'),
             path: paths.dashboard.user.root,
-            icon: ICONS.user,
-            children: [
-              { title: t('profile'), path: paths.dashboard.user.root },
-              { title: t('cards'), path: paths.dashboard.user.cards },
-              { title: t('list'), path: paths.dashboard.user.list },
-              { title: t('create'), path: paths.dashboard.user.new },
-              { title: t('edit'), path: paths.dashboard.user.demo.edit },
-              { title: t('account'), path: paths.dashboard.user.account },
-            ],
+            icon: <Iconify icon="iconamoon:profile-bold" />,
+            // children: [
+            //   { title: t('create'), path: paths.dashboard.user.new },
+            // ],
           },
+          {
+            title: t('account'),
+            path: paths.dashboard.user.account,
+            // icon: <Iconify icon="bxs:share-alt" />,
+          },
+          // { title: t('profile'), path: paths.dashboard.user.root },
+          { title: t('cards'), path: paths.dashboard.user.cards },
+          { title: t('edit'), path: paths.dashboard.user.demo.edit },
+          {
+            title: t('share doctorna'),
+            path: paths.dashboard.user.list,
+            icon: <Iconify icon="bxs:share-alt" />,
+          },
+          // { title: t('share doctorna'), path: paths.dashboard.user.new },
         ],
       },
     ];

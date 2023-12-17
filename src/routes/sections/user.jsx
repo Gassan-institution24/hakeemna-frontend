@@ -68,15 +68,15 @@ const BlankPage = lazy(() => import('src/pages/dashboard/blank'));
 
 export const userRoutes = [
   {
-    path: 'user',
+    path: 'dashboard',
     element: (
-      // <AuthGuard>
+      <AuthGuard>
         <DashboardLayout>
           <Suspense fallback={<LoadingScreen />}>
             <Outlet />
           </Suspense>
         </DashboardLayout>
-      // </AuthGuard>
+     </AuthGuard>
     ),
     children: [
       { element: <IndexPage />, index: true },
