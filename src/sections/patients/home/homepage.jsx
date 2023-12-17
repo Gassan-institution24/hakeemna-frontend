@@ -58,6 +58,7 @@ const TABLE_HEAD = [
   { id: 'Communications', label: 'Communications' },
   { id: 'Feedback', label: 'Feedback' },
   { id: 'Insurance', label: 'Insurance' },
+  { id: 'Offers', label: 'Offers' },
   { id: '', width: 88 },
 ];
 

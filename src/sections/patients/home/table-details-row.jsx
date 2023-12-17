@@ -121,6 +121,16 @@ export default function CountriesTableRow({
       >
         Insurance
       </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: 'blue',
+          textDecoration: 'underline',
+        }}
+        // onClick={showInsurance}
+      >
+        Offers optained | offers Sent
+      </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
