@@ -8,38 +8,40 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useAuthContext } from 'src/auth/hooks';
 
 export default function ProfileFollowers() {
   const { data } = useGetUser();
   const [countdowns, setCountdowns] = useState({});
 
+  const { user } = useAuthContext();
 
   
-  useEffect(() => {
-    if (data) {
-      const currentDate = new Date();
-      const countdownTimers = {};
-      data.current_medications.forEach((med) => {
-        const endDate = new Date(med.enddate);
-        if (endDate > currentDate) {
-          const intervalId = setInterval(() => {
-            const now = new Date();
-            const difference = endDate.getTime() - now.getTime();
-            const millisecondsInDay = 1000 * 60 * 60 * 24;
-            const daysDifference = Math.floor(difference / millisecondsInDay);
-            setCountdowns((prevCountdowns) => ({
-              ...prevCountdowns,
-              [med.name]: daysDifference > 0 ? daysDifference : 0,
-            }));
-          }, 1000);
-          countdownTimers[med.name] = intervalId;
-        }
+  // useEffect(() => {
+  //   if (data) {
+  //     const currentDate = new Date();
+  //     const countdownTimers = {};
+  //     data.current_medications.forEach((med) => {
+  //       const endDate = new Date(med.enddate);
+  //       if (endDate > currentDate) {
+  //         const intervalId = setInterval(() => {
+  //           const now = new Date();
+  //           const difference = endDate.getTime() - now.getTime();
+  //           const millisecondsInDay = 1000 * 60 * 60 * 24;
+  //           const daysDifference = Math.floor(difference / millisecondsInDay);
+  //           setCountdowns((prevCountdowns) => ({
+  //             ...prevCountdowns,
+  //             [med.name]: daysDifference > 0 ? daysDifference : 0,
+  //           }));
+  //         }, 1000);
+  //         countdownTimers[med.name] = intervalId;
+  //       }
         
-      });
-        Object.values(countdownTimers).forEach((timerId) =>  clearInterval(timerId));
+  //     });
+  //       Object.values(countdownTimers).forEach((timerId) =>  clearInterval(timerId));
       
-    }
-  }, [data]);
+  //   }
+  // }, [data]);
 
 
 
@@ -57,15 +59,15 @@ export default function ProfileFollowers() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.current_medications.map((med) => (
-              <TableRow key={med.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell>{data.medicine.trade_name}</TableCell>
-                <TableCell align="right">{med.frequently}</TableCell>
-                <TableCell align="right">{med.dose}</TableCell>
-                <TableCell align="right">{`${countdowns[med.name] !== undefined ? countdowns[med.name] : ''} Days`}</TableCell>
-                <TableCell align="right">$ {data.medicine.price_1}</TableCell>
-              </TableRow>
-            ))}
+           
+              {/* <TableRow key={} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell>{}</TableCell>
+                <TableCell align="right">{}</TableCell>
+                <TableCell align="right"></TableCell>
+                <TableCell align="right"></TableCell>
+                <TableCell align="right"></TableCell>
+              </TableRow> */}
+       
           </TableBody>
         </Table>
       </TableContainer>
