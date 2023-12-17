@@ -213,7 +213,7 @@ export default function PatientTableView() {
 
   const handleShowHistoryRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.patients.history(id)); /// edit
+      router.push(paths.superadmin.patients.history.root(id)); /// edit
     },
     [router]
   );

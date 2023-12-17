@@ -24,8 +24,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -42,7 +40,8 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetPatientAppointments } from 'src/api/tables';
+import axiosHandler from 'src/utils/axios-handler';
+import { useGetAppointmentTypes, useGetPatientAppointments } from 'src/api/tables';
 // import PatientHistoryAnalytic from './appoint-history-analytic';
 import PatientHistoryRow from './appoint-history-row';
 import PatientHistoryToolbar from './appoint-history-toolbar';
@@ -65,7 +64,6 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  service: [],
   status: 'all',
   startDate: null,
   endDate: null,
@@ -73,7 +71,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceListView({patientData}) {
+export default function AppointHistoryView({ patientData }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -84,7 +82,9 @@ export default function InvoiceListView({patientData}) {
 
   const confirm = useBoolean();
 
-  const {appointmentsData} = useGetPatientAppointments(patientData._id)
+  const { appointmentsData } = useGetPatientAppointments(patientData._id);
+
+  const { appointmenttypesData } = useGetAppointmentTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -108,14 +108,12 @@ export default function InvoiceListView({patientData}) {
   const denseHeight = table.dense ? 56 : 76;
 
   const canReset =
-    !!filters.name ||
-    !!filters.service.length ||
-    filters.status !== 'all' ||
-    (!!filters.startDate && !!filters.endDate);
+    !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const getAppointLength = (status) => appointmentsData.filter((item) => item.status === status).length;
+  const getAppointLength = (status) =>
+    appointmentsData.filter((item) => item.status === status).length;
 
   // const getTotalAmount = (status) =>
   //   sumBy(
@@ -185,9 +183,22 @@ export default function InvoiceListView({patientData}) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.dashboard.invoice.edit(id));
+      router.push(paths.superadmin.patients.history.editAppointment(id));
     },
     [router]
+  );
+  const handleUnbookRow = useCallback(
+    (id) => {
+      axiosHandler({method:"PATCH",path:''})
+      router.push(paths.superadmin.patients.history.editAppointment(id));
+    },
+    [router]
+  );
+  const handleAddRow = useCallback(
+    () => {
+      router.push(paths.superadmin.patients.history.addAppointment(patientData._id));
+    },
+    [router,patientData._id]
   );
 
   const handleViewRow = useCallback(
@@ -211,7 +222,6 @@ export default function InvoiceListView({patientData}) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-
         <Card>
           <Tabs
             value={filters.status}
@@ -244,9 +254,10 @@ export default function InvoiceListView({patientData}) {
           <PatientHistoryToolbar
             filters={filters}
             onFilters={handleFilters}
+            onAdd={handleAddRow}
             //
             dateError={dateError}
-            serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
+            serviceOptions={appointmenttypesData.map((option) => option)}
           />
 
           {canReset && (
@@ -262,45 +273,6 @@ export default function InvoiceListView({patientData}) {
           )}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={appointmentsData.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  appointmentsData.map((row) => row.id)
-                )
-              }
-              action={
-                <Stack direction="row">
-                  <Tooltip title="Sent">
-                    <IconButton color="primary">
-                      <Iconify icon="iconamoon:send-fill" />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Download">
-                    <IconButton color="primary">
-                      <Iconify icon="eva:download-outline" />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Print">
-                    <IconButton color="primary">
-                      <Iconify icon="solar:printer-minimalistic-bold" />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Delete">
-                    <IconButton color="primary" onClick={confirm.onTrue}>
-                      <Iconify icon="solar:trash-bin-trash-bold" />
-                    </IconButton>
-                  </Tooltip>
-                </Stack>
-              }
-            />
-
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
                 <TableHeadCustom
@@ -310,12 +282,6 @@ export default function InvoiceListView({patientData}) {
                   rowCount={appointmentsData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      appointmentsData.map((row) => row.id)
-                    )
-                  }
                 />
 
                 <TableBody>
@@ -389,7 +355,7 @@ export default function InvoiceListView({patientData}) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, service, startDate, endDate } = filters;
+  const { name, status, types, startDate, endDate } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -403,34 +369,38 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   if (name) {
     inputData = inputData.filter(
-      (invoice) =>
-        invoice.invoiceNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        invoice.invoiceTo.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (appointment) =>
+        (appointment?.unit_service?.name_english &&
+          appointment?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
+            -1) ||
+        (appointment?.unit_service?.name_arabic &&
+          appointment?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
+            -1) ||
+        (appointment?.name_english &&
+          appointment?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (appointment?.name_arabic &&
+          appointment?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        appointment?._id === name ||
+        JSON.stringify(appointment.code) === name
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((invoice) => invoice.status === status);
-  }
-
-  if (service.length) {
-    inputData = inputData.filter((invoice) =>
-      invoice.items.some((filterItem) => service.includes(filterItem.service))
-    );
+    inputData = inputData.filter((appointment) => appointment.status === status);
   }
 
   if (!dateError) {
     if (startDate && endDate) {
       inputData = inputData.filter(
-        (invoice) =>
-          fTimestamp(invoice.createDate) >= fTimestamp(startDate) &&
-          fTimestamp(invoice.createDate) <= fTimestamp(endDate)
+        (appointment) =>
+          fTimestamp(appointment.date) >= fTimestamp(startDate) &&
+          fTimestamp(appointment.date) <= fTimestamp(endDate)
       );
     }
   }
 
   return inputData;
 }
-InvoiceListView.propTypes = {
+AppointHistoryView.propTypes = {
   patientData: PropTypes.object,
 };

@@ -23,8 +23,8 @@ export default function InvoiceTableFiltersResult({
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
   const handleRemoveService = (inputValue) => {
-    const newValue = filters.service.filter((item) => item !== inputValue);
-    onFilters('service', newValue);
+    const newValue = filters.types.filter((item) => item !== inputValue);
+    onFilters('types', newValue);
   };
 
   const handleRemoveStatus = () => {
@@ -46,18 +46,6 @@ export default function InvoiceTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {!!filters.service.length && (
-          <Block label="Service:">
-            {filters.service.map((item) => (
-              <Chip
-                key={item}
-                label={item}
-                size="small"
-                onDelete={() => handleRemoveService(item)}
-              />
-            ))}
-          </Block>
-        )}
 
         {filters.status !== 'all' && (
           <Block label="Status:">

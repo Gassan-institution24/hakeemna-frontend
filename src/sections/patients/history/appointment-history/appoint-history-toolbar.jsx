@@ -21,6 +21,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 export default function InvoiceTableToolbar({
   filters,
   onFilters,
+  onAdd,
   //
   dateError,
   serviceOptions,
@@ -37,8 +38,8 @@ export default function InvoiceTableToolbar({
   const handleFilterService = useCallback(
     (event) => {
       onFilters(
-        'service',
-        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
+        'types',
+        event
       );
     },
     [onFilters]
@@ -72,30 +73,6 @@ export default function InvoiceTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-        <FormControl
-          sx={{
-            flexShrink: 0,
-            width: { xs: 1, md: 180 },
-          }}
-        >
-          <InputLabel>Service</InputLabel>
-
-          <Select
-            multiple
-            value={filters.service}
-            onChange={handleFilterService}
-            input={<OutlinedInput label="Service" />}
-            renderValue={(selected) => selected.map((value) => value).join(', ')}
-            sx={{ textTransform: 'capitalize' }}
-          >
-            {serviceOptions.map((option) => (
-              <MenuItem key={option} value={option}>
-                <Checkbox disableRipple size="small" checked={filters.service.includes(option)} />
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
 
         <DatePicker
           label="Start date"
@@ -136,10 +113,14 @@ export default function InvoiceTableToolbar({
               ),
             }}
           />
-
+          <Stack direction="row">
           <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
+          <IconButton onClick={onAdd}>
+            <Iconify icon="zondicons:add-outline" />
+          </IconButton>
+          </Stack>
         </Stack>
       </Stack>
 
@@ -163,15 +144,6 @@ export default function InvoiceTableToolbar({
             popover.onClose();
           }}
         >
-          <Iconify icon="solar:import-bold" />
-          Import
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-          }}
-        >
           <Iconify icon="solar:export-bold" />
           Export
         </MenuItem>
@@ -184,5 +156,6 @@ InvoiceTableToolbar.propTypes = {
   dateError: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,
+  onAdd: PropTypes.func,
   serviceOptions: PropTypes.array,
 };
