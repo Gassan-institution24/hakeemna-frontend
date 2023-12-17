@@ -11,7 +11,11 @@ export default function TableCreatePage() {
   console.log('iddd', id);
   const { data } = useGetPatient(id);
   console.log('patient dataa', data);
-  const patientName = data?.first_name || data?.last_name?`${data?.first_name||''} ${data?.last_name||''}`: 'Patient';
+  const patientName =
+    (data?.first_name && data?.last_name && `${data?.first_name} ${data?.last_name}`) ||
+    (data?.first_name && data?.first_name) ||
+    (data?.last_name && data?.last_name) ||
+    'Patient';
   return (
     <>
       <Helmet>

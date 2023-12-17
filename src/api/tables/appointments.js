@@ -3,13 +3,13 @@ import { useMemo } from 'react';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetUSFeedbackes(id) {
-  const URL = endpoints.tables.USfeedbacks(id);
+export function useGetAppointments() {
+  const URL = endpoints.tables.appointments;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      feedbackData: data || [] ,
+      appointmentsData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -26,13 +26,13 @@ export function useGetUSFeedbackes(id) {
 }
 
 
-export function useGetPatientFeedbacks(id) {
-  const URL = endpoints.tables.patientfeedbacks(id);
+export function useGetPatientAppointments(id) {
+  const URL = endpoints.tables.patientAppointments(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      feedbackData: data || [] ,
+      appointmentsData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -49,8 +49,8 @@ export function useGetPatientFeedbacks(id) {
 }
 
 
-export function useGetFeedback(id) {
-  const URL = endpoints.tables.feedback(id);
+export function useGetAppointment(id) {
+  const URL = endpoints.tables.appointment(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

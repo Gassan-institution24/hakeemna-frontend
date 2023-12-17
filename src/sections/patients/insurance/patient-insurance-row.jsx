@@ -20,26 +20,20 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function CountriesTableRow({
+export default function InsuranceRow({
   row,
-  selected,
-  onEditRow,
-  onSelectRow,
-  onActivate,
-  onInactivate,
+  onDeleteRow,
   setFilters,
   filters,
-  showAccounting,
-  showCommunications,
-  showFeedback,
-  showInsurance,
-  showGeneralInfo
 }) {
   const {
     code,
-    first_name,
-    last_name,
+    name_english,
+    type,
     status,
+    webpage,
+    phone,
+    address,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -50,90 +44,28 @@ export default function CountriesTableRow({
   } = row;
   const popover = usePopover();
   const DDL = usePopover();
-  const details = usePopover();
-  const collapse = useBoolean();
-  const modal = useBoolean();
 
   const renderPrimary = (
-    <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell>
+    <TableRow hover >
       <TableCell>{code}</TableCell>
-      <TableCell>{first_name} {last_name}</TableCell>
+      <TableCell >{name_english}</TableCell>
+      <TableCell onClick={()=>setFilters({...filters,name:type?.name_english})}>{type?.name_english}</TableCell>
       <TableCell>
         <Label
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
-        >
+          >
           {status}
         </Label>
       </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
-        }}
-        onClick={showGeneralInfo}
-      >
-        General Info
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
-        }}
-        onClick={showAccounting}
-      >
-        History
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
-        }}
-        onClick={showCommunications}
-      >
-        Communications
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
-        }}
-        onClick={showFeedback}
-      >
-        Feedback
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
-        }}
-        onClick={showInsurance}
-      >
-        Insurance
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
-        }}
-        // onClick={showInsurance}
-      >
-        Offers optained | offers Sent
-      </TableCell>
+      <TableCell>{webpage}</TableCell>
+      <TableCell>{phone}</TableCell>
+      <TableCell>{address}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-          <Iconify icon="eva:more-vertical-fill" />
+        <IconButton sx={{ color: 'error.main' }} onClick={onDeleteRow}>
+        <Iconify icon="mi:delete" />
         </IconButton>
       </TableCell>
     </TableRow>
@@ -142,44 +74,23 @@ export default function CountriesTableRow({
   return (
     <>
       {renderPrimary}
-
-      {/* <DetailsModal row={row} open={modal.value} onClose={modal.onFalse} /> */}
-      <CustomPopover
+      {/* <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'active' ? (
-          <MenuItem
-            onClick={() => {
-              onInactivate();
-              // popover.onClose();
-            }}
-            sx={{ color: 'error.main' }}
-          >
-            <Iconify icon="ic:baseline-pause" />
-            Inactivate
-          </MenuItem>
-        ) : (
-          <MenuItem
-            onClick={() => {
-              onActivate();
-              // popover.onClose();
-            }}
-            sx={{ color: 'success.main' }}
-          >
-            <Iconify icon="bi:play-fill" />
-            activate
-          </MenuItem>
-        )}
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
         </MenuItem>
-      </CustomPopover>
+        <MenuItem onClick={onDeleteRow} sx={{ color: 'error.main' }}>
+          <Iconify icon="mi:delete" />
+          Delete
+        </MenuItem>
+      </CustomPopover> */}
 
-      <CustomPopover
+      {/* <CustomPopover
         open={DDL.open}
         onClose={DDL.onClose}
         arrow="right-top"
@@ -204,23 +115,14 @@ export default function CountriesTableRow({
           {ip_address_user_modification}
         </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
-      </CustomPopover>
+      </CustomPopover> */}
     </>
   );
 }
 
-CountriesTableRow.propTypes = {
-  onSelectRow: PropTypes.func,
+InsuranceRow.propTypes = {
   setFilters: PropTypes.func,
-  onActivate: PropTypes.func,
-  onInactivate: PropTypes.func,
-  onEditRow: PropTypes.func,
-  showAccounting: PropTypes.func,
-  showCommunications: PropTypes.func,
-  showFeedback: PropTypes.func,
-  showInsurance: PropTypes.func,
-  showGeneralInfo: PropTypes.func,
+  onDeleteRow: PropTypes.func,
   row: PropTypes.object,
-  selected: PropTypes.bool,
   filters: PropTypes.object,
 };

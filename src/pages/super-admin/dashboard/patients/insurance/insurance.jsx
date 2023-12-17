@@ -8,15 +8,20 @@ import { useParams } from 'src/routes/hooks';
 export default function TableCreatePage() {
   const params = useParams();
   const { id } = params;
-  const { data } = useGetPatient(id);
-  const patientName = `${data?.first_name} ${data?.last_name}` || 'Patient'
+  const { data, refetch } = useGetPatient(id);
+  console.log(data);
+  const patientName =
+    (data?.first_name && data?.last_name && `${data?.first_name} ${data?.last_name}`) ||
+    (data?.first_name && data?.first_name) ||
+    (data?.last_name && data?.last_name) ||
+    'Patient';
   return (
     <>
       <Helmet>
         <title> Patients: {patientName} Insurance </title>
       </Helmet>
 
-      {data && <PatientInsurance patientData={data}/>}
+      {data && <PatientInsurance patientData={data} refetch={refetch} />}
     </>
   );
 }

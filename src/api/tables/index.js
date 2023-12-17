@@ -57,3 +57,4 @@ export * from './employees';
 export * from './license_movements'
 export * from './packages'
 export * from './feedback'
+export * from './appointments'
