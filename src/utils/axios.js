@@ -106,6 +106,7 @@ export const endpoints = {
     package:(id)=>`/api/backages/${id}`,
     feedbacks:'/api/feedback',
     USfeedbacks:(id)=>`/api/feedback/unitservice/${id}`,
+    patientfeedbacks:(id)=>`/api/feedback/patient/${id}`,
     feedback:(id)=>`/api/feedback/${id}`,
   },
   chat: '/api/chat',
