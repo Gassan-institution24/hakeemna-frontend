@@ -40,6 +40,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useGetAppointmentTypes, useGetPatientAppointments } from 'src/api/tables';
 // import PatientHistoryAnalytic from './appoint-history-analytic';
@@ -82,7 +83,7 @@ export default function AppointHistoryView({ patientData }) {
 
   const confirm = useBoolean();
 
-  const { appointmentsData } = useGetPatientAppointments(patientData._id);
+  const { appointmentsData, refetch } = useGetPatientAppointments(patientData._id);
 
   const { appointmenttypesData } = useGetAppointmentTypes();
 
@@ -162,44 +163,33 @@ export default function AppointHistoryView({ patientData }) {
     [table]
   );
 
-  const handleDeleteRow = useCallback(
-    (id) => {
-      const deleteRow = appointmentsData.filter((row) => row.id !== id);
-
+  const handleUnbookRow = useCallback(
+    async (id) => {
+      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/unbook` });
+      refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, appointmentsData]
+    [dataInPage.length, table,refetch]
   );
-
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = appointmentsData.filter((row) => !table.selected.includes(row.id));
-
-    table.onUpdatePageDeleteRows({
-      totalRows: appointmentsData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, appointmentsData]);
-
-  const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.superadmin.patients.history.editAppointment(id));
+  const handleUnbookRows = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointments}/unbook`,
+        data: { ids: table.selected },
+      });
+      refetch();
+      table.onUpdatePageDeleteRows({
+        totalRows: appointmentsData.length,
+        totalRowsInPage: dataInPage.length,
+        totalRowsFiltered: dataFiltered.length,
+      });
     },
-    [router]
+    [refetch,dataFiltered.length, dataInPage.length,appointmentsData.length, table]
   );
-  const handleUnbookRow = useCallback(
-    (id) => {
-      axiosHandler({method:"PATCH",path:''})
-      router.push(paths.superadmin.patients.history.editAppointment(id));
-    },
-    [router]
-  );
-  const handleAddRow = useCallback(
-    () => {
-      router.push(paths.superadmin.patients.history.addAppointment(patientData._id));
-    },
-    [router,patientData._id]
-  );
+  const handleAddRow = useCallback(() => {
+    router.push(paths.superadmin.patients.history.addAppointment(patientData._id));
+  }, [router, patientData._id]);
 
   const handleViewRow = useCallback(
     (id) => {
@@ -273,6 +263,25 @@ export default function AppointHistoryView({ patientData }) {
           )}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+            <TableSelectedAction
+              // dense={table.dense}
+              numSelected={table.selected.length}
+              rowCount={dataFiltered.length}
+              onSelectAllRows={(checked) =>
+                table.onSelectAllRows(
+                  checked,
+                  dataFiltered.map((row) => row._id)
+                )
+              }
+              action={
+                <Tooltip title="Unbook all">
+                  <IconButton color="error" onClick={confirm.onTrue}>
+                    <Iconify icon="mdi:bell-cancel" />
+                  </IconButton>
+                </Tooltip>
+              }
+              color="error"
+            />
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
                 <TableHeadCustom
@@ -282,6 +291,12 @@ export default function AppointHistoryView({ patientData }) {
                   rowCount={appointmentsData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
+                  onSelectAllRows={(checked) =>
+                    table.onSelectAllRows(
+                      checked,
+                      dataFiltered.map((row) => row._id)
+                    )
+                  }
                 />
 
                 <TableBody>
@@ -292,13 +307,12 @@ export default function AppointHistoryView({ patientData }) {
                     )
                     .map((row) => (
                       <PatientHistoryRow
-                        key={row.id}
+                        key={row._id}
                         row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
-                        onViewRow={() => handleViewRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
+                        selected={table.selected.includes(row._id)}
+                        onSelectRow={() => table.onSelectRow(row._id)}
+                        onViewRow={() => handleViewRow(row._id)}
+                        onUnbookRow={() => handleUnbookRow(row._id)}
                       />
                     ))}
 
@@ -329,10 +343,10 @@ export default function AppointHistoryView({ patientData }) {
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Delete"
+        title="Unbook"
         content={
           <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
+            Are you sure want to Unbook <strong> {table.selected.length} </strong> items?
           </>
         }
         action={
@@ -340,11 +354,11 @@ export default function AppointHistoryView({ patientData }) {
             variant="contained"
             color="error"
             onClick={() => {
-              handleDeleteRows();
               confirm.onFalse();
+              handleUnbookRows();
             }}
           >
-            Delete
+            Unbook
           </Button>
         }
       />

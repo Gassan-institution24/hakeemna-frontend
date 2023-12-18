@@ -109,6 +109,7 @@ export const endpoints = {
     patientfeedbacks:(id)=>`/api/feedback/patient/${id}`,
     feedback:(id)=>`/api/feedback/${id}`,
     appointments:'/api/appointments',
+    availableAppointments:'/api/appointments/available',
     appointment:(id)=>`/api/appointments/${id}`,
     patientAppointments:(id)=>`/api/appointments/patient/${id}`,
   },
