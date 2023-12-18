@@ -213,7 +213,7 @@ between: {
       communications: (id) => `${ROOTS.SUPERADMIN}/patients/${id}/communications`,
       history: {
         root:(id) => `${ROOTS.SUPERADMIN}/patients/${id}/history`,
-        addAppointment:(id) => `${ROOTS.SUPERADMIN}/patients/${id}/history/addappoint`,
+        addAppointment:(id) => `${ROOTS.SUPERADMIN}/patients/${id}/bookappoint`,
         editAppointment:(id) => `${ROOTS.SUPERADMIN}/patients/${id}/history/addappoint`,
         new: `${ROOTS.SUPERADMIN}/tables/cities/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/cities/${id}/edit`,

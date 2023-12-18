@@ -307,6 +307,9 @@ const PatientsInfoPage = lazy(() => import('src/pages/super-admin/dashboard/pati
 const PatientsHistoryPage = lazy(() =>
   import('src/pages/super-admin/dashboard/patients/history/history')
 );
+const PatientsBookAppointmentPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/patients/history/bookAppointment')
+);
 const PatientsInsurancePage = lazy(() =>
   import('src/pages/super-admin/dashboard/patients/insurance/insurance')
 );
@@ -360,6 +363,7 @@ export const dashboardRoutes = [
           { path: 'add', element: <PatientsAddPage /> },
           { path: ':id/edit', element: <PatientsEditPage /> },
           { path: ':id/history', element: <PatientsHistoryPage /> },
+          { path: ':id/bookappoint', element: <PatientsBookAppointmentPage /> },
           { path: ':id/insurance', element: <PatientsInsurancePage /> },
           { path: ':id/communications', element: <PatientsCommunicationsPage /> },
           { path: ':id/feedback', element: <PatientsFeedbackPage /> },

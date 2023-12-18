@@ -31,7 +31,7 @@ export default function InvoiceTableRow({
   selected,
   onSelectRow,
   onViewRow,
-  onEditRow,
+  onUnbookRow,
   onDeleteRow,
 }) {
   const {
@@ -62,6 +62,9 @@ export default function InvoiceTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
+        <TableCell padding="checkbox">
+          <Checkbox checked={selected} onClick={onSelectRow} />
+        </TableCell>
 
         <TableCell align="center">{code}</TableCell>
         <TableCell align="center">{name_english}</TableCell>
@@ -125,12 +128,13 @@ export default function InvoiceTableRow({
       >
         <MenuItem
           onClick={() => {
-            onEditRow();
+            onUnbookRow();
             popover.onClose();
           }}
+          sx={{ color: 'error.main' }}
         >
-          <Iconify icon="fluent:edit-32-filled" />
-          Edit
+          <Iconify icon="mdi:bell-cancel" />
+          Unbook
         </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
@@ -148,15 +152,17 @@ export default function InvoiceTableRow({
         }}
       >
         <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}><ListItemText
-              primary={format(new Date(created_at), 'dd MMM yyyy')}
-              secondary={format(new Date(created_at), 'p')}
-              primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-              secondaryTypographyProps={{
-                component: 'span',
-                typography: 'caption',
-              }}
-            /></Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={format(new Date(created_at), 'dd MMM yyyy')}
+            secondary={format(new Date(created_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
@@ -164,15 +170,15 @@ export default function InvoiceTableRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-            <ListItemText
-              primary={format(new Date(updated_at), 'dd MMM yyyy')}
-              secondary={format(new Date(updated_at), 'p')}
-              primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-              secondaryTypographyProps={{
-                component: 'span',
-                typography: 'caption',
-              }}
-            />
+          <ListItemText
+            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            secondary={format(new Date(updated_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
         </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
@@ -188,7 +194,7 @@ export default function InvoiceTableRow({
 
 InvoiceTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
-  onEditRow: PropTypes.func,
+  onUnbookRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
   row: PropTypes.object,
