@@ -1,20 +1,19 @@
 import { useScroll } from 'framer-motion';
-
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-
 import ScrollProgress from 'src/components/scroll-progress';
-
 import HomeHero from '../home-hero';
-import HomeMinimal from '../home-minimal';
+import Whowweare from '../whoarewe';
+import Servicesweprovide from '../servicesweprovide'
+import Whydoc from '../Why';
+import Patient from '../patientpage';
+import Us from '../uspage';
+import HomeHugePackElements from '../home-hugepack-elements';
+import HomeAdvertisement from '../home-advertisement';
 import HomePricing from '../home-pricing';
 import HomeDarkMode from '../home-dark-mode';
 import HomeLookingFor from '../home-looking-for';
 import HomeForDesigner from '../home-for-designer';
-import HomeColorPresets from '../home-color-presets';
-import HomeAdvertisement from '../home-advertisement';
-import HomeCleanInterfaces from '../home-clean-interfaces';
-import HomeHugePackElements from '../home-hugepack-elements';
 
 // ----------------------------------------------------------------------
 
@@ -56,7 +55,7 @@ export default function HomeView() {
           bgcolor: 'background.default',
         }}
       > 
-      <HomeMinimal />
+      <Whowweare />
         {/*
 
         <HomeHugePackElements /> 
@@ -69,9 +68,11 @@ export default function HomeView() {
 
         <HomeDarkMode /> */}
  
-        <HomeColorPresets />
-
-        <HomeCleanInterfaces />
+        <Whydoc />
+        <Servicesweprovide />
+      
+        <Patient />
+        <Us />
 
         {/* <HomePricing /> */}
       </Box>

@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import ScrollProgress from 'src/components/scroll-progress';
 
 import HomeHero from '../home-hero';
-import HomeMinimal from '../home-minimal';
+import HomeMinimal from '../whoarewe';
 import HomePricing from '../home-pricing';
 // import HomeDarkMode from '../home-dark-mode';
 // import HomeLookingFor from '../home-looking-for';
