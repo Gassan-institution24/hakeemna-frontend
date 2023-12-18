@@ -16,7 +16,7 @@ import { CardMedia } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-export default function HomeColorPresets() {
+export default function Whydoc() {
   const settings = useSettingsContext();
 
   const renderDescription = (
@@ -43,7 +43,7 @@ export default function HomeColorPresets() {
         position: "relative",
         left: "19%",
         width: "65%",
-        borderRadius: "10px", // Added border radius here
+        borderRadius: "10px",
         border:"none",
       }}
     />
