@@ -31,6 +31,7 @@ import NavDesktop from './nav/desktop';
 import { HEADER } from '../config-layout';
 import { navConfig } from './config-navigation';
 import LoginButton from '../common/login-button';
+import SigupButton from '../common/signup-button';
 import HeaderShadow from '../common/header-shadow';
 // ----------------------------------------------------------------------
 
@@ -87,6 +88,7 @@ export default function Header() {
             </Button> */}
             {/* login in navbar */}
             {mdUp && <LoginButton />}
+            {mdUp && <SigupButton />}
 
             <m.div variants={varFade().inUp}>
               <Switch

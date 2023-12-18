@@ -13,25 +13,30 @@ import { varFade, MotionViewport } from 'src/components/animate';
 
 const CARDS = [
   {
-    icon: "https://www.aha.org/sites/default/files/2023-04/Hospital2_icon.png",
-    title: 'MedicalHub',
+    icon: "https://static.vecteezy.com/system/resources/thumbnails/021/809/795/small/doctors-day-illustration-png.png",
+    title: 'Medical Hub',
     description: 'An integrated platform that brings both medical service providers and beneficiaries in one place',
   },
   {
-    icon: 'https://static.vecteezy.com/system/resources/thumbnails/004/607/791/small/man-face-emotive-icon-smiling-male-character-in-blue-shirt-flat-illustration-isolated-on-white-happy-human-psychological-portrait-positive-emotions-user-avatar-for-app-web-design-vector.jpg',
-    title: 'User-friendly',
-    description: 'The kit is built on the principles of the atomic design system. It helps you to create projects fastest and easily customized packages for your projects.',
+    icon: 'https://banner2.cleanpng.com/20180323/aee/kisspng-environmental-management-system-waste-management-n-recycle-bin-5ab5bb79ea76a4.3634868415218594499604.jpg',
+    title: 'Green Managment',
+    description: 'An integrated platform that brings both medical service providers and beneficiaries in one place',
   },
   {
-    icon: 'https://logodix.com/logo/366948.png',
-    title: 'interactive use',
-    description: 'Easy to customize and extend, saving you time and money.',
+    icon: 'https://cdn-icons-png.flaticon.com/512/5695/5695909.png',
+    title: 'User Friendly',
+    description: 'An integrated platform that brings both medical service providers and beneficiaries in one place',
+  },
+  {
+    icon: 'https://www.zevenet.com/wp-content/uploads/2019/10/zevenet_website_icons-ABOUT_US_Research_and_development_Green-.svg',
+    title: 'R & D Support',
+    description: 'An integrated platform that brings both medical service providers and beneficiaries in one place',
   },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function HomeMinimal() {
+export default function whoAreWe() {
   return (
     <Container
       component={MotionViewport}
@@ -60,12 +65,12 @@ export default function HomeMinimal() {
       </Stack>
 
       <Box
-        gap={{ xs: 3, lg: 10 }}
+        gap={{ xs: 3, lg: 5 }}
         display="grid"
         alignItems="center"
         gridTemplateColumns={{
           xs: 'repeat(1, 1fr)',
-          md: 'repeat(3, 1fr)',
+          md: 'repeat(4, 1fr)',
         }}
       >
         {CARDS.map((card, index) => (
@@ -76,15 +81,7 @@ export default function HomeMinimal() {
                 boxShadow: { md: 'none' },
                 bgcolor: 'background.default',
                 p: (theme) => theme.spacing(10, 5),
-                ...(index === 1 && {
-                  boxShadow: (theme) => ({
-                    md: `-40px 40px 80px ${
-                      theme.palette.mode === 'light'
-                        ? alpha(theme.palette.grey[500], 0.16)
-                        : alpha(theme.palette.common.black, 0.4)
-                    }`,
-                  }),
-                }),
+         
               }}
             >
               <Box
