@@ -90,7 +90,6 @@ export default function JobListView() {
         const results = _jobs.filter(
           (job) => job.title.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
         );
-
         setSearch((prevState) => ({
           ...prevState,
           results,

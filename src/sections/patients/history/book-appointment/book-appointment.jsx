@@ -47,7 +47,8 @@ import AppointmentFiltersResult from './appointment-filters-result';
 const defaultFilters = {
   unitServices: 'all',
   countries: 'all',
-  date: null,
+  start_date: null,
+  end_date: null,
   appointtypes: 'all',
   payment_methods: 'all',
 };
@@ -77,15 +78,24 @@ export default function AppointmentListView({patientData}) {
 
   const [filters, setFilters] = useState(defaultFilters);
 
+  const sortOptions = [{ value: 'latest', label: 'Latest' },
+  { value: 'oldest', label: 'Oldest' }]
+
+  const dateError =
+    filters.Offer_start_date && filters.Offer_end_date
+      ? filters.Offer_start_date.getTime() > filters.Offer_end_date.getTime()
+      : false;
+
   const dataFiltered = applyFilter({
     inputData: appointmentsData,
     filters,
     sortBy,
+    dateError
   });
 
   const canReset = !isEqual(defaultFilters, filters);
 
-  const notFound = !dataFiltered.length && canReset;
+  const notFound = !dataFiltered.length;
 
   const handleFilters = useCallback((name, value) => {
     setFilters((prevState) => ({
@@ -106,8 +116,16 @@ export default function AppointmentListView({patientData}) {
       }));
 
       if (inputValue) {
-        const results = _jobs.filter(
-          (job) => job.title.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+        const results = appointmentsData.filter(
+          (appointment) => ((appointment.name_english && appointment.name_english?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
+          (appointment.name_arabic && appointment.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
+          (appointment.unit_service && appointment.unit_service.name_english?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
+          (appointment.unit_service && appointment.unit_service.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
+          (appointment.work_group &&appointment.work_group.employees && appointment.work_group.employees.some((employee)=>employee.first_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1)) ||
+          (appointment.work_group &&appointment.work_group.employees && appointment.work_group.employees.some((employee)=>employee.last_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1)) ||
+          (appointment.work_group &&appointment.work_group.employees && appointment.work_group.employees.some((employee)=>employee.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1)) ||
+          appointment?._id === search.query.toLowerCase() ||
+          JSON.stringify(appointment.code) === search.query.toLowerCase() )
         );
 
         setSearch((prevState) => ({
@@ -116,7 +134,7 @@ export default function AppointmentListView({patientData}) {
         }));
       }
     },
-    [search.query]
+    [search.query,appointmentsData]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -154,9 +172,10 @@ export default function AppointmentListView({patientData}) {
           unitServicesOptions={unitservicesData}
           appointmentTypeOptions={appointmenttypesData}
           paymentMethodsOptions={paymentMethodsData}
+          dateError={dateError}
         />
 
-        <AppointmentSort sort={sortBy} onSort={handleSortBy} sortOptions={JOB_SORT_OPTIONS} />
+        <AppointmentSort sort={sortBy} onSort={handleSortBy} sortOptions={sortOptions} />
       </Stack>
     </Stack>
   );
@@ -219,21 +238,18 @@ export default function AppointmentListView({patientData}) {
 
 // ----------------------------------------------------------------------
 
-const applyFilter = ({ inputData, filters, sortBy }) => {
-  const { appointtypes, payment_methods, date, unitServices, countries, cities } = filters;
+const applyFilter = ({ inputData, filters, sortBy,dateError}) => {
+  const { appointtypes, payment_methods, date, start_date, end_date, unitServices, countries, cities } = filters;
 
   // SORT BY
   if (sortBy === 'latest') {
-    inputData = orderBy(inputData, ['createdAt'], ['desc']);
+    inputData = orderBy(inputData, ['start_time'], ['desc']);
   }
 
   if (sortBy === 'oldest') {
-    inputData = orderBy(inputData, ['createdAt'], ['asc']);
+    inputData = orderBy(inputData, ['start_time'], ['asc']);
   }
 
-  if (sortBy === 'popular') {
-    inputData = orderBy(inputData, ['totalViews'], ['desc']);
-  }
 
   // FILTERS
 
@@ -247,17 +263,20 @@ const applyFilter = ({ inputData, filters, sortBy }) => {
       (appointment) => appointment?.payment_method?._id === payment_methods
     );
   }
+  if (!dateError) {
+    if (start_date && end_date) {
+      inputData = inputData.filter(
+        (appointment) =>
+          fTimestamp(appointment.start_time) >= fTimestamp(start_date) &&
+          fTimestamp(appointment.end_time) <= fTimestamp(end_date)
+      );
+    }
+  }
   if (unitServices !== 'all') {
     inputData = inputData.filter((appointment) => appointment?.unit_service?._id === unitServices);
   }
   if (countries !== 'all') {
     inputData = inputData.filter((appointment) => appointment?.unit_service?.country === countries);
-  }
-
-  if (date) {
-    inputData = inputData.filter(
-      (appointment) => fTimestamp(appointment.date) === fTimestamp(date)
-    );
   }
 
   return inputData;

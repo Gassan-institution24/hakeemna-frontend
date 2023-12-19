@@ -38,7 +38,8 @@ export default function JobFilters({
   countriesOptions,
   citiesOptions,
   unitServicesOptions,
-  appointmentTypeOptions
+  appointmentTypeOptions,
+  dateError
 }) {
   const [selectedCountry, setSelectedCountry] = useState('');
 
@@ -71,12 +72,15 @@ export default function JobFilters({
     [onFilters]
   );
 
-
-
-
-  const handleFilterDate = useCallback(
+  const handleFilterStartDate = useCallback(
     (newValue) => {
-      onFilters('date', newValue);
+      onFilters('start_date', newValue);
+    },
+    [onFilters]
+  );
+  const handleFilterEndDate = useCallback(
+    (newValue) => {
+      onFilters('end_date', newValue);
     },
     [onFilters]
   );
@@ -112,13 +116,25 @@ export default function JobFilters({
   const renderDate = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-        Appointment Date
+        Time
       </Typography>
       <Stack spacing={2.5}>
         <DatePicker
-          label="Date"
-          value={filters.Offer_start_date}
-          onChange={handleFilterDate}
+          label="From"
+          value={filters.start_date}
+          onChange={handleFilterStartDate}
+        />
+
+        <DatePicker
+          label="To"
+          value={filters.end_date}
+          onChange={handleFilterEndDate}
+          slotProps={{
+            textField: {
+              error: dateError,
+              helperText: dateError && 'To time must be later than start date',
+            },
+          }}
         />
       </Stack>
     </Stack>
@@ -277,4 +293,5 @@ JobFilters.propTypes = {
   onOpen: PropTypes.func,
   onResetFilters: PropTypes.func,
   open: PropTypes.bool,
+  dateError: PropTypes.bool,
 };

@@ -7,6 +7,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import Iconify from 'src/components/iconify';
+import { fDate } from 'src/utils/format-time';
+import { shortDateLabel } from 'src/components/custom-date-range-picker';
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +27,12 @@ export default function JobFiltersResult({
   appointmentTypeOptions,
   ...other
 }) {
+  const shortLabel = shortDateLabel(filters.start_date, filters.end_date);
+
+  const handleRemoveTime = () => {
+    onFilters('start_date', null);
+    onFilters('end_date', null);
+  };
 
   const handleRemoveAppointmentTypes = () => {
     onFilters('appointtypes', 'all');
@@ -40,10 +48,6 @@ export default function JobFiltersResult({
     onFilters('unitServices', 'all');
   };
 
-  const handleRemoveDate = () => {
-    onFilters('date', null);
-  };
-
   return (
     <Stack spacing={1.5} {...other}>
       <Box sx={{ typography: 'body2' }}>
@@ -55,9 +59,9 @@ export default function JobFiltersResult({
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
 
-      {filters.date  && (
-          <Block label="Date:">
-            <Chip size="small" label={filters.date} onDelete={handleRemoveDate} />
+      {filters.start_date && filters.end_date && (
+          <Block label="Time:">
+            <Chip size="small" label={shortLabel} onDelete={handleRemoveTime} />
           </Block>
         )}
 

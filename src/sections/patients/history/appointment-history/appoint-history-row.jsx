@@ -31,7 +31,7 @@ export default function InvoiceTableRow({
   selected,
   onSelectRow,
   onViewRow,
-  onUnbookRow,
+  onCancelRow,
   onDeleteRow,
 }) {
   const {
@@ -103,8 +103,9 @@ export default function InvoiceTableRow({
           <Label
             variant="soft"
             color={
+              (status === 'pending' && 'secondary') ||
+              (status === 'Processing' && 'info') ||
               (status === 'finished' && 'success') ||
-              (status === 'processing' && 'warning') ||
               (status === 'canceled' && 'error') ||
               'default'
             }
@@ -126,16 +127,18 @@ export default function InvoiceTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
+        {status !== "canceled" &&
         <MenuItem
           onClick={() => {
-            onUnbookRow();
+            onCancelRow();
             popover.onClose();
           }}
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="mdi:bell-cancel" />
-          Unbook
+          Cancel
         </MenuItem>
+        }
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
@@ -194,7 +197,7 @@ export default function InvoiceTableRow({
 
 InvoiceTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
-  onUnbookRow: PropTypes.func,
+  onCancelRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
   row: PropTypes.object,
