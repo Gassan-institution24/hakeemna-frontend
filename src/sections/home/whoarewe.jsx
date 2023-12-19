@@ -18,7 +18,7 @@ const CARDS = [
     description: 'An integrated platform that brings both medical service providers and beneficiaries in one place',
   },
   {
-    icon: 'https://banner2.cleanpng.com/20180323/aee/kisspng-environmental-management-system-waste-management-n-recycle-bin-5ab5bb79ea76a4.3634868415218594499604.jpg',
+    icon: 'https://png.pngtree.com/png-vector/20220831/ourmid/pngtree-banyan-tree-logo-design-vector-png-image_6131481.png',
     title: 'Green Managment',
     description: 'An integrated platform that brings both medical service providers and beneficiaries in one place',
   },
@@ -41,14 +41,14 @@ export default function whoAreWe() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 10, md: 15 },
+        py: { xs: 10, md: 10 },
       }}
     >
       <Stack
         spacing={3}
         sx={{
           textAlign: 'center',
-          mb: { xs: 5, md: 10 },
+          mb: { xs: 5, md: 8 },
         }}
       >
         <m.div variants={varFade().inUp}>
@@ -79,7 +79,7 @@ export default function whoAreWe() {
               sx={{
                 textAlign: 'center',
                 boxShadow: { md: 'none' },
-                bgcolor: 'background.default',
+                bgcolor: 'rgba(102, 255, 102, 0)',
                 p: (theme) => theme.spacing(10, 5),
          
               }}

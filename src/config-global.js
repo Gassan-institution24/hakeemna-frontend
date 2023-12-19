@@ -36,3 +36,4 @@ export const PATH_AFTER_LOGIN = paths.dashboard.root; // as '/dashboard'
 export const PATH_BEFORE_LOGIN = paths.between.root; // as '/dashboard'
 export const PATH_FOR_US = "https://www.prestashop.com/sites/default/files/wysiwyg/404_not_found.png" // as '/dashboard'
 export const PATH_FOR_PATIENT = "https://www.prestashop.com/sites/default/files/wysiwyg/404_not_found.png" // as '/dashboard'
+

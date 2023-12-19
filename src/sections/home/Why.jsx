@@ -1,20 +1,12 @@
 import { color, m } from 'framer-motion';
-
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import CardActionArea from '@mui/material/CardActionArea';
-
-import { presetOptions } from 'src/theme/options/presets';
-
-import Image from 'src/components/image';
-import Iconify from 'src/components/iconify';
-import { useSettingsContext } from 'src/components/settings';
-import { varFade, MotionViewport } from 'src/components/animate';
 import { CardMedia } from '@mui/material';
 
-// ----------------------------------------------------------------------
+import { useSettingsContext } from 'src/components/settings';
+import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function Whydoc() {
   const settings = useSettingsContext();
@@ -22,38 +14,37 @@ export default function Whydoc() {
   const renderDescription = (
     <Stack spacing={3} sx={{ textAlign: 'center' }}>
       <m.div variants={varFade().inDown}>
-        <Typography variant="h2">Why Doctorna <span style={{ color: 'green'}}>?</span></Typography>
-        <br/>
-        <br/>
-        <br/>
+        <Typography variant="h2">Why Doctorna <span style={{ color: 'green' }}>?</span></Typography>
+        <br />
+        <br />
+        <br />
       </m.div>
     </Stack>
   );
 
   const renderContent = (
     <Box sx={{ position: 'relative' }}>
-    <iframe
-      src="https://www.youtube.com/embed/4KIk8h9xNL8?si=ng1fBA7_X2uHQ4sF"
-      title="YouTube video player"
-    
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      height="400"
-      allowfullscreen
-      style={{
-        position: "relative",
-        left: "19%",
-        width: "65%",
-        borderRadius: "10px",
-        border:"none",
-      }}
-    />
-    
-        <Typography variant="h6" sx={{   position: 'relative' ,left:"48.5%" , marginTop:"25px"}}> Dr.Grendizer </Typography>
-        <Typography sx={{ fontSize: 15,  position: 'relative' ,left:"38.5%" , marginTop:"15px"}} >Protection and bombing specialist based on the earth </Typography>
-  </Box>
+      <div style={{ position: 'relative', paddingBottom: '56.25%', width: '100%' }}>
+        <iframe
+          src="https://www.youtube.com/embed/4KIk8h9xNL8?si=ng1fBA7_X2uHQ4sF"
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '80%',
+            borderRadius: '10px',
+            border: 'none',
+          }}
+        />
+      </div>
+      <Typography variant="h6" sx={{ textAlign: 'center', marginTop: '15px' }}> Dr.Grendizer </Typography>
+      <Typography sx={{ fontSize: 15, textAlign: 'center', marginTop: '10px' }}>Protection and bombing specialist based on the earth </Typography>
+    </Box>
   );
-
-
 
   return (
     <Container
@@ -61,12 +52,10 @@ export default function Whydoc() {
       sx={{
         position: 'relative',
         py: { xs: 10, md: 15 },
+        maxWidth: '100%',
       }}
     >
       {renderDescription}
-
- 
-
       {renderContent}
     </Container>
   );

@@ -7,10 +7,9 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import { useSettingsContext } from 'src/components/settings';
 import { varFade, MotionViewport } from 'src/components/animate';
 import { Button } from '@mui/material';
-// ----------------------------------------------------------------------
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -18,9 +17,10 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
+
 export default function Whydoc() {
   const renderDescription = (
-    <Stack spacing={3} sx={{ textAlign: 'center', position: 'relative', top: '-180px' }}>
+    <Stack spacing={3} sx={{ textAlign: 'center', position: 'relative', top: '-50px' }}>
       <m.div variants={varFade().inDown}>
         <Typography variant="h2">We Provide you: </Typography>
       </m.div>
@@ -28,74 +28,97 @@ export default function Whydoc() {
   );
 
   const renderContent = (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} columns={16}>
-        <Grid item xs={8}>
+    <Box sx={{ flexGrow: 1, position: 'relative', left: '12%', mt: 5 }}>
+      <Grid container spacing={4}>
+        <Grid item xs={12} sm={6} md={6}>
           <Item
             sx={{
-              height:"200px",
-              width:"400px",
-              border: 1,
+              height: '300px',
+              width: '300px',
               position: 'relative',
-              backgroundImage: ` url(https://img.freepik.com/premium-photo/doctor-with-his-patient_8595-5688.jpg)`,
+              backgroundImage: `linear-gradient(rgba(119, 119, 119, 0.468), rgba(171, 255, 205, 0.394)), url(https://i.pinimg.com/736x/35/57/55/355755832670880825ad87838e18d6b6.jpg)`,
               backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              color: '#fff',
+              p: 5,
+              '&:hover': {
+                backgroundImage:
+                  'linear-gradient(rgba(64, 64, 64, 0.486), rgba(64, 64, 64, 0.486)), url(https://i.pinimg.com/736x/35/57/55/355755832670880825ad87838e18d6b6.jpg)',
+              },
             }}
           >
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br /> Amet cupiditate ipsum
-            porro, harum quo facere exercitationem saepe blanditiis autem maiores necessitatibus{' '}
-            <br /> sapiente expedita architecto dignissimos quae reprehenderit odit deleniti
-            consequuntur!
-            <br />
+            <Typography variant="h5">as unitservices </Typography>
+            <p
+              style={{
+                fontWeight: '700',
+                width: '250px',
+                textAlign: 'left',
+              }}
+            >
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br /> Amet cupiditate ipsum
+              porro, harum quo facere exercitationem saepe blanditiis autem maiores necessitatibus
+            </p>
             <Button
-                          sx={{
-                            bgcolor: 'success.main',
-                            color: '#fff',
-                            position: 'relative',
-      
-                            width: '100px',
-                            '&:hover': {
-                              bgcolor: '#fff',
-                              color: 'success.main',
-                              border: 1,
-                              borderColor: 'success.main'
-                            },
-                          }}
+              sx={{
+                bgcolor: 'success.main',
+                color: '#fff',
+                position: 'relative',
+                top: '20px',
+                width: '100px',
+                '&:hover': {
+                  bgcolor: '#fff',
+                  color: 'success.main',
+                  border: 1,
+                  borderColor: 'success.main',
+                },
+              }}
             >
               test button
             </Button>
           </Item>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={12} sm={6} md={4}>
           <Item
             sx={{
-              height:"200px",
-              width:"400px",
-              border: 1,
+              height: '300px',
+              width: '300px',
               position: 'relative',
-              backgroundImage: ` url(https://iprospectcheck.com/wp-content/uploads/2022/07/physican-background-check.jpg)`,
+              backgroundImage: `linear-gradient(rgba(119, 119, 119, 0.468), rgba(171, 255, 205, 0.394)), url(https://i.pinimg.com/736x/35/57/55/355755832670880825ad87838e18d6b6.jpg)`,
               backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              color: '#fff',
+              p: 5,
+              '&:hover': {
+                backgroundImage:
+                  'linear-gradient(rgba(64, 64, 64, 0.486), rgba(64, 64, 64, 0.486)), url(https://i.pinimg.com/736x/35/57/55/355755832670880825ad87838e18d6b6.jpg)',
+              },
             }}
           >
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br /> Amet cupiditate ipsum
-            porro, harum quo facere exercitationem saepe blanditiis autem maiores necessitatibus{' '}
-            <br /> sapiente expedita architecto dignissimos quae reprehenderit odit deleniti
-            consequuntur!
-            <br />
+            <Typography variant="h5">as unitservices </Typography>
+            <p
+              style={{
+                fontWeight: '700',
+                width: '250px',
+                textAlign: 'left',
+              }}
+            >
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br /> Amet cupiditate ipsum
+              porro, harum quo facere exercitationem saepe blanditiis autem maiores necessitatibus
+            </p>
             <Button
-                          sx={{
-                            bgcolor: 'success.main',
-                            color: '#fff',
-                            position: 'relative',
-                            width: '100px',
-                            '&:hover': {
-                              bgcolor: '#fff',
-                              color: 'success.main',
-                              border: 1,
-                              borderColor: 'success.main'
-                            },
-                          }}
+              sx={{
+                bgcolor: 'success.main',
+                color: '#fff',
+                position: 'relative',
+                top: '20px',
+                width: '100px',
+                '&:hover': {
+                  bgcolor: '#fff',
+                  color: 'success.main',
+                  border: 1,
+                  borderColor: 'success.main',
+                },
+              }}
             >
               test button
             </Button>
@@ -110,22 +133,13 @@ export default function Whydoc() {
       component={MotionViewport}
       sx={{
         position: 'relative',
-        py: { xs: 50, md: 25 },
-        mb: 15,
-        mt: 10,
-        border: 1,
+        py: { xs: 4, md: 10 },
+        mb: 8,
+        mt: 8,
       }}
     >
       {renderDescription}
-
       {renderContent}
     </Container>
   );
 }
-
-// sx={{
-//   position: 'relative',
-//   backgroundImage: ` url(https://iprospectcheck.com/wp-content/uploads/2022/07/physican-background-check.jpg)`,
-//   backgroundSize: 'cover',
-//   backgroundRepeat: 'no-repeat',
-// }}
