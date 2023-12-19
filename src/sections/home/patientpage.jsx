@@ -1,24 +1,11 @@
-import { color, m } from 'framer-motion';
-import SigupButton from 'src/layouts/common/signup-button';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-// import { alpha } from '@mui/material/styles';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import { useGetPosts } from 'src/api/user';
-import { varFade, MotionViewport } from 'src/components/animate';
-import Image from 'src/components/image';
-import Divider from '@mui/material/Divider';
+import { Button, Grid, Paper } from '@mui/material';
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
-import { Button } from '@mui/material';
 import midical from './images/medical.png';
 import left from './images/doc1-removebg-preview.png';
-// ----------------------------------------------------------------------
+
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1d222900' : '#fff',
+  backgroundColor: theme.palette.mode === 'dark' ? '#1d222900' : 'rgba(255, 255, 255, 0)',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
@@ -27,75 +14,65 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Patient() {
   return (
-    <Box sx={{ flexGrow: 1, height: '600px' }}>
-      <Grid container spacing={2} columns={16}>
-        <Grid item xs={8}>
-          <Item
+    <Grid container sx={{mb:{md:15,xs:2}}}>
+      <Grid item xs={12} md={6}>
+        <Item
+          sx={{
+            textAlign: 'left',
+            padding: '20px',
+            position: { md: 'relative' },
+            left: { md: '250px' },
+            top: { md: '120px' },
+            p:1,
+            
+          }}
+        >
+          <h1 style={{ color: 'green' }}>I am a patient</h1>
+          <p>
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit culpa
+            <br /> porro aut molestiaks vitae minjus tempore odio tempore odio. <br />
+            tempore odio Lorem ipsum sit amet consectetur adipjkisicing.
+          </p>
+          <Button
             sx={{
-              position: 'relative',
-              top: '40%',
-              left:"350px"
+              bgcolor: 'success.main',
+              color: '#fff',
+              width: '130px',
+            
+              '&:hover': {
+                bgcolor: '#fff',
+                color: 'success.main',
+                border: 1,
+                borderColor: 'success.main',
+              },
             }}
           >
-            <h1
-              style={{
-                textAlign:"left",
-                color:"green"
-              }}
-            >
-              I am patients
-            </h1>
-            <p
-              style={{
-                position: 'relative',
-                textAlign:"left",
-              }}
-            >
-              Lorem ipsum, dolor sit amet consectetu adipisicing elit culpa
-              <br /> porro aut molestiaks vitae minjus tempore odio tempore odio. <br />
-              tempore odio Lorem ipsum sit amet consectetur adipjkisicing.
-            </p>
-            <Button
-              sx={{
-                bgcolor: 'success.main',
-                color: '#fff',
-                position: 'relative',
-                left: -400,
-                top: 10,
-                width: '130px',
-                '&:hover': {
-                  bgcolor: '#fff',
-                  color: 'success.main',
-                  border: 1,
-                  borderColor: 'success.main'
-                },
-              }}
-            >
-              Signup
-            </Button>
-          </Item>
-        </Grid>
-        <Grid item xs={8}>
-          <Item
-            sx={{
-              backgroundImage: ` url(${left})`,
-              position: 'relative',
-              right: '160px',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-            }}
-          >
-            <Image
-              alt="patient"
-              src={midical}
-              sx={{
-                width: '400px',
-                height: '400px',
-              }}
-            />
-          </Item>
-        </Grid>
+            Signup
+          </Button>
+        </Item>
       </Grid>
-    </Box>
+      <Grid item xs={12} md={4} sx={{ display: { xs: 'none', md: 'flex' } }}>
+        <Item
+          sx={{
+            backgroundImage: `url(${left})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            minHeight: '300px',
+            position: { md: 'relative' },
+            
+          }}
+        >
+          <img
+            src={midical}
+            alt="patient"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          />
+        </Item>
+      </Grid>
+    </Grid>
   );
 }
