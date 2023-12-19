@@ -12,27 +12,27 @@ import { _jobs, JOB_DETAILS_TABS, JOB_PUBLISH_OPTIONS } from 'src/_mock';
 import Label from 'src/components/label';
 import { useSettingsContext } from 'src/components/settings';
 
-import JobDetailsToolbar from './patient-info-toolbar';
-import JobDetailsContent from './patient-info-content';
+import MovementToolbar from 'src/sections/economic-movements/show-economic-movement/movement-info-toolbar';
+import EconomicMovementContent from 'src/sections/economic-movements/show-economic-movement/movement-info-content';
 
 // ----------------------------------------------------------------------
 
-export default function JobDetailsView({ patientData }) {
+export default function EconomicMovementInfoView({ economicMovementData }) {
   const settings = useSettingsContext();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <JobDetailsToolbar
+      <MovementToolbar
         backLink={paths.superadmin.patients.root}
-        // editLink={paths.superadmin.patients.edit(`${patientData?._id}`)}
+        editLink={paths.superadmin.patients.edit(`${economicMovementData?._id}`)}
         liveLink="#"
       />
 
-      <JobDetailsContent patientData={patientData} />
+      <EconomicMovementContent economicMovementData={economicMovementData} />
     </Container>
   );
 }
 
-JobDetailsView.propTypes = {
-  patientData: PropTypes.object,
+EconomicMovementInfoView.propTypes = {
+  economicMovementData: PropTypes.object,
 };
