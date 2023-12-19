@@ -24,7 +24,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function JobItem({ appointment, onBook, onView, onEdit, onDelete }) {
+export default function AppointmentItem({ appointment, onBook, onView, onEdit, onDelete }) {
   const popover = usePopover();
 
   const {
@@ -37,7 +37,6 @@ export default function JobItem({ appointment, onBook, onView, onEdit, onDelete 
     appointment_type,
     patient,
     payment_method,
-    date,
     start_time,
     end_time,
     name_english,
@@ -90,7 +89,7 @@ export default function JobItem({ appointment, onBook, onView, onEdit, onDelete 
           />
 
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-            {fDate(date)}
+            {fDate(start_time)}
           </Stack>
           <Stack
             spacing={0.5}
@@ -154,6 +153,7 @@ export default function JobItem({ appointment, onBook, onView, onEdit, onDelete 
         arrow="right-top"
         sx={{ width: 140 }}
       >
+        {}
         <MenuItem
           onClick={() => {
             popover.onClose();
@@ -189,7 +189,7 @@ export default function JobItem({ appointment, onBook, onView, onEdit, onDelete 
   );
 }
 
-JobItem.propTypes = {
+AppointmentItem.propTypes = {
   appointment: PropTypes.object,
   onDelete: PropTypes.func,
   onEdit: PropTypes.func,

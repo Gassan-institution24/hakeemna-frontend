@@ -27,6 +27,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 import { useGetPatientAppointments } from 'src/api/tables';
 
 import AppointHistory from './appointment-history/appoint-history'
+import EconomicMovementsView from './economic-movements/economic-movements-view';
 import PatientHistoryAnalytic from './appointment-history/appoint-history-analytic';
 
 // ----------------------------------------------------------------------
@@ -106,7 +107,7 @@ const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsD
           ]}
           style={{ marginBottom: '25px' }}
         />
-        <Card
+        {/* <Card
           sx={{
             mb: { xs: 3, md: 5 },
           }}
@@ -162,10 +163,11 @@ const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsD
               />
             </Stack>
           </Scrollbar>
-        </Card>
+        </Card> */}
       {renderTabs}
 
       {currentTab === 'Appointment' && <AppointHistory patientData={patientData} />}
+      {currentTab === 'Economic Movements' && <EconomicMovementsView patientData={patientData} />}
 
       {/* {currentTab === 'candidates' && <JobDetailsCandidates candidates={currentJob?.candidates} />} */}
     </Container>

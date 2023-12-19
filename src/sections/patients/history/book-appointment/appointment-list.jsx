@@ -9,7 +9,7 @@ import { endpoints } from 'src/utils/axios';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import JobItem from './appointment-item';
+import AppointmentItem from './appointment-item';
 
 // ----------------------------------------------------------------------
 
@@ -53,7 +53,7 @@ export default function AppointmentList({ patientData,appointments,refetch }) {
         }}
       >
         {appointments.map((appointment) => (
-          <JobItem
+          <AppointmentItem
             key={appointment.id}
             appointment={appointment}
             onBook={() => handleBook(appointment._id)}

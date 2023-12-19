@@ -305,20 +305,24 @@ const PatientsAddPage = lazy(() => import('src/pages/super-admin/dashboard/patie
 const PatientsEditPage = lazy(() => import('src/pages/super-admin/dashboard/patients/edit'));
 const PatientsInfoPage = lazy(() => import('src/pages/super-admin/dashboard/patients/info'));
 const PatientsHistoryPage = lazy(() =>
-  import('src/pages/super-admin/dashboard/patients/history/history')
+import('src/pages/super-admin/dashboard/patients/history/history')
 );
 const PatientsBookAppointmentPage = lazy(() =>
-  import('src/pages/super-admin/dashboard/patients/history/bookAppointment')
+import('src/pages/super-admin/dashboard/patients/history/bookAppointment')
 );
 const PatientsInsurancePage = lazy(() =>
-  import('src/pages/super-admin/dashboard/patients/insurance/insurance')
+import('src/pages/super-admin/dashboard/patients/insurance/insurance')
 );
 const PatientsCommunicationsPage = lazy(() =>
   import('src/pages/super-admin/dashboard/patients/communications/communications')
 );
 const PatientsFeedbackPage = lazy(() =>
-  import('src/pages/super-admin/dashboard/patients/feedback/feedback')
+import('src/pages/super-admin/dashboard/patients/feedback/feedback')
 );
+
+// ECONOMIC MOVEMENTS
+const EconomicMovementInfoPage = lazy(() => import('src/pages/super-admin/dashboard/economic-movement/view-economic-movement'));
+
 
 // ----------------------------------------------------------------------
 
@@ -360,6 +364,20 @@ export const dashboardRoutes = [
         children: [
           { element: <PatientsHomePage />, index: true },
           { path: ':id/info', element: <PatientsInfoPage /> },
+          { path: 'add', element: <PatientsAddPage /> },
+          { path: ':id/edit', element: <PatientsEditPage /> },
+          { path: ':id/history', element: <PatientsHistoryPage /> },
+          { path: ':id/bookappoint', element: <PatientsBookAppointmentPage /> },
+          { path: ':id/insurance', element: <PatientsInsurancePage /> },
+          { path: ':id/communications', element: <PatientsCommunicationsPage /> },
+          { path: ':id/feedback', element: <PatientsFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'economicmovement',
+        children: [
+          { element: <PatientsHomePage />, index: true },
+          { path: ':id/info', element: <EconomicMovementInfoPage /> },
           { path: 'add', element: <PatientsAddPage /> },
           { path: ':id/edit', element: <PatientsEditPage /> },
           { path: ':id/history', element: <PatientsHistoryPage /> },

@@ -204,6 +204,11 @@ between: {
       feedback: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/feedback`,
       insurance: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/insurance`,
     },
+    economicMovement:{
+      root: `${ROOTS.SUPERADMIN}/economicmovement`,
+      info:(id) => `${ROOTS.SUPERADMIN}/economicmovement/${id}/info`,
+      edit:(id) => `${ROOTS.SUPERADMIN}/economicmovement/${id}/edit`,
+    },
     patients: {
       root: `${ROOTS.SUPERADMIN}/patients`,
       list: `${ROOTS.SUPERADMIN}/patients/list`,

@@ -112,6 +112,8 @@ export const endpoints = {
     availableAppointments:'/api/appointments/available',
     appointment:(id)=>`/api/appointments/${id}`,
     patientAppointments:(id)=>`/api/appointments/patient/${id}`,
+    economecMovements:'/api/economicmovements',
+    economicMovement:(id)=>`/api/economicmovements/${id}`,
   },
   chat: '/api/chat',
   kanban: '/api/kanban',

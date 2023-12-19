@@ -129,13 +129,13 @@ export default function AppointHistoryView({ patientData }) {
     {
       value: 'pending',
       label: 'Pending',
-      color: 'warning',
+      color: 'secondary',
       count: getAppointLength('pending'),
     },
     {
       value: 'processing',
       label: 'Processing',
-      color: 'default',
+      color: 'info',
       count: getAppointLength('processing'),
     },
     {
@@ -163,19 +163,24 @@ export default function AppointHistoryView({ patientData }) {
     [table]
   );
 
-  const handleUnbookRow = useCallback(
+  const handleCancelRow = useCallback(
     async (id) => {
-      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/unbook` });
+      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/cancel` });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
     [dataInPage.length, table,refetch]
   );
-  const handleUnbookRows = useCallback(
+  const handleCancelRows = useCallback(
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `${endpoints.tables.appointments}/unbook`,
+        path: `${endpoints.tables.appointments}/cancel`,
+        data: { ids: table.selected },
+      });
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointments}/cancel`,
         data: { ids: table.selected },
       });
       refetch();
@@ -312,7 +317,7 @@ export default function AppointHistoryView({ patientData }) {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onViewRow={() => handleViewRow(row._id)}
-                        onUnbookRow={() => handleUnbookRow(row._id)}
+                        onCancelRow={() => handleCancelRow(row._id)}
                       />
                     ))}
 
@@ -343,10 +348,10 @@ export default function AppointHistoryView({ patientData }) {
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Unbook"
+        title="Cancel"
         content={
           <>
-            Are you sure want to Unbook <strong> {table.selected.length} </strong> items?
+            Are you sure want to cancel <strong> {table.selected.length} </strong> items?
           </>
         }
         action={
@@ -355,10 +360,10 @@ export default function AppointHistoryView({ patientData }) {
             color="error"
             onClick={() => {
               confirm.onFalse();
-              handleUnbookRows();
+              handleCancelRows();
             }}
           >
-            Unbook
+            Cancel
           </Button>
         }
       />

@@ -117,13 +117,13 @@ export default function TourFilters({
       <Stack spacing={2.5}>
         <DatePicker
           label="Start date"
-          value={filters.Offer_start_date}
+          value={filters.start_date}
           onChange={handleFilterStartDate}
         />
 
         <DatePicker
           label="End date"
-          value={filters.Offer_end_date}
+          value={filters.end_date}
           onChange={handleFilterEndDate}
           slotProps={{
             textField: {
