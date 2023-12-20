@@ -319,9 +319,8 @@ const PatientsCommunicationsPage = lazy(() =>
 const PatientsFeedbackPage = lazy(() =>
 import('src/pages/super-admin/dashboard/patients/feedback/feedback')
 );
-
-// ECONOMIC MOVEMENTS
-const EconomicMovementInfoPage = lazy(() => import('src/pages/super-admin/dashboard/economic-movement/view-economic-movement'));
+       // ECONOMIC MOVEMENTS
+const InvoiceInfoPage = lazy(() => import('src/pages/super-admin/dashboard/patients/history/invoives/view-invoice'));
 
 
 // ----------------------------------------------------------------------
@@ -371,20 +370,12 @@ export const dashboardRoutes = [
           { path: ':id/insurance', element: <PatientsInsurancePage /> },
           { path: ':id/communications', element: <PatientsCommunicationsPage /> },
           { path: ':id/feedback', element: <PatientsFeedbackPage /> },
-        ],
-      },
-      {
-        path: 'economicmovement',
-        children: [
-          { element: <PatientsHomePage />, index: true },
-          { path: ':id/info', element: <EconomicMovementInfoPage /> },
-          { path: 'add', element: <PatientsAddPage /> },
-          { path: ':id/edit', element: <PatientsEditPage /> },
-          { path: ':id/history', element: <PatientsHistoryPage /> },
-          { path: ':id/bookappoint', element: <PatientsBookAppointmentPage /> },
-          { path: ':id/insurance', element: <PatientsInsurancePage /> },
-          { path: ':id/communications', element: <PatientsCommunicationsPage /> },
-          { path: ':id/feedback', element: <PatientsFeedbackPage /> },
+          {
+            path: ':id/invoices',
+            children: [
+              { path: ':inid/info', element: <InvoiceInfoPage /> },
+            ],
+          },
         ],
       },
       {

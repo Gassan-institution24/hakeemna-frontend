@@ -138,7 +138,7 @@ export default function MovementInfoContent({ economicMovementData }) {
         </Label>
       </Typography>
 
-      {drug_allergies[0] &&<Stack spacing={2}>
+      {drug_allergies &&<Stack spacing={2}>
         <Typography style={{ fontWeight:600 }} variant="h6">Drug Allergies</Typography>
         <Stack spacing={1}>
           {drug_allergies?.map((drug) => (
@@ -146,7 +146,7 @@ export default function MovementInfoContent({ economicMovementData }) {
           ))}
         </Stack>
       </Stack>}
-      {diseases[0] &&<Stack spacing={2}>
+      {diseases &&<Stack spacing={2}>
         <Typography style={{ fontWeight:600 }} variant="h6">Diseases</Typography>
         <Stack spacing={1}>
           {diseases?.map((disease) => (
@@ -154,7 +154,7 @@ export default function MovementInfoContent({ economicMovementData }) {
           ))}
         </Stack>
       </Stack>}
-      {surgeries[0] &&<Stack spacing={2}>
+      {surgeries &&<Stack spacing={2}>
         <Typography style={{ fontWeight:600 }} variant="h6">Surgeries</Typography>
         <Stack spacing={1}>
           {surgeries?.map((surgery) => (
@@ -162,7 +162,7 @@ export default function MovementInfoContent({ economicMovementData }) {
           ))}
         </Stack>
       </Stack>}
-      {medicines[0] &&<Stack spacing={2}>
+      {medicines &&<Stack spacing={2}>
         <Typography style={{ fontWeight:600 }} variant="h6">Medicines</Typography>
         <Stack spacing={1}>
           {medicines?.map((data) => (
@@ -170,7 +170,7 @@ export default function MovementInfoContent({ economicMovementData }) {
           ))}
         </Stack>
       </Stack>}
-      {insurance[0] &&<Stack spacing={2}>
+      {insurance &&<Stack spacing={2}>
         <Typography style={{ fontWeight:600 }} variant="h6">Insurance</Typography>
         <Stack spacing={1}>
           {insurance?.map((company) => (

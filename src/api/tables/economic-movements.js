@@ -24,6 +24,29 @@ export function useGetEconomicMovements() {
 
   return { ...memoizedValue, refetch };
 }
+
+export function useGetPatientEconomicMovements(id) {
+  const URL = endpoints.tables.patienteconomicMovements(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      economecMovementsData: data || [] ,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
 export function useGetEconomicMovement(id) {
   const URL = endpoints.tables.economicMovement(id);
 

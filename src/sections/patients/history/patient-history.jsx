@@ -26,8 +26,9 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 
 import { useGetPatientAppointments } from 'src/api/tables';
 
-import AppointHistory from './appointment-history/appoint-history'
-import EconomicMovementsView from './economic-movements/economic-movements-view';
+import AppointHistory from './appointment-history/appoint-history';
+import EconomicMovementsView from './invoices/invoices-view';
+import PaymentControlView from './payment-control/payment-control';
 import PatientHistoryAnalytic from './appointment-history/appoint-history-analytic';
 
 // ----------------------------------------------------------------------
@@ -35,8 +36,8 @@ import PatientHistoryAnalytic from './appointment-history/appoint-history-analyt
 export default function PatientHistoryView({ patientData }) {
   const theme = useTheme();
 
-  const {appointmentsData} = useGetPatientAppointments(patientData._id)
-  console.log('app da',appointmentsData)
+  const { appointmentsData } = useGetPatientAppointments(patientData._id);
+  console.log('app da', appointmentsData);
 
   const settings = useSettingsContext();
 
@@ -46,17 +47,24 @@ export default function PatientHistoryView({ patientData }) {
     setCurrentTab(newValue);
   }, []);
 
-  const getAppointLength = (status) => appointmentsData?.filter((item) => item.status === status).length;
+  const getAppointLength = (status) =>
+    appointmentsData?.filter((item) => item.status === status).length;
 
   const getTotalAmount = (status) =>
-  sumBy(
-    appointmentsData.filter((item) => item.status === status),
-    'totalAmount'
-  );
+    sumBy(
+      appointmentsData.filter((item) => item.status === status),
+      'totalAmount'
+    );
 
-const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsData.length) * 100;
+  const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsData.length) * 100;
 
-  const HistoryTabsList = ['Appointment','Economic Movements','Accounting','Payment Control','Subscriptions']
+  const HistoryTabsList = [
+    'Appointment',
+    'Invoices',
+    'Accounting',
+    'Payment Control',
+    'Subscriptions',
+  ]; // Invoices === economicMovement
 
   const renderTabs = (
     <Tabs
@@ -66,7 +74,7 @@ const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsD
         mb: { xs: 3, md: 5 },
       }}
     >
-      {HistoryTabsList.map((tab,idx) => (
+      {HistoryTabsList.map((tab, idx) => (
         <Tab
           key={idx}
           iconPosition="end"
@@ -84,30 +92,32 @@ const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsD
     </Tabs>
   );
   const patientName =
-  (patientData?.first_name && patientData?.last_name && `${patientData?.first_name} ${patientData?.last_name}`) ||
-  (patientData?.first_name && patientData?.first_name) ||
-  (patientData?.last_name && patientData?.last_name) ||
-  'Patient';
+    (patientData?.first_name &&
+      patientData?.last_name &&
+      `${patientData?.first_name} ${patientData?.last_name}`) ||
+    (patientData?.first_name && patientData?.first_name) ||
+    (patientData?.last_name && patientData?.last_name) ||
+    'Patient';
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-          heading={`${patientName} History`}
-          links={[
-            {
-              name: 'Dashboard',
-              href: paths.superadmin.root,
-            },
-            {
-              name: 'Patients',
-              href: paths.superadmin.patients.root,
-            },
-            {
-              name:`${patientName} History`,
-            },
-          ]}
-          style={{ marginBottom: '25px' }}
-        />
-        {/* <Card
+        heading={`${patientName} History`}
+        links={[
+          {
+            name: 'Dashboard',
+            href: paths.superadmin.root,
+          },
+          {
+            name: 'Patients',
+            href: paths.superadmin.patients.root,
+          },
+          {
+            name: `${patientName} History`,
+          },
+        ]}
+        style={{ marginBottom: '25px' }}
+      />
+      {/* <Card
           sx={{
             mb: { xs: 3, md: 5 },
           }}
@@ -167,7 +177,8 @@ const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsD
       {renderTabs}
 
       {currentTab === 'Appointment' && <AppointHistory patientData={patientData} />}
-      {currentTab === 'Economic Movements' && <EconomicMovementsView patientData={patientData} />}
+      {currentTab === 'Invoices' && <EconomicMovementsView patientData={patientData} />}
+      {currentTab === 'Payment Control' && <PaymentControlView patientData={patientData} />}
 
       {/* {currentTab === 'candidates' && <JobDetailsCandidates candidates={currentJob?.candidates} />} */}
     </Container>

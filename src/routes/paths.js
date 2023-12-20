@@ -204,11 +204,6 @@ between: {
       feedback: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/feedback`,
       insurance: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/insurance`,
     },
-    economicMovement:{
-      root: `${ROOTS.SUPERADMIN}/economicmovement`,
-      info:(id) => `${ROOTS.SUPERADMIN}/economicmovement/${id}/info`,
-      edit:(id) => `${ROOTS.SUPERADMIN}/economicmovement/${id}/edit`,
-    },
     patients: {
       root: `${ROOTS.SUPERADMIN}/patients`,
       list: `${ROOTS.SUPERADMIN}/patients/list`,
@@ -222,6 +217,11 @@ between: {
         editAppointment:(id) => `${ROOTS.SUPERADMIN}/patients/${id}/history/addappoint`,
         new: `${ROOTS.SUPERADMIN}/tables/cities/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/cities/${id}/edit`,
+        invoices:{
+          // root: `${ROOTS.SUPERADMIN}/invoices`,
+          info:(id,inid) => `${ROOTS.SUPERADMIN}/patients/${id}/invoices/${inid}/info`,
+          edit:(id,inid) => `${ROOTS.SUPERADMIN}/patients/${id}/invoices/${inid}/edit`,
+        },
       },
       feedback: (id) => `${ROOTS.SUPERADMIN}/patients/${id}/feedback`,
       insurance: (id) => `${ROOTS.SUPERADMIN}/patients/${id}/insurance`,
