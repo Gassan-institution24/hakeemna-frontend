@@ -1,6 +1,6 @@
-import { useScroll } from 'framer-motion';
+import PropTypes from 'prop-types';
+import { useScroll, m } from 'framer-motion';
 import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
 import ScrollProgress from 'src/components/scroll-progress';
 import HomeHero from '../home-hero';
 import Whowweare from '../whoarewe';
@@ -10,7 +10,7 @@ import Patient from '../patientpage';
 import Us from '../uspage';
 // ----------------------------------------------------------------------
 
-export default function HomeView() {
+export default function HomeView({ divRef }) {
   const { scrollYProgress } = useScroll();
 
   return (
@@ -23,7 +23,8 @@ export default function HomeView() {
         sx={{
           overflow: 'hidden',
           position: 'relative',
-          // bgcolor: 'success.light',
+          background: 'linear-gradient(rgba(173, 216, 230, 0.115), #ffffdc44)',
+          boxShadow: '0px -5px 10px rgba(173, 216, 230, 0.115)',
         }}
       >
         <Whowweare />
@@ -41,16 +42,19 @@ export default function HomeView() {
         sx={{
           overflow: 'hidden',
           position: 'relative',
-          // bgcolor: 'rgba(102, 255, 102, 0.861)',
+          background: 'linear-gradient(rgba(173, 216, 230, 0.115), #fdfdc644)',
+          boxShadow: '0px -5px 10px rgba(173, 216, 230, 0.1)',
         }}
       >
         <Servicesweprovide />
       </Box>
       <Box
+        ref={divRef}
         sx={{
           overflow: 'hidden',
           position: 'relative',
           bgcolor: 'background.default',
+          p: 5,
         }}
       >
         <Patient />
@@ -59,3 +63,6 @@ export default function HomeView() {
     </>
   );
 }
+HomeView.propTypes = {
+  divRef: PropTypes.element,
+};

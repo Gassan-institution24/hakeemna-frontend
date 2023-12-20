@@ -89,4 +89,14 @@ export const navConfig = [
     icon: <Iconify icon="solar:notebook-bold-duotone" />,
     path: "https://www.business.qld.gov.au/running-business/growing-business/research-development#:~:text=Research%20and%20development%20(R%26D)%20is,services%20to%20fit%20these%20needs.",
   },
+  {
+    title: 'Services',
+    icon: <Iconify icon="solar:notebook-bold-duotone" />,
+    path: "https://www.business.qld.gov.au/running-business/growing-business/research-development#:~:text=Research%20and%20development%20(R%26D)%20is,services%20to%20fit%20these%20needs.",
+  },
+  {
+    title: 'About',
+    icon: <Iconify icon="solar:notebook-bold-duotone" />,
+    path: "https://www.business.qld.gov.au/running-business/growing-business/research-development#:~:text=Research%20and%20development%20(R%26D)%20is,services%20to%20fit%20these%20needs.",
+  },
 ];
