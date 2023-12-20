@@ -9,14 +9,14 @@ import Header from './header';
 
 // ----------------------------------------------------------------------
 
-export default function MainLayout({ children }) {
+export default function MainLayout({ children,scrollToDiv }) {
   const pathname = usePathname();
 
   const homePage = pathname === '/';
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
-      <Header />
+      <Header scrollToDiv={scrollToDiv} />
 
       <Box
         component="main"
@@ -37,4 +37,5 @@ export default function MainLayout({ children }) {
 
 MainLayout.propTypes = {
   children: PropTypes.node,
+  scrollToDiv: PropTypes.func,
 };

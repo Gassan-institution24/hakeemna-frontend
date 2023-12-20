@@ -1,3 +1,4 @@
+import React, { useRef } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 
 import MainLayout from 'src/layouts/main';
@@ -13,6 +14,13 @@ import { userRoutes } from './user';
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const divRef = useRef(null);
+  const scrollToDiv = () => {
+    // Scroll logic using divRef.current.scrollIntoView() or any other scroll method
+    if (divRef.current) {
+      divRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   return useRoutes([
     // SET INDEX PAGE WITH SKIP HOME PAGE
     // {
@@ -26,8 +34,8 @@ export default function Router() {
     {
       path: '/',
       element: (
-        <MainLayout>
-          <HomePage />
+        <MainLayout scrollToDiv={scrollToDiv}>
+          <HomePage divRef={divRef}/>
         </MainLayout>
       ),
     },
