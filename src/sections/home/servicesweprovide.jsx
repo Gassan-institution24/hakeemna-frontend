@@ -28,7 +28,7 @@ export default function Whydoc() {
   );
 
   const renderContent = (
-    <Box sx={{ flexGrow: 1, position: 'relative', left: '12%', mt: 5 }}>
+    <Box sx={{ flexGrow: 1, position: 'relative', left: { xs: '7%', md:' 12% '}, mt: 5 }}>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6} md={6}>
           <Item
@@ -36,18 +36,18 @@ export default function Whydoc() {
               height: '300px',
               width: '300px',
               position: 'relative',
-              backgroundImage: `linear-gradient(rgba(119, 119, 119, 0.468), rgba(171, 255, 205, 0.394)), url(https://i.pinimg.com/736x/35/57/55/355755832670880825ad87838e18d6b6.jpg)`,
+              backgroundImage: `linear-gradient(rgba(119, 119, 119, 0.468), rgba(171, 255, 205, 0.394)), url(https://as2.ftcdn.net/v2/jpg/03/13/90/91/1000_F_313909135_kJ9iYYjNgbhWvBJF0H6i8bMCSr48ZZZA.jpg)`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               color: '#fff',
               p: 5,
               '&:hover': {
                 backgroundImage:
-                  'linear-gradient(rgba(64, 64, 64, 0.486), rgba(64, 64, 64, 0.486)), url(https://i.pinimg.com/736x/35/57/55/355755832670880825ad87838e18d6b6.jpg)',
+                  'linear-gradient(rgba(64, 64, 64, 0.486), rgba(64, 64, 64, 0.486)), url(https://as2.ftcdn.net/v2/jpg/03/13/90/91/1000_F_313909135_kJ9iYYjNgbhWvBJF0H6i8bMCSr48ZZZA.jpg)',
               },
             }}
           >
-            <Typography variant="h5">as unitservices </Typography>
+            <Typography variant="h5">As Patient </Typography>
             <p
               style={{
                 fontWeight: '700',
@@ -73,7 +73,7 @@ export default function Whydoc() {
                 },
               }}
             >
-              test button
+              Read More
             </Button>
           </Item>
         </Grid>
@@ -94,7 +94,7 @@ export default function Whydoc() {
               },
             }}
           >
-            <Typography variant="h5">as unitservices </Typography>
+            <Typography variant="h5">As Unitservices </Typography>
             <p
               style={{
                 fontWeight: '700',
@@ -120,7 +120,7 @@ export default function Whydoc() {
                 },
               }}
             >
-              test button
+              Read More
             </Button>
           </Item>
         </Grid>
@@ -134,8 +134,8 @@ export default function Whydoc() {
       sx={{
         position: 'relative',
         py: { xs: 4, md: 10 },
-        mb: 8,
         mt: 8,
+        mb: { xs: 1, md: 0 },
       }}
     >
       {renderDescription}
