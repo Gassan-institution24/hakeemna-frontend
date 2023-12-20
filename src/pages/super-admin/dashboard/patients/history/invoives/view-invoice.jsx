@@ -1,21 +1,21 @@
 import { Helmet } from 'react-helmet-async';
 
-import EconomicMovementInfo from 'src/sections/patients/history/economic-movements/show-economic-movement/movement-info';
+import InvoiceInfo from 'src/sections/patients/history/invoices/invoice-show/invoice-detail-view';
 import { useGetEconomicMovement } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------
 
 export default function TableCreatePage() {
   const params = useParams();
-  const { id } = params;
-  const { data } = useGetEconomicMovement(id);
+  const { inid } = params;
+  const { data } = useGetEconomicMovement(inid);
   return (
     <>
       <Helmet>
         <title> Economic Movement </title>
       </Helmet>
 
-      {data && <EconomicMovementInfo economicMovementData={data}/>}
+      {data && <InvoiceInfo economicMovementData={data} />}
     </>
   );
 }

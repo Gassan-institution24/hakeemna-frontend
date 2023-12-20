@@ -86,6 +86,29 @@ const useStyles = () =>
 
 export default function InvoicePDF({ invoice, currentStatus }) {
   const {
+    code,
+    unit_service,
+    employee,
+    appointment,
+    patient,
+    work_shift,
+    insurance,
+    type,
+    details,
+    Total_Amount,
+    Total_tax_Amount,
+    Total_deduction_amount,
+    Balance,
+    Currency,
+    stakeholder,
+    Concept,
+    Payment_Method,
+    bank,
+    Provided_services,
+    user_creation,
+    created_at,
+
+
     items,
     taxes,
     dueDate,
@@ -109,35 +132,37 @@ export default function InvoicePDF({ invoice, currentStatus }) {
 
           <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
             <Text style={styles.h3}>{currentStatus}</Text>
-            <Text> {invoiceNumber} </Text>
+            <Text> {code} </Text>
           </View>
         </View>
 
         <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>Invoice from</Text>
-            <Text style={styles.body2}>{invoiceFrom.name}</Text>
-            <Text style={styles.body2}>{invoiceFrom.fullAddress}</Text>
-            <Text style={styles.body2}>{invoiceFrom.phoneNumber}</Text>
+            <Text style={styles.body2}>{patient.first_name} {patient.last_name}</Text>
+            <Text style={styles.body2}>{patient.country}{patient.city}</Text>
+            <Text style={styles.body2}>{patient.mobile_num1}</Text>
+            <Text style={styles.body2}>{patient.email}</Text>
           </View>
 
           <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>Invoice to</Text>
-            <Text style={styles.body2}>{invoiceTo.name}</Text>
-            <Text style={styles.body2}>{invoiceTo.fullAddress}</Text>
-            <Text style={styles.body2}>{invoiceTo.phoneNumber}</Text>
+            <Text style={styles.body2}>{unit_service?.name_english}</Text>
+            <Text style={styles.body2}>{unit_service?.country?.name_english}{unit_service?.city?.name_english}</Text>
+            <Text style={styles.body2}>{unit_service?.phone}</Text>
+            <Text style={styles.body2}>{unit_service?.email}</Text>
           </View>
         </View>
 
         <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>Date create</Text>
-            <Text style={styles.body2}>{fDate(createDate)}</Text>
+            <Text style={styles.body2}>{fDate(created_at)}</Text>
           </View>
-          <View style={styles.col6}>
+          {/* <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>Due date</Text>
             <Text style={styles.body2}>{fDate(dueDate)}</Text>
-          </View>
+          </View> */}
         </View>
 
         <Text style={[styles.subtitle1, styles.mb8]}>Invoice Details</Text>
@@ -168,27 +193,27 @@ export default function InvoicePDF({ invoice, currentStatus }) {
           </View>
 
           <View>
-            {items.map((item, index) => (
-              <View style={styles.tableRow} key={item.id}>
+            {Provided_services.map((item, index) => (
+              <View style={styles.tableRow} key={item.code}>
                 <View style={styles.tableCell_1}>
-                  <Text>{index + 1}</Text>
+                  <Text>{index+1}</Text>
                 </View>
 
                 <View style={styles.tableCell_2}>
-                  <Text style={styles.subtitle2}>{item.title}</Text>
-                  <Text>{item.description}</Text>
+                  <Text style={styles.subtitle2}>{item.name_english}</Text>
+                  {/* <Text>{item.description}</Text> */}
                 </View>
 
                 <View style={styles.tableCell_3}>
-                  <Text>{item.quantity}</Text>
+                  <Text>{item.service_quantity}</Text>
                 </View>
 
                 <View style={styles.tableCell_3}>
-                  <Text>{item.price}</Text>
+                  <Text>{item.total_amount}</Text>
                 </View>
 
                 <View style={[styles.tableCell_3, styles.alignRight]}>
-                  <Text>{fCurrency(item.price * item.quantity)}</Text>
+                  <Text>{fCurrency(item.accumulated_amount)}</Text>
                 </View>
               </View>
             ))}
@@ -201,11 +226,11 @@ export default function InvoicePDF({ invoice, currentStatus }) {
                 <Text>Subtotal</Text>
               </View>
               <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(subTotal)}</Text>
+                <Text>{fCurrency(Total_Amount)}</Text>
               </View>
             </View>
 
-            <View style={[styles.tableRow, styles.noBorder]}>
+            {/* <View style={[styles.tableRow, styles.noBorder]}>
               <View style={styles.tableCell_1} />
               <View style={styles.tableCell_2} />
               <View style={styles.tableCell_3} />
@@ -215,17 +240,17 @@ export default function InvoicePDF({ invoice, currentStatus }) {
               <View style={[styles.tableCell_3, styles.alignRight]}>
                 <Text>{fCurrency(-shipping)}</Text>
               </View>
-            </View>
+            </View> */}
 
             <View style={[styles.tableRow, styles.noBorder]}>
               <View style={styles.tableCell_1} />
               <View style={styles.tableCell_2} />
               <View style={styles.tableCell_3} />
               <View style={styles.tableCell_3}>
-                <Text>Discount</Text>
+                <Text>Deductions</Text>
               </View>
               <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(-discount)}</Text>
+                <Text>{fCurrency(-Total_deduction_amount)}</Text>
               </View>
             </View>
 
@@ -237,7 +262,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
                 <Text>Taxes</Text>
               </View>
               <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text>{fCurrency(taxes)}</Text>
+                <Text>{fCurrency(Total_tax_Amount)}</Text>
               </View>
             </View>
 
@@ -249,7 +274,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
                 <Text style={styles.h4}>Total</Text>
               </View>
               <View style={[styles.tableCell_3, styles.alignRight]}>
-                <Text style={styles.h4}>{fCurrency(totalAmount)}</Text>
+                <Text style={styles.h4}>{fCurrency(Balance)}</Text>
               </View>
             </View>
           </View>

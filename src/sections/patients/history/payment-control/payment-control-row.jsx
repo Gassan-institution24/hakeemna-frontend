@@ -67,7 +67,7 @@ export default function MovementTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell> */}
 
-        <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
+        <TableCell >
           {code}
 
           {/* <ListItemText
@@ -106,7 +106,7 @@ export default function MovementTableRow({
         <TableCell>
           <ListItemText
             primary={appointment?.name_english}
-            secondary={format(new Date(appointment?.start_time), 'dd MMM yyyy p')}
+            secondary={isValid(new Date(appointment?.start_time))&&format(new Date(appointment?.start_time), 'dd MMM yyyy p')||''}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -119,7 +119,7 @@ export default function MovementTableRow({
         <TableCell>
           <ListItemText
             primary={work_shift?.name_english}
-            secondary={isValid(new Date(work_shift?.start_time))&&isValid(new Date(work_shift?.start_time), 'dd MMM yyyy p')||''}
+            secondary={isValid(new Date(work_shift?.start_time))&&format(new Date(work_shift?.start_time), 'dd MMM yyyy p')||''}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,

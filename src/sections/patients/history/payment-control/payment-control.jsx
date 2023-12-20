@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types';
 import sumBy from 'lodash/sumBy';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -41,23 +42,24 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useGetEconomicMovements } from 'src/api/tables/economic-movements';
+import { useGetPatientIncomePaymentControl } from 'src/api/tables';
 
-import MovementsAnalytic from './movement-analytic';
-import MovementRow from './movement-table-row';
-import MovementTableToolbar from './movement-table-toolbar';
-import MovementTableFiltersResult from './movement-table-filters-result';
+import PaymentControlAnalytic from '../table-analytic';
+import PaymentControlRow from './payment-control-row';
+import PaymentControlTableToolbar from './payment-table-toolbar';
+import PaymentTableFiltersResult from './payment-control-filters-result';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'unit_service', label: 'Unit Service' },
-  { id: 'appointment', label: 'Appointment' },
-  { id: 'work_shift', label: 'Work Shift'},
-  { id: 'type', label: 'Type' },
-  { id: 'hospital', label: 'Hospital' },
-  { id: 'Balance', label: 'Balance' },
+  { id: 'stakeholder', label: 'Stakeholder' },
+  { id: 'invoice', label: 'Invoice' },
+  { id: 'required_amount', label: 'Required Amount' },
+  { id: 'due_date', label: 'Due Date' },
+  { id: 'amount', label: 'Amount' },
+  { id: 'recieved_real_date', label: 'Recieved Real Date' },
   { id: 'status', label: 'Status' },
   { id: '' },
 ];
@@ -72,7 +74,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function EconomicMovementsView() {
+export default function IncomePaymentControlView({ patientData }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -81,9 +83,13 @@ export default function EconomicMovementsView() {
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
+  const [USsincomePayment, setUSsincomePayment] = useState({});
+
   // const confirm = useBoolean();
 
-  const {economecMovementsData,refetch} = useGetEconomicMovements()
+  const { incomePaymentData, refetch } = useGetPatientIncomePaymentControl(patientData._id);
+
+  console.log('incomePaymentData', incomePaymentData);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -93,7 +99,7 @@ export default function EconomicMovementsView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: economecMovementsData,
+    inputData: incomePaymentData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -114,18 +120,20 @@ export default function EconomicMovementsView() {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const getInvoiceLength = (status) => economecMovementsData.filter((item) => item.status === status).length;
+  const getInvoiceLength = (status) =>
+    incomePaymentData.filter((item) => item.status === status).length;
 
   const getTotalAmount = (status) =>
     sumBy(
-      economecMovementsData.filter((item) => item.status === status),
+      incomePaymentData.filter((item) => item.status === status),
       'Balance'
     );
 
-  const getPercentByStatus = (status) => (getInvoiceLength(status) / economecMovementsData.length) * 100;
+  const getPercentByStatus = (status) =>
+    (getInvoiceLength(status) / incomePaymentData.length) * 100;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: economecMovementsData.length },
+    { value: 'all', label: 'All', color: 'default', count: incomePaymentData.length },
     {
       value: 'paid',
       label: 'Paid',
@@ -165,35 +173,35 @@ export default function EconomicMovementsView() {
 
   // const handleDeleteRow = useCallback(
   //   (id) => {
-  //     const deleteRow = economecMovementsData.filter((row) => row.id !== id);
+  //     const deleteRow = incomePaymentData.filter((row) => row.id !== id);
   //   (deleteRow);
 
   //     table.onUpdatePageDeleteRow(dataInPage.length);
   //   },
-  //   [dataInPage.length, table, economecMovementsData]
+  //   [dataInPage.length, table, incomePaymentData]
   // );
 
   // const handleDeleteRows = useCallback(() => {
-  //   const deleteRows = economecMovementsData.filter((row) => !table.selected.includes(row.id));
+  //   const deleteRows = incomePaymentData.filter((row) => !table.selected.includes(row.id));
   // (deleteRows);
 
   //   table.onUpdatePageDeleteRows({
-  //     totalRows: economecMovementsData.length,
+  //     totalRows: incomePaymentData.length,
   //     totalRowsInPage: dataInPage.length,
   //     totalRowsFiltered: dataFiltered.length,
   //   });
-  // }, [dataFiltered.length, dataInPage.length, table, economecMovementsData]);
+  // }, [dataFiltered.length, dataInPage.length, table, incomePaymentData]);
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.economicMovement.edit(id));
+      router.push(paths.superadmin.invoices.edit(id));
     },
     [router]
   );
 
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.economicMovement.info(id));
+      router.push(paths.superadmin.invoices.info(id));
     },
     [router]
   );
@@ -209,6 +217,38 @@ export default function EconomicMovementsView() {
     setFilters(defaultFilters);
   }, []);
 
+  // useEffect(()=>{
+  //   const filterIncomePayment = () => {
+  //     const data = USincomePayment;
+  //     if (incomePaymentData.length) {
+  //       incomePaymentData.forEach((item) => {
+  //         if (item.payment_done) {
+  //           data[item.unitservice._id] = { amount: 0, date: item.payment_done_real_dte };
+  //         } else if (item.income_recieved) {
+  //           if (data[item.unitservice._id]) {
+  //             // If it exists, add the income to the existing sum
+  //             data[item.unitservice._id.amount] += item.couta_amount;
+  //           } else {
+  //             // If it doesn't exist, create a new entry with the income
+  //             data[item.unitservice._id] = { amount: item.couta_amount };
+  //           }
+  //         } else if (!item.income_recieved) {
+  //           if (data[item.unitservice._id]) {
+  //             // If it exists, add the income to the existing sum
+  //             data[item.unitservice._id.amount] -= item.couta_amount;
+  //           } else {
+  //             // If it doesn't exist, create a new entry with the income
+  //             data[item.unitservice._id] = { amount: -item.couta_amount };
+  //           }
+  //         }
+  //       });
+  //       setUSincomePayment(data);
+  //       console.log('USincomePayment', USincomePayment);
+  //     }
+  //   };
+
+  //   filterIncomePayment()
+  // },incomePaymentData)
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -223,16 +263,16 @@ export default function EconomicMovementsView() {
               divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
               sx={{ py: 2 }}
             >
-              <MovementsAnalytic
+              <PaymentControlAnalytic
                 title="Total"
-                total={economecMovementsData.length}
+                total={incomePaymentData.length}
                 percent={100}
-                price={sumBy(economecMovementsData, 'Balance')}
+                price={sumBy(incomePaymentData, 'Balance')}
                 icon="solar:bill-list-bold-duotone"
                 color={theme.palette.info.main}
               />
 
-              <MovementsAnalytic
+              <PaymentControlAnalytic
                 title="Paid"
                 total={getInvoiceLength('paid')}
                 percent={getPercentByStatus('paid')}
@@ -241,7 +281,7 @@ export default function EconomicMovementsView() {
                 color={theme.palette.success.main}
               />
 
-              <MovementsAnalytic
+              <PaymentControlAnalytic
                 title="Pending"
                 total={getInvoiceLength('pending')}
                 percent={getPercentByStatus('pending')}
@@ -250,7 +290,7 @@ export default function EconomicMovementsView() {
                 color={theme.palette.warning.main}
               />
 
-              <MovementsAnalytic
+              <PaymentControlAnalytic
                 title="Overdue"
                 total={getInvoiceLength('overdue')}
                 percent={getPercentByStatus('overdue')}
@@ -291,7 +331,7 @@ export default function EconomicMovementsView() {
             ))}
           </Tabs>
 
-          <MovementTableToolbar
+          <PaymentControlTableToolbar
             filters={filters}
             onFilters={handleFilters}
             //
@@ -300,7 +340,7 @@ export default function EconomicMovementsView() {
           />
 
           {canReset && (
-            <MovementTableFiltersResult
+            <PaymentTableFiltersResult
               filters={filters}
               onFilters={handleFilters}
               //
@@ -315,11 +355,11 @@ export default function EconomicMovementsView() {
             {/* <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={economecMovementsData.length}
+              rowCount={incomePaymentData.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  economecMovementsData.map((row) => row.id)
+                  incomePaymentData.map((row) => row.id)
                 )
               }
               action={
@@ -357,13 +397,13 @@ export default function EconomicMovementsView() {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={economecMovementsData.length}
+                  rowCount={incomePaymentData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   // onSelectAllRows={(checked) =>
                   //   table.onSelectAllRows(
                   //     checked,
-                  //     economecMovementsData.map((row) => row.id)
+                  //     incomePaymentData.map((row) => row.id)
                   //   )
                   // }
                 />
@@ -375,7 +415,7 @@ export default function EconomicMovementsView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <MovementRow
+                      <PaymentControlRow
                         key={row.id}
                         row={row}
                         // selected={table.selected.includes(row.id)}
@@ -388,7 +428,7 @@ export default function EconomicMovementsView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, economecMovementsData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, incomePaymentData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -481,3 +521,6 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   return inputData;
 }
+IncomePaymentControlView.propTypes = {
+  patientData: PropTypes.object,
+};

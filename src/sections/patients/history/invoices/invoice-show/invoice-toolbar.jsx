@@ -13,25 +13,28 @@ import IconButton from '@mui/material/IconButton';
 import DialogActions from '@mui/material/DialogActions';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { useParams,useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import Iconify from 'src/components/iconify';
 
-import InvoicePDF from './movement-pdf';
+import InvoicePDF from './invoice-pdf';
 
 // ----------------------------------------------------------------------
 
 export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, onChangeStatus }) {
+  const params = useParams();
+  const {id} = params
+
   const router = useRouter();
 
   const view = useBoolean();
 
-  const handleEdit = useCallback(() => {
-    router.push(paths.dashboard.invoice.edit(invoice.id));
-  }, [invoice.id, router]);
+  // const handleEdit = useCallback(() => {
+  //   router.push(paths.superadmin.patients.history.invoices.edit(id,invoice._id));
+  // }, [invoice._id,id,router]);
 
   return (
     <>
@@ -42,11 +45,11 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
         sx={{ mb: { xs: 3, md: 5 } }}
       >
         <Stack direction="row" spacing={1} flexGrow={1} sx={{ width: 1 }}>
-          <Tooltip title="Edit">
+          {/* <Tooltip title="Edit">
             <IconButton onClick={handleEdit}>
               <Iconify icon="solar:pen-bold" />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
 
           <Tooltip title="View">
             <IconButton onClick={view.onTrue}>
@@ -71,27 +74,27 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
               </Tooltip>
             )}
           </PDFDownloadLink>
-
+{/* 
           <Tooltip title="Print">
             <IconButton>
               <Iconify icon="solar:printer-minimalistic-bold" />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
 
-          <Tooltip title="Send">
+          {/* <Tooltip title="Send">
             <IconButton>
               <Iconify icon="iconamoon:send-fill" />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
 
-          <Tooltip title="Share">
+          {/* <Tooltip title="Share">
             <IconButton>
               <Iconify icon="solar:share-bold" />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
         </Stack>
 
-        <TextField
+        {/* <TextField
           fullWidth
           select
           label="Status"
@@ -106,7 +109,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
               {option.label}
             </MenuItem>
           ))}
-        </TextField>
+        </TextField> */}
       </Stack>
 
       <Dialog fullScreen open={view.value}>
