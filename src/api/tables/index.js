@@ -47,6 +47,7 @@ export * from './rooms';
 export * from './service_types';
 export * from './specialities';
 export * from './stakeholder_types';
+export * from './stakeholders';
 export * from './sub_specialities';
 export * from './surgeries';
 export * from './symptoms';

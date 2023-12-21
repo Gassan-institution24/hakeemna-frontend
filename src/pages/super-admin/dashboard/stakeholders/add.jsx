@@ -1,0 +1,17 @@
+import { Helmet } from 'react-helmet-async';
+
+import AddPatient from 'src/sections/stakeholders/add/add-stakeholder';
+
+// ----------------------------------------------------------------------
+
+export default function StakeholderAddPage() {
+  return (
+    <>
+      <Helmet>
+        <title> Add Patient</title>
+      </Helmet>
+
+      <AddPatient />
+    </>
+  );
+}

@@ -83,13 +83,18 @@ export default function IncomePaymentControlView({ patientData }) {
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
-  const [USsincomePayment, setUSsincomePayment] = useState({});
-
   // const confirm = useBoolean();
 
   const { incomePaymentData, refetch } = useGetPatientIncomePaymentControl(patientData._id);
 
-  console.log('incomePaymentData', incomePaymentData);
+  const unitServiceOptions = incomePaymentData.reduce((arr, data) => {
+    // Check if the name_english is not already in the array
+    if (!arr.includes(data.unit_service.name_english)) {
+      // Add the name_english to the array
+      arr.push(data.unit_service.name_english);
+    }
+    return arr;
+  }, []);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -120,44 +125,55 @@ export default function IncomePaymentControlView({ patientData }) {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
+  const getInvoiceLengthForTabs = (status) => {
+    const filterdData = applyFilter({
+      inputData: incomePaymentData,
+      comparator: getComparator(table.order, table.orderBy),
+      filters: { ...filters, status: 'all' },
+      dateError,
+    });
+    if (!status) {
+      return filterdData.length;
+    }
+    return filterdData.filter((item) => item.status === status).length;
+  };
+
   const getInvoiceLength = (status) =>
-    incomePaymentData.filter((item) => item.status === status).length;
+    status ? dataFiltered.filter((item) => item.status === status).length : dataFiltered.length;
 
   const getTotalAmount = (status) =>
     sumBy(
-      incomePaymentData.filter((item) => item.status === status),
-      'Balance'
+      dataFiltered.filter((item) => item.status === status),
+      status === 'paid' ? 'amount' : 'required_amount'
     );
+  const getSumTotal = dataFiltered.reduce((sum, item) => {
+    const amount = typeof item.amount === 'number' ? item.amount : 0;
+    const requiredAmount = typeof item.required_amount === 'number' ? item.required_amount : 0;
+    return sum + amount - requiredAmount;
+  }, 0);
 
-  const getPercentByStatus = (status) =>
-    (getInvoiceLength(status) / incomePaymentData.length) * 100;
+  const getPercentByStatus = (status) => (getInvoiceLength(status) / dataFiltered.length) * 100;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: incomePaymentData.length },
+    { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
     {
       value: 'paid',
       label: 'Paid',
       color: 'success',
-      count: getInvoiceLength('paid'),
+      count: getInvoiceLengthForTabs('paid'),
     },
     {
       value: 'pending',
       label: 'Pending',
       color: 'warning',
-      count: getInvoiceLength('pending'),
+      count: getInvoiceLengthForTabs('pending'),
     },
     {
       value: 'overdue',
       label: 'Overdue',
       color: 'error',
-      count: getInvoiceLength('overdue'),
+      count: getInvoiceLengthForTabs('overdue'),
     },
-    // {
-    //   value: 'draft',
-    //   label: 'Draft',
-    //   color: 'default',
-    //   count: getInvoiceLength('draft'),
-    // },
   ];
 
   const handleFilters = useCallback(
@@ -171,39 +187,18 @@ export default function IncomePaymentControlView({ patientData }) {
     [table]
   );
 
-  // const handleDeleteRow = useCallback(
-  //   (id) => {
-  //     const deleteRow = incomePaymentData.filter((row) => row.id !== id);
-  //   (deleteRow);
-
-  //     table.onUpdatePageDeleteRow(dataInPage.length);
-  //   },
-  //   [dataInPage.length, table, incomePaymentData]
-  // );
-
-  // const handleDeleteRows = useCallback(() => {
-  //   const deleteRows = incomePaymentData.filter((row) => !table.selected.includes(row.id));
-  // (deleteRows);
-
-  //   table.onUpdatePageDeleteRows({
-  //     totalRows: incomePaymentData.length,
-  //     totalRowsInPage: dataInPage.length,
-  //     totalRowsFiltered: dataFiltered.length,
-  //   });
-  // }, [dataFiltered.length, dataInPage.length, table, incomePaymentData]);
-
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.invoices.edit(id));
+      router.push(paths.superadmin.patients.history.payment.edit(patientData._id,id));
     },
-    [router]
+    [router,patientData._id]
   );
 
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.invoices.info(id));
+      router.push(paths.superadmin.patients.history.payment.info(patientData._id,id));
     },
-    [router]
+    [router,patientData._id]
   );
 
   const handleFilterStatus = useCallback(
@@ -217,38 +212,6 @@ export default function IncomePaymentControlView({ patientData }) {
     setFilters(defaultFilters);
   }, []);
 
-  // useEffect(()=>{
-  //   const filterIncomePayment = () => {
-  //     const data = USincomePayment;
-  //     if (incomePaymentData.length) {
-  //       incomePaymentData.forEach((item) => {
-  //         if (item.payment_done) {
-  //           data[item.unitservice._id] = { amount: 0, date: item.payment_done_real_dte };
-  //         } else if (item.income_recieved) {
-  //           if (data[item.unitservice._id]) {
-  //             // If it exists, add the income to the existing sum
-  //             data[item.unitservice._id.amount] += item.couta_amount;
-  //           } else {
-  //             // If it doesn't exist, create a new entry with the income
-  //             data[item.unitservice._id] = { amount: item.couta_amount };
-  //           }
-  //         } else if (!item.income_recieved) {
-  //           if (data[item.unitservice._id]) {
-  //             // If it exists, add the income to the existing sum
-  //             data[item.unitservice._id.amount] -= item.couta_amount;
-  //           } else {
-  //             // If it doesn't exist, create a new entry with the income
-  //             data[item.unitservice._id] = { amount: -item.couta_amount };
-  //           }
-  //         }
-  //       });
-  //       setUSincomePayment(data);
-  //       console.log('USincomePayment', USincomePayment);
-  //     }
-  //   };
-
-  //   filterIncomePayment()
-  // },incomePaymentData)
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -265,9 +228,9 @@ export default function IncomePaymentControlView({ patientData }) {
             >
               <PaymentControlAnalytic
                 title="Total"
-                total={incomePaymentData.length}
+                total={getInvoiceLength()}
                 percent={100}
-                price={sumBy(incomePaymentData, 'Balance')}
+                price={getSumTotal}
                 icon="solar:bill-list-bold-duotone"
                 color={theme.palette.info.main}
               />
@@ -336,7 +299,7 @@ export default function IncomePaymentControlView({ patientData }) {
             onFilters={handleFilters}
             //
             dateError={dateError}
-            serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
+            serviceOptions={unitServiceOptions.map((option) => option)}
           />
 
           {canReset && (
@@ -493,28 +456,37 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   if (name) {
     inputData = inputData.filter(
-      (invoice) =>
-        invoice.invoiceNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        invoice.invoiceTo.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (data) =>
+        (data?.unit_service?.name_english &&
+          data?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.unit_service?.name_arabic &&
+          data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.stakeholder?.name_english &&
+          data?.stakeholder?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.stakeholder?.name_arabic &&
+          data?.stakeholder?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        data?._id === name ||
+        JSON.stringify(data?.invoice?.code) === name ||
+        JSON.stringify(data.code) === name
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((invoice) => invoice.status === status);
+    inputData = inputData.filter((payment) => payment.status === status);
   }
 
   if (service.length) {
-    inputData = inputData.filter((invoice) =>
-      invoice.items.some((filterItem) => service.includes(filterItem.service))
-    );
+    inputData = inputData.filter((payment) => payment.unit_service && service.includes(payment.unit_service.name_english));
   }
 
   if (!dateError) {
     if (startDate && endDate) {
       inputData = inputData.filter(
-        (invoice) =>
-          fTimestamp(invoice.createDate) >= fTimestamp(startDate) &&
-          fTimestamp(invoice.createDate) <= fTimestamp(endDate)
+        (payment) =>
+          (fTimestamp(payment.due_date) >= fTimestamp(startDate) &&
+            fTimestamp(payment.due_date) <= fTimestamp(endDate)) ||
+          (fTimestamp(payment.recieved_real_date) >= fTimestamp(startDate) &&
+            fTimestamp(payment.recieved_real_date) <= fTimestamp(endDate))
       );
     }
   }

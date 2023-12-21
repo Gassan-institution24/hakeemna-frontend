@@ -78,11 +78,46 @@ export function useNavData() {
             path: paths.superadmin.patients.root,
             icon: ICONS.booking,
           },
-          // {
-          //   title: t('file'),
-          //   path: paths.dashboard.general.file,
-          //   icon: ICONS.file,
-          // },
+          {
+            title: t('stakeholders'),
+            path: paths.superadmin.stakeholders.root,
+            icon: ICONS.ecommerce,
+          },
+          {
+            title: t('accounting'),
+            path: paths.dashboard.general.file,
+            icon: ICONS.file,
+          },
+          {
+            title: t('statistics'),
+            path: paths.dashboard.general.file,
+            icon: ICONS.file,
+          },
+          {
+            title: t('packages'),
+            path: paths.dashboard.general.file,
+            icon: ICONS.file,
+          },
+          {
+            title: t('communications'),
+            path: paths.dashboard.general.file,
+            icon: ICONS.file,
+          },
+          {
+            title: t('access control list'),
+            path: paths.dashboard.general.file,
+            icon: ICONS.file,
+          },
+          {
+            title: t('customers training'),
+            path: paths.dashboard.general.file,
+            icon: ICONS.file,
+          },
+          {
+            title: t('our team training'),
+            path: paths.dashboard.general.file,
+            icon: ICONS.file,
+          },
           {
             title: t('Adjustable Services Control'),
             path: paths.dashboard.general.banking,
