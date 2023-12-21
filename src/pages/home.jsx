@@ -4,17 +4,18 @@ import HomeView from 'src/sections/home/view/home-view';
 
 // ----------------------------------------------------------------------
 
-export default function HomePage({divRef}) {
+export default function HomePage({divRef,divRef2}) {
   return (
     <>
       <Helmet>
         <title>Doctorna</title>
       </Helmet>
 
-      <HomeView divRef={divRef} />
+      <HomeView divRef={divRef} divRef2={divRef2} />
     </>
   );
 }
 HomePage.propTypes = {
   divRef: PropTypes.element,
+  divRef2: PropTypes.element,
 };

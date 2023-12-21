@@ -37,10 +37,10 @@ export default function Patient() {
               backgroundImage: `url(${circleside})`,
               backgroundSize: 'cover',
               backgroundRepeat: 'no-repeat',
-              width: '400px',
-              height: '400px',
+              width: '500px',
+              height: '500px',
               position: 'relative',
-              top: '60px',
+              left: '-100px',
             }}
           >
             <img
@@ -51,8 +51,8 @@ export default function Patient() {
                 position: 'relative',
                 right: '-10px',
                 top: '15px',
-                width: '220px',
-                height: '220px',
+                width: '250px',
+                height: '250px',
               }}
             />
           </Item>
@@ -66,9 +66,10 @@ export default function Patient() {
               top: { md: '120px' },
               p: 1,
               width: { md: '500px', xs: '280px' },
+              fontSize:18
             }}
           >
-            <h1 style={{ color: 'green' }}>I am a patient</h1>
+            <h1 style={{ color: 'green' }}>I am a unitservices</h1>
             <p>
               Lorem ipsum, dolor sit amet consectetur adipisicing elit culpa
               <br /> porro aut molestiaks vitae minjus tempore odio tempore odio. <br />

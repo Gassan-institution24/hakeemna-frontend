@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles';
 
 import { RouterLink } from 'src/routes/components';
 
-import Doclogo from './logo.png'
+import Doclogo from './doc.png'
 // ----------------------------------------------------------------------
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
@@ -33,8 +33,8 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       ref={ref}
       component="div"
       sx={{
-        width:180,
-        height: 80,
+        width:200,
+        height: 110,
         display: 'inline-flex',
         ...sx,
       }}
