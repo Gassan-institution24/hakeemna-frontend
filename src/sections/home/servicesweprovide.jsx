@@ -9,7 +9,9 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { varFade, MotionViewport } from 'src/components/animate';
 import { Button } from '@mui/material';
+import { PATH_FOR_PATIENT_SERVICES,PATH_FOR_US_SERVICES  } from 'src/config-global';
 
+ 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -59,6 +61,9 @@ export default function Whydoc() {
               porro, harum quo facere exercitationem saepe blanditiis autem maiores necessitatibus
             </p>
             <Button
+              target="_blank"
+              rel="noopener"
+              href={PATH_FOR_PATIENT_SERVICES}
               sx={{
                 bgcolor: 'success.main',
                 color: '#fff',
@@ -106,6 +111,9 @@ export default function Whydoc() {
               porro, harum quo facere exercitationem saepe blanditiis autem maiores necessitatibus
             </p>
             <Button
+              target="_blank"
+              rel="noopener"
+              href={PATH_FOR_US_SERVICES}
               sx={{
                 bgcolor: 'success.main',
                 color: '#fff',

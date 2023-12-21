@@ -6,7 +6,7 @@ import NavList from './nav-list';
 
 // ----------------------------------------------------------------------
 
-export default function NavDesktop({ data }) {
+export default function NavDesktop({ data,scrollToDiv2 }) {
   return (
     <Stack component="nav" direction="row" spacing={5} sx={{ mr: 2.5, height: 1 }}>
       {data.map((list) => (
@@ -18,4 +18,5 @@ export default function NavDesktop({ data }) {
 
 NavDesktop.propTypes = {
   data: PropTypes.array,
+  scrollToDiv2: PropTypes.func,
 };

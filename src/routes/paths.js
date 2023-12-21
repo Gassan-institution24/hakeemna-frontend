@@ -14,7 +14,8 @@ const ROOTS = {
   DASHBOARD: '/dashboard',
   SUPERADMIN: '/dashboard',
   USER: '/user',
-  BETWEEN: '/between'
+  BETWEEN: '/between',
+  PAGES: '/pages'
 };
 
 // ----------------------------------------------------------------------
@@ -96,11 +97,16 @@ export const paths = {
     },
   },
 
-// PAGES BETWEEN
+// PAGES
 between: {
   root: ROOTS.BETWEEN,
-  page: `${ROOTS.BETWEEN}/pages`,
 },
+pages: {
+  root: ROOTS.PAGES,
+  patients: `/patients`,
+  unit: `/unit`,
+},
+
 
 
   // DASHBOARD

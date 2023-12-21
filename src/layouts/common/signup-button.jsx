@@ -7,7 +7,6 @@ export default function SigupButton({ sx ,scrollToDiv}) {
     <Button
       component={RouterLink}
       onClick={scrollToDiv}
-      // href={SIGNUP_PATH}
       variant="outlined"
       sx={{
         mr: 3,
