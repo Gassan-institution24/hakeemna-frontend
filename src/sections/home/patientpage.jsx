@@ -41,6 +41,7 @@ export default function Patient() {
               top: { md: '120px' },
               p: 1,
               width: { md: '500px', xs: '280px' },
+              fontSize:18
             }}
           >
             <h1 style={{ color: 'green' }}>I am a patient</h1>
@@ -81,10 +82,10 @@ export default function Patient() {
               backgroundImage: `url(${circle})`,
               backgroundSize: 'cover',
               backgroundRepeat: 'no-repeat',
-              width: '400px',
-              height: '400px',
+              width: '500px',
+              height: '500px',
               position: 'relative',
-              right: '-70px',
+              right: '-150px',
               top: '60px',
             }}
           >
@@ -94,10 +95,10 @@ export default function Patient() {
               style={{
                 objectFit: 'cover',
                 position: 'relative',
-                right: '-10px',
-                top: '15px',
-                width: '220px',
-                height: '220px',
+                right: '-25px',
+                top: '30px',
+                width: '250px',
+                height: '250px',
               }}
             />
           </Item>

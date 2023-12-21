@@ -10,14 +10,14 @@ import Patient from '../patientpage';
 import Us from '../uspage';
 // ----------------------------------------------------------------------
 
-export default function HomeView({ divRef }) {
+export default function HomeView({ divRef,divRef2 }) {
   const { scrollYProgress } = useScroll();
 
   return (
     <>
       <ScrollProgress scrollYProgress={scrollYProgress} />
 
-      <HomeHero />
+      <HomeHero  ref={divRef2}/>
 
       <Box
         sx={{
@@ -65,4 +65,5 @@ export default function HomeView({ divRef }) {
 }
 HomeView.propTypes = {
   divRef: PropTypes.element,
+  divRef2: PropTypes.element,
 };

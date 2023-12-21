@@ -27,7 +27,8 @@ const ProductCheckoutPage = lazy(() => import('src/pages/product/checkout'));
 // BLOG
 const PostListPage = lazy(() => import('src/pages/post/list'));
 const PostDetailsPage = lazy(() => import('src/pages/post/details'));
-const Between = lazy(() => import('src/pages/between/between'));
+const Patientsservices = lazy(() => import('src/pages/services/patients'));
+const Unitservices = lazy(() => import('src/pages/services/unit'));
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +44,8 @@ export const mainRoutes = [
     children: [
       { path: 'about-us', element: <AboutPage /> },
       { path: 'contact-us', element: <ContactPage /> },
-      { path: 'between', element: <Between /> },
+      { path: 'patients', element: <Patientsservices /> },
+      { path: 'unit', element: <Unitservices /> },
       { path: 'faqs', element: <FaqsPage /> },
       {
         path: 'product',

@@ -21,21 +21,23 @@ export default function Router() {
       divRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
+  const divRef2 = useRef(null);
+  const scrollToDiv2 = () => {
+    // Scroll logic using divRef.current.scrollIntoView() or any other scroll method
+    if (divRef.current) {
+      divRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+
+
+
   return useRoutes([
-    // SET INDEX PAGE WITH SKIP HOME PAGE
-    // {
-    //   path: '/',
-    //   element: <Navigate to={PATH_AFTER_LOGIN} replace />,
-    // },
-
-    // ----------------------------------------------------------------------
-
-    // SET INDEX PAGE WITH HOME PAGE
     {
       path: '/',
       element: (
-        <MainLayout scrollToDiv={scrollToDiv}>
-          <HomePage divRef={divRef}/>
+        <MainLayout scrollToDiv={scrollToDiv} scrollToDiv2={scrollToDiv2}>
+          <HomePage divRef={divRef} divRef2={divRef2}/>
         </MainLayout>
       ),
     },

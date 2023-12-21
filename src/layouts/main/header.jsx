@@ -75,7 +75,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function Header({scrollToDiv}) {
+export default function Header({scrollToDiv,scrollToDiv2}) {
   const settings = useSettingsContext();
   const theme = useTheme();
 
@@ -120,7 +120,7 @@ export default function Header({scrollToDiv}) {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          {mdUp && <NavDesktop data={navConfig} />}
+          {mdUp && <NavDesktop data={navConfig}  scrollToDiv2={scrollToDiv2}/>}
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
             {mdUp && <LoginButton />}
@@ -146,4 +146,5 @@ export default function Header({scrollToDiv}) {
 }
 Header.propTypes = {
   scrollToDiv: PropTypes.func,
+  scrollToDiv2: PropTypes.func,
 };
