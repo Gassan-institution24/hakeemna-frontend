@@ -33,7 +33,7 @@ export default function CountriesTableRow({
   showCommunications,
   showFeedback,
   showInsurance,
-  showGeneralInfo
+  showGeneralInfo,
 }) {
   const {
     code,
@@ -60,7 +60,9 @@ export default function CountriesTableRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
       <TableCell>{code}</TableCell>
-      <TableCell>{first_name} {last_name}</TableCell>
+      <TableCell>
+        {first_name} {last_name}
+      </TableCell>
       <TableCell>
         <Label
           variant="soft"
@@ -74,8 +76,8 @@ export default function CountriesTableRow({
       <TableCell
         sx={{
           cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
         }}
         onClick={showGeneralInfo}
       >
@@ -84,8 +86,8 @@ export default function CountriesTableRow({
       <TableCell
         sx={{
           cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
         }}
         onClick={showAccounting}
       >
@@ -94,8 +96,8 @@ export default function CountriesTableRow({
       <TableCell
         sx={{
           cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
         }}
         onClick={showCommunications}
       >
@@ -104,8 +106,8 @@ export default function CountriesTableRow({
       <TableCell
         sx={{
           cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
         }}
         onClick={showFeedback}
       >
@@ -114,8 +116,8 @@ export default function CountriesTableRow({
       <TableCell
         sx={{
           cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
         }}
         onClick={showInsurance}
       >
@@ -124,8 +126,8 @@ export default function CountriesTableRow({
       <TableCell
         sx={{
           cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
         }}
         // onClick={showInsurance}
       >

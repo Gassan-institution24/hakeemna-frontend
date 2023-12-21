@@ -69,8 +69,8 @@ export default function CountriesTableRow({
       <TableCell
         sx={{
           cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
         }}
         onClick={() => setFilters({ ...filters, name: scientific_name })}
       >
@@ -79,8 +79,8 @@ export default function CountriesTableRow({
       <TableCell
         sx={{
           cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
         }}
         onClick={() => setFilters({ ...filters, name: family?.name_english })}
       >
@@ -99,8 +99,8 @@ export default function CountriesTableRow({
       <TableCell
         sx={{
           cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
         }}
         onClick={() => setFilters({ ...filters, name: country?.name_english })}
       >

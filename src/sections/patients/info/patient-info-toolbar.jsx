@@ -40,13 +40,13 @@ export default function JobDetailsToolbar({
           Back
         </Button>
 
-        <Box sx={{ flexGrow: 1 }} />
+        {/* <Box sx={{ flexGrow: 1 }} />
 
         <Tooltip title="Edit">
           <IconButton component={RouterLink} href={editLink}>
             <Iconify icon="solar:pen-bold" />
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
       </Stack>
     </>
   );

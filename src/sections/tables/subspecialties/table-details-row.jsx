@@ -65,8 +65,8 @@ export default function TableDetailsRow({
       <TableCell
         sx={{
           cursor: 'pointer',
-          color: 'blue',
-          textDecoration: 'underline',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
         }}
         onClick={() => setFilters({ ...filters, name: specialty.name_english })}
       >

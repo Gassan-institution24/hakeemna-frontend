@@ -320,7 +320,35 @@ const PatientsFeedbackPage = lazy(() =>
 import('src/pages/super-admin/dashboard/patients/feedback/feedback')
 );
        // ECONOMIC MOVEMENTS
-const InvoiceInfoPage = lazy(() => import('src/pages/super-admin/dashboard/patients/history/invoives/view-invoice'));
+const PatientInvoiceInfoPage = lazy(() => import('src/pages/super-admin/dashboard/patients/history/invoives/view-invoice'));
+const PatientPaymentInfoPage = lazy(() => import('src/pages/super-admin/dashboard/patients/history/payment/view-payment'));
+
+// STAKEHOLDERS
+const StakeholdersHomePage = lazy(() => import('src/pages/super-admin/dashboard/stakeholders/home'));
+const StakeholdersAddPage = lazy(() => import('src/pages/super-admin/dashboard/stakeholders/add'));
+const StakeholdersEditPage = lazy(() => import('src/pages/super-admin/dashboard/stakeholders/edit'));
+const StakeholdersInfoPage = lazy(() => import('src/pages/super-admin/dashboard/stakeholders/info'));
+const StakeholdersHistoryPage = lazy(() =>
+import('src/pages/super-admin/dashboard/stakeholders/history/history')
+);
+const StakeholdersOffersPage = lazy(() =>
+import('src/pages/super-admin/dashboard/stakeholders/offers/offers')
+);
+const StakeholdersBookAppointmentPage = lazy(() =>
+import('src/pages/super-admin/dashboard/stakeholders/history/bookAppointment')
+);
+const StakeholdersInsurancePage = lazy(() =>
+import('src/pages/super-admin/dashboard/stakeholders/insurance/insurance')
+);
+const StakeholdersCommunicationsPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/stakeholders/communications/communications')
+);
+const StakeholdersFeedbackPage = lazy(() =>
+import('src/pages/super-admin/dashboard/stakeholders/feedback/feedback')
+);
+       // ECONOMIC MOVEMENTS
+const StakeholdersInvoiceInfoPage = lazy(() => import('src/pages/super-admin/dashboard/stakeholders/history/invoices/view-invoice'));
+const StakeholdersPaymentInfoPage = lazy(() => import('src/pages/super-admin/dashboard/stakeholders/history/payment/view-payment'));
 
 
 // ----------------------------------------------------------------------
@@ -373,7 +401,40 @@ export const dashboardRoutes = [
           {
             path: ':id/invoices',
             children: [
-              { path: ':inid/info', element: <InvoiceInfoPage /> },
+              { path: ':inid/info', element: <PatientInvoiceInfoPage /> },
+            ],
+          },
+          {
+            path: ':id/payment',
+            children: [
+              { path: ':inid/info', element: <PatientPaymentInfoPage /> },
+            ],
+          },
+        ],
+      },
+      {
+        path: 'stakeholders',
+        children: [
+          { element: <StakeholdersHomePage />, index: true },
+          { path: ':id/info', element: <StakeholdersInfoPage /> },
+          { path: 'add', element: <StakeholdersAddPage /> },
+          { path: ':id/edit', element: <StakeholdersEditPage /> },
+          { path: ':id/history', element: <StakeholdersHistoryPage /> },
+          { path: ':id/offers', element: <StakeholdersOffersPage /> },
+          { path: ':id/bookappoint', element: <StakeholdersBookAppointmentPage /> },
+          { path: ':id/insurance', element: <StakeholdersInsurancePage /> },
+          { path: ':id/communications', element: <StakeholdersCommunicationsPage /> },
+          { path: ':id/feedback', element: <StakeholdersFeedbackPage /> },
+          {
+            path: ':id/invoices',
+            children: [
+              { path: ':inid/info', element: <StakeholdersInvoiceInfoPage /> },
+            ],
+          },
+          {
+            path: ':id/payment',
+            children: [
+              { path: ':inid/info', element: <StakeholdersPaymentInfoPage /> },
             ],
           },
         ],

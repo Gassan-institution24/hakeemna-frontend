@@ -25,7 +25,7 @@ export default function JobDetailsView({ patientData }) {
       <JobDetailsToolbar
         backLink={paths.superadmin.patients.root}
         // editLink={paths.superadmin.patients.edit(`${patientData?._id}`)}
-        liveLink="#"
+        // liveLink="#"
       />
 
       <JobDetailsContent patientData={patientData} />
