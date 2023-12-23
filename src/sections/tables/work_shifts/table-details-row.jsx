@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fDateTime } from 'src/utils/format-time';
+import { fDateTime, fTime } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -33,8 +33,8 @@ export default function TableDetailsRow({
     code,
     name_english,
     unit_service,
-    start_date,
-    end_date,
+    start_time,
+    end_time,
     status,
     created_at,
     user_creation,
@@ -73,8 +73,8 @@ export default function TableDetailsRow({
       >
         {unit_service?.name_english}
       </TableCell>
-      <TableCell>{fDateTime(start_date)}</TableCell>
-      <TableCell>{fDateTime(end_date)}</TableCell>
+      <TableCell>{fTime(start_time)}</TableCell>
+      <TableCell>{fTime(end_time)}</TableCell>
       <TableCell>
         <Label
           variant="soft"

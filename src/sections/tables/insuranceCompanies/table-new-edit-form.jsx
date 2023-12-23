@@ -78,7 +78,7 @@ export default function TableNewEditForm({ currentTable }) {
       if (currentTable) {
         await axiosHandler({
           method: 'PATCH',
-          path: endpoints.tables.activity(currentTable._id),
+          path: endpoints.tables.insuranceCo(currentTable._id),
           data: {
             modifications_nums: (currentTable.modifications_nums || 0) + 1,
             ip_address_user_modification: address.data.IPv4,
@@ -89,7 +89,7 @@ export default function TableNewEditForm({ currentTable }) {
       } else {
         await axiosHandler({
           method: 'POST',
-          path: endpoints.tables.activities,
+          path: endpoints.tables.insuranceCos,
           data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
         });
       }
@@ -156,7 +156,7 @@ export default function TableNewEditForm({ currentTable }) {
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentTable ? 'Create User' : 'Save Changes'}
+                {!currentTable ? 'Create' : 'Save Changes'}
               </LoadingButton>
             </Stack>
           </Card>

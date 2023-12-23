@@ -159,17 +159,17 @@ export default function JwtRegisterView() {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect native onChange={handleCountryChange} name="country" label="Country">
             <option>{null}</option>
-            {countriesData.map((country) => (
-              <option key={country._id} value={country._id}>
-                {country.name_english}
+            {countriesData?.map((country) => (
+              <option key={country?._id} value={country?._id}>
+                {country?.name_english}
               </option>
             ))}
           </RHFSelect>
           <RHFSelect native name="city" label="City">
             <option>{null}</option>
-            {cities.map((city) => (
-              <option key={city._id} value={city._id}>
-                {city.name_english}
+            {cities?.map((city) => (
+              <option key={city?._id} value={city?._id}>
+                {city?.name_english}
               </option>
             ))}
           </RHFSelect>

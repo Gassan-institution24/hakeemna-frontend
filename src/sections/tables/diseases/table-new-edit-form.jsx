@@ -13,7 +13,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetSymptoms } from 'src/api/tables';
+import { useGetCategories, useGetSymptoms } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFMultiSelect, RHFSelect } from 'src/components/hook-form';
@@ -28,6 +28,8 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
 
   const { user } = useAuthContext();
+
+  const {categories} = useGetCategories()
 
   const { tableData } = useGetSymptoms();
 
@@ -150,7 +152,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
               <RHFSelect native name="category" label="category">
                 <option> </option>
-                {tableData.map((category) => (
+                {categories.map((category) => (
                   <option key={category._id} value={category._id}>
                     {category.name_english}
                   </option>

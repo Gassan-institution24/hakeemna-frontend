@@ -209,7 +209,7 @@ export default function AppointmentListView({patientData}) {
           },
           {
             name: 'History',
-            href: paths.superadmin.patients.history.root,
+            href: paths.superadmin.patients.history.root(patientData._id),
           },
           { name: 'Appointments' },
         ]}

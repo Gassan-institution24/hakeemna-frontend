@@ -128,7 +128,7 @@ export default function TableNewEditForm({ currentTable }) {
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentTable ? 'Create User' : 'Save Changes'}
+                {!currentTable ? 'Create' : 'Save Changes'}
               </LoadingButton>
             </Stack>
           </Card>
