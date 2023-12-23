@@ -1,7 +1,6 @@
+import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
@@ -9,114 +8,122 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 import { alpha, useTheme } from '@mui/material/styles';
-
+import Tab from '@mui/material/Tab';
+import Card from '@mui/material/Card';
+import Container from '@mui/material/Container';
+import Tabs, { tabsClasses } from '@mui/material/Tabs';
+import Link from '@mui/material/Link';
+import { Button } from '@mui/material';
 import { fShortenNumber } from 'src/utils/format-number';
 
 import { _socials } from 'src/_mock';
 import { AvatarShape } from 'src/assets/illustrations';
-
+import { fDatet, fDate } from 'src/utils/format-time';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
-
+import { useGetPatientAppointments } from 'src/api/tables';
+import { useSettingsContext } from 'src/components/settings';
 // ----------------------------------------------------------------------
 
 export default function UserCard({ user }) {
   const theme = useTheme();
+const {appointmentsData} = useGetPatientAppointments(user)
+console.log(appointmentsData);
+  return appointmentsData.map((info, index) => (
+    <>
+      
+      <Card>
+        <Stack sx={{ p: 3, pb: 2 }}>
+          <Avatar
+            alt={info?.name_english}
+            src={info?.company_log}
+            variant="rounded"
+            sx={{ width: 48, height: 48, mb: 2 }}
+          />
 
-  const { name, coverUrl, role, totalFollowers, totalPosts, avatarUrl, totalFollowing } = user;
-
-  return (
-    <Card sx={{ textAlign: 'center' }}>
-      <Box sx={{ position: 'relative' }}>
-        <AvatarShape
-          sx={{
-            left: 0,
-            right: 0,
-            zIndex: 10,
-            mx: 'auto',
-            bottom: -26,
-            position: 'absolute',
-          }}
-        />
-
-        <Avatar
-          alt={name}
-          src={avatarUrl}
-          sx={{
-            width: 64,
-            height: 64,
-            zIndex: 11,
-            left: 0,
-            right: 0,
-            bottom: -32,
-            mx: 'auto',
-            position: 'absolute',
-          }}
-        />
-
-        <Image
-          src={coverUrl}
-          alt={coverUrl}
-          ratio="16/9"
-          overlay={alpha(theme.palette.grey[900], 0.48)}
-        />
-      </Box>
-
-      <ListItemText
-        sx={{ mt: 7, mb: 1 }}
-        primary={name}
-        secondary={role}
-        primaryTypographyProps={{ typography: 'subtitle1' }}
-        secondaryTypographyProps={{ component: 'span', mt: 0.5 }}
-      />
-
-      <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 2.5 }}>
-        {_socials.map((social) => (
-          <IconButton
-            key={social.name}
-            sx={{
-              color: social.color,
-              '&:hover': {
-                bgcolor: alpha(social.color, 0.08),
-              },
+          <ListItemText
+            // sx={{ mb: 0 }}
+            // primary={
+            //   <Link component={RouterLink} href={paths.dashboard.job.details(_id)} color="inherit">
+            //     {info?.name_english}
+            //   </Link>
+            // }
+            secondary={
+              <Link color="inherit">
+                {info.name_english}
+              </Link>
+            }
+            primaryTypographyProps={{
+              typography: 'subtitle1',
             }}
+            secondaryTypographyProps={{
+              mt: 1,
+              component: 'span',
+              typography: 'caption',
+              color: 'text.disabled',
+            }}
+          />
+
+          <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
+            {fDate(info?.created_at)}
+          </Stack>
+          <Stack
+            spacing={0.5}
+            direction="row"
+            alignItems="center"
+            sx={{ color: 'primary.main', typography: 'caption' }}
           >
-            <Iconify icon={social.icon} />
-          </IconButton>
-        ))}
-      </Stack>
+            <Iconify width={16} icon="ic:baseline-tag" />
+            {info.code}
+          </Stack>
+        </Stack>
 
-      <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider sx={{ borderStyle: 'dashed' }} />
 
-      <Box
-        display="grid"
-        gridTemplateColumns="repeat(3, 1fr)"
-        sx={{ py: 3, typography: 'subtitle1' }}
-      >
-        <div>
-          <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
-            Follower
-          </Typography>
-          {fShortenNumber(totalFollowers)}
-        </div>
-
-        <div>
-          <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
-            Following
-          </Typography>
-
-          {fShortenNumber(totalFollowing)}
-        </div>
-
-        <div>
-          <Typography variant="caption" component="div" sx={{ mb: 0.5, color: 'text.secondary' }}>
-            Total Post
-          </Typography>
-          {fShortenNumber(totalPosts)}
-        </div>
-      </Box>
-    </Card>
-  );
+        <Box rowGap={1.5} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3, justifyContent: 'space-between' }}>
+          {[
+            {
+              label: `${fDatet(info.start_time)} ${fDatet(info.end_time)}` ,
+              icon: <Iconify width={16} icon="icon-park-solid:time" sx={{ flexShrink: 0 }} />,
+            },
+            {
+              label: info?.department.english_department_name,
+              icon: (
+                <Iconify width={16} icon="medical-icon:health-services" sx={{ flexShrink: 0 }} />
+              ),
+            },
+            {
+              label:  info?.status,
+              icon: <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }} />,
+            },
+            {
+              label: info?.name_english,
+              icon: (
+                <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
+              ),
+            },
+          ].map((item) => (
+            <Stack
+              key={item.label}
+              spacing={0.5}
+              flexShrink={0}
+              direction="row"
+              alignItems="center"
+              sx={{ color: 'text.disabled', minWidth: 0 }}
+            >
+              {item?.icon}
+              <Typography variant="caption" noWrap>
+                {item?.label}
+              </Typography>
+            </Stack>
+          ))}
+          <Button  sx={{mt:3,width:100}} variant="outlined" color="success">
+            Book
+          </Button>
+        </Box>
+      </Card>
+    </>
+  ));
 }
 
 UserCard.propTypes = {

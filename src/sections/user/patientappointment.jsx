@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import { useAuthContext } from 'src/auth/hooks';
   
 export default function ProfileFollowers() {
-  const { data } = useGetpatientAppointment();
+const { data } = useGetpatientAppointment();
 const { user } = useAuthContext();
   return (
     <>
