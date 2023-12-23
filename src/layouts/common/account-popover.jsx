@@ -43,7 +43,6 @@ export default function AccountPopover() {
   const router = useRouter();
 
   const { user } = useAuthContext();
-  console.log(user)
 
   const { logout } = useAuthContext();
 

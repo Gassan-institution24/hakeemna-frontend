@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 
 import { paths } from 'src/routes/paths';
 
@@ -8,6 +8,9 @@ import { useAuthContext } from 'src/auth/hooks';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
+import { useSnackbar } from 'src/components/snackbar';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useRouter } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -50,6 +53,8 @@ const ICONS = {
 // ----------------------------------------------------------------------
 
 export function useNavData() {
+ 
+
   const { t } = useTranslate();
   const { user } = useAuthContext();
 
@@ -152,19 +157,45 @@ export function useNavData() {
             // ],
           },
           {
-            title: t('account'),
+            title: t('settings'),
             path: paths.dashboard.user.account,
-            // icon: <Iconify icon="bxs:share-alt" />,
+            icon: <Iconify icon="solar:settings-bold-duotone" />,
           },
-          // { title: t('profile'), path: paths.dashboard.user.root },
-          { title: t('cards'), path: paths.dashboard.user.cards },
-          { title: t('edit'), path: paths.dashboard.user.demo.edit },
+          {
+            title: t('my appointents'),
+            path: paths.dashboard.user.cards,
+            icon: <Iconify icon="teenyicons:appointments-solid" />,
+          },
+          {
+            title: t('medical report'),
+            path: paths.dashboard.user.cards,
+            icon: <Iconify icon="tabler:report-medical" />,
+          },
+          {
+            title: t('contact us'),
+            path: paths.dashboard.user.demo.edit,
+            icon: <Iconify icon="ic:round-contact-support" />,
+          },
+          {
+            title: t('my medicines'),
+            path: paths.dashboard.user.list,
+            icon: <Iconify icon="game-icons:medicines" />,
+          },
+          {
+            title: t('Financial movements'),
+            path: '#',
+            icon: <Iconify icon="arcticons:gnucash" />,
+          },
           {
             title: t('share doctorna'),
-            path: paths.dashboard.user.list,
+            path: '#',
             icon: <Iconify icon="bxs:share-alt" />,
           },
-          // { title: t('share doctorna'), path: paths.dashboard.user.new },
+          {
+            title: t('logout'),
+            path: '#',
+            icon: <Iconify icon="tabler:logout" />,
+          },
         ],
       },
     ];
