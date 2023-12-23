@@ -120,7 +120,7 @@ export default function CitiesNewEditForm({ currentCity }) {
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentCity ? 'Create User' : 'Save Changes'}
+                {!currentCity ? 'Create' : 'Save Changes'}
               </LoadingButton>
             </Stack>
           </Card>

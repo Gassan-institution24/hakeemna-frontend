@@ -270,7 +270,7 @@ export default function UserNewEditForm({ currentUser }) {
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentUser ? 'Create User' : 'Save Changes'}
+                {!currentUser ? 'Create' : 'Save Changes'}
               </LoadingButton>
             </Stack>
           </Card>

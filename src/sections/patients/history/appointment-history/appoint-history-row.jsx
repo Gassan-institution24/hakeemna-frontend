@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -74,8 +74,8 @@ export default function InvoiceTableRow({
 
         <TableCell align="center">
           <ListItemText
-            primary={format(new Date(date), 'dd MMM yyyy')}
-            secondary={format(new Date(start_time), 'p')}
+            primary={isValid(new Date(date)) && format(new Date(date), 'dd MMM yyyy')}
+            secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -86,8 +86,8 @@ export default function InvoiceTableRow({
         </TableCell>
         <TableCell align="center">
           <ListItemText
-            primary={format(new Date(date), 'dd MMM yyyy')}
-            secondary={format(new Date(end_time), 'p')}
+            primary={isValid(new Date(date)) && format(new Date(date), 'dd MMM yyyy')}
+            secondary={isValid(new Date(end_time)) && format(new Date(end_time), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,

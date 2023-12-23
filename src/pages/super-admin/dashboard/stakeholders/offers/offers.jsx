@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import PatientFeedback from 'src/sections/stakeholders/feedback/stakeholder-feedback';
+import StakeholderOffers from 'src/sections/stakeholders/offers/offers-home-page';
 import { useGetStakeholder } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------
@@ -16,7 +16,7 @@ export default function StackholderFeedbackPage() {
         <title> stakeholders: {stakeholderName} Feedback </title>
       </Helmet>
 
-      {data && <PatientFeedback stakeholderData={data} />}
+      {data && <StakeholderOffers stakeholderData={data} />}
     </>
   );
 }

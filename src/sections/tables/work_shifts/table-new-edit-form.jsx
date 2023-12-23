@@ -9,7 +9,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -39,8 +39,8 @@ export default function TableNewEditForm({ currentTable }) {
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
     unit_service: Yup.string(),
-    start_date: Yup.string(),
-    end_date: Yup.string(),
+    start_time: Yup.string(),
+    end_time: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -48,8 +48,8 @@ export default function TableNewEditForm({ currentTable }) {
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
       unit_service: currentTable?.unit_service?._id || null,
-      start_date: currentTable?.start_date || '',
-      end_date: currentTable?.end_date || '',
+      start_time: currentTable?.start_time || '',
+      end_time: currentTable?.end_time || '',
     }),
     [currentTable]
   );
@@ -126,29 +126,29 @@ export default function TableNewEditForm({ currentTable }) {
                   </option>
                 ))}
               </RHFSelect>
-              <DatePicker
-                name="start_date"
+              <TimePicker
+                name="start_time"
                 label="Start date"
-                onChange={(date) => methods.setValue('start_date', date, { shouldValidate: true })}
+                onChange={(date) => methods.setValue('start_time', date, { shouldValidate: true })}
                 // Parse the UTC date string to a JavaScript Date object
                 value={
-                  methods.getValues('start_date') ? new Date(methods.getValues('start_date')) : null
+                  methods.getValues('start_time') ? new Date(methods.getValues('start_time')) : null
                 }
               />
-              <DatePicker
-                name="end_date"
+              <TimePicker
+                name="end_time"
                 label="End date"
-                onChange={(date) => methods.setValue('end_date', date, { shouldValidate: true })}
+                onChange={(date) => methods.setValue('end_time', date, { shouldValidate: true })}
                 // Parse the UTC date string to a JavaScript Date object
                 value={
-                  methods.getValues('end_date') ? new Date(methods.getValues('end_date')) : null
+                  methods.getValues('end_time') ? new Date(methods.getValues('end_time')) : null
                 }
               />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentTable ? 'Create User' : 'Save Changes'}
+                {!currentTable ? 'Create' : 'Save Changes'}
               </LoadingButton>
             </Stack>
           </Card>

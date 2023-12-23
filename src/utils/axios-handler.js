@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { HOST_API } from 'src/config-global';
 
 export default async function axiosHandler({
   setData,
@@ -8,7 +9,7 @@ export default async function axiosHandler({
   path,
   data,
 }) {
-    const url = `http://localhost:3000${path}`;
+    const url = `${HOST_API}${path}`;
     const token = Cookies.get('user_token');
     const response = await axios({
       method,
