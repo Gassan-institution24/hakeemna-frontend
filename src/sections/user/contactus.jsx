@@ -17,7 +17,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import { border } from '@mui/system';
 // ----------------------------------------------------------------------
 
-export default function AccountSocialLinks() {
+export default function ContactUs() {
   const { enqueueSnackbar } = useSnackbar();
   const [error, setError] = useState();
 
@@ -103,7 +103,7 @@ export default function AccountSocialLinks() {
 
           <m.div variants={varFade().inUp}>
             <Button size="large" type="submit" variant="contained" methods={methods}>
-              Submit Now
+              Submit Nowffsdfsdfs
             </Button>
           </m.div>
         </Stack>

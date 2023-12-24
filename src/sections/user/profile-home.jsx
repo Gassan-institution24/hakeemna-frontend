@@ -1,136 +1,223 @@
-import { useRef, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import axios from 'axios';
-import Fab from '@mui/material/Fab';
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import { alpha } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
-import Grid from '@mui/material/Unstable_Grid2';
-import CardHeader from '@mui/material/CardHeader';
-import useSWR from 'swr';
+// import PropTypes from 'prop-types';
+// import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 
-import { fetcher, endpoints } from 'src/utils/axios';
-import { fNumber } from 'src/utils/format-number';
+// import Chip from '@mui/material/Chip';
+// import Card from '@mui/material/Card';
+// import Paper from '@mui/material/Paper';
+// import Stack from '@mui/material/Stack';
+// import Avatar from '@mui/material/Avatar';
+// import Grid from '@mui/material/Unstable_Grid2';
+// import Typography from '@mui/material/Typography';
+// import ListItemText from '@mui/material/ListItemText';
 
-import { _socials } from 'src/_mock';
+// import { fDate } from 'src/utils/format-time';
+// import { fCurrency } from 'src/utils/format-number';
 
-import Iconify from 'src/components/iconify';
+// import Label from 'src/components/label/label';
+// import Iconify from 'src/components/iconify';
+// import Markdown from 'src/components/markdown';
+// import { useAuthContext } from 'src/auth/hooks';
 
-import { useGetUser } from 'src/api/user';
+// // ----------------------------------------------------------------------
 
-import { useAuthContext } from 'src/auth/hooks';
-import ProfilePostItem from './profile-post-item';
-// ----------------------------------------------------------------------
+// export default function ProfileHome() {
+  
 
-export default function ProfileHome({ info, posts }) {
-  const fileRef = useRef(null);
-  const { data } = useGetUser();
+//   const { user } = useAuthContext()
+//   const renderContent = (
+//     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
+//       <Typography variant="h4">
+//         {user.patient.first_name} {user.patient.last_name}
+//       </Typography>
+//       <Typography
+//         variant="h6"
+//         style={{
+//           position: 'absolute',
+//           top: 0,
+//           right: 0,
+//           margin: '20px', // Optional: Add some margin to provide space from the edges
+//         }}
+//       >
+//         {/* <Label
+//           variant="soft"
+//           color={
+//             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
+//           }
+//         >
+//           {status}
+//         </Label> */}
+//       </Typography>
 
-  const { user } = useAuthContext();
-  console.log(user);
+//       {drug_allergies.length &&<Stack spacing={2}>
+//         <Typography style={{ fontWeight:600 }} variant="h6">Drug Allergies</Typography>
+//         <Stack spacing={1}>
+//           {drug_allergies?.map((drug) => (
+//             <li key={drug._id}>{drug.scientific_name}</li>
+//           ))}
+//         </Stack>
+//       </Stack>}
+//       {diseases.length &&<Stack spacing={2}>
+//         <Typography style={{ fontWeight:600 }} variant="h6">Diseases</Typography>
+//         <Stack spacing={1}>
+//           {diseases?.map((disease) => (
+//             <li key={disease._id}>{disease.name_english}</li>
+//           ))}
+//         </Stack>
+//       </Stack>}
+//       {surgeries.length &&<Stack spacing={2}>
+//         <Typography style={{ fontWeight:600 }} variant="h6">Surgeries</Typography>
+//         <Stack spacing={1}>
+//           {surgeries?.map((surgery) => (
+//             <li key={surgery._id}>{surgery.name_english}</li>
+//           ))}
+//         </Stack>
+//       </Stack>}
+//       {medicines.length &&<Stack spacing={2}>
+//         <Typography style={{ fontWeight:600 }} variant="h6">Medicines</Typography>
+//         <Stack spacing={1}>
+//           {medicines?.map((data) => (
+//             <li key={data?.medicine._id} >{data?.medicine.trade_name}</li>
+//           ))}
+//         </Stack>
+//       </Stack>}
+//       {insurance.length &&<Stack spacing={2}>
+//         <Typography style={{ fontWeight:600 }} variant="h6">Insurance</Typography>
+//         <Stack spacing={1}>
+//           {insurance?.map((company) => (
+//             <li key={company._id}>{company?.name_english}</li>
+//           ))}
+//         </Stack>
+//       </Stack>}
 
-  const handleAttach = () => {
-    if (fileRef.current) {
-      fileRef.current.click();
-    }
-  };
+//       {sport_exercises &&<Stack spacing={2}>
+//         <Typography style={{ fontWeight:600 }} variant="h6">Sport Exercises</Typography>
+//         <li>{sport_exercises}</li>
+//       </Stack>}
+//       {eating_diet &&<Stack spacing={2}>
+//         <Typography style={{ fontWeight:600 }} variant="h6">Eating Diet</Typography>
+//         <li>{eating_diet?.name_english}</li>
+//       </Stack>}
+//        {alcohol_consumption &&<Stack spacing={2}>
+//         <Typography style={{ fontWeight:600 }} variant="h6">Alcohol Consumption</Typography>
+//         <li>{alcohol_consumption}</li>
+//       </Stack>}
+//       {smoking &&<Stack spacing={2}>
+//         <Typography style={{ fontWeight:600 }} variant="h6">Smoking</Typography>
+//         <li>{smoking}</li>
+//       </Stack>}
+//        {other_medication_notes &&<Stack spacing={2}>
+//         <Typography style={{ fontWeight:600 }} variant="h6">Other Medication Notes</Typography>
+//         <li>{other_medication_notes}</li>
+//       </Stack>}
+//     </Stack>
+//   );
 
-  const renderAbout = (
-    <>
-      {' '}
-      <Card>
-        <CardHeader title="About" />
-        <Stack spacing={2} sx={{ p: 3 }}>
-          <Stack direction="row" sx={{ typography: 'body2' }}>
-            name : {user.patient.first_name}
-          </Stack>
-          <Stack direction="row" sx={{ typography: 'body2' }}>
-            gender : {user.patient.first_name}
-          </Stack>
-          <Stack direction="row" sx={{ typography: 'body2' }}>
-            height : {user.patient.first_name}
-          </Stack>
-          <Stack direction="row" sx={{ typography: 'body2' }}>
-            weight : {user.patient.first_name}
-          </Stack>
-          <Stack direction="row" sx={{ typography: 'body2' }}>
-            blood_type : {user.patient.first_name}
-          </Stack>
-          <Stack direction="row" sx={{ typography: 'body2' }}>
-            marital_status : {user.patient.first_name}
-          </Stack>
-          <Stack direction="row" sx={{ typography: 'body2' }}>
-            address :{user.patient.first_name}
-          </Stack>
-          <Stack direction="row" sx={{ typography: 'body2' }}>
-            phone : {user.patient.first_name}
-          </Stack>
-          <Stack direction="row" sx={{ typography: 'body2' }}>
-            mobile : {user.patient.first_name}
-          </Stack>
-        </Stack>
-      </Card>
-    </>
-  );
+//   const renderOverview = (
+//     <Stack component={Card} spacing={2} sx={{ p: 3 }}>
+//       {[
+//         {
+//           label: 'Patient Father',
+//           value: patient_father?.userName,
+//           icon: <Iconify icon="solar:calendar-date-bold" />,
+//         },
+//         {
+//           label: 'Gender',
+//           value: gender,
+//           icon: <Iconify icon="solar:calendar-date-bold" />,
+//         },
+//         {
+//           label: 'Birth Place',
+//           value: nationality?.name_english,
+//           icon: <Iconify icon="solar:calendar-date-bold" />,
+//         },
+//         {
+//           label: 'Birth Date',
+//           value: fDate(birth_date),
+//           icon: <Iconify icon="solar:calendar-date-bold" />,
+//         },
+//         {
+//           label: 'Identification Number',
+//           value: identification_num,
+//           icon: <Iconify icon="solar:calendar-date-bold" />,
+//         },
+//         {
+//           label: 'Blood Type',
+//           value: blood_type,
+//           icon: <Iconify icon="solar:calendar-date-bold" />,
+//         },
+//         {
+//           label: 'Pregnant',
+//           value: pregnant ? 'Yes' : 'No',
+//           icon: <Iconify icon="solar:calendar-date-bold" />,
+//         },
+//         {
+//           label: 'Height',
+//           value: height,
+//           icon: <Iconify icon="solar:calendar-date-bold" />,
+//         },
+//         {
+//           label: 'Weight',
+//           value: weight,
+//           icon: <Iconify icon="solar:calendar-date-bold" />,
+//         },
+//         {
+//           label: 'Marital Status',
+//           value: marital_status,
+//           icon: <Iconify icon="solar:calendar-date-bold" />,
+//         },
+//         {
+//           label: 'Address',
+//           value:user.patient.address,
+//           icon: <Iconify icon="solar:clock-circle-bold" />,
+//         },
+//         // {
+//         //   label: 'Email',
+//         //   value: email,
+//         //   icon: <Iconify icon="solar:wad-of-money-bold" />,
+//         // },
+//         {
+//           label: 'Mobile Number',
+//           value: user.patient.mobile_num1,
+//           icon: <Iconify icon="carbon:skill-level-basic" />,
+//         },
+//         {
+//           label: 'Second Mobile Number',
+//           value: user.patient.mobile_num2,
+//           icon: <Iconify icon="carbon:skill-level-basic" />,
+//         },
+//       ].map((item) => (
+//         <>
+//         {item.value && <Stack key={item.label} spacing={1.5}>
+//           {/* {item.icon} */}
+//           <ListItemText
+//             primary={item.label}
+//             secondary={item.value}
+//             primaryTypographyProps={{
+//               typography: 'body2',
+//               color: 'text.secondary',
+//               mb: 0.5,
+//             }}
+//             secondaryTypographyProps={{
+//               typography: 'subtitle2',
+//               color: 'text.primary',
+//               component: 'span',
+//             }}
+//           />
+//         </Stack>}
+//         </>
+//       ))}
+//     </Stack>
+//   );
+//   return (
+//     <Grid container spacing={3}>
+//       <Grid xs={12} md={8}>
+//         {renderContent}
+//       </Grid>
 
-  // const renderPostInput = (
-  //   <Card sx={{ p: 3 }}>
-  //     <InputBase
-  //       multiline
-  //       fullWidth
-  //       rows={4}
-  //       placeholder="Share what you are thinking here..."
-  //       sx={{
-  //         p: 2,
-  //         mb: 3,
-  //         borderRadius: 1,
-  //         border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.2)}`,
-  //       }}
-  //     />
+//       <Grid xs={12} md={4}>
+//         {renderOverview}
+//       </Grid>
+//     </Grid>
+//   );
+// }
 
-  //     <Stack direction="row" alignItems="center" justifyContent="space-between">
-  //       <Stack direction="row" spacing={1} alignItems="center" sx={{ color: 'text.secondary' }}>
-  //         <Fab size="small" color="inherit" variant="softExtended" onClick={handleAttach}>
-  //           <Iconify icon="solar:gallery-wide-bold" width={24} sx={{ color: 'success.main' }} />
-  //           Image/Video
-  //         </Fab>
-
-  //         <Fab size="small" color="inherit" variant="softExtended">
-  //           <Iconify icon="solar:videocamera-record-bold" width={24} sx={{ color: 'error.main' }} />
-  //           Streaming
-  //         </Fab>
-  //       </Stack>
-
-  //       <Button variant="contained">Post</Button>
-  //     </Stack>
-
-  //     <input ref={fileRef} type="file" style={{ display: 'none' }} />
-  //   </Card>
-  // );
-
-  return (
-    <Grid container spacing={3}>
-      <Grid xs={12} md={4}>
-        <Stack spacing={3}>{renderAbout}</Stack>
-      </Grid>
-
-      <Grid xs={12} md={8}>
-        <Stack spacing={3}>
-          {/* {renderPostInput} */}
-
-          <ProfilePostItem />
-        </Stack>
-      </Grid>
-    </Grid>
-  );
-}
-
-ProfileHome.propTypes = {
-  info: PropTypes.object,
-  posts: PropTypes.array,
-};

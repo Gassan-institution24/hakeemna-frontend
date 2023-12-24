@@ -17,7 +17,7 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
     <Box
       sx={{
         ...bgGradient({
-          color: alpha(theme.palette.primary.darker, 0.8),
+          color: alpha(theme.palette.primary.dark, 0.8),
           imgUrl: coverUrl,
         }),
         height: 1,
@@ -52,7 +52,7 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
             textAlign: { xs: 'center', md: 'unset' },
           }}
           primary={name}
-          // secondary={role}
+          secondary={role}
           primaryTypographyProps={{
             typography: 'h4',
           }}
