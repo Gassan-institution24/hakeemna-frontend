@@ -10,36 +10,26 @@ import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import UserCardList from '../user-card-list';
+import Share from '../Share';
 
 // ----------------------------------------------------------------------
 
-export default function UserCardsView() {
+export default function UserAppointmentsView() {
   const settings = useSettingsContext();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="User Cards"
+        heading="Share"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
           { name: 'User', href: paths.dashboard.user.root },
-          { name: 'Cards' },
+          { name: 'Share' },
         ]}
-        action={
-          <Button
-            component={RouterLink}
-            href={paths.dashboard.user.new}
-            variant="contained"
-            startIcon={<Iconify icon="mingcute:add-line" />}
-          >
-            New User
-          </Button>
-        }
         sx={{ mb: { xs: 3, md: 5 } }}
       />
 
-      <UserCardList users={_userCards} />
+      <Share users={_userCards} />
     </Container>
   );
 }

@@ -13,8 +13,8 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import AccountGeneral from '../account-general';
-import AccountBilling from '../account-billing';
-import AccountSocialLinks from '../cotactus';
+// import AccountBilling from '../account-billing';
+// import AccountSocialLinks from '../cotactus';
 import AccountNotifications from '../account-notifications';
 import AccountChangePassword from '../account-change-password';
 import MedicalReport from '../medicalreport';
@@ -92,19 +92,19 @@ export default function AccountView() {
 
       {currentTab === 'general' && <AccountGeneral />}
 
-      {currentTab === 'billing' && (
+      {/* {currentTab === 'billing' && (
         <AccountBilling
           plans={_userPlans}
           cards={_userPayment}
           invoices={_userInvoices}
           addressBook={_userAddressBook}
         />
-      )}
+      )} */}
 
       {currentTab === 'notifications' && <AccountNotifications />}
       {currentTab === 'MedicalReport' && <MedicalReport />}
 
-      {currentTab === 'social' && <AccountSocialLinks socialLinks={_userAbout.socialLinks} />}
+      {/* {currentTab === 'social' && <AccountSocialLinks socialLinks={_userAbout.socialLinks} />} */}
 
       {currentTab === 'security' && <AccountChangePassword />}
     </Container>

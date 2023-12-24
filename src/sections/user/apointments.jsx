@@ -18,20 +18,26 @@ import { fShortenNumber } from 'src/utils/format-number';
 
 import { _socials } from 'src/_mock';
 import { AvatarShape } from 'src/assets/illustrations';
-import { fDatet, fDate } from 'src/utils/format-time';
+import { fTime, fDate } from 'src/utils/format-time';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import { useGetPatientAppointments } from 'src/api/tables';
 import { useSettingsContext } from 'src/components/settings';
 // ----------------------------------------------------------------------
 
-export default function UserCard({ user }) {
+export default function Appoinment({ user }) {
   const theme = useTheme();
 const {appointmentsData} = useGetPatientAppointments(user)
-console.log(appointmentsData);
-  return appointmentsData.map((info, index) => (
+
+
+const pendingAppointments = appointmentsData.filter(
+  (info) => info.status === "pending"
+);
+
+
+
+  return pendingAppointments.map((info, index) => (
     <>
-      
       <Card>
         <Stack sx={{ p: 3, pb: 2 }}>
           <Avatar
@@ -42,12 +48,6 @@ console.log(appointmentsData);
           />
 
           <ListItemText
-            // sx={{ mb: 0 }}
-            // primary={
-            //   <Link component={RouterLink} href={paths.dashboard.job.details(_id)} color="inherit">
-            //     {info?.name_english}
-            //   </Link>
-            // }
             secondary={
               <Link color="inherit">
                 {info.name_english}
@@ -83,7 +83,7 @@ console.log(appointmentsData);
         <Box rowGap={1.5} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3, justifyContent: 'space-between' }}>
           {[
             {
-              label: `${fDatet(info.start_time)} ${fDatet(info.end_time)}` ,
+              label: `${fTime(info.start_time)} ${fTime(info.end_time)}` ,
               icon: <Iconify width={16} icon="icon-park-solid:time" sx={{ flexShrink: 0 }} />,
             },
             {
@@ -117,15 +117,12 @@ console.log(appointmentsData);
               </Typography>
             </Stack>
           ))}
-          <Button  sx={{mt:3,width:100}} variant="outlined" color="success">
-            Book
-          </Button>
         </Box>
       </Card>
     </>
   ));
 }
 
-UserCard.propTypes = {
+Appoinment.propTypes = {
   user: PropTypes.object,
 };

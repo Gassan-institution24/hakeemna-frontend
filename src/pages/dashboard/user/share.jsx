@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { UserCardsView } from 'src/sections/user/view';
+import { Share } from 'src/sections/user/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserCardsPage() {
+export default function Sharedoctorna() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: User Cards</title>
+        <title>Share</title>
       </Helmet>
 
-      <UserCardsView />
+      <Share />
     </>
   );
 }

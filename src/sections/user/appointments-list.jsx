@@ -7,16 +7,12 @@ import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
 import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import Box from '@mui/material/Box';
-
-
-
-import { _userAbout, _userFeeds, _userFriends, _userGallery, _userFollowers } from 'src/_mock';
-
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
-
-import UserCard from './user-card';
-
+import { useGetPatient } from 'src/api/tables';
+import Appoinment from './apointments';
+import FinishedAppoinment from './apointmentsfinished';
+import AppointmentBooking from './apointmentsbooking';
 // ----------------------------------------------------------------------
 
 export default function UserCardList() {
@@ -30,21 +26,23 @@ export default function UserCardList() {
 
   const TABS = [
     {
-      value: 'مواعيدي',
-      label: 'مواعيدي',
+      value: 'My Appointments',
+      label: 'My Appointments',
       icon: <Iconify icon="solar:user-id-bold" width={24} />,
     },
-    // {
-    //   value: 'current medications',
-    //   label: 'Current Medications',
-    //   icon: <Iconify icon="icon-park-outline:medicine-chest" width={24} />,
-    // },
-    // {
-    //   value: 'appointments',
-    //   label: 'Appointments',
-    //   icon: <Iconify icon="teenyicons:appointments-outline" width={24} />,
-    // },
+    {
+      value: 'BookAppointment',
+      label: 'Book Appointment',
+      icon: <Iconify icon="icon-park-outline:medicine-chest" width={24} />,
+    },
+    {
+      value: 'medicalreport',
+      label: 'Medical Report',
+      icon: <Iconify icon="tabler:report-medical" width={24} />,
+    },
   ];
+
+  const { data } = useGetPatient(user.patient._id);
 
   return (
     <Container>
@@ -78,40 +76,39 @@ export default function UserCardList() {
         </Tabs>
       </Card>
 
-      {currentTab === 'مواعيدي' && (
-        <Box
-          gap={3}
-          display="grid"
-          gridTemplateColumns={{
-            xs: 'repeat(1, 1fr)',
-            sm: 'repeat(2, 1fr)',
-            md: 'repeat(3, 1fr)',
-          }}
-        >
-          <UserCard user={user.patient._id} />
-        </Box>
+      {currentTab === 'My Appointments' && (
+        <>
+          <h3>test</h3>
+          <Box
+            gap={3}
+            display="grid"
+            gridTemplateColumns={{
+              xs: 'repeat(1, 1fr)',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)',
+            }}
+          >
+            <Appoinment user={user.patient._id} />
+          </Box>
+          <hr />
+          <h3>test</h3>
+          <Box
+            gap={3}
+            display="grid"
+            gridTemplateColumns={{
+              xs: 'repeat(1, 1fr)',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)',
+            }}
+          >
+            <FinishedAppoinment user={user.patient._id} />
+          </Box>
+        </>
       )}
 
-      {/* {currentTab === 'current medications' && (
-        <ProfileFollowers current medications={_userFollowers} />
-      )} */}
+      {currentTab === 'BookAppointment' && <AppointmentBooking patientData={data} />}
 
       {/* {currentTab === 'appointments' && <ProfileFriends appointments={_userFriends}/>} */}
     </Container>
   );
 }
-
-
-// return(
-// <Box
-//   gap={3}
-//   display="grid"
-//   gridTemplateColumns={{
-//     xs: 'repeat(1, 1fr)',
-//     sm: 'repeat(2, 1fr)',
-//     md: 'repeat(3, 1fr)',
-//   }}
-// >
-//   <UserCard user={user.patient._id} />
-// </Box>
-// );
