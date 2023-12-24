@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import PaymentInfo from 'src/sections/patients/history/payment-control/payment-show/payment-detail-view';
+import PaymentInfo from 'src/sections/super-admin/patients/history/payment-control/payment-show/payment-detail-view';
 import { useGetIncomePayment } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------

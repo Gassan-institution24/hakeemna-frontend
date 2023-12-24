@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import {EmployeeTypesTableView} from 'src/sections/tables/view';
+import { EmployeeTypesTableView } from 'src/sections/super-admin/tables/view';
 
 // ----------------------------------------------------------------------
 

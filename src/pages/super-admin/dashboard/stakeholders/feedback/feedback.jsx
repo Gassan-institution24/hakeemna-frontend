@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import StakeholderFeedback from 'src/sections/stakeholders/feedback/stakeholder-feedback';
+import StakeholderFeedback from 'src/sections/super-admin/stakeholders/feedback/stakeholder-feedback';
 import { useGetStakeholder } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------

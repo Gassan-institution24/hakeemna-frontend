@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import PatientFeedback from 'src/sections/patients/feedback/patient-feedback';
+import PatientFeedback from 'src/sections/super-admin/patients/feedback/patient-feedback';
 import { useGetPatient } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------
@@ -20,7 +20,7 @@ export default function TableCreatePage() {
         <title> Patients: {patientName} Feedback </title>
       </Helmet>
 
-      {data && <PatientFeedback patientData={data}/>}
+      {data && <PatientFeedback patientData={data} />}
     </>
   );
 }

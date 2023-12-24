@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import EditPatient from 'src/sections/patients/edit/edit-patient';
+import EditPatient from 'src/sections/super-admin/patients/edit/edit-patient';
 import { useGetPatient } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------
@@ -20,7 +20,7 @@ export default function TableCreatePage() {
         <title> Patients: Edit {patientName} </title>
       </Helmet>
 
-      {data && <EditPatient patientData={data}/>}
+      {data && <EditPatient patientData={data} />}
     </>
   );
 }

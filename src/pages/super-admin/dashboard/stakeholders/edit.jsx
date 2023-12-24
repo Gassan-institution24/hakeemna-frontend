@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import EditPatient from 'src/sections/stakeholders/edit/edit-patient';
+import EditPatient from 'src/sections/super-admin/stakeholders/edit/edit-patient';
 import { useGetStakeholder } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------

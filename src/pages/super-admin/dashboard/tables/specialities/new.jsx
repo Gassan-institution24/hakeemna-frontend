@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import TableCreateView from 'src/sections/tables/specialties/table-create-view';
+import TableCreateView from 'src/sections/super-admin/tables/specialties/table-create-view';
 
 // ----------------------------------------------------------------------
 

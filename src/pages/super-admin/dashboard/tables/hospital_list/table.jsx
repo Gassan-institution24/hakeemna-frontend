@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import {HospitalsTableView} from 'src/sections/tables/view';
+import { HospitalsTableView } from 'src/sections/super-admin/tables/view';
 
 // ----------------------------------------------------------------------
 

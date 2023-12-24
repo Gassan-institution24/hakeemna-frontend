@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import CurrencyTableView from 'src/sections/tables/view/currency-table-view';
+import CurrencyTableView from 'src/sections/super-admin/tables/view/currency-table-view';
 
 // ----------------------------------------------------------------------
 

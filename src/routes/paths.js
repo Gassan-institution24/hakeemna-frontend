@@ -15,7 +15,7 @@ const ROOTS = {
   SUPERADMIN: '/dashboard',
   USER: '/user',
   BETWEEN: '/between',
-  PAGES: '/pages'
+  PAGES: '/pages',
 };
 
 // ----------------------------------------------------------------------
@@ -68,7 +68,7 @@ export const paths = {
       register: `${ROOTS.AUTH}/jwt/register`,
       verify: `${ROOTS.AUTH}/jwt/verify`,
       newPassword: `${ROOTS.AUTH}/jwt/new-password`,
-      forgotPassword:`${ROOTS.AUTH}/jwt/forgot-password`
+      forgotPassword: `${ROOTS.AUTH}/jwt/forgot-password`,
     },
     firebase: {
       login: `${ROOTS.AUTH}/firebase/login`,
@@ -97,17 +97,15 @@ export const paths = {
     },
   },
 
-// PAGES
-between: {
-  root: ROOTS.BETWEEN,
-},
-pages: {
-  root: ROOTS.PAGES,
-  patients: `/patients`,
-  unit: `/unit`,
-},
-
-
+  // PAGES
+  between: {
+    root: ROOTS.BETWEEN,
+  },
+  pages: {
+    root: ROOTS.PAGES,
+    patients: `/patients`,
+    unit: `/unit`,
+  },
 
   // DASHBOARD
   dashboard: {
@@ -205,7 +203,7 @@ pages: {
       list: `${ROOTS.SUPERADMIN}/unitservices/list`,
       accounting: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/accounting`,
       newAccounting: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/accounting/new`,
-      editAccounting: (id,ID) => `${ROOTS.SUPERADMIN}/unitservices/${id}/accounting/${ID}/edit`,
+      editAccounting: (id, ID) => `${ROOTS.SUPERADMIN}/unitservices/${id}/accounting/${ID}/edit`,
       communications: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/communications`,
       feedback: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/feedback`,
       insurance: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/insurance`,
@@ -213,24 +211,24 @@ pages: {
     patients: {
       root: `${ROOTS.SUPERADMIN}/patients`,
       list: `${ROOTS.SUPERADMIN}/patients/list`,
-      new:`${ROOTS.SUPERADMIN}/patients/new`,
+      new: `${ROOTS.SUPERADMIN}/patients/new`,
       edit: (id) => `${ROOTS.SUPERADMIN}/patients/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/patients/${id}/info`,
       communications: (id) => `${ROOTS.SUPERADMIN}/patients/${id}/communications`,
       history: {
-        root:(id) => `${ROOTS.SUPERADMIN}/patients/${id}/history`,
-        addAppointment:(id) => `${ROOTS.SUPERADMIN}/patients/${id}/bookappoint`,
-        editAppointment:(id) => `${ROOTS.SUPERADMIN}/patients/${id}/history/addappoint`,
+        root: (id) => `${ROOTS.SUPERADMIN}/patients/${id}/history`,
+        addAppointment: (id) => `${ROOTS.SUPERADMIN}/patients/${id}/bookappoint`,
+        editAppointment: (id) => `${ROOTS.SUPERADMIN}/patients/${id}/history/addappoint`,
         new: `${ROOTS.SUPERADMIN}/tables/cities/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/cities/${id}/edit`,
-        invoices:{
+        invoices: {
           // root: `${ROOTS.SUPERADMIN}/invoices`,
-          info:(id,inid) => `${ROOTS.SUPERADMIN}/patients/${id}/invoices/${inid}/info`,
+          info: (id, inid) => `${ROOTS.SUPERADMIN}/patients/${id}/invoices/${inid}/info`,
           // edit:(id,inid) => `${ROOTS.SUPERADMIN}/patients/${id}/invoices/${inid}/edit`,
         },
-        payment:{
+        payment: {
           // root: `${ROOTS.SUPERADMIN}/invoices`,
-          info:(id,inid) => `${ROOTS.SUPERADMIN}/patients/${id}/payment/${inid}/info`,
+          info: (id, inid) => `${ROOTS.SUPERADMIN}/patients/${id}/payment/${inid}/info`,
           // edit:(id,inid) => `${ROOTS.SUPERADMIN}/patients/${id}/invoices/${inid}/edit`,
         },
       },
@@ -240,31 +238,90 @@ pages: {
     stakeholders: {
       root: `${ROOTS.SUPERADMIN}/stakeholders`,
       list: `${ROOTS.SUPERADMIN}/stakeholders/list`,
-      new:`${ROOTS.SUPERADMIN}/stakeholders/new`,
+      new: `${ROOTS.SUPERADMIN}/stakeholders/new`,
       edit: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/info`,
       offers: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/offers`,
-      offer: (id,ofid) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/offers/${ofid}`,
+      offer: (id, ofid) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/offers/${ofid}`,
       communications: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/communications`,
       history: {
-        root:(id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/history`,
-        addAppointment:(id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/bookappoint`,
-        editAppointment:(id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/history/addappoint`,
+        root: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/history`,
+        addAppointment: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/bookappoint`,
+        editAppointment: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/history/addappoint`,
         new: `${ROOTS.SUPERADMIN}/tables/cities/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/cities/${id}/edit`,
-        invoices:{
+        invoices: {
           // root: `${ROOTS.SUPERADMIN}/invoices`,
-          info:(id,inid) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/invoices/${inid}/info`,
+          info: (id, inid) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/invoices/${inid}/info`,
           // edit:(id,inid) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/invoices/${inid}/edit`,
         },
-        payment:{
+        payment: {
           // root: `${ROOTS.SUPERADMIN}/invoices`,
-          info:(id,inid) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/payment/${inid}/info`,
+          info: (id, inid) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/payment/${inid}/info`,
           // edit:(id,inid) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/invoices/${inid}/edit`,
         },
       },
       feedback: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/feedback`,
       insurance: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/insurance`,
+    },
+    accounting: {
+      root: `${ROOTS.SUPERADMIN}/accounting`,
+      new: `${ROOTS.SUPERADMIN}/accounting/new`,
+      unitservice: (id) => `${ROOTS.SUPERADMIN}/accounting/unitservice/${id}`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/accounting/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/accounting/${id}/info`,
+    },
+    statistics: {
+      root: `${ROOTS.SUPERADMIN}/statistics`,
+      new: `${ROOTS.SUPERADMIN}/statistics/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/statistics/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/statistics/${id}/info`,
+    },
+    packages: {
+      root: `${ROOTS.SUPERADMIN}/packages`,
+      new: `${ROOTS.SUPERADMIN}/packages/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/packages/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/packages/${id}/info`,
+    },
+    communication: {
+      root: `${ROOTS.SUPERADMIN}/communication`,
+      new: `${ROOTS.SUPERADMIN}/communication/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/communication/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/communication/${id}/info`,
+    },
+    accessControlList: {
+      root: `${ROOTS.SUPERADMIN}/acl`,
+      new: `${ROOTS.SUPERADMIN}/acl/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/acl/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/acl/${id}/info`,
+    },
+    customersTraining: {
+      root: `${ROOTS.SUPERADMIN}/training`,
+      new: `${ROOTS.SUPERADMIN}/training/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/training/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/training/${id}/info`,
+    },
+    doctornaTeamTraining: {
+      root: `${ROOTS.SUPERADMIN}/traineeship`,
+      new: `${ROOTS.SUPERADMIN}/traineeship/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/traineeship/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/traineeship/${id}/info`,
+    },
+    adjustableServices: {
+      root: `${ROOTS.SUPERADMIN}/asc`,
+      new: `${ROOTS.SUPERADMIN}/asc/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/asc/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/asc/${id}/info`,
+    },
+    qualityControl: {
+      root: `${ROOTS.SUPERADMIN}/qc`,
+      unitservices: `${ROOTS.SUPERADMIN}/qc/unitservices`,
+      unitservice: (id) => `${ROOTS.SUPERADMIN}/qc/unitservices/${id}`,
+      stakeholders: `${ROOTS.SUPERADMIN}/qc/stakeholder`,
+      stakeholder: (id) => `${ROOTS.SUPERADMIN}/qc/stakeholder/${id}`,
+      new: `${ROOTS.SUPERADMIN}/qc/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/qc/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/qc/${id}/info`,
     },
     tables: {
       root: `${ROOTS.SUPERADMIN}/tables`,
@@ -421,6 +478,5 @@ pages: {
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/rooms/${id}/edit`,
       },
     },
-    
   },
 };

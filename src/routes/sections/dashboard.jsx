@@ -353,6 +353,33 @@ import('src/pages/super-admin/dashboard/stakeholders/feedback/feedback')
 const StakeholdersInvoiceInfoPage = lazy(() => import('src/pages/super-admin/dashboard/stakeholders/history/invoices/view-invoice'));
 const StakeholdersPaymentInfoPage = lazy(() => import('src/pages/super-admin/dashboard/stakeholders/history/payment/view-payment'));
 
+// ACCOUNTING
+const AccountingHomePage = lazy(() => import('src/pages/super-admin/dashboard/accounting/home'));
+const AccountingUnitServicePage = lazy(() => import('src/pages/super-admin/dashboard/accounting/unitService'));
+
+// STATISTICS
+const StatisticsHomePage = lazy(() => import('src/pages/super-admin/dashboard/statistics/home'));
+
+// PACKAGES
+const PackagesHomePage = lazy(() => import('src/pages/super-admin/dashboard/packages/home'));
+
+// COMMUNICATION
+const CommunicationHomePage = lazy(() => import('src/pages/super-admin/dashboard/communications/home'));
+
+// ACCESS CONTROL LIST
+const AccessControleListHomePage = lazy(() => import('src/pages/super-admin/dashboard/accessControlList/home'));
+
+// CUSTOMER TRAINING
+const CustomerTrainingHomePage = lazy(() => import('src/pages/super-admin/dashboard/customerTraining/home'));
+
+// DOCTORNA TEAM TRAINING
+const DoctornaTeamTrainingHomePage = lazy(() => import('src/pages/super-admin/dashboard/doctornaTeamTraining/home'));
+
+// ADJUSTABLE SERVICES CONTROL
+const AdjustableServicesControlHomePage = lazy(() => import('src/pages/super-admin/dashboard/adjustableServiceControl/home'));
+
+// QUALITY CONTROL
+const QualityControlHomePage = lazy(() => import('src/pages/super-admin/dashboard/qualityControl/home'));
 
 // ----------------------------------------------------------------------
 
@@ -387,6 +414,88 @@ export const dashboardRoutes = [
           { path: ':id/insurance', element: <UnitserviceInsurancePage /> },
           { path: ':id/communications', element: <UnitserviceCommunicationsPage /> },
           { path: ':id/feedback', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'accounting',
+        children: [
+          { element: <AccountingHomePage />, index: true },
+          { path: 'unitservice/:id', element: <AccountingUnitServicePage /> },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'statistics',
+        children: [
+          { element: <StatisticsHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'packages',
+        children: [
+          { element: <PackagesHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'communication',
+        children: [
+          { element: <CommunicationHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'acl',
+        children: [
+          { element: <AccessControleListHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'training',
+        children: [
+          { element: <CustomerTrainingHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'traineeship',
+        children: [
+          { element: <DoctornaTeamTrainingHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'asc',
+        children: [
+          { element: <AccessControleListHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'qc',
+        children: [
+          { element: <QualityControlHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
         ],
       },
       {

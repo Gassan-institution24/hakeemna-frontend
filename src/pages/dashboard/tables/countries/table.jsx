@@ -1,7 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import CountriesTableView from 'src/sections/tables/view/countries-table-view';
-
+import CountriesTableView from 'src/sections/super-admin/tables/view/countries-table-view';
 
 // ----------------------------------------------------------------------
 

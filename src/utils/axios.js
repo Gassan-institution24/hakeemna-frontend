@@ -102,6 +102,7 @@ export const endpoints = {
     patients:'/api/patient',
     patient:(id)=>`/api/patient/${id}`,
     unitServiceLicenseMovement:(id)=>`/api/licensemovements/unitservice/${id}`,
+    unitServiceLicenseMovements:`/api/licensemovements/unitservice`,
     licenseMovement:(id)=>`/api/licensemovements/${id}`,
     licenseMovements:`/api/licensemovements`,
     packages:'/api/backages',

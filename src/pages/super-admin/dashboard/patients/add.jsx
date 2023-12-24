@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import AddPatient from 'src/sections/patients/add/add-patient';
+import AddPatient from 'src/sections/super-admin/patients/add/add-patient';
 
 // ----------------------------------------------------------------------
 
