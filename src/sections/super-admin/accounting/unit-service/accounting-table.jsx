@@ -42,7 +42,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useGetLicenseMovement } from 'src/api/tables';
+import { useGetUSLicenseMovement } from 'src/api/tables';
 
 import TableAnalytic from '../../patients/history/table-analytic'; 
 import AccountingTableRow from './accounting-table-row';
@@ -84,8 +84,9 @@ export default function USlicenseMovementView({unitServiceData}) {
 
   // const confirm = useBoolean();
 
-  const { licenseMovementData, refetch } = useGetLicenseMovement(unitServiceData._id);
-
+  const { licenseMovements, refetch } = useGetUSLicenseMovement(unitServiceData._id);
+  console.log('licenseMovements',unitServiceData._id)
+  console.log('licenseMovements',licenseMovements)
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -94,7 +95,7 @@ export default function USlicenseMovementView({unitServiceData}) {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: licenseMovementData,
+    inputData: licenseMovements,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -121,7 +122,7 @@ export default function USlicenseMovementView({unitServiceData}) {
 
   const getInvoiceLengthForTabs = (status) => {
     const filterdData = applyFilter({
-      inputData: licenseMovementData,
+      inputData: licenseMovements,
       comparator: getComparator(table.order, table.orderBy),
       filters: { ...filters, status: 'all' },
       dateError,
@@ -181,24 +182,24 @@ export default function USlicenseMovementView({unitServiceData}) {
 
   // const handleDeleteRow = useCallback(
   //   (id) => {
-  //     const deleteRow = licenseMovementData.filter((row) => row.id !== id);
+  //     const deleteRow = licenseMovements.filter((row) => row.id !== id);
   //   (deleteRow);
 
   //     table.onUpdatePageDeleteRow(dataInPage.length);
   //   },
-  //   [dataInPage.length, table, licenseMovementData]
+  //   [dataInPage.length, table, licenseMovements]
   // );
 
   // const handleDeleteRows = useCallback(() => {
-  //   const deleteRows = licenseMovementData.filter((row) => !table.selected.includes(row.id));
+  //   const deleteRows = licenseMovements.filter((row) => !table.selected.includes(row.id));
   // (deleteRows);
 
   //   table.onUpdatePageDeleteRows({
-  //     totalRows: licenseMovementData.length,
+  //     totalRows: licenseMovements.length,
   //     totalRowsInPage: dataInPage.length,
   //     totalRowsFiltered: dataFiltered.length,
   //   });
-  // }, [dataFiltered.length, dataInPage.length, table, licenseMovementData]);
+  // }, [dataFiltered.length, dataInPage.length, table, licenseMovements]);
 
   const handleEditRow = useCallback(
     (id) => {
@@ -331,11 +332,11 @@ export default function USlicenseMovementView({unitServiceData}) {
             {/* <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={licenseMovementData.length}
+              rowCount={licenseMovements.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  licenseMovementData.map((row) => row.id)
+                  licenseMovements.map((row) => row.id)
                 )
               }
               action={
@@ -373,13 +374,13 @@ export default function USlicenseMovementView({unitServiceData}) {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={licenseMovementData.length}
+                  rowCount={licenseMovements.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   // onSelectAllRows={(checked) =>
                   //   table.onSelectAllRows(
                   //     checked,
-                  //     licenseMovementData.map((row) => row.id)
+                  //     licenseMovements.map((row) => row.id)
                   //   )
                   // }
                 />
@@ -407,7 +408,7 @@ export default function USlicenseMovementView({unitServiceData}) {
                     emptyRows={emptyRows(
                       table.page,
                       table.rowsPerPage,
-                      licenseMovementData.length
+                      licenseMovements.length
                     )}
                   />
 
@@ -461,7 +462,7 @@ export default function USlicenseMovementView({unitServiceData}) {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { name, status, service, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -469,7 +470,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

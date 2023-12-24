@@ -17,7 +17,7 @@ export default function AccountingUSPage() {
         <title> {unitServiceName} Accounting</title>
       </Helmet>
 
-      <AccountingUS unitServiceData={data} />
+      {data &&<AccountingUS unitServiceData={data} />}
     </>
   );
 }
