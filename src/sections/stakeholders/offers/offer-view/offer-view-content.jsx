@@ -10,7 +10,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDate } from 'src/utils/format-time';
+import { fDate, fDateTime } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
 import Label from 'src/components/label/label';
@@ -19,16 +19,30 @@ import Markdown from 'src/components/markdown';
 
 // ----------------------------------------------------------------------
 
-export default function StakeholderInfoContent({ stakeholderData }) {
-  console.log("stakeholderData",stakeholderData)
+export default function StakeholderInfoContent({ stakeholderData,offerData }) {
   const {
     code,
+    employee_type,
+    unit_service,
+    country,
+    city,
+    stakeholder,
     name_english,
+    comment,
+    quantity,
+    currency,
+    price,
+    start_date,
+    end_date,
+    img,
+    services,
+    status,
+
+
+
     identification_num,
     stakeholder_type,
-    country,
     stakeholder_registration,
-    unit_service,
     tax_num,
     address,
     web_page,
@@ -37,12 +51,10 @@ export default function StakeholderInfoContent({ stakeholderData }) {
     mobile_num,
     specialty,
     bank_acc,
-    city,
     email,
     insurance,
-    status,
-  } = stakeholderData;
-
+  } = offerData;
+  
   const renderOverview = (
     <Stack component={Card} spacing={2} sx={{ p: 3 }}>
       {[
@@ -52,8 +64,18 @@ export default function StakeholderInfoContent({ stakeholderData }) {
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Country',
-          value: country?.userName,
+          label: 'Start Date',
+          value: fDateTime(start_date),
+          icon: <Iconify icon="solar:calendar-date-bold" />,
+        },
+        {
+          label: 'End Date',
+          value: fDateTime(end_date),
+          icon: <Iconify icon="solar:calendar-date-bold" />,
+        },
+        {
+          label: 'Employee Type',
+          value: employee_type?.name_english,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
@@ -62,60 +84,41 @@ export default function StakeholderInfoContent({ stakeholderData }) {
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Stakeholder Type',
-          value: stakeholder_type?.name_english,
+          label: 'Country',
+          value: country?.name_english,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'insurance',
-          value: insurance.map((company)=>company.name_english).join(', '),
+          label: 'city',
+          value: city?.userName,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Registration',
-          value: stakeholder_registration,
+          label: 'Stakeholder',
+          value: stakeholder?.userName,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Identification Number',
-          value: identification_num,
+          label: 'Comment',
+          value: comment,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Tax Number',
-          value: tax_num,
+          label: 'Quantity',
+          value: quantity,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'address',
-          value: address,
+          label: 'Price',
+          value: `${currency.symbol}${price}`,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'email',
-          value: email,
+          label: 'Services',
+          value: services.map((service)=>service.name_english).join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
-        {
-          label: 'Web Page',
-          value: web_page,
-          icon: <Iconify icon="solar:calendar-date-bold" />,
-        },
-        {
-          label: 'Phone Number',
-          value: phone,
-          icon: <Iconify icon="solar:calendar-date-bold" />,
-        },
-        {
-          label: 'Mobile Number',
-          value: mobile_num,
-          icon: <Iconify icon="solar:clock-circle-bold" />,
-        },
-        {
-          label: 'Specialty',
-          value: specialty?.name_english,
-          icon: <Iconify icon="solar:wad-of-money-bold" />,
-        }
+       
       ].map((item) => (
         <>
         {item.value && <Stack key={item.label} spacing={1.5}>
@@ -150,4 +153,5 @@ export default function StakeholderInfoContent({ stakeholderData }) {
 
 StakeholderInfoContent.propTypes = {
   stakeholderData: PropTypes.object,
+  offerData: PropTypes.object,
 };

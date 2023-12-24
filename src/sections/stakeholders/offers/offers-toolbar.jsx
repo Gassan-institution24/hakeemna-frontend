@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { Rating } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
 
 import Iconify from 'src/components/iconify';
 
@@ -24,6 +25,7 @@ export default function TablesTableToolbar({
   //
   canReset,
   onResetFilters,
+  dateError
 }) {
   const handleFilterName = useCallback(
     (event) => {
@@ -40,6 +42,21 @@ export default function TablesTableToolbar({
     },
     [onFilters]
   );
+
+  const handleFilterStartDate = useCallback(
+    (newValue) => {
+      onFilters('start_date', newValue);
+    },
+    [onFilters]
+  );
+
+  const handleFilterEndDate = useCallback(
+    (newValue) => {
+      onFilters('end_date', newValue);
+    },
+    [onFilters]
+  );
+
   const rateOptions = [1, 2, 3, 4, 5];
 
   return (
@@ -55,7 +72,31 @@ export default function TablesTableToolbar({
         pr: { xs: 2.5, md: 1 },
       }}
     >
-      <FormControl
+      <DatePicker
+          label="Start date"
+          value={filters.start_date}
+          onChange={handleFilterStartDate}
+          slotProps={{ textField: { fullWidth: true } }}
+          sx={{
+            maxWidth: { md: 180 },
+          }}
+        />
+
+        <DatePicker
+          label="End date"
+          value={filters.end_date}
+          onChange={handleFilterEndDate}
+          slotProps={{
+            textField: {
+              fullWidth: true,
+              error: dateError,
+            },
+          }}
+          sx={{
+            maxWidth: { md: 180 },
+          }}
+        />
+      {/* <FormControl
         sx={{
           flexShrink: 0,
           width: { xs: 1, md: 200 },
@@ -82,7 +123,7 @@ export default function TablesTableToolbar({
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
+      </FormControl> */}
 
       <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
         <TextField
@@ -115,6 +156,7 @@ export default function TablesTableToolbar({
 }
 
 TablesTableToolbar.propTypes = {
+  dateError: PropTypes.bool,
   canReset: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,

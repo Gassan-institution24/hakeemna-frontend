@@ -39,6 +39,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+import { fTimestamp } from 'src/utils/format-time';
 
 import { useGetStakeholderOffers } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
@@ -67,6 +68,8 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   status: 'all',
+  start_date: null,
+  end_date: null,
   rate: [],
 };
 
@@ -91,13 +94,13 @@ export default function StakeholderOffersView({ stakeholderData }) {
 
   const router = useRouter();
 
-  const { offersData } = useGetStakeholderOffers(id);
+  const { offersData, refetch } = useGetStakeholderOffers(id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
-    filters.startDate && filters.endDate
-      ? filters.startDate.getTime() > filters.endDate.getTime()
+    filters.start_date && filters.end_date
+      ? filters.start_date.getTime() > filters.end_date.getTime()
       : false;
 
   const dataFiltered = applyFilter({
@@ -107,11 +110,16 @@ export default function StakeholderOffersView({ stakeholderData }) {
     dateError,
   });
 
+  const dataInPage = dataFiltered.slice(
+    table.page * table.rowsPerPage,
+    table.page * table.rowsPerPage + table.rowsPerPage
+  );
+
   const { t } = useTranslate();
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all' || filters.rate.length > 0;
+  const canReset = !!filters?.name || filters.status !== 'all' || filters.rate.length > 0 || (!!filters.start_date && !!filters.end_date);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -158,6 +166,67 @@ export default function StakeholderOffersView({ stakeholderData }) {
     },
     [handleFilters]
   );
+
+  const handleViewRow = useCallback(
+    (ID) => {
+      router.push(paths.superadmin.stakeholders.offer(stakeholderData._id,ID));
+    },
+    [router,stakeholderData._id]
+  );
+
+  const handleActivate = useCallback(
+    async (ID) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.offer(ID)}/updatestatus`, /// edit
+        data: { status: 'active' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
+  );
+  const handleInactivate = useCallback(
+    async (ID) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.offer(ID)}/updatestatus`, /// edit
+        data: { status: 'inactive' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
+  );
+
+  const handleActivateRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.offers}/updatestatus`, /// edit
+      data: { status: 'active', ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: offersData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [dataFiltered.length, dataInPage.length, table, offersData, refetch]);
+
+  const handleInactivateRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.offers}/updatestatus`, /// edit
+      data: { status: 'inactive', ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: offersData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [dataFiltered.length, dataInPage.length, table, offersData, refetch]);
+
   return (
     <>
       <Container maxWidth={false}>
@@ -220,6 +289,44 @@ export default function StakeholderOffersView({ stakeholderData }) {
           )}
 
           <TableContainer>
+          <TableSelectedAction
+              // dense={table.dense}
+              numSelected={table.selected.length}
+              rowCount={dataFiltered.length}
+              onSelectAllRows={(checked) =>
+                table.onSelectAllRows(
+                  checked,
+                  dataFiltered.map((row) => row._id)
+                )
+              }
+              action={
+                <>
+                  {dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'inactive') ? (
+                    <Tooltip title="Activate all">
+                      <IconButton color="primary" onClick={confirmActivate.onTrue}>
+                        <Iconify icon="codicon:run-all" />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Inactivate all">
+                      <IconButton color="error" onClick={confirmInactivate.onTrue}>
+                        <Iconify icon="iconoir:pause-solid" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </>
+              }
+              color={
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'inactive')
+                  ? 'primary'
+                  : 'error'
+              }
+            />
+
             <Scrollbar>
               <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
                 <TableHeadCustom
@@ -229,12 +336,12 @@ export default function StakeholderOffersView({ stakeholderData }) {
                   rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     dataFiltered.map((row) => row._id)
-                  //   )
-                  // }
+                  onSelectAllRows={(checked) =>
+                    table.onSelectAllRows(
+                      checked,
+                      dataFiltered.map((row) => row._id)
+                    )
+                  }
                 />
 
                 <TableBody>
@@ -249,9 +356,11 @@ export default function StakeholderOffersView({ stakeholderData }) {
                         row={row}
                         filters={filters}
                         setFilters={setFilters}
-                        // selected={table.selected.includes(row._id)}
+                        selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        // onEditRow={() => handleEditRow(row._id)}
+                        onView={() => handleViewRow(row._id)}
+                        onActivate={() => handleActivate(row._id)}
+                        onInactivate={() => handleInactivate(row._id)}
                       />
                     ))}
 
@@ -278,6 +387,51 @@ export default function StakeholderOffersView({ stakeholderData }) {
           />
         </Card>
       </Container>
+
+      <ConfirmDialog
+        open={confirmInactivate.value}
+        onClose={confirmInactivate.onFalse}
+        title="Inactivate"
+        content={
+          <>
+            Are you sure want to Inactivate <strong> {table.selected.length} </strong> items?
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              handleInactivateRows();
+              confirmInactivate.onFalse();
+            }}
+          >
+            Inactivate
+          </Button>
+        }
+      />
+      <ConfirmDialog
+        open={confirmActivate.value}
+        onClose={confirmActivate.onFalse}
+        title="Activate"
+        content={
+          <>
+            Are you sure want to Activate <strong> {table.selected.length} </strong> items?
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              handleActivateRows();
+              confirmActivate.onFalse();
+            }}
+          >
+            Activate
+          </Button>
+        }
+      />
     </>
   );
 }
@@ -285,7 +439,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name, rate } = filters;
+  const { status, name, rate,start_date,end_date } = filters;
 
   const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
@@ -300,19 +454,22 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.department?.name_english &&
-          data?.department?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.department?.name_arabic &&
-          data?.department?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.appointment?.name_english &&
-          data?.appointment?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.appointment?.name_arabic &&
-          data?.appointment?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.doctor?.name_english &&
-          data?.doctor?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.doctor?.name_arabic &&
-          data?.doctor?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.title && data?.title?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_english &&
+          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.unit_service?.name_english &&
+          data?.unit_service?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.unit_service?.name_arabic &&
+          data?.unit_service?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.country?.name_english &&
+          data?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.country?.name_arabic &&
+          data?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city?.name_english &&
+          data?.city?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city?.name_arabic &&
+          data?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
@@ -323,6 +480,15 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   }
   if (rate.length > 0) {
     inputData = inputData.filter((order) => rate.includes(order.Rate));
+  }
+  if (!dateError) {
+    if (start_date && end_date) {
+      inputData = inputData.filter(
+        (offer) =>
+          fTimestamp(offer.start_date) <= fTimestamp(end_date) &&
+          fTimestamp(offer.end_date) >= fTimestamp(start_date)
+      );
+    }
   }
 
   return inputData;

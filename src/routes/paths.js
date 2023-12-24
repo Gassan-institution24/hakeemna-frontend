@@ -244,6 +244,7 @@ pages: {
       edit: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/info`,
       offers: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/offers`,
+      offer: (id,ofid) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/offers/${ofid}`,
       communications: (id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/communications`,
       history: {
         root:(id) => `${ROOTS.SUPERADMIN}/stakeholders/${id}/history`,

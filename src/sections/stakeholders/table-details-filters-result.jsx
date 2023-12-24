@@ -20,15 +20,15 @@ export default function OrderTableFiltersResult({
   results,
   ...other
 }) {
-  const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
+  const shortLabel = shortDateLabel(filters.start_date, filters.end_date);
 
   const handleRemoveStatus = () => {
     onFilters('status', 'all');
   };
 
   const handleRemoveDate = () => {
-    onFilters('startDate', null);
-    onFilters('endDate', null);
+    onFilters('start_date', null);
+    onFilters('end_date', null);
   };
 
   return (
@@ -47,7 +47,7 @@ export default function OrderTableFiltersResult({
           </Block>
         )}
 
-        {filters.startDate && filters.endDate && (
+        {filters.start_date && filters.end_date && (
           <Block label="Date:">
             <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
           </Block>
