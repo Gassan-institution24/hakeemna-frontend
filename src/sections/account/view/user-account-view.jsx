@@ -1,23 +1,17 @@
 import { useState, useCallback } from 'react';
-
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
-
 import { paths } from 'src/routes/paths';
-
 import { _userAbout, _userPlans, _userPayment, _userInvoices, _userAddressBook } from 'src/_mock';
-
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-
 import AccountGeneral from '../account-general';
-// import AccountBilling from '../account-billing';
-// import AccountSocialLinks from '../cotactus';
+import AccountBilling from '../account-billing';
 import AccountNotifications from '../account-notifications';
 import AccountChangePassword from '../account-change-password';
-import MedicalReport from '../medicalreport';
+
 // ----------------------------------------------------------------------
 
 const TABS = [
@@ -27,24 +21,9 @@ const TABS = [
     icon: <Iconify icon="solar:user-id-bold" width={24} />,
   },
   {
-    value: 'billing',
-    label: 'Billing',
-    icon: <Iconify icon="solar:bill-list-bold" width={24} />,
-  },
-  {
     value: 'notifications',
     label: 'Notifications',
     icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
-  },
-  {
-    value: 'MedicalReport',
-    label: 'MedicalReport',
-    icon: <Iconify icon="carbon:report" width={24} />,
-  },
-  {
-    value: 'social',
-    label: 'Support Team',
-    icon: <Iconify icon="material-symbols:contact-support" width={24} />,
   },
   {
     value: 'security',
@@ -77,7 +56,6 @@ export default function AccountView() {
           mb: { xs: 3, md: 5 },
         }}
       />
-
       <Tabs
         value={currentTab}
         onChange={handleChangeTab}
@@ -89,23 +67,8 @@ export default function AccountView() {
           <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
       </Tabs>
-
       {currentTab === 'general' && <AccountGeneral />}
-
-      {/* {currentTab === 'billing' && (
-        <AccountBilling
-          plans={_userPlans}
-          cards={_userPayment}
-          invoices={_userInvoices}
-          addressBook={_userAddressBook}
-        />
-      )} */}
-
       {currentTab === 'notifications' && <AccountNotifications />}
-      {currentTab === 'MedicalReport' && <MedicalReport />}
-
-      {/* {currentTab === 'social' && <AccountSocialLinks socialLinks={_userAbout.socialLinks} />} */}
-
       {currentTab === 'security' && <AccountChangePassword />}
     </Container>
   );
