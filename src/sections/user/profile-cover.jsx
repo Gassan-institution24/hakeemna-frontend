@@ -15,6 +15,8 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
 
   return (
     <Box
+
+    // green cover
       sx={{
         ...bgGradient({
           color: alpha(theme.palette.primary.dark, 0.8),

@@ -27,7 +27,7 @@ export default function UserProfileView() {
 
   const [currentTab, setCurrentTab] = useState('profile');
 
-  const handleChangeTab = useCallback((event, newValue) => {
+  const handleChangeTab = useCallback((newValue) => {
     setCurrentTab(newValue);
   }, []);
 
@@ -53,7 +53,7 @@ export default function UserProfileView() {
       >
         <ProfileCover
           role={user.patient.identification_num}
-          name={user?.userName}
+          name={`${user.patient.first_name} ${user.patient.last_name}`}
           avatarUrl={user?.patient.profile_picture}
           coverUrl={_userAbout.coverUrl}
         />
@@ -81,10 +81,6 @@ export default function UserProfileView() {
       </Card>
 
       {currentTab === 'profile' && <ProfileHome info={_userAbout}  />}
-      {/* 
-      {currentTab === 'current medications' && <ProfileFollowers current medications={_userFollowers} />}
-
-      {currentTab === 'appointments' && <ProfileFriends appointments={_userFriends}/>} */}
     </Container>
   );
 }

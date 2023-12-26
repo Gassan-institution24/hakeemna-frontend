@@ -135,6 +135,7 @@ pages: {
       profile: `${ROOTS.DASHBOARD}/user/profile`,
       account: `${ROOTS.DASHBOARD}/user/account`,
       share: `${ROOTS.DASHBOARD}/user/share`,
+      financilmovment: `${ROOTS.DASHBOARD}/user/financilmovment`,
       edit: (id) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
       demo: {
         edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,

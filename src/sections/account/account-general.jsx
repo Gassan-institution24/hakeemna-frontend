@@ -37,7 +37,21 @@ export default function AccountGeneral() {
     country: Yup.string(),
     city: Yup.string(),
     address: Yup.string(),
+    sport_exercises: Yup.string(),
+    smoking: Yup.string(),
   });
+  const DATAFORMAP = [
+    {
+      value: 'not smoker',
+    },
+    {
+      value: 'light smoker',
+    },
+    {
+      value: 'heavy smoker',
+    },
+  ];
+
 
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
@@ -62,6 +76,8 @@ export default function AccountGeneral() {
     country: user?.patient?.country?._id || null,
     city: user?.patient?.city?._id || null,
     address: user?.patient?.address || '',
+    sport_exercises: user?.patient?.sport_exercises || '',
+    smoking: user?.patient?.smoking || '',
   };
 
   const methods = useForm({
@@ -207,6 +223,33 @@ export default function AccountGeneral() {
                     {city.name_english}
                   </MenuItem>
                 ))}
+              </RHFSelect>
+
+              <RHFSelect
+                label="Sport Exercises"
+                fullWidth
+                name="sport_exercises"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                <MenuItem>0</MenuItem>
+                <MenuItem>once a week</MenuItem>
+                <MenuItem>twice a week</MenuItem>
+                <MenuItem>3-4 times a week</MenuItem>
+                <MenuItem>often</MenuItem>
+              </RHFSelect>
+
+              <RHFSelect
+                label="Smoking"
+                fullWidth
+                name="smoking"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                { DATAFORMAP.map((test,i)=>(
+                    <MenuItem key={i}>{test.value}</MenuItem>
+                ))}
+              
               </RHFSelect>
             </Box>
 

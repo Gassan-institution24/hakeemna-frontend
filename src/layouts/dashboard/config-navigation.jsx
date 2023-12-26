@@ -218,7 +218,7 @@ export function useNavData() {
           },
           {
             title: t('Financial movements'),
-            path: '#',
+            path: paths.dashboard.user.financilmovment,
             icon: <Iconify icon="arcticons:gnucash" />,
           },
           {
