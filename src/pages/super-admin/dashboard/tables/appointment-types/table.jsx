@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import AppointmentTypesTableView from 'src/sections/tables/view/appointypes-table-view';
+import AppointmentTypesTableView from 'src/sections/super-admin/tables/view/appointypes-table-view';
 
 // ----------------------------------------------------------------------
 

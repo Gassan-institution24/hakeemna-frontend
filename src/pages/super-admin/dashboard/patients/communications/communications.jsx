@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import PatientCommunication from 'src/sections/patients/communication/patient-communication';
+import PatientCommunication from 'src/sections/super-admin/patients/communication/patient-communication';
 import { useGetPatient } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------
@@ -20,7 +20,7 @@ export default function TableCreatePage() {
         <title> Patients: {patientName} Communication </title>
       </Helmet>
 
-      {data && <PatientCommunication patientData={data}/>}
+      {data && <PatientCommunication patientData={data} />}
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import FreeSubscriptionTableView from 'src/sections/tables/view/freesubscriptions-table-view';
+import FreeSubscriptionTableView from 'src/sections/super-admin/tables/view/freesubscriptions-table-view';
 
 // ----------------------------------------------------------------------
 

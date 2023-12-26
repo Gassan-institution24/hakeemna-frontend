@@ -3,13 +3,13 @@ import { useMemo } from 'react';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetPackages() {
-  const URL = endpoints.tables.packages;
+export function useGetSubscriptions() {
+  const URL = endpoints.tables.subscriptions;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      packagesData: data || [] ,
+      subscriptionsData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -24,8 +24,8 @@ export function useGetPackages() {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetPackage(id) {
-  const URL = endpoints.tables.package(id);
+export function useGetSubscription(id) {
+  const URL = endpoints.tables.subscription(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

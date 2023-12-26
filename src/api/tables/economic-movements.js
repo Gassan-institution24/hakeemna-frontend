@@ -9,7 +9,7 @@ export function useGetEconomicMovements() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      economecMovementsData: data || [] ,
+      economecMovementsData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -31,7 +31,7 @@ export function useGetPatientEconomicMovements(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      economecMovementsData: data || [] ,
+      economecMovementsData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -48,12 +48,12 @@ export function useGetPatientEconomicMovements(id) {
 }
 
 export function useGetStackeholderEconomicMovements(id) {
-  const URL = endpoints.tables.stackholdereconomicMovements(id);
+  const URL = endpoints.tables.stakeholdereconomicMovements(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      economecMovementsData: data || [] ,
+      economecMovementsData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

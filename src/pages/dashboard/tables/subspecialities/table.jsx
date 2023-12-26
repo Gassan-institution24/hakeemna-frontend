@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import SubSpecialtiesTableView from 'src/sections/tables/view/subspecialties-table-view';
+import SubSpecialtiesTableView from 'src/sections/super-admin/tables/view/subspecialties-table-view';
 
 // ----------------------------------------------------------------------
 

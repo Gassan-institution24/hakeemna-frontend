@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import BookAppointment from 'src/sections/patients/history/book-appointment/book-appointment';
+import BookAppointment from 'src/sections/super-admin/patients/history/book-appointment/book-appointment';
 import { useGetPatient } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------
@@ -20,7 +20,7 @@ export default function TableCreatePage() {
         <title> {patientName}: Book an appointment </title>
       </Helmet>
 
-      {data && <BookAppointment patientData={data}/>}
+      {data && <BookAppointment patientData={data} />}
     </>
   );
 }

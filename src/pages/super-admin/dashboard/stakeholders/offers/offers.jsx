@@ -1,11 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 
-import StakeholderOffers from 'src/sections/stakeholders/offers/offers-home-page';
+import StakeholderOffers from 'src/sections/super-admin/stakeholders/offers/offers-home-page';
 import { useGetStakeholder } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------
 
-export default function StackholderFeedbackPage() {
+export default function StackholderOffersPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetStakeholder(id);
@@ -13,7 +13,7 @@ export default function StackholderFeedbackPage() {
   return (
     <>
       <Helmet>
-        <title> stakeholders: {stakeholderName} Feedback </title>
+        <title> stakeholders: {stakeholderName} Offers </title>
       </Helmet>
 
       {data && <StakeholderOffers stakeholderData={data} />}

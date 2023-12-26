@@ -334,6 +334,9 @@ import('src/pages/super-admin/dashboard/stakeholders/history/history')
 const StakeholdersOffersPage = lazy(() =>
 import('src/pages/super-admin/dashboard/stakeholders/offers/offers')
 );
+const StakeholdersViewOfferPage = lazy(() =>
+import('src/pages/super-admin/dashboard/stakeholders/offers/viewOffer')
+);
 const StakeholdersBookAppointmentPage = lazy(() =>
 import('src/pages/super-admin/dashboard/stakeholders/history/bookAppointment')
 );
@@ -350,6 +353,41 @@ import('src/pages/super-admin/dashboard/stakeholders/feedback/feedback')
 const StakeholdersInvoiceInfoPage = lazy(() => import('src/pages/super-admin/dashboard/stakeholders/history/invoices/view-invoice'));
 const StakeholdersPaymentInfoPage = lazy(() => import('src/pages/super-admin/dashboard/stakeholders/history/payment/view-payment'));
 
+// ACCOUNTING
+const AccountingHomePage = lazy(() => import('src/pages/super-admin/dashboard/accounting/home'));
+const AccountingUnitServicePage = lazy(() => import('src/pages/super-admin/dashboard/accounting/unitService'));
+const AddAccountingUnitServicePage = lazy(() => import('src/pages/super-admin/dashboard/accounting/addUSAcoounting'));
+const EditAccountingUnitServicePage = lazy(() => import('src/pages/super-admin/dashboard/accounting/editUSAccounting'));
+const AccountingStakeholderPage = lazy(() => import('src/pages/super-admin/dashboard/accounting/stakeholder'));
+const AddAccountingStakeholderPage = lazy(() => import('src/pages/super-admin/dashboard/accounting/addStakeholderAcoounting'));
+const EditAccountingStakeholderPage = lazy(() => import('src/pages/super-admin/dashboard/accounting/editStakeholderAccounting'));
+
+
+// STATISTICS
+const StatisticsHomePage = lazy(() => import('src/pages/super-admin/dashboard/statistics/home'));
+
+// SUBSCRIPTIONS
+const SubscriptionsHomePage = lazy(() => import('src/pages/super-admin/dashboard/subscriptions/home'));
+const SubscriptionsNewPage = lazy(() => import('src/pages/super-admin/dashboard/subscriptions/add'));
+const SubscriptionsEditPage = lazy(() => import('src/pages/super-admin/dashboard/subscriptions/edit'));
+
+// COMMUNICATION
+const CommunicationHomePage = lazy(() => import('src/pages/super-admin/dashboard/communications/home'));
+
+// ACCESS CONTROL LIST
+const AccessControleListHomePage = lazy(() => import('src/pages/super-admin/dashboard/accessControlList/home'));
+
+// CUSTOMER TRAINING
+const CustomerTrainingHomePage = lazy(() => import('src/pages/super-admin/dashboard/customerTraining/home'));
+
+// DOCTORNA TEAM TRAINING
+const DoctornaTeamTrainingHomePage = lazy(() => import('src/pages/super-admin/dashboard/doctornaTeamTraining/home'));
+
+// ADJUSTABLE SERVICES CONTROL
+const AdjustableServicesControlHomePage = lazy(() => import('src/pages/super-admin/dashboard/adjustableServiceControl/home'));
+
+// QUALITY CONTROL
+const QualityControlHomePage = lazy(() => import('src/pages/super-admin/dashboard/qualityControl/home'));
 
 // ----------------------------------------------------------------------
 
@@ -387,6 +425,91 @@ export const dashboardRoutes = [
         ],
       },
       {
+        path: 'accounting',
+        children: [
+          { element: <AccountingHomePage />, index: true },
+          { path: 'unitservice/:id', element: <AccountingUnitServicePage /> },
+          { path: 'stakeholder/:id', element: <AccountingStakeholderPage /> },
+          { path: 'unitservice/:id/new', element: <AddAccountingUnitServicePage /> },
+          { path: 'unitservice/:id/edit/:acid', element: <EditAccountingUnitServicePage /> },
+          { path: 'stakeholder/:id/new', element: <AddAccountingStakeholderPage /> },
+          { path: 'stakeholder/:id/edit/:acid', element: <EditAccountingStakeholderPage /> },
+          // { path: ':id/info', element: <UnitserviceInsurancePage /> },
+        ],
+      },
+      {
+        path: 'statistics',
+        children: [
+          { element: <StatisticsHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'subscriptions',
+        children: [
+          { element: <SubscriptionsHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <SubscriptionsEditPage /> },
+          { path: 'new', element: <SubscriptionsNewPage /> },
+        ],
+      },
+      {
+        path: 'communication',
+        children: [
+          { element: <CommunicationHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'acl',
+        children: [
+          { element: <AccessControleListHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'training',
+        children: [
+          { element: <CustomerTrainingHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'traineeship',
+        children: [
+          { element: <DoctornaTeamTrainingHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'asc',
+        children: [
+          { element: <AccessControleListHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
+        path: 'qc',
+        children: [
+          { element: <QualityControlHomePage />, index: true },
+          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          { path: 'add', element: <UnitserviceFeedbackPage /> },
+        ],
+      },
+      {
         path: 'patients',
         children: [
           { element: <PatientsHomePage />, index: true },
@@ -421,6 +544,7 @@ export const dashboardRoutes = [
           { path: ':id/edit', element: <StakeholdersEditPage /> },
           { path: ':id/history', element: <StakeholdersHistoryPage /> },
           { path: ':id/offers', element: <StakeholdersOffersPage /> },
+          { path: ':id/offers/:ofid', element: <StakeholdersViewOfferPage /> },
           { path: ':id/bookappoint', element: <StakeholdersBookAppointmentPage /> },
           { path: ':id/insurance', element: <StakeholdersInsurancePage /> },
           { path: ':id/communications', element: <StakeholdersCommunicationsPage /> },

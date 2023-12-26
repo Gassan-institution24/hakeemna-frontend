@@ -32,7 +32,7 @@ import TourFiltersResult from '../offer-filters-result';
 const defaultFilters = {
   cities: [],
   tourGuides: [],
-  stackholder: [],
+  stakeholder: [],
   Offer_start_date: null,
   Offer_end_date: null,
 };
@@ -58,7 +58,7 @@ export default function TourListView() {
       ? filters.Offer_start_date.getTime() > filters.Offer_end_date.getTime()
       : false;
 
-  const {data,refetch} = useGetOffers()
+  const { data, refetch } = useGetOffers();
   const dataFiltered = applyFilter({
     inputData: data,
     filters,
@@ -68,7 +68,7 @@ export default function TourListView() {
   const canReset =
     !!filters.cities.length ||
     !!filters.tourGuides.length ||
-    !!filters.stackholder.length ||
+    !!filters.stakeholder.length ||
     (!!filters.Offer_start_date && !!filters.Offer_end_date);
 
   const notFound = !dataFiltered.length && canReset;
@@ -135,7 +135,7 @@ export default function TourListView() {
           canReset={canReset}
           onResetFilters={handleResetFilters}
           //
-         
+
           tourGuideOptions={_tourGuides}
           // citiesOptions={countries}
           //
@@ -178,7 +178,7 @@ export default function TourListView() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-      Create Offer
+            Create Offer
           </Button>
         }
         sx={{
@@ -207,7 +207,7 @@ export default function TourListView() {
 // ----------------------------------------------------------------------
 
 const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
-  const { stackholder, cities, Offer_start_date, Offer_end_date, tourGuides } = filters;
+  const { stakeholder, cities, Offer_start_date, Offer_end_date, tourGuides } = filters;
 
   const tourGuideIds = tourGuides.map((tourGuide) => tourGuide.id);
 
@@ -245,8 +245,8 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
     );
   }
 
-  if (stackholder.length) {
-    inputData = inputData.filter((tour) =>  stackholder.includes(tour.stackholder));
+  if (stakeholder.length) {
+    inputData = inputData.filter((tour) => stakeholder.includes(tour.stakeholder));
   }
 
   return inputData;

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import StakeholderInsurance from 'src/sections/stakeholders/insurance/stakeholder-insurance';
+import StakeholderInsurance from 'src/sections/super-admin/stakeholders/insurance/stakeholder-insurance';
 import { useGetStakeholder } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------

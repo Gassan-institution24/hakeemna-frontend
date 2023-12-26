@@ -53,7 +53,7 @@ export function useGetOffer(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      data,
+      offerData:data,
       loading: isLoading,
       error,
       validating: isValidating,

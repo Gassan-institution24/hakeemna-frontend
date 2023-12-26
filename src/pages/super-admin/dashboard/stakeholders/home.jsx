@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import StakeholdersView from 'src/sections/stakeholders/home/homepage';
+import StakeholdersView from 'src/sections/super-admin/stakeholders/home/homepage';
 
 // ----------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import PatientInfo from 'src/sections/patients/info/patient-info';
+import PatientInfo from 'src/sections/super-admin/patients/info/patient-info';
 import { useGetPatient } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------

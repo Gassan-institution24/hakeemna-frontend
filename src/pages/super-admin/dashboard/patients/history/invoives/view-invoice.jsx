@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import InvoiceInfo from 'src/sections/patients/history/invoices/invoice-show/invoice-detail-view';
+import InvoiceInfo from 'src/sections/super-admin/patients/history/invoices/invoice-show/invoice-detail-view';
 import { useGetEconomicMovement } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------

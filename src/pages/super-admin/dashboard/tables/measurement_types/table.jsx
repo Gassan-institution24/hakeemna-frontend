@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import {MeasurmentTypesTableView} from 'src/sections/tables/view';
+import { MeasurmentTypesTableView } from 'src/sections/super-admin/tables/view';
 
 // ----------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import UnitServicesTableView from 'src/sections/tables/view/unitservices-table-view';
+import UnitServicesTableView from 'src/sections/super-admin/tables/view/unitservices-table-view';
 
 // ----------------------------------------------------------------------
 
