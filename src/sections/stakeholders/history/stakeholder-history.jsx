@@ -1,0 +1,109 @@
+import PropTypes from 'prop-types';
+import sumBy from 'lodash/sumBy';
+import { useState, useCallback } from 'react';
+
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+
+import { alpha, useTheme } from '@mui/material/styles';
+
+import { paths } from 'src/routes/paths';
+
+import { _jobs, JOB_DETAILS_TABS, JOB_PUBLISH_OPTIONS } from 'src/_mock';
+
+import Label from 'src/components/label';
+import Iconify from 'src/components/iconify';
+import Scrollbar from 'src/components/scrollbar';
+
+import { RouterLink } from 'src/routes/components';
+import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
+
+// import { useGetStakeholderAppointments } from 'src/api/tables';
+
+import AppointHistory from './appointment-history/appoint-history';
+import EconomicMovementsView from './invoices/invoices-view';
+import PaymentControlView from './payment-control/payment-control';
+import StakeholderHistoryAnalytic from './appointment-history/appoint-history-analytic';
+
+// ----------------------------------------------------------------------
+
+export default function StakeholderHistoryView({ stakeholderData }) {
+  const theme = useTheme();
+
+  const settings = useSettingsContext();
+
+  const [currentTab, setCurrentTab] = useState('Appointment');
+
+  const handleChangeTab = useCallback((event, newValue) => {
+    setCurrentTab(newValue);
+  }, []);
+
+  const HistoryTabsList = [
+    'Appointment',
+    'Invoices',
+    'Accounting',
+    'Payment Control',
+    'Subscriptions',
+  ]; // Invoices === economicMovement
+
+  const renderTabs = (
+    <Tabs
+      value={currentTab}
+      onChange={handleChangeTab}
+      sx={{
+        mb: { xs: 3, md: 5 },
+      }}
+    >
+      {HistoryTabsList.map((tab, idx) => (
+        <Tab
+          key={idx}
+          iconPosition="end"
+          value={tab}
+          label={tab}
+        />
+      ))}
+    </Tabs>
+  );
+  const stakeholderName =
+    (stakeholderData?.name_english) ||
+    'Stakeholder';
+  return (
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <CustomBreadcrumbs
+        heading={`${stakeholderName} History`}
+        links={[
+          {
+            name: 'Dashboard',
+            href: paths.superadmin.root,
+          },
+          {
+            name: 'Stakeholders',
+            href: paths.superadmin.stakeholders.root,
+          },
+          {
+            name: `${stakeholderName} History`,
+          },
+        ]}
+        style={{ marginBottom: '25px' }}
+      />
+     
+      {renderTabs}
+
+      {/* {currentTab === 'Appointment' && <AppointHistory stakeholderData={stakeholderData} />} */}
+      {currentTab === 'Invoices' && <EconomicMovementsView stakeholderData={stakeholderData} />}
+      {currentTab === 'Payment Control' && <PaymentControlView stakeholderData={stakeholderData} />}
+
+      {/* {currentTab === 'candidates' && <JobDetailsCandidates candidates={currentJob?.candidates} />} */}
+    </Container>
+  );
+}
+
+StakeholderHistoryView.propTypes = {
+  stakeholderData: PropTypes.object,
+};
