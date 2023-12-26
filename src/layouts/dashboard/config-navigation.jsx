@@ -151,9 +151,6 @@ export function useNavData() {
             title: t('profile'),
             path: paths.dashboard.user.root,
             icon: <Iconify icon="iconamoon:profile-bold" />,
-            // children: [
-            //   { title: t('create'), path: paths.dashboard.user.new },
-            // ],
           },
           {
             title: t('settings'),
@@ -167,7 +164,7 @@ export function useNavData() {
           },
           {
             title: t('medical report'),
-            path: paths.dashboard.user.cards,
+            path: '#',
             icon: <Iconify icon="tabler:report-medical" />,
           },
           {
@@ -182,12 +179,12 @@ export function useNavData() {
           },
           {
             title: t('Financial movements'),
-            path: '#',
+            path: paths.dashboard.user.financilmovment,
             icon: <Iconify icon="arcticons:gnucash" />,
           },
           {
             title: t('share doctorna'),
-            path: '#',
+            path: paths.dashboard.user.share,
             icon: <Iconify icon="bxs:share-alt" />,
           },
           {

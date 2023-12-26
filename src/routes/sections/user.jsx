@@ -32,7 +32,9 @@ const InvoiceCreatePage = lazy(() => import('src/pages/dashboard/invoice/new'));
 const InvoiceEditPage = lazy(() => import('src/pages/dashboard/invoice/edit'));
 // USER
 const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
-const UserCardsPage = lazy(() => import('src/pages/dashboard/user/cards'));
+const UserAppointmentsPage = lazy(() => import('src/pages/dashboard/user/appointments'));
+const Share = lazy(() => import('src/pages/dashboard/user/share'));
+const FinancilMovment = lazy(() => import('src/pages/dashboard/user/FinancilMovment'));
 const UserListPage = lazy(() => import('src/pages/dashboard/user/list'));
 const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserCreatePage = lazy(() => import('src/pages/dashboard/user/new'));
@@ -92,10 +94,12 @@ export const userRoutes = [
           { path: 'profile', element: <UserProfilePage /> },
           { path: 'ecommerce', element: <OverviewEcommercePage /> },
           { path: 'list', element: <UserListPage /> },
-          { path: 'cards', element: <UserCardsPage /> },
+          { path: 'appointments', element: <UserAppointmentsPage /> },
           { path: 'new', element: <UserCreatePage /> },
           { path: ':id/edit', element: <UserEditPage /> },
           { path: 'account', element: <UserAccountPage /> },
+          { path: 'share', element: <Share /> },
+          { path: 'financilmovment', element: <FinancilMovment /> },
         ],
       },
       {

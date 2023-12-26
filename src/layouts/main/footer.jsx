@@ -64,7 +64,7 @@ export default function Footer() {
         <Typography variant="caption" component="div">
           © All rights reserved
           <br /> made by
-          <Link href="#"> Doctorna.online </Link>
+          <Link href="/"> Doctorna.online </Link>
         </Typography>
       </Container>
     </Box>

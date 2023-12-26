@@ -69,8 +69,6 @@ export default function AppointmentBooking({patientData}) {
   });
 
   const { appointmentsData, refetch } = useGetAvailableAppointments();
-  console.log(appointmentsData,"sdfsdfsdfsdf");
-
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { unitservicesData } = useGetUnitservices();

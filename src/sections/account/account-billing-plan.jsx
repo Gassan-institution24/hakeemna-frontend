@@ -17,50 +17,67 @@ import { PlanFreeIcon, PlanStarterIcon, PlanPremiumIcon } from 'src/assets/icons
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
-import { AddressListDialog } from '../address';
-import PaymentCardListDialog from '../payment/payment-card-list-dialog';
+// import { AddressListDialog } from '../address';
+// import PaymentCardListDialog from '../payment/payment-card-list-dialog';
 
 // ----------------------------------------------------------------------
 
-export default function AccountBillingPlan({ cardList, addressBook, plans }) {
+export default function AccountBillingPlan({ cardList, addressBook}) {
   const openAddress = useBoolean();
 
   const openCards = useBoolean();
+  const TABS = [
+    {
+      value: 'My Appointments',
+      label: 'My Appointments',
+      icon: <Iconify icon="solar:user-id-bold" width={24} />,
+    },
+    {
+      value: 'BookAppointment',
+      label: 'Book Appointment',
+      icon: <Iconify icon="icon-park-outline:medicine-chest" width={24} />,
+    },
+    {
+      value: 'medicalreport',
+      label: 'Medical Report',
+      icon: <Iconify icon="tabler:report-medical" width={24} />,
+    },
+  ];
 
-  const primaryAddress = addressBook.filter((address) => address.primary)[0];
+  // const primaryAddress = addressBook.filter((address) => address.primary)[0];
 
-  const primaryCard = cardList.filter((card) => card.primary)[0];
+  // const primaryCard = cardList.filter((card) => card.primary)[0];
 
   const [selectedPlan, setSelectedPlan] = useState('');
 
-  const [selectedAddress, setSelectedAddress] = useState(primaryAddress);
+  // const [selectedAddress, setSelectedAddress] = useState(primaryAddress);
 
-  const [selectedCard, setSelectedCard] = useState(primaryCard);
+  // const [selectedCard, setSelectedCard] = useState(primaryCard);
 
-  const handleSelectPlan = useCallback(
-    (newValue) => {
-      const currentPlan = plans.filter((plan) => plan.primary)[0].subscription;
-      if (currentPlan !== newValue) {
-        setSelectedPlan(newValue);
-      }
-    },
-    [plans]
-  );
+  // const handleSelectPlan = useCallback(
+  //   (newValue) => {
+  //     const currentPlan = plans.filter((plan) => plan.primary)[0].subscription;
+  //     if (currentPlan !== newValue) {
+  //       setSelectedPlan(newValue);
+  //     }
+  //   },
+  //   [plans]
+  // );
 
-  const handleSelectAddress = useCallback((newValue) => {
-    setSelectedAddress(newValue);
-  }, []);
+  // const handleSelectAddress = useCallback((newValue) => {
+  //   setSelectedAddress(newValue);
+  // }, []);
 
-  const handleSelectCard = useCallback((newValue) => {
-    setSelectedCard(newValue);
-  }, []);
+  // const handleSelectCard = useCallback((newValue) => {
+  //   setSelectedCard(newValue);
+  // }, []);
 
-  const renderPlans = plans.map((plan) => (
+  const renderPlans = TABS.map((plan) => (
     <Grid xs={12} md={4} key={plan.subscription}>
       <Stack
         component={Paper}
         variant="outlined"
-        onClick={() => handleSelectPlan(plan.subscription)}
+        // onClick={() => handleSelectPlan(plan.subscription)}
         sx={{
           p: 2.5,
           position: 'relative',
@@ -69,12 +86,12 @@ export default function AccountBillingPlan({ cardList, addressBook, plans }) {
             opacity: 0.48,
             cursor: 'default',
           }),
-          ...(plan.subscription === selectedPlan && {
-            boxShadow: (theme) => `0 0 0 2px ${theme.palette.text.primary}`,
-          }),
+          // ...(plan.subscription === selectedPlan && {
+          //   boxShadow: (theme) => `0 0 0 2px ${theme.palette.text.primary}`,
+          // }),
         }}
       >
-        {plan.primary && (
+        {/* {plan.primary && (
           <Label
             color="info"
             startIcon={<Iconify icon="eva:star-fill" />}
@@ -82,12 +99,16 @@ export default function AccountBillingPlan({ cardList, addressBook, plans }) {
           >
             Current
           </Label>
-        )}
+        )} */}
+        <Label>fgfgfgfg</Label>
 
         <Box sx={{ width: 48, height: 48 }}>
-          {plan.subscription === 'basic' && <PlanFreeIcon />}
-          {plan.subscription === 'starter' && <PlanStarterIcon />}
-          {plan.subscription === 'premium' && <PlanPremiumIcon />}
+{/* plan.subscription === 'basic' && */}
+           <PlanFreeIcon />
+{/* plan.subscription === 'starter' &&  */}
+          <PlanStarterIcon />
+          {/* plan.subscription === 'premium' &&  */}
+          <PlanPremiumIcon />
         </Box>
 
         <Box
@@ -98,17 +119,17 @@ export default function AccountBillingPlan({ cardList, addressBook, plans }) {
             textTransform: 'capitalize',
           }}
         >
-          {plan.subscription}
+          {/* {plan.subscription} */}lll
         </Box>
 
         <Stack direction="row" alignItems="center" sx={{ typography: 'h4' }}>
-          {plan.price || 'Free'}
-
-          {!!plan.price && (
+          {/* {plan.price || 'Free'} */}
+llppp
+          {/* {!!plan.price && (
             <Box component="span" sx={{ typography: 'body2', color: 'text.disabled', ml: 0.5 }}>
               /mo
             </Box>
-          )}
+          )} */}
         </Stack>
       </Stack>
     </Grid>
@@ -120,7 +141,7 @@ export default function AccountBillingPlan({ cardList, addressBook, plans }) {
         <CardHeader title="Plan" />
 
         <Grid container spacing={2} sx={{ p: 3 }}>
-          {renderPlans}
+          {/* {renderPlans} */}
         </Grid>
 
         <Stack spacing={2} sx={{ p: 3, pt: 0, typography: 'body2' }}>
@@ -129,7 +150,7 @@ export default function AccountBillingPlan({ cardList, addressBook, plans }) {
               Plan
             </Grid>
             <Grid xs={12} md={8} sx={{ typography: 'subtitle2', textTransform: 'capitalize' }}>
-              {selectedPlan || '-'}
+              {/* {selectedPlan || '-'} */}
             </Grid>
           </Grid>
 
@@ -139,11 +160,11 @@ export default function AccountBillingPlan({ cardList, addressBook, plans }) {
             </Grid>
             <Grid xs={12} md={8}>
               <Button
-                onClick={openAddress.onTrue}
+                // onClick={openAddress.onTrue}
                 endIcon={<Iconify width={16} icon="eva:arrow-ios-downward-fill" />}
                 sx={{ typography: 'subtitle2', p: 0, borderRadius: 0 }}
               >
-                {selectedAddress?.name}
+                {/* {selectedAddress?.name} */}
               </Button>
             </Grid>
           </Grid>
@@ -153,7 +174,7 @@ export default function AccountBillingPlan({ cardList, addressBook, plans }) {
               Billing address
             </Grid>
             <Grid xs={12} md={8} sx={{ color: 'text.secondary' }}>
-              {selectedAddress?.fullAddress}
+              {/* {selectedAddress?.fullAddress} */}
             </Grid>
           </Grid>
 
@@ -162,7 +183,7 @@ export default function AccountBillingPlan({ cardList, addressBook, plans }) {
               Billing phone number
             </Grid>
             <Grid xs={12} md={8} sx={{ color: 'text.secondary' }}>
-              {selectedAddress?.phoneNumber}
+              {/* {selectedAddress?.phoneNumber} */}
             </Grid>
           </Grid>
 
@@ -172,11 +193,11 @@ export default function AccountBillingPlan({ cardList, addressBook, plans }) {
             </Grid>
             <Grid xs={12} md={8}>
               <Button
-                onClick={openCards.onTrue}
+                // onClick={openCards.onTrue}
                 endIcon={<Iconify width={16} icon="eva:arrow-ios-downward-fill" />}
                 sx={{ typography: 'subtitle2', p: 0, borderRadius: 0 }}
               >
-                {selectedCard?.cardNumber}
+                {/* {selectedCard?.cardNumber} */}
               </Button>
             </Grid>
           </Grid>
@@ -190,15 +211,15 @@ export default function AccountBillingPlan({ cardList, addressBook, plans }) {
         </Stack>
       </Card>
 
-      <PaymentCardListDialog
+      {/* <PaymentCardListDialog
         list={cardList}
         open={openCards.value}
         onClose={openCards.onFalse}
         selected={(selectedId) => selectedCard?.id === selectedId}
         onSelect={handleSelectCard}
-      />
-
-      <AddressListDialog
+      /> */}
+lllghj
+      {/* <AddressListDialog
         list={addressBook}
         open={openAddress.value}
         onClose={openAddress.onFalse}
@@ -213,7 +234,7 @@ export default function AccountBillingPlan({ cardList, addressBook, plans }) {
             New
           </Button>
         }
-      />
+      /> */}
     </>
   );
 }
@@ -221,5 +242,5 @@ export default function AccountBillingPlan({ cardList, addressBook, plans }) {
 AccountBillingPlan.propTypes = {
   addressBook: PropTypes.array,
   cardList: PropTypes.array,
-  plans: PropTypes.array,
+  // plans: PropTypes.array,
 };

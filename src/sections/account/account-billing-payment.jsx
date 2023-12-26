@@ -8,15 +8,29 @@ import CardHeader from '@mui/material/CardHeader';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import Iconify from 'src/components/iconify';
+import { useAuthContext } from 'src/auth/hooks';
 
 import PaymentCardItem from '../payment/payment-card-item';
 import PaymentNewCardDialog from '../payment/payment-new-card-dialog';
 
 // ----------------------------------------------------------------------
 
-export default function AccountBillingPayment({ cards }) {
+export default function AccountBillingPayment() {
+  const { user } = useAuthContext();
+  
+  
   const newCard = useBoolean();
-
+  const cards = [
+    {
+      value: 'all',
+    },
+    {
+      value: 'unread',
+    },
+    {
+      value: 'archived',
+    },
+  ];
   return (
     <>
       <Card sx={{ my: 3 }}>
@@ -34,7 +48,7 @@ export default function AccountBillingPayment({ cards }) {
           }
         />
 
-        <Box
+        {/* <Box
           rowGap={2.5}
           columnGap={2}
           display="grid"
@@ -44,10 +58,10 @@ export default function AccountBillingPayment({ cards }) {
           }}
           sx={{ p: 3 }}
         >
-          {cards.map((card) => (
+          {cards?.map((card) => (
             <PaymentCardItem key={card.id} card={card} />
           ))}
-        </Box>
+        </Box> */}
       </Card>
 
       <PaymentNewCardDialog open={newCard.value} onClose={newCard.onFalse} />
@@ -55,6 +69,6 @@ export default function AccountBillingPayment({ cards }) {
   );
 }
 
-AccountBillingPayment.propTypes = {
-  cards: PropTypes.array,
-};
+// AccountBillingPayment.propTypes = {
+//   cards: PropTypes.array,
+// };
