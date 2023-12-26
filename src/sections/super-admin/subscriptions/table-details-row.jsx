@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import Collapse from '@mui/material/Collapse';
+import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
@@ -16,49 +14,37 @@ import { fDateTime } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function CountriesTableRow({
+export default function TableDetailsRow({
   row,
   selected,
   onEditRow,
   onSelectRow,
-  onActivate,
   onInactivate,
-  setFilters,
+  onActivate,
   filters,
-  showAccounting,
-  showCommunications,
-  showFeedback,
-  showInsurance,
-  showGeneralInfo,
+  setFilters,
 }) {
   const {
     code,
     name_english,
     country,
     city,
-    identification_num,
-    email,
     US_type,
-    sector_type,
+    unit_service,
+    package_appointment,
+    package_accounting,
+    package_docotor_report,
+    package_final_reporting,
+    package_old_files_Management,
+    package_TAX_Income_reporting,
+    period_in_months,
+    cost_in_usd,
     status,
-    speciality,
-    subscription_period_months,
-    tax,
-    address,
-    web_page,
-    phone,
-    mobile_num,
-    ip_address,
-    introduction_letter,
-    other_information,
-    users_num,
-    subscriptions,
-    insurance,
-    last_internet_connection,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -67,19 +53,100 @@ export default function CountriesTableRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
-  const popover = usePopover();
+
   const DDL = usePopover();
   const details = usePopover();
-  const collapse = useBoolean();
-  const modal = useBoolean();
+  const popover = usePopover();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell>{code}</TableCell>
+
+      <TableCell>
+        <Box>{code}</Box>
+      </TableCell>
+
       <TableCell>{name_english}</TableCell>
+
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
+        }}
+        onClick={() => setFilters({ ...filters, name: country.name_english })}
+      >
+        {country?.name_english}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
+        }}
+        onClick={() => setFilters({ ...filters, name: city.name_english })}
+      >
+        {city?.name_english}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
+        }}
+        onClick={() => setFilters({ ...filters, name: US_type.name_english })}
+      >
+        {US_type?.name_english}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
+        }}
+        onClick={() => setFilters({ ...filters, name: unit_service.name_english })}
+      >
+        {unit_service?.name_english}
+      </TableCell>
+      <TableCell>
+        {package_appointment && (
+          <li>
+            Appointments
+            <br />
+          </li>
+        )}
+        {package_accounting && (
+          <li>
+            Accounting
+            <br />
+          </li>
+        )}
+        {package_docotor_report && (
+          <li>
+            Doctor Report
+            <br />
+          </li>
+        )}
+        {package_final_reporting && (
+          <li>
+            Final Reporting
+            <br />
+          </li>
+        )}
+        {package_old_files_Management && (
+          <li>
+            Old Files Management
+            <br />
+          </li>
+        )}
+        {package_TAX_Income_reporting && <li>
+          Package TAX Income Reporting
+          </li>}
+      </TableCell>
+      <TableCell>{period_in_months}</TableCell>
+      <TableCell>${cost_in_usd}</TableCell>
       <TableCell>
         <Label
           variant="soft"
@@ -90,57 +157,20 @@ export default function CountriesTableRow({
           {status}
         </Label>
       </TableCell>
-      {/* <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-         // textDecoration: 'underline',
-        }}
-        onClick={showGeneralInfo}
-      >
-        General Info
-      </TableCell> */}
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showAccounting}
-      >
-        Accounting
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showCommunications}
-      >
-        Communications
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showFeedback}
-      >
-        Feedback
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showInsurance}
-      >
-        Insurance
-      </TableCell>
+
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        {/* <IconButton
+          color={collapse.value ? 'inherit' : 'default'}
+          onClick={collapse.onToggle}
+          sx={{
+            ...(collapse.value && {
+              bgcolor: 'action.hover',
+            }),
+          }}
+        >
+          <Iconify icon="eva:arrow-ios-downward-fill" />
+        </IconButton> */}
+
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -152,7 +182,6 @@ export default function CountriesTableRow({
     <>
       {renderPrimary}
 
-      {/* <DetailsModal row={row} open={modal.value} onClose={modal.onFalse} /> */}
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
@@ -163,7 +192,7 @@ export default function CountriesTableRow({
           <MenuItem
             onClick={() => {
               onInactivate();
-              // popover.onClose();
+              popover.onClose();
             }}
             sx={{ color: 'error.main' }}
           >
@@ -174,7 +203,7 @@ export default function CountriesTableRow({
           <MenuItem
             onClick={() => {
               onActivate();
-              // popover.onClose();
+              popover.onClose();
             }}
             sx={{ color: 'success.main' }}
           >
@@ -182,6 +211,16 @@ export default function CountriesTableRow({
             activate
           </MenuItem>
         )}
+
+        <MenuItem
+          onClick={() => {
+            onEditRow();
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="fluent:edit-32-filled" />
+          Edit
+        </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
@@ -218,18 +257,13 @@ export default function CountriesTableRow({
   );
 }
 
-CountriesTableRow.propTypes = {
+TableDetailsRow.propTypes = {
+  onInactivate: PropTypes.func,
+  onActivate: PropTypes.func,
   onSelectRow: PropTypes.func,
   setFilters: PropTypes.func,
-  onActivate: PropTypes.func,
-  onInactivate: PropTypes.func,
   onEditRow: PropTypes.func,
-  showAccounting: PropTypes.func,
-  showCommunications: PropTypes.func,
-  showFeedback: PropTypes.func,
-  showInsurance: PropTypes.func,
-  showGeneralInfo: PropTypes.func,
   row: PropTypes.object,
-  selected: PropTypes.bool,
   filters: PropTypes.object,
+  selected: PropTypes.bool,
 };

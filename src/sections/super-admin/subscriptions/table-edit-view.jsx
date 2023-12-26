@@ -5,34 +5,39 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import JobNewEditForm from '../communications-new-edit-form';
+import { useParams } from 'src/routes/hooks';
+
+import { useGetSubscription } from 'src/api/tables';
+
+import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function JobCreateView() {
+export default function TableEditView() {
   const settings = useSettingsContext();
-
+  const params = useParams();
+  const { id } = params;
+  const { data } = useGetSubscription(id);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new job"
+        heading="Update Subscription"
         links={[
           {
             name: 'Dashboard',
-            href: paths.dashboard.root,
+            href: paths.superadmin,
           },
           {
-            name: 'Job',
-            href: paths.dashboard.job.root,
+            name: 'Subscriptions',
+            href: paths.superadmin.subscriptions.root,
           },
-          { name: 'New job' },
+          { name: 'Update Subscription' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
-
-      <JobNewEditForm />
+      {data && <TableNewEditForm currentTable={data} />}
     </Container>
   );
 }

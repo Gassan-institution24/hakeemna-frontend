@@ -1,48 +1,38 @@
-import PropTypes from 'prop-types';
-
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { _jobs } from 'src/_mock';
-
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import JobNewEditForm from '../communications-new-edit-form';
+import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function JobEditView({ id }) {
+export default function TableCreateView() {
   const settings = useSettingsContext();
-
-  const currentJob = _jobs.find((job) => job.id === id);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit"
+        heading="Create a new Subscription"
         links={[
           {
             name: 'Dashboard',
-            href: paths.dashboard.root,
+            href: paths.superadmin,
           },
           {
-            name: 'Job',
-            href: paths.dashboard.job.root,
+            name: 'Subscriptions',
+            href: paths.superadmin.subscriptions.root,
           },
-          { name: currentJob?.title },
+          { name: 'New Subscription' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
 
-      <JobNewEditForm currentJob={currentJob} />
+      <TableNewEditForm />
     </Container>
   );
 }
-
-JobEditView.propTypes = {
-  id: PropTypes.string,
-};

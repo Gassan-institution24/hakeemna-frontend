@@ -368,6 +368,8 @@ const StatisticsHomePage = lazy(() => import('src/pages/super-admin/dashboard/st
 
 // SUBSCRIPTIONS
 const SubscriptionsHomePage = lazy(() => import('src/pages/super-admin/dashboard/subscriptions/home'));
+const SubscriptionsNewPage = lazy(() => import('src/pages/super-admin/dashboard/subscriptions/add'));
+const SubscriptionsEditPage = lazy(() => import('src/pages/super-admin/dashboard/subscriptions/edit'));
 
 // COMMUNICATION
 const CommunicationHomePage = lazy(() => import('src/pages/super-admin/dashboard/communications/home'));
@@ -449,8 +451,8 @@ export const dashboardRoutes = [
         children: [
           { element: <SubscriptionsHomePage />, index: true },
           { path: ':id/info', element: <UnitserviceInsurancePage /> },
-          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
-          { path: 'add', element: <UnitserviceFeedbackPage /> },
+          { path: ':id/edit', element: <SubscriptionsEditPage /> },
+          { path: 'new', element: <SubscriptionsNewPage /> },
         ],
       },
       {

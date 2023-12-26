@@ -2,14 +2,14 @@ import { useState, useCallback, useRef } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import Tooltip from '@mui/material/Tooltip';
-import { alpha } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
+import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 import { RouterLink } from 'src/routes/components';
 
@@ -18,9 +18,12 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { fTimestamp } from 'src/utils/format-time';
 import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+
+import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -39,25 +42,29 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetUnitservices } from 'src/api/tables'; /// edit
-import axiosHandler from 'src/utils/axios-handler';
+import { useGetSubscriptions } from 'src/api/tables'; /// edit
 import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from './table-details-row'; /// edit
-import TableDetailToolbar from '../table-details-toolbar';
-import TableDetailFiltersResult from '../table-details-filters-result';
+import TableDetailToolbar from './table-details-toolbar';
+import TableDetailFiltersResult from './table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
+
 const TABLE_HEAD = [
-  /// to edit
+  /// edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'Name' },
+  { id: 'country', label: 'Country' },
+  { id: 'city', label: 'City' },
+  { id: 'US_type', label: 'Unit Service Type' },
+  { id: 'unit_service', label: 'Unit Service' },
+  { id: 'packages', label: 'Packages' },
+  { id: 'period_months_offer', label: 'Period in Months' },
+  { id: 'cost_in_usd', label: 'Cost' },
   { id: 'status', label: 'Status' },
-  //   { id: 'General-info', label: 'General Info' },
-  { id: 'Accounting', label: 'Accounting' },
-  { id: 'Communications', label: 'Communications' },
-  { id: 'Feedback', label: 'Feedback' },
-  { id: 'Insurance', label: 'Insurance' },
   { id: '', width: 88 },
 ];
 
@@ -67,27 +74,20 @@ const defaultFilters = {
 };
 
 // ----------------------------------------------------------------------
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  // { value: 'public', label: 'public' },
-  // { value: 'privet', label: 'privet' },
-  // { value: 'charity', label: 'charity' },
-];
 
-export default function UnitServicesTableView() {
-  /// edit
+export default function SubscriptionTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
 
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
+  const settings = useSettingsContext();
 
   const router = useRouter();
 
-  const { unitservicesData, refetch } = useGetUnitservices();
+  const confirmActivate = useBoolean();
+  const confirmInactivate = useBoolean();
+
+  const { subscriptionsData, refetch } = useGetSubscriptions();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -97,7 +97,7 @@ export default function UnitServicesTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: unitservicesData,
+    inputData: subscriptionsData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -107,7 +107,7 @@ export default function UnitServicesTableView() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
+  console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.status !== 'all';
@@ -123,8 +123,8 @@ export default function UnitServicesTableView() {
       acc.push({
         code: data.code,
         name: data.name_english,
-        category: data.category?.name_english,
-        symptoms: data.symptoms?.map((symptom) => symptom?.name_english),
+        country: data.country?.name_english,
+        status: data.status,
       });
       return acc;
     }, []);
@@ -135,60 +135,8 @@ export default function UnitServicesTableView() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'unitservicesTable.xlsx'); /// edit
+    saveAs(data, 'subscriptionsTable.xlsx'); /// edit
   };
-  const handleActivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.unitservice(id)}/updatestatus`,
-        data: { status: 'active' },
-      });
-      refetch();
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, refetch]
-  );
-  const handleInactivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.unitservice(id)}/updatestatus`,
-        data: { status: 'inactive' },
-      });
-      refetch();
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, refetch]
-  );
-
-  const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.unitservices}`,
-      data: { status: 'active', ids: table.selected },
-    });
-    refetch();
-    table.onUpdatePageDeleteRows({
-      totalRows: unitservicesData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, unitservicesData, refetch]);
-
-  const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.unitservices}`,
-      data: { status: 'inactive', ids: table.selected },
-    });
-    refetch();
-    table.onUpdatePageDeleteRows({
-      totalRows: unitservicesData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, unitservicesData, refetch]);
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -201,40 +149,62 @@ export default function UnitServicesTableView() {
     [table]
   );
 
-  const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.superadmin.tables.unitservices.edit(id)); /// edit
+  const handleActivate = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.subscription(id)}/updatestatus`, /// edit
+        data: { status: 'active' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [router]
+    [dataInPage.length, table, refetch]
+  );
+  const handleInactivate = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.subscription(id)}/updatestatus`, /// edit
+        data: { status: 'inactive' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
   );
 
-  const handleShowAccountingRow = useCallback(
+  const handleActivateRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.subscriptions}/updatestatus`, /// edit
+      data: { status: 'active', ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: subscriptionsData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [dataFiltered.length, dataInPage.length, table, subscriptionsData, refetch]);
+
+  const handleInactivateRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.subscriptions}/updatestatus`, /// edit
+      data: { status: 'inactive', ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: subscriptionsData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [dataFiltered.length, dataInPage.length, table, subscriptionsData, refetch]);
+
+  const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.unitservices.accounting(id)); /// edit
-    },
-    [router]
-  );
-  const handleShowCommunicationsRow = useCallback(
-    (id) => {
-      router.push(paths.superadmin.unitservices.communications(id)); /// edit
-    },
-    [router]
-  );
-  const handleShowFeedbacksRow = useCallback(
-    (id) => {
-      router.push(paths.superadmin.unitservices.feedback(id)); /// edit
-    },
-    [router]
-  );
-  const handleShowInsuranceRow = useCallback(
-    (id) => {
-      router.push(paths.superadmin.unitservices.insurance(id)); /// edit
-    },
-    [router]
-  );
-  const handleShowGeneralInfoRow = useCallback(
-    (id) => {
-      router.push(paths.superadmin.tables.unitservices.root); /// edit
+      router.push(paths.superadmin.subscriptions.edit(id));
     },
     [router]
   );
@@ -249,35 +219,35 @@ export default function UnitServicesTableView() {
   //   },
   //   [router]
   // );
+
   const handleFilterStatus = useCallback(
     (event, newValue) => {
       handleFilters('status', newValue);
     },
     [handleFilters]
   );
-
   return (
     <>
       <Container maxWidth={false}>
         <CustomBreadcrumbs
-          heading="Unit Services" /// edit
+          heading="Subscriptions" /// edit
           links={[
             {
               name: 'Super',
               href: paths.superadmin.root,
             },
-            { name: 'Unit Services' }, /// edit
+            { name: 'Subscriptions' }, /// edit
           ]}
-          // action={
-          //   <Button
-          //     component={RouterLink}
-          //     href={paths.superadmin.tables.unitservices.new} /// edit
-          //     variant="contained"
-          //     startIcon={<Iconify icon="mingcute:add-line" />}
-          //   >
-          //     New Unit Service
-          //   </Button> /// edit
-          // }
+          action={
+            <Button
+              component={RouterLink}
+              href={paths.superadmin.subscriptions.new} /// edit
+              variant="contained"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+            >
+              New Subscription
+            </Button> /// edit
+          }
           sx={{
             mb: { xs: 3, md: 5 },
           }}
@@ -306,28 +276,20 @@ export default function UnitServicesTableView() {
                     color={
                       (tab.value === 'active' && 'success') ||
                       (tab.value === 'inactive' && 'error') ||
-                      // (tab.value === 'public' && 'success') ||
-                      // (tab.value === 'privet' && 'error') ||
-                      // (tab.value === 'charity' && 'success') ||
                       'default'
                     }
                   >
-                    {tab.value === 'all' && unitservicesData.length}
+                    {tab.value === 'all' && subscriptionsData.length}
                     {tab.value === 'active' &&
-                      unitservicesData.filter((order) => order.status === 'active').length}
+                      subscriptionsData.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      unitservicesData.filter((order) => order.status === 'inactive').length}
-                    {/* {tab.value === 'public' &&
-                      unitservicesData.filter((order) => order.sector_type === 'public').length}
-                    {tab.value === 'privet' &&
-                      unitservicesData.filter((order) => order.sector_type === 'privet').length}
-                    {tab.value === 'charity' &&
-                      unitservicesData.filter((order) => order.sector_type === 'charity').length} */}
+                      subscriptionsData.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
             ))}
           </Tabs>
+
           <TableDetailToolbar
             onPrint={printHandler}
             filters={filters}
@@ -421,11 +383,6 @@ export default function UnitServicesTableView() {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row._id)}
-                        showGeneralInfo={handleShowGeneralInfoRow}
-                        showAccounting={() => handleShowAccountingRow(row._id)}
-                        showCommunications={() => handleShowCommunicationsRow(row._id)}
-                        showFeedback={() => handleShowFeedbacksRow(row._id)}
-                        showInsurance={() => handleShowInsuranceRow(row._id)}
                         onInactivate={() => handleInactivate(row._id)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
@@ -433,7 +390,11 @@ export default function UnitServicesTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, unitservicesData.length)}
+                    emptyRows={emptyRows(
+                      table.page,
+                      table.rowsPerPage,
+                      subscriptionsData.length
+                    )}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -508,7 +469,7 @@ export default function UnitServicesTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -521,24 +482,26 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.name_arabic &&
-          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.name_english &&
           data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.sector_type &&
-          data?.sector_type?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.country?.name_english &&
-          data?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+          data?.country?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.country?.name_arabic &&
-          data?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+          data?.country?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.city?.name_english &&
-          data?.city?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+          data?.city?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.city?.name_arabic &&
-          data?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.subscriptions[0] &&
-          data?.subscriptions?.some(
-            (one) => one?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
-          )) ||
+          data?.city?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.US_type?.name_english &&
+          data?.US_type?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.US_type?.name_arabic &&
+          data?.US_type?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.unit_service?.name_english &&
+          data?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.unit_service?.name_arabic &&
+          data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
