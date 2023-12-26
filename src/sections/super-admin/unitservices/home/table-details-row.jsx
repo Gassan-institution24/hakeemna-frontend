@@ -56,7 +56,7 @@ export default function CountriesTableRow({
     introduction_letter,
     other_information,
     users_num,
-    packages,
+    subscriptions,
     insurance,
     last_internet_connection,
     created_at,

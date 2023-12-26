@@ -61,8 +61,8 @@ export function useNavData() {
             icon: <Iconify icon="akar-icons:statistic-up" />,
           },
           {
-            title: t('packages'),
-            path: paths.superadmin.packages.root,
+            title: t('subscriptions'),
+            path: paths.superadmin.subscriptions.root,
             icon: <Iconify icon="eos-icons:activate-subscriptions" />,
           },
           {

@@ -55,7 +55,7 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   // { id: 'unit_service', label: 'Unit Service' },
   { id: 'free_subscription', label: 'Free Subscription' },
-  { id: 'Package', label: 'Package' },
+  { id: 'subscription', label: 'Subscription' },
   { id: 'status', label: 'Status' },
   { id: 'Start_date', label: 'Start Date' },
   { id: 'End_date', label: 'End Date' },
@@ -346,10 +346,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.free_subscription?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.free_subscription?.name_arabic &&
           data?.free_subscription?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.Package?.name_english &&
-          data?.Package?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.Package?.name_arabic &&
-          data?.Package?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.subscription?.name_english &&
+          data?.subscription?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.subscription?.name_arabic &&
+          data?.subscription?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.Payment_method?.name_english &&
           data?.Payment_method?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.Payment_method?.name_arabic &&

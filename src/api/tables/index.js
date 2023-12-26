@@ -56,7 +56,7 @@ export * from './unit_services';
 export * from './work_shifts';
 export * from './employees';
 export * from './license_movements'
-export * from './packages'
+export * from './subscriptions'
 export * from './feedback'
 export * from './appointments'
 export * from './economic-movements'

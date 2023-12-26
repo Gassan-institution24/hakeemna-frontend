@@ -51,7 +51,7 @@ export default function CountriesTableRow({
     introduction_letter,
     other_information,
     users_num,
-    packages,
+    subscriptions,
     insurance,
     last_internet_connection,
     created_at,
@@ -254,8 +254,8 @@ export default function CountriesTableRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Users no:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{users_num}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Packages:</Box>
-        {packages.map((one) => (
+        <Box sx={{ pt: 1, fontWeight: 600 }}>subscriptions:</Box>
+        {subscriptions.map((one) => (
           <Box sx={{ pb: 1 }}>{one?.name_english}</Box>
         ))}
         <Box sx={{ pt: 1, fontWeight: 600 }}>Insurance:</Box>

@@ -366,8 +366,8 @@ const EditAccountingStakeholderPage = lazy(() => import('src/pages/super-admin/d
 // STATISTICS
 const StatisticsHomePage = lazy(() => import('src/pages/super-admin/dashboard/statistics/home'));
 
-// PACKAGES
-const PackagesHomePage = lazy(() => import('src/pages/super-admin/dashboard/packages/home'));
+// SUBSCRIPTIONS
+const SubscriptionsHomePage = lazy(() => import('src/pages/super-admin/dashboard/subscriptions/home'));
 
 // COMMUNICATION
 const CommunicationHomePage = lazy(() => import('src/pages/super-admin/dashboard/communications/home'));
@@ -445,9 +445,9 @@ export const dashboardRoutes = [
         ],
       },
       {
-        path: 'packages',
+        path: 'subscriptions',
         children: [
-          { element: <PackagesHomePage />, index: true },
+          { element: <SubscriptionsHomePage />, index: true },
           { path: ':id/info', element: <UnitserviceInsurancePage /> },
           { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
           { path: 'add', element: <UnitserviceFeedbackPage /> },

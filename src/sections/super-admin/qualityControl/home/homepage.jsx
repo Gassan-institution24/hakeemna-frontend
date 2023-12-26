@@ -535,8 +535,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.city?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.city?.name_arabic &&
           data?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.packages[0] &&
-          data?.packages?.some(
+        (data?.subscriptions[0] &&
+          data?.subscriptions?.some(
             (one) => one?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
           )) ||
         data?._id === name ||

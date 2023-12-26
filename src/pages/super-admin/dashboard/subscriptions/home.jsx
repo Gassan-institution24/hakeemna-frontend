@@ -1,12 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import Packages from 'src/sections/super-admin/packages/home/homepage';
+import Subscriptions from 'src/sections/super-admin/subscriptions/home/homepage';
 import { useGetUnitservice } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function PackagesPage() {
+export default function SubscriptionsPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetUnitservice(id);
@@ -17,7 +17,7 @@ export default function PackagesPage() {
         <title> {unitServiceName} Accounting</title>
       </Helmet>
 
-      <Packages unitServiceData={data} />
+      <Subscriptions unitServiceData={data} />
     </>
   );
 }

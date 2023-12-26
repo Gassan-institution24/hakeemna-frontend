@@ -20,7 +20,7 @@ import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetFreeSubscriptions, useGetPaymentMethods,useGetPackages } from 'src/api/tables';
+import { useGetFreeSubscriptions, useGetPaymentMethods, useGetSubscriptions } from 'src/api/tables';
 
 // ----------------------------------------------------------------------
 
@@ -29,15 +29,15 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
 
   const { user } = useAuthContext();
 
-  const {freeSubscriptionsData} = useGetFreeSubscriptions()
-  const {packagesData} = useGetPackages()
-  const {paymentMethodsData} = useGetPaymentMethods()
+  const { freeSubscriptionsData } = useGetFreeSubscriptions();
+  const { subscriptionsData } = useGetSubscriptions();
+  const { paymentMethodsData } = useGetPaymentMethods();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewSchema = Yup.object().shape({
     free_subscription: Yup.string().nullable(),
-    package: Yup.string().nullable(),
+    subscription: Yup.string().nullable(),
     Payment_method: Yup.string().required('Payment method is required'),
     Payment_frequency: Yup.string().required('Payment frequency is required'),
     note: Yup.string(),
@@ -50,15 +50,15 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
   const defaultValues = useMemo(
     /// edit
     () => ({
-      free_subscription:licenseMovementData?.free_subscription?._id || null ,
-      package:licenseMovementData?.package?._id || null ,
-      Payment_method:licenseMovementData?.Payment_method?._id || null ,
-      Payment_frequency:licenseMovementData?.Payment_frequency || '' ,
-      note:licenseMovementData?.note || '' ,
-      Start_date:licenseMovementData?.Start_date || '' ,
-      End_date:licenseMovementData?.End_date || '' ,
-      Users_num:licenseMovementData?.Users_num || '' ,
-      price:licenseMovementData?.price || '' ,
+      free_subscription: licenseMovementData?.free_subscription?._id || null,
+      subscription: licenseMovementData?.subscription?._id || null,
+      Payment_method: licenseMovementData?.Payment_method?._id || null,
+      Payment_frequency: licenseMovementData?.Payment_frequency || '',
+      note: licenseMovementData?.note || '',
+      Start_date: licenseMovementData?.Start_date || '',
+      End_date: licenseMovementData?.End_date || '',
+      Users_num: licenseMovementData?.Users_num || '',
+      price: licenseMovementData?.price || '',
     }),
     [licenseMovementData]
   );
@@ -92,7 +92,12 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
         await axiosHandler({
           method: 'POST',
           path: endpoints.tables.licenseMovements,
-          data: { unit_service:unitServiceData._id,ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
+          data: {
+            unit_service: unitServiceData._id,
+            ip_address_user_creation: address.data.IPv4,
+            user_creation: user._id,
+            ...data,
+          },
         }); /// edit
       }
       reset();
@@ -126,9 +131,9 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
                   </option>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="package" label="package">
+              <RHFSelect native name="subscription" label="subscription">
                 <option>{null}</option>
-                {packagesData.map((backage) => (
+                {subscriptionsData.map((backage) => (
                   <option key={backage._id} value={backage._id}>
                     {backage.name_english}
                   </option>
@@ -144,8 +149,8 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
               </RHFSelect>
               <RHFSelect native name="Payment_frequency" label="Payment Frequency">
                 <option>{null}</option>
-                <option value='once a week'>once a week</option>
-                <option value='once a month'>once a month</option>
+                <option value="once a week">once a week</option>
+                <option value="once a month">once a month</option>
               </RHFSelect>
               <DatePicker
                 name="Start_date"
@@ -165,8 +170,8 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
                   methods.getValues('End_date') ? new Date(methods.getValues('End_date')) : null
                 }
               />
-              <RHFTextField name="price" label="Price" type='number'/>
-              <RHFTextField name="Users_num" label="Users no"  type='number'/>
+              <RHFTextField name="price" label="Price" type="number" />
+              <RHFTextField name="Users_num" label="Users no" type="number" />
               <RHFTextField name="note" label="note" />
             </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

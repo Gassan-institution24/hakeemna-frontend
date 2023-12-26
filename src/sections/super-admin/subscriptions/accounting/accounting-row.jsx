@@ -20,45 +20,24 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function CountriesTableRow({
+export default function AccountingRow({
   row,
-  selected,
   onEditRow,
-  onSelectRow,
-  onActivate,
-  onInactivate,
   setFilters,
   filters,
-  showAccounting,
-  showCommunications,
-  showFeedback,
-  showInsurance,
-  showGeneralInfo,
 }) {
   const {
     code,
-    name_english,
-    country,
-    city,
-    identification_num,
-    email,
-    US_type,
-    sector_type,
+    free_subscription,
+    subscription,
     status,
-    speciality,
-    subscription_period_months,
-    tax,
-    address,
-    web_page,
-    phone,
-    mobile_num,
-    ip_address,
-    introduction_letter,
-    other_information,
-    users_num,
-    packages,
-    insurance,
-    last_internet_connection,
+    Start_date,
+    End_date,
+    Users_num,
+    price,
+    Payment_method,
+    Payment_frequency,
+    note,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -69,77 +48,29 @@ export default function CountriesTableRow({
   } = row;
   const popover = usePopover();
   const DDL = usePopover();
-  const details = usePopover();
-  const collapse = useBoolean();
-  const modal = useBoolean();
 
   const renderPrimary = (
-    <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell>
+    <TableRow hover >
       <TableCell>{code}</TableCell>
-      <TableCell>{name_english}</TableCell>
+      <TableCell onClick={()=>setFilters({...filters,name:free_subscription?.name_english})}>{free_subscription?.name_english}</TableCell>
+      <TableCell onClick={()=>setFilters({...filters,name:subscription?.name_english})}>{subscription?.name_english}</TableCell>
       <TableCell>
         <Label
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
-        >
+          >
           {status}
         </Label>
       </TableCell>
-      {/* <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-         // textDecoration: 'underline',
-        }}
-        onClick={showGeneralInfo}
-      >
-        General Info
-      </TableCell> */}
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showAccounting}
-      >
-        Accounting
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showCommunications}
-      >
-        Communications
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showFeedback}
-      >
-        Feedback
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showInsurance}
-      >
-        Insurance
-      </TableCell>
+      <TableCell>{fDateTime(Start_date)}</TableCell>
+      <TableCell>{fDateTime(End_date)}</TableCell>
+      <TableCell>{Users_num}</TableCell>
+      <TableCell>{price}</TableCell>
+      <TableCell onClick={()=>setFilters({...filters,name:Payment_method?.name_english})}>{Payment_method?.name_english}</TableCell>
+      <TableCell>{Payment_frequency}</TableCell>
+      <TableCell>{note}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
@@ -151,37 +82,21 @@ export default function CountriesTableRow({
   return (
     <>
       {renderPrimary}
-
-      {/* <DetailsModal row={row} open={modal.value} onClose={modal.onFalse} /> */}
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'active' ? (
-          <MenuItem
-            onClick={() => {
-              onInactivate();
-              // popover.onClose();
-            }}
-            sx={{ color: 'error.main' }}
-          >
-            <Iconify icon="ic:baseline-pause" />
-            Inactivate
-          </MenuItem>
-        ) : (
-          <MenuItem
-            onClick={() => {
-              onActivate();
-              // popover.onClose();
-            }}
-            sx={{ color: 'success.main' }}
-          >
-            <Iconify icon="bi:play-fill" />
-            activate
-          </MenuItem>
-        )}
+        <MenuItem
+          onClick={() => {
+            onEditRow();
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="fluent:edit-32-filled" />
+          Edit
+        </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
@@ -218,18 +133,9 @@ export default function CountriesTableRow({
   );
 }
 
-CountriesTableRow.propTypes = {
-  onSelectRow: PropTypes.func,
+AccountingRow.propTypes = {
   setFilters: PropTypes.func,
-  onActivate: PropTypes.func,
-  onInactivate: PropTypes.func,
   onEditRow: PropTypes.func,
-  showAccounting: PropTypes.func,
-  showCommunications: PropTypes.func,
-  showFeedback: PropTypes.func,
-  showInsurance: PropTypes.func,
-  showGeneralInfo: PropTypes.func,
   row: PropTypes.object,
-  selected: PropTypes.bool,
   filters: PropTypes.object,
 };

@@ -15,7 +15,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
-import { useRouter,useParams } from 'src/routes/hooks';
+import { useRouter, useParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -55,7 +55,7 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   // { id: 'unit_service', label: 'Unit Service' },
   { id: 'free_subscription', label: 'Free Subscription' },
-  { id: 'Package', label: 'Package' },
+  { id: 'subscription', label: 'Subscription' },
   { id: 'status', label: 'Status' },
   { id: 'Start_date', label: 'Start Date' },
   { id: 'End_date', label: 'End Date' },
@@ -82,13 +82,13 @@ const STATUS_OPTIONS = [
   // { value: 'charity', label: 'charity' },
 ];
 
-export default function UnitServicesAccountingView({unitServiceData}) {
+export default function UnitServicesAccountingView({ unitServiceData }) {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const params = useParams();
   const { id } = params;
-  
+
   const componentRef = useRef();
 
   const confirmActivate = useBoolean();
@@ -123,7 +123,7 @@ export default function UnitServicesAccountingView({unitServiceData}) {
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
-  console.log(unitServiceData)
+  console.log(unitServiceData);
   const handleDownload = () => {
     const excelBody = dataFiltered.reduce((acc, info) => {
       acc.push({
@@ -156,9 +156,9 @@ export default function UnitServicesAccountingView({unitServiceData}) {
 
   const handleEditRow = useCallback(
     (ID) => {
-      router.push(paths.superadmin.unitservices.editAccounting(id,ID)); /// edit
+      router.push(paths.superadmin.unitservices.editAccounting(id, ID)); /// edit
     },
-    [router,id]
+    [router, id]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -170,7 +170,7 @@ export default function UnitServicesAccountingView({unitServiceData}) {
     },
     [handleFilters]
   );
-    const unitserviceName = unitServiceData?.name_english
+  const unitserviceName = unitServiceData?.name_english;
   return (
     <>
       <Container maxWidth={false}>
@@ -261,7 +261,6 @@ export default function UnitServicesAccountingView({unitServiceData}) {
           )}
 
           <TableContainer>
-
             <Scrollbar>
               <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
                 <TableHeadCustom
@@ -343,13 +342,14 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter(
       (data) =>
         (data?.free_subscription?.name_english &&
-          data?.free_subscription?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+          data?.free_subscription?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
+            -1) ||
         (data?.free_subscription?.name_arabic &&
           data?.free_subscription?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.Package?.name_english &&
-          data?.Package?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.Package?.name_arabic &&
-          data?.Package?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.subscription?.name_english &&
+          data?.subscription?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.subscription?.name_arabic &&
+          data?.subscription?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.Payment_method?.name_english &&
           data?.Payment_method?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.Payment_method?.name_arabic &&

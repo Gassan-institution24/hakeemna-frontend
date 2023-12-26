@@ -29,7 +29,7 @@ export default function AccountingRow({
   const {
     code,
     free_subscription,
-    Package,
+    subscription,
     status,
     Start_date,
     End_date,
@@ -53,7 +53,7 @@ export default function AccountingRow({
     <TableRow hover >
       <TableCell>{code}</TableCell>
       <TableCell onClick={()=>setFilters({...filters,name:free_subscription?.name_english})}>{free_subscription?.name_english}</TableCell>
-      <TableCell onClick={()=>setFilters({...filters,name:Package?.name_english})}>{Package?.name_english}</TableCell>
+      <TableCell onClick={()=>setFilters({...filters,name:subscription?.name_english})}>{subscription?.name_english}</TableCell>
       <TableCell>
         <Label
           variant="soft"

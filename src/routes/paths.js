@@ -283,11 +283,11 @@ export const paths = {
       edit: (id) => `${ROOTS.SUPERADMIN}/statistics/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/statistics/${id}/info`,
     },
-    packages: {
-      root: `${ROOTS.SUPERADMIN}/packages`,
-      new: `${ROOTS.SUPERADMIN}/packages/new`,
-      edit: (id) => `${ROOTS.SUPERADMIN}/packages/${id}/edit`,
-      info: (id) => `${ROOTS.SUPERADMIN}/packages/${id}/info`,
+    subscriptions: {
+      root: `${ROOTS.SUPERADMIN}/subscriptions`,
+      new: `${ROOTS.SUPERADMIN}/subscriptions/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/subscriptions/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/subscriptions/${id}/info`,
     },
     communication: {
       root: `${ROOTS.SUPERADMIN}/communication`,
