@@ -26,10 +26,10 @@ export default function TourFiltersResult({
 }) {
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
-  const { stackholder } = useGetStackholder();
+  const { stakeholder } = useGetStackholder();
   const handleRemoveServices = (inputValue) => {
-    const newValue = filters.stackholder.filter((item) => item._id !== inputValue._id);
-    onFilters('stackholder', newValue);
+    const newValue = filters.stakeholder.filter((item) => item._id !== inputValue._id);
+    onFilters('stakeholder', newValue);
   };
 
   const handleRemoveAvailable = () => {
@@ -74,10 +74,10 @@ export default function TourFiltersResult({
           </Block>
         )}
 
-        {!!filters.stackholder && (
-          <Block label="stackholder:">
-            {stackholder
-              .filter((data) => filters.stackholder.includes(data._id))
+        {!!filters.stakeholder && (
+          <Block label="stakeholder:">
+            {stakeholder
+              .filter((data) => filters.stakeholder.includes(data._id))
               .map((item) => (
                 <Chip
                   key={item._id}

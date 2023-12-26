@@ -42,7 +42,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useGetUSLicenseMovement } from 'src/api/tables';
+import { useGetStakeholderLicenseMovement } from 'src/api/tables';
 
 import TableAnalytic from '../../patients/history/table-analytic'; 
 import AccountingTableRow from './accounting-table-row';
@@ -73,7 +73,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function USlicenseMovementView({unitServiceData}) {
+export default function StakeholderlicenseMovementView({stakeholderData}) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -84,8 +84,8 @@ export default function USlicenseMovementView({unitServiceData}) {
 
   // const confirm = useBoolean();
 
-  const { licenseMovements, refetch } = useGetUSLicenseMovement(unitServiceData._id);
-  console.log('licenseMovements',unitServiceData._id)
+  const { licenseMovements, refetch } = useGetStakeholderLicenseMovement(stakeholderData._id);
+  console.log('licenseMovements',stakeholderData._id)
   console.log('licenseMovements',licenseMovements)
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -201,9 +201,9 @@ export default function USlicenseMovementView({unitServiceData}) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.accounting.unitservice.edit(unitServiceData._id,id));
+      router.push(paths.superadmin.accounting.stakeholder.edit(stakeholderData._id,id));
     },
-    [router,unitServiceData._id]
+    [router,stakeholderData._id]
   );
 
   const handleViewRow = useCallback(
@@ -239,13 +239,13 @@ export default function USlicenseMovementView({unitServiceData}) {
             href: paths.superadmin.accounting.root,
           },
           {
-            name: `${unitServiceData?.name_english || 'Unit Service'} Accounting`,
+            name: `${stakeholderData?.name_english || 'Stkeholder'} Accounting`,
           },
         ]}
         action={
           <Button
             component={RouterLink}
-            href={paths.superadmin.accounting.unitservice.add(unitServiceData._id)} /// edit
+            href={paths.superadmin.accounting.stakeholder.add(stakeholderData._id)} /// edit
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
@@ -485,6 +485,6 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   return inputData;
 }
-USlicenseMovementView.propTypes = {
-  unitServiceData: PropTypes.object,
+StakeholderlicenseMovementView.propTypes = {
+  stakeholderData: PropTypes.object,
 };

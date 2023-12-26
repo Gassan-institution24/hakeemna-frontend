@@ -21,7 +21,6 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useGetStackholder } from 'src/api/user';
 
-
 // ----------------------------------------------------------------------
 
 export default function TourFilters({
@@ -42,16 +41,16 @@ export default function TourFilters({
   dateError,
 }) {
   const { tableData } = useGetCities();
-  const { stackholder } = useGetStackholder();
-  console.log(stackholder);
+  const { stakeholder } = useGetStackholder();
+  console.log(stakeholder);
   const handleFilterStack = useCallback(
     (newValue) => {
-      const checked = filters.stackholder.includes(newValue)
-        ? filters.stackholder.filter((value) => value !== newValue)
-        : [...filters.stackholder, newValue];
-      onFilters('stackholder', checked);
+      const checked = filters.stakeholder.includes(newValue)
+        ? filters.stakeholder.filter((value) => value !== newValue)
+        : [...filters.stakeholder, newValue];
+      onFilters('stakeholder', checked);
     },
-    [filters.stackholder, onFilters]
+    [filters.stakeholder, onFilters]
   );
   const handleFilterCities = useCallback(
     (newValue) => {
@@ -202,14 +201,14 @@ export default function TourFilters({
   const renderServices = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-        stackholder
+        stakeholder
       </Typography>
-      {stackholder.map((option) => (
+      {stakeholder.map((option) => (
         <FormControlLabel
           key={option?.key}
           control={
             <Checkbox
-              checked={filters.stackholder.includes(option._id)}
+              checked={filters.stakeholder.includes(option._id)}
               onClick={() => handleFilterStack(option._id)}
             />
           }

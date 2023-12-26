@@ -25,7 +25,7 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import UnitServicesAccounting from './unit-services/accounting-table'
-import StakeholderAccounting from './stakeholders/accounting'
+import StakeholderAccounting from './stakeholders/accounting-table'
 import TableAnalytic from '../patients/history/table-analytic';
 
 // ----------------------------------------------------------------------

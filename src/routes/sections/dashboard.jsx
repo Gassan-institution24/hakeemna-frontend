@@ -356,6 +356,12 @@ const StakeholdersPaymentInfoPage = lazy(() => import('src/pages/super-admin/das
 // ACCOUNTING
 const AccountingHomePage = lazy(() => import('src/pages/super-admin/dashboard/accounting/home'));
 const AccountingUnitServicePage = lazy(() => import('src/pages/super-admin/dashboard/accounting/unitService'));
+const AddAccountingUnitServicePage = lazy(() => import('src/pages/super-admin/dashboard/accounting/addUSAcoounting'));
+const EditAccountingUnitServicePage = lazy(() => import('src/pages/super-admin/dashboard/accounting/editUSAccounting'));
+const AccountingStakeholderPage = lazy(() => import('src/pages/super-admin/dashboard/accounting/stakeholder'));
+const AddAccountingStakeholderPage = lazy(() => import('src/pages/super-admin/dashboard/accounting/addStakeholderAcoounting'));
+const EditAccountingStakeholderPage = lazy(() => import('src/pages/super-admin/dashboard/accounting/editStakeholderAccounting'));
+
 
 // STATISTICS
 const StatisticsHomePage = lazy(() => import('src/pages/super-admin/dashboard/statistics/home'));
@@ -421,9 +427,12 @@ export const dashboardRoutes = [
         children: [
           { element: <AccountingHomePage />, index: true },
           { path: 'unitservice/:id', element: <AccountingUnitServicePage /> },
-          { path: ':id/info', element: <UnitserviceInsurancePage /> },
-          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
-          { path: 'add', element: <UnitserviceFeedbackPage /> },
+          { path: 'stakeholder/:id', element: <AccountingStakeholderPage /> },
+          { path: 'unitservice/:id/new', element: <AddAccountingUnitServicePage /> },
+          { path: 'unitservice/:id/edit/:acid', element: <EditAccountingUnitServicePage /> },
+          { path: 'stakeholder/:id/new', element: <AddAccountingStakeholderPage /> },
+          { path: 'stakeholder/:id/edit/:acid', element: <EditAccountingStakeholderPage /> },
+          // { path: ':id/info', element: <UnitserviceInsurancePage /> },
         ],
       },
       {

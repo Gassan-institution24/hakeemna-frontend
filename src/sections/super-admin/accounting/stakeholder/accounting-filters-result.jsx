@@ -46,7 +46,7 @@ export default function InvoiceTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {/* {!!filters.service.length && (
+        {!!filters.service.length && (
           <Block label="Service:">
             {filters.service.map((item) => (
               <Chip
@@ -57,7 +57,7 @@ export default function InvoiceTableFiltersResult({
               />
             ))}
           </Block>
-        )} */}
+        )}
 
         {filters.status !== 'all' && (
           <Block label="Status:">

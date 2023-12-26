@@ -13,39 +13,39 @@ import TableNewEditForm from './accounting-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function USAppointmentEditView({unitServiceData,licenseMovementData}) {
+export default function USAppointmentEditView({stakeholderData,licenseMovementData}) {
   const settings = useSettingsContext();
-  const unitServiceName = unitServiceData?.name_english || 'Unit Service'
+  const stakeholderName = stakeholderData?.name_english || 'Stakeholder'
   const params = useParams();
   const { id } = params;
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={`Edit ${unitServiceName} Accounting`} /// edit
+        heading={`Edit ${stakeholderName} Accounting`} /// edit
         links={[
           {
             name: 'Dashboard',
             href: paths.superadmin,
           },
           {
-            name: 'Unit Services',
-            href: paths.superadmin.unitservices.root,
+            name: 'Accounting',
+            href: paths.superadmin.accounting.root,
           },
           {
-            name: `${unitServiceName} accounting`, /// edit
-            href: paths.superadmin.unitservices.accounting(id),
+            name: `${stakeholderName} accounting`, /// edit
+            href: paths.superadmin.accounting.stakeholder.root(id),
           },
-          { name: `Edit ${unitServiceName} accounting` },
+          { name: `Edit ${stakeholderName} accounting` },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
-      {licenseMovementData && <TableNewEditForm licenseMovementData={licenseMovementData} unitServiceData={unitServiceData} />}
+      {licenseMovementData && <TableNewEditForm licenseMovementData={licenseMovementData} stakeholderData={stakeholderData} />}
     </Container>
   );
 }
 USAppointmentEditView.propTypes = {
-  unitServiceData: PropTypes.object,
+  stakeholderData: PropTypes.object,
   licenseMovementData: PropTypes.object,
 };

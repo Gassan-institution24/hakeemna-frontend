@@ -42,7 +42,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useGetUSLicenseMovements } from 'src/api/tables';
+import { useGetStakeholderLicenseMovements } from 'src/api/tables';
 
 import TableAnalytic from '../../patients/history/table-analytic'; 
 import AccountingTableRow from './accounting-table-row';
@@ -53,7 +53,7 @@ import MovementTableFiltersResult from './accounting-filters-result';
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'unit_service', label: 'Unit Service' },
+  { id: 'stakeholder', label: 'Stakeholder' },
   { id: 'Start_date', label: 'Start Subscription' },
   { id: 'End_date', label: 'End Subscription' },
   { id: 'count', label: 'Subscriptions no.' },
@@ -79,35 +79,35 @@ export default function LicenseMovementsView() {
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
-  const { licenseMovements, refetch } = useGetUSLicenseMovements();
-  console.log('old dataa',licenseMovements)
+  const { licenseMovements, refetch } = useGetStakeholderLicenseMovements();
+
   const separateEachUsMovement= useCallback (() => {
     const results = {};
     const now = new Date()
     licenseMovements.forEach((movement) => {
-      if (!results[movement.unit_service._id]) {
-        results[movement.unit_service._id] = {};
-        results[movement.unit_service._id].unit_service = movement.unit_service;
+      if (!results[movement.stakeholder._id]) {
+        results[movement.stakeholder._id] = {};
+        results[movement.stakeholder._id].stakeholder = movement.stakeholder;
       }
-      if(results[movement.unit_service._id].count){
-        results[movement.unit_service._id].count += 1
-      }else{results[movement.unit_service._id].count = 1}
-      if(results[movement.unit_service._id].payments){
-        results[movement.unit_service._id].payments += movement.price
-      }else{results[movement.unit_service._id].payments = movement.price}
+      if(results[movement.stakeholder._id].count){
+        results[movement.stakeholder._id].count += 1
+      }else{results[movement.stakeholder._id].count = 1}
+      if(results[movement.stakeholder._id].payments){
+        results[movement.stakeholder._id].payments += movement.price
+      }else{results[movement.stakeholder._id].payments = movement.price}
       if (
-        !results[movement.unit_service._id].start_date ||
-        results[movement.unit_service._id].start_date > movement.Start_date
+        !results[movement.stakeholder._id].start_date ||
+        results[movement.stakeholder._id].start_date > movement.Start_date
       ) {
-        results[movement.unit_service._id].start_date = movement.Start_date;
+        results[movement.stakeholder._id].start_date = movement.Start_date;
       }
   
       if (
-        !results[movement.unit_service._id].end_date ||
-        results[movement.unit_service._id].end_date < movement.End_date
+        !results[movement.stakeholder._id].end_date ||
+        results[movement.stakeholder._id].end_date < movement.End_date
       ) {
-        results[movement.unit_service._id].end_date = movement.End_date;
-        results[movement.unit_service._id].user_no = movement.Users_num;
+        results[movement.stakeholder._id].end_date = movement.End_date;
+        results[movement.stakeholder._id].user_no = movement.Users_num;
       }
     });
     const resultsArr = Object.keys(results).map((key)=>({id:key,...results[key],status:new Date(results[key].end_date)>=now&&new Date(results[key].start_date)<=now?'active':'inactive'}))
@@ -182,7 +182,7 @@ export default function LicenseMovementsView() {
 
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.accounting.unitservice.root(id));
+      router.push(paths.superadmin.accounting.stakeholder.root(id));
     },
     [router]
   );
@@ -326,12 +326,12 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.unit_service?.name_english &&
-          data?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.unit_service?.name_arabic &&
-          data?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        data?.unit_service._id === name ||
-        JSON.stringify(data.unit_service.code) === name
+        (data?.stakeholder?.name_english &&
+          data?.stakeholder?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.stakeholder?.name_arabic &&
+          data?.stakeholder?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        data?.stakeholder._id === name ||
+        JSON.stringify(data.stakeholder.code) === name
     );
   }
 

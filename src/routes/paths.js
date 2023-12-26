@@ -266,10 +266,16 @@ export const paths = {
     },
     accounting: {
       root: `${ROOTS.SUPERADMIN}/accounting`,
-      new: `${ROOTS.SUPERADMIN}/accounting/new`,
-      unitservice: (id) => `${ROOTS.SUPERADMIN}/accounting/unitservice/${id}`,
-      edit: (id) => `${ROOTS.SUPERADMIN}/accounting/${id}/edit`,
-      info: (id) => `${ROOTS.SUPERADMIN}/accounting/${id}/info`,
+      unitservice:{
+        root:(id) => `${ROOTS.SUPERADMIN}/accounting/unitservice/${id}`,
+        add: (id) => `${ROOTS.SUPERADMIN}/accounting/unitservice/${id}/new`,
+        edit: (id,acid) => `${ROOTS.SUPERADMIN}/accounting/unitservice/${id}/edit/${acid}`,
+      },
+      stakeholder:{
+        root:(id) => `${ROOTS.SUPERADMIN}/accounting/stakeholder/${id}`,
+        add: (id) => `${ROOTS.SUPERADMIN}/accounting/stakeholder/${id}/new`,
+        edit: (id,acid) => `${ROOTS.SUPERADMIN}/accounting/stakeholder/${id}/edit/${acid}`,
+      },
     },
     statistics: {
       root: `${ROOTS.SUPERADMIN}/statistics`,

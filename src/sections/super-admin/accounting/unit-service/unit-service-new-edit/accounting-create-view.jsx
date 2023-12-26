@@ -28,12 +28,12 @@ export default function USAccountingCreateView({unitServiceData}) {
             href: paths.superadmin,
           },
           {
-            name: 'Unit Services',
-            href: paths.superadmin.unitservices.root,
+            name: 'Accounting',
+            href: paths.superadmin.accounting.root,
           },
           {
             name: `${unitServiceName} accounting`, /// edit
-            href: paths.superadmin.unitservices.accounting(id),
+            href: paths.superadmin.accounting.unitservice.root(id),
           },
           { name: `New ${unitServiceName} accounting` },
         ]}

@@ -63,8 +63,8 @@ export default function TourNewEditForm({ currentTour }) {
   };
 
   const { tableData } = useGetCities();
-  const { stackholder } = useGetStackholder();
-  const stackholdersMultiSelectOptions = stackholder?.reduce((acc, data) => {
+  const { stakeholder } = useGetStackholder();
+  const stakeholdersMultiSelectOptions = stakeholder?.reduce((acc, data) => {
     acc.push({ value: data._id, label: data.stakeholder_name });
     return acc;
   }, []);
@@ -259,7 +259,7 @@ export default function TourNewEditForm({ currentTour }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {stackholder.map((option) => (
+                {stakeholder.map((option) => (
                   <MenuItem key={option._id} value={option._id}>
                     {option.stakeholder_name}
                   </MenuItem>
