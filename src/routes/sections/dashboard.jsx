@@ -271,9 +271,9 @@ const DeductionConfigEditPage = lazy(() =>
   import('src/pages/super-admin/dashboard/tables/deduction_config/edit')
 );
 // ROOMS
-const RoomsTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/table'));
-const RoomCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/new'));
-const RoomEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/edit'));
+// const RoomsTablePage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/table'));
+// const RoomCreatePage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/new'));
+// const RoomEditPage = lazy(() => import('src/pages/super-admin/dashboard/tables/rooms/edit'));
 // UNITSERVICES SIDEBAR OPTIONS
 const UnitservicesPage = lazy(() => import('src/pages/super-admin/dashboard/unitservices/home'));
 // UNITSERVICES ACCOUNTING
@@ -829,15 +829,15 @@ export const dashboardRoutes = [
               { path: ':id/edit', element: <DeductionConfigEditPage /> },
             ],
           },
-          {
-            path: 'rooms',
-            children: [
-              { element: <RoomsTablePage />, index: true },
-              { path: 'list', element: <RoomsTablePage /> },
-              { path: 'new', element: <RoomCreatePage /> },
-              { path: ':id/edit', element: <RoomEditPage /> },
-            ],
-          },
+          // {
+          //   path: 'rooms',
+          //   children: [
+          //     { element: <RoomsTablePage />, index: true },
+          //     { path: 'list', element: <RoomsTablePage /> },
+          //     { path: 'new', element: <RoomCreatePage /> },
+          //     { path: ':id/edit', element: <RoomEditPage /> },
+          //   ],
+          // },
         ],
       },
     ],

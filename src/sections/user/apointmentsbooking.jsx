@@ -36,11 +36,11 @@ import {
 } from 'src/api/tables';
 import { fTimestamp } from 'src/utils/format-time';
 
-import AppointmentList from '../patients/history/book-appointment/appointment-list';
-import AppointmentSort from '../patients/history/book-appointment/appointment-sort';
-import AppointmentSearch from '../patients/history/book-appointment/appointment-search';
-import AppointmentFilters from '../patients/history/book-appointment/appointment-filters';
-import AppointmentFiltersResult from '../patients/history/book-appointment/appointment-filters-result';
+import AppointmentList from '../super-admin/patients/history/book-appointment/appointment-list';
+import AppointmentSort from '../super-admin/patients/history/book-appointment/appointment-sort';
+import AppointmentSearch from '../super-admin/patients/history/book-appointment/appointment-search';
+import AppointmentFilters from '../super-admin/patients/history/book-appointment/appointment-filters';
+import AppointmentFiltersResult from '../super-admin/patients/history/book-appointment/appointment-filters-result';
 
 // ----------------------------------------------------------------------
 

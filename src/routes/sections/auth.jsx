@@ -68,11 +68,11 @@ const authJwt = {
           <Outlet />
         </CompactLayout>
       ),
-      children: [
-        { path: 'verify', element: <VerifyPage /> },
-        { path: 'new-password', element: <NewPasswordPage /> },
-        { path: 'forgot-password', element: <ForgetPasswordPage /> },
-      ],
+      // children: [
+      //   { path: 'verify', element: <VerifyPage /> },
+      //   { path: 'new-password', element: <NewPasswordPage /> },
+      //   { path: 'forgot-password', element: <ForgetPasswordPage /> },
+      // ],
     },
   ],
 };

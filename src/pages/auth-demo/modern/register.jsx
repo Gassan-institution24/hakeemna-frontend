@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { ModernRegisterView } from 'src/sections/auth-demo/modern';
+import { ModernRegisterView } from 'src/sections/other/auth-demo/modern';
 
 // ----------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { ModernNewPasswordView } from 'src/sections/auth-demo/modern';
+import { ModernNewPasswordView } from 'src/sections/other/auth-demo/modern';
 
 // ----------------------------------------------------------------------
 

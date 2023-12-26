@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { AccountView } from 'src/sections/account/view';
+import { AccountView } from 'src/sections/other/account/view';
 
 // ----------------------------------------------------------------------
 

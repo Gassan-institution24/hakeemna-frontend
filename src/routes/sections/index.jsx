@@ -8,7 +8,7 @@ import { authRoutes } from './auth';
 import { authDemoRoutes } from './auth-demo';
 import { HomePage, mainRoutes } from './main';
 import { dashboardRoutes } from './dashboard';
-import { componentsRoutes } from './components';
+// import { componentsRoutes } from './components';
 import { userRoutes } from './user';
 
 // ----------------------------------------------------------------------
@@ -44,7 +44,7 @@ export default function Router() {
 
     // Auth routes
     ...authRoutes,
-    ...authDemoRoutes,
+    // ...authDemoRoutes,
 
     // Dashboard routes
     ...dashboardRoutes,
@@ -53,7 +53,7 @@ export default function Router() {
     ...mainRoutes,
 
     // Components routes
-    ...componentsRoutes,
+    // ...componentsRoutes,
 
     // user routes
     ...userRoutes,
