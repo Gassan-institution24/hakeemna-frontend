@@ -14,7 +14,7 @@ import Share from '../Share';
 
 // ----------------------------------------------------------------------
 
-export default function UserAppointmentsView() {
+export default function Financilmovment() {
   const settings = useSettingsContext();
 
   return (

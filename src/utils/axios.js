@@ -173,4 +173,7 @@ export const endpoints = {
   countries: {
     getAllcountries: '/api/countries/',
   },
+  payment: {
+    getAllpaymentmethods: '/api/paymentmethods',
+  },
 };

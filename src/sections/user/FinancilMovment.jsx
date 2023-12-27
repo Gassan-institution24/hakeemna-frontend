@@ -1,33 +1,27 @@
-import PropTypes from 'prop-types';
-
 import Grid from '@mui/material/Unstable_Grid2';
-
 import AccountBillingPayment from '../other/account/account-billing-payment';
-// import AccountBillingHistory from '../account/account-billing-history';
-// import AccountBillingAddress from '../account/account-billing-address';
-
+import AccountBillingHistory from '../other/account/account-billing-history';
+import AccountBillingAddress from '../other/account/account-billing-address';
 // ----------------------------------------------------------------------
 
-export default function FinancilMovment({ cards, plans, invoices, addressBook }) {
+export default function FinancilMovment() {
   return (
     <Grid container spacing={5} disableEqualOverflow>
       <Grid xs={12} md={8}>
-        <AccountBillingPayment cards={cards} />
-
-        {/* <AccountBillingAddress addressBook={addressBook} /> */}
-        <></>
+        <AccountBillingPayment />
+        <AccountBillingAddress />
       </Grid>
-
-      {/* <Grid xs={12} md={4}>
-        <AccountBillingHistory invoices={invoices} />
-      </Grid> */}
+      <Grid
+        xs={12}
+        md={4}
+        title="Invoice History"
+        sx={{
+          position: { md: 'relative' },
+          top: { md: '24px' },
+        }}
+      >
+        <AccountBillingHistory />
+      </Grid>
     </Grid>
   );
 }
-
-FinancilMovment.propTypes = {
-  addressBook: PropTypes.array,
-  cards: PropTypes.array,
-  invoices: PropTypes.array,
-  plans: PropTypes.array,
-};

@@ -10,7 +10,7 @@ import Label from 'src/components/label';
 // ----------------------------------------------------------------------
 
 export default function AddressItem({ address, action, sx, ...other }) {
-  const { name, fullAddress, addressType, phoneNumber, primary } = address;
+  const { value } = address;
 
   return (
     <Stack
@@ -27,13 +27,13 @@ export default function AddressItem({ address, action, sx, ...other }) {
       <Stack flexGrow={1} spacing={1}>
         <Stack direction="row" alignItems="center">
           <Typography variant="subtitle2">
-            {name}
+            {value}
             <Box component="span" sx={{ ml: 0.5, typography: 'body2', color: 'text.secondary' }}>
-              ({addressType})
+              ({value})
             </Box>
           </Typography>
 
-          {primary && (
+          {value && (
             <Label color="info" sx={{ ml: 1 }}>
               Default
             </Label>
@@ -41,11 +41,11 @@ export default function AddressItem({ address, action, sx, ...other }) {
         </Stack>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {fullAddress}
+          {value}
         </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {phoneNumber}
+          {value}
         </Typography>
       </Stack>
 

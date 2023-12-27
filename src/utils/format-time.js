@@ -7,6 +7,11 @@ export function fDate(date, newFormat) {
 
   return date ? format(new Date(date), fm) : '';
 }
+export function fMonth(date, newFormat) {
+  const fm = newFormat || 'MMM yyyy';
+
+  return date ? format(new Date(date), fm) : '';
+}
 
 
 export function fDateTime(date, newFormat) {

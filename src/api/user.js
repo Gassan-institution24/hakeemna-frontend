@@ -124,3 +124,18 @@ export function useGetCountries() {
   );
   return memoizedValue;
 }
+
+export function useGetPaymentmethods() {
+  const URL = `${endpoints.payment.getAllpaymentmethods}`;
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      paymentmethods: data || [],
+      Loading: isLoading,
+      error,
+      validating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  return memoizedValue;
+}

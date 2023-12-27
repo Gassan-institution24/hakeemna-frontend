@@ -18,19 +18,23 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function AccountBillingHistory({ invoices }) {
+export default function AccountBillingHistory() {
   const showMore = useBoolean();
-
+const DATA =[
+  {
+    value:'test'
+  }
+]
   return (
     <Card>
-      <CardHeader title="Invoice History" />
+      <CardHeader/>
 
       <Stack spacing={1.5} sx={{ px: 3, pt: 3 }}>
-        {(showMore.value ? invoices : invoices.slice(0, 8)).map((invoice) => (
+        {(showMore.value ? DATA : DATA.slice(0, 8)).map((invoice) => (
           <Stack key={invoice.id} direction="row" alignItems="center">
             <ListItemText
-              primary={invoice.invoiceNumber}
-              secondary={fDate(invoice.createdAt)}
+              primary={invoice.value}
+              // secondary={fDate(invoice.value)}
               primaryTypographyProps={{
                 typography: 'body2',
               }}
@@ -73,6 +77,6 @@ export default function AccountBillingHistory({ invoices }) {
   );
 }
 
-AccountBillingHistory.propTypes = {
-  invoices: PropTypes.array,
-};
+// AccountBillingHistory.propTypes = {
+//   invoices: PropTypes.array,
+// };
