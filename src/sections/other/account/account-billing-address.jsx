@@ -19,7 +19,9 @@ import { AddressItem, AddressNewForm } from '../address';
 
 export default function AccountBillingAddress({ addressBook }) {
   const [addressId, setAddressId] = useState('');
-
+  const DATA = [
+    {value : 'test'}
+  ]
   const popover = usePopover();
 
   const addressForm = useBoolean();
@@ -44,7 +46,7 @@ export default function AccountBillingAddress({ addressBook }) {
   return (
     <>
       <Card>
-        <CardHeader
+        {/* <CardHeader
           title="Address Book"
           action={
             <Button
@@ -56,34 +58,37 @@ export default function AccountBillingAddress({ addressBook }) {
               Address
             </Button>
           }
-        />
+        /> */}
 
         <Stack spacing={2.5} sx={{ p: 3 }}>
-          {addressBook.map((address) => (
-            <AddressItem
-              variant="outlined"
-              key={address.id}
-              address={address}
-              action={
-                <IconButton
-                  onClick={(event) => {
-                    handleSelectedId(event, `${address.id}`);
-                  }}
-                  sx={{ position: 'absolute', top: 8, right: 8 }}
-                >
-                  <Iconify icon="eva:more-vertical-fill" />
-                </IconButton>
-              }
-              sx={{
-                p: 2.5,
-                borderRadius: 1,
-              }}
-            />
+          {DATA.map((address) => (
+            <>
+              <AddressItem
+                variant="outlined"
+                // key={address.id}
+                address={address}
+                // action={
+                //   <IconButton
+                //     onClick={(event) => {
+                //       handleSelectedId(event, `${address.id}`);
+                //     }}
+                //     sx={{ position: 'absolute', top: 8, right: 8 }}
+                //   >
+                //     <Iconify icon="eva:more-vertical-fill" />
+                //   </IconButton>
+                // }
+                sx={{
+                  p: 2.5,
+                  borderRadius: 1,
+                }}
+              />
+              
+            </>
           ))}
         </Stack>
       </Card>
 
-      <CustomPopover open={popover.open} onClose={handleClose}>
+      {/* <CustomPopover open={popover.open} onClose={handleClose}>
         <MenuItem
           onClick={() => {
             handleClose();
@@ -114,7 +119,7 @@ export default function AccountBillingAddress({ addressBook }) {
           <Iconify icon="solar:trash-bin-trash-bold" />
           Delete
         </MenuItem>
-      </CustomPopover>
+      </CustomPopover> */}
 
       <AddressNewForm
         open={addressForm.value}

@@ -51,7 +51,7 @@ export default function AccountGeneral() {
       value: 'heavy smoker',
     },
   ];
-
+  const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
 
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
@@ -232,11 +232,11 @@ export default function AccountGeneral() {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                <MenuItem>0</MenuItem>
-                <MenuItem>once a week</MenuItem>
-                <MenuItem>twice a week</MenuItem>
-                <MenuItem>3-4 times a week</MenuItem>
-                <MenuItem>often</MenuItem>
+                 {SECDATAFORMAP.map((test) => (
+                  <MenuItem value={test} key={test}>
+                    {test}
+                  </MenuItem>
+                ))}
               </RHFSelect>
 
               <RHFSelect
@@ -246,10 +246,11 @@ export default function AccountGeneral() {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                { DATAFORMAP.map((test,i)=>(
-                    <MenuItem key={i}>{test.value}</MenuItem>
+                {DATAFORMAP.map((test) => (
+                  <MenuItem value={test.value} key={test._id}>
+                    {test.value}
+                  </MenuItem>
                 ))}
-              
               </RHFSelect>
             </Box>
 

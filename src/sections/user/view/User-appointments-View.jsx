@@ -14,7 +14,7 @@ import UserCardList from '../appointments-list';
 
 // ----------------------------------------------------------------------
 
-export default function UserAppointmentsView() {
+export default function Financilmovment() {
   const settings = useSettingsContext();
 
   return (
