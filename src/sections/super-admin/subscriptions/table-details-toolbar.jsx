@@ -3,9 +3,14 @@ import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
+import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import Iconify from 'src/components/iconify';
@@ -31,6 +36,17 @@ export default function OrderTableToolbar({
     [onFilters]
   );
 
+  const handleFilterFees = useCallback(
+    (event) => {
+      onFilters(
+        'fees',
+        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
+      );
+    },
+    [onFilters]
+  );
+  const FeesOptions = ['Free','$50 and less', '$100 and less', 'More than $100'];
+
   return (
     <>
       <Stack
@@ -45,6 +61,34 @@ export default function OrderTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
+        <FormControl
+        sx={{
+          flexShrink: 0,
+          width: { xs: 1, md: 200 },
+        }}
+      >
+        <InputLabel>Fees</InputLabel>
+
+        <Select
+          multiple
+          value={filters.fees}
+          onChange={handleFilterFees}
+          input={<OutlinedInput label="Fees" />}
+          renderValue={(selected) => selected.map((value) => value).join(', ')}
+          MenuProps={{
+            PaperProps: {
+              sx: { maxHeight: 240 },
+            },
+          }}
+        >
+          {FeesOptions.map((option) => (
+            <MenuItem key={option} value={option}>
+              <Checkbox disableRipple size="small" checked={filters.fees.includes(option)} />
+              {option}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth

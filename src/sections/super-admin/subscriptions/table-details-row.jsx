@@ -146,7 +146,7 @@ export default function TableDetailsRow({
           </li>}
       </TableCell>
       <TableCell>{period_in_months}</TableCell>
-      <TableCell>${cost_in_usd}</TableCell>
+      <TableCell>{cost_in_usd?`$${cost_in_usd}`:"Free"}</TableCell>
       <TableCell>
         <Label
           variant="soft"

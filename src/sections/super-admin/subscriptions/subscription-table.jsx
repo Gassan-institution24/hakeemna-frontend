@@ -71,6 +71,7 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   status: 'all',
+  fees:[],
 };
 
 // ----------------------------------------------------------------------
@@ -467,7 +468,7 @@ export default function SubscriptionTableView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name } = filters;
+  const { status, name, fees } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -506,7 +507,23 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         JSON.stringify(data.code) === name
     );
   }
-
+  if (fees.length) {
+    inputData = inputData.filter((subscription) => {
+      if (fees.includes('Free')) {
+        return !subscription.cost_in_usd;
+      }
+      if (fees.includes('$50 and less')) {
+        return subscription.cost_in_usd <= 50;
+      }
+      if (fees.includes('$100 and less')) {
+        return subscription.cost_in_usd <= 100;
+      }
+      if (fees.includes('More than $100')) {
+        return subscription.cost_in_usd > 100;
+      }
+      return false;
+    });
+  }
   if (status !== 'all') {
     inputData = inputData.filter((order) => order.status === status);
   }
