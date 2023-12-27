@@ -8,7 +8,7 @@ export default function FinancilMovmentdoctorna() {
   return (
     <>
       <Helmet>
-        <title>Share</title>
+        <title>Financil Movment</title>
       </Helmet>
 
       <FinancilMovment />

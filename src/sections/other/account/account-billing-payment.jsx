@@ -4,33 +4,21 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
 import CardHeader from '@mui/material/CardHeader';
-
+import { useGetPaymentmethods } from 'src/api/user';
 import { useBoolean } from 'src/hooks/use-boolean';
-
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/hooks';
-
 import PaymentCardItem from '../payment/payment-card-item';
 import PaymentNewCardDialog from '../payment/payment-new-card-dialog';
+
 
 // ----------------------------------------------------------------------
 
 export default function AccountBillingPayment() {
   const { user } = useAuthContext();
-  
-  
+  const { paymentmethods } = useGetPaymentmethods();
+console.log(paymentmethods);
   const newCard = useBoolean();
-  const cards = [
-    {
-      value: 'all',
-    },
-    {
-      value: 'unread',
-    },
-    {
-      value: 'archived',
-    },
-  ];
   return (
     <>
       <Card sx={{ my: 3 }}>
@@ -48,7 +36,7 @@ export default function AccountBillingPayment() {
           }
         />
 
-        {/* <Box
+        <Box
           rowGap={2.5}
           columnGap={2}
           display="grid"
@@ -58,10 +46,10 @@ export default function AccountBillingPayment() {
           }}
           sx={{ p: 3 }}
         >
-          {cards?.map((card) => (
-            <PaymentCardItem key={card.id} card={card} />
+          {paymentmethods?.map((card) => (
+            <PaymentCardItem key={card._id} card={card.card_holder} />
           ))}
-        </Box> */}
+        </Box>
       </Card>
 
       <PaymentNewCardDialog open={newCard.value} onClose={newCard.onFalse} />

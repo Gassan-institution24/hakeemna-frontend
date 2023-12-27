@@ -9,17 +9,17 @@ import FinancilMovment from '../FinancilMovment';
 
 // ----------------------------------------------------------------------
 
-export default function UserAppointmentsView() {
+export default function Financilmovment() {
   const settings = useSettingsContext();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="FinancilMovment"
+        heading="Financil Movment"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
           { name: 'User', href: paths.dashboard.user.root },
-          { name: 'FinancilMovment' },
+          { name: 'Financil Movment' },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
