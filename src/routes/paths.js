@@ -323,10 +323,11 @@ export const paths = {
     },
     qualityControl: {
       root: `${ROOTS.SUPERADMIN}/qc`,
+      doctorna: `${ROOTS.SUPERADMIN}/qc/doctorna`,
       unitservices: `${ROOTS.SUPERADMIN}/qc/unitservices`,
       unitservice: (id) => `${ROOTS.SUPERADMIN}/qc/unitservices/${id}`,
-      stakeholders: `${ROOTS.SUPERADMIN}/qc/stakeholder`,
-      stakeholder: (id) => `${ROOTS.SUPERADMIN}/qc/stakeholder/${id}`,
+      stakeholders: `${ROOTS.SUPERADMIN}/qc/stakeholders`,
+      stakeholder: (id) => `${ROOTS.SUPERADMIN}/qc/stakeholders/${id}`,
       new: `${ROOTS.SUPERADMIN}/qc/new`,
       edit: (id) => `${ROOTS.SUPERADMIN}/qc/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/qc/${id}/info`,

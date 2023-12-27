@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+import { Rating } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -20,45 +21,19 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function CountriesTableRow({
+export default function FeedbackRow({
   row,
-  selected,
   onEditRow,
-  onSelectRow,
-  onActivate,
-  onInactivate,
   setFilters,
+  onUnread,
+  onRead,
   filters,
-  showAccounting,
-  showCommunications,
-  showFeedback,
-  showInsurance,
-  showGeneralInfo,
 }) {
   const {
     code,
-    name_english,
-    country,
-    city,
-    identification_num,
-    email,
-    US_type,
-    sector_type,
     status,
-    speciality,
-    subscription_period_months,
-    tax,
-    address,
-    web_page,
-    phone,
-    mobile_num,
-    ip_address,
-    introduction_letter,
-    other_information,
-    users_num,
-    subscriptions,
-    insurance,
-    last_internet_connection,
+    error_code,
+    error_msg,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -69,76 +44,21 @@ export default function CountriesTableRow({
   } = row;
   const popover = usePopover();
   const DDL = usePopover();
-  const details = usePopover();
-  const collapse = useBoolean();
-  const modal = useBoolean();
 
   const renderPrimary = (
-    <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell>
+    <TableRow hover >
       <TableCell>{code}</TableCell>
-      <TableCell>{name_english}</TableCell>
+      <TableCell>{error_code}</TableCell>
+      <TableCell>{error_msg}</TableCell>
       <TableCell>
         <Label
           variant="soft"
           color={
-            (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
+            (status === 'read' && 'success') || (status === 'not read' && 'error') || 'default'
           }
-        >
+          >
           {status}
         </Label>
-      </TableCell>
-      {/* <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-         // textDecoration: 'underline',
-        }}
-        onClick={showGeneralInfo}
-      >
-        General Info
-      </TableCell> */}
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showAccounting}
-      >
-        Accounting
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showCommunications}
-      >
-        Communications
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showFeedback}
-      >
-        Feedback
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showInsurance}
-      >
-        Insurance
       </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -152,36 +72,36 @@ export default function CountriesTableRow({
     <>
       {renderPrimary}
 
-      {/* <DetailsModal row={row} open={modal.value} onClose={modal.onFalse} /> */}
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'active' ? (
+        {status === 'read' ? (
           <MenuItem
             onClick={() => {
-              onInactivate();
-              // popover.onClose();
+              onUnread();
+              popover.onClose();
             }}
             sx={{ color: 'error.main' }}
           >
-            <Iconify icon="ic:baseline-pause" />
-            Inactivate
+            <Iconify icon="fluent:mail-20-filled" />
+            unread
           </MenuItem>
         ) : (
           <MenuItem
             onClick={() => {
-              onActivate();
-              // popover.onClose();
+              onRead();
+              popover.onClose();
             }}
             sx={{ color: 'success.main' }}
           >
-            <Iconify icon="bi:play-fill" />
-            activate
+            <Iconify icon="fluent:mail-read-20-filled" />
+            read
           </MenuItem>
         )}
+
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
@@ -218,18 +138,11 @@ export default function CountriesTableRow({
   );
 }
 
-CountriesTableRow.propTypes = {
-  onSelectRow: PropTypes.func,
+FeedbackRow.propTypes = {
+  onUnread: PropTypes.func,
+  onRead: PropTypes.func,
   setFilters: PropTypes.func,
-  onActivate: PropTypes.func,
-  onInactivate: PropTypes.func,
   onEditRow: PropTypes.func,
-  showAccounting: PropTypes.func,
-  showCommunications: PropTypes.func,
-  showFeedback: PropTypes.func,
-  showInsurance: PropTypes.func,
-  showGeneralInfo: PropTypes.func,
   row: PropTypes.object,
-  selected: PropTypes.bool,
   filters: PropTypes.object,
 };

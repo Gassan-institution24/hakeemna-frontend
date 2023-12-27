@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import Subscriptions from 'src/sections/super-admin/subscriptions/home-page-table';
+import Subscriptions from 'src/sections/super-admin/subscriptions/subscription-table';
 import { useGetUnitservice } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 

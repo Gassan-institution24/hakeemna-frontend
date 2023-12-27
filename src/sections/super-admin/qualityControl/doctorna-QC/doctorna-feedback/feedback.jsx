@@ -40,54 +40,42 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetUSLicenseMovement } from 'src/api/tables'; /// edit
+import { useGetDoctornaFeedbackes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';
-import AccountingRow from './accounting-row'; /// edit
-import TableDetailToolbar from '../table-details-toolbar';
-import TableDetailFiltersResult from '../table-details-filters-result';
+import FeedbackRow from './feedback-row'; /// edit
+import FeedbackToolbar from './feedback-toolbar';
+import TableDetailFiltersResult from './table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
-  // { id: 'unit_service', label: 'Unit Service' },
-  { id: 'free_subscription', label: 'Free Subscription' },
-  { id: 'subscription', label: 'Subscription' },
+  { id: 'title', label: 'Title' },
+  { id: 'Body', label: 'Body' },
+  { id: 'Rate', label: 'Rate' },
   { id: 'status', label: 'Status' },
-  { id: 'Start_date', label: 'Start Date' },
-  { id: 'End_date', label: 'End Date' },
-  { id: 'Users_num', label: 'Users no' },
-  { id: 'price', label: 'Price' },
-  { id: 'Payment_method', label: 'Payment Method' },
-  { id: 'Payment_frequency', label: 'Payment Frequency' },
-  { id: 'notes', label: 'Notes' },
   { id: '', width: 88 },
 ];
 
 const defaultFilters = {
   name: '',
   status: 'all',
+  rate: [],
 };
 
 // ----------------------------------------------------------------------
 const STATUS_OPTIONS = [
   { value: 'all', label: 'All' },
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  // { value: 'public', label: 'public' },
-  // { value: 'privet', label: 'privet' },
-  // { value: 'charity', label: 'charity' },
+  { value: 'read', label: 'Read' },
+  { value: 'not read', label: 'not read' },
 ];
 
-export default function UnitServicesAccountingView({ unitServiceData }) {
+export default function UnitServicesFeedbackView({ unitServiceData }) {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
-
-  const params = useParams();
-  const { id } = params;
 
   const componentRef = useRef();
 
@@ -96,7 +84,7 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
 
   const router = useRouter();
 
-  const { licenseMovements, refetch } = useGetUSLicenseMovement(id);
+  const { feedbackData, refetch } = useGetDoctornaFeedbackes();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -106,17 +94,22 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: licenseMovements,
+    inputData: feedbackData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
   });
 
+  const dataInPage = dataFiltered.slice(
+    table.page * table.rowsPerPage,
+    table.page * table.rowsPerPage + table.rowsPerPage
+  );
+
   const { t } = useTranslate();
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'all' || filters.rate.length > 0;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -154,13 +147,6 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
     [table]
   );
 
-  const handleEditRow = useCallback(
-    (ID) => {
-      router.push(paths.superadmin.unitservices.editAccounting(id, ID)); /// edit
-    },
-    [router, id]
-  );
-
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
@@ -170,38 +156,36 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
     },
     [handleFilters]
   );
-  const unitserviceName = unitServiceData?.name_english;
+
+  const handleRead = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.feedback(id)}/updatestatus`, /// edit
+        data: { status: 'read' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
+  );
+
+  const handleUnread = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.feedback(id)}/updatestatus`, /// edit
+        data: { status: 'not read' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
+  );
+
   return (
     <>
       <Container maxWidth={false}>
-        <CustomBreadcrumbs
-          heading={`${unitserviceName} accounting`} /// edit
-          links={[
-            {
-              name: 'Super',
-              href: paths.superadmin.root,
-            },
-            {
-              name: 'Unit Services',
-              href: paths.superadmin.unitservices.root,
-            },
-            { name: t(`${unitserviceName} accounting`) }, /// edit
-          ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.superadmin.unitservices.newAccounting(id)} /// edit
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New License
-            </Button> /// edit
-          }
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
-        />
-
         <Card>
           <Tabs
             value={filters.status}
@@ -223,22 +207,22 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
                     color={
-                      (tab.value === 'active' && 'success') ||
-                      (tab.value === 'inactive' && 'error') ||
+                      (tab.value === 'read' && 'success') ||
+                      (tab.value === 'not read' && 'error') ||
                       'default'
                     }
                   >
-                    {tab.value === 'all' && licenseMovements.length}
-                    {tab.value === 'active' &&
-                      licenseMovements.filter((order) => order.status === 'active').length}
-                    {tab.value === 'inactive' &&
-                      licenseMovements.filter((order) => order.status === 'inactive').length}
+                    {tab.value === 'all' && feedbackData.length}
+                    {tab.value === 'read' &&
+                      feedbackData.filter((order) => order.status === 'read').length}
+                    {tab.value === 'not read' &&
+                      feedbackData.filter((order) => order.status === 'not read').length}
                   </Label>
                 }
               />
             ))}
           </Tabs>
-          <TableDetailToolbar
+          <FeedbackToolbar
             onPrint={printHandler}
             filters={filters}
             onFilters={handleFilters}
@@ -285,20 +269,22 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <AccountingRow
+                      <FeedbackRow
                         key={row._id}
                         row={row}
                         filters={filters}
                         setFilters={setFilters}
+                        onRead={() => handleRead(row._id)}
+                        onUnread={() => handleUnread(row._id)}
                         // selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
+                        // onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, licenseMovements.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, feedbackData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -326,7 +312,7 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name } = filters;
+  const { status, name, rate } = filters;
 
   const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
@@ -341,30 +327,24 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.free_subscription?.name_english &&
-          data?.free_subscription?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
-        (data?.free_subscription?.name_arabic &&
-          data?.free_subscription?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.subscription?.name_english &&
-          data?.subscription?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.subscription?.name_arabic &&
-          data?.subscription?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.Payment_method?.name_english &&
-          data?.Payment_method?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.Payment_method?.name_arabic &&
-          data?.Payment_method?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.title &&
+          data?.title?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.Body &&
+          data?.Body?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
+    inputData = inputData.filter((feedback) => feedback.status === status);
+  }
+  if (rate.length > 0) {
+    inputData = inputData.filter((feedback) => rate.includes(feedback.Rate));
   }
 
   return inputData;
 }
-UnitServicesAccountingView.propTypes = {
+UnitServicesFeedbackView.propTypes = {
   unitServiceData: PropTypes.object,
 };
