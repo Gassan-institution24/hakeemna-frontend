@@ -95,9 +95,9 @@ export function useNavData() {
             path: paths.superadmin.qualityControl.root,
             icon: <Iconify icon="healthicons:world-care" />,
             children: [
-              { title: t('Doctorna online'), path: paths.superadmin.qualityControl.root },
-              { title: t('unitservices'), path: paths.superadmin.qualityControl.unitservices },
-              { title: t('stakeholders'), path: paths.superadmin.qualityControl.stakeholders},
+              { title: t('Doctorna online'), path: paths.superadmin.qualityControl.doctorna },
+              { title: t('Unit Services'), path: paths.superadmin.qualityControl.unitservices },
+              { title: t('Stakeholders'), path: paths.superadmin.qualityControl.stakeholders},
             ],
           },
           // {

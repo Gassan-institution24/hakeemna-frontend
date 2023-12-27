@@ -108,6 +108,8 @@ export const endpoints = {
     subscription: (id) => `/api/subscription/${id}`,
     feedbacks: '/api/feedback',
     doctornafeedbacks: '/api/feedback/doctorna',
+    USsfeedbacks: '/api/feedback/unitservices',
+    stakeholdersfeedbacks: '/api/feedback/stakeholders',
     USfeedbacks: (id) => `/api/feedback/unitservice/${id}`,
     patientfeedbacks: (id) => `/api/feedback/patient/${id}`,
     stakeholderFeedbacks: (id) => `/api/feedback/stakeholder/${id}`,

@@ -388,6 +388,8 @@ const AdjustableServicesControlHomePage = lazy(() => import('src/pages/super-adm
 
 // QUALITY CONTROL
 const QualityControlHomePage = lazy(() => import('src/pages/super-admin/dashboard/qualityControl/doctornaHome'));
+const QualityControlUnitServicesPage = lazy(() => import('src/pages/super-admin/dashboard/qualityControl/unit-services-QC'));
+const QualityControlStakeholdersPage = lazy(() => import('src/pages/super-admin/dashboard/qualityControl/stakeholders-QC'));
 
 // ----------------------------------------------------------------------
 
@@ -503,8 +505,9 @@ export const dashboardRoutes = [
       {
         path: 'qc',
         children: [
-          { element: <QualityControlHomePage />, index: true },
-          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: 'doctorna', element: <QualityControlHomePage /> },
+          { path: 'unitservices', element: <QualityControlUnitServicesPage /> },
+          { path: 'stakeholders', element: <QualityControlStakeholdersPage /> },
           { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
           { path: 'add', element: <UnitserviceFeedbackPage /> },
         ],

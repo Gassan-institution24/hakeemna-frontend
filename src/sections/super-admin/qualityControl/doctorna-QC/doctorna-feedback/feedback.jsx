@@ -337,10 +337,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
+    inputData = inputData.filter((feedback) => feedback.status === status);
   }
   if (rate.length > 0) {
-    inputData = inputData.filter((order) => rate.includes(order.Rate));
+    inputData = inputData.filter((feedback) => rate.includes(feedback.Rate));
   }
 
   return inputData;
