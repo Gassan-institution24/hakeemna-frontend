@@ -11,10 +11,6 @@ import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import MenuItem from '@mui/material/MenuItem';
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
 import TableContainer from '@mui/material/TableContainer';
 import { RouterLink } from 'src/routes/components';
 
@@ -43,61 +39,54 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+
+import { useGetDoctornaFeedbackes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
-
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-
-import { enqueueSnackbar } from 'notistack';
-import { useGetInsuranceCos } from 'src/api/tables';
 import { useTranslate } from 'src/locales';
-import InsuranceRow from './insurance-row'; /// edit
-import TableDetailToolbar from '../table-details-toolbar';
-import TableDetailFiltersResult from '../table-details-filters-result';
+import FeedbackRow from './feedback-row'; /// edit
+import FeedbackToolbar from './feedback-toolbar';
+import TableDetailFiltersResult from './table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name' },
-  { id: 'type', label: 'Type' },
+  { id: 'title', label: 'Title' },
+  { id: 'Body', label: 'Body' },
+  { id: 'Rate', label: 'Rate' },
   { id: 'status', label: 'Status' },
-  { id: 'webpage', label: 'Webpage' },
-  { id: 'phone', label: 'Phone' },
-  { id: 'address', label: 'Address' },
   { id: '', width: 88 },
 ];
 
 const defaultFilters = {
   name: '',
   status: 'all',
+  rate: [],
 };
 
 // ----------------------------------------------------------------------
 const STATUS_OPTIONS = [
   { value: 'all', label: 'All' },
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  // { value: 'public', label: 'public' },
-  // { value: 'privet', label: 'privet' },
-  // { value: 'charity', label: 'charity' },
+  { value: 'read', label: 'Read' },
+  { value: 'not read', label: 'not read' },
 ];
 
-export default function UnitServicesInsuranceView({ unitServiceData, refetch }) {
+export default function UnitServicesFeedbackView({ unitServiceData }) {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
 
-  const popover = usePopover();
+  const confirmActivate = useBoolean();
+  const confirmInactivate = useBoolean();
+
+  const router = useRouter();
+
+  const { feedbackData, refetch } = useGetDoctornaFeedbackes();
 
   const [filters, setFilters] = useState(defaultFilters);
-
-  const { insuranseCosData } = useGetInsuranceCos();
-  const filteredInsuranceCos = insuranseCosData.filter((company) =>
-    !unitServiceData?.insurance?.some((data) => data._id === company._id)
-  ).filter((data)=>data.status === 'active');
 
   const dateError =
     filters.startDate && filters.endDate
@@ -105,31 +94,31 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: unitServiceData?.insurance,
+    inputData: feedbackData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
   });
 
-  console.log('dataata', unitServiceData);
-  const { t } = useTranslate();
-
-  const dataInPage = dataFiltered?.slice(
+  const dataInPage = dataFiltered.slice(
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
+  const { t } = useTranslate();
+
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'all' || filters.rate.length > 0;
 
-  const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
+  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
+  console.log(unitServiceData);
   const handleDownload = () => {
-    const excelBody = dataFiltered?.reduce((acc, info) => {
+    const excelBody = dataFiltered.reduce((acc, info) => {
       acc.push({
         code: info.code,
         name: info.name_english,
@@ -147,41 +136,6 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
     });
     saveAs(file, 'unitservicesTable.xlsx'); /// edit
   };
-
-  const handleAddRow = useCallback(
-    async (id) => {
-      if (unitServiceData.insurance.some((company) => company._id === id)) {
-        enqueueSnackbar('this company already exist', {
-          variant: 'error',
-        });
-        return;
-      }
-      const info = [...unitServiceData.insurance, id];
-
-      await axiosHandler({
-        method: 'PATCH',
-        path: endpoints.tables.unitservice(unitServiceData?._id), /// to edit
-        data: { insurance: info },
-      });
-      refetch();
-      table.onUpdatePageDeleteRow(dataInPage?.length);
-    },
-    [dataInPage?.length, table, refetch, unitServiceData?._id, unitServiceData?.insurance]
-  );
-  const handleDeleteRow = useCallback(
-    async (id) => {
-      const info = unitServiceData?.insurance?.filter((company) => company?._id !== id);
-      await axiosHandler({
-        method: 'PATCH',
-        path: endpoints.tables.unitservice(unitServiceData?._id), /// to edit
-        data: { insurance: info },
-      });
-      refetch();
-      table.onUpdatePageDeleteRow(dataInPage?.length);
-    },
-    [dataInPage?.length, table, refetch, unitServiceData?._id, unitServiceData?.insurance]
-  );
-
   const handleFilters = useCallback(
     (name, value) => {
       table.onResetPage();
@@ -202,38 +156,36 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
     },
     [handleFilters]
   );
-  const unitserviceName = unitServiceData?.name_english;
+
+  const handleRead = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.feedback(id)}/updatestatus`, /// edit
+        data: { status: 'read' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
+  );
+
+  const handleUnread = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.feedback(id)}/updatestatus`, /// edit
+        data: { status: 'not read' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
+  );
+
   return (
     <>
       <Container maxWidth={false}>
-        <CustomBreadcrumbs
-          heading={`${unitserviceName} Insurance`} /// edit
-          links={[
-            {
-              name: 'Super',
-              href: paths.superadmin.root,
-            },
-            {
-              name: 'Unit Services',
-              href: paths.superadmin.unitservices.root,
-            },
-            { name: t(`${unitserviceName} Insurance`) }, /// edit
-          ]}
-          action={
-            <Button
-              component={RouterLink}
-              onClick={popover.onOpen}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Insurance
-            </Button> /// edit
-          }
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
-        />
-
         <Card>
           <Tabs
             value={filters.status}
@@ -255,24 +207,22 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
                     color={
-                      (tab.value === 'active' && 'success') ||
-                      (tab.value === 'inactive' && 'error') ||
+                      (tab.value === 'read' && 'success') ||
+                      (tab.value === 'not read' && 'error') ||
                       'default'
                     }
                   >
-                    {tab.value === 'all' && unitServiceData?.insurance?.length}
-                    {tab.value === 'active' &&
-                      unitServiceData?.insurance.filter((order) => order.status === 'active')
-                        .length}
-                    {tab.value === 'inactive' &&
-                      unitServiceData?.insurance.filter((order) => order.status === 'inactive')
-                        .length}
+                    {tab.value === 'all' && feedbackData.length}
+                    {tab.value === 'read' &&
+                      feedbackData.filter((order) => order.status === 'read').length}
+                    {tab.value === 'not read' &&
+                      feedbackData.filter((order) => order.status === 'not read').length}
                   </Label>
                 }
               />
             ))}
           </Tabs>
-          <TableDetailToolbar
+          <FeedbackToolbar
             onPrint={printHandler}
             filters={filters}
             onFilters={handleFilters}
@@ -289,7 +239,7 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
               //
               onResetFilters={handleResetFilters}
               //
-              results={dataFiltered?.length}
+              results={dataFiltered.length}
               sx={{ p: 2.5, pt: 0 }}
             />
           )}
@@ -301,42 +251,40 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered?.length}
+                  rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   // onSelectAllRows={(checked) =>
                   //   table.onSelectAllRows(
                   //     checked,
-                  //     dataFiltered?.map((row) => row._id)
+                  //     dataFiltered.map((row) => row._id)
                   //   )
                   // }
                 />
 
                 <TableBody>
                   {dataFiltered
-                    ?.slice(
+                    .slice(
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    ?.map((row) => (
-                      <InsuranceRow
-                        key={row?._id}
+                    .map((row) => (
+                      <FeedbackRow
+                        key={row._id}
                         row={row}
                         filters={filters}
                         setFilters={setFilters}
+                        onRead={() => handleRead(row._id)}
+                        onUnread={() => handleUnread(row._id)}
                         // selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row?._id)}
-                        onDeleteRow={() => handleDeleteRow(row?._id)}
+                        onSelectRow={() => table.onSelectRow(row._id)}
+                        // onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(
-                      table.page,
-                      table.rowsPerPage,
-                      unitServiceData?.insurance.length
-                    )}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, feedbackData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -346,7 +294,7 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered?.length}
+            count={dataFiltered.length}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
@@ -357,23 +305,6 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
           />
         </Card>
       </Container>
-      <CustomPopover open={popover.open} onClose={popover.onClose} arrow="right-top">
-        <div
-          style={{
-            maxHeight: '150px',
-            overflowY: 'auto',
-            scrollbarWidth: 'thin',
-            scrollbarColor: 'darkgray lightgray',
-          }}
-        >
-          {filteredInsuranceCos?.map((company) => (
-            <MenuItem onClick={() => handleAddRow(company._id)}>
-              {/* <Iconify icon="ic:baseline-add" /> */}
-              {company?.name_english}
-            </MenuItem>
-          ))}
-        </div>
-      </CustomPopover>
     </>
   );
 }
@@ -381,7 +312,7 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name } = filters;
+  const { status, name, rate } = filters;
 
   const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
@@ -391,19 +322,15 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis?.map((el) => el[0]);
+  inputData = stabilizedThis.map((el) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.name_english &&
-          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.name_arabic &&
-          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.type?.name_english &&
-          data?.type?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.type?.name_arabic &&
-          data?.type?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.title &&
+          data?.title?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.Body &&
+          data?.Body?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
@@ -412,10 +339,12 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (status !== 'all') {
     inputData = inputData.filter((order) => order.status === status);
   }
+  if (rate.length > 0) {
+    inputData = inputData.filter((order) => rate.includes(order.Rate));
+  }
 
   return inputData;
 }
-UnitServicesInsuranceView.propTypes = {
+UnitServicesFeedbackView.propTypes = {
   unitServiceData: PropTypes.object,
-  refetch: PropTypes.func,
 };

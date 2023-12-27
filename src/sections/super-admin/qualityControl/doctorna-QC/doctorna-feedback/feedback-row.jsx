@@ -25,6 +25,8 @@ export default function FeedbackRow({
   row,
   onEditRow,
   setFilters,
+  onUnread,
+  onRead,
   filters,
 }) {
   const {
@@ -39,6 +41,10 @@ export default function FeedbackRow({
     created_at,
     user_creation,
     ip_address_user_creation,
+    updated_at,
+    user_modification,
+    ip_address_user_modification,
+    modifications_nums,
   } = row;
   const popover = usePopover();
   const DDL = usePopover();
@@ -46,25 +52,22 @@ export default function FeedbackRow({
   const renderPrimary = (
     <TableRow hover >
       <TableCell>{code}</TableCell>
-      <TableCell onClick={()=>setFilters({...filters,name:department?.name_english})}>{department?.name_english}</TableCell>
-      <TableCell onClick={()=>setFilters({...filters,name:appointment?.name_english})}>{appointment?.name_english}</TableCell>
-      <TableCell onClick={()=>setFilters({...filters,name:doctor?.name_english})}>{doctor?.name_english}</TableCell>
       <TableCell>{title}</TableCell>
+      <TableCell>{Body}</TableCell>
+      <TableCell ><Rating size="small" readOnly value={Rate} precision={0.1} max={5} /></TableCell>
       <TableCell>
         <Label
           variant="soft"
           color={
-            (status === 'read' && 'success') || (status === 'unread' && 'error') || 'default'
+            (status === 'read' && 'success') || (status === 'not read' && 'error') || 'default'
           }
           >
           {status}
         </Label>
       </TableCell>
-      <TableCell>{Body}</TableCell>
-      <TableCell ><Rating size="small" readOnly value={Rate} precision={0.1} max={5} /></TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={DDL.onOpen}>
-        <Iconify icon="carbon:data-quality-definition" />
+        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+          <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
       </TableCell>
     </TableRow>
@@ -73,6 +76,43 @@ export default function FeedbackRow({
   return (
     <>
       {renderPrimary}
+
+      <CustomPopover
+        open={popover.open}
+        onClose={popover.onClose}
+        arrow="right-top"
+        sx={{ width: 140 }}
+      >
+        {status === 'read' ? (
+          <MenuItem
+            onClick={() => {
+              onUnread();
+              popover.onClose();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="fluent:mail-20-filled" />
+            unread
+          </MenuItem>
+        ) : (
+          <MenuItem
+            onClick={() => {
+              onRead();
+              popover.onClose();
+            }}
+            sx={{ color: 'success.main' }}
+          >
+            <Iconify icon="fluent:mail-read-20-filled" />
+            read
+          </MenuItem>
+        )}
+
+        <MenuItem onClick={DDL.onOpen}>
+          <Iconify icon="carbon:data-quality-definition" />
+          DDL
+        </MenuItem>
+      </CustomPopover>
+
       <CustomPopover
         open={DDL.open}
         onClose={DDL.onClose}
@@ -86,14 +126,26 @@ export default function FeedbackRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
+
         <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
-        <Box sx={{ pb: 1 }}>{ip_address_user_creation}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
+          {ip_address_user_modification}
+        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
       </CustomPopover>
     </>
   );
 }
 
 FeedbackRow.propTypes = {
+  onUnread: PropTypes.func,
+  onRead: PropTypes.func,
   setFilters: PropTypes.func,
   onEditRow: PropTypes.func,
   row: PropTypes.object,
