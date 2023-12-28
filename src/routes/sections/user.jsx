@@ -93,7 +93,7 @@ export const userRoutes = [
           { element: <UserProfilePage />, index: true },
           { path: 'profile', element: <UserProfilePage /> },
           // { path: 'ecommerce', element: <OverviewEcommercePage /> },
-          { path: 'list', element: <UserListPage /> },
+          { path: 'medicins', element: <UserListPage /> },
           { path: 'appointments', element: <UserAppointmentsPage /> },
           { path: 'new', element: <UserCreatePage /> },
           { path: ':id/edit', element: <UserEditPage /> },
