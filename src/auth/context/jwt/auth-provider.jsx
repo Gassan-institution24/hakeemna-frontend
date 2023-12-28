@@ -106,20 +106,25 @@ export function AuthProvider({ children }) {
 
     const response = await axios.post(endpoints.auth.login, data);
 
-    const { accessToken, user } = response.data;
+    const { accessToken, user ,message } = response.data;
 
-    setSession(accessToken);
-
-    dispatch({
-      type: 'LOGIN',
-      payload: {
-        user: {
-          ...user,
-          accessToken,
+    if(accessToken && user){
+      setSession(accessToken);
+  
+      dispatch({
+        type: 'LOGIN',
+        payload: {
+          user: {
+            ...user,
+            accessToken,
+          },
         },
-      },
-    });
-  }, []);
+      });
+      initialize()
+    }
+    else throw new Error(message);
+
+  }, [initialize]);
 
   // REGISTER
   const register = useCallback(async (data) => {
@@ -140,7 +145,8 @@ export function AuthProvider({ children }) {
         },
       },
     });
-  }, []);
+    initialize()
+  }, [initialize]);
   // const registerAsUS = useCallback(async (info) => {
   //   const data = {
   //     email:info.email,
@@ -185,12 +191,12 @@ export function AuthProvider({ children }) {
 
   // FORGOT PASSWORD
   const forgotPassword = useCallback(async (email) => {
-    // await Auth.forgotPassword(email);
+    await axios.post(endpoints.auth.forgotpassword, {email});
   }, []);
 
   // NEW PASSWORD
-  const newPassword = useCallback(async (email, code, password) => {
-    // await Auth.forgotPasswordSubmit(email, code, password);
+  const newPassword = useCallback(async (email, code, password,confirmPassword) => {
+     await axios.patch(endpoints.auth.resetpassword, {email,resetToken:code,password,confirmPassword});
   }, []);
 
   // LOGOUT

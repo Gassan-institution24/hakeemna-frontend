@@ -66,19 +66,19 @@ export default function JwtLoginView() {
       router.push(returnTo || PATH_AFTER_LOGIN);
     } catch (error) {
       console.error(error);
-      reset();
+      // reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
-      <Typography variant="h4">Sign in to Minimal</Typography>
+      <Typography variant="h4">Sign in to Doctorna</Typography>
 
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">New user?</Typography>
 
-        <Link component={RouterLink} href={paths.auth.jwt.register} variant="subtitle2">
+        <Link component={RouterLink} href={paths.auth.register} variant="subtitle2">
           Create an account
         </Link>
       </Stack>
@@ -106,7 +106,14 @@ export default function JwtLoginView() {
         }}
       />
 
-      <Link variant="body2" component={RouterLink} href={paths.auth.jwt.forgotPassword} color="inherit" underline="always" sx={{ alignSelf: 'flex-end' }}>
+      <Link
+        variant="body2"
+        component={RouterLink}
+        href={paths.auth.forgotPassword}
+        color="inherit"
+        underline="always"
+        sx={{ alignSelf: 'flex-end' }}
+      >
         Forgot password?
       </Link>
 

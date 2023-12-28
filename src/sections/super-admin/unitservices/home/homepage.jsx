@@ -53,7 +53,7 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'Name' },
   { id: 'status', label: 'Status' },
-  //   { id: 'General-info', label: 'General Info' },
+  { id: 'General-info', label: 'General Info' },
   { id: 'Accounting', label: 'Accounting' },
   { id: 'Communications', label: 'Communications' },
   { id: 'Feedback', label: 'Feedback' },
@@ -234,7 +234,7 @@ export default function UnitServicesTableView() {
   );
   const handleShowGeneralInfoRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.unitservices.root); /// edit
+      router.push(paths.superadmin.unitservices.info(id)); /// edit
     },
     [router]
   );
@@ -421,7 +421,7 @@ export default function UnitServicesTableView() {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row._id)}
-                        showGeneralInfo={handleShowGeneralInfoRow}
+                        showGeneralInfo={()=>handleShowGeneralInfoRow(row._id)}
                         showAccounting={() => handleShowAccountingRow(row._id)}
                         showCommunications={() => handleShowCommunicationsRow(row._id)}
                         showFeedback={() => handleShowFeedbacksRow(row._id)}

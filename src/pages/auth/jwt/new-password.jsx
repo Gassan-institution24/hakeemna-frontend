@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { JwtNewPasswordView } from 'src/sections/auth/jwt';
+import { JwtNewPasswordView } from 'src/sections/auth';
 
 // ----------------------------------------------------------------------
 

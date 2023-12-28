@@ -183,7 +183,7 @@ export default function HomeHero() {
             textAlign: 'center',
           }}
         >
-          Keep in  <br />
+          Keep in <br />
           Health with
         </Typography>
       </m.div>
@@ -204,11 +204,10 @@ export default function HomeHero() {
 
       <m.div variants={varFade().in}>
         <Typography variant="body2" sx={{ textAlign: 'center' }}>
-            The most extensive assembly of healthcare providers and recipients.
+          The most extensive assembly of healthcare providers and recipients.
         </Typography>
       </m.div>
-      <br/>
-
+      <br />
 
       <m.div variants={varFade().in}>
         <Stack spacing={1.5} direction={{ xs: 'column-reverse', sm: 'row' }} sx={{ mb: 5 }}>
@@ -219,7 +218,7 @@ export default function HomeHero() {
             startIcon={<Iconify icon="eva:external-link-fill" width={24} />}
             target="_blank"
             rel="noopener"
-            href={paths.auth.jwt.register}
+            href={paths.auth.register}
             sx={{ borderColor: 'text.primary' }}
           >
             Get Started
@@ -228,16 +227,13 @@ export default function HomeHero() {
       </m.div>
 
       <Stack spacing={3} sx={{ textAlign: 'center' }}>
-   
-            <m.div variants={varFade().in}>
-                <Iconify icon='noto:hospital'   width={30} sx={{ m: 0.5 }}/>
-                <Iconify icon='solar:health-broken' color='green' width={30} sx={{ m: 0.5 }}/>
-                <Iconify icon='ri:mental-health-line' color='lightblue' width={30} sx={{ m: 0.5 }}/>
-                <Iconify icon='pajamas:status-health' color='red' width={30} sx={{ m: 0.5 }}/>
-                <Iconify icon='icon-park:medicine-bottle'  width={30} sx={{ m: 0.5 }}/>
-            </m.div>
-        
-     
+        <m.div variants={varFade().in}>
+          <Iconify icon="noto:hospital" width={30} sx={{ m: 0.5 }} />
+          <Iconify icon="solar:health-broken" color="green" width={30} sx={{ m: 0.5 }} />
+          <Iconify icon="ri:mental-health-line" color="lightblue" width={30} sx={{ m: 0.5 }} />
+          <Iconify icon="pajamas:status-health" color="red" width={30} sx={{ m: 0.5 }} />
+          <Iconify icon="icon-park:medicine-bottle" width={30} sx={{ m: 0.5 }} />
+        </m.div>
       </Stack>
     </Stack>
   );
@@ -272,7 +268,7 @@ export default function HomeHero() {
           src='https://i.pinimg.com/originals/b8/23/e3/b823e38cc01fdb9278b6f7faa2feda6d.gif'
           sx={{ position: 'absolute', mt: -5 }}
         /> */}
-       {/* 
+        {/* 
         <Box
           component={m.img}
           animate={{ y: ['-100%', '0%'] }}
@@ -288,12 +284,12 @@ export default function HomeHero() {
         variants={varFade().in}
         sx={{ width: 720, position: 'relative', ml: -5 }}
       >
-         <Box
+        <Box
           component={m.img}
           animate={{ y: ['100%', '0%'] }}
           transition={transition}
           alt={lightMode ? 'light_2' : 'dark_2'}
-          src='https://cdn.dribbble.com/users/3726898/screenshots/15468954/media/b3a0f8865b485187e200839facdc22ac.gif'
+          src="https://cdn.dribbble.com/users/3726898/screenshots/15468954/media/b3a0f8865b485187e200839facdc22ac.gif"
           sx={{ position: 'absolute', mt: -5 }}
         />
         <Box
@@ -301,15 +297,15 @@ export default function HomeHero() {
           animate={{ y: ['0%', '-100%'] }}
           transition={transition}
           alt={lightMode ? 'light_2' : 'dark_2'}
-          src='https://cdn.dribbble.com/users/856306/screenshots/4120104/medical_building_800x600.gif'
+          src="https://cdn.dribbble.com/users/856306/screenshots/4120104/medical_building_800x600.gif"
           sx={{ position: 'absolute' }}
-        /> 
-                <Box
+        />
+        <Box
           component={m.img}
           animate={{ y: ['0%', '-100%'] }}
           transition={transition}
           alt={lightMode ? 'light_2' : 'dark_2'}
-          src='https://cdn.dribbble.com/users/856306/screenshots/4120104/medical_building_800x600.gif'
+          src="https://cdn.dribbble.com/users/856306/screenshots/4120104/medical_building_800x600.gif"
           sx={{ position: 'absolute' }}
         />
       </Stack>

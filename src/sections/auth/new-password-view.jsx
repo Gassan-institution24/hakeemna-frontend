@@ -22,6 +22,7 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFCode, RHFTextField } from 'src/components/hook-form';
+import { useSnackbar } from 'src/components/snackbar';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +32,8 @@ export default function NewPasswordView() {
   const router = useRouter();
 
   const searchParams = useSearchParams();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const email = searchParams.get('email');
 
@@ -72,11 +75,13 @@ export default function NewPasswordView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await newPassword?.(data.email, data.code, data.password);
+      await newPassword?.(data.email, data.code, data.password, data.confirmPassword);
 
-      router.push(paths.auth.amplify.login);
+      router.push(paths.auth.login);
+      enqueueSnackbar('Password has changed successfully!');
     } catch (error) {
       console.error(error);
+      enqueueSnackbar(error.message, { variant: 'error' });
     }
   });
 
@@ -159,7 +164,7 @@ export default function NewPasswordView() {
 
       <Link
         component={RouterLink}
-        href={paths.auth.amplify.login}
+        href={paths.auth.login}
         color="inherit"
         variant="subtitle2"
         sx={{

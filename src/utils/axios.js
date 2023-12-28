@@ -139,6 +139,8 @@ export const endpoints = {
     me: '/api/auth/me',
     login: '/api/auth/login',
     register: '/api/auth/signup',
+    forgotpassword: '/api/auth/forgotpassword',
+    resetpassword: '/api/auth/resetpassword',
   },
   mail: {
     list: '/api/mail/list',
