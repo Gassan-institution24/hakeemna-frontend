@@ -292,7 +292,7 @@ export function useNavData() {
       return unitServicesItems;
     }
     return [...userItems];
-  }, [t, user, handleLogout]);
+  }, [t, user, handleLogout,router]);
 
   return data;
 }
