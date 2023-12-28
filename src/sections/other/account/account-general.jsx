@@ -40,17 +40,7 @@ export default function AccountGeneral() {
     sport_exercises: Yup.string(),
     smoking: Yup.string(),
   });
-  const DATAFORMAP = [
-    {
-      value: 'not smoker',
-    },
-    {
-      value: 'light smoker',
-    },
-    {
-      value: 'heavy smoker',
-    },
-  ];
+  const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
 
   const handleCountryChange = (event) => {
@@ -232,7 +222,7 @@ export default function AccountGeneral() {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                 {SECDATAFORMAP.map((test) => (
+                {SECDATAFORMAP.map((test) => (
                   <MenuItem value={test} key={test}>
                     {test}
                   </MenuItem>
@@ -247,8 +237,8 @@ export default function AccountGeneral() {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {DATAFORMAP.map((test) => (
-                  <MenuItem value={test.value} key={test._id}>
-                    {test.value}
+                  <MenuItem value={test} key={test._id}>
+                    {test}
                   </MenuItem>
                 ))}
               </RHFSelect>

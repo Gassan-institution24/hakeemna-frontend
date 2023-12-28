@@ -26,11 +26,8 @@ import { useSettingsContext } from 'src/components/settings';
 // ----------------------------------------------------------------------
 
 export default function FinishedAppoinment({ user }) {
-  const theme = useTheme();
+const theme = useTheme();
 const {appointmentsData} = useGetPatientAppointments(user)
-
-
-
 
 const finishedAppointments = appointmentsData.filter(
   (info) => info.status === 'finished'

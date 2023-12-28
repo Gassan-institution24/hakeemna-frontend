@@ -10,15 +10,17 @@ import Box from '@mui/material/Box';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import { useGetPatient } from 'src/api/tables';
-import Appoinment from './apointments';
-import FinishedAppoinment from './apointmentsfinished';
-import AppointmentBooking from './apointmentsbooking';
+// import Appoinment from './apointments';
+import Appoinment from '../apointments';
+import FinishedAppoinment from '../apointmentsfinished';
+import AppointmentBooking from '../apointmentsbooking';
+import Prescriptions from '../prescriptions';
 // ----------------------------------------------------------------------
 const TABS = [
   {
-    value: 'My Appointments',
-    label: 'My Appointments',
-    icon: <Iconify icon="solar:user-id-bold" width={24} />,
+    value: 'Prescriptions',
+    label: 'Prescriptions',
+    icon: <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />,
   },
   {
     value: 'BookAppointment',
@@ -31,7 +33,7 @@ const TABS = [
 export default function UserCardList() {
   const { user } = useAuthContext();
   const settings = useSettingsContext();
-  const [currentTab, setCurrentTab] = useState('My Appointments');
+  const [currentTab, setCurrentTab] = useState('Prescriptions');
   const { data } = useGetPatient(user.patient._id);
   
   const handleChangeTab = useCallback((event, newValue) => {
@@ -69,34 +71,19 @@ export default function UserCardList() {
         </Tabs>
       </Card>
 
-      {currentTab === 'My Appointments' && (
-        <>
-          <h3>test</h3>
+      {currentTab === 'Prescriptions' && (
           <Box
             gap={3}
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
               sm: 'repeat(2, 1fr)',
-              md: 'repeat(3, 1fr)',
+              md: 'repeat(1, 1fr)',
             }}
+            sx={{width:'100%'}}
           >
-            <Appoinment user={user.patient._id} />
+            <Prescriptions user={user.patient._id} />
           </Box>
-          <hr />
-          <h3>test</h3>
-          <Box
-            gap={3}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              sm: 'repeat(2, 1fr)',
-              md: 'repeat(3, 1fr)',
-            }}
-          >
-            <FinishedAppoinment user={user.patient._id} />
-          </Box>
-        </>
       )}
 
       {currentTab === 'BookAppointment' && <AppointmentBooking patientData={data} />}

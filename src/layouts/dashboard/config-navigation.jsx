@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react';
 
 import { paths } from 'src/routes/paths';
-
+import { HOST_API } from 'src/config-global';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useRouter } from 'src/routes/hooks';
@@ -16,8 +16,22 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export function useNavData() {
   const router = useRouter();
+  const { logout } = useAuthContext();
+  const popover = usePopover();
+  const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslate();
   const { user } = useAuthContext();
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await logout();
+      popover.onClose();
+      // router, router.replace('/');
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Unable to logout!', { variant: 'error' });
+    }
+  }, [logout, popover, enqueueSnackbar]);
 
   const data = useMemo(() => {
     const superAdminItems = [
@@ -96,7 +110,7 @@ export function useNavData() {
             children: [
               { title: t('Doctorna online'), path: paths.superadmin.qualityControl.doctorna },
               { title: t('Unit Services'), path: paths.superadmin.qualityControl.unitservices },
-              { title: t('Stakeholders'), path: paths.superadmin.qualityControl.stakeholders},
+              { title: t('Stakeholders'), path: paths.superadmin.qualityControl.stakeholders },
             ],
           },
           // {
@@ -220,7 +234,7 @@ export function useNavData() {
           // USER
           {
             title: t('profile'),
-            path: paths.dashboard.user.root,
+            path: paths.dashboard.user.profile,
             icon: <Iconify icon="iconamoon:profile-bold" />,
           },
           {
@@ -244,9 +258,9 @@ export function useNavData() {
             icon: <Iconify icon="ic:round-contact-support" />,
           },
           {
-            title: t('my medicines'),
-            path: paths.dashboard.user.list,
-            icon: <Iconify icon="game-icons:medicines" />,
+            title: t('prescriptions'),
+            path: paths.dashboard.user.medicins,
+            icon: <Iconify icon="material-symbols-light:prescriptions-outline" />,
           },
           {
             title: t('Financial movements'),
@@ -260,8 +274,9 @@ export function useNavData() {
           },
           {
             title: t('logout'),
-            path: '#',
             icon: <Iconify icon="tabler:logout" />,
+            onClick: handleLogout,
+            path: '/',
           },
         ],
       },
@@ -277,7 +292,7 @@ export function useNavData() {
       return unitServicesItems;
     }
     return [...userItems];
-  }, [t, user,router]);
+  }, [t, user, handleLogout]);
 
   return data;
 }
