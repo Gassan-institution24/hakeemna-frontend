@@ -37,11 +37,6 @@ export default function AccountBillingPlan({ cardList, addressBook}) {
       label: 'Book Appointment',
       icon: <Iconify icon="icon-park-outline:medicine-chest" width={24} />,
     },
-    {
-      value: 'medicalreport',
-      label: 'Medical Report',
-      icon: <Iconify icon="tabler:report-medical" width={24} />,
-    },
   ];
 
   // const primaryAddress = addressBook.filter((address) => address.primary)[0];
@@ -218,7 +213,6 @@ llppp
         selected={(selectedId) => selectedCard?.id === selectedId}
         onSelect={handleSelectCard}
       /> */}
-lllghj
       {/* <AddressListDialog
         list={addressBook}
         open={openAddress.value}
