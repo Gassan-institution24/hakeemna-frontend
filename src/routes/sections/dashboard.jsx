@@ -298,6 +298,9 @@ const UnitserviceFeedbackPage = lazy(() =>
 const UnitserviceInsurancePage = lazy(() =>
   import('src/pages/super-admin/dashboard/unitservices/insurance/insurance')
 );
+const UnitServiceInfoPage = lazy(() =>
+  import('src/pages/super-admin/dashboard/unitservices/info')
+);
 
 // PATIENTS
 const PatientsHomePage = lazy(() => import('src/pages/super-admin/dashboard/patients/home'));
@@ -421,6 +424,7 @@ export const dashboardRoutes = [
               { path: ':acid/edit', element: <UnitserviceEditAccountingPage /> },
             ],
           },
+          { path: ':id/info', element: <UnitServiceInfoPage /> },
           { path: ':id/insurance', element: <UnitserviceInsurancePage /> },
           { path: ':id/communications', element: <UnitserviceCommunicationsPage /> },
           { path: ':id/feedback', element: <UnitserviceFeedbackPage /> },

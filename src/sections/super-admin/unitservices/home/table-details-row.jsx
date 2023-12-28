@@ -106,6 +106,16 @@ export default function CountriesTableRow({
           color: '#3F54EB',
           // textDecoration: 'underline',
         }}
+        onClick={showGeneralInfo}
+      >
+        General Info
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
+        }}
         onClick={showAccounting}
       >
         Accounting

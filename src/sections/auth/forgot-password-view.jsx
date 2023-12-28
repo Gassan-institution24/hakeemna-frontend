@@ -16,11 +16,13 @@ import { PasswordIcon } from 'src/assets/icons';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { useSnackbar } from 'src/components/snackbar';
 
 // ----------------------------------------------------------------------
 
 export default function ForgotPasswordView() {
   const { forgotPassword } = useAuthContext();
+  const { enqueueSnackbar } = useSnackbar();
 
   const router = useRouter();
 
@@ -50,10 +52,11 @@ export default function ForgotPasswordView() {
         email: data.email,
       }).toString();
 
-      const href = `${paths.auth.jwt.newPassword}?${searchParams}`;
+      const href = `${paths.auth.newPassword}?${searchParams}`;
       router.push(href);
     } catch (error) {
       console.error(error);
+      enqueueSnackbar(error, { variant: 'error' });
     }
   });
 
@@ -73,7 +76,7 @@ export default function ForgotPasswordView() {
 
       <Link
         component={RouterLink}
-        href={paths.auth.jwt.login}
+        href={paths.auth.login}
         color="inherit"
         variant="subtitle2"
         sx={{

@@ -20,17 +20,8 @@ const NewPasswordPage = lazy(() => import('src/pages/auth/jwt/new-password'));
 
 // ----------------------------------------------------------------------
 
-const authJwt = {
-  path: 'jwt',
-  element: (
-    <GuestGuard>
-      <Suspense fallback={<SplashScreen />}>
-        <Outlet />
-      </Suspense>
-    </GuestGuard>
-  ),
-  children: [
-    {
+export const authRoutes = 
+    [{
       path: 'login',
       element: (
         <AuthClassicLayout>
@@ -68,18 +59,17 @@ const authJwt = {
           <Outlet />
         </CompactLayout>
       ),
-      // children: [
-      //   { path: 'verify', element: <VerifyPage /> },
-      //   { path: 'new-password', element: <NewPasswordPage /> },
-      //   { path: 'forgot-password', element: <ForgetPasswordPage /> },
-      // ],
+      children: [
+        { path: 'verify', element: <VerifyPage /> },
+        { path: 'new-password', element: <NewPasswordPage /> },
+        { path: 'forgot-password', element: <ForgetPasswordPage /> },
+      ],
     },
-  ],
-};
+  ]
 
-export const authRoutes = [
-  {
-    path: 'auth',
-    children: [authJwt],
-  },
-];
+// export const authRoutes = [
+//   {
+//     path: 'auth',
+//     children: [authJwt],
+//   },
+// ];

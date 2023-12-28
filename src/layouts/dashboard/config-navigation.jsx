@@ -4,12 +4,13 @@ import { paths } from 'src/routes/paths';
 import { HOST_API } from 'src/config-global';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useRouter } from 'src/routes/hooks';
+
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useRouter } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -153,6 +154,78 @@ export function useNavData() {
         ],
       },
     ];
+    const unitServicesItems = [
+      {
+        subheader: t('overview'),
+        items: [
+          // {
+          //   title: t('app'),
+          //   path: paths.dashboard.root,
+          //   icon: ICONS.dashboard,
+          // },
+          {
+            title: t('management tables/rooms/appotypes'),
+            path: paths.superadmin.tables.root,
+            icon: <Iconify icon="icon-park-twotone:data" />,
+          },
+          {
+            title: t('Subscriptions'),
+            path: paths.superadmin.tables.root,
+            icon: <Iconify icon="icon-park-twotone:data" />,
+          },
+          {
+            title: t('Accounting'),
+            path: paths.superadmin.unitservices.root,
+            icon: <Iconify icon="fa-solid:clinic-medical" />,
+          },
+          {
+            title: t('Appointments'),
+            path: paths.superadmin.patients.root,
+            icon: <Iconify icon="iconamoon:profile-bold" />,
+          },
+          {
+            title: t('Profile'),
+            path: paths.superadmin.stakeholders.root,
+            icon: <Iconify icon="material-symbols:sell-sharp" />,
+          },
+          {
+            title: t('Insurance'),
+            path: paths.superadmin.accounting.root,
+            icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
+          },
+          {
+            title: t('Feedback'),
+            path: paths.superadmin.statistics.root,
+            icon: <Iconify icon="akar-icons:statistic-up" />,
+          },
+          {
+            title: t('suppliers offers'),
+            path: paths.superadmin.subscriptions.root,
+            icon: <Iconify icon="eos-icons:activate-subscriptions" />,
+          },
+          {
+            title: t('communications'),
+            path: paths.superadmin.communication.root,
+            icon: <Iconify icon="solar:call-chat-bold" />,
+          },
+          {
+            title: t('employees'),
+            path: paths.superadmin.accessControlList.root,
+            icon: <Iconify icon="mdi:user-access-control" />,
+          },
+          {
+            title: t('appointments'),
+            path: paths.superadmin.customersTraining.root,
+            icon: <Iconify icon="mdi:teach" />,
+          },
+          {
+            title: t('quality control'),
+            path: paths.superadmin.qualityControl.root,
+            icon: <Iconify icon="healthicons:world-care" />,
+          },
+        ],
+      },
+    ];
 
     const userItems = [
       {
@@ -209,14 +282,17 @@ export function useNavData() {
       },
     ];
 
-    if (user.role === 'superadmin') {
+    if(!user){
+      router.replace('/');
+    }
+    if (user?.role === 'superadmin') {
       return superAdminItems;
     }
-    if (user.role === 'admin') {
-      return [...superAdminItems];
+    if (user?.role === 'admin') {
+      return unitServicesItems;
     }
     return [...userItems];
-  }, [t, user, handleLogout]);
+  }, [t, user, handleLogout,router]);
 
   return data;
 }

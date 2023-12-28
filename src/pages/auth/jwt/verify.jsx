@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { JwtVerifyView } from 'src/sections/auth/jwt';
+import { JwtVerifyView } from 'src/sections/auth';
 
 // ----------------------------------------------------------------------
 
@@ -14,4 +14,4 @@ export default function VerifyPage() {
       <JwtVerifyView />
     </>
   );
-} 
+}
