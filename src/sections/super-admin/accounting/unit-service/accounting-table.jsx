@@ -44,7 +44,7 @@ import {
 } from 'src/components/table';
 import { useGetUSLicenseMovement } from 'src/api/tables';
 
-import TableAnalytic from '../../patients/history/table-analytic'; 
+import TableAnalytic from '../../patients/history/table-analytic';
 import AccountingTableRow from './accounting-table-row';
 import MovementTableToolbar from './accounting-table-toolbar';
 import MovementTableFiltersResult from './accounting-filters-result';
@@ -73,7 +73,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function USlicenseMovementView({unitServiceData}) {
+export default function USlicenseMovementView({ unitServiceData }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -85,8 +85,8 @@ export default function USlicenseMovementView({unitServiceData}) {
   // const confirm = useBoolean();
 
   const { licenseMovements, refetch } = useGetUSLicenseMovement(unitServiceData._id);
-  console.log('licenseMovements',unitServiceData._id)
-  console.log('licenseMovements',licenseMovements)
+  console.log('licenseMovements', unitServiceData._id);
+  console.log('licenseMovements', licenseMovements);
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -201,9 +201,9 @@ export default function USlicenseMovementView({unitServiceData}) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.accounting.unitservice.edit(unitServiceData._id,id));
+      router.push(paths.superadmin.accounting.unitservice.edit(unitServiceData._id, id));
     },
-    [router,unitServiceData._id]
+    [router, unitServiceData._id]
   );
 
   const handleViewRow = useCallback(
@@ -227,33 +227,35 @@ export default function USlicenseMovementView({unitServiceData}) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-        heading='Accounting'
-        links={[
-          {
-            name: 'Dashboard',
-            href: paths.superadmin.root,
-          },
-          {
-            name: 'Accounting',
-            href: paths.superadmin.accounting.root,
-          },
-          {
-            name: `${unitServiceData?.name_english || 'Unit Service'} Accounting`,
-          },
-        ]}
-        action={
-          <Button
-            component={RouterLink}
-            href={paths.superadmin.accounting.unitservice.add(unitServiceData._id)} /// edit
-            variant="contained"
-            startIcon={<Iconify icon="mingcute:add-line" />}
-          >
-            New License
-          </Button> 
-        }
-        style={{ marginBottom: '25px' }}
-      />
+        <CustomBreadcrumbs
+          heading="Accounting"
+          links={[
+            {
+              name: 'Dashboard',
+              href: paths.superadmin.root,
+            },
+            {
+              name: 'Accounting',
+              href: paths.superadmin.accounting.root,
+            },
+            {
+              name: `${
+                (unitServiceData && unitServiceData.name_english) || 'Unit Service'
+              } Accounting`,
+            },
+          ]}
+          action={
+            <Button
+              component={RouterLink}
+              href={paths.superadmin.accounting.unitservice.add(unitServiceData._id)} /// edit
+              variant="contained"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+            >
+              New License
+            </Button>
+          }
+          style={{ marginBottom: '25px' }}
+        />
 
         <Card>
           <Tabs
@@ -381,11 +383,7 @@ export default function USlicenseMovementView({unitServiceData}) {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(
-                      table.page,
-                      table.rowsPerPage,
-                      licenseMovements.length
-                    )}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, licenseMovements.length)}
                   />
 
                   <TableNoData notFound={notFound} />

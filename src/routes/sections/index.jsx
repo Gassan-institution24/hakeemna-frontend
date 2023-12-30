@@ -7,7 +7,8 @@ import MainLayout from 'src/layouts/main';
 import { authRoutes } from './auth';
 // import { authDemoRoutes } from './auth-demo';
 import { HomePage, mainRoutes } from './main';
-import { dashboardRoutes } from './dashboard';
+import { dashboardRoutes } from './super-admin-dashboard';
+import { unitServiceDashboardRoutes } from './unit-service-dashboard';
 // import { componentsRoutes } from './components';
 import { userRoutes } from './user';
 
@@ -49,6 +50,9 @@ export default function Router() {
     // Dashboard routes
     ...dashboardRoutes,
 
+    // unit service dashboard routes
+    ...unitServiceDashboardRoutes,
+    
     // Main routes
     ...mainRoutes,
 

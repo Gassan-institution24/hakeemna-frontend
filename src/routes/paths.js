@@ -471,4 +471,105 @@ export const paths = {
       },
     },
   },
+  // unit service
+  unitservice: {
+    root: ROOTS.SUPERADMIN,
+    appointments: {
+      root: `${ROOTS.SUPERADMIN}/appointments`,
+      new: `${ROOTS.SUPERADMIN}/appointments/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/appointments/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/appointments/${id}/info`,
+    },
+    employees: {
+      root: `${ROOTS.SUPERADMIN}/employees`,
+      new: `${ROOTS.SUPERADMIN}/employees/new`,
+      attendence: `${ROOTS.SUPERADMIN}/employees/attendence`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/employees/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/employees/${id}/info`,
+      appointments: (id) => `${ROOTS.SUPERADMIN}/employees/${id}/appointments`,
+    },
+    accounting: {
+      root: `${ROOTS.SUPERADMIN}/accounting`,
+      economicmovements: {
+        root: `${ROOTS.SUPERADMIN}/accounting/economicmovements`,
+        add: `${ROOTS.SUPERADMIN}/accounting/economicmovements/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/accounting/economicmovements/${id}/edit`,
+        info: (id) => `${ROOTS.SUPERADMIN}/accounting/economicmovements/${id}/info`,
+      },
+      paymentcontrol: {
+        root: `${ROOTS.SUPERADMIN}/accounting/paymentcontrol`,
+        add: `${ROOTS.SUPERADMIN}/accounting/paymentcontrol/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/accounting/paymentcontrol/${id}/edit`,
+        info: (id) => `${ROOTS.SUPERADMIN}/accounting/paymentcontrol/${id}/info`,
+      },
+      reciepts: {
+        root: `${ROOTS.SUPERADMIN}/accounting/reciepts`,
+        add: `${ROOTS.SUPERADMIN}/accounting/reciepts/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/accounting/reciepts/${id}/edit`,
+        info: (id) => `${ROOTS.SUPERADMIN}/accounting/reciepts/${id}/info`,
+      },
+    },
+    insurance: {
+      root: `${ROOTS.SUPERADMIN}/insurance`,
+      new: `${ROOTS.SUPERADMIN}/insurance/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/insurance/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/insurance/${id}/info`,
+    },
+    offers: {
+      root: `${ROOTS.SUPERADMIN}/offers`,
+      info: (id) => `${ROOTS.SUPERADMIN}/offers/${id}/info`,
+    },
+    communication: {
+      root: `${ROOTS.SUPERADMIN}/communication`,
+    },
+    qualityControl: {
+      root: `${ROOTS.SUPERADMIN}/qc`,
+    },
+    subscriptions: {
+      root: `${ROOTS.SUPERADMIN}/subscriptions`,
+      new: `${ROOTS.SUPERADMIN}/subscriptions/new`,
+      info: (id) => `${ROOTS.SUPERADMIN}/subscriptions/${id}/info`,
+    },
+    profile: {
+      root: `${ROOTS.SUPERADMIN}/profile`,
+      edit: `${ROOTS.SUPERADMIN}/edit`,
+    },
+    tables: {
+      root: `${ROOTS.SUPERADMIN}/tables`,
+      details: (tablename) => `${ROOTS.SUPERADMIN}/tables/${tablename}`,
+      appointypes: {
+        root: `${ROOTS.SUPERADMIN}/tables/appointment_types`,
+        new: `${ROOTS.SUPERADMIN}/tables/appointment_types/new`,
+      },
+      activities: {
+        root: `${ROOTS.SUPERADMIN}/tables/activities`,
+        new: `${ROOTS.SUPERADMIN}/tables/activities/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/activities/${id}/edit`,
+      },
+      employeetypes: {
+        root: `${ROOTS.SUPERADMIN}/tables/employee_types`,
+        new: `${ROOTS.SUPERADMIN}/tables/employee_types/new`,
+      },
+      workshifts: {
+        root: `${ROOTS.SUPERADMIN}/tables/work_shifts`,
+        new: `${ROOTS.SUPERADMIN}/tables/work_shifts/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/work_shifts/${id}/edit`,
+      },
+      workgroups: {
+        root: `${ROOTS.SUPERADMIN}/tables/work_groups`,
+        new: `${ROOTS.SUPERADMIN}/tables/work_groups/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/work_groups/${id}/edit`,
+      },
+      rooms: {
+        root: `${ROOTS.SUPERADMIN}/tables/rooms`,
+        new: `${ROOTS.SUPERADMIN}/tables/rooms/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/rooms/${id}/edit`,
+      },
+      departments: {
+        root: `${ROOTS.SUPERADMIN}/tables/departments`,
+        new: `${ROOTS.SUPERADMIN}/tables/departments/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/departments/${id}/edit`,
+      },
+    },
+  },
 };
