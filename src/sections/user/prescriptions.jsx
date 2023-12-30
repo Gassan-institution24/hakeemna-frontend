@@ -4,48 +4,96 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import { Page, Text, View, Document, PDFDownloadLink, StyleSheet } from '@react-pdf/renderer';
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  PDFDownloadLink,
+  StyleSheet,
+  Image as PdfImage,
+} from '@react-pdf/renderer';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/hooks';
 import { fDate } from 'src/utils/format-time';
+import Doclogo from '../../components/logo/doc.png';
 
 export default function Prescriptions() {
   const { user } = useAuthContext();
   const styles = StyleSheet.create({
-    document: {
-      fontFamily: 'Arial',
-      fontSize: 15,
-    },
-    page: {
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      padding: 20,
-    },
-    view: {
-      marginBottom: 10,
-      border: 1,
-      padding: 10,
-      backgroundColor: 'aliceblue',
-    },
-    text: {
-      marginBottom: 5,
-    },
     icon: {
       color: 'blue',
-      fontWeight: 600,
-      fontSize: 24, 
+      position: 'relative',
+      top: '3px',
+    },
+    image: {
+      width: '100px',
+      height: '100px',
+    },
+    page: {
+      backgroundColor: 'aliceblue',
+      border: 1,
+    },
+
+    gridContainer: {
+      border: 1,
+      display: 'grid',
+      gridTemplateColumns:'auto auto',
+      padding: '10px',
+      gap:'10px',
+      marginBottom: 10,
+      alignItems: 'center',
+      fontSize: 12,
+    },
+    gridContainer2: {
+      border: 1,
+      display: 'grid',
+      gridTemplateColumns: 'auto 1fr',
+      gap: 10,
+      marginBottom: 10,
+      padding: 10,
+      fontSize: 12,
+    },
+    gridFooter: {
+      border: 1,
+      display: 'grid',
+      gridTemplateColumns: '1fr',
+      gap: 10,
+      paddingTop: 5,
+      paddingBottom: 5,
+      paddingLeft: 10,
+      paddingRight: 10,
+      fontSize: 12,
     },
   });
+
   const PrescriptionPDF = () => (
     <Document>
       <Page size="A4" style={styles.page}>
         {user.patient.medicines.map((med) => (
-          <View key={med.id} style={styles.view}>
-            <Text style={styles.text}>Name: {med.medicine.trade_name}</Text>
-            <Text style={styles.text}>Dose: {med.dose}</Text>
-            <Text style={styles.text}>Frequently: {med.frequently}</Text>
-            <Text style={styles.text}>Start Date: {fDate(med.startdate)}</Text>
-            <Text style={styles.text}>End Date: {fDate(med.enddate)}</Text>
+          <View key={med.id}>
+            <View style={styles.gridContainer}>
+             <PdfImage src={Doclogo} style={styles.image} />
+              <Text>Patient Name: {user.userName}</Text>
+              <Text>Doctor Name: doctor</Text>
+              <Text>Doctor Name: doctor</Text>
+              <Text>Doctor Name: doctor</Text>
+              <Text>Doctor Name: doctor</Text>
+            </View>
+            <View style={styles.gridContainer2}>
+              <Text>Patient Name: {user.userName}</Text>
+              <Text>Doctor Name: doctor</Text>
+              <Text>Doctor Name: doctor</Text>
+              <Text>Doctor Name: doctor</Text>
+              <Text>Doctor Name: doctor</Text>
+            </View>
+            <View style={styles.gridFooter}>
+              <Text>Patient Name: {user.userName}</Text>
+              <Text>Doctor Name: doctor</Text>
+              <Text>Doctor Name: doctor</Text>
+              <Text>Doctor Name: doctor</Text>
+              <Text>Doctor Name: doctor</Text>
+            </View>
           </View>
         ))}
       </Page>
@@ -71,7 +119,9 @@ export default function Prescriptions() {
               document={<PrescriptionPDF medicines={[med]} />}
               fileName={`${user.patient.first_name} prescription.pdf`}
             >
-              {({ loading }) => (loading ? 'Loading document...' : <Iconify icon='teenyicons:pdf-outline' style={styles.icon}/>)}
+              {({ loading }) =>
+                loading ? 'Loading document...' : <Iconify icon="teenyicons:pdf-outline" />
+              }
             </PDFDownloadLink>
           </ListItem>
         </List>
