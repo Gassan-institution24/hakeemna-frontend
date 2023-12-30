@@ -164,39 +164,29 @@ export function useNavData() {
           //   icon: ICONS.dashboard,
           // },
           {
+            title: t('Appointments'),
+            path: paths.superadmin.patients.root,
+            icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+          },
+          {
+            title: t('employees'),
+            path: paths.superadmin.accessControlList.root,
+            icon: <Iconify icon="fluent:people-20-filled" />,
+          },
+          {
+            title: t('Accounting'),
+            path: paths.superadmin.unitservices.root,
+            icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
+          },
+          {
             title: t('management tables/rooms/appotypes'),
             path: paths.superadmin.tables.root,
             icon: <Iconify icon="icon-park-twotone:data" />,
           },
           {
-            title: t('Subscriptions'),
-            path: paths.superadmin.tables.root,
-            icon: <Iconify icon="icon-park-twotone:data" />,
-          },
-          {
-            title: t('Accounting'),
-            path: paths.superadmin.unitservices.root,
-            icon: <Iconify icon="fa-solid:clinic-medical" />,
-          },
-          {
-            title: t('Appointments'),
-            path: paths.superadmin.patients.root,
-            icon: <Iconify icon="iconamoon:profile-bold" />,
-          },
-          {
-            title: t('Profile'),
-            path: paths.superadmin.stakeholders.root,
-            icon: <Iconify icon="material-symbols:sell-sharp" />,
-          },
-          {
             title: t('Insurance'),
             path: paths.superadmin.accounting.root,
-            icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
-          },
-          {
-            title: t('Feedback'),
-            path: paths.superadmin.statistics.root,
-            icon: <Iconify icon="akar-icons:statistic-up" />,
+            icon: <Iconify icon="ic:baseline-security" />,
           },
           {
             title: t('suppliers offers'),
@@ -209,19 +199,19 @@ export function useNavData() {
             icon: <Iconify icon="solar:call-chat-bold" />,
           },
           {
-            title: t('employees'),
-            path: paths.superadmin.accessControlList.root,
-            icon: <Iconify icon="mdi:user-access-control" />,
-          },
-          {
-            title: t('appointments'),
-            path: paths.superadmin.customersTraining.root,
-            icon: <Iconify icon="mdi:teach" />,
-          },
-          {
             title: t('quality control'),
             path: paths.superadmin.qualityControl.root,
             icon: <Iconify icon="healthicons:world-care" />,
+          },
+          {
+            title: t('Subscriptions'),
+            path: paths.superadmin.tables.root,
+            icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
+          },
+          {
+            title: t('Profile'),
+            path: paths.superadmin.stakeholders.root,
+            icon: <Iconify icon="fa-solid:clinic-medical" />,
           },
         ],
       },
