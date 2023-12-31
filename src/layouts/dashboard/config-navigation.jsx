@@ -156,62 +156,121 @@ export function useNavData() {
     ];
     const unitServicesItems = [
       {
-        subheader: t('overview'),
+        subheader: t('control panel'),
         items: [
-          // {
-          //   title: t('app'),
-          //   path: paths.dashboard.root,
-          //   icon: ICONS.dashboard,
-          // },
           {
-            title: t('Appointments'),
-            path: paths.superadmin.patients.root,
-            icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+            title: t('departments'),
+            path: paths.unitservice.departments.root,
+            icon: <Iconify icon="uis:web-section-alt" />,
           },
           {
             title: t('employees'),
-            path: paths.superadmin.accessControlList.root,
+            path: paths.unitservice.employees.root,
             icon: <Iconify icon="fluent:people-20-filled" />,
           },
           {
-            title: t('Accounting'),
-            path: paths.superadmin.unitservices.root,
-            icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
+            title: t('activities'),
+            path: paths.unitservice.activities.root,
+            icon: <Iconify icon="material-symbols:volunteer-activism" />,
           },
           {
-            title: t('management tables/rooms/appotypes'),
-            path: paths.superadmin.tables.root,
+            title: t('Appointments'),
+            path: paths.unitservice.appointments.root,
+            icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+          },
+          {
+            title: t('appointment configuration'),
+            path: paths.unitservice.appointmentconfiguration.root,
+            icon: <Iconify icon="fluent:content-settings-16-regular" />,
+          },
+          {
+            title: t('Accounting'),
+            path: paths.unitservice.accounting.root,
+            icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
+            children: [
+              { title: t('economic movements'), path: paths.unitservice.accounting.economicmovements.root },
+              { title: t('payment control'), path: paths.unitservice.accounting.paymentcontrol.root },
+              { title: t('reciepts'), path: paths.unitservice.accounting.reciepts.root },
+            ],
+          },
+          {
+            title: t('management tables'),
+            path: paths.unitservice.tables.root,
             icon: <Iconify icon="icon-park-twotone:data" />,
+            children: [
+              { title: t('appointment types'), path: paths.unitservice.tables.appointypes.root },
+              { title: t('employee types'), path: paths.unitservice.tables.employeetypes.root },
+              { title: t('work shifts'), path: paths.unitservice.tables.workshifts.root },
+              { title: t('work groups'), path: paths.unitservice.tables.workgroups.root },
+              { title: t('rooms'), path: paths.unitservice.tables.rooms.root },
+            ],
           },
           {
             title: t('Insurance'),
-            path: paths.superadmin.accounting.root,
+            path: paths.unitservice.insurance.root,
             icon: <Iconify icon="ic:baseline-security" />,
           },
           {
             title: t('suppliers offers'),
-            path: paths.superadmin.subscriptions.root,
+            path: paths.unitservice.offers.root,
             icon: <Iconify icon="eos-icons:activate-subscriptions" />,
           },
           {
-            title: t('communications'),
-            path: paths.superadmin.communication.root,
+            title: t('communication'),
+            path: paths.unitservice.communication.root,
             icon: <Iconify icon="solar:call-chat-bold" />,
           },
           {
             title: t('quality control'),
-            path: paths.superadmin.qualityControl.root,
+            path: paths.unitservice.qualityControl.root,
             icon: <Iconify icon="healthicons:world-care" />,
           },
           {
             title: t('Subscriptions'),
-            path: paths.superadmin.tables.root,
+            path: paths.unitservice.subscriptions.root,
             icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
           },
           {
             title: t('Profile'),
-            path: paths.superadmin.stakeholders.root,
+            path: paths.unitservice.profile.root,
             icon: <Iconify icon="fa-solid:clinic-medical" />,
+          },
+        ],
+      },
+    ];
+    const employeeItems = [
+      {
+        subheader: t('Employee dashboard'),
+        items: [
+          {
+            title: t('entrance management'),
+            path: paths.employee.entrancemanagement.root,
+            icon: <Iconify icon="oi:timer" />,
+          },
+          {
+            title: t('appointments'),
+            path: paths.employee.appointments.root,
+            icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+          },
+          {
+            title: t('accounting'),
+            path: paths.employee.accounting.root,
+            icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
+          },
+          {
+            title: t('communications'),
+            path: paths.employee.communication.root,
+            icon: <Iconify icon="solar:call-chat-bold" />,
+          },
+          {
+            title: t('quality control'),
+            path: paths.employee.qualityControl.root,
+            icon: <Iconify icon="healthicons:world-care" />,
+          },
+          {
+            title: t('profile'),
+            path: paths.employee.profile.root,
+            icon: <Iconify icon="iconamoon:profile-bold" />,
           },
         ],
       },
@@ -272,17 +331,17 @@ export function useNavData() {
       },
     ];
 
-    if(!user){
+    if (!user) {
       router.replace('/');
     }
     if (user?.role === 'superadmin') {
       return superAdminItems;
     }
     if (user?.role === 'admin') {
-      return unitServicesItems;
+      return [...unitServicesItems, ...employeeItems];
     }
     return [...userItems];
-  }, [t, user, handleLogout,router]);
+  }, [t, user, handleLogout, router]);
 
   return data;
 }
