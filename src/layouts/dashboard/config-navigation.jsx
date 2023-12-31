@@ -298,7 +298,7 @@ export function useNavData() {
           },
           {
             title: t('medical report'),
-            path: '#',
+            path: paths.dashboard.user.medicalreports,
             icon: <Iconify icon="tabler:report-medical" />,
           },
           {
@@ -308,7 +308,7 @@ export function useNavData() {
           },
           {
             title: t('prescriptions'),
-            path: paths.dashboard.user.medicins,
+            path: paths.dashboard.user.prescriptions,
             icon: <Iconify icon="material-symbols-light:prescriptions-outline" />,
           },
           {

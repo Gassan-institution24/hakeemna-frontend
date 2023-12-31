@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { m } from 'framer-motion';
 import { varFade, MotionViewport } from 'src/components/animate';
 import Stack from '@mui/material/Stack';
-import midical from './images/medical.png';
+import medical from './images/medical.png';
 import circle from './images/circle.png';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -90,7 +90,7 @@ export default function Patient() {
             }}
           >
             <img
-              src={midical}
+              src={medical}
               alt="patient"
               style={{
                 objectFit: 'cover',
