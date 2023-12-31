@@ -9,6 +9,7 @@ import { authRoutes } from './auth';
 import { HomePage, mainRoutes } from './main';
 import { dashboardRoutes } from './super-admin-dashboard';
 import { unitServiceDashboardRoutes } from './unit-service-dashboard';
+import { unitServiceEmployeeDashboardRoutes } from './unit-service-employee-dashboard';
 // import { componentsRoutes } from './components';
 import { userRoutes } from './user';
 
@@ -52,6 +53,9 @@ export default function Router() {
 
     // unit service dashboard routes
     ...unitServiceDashboardRoutes,
+
+    // unit service employee dashboard routes
+    ...unitServiceEmployeeDashboardRoutes,
     
     // Main routes
     ...mainRoutes,

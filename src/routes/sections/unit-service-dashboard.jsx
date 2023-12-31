@@ -5,439 +5,149 @@ import { AuthGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
+import RecieptsInfoPage from 'src/pages/employee/accounting/reciepts/info';
 
 // ----------------------------------------------------------------------
-
-// OVERVIEW
-// const IndexPage = lazy(() => import('src/pages/app'));
-// const OverviewEcommercePage = lazy(() => import('src/pages/ecommerce'));
-// const OverviewAnalyticsPage = lazy(() => import('src/pages/analytics'));
-// const OverviewBankingPage = lazy(() => import('src/pages/banking'));
-// const OverviewBookingPage = lazy(() => import('src/pages/booking'));
-// const OverviewFilePage = lazy(() => import('src/pages/file'));
-
-// TABLES
-const TablesListPage = lazy(() => import('src/pages/super-admin/tables/list'));
-// CITIES
-const CitiesTablePage = lazy(() => import('src/pages/super-admin/tables/cities/table'));
-const CityCreatePage = lazy(() => import('src/pages/super-admin/tables/cities/new'));
-const CityEditPage = lazy(() => import('src/pages/super-admin/tables/cities/edit'));
-// COUNTRIES
-const CountriesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/countries/table')
-);
-const CountryCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/countries/new')
-);
-const CountryEditPage = lazy(() => import('src/pages/super-admin/tables/countries/edit'));
-// COURENCY
-const CurrencyTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/currency/table')
-);
-const CurrencyCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/currency/new')
-);
-const CurrencyEditPage = lazy(() => import('src/pages/super-admin/tables/currency/edit'));
-// SURGERIES
-const SurgeriesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/surgeries/table')
-);
-const SurgeryCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/surgeries/new')
-);
-const SurgeryEditPage = lazy(() => import('src/pages/super-admin/tables/surgeries/edit'));
-// MEDICAL CATEEGORIES
-const MedCatTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/medical-categories/table')
-);
-const MedCatCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/medical-categories/new')
-);
-const MedCatEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/medical-categories/edit')
-);
-// DISEASES
-const DiseasesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/diseases/table')
-);
-const DiseaseCreatePage = lazy(() => import('src/pages/super-admin/tables/diseases/new'));
-const DiseaseEditPage = lazy(() => import('src/pages/super-admin/tables/diseases/edit'));
-// MEDICINES FAMILIES
-const MedFamiliesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/medicines-families/table')
-);
-const MedFamilyCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/medicines-families/new')
-);
-const MedFamilyEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/medicines-families/edit')
-);
-// MEDICINES
-const MedicinesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/medicines/table')
-);
-const MedicineCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/medicines/new')
-);
-const MedicineEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/medicines/edit')
-);
-// SYMPTOMS
-const SymptomsTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/symptoms/table')
-);
-const SymptomCreatePage = lazy(() => import('src/pages/super-admin/tables/symptoms/new'));
-const SymptomEditPage = lazy(() => import('src/pages/super-admin/tables/symptoms/edit'));
-// DIETS
-const DietsTablePage = lazy(() => import('src/pages/super-admin/tables/diets/table'));
-const DietCreatePage = lazy(() => import('src/pages/super-admin/tables/diets/new'));
-const DietEditPage = lazy(() => import('src/pages/super-admin/tables/diets/edit'));
-// ANALYSIS
-const AnalysisTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/analysis/table')
-);
-const AnalysisCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/analysis/new')
-);
-const AnalysisEditPage = lazy(() => import('src/pages/super-admin/tables/analysis/edit'));
-// INSURANCE COMPANIES
-const InsuranceCoTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/insurance-companies/table')
-);
-const InsuranceCoCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/insurance-companies/new')
-);
-const InsuranceCoEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/insurance-companies/edit')
-);
-// UNIT SERVICES
-const USsTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/unit-services/table')
-);
-const USCreatePage = lazy(() => import('src/pages/super-admin/tables/unit-services/new'));
-const USEditPage = lazy(() => import('src/pages/super-admin/tables/unit-services/edit'));
 // DEPARTMENTS
-const DepartmentsTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/departments/table')
+const DepartmentsHomePage = lazy(() => import('src/pages/unit-service/departments/home'));
+const DepartmentsNewPage = lazy(() => import('src/pages/unit-service/departments/new'));
+const DepartmentsInfoPage = lazy(() => import('src/pages/unit-service/departments/info'));
+const DepartmentsEmployeesPage = lazy(() => import('src/pages/unit-service/departments/employees'));
+const DepartmentsAccountingPage = lazy(() =>
+  import('src/pages/unit-service/departments/accounting')
 );
-const DepartmentCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/departments/new')
+const DepartmentsActivitiesPage = lazy(() =>
+  import('src/pages/unit-service/departments/activities')
 );
-const DepartmentEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/departments/edit')
+const DepartmentsAppointmentsPage = lazy(() =>
+  import('src/pages/unit-service/departments/appointments')
 );
-// SPECIALITIES
-const SpecialitiesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/specialities/table')
+const DepartmentsAppointmentConfigPage = lazy(() =>
+  import('src/pages/unit-service/departments/appointmentconfiguration')
 );
-const SpecialityCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/specialities/new')
+const DepartmentsQualityControlPage = lazy(() =>
+  import('src/pages/unit-service/departments/qualitycontrole')
 );
-const SpecialityEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/specialities/edit')
+const DepartmentsRoomsPage = lazy(() => import('src/pages/unit-service/departments/rooms'));
+const DepartmentsEditPage = lazy(() => import('src/pages/unit-service/departments/edit'));
+// EMPLOYEES
+const EmployeesHomePage = lazy(() => import('src/pages/unit-service/employees/home'));
+const EmployeesInfoPage = lazy(() => import('src/pages/unit-service/employees/info'));
+const EmployeesAppointmentsPage = lazy(() =>
+  import('src/pages/unit-service/employees/appontiments')
 );
-// SUBSPECIALITIES
-const SubspecialitiesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/subspecialities/table')
-);
-const SubspecialityCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/subspecialities/new')
-);
-const SubspecialityEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/subspecialities/edit')
-);
-// APPOINTMENT TYPES
-const AppoinTypesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/appointment-types/table')
-);
-const AppoinTypeCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/appointment-types/new')
-);
-const AppoinTypeEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/appointment-types/edit')
-);
-// FREE SUBSCRIPTIONS
-const FreeSubTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/free-subscriptions/table')
-);
-const FreeSubCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/free-subscriptions/new')
-);
-const FreeSubEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/free-subscriptions/edit')
-);
-// ADDED VALUE TAXES
-const TaxesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/added-value-taxes/table')
-);
-const TaxCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/added-value-taxes/new')
-);
-const TaxEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/added-value-taxes/edit')
-);
-// UNIT SERVICE TYPES
-const USTypesTablePage = lazy(() => import('src/pages/super-admin/tables/ustypes/table'));
-const USTypeCreatePage = lazy(() => import('src/pages/super-admin/tables/ustypes/new'));
-const USTypeEditPage = lazy(() => import('src/pages/super-admin/tables/ustypes/edit'));
+const EmployeesAttendencePage = lazy(() => import('src/pages/unit-service/employees/attendence'));
+const EmployeesEditPage = lazy(() => import('src/pages/unit-service/employees/edit'));
+const EmployeesACLPage = lazy(() => import('src/pages/unit-service/employees/acl'));
+const EmployeesNewPage = lazy(() => import('src/pages/unit-service/employees/new'));
 // ACTIVITIES
-const ActivitiesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/activities/table')
+const ActivitiesHomePage = lazy(() => import('src/pages/unit-service/activities/home'));
+const ActivitiesEditPage = lazy(() => import('src/pages/unit-service/activities/edit'));
+const ActivitiesNewPage = lazy(() => import('src/pages/unit-service/activities/new'));
+// APPOINTMENTS
+const AppointmentsHomePage = lazy(() => import('src/pages/unit-service/appointments/home'));
+const AppointmentsInfoPage = lazy(() => import('src/pages/unit-service/appointments/info'));
+const AppointmentsEditPage = lazy(() => import('src/pages/unit-service/appointments/edit'));
+const AppointmentsNewPage = lazy(() => import('src/pages/unit-service/appointments/new'));
+// APPOINTMENT CONFIGURATION
+const AppointmentConfigHomePage = lazy(() =>
+  import('src/pages/unit-service/appointmentsConfiguration/home')
 );
-const ActivityCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/activities/new')
+const AppointmentConfigInfoPage = lazy(() =>
+  import('src/pages/unit-service/appointmentsConfiguration/info')
 );
-const ActivityEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/activities/edit')
+const AppointmentConfigEditPage = lazy(() =>
+  import('src/pages/unit-service/appointmentsConfiguration/edit')
+);
+const AppointmentConfigNewPage = lazy(() =>
+  import('src/pages/unit-service/appointmentsConfiguration/new')
+);
+// ACCOUNTING
+// ECONOMIC MOVEMENTS
+const EconomicHomePage = lazy(() =>
+  import('src/pages/unit-service/accounting/economic-movements/home')
+);
+const EconomicInfoPage = lazy(() =>
+  import('src/pages/unit-service/accounting/economic-movements/info')
+);
+const EconomicEditPage = lazy(() =>
+  import('src/pages/unit-service/accounting/economic-movements/edit')
+);
+const EconomicNewPage = lazy(() =>
+  import('src/pages/unit-service/accounting/economic-movements/new')
+);
+// PAYMENT CONTROL
+const PaymentControlHomePage = lazy(() =>
+  import('src/pages/unit-service/accounting/payment-control/home')
+);
+const PaymentControlInfoPage = lazy(() =>
+  import('src/pages/unit-service/accounting/payment-control/info')
+);
+const PaymentControlEditPage = lazy(() =>
+  import('src/pages/unit-service/accounting/payment-control/edit')
+);
+const PaymentControlNewPage = lazy(() =>
+  import('src/pages/unit-service/accounting/payment-control/new')
+);
+// RECEIPTS
+const ReceiptsHomePage = lazy(() => import('src/pages/unit-service/accounting/reciepts/home'));
+const ReceiptsInfoPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/info'));
+const ReceiptsEditPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/edit'));
+const ReceiptsNewPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/new'));
+// INSURANCE
+const InsuranceHomePage = lazy(() => import('src/pages/unit-service/insurance/home'));
+// OFFERS
+const OffersHomePage = lazy(() => import('src/pages/unit-service/offers/home'));
+const OffersInfoPage = lazy(() => import('src/pages/unit-service/offers/info'));
+const OffersNewPage = lazy(() => import('src/pages/unit-service/offers/new'));
+// COMMUNICATION
+const CommunicationHomePage = lazy(() => import('src/pages/unit-service/communication/home'));
+// QUALITY CONTROL
+const QCHomePage = lazy(() => import('src/pages/unit-service/qualitycontrol/home'));
+// SUBSCRIPTIONS
+const SubscriptionsHomePage = lazy(() => import('src/pages/unit-service/subscriptions/home'));
+const SubscriptionsNewPage = lazy(() => import('src/pages/unit-service/subscriptions/new'));
+const SubscriptionsInfoPage = lazy(() => import('src/pages/unit-service/subscriptions/info'));
+// PROFILE
+const ProfileHomePage = lazy(() => import('src/pages/unit-service/profile/home'));
+const ProfileEditPage = lazy(() => import('src/pages/unit-service/profile/edit'));
+// TABLES
+// APPOINTMENT TYPES
+const AppointmentTypesHomePage = lazy(() =>
+  import('src/pages/unit-service/tables/appointment-types/home')
+);
+const AppointmentTypesNewPage = lazy(() =>
+  import('src/pages/unit-service/tables/appointment-types/new')
+);
+const AppointmentTypesEditPage = lazy(() =>
+  import('src/pages/unit-service/tables/appointment-types/edit')
 );
 // EMPLOYEE TYPES
-const EmployeeTypesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/employee_types/table')
+const EmployeeTypesHomePage = lazy(() =>
+  import('src/pages/unit-service/tables/employee-types/home')
 );
-const EmployeeTypeCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/employee_types/new')
-);
-const EmployeeTypeEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/employee_types/edit')
-);
-// PAYMENT METHODS
-const PaymentMethodsTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/payment_methods/table')
-);
-const PaymentMethodCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/payment_methods/new')
-);
-const PaymentMethodEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/payment_methods/edit')
-);
-// STAKEHOLDER TYPES
-const StakeholderTypesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/stakeholder_types/table')
-);
-const StackholderTypeCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/stakeholder_types/new')
-);
-const StackholderTypeEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/stakeholder_types/edit')
+const EmployeeTypesNewPage = lazy(() => import('src/pages/unit-service/tables/employee-types/new'));
+const EmployeeTypesEditPage = lazy(() =>
+  import('src/pages/unit-service/tables/employee-types/edit')
 );
 // WORK SHIFTS
-const WorkShiftsTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/work_shifts/table')
-);
-const WorkShiftCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/work_shifts/new')
-);
-const WorkShiftEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/work_shifts/edit')
-);
-// SERVICE TYPES
-const ServiceTypesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/service_types/table')
-);
-const ServiceTypeCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/service_types/new')
-);
-const ServiceTypeEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/service_types/edit')
-);
-// MEASURMENT TYPES
-const MeasurmentTypesTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/measurement_types/table')
-);
-const MeasurmentTypeCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/measurement_types/new')
-);
-const MeasurmentTypeEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/measurement_types/edit')
-);
-// HOSPITAL LIST
-const HospitalListTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/hospital_list/table')
-);
-const HospitalListCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/hospital_list/new')
-);
-const HospitalListEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/hospital_list/edit')
-);
-// DEDUTION CONFIG
-const DeductionConfigTablePage = lazy(() =>
-  import('src/pages/super-admin/tables/deduction_config/table')
-);
-const DeductionConfigCreatePage = lazy(() =>
-  import('src/pages/super-admin/tables/deduction_config/new')
-);
-const DeductionConfigEditPage = lazy(() =>
-  import('src/pages/super-admin/tables/deduction_config/edit')
-);
+const WorkShiftsHomePage = lazy(() => import('src/pages/unit-service/tables/work-shifts/home'));
+const WorkShiftsNewPage = lazy(() => import('src/pages/unit-service/tables/work-shifts/new'));
+const WorkShiftsEditPage = lazy(() => import('src/pages/unit-service/tables/work-shifts/edit'));
+// WORK GROUPS
+const WorkGroupsHomePage = lazy(() => import('src/pages/unit-service/tables/work-groups/home'));
+const WorkGroupsNewPage = lazy(() => import('src/pages/unit-service/tables/work-groups/new'));
+const WorkGroupsEditPage = lazy(() => import('src/pages/unit-service/tables/work-groups/edit'));
 // ROOMS
-// const RoomsTablePage = lazy(() => import('src/pages/super-admin/tables/rooms/table'));
-// const RoomCreatePage = lazy(() => import('src/pages/super-admin/tables/rooms/new'));
-// const RoomEditPage = lazy(() => import('src/pages/super-admin/tables/rooms/edit'));
-// UNITSERVICES SIDEBAR OPTIONS
-const UnitservicesPage = lazy(() => import('src/pages/super-admin/unitservices/home'));
-// UNITSERVICES ACCOUNTING
-const UnitserviceAccountingPage = lazy(() =>
-  import('src/pages/super-admin/unitservices/accounting/accounting')
-);
-const UnitserviceAddAccountingPage = lazy(() =>
-  import('src/pages/super-admin/unitservices/accounting/addAccounting')
-);
-const UnitserviceEditAccountingPage = lazy(() =>
-  import('src/pages/super-admin/unitservices/accounting/editAccounting')
-);
-// UNITSERVICES COMMUNICATIONS
-const UnitserviceCommunicationsPage = lazy(() =>
-  import('src/pages/super-admin/unitservices/communications/communications')
-);
-// UNITSERVICES FEEDBACK
-const UnitserviceFeedbackPage = lazy(() =>
-  import('src/pages/super-admin/unitservices/feedback/feedback')
-);
-// UNITSERVICES INSURANCE
-const UnitserviceInsurancePage = lazy(() =>
-  import('src/pages/super-admin/unitservices/insurance/insurance')
-);
-const UnitServiceInfoPage = lazy(() => import('src/pages/super-admin/unitservices/info'));
-
-// PATIENTS
-const PatientsHomePage = lazy(() => import('src/pages/super-admin/patients/home'));
-const PatientsAddPage = lazy(() => import('src/pages/super-admin/patients/add'));
-const PatientsEditPage = lazy(() => import('src/pages/super-admin/patients/edit'));
-const PatientsInfoPage = lazy(() => import('src/pages/super-admin/patients/info'));
-const PatientsHistoryPage = lazy(() =>
-  import('src/pages/super-admin/patients/history/history')
-);
-const PatientsBookAppointmentPage = lazy(() =>
-  import('src/pages/super-admin/patients/history/bookAppointment')
-);
-const PatientsInsurancePage = lazy(() =>
-  import('src/pages/super-admin/patients/insurance/insurance')
-);
-const PatientsCommunicationsPage = lazy(() =>
-  import('src/pages/super-admin/patients/communications/communications')
-);
-const PatientsFeedbackPage = lazy(() =>
-  import('src/pages/super-admin/patients/feedback/feedback')
-);
-// ECONOMIC MOVEMENTS
-const PatientInvoiceInfoPage = lazy(() =>
-  import('src/pages/super-admin/patients/history/invoives/view-invoice')
-);
-const PatientPaymentInfoPage = lazy(() =>
-  import('src/pages/super-admin/patients/history/payment/view-payment')
-);
-
-// STAKEHOLDERS
-const StakeholdersHomePage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/home')
-);
-const StakeholdersAddPage = lazy(() => import('src/pages/super-admin/stakeholders/add'));
-const StakeholdersEditPage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/edit')
-);
-const StakeholdersInfoPage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/info')
-);
-const StakeholdersHistoryPage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/history/history')
-);
-const StakeholdersOffersPage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/offers/offers')
-);
-const StakeholdersViewOfferPage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/offers/viewOffer')
-);
-const StakeholdersBookAppointmentPage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/history/bookAppointment')
-);
-const StakeholdersInsurancePage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/insurance/insurance')
-);
-const StakeholdersCommunicationsPage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/communications/communications')
-);
-const StakeholdersFeedbackPage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/feedback/feedback')
-);
-// ECONOMIC MOVEMENTS
-const StakeholdersInvoiceInfoPage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/history/invoices/view-invoice')
-);
-const StakeholdersPaymentInfoPage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/history/payment/view-payment')
-);
-
-// ACCOUNTING
-const AccountingHomePage = lazy(() => import('src/pages/super-admin/accounting/home'));
-const AccountingUnitServicePage = lazy(() =>
-  import('src/pages/super-admin/accounting/unitService')
-);
-const AddAccountingUnitServicePage = lazy(() =>
-  import('src/pages/super-admin/accounting/addUSAcoounting')
-);
-const EditAccountingUnitServicePage = lazy(() =>
-  import('src/pages/super-admin/accounting/editUSAccounting')
-);
-const AccountingStakeholderPage = lazy(() =>
-  import('src/pages/super-admin/accounting/stakeholder')
-);
-const AddAccountingStakeholderPage = lazy(() =>
-  import('src/pages/super-admin/accounting/addStakeholderAcoounting')
-);
-const EditAccountingStakeholderPage = lazy(() =>
-  import('src/pages/super-admin/accounting/editStakeholderAccounting')
-);
-
-// STATISTICS
-const StatisticsHomePage = lazy(() => import('src/pages/super-admin/statistics/home'));
-
-// SUBSCRIPTIONS
-const SubscriptionsHomePage = lazy(() => import('src/pages/super-admin/subscriptions/home'));
-const SubscriptionsNewPage = lazy(() => import('src/pages/super-admin/subscriptions/add'));
-const SubscriptionsEditPage = lazy(() => import('src/pages/super-admin/subscriptions/edit'));
-
-// COMMUNICATION
-const CommunicationHomePage = lazy(() =>
-  import('src/pages/super-admin/communications/home')
-);
-
-// ACCESS CONTROL LIST
-const AccessControleListHomePage = lazy(() =>
-  import('src/pages/super-admin/accessControlList/home')
-);
-
-// CUSTOMER TRAINING
-const CustomerTrainingHomePage = lazy(() =>
-  import('src/pages/super-admin/customerTraining/home')
-);
-
-// DOCTORNA TEAM TRAINING
-const DoctornaTeamTrainingHomePage = lazy(() =>
-  import('src/pages/super-admin/doctornaTeamTraining/home')
-);
-
-// ADJUSTABLE SERVICES CONTROL
-const AdjustableServicesControlHomePage = lazy(() =>
-  import('src/pages/super-admin/adjustableServiceControl/home')
-);
-
-// QUALITY CONTROL
-const QualityControlHomePage = lazy(() =>
-  import('src/pages/super-admin/qualityControl/doctornaHome')
-);
-const QualityControlUnitServicesPage = lazy(() =>
-  import('src/pages/super-admin/qualityControl/unit-services-QC')
-);
-const QualityControlStakeholdersPage = lazy(() =>
-  import('src/pages/super-admin/qualityControl/stakeholders-QC')
-);
+const RoomsHomePage = lazy(() => import('src/pages/unit-service/tables/rooms/home'));
+const RoomsNewPage = lazy(() => import('src/pages/unit-service/tables/rooms/new'));
+const RoomsEditPage = lazy(() => import('src/pages/unit-service/tables/rooms/edit'));
 
 // ----------------------------------------------------------------------
 
 export const unitServiceDashboardRoutes = [
   {
-    path: 'dashboard',
+    path: 'dashboard/us',
     element: (
       <AuthGuard>
         <DashboardLayout>
@@ -451,111 +161,124 @@ export const unitServiceDashboardRoutes = [
       // { element: <IndexPage />, index: true },
       // { path: '', element: < /> },
       {
-        path: 'appointments',
+        path: 'departments',
         children: [
-          { element: <UnitservicesPage />, index: true },
-          { path: ':id/info', element: <UnitServiceInfoPage /> },
-          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
-          { path: 'new', element: <UnitserviceFeedbackPage /> },
+          { element: <DepartmentsHomePage />, index: true },
+          { path: 'new', element: <DepartmentsNewPage /> },
+          { path: ':id/info', element: <DepartmentsInfoPage /> },
+          { path: ':id/employees', element: <DepartmentsEmployeesPage /> },
+          { path: ':id/accounting', element: <DepartmentsAccountingPage /> },
+          { path: ':id/activities', element: <DepartmentsActivitiesPage /> },
+          { path: ':id/appointments', element: <DepartmentsAppointmentsPage /> },
+          { path: ':id/appointmentconfiguration', element: <DepartmentsAppointmentConfigPage /> },
+          { path: ':id/qc', element: <DepartmentsQualityControlPage /> },
+          { path: ':id/rooms', element: <DepartmentsRoomsPage /> },
+          { path: ':id/edit', element: <DepartmentsEditPage /> },
         ],
       },
-      // {
-      //   path: 'statistics',
-      //   children: [
-      //     { element: <StatisticsHomePage />, index: true },
-      //     { path: ':id/info', element: <UnitserviceInsurancePage /> },
-      //     { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
-      //     { path: 'new', element: <UnitserviceFeedbackPage /> },
-      //   ],
-      // },
       {
         path: 'employees',
         children: [
-          { element: <AccessControleListHomePage />, index: true },
-          { path: ':id/info', element: <UnitserviceInsurancePage /> },
-          { path: ':id/appointments', element: <UnitserviceInsurancePage /> },
-          { path: 'attendence', element: <UnitserviceInsurancePage /> },
-          { path: ':id/edit', element: <UnitserviceFeedbackPage /> },
-          { path: ':id/acl', element: <UnitserviceFeedbackPage /> },
-          { path: 'new', element: <UnitserviceFeedbackPage /> },
+          { element: <EmployeesHomePage />, index: true },
+          { path: ':id/info', element: <EmployeesInfoPage /> },
+          { path: ':id/appointments', element: <EmployeesAppointmentsPage /> },
+          { path: 'attendence', element: <EmployeesAttendencePage /> },
+          { path: ':id/edit', element: <EmployeesEditPage /> },
+          { path: ':id/acl', element: <EmployeesACLPage /> },
+          { path: 'new', element: <EmployeesNewPage /> },
+        ],
+      },
+      {
+        path: 'activities',
+        children: [
+          { element: <ActivitiesHomePage />, index: true },
+          { path: 'new', element: <ActivitiesNewPage /> },
+          { path: ':id/edit', element: <ActivitiesEditPage /> },
+        ],
+      },
+      {
+        path: 'appointments',
+        children: [
+          { element: <AppointmentsHomePage />, index: true },
+          { path: ':id/info', element: <AppointmentsInfoPage /> },
+          { path: ':id/edit', element: <AppointmentsEditPage /> },
+          { path: 'new', element: <AppointmentsNewPage /> },
+        ],
+      },
+      {
+        path: 'appointmentconfiguration',
+        children: [
+          { element: <AppointmentConfigHomePage />, index: true },
+          { path: ':id/info', element: <AppointmentConfigInfoPage /> },
+          { path: ':id/edit', element: <AppointmentConfigEditPage /> },
+          { path: 'new', element: <AppointmentConfigNewPage /> },
         ],
       },
       {
         path: 'accounting',
         children: [
-          { element: <AccountingHomePage />, index: true },
           {
             path: 'economicmovements',
             children: [
-              { element: <CustomerTrainingHomePage />, index: true },
-              { path: ':id/info', element: <UnitserviceInsurancePage /> },
-              { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
-              { path: 'new', element: <UnitserviceFeedbackPage /> },
+              { element: <EconomicHomePage />, index: true },
+              { path: ':id/info', element: <EconomicInfoPage /> },
+              { path: ':id/edit', element: <EconomicEditPage /> },
+              { path: 'new', element: <EconomicNewPage /> },
             ],
           },
           {
             path: 'paymentcontrol',
             children: [
-              { element: <CustomerTrainingHomePage />, index: true },
-              { path: ':id/info', element: <UnitserviceInsurancePage /> },
-              { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
-              { path: 'new', element: <UnitserviceFeedbackPage /> },
+              { element: <PaymentControlHomePage />, index: true },
+              { path: ':id/info', element: <PaymentControlInfoPage /> },
+              { path: ':id/edit', element: <PaymentControlEditPage /> },
+              { path: 'new', element: <PaymentControlNewPage /> },
             ],
           },
           {
             path: 'reciepts',
             children: [
-              { element: <CustomerTrainingHomePage />, index: true },
-              { path: ':id/info', element: <UnitserviceInsurancePage /> },
-              { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
-              { path: 'new', element: <UnitserviceFeedbackPage /> },
+              { element: <ReceiptsHomePage />, index: true },
+              { path: ':id/info', element: <RecieptsInfoPage /> },
+              { path: ':id/edit', element: <ReceiptsEditPage /> },
+              { path: 'new', element: <ReceiptsNewPage /> },
             ],
           },
-
         ],
       },
       {
         path: 'insurance',
-        children: [
-          { element: <CustomerTrainingHomePage />, index: true },
-          { path: ':id/info', element: <UnitserviceInsurancePage /> },
-          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
-          { path: 'new', element: <UnitserviceFeedbackPage /> },
-        ],
+        children: [{ element: <InsuranceHomePage />, index: true }],
       },
       {
         path: 'offers',
         children: [
-          { element: <DoctornaTeamTrainingHomePage />, index: true },
-          { path: ':id/info', element: <UnitserviceInsurancePage /> },
-          { path: 'new', element: <UnitserviceFeedbackPage /> },
+          { element: <OffersHomePage />, index: true },
+          { path: ':id/info', element: <OffersInfoPage /> },
+          { path: 'new', element: <OffersNewPage /> },
         ],
       },
       {
         path: 'communication',
-        children: [
-          { element: <CommunicationHomePage />, index: true },
-        ],
+        children: [{ element: <CommunicationHomePage />, index: true }],
       },
       {
         path: 'qc',
-        children: [
-          { element: <DoctornaTeamTrainingHomePage />, index: true },
-        ],
+        children: [{ element: <QCHomePage />, index: true }],
       },
       {
         path: 'subscriptions',
         children: [
           { element: <SubscriptionsHomePage />, index: true },
-          { path: 'new', element: <UnitserviceInsurancePage /> },
-          { path: ':id/info', element: <UnitserviceInsurancePage /> },
+          { path: 'new', element: <SubscriptionsNewPage /> },
+          { path: ':id/info', element: <SubscriptionsInfoPage /> },
         ],
       },
       {
         path: 'profile',
         children: [
-          { element: <DoctornaTeamTrainingHomePage />, index: true },
-          { path: 'edit', element: <UnitserviceCommunicationsPage /> },
+          { element: <ProfileHomePage />, index: true },
+          { path: 'edit', element: <ProfileEditPage /> },
         ],
       },
       {
@@ -564,57 +287,41 @@ export const unitServiceDashboardRoutes = [
           {
             path: 'appointment_types',
             children: [
-              { element: <AppoinTypesTablePage />, index: true },
-              { path: 'new', element: <AppoinTypeCreatePage /> },
-              { path: ':id/edit', element: <AppoinTypeEditPage /> },
-            ],
-          },
-          {
-            path: 'activities',
-            children: [
-              { element: <ActivitiesTablePage />, index: true },
-              { path: 'new', element: <ActivityCreatePage /> },
-              { path: ':id/edit', element: <ActivityEditPage /> },
+              { element: <AppointmentTypesHomePage />, index: true },
+              { path: 'new', element: <AppointmentTypesNewPage /> },
+              { path: ':id/edit', element: <AppointmentTypesEditPage /> },
             ],
           },
           {
             path: 'employee_types',
             children: [
-              { element: <EmployeeTypesTablePage />, index: true },
-              { path: 'new', element: <EmployeeTypeCreatePage /> },
-              { path: ':id/edit', element: <EmployeeTypeEditPage /> },
+              { element: <EmployeeTypesHomePage />, index: true },
+              { path: 'new', element: <EmployeeTypesNewPage /> },
+              { path: ':id/edit', element: <EmployeeTypesEditPage /> },
             ],
           },
           {
             path: 'work_shifts',
             children: [
-              { element: <WorkShiftsTablePage />, index: true },
-              { path: 'new', element: <WorkShiftCreatePage /> },
-              { path: ':id/edit', element: <WorkShiftEditPage /> },
+              { element: <WorkShiftsHomePage />, index: true },
+              { path: 'new', element: <WorkShiftsNewPage /> },
+              { path: ':id/edit', element: <WorkShiftsEditPage /> },
             ],
           },
           {
             path: 'work_groups',
             children: [
-              { element: <WorkShiftsTablePage />, index: true },
-              { path: 'new', element: <WorkShiftCreatePage /> },
-              { path: ':id/edit', element: <WorkShiftEditPage /> },
+              { element: <WorkGroupsHomePage />, index: true },
+              { path: 'new', element: <WorkGroupsNewPage /> },
+              { path: ':id/edit', element: <WorkGroupsEditPage /> },
             ],
           },
           {
             path: 'rooms',
             children: [
-              { element: <WorkShiftsTablePage />, index: true },
-              { path: 'new', element: <WorkShiftCreatePage /> },
-              { path: ':id/edit', element: <WorkShiftEditPage /> },
-            ],
-          },
-          {
-            path: 'departments',
-            children: [
-              { element: <WorkShiftsTablePage />, index: true },
-              { path: 'new', element: <WorkShiftCreatePage /> },
-              { path: ':id/edit', element: <WorkShiftEditPage /> },
+              { element: <RoomsHomePage />, index: true },
+              { path: 'new', element: <RoomsNewPage /> },
+              { path: ':id/edit', element: <RoomsEditPage /> },
             ],
           },
         ],
