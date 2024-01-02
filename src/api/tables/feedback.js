@@ -25,6 +25,72 @@ export function useGetUSFeedbackes(id) {
   return { ...memoizedValue, refetch };
 }
 
+export function useGetUSFeedbackesCount(id) {
+  const URL = endpoints.tables.USfeedbacksCount(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      feedbackCount: data  ,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
+export function useGetDepartmentFeedbackes(id) {
+  const URL = endpoints.tables.departmentfeedbacks(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      feedbackData: data || [] ,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
+export function useGetDepartmentFeedbackesCount(id) {
+  const URL = endpoints.tables.departmentfeedbacksCount(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      feedbackCount: data  ,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
 export function useGetDoctornaFeedbackes() {
   const URL = endpoints.tables.doctornafeedbacks;
 

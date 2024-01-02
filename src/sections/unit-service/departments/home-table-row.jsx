@@ -21,6 +21,10 @@ import {
   useGetDepartmentAppointmentConfigsCount,
   useGetDepartmentActivitiesCount,
   useGetDepartmentAppointmentsCount,
+  useGetDepartmentEconomicMovementsCount,
+  useGetDepartmentEmployeesCount,
+  useGetDepartmentFeedbackesCount,
+  useGetDepartmentRoomsCount,
 } from 'src/api/tables';
 
 // ----------------------------------------------------------------------
@@ -57,6 +61,10 @@ export default function CountriesTableRow({
   const { appointmentConfigCount } = useGetDepartmentAppointmentConfigsCount(row._id);
   const { activitiesCount } = useGetDepartmentActivitiesCount(row._id);
   const { appointmentsCount } = useGetDepartmentAppointmentsCount(row._id);
+  const { economecMovementsCount } = useGetDepartmentEconomicMovementsCount(row._id);
+  const { employeesCount } = useGetDepartmentEmployeesCount(row._id);
+  const { feedbackCount } = useGetDepartmentFeedbackesCount(row._id);
+  const { roomsCount } = useGetDepartmentRoomsCount(row._id);
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -83,7 +91,7 @@ export default function CountriesTableRow({
         }}
         onClick={showAccounting}
       >
-        Acc
+        {economecMovementsCount}
       </TableCell>
       <TableCell
         sx={{
@@ -119,7 +127,7 @@ export default function CountriesTableRow({
         }}
         onClick={showEmployees}
       >
-        Employees
+        {employeesCount}
       </TableCell>
       <TableCell
         sx={{
@@ -128,7 +136,7 @@ export default function CountriesTableRow({
         }}
         onClick={showQualityControl}
       >
-        QC
+        {feedbackCount}
       </TableCell>
       <TableCell
         sx={{
@@ -137,7 +145,7 @@ export default function CountriesTableRow({
         }}
         onClick={showRooms}
       >
-        Rooms
+        {roomsCount}
       </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
