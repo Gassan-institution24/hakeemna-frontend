@@ -137,7 +137,7 @@ export default function SortingSelectingTable() {
                     <TableCell padding="checkbox">
                       <Checkbox checked={table.selected.includes(row.name)} />
                     </TableCell>
-                    <TableCell> {row.name} </TableCell>
+                    <TableCell align="center"> {row.name} </TableCell>
                     <TableCell align="center">{row.calories}</TableCell>
                     <TableCell align="center">{row.fat}</TableCell>
                     <TableCell align="center">{row.carbs}</TableCell>

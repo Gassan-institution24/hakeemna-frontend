@@ -169,7 +169,7 @@ export default function AppointHistoryView({ patientData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table,refetch]
+    [dataInPage.length, table, refetch]
   );
   const handleCancelRows = useCallback(
     async (id) => {
@@ -190,7 +190,7 @@ export default function AppointHistoryView({ patientData }) {
         totalRowsFiltered: dataFiltered.length,
       });
     },
-    [refetch,dataFiltered.length, dataInPage.length,appointmentsData.length, table]
+    [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table]
   );
   const handleAddRow = useCallback(() => {
     router.push(paths.superadmin.patients.history.addAppointment(patientData._id));

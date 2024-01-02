@@ -49,7 +49,6 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  /// to edit
   { id: 'code', label: 'Code' },
   { id: 'trade_name', label: 'Trade name' },
   { id: 'scientific_name', label: 'Scientific name' },
@@ -57,13 +56,6 @@ const TABLE_HEAD = [
   { id: 'status', label: 'Status' },
   { id: 'country', label: 'Country' },
   { id: 'ATCCODE', label: 'ATCCODE' },
-  // { id: 'created_at', label: 'Date Of Creation' },
-  // { id: 'user_creation', label: 'Creater' },
-  // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
-  // { id: 'updated_at', label: 'Date Of Updating' },
-  // { id: 'user_modification', label: 'Last Modifier' },
-  // { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
-  // { id: 'modifications_nums', label: 'No Of Modifications' },
   { id: '', width: 88 },
 ];
 
@@ -87,6 +79,8 @@ export default function MedicinesTableView() {
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
+
+  const settings = useSettingsContext();
 
   const router = useRouter();
 
@@ -229,12 +223,12 @@ export default function MedicinesTableView() {
   );
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Medicines" /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

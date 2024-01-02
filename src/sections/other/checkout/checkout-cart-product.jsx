@@ -44,9 +44,9 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
         </Stack>
       </TableCell>
 
-      <TableCell>{fCurrency(price)}</TableCell>
+      <TableCell align="center">{fCurrency(price)}</TableCell>
 
-      <TableCell>
+      <TableCell align="center">
         <Box sx={{ width: 88, textAlign: 'right' }}>
           <IncrementerButton
             quantity={quantity}

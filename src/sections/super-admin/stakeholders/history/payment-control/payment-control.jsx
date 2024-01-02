@@ -189,16 +189,16 @@ export default function IncomePaymentControlView({ stakeholderData }) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.stakeholders.history.payment.edit(stakeholderData._id,id));
+      router.push(paths.superadmin.stakeholders.history.payment.edit(stakeholderData._id, id));
     },
-    [router,stakeholderData._id]
+    [router, stakeholderData._id]
   );
 
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.stakeholders.history.payment.info(stakeholderData._id,id));
+      router.push(paths.superadmin.stakeholders.history.payment.info(stakeholderData._id, id));
     },
-    [router,stakeholderData._id]
+    [router, stakeholderData._id]
   );
 
   const handleFilterStatus = useCallback(
@@ -476,7 +476,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   }
 
   if (service.length) {
-    inputData = inputData.filter((payment) => payment.unit_service && service.includes(payment.unit_service.name_english));
+    inputData = inputData.filter(
+      (payment) => payment.unit_service && service.includes(payment.unit_service.name_english)
+    );
   }
 
   if (!dateError) {

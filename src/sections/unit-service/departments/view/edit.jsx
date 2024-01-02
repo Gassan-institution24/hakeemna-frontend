@@ -10,7 +10,7 @@ import TableNewEditForm from '../department-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableEditView({departmentData}) {
+export default function TableEditView({ departmentData }) {
   const settings = useSettingsContext();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>

@@ -108,7 +108,7 @@ function BookingDetailsRow({ row }) {
           {row.destination.name}
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={row.customer.name}
             secondary={row.customer.phoneNumber}
@@ -121,7 +121,7 @@ function BookingDetailsRow({ row }) {
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={format(new Date(row.checkIn), 'dd MMM yyyy')}
             secondary={format(new Date(row.checkIn), 'p')}
@@ -134,7 +134,7 @@ function BookingDetailsRow({ row }) {
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={format(new Date(row.checkOut), 'dd MMM yyyy')}
             secondary={format(new Date(row.checkOut), 'p')}
@@ -147,7 +147,7 @@ function BookingDetailsRow({ row }) {
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <Label
             variant={lightMode ? 'soft' : 'filled'}
             color={

@@ -227,12 +227,12 @@ export default function MeasurmentTypesTableView() {
   );
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Measurment Types" /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

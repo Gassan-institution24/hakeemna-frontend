@@ -36,7 +36,7 @@ export default function CollapsibleTable() {
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell>Dessert (100g serving)</TableCell>
+              <TableCell align="center">Dessert (100g serving)</TableCell>
               <TableCell align="right">Calories</TableCell>
               <TableCell align="right">Fat&nbsp;(g)</TableCell>
               <TableCell align="right">Carbs&nbsp;(g)</TableCell>
@@ -63,7 +63,7 @@ function CollapsibleTableRow({ row }) {
   return (
     <>
       <TableRow>
-        <TableCell>
+        <TableCell align="center">
           <IconButton
             size="small"
             color={collapsible.value ? 'inherit' : 'default'}
@@ -108,8 +108,8 @@ function CollapsibleTableRow({ row }) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
+                    <TableCell align="center">Date</TableCell>
+                    <TableCell align="center">Customer</TableCell>
                     <TableCell align="right">Amount</TableCell>
                     <TableCell align="right">Total price ($)</TableCell>
                   </TableRow>
@@ -121,7 +121,7 @@ function CollapsibleTableRow({ row }) {
                       <TableCell component="th" scope="row">
                         {historyRow.date}
                       </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
+                      <TableCell align="center">{historyRow.customerId}</TableCell>
                       <TableCell align="right">{historyRow.amount}</TableCell>
                       <TableCell align="right">
                         {Math.round(historyRow.amount * row.price * 100) / 100}

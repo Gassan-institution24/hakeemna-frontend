@@ -57,7 +57,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <Label
             variant="soft"
             color={

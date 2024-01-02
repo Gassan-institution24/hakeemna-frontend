@@ -26,7 +26,7 @@ export default function TableCreateView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Medicines',                   /// edit
+            name: 'Medicines', /// edit
             href: paths.superadmin.tables.medicines.root,
           },
           { name: 'New Medicine' },

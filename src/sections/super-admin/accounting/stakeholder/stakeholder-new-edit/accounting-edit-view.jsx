@@ -13,9 +13,9 @@ import TableNewEditForm from './accounting-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function USAppointmentEditView({stakeholderData,licenseMovementData}) {
+export default function USAppointmentEditView({ stakeholderData, licenseMovementData }) {
   const settings = useSettingsContext();
-  const stakeholderName = stakeholderData?.name_english || 'Stakeholder'
+  const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
   const params = useParams();
   const { id } = params;
   return (
@@ -41,7 +41,12 @@ export default function USAppointmentEditView({stakeholderData,licenseMovementDa
           mb: { xs: 3, md: 5 },
         }}
       />
-      {licenseMovementData && <TableNewEditForm licenseMovementData={licenseMovementData} stakeholderData={stakeholderData} />}
+      {licenseMovementData && (
+        <TableNewEditForm
+          licenseMovementData={licenseMovementData}
+          stakeholderData={stakeholderData}
+        />
+      )}
     </Container>
   );
 }

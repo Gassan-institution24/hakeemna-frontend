@@ -91,6 +91,8 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
 
   const componentRef = useRef();
 
+  const settings = useSettingsContext();
+
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
@@ -173,12 +175,12 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
   const unitserviceName = unitServiceData?.name_english;
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading={`${unitserviceName} accounting`} /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

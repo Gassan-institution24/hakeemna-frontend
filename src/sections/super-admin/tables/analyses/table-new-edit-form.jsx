@@ -102,8 +102,18 @@ export default function TableNewEditForm({ currentSelected }) {
                 sm: 'repeat(2, 1fr)',
               }} /// edit
             >
-              <RHFTextField name="name_english" label="name english" />
-              <RHFTextField name="name_arabic" label="name arabic" />
+              <RHFTextField
+                lang="en"
+                onChange={handleEnglishInputChange}
+                name="name_english"
+                label="name english"
+              />
+              <RHFTextField
+                lang="ar"
+                onChange={handleArabicInputChange}
+                name="name_arabic"
+                label="name arabic"
+              />
             </Box>
             <Box
               rowGap={3}
@@ -115,6 +125,8 @@ export default function TableNewEditForm({ currentSelected }) {
               }}
             >
               <RHFTextField
+                lang="en"
+                onChange={handleEnglishInputChange}
                 sx={{ mt: 3 }}
                 name="description"
                 label="description"
@@ -123,6 +135,8 @@ export default function TableNewEditForm({ currentSelected }) {
                 rows={4}
               />
               <RHFTextField
+                lang="ar"
+                onChange={handleArabicInputChange}
                 sx={{ mt: 3 }}
                 name="description_arabic"
                 label="description arabic"

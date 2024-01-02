@@ -1,4 +1,4 @@
-import { format,isValid } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -34,15 +34,7 @@ export default function MovementTableRow({
   onEditRow,
   onDeleteRow,
 }) {
-  const {
-    stakeholder,
-    start_date,
-    end_date,
-    count,
-    payments,
-    user_no,
-    status
-  } = row;
+  const { stakeholder, start_date, end_date, count, payments, user_no, status } = row;
 
   const confirm = useBoolean();
 
@@ -52,12 +44,9 @@ export default function MovementTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
+        <TableCell>{stakeholder.code}</TableCell>
 
-        <TableCell >
-          {stakeholder.code}
-        </TableCell>
-
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={stakeholder?.name_english}
             secondary={stakeholder?.city}
@@ -70,40 +59,36 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(start_date))&&format(new Date(start_date), 'dd MMM yyyy')||''}
+            primary={
+              (isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMM yyyy')) || ''
+            }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(end_date))&&format(new Date(end_date), 'dd MMM yyyy')||''}
+            primary={
+              (isValid(new Date(end_date)) && format(new Date(end_date), 'dd MMM yyyy')) || ''
+            }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
-        <TableCell>
-          {count}
-        </TableCell>
-        <TableCell>
-          JOD {payments}
-        </TableCell>
-        <TableCell>
+        <TableCell align="center">{count}</TableCell>
+        <TableCell align="center">JOD {payments}</TableCell>
+        <TableCell align="center">
           <Label
             variant="soft"
             color={
-              (status === 'active' && 'success') ||
-              (status === 'inactive' && 'error') ||
-              'default'
+              (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
             }
           >
             {status}
           </Label>
         </TableCell>
-        <TableCell>
-            {user_no} users
-        </TableCell>
+        <TableCell align="center">{user_no} users</TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={onViewRow}>

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import DepartmentQCView from 'src/sections/unit-service/departments/view/qualitycontrole';
+import DepartmentQCView from 'src/sections/unit-service/departments/view/quality-control';
 import { useGetDepartment } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 
@@ -14,7 +14,7 @@ export default function DepartmentQCPage() {
   return (
     <>
       <Helmet>
-        <title>{name} Department Quality Control</title>
+        <title>{name||''} Department Quality Control</title>
       </Helmet>
 
       {data && <DepartmentQCView departmentData={data} />}

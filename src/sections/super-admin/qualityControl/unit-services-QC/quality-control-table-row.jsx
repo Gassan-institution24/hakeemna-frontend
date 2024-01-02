@@ -1,4 +1,4 @@
-import { format,isValid } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -35,29 +35,20 @@ export default function QCTableRow({
   onEditRow,
   onDeleteRow,
 }) {
-  const {
-    unit_service,
-    rate,
-    count,
-    read,
-    notRead,
-  } = row;
+  const { unit_service, rate, count, read, notRead } = row;
 
   const confirm = useBoolean();
 
   const DDL = usePopover();
   const popover = usePopover();
 
-  const overAllRate = rate/count
+  const overAllRate = rate / count;
 
   return (
     <>
       <TableRow hover selected={selected}>
-
-        <TableCell >
-          {unit_service.code}
-        </TableCell>
-        <TableCell>
+        <TableCell>{unit_service.code}</TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={unit_service?.name_english}
             secondary={unit_service?.city}
@@ -70,19 +61,13 @@ export default function QCTableRow({
           />
         </TableCell>
 
-        <TableCell>
-        <Rating size="small" readOnly value={overAllRate} precision={0.1} max={5} />
+        <TableCell align="center">
+          <Rating size="small" readOnly value={overAllRate} precision={0.1} max={5} />
         </TableCell>
 
-        <TableCell>
-          {count}
-        </TableCell>
-        <TableCell>
-          {read}
-        </TableCell>
-        <TableCell>
-          {notRead}
-        </TableCell>
+        <TableCell align="center">{count}</TableCell>
+        <TableCell align="center">{read}</TableCell>
+        <TableCell align="center">{notRead}</TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={onViewRow}>

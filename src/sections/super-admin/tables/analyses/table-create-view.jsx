@@ -26,7 +26,7 @@ export default function TableCreateView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Analyses',                   /// edit
+            name: 'Analyses', /// edit
             href: paths.superadmin.tables.analysis.root,
           },
           { name: 'New Analysis' },

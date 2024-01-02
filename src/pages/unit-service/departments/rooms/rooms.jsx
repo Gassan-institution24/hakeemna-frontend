@@ -1,23 +1,23 @@
 import { Helmet } from 'react-helmet-async';
 
-import DepartmentActivitiesView from 'src/sections/unit-service/departments/view/activities'
+import DepartmentRoomsView from 'src/sections/unit-service/departments/view/rooms';
 import { useGetDepartment } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function DepartmentActivitiesPage() {
+export default function DepartmentRoomsPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetDepartment(id);
-  const name = data?.name_english
+  const name = data?.name_english;
   return (
     <>
       <Helmet>
-        <title>{name} Department Activities</title>
+        <title>{name||''} Department Rooms</title>
       </Helmet>
 
-      {data && <DepartmentActivitiesView departmentData={data} />}
+      {data && <DepartmentRoomsView departmentData={data} />}
     </>
   );
 }

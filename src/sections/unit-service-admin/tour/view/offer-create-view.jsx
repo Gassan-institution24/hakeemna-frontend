@@ -17,7 +17,6 @@ export default function TourCreateView() {
       <CustomBreadcrumbs
         heading="Create a new offer"
         links={[
-    
           {
             name: 'Offer',
             href: paths.dashboard.tour.root,

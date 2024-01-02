@@ -80,9 +80,11 @@ export default function UnitServicesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const componentRef = useRef();
+
+  const settings = useSettingsContext();
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
@@ -218,7 +220,7 @@ export default function UnitServicesTableView() {
   );
   const handleShowActivitiesRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.departments.activities(id)); /// edit
+      router.push(paths.unitservice.departments.activities.root(id)); /// edit
     },
     [router]
   );
@@ -236,7 +238,7 @@ export default function UnitServicesTableView() {
   );
   const handleShowemployeesRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.departments.employees(id)); /// edit
+      router.push(paths.unitservice.departments.employees.root(id)); /// edit
     },
     [router]
   );
@@ -248,7 +250,7 @@ export default function UnitServicesTableView() {
   );
   const handleShowRoomsRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.departments.rooms(id)); /// edit
+      router.push(paths.unitservice.departments.rooms.root(id)); /// edit
     },
     [router]
   );
@@ -272,7 +274,7 @@ export default function UnitServicesTableView() {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Departments" /// edit
           links={[

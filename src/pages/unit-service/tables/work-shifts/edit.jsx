@@ -14,7 +14,7 @@ export default function WorkShiftEditPage() {
   return (
     <>
       <Helmet>
-        <title>Edit {name} Work Shift</title>
+        <title>Edit {name||''} Work Shift</title>
       </Helmet>
 
       {data && <WorkShiftEditView workShiftData={data} />}

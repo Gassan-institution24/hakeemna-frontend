@@ -24,8 +24,8 @@ import { RouterLink } from 'src/routes/components';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import UnitServicesAccounting from './unit-services/accounting-table'
-import StakeholderAccounting from './stakeholders/accounting-table'
+import UnitServicesAccounting from './unit-services/accounting-table';
+import StakeholderAccounting from './stakeholders/accounting-table';
 import TableAnalytic from '../patients/history/table-analytic';
 
 // ----------------------------------------------------------------------
@@ -41,11 +41,7 @@ export default function AccountingHomePage() {
     setCurrentTab(newValue);
   }, []);
 
-
-  const HistoryTabsList = [
-    'Unit Services',
-    'Stakeholders',
-  ]; 
+  const HistoryTabsList = ['Unit Services', 'Stakeholders'];
 
   const renderTabs = (
     <Tabs
@@ -56,19 +52,14 @@ export default function AccountingHomePage() {
       }}
     >
       {HistoryTabsList.map((tab, idx) => (
-        <Tab
-          key={idx}
-          iconPosition="end"
-          value={tab}
-          label={tab}
-        />
+        <Tab key={idx} iconPosition="end" value={tab} label={tab} />
       ))}
     </Tabs>
   );
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading='Accounting'
+        heading="Accounting"
         links={[
           {
             name: 'Dashboard',
@@ -80,7 +71,7 @@ export default function AccountingHomePage() {
         ]}
         style={{ marginBottom: '25px' }}
       />
-     
+
       {renderTabs}
 
       {currentTab === 'Unit Services' && <UnitServicesAccounting />}

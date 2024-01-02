@@ -158,12 +158,12 @@ export default function SymptomsTableView() {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Symptoms" /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

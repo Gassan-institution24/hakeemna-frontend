@@ -21,14 +21,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function FeedbackRow({
-  row,
-  onEditRow,
-  setFilters,
-  onUnread,
-  onRead,
-  filters,
-}) {
+export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRead, filters }) {
   const {
     code,
     department,
@@ -50,18 +43,20 @@ export default function FeedbackRow({
   const DDL = usePopover();
 
   const renderPrimary = (
-    <TableRow hover >
-      <TableCell>{code}</TableCell>
-      <TableCell>{title}</TableCell>
-      <TableCell>{Body}</TableCell>
-      <TableCell ><Rating size="small" readOnly value={Rate} precision={0.1} max={5} /></TableCell>
+    <TableRow hover>
+      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">{title}</TableCell>
+      <TableCell align="center">{Body}</TableCell>
       <TableCell>
+        <Rating size="small" readOnly value={Rate} precision={0.1} max={5} />
+      </TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={
             (status === 'read' && 'success') || (status === 'not read' && 'error') || 'default'
           }
-          >
+        >
           {status}
         </Label>
       </TableCell>

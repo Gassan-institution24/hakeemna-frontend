@@ -14,7 +14,7 @@ export default function EmployeeInfoPage() {
   return (
     <>
       <Helmet>
-        <title>{name} Employee Info</title>
+        <title>{name||''} Employee Info</title>
       </Helmet>
 
       {data && <EmployeeInfoView employeeData={data} />}

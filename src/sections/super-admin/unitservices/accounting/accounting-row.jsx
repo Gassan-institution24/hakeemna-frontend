@@ -20,12 +20,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function AccountingRow({
-  row,
-  onEditRow,
-  setFilters,
-  filters,
-}) {
+export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
   const {
     code,
     free_subscription,
@@ -50,27 +45,42 @@ export default function AccountingRow({
   const DDL = usePopover();
 
   const renderPrimary = (
-    <TableRow hover >
-      <TableCell>{code}</TableCell>
-      <TableCell onClick={()=>setFilters({...filters,name:free_subscription?.name_english})}>{free_subscription?.name_english}</TableCell>
-      <TableCell onClick={()=>setFilters({...filters,name:subscription?.name_english})}>{subscription?.name_english}</TableCell>
-      <TableCell>
+    <TableRow hover>
+      <TableCell align="center">{code}</TableCell>
+      <TableCell
+        align="center"
+        onClick={() => setFilters({ ...filters, name: free_subscription?.name_english })}
+      >
+        {free_subscription?.name_english}
+      </TableCell>
+      <TableCell
+        align="center"
+        onClick={() => setFilters({ ...filters, name: subscription?.name_english })}
+      >
+        {subscription?.name_english}
+      </TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
-          >
+        >
           {status}
         </Label>
       </TableCell>
-      <TableCell>{fDateTime(Start_date)}</TableCell>
-      <TableCell>{fDateTime(End_date)}</TableCell>
-      <TableCell>{Users_num}</TableCell>
-      <TableCell>{price}</TableCell>
-      <TableCell onClick={()=>setFilters({...filters,name:Payment_method?.name_english})}>{Payment_method?.name_english}</TableCell>
-      <TableCell>{Payment_frequency}</TableCell>
-      <TableCell>{note}</TableCell>
+      <TableCell align="center">{fDateTime(Start_date)}</TableCell>
+      <TableCell align="center">{fDateTime(End_date)}</TableCell>
+      <TableCell align="center">{Users_num}</TableCell>
+      <TableCell align="center">{price}</TableCell>
+      <TableCell
+        align="center"
+        onClick={() => setFilters({ ...filters, name: Payment_method?.name_english })}
+      >
+        {Payment_method?.name_english}
+      </TableCell>
+      <TableCell align="center">{Payment_frequency}</TableCell>
+      <TableCell align="center">{note}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />

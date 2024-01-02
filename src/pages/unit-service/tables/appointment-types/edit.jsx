@@ -14,7 +14,7 @@ export default function AppointmentTypeEditPage() {
   return (
     <>
       <Helmet>
-        <title>Edit {name} Appointment Type</title>
+        <title>Edit {name||''} Appointment Type</title>
       </Helmet>
 
       {data && <AppointmentTypeEditView appointmentTypeData={data} />}

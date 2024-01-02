@@ -26,7 +26,6 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 
 import OffersView from './offers-table';
 
-
 // ----------------------------------------------------------------------
 
 export default function StakeholderOffersView({ stakeholderData }) {
@@ -40,10 +39,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
     setCurrentTab(newValue);
   }, []);
 
-  const OffersTabsList = [
-    'Offers',
-    'Taken Offers',
-  ]; 
+  const OffersTabsList = ['Offers', 'Taken Offers'];
 
   const renderTabs = (
     <Tabs
@@ -54,18 +50,11 @@ export default function StakeholderOffersView({ stakeholderData }) {
       }}
     >
       {OffersTabsList.map((tab, idx) => (
-        <Tab
-          key={idx}
-          iconPosition="end"
-          value={tab}
-          label={tab}
-        />
+        <Tab key={idx} iconPosition="end" value={tab} label={tab} />
       ))}
     </Tabs>
   );
-  const stakeholderName =
-    (stakeholderData?.name_english) ||
-    'Stakeholder';
+  const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -85,7 +74,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
         ]}
         style={{ marginBottom: '25px' }}
       />
-     
+
       {/* {renderTabs} */}
 
       {currentTab === 'Offers' && <OffersView stakeholderData={stakeholderData} />}

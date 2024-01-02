@@ -157,7 +157,7 @@ export default function PostDetailsView({ title }) {
   );
 
   return (
-    <Container maxWidth={false}>
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       {postLoading && renderSkeleton}
 
       {postError && renderError}

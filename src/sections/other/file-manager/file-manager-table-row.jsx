@@ -120,7 +120,7 @@ export default function FileManagerTableRow({ row, selected, onSelectRow, onDele
           />
         </TableCell>
 
-        <TableCell onClick={handleClick}>
+        <TableCell align="center" onClick={handleClick}>
           <Stack direction="row" alignItems="center" spacing={2}>
             <FileThumbnail file={type} sx={{ width: 36, height: 36 }} />
 
@@ -138,15 +138,15 @@ export default function FileManagerTableRow({ row, selected, onSelectRow, onDele
           </Stack>
         </TableCell>
 
-        <TableCell onClick={handleClick} sx={{ whiteSpace: 'nowrap' }}>
+        <TableCell align="center" onClick={handleClick} sx={{ whiteSpace: 'nowrap' }}>
           {fData(size)}
         </TableCell>
 
-        <TableCell onClick={handleClick} sx={{ whiteSpace: 'nowrap' }}>
+        <TableCell align="center" onClick={handleClick} sx={{ whiteSpace: 'nowrap' }}>
           {type}
         </TableCell>
 
-        <TableCell onClick={handleClick} sx={{ whiteSpace: 'nowrap' }}>
+        <TableCell align="center" onClick={handleClick} sx={{ whiteSpace: 'nowrap' }}>
           <ListItemText
             primary={format(new Date(modifiedAt), 'dd MMM yyyy')}
             secondary={format(new Date(modifiedAt), 'p')}

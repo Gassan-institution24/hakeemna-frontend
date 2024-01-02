@@ -20,7 +20,7 @@ import TourDetailsBookers from '../offer-details-bookers';
 
 export default function TourDetailsView({ id }) {
   const settings = useSettingsContext();
-  const {data} = useGetOffer(id)
+  const { data } = useGetOffer(id);
   const [publish, setPublish] = useState(data?.publish);
 
   const [currentTab, setCurrentTab] = useState('content');

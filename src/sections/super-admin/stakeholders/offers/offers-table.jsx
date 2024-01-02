@@ -89,6 +89,8 @@ export default function StakeholderOffersView({ stakeholderData }) {
 
   const componentRef = useRef();
 
+  const settings = useSettingsContext();
+
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
@@ -119,7 +121,11 @@ export default function StakeholderOffersView({ stakeholderData }) {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all' || filters.rate.length > 0 || (!!filters.start_date && !!filters.end_date);
+  const canReset =
+    !!filters?.name ||
+    filters.status !== 'all' ||
+    filters.rate.length > 0 ||
+    (!!filters.start_date && !!filters.end_date);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -169,9 +175,9 @@ export default function StakeholderOffersView({ stakeholderData }) {
 
   const handleViewRow = useCallback(
     (ID) => {
-      router.push(paths.superadmin.stakeholders.offer(stakeholderData._id,ID));
+      router.push(paths.superadmin.stakeholders.offer(stakeholderData._id, ID));
     },
-    [router,stakeholderData._id]
+    [router, stakeholderData._id]
   );
 
   const handleActivate = useCallback(
@@ -229,7 +235,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <Card>
           <Tabs
             value={filters.status}
@@ -289,7 +295,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
           )}
 
           <TableContainer>
-          <TableSelectedAction
+            <TableSelectedAction
               // dense={table.dense}
               numSelected={table.selected.length}
               rowCount={dataFiltered.length}
@@ -439,7 +445,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name, rate,start_date,end_date } = filters;
+  const { status, name, rate, start_date, end_date } = filters;
 
   const stabilizedThis = inputData?.map((el, index) => [el, index]);
 

@@ -27,7 +27,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, onDeleteRow }) {
-  console.log('onviewrowwwww',onViewRow)
+  console.log('onviewrowwwww', onViewRow);
   const {
     tableName,
     documents,
@@ -45,8 +45,8 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
 
   const popover = usePopover();
 
-  function stackComponent ({arr,idx})  {
-    return(
+  function stackComponent({ arr, idx }) {
+    return (
       <Stack
         key={idx}
         direction="row"
@@ -58,11 +58,27 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
           },
         }}
       >
-        {arr?.map((item)=>item === 'active'||item ==="inactive"? <Box sx={{flex:1}}><Label variant="soft" color={ (item === 'active' && 'success') || (item === 'inactive' && 'warning')||'default' }>{item} </Label></Box>: <Box sx={{flex:1}} >{item}</Box> )}
-        
+        {arr?.map((item) =>
+          item === 'active' || item === 'inactive' ? (
+            <Box sx={{ flex: 1 }}>
+              <Label
+                variant="soft"
+                color={
+                  (item === 'active' && 'success') ||
+                  (item === 'inactive' && 'warning') ||
+                  'default'
+                }
+              >
+                {item}{' '}
+              </Label>
+            </Box>
+          ) : (
+            <Box sx={{ flex: 1 }}>{item}</Box>
+          )
+        )}
       </Stack>
-    )
-  };
+    );
+  }
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -70,7 +86,7 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell> */}
 
-      <TableCell>
+      <TableCell align="center">
         <Box
           onClick={onViewRow}
           sx={{
@@ -84,11 +100,11 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
         </Box>
       </TableCell>
 
-      <TableCell>
+      <TableCell align="center">
         <Box>Note</Box>
       </TableCell>
 
-      {/* <TableCell>
+      {/* <TableCell align="center">
         <ListItemText
           primary={format(new Date(createdAt), 'dd MMM yyyy')}
           secondary={format(new Date(createdAt), 'p')}
@@ -103,9 +119,9 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
 
       <TableCell align="center"> {totalQuantity} </TableCell>
 
-      <TableCell> {fCurrency(subTotal)} </TableCell>
+      <TableCell align="center"> {fCurrency(subTotal)} </TableCell>
 
-      <TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={
@@ -148,86 +164,355 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
           unmountOnExit
           sx={{ bgcolor: 'background.neutral' }}
         >
-          {tableName === 'countries' && <Stack component={Paper} sx={{ m: 1.5 }}>
-              {stackComponent({arr:['Code','Name','Status','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,item.status,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'cities' && <Stack component={Paper} sx={{ m: 1.5 }}>
-              {stackComponent({arr:['Code','Name','Country','Status','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,item.country?.name_english,item.status,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'surgeries' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'diseases' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Category','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name,item.category?.name,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'specialities' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'sub_specialities' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Specialty','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,item.specialty?.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'insurance_companies' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Country','Status','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name,item.country?.name,item.status,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'added_value_tax_GD' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.tax_name,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'departments' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Unit Service','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,item.unit_service?.name_english,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'unit_services' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','City','Status','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,item.city?.name_english,item.status,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'medicines' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Country','Status','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.trade_name,item.country?.name_english,item.status,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'appointment_types' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Status','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name,item.status,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'free_subscriptions' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','General','Status','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name,item.general,item.status,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'symptoms' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'patients' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Status','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.first_name,item.status,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'diets' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'currencies' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Symbol','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name_english,item.symbol,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'analyses' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'medical_categories' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
-          {tableName === 'medicines_families' && <Stack component={Paper} sx={{ m: 1.5 }}>
-          {stackComponent({arr:['Code','Name','Created At','Updated At']})}
-              {documents.map((item, idx) => stackComponent({idx:{idx},arr:[item.code,item.name,fDateTime(item.created_at),fDateTime(item.updated_at)]}))}
-          </Stack>}
+          {tableName === 'countries' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Status', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name_english,
+                    item.status,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'cities' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({
+                arr: ['Code', 'Name', 'Country', 'Status', 'Created At', 'Updated At'],
+              })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name_english,
+                    item.country?.name_english,
+                    item.status,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'surgeries' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'diseases' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Category', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name,
+                    item.category?.name,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'specialities' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name_english,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'sub_specialities' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Specialty', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name_english,
+                    item.specialty?.name_english,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'insurance_companies' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({
+                arr: ['Code', 'Name', 'Country', 'Status', 'Created At', 'Updated At'],
+              })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name,
+                    item.country?.name,
+                    item.status,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'added_value_tax_GD' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.tax_name,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'departments' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({
+                arr: ['Code', 'Name', 'Unit Service', 'Created At', 'Updated At'],
+              })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name_english,
+                    item.unit_service?.name_english,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'unit_services' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({
+                arr: ['Code', 'Name', 'City', 'Status', 'Created At', 'Updated At'],
+              })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name_english,
+                    item.city?.name_english,
+                    item.status,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'medicines' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({
+                arr: ['Code', 'Name', 'Country', 'Status', 'Created At', 'Updated At'],
+              })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.trade_name,
+                    item.country?.name_english,
+                    item.status,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'appointment_types' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Status', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name,
+                    item.status,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'free_subscriptions' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({
+                arr: ['Code', 'Name', 'General', 'Status', 'Created At', 'Updated At'],
+              })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name,
+                    item.general,
+                    item.status,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'symptoms' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'patients' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Status', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.first_name,
+                    item.status,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'diets' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'currencies' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Symbol', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name_english,
+                    item.symbol,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'analyses' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'medical_categories' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
+          {tableName === 'medicines_families' && (
+            <Stack component={Paper} sx={{ m: 1.5 }}>
+              {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
+              {documents.map((item, idx) =>
+                stackComponent({
+                  idx: { idx },
+                  arr: [
+                    item.code,
+                    item.name,
+                    fDateTime(item.created_at),
+                    fDateTime(item.updated_at),
+                  ],
+                })
+              )}
+            </Stack>
+          )}
         </Collapse>
       </TableCell>
     </TableRow>

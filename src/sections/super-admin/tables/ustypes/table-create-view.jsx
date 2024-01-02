@@ -26,7 +26,7 @@ export default function TableCreateView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Unit Service Types',                   /// edit
+            name: 'Unit Service Types', /// edit
             href: paths.superadmin.tables.unitservicetypes.root,
           },
           { name: 'New Unit Service Type' },

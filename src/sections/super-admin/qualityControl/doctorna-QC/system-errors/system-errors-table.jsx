@@ -78,6 +78,8 @@ export default function DoctornaSystemErrorsView() {
 
   const componentRef = useRef();
 
+  const settings = useSettingsContext();
+
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
@@ -106,7 +108,7 @@ export default function DoctornaSystemErrorsView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const codeOptions = Array.from(new Set(systemErrorsData.map(data => data.error_code)));
+  const codeOptions = Array.from(new Set(systemErrorsData.map((data) => data.error_code)));
 
   const canReset = !!filters?.name || filters.status !== 'all' || filters.errorCodes.length > 0;
 
@@ -183,7 +185,7 @@ export default function DoctornaSystemErrorsView() {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <Card>
           <Tabs
             value={filters.status}
@@ -326,10 +328,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.error_msg &&
-          data?.error_msg?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.error_code &&
-          data?.error_code?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.error_msg && data?.error_msg?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.error_code && data?.error_code?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

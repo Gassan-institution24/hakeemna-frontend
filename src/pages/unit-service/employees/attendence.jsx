@@ -14,7 +14,7 @@ export default function EmployeeAttendencePage() {
   return (
     <>
       <Helmet>
-        <title>{name} Employee Attendence</title>
+        <title>{name||''} Employee Attendence</title>
       </Helmet>
 
       {data && <EmployeeAttendenceView employeeData={data} />}

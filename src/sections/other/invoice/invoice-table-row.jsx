@@ -70,7 +70,7 @@ export default function InvoiceTableRow({
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={format(new Date(createDate), 'dd MMM yyyy')}
             secondary={format(new Date(createDate), 'p')}
@@ -83,7 +83,7 @@ export default function InvoiceTableRow({
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={format(new Date(dueDate), 'dd MMM yyyy')}
             secondary={format(new Date(dueDate), 'p')}
@@ -96,11 +96,11 @@ export default function InvoiceTableRow({
           />
         </TableCell>
 
-        <TableCell>{fCurrency(totalAmount)}</TableCell>
+        <TableCell align="center">{fCurrency(totalAmount)}</TableCell>
 
         <TableCell align="center">{sent}</TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <Label
             variant="soft"
             color={

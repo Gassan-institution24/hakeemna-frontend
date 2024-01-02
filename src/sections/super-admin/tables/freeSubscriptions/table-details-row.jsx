@@ -60,13 +60,14 @@ export default function TableDetailsRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell>
+      <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell>{name_english}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
 
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -77,6 +78,7 @@ export default function TableDetailsRow({
         {country?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -87,6 +89,7 @@ export default function TableDetailsRow({
         {city?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -97,6 +100,7 @@ export default function TableDetailsRow({
         {US_type?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -106,13 +110,13 @@ export default function TableDetailsRow({
       >
         {speciality?.name_english}
       </TableCell>
-      <TableCell>{fDateTime(offer_date)}</TableCell>
-      <TableCell>{period_in_months}</TableCell>
-      <TableCell>{concept}</TableCell>
-      <TableCell>
+      <TableCell align="center">{fDateTime(offer_date)}</TableCell>
+      <TableCell align="center">{period_in_months}</TableCell>
+      <TableCell align="center">{concept}</TableCell>
+      <TableCell align="center">
         <Iconify icon={!general ? 'mingcute:close-line' : 'eva:checkmark-fill'} width={16} />
       </TableCell>
-      <TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={

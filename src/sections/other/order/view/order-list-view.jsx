@@ -85,26 +85,26 @@ export default function OrderListView() {
   const dataFiltered = applyFilter({
     inputData: tableData.filter((data) =>
       [
-        'cities',//
-        'surgeries',//
-        'diseases',//
-        'insurance_companies',//
-        'specialities',//
-        'sub_specialities',//
-        'countries',//
+        'cities', //
+        'surgeries', //
+        'diseases', //
+        'insurance_companies', //
+        'specialities', //
+        'sub_specialities', //
+        'countries', //
         'added_value_tax_GD',
-        'departments',//
-        'medicines',//
-        'unit_services',//
-        'appointment_types',//
-        'free_subscriptions',//
-        'symptoms',//
+        'departments', //
+        'medicines', //
+        'unit_services', //
+        'appointment_types', //
+        'free_subscriptions', //
+        'symptoms', //
         'patients',
-        'diets',//
-        'currencies',//
-        'analyses',//
-        'medical_categories',//
-        'medicines_families',//
+        'diets', //
+        'currencies', //
+        'analyses', //
+        'medical_categories', //
+        'medicines_families', //
       ].includes(data.tableName)
     ),
     comparator: getComparator(table.order, table.orderBy),

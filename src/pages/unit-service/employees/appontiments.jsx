@@ -14,7 +14,7 @@ export default function EmployeeAppointmentsPage() {
   return (
     <>
       <Helmet>
-        <title>{name} Employee Appointments</title>
+        <title>{name||''} Employee Appointments</title>
       </Helmet>
 
       {data && <EmployeeAppointmentsView employeeData={data} />}

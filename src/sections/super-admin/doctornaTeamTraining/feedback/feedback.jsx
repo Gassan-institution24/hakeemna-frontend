@@ -66,7 +66,7 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   status: 'all',
-  rate:[]
+  rate: [],
 };
 
 // ----------------------------------------------------------------------
@@ -160,12 +160,12 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
   const unitserviceName = unitServiceData?.name_english;
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading={`${unitserviceName} feedback`} /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {
@@ -319,8 +319,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter(
       (data) =>
         (data?.department?.name_english &&
-          data?.department?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          data?.department?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.department?.name_arabic &&
           data?.department?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.appointment?.name_english &&
@@ -331,8 +330,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.doctor?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.doctor?.name_arabic &&
           data?.doctor?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.title &&
-          data?.title?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.title && data?.title?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
@@ -342,7 +340,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter((order) => order.status === status);
   }
   if (rate.length > 0) {
-    inputData = inputData.filter((order) => rate.includes(order.Rate) );
+    inputData = inputData.filter((order) => rate.includes(order.Rate));
   }
 
   return inputData;

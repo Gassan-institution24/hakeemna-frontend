@@ -59,14 +59,15 @@ export default function OffersTableRow({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell>{code}</TableCell>
-      <TableCell>{name_english}</TableCell>
-      <TableCell>{comment}</TableCell>
-      <TableCell>{quantity}</TableCell>
-      <TableCell>
-        {currency?.symbol}{price}
+      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{comment}</TableCell>
+      <TableCell align="center">{quantity}</TableCell>
+      <TableCell align="center">
+        {currency?.symbol}
+        {price}
       </TableCell>
-      <TableCell>
+      <TableCell align="center">
         <ListItemText
           primary={isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMM yyyy')}
           secondary={isValid(new Date(start_date)) && format(new Date(start_date), 'p')}
@@ -78,7 +79,7 @@ export default function OffersTableRow({
           }}
         />
       </TableCell>
-      <TableCell>
+      <TableCell align="center">
         <ListItemText
           primary={isValid(new Date(end_date)) && format(new Date(end_date), 'dd MMM yyyy')}
           secondary={isValid(new Date(end_date)) && format(new Date(end_date), 'p')}
@@ -90,8 +91,8 @@ export default function OffersTableRow({
           }}
         />
       </TableCell>
-      <TableCell>{services?.length}</TableCell>
-      <TableCell>
+      <TableCell align="center">{services?.length}</TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={

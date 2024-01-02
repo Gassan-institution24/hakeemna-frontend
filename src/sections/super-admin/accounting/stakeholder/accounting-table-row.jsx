@@ -1,4 +1,4 @@
-import { format,isValid } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -70,14 +70,16 @@ export default function MovementTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell> */}
 
-        <TableCell >
-          {code}
-        </TableCell>
+        <TableCell>{code}</TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
-            primary={free_subscription?.name_english ||subscription?.name_english }
-            secondary={free_subscription?.period_in_months &&`${free_subscription?.period_in_months} months`||subscription?.period_in_months &&`${subscription?.period_in_months} months`}
+            primary={free_subscription?.name_english || subscription?.name_english}
+            secondary={
+              (free_subscription?.period_in_months &&
+                `${free_subscription?.period_in_months} months`) ||
+              (subscription?.period_in_months && `${subscription?.period_in_months} months`)
+            }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -87,27 +89,30 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(Start_date))&&format(new Date(Start_date), 'dd MMM yyyy')||''}
+            primary={
+              (isValid(new Date(Start_date)) && format(new Date(Start_date), 'dd MMM yyyy')) || ''
+            }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(End_date))&&format(new Date(End_date), 'dd MMM yyyy')||''}
+            primary={
+              (isValid(new Date(End_date)) && format(new Date(End_date), 'dd MMM yyyy')) || ''
+            }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
 
-        <TableCell>
-            {Users_num} users
+        <TableCell align="center">{Users_num} users</TableCell>
+        <TableCell align="center">
+          {currency?.symbol}
+          {price}
         </TableCell>
-        <TableCell>
-          {currency?.symbol}{price} 
-        </TableCell>
-        <TableCell>
-        <Label
+        <TableCell align="center">
+          <Label
             variant="soft"
             color={
               (status === 'active' && 'success') ||
@@ -118,9 +123,7 @@ export default function MovementTableRow({
             {status}
           </Label>
         </TableCell>
-        <TableCell>
-          {note} 
-        </TableCell>
+        <TableCell align="center">{note}</TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>

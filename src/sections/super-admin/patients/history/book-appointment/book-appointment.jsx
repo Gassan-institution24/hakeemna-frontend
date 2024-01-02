@@ -55,7 +55,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentListView({patientData}) {
+export default function AppointmentListView({ patientData }) {
   const settings = useSettingsContext();
 
   const openFilters = useBoolean();
@@ -69,7 +69,7 @@ export default function AppointmentListView({patientData}) {
 
   const { appointmentsData, refetch } = useGetAvailableAppointments();
 
-  console.log('dataaaaaaaapp',appointmentsData)
+  console.log('dataaaaaaaapp', appointmentsData);
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { unitservicesData } = useGetUnitservices();
@@ -78,8 +78,10 @@ export default function AppointmentListView({patientData}) {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const sortOptions = [{ value: 'latest', label: 'Latest' },
-  { value: 'oldest', label: 'Oldest' }]
+  const sortOptions = [
+    { value: 'latest', label: 'Latest' },
+    { value: 'oldest', label: 'Oldest' },
+  ];
 
   const dateError =
     filters.Offer_start_date && filters.Offer_end_date
@@ -90,7 +92,7 @@ export default function AppointmentListView({patientData}) {
     inputData: appointmentsData,
     filters,
     sortBy,
-    dateError
+    dateError,
   });
 
   const canReset = !isEqual(defaultFilters, filters);
@@ -117,15 +119,39 @@ export default function AppointmentListView({patientData}) {
 
       if (inputValue) {
         const results = appointmentsData.filter(
-          (appointment) => ((appointment.name_english && appointment.name_english?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
-          (appointment.name_arabic && appointment.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
-          (appointment.unit_service && appointment.unit_service.name_english?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
-          (appointment.unit_service && appointment.unit_service.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
-          (appointment.work_group &&appointment.work_group.employees && appointment.work_group.employees.some((employee)=>employee.first_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1)) ||
-          (appointment.work_group &&appointment.work_group.employees && appointment.work_group.employees.some((employee)=>employee.last_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1)) ||
-          (appointment.work_group &&appointment.work_group.employees && appointment.work_group.employees.some((employee)=>employee.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1)) ||
-          appointment?._id === search.query.toLowerCase() ||
-          JSON.stringify(appointment.code) === search.query.toLowerCase() )
+          (appointment) =>
+            (appointment.name_english &&
+              appointment.name_english?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
+            (appointment.name_arabic &&
+              appointment.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
+            (appointment.unit_service &&
+              appointment.unit_service.name_english
+                ?.toLowerCase()
+                .indexOf(search.query.toLowerCase()) !== -1) ||
+            (appointment.unit_service &&
+              appointment.unit_service.name_arabic
+                ?.toLowerCase()
+                .indexOf(search.query.toLowerCase()) !== -1) ||
+            (appointment.work_group &&
+              appointment.work_group.employees &&
+              appointment.work_group.employees.some(
+                (employee) =>
+                  employee.first_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+              )) ||
+            (appointment.work_group &&
+              appointment.work_group.employees &&
+              appointment.work_group.employees.some(
+                (employee) =>
+                  employee.last_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+              )) ||
+            (appointment.work_group &&
+              appointment.work_group.employees &&
+              appointment.work_group.employees.some(
+                (employee) =>
+                  employee.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+              )) ||
+            appointment?._id === search.query.toLowerCase() ||
+            JSON.stringify(appointment.code) === search.query.toLowerCase()
         );
 
         setSearch((prevState) => ({
@@ -134,7 +160,7 @@ export default function AppointmentListView({patientData}) {
         }));
       }
     },
-    [search.query,appointmentsData]
+    [search.query, appointmentsData]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -238,8 +264,17 @@ export default function AppointmentListView({patientData}) {
 
 // ----------------------------------------------------------------------
 
-const applyFilter = ({ inputData, filters, sortBy,dateError}) => {
-  const { appointtypes, payment_methods, date, start_date, end_date, unitServices, countries, cities } = filters;
+const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
+  const {
+    appointtypes,
+    payment_methods,
+    date,
+    start_date,
+    end_date,
+    unitServices,
+    countries,
+    cities,
+  } = filters;
 
   // SORT BY
   if (sortBy === 'latest') {
@@ -249,7 +284,6 @@ const applyFilter = ({ inputData, filters, sortBy,dateError}) => {
   if (sortBy === 'oldest') {
     inputData = orderBy(inputData, ['start_time'], ['asc']);
   }
-
 
   // FILTERS
 
@@ -282,5 +316,5 @@ const applyFilter = ({ inputData, filters, sortBy,dateError}) => {
   return inputData;
 };
 AppointmentListView.propTypes = {
-    patientData: PropTypes.object,
-  };
+  patientData: PropTypes.object,
+};

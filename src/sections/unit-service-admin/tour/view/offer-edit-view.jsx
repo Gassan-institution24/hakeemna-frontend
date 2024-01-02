@@ -17,7 +17,7 @@ import TourNewEditForm from '../offer-new-edit-form';
 export default function TourEditView({ id }) {
   const settings = useSettingsContext();
 
-  const {data} = useGetOffer(id)
+  const { data } = useGetOffer(id);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>

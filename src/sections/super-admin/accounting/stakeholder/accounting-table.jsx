@@ -44,7 +44,7 @@ import {
 } from 'src/components/table';
 import { useGetStakeholderLicenseMovement } from 'src/api/tables';
 
-import TableAnalytic from '../../patients/history/table-analytic'; 
+import TableAnalytic from '../../patients/history/table-analytic';
 import AccountingTableRow from './accounting-table-row';
 import MovementTableToolbar from './accounting-table-toolbar';
 import MovementTableFiltersResult from './accounting-filters-result';
@@ -73,7 +73,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function StakeholderlicenseMovementView({stakeholderData}) {
+export default function StakeholderlicenseMovementView({ stakeholderData }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -85,8 +85,8 @@ export default function StakeholderlicenseMovementView({stakeholderData}) {
   // const confirm = useBoolean();
 
   const { licenseMovements, refetch } = useGetStakeholderLicenseMovement(stakeholderData._id);
-  console.log('licenseMovements',stakeholderData._id)
-  console.log('licenseMovements',licenseMovements)
+  console.log('licenseMovements', stakeholderData._id);
+  console.log('licenseMovements', licenseMovements);
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -201,9 +201,9 @@ export default function StakeholderlicenseMovementView({stakeholderData}) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.accounting.stakeholder.edit(stakeholderData._id,id));
+      router.push(paths.superadmin.accounting.stakeholder.edit(stakeholderData._id, id));
     },
-    [router,stakeholderData._id]
+    [router, stakeholderData._id]
   );
 
   const handleViewRow = useCallback(
@@ -227,33 +227,33 @@ export default function StakeholderlicenseMovementView({stakeholderData}) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-        heading='Accounting'
-        links={[
-          {
-            name: 'Dashboard',
-            href: paths.superadmin.root,
-          },
-          {
-            name: 'Accounting',
-            href: paths.superadmin.accounting.root,
-          },
-          {
-            name: `${stakeholderData?.name_english || 'Stkeholder'} Accounting`,
-          },
-        ]}
-        action={
-          <Button
-            component={RouterLink}
-            href={paths.superadmin.accounting.stakeholder.add(stakeholderData._id)} /// edit
-            variant="contained"
-            startIcon={<Iconify icon="mingcute:add-line" />}
-          >
-            New License
-          </Button> 
-        }
-        style={{ marginBottom: '25px' }}
-      />
+        <CustomBreadcrumbs
+          heading="Accounting"
+          links={[
+            {
+              name: 'Dashboard',
+              href: paths.superadmin.root,
+            },
+            {
+              name: 'Accounting',
+              href: paths.superadmin.accounting.root,
+            },
+            {
+              name: `${stakeholderData?.name_english || 'Stkeholder'} Accounting`,
+            },
+          ]}
+          action={
+            <Button
+              component={RouterLink}
+              href={paths.superadmin.accounting.stakeholder.add(stakeholderData._id)} /// edit
+              variant="contained"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+            >
+              New License
+            </Button>
+          }
+          style={{ marginBottom: '25px' }}
+        />
 
         <Card>
           <Tabs
@@ -381,11 +381,7 @@ export default function StakeholderlicenseMovementView({stakeholderData}) {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(
-                      table.page,
-                      table.rowsPerPage,
-                      licenseMovements.length
-                    )}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, licenseMovements.length)}
                   />
 
                   <TableNoData notFound={notFound} />

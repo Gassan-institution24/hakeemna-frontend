@@ -64,13 +64,14 @@ export default function TableDetailsRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell>
+      <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell>{name_english}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
 
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -81,6 +82,7 @@ export default function TableDetailsRow({
         {country?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -91,6 +93,7 @@ export default function TableDetailsRow({
         {city?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -101,6 +104,7 @@ export default function TableDetailsRow({
         {US_type?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -110,7 +114,7 @@ export default function TableDetailsRow({
       >
         {unit_service?.name_english}
       </TableCell>
-      <TableCell>
+      <TableCell align="center">
         {package_appointment && (
           <li>
             Appointments
@@ -141,13 +145,11 @@ export default function TableDetailsRow({
             <br />
           </li>
         )}
-        {package_TAX_Income_reporting && <li>
-          Package TAX Income Reporting
-          </li>}
+        {package_TAX_Income_reporting && <li>Package TAX Income Reporting</li>}
       </TableCell>
-      <TableCell>{period_in_months}</TableCell>
-      <TableCell>{cost_in_usd?`$${cost_in_usd}`:"Free"}</TableCell>
-      <TableCell>
+      <TableCell align="center">{period_in_months}</TableCell>
+      <TableCell align="center">{cost_in_usd ? `$${cost_in_usd}` : 'Free'}</TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={

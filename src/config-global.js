@@ -6,7 +6,7 @@ import { paths } from 'src/routes/paths';
 // export const HOST_API = 'http://localhost:3000/';
 export const HOST_API = 'http://localhost:3000';
 export const ASSETS_API = 'http://localhost:3000';
-// export const HOST_API =  'https://doctorna-mauve.vercel.app';
+// export const HOST_API = 'https://doctorna-mauve.vercel.app';
 // export const ASSETS_API = 'https://doctorna-mauve.vercel.app';
 
 export const FIREBASE_API = {

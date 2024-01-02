@@ -21,14 +21,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function FeedbackRow({
-  row,
-  onEditRow,
-  setFilters,
-  onUnread,
-  onRead,
-  filters,
-}) {
+export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRead, filters }) {
   const {
     code,
     status,
@@ -46,17 +39,17 @@ export default function FeedbackRow({
   const DDL = usePopover();
 
   const renderPrimary = (
-    <TableRow hover >
-      <TableCell>{code}</TableCell>
-      <TableCell>{error_code}</TableCell>
-      <TableCell>{error_msg}</TableCell>
-      <TableCell>
+    <TableRow hover>
+      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">{error_code}</TableCell>
+      <TableCell align="center">{error_msg}</TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={
             (status === 'read' && 'success') || (status === 'not read' && 'error') || 'default'
           }
-          >
+        >
           {status}
         </Label>
       </TableCell>

@@ -26,7 +26,7 @@ export default function TableCreateView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Currency',                   /// edit
+            name: 'Currency', /// edit
             href: paths.superadmin.tables.currency.root,
           },
           { name: 'New Currency' },

@@ -17,6 +17,7 @@ import { saveAs } from 'file-saver';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -40,13 +41,6 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'name' },
   { id: 'description', label: 'description' },
-  // { id: 'created_at', label: 'Date Of Creation' },
-  // { id: 'user_creation', label: 'Creater' },
-  // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
-  // { id: 'updated_at', label: 'Date Of Updating' },
-  // { id: 'user_modification', label: 'Last Modifier' },
-  // { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
-  // { id: 'modifications_nums', label: 'No Of Modifications' },
   { id: '', width: 88 },
 ];
 
@@ -62,6 +56,8 @@ export default function AnalysesTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
+
+  const settings = useSettingsContext();
 
   const router = useRouter();
 
@@ -146,12 +142,12 @@ export default function AnalysesTableView() {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Analyses" /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

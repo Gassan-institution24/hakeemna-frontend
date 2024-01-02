@@ -21,12 +21,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function FeedbackRow({
-  row,
-  onEditRow,
-  setFilters,
-  filters,
-}) {
+export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
   const {
     code,
     appointment,
@@ -43,24 +38,24 @@ export default function FeedbackRow({
   const DDL = usePopover();
 
   const renderPrimary = (
-    <TableRow hover >
-      <TableCell>{code}</TableCell>
-      <TableCell>{title}</TableCell>
-      <TableCell>
+    <TableRow hover>
+      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">{title}</TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
-          color={
-            (status === 'read' && 'success') || (status === 'unread' && 'error') || 'default'
-          }
-          >
+          color={(status === 'read' && 'success') || (status === 'unread' && 'error') || 'default'}
+        >
           {status}
         </Label>
       </TableCell>
-      <TableCell>{Body}</TableCell>
-      <TableCell ><Rating size="small" readOnly value={Rate} precision={0.1} max={5} /></TableCell>
+      <TableCell align="center">{Body}</TableCell>
+      <TableCell>
+        <Rating size="small" readOnly value={Rate} precision={0.1} max={5} />
+      </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={DDL.onOpen}>
-        <Iconify icon="carbon:data-quality-definition" />
+          <Iconify icon="carbon:data-quality-definition" />
         </IconButton>
       </TableCell>
     </TableRow>

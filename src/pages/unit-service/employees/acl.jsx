@@ -14,7 +14,7 @@ export default function EmployeeACLPage() {
   return (
     <>
       <Helmet>
-        <title>{name} Employee ACL</title>
+        <title>{name||''} Employee ACL</title>
       </Helmet>
 
       {data && <EmployeeACLView employeeData={data} />}

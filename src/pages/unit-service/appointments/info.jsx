@@ -10,11 +10,11 @@ export default function AppointmentEditPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetAppointment(id);
-  const name = data?.name_english || 'Appointment';
+  const name = data?.name_english;
   return (
     <>
       <Helmet>
-        <title>{name} Appointment Info</title>
+        <title>{name||''} Appointment Info</title>
       </Helmet>
 
       {data &&<AppointmentInfoView appointmentData={data} />}

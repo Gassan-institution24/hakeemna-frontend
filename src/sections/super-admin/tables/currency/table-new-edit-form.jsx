@@ -102,8 +102,18 @@ export default function TableNewEditForm({ currentSelected }) {
                 sm: 'repeat(2, 1fr)',
               }} /// edit
             >
-              <RHFTextField name="name_english" label="name english" />
-              <RHFTextField name="name_arabic" label="name arabic" />
+              <RHFTextField
+                lang="en"
+                onChange={handleEnglishInputChange}
+                name="name_english"
+                label="name english"
+              />
+              <RHFTextField
+                lang="ar"
+                onChange={handleArabicInputChange}
+                name="name_arabic"
+                label="name arabic"
+              />
               <RHFTextField name="symbol" label="symbol" />
               <RHFTextField name="relation_to_dollar" label="one dollar equals" />
             </Box>

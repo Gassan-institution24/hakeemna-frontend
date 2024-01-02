@@ -1,4 +1,4 @@
-import { format,isValid } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -90,7 +90,7 @@ export default function MovementTableRow({
           /> */}
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={unit_service?.name_english}
             secondary={employee?.first_name}
@@ -103,7 +103,7 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={appointment?.name_english}
             secondary={format(new Date(appointment?.start_time), 'dd MMM yyyy p')}
@@ -116,10 +116,14 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={work_shift?.name_english}
-            secondary={isValid(new Date(work_shift?.start_time))&&isValid(new Date(work_shift?.start_time), 'dd MMM yyyy p')||''}
+            secondary={
+              (isValid(new Date(work_shift?.start_time)) &&
+                isValid(new Date(work_shift?.start_time), 'dd MMM yyyy p')) ||
+              ''
+            }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -128,7 +132,7 @@ export default function MovementTableRow({
             }}
           />
         </TableCell>
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={type}
             // secondary={format(new Date(work_shift?.start_time), 'p')}
@@ -140,7 +144,7 @@ export default function MovementTableRow({
             // }}
           />
         </TableCell>
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={hospital?.name_english}
             secondary={hospital?.city?.name_english}
@@ -153,9 +157,9 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell>{fCurrency(Balance)}</TableCell>
+        <TableCell align="center">{fCurrency(Balance)}</TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <Label
             variant="soft"
             color={

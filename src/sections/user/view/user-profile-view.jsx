@@ -9,7 +9,7 @@ import { paths } from 'src/routes/paths';
 
 import { useAuthContext } from 'src/auth/hooks';
 
-import { _userAbout} from 'src/_mock';
+import { _userAbout } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
@@ -80,7 +80,7 @@ export default function UserProfileView() {
         </Tabs>
       </Card>
 
-      {currentTab === 'profile' && <ProfileHome info={_userAbout}  />}
+      {currentTab === 'profile' && <ProfileHome info={_userAbout} />}
     </Container>
   );
 }

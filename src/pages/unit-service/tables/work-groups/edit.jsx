@@ -14,7 +14,7 @@ export default function WorkGroupEditPage() {
   return (
     <>
       <Helmet>
-        <title>Edit {name} Work Group</title>
+        <title>Edit {name||''} Work Group</title>
       </Helmet>
 
       {data && <WorkGroupEditView workGroupData={data} />}

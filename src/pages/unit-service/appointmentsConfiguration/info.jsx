@@ -14,7 +14,7 @@ export default function AppointmentConfigInfoPage() {
   return (
     <>
       <Helmet>
-        <title>{name} Appointment Configuration Info</title>
+        <title>{name||''} Appointment Configuration Info</title>
       </Helmet>
 
       {data && <AppointmentConfigInfoView appointmentConfigData={data} />}

@@ -90,14 +90,16 @@ export default function PatientInsuranceView({ patientData, refetch }) {
 
   const componentRef = useRef();
 
+  const settings = useSettingsContext();
+
   const popover = usePopover();
 
   const [filters, setFilters] = useState(defaultFilters);
 
   const { insuranseCosData } = useGetInsuranceCos();
-  const filteredInsuranceCos = insuranseCosData.filter((company) =>
-    !patientData?.insurance?.some((data) => data._id === company._id)
-  ).filter((data)=>data.status === 'active');
+  const filteredInsuranceCos = insuranseCosData
+    .filter((company) => !patientData?.insurance?.some((data) => data._id === company._id))
+    .filter((data) => data.status === 'active');
 
   const dateError =
     filters.startDate && filters.endDate
@@ -203,13 +205,15 @@ export default function PatientInsuranceView({ patientData, refetch }) {
     [handleFilters]
   );
   const patientName =
-    (patientData?.first_name && patientData?.last_name && `${patientData?.first_name} ${patientData?.last_name}`) ||
+    (patientData?.first_name &&
+      patientData?.last_name &&
+      `${patientData?.first_name} ${patientData?.last_name}`) ||
     (patientData?.first_name && patientData?.first_name) ||
     (patientData?.last_name && patientData?.last_name) ||
     'Patient';
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading={`${patientName} Insurance`} /// edit
           links={[
@@ -266,11 +270,9 @@ export default function PatientInsuranceView({ patientData, refetch }) {
                   >
                     {tab.value === 'all' && patientData?.insurance?.length}
                     {tab.value === 'active' &&
-                      patientData?.insurance.filter((order) => order.status === 'active')
-                        .length}
+                      patientData?.insurance.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      patientData?.insurance.filter((order) => order.status === 'inactive')
-                        .length}
+                      patientData?.insurance.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />

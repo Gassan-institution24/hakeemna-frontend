@@ -85,6 +85,8 @@ export default function UnitServicesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
+  const settings = useSettingsContext();
+
   const router = useRouter();
 
   const { unitservicesData, refetch } = useGetUnitservices();
@@ -258,12 +260,12 @@ export default function UnitServicesTableView() {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Unit Services" /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             { name: 'Unit Services' }, /// edit
@@ -421,7 +423,7 @@ export default function UnitServicesTableView() {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row._id)}
-                        showGeneralInfo={()=>handleShowGeneralInfoRow(row._id)}
+                        showGeneralInfo={() => handleShowGeneralInfoRow(row._id)}
                         showAccounting={() => handleShowAccountingRow(row._id)}
                         showCommunications={() => handleShowCommunicationsRow(row._id)}
                         showFeedback={() => handleShowFeedbacksRow(row._id)}

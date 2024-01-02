@@ -71,7 +71,7 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   status: 'all',
-  fees:[],
+  fees: [],
 };
 
 // ----------------------------------------------------------------------
@@ -229,12 +229,12 @@ export default function SubscriptionTableView() {
   );
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Subscriptions" /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             { name: 'Subscriptions' }, /// edit
@@ -391,11 +391,7 @@ export default function SubscriptionTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(
-                      table.page,
-                      table.rowsPerPage,
-                      subscriptionsData.length
-                    )}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, subscriptionsData.length)}
                   />
 
                   <TableNoData notFound={notFound} />

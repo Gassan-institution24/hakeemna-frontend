@@ -57,15 +57,8 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'name', label: 'Name' },
   { id: 'department', label: 'Department' },
-  { id: 'general_info', label: 'general_info' },
+  { id: 'general_info', label: 'General Info' },
   { id: 'status', label: 'Status' },
-  // { id: 'created_at', label: 'Date Of Creation' },
-  // { id: 'user_creation', label: 'Creater' },
-  // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
-  // { id: 'updated_at', label: 'Date Of Updating' },
-  // { id: 'user_modification', label: 'Last Modifier' },
-  // { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
-  // { id: 'modifications_nums', label: 'No Of Modifications' },
   { id: '', width: 88 },
 ];
 
@@ -228,12 +221,12 @@ export default function RoomsTableView() {
   );
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Rooms" /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

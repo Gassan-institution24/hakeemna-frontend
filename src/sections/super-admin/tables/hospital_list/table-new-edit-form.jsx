@@ -59,6 +59,23 @@ export default function TableNewEditForm({ currentTable }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s]*$/; // Range for Arabic characters
+
+    if (arabicRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
+  const handleEnglishInputChange = (event) => {
+    // Validate the input based on English language rules
+    const englishRegex = /^[a-zA-Z0-9\s]*$/; // Only allow letters and spaces
+
+    if (englishRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
 
   const {
     reset,
@@ -129,8 +146,18 @@ export default function TableNewEditForm({ currentTable }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name_english" label="name english" />
-              <RHFTextField name="name_arabic" label="name arabic" />
+              <RHFTextField
+                lang="en"
+                onChange={handleEnglishInputChange}
+                name="name_english"
+                label="name english"
+              />
+              <RHFTextField
+                lang="ar"
+                onChange={handleArabicInputChange}
+                name="name_arabic"
+                label="name arabic"
+              />
 
               <RHFSelect native onChange={handleCountryChange} name="country" label="Country">
                 <option> </option>

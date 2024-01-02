@@ -61,18 +61,11 @@ export default function StakeholderHistoryView({ stakeholderData }) {
       }}
     >
       {HistoryTabsList.map((tab, idx) => (
-        <Tab
-          key={idx}
-          iconPosition="end"
-          value={tab}
-          label={tab}
-        />
+        <Tab key={idx} iconPosition="end" value={tab} label={tab} />
       ))}
     </Tabs>
   );
-  const stakeholderName =
-    (stakeholderData?.name_english) ||
-    'Stakeholder';
+  const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -92,7 +85,7 @@ export default function StakeholderHistoryView({ stakeholderData }) {
         ]}
         style={{ marginBottom: '25px' }}
       />
-     
+
       {renderTabs}
 
       {/* {currentTab === 'Appointment' && <AppointHistory stakeholderData={stakeholderData} />} */}

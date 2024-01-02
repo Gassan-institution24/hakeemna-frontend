@@ -31,7 +31,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   const navData = useNavData();
 
-  console.log('nav dataaa',navData)
+  console.log('nav dataaa', navData);
 
   useEffect(() => {
     if (openNav) {
@@ -71,6 +71,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       sx={{
         flexShrink: { lg: 0 },
         width: { lg: NAV.W_VERTICAL },
+        boxShadow: (theme) => theme.customShadows.z8,
       }}
     >
       <NavToggleButton />

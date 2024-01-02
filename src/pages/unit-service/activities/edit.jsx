@@ -10,11 +10,11 @@ export default function ActivityEditPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetActivity(id);
-  const name = data?.name_english || 'Activity';
+  const name = data?.name_english;
   return (
     <>
       <Helmet>
-        <title>Edit {name} Activity</title>
+        <title>Edit {name||''} Activity</title>
       </Helmet>
 
       {data &&<EditActivityView activityData={data} />}

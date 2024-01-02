@@ -45,7 +45,6 @@ const STATUS_OPTIONS = [
 ];
 
 export default function InvoiceDetails({ economicMovementData }) {
-
   const settings = useSettingsContext();
 
   const renderTotal = (
@@ -122,7 +121,7 @@ export default function InvoiceDetails({ economicMovementData }) {
 
               <TableCell sx={{ typography: 'subtitle2' }}>Description</TableCell>
 
-              <TableCell>Qty</TableCell>
+              <TableCell align="center">Qty</TableCell>
 
               <TableCell align="right">Unit price</TableCell>
 
@@ -133,9 +132,9 @@ export default function InvoiceDetails({ economicMovementData }) {
           <TableBody>
             {economicMovementData.Provided_services?.map((row, index) => (
               <TableRow key={index}>
-                <TableCell>{row.index+1}</TableCell>
+                <TableCell align="center">{row.index + 1}</TableCell>
 
-                <TableCell>
+                <TableCell align="center">
                   <Box sx={{ maxWidth: 560 }}>
                     <Typography variant="subtitle2">{row?.name_english}</Typography>
 
@@ -145,7 +144,7 @@ export default function InvoiceDetails({ economicMovementData }) {
                   </Box>
                 </TableCell>
 
-                <TableCell>{row.service_quantity}</TableCell>
+                <TableCell align="center">{row.service_quantity}</TableCell>
 
                 <TableCell align="right">{fCurrency(row.total_amount)}</TableCell>
 
@@ -162,10 +161,7 @@ export default function InvoiceDetails({ economicMovementData }) {
 
   return (
     <>
-      <InvoiceToolbar
-        invoice={economicMovementData}
-        statusOptions={STATUS_OPTIONS}
-      />
+      <InvoiceToolbar invoice={economicMovementData} statusOptions={STATUS_OPTIONS} />
 
       <Card sx={{ pt: 5, px: 5 }}>
         <Box
@@ -234,7 +230,7 @@ export default function InvoiceDetails({ economicMovementData }) {
             </Typography>
             {fDate(economicMovementData.created_at)}
           </Stack>
-{/* 
+          {/* 
           <Stack sx={{ typography: 'body2' }}>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               Due Date
@@ -249,7 +245,7 @@ export default function InvoiceDetails({ economicMovementData }) {
 
         {renderFooter}
       </Card>
-      </>
+    </>
   );
 }
 

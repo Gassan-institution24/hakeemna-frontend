@@ -14,7 +14,7 @@ export default function DepartmentAppointmentConfigPage() {
   return (
     <>
       <Helmet>
-        <title>{name} Department Appointment Configuration</title>
+        <title>{name||''} Department Appointment Configuration</title>
       </Helmet>
 
       {data && <DepartmentAppointmentConfigView departmentData={data} />}
