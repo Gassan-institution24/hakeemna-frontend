@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -18,8 +18,38 @@ import { useAuthContext } from 'src/auth/hooks';
 import { fDate } from 'src/utils/format-time';
 import Doclogo from '../../components/logo/doc.png';
 
+
+
+
 export default function Prescriptions() {
+  const [currentDate, setCurrentDate] = useState(new Date());
   const { user } = useAuthContext();
+
+  function calculateAge(birthDate) {
+    const today = new Date();
+    const dob = new Date(birthDate);
+
+    const age = today.getFullYear() - dob.getFullYear();
+    return age;
+  }
+  function calculateDuration(startDate, endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+  
+    const difference = end.getTime() - start.getTime();
+    const daysDifference = Math.ceil(difference / (1000 * 3600 * 24));
+  
+    return daysDifference;
+  }
+  
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 3600000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   const styles = StyleSheet.create({
     icon: {
       color: 'blue',
@@ -27,72 +57,127 @@ export default function Prescriptions() {
       top: '3px',
     },
     image: {
-      width: '100px',
-      height: '100px',
+      width: '80px',
+      height: '80px',
+    },
+    imgItem: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '10px',
+      fontSize: '15px',
+    },
+    departmentInfo: {
+      textAlign: 'center',
+      fontSize: 12,
+      position: 'relative',
+      top: '-10px',
+      gap: 20,
     },
     page: {
       backgroundColor: 'aliceblue',
       border: 1,
     },
-
     gridContainer: {
-      border: 1,
-      display: 'grid',
-      gridTemplateColumns:'auto auto',
-      padding: '10px',
-      gap:'10px',
-      marginBottom: 10,
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
       alignItems: 'center',
-      fontSize: 12,
+      padding: '10px',
+      fontSize: '14px',
+      position: 'relative',
+      bottom: '-40px',
     },
-    gridContainer2: {
-      border: 1,
-      display: 'grid',
-      gridTemplateColumns: 'auto 1fr',
-      gap: 10,
-      marginBottom: 10,
-      padding: 10,
-      fontSize: 12,
+    gridBody: {
+      borderTop: 1,
+      padding: '10px',
+      gap: '10px',
+      height: '100%',
+      position: 'relative',
+      top: '40px',
     },
-    gridFooter: {
-      border: 1,
-      display: 'grid',
-      gridTemplateColumns: '1fr',
-      gap: 10,
-      paddingTop: 5,
-      paddingBottom: 5,
-      paddingLeft: 10,
-      paddingRight: 10,
-      fontSize: 12,
+    table: {
+      display: 'table',
+      width: 'auto',
+      borderStyle: 'solid',
+      borderWidth: 1,
+      borderRightWidth: 0,
+      borderBottomWidth: 0,
+     
+    },
+    tableRow: {
+      margin: 'auto',
+      flexDirection: 'row',
+     
+    },
+    tableCol: {
+      width: '25%',
+      borderStyle: 'solid',
+      borderWidth: 1,
+      borderLeftWidth: 0,
+      borderTopWidth: 0,
+     
+    },
+    tableCell: {
+      margin: 'auto',
+      marginTop: 5,
+      fontSize: 10,
+      padding:1,
     },
   });
 
   const PrescriptionPDF = () => (
     <Document>
       <Page size="A4" style={styles.page}>
-        {user.patient.medicines.map((med) => (
+        {user.patient.medicines.map((med, i) => (
           <View key={med.id}>
+            <View style={styles.imgItem}>
+              <PdfImage src={Doclogo} style={styles.image} />
+              <Text>DOCTORNA HOSPITAL</Text>
+              <PdfImage src={Doclogo} style={styles.image} />
+            </View>
+            <View style={styles.departmentInfo}>
+              <Text>DR: Doctor Name</Text>
+              <Text>Al Waha_cercle at0349</Text>
+              <Text>+962776088372</Text>
+            </View>
             <View style={styles.gridContainer}>
-             <PdfImage src={Doclogo} style={styles.image} />
-              <Text>Patient Name: {user.userName}</Text>
-              <Text>Doctor Name: doctor</Text>
-              <Text>Doctor Name: doctor</Text>
-              <Text>Doctor Name: doctor</Text>
-              <Text>Doctor Name: doctor</Text>
+              <Text>Name: {user.userName}</Text>
+              <Text>Age: {calculateAge(user.patient.birth_date)}</Text>
+              <Text>Date: {fDate(currentDate)}</Text>
             </View>
-            <View style={styles.gridContainer2}>
-              <Text>Patient Name: {user.userName}</Text>
-              <Text>Doctor Name: doctor</Text>
-              <Text>Doctor Name: doctor</Text>
-              <Text>Doctor Name: doctor</Text>
-              <Text>Doctor Name: doctor</Text>
-            </View>
-            <View style={styles.gridFooter}>
-              <Text>Patient Name: {user.userName}</Text>
-              <Text>Doctor Name: doctor</Text>
-              <Text>Doctor Name: doctor</Text>
-              <Text>Doctor Name: doctor</Text>
-              <Text>Doctor Name: doctor</Text>
+            <View style={styles.gridBody}>
+              <View style={styles.table}>
+                <View style={styles.tableRow}>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>Name</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>Dose</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>Frequently</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>Duration</Text>
+                  </View>
+                </View>
+                <View style={styles.tableRow}>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>{med.medicine.trade_name}</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>{med.dose}</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>{med.frequently}</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>{calculateDuration(med.startdate, med.enddate)} Days</Text>
+                  </View>
+                </View>
+              </View>
             </View>
           </View>
         ))}

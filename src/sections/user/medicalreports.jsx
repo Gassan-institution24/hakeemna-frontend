@@ -98,9 +98,13 @@ export default function Medicalreports() {
     },
     pdf: {
       position: 'absolute',
-      top: 15,
+      top: 30,
       right: 15,
       zIndex: 999,
+    },
+    pdf2: {
+      width:30,
+      height:30
     },
   });
 
@@ -174,7 +178,7 @@ export default function Medicalreports() {
               fileName={`${user.patient.first_name} MediacalReport.pdf`}
             >
               {({ loading }) =>
-                loading ? 'Loading document...' : <Iconify icon="teenyicons:pdf-outline" />
+                loading ? 'Loading document...' : <Iconify style={styles.pdf2} icon="teenyicons:pdf-outline" />
               }
             </PDFDownloadLink>
             <Stack

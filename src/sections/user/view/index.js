@@ -6,4 +6,5 @@ export { default as UserCreateView } from './user-create-view';
 export { default as UserProfileView } from './user-profile-view';
 export { default as FinancilMovment } from './FinancilMovment';
 export { default as Medicalreports } from './user-medicalreports-view';
+export { default as Pharmaces} from '../pharmacies'
 

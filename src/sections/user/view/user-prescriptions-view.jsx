@@ -15,6 +15,7 @@ import Appoinment from '../apointments';
 import FinishedAppoinment from '../apointmentsfinished';
 import AppointmentBooking from '../apointmentsbooking';
 import Prescriptions from '../prescriptions';
+import Pharmaces  from '../pharmacies';
 // ----------------------------------------------------------------------
 const TABS = [
   {
@@ -23,9 +24,9 @@ const TABS = [
     icon: <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />,
   },
   {
-    value: 'BookAppointment',
-    label: 'Book Appointment',
-    icon: <Iconify icon="icon-park-outline:medicine-chest" width={24} />,
+    value: 'Pharmaces',
+    label: 'Pharmacies Near Me',
+    icon: <Iconify icon="healthicons:pharmacy-outline" width={24} />,
   },
   
 ];
@@ -86,7 +87,7 @@ export default function UserCardList() {
           </Box>
       )}
 
-      {currentTab === 'BookAppointment' && <AppointmentBooking patientData={data} />}
+      {currentTab === 'Pharmaces' && <Pharmaces patientData={data} />}
 
     </Container>
   );
