@@ -14,7 +14,7 @@ export default function RoomEditPage() {
   return (
     <>
       <Helmet>
-        <title>Edit {name} Room</title>
+        <title>Edit {name||''} Room</title>
       </Helmet>
 
       {data && <RoomEditView roomData={data} />}

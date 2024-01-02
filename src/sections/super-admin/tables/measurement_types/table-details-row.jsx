@@ -53,13 +53,13 @@ export default function TableDetailsRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell>
+      <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell>{symbol}</TableCell>
-      <TableCell>{name_english}</TableCell>
-      <TableCell>
+      <TableCell align="center">{symbol}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={

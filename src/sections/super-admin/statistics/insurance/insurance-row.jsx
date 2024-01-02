@@ -20,12 +20,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function InsuranceRow({
-  row,
-  onDeleteRow,
-  setFilters,
-  filters,
-}) {
+export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) {
   const {
     code,
     name_english,
@@ -46,26 +41,31 @@ export default function InsuranceRow({
   const DDL = usePopover();
 
   const renderPrimary = (
-    <TableRow hover >
-      <TableCell>{code}</TableCell>
-      <TableCell >{name_english}</TableCell>
-      <TableCell onClick={()=>setFilters({...filters,name:type?.name_english})}>{type?.name_english}</TableCell>
-      <TableCell>
+    <TableRow hover>
+      <TableCell align="center">{code}</TableCell>
+      <TableCell>{name_english}</TableCell>
+      <TableCell
+        align="center"
+        onClick={() => setFilters({ ...filters, name: type?.name_english })}
+      >
+        {type?.name_english}
+      </TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
-          >
+        >
           {status}
         </Label>
       </TableCell>
-      <TableCell>{webpage}</TableCell>
-      <TableCell>{phone}</TableCell>
-      <TableCell>{address}</TableCell>
+      <TableCell align="center">{webpage}</TableCell>
+      <TableCell align="center">{phone}</TableCell>
+      <TableCell align="center">{address}</TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton sx={{ color: 'error.main' }} onClick={onDeleteRow}>
-        <Iconify icon="mi:delete" />
+          <Iconify icon="mi:delete" />
         </IconButton>
       </TableCell>
     </TableRow>

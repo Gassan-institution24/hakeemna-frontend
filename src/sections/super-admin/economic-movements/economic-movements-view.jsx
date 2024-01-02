@@ -54,7 +54,7 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'unit_service', label: 'Unit Service' },
   { id: 'appointment', label: 'Appointment' },
-  { id: 'work_shift', label: 'Work Shift'},
+  { id: 'work_shift', label: 'Work Shift' },
   { id: 'type', label: 'Type' },
   { id: 'hospital', label: 'Hospital' },
   { id: 'Balance', label: 'Balance' },
@@ -83,7 +83,7 @@ export default function EconomicMovementsView() {
 
   // const confirm = useBoolean();
 
-  const {economecMovementsData,refetch} = useGetEconomicMovements()
+  const { economecMovementsData, refetch } = useGetEconomicMovements();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -114,7 +114,8 @@ export default function EconomicMovementsView() {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const getInvoiceLength = (status) => economecMovementsData.filter((item) => item.status === status).length;
+  const getInvoiceLength = (status) =>
+    economecMovementsData.filter((item) => item.status === status).length;
 
   const getTotalAmount = (status) =>
     sumBy(
@@ -122,7 +123,8 @@ export default function EconomicMovementsView() {
       'Balance'
     );
 
-  const getPercentByStatus = (status) => (getInvoiceLength(status) / economecMovementsData.length) * 100;
+  const getPercentByStatus = (status) =>
+    (getInvoiceLength(status) / economecMovementsData.length) * 100;
 
   const TABS = [
     { value: 'all', label: 'All', color: 'default', count: economecMovementsData.length },
@@ -388,7 +390,11 @@ export default function EconomicMovementsView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, economecMovementsData.length)}
+                    emptyRows={emptyRows(
+                      table.page,
+                      table.rowsPerPage,
+                      economecMovementsData.length
+                    )}
                   />
 
                   <TableNoData notFound={notFound} />

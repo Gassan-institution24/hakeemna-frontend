@@ -80,6 +80,23 @@ export default function TableNewEditForm({ currentTable }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s]*$/; // Range for Arabic characters
+
+    if (arabicRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
+  const handleEnglishInputChange = (event) => {
+    // Validate the input based on English language rules
+    const englishRegex = /^[a-zA-Z0-9\s]*$/; // Only allow letters and spaces
+
+    if (englishRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
 
   const {
     reset,
@@ -90,7 +107,7 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     const address = await axios.get('https://geolocation-db.com/json/');
     try {
-      console.log("data",data)
+      console.log('data', data);
       // const modifiedData = {
       //   ...data,
       //   package_appointment: Boolean(data.package_appointment),
@@ -142,8 +159,18 @@ export default function TableNewEditForm({ currentTable }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name_english" label="name english" />
-              <RHFTextField name="name_arabic" label="name arabic" />
+              <RHFTextField
+                lang="en"
+                onChange={handleEnglishInputChange}
+                name="name_english"
+                label="name english"
+              />
+              <RHFTextField
+                lang="ar"
+                onChange={handleArabicInputChange}
+                name="name_arabic"
+                label="name arabic"
+              />
 
               <RHFSelect native name="country" label="Country">
                 <option> </option>
@@ -219,25 +246,33 @@ export default function TableNewEditForm({ currentTable }) {
               <FormControlLabel
                 name="package_docotor_report"
                 control={<Checkbox defaultChecked={defaultValues.package_docotor_report} />}
-                onChange={(event) => methods.setValue('package_docotor_report', event.target.checked)}
+                onChange={(event) =>
+                  methods.setValue('package_docotor_report', event.target.checked)
+                }
                 label="Docotor Report"
               />
               <FormControlLabel
                 name="package_final_reporting"
                 control={<Checkbox defaultChecked={defaultValues.package_final_reporting} />}
-                onChange={(event) => methods.setValue('package_final_reporting', event.target.checked)}
+                onChange={(event) =>
+                  methods.setValue('package_final_reporting', event.target.checked)
+                }
                 label="Final Reporting"
               />
               <FormControlLabel
                 name="package_old_files_Management"
                 control={<Checkbox defaultChecked={defaultValues.package_old_files_Management} />}
-                onChange={(event) => methods.setValue('package_old_files_Management', event.target.checked)}
+                onChange={(event) =>
+                  methods.setValue('package_old_files_Management', event.target.checked)
+                }
                 label="Old Files Management"
               />
               <FormControlLabel
                 name="package_TAX_Income_reporting"
                 control={<Checkbox defaultChecked={defaultValues.package_TAX_Income_reporting} />}
-                onChange={(event) => methods.setValue('package_TAX_Income_reporting', event.target.checked)}
+                onChange={(event) =>
+                  methods.setValue('package_TAX_Income_reporting', event.target.checked)
+                }
                 label="Package TAX Income Reporting"
               />
             </Box>

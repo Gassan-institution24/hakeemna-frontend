@@ -14,7 +14,7 @@ export default function SubscriptionsInfoPage() {
   return (
     <>
       <Helmet>
-        <title>{name} Subscription Info</title>
+        <title>{name||''} Subscription Info</title>
       </Helmet>
 
       {data && <SubscriptionsInfoView subscriptionData={data} />}

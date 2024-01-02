@@ -58,13 +58,14 @@ export default function TableDetailsRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell>
+      <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell>{name_english}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
 
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -75,6 +76,7 @@ export default function TableDetailsRow({
         {country?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -85,6 +87,7 @@ export default function TableDetailsRow({
         {city?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -94,10 +97,10 @@ export default function TableDetailsRow({
       >
         {type?.name_english}
       </TableCell>
-      <TableCell>{webpage}</TableCell>
-      <TableCell>{phone}</TableCell>
-      <TableCell>{address}</TableCell>
-      <TableCell>
+      <TableCell align="center">{webpage}</TableCell>
+      <TableCell align="center">{phone}</TableCell>
+      <TableCell align="center">{address}</TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={

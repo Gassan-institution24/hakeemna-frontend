@@ -83,6 +83,8 @@ export default function SurgeriesTableView() {
 
   const router = useRouter();
 
+  const settings = useSettingsContext();
+
   const { tableData, refetch } = useGetSurgeries();
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -158,12 +160,12 @@ export default function SurgeriesTableView() {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Surgeries" /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

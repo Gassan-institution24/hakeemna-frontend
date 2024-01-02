@@ -41,7 +41,7 @@ export default function BasicTable() {
           <TableBody>
             {TABLE_DATA.map((row) => (
               <TableRow key={row.name}>
-                <TableCell>{row.name}</TableCell>
+                <TableCell align="center">{row.name}</TableCell>
                 <TableCell align="right">{row.calories}</TableCell>
                 <TableCell align="right">{row.fat}</TableCell>
                 <TableCell align="right">{row.carbs}</TableCell>

@@ -16,7 +16,6 @@ export default function ProfileFollowers() {
 
   const { user } = useAuthContext();
 
-  
   // useEffect(() => {
   //   if (data) {
   //     const currentDate = new Date();
@@ -36,14 +35,12 @@ export default function ProfileFollowers() {
   //         }, 1000);
   //         countdownTimers[med.name] = intervalId;
   //       }
-        
+
   //     });
   //       Object.values(countdownTimers).forEach((timerId) =>  clearInterval(timerId));
-      
+
   //   }
   // }, [data]);
-
-
 
   return (
     <>
@@ -51,7 +48,7 @@ export default function ProfileFollowers() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell align="center">Name</TableCell>
               <TableCell align="right">Frequently</TableCell>
               <TableCell align="right">Dose</TableCell>
               <TableCell align="right">Duration</TableCell>
@@ -59,15 +56,13 @@ export default function ProfileFollowers() {
             </TableRow>
           </TableHead>
           <TableBody>
-           
-              {/* <TableRow key={} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell>{}</TableCell>
+            {/* <TableRow key={} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell align="center">{}</TableCell>
                 <TableCell align="right">{}</TableCell>
                 <TableCell align="right"></TableCell>
                 <TableCell align="right"></TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow> */}
-       
           </TableBody>
         </Table>
       </TableContainer>

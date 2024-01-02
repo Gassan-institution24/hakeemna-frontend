@@ -63,7 +63,7 @@ function EcommerceBestSalesmanRow({ row }) {
         {row.name}
       </TableCell>
 
-      <TableCell>{row.category}</TableCell>
+      <TableCell align="center">{row.category}</TableCell>
 
       <TableCell align="center">
         <Iconify icon={row.flag} sx={{ borderRadius: 0.65, width: 28 }} />

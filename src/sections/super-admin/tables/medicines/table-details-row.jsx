@@ -64,9 +64,10 @@ export default function CountriesTableRow({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell>{code}</TableCell>
-      <TableCell>{trade_name}</TableCell>
+      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">{trade_name}</TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -77,6 +78,7 @@ export default function CountriesTableRow({
         {scientific_name}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -86,7 +88,7 @@ export default function CountriesTableRow({
       >
         {family?.name_english}
       </TableCell>
-      <TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={
@@ -97,6 +99,7 @@ export default function CountriesTableRow({
         </Label>
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -106,7 +109,7 @@ export default function CountriesTableRow({
       >
         {country?.name_english}
       </TableCell>
-      <TableCell>{ATCCODE}</TableCell>
+      <TableCell align="center">{ATCCODE}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>

@@ -59,11 +59,11 @@ export default function CountriesTableRow({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell>{code}</TableCell>
-      <TableCell>
+      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">
         {first_name} {last_name}
       </TableCell>
-      <TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={
@@ -74,6 +74,7 @@ export default function CountriesTableRow({
         </Label>
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -84,6 +85,7 @@ export default function CountriesTableRow({
         General Info
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -94,6 +96,7 @@ export default function CountriesTableRow({
         History
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -104,6 +107,7 @@ export default function CountriesTableRow({
         Communications
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -114,6 +118,7 @@ export default function CountriesTableRow({
         Feedback
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -124,6 +129,7 @@ export default function CountriesTableRow({
         Insurance
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',

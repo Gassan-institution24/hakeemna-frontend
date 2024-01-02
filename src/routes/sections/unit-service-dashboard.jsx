@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 import { AuthGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
+import SecondaryNavLayout from 'src/layouts/secondary-nav-bar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 import RecieptsInfoPage from 'src/pages/employee/accounting/reciepts/info';
@@ -17,7 +18,13 @@ const DepartmentsAccountingPage = lazy(() =>
   import('src/pages/unit-service/departments/accounting')
 );
 const DepartmentsActivitiesPage = lazy(() =>
-  import('src/pages/unit-service/departments/activities')
+  import('src/pages/unit-service/departments/activities/activities')
+);
+const DepartmentsNewActivitiesPage = lazy(() =>
+  import('src/pages/unit-service/departments/activities/addActivitty')
+);
+const DepartmentsEditActivitiesPage = lazy(() =>
+  import('src/pages/unit-service/departments/activities/editActivity')
 );
 const DepartmentsAppointmentsPage = lazy(() =>
   import('src/pages/unit-service/departments/appointments')
@@ -28,7 +35,11 @@ const DepartmentsAppointmentConfigPage = lazy(() =>
 const DepartmentsQualityControlPage = lazy(() =>
   import('src/pages/unit-service/departments/qualitycontrole')
 );
-const DepartmentsRoomsPage = lazy(() => import('src/pages/unit-service/departments/rooms'));
+const DepartmentsRoomsPage = lazy(() => import('src/pages/unit-service/departments/rooms/rooms'));
+const DepartmentsNewRoomsPage = lazy(() => import('src/pages/unit-service/departments/rooms/add'));
+const DepartmentsEditRoomsPage = lazy(() =>
+  import('src/pages/unit-service/departments/rooms/edit')
+);
 const DepartmentsEditPage = lazy(() => import('src/pages/unit-service/departments/edit'));
 // EMPLOYEES
 const EmployeesHomePage = lazy(() => import('src/pages/unit-service/employees/home'));
@@ -166,13 +177,48 @@ export const unitServiceDashboardRoutes = [
           { element: <DepartmentsHomePage />, index: true },
           { path: 'new', element: <DepartmentsNewPage /> },
           { path: ':id/info', element: <DepartmentsInfoPage /> },
-          { path: ':id/employees', element: <DepartmentsEmployeesPage /> },
+          {
+            path: ':id/employees',
+            children: [
+              { element: <DepartmentsEmployeesPage />, index: true },
+              {
+                path: ':emid',
+                element: (
+                  <SecondaryNavLayout>
+                    <Outlet />
+                  </SecondaryNavLayout>
+                ),
+                children: [
+                  { path: 'info', element: <EmployeesInfoPage /> },
+                  { path: 'appointments', element: <EmployeesAppointmentsPage /> },
+                  { path: 'attendence', element: <EmployeesAttendencePage /> },
+                  { path: 'edit', element: <EmployeesEditPage /> },
+                  { path: 'acl', element: <EmployeesACLPage /> },
+                  { path: 'new', element: <EmployeesNewPage /> },
+                ],
+              },
+            ],
+          },
           { path: ':id/accounting', element: <DepartmentsAccountingPage /> },
-          { path: ':id/activities', element: <DepartmentsActivitiesPage /> },
+          {
+            path: ':id/activities',
+            children: [
+              { element: <DepartmentsActivitiesPage />, index: true },
+              { path: 'new', element: <DepartmentsNewActivitiesPage /> },
+              { path: ':acid/edit', element: <DepartmentsEditActivitiesPage /> },
+            ],
+          },
+          {
+            path: ':id/rooms',
+            children: [
+              { element: <DepartmentsRoomsPage />, index: true },
+              { path: 'new', element: <DepartmentsNewRoomsPage /> },
+              { path: ':acid/edit', element: <DepartmentsEditRoomsPage /> },
+            ],
+          },
           { path: ':id/appointments', element: <DepartmentsAppointmentsPage /> },
           { path: ':id/appointmentconfiguration', element: <DepartmentsAppointmentConfigPage /> },
           { path: ':id/qc', element: <DepartmentsQualityControlPage /> },
-          { path: ':id/rooms', element: <DepartmentsRoomsPage /> },
           { path: ':id/edit', element: <DepartmentsEditPage /> },
         ],
       },
@@ -180,12 +226,22 @@ export const unitServiceDashboardRoutes = [
         path: 'employees',
         children: [
           { element: <EmployeesHomePage />, index: true },
-          { path: ':id/info', element: <EmployeesInfoPage /> },
-          { path: ':id/appointments', element: <EmployeesAppointmentsPage /> },
-          { path: 'attendence', element: <EmployeesAttendencePage /> },
-          { path: ':id/edit', element: <EmployeesEditPage /> },
-          { path: ':id/acl', element: <EmployeesACLPage /> },
-          { path: 'new', element: <EmployeesNewPage /> },
+          {
+            path: ':id',
+            element: (
+              <SecondaryNavLayout>
+                <Outlet />
+              </SecondaryNavLayout>
+            ),
+            children: [
+              { path: 'info', element: <EmployeesInfoPage /> },
+              { path: 'appointments', element: <EmployeesAppointmentsPage /> },
+              { path: 'attendence', element: <EmployeesAttendencePage /> },
+              { path: 'edit', element: <EmployeesEditPage /> },
+              { path: 'acl', element: <EmployeesACLPage /> },
+              { path: 'new', element: <EmployeesNewPage /> },
+            ],
+          },
         ],
       },
       {

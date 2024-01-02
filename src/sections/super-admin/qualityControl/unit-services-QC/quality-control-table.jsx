@@ -78,32 +78,32 @@ export default function USsFeedbacks() {
   const table = useTable({ defaultOrderBy: 'createDate' });
 
   const { feedbackData, refetch } = useGetUSsFeedbackes();
-  console.log('old dataa',feedbackData)
+  console.log('old dataa', feedbackData);
   const separateEachunitServiceFeedbacks = useCallback(() => {
     const results = {};
-    
+
     feedbackData.forEach((feedback) => {
       const unitServiceId = feedback.unit_service._id;
-  
+
       if (!results[unitServiceId]) {
         results[unitServiceId] = { unit_service: feedback.unit_service };
       }
-  
+
       results[unitServiceId].count = (results[unitServiceId].count || 0) + 1;
       results[unitServiceId].rate = (results[unitServiceId].rate || 0) + feedback.Rate;
-  
+
       if (feedback.status === 'read') {
         results[unitServiceId].read = (results[unitServiceId].read || 0) + 1;
       } else {
         results[unitServiceId].notRead = (results[unitServiceId].notRead || 0) + 1;
       }
     });
-  
+
     const resultsArr = Object.keys(results).map((key) => ({ id: key, ...results[key] }));
     return resultsArr;
   }, [feedbackData]);
 
-  console.log('separateEachunitServiceFeedbacks',separateEachunitServiceFeedbacks())
+  console.log('separateEachunitServiceFeedbacks', separateEachunitServiceFeedbacks());
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -121,14 +121,12 @@ export default function USsFeedbacks() {
 
   const denseHeight = table.dense ? 56 : 76;
 
-  const canReset =
-    !!filters.name ||
-    filters.status !== 'all';
+  const canReset = !!filters.name || filters.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-  const now = new Date()
+  const now = new Date();
 
-  const getInvoiceLength = (status) => dataFiltered.filter((item) =>item.status === status ).length;
+  const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
 
   const getInvoiceLengthForTabs = (status) => {
     const filterdData = applyFilter({
@@ -175,24 +173,21 @@ export default function USsFeedbacks() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-        heading="Unit Services Quality Control"
-        links={[
-          {
-            name: 'Dashboard',
-            href: paths.superadmin.root,
-          },
-          {
-            name: 'Unit Services Quality Control',
-          },
-        ]}
-        style={{ marginBottom: '25px' }}
-      />
+        <CustomBreadcrumbs
+          heading="Unit Services Quality Control"
+          links={[
+            {
+              name: 'Dashboard',
+              href: paths.superadmin.root,
+            },
+            {
+              name: 'Unit Services Quality Control',
+            },
+          ]}
+          style={{ marginBottom: '25px' }}
+        />
         <Card>
-          <QCTableToolbar
-            filters={filters}
-            onFilters={handleFilters}
-          />
+          <QCTableToolbar filters={filters} onFilters={handleFilters} />
 
           {canReset && (
             <QCTableFiltersResult
@@ -207,7 +202,6 @@ export default function USsFeedbacks() {
           )}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
                 <TableHeadCustom
@@ -226,11 +220,7 @@ export default function USsFeedbacks() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <QCTableRow
-                        key={row.id}
-                        row={row}
-                        onViewRow={() => handleViewRow(row.id)}
-                      />
+                      <QCTableRow key={row.id} row={row} onViewRow={() => handleViewRow(row.id)} />
                     ))}
 
                   <TableEmptyRows
@@ -291,7 +281,9 @@ function applyFilter({ inputData, comparator, filters }) {
     );
   }
   if (rate.length) {
-    inputData = inputData.filter((feedback) => rate.includes(Math.round(feedback.rate/feedback.count)));
+    inputData = inputData.filter((feedback) =>
+      rate.includes(Math.round(feedback.rate / feedback.count))
+    );
   }
 
   if (status !== 'all') {

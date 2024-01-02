@@ -36,13 +36,13 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell>
+      <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell>{name_english}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
 
-      <TableCell>{description}</TableCell>
+      <TableCell align="center">{description}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>

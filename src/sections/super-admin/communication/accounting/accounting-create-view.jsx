@@ -10,12 +10,11 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TableNewEditForm from './accounting-new-edit-form';
 
-
 // ----------------------------------------------------------------------
 
-export default function USAccountingCreateView({unitServiceData}) {
+export default function USAccountingCreateView({ unitServiceData }) {
   const settings = useSettingsContext();
-  const unitServiceName = unitServiceData?.name_english || 'Unit Service'
+  const unitServiceName = unitServiceData?.name_english || 'Unit Service';
   const params = useParams();
   const { id } = params;
   return (
@@ -42,7 +41,7 @@ export default function USAccountingCreateView({unitServiceData}) {
         }}
       />
 
-      <TableNewEditForm  unitServiceData={unitServiceData}/>
+      <TableNewEditForm unitServiceData={unitServiceData} />
     </Container>
   );
 }

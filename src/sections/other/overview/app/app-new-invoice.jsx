@@ -92,13 +92,13 @@ function AppNewInvoiceRow({ row }) {
   return (
     <>
       <TableRow>
-        <TableCell>{row.invoiceNumber}</TableCell>
+        <TableCell align="center">{row.invoiceNumber}</TableCell>
 
-        <TableCell>{row.category}</TableCell>
+        <TableCell align="center">{row.category}</TableCell>
 
-        <TableCell>{fCurrency(row.price)}</TableCell>
+        <TableCell align="center">{fCurrency(row.price)}</TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <Label
             variant="soft"
             color={

@@ -39,7 +39,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetPatient,useGetPatients } from 'src/api/tables'; /// edit
+import { useGetPatient, useGetPatients } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import TableDetailRow from './table-details-row'; /// edit
@@ -83,6 +83,8 @@ export default function PatientTableView() {
 
   const componentRef = useRef();
 
+  const settings = useSettingsContext();
+
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
@@ -90,7 +92,7 @@ export default function PatientTableView() {
 
   const { patientsData, refetch } = useGetPatients();
   const { data } = useGetPatient('657d610698f13d11740e4d98');
-  console.log('pat dataaa', data)
+  console.log('pat dataaa', data);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -261,7 +263,7 @@ export default function PatientTableView() {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Patients" /// edit
           links={[
@@ -424,7 +426,7 @@ export default function PatientTableView() {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row._id)}
-                        showGeneralInfo={()=>handleShowGeneralInfoRow(row._id)}
+                        showGeneralInfo={() => handleShowGeneralInfoRow(row._id)}
                         showAccounting={() => handleShowHistoryRow(row._id)}
                         showCommunications={() => handleShowCommunicationsRow(row._id)}
                         showFeedback={() => handleShowFeedbacksRow(row._id)}
@@ -524,10 +526,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.first_name &&
-          data?.first_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.last_name &&
-          data?.last_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.first_name && data?.first_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.last_name && data?.last_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.name_english &&
           data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.country?.name_english &&

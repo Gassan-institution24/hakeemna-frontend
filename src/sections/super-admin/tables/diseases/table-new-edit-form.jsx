@@ -29,7 +29,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
   const { user } = useAuthContext();
 
-  const {categories} = useGetCategories()
+  const { categories } = useGetCategories();
 
   const { tableData } = useGetSymptoms();
 
@@ -120,8 +120,18 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 sm: 'repeat(2, 1fr)',
               }} /// edit
             >
-              <RHFTextField name="name_english" label="name english" />
-              <RHFTextField name="name_arabic" label="name arabic" />
+              <RHFTextField
+                lang="en"
+                onChange={handleEnglishInputChange}
+                name="name_english"
+                label="name english"
+              />
+              <RHFTextField
+                lang="ar"
+                onChange={handleArabicInputChange}
+                name="name_arabic"
+                label="name arabic"
+              />
             </Box>
 
             <Box
@@ -134,6 +144,8 @@ export default function CountriesNewEditForm({ currentSelected }) {
               }}
             >
               <RHFTextField
+                lang="en"
+                onChange={handleEnglishInputChange}
                 sx={{ mt: 3 }}
                 name="description"
                 label="description"
@@ -142,6 +154,8 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 rows={3}
               />
               <RHFTextField
+                lang="ar"
+                onChange={handleArabicInputChange}
                 sx={{ mt: 3 }}
                 name="description_arabic"
                 label="description arabic"

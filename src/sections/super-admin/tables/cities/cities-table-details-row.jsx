@@ -54,14 +54,14 @@ export default function CitiesTableRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell>
+      <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell>{name_english}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
 
-      <TableCell>{country?.name_english}</TableCell>
-      <TableCell>
+      <TableCell align="center">{country?.name_english}</TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={

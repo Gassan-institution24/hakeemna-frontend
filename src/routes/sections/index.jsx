@@ -9,7 +9,7 @@ import { authRoutes } from './auth';
 import { HomePage, mainRoutes } from './main';
 import { dashboardRoutes } from './super-admin-dashboard';
 import { unitServiceDashboardRoutes } from './unit-service-dashboard';
-import { unitServiceEmployeeDashboardRoutes } from './unit-service-employee-dashboard';
+import { unitServiceEmployeeDashboardRoutes } from './employee-dashboard';
 // import { componentsRoutes } from './components';
 import { userRoutes } from './user';
 

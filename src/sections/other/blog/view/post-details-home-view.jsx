@@ -93,7 +93,7 @@ export default function PostDetailsHomeView({ title }) {
         />
       </Container>
 
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <Stack sx={{ maxWidth: 720, mx: 'auto' }}>
           <Typography variant="subtitle1" sx={{ mb: 5 }}>
             {post.description}

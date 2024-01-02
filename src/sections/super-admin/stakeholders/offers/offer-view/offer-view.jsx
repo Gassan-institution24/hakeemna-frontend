@@ -17,7 +17,7 @@ import StakeholderOfferContent from './offer-view-content';
 
 // ----------------------------------------------------------------------
 
-export default function StakeholderOfferView({ stakeholderData,offerData }) {
+export default function StakeholderOfferView({ stakeholderData, offerData }) {
   const settings = useSettingsContext();
 
   return (

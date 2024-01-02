@@ -79,6 +79,8 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
 
   const componentRef = useRef();
 
+  const settings = useSettingsContext();
+
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
@@ -185,7 +187,7 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <Card>
           <Tabs
             value={filters.status}
@@ -327,10 +329,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.title &&
-          data?.title?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.Body &&
-          data?.Body?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.title && data?.title?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.Body && data?.Body?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

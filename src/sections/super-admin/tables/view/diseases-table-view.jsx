@@ -68,6 +68,8 @@ export default function DiseasesTableView() {
 
   const componentRef = useRef();
 
+  const settings = useSettingsContext();
+
   const router = useRouter();
 
   const { tableData } = useGetDiseases();
@@ -147,12 +149,12 @@ export default function DiseasesTableView() {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Diseases" /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

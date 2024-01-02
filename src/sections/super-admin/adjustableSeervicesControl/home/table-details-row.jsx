@@ -78,9 +78,9 @@ export default function CountriesTableRow({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell>{code}</TableCell>
-      <TableCell>{name_english}</TableCell>
-      <TableCell>
+      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={
@@ -90,7 +90,7 @@ export default function CountriesTableRow({
           {status}
         </Label>
       </TableCell>
-      {/* <TableCell
+      {/* <TableCell align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -101,6 +101,7 @@ export default function CountriesTableRow({
         General Info
       </TableCell> */}
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -111,6 +112,7 @@ export default function CountriesTableRow({
         Accounting
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -121,6 +123,7 @@ export default function CountriesTableRow({
         Communications
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -131,6 +134,7 @@ export default function CountriesTableRow({
         Feedback
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',

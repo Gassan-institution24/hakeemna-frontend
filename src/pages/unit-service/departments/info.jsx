@@ -14,7 +14,7 @@ export default function DepartmentInfoPage() {
   return (
     <>
       <Helmet>
-        <title>{name} Department Info</title>
+        <title>{name||''} Department Info</title>
       </Helmet>
 
       {data && <DepartmentInfoView departmentData={data} />}

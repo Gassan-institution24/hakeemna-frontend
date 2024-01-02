@@ -57,13 +57,14 @@ export default function TableDetailsRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell>
+      <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell>{name_english}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
 
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -74,6 +75,7 @@ export default function TableDetailsRow({
         {unit_service?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -83,8 +85,8 @@ export default function TableDetailsRow({
       >
         {service?.name_english}
       </TableCell>
-      <TableCell>{description}</TableCell>
-      <TableCell>
+      <TableCell align="center">{description}</TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={

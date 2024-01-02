@@ -158,8 +158,18 @@ export default function JwtRegisterView() {
         {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFTextField name="name_english" label="Name in english" />
-          <RHFTextField name="name_arabic" label="Name in arabic" />
+          <RHFTextField
+            lang="en"
+            onChange={handleEnglishInputChange}
+            name="name_english"
+            label="Name in english"
+          />
+          <RHFTextField
+            lang="ar"
+            onChange={handleArabicInputChange}
+            name="name_arabic"
+            label="Name in arabic"
+          />
         </Stack>
 
         <RHFTextField name="email" label="Email address" />

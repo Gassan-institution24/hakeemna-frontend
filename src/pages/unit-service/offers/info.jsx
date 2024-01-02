@@ -14,7 +14,7 @@ export default function OffersInfoPage() {
   return (
     <>
       <Helmet>
-        <title>{name} Offer Info</title>
+        <title>{name||''} Offer Info</title>
       </Helmet>
 
       {data && <OffersInfoView offerData={data} />}

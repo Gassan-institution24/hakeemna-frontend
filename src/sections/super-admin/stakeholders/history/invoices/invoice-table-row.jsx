@@ -1,4 +1,4 @@
-import { format,isValid } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -68,7 +68,7 @@ export default function MovementTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell> */}
 
-        <TableCell >
+        <TableCell>
           {code}
 
           {/* <ListItemText
@@ -91,7 +91,7 @@ export default function MovementTableRow({
           /> */}
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={unit_service?.name_english}
             secondary={employee?.first_name}
@@ -104,10 +104,14 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={appointment?.name_english}
-            secondary={isValid(new Date(appointment?.start_time))&&format(new Date(appointment?.start_time), 'dd MMM yyyy p')||''}
+            secondary={
+              (isValid(new Date(appointment?.start_time)) &&
+                format(new Date(appointment?.start_time), 'dd MMM yyyy p')) ||
+              ''
+            }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -117,16 +121,15 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell>
-            {stakeholder?.name_english}
-        </TableCell>
-        <TableCell>
-          {Provided_services.length}
+        <TableCell align="center">{stakeholder?.name_english}</TableCell>
+        <TableCell align="center">{Provided_services.length}</TableCell>
+
+        <TableCell align="center">
+          {Currency?.symbol}
+          {Balance}
         </TableCell>
 
-        <TableCell>{Currency?.symbol}{Balance}</TableCell>
-
-        <TableCell>
+        <TableCell align="center">
           <Label
             variant="soft"
             color={

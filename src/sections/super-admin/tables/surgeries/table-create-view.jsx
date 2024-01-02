@@ -26,11 +26,11 @@ export default function CountryCreateView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Surgeries',                   /// edit
+            name: 'Surgeries', /// edit
             href: paths.superadmin.tables.surgeries.root,
-          },  
-          { name: 'New surgery' },        /// edit
-        ]} 
+          },
+          { name: 'New surgery' }, /// edit
+        ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}

@@ -26,7 +26,7 @@ export default function CountryCreateView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'countries',                   /// edit
+            name: 'countries', /// edit
             href: paths.superadmin.tables.countries.root,
           },
           { name: 'New country' },

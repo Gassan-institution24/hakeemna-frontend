@@ -14,7 +14,7 @@ export default function DepartmentAccountingPage() {
   return (
     <>
       <Helmet>
-        <title>{name} Department Accounting</title>
+        <title>{name||''} Department Accounting</title>
       </Helmet>
 
       {data && <DepartmentAccountingView departmentData={data} />}

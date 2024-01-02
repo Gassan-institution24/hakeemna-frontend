@@ -80,7 +80,7 @@ export default function SubSpecialtiesTableView() {
 
   const componentRef = useRef();
 
-  // const settings = useSettingsContext();
+  const settings = useSettingsContext();
 
   const router = useRouter();
 
@@ -228,12 +228,12 @@ export default function SubSpecialtiesTableView() {
   // );
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Subspecialties" /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

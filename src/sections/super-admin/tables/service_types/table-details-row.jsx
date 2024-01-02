@@ -58,13 +58,14 @@ export default function TableDetailsRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell>
+      <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell>{name_english}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
 
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -75,6 +76,7 @@ export default function TableDetailsRow({
         {unit_service?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -84,8 +86,9 @@ export default function TableDetailsRow({
       >
         {work_shift?.name_english}
       </TableCell>
-      <TableCell>{Price_per_unit}</TableCell>
+      <TableCell align="center">{Price_per_unit}</TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -95,7 +98,7 @@ export default function TableDetailsRow({
       >
         {Measurement_type?.name_english}
       </TableCell>
-      <TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={

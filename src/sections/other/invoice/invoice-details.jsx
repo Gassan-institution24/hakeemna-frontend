@@ -119,7 +119,7 @@ export default function InvoiceDetails({ invoice }) {
 
               <TableCell sx={{ typography: 'subtitle2' }}>Description</TableCell>
 
-              <TableCell>Qty</TableCell>
+              <TableCell align="center">Qty</TableCell>
 
               <TableCell align="right">Unit price</TableCell>
 
@@ -130,9 +130,9 @@ export default function InvoiceDetails({ invoice }) {
           <TableBody>
             {invoice.items.map((row, index) => (
               <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell align="center">{index + 1}</TableCell>
 
-                <TableCell>
+                <TableCell align="center">
                   <Box sx={{ maxWidth: 560 }}>
                     <Typography variant="subtitle2">{row.title}</Typography>
 
@@ -142,7 +142,7 @@ export default function InvoiceDetails({ invoice }) {
                   </Box>
                 </TableCell>
 
-                <TableCell>{row.quantity}</TableCell>
+                <TableCell align="center">{row.quantity}</TableCell>
 
                 <TableCell align="right">{fCurrency(row.price)}</TableCell>
 

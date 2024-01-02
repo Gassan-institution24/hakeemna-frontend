@@ -78,32 +78,32 @@ export default function StakeholdersFeedbacks() {
   const table = useTable({ defaultOrderBy: 'createDate' });
 
   const { feedbackData, refetch } = useGetStakeholdersFeedbackes();
-  console.log('old dataa',feedbackData)
+  console.log('old dataa', feedbackData);
   const separateEachStakeholderFeedbacks = useCallback(() => {
     const results = {};
-    
+
     feedbackData.forEach((feedback) => {
       const stakeholderId = feedback.stakeholder._id;
-  
+
       if (!results[stakeholderId]) {
         results[stakeholderId] = { stakeholder: feedback.stakeholder };
       }
-  
+
       results[stakeholderId].count = (results[stakeholderId].count || 0) + 1;
       results[stakeholderId].rate = (results[stakeholderId].rate || 0) + feedback.Rate;
-  
+
       if (feedback.status === 'read') {
         results[stakeholderId].read = (results[stakeholderId].read || 0) + 1;
       } else {
         results[stakeholderId].notRead = (results[stakeholderId].notRead || 0) + 1;
       }
     });
-  
+
     const resultsArr = Object.keys(results).map((key) => ({ id: key, ...results[key] }));
     return resultsArr;
   }, [feedbackData]);
 
-  console.log('separateEachStakeholderFeedbacks',separateEachStakeholderFeedbacks())
+  console.log('separateEachStakeholderFeedbacks', separateEachStakeholderFeedbacks());
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -121,14 +121,12 @@ export default function StakeholdersFeedbacks() {
 
   const denseHeight = table.dense ? 56 : 76;
 
-  const canReset =
-    !!filters.name ||
-    filters.status !== 'all';
+  const canReset = !!filters.name || filters.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-  const now = new Date()
+  const now = new Date();
 
-  const getInvoiceLength = (status) => dataFiltered.filter((item) =>item.status === status ).length;
+  const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
 
   const getInvoiceLengthForTabs = (status) => {
     const filterdData = applyFilter({
@@ -142,7 +140,6 @@ export default function StakeholdersFeedbacks() {
     }
     return filterdData.filter((item) => item.status === status).length;
   };
-
 
   const TABS = [
     { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
@@ -192,19 +189,19 @@ export default function StakeholdersFeedbacks() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-        heading="Stakeholders Quality Control"
-        links={[
-          {
-            name: 'Dashboard',
-            href: paths.superadmin.root,
-          },
-          {
-            name: 'Stakeholders Quality Control',
-          },
-        ]}
-        style={{ marginBottom: '25px' }}
-      />
+        <CustomBreadcrumbs
+          heading="Stakeholders Quality Control"
+          links={[
+            {
+              name: 'Dashboard',
+              href: paths.superadmin.root,
+            },
+            {
+              name: 'Stakeholders Quality Control',
+            },
+          ]}
+          style={{ marginBottom: '25px' }}
+        />
         <Card>
           <QCTableToolbar
             filters={filters}
@@ -227,7 +224,6 @@ export default function StakeholdersFeedbacks() {
           )}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
                 <TableHeadCustom
@@ -246,11 +242,7 @@ export default function StakeholdersFeedbacks() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <QCTableRow
-                        key={row.id}
-                        row={row}
-                        onViewRow={() => handleViewRow(row.id)}
-                      />
+                      <QCTableRow key={row.id} row={row} onViewRow={() => handleViewRow(row.id)} />
                     ))}
 
                   <TableEmptyRows
@@ -311,7 +303,9 @@ function applyFilter({ inputData, comparator, filters }) {
     );
   }
   if (rate.length) {
-    inputData = inputData.filter((feedback) => rate.includes(Math.round(feedback.rate/feedback.count)));
+    inputData = inputData.filter((feedback) =>
+      rate.includes(Math.round(feedback.rate / feedback.count))
+    );
   }
 
   if (status !== 'all') {

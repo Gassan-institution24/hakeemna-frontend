@@ -39,7 +39,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetStakeholder,useGetStakeholders } from 'src/api/tables'; /// edit
+import { useGetStakeholder, useGetStakeholders } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import TableDetailRow from './table-details-row'; /// edit
@@ -83,6 +83,8 @@ export default function StakeholderTableView() {
 
   const componentRef = useRef();
 
+  const settings = useSettingsContext();
+
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
@@ -90,7 +92,7 @@ export default function StakeholderTableView() {
 
   const { stakeholdersData, refetch } = useGetStakeholders();
   const { data } = useGetStakeholder('657d610698f13d11740e4d98');
-  console.log('pat dataaa', data)
+  console.log('pat dataaa', data);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -267,7 +269,7 @@ export default function StakeholderTableView() {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Stakeholders" /// edit
           links={[
@@ -430,7 +432,7 @@ export default function StakeholderTableView() {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row._id)}
-                        showGeneralInfo={()=>handleShowGeneralInfoRow(row._id)}
+                        showGeneralInfo={() => handleShowGeneralInfoRow(row._id)}
                         showAccounting={() => handleShowHistoryRow(row._id)}
                         showCommunications={() => handleShowCommunicationsRow(row._id)}
                         showFeedback={() => handleShowFeedbacksRow(row._id)}
@@ -547,12 +549,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.stakeholder_type?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.stakeholder_type?.name_arabic &&
           data?.stakeholder_type?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.email &&
-          data?.email?.indexOf(name.toLowerCase()) !== -1) ||
-        (data?.phone &&
-          JSON.stringify(data.phone).indexOf(name.toLowerCase()) !== -1) ||
-        (data?.mobile_num &&
-          JSON.stringify(data.mobile_num).indexOf(name.toLowerCase()) !== -1) ||
+        (data?.email && data?.email?.indexOf(name.toLowerCase()) !== -1) ||
+        (data?.phone && JSON.stringify(data.phone).indexOf(name.toLowerCase()) !== -1) ||
+        (data?.mobile_num && JSON.stringify(data.mobile_num).indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

@@ -45,7 +45,6 @@ const STATUS_OPTIONS = [
 ];
 
 export default function InvoiceDetails({ paymentData }) {
-
   const settings = useSettingsContext();
 
   const renderTotal = (
@@ -122,10 +121,10 @@ export default function InvoiceDetails({ paymentData }) {
 
               <TableCell sx={{ typography: 'subtitle2' }}>Received Amount</TableCell>
 
-              <TableCell>Invoice no</TableCell>
+              <TableCell align="center">Invoice no</TableCell>
 
               <TableCell align="right">Invoice Amount</TableCell>
-              
+
               <TableCell align="right">Total Received Amount</TableCell>
 
               <TableCell align="right">Remained Amount</TableCell>
@@ -133,27 +132,27 @@ export default function InvoiceDetails({ paymentData }) {
           </TableHead>
 
           <TableBody>
-              <TableRow>
-                <TableCell>{paymentData.code}</TableCell>
+            <TableRow>
+              <TableCell align="center">{paymentData.code}</TableCell>
 
-                <TableCell>
-                  <Box sx={{ maxWidth: 560 }}>
-                    <Typography variant="subtitle2">{fCurrency(paymentData?.amount)}</Typography>
+              <TableCell align="center">
+                <Box sx={{ maxWidth: 560 }}>
+                  <Typography variant="subtitle2">{fCurrency(paymentData?.amount)}</Typography>
 
-                    {/* <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                  {/* <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
                       {row.description}
                     </Typography> */}
-                  </Box>
-                </TableCell>
+                </Box>
+              </TableCell>
 
-                <TableCell>{paymentData.invoice?.code}</TableCell>
+              <TableCell align="center">{paymentData.invoice?.code}</TableCell>
 
-                <TableCell align="right">{fCurrency(paymentData.invoice?.Balance)}</TableCell>
-                
-                <TableCell align="right">{fCurrency(paymentData.invoice?.Balance)}</TableCell>
+              <TableCell align="right">{fCurrency(paymentData.invoice?.Balance)}</TableCell>
 
-                <TableCell align="right">{fCurrency(20)}</TableCell>
-              </TableRow>
+              <TableCell align="right">{fCurrency(paymentData.invoice?.Balance)}</TableCell>
+
+              <TableCell align="right">{fCurrency(20)}</TableCell>
+            </TableRow>
 
             {renderTotal}
           </TableBody>
@@ -164,10 +163,7 @@ export default function InvoiceDetails({ paymentData }) {
 
   return (
     <>
-      <InvoiceToolbar
-        paymentData={paymentData}
-        statusOptions={STATUS_OPTIONS}
-      />
+      <InvoiceToolbar paymentData={paymentData} statusOptions={STATUS_OPTIONS} />
 
       <Card sx={{ pt: 5, px: 5 }}>
         <Box
@@ -251,7 +247,7 @@ export default function InvoiceDetails({ paymentData }) {
 
         {renderFooter}
       </Card>
-      </>
+    </>
   );
 }
 

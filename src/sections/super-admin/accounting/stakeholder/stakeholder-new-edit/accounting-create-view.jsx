@@ -10,12 +10,11 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TableNewEditForm from './accounting-new-edit-form';
 
-
 // ----------------------------------------------------------------------
 
-export default function USAccountingCreateView({stakeholderData}) {
+export default function USAccountingCreateView({ stakeholderData }) {
   const settings = useSettingsContext();
-  const stakeholderName = stakeholderData?.name_english || 'Stakeholder'
+  const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
   const params = useParams();
   const { id } = params;
   return (
@@ -42,7 +41,7 @@ export default function USAccountingCreateView({stakeholderData}) {
         }}
       />
 
-      <TableNewEditForm  stakeholderData={stakeholderData}/>
+      <TableNewEditForm stakeholderData={stakeholderData} />
     </Container>
   );
 }

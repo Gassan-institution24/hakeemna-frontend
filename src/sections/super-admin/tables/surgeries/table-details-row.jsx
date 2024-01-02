@@ -43,14 +43,14 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell>
+      <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell>{name_english}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
 
-      <TableCell>{description}</TableCell>
-      <TableCell>
+      <TableCell align="center">{description}</TableCell>
+      <TableCell align="center">
         Diseases
         <IconButton
           color={collapse.value ? 'inherit' : 'default'}

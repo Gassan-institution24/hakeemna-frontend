@@ -14,7 +14,7 @@ export default function AppointmentConfigEditPage() {
   return (
     <>
       <Helmet>
-        <title>Edit {name} Appointment Configuration</title>
+        <title>Edit {name||''} Appointment Configuration</title>
       </Helmet>
 
       {data && <EditAppointmentConfigView appointmentConfigData={data} />}

@@ -95,9 +95,9 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
   const [filters, setFilters] = useState(defaultFilters);
 
   const { insuranseCosData } = useGetInsuranceCos();
-  const filteredInsuranceCos = insuranseCosData.filter((company) =>
-    !unitServiceData?.insurance?.some((data) => data._id === company._id)
-  ).filter((data)=>data.status === 'active');
+  const filteredInsuranceCos = insuranseCosData
+    .filter((company) => !unitServiceData?.insurance?.some((data) => data._id === company._id))
+    .filter((data) => data.status === 'active');
 
   const dateError =
     filters.startDate && filters.endDate
@@ -205,12 +205,12 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
   const unitserviceName = unitServiceData?.name_english;
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading={`${unitserviceName} Insurance`} /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

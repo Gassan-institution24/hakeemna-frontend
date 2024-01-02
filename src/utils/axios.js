@@ -160,6 +160,7 @@ export const endpoints = {
     offer: (id) => `/api/suppliersoffers/${id}`,
     stakeholderOffers: (id) => `/api/suppliersoffers/stakeholder/${id}`,
     patientIncomePaymentControl: (id) => `/api/incomepayment/patient/${id}`,
+    departmentIncomePaymentControl: (id) => `/api/incomepayment/department/${id}`,
     stakeholderIncomePaymentControl: (id) => `/api/incomepayment/stakeholder/${id}`,
     systemErrors: '/api/systemerrors',
     systemError: (id) => `/api/systemerrors/${id}`,

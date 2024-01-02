@@ -1,4 +1,4 @@
-import { format,isValid } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -73,11 +73,9 @@ export default function MovementTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell> */}
 
-        <TableCell >
-          {code}
-        </TableCell>
+        <TableCell>{code}</TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={unit_service?.name_english}
             secondary={employee?.first_name}
@@ -90,7 +88,7 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={stakeholder?.name_english}
             secondary={stakeholder?.unit_service?.name_english}
@@ -103,10 +101,14 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={invoice?.code}
-            secondary={isValid(new Date(invoice?.created_at))&&format(new Date(invoice?.created_at), 'dd MMM yyyy p')||''}
+            secondary={
+              (isValid(new Date(invoice?.created_at)) &&
+                format(new Date(invoice?.created_at), 'dd MMM yyyy p')) ||
+              ''
+            }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -115,7 +117,7 @@ export default function MovementTableRow({
             }}
           />
         </TableCell>
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={required_amount}
             // secondary={format(new Date(work_shift?.start_time), 'p')}
@@ -127,16 +129,18 @@ export default function MovementTableRow({
             // }}
           />
         </TableCell>
-        <TableCell>
-        {isValid(new Date(due_date))?format(new Date(due_date), 'dd MMM yyyy'):''}
+        <TableCell align="center">
+          {isValid(new Date(due_date)) ? format(new Date(due_date), 'dd MMM yyyy') : ''}
         </TableCell>
 
-        <TableCell>{fCurrency(amount)}</TableCell>
-        <TableCell>
-        {isValid(new Date(recieved_real_date))?format(new Date(recieved_real_date), 'dd MMM yyyy'):''}
+        <TableCell align="center">{fCurrency(amount)}</TableCell>
+        <TableCell align="center">
+          {isValid(new Date(recieved_real_date))
+            ? format(new Date(recieved_real_date), 'dd MMM yyyy')
+            : ''}
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <Label
             variant="soft"
             color={

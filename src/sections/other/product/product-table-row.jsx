@@ -84,7 +84,7 @@ export default function ProductTableRow({
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <ListItemText
             primary={format(new Date(createdAt), 'dd MMM yyyy')}
             secondary={format(new Date(createdAt), 'p')}
@@ -111,9 +111,9 @@ export default function ProductTableRow({
           {!!available && available} {inventoryType}
         </TableCell>
 
-        <TableCell>{fCurrency(price)}</TableCell>
+        <TableCell align="center">{fCurrency(price)}</TableCell>
 
-        <TableCell>
+        <TableCell align="center">
           <Label variant="soft" color={(publish === 'published' && 'info') || 'default'}>
             {publish}
           </Label>

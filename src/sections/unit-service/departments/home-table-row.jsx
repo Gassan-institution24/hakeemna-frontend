@@ -71,9 +71,9 @@ export default function CountriesTableRow({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell>{code}</TableCell>
-      <TableCell>{name_english}</TableCell>
-      <TableCell>
+      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={
@@ -84,6 +84,7 @@ export default function CountriesTableRow({
         </Label>
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -94,6 +95,7 @@ export default function CountriesTableRow({
         {economecMovementsCount}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -103,6 +105,7 @@ export default function CountriesTableRow({
         {appointmentConfigCount}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -112,6 +115,7 @@ export default function CountriesTableRow({
         {appointmentsCount}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -121,6 +125,7 @@ export default function CountriesTableRow({
         {activitiesCount}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -130,6 +135,7 @@ export default function CountriesTableRow({
         {employeesCount}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -139,6 +145,7 @@ export default function CountriesTableRow({
         {feedbackCount}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',

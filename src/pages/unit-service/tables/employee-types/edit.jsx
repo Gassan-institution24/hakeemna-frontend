@@ -14,7 +14,7 @@ export default function EmployeeTypeEditPage() {
   return (
     <>
       <Helmet>
-        <title>Edit {name} Employee Type</title>
+        <title>Edit {name||''} Employee Type</title>
       </Helmet>
 
       {data && <EmployeeTypeEditView employeeTypeData={data} />}

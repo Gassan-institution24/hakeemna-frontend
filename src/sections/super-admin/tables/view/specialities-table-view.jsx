@@ -29,8 +29,9 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 // import { ConfirmDialog } from 'src/components/custom-dialog';
-// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { useSettingsContext } from 'src/components/settings';
+
 import {
   useTable,
   emptyRows,
@@ -79,7 +80,7 @@ export default function SpecialtiesTableView() {
 
   const componentRef = useRef();
 
-  // const settings = useSettingsContext();
+  const settings = useSettingsContext();
 
   const router = useRouter();
 
@@ -227,12 +228,12 @@ export default function SpecialtiesTableView() {
   // );
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Specialties" /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

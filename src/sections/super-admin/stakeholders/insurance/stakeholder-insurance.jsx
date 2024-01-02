@@ -205,7 +205,7 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
   const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading={`${stakeholderName} Insurance`} /// edit
           links={[

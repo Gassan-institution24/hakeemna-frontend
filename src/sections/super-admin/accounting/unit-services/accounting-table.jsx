@@ -44,7 +44,7 @@ import {
 } from 'src/components/table';
 import { useGetUSLicenseMovements } from 'src/api/tables';
 
-import TableAnalytic from '../../patients/history/table-analytic'; 
+import TableAnalytic from '../../patients/history/table-analytic';
 import AccountingTableRow from './accounting-table-row';
 import MovementTableToolbar from './accounting-table-toolbar';
 import MovementTableFiltersResult from './accounting-filters-result';
@@ -80,28 +80,32 @@ export default function LicenseMovementsView() {
   const table = useTable({ defaultOrderBy: 'createDate' });
 
   const { licenseMovements, refetch } = useGetUSLicenseMovements();
-  console.log('old dataa',licenseMovements)
-  const separateEachUsMovement= useCallback (() => {
+  console.log('old dataa', licenseMovements);
+  const separateEachUsMovement = useCallback(() => {
     const results = {};
-    const now = new Date()
+    const now = new Date();
     licenseMovements.forEach((movement) => {
       if (!results[movement.unit_service._id]) {
         results[movement.unit_service._id] = {};
         results[movement.unit_service._id].unit_service = movement.unit_service;
       }
-      if(results[movement.unit_service._id].count){
-        results[movement.unit_service._id].count += 1
-      }else{results[movement.unit_service._id].count = 1}
-      if(results[movement.unit_service._id].payments){
-        results[movement.unit_service._id].payments += movement.price
-      }else{results[movement.unit_service._id].payments = movement.price}
+      if (results[movement.unit_service._id].count) {
+        results[movement.unit_service._id].count += 1;
+      } else {
+        results[movement.unit_service._id].count = 1;
+      }
+      if (results[movement.unit_service._id].payments) {
+        results[movement.unit_service._id].payments += movement.price;
+      } else {
+        results[movement.unit_service._id].payments = movement.price;
+      }
       if (
         !results[movement.unit_service._id].start_date ||
         results[movement.unit_service._id].start_date > movement.Start_date
       ) {
         results[movement.unit_service._id].start_date = movement.Start_date;
       }
-  
+
       if (
         !results[movement.unit_service._id].end_date ||
         results[movement.unit_service._id].end_date < movement.End_date
@@ -110,9 +114,16 @@ export default function LicenseMovementsView() {
         results[movement.unit_service._id].user_no = movement.Users_num;
       }
     });
-    const resultsArr = Object.keys(results).map((key)=>({id:key,...results[key],status:new Date(results[key].end_date)>=now&&new Date(results[key].start_date)<=now?'active':'inactive'}))
+    const resultsArr = Object.keys(results).map((key) => ({
+      id: key,
+      ...results[key],
+      status:
+        new Date(results[key].end_date) >= now && new Date(results[key].start_date) <= now
+          ? 'active'
+          : 'inactive',
+    }));
     return resultsArr;
-  },[licenseMovements])
+  }, [licenseMovements]);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -130,14 +141,12 @@ export default function LicenseMovementsView() {
 
   const denseHeight = table.dense ? 56 : 76;
 
-  const canReset =
-    !!filters.name ||
-    filters.status !== 'all';
+  const canReset = !!filters.name || filters.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-  const now = new Date()
+  const now = new Date();
 
-  const getInvoiceLength = (status) => dataFiltered.filter((item) =>item.status === status ).length;
+  const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
 
   const getInvoiceLengthForTabs = (status) => {
     const filterdData = applyFilter({
@@ -151,7 +160,6 @@ export default function LicenseMovementsView() {
     }
     return filterdData.filter((item) => item.status === status).length;
   };
-
 
   const TABS = [
     { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
@@ -251,7 +259,6 @@ export default function LicenseMovementsView() {
           )}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
                 <TableHeadCustom

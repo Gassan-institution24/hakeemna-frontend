@@ -85,7 +85,9 @@ export default function EconomicMovementsView({ stakeholderData }) {
 
   // const confirm = useBoolean();
 
-  const { economecMovementsData, refetch } = useGetStackeholderEconomicMovements(stakeholderData._id);
+  const { economecMovementsData, refetch } = useGetStackeholderEconomicMovements(
+    stakeholderData._id
+  );
 
   const [filters, setFilters] = useState(defaultFilters);
 

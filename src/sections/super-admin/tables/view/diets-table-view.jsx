@@ -12,6 +12,8 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useReactToPrint } from 'react-to-print';
+import { useSettingsContext } from 'src/components/settings';
+
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -62,6 +64,8 @@ export default function DietsTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
+
+  const settings = useSettingsContext();
 
   const router = useRouter();
 
@@ -146,12 +150,12 @@ export default function DietsTableView() {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Diets" /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

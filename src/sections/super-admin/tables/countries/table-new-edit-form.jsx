@@ -100,8 +100,18 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 sm: 'repeat(2, 1fr)',
               }} /// edit
             >
-              <RHFTextField name="name_english" label="name english" />
-              <RHFTextField name="name_arabic" label="name arabic" />
+              <RHFTextField
+                lang="en"
+                onChange={handleEnglishInputChange}
+                name="name_english"
+                label="name english"
+              />
+              <RHFTextField
+                lang="ar"
+                onChange={handleArabicInputChange}
+                name="name_arabic"
+                label="name arabic"
+              />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

@@ -82,6 +82,8 @@ export default function StakeholderFeedbackView({ stakeholderData }) {
 
   const componentRef = useRef();
 
+  const settings = useSettingsContext();
+
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
@@ -157,12 +159,12 @@ export default function StakeholderFeedbackView({ stakeholderData }) {
   const stakeholderName = stakeholderData.name_english || 'Stakeholder';
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading={`${stakeholderName} feedback`} /// edit
           links={[
             {
-              name: 'Super',
+              name: 'Dashboard',
               href: paths.superadmin.root,
             },
             {

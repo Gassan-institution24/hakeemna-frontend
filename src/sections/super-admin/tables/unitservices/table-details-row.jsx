@@ -73,9 +73,9 @@ export default function CountriesTableRow({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell>{code}</TableCell>
-      <TableCell>{name_english}</TableCell>
-      <TableCell>
+      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">
         <Label
           variant="soft"
           color={
@@ -85,9 +85,10 @@ export default function CountriesTableRow({
           {status}
         </Label>
       </TableCell>
-      <TableCell>{identification_num}</TableCell>
-      <TableCell>{email}</TableCell>
+      <TableCell align="center">{identification_num}</TableCell>
+      <TableCell align="center">{email}</TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -98,6 +99,7 @@ export default function CountriesTableRow({
         {country?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -108,6 +110,7 @@ export default function CountriesTableRow({
         {city?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -118,6 +121,7 @@ export default function CountriesTableRow({
         {US_type?.name_english}
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -137,6 +141,7 @@ export default function CountriesTableRow({
         </Label>
       </TableCell>
       <TableCell
+        align="center"
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -236,9 +241,7 @@ export default function CountriesTableRow({
         }}
       >
         <Box sx={{ fontWeight: 600 }}>subscriptions Period:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-          {period_months} months
-        </Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{period_months} months</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Tax:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{tax}</Box>
 
