@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
@@ -8,14 +8,15 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useAuthContext } from 'src/auth/hooks';
-import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import { MenuItem } from '@mui/material';
-import FormProvider, { RHFTextField, RHFSelect } from 'src/components/hook-form';
+import { MenuItem,Typography, Button} from '@mui/material';
+import FormProvider, { RHFTextField, RHFSelect, RHFUploadAvatar, RHFSwitch } from 'src/components/hook-form';
 import { useGetCities, useGetCountries } from 'src/api/tables';
 import axiosHandler from 'src/utils/axios-handler';
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+
+
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
@@ -99,27 +100,27 @@ export default function AccountGeneral() {
     }
   });
 
-  // const handleDrop = useCallback(
-  //   (acceptedFiles) => {
-  //     const file = acceptedFiles[0];
+  const handleDrop = useCallback(
+    (acceptedFiles) => {
+      const file = acceptedFiles[0];
 
-  //     const newFile = Object.assign(file, {
-  //       preview: URL.createObjectURL(file),
-  //     });
+      const newFile = Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      });
 
-  //     if (file) {
-  //       setValue('photoURL', newFile, { shouldValidate: true });
-  //     }
-  //   },
-  //   [setValue]
-  // );
+      if (file) {
+        setValue('photoURL', newFile, { shouldValidate: true });
+      }
+    },
+    [setValue]
+  );
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
         {/* img */}
         <Grid xs={12} md={4}>
-          {/* <Card sx={{ pt: 10, pb: 5, px: 3, textAlign: 'center' }}>
+          <Card sx={{ pt: 10, pb: 5, px: 3, textAlign: 'center' }}>
             <RHFUploadAvatar
               name="photoURL"
               maxSize={3145728}
@@ -136,22 +137,23 @@ export default function AccountGeneral() {
                   }}
                 >
                   Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of {fuser(3145728)}
+                  <br /> max size of  
+                  {/* {fuser(3145728)} */}
                 </Typography>
               }
             />
 
-            <RHFSwitch
+            {/* <RHFSwitch
               name="isPublic"
               labelPlacement="start"
               label="Public Profile"
               sx={{ mt: 5 }}
-            />
+            /> */}
 
             <Button variant="soft" color="error" sx={{ mt: 3 }}>
-              Delete User
+              Delete Profile
             </Button>
-          </Card> */}
+          </Card>
         </Grid>
         {/* img */}
         <Grid xs={12} md={8}>

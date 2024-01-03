@@ -5,11 +5,11 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import UserNewEditForm from '../contactus';
+import ContactUs from '../contactus';
 
 // ----------------------------------------------------------------------
 
-export default function UserCreateView() {
+export default function ContactUsView() {
   const settings = useSettingsContext();
 
   return (
@@ -32,7 +32,7 @@ export default function UserCreateView() {
         }}
       />
 
-      <UserNewEditForm />
+      <ContactUs />
     </Container>
   );
 }

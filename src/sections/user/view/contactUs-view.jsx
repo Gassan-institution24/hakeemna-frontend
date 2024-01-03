@@ -13,7 +13,7 @@ import UserNewEditForm from '../contactus';
 
 // ----------------------------------------------------------------------
 
-export default function UserEditView({ id }) {
+export default function ContactUsView({ id }) {
   const settings = useSettingsContext();
 
   const currentUser = _userList.find((user) => user.id === id);
@@ -43,6 +43,6 @@ export default function UserEditView({ id }) {
   );
 }
 
-UserEditView.propTypes = {
+ContactUsView.propTypes = {
   id: PropTypes.string,
 };
