@@ -54,13 +54,12 @@ const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'Name' },
+  { id: 'employee_type', label: 'Employee Type' },
+  { id: 'email', label: 'email' },
+  { id: 'nationality', label: 'Nationality' },
+  { id: 'validatd_identity', label: 'Validated Identity' },
+  { id: 'Adjust_schedule', label: 'Adjust schedule' },
   { id: 'status', label: 'Status' },
-  { id: 'General-info', label: 'General Info' },
-  { id: 'History', label: 'History' },
-  { id: 'Communications', label: 'Communications' },
-  { id: 'Feedback', label: 'Feedback' },
-  { id: 'Insurance', label: 'Insurance' },
-  { id: 'Offers', label: 'Offers' },
   { id: '', width: 88 },
 ];
 
@@ -143,7 +142,7 @@ export default function EmployeesTableView({departmentData}) {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `${endpoints.tables.patient(id)}/updatestatus`,
+        path: `${endpoints.tables.employee(id)}/updatestatus`,
         data: { status: 'active' },
       });
       refetch();
@@ -155,7 +154,7 @@ export default function EmployeesTableView({departmentData}) {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `${endpoints.tables.patient(id)}/updatestatus`,
+        path: `${endpoints.tables.employee(id)}/updatestatus`,
         data: { status: 'inactive' },
       });
       refetch();
@@ -167,7 +166,7 @@ export default function EmployeesTableView({departmentData}) {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `${endpoints.tables.patients}/updatestatus`,
+      path: `${endpoints.tables.employees}/updatestatus`,
       data: { status: 'active', ids: table.selected },
     });
     refetch();
@@ -181,7 +180,7 @@ export default function EmployeesTableView({departmentData}) {
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `${endpoints.tables.patients}/updatestatus`,
+      path: `${endpoints.tables.employees}/updatestatus`,
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();
@@ -210,7 +209,7 @@ export default function EmployeesTableView({departmentData}) {
     [router,departmentData]
   );
 
-  const handleShowRow = useCallback(
+  const handleViewRow = useCallback(
     (id) => {
       router.push(paths.unitservice.departments.employees.info(departmentData._id,id)); /// edit
     },
@@ -238,24 +237,28 @@ export default function EmployeesTableView({departmentData}) {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Patients" /// edit
+          heading={`${departmentData.name_english || ''} Department Employees`} /// edit
           links={[
             {
               name: 'Dashboard',
-              href: paths.superadmin.root,
+              href: paths.unitservice.root,
             },
-            { name: 'Patients' }, /// edit
+            {
+              name: 'Departments',
+              href: paths.unitservice.departments.root,
+            },
+            { name: `${departmentData.name_english || 'Department'} Employees`} , /// edit
           ]}
-          // action={
-          //   <Button
-          //     component={RouterLink}
-          //     href={paths.superadmin.tables.unitservices.new} /// edit
-          //     variant="contained"
-          //     startIcon={<Iconify icon="mingcute:add-line" />}
-          //   >
-          //     New Unit Service
-          //   </Button> /// edit
-          // }
+          action={
+            <Button
+              component={RouterLink}
+              href={paths.unitservice.departments.employees.new(departmentData._id)} /// edit
+              variant="contained"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+            >
+              New Employee
+            </Button> /// edit
+          }
           sx={{
             mb: { xs: 3, md: 5 },
             mt: { xs: 3, md: 5 },
@@ -285,9 +288,6 @@ export default function EmployeesTableView({departmentData}) {
                     color={
                       (tab.value === 'active' && 'success') ||
                       (tab.value === 'inactive' && 'error') ||
-                      // (tab.value === 'public' && 'success') ||
-                      // (tab.value === 'privet' && 'error') ||
-                      // (tab.value === 'charity' && 'success') ||
                       'default'
                     }
                   >
@@ -296,12 +296,6 @@ export default function EmployeesTableView({departmentData}) {
                       employeesData.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
                       employeesData.filter((order) => order.status === 'inactive').length}
-                    {/* {tab.value === 'public' &&
-                      employeesData.filter((order) => order.sector_type === 'public').length}
-                    {tab.value === 'privet' &&
-                      employeesData.filter((order) => order.sector_type === 'privet').length}
-                    {tab.value === 'charity' &&
-                      employeesData.filter((order) => order.sector_type === 'charity').length} */}
                   </Label>
                 }
               />
@@ -331,7 +325,7 @@ export default function EmployeesTableView({departmentData}) {
 
           <TableContainer>
             <TableSelectedAction
-              // dense={table.dense}
+              dense={table.dense}
               numSelected={table.selected.length}
               rowCount={dataFiltered.length}
               onSelectAllRows={(checked) =>
@@ -340,25 +334,25 @@ export default function EmployeesTableView({departmentData}) {
                   dataFiltered.map((row) => row._id)
                 )
               }
-              // action={
-              //   <>
-              //     {dataFiltered
-              //       .filter((row) => table.selected.includes(row._id))
-              //       .some((data) => data.status === 'inactive') ? (
-              //       <Tooltip title="Activate all">
-              //         <IconButton color="primary" onClick={confirmActivate.onTrue}>
-              //           <Iconify icon="codicon:run-all" />
-              //         </IconButton>
-              //       </Tooltip>
-              //     ) : (
-              //       <Tooltip title="Inactivate all">
-              //         <IconButton color="error" onClick={confirmInactivate.onTrue}>
-              //           <Iconify icon="iconoir:pause-solid" />
-              //         </IconButton>
-              //       </Tooltip>
-              //     )}
-              //   </>
-              // }
+              action={
+                <>
+                  {dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'inactive') ? (
+                    <Tooltip title="Activate all">
+                      <IconButton color="primary" onClick={confirmActivate.onTrue}>
+                        <Iconify icon="codicon:run-all" />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Inactivate all">
+                      <IconButton color="error" onClick={confirmInactivate.onTrue}>
+                        <Iconify icon="iconoir:pause-solid" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </>
+              }
               color={
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
@@ -400,7 +394,7 @@ export default function EmployeesTableView({departmentData}) {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row._id)}
-                        showRow={() => handleShowRow(row._id)}
+                        onViewRow={() => handleViewRow(row._id)}
                         onInactivate={() => handleInactivate(row._id)}
                         onEditRow={() => handleEditRow(row._id)}
                       />

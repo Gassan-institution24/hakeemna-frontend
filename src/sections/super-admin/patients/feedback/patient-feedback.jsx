@@ -333,10 +333,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.appointment?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.appointment?.name_arabic &&
           data?.appointment?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.doctor?.name_english &&
-          data?.doctor?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.doctor?.name_arabic &&
-          data?.doctor?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.name_english &&
+          data?.employee?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.name_arabic &&
+          data?.employee?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.title && data?.title?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name

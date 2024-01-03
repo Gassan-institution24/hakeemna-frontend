@@ -491,7 +491,11 @@ export const paths = {
         feedback: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/feedback`,
         attendence: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/attendence`,
         offers: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/offers`,
-        activities: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/activities`,
+        activities: {
+          root:  (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/activities`,
+          new:  (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/activities/new`,
+          edit:  (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/activities`,
+        },
         acl: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/acl`,
       },
       accounting: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/accounting`,

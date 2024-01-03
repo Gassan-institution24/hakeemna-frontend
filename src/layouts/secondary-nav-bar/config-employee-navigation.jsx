@@ -6,6 +6,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useRouter,useParams } from 'src/routes/hooks';
 
 import Iconify from 'src/components/iconify';
+import { useGetEmployee } from 'src/api/tables';
 
 
 // ----------------------------------------------------------------------
@@ -17,16 +18,13 @@ export function useNavData() {
   const { user } = useAuthContext();
   const {id,emid}= params
 
+  const employeeData = useGetEmployee(emid).data
   const data = useMemo(() => {
     const unitServicesItems = [
+      
       {
         subheader: t('control panel'),
         items: [
-          {
-            title: t('general info'),
-            path: paths.unitservice.departments.employees.info(id,emid),
-            icon: <Iconify icon="fluent:person-info-20-filled" />,
-          },
           {
             title: t('appointments'),
             path: paths.unitservice.departments.employees.appointments(id,emid),
@@ -59,7 +57,7 @@ export function useNavData() {
           },
           {
             title: t('activities'),
-            path: paths.unitservice.departments.employees.activities(id,emid),
+            path: paths.unitservice.departments.employees.activities.root(id,emid),
             icon: <Iconify icon="ic:baseline-security" />,
           },
           {
@@ -67,8 +65,18 @@ export function useNavData() {
             path: paths.unitservice.departments.employees.acl(id,emid),
             icon: <Iconify icon="eos-icons:activate-subscriptions" />,
           },
+          
       
         ],
+      },
+      {
+        items: [
+          {
+            title: t(`${employeeData?.first_name} ${employeeData?.family_name}`),
+            path: paths.unitservice.departments.employees.info(id,emid),
+            icon: <Iconify icon="fluent:person-info-20-filled" />,
+          },
+        ]
       },
     ];
 
@@ -81,7 +89,7 @@ export function useNavData() {
       return [...unitServicesItems];
     }
     return [...unitServicesItems];
-  }, [t, user, router,id,emid]);
+  }, [t, user, router,id,emid,employeeData]);
 
   return data;
 }

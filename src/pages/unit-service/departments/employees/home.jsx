@@ -10,7 +10,7 @@ export default function DepartmentEmployeesPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetDepartment(id);
-  const name = data?.name_english
+  const name = data?.first_name
   return (
     <>
       <Helmet>

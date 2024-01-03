@@ -29,17 +29,17 @@ export default function CountriesTableRow({
   onInactivate,
   setFilters,
   filters,
-  showRow,
+  onViewRow,
 }) {
   const {
     code,
-    unit_service,
-    department,
     employee_type,
     email,
     first_name,
     family_name,
     nationality,
+    validatd_identity,
+    Adjust_schedule,
     status,
     created_at,
     user_creation,
@@ -57,10 +57,23 @@ export default function CountriesTableRow({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell align="center">{code}</TableCell>
-      <TableCell align="center">
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
+        }} onClick={onViewRow} align="center">{code}</TableCell>
+      <TableCell sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
+        }} onClick={onViewRow} align="center">
         {first_name} {family_name}
       </TableCell>
+      <TableCell align="center">{employee_type?.name_english}</TableCell>
+      <TableCell align="center">{email}</TableCell>
+      <TableCell align="center">{nationality?.name_english}</TableCell>
+      <TableCell align="center"><Iconify icon={validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} /></TableCell>
+      <TableCell align="center"><Iconify icon={Adjust_schedule ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} /></TableCell>
       <TableCell align="center">
         <Label
           variant="soft"
@@ -71,72 +84,7 @@ export default function CountriesTableRow({
           {status}
         </Label>
       </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        // onClick={showGeneralInfo}
-      >
-        General Info
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        // onClick={showAccounting}
-      >
-        History
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        // onClick={showCommunications}
-      >
-        Communications
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        // onClick={showFeedback}
-      >
-        Feedback
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        // onClick={showInsurance}
-      >
-        Insurance
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        // onClick={showInsurance}
-      >
-        Offers optained | offers Sent
-      </TableCell>
+
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
@@ -159,7 +107,7 @@ export default function CountriesTableRow({
           <MenuItem
             onClick={() => {
               onInactivate();
-              // popover.onClose();
+              popover.onClose();
             }}
             sx={{ color: 'error.main' }}
           >
@@ -170,7 +118,7 @@ export default function CountriesTableRow({
           <MenuItem
             onClick={() => {
               onActivate();
-              // popover.onClose();
+              popover.onClose();
             }}
             sx={{ color: 'success.main' }}
           >
@@ -178,6 +126,10 @@ export default function CountriesTableRow({
             activate
           </MenuItem>
         )}
+        <MenuItem onClick={onViewRow}>
+          <Iconify icon="solar:eye-bold" />
+          View
+        </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
@@ -220,7 +172,7 @@ CountriesTableRow.propTypes = {
   onActivate: PropTypes.func,
   onInactivate: PropTypes.func,
   onEditRow: PropTypes.func,
-  showRow: PropTypes.func,
+  onViewRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
   filters: PropTypes.object,
