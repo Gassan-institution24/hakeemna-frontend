@@ -26,7 +26,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
     code,
     department,
     appointment,
-    doctor,
+    employee,
     status,
     title,
     Body,
@@ -55,9 +55,9 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
       </TableCell>
       <TableCell
         align="center"
-        onClick={() => setFilters({ ...filters, name: doctor?.name_english })}
+        onClick={() => setFilters({ ...filters, name: employee?.name_english })}
       >
-        {doctor?.name_english}
+        {employee?.name_english}
       </TableCell>
       <TableCell align="center">{title}</TableCell>
       <TableCell align="center">

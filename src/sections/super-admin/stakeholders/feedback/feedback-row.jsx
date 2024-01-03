@@ -25,7 +25,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
   const {
     code,
     appointment,
-    doctor,
+    employee,
     status,
     title,
     Body,

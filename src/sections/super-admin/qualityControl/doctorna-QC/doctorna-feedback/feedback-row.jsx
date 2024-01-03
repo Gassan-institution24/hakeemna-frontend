@@ -26,7 +26,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRe
     code,
     department,
     appointment,
-    doctor,
+    employee,
     status,
     title,
     Body,

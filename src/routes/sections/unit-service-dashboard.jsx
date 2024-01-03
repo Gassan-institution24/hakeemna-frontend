@@ -13,7 +13,17 @@ import RecieptsInfoPage from 'src/pages/employee/accounting/reciepts/info';
 const DepartmentsHomePage = lazy(() => import('src/pages/unit-service/departments/home'));
 const DepartmentsNewPage = lazy(() => import('src/pages/unit-service/departments/new'));
 const DepartmentsInfoPage = lazy(() => import('src/pages/unit-service/departments/info'));
-const DepartmentsEmployeesPage = lazy(() => import('src/pages/unit-service/departments/employees'));
+const DepartmentsEmployeesPage = lazy(() => import('src/pages/unit-service/departments/employees/home'));
+const DepartmentsEmployeesNewPage = lazy(() => import('src/pages/unit-service/departments/employees/new'));
+const DepartmentsEmployeesInfoPage = lazy(() => import('src/pages/unit-service/departments/employees/info'));
+const DepartmentsEmployeesAppointmentsPage = lazy(() => import('src/pages/unit-service/departments/employees/appointment'));
+const DepartmentsEmployeesAppointmentConfigPage = lazy(() => import('src/pages/unit-service/departments/employees/appointConfig'));
+const DepartmentsEmployeesAccountingPage = lazy(() => import('src/pages/unit-service/departments/employees/accounting'));
+const DepartmentsEmployeesFeedbackPage = lazy(() => import('src/pages/unit-service/departments/employees/feedback'));
+const DepartmentsEmployeesAttendencePage = lazy(() => import('src/pages/unit-service/departments/employees/attendence'));
+const DepartmentsEmployeesOffersPage = lazy(() => import('src/pages/unit-service/departments/employees/offers'));
+const DepartmentsEmployeesActivitiesPage = lazy(() => import('src/pages/unit-service/departments/employees/activities'));
+const DepartmentsEmployeesACLPage = lazy(() => import('src/pages/unit-service/departments/employees/acl'));
 const DepartmentsAccountingPage = lazy(() =>
   import('src/pages/unit-service/departments/accounting')
 );
@@ -181,6 +191,7 @@ export const unitServiceDashboardRoutes = [
             path: ':id/employees',
             children: [
               { element: <DepartmentsEmployeesPage />, index: true },
+              { path: 'new', element: <DepartmentsEmployeesNewPage /> },
               {
                 path: ':emid',
                 element: (
@@ -189,12 +200,15 @@ export const unitServiceDashboardRoutes = [
                   </SecondaryNavLayout>
                 ),
                 children: [
-                  { path: 'info', element: <EmployeesInfoPage /> },
-                  { path: 'appointments', element: <EmployeesAppointmentsPage /> },
-                  { path: 'attendence', element: <EmployeesAttendencePage /> },
-                  { path: 'edit', element: <EmployeesEditPage /> },
-                  { path: 'acl', element: <EmployeesACLPage /> },
-                  { path: 'new', element: <EmployeesNewPage /> },
+                  { path: 'info', element: <DepartmentsEmployeesInfoPage /> },
+                  { path: 'appointments', element: <DepartmentsEmployeesAppointmentsPage /> },
+                  { path: 'appointmentconfig', element: <DepartmentsEmployeesAppointmentConfigPage /> },
+                  { path: 'accounting', element: <DepartmentsEmployeesAccountingPage /> },
+                  { path: 'feedback', element: <DepartmentsEmployeesFeedbackPage /> },
+                  { path: 'attendence', element: <DepartmentsEmployeesAttendencePage /> },
+                  { path: 'offers', element: <DepartmentsEmployeesOffersPage /> },
+                  { path: 'activities', element: <DepartmentsEmployeesActivitiesPage /> },
+                  { path: 'acl', element: <DepartmentsEmployeesACLPage /> },
                 ],
               },
             ],
@@ -236,8 +250,12 @@ export const unitServiceDashboardRoutes = [
             children: [
               { path: 'info', element: <EmployeesInfoPage /> },
               { path: 'appointments', element: <EmployeesAppointmentsPage /> },
+              { path: 'appointmentconfig', element: <EmployeesAppointmentsPage /> },
+              { path: 'accounting', element: <EmployeesAppointmentsPage /> },
+              { path: 'feedback', element: <EmployeesAppointmentsPage /> },
               { path: 'attendence', element: <EmployeesAttendencePage /> },
-              { path: 'edit', element: <EmployeesEditPage /> },
+              { path: 'offers', element: <EmployeesAttendencePage /> },
+              { path: 'activities', element: <EmployeesAttendencePage /> },
               { path: 'acl', element: <EmployeesACLPage /> },
               { path: 'new', element: <EmployeesNewPage /> },
             ],
