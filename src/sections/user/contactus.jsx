@@ -103,7 +103,7 @@ export default function ContactUs() {
 
           <m.div variants={varFade().inUp}>
             <Button size="large" type="submit" variant="contained" methods={methods}>
-              Submit Nowffsdfsdfs
+              Submit Now
             </Button>
           </m.div>
         </Stack>
