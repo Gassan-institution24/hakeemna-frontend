@@ -76,6 +76,24 @@ export default function CountriesNewEditForm({ currentSelected }) {
     formState: { isSubmitting },
   } = methods;
 
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s]*$/; // Range for Arabic characters
+
+    if (arabicRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
+  const handleEnglishInputChange = (event) => {
+    // Validate the input based on English language rules
+    const englishRegex = /^[a-zA-Z0-9\s]*$/; // Only allow letters and spaces
+
+    if (englishRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       const address = await axios.get('https://geolocation-db.com/json/');
