@@ -90,6 +90,8 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
 
   const componentRef = useRef();
 
+  const settings = useSettingsContext();
+
   const popover = usePopover();
 
   const [filters, setFilters] = useState(defaultFilters);
