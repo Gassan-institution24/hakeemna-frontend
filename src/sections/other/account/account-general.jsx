@@ -20,8 +20,9 @@ import { paths } from 'src/routes/paths';
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
+  const [profilePicture, setProfilePicture] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
-  const [error, setError] = useState();
+  // const [error, setError] = useState();
   const { countriesData } = useGetCountries();
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
@@ -40,6 +41,7 @@ export default function AccountGeneral() {
     address: Yup.string(),
     sport_exercises: Yup.string(),
     smoking: Yup.string(),
+    profile_picture: Yup.string(),
   });
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
@@ -69,6 +71,7 @@ export default function AccountGeneral() {
     address: user?.patient?.address || '',
     sport_exercises: user?.patient?.sport_exercises || '',
     smoking: user?.patient?.smoking || '',
+    profile_picture: user?.patient?.profile_picture || '',
   };
 
   const methods = useForm({
@@ -81,49 +84,59 @@ export default function AccountGeneral() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (info) => {
+  // const { handleSubmit } = useForm(); 
+
+ 
+  const handleDrop = (acceptedFiles) => {
+    const file = acceptedFiles[0];
+    setProfilePicture(file); // Save the file in state
+  };
+
+  const onSubmit = async (data) => {
+    // Create a new FormData object
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
+    });
+
+
+    if (profilePicture) {
+      formData.append('ter', profilePicture);
+    }
+
+    // Handle form submission with the updated form data
     try {
-      const response = await axiosHandler({
-        setError,
+      // Use your API endpoint to submit the form data
+      const response = await fetch('http://localhost:3000/api/patient/657e871cb35a2b1c64602b1c', {
         method: 'PATCH',
-        path: `/api/patient/${user.patient._id}`,
-        data: info,
+        body: formData,
       });
 
-      if (response) {
+      if (response.ok) {
+        // Update successful, perform actions like showing success message and redirection
+        console.log(formData);
         enqueueSnackbar('Profile updated successfully', { variant: 'success' });
-        router.push(paths.dashboard.user.profile);
+        // router.push(paths.dashboard.user.profile);
+      } else {
+        // Update failed, handle errors
+        throw new Error('Failed to update profile');
       }
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      console.log(error.message);
       enqueueSnackbar('Failed to update profile', { variant: 'error' });
     }
-  });
+  
+  };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      if (file) {
-        setValue('photoURL', newFile, { shouldValidate: true });
-      }
-    },
-    [setValue]
-  );
 
   return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
         {/* img */}
         <Grid xs={12} md={4}>
           <Card sx={{ pt: 10, pb: 5, px: 3, textAlign: 'center' }}>
             <RHFUploadAvatar
-              name="photoURL"
-              maxSize={3145728}
+              name="profile_picture"
               onDrop={handleDrop}
               helperText={
                 <Typography
