@@ -19,13 +19,14 @@ import { _addressBooks } from 'src/_mock';
 
 import FormProvider from 'src/components/hook-form';
 
-import InvoiceNewEditDetails from '../appointmentConfig/invoice-new-edit-details';
-import InvoiceNewEditAddress from '../appointmentConfig/invoice-new-edit-address';
-import InvoiceNewEditStatusDate from '../appointmentConfig/invoice-new-edit-status-date';
+import NewEditHolidays from '../appointmentConfig/new-edit-holidays';
+import NewEditLongHolidays from '../appointmentConfig/new-edit-long-holiday';
+import NewEditDaysDetails from '../appointmentConfig/new-edit-days-details';
+import NewEditStatusDate from '../appointmentConfig/new-edit-details';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceNewEditForm({ currentInvoice }) {
+export default function InvoiceNewEditForm({ currentConfig }) {
   const router = useRouter();
 
   const settings = useSettingsContext();
@@ -34,54 +35,47 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
 
   const loadingSend = useBoolean();
 
-  const NewInvoiceSchema = Yup.object().shape({
-    invoiceTo: Yup.mixed().nullable().required('Invoice to is required'),
-    createDate: Yup.mixed().nullable().required('Create date is required'),
-    dueDate: Yup.mixed()
-      .required('Due date is required')
-      .test(
-        'date-min',
-        'Due date must be later than create date',
-        (value, { parent }) => value.getTime() > parent.createDate.getTime()
-      ),
+  const NewConfigSchema = Yup.object().shape({
+    weekend: Yup.array(),
+    appointment_time: Yup.number().required('Appointment Time is required'),
+    holidays: Yup.array(),
+    long_holidays: Yup.array(),
     // not required
-    taxes: Yup.number(),
-    status: Yup.string(),
-    discount: Yup.number(),
-    shipping: Yup.number(),
-    invoiceFrom: Yup.mixed(),
-    totalAmount: Yup.number(),
-    invoiceNumber: Yup.string(),
+    // work_group: Yup.string().required('Work Group is required'),
+    work_shift: Yup.string().required('Work Shift is required'),
+    days_details: Yup.array().required('Days Details is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      invoiceNumber: currentInvoice?.invoiceNumber || 'INV-1990',
-      createDate: currentInvoice?.createDate || new Date(),
-      dueDate: currentInvoice?.dueDate || null,
-      taxes: currentInvoice?.taxes || 0,
-      shipping: currentInvoice?.shipping || 0,
-      status: currentInvoice?.status || 'draft',
-      discount: currentInvoice?.discount || 0,
-      invoiceFrom: currentInvoice?.invoiceFrom || _addressBooks[0],
-      invoiceTo: currentInvoice?.invoiceTo || null,
-      items: currentInvoice?.items || [
+      weekend: currentConfig?.weekend || [],
+      appointment_time: currentConfig?.appointment_time || null,
+      holidays: currentConfig?.holidays || [{
+        description:'',
+        date:null
+      }],
+      long_holidays: currentConfig?.long_holidays || [{
+        description:'',
+        start_date:null,
+        end_date:null
+      }],
+      work_group: currentConfig?.work_group || null,
+      work_shift: currentConfig?.work_shift || null,
+      days_details: currentConfig?.days_details || [
         {
-          title: '',
-          description: '',
-          service: '',
-          quantity: 1,
-          price: 0,
-          total: 0,
+          day: '',
+          work_start_time: null,
+          work_end_time: null,
+          break_start_time: null,
+          break_end_time: null,
         },
       ],
-      totalAmount: currentInvoice?.totalAmount || 0,
     }),
-    [currentInvoice]
+    [currentConfig]
   );
 
   const methods = useForm({
-    resolver: yupResolver(NewInvoiceSchema),
+    resolver: yupResolver(NewConfigSchema),
     defaultValues,
   });
 
@@ -92,24 +86,9 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     formState: { isSubmitting },
   } = methods;
 
-  const handleSaveAsDraft = handleSubmit(async (data) => {
-    loadingSave.onTrue();
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      loadingSave.onFalse();
-      router.push(paths.dashboard.invoice.root);
-      console.info('DATA', JSON.stringify(data, null, 2));
-    } catch (error) {
-      console.error(error);
-      loadingSave.onFalse();
-    }
-  });
-
-  const handleCreateAndSend = handleSubmit(async (data) => {
+  const handleSave = handleSubmit(async (data) => {
     loadingSend.onTrue();
-
+    console.log("submitted data ",data)
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
@@ -126,31 +105,20 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     <Container maxWidth='lg'>
     <FormProvider methods={methods}>
       <Card>
-        {/* <InvoiceNewEditAddress /> */}
-
-        {/* <InvoiceNewEditStatusDate /> */}
-
-        <InvoiceNewEditDetails />
+        <NewEditStatusDate />
+        <NewEditDaysDetails />
+        <NewEditHolidays />
+        <NewEditLongHolidays />
       </Card>
 
       <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
-        <LoadingButton
-          color="inherit"
-          size="large"
-          variant="outlined"
-          loading={loadingSave.value && isSubmitting}
-          onClick={handleSaveAsDraft}
-        >
-          Save as Draft
-        </LoadingButton>
 
         <LoadingButton
-          size="large"
           variant="contained"
           loading={loadingSend.value && isSubmitting}
-          onClick={handleCreateAndSend}
+          onClick={handleSave}
         >
-          {currentInvoice ? 'Update' : 'Create'} & Send
+          Save
         </LoadingButton>
       </Stack>
     </FormProvider>
@@ -159,5 +127,5 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
 }
 
 InvoiceNewEditForm.propTypes = {
-  currentInvoice: PropTypes.object,
+  currentConfig: PropTypes.object,
 };
