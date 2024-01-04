@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import { inputBaseClasses } from '@mui/material/InputBase';
@@ -21,7 +22,7 @@ import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceNewEditDetails() {
+export default function NewEditHolidays() {
   const { control, setValue, watch, resetField } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -31,15 +32,6 @@ export default function InvoiceNewEditDetails() {
 
   const values = watch();
 
-  const totalOnRow = values.items.map((item) => item.quantity * item.price);
-
-  const subTotal = sum(totalOnRow);
-
-  const totalAmount = subTotal - values.discount - values.shipping + values.taxes;
-
-  useEffect(() => {
-    setValue('totalAmount', totalAmount);
-  }, [setValue, totalAmount]);
 
   const handleAdd = () => {
     append({
@@ -53,36 +45,35 @@ export default function InvoiceNewEditDetails() {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h6" sx={{ color: 'text.disabled', mb: 3 }}>
+    <Box sx={{ px: 3,pb:3 }}>
+      <Typography variant="p" sx={{ color: 'text.disabled', mb: 3 }}>
         Holidays:
       </Typography>
 
-      <Stack divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={3}>
+      <Stack sx={{mt:3}} divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={2}>
         {fields.map((item, index) => (
-          <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
+          <Stack key={item.id} alignItems="flex-start" spacing={1.5} sx={{width:{xs:'100%',md: 'auto'}}}>
+            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{width:{xs:'100%',md: 'auto'}}}>
               <RHFTextField
-                // size="small"
+                size="small"
                 name={`holidays[${index}].description`}
                 label="Description"
-                InputLabelProps={{ shrink: true }}
-                sx={{ flex: 2 }}
+                // sx={{ flex: 2 }}
               />
               <Controller
-                name="createDate"
+                name={`holidays[${index}].date`}
                 control={control}
                 render={({ field, fieldState: { error } }) => (
                   <DatePicker
-                    label="Date create"
-                    sx={{ flex: 1 }}
+                    label="Date"
+                    // sx={{ flex: 1 }}
                     value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
                     slotProps={{
                       textField: {
-                        // size: 'small',
+                        size: 'small',
                         fullWidth: true,
                         error: !!error,
                         helperText: error?.message,
@@ -91,21 +82,15 @@ export default function InvoiceNewEditDetails() {
                   />
                 )}
               />
+              <IconButton sx={{justifySelf:'flex-end',alignSelf:'flex-end',width:35}} size='small' color='error' onClick={() => handleRemove(index)}>
+              <Iconify icon="solar:trash-bin-trash-bold" />
+              </IconButton>
             </Stack>
-
-            <Button
-              size="small"
-              color="error"
-              startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
-              onClick={() => handleRemove(index)}
-            >
-              Remove
-            </Button>
           </Stack>
         ))}
       </Stack>
 
-      <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
+      <Divider sx={{ mt: 3,mb:1 , borderStyle: 'dashed' }} />
 
       <Stack
         spacing={3}
@@ -115,9 +100,9 @@ export default function InvoiceNewEditDetails() {
         <Button
           size="small"
           color="primary"
-          startIcon={<Iconify icon="mingcute:add-line" />}
+          startIcon={<Iconify icon="tdesign:plus" />}
+          sx={{padding:1}}
           onClick={handleAdd}
-          sx={{ flexShrink: 0 }}
         >
           Add Item
         </Button>
