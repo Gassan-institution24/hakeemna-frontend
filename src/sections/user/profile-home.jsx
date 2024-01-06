@@ -21,6 +21,7 @@ export default function ProfileHome() {
     return age;
   }
   const { user } = useAuthContext();
+  console.log(user?.patient);
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
       {user.patient.drug_allergies.length > 0 && (
@@ -220,7 +221,8 @@ export default function ProfileHome() {
       <div>
         <Image
           alt="profile"
-          src={user?.patient.profile_picture}
+          // to do : update the path
+          src={`http://localhost:3000/${user?.patient.profile_picture}`}
           sx={{
             height: '150px',
             width: '100px',
