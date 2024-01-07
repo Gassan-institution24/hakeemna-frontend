@@ -13,10 +13,33 @@ import { useSettingsContext } from 'src/components/settings';
 import { useGetPatient } from 'src/api/tables';
 import Medicalreports from '../medicalreports';
 import Prescriptions from '../prescriptions';
+import Bmi from '../bmi';
 // ----------------------------------------------------------------------
 
 export default function UserCardList() {
   const { user } = useAuthContext();
+  const [currentTab, setCurrentTab] = useState('Medicalreports');
+  const handleChangeTab = useCallback((event, newValue) => {
+    setCurrentTab(newValue);
+  }, []);
+
+  const TABS = [
+    {
+      value: 'Medicalreports',
+      label: 'Medical Reports',
+      icon: <Iconify icon="solar:user-id-bold" width={24} />,
+    },
+    {
+      value: 'general',
+      label: 'Notifications',
+      icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
+    },
+    {
+      value: 'bmi',
+      label: 'BMI',
+      icon: <Iconify icon="fluent:calculator-24-filled" width={24} />,
+    },
+  ];
   return (
     <Container>
       <CustomBreadcrumbs
@@ -29,18 +52,33 @@ export default function UserCardList() {
         sx={{ mb: { xs: 3, md: 5 } }}
       />
 
-      <Box
-        gap={3}
-        display="grid"
-        gridTemplateColumns={{
-          xs: 'repeat(1, 1fr)',
-          sm: 'repeat(2, 1fr)',
-          md: 'repeat(1, 1fr)',
+      <Tabs
+        value={currentTab}
+        onChange={handleChangeTab}
+        sx={{
+          mb: { xs: 3, md: 5 },
         }}
-        sx={{ width: '100%' }}
       >
-        <Medicalreports user={user.patient._id} />
-      </Box>
+        {TABS.map((tab) => (
+          <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
+        ))}
+      </Tabs>
+      {currentTab === 'Medicalreports' && (
+        <Box
+          gap={3}
+          display="grid"
+          gridTemplateColumns={{
+            xs: 'repeat(1, 1fr)',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(1, 1fr)',
+          }}
+          sx={{ width: '100%' }}
+        >
+          <Medicalreports user={user.patient._id} />
+        </Box>
+      )}
+      {currentTab === 'general' && <Prescriptions />}
+      {currentTab === 'bmi' && <Bmi />}
     </Container>
   );
 }
