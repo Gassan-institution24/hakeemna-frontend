@@ -106,8 +106,9 @@ export default function AccountGeneral() {
 
     // Handle form submission with the updated form data
     try {
+      
       // Use your API endpoint to submit the form data
-      const response = await fetch('http://localhost:3000/api/patient/657e871cb35a2b1c64602b1c', {
+      const response = await fetch('http://localhost:3000/api/patient/6597222f8e4b1427b08e6b96', {
         method: 'PATCH',
         body: formData,
       });
