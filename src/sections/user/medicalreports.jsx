@@ -148,16 +148,15 @@ export default function Medicalreports() {
             backgroundBlendMode: 'lighten',
           }}
         >
-          <Stack sx={{ p: 3, pb: 2 }}>
+          <Stack sx={{ p: 2, pb: 1, height: 150 }}>
             <Avatar
               alt={info.name_english}
               src={Avatar}
               variant="rounded"
               sx={{ width: 48, height: 48, mb: 2 }}
             />
-            <p>{info.department.name_english}</p>
             <ListItemText
-              secondary={<Link color="inherit">{info.name_english}</Link>}
+              primary={<Link color="black">{info.department.name_english}</Link>}
               primaryTypographyProps={{
                 typography: 'subtitle1',
               }}
@@ -181,15 +180,6 @@ export default function Medicalreports() {
                 loading ? 'Loading document...' : <Iconify style={styles.pdf2} icon="teenyicons:pdf-outline" />
               }
             </PDFDownloadLink>
-            <Stack
-              spacing={0.5}
-              direction="row"
-              alignItems="center"
-              sx={{ color: 'primary.main', typography: 'caption', mt: 1 }}
-            >
-              <Iconify width={16} icon="ic:baseline-tag" />
-              {info?.code}
-            </Stack>
           </Stack>
 
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
@@ -215,6 +205,10 @@ export default function Medicalreports() {
               {
                 label: `${user.patient.first_name} ${user.patient.last_name}`,
                 icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
+              },
+              {
+                label: `ESG`,
+                icon: <Iconify width={16} icon="fa6-solid:file-prescription" sx={{ flexShrink: 0 }} />,
               },
             ].map((item) => (
               <Stack

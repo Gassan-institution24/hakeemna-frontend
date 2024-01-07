@@ -30,8 +30,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="guidance:no-drug-or-substance"
-              />{' '}
-              Drug Allergies{' '}
+            />{' '}
+            Drug Allergies{' '}
           </Typography>
           <Stack spacing={1}>
             {user.patient.drug_allergies?.map((drug) => (
@@ -50,8 +50,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="ph:virus"
-              />{' '}
-              Diseases{' '}
+            />{' '}
+            Diseases{' '}
           </Typography>
           <Stack spacing={1}>
             {user.patient.diseases?.map((disease) => (
@@ -73,8 +73,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="guidance:surgery"
-              />{' '}
-              Surgeries{' '}
+            />{' '}
+            Surgeries{' '}
           </Typography>
           <Stack spacing={1}>
             {user.patient.surgeries.map((surgery) => (
@@ -96,8 +96,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="healthicons:medicines-outline"
-              />{' '}
-              Medicines{' '}
+            />{' '}
+            Medicines{' '}
           </Typography>
           <Stack spacing={1}>
             {user.patient.medicines?.map((data) => (
@@ -116,8 +116,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="streamline:insurance-hand"
-              />{' '}
-              Insurance{' '}
+            />{' '}
+            Insurance{' '}
           </Typography>
           <Stack spacing={1}>
             {user.patient.insurance.map((company) => (
@@ -139,8 +139,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="icon-park-outline:sport"
-              />{' '} 
-              Sport Exercises
+            />{' '}
+            Sport Exercises
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
             {' '}
@@ -155,8 +155,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="fluent:food-apple-20-regular"
-              />{' '}
-              Eating Diet{' '}
+            />{' '}
+            Eating Diet{' '}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
             {' '}
@@ -171,8 +171,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="healthicons:alcohol"
-              />{' '}
-              Alcohol Consumption{' '}
+            />{' '}
+            Alcohol Consumption{' '}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
             {' '}
@@ -187,8 +187,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="healthicons:smoking-outline"
-              />{' '}
-              Smoking
+            />{' '}
+            Smoking
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
             {' '}
@@ -203,8 +203,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="charm:notes"
-              />{' '}
-              Notes
+            />{' '}
+            Notes
           </Typography>
           {user.patient.other_medication_notes.map((note, index) => (
             <li key={index} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
@@ -221,8 +221,7 @@ export default function ProfileHome() {
       <div>
         <Image
           alt="profile"
-          // to do : update the path
-          src={`http://localhost:3000/${user?.patient.profile_picture}`}
+          src={`http://localhost:3000/${user?.patient.profile_picture?.replace(/\\/g, '/')}`}
           sx={{
             height: '150px',
             width: '100px',
@@ -233,13 +232,13 @@ export default function ProfileHome() {
           }}
         />
         <Iconify
-          icon="solar:pin-bold-duotone"
+          icon="subway:pin"
           style={{
             position: 'absolute',
-            top: 5,
-            left: 115,
-            height: '30px',
-            width: '30px',
+            top: 15,
+            left: 108,
+            height: '27px',
+            width: '27px',
             color: 'rgb(0, 156, 0)',
             zIndex: 1,
           }}

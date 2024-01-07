@@ -297,6 +297,11 @@ export function useNavData() {
             icon: <Iconify icon="teenyicons:appointments-solid" />,
           },
           {
+            title: t('book appointents'),
+            path: paths.dashboard.user.bookappointment,
+            icon:<Iconify icon="icon-park-outline:medicine-chest"/>,
+          },
+          {
             title: t('medical report'),
             path: paths.dashboard.user.medicalreports,
             icon: <Iconify icon="tabler:report-medical" />,
