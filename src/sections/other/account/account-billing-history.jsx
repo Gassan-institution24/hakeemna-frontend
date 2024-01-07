@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -8,10 +6,7 @@ import Divider from '@mui/material/Divider';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
-
 import { useBoolean } from 'src/hooks/use-boolean';
-
-import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
 import Iconify from 'src/components/iconify';
@@ -76,7 +71,3 @@ const DATA =[
     </Card>
   );
 }
-
-// AccountBillingHistory.propTypes = {
-//   invoices: PropTypes.array,
-// };

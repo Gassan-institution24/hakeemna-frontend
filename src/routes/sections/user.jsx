@@ -33,6 +33,7 @@ const TablesListPage = lazy(() => import('src/pages/dashboard/tables/list'));
 // USER
 const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
 const UserAppointmentsPage = lazy(() => import('src/pages/dashboard/user/appointments'));
+const Booking = lazy(() => import('src/pages/dashboard/user/booking'));
 const Share = lazy(() => import('src/pages/dashboard/user/share'));
 const FinancilMovment = lazy(() => import('src/pages/dashboard/user/FinancilMovment'));
 const UserListPage = lazy(() => import('src/pages/dashboard/user/list'));
@@ -40,6 +41,7 @@ const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserCreatePage = lazy(() => import('src/pages/dashboard/user/new'));
 const UserEditPage = lazy(() => import('src/pages/dashboard/user/edit'));
 const Medicalreports = lazy(() => import('src/pages/dashboard/user/Medicalreports'));
+const BMI = lazy(() => import('src/sections/user/bmi'));
 
 // BLOG
 // const BlogPostsPage = lazy(() => import('src/pages/dashboard/post/list'));
@@ -96,7 +98,9 @@ export const userRoutes = [
           { path: 'profile', element: <UserProfilePage /> },
           { path: 'medicalreports', element: <Medicalreports /> },
           { path: 'prescriptions', element: <UserListPage /> },
+          { path: 'bmi', element: <BMI /> },
           { path: 'appointments', element: <UserAppointmentsPage /> },
+          { path: 'bookappointment', element: <Booking /> },
           { path: 'new', element: <UserCreatePage /> },
           { path: ':id/edit', element: <UserEditPage /> },
           { path: 'account', element: <UserAccountPage /> },

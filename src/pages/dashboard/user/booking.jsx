@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { Financilmovment } from 'src/sections/user/view';
+import { BookingAppointment } from 'src/sections/user/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserAppointmentsPage() {
+export default function Booking() {
   return (
     <>
       <Helmet>
-        <title>Appointment</title>
+        <title> Dashboard: book</title>
       </Helmet>
 
-      <Financilmovment />
+      <BookingAppointment />
     </>
   );
 }

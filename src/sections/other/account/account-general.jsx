@@ -22,12 +22,12 @@ import { paths } from 'src/routes/paths';
 export default function AccountGeneral() {
   const [profilePicture, setProfilePicture] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
-  // const [error, setError] = useState();
   const { countriesData } = useGetCountries();
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
   const { tableData } = useGetCities();
   const { user } = useAuthContext();
+  console.log(user);
   const router = useRouter();
   const UpdateUserSchema = Yup.object().shape({
     first_name: Yup.string(),
@@ -59,6 +59,7 @@ export default function AccountGeneral() {
         : tableData
     );
   }, [tableData, selectedCountry]);
+
   const defaultValues = {
     first_name: user?.patient?.first_name || '',
     last_name: user?.patient?.last_name || '',
@@ -73,6 +74,7 @@ export default function AccountGeneral() {
     smoking: user?.patient?.smoking || '',
     profile_picture: user?.patient?.profile_picture || '',
   };
+  
 
   const methods = useForm({
     resolver: yupResolver(UpdateUserSchema),
@@ -84,13 +86,39 @@ export default function AccountGeneral() {
     formState: { isSubmitting },
   } = methods;
 
-  // const { handleSubmit } = useForm(); 
 
- 
-  const handleDrop = (acceptedFiles) => {
-    const file = acceptedFiles[0];
-    setProfilePicture(file); // Save the file in state
+
+  const fuser = (fuserSize) => {
+    const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif'];
+  
+    const isValidFile = (fileName) => {
+      const fileExtension = fileName.slice(fileName.lastIndexOf(".")).toLowerCase();
+      const isExtensionAllowed = allowedExtensions.includes(fileExtension);
+      return isExtensionAllowed;
+    };
+    const isValidSize = (fileSize) => fileSize <= 3145728;
+  
+
+  
+    return {
+      validateFile: isValidFile,
+      validateSize: isValidSize
+    };
   };
+// Inside the AccountGeneral component
+const handleDrop = (acceptedFiles) => {
+  const file = acceptedFiles[0];
+  
+  // Validate file before setting the profile picture
+  const fileValidator = fuser(file.size);
+
+  if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
+    setProfilePicture(file); // Save the file in state
+  } else {
+    // Handle invalid file type or size
+    enqueueSnackbar('Invalid file type or size', { variant: 'error' });
+  }
+};
 
   const onSubmit = async (data) => {
     // Create a new FormData object
@@ -106,9 +134,8 @@ export default function AccountGeneral() {
 
     // Handle form submission with the updated form data
     try {
-      
       // Use your API endpoint to submit the form data
-      const response = await fetch('http://localhost:3000/api/patient/6597222f8e4b1427b08e6b96', {
+      const response = await fetch(`http://localhost:3000/api/patient/${user?.patient._id}`, {
         method: 'PATCH',
         body: formData,
       });
@@ -117,7 +144,7 @@ export default function AccountGeneral() {
         // Update successful, perform actions like showing success message and redirection
         console.log(formData);
         enqueueSnackbar('Profile updated successfully', { variant: 'success' });
-        // router.push(paths.dashboard.user.profile);
+        router.push(paths.dashboard.user.profile);
       } else {
         // Update failed, handle errors
         throw new Error('Failed to update profile');
@@ -135,38 +162,28 @@ export default function AccountGeneral() {
       <Grid container spacing={3}>
         {/* img */}
         <Grid xs={12} md={4}>
-          <Card sx={{ pt: 10, pb: 5, px: 3, textAlign: 'center' }}>
+          <Card sx={{ pt: 10, height: {md:'100%'},pb:{xs:5}, px: 3, textAlign: 'center' }}>
             <RHFUploadAvatar
               name="profile_picture"
+              value = {`http://localhost:3000/${user?.patient.profile_picture}`}
               onDrop={handleDrop}
               helperText={
                 <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 3,
-                    mx: 'auto',
-                    display: 'block',
-                    textAlign: 'center',
-                    color: 'text.disabled',
-                  }}
-                >
-                  Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of  
-                  {/* {fuser(3145728)} */}
-                </Typography>
+                variant="caption"
+                sx={{
+                  mt: 3,
+                  mx: 'auto',
+                  display: 'block',
+                  textAlign: 'center',
+                  color: 'text.disabled',
+                }}
+              >
+                Allowed *.jpeg, *.jpg, *.png, *.gif
+                <br /> max size of  3MB
+              </Typography>
+              
               }
             />
-
-            {/* <RHFSwitch
-              name="isPublic"
-              labelPlacement="start"
-              label="Public Profile"
-              sx={{ mt: 5 }}
-            /> */}
-
-            <Button variant="soft" color="error" sx={{ mt: 3 }}>
-              Delete Profile
-            </Button>
           </Card>
         </Grid>
         {/* img */}
