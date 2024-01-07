@@ -25,6 +25,50 @@ export function useGetAppointmentConfigs() {
   return { ...memoizedValue, refetch };
 }
 
+export function useGetUSEmployeeAppointmentConfigs(id,emid) {
+  const URL = endpoints.tables.usEmployeeAppointmentconfig(id,emid);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      appointmentConfigData: data || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
+export function useGetDepartmentEmployeeAppointmentConfigs(id,emid) {
+  const URL = endpoints.tables.departmentEmployeeAppointmentconfig(id,emid);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      appointmentConfigData: data ,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
 export function useGetUSAppointmentConfigs(id) {
   const URL = endpoints.tables.usappointmentconfig(id);
 

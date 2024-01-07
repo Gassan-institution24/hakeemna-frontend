@@ -23,14 +23,14 @@ import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function NewEditLongHolidays() {
-  const { control, setValue, watch, resetField } = useFormContext();
+  const { control, setValue, watch, resetField, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'long_holidays',
   });
 
-  const values = watch();
+  const values = getValues();
 
   const handleAdd = () => {
     append({
@@ -45,15 +45,28 @@ export default function NewEditLongHolidays() {
   };
 
   return (
-    <Box sx={{ px: 3,pb:3 }}>
+    <Box sx={{ px: 3, pb: 3 }}>
       <Typography variant="p" sx={{ color: 'text.disabled', mb: 3 }}>
         Long Holidays:
       </Typography>
 
-      <Stack sx={{mt:3}} divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={3}>
+      <Stack
+        sx={{ mt: 3 }}
+        divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
+        spacing={3}
+      >
         {fields.map((item, index) => (
-          <Stack key={item.id} alignItems="flex-start" spacing={1.5} sx={{width:{xs:'100%',md: 'auto'}}}>
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{width:{xs:'100%',md: 'auto'}}}>
+          <Stack
+            key={item.id}
+            alignItems="flex-start"
+            spacing={1.5}
+            sx={{ width: { xs: '100%', md: 'auto' } }}
+          >
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              spacing={2}
+              sx={{ width: { xs: '100%', md: 'auto' } }}
+            >
               <RHFTextField
                 size="small"
                 name={`long_holidays[${index}].description`}
@@ -67,7 +80,7 @@ export default function NewEditLongHolidays() {
                   <DatePicker
                     label="Start Date"
                     // sx={{ flex: 1 }}
-                    value={field.value}
+                    value={new Date(values.long_holidays[index].start_date)}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
@@ -89,7 +102,7 @@ export default function NewEditLongHolidays() {
                   <DatePicker
                     label="End Date"
                     // sx={{ flex: 1 }}
-                    value={field.value}
+                    value={new Date(values.long_holidays[index].end_date)}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
@@ -104,16 +117,20 @@ export default function NewEditLongHolidays() {
                   />
                 )}
               />
-              <IconButton size='small' color='error' sx={{justifySelf:'flex-end',alignSelf:'flex-end',width:35}} onClick={() => handleRemove(index)}>
-              <Iconify icon="solar:trash-bin-trash-bold" />
+              <IconButton
+                size="small"
+                color="error"
+                sx={{ justifySelf: 'flex-end', alignSelf: 'flex-end', width: 35 }}
+                onClick={() => handleRemove(index)}
+              >
+                <Iconify icon="solar:trash-bin-trash-bold" />
               </IconButton>
             </Stack>
-
           </Stack>
         ))}
       </Stack>
 
-      <Divider sx={{ mt: 3,mb:1, borderStyle: 'dashed' }} />
+      <Divider sx={{ mt: 3, mb: 1, borderStyle: 'dashed' }} />
 
       <Stack
         spacing={1}
@@ -124,7 +141,7 @@ export default function NewEditLongHolidays() {
           size="small"
           color="primary"
           startIcon={<Iconify icon="tdesign:plus" />}
-          sx={{padding:1}}
+          sx={{ padding: 1 }}
           onClick={handleAdd}
         >
           Add Item

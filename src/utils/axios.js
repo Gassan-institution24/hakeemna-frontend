@@ -68,6 +68,8 @@ export const endpoints = {
     appointmenttypes: '/api/appointments/types',
     appointmenttype: (id) => `/api/appointments/types/${id}`,
     appointmentconfigs: '/api/appointments/config',
+    usEmployeeAppointmentconfig: (id,emid) => `/api/appointments/config/unitservice/${id}/employee/${emid}`,
+    departmentEmployeeAppointmentconfig: (id,emid) => `/api/appointments/config/department/${id}/employee/${emid}`,
     appointmentconfig: (id) => `/api/appointments/config/${id}`,
     usappointmentconfig: (id) => `/api/appointments/config/unitservice/${id}`,
     usappointmentconfigcount: (id) => `/api/appointments/config//unitservice${id}/count`,
