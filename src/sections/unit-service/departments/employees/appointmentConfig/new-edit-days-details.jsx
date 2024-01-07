@@ -1,4 +1,5 @@
 import sum from 'lodash/sum';
+import { format, isValid } from 'date-fns';
 import { useEffect, useCallback } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
@@ -40,8 +41,8 @@ export default function NewEditDayDetails() {
     name: 'days_details',
   });
 
-  const values = watch();
-
+  console.log('fields',fields)
+  const values = getValues();
 
   const handleAdd = () => {
     const defaultItem = {
@@ -51,8 +52,8 @@ export default function NewEditDayDetails() {
       break_start_time: null,
       break_end_time: null,
     };
-    const existingData = getValues().days_details[getValues().days_details.length-1]; // Get the current form values
-    const newItem = { ...defaultItem, ...existingData };
+    const existingData = values.days_details[values.days_details.length - 1]; // Get the current form values
+    const newItem = { ...defaultItem, ...existingData,day:'' };
     append(newItem);
   };
 
@@ -61,29 +62,52 @@ export default function NewEditDayDetails() {
   };
 
   return (
-    <Box sx={{ px: 3,pb:3 }}>
+    <Box sx={{ px: 3, pb: 3 }}>
       <Typography variant="p" sx={{ color: 'text.disabled', mb: 3 }}>
         Days Details:
       </Typography>
 
-      <Stack sx={{mt:3}} divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={3}>
+      <Stack
+        sx={{ mt: 3 }}
+        divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
+        spacing={3}
+      >
         {fields.map((item, index) => (
-          <Stack key={item.id} alignItems="flex-start" flexWrap='wrap' spacing={1.5} sx={{width:{xs:'100%'}}}>
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{width:{xs:'100%'}}}>
+          <Stack
+            key={item.id}
+            alignItems="flex-start"
+            flexWrap="wrap"
+            spacing={1.5}
+            sx={{ width: { xs: '100%' } }}
+          >
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              spacing={2}
+              sx={{ width: { xs: '100%' } }}
+            >
               <RHFSelect size="small" native name={`days_details[${index}].day`} label="Day">
                 <option>{null}</option>
-                {weekDays.filter((option)=>!getValues().weekend.includes(option.value)).map((option)=>(
-                <option value={option.value}>{option.label}</option>
-                ))}
+                {weekDays
+                  .filter(
+                    (option) =>
+                      !values.weekend.includes(option.value) &&
+                      !values.days_details.some(
+                        (detail) =>
+                          detail.day === option.value && values.days_details[index]?.day !== option.value
+                      )
+                  )
+                  .map((option) => (
+                    <option value={option.value}>{option.label}</option>
+                  ))}
               </RHFSelect>
 
               <Controller
                 name={`days_details[${index}].work_start_time`}
                 control={control}
                 render={({ field, fieldState: { error } }) => (
-                  <MobileTimePicker 
-                  label="Work Start Time"
-                    value={field.value}
+                  <MobileTimePicker
+                    label="Work Start Time"
+                    value={values.days_details[index].work_start_time?new Date(values.days_details[index].work_start_time):null}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
@@ -102,9 +126,9 @@ export default function NewEditDayDetails() {
                 name={`days_details[${index}].work_end_time`}
                 control={control}
                 render={({ field, fieldState: { error } }) => (
-                  <MobileTimePicker 
-                  label="Work End Time"
-                    value={field.value}
+                  <MobileTimePicker
+                    label="Work End Time"
+                    value={values.days_details[index].work_end_time?new Date(values.days_details[index].work_end_time):null}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
@@ -123,9 +147,9 @@ export default function NewEditDayDetails() {
                 name={`days_details[${index}].break_start_time`}
                 control={control}
                 render={({ field, fieldState: { error } }) => (
-                  <MobileTimePicker 
-                  label="Break Start Time"
-                    value={field.value}
+                  <MobileTimePicker
+                    label="Break Start Time"
+                    value={values.days_details[index].break_start_time?new Date(values.days_details[index].break_start_time):null}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
@@ -144,9 +168,9 @@ export default function NewEditDayDetails() {
                 name={`days_details[${index}].break_end_time`}
                 control={control}
                 render={({ field, fieldState: { error } }) => (
-                  <MobileTimePicker 
-                  label="Break End Time"
-                    value={field.value}
+                  <MobileTimePicker
+                    label="Break End Time"
+                    value={values.days_details[index].break_end_time?new Date(values.days_details[index].break_end_time):null}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
@@ -161,15 +185,20 @@ export default function NewEditDayDetails() {
                   />
                 )}
               />
-              <IconButton size='small' color='error' sx={{justifySelf:{xs:'flex-end'},alignSelf:{xs:'flex-end'},width:35}} onClick={() => handleRemove(index)}>
-              <Iconify icon="solar:trash-bin-trash-bold" />
+              <IconButton
+                size="small"
+                color="error"
+                sx={{ justifySelf: { xs: 'flex-end' }, alignSelf: { xs: 'flex-end' }, width: 35 }}
+                onClick={() => handleRemove(index)}
+              >
+                <Iconify icon="solar:trash-bin-trash-bold" />
               </IconButton>
             </Stack>
           </Stack>
         ))}
       </Stack>
 
-      <Divider sx={{ mt: 3, mb:1, borderStyle: 'dashed' }} />
+      <Divider sx={{ mt: 3, mb: 1, borderStyle: 'dashed' }} />
 
       <Stack
         spacing={3}
@@ -180,7 +209,7 @@ export default function NewEditDayDetails() {
           size="small"
           color="primary"
           startIcon={<Iconify icon="tdesign:plus" />}
-          sx={{padding:1}}
+          sx={{ padding: 1 }}
           onClick={handleAdd}
           // sx={{ flexShrink: 0 }}
         >

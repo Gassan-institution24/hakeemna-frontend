@@ -1,9 +1,11 @@
 import { Controller, useFormContext } from 'react-hook-form';
 
+import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
@@ -22,7 +24,7 @@ const weekDays = [
   { value: 'friday', label: 'Friday' },
 ];
 
-export default function NewEditDetails() {
+export default function NewEditDetails({appointmentConfigData}) {
   const { control, watch, getValues } = useFormContext();
 
   const values = getValues();
@@ -37,25 +39,31 @@ export default function NewEditDetails() {
   }
 
   function calculateAverageAppointmentNumber() {
-    let minutesNum = 0;
+    // let minutesNum = 0;
     let sum = 0;
-  
+    let numberOfAppoint = 0;
+
     values.days_details.forEach((item, index) => {
-      console.log("item",item)
-      const { work_end_time, work_start_time } = item;
-      console.log("work_end_time, work_start_time",work_end_time, work_start_time)
-      minutesNum += calculateMinutesDifference(work_start_time,work_end_time);
-      console.log("calculateMinutesDifference(work_start_time,work_end_time)",calculateMinutesDifference(work_start_time,work_end_time))
-      sum += 1 ;
+      const { work_end_time, work_start_time, break_end_time, break_start_time } = item;
+      let minutesNum = 0;
+      if (work_end_time && work_start_time) {
+        minutesNum = calculateMinutesDifference(new Date(work_start_time), new Date(work_end_time));
+      }
+      if (break_end_time && break_start_time) {
+        minutesNum -= calculateMinutesDifference(new Date(break_start_time), new Date(break_end_time));
+      }
+      sum += 1;
+      if (values.appointment_time) {
+        numberOfAppoint += Math.floor(minutesNum / values.appointment_time);
+      }
     });
-    console.log("sum > 0 ? minutesNum / sum : 0",sum > 0 ? minutesNum / sum : 0)
-  
-    return sum > 0 && values.appointment_time ? minutesNum / sum /values.appointment_time : 0;
+    // return Math.floor(sum > 0 && values.appointment_time ? minutesNum * sum / values.appointment_time : 0);
+    return Math.floor(numberOfAppoint / sum);
   }
 
   return (
     <Stack sx={{ p: 3 }}>
-      <Typography variant="p" sx={{ color: 'text.disabled'}}>
+      <Typography variant="p" sx={{ color: 'text.disabled' }}>
         Weekly Days Off:
       </Typography>
       <Stack
@@ -69,11 +77,15 @@ export default function NewEditDetails() {
           options={weekDays}
           sx={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(7, 1fr)',
+            gridTemplateColumns: {
+              md: 'repeat(7, 1fr)',
+              sm: 'repeat(4, 1fr)',
+              xs: 'repeat(2, 1fr)',
+            },
           }}
         />
       </Stack>
-      <Typography variant="p" sx={{ color: 'text.disabled'}}>
+      <Typography variant="p" sx={{ color: 'text.disabled' }}>
         Details:
       </Typography>
       <Stack
@@ -82,70 +94,80 @@ export default function NewEditDetails() {
         sx={{ p: 3, bgcolor: 'background.neutral', width: { xs: '100%', md: 'auto' } }}
       >
         <RHFSelect
+          native
           size="small"
           name="work_shift"
           label="Work Shift"
-          // InputLabelProps={{ shrink: true }}
+          InputLabelProps={{ shrink: true }}
           PaperPropsSx={{ textTransform: 'capitalize' }}
+          disabled={Boolean(appointmentConfigData)}
         >
+          <option value={null}> </option>
           {workShiftsData.map((option) => (
-            <MenuItem key={option} value={option._id}>
+            <option key={option._id} value={option._id}>
               {option.name_english}
-            </MenuItem>
+            </option>
           ))}
         </RHFSelect>
         <RHFSelect
+          native
           size="small"
           name="work_group"
           label="Work Group"
-          // InputLabelProps={{ shrink: true }}
+          InputLabelProps={{ shrink: true }}
           PaperPropsSx={{ textTransform: 'capitalize' }}
+          disabled={Boolean(appointmentConfigData)}
         >
+          <option value={null}> </option>
           {workGroupsData.map((option) => (
-            <MenuItem key={option} value={option._id}>
+            <option key={option._id} value={option._id}>
               {option.name_english}
-            </MenuItem>
+            </option>
           ))}
         </RHFSelect>
         <RHFTextField
           size="small"
           InputProps={{
-            endAdornment: <InputAdornment position="end">min</InputAdornment>,
+            endAdornment: <InputAdornment position="end" >
+              <Box sx={{ fontSize: '0.8rem'}}>
+              min
+              </Box></InputAdornment>,
           }}
           name="appointment_time"
           label="Appointment Duration Time"
+          inputProps={{ min: 5, max: 180,step: 5 }}
           type="number"
-          value={values.appointment_time}
+          InputLabelProps={{ shrink: true }}
+        />
+        <RHFTextField
+          size="small"
+          InputProps={{
+            startAdornment:  <InputAdornment position="start"><Box  sx={{ fontSize: '0.8rem'}}>
+            for the next
+            </Box></InputAdornment>,
+            endAdornment: <InputAdornment position="end"><Box sx={{ fontSize: '0.8rem'}}>
+            days
+            </Box></InputAdornment>,
+          }}
+          name="config_frequency"
+          label="Configuration Frequency"
+          type="number"
+          inputProps={{ min: 0, max: 30, textAlign: 'center' }}
+          InputLabelProps={{ shrink: true }}
         />
         <RHFTextField
           disabled
           size="small"
           name="appointments_number"
-          label="Appointments Number"
+          label="Daily Appointments Number"
+          InputLabelProps={{ shrink: true }}
           value={calculateAverageAppointmentNumber()}
         />
-
-        {/* <Controller
-          name="createDate"
-          control={control}
-          render={({ field, fieldState: { error } }) => (
-            <DatePicker
-              label="Date create"
-              value={field.value}
-              onChange={(newValue) => {
-                field.onChange(newValue);
-              }}
-              slotProps={{
-                textField: {
-                  fullWidth: true,
-                  error: !!error,
-                  helperText: error?.message,
-                },
-              }}
-            />
-          )}
-        /> */}
       </Stack>
     </Stack>
   );
 }
+
+NewEditDetails.propTypes = {
+  appointmentConfigData: PropTypes.object,
+};

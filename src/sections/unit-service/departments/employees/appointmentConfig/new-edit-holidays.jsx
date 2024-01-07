@@ -23,14 +23,14 @@ import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function NewEditHolidays() {
-  const { control, setValue, watch, resetField } = useFormContext();
+  const { control, setValue, watch, resetField,getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'holidays',
   });
 
-  const values = watch();
+  const values = getValues();
 
 
   const handleAdd = () => {
@@ -67,7 +67,7 @@ export default function NewEditHolidays() {
                   <DatePicker
                     label="Date"
                     // sx={{ flex: 1 }}
-                    value={field.value}
+                    value={new Date(values.holidays[index].date)}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
