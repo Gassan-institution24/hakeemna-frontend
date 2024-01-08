@@ -52,13 +52,13 @@ import HistoryFiltersResult from '../appointment-filters-result';
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name', align: 'center' },
-  { id: 'unit_service', label: 'Unit Service' },
+  // { id: 'name_english', label: 'Name', align: 'center' },
+  // { id: 'unit_service', label: 'Unit Service' },
   { id: 'appointment_type', label: 'Appointment Type' },
-  { id: 'payment_method', label: 'Payment Method' },
+  // { id: 'payment_method', label: 'Payment Method' },
   { id: 'start_time', label: 'Start Time' },
   { id: 'end_time', label: 'End Time' },
-  { id: 'price_in_JOD', label: 'Price in JOD' },
+  { id: 'price_in_JOD', label: 'Price' },
   { id: 'status', label: 'Status' },
   { id: '' },
 ];
@@ -109,7 +109,7 @@ export default function AppointHistoryView({ departmentData }) {
   const denseHeight = table.dense ? 56 : 76;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
+    !!filters.name || filters.status !== 'all' || !!filters.startDate || !!filters.endDate;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -119,15 +119,15 @@ export default function AppointHistoryView({ departmentData }) {
   const TABS = [
     { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
     {
-      value: 'Available',
+      value: 'available',
       label: 'Available',
-      color: 'warning',
+      color: 'secondary',
       count: getAppointLength('available'),
     },
     {
       value: 'pending',
       label: 'Pending',
-      color: 'secondary',
+      color: 'warning',
       count: getAppointLength('pending'),
     },
     {
@@ -147,6 +147,12 @@ export default function AppointHistoryView({ departmentData }) {
       label: 'Canceled',
       color: 'error',
       count: getAppointLength('canceled'),
+    },
+    {
+      value: 'not booked',
+      label: 'Not Booked',
+      color: 'secondary',
+      count: getAppointLength('not booked'),
     },
   ];
 
@@ -169,6 +175,16 @@ export default function AppointHistoryView({ departmentData }) {
     },
     [dataInPage.length, table, refetch]
   );
+
+  const handleUnCancelRow = useCallback(
+    async (id) => {
+      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/uncancel` });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
+  );
+
   const handleCancelRows = useCallback(
     async (id) => {
       await axiosHandler({
@@ -316,6 +332,7 @@ export default function AppointHistoryView({ departmentData }) {
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onViewRow={() => handleViewRow(row._id)}
                         onCancelRow={() => handleCancelRow(row._id)}
+                        onUnCancelRow={() => handleUnCancelRow(row._id)}
                       />
                     ))}
 
@@ -410,8 +427,16 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     if (startDate && endDate) {
       inputData = inputData.filter(
         (appointment) =>
-          fTimestamp(appointment.date) >= fTimestamp(startDate) &&
-          fTimestamp(appointment.date) <= fTimestamp(endDate)
+          fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
+          fTimestamp(appointment.start_time) <= fTimestamp(endDate)
+      );
+    } else if (startDate) {
+      const endOfDay = new Date(startDate);
+      endOfDay.setDate(endOfDay.getDate() + 1);
+      inputData = inputData.filter(
+        (appointment) =>
+          fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
+          fTimestamp(appointment.start_time) < fTimestamp(endOfDay)
       );
     }
   }

@@ -22,7 +22,7 @@ import Scrollbar from 'src/components/scrollbar';
 
 import { RouterLink } from 'src/routes/components';
 import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import UnitServicesAccounting from './unit-services/accounting-table';
 import StakeholderAccounting from './stakeholders/accounting-table';
@@ -69,7 +69,9 @@ export default function AccountingHomePage() {
             name: 'Accounting',
           },
         ]}
-        style={{ marginBottom: '25px' }}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
       />
 
       {renderTabs}
