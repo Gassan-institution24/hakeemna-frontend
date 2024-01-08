@@ -200,7 +200,9 @@ export default function StakeholdersFeedbacks() {
               name: 'Stakeholders Quality Control',
             },
           ]}
-          style={{ marginBottom: '25px' }}
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
         />
         <Card>
           <QCTableToolbar

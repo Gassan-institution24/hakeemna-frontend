@@ -230,7 +230,9 @@ export default function AppointHistoryView({ departmentData }) {
               name: `${departmentData.name_english || 'Deaprtment'} Appointments`,
             },
           ]}
-          style={{ marginBottom: '25px' }}
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
         />
         <Card>
           <Tabs

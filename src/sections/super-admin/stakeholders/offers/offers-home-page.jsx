@@ -72,7 +72,9 @@ export default function StakeholderOffersView({ stakeholderData }) {
             name: `${stakeholderName} Offers`,
           },
         ]}
-        style={{ marginBottom: '25px' }}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
       />
 
       {/* {renderTabs} */}

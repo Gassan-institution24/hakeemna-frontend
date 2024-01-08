@@ -69,7 +69,9 @@ export default function DoctornaQCPage() {
             name: 'Doctorna Quality Control',
           },
         ]}
-        style={{ marginBottom: '25px' }}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
       />
 
       {renderTabs}

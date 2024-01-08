@@ -26,12 +26,13 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceTableRow({
+export default function AppointmentsTableRow({
   row,
   selected,
   onSelectRow,
   onViewRow,
   onCancelRow,
+  onUnCancelRow,
   onDeleteRow,
 }) {
   const {
@@ -67,15 +68,15 @@ export default function InvoiceTableRow({
         </TableCell>
 
         <TableCell align="center">{code}</TableCell>
-        <TableCell align="center">{name_english}</TableCell>
-        <TableCell align="center">{unit_service?.name_english}</TableCell>
+        {/* <TableCell align="center">{name_english}</TableCell> */}
+        {/* <TableCell align="center">{unit_service?.name_english}</TableCell> */}
         <TableCell align="center">{appointment_type?.name_english}</TableCell>
-        <TableCell align="center">{payment_method?.name_english}</TableCell>
+        {/* <TableCell align="center">{payment_method?.name_english}</TableCell> */}
 
         <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(date)) && format(new Date(date), 'dd MMM yyyy')}
-            secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
+            primary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
+            secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMM yyyy')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -86,8 +87,8 @@ export default function InvoiceTableRow({
         </TableCell>
         <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(date)) && format(new Date(date), 'dd MMM yyyy')}
-            secondary={isValid(new Date(end_time)) && format(new Date(end_time), 'p')}
+            primary={isValid(new Date(end_time)) && format(new Date(end_time), 'p')}
+            secondary={isValid(new Date(end_time)) && format(new Date(end_time), 'dd MMM yyyy')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -103,10 +104,12 @@ export default function InvoiceTableRow({
           <Label
             variant="soft"
             color={
-              (status === 'pending' && 'secondary') ||
+              (status === 'available' && 'secondary') ||
+              (status === 'pending' && 'warning') ||
               (status === 'Processing' && 'info') ||
               (status === 'finished' && 'success') ||
               (status === 'canceled' && 'error') ||
+              (status === 'not booked' && 'secondary') ||
               'default'
             }
           >
@@ -137,6 +140,18 @@ export default function InvoiceTableRow({
         >
           <Iconify icon="mdi:bell-cancel" />
           Cancel
+        </MenuItem>
+        }
+        {status === "canceled" &&
+        <MenuItem
+          onClick={() => {
+            onUnCancelRow();
+            popover.onClose();
+          }}
+          sx={{ color: 'success.main' }}
+        >
+          <Iconify icon="material-symbols-light:notifications-active-rounded" />
+          uncancel
         </MenuItem>
         }
         <MenuItem onClick={DDL.onOpen}>
@@ -195,9 +210,10 @@ export default function InvoiceTableRow({
   );
 }
 
-InvoiceTableRow.propTypes = {
+AppointmentsTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
   onCancelRow: PropTypes.func,
+  onUnCancelRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
   row: PropTypes.object,

@@ -100,7 +100,7 @@ export function AuthProvider({ children }) {
   // LOGIN
   const login = useCallback(async (email, password) => {
     const data = {
-      email,
+      email:email.toLowerCase(),
       password,
     };
 
@@ -130,7 +130,7 @@ export function AuthProvider({ children }) {
   const register = useCallback(async (data) => {
     console.log('user dataaaaa', data);
 
-    const response = await axios.post(endpoints.auth.register, data);
+    const response = await axios.post(endpoints.auth.register, {...data,email:data.email.toLowerCase()});
 
     const { accessToken, user } = response.data;
 
@@ -191,12 +191,12 @@ export function AuthProvider({ children }) {
 
   // FORGOT PASSWORD
   const forgotPassword = useCallback(async (email) => {
-    await axios.post(endpoints.auth.forgotpassword, {email});
+    await axios.post(endpoints.auth.forgotpassword, {email:email.toLowerCase()});
   }, []);
 
   // NEW PASSWORD
   const newPassword = useCallback(async (email, code, password,confirmPassword) => {
-     await axios.patch(endpoints.auth.resetpassword, {email,resetToken:code,password,confirmPassword});
+     await axios.patch(endpoints.auth.resetpassword, {email:email.toLowerCase(),resetToken:code,password,confirmPassword});
   }, []);
 
   // LOGOUT

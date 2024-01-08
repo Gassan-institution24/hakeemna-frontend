@@ -27,7 +27,7 @@ import NewEditDetails from '../appointmentConfig/new-edit-details';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceNewEditForm({ appointmentConfigData, refetch, loading }) {
+export default function AppointConfigNewEditForm({ appointmentConfigData, refetch, loading }) {
   const router = useRouter();
 
   const { id, emid } = useParams();
@@ -68,8 +68,8 @@ export default function InvoiceNewEditForm({ appointmentConfigData, refetch, loa
           end_date: null,
         },
       ],
-      work_group: appointmentConfigData?.work_group._id || null,
-      work_shift: appointmentConfigData?.work_shift._id || null,
+      work_group: appointmentConfigData?.work_group?._id || null,
+      work_shift: appointmentConfigData?.work_shift?._id || null,
       days_details: appointmentConfigData?.days_details || [
         {
           day: '',
@@ -101,7 +101,7 @@ export default function InvoiceNewEditForm({ appointmentConfigData, refetch, loa
     console.log('submitted data ', data);
     try {
       if (appointmentConfigData) {
-        await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData._id}`, {
+        await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
           ...data,
           department: id,
         });
@@ -122,16 +122,16 @@ export default function InvoiceNewEditForm({ appointmentConfigData, refetch, loa
   useEffect(() => {
     if (appointmentConfigData) {
       methods.reset({
-        weekend: appointmentConfigData.weekend || [],
-        appointment_time: appointmentConfigData.appointment_time || null,
+        weekend: appointmentConfigData?.weekend || [],
+        appointment_time: appointmentConfigData?.appointment_time || null,
         config_frequency: appointmentConfigData?.config_frequency || null,
-        holidays: appointmentConfigData.holidays || [
+        holidays: appointmentConfigData?.holidays || [
           {
             description: '',
             date: null,
           },
         ],
-        long_holidays: appointmentConfigData.long_holidays || [
+        long_holidays: appointmentConfigData?.long_holidays || [
           {
             description: '',
             start_date: null,
@@ -179,7 +179,7 @@ export default function InvoiceNewEditForm({ appointmentConfigData, refetch, loa
   );
 }
 
-InvoiceNewEditForm.propTypes = {
+AppointConfigNewEditForm.propTypes = {
   appointmentConfigData: PropTypes.object,
   refetch: PropTypes.func,
   loading: PropTypes.bool,

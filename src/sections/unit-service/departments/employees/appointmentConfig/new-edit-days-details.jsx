@@ -26,7 +26,7 @@ import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 const weekDays = [
   { value: 'saturday', label: 'Saturday' },
   { value: 'sunday', label: 'Sunday' },
-  { value: 'Monday', label: 'Monday' },
+  { value: 'monday', label: 'Monday' },
   { value: 'tuesday', label: 'Tuesday' },
   { value: 'wednesday', label: 'Wednesday' },
   { value: 'thursday', label: 'Thursday' },
@@ -41,7 +41,7 @@ export default function NewEditDayDetails() {
     name: 'days_details',
   });
 
-  console.log('fields',fields)
+  console.log('fields', fields);
   const values = getValues();
 
   const handleAdd = () => {
@@ -53,7 +53,7 @@ export default function NewEditDayDetails() {
       break_end_time: null,
     };
     const existingData = values.days_details[values.days_details.length - 1]; // Get the current form values
-    const newItem = { ...defaultItem, ...existingData,day:'' };
+    const newItem = { ...defaultItem, ...existingData, day: '' };
     append(newItem);
   };
 
@@ -93,7 +93,8 @@ export default function NewEditDayDetails() {
                       !values.weekend.includes(option.value) &&
                       !values.days_details.some(
                         (detail) =>
-                          detail.day === option.value && values.days_details[index]?.day !== option.value
+                          detail.day === option.value &&
+                          values.days_details[index]?.day !== option.value
                       )
                   )
                   .map((option) => (
@@ -107,7 +108,11 @@ export default function NewEditDayDetails() {
                 render={({ field, fieldState: { error } }) => (
                   <MobileTimePicker
                     label="Work Start Time"
-                    value={values.days_details[index].work_start_time?new Date(values.days_details[index].work_start_time):null}
+                    value={
+                      values.days_details[index].work_start_time
+                        ? new Date(values.days_details[index].work_start_time)
+                        : null
+                    }
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
@@ -128,7 +133,11 @@ export default function NewEditDayDetails() {
                 render={({ field, fieldState: { error } }) => (
                   <MobileTimePicker
                     label="Work End Time"
-                    value={values.days_details[index].work_end_time?new Date(values.days_details[index].work_end_time):null}
+                    value={
+                      values.days_details[index].work_end_time
+                        ? new Date(values.days_details[index].work_end_time)
+                        : null
+                    }
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
@@ -149,7 +158,11 @@ export default function NewEditDayDetails() {
                 render={({ field, fieldState: { error } }) => (
                   <MobileTimePicker
                     label="Break Start Time"
-                    value={values.days_details[index].break_start_time?new Date(values.days_details[index].break_start_time):null}
+                    value={
+                      values.days_details[index].break_start_time
+                        ? new Date(values.days_details[index].break_start_time)
+                        : null
+                    }
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
@@ -170,7 +183,11 @@ export default function NewEditDayDetails() {
                 render={({ field, fieldState: { error } }) => (
                   <MobileTimePicker
                     label="Break End Time"
-                    value={values.days_details[index].break_end_time?new Date(values.days_details[index].break_end_time):null}
+                    value={
+                      values.days_details[index].break_end_time
+                        ? new Date(values.days_details[index].break_end_time)
+                        : null
+                    }
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}

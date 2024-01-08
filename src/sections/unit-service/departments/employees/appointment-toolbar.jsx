@@ -75,7 +75,7 @@ export default function InvoiceTableToolbar({
       >
 
         <DatePicker
-          label="Start date"
+          label="Date"
           value={filters.startDate}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
