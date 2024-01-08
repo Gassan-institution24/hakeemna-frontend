@@ -22,7 +22,7 @@ export default function Bmi() {
   }, []);
 
   const calculate = useCallback(() => {
-    const bmi = weight / ((height / 100) ** 2);
+    const bmi = weight / (height / 100) ** 2;
     setResult(bmi);
   }, [height, weight]);
 
@@ -35,7 +35,7 @@ export default function Bmi() {
         boxShadow: 7,
         borderRadius: 2,
         p: 5,
-        width: { xs: 340, md: 400 }
+        width: { xs: 340, md: 400 },
       }}
     >
       <m.div variants={varFade().inUp}>
@@ -44,10 +44,30 @@ export default function Bmi() {
 
       <Stack spacing={3}>
         <m.div variants={varFade().inUp}>
-          <TextField fullWidth label="Height" value={height} onChange={handleHeightChange} />
+          <TextField
+            fullWidth
+            label={
+              <span>
+                Height<span style={{ color: 'green', fontWeight:600 }}>/</span>cm
+              </span>
+            }
+            type="Number"
+            value={height}
+            onChange={handleHeightChange}
+          />
         </m.div>
         <m.div variants={varFade().inUp}>
-          <TextField fullWidth label="Weight" value={weight} onChange={handleWeightChange} />
+        <TextField
+            fullWidth
+            label={
+              <span>
+                Weight<span style={{ color: 'green', fontWeight:600 }}>/</span>kg
+              </span>
+            }
+            type="Number"
+            value={weight}
+            onChange={handleWeightChange}
+          />
         </m.div>
       </Stack>
 
@@ -57,30 +77,30 @@ export default function Bmi() {
         </Button>
       </m.div>
 
-    {result !== null && (
-  <m.div variants={varFade().inUp}>
-    {result.toFixed(2) >= 18.5 && result.toFixed(2) < 24.9 && (
-      <Typography variant="body1" style={{ color: 'green' }}>
-        {result.toFixed(2)} Normal weight
-      </Typography>
-    )}
-    {result.toFixed(2) >= 24.9 && result.toFixed(2) < 29.9 && (
-      <Typography variant="body1" style={{ color: 'orange' }}>
-        {result.toFixed(2)} Overweight
-      </Typography>
-    )}
-    {result.toFixed(2) >= 29.9 && (
-      <Typography variant="body1" style={{ color: 'red' }}>
-        {result.toFixed(2)} Obese
-      </Typography>
-    )}
-    {result.toFixed(2) < 18.5 && (
-      <Typography variant="body1" style={{ color: 'red' }}>
-        {result.toFixed(2)} Underweight
-      </Typography>
-    )}
-  </m.div>
-)}
+      {result !== null && (
+        <m.div>
+          {result.toFixed(2) >= 18.5 && result.toFixed(2) < 24.9 && (
+            <Typography variant="body1" style={{ color: 'green' }}>
+              {result.toFixed(2)} Normal weight
+            </Typography>
+          )}
+          {result.toFixed(2) >= 24.9 && result.toFixed(2) < 29.9 && (
+            <Typography variant="body1" style={{ color: 'orange' }}>
+              {result.toFixed(2)} Overweight
+            </Typography>
+          )}
+          {result.toFixed(2) >= 29.9 && (
+            <Typography variant="body1" style={{ color: 'red' }}>
+              {result.toFixed(2)} Obese
+            </Typography>
+          )}
+          {result.toFixed(2) < 18.5 && (
+            <Typography variant="body1" style={{ color: 'red' }}>
+              {result.toFixed(2)} Underweight
+            </Typography>
+          )}
+        </m.div>
+      )}
     </Stack>
   );
 }

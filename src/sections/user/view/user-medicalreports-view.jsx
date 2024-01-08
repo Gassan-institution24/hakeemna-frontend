@@ -12,7 +12,7 @@ import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import { useGetPatient } from 'src/api/tables';
 import Medicalreports from '../medicalreports';
-import Prescriptions from '../prescriptions';
+import OldMedicalReports from '../oldprescriptions';
 import Bmi from '../bmi';
 // ----------------------------------------------------------------------
 
@@ -30,8 +30,8 @@ export default function UserCardList() {
       icon: <Iconify icon="solar:user-id-bold" width={24} />,
     },
     {
-      value: 'general',
-      label: 'Notifications',
+      value: 'oldmedicaloeports',
+      label: 'Old Medical Reports',
       icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
     },
     {
@@ -77,7 +77,7 @@ export default function UserCardList() {
           <Medicalreports user={user.patient._id} />
         </Box>
       )}
-      {currentTab === 'general' && <Prescriptions />}
+      {currentTab === 'oldmedicaloeports' && <OldMedicalReports user={user.patient._id}/>}
       {currentTab === 'bmi' && <Bmi />}
     </Container>
   );
