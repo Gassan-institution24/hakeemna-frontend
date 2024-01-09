@@ -3,14 +3,14 @@ import { useState, useCallback, useRef } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import Tooltip from '@mui/material/Tooltip';
-import { alpha } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
+import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 import { RouterLink } from 'src/routes/components';
 
@@ -18,11 +18,13 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useAuthContext } from 'src/auth/hooks';
 
+import { fTimestamp } from 'src/utils/format-time';
 import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+
+import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -30,7 +32,6 @@ import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import NavEmployee from 'src/layouts/secondary-nav-bar/nav-employee';
 import {
   useTable,
   emptyRows,
@@ -42,24 +43,21 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetUSEmployees } from 'src/api/tables'; /// edit
+import { useGetDepartmentActivities } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
-import TableDetailRow from '../table-details-row'; /// edit
-import TableDetailToolbar from '../table-details-toolbar';
-import TableDetailFiltersResult from '../table-details-filters-result';
+import TableDetailRow from '../activities/table-details-row'; /// edit
+import TableDetailToolbar from '../activities/table-details-toolbar';
+import TableDetailFiltersResult from '../activities/table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
+
 const TABLE_HEAD = [
-  /// to edit
   { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name' },
-  { id: 'employee_type', label: 'Employee Type' },
-  { id: 'email', label: 'email' },
-  { id: 'nationality', label: 'Nationality' },
-  { id: 'validatd_identity', label: 'Validated Identity' },
-  { id: 'Adjust_schedule', label: 'Adjust schedule' },
+  { id: 'name', label: 'Name' },
+  { id: 'details', label: 'Details' },
   { id: 'status', label: 'Status' },
   { id: '', width: 88 },
 ];
@@ -70,28 +68,20 @@ const defaultFilters = {
 };
 
 // ----------------------------------------------------------------------
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-];
 
-export default function EmployeesTableView() {
-  /// edit
+export default function ActivitesTableView({departmentData}) {
   const table = useTable({ defaultOrderBy: 'code' });
-
-  const { user } = useAuthContext();
 
   const componentRef = useRef();
 
   const settings = useSettingsContext();
 
+  const router = useRouter();
+
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const router = useRouter();
-
-  const { employeesData, refetch } = useGetUSEmployees(user.unit_service._id);
+  const { activitiesData, refetch } = useGetDepartmentActivities(departmentData._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -101,7 +91,7 @@ export default function EmployeesTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: employeesData,
+    inputData: activitiesData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -111,7 +101,6 @@ export default function EmployeesTableView() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.status !== 'all';
@@ -122,77 +111,25 @@ export default function EmployeesTableView() {
     content: () => componentRef.current,
   });
 
-  // const handleDownload = () => {
-  //   const excelBody = dataFiltered.reduce((acc, data) => {
-  //     acc.push({
-  //       code: data.code,
-  //       name: data.name_english,
-  //       category: data.category?.name_english,
-  //       symptoms: data.symptoms?.map((symptom) => symptom?.name_english),
-  //     });
-  //     return acc;
-  //   }, []);
-  //   const wb = XLSX.utils.book_new();
-  //   const ws = XLSX.utils.json_to_sheet(excelBody);
-  //   XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
-  //   const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-  //   const data = new Blob([excelBuffer], {
-  //     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  //   });
-  //   saveAs(data, 'unitservicesTable.xlsx'); /// edit
-  // };
-  const handleActivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employee(id)}/updatestatus`,
-        data: { status: 'active' },
+  const handleDownload = () => {
+    const excelBody = dataFiltered.reduce((acc, data) => {
+      acc.push({
+        code: data.code,
+        name: data.name_english,
+        country: data.country?.name_english,
+        status: data.status,
       });
-      refetch();
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, refetch]
-  );
-  const handleInactivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employee(id)}/updatestatus`,
-        data: { status: 'inactive' },
-      });
-      refetch();
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, refetch]
-  );
-
-  const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.employees}/updatestatus`,
-      data: { status: 'active', ids: table.selected },
+      return acc;
+    }, []);
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(excelBody);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    refetch();
-    table.onUpdatePageDeleteRows({
-      totalRows: employeesData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, employeesData, refetch]);
-
-  const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.employees}/updatestatus`,
-      data: { status: 'inactive', ids: table.selected },
-    });
-    refetch();
-    table.onUpdatePageDeleteRows({
-      totalRows: employeesData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, employeesData, refetch]);
+    saveAs(data, 'ActivitiesTable.xlsx'); /// edit
+  };
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -205,18 +142,71 @@ export default function EmployeesTableView() {
     [table]
   );
 
-  const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.employees.edit(id)); /// edit
+  const handleActivate = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.activity(id)}/updatestatus`, /// edit
+        data: { status: 'active' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [router]
+    [dataInPage.length, table, refetch]
+  );
+  const handleInactivate = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.activity(id)}/updatestatus`, /// edit
+        data: { status: 'inactive' },
+      });
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch]
   );
 
-  const handleViewRow = useCallback(
+  const handleActivateRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.activities}/updatestatus`, /// edit
+      data: { status: 'active', ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: activitiesData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [dataFiltered.length, dataInPage.length, table, activitiesData, refetch]);
+
+  const handleInactivateRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.activities}/updatestatus`, /// edit
+      data: { status: 'inactive', ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: activitiesData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [dataFiltered.length, dataInPage.length, table, activitiesData, refetch]);
+
+  const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.employees.info(id)); /// edit
+      router.push(paths.unitservice.departments.activities.edit(departmentData._id,id));
     },
-    [router]
+    [router,departmentData]
+  );
+
+  const handleCreate = useCallback(
+    (id) => {
+      router.push(paths.unitservice.departments.employees.activities.root(departmentData._id,id));
+    },
+    [router,departmentData]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -229,44 +219,17 @@ export default function EmployeesTableView() {
   //   },
   //   [router]
   // );
+
   const handleFilterStatus = useCallback(
     (event, newValue) => {
       handleFilters('status', newValue);
     },
     [handleFilters]
   );
-
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading="Employees" /// edit
-          links={[
-            {
-              name: 'Dashboard',
-              href: paths.unitservice.root,
-            },
-            {
-              name: 'Departments',
-              href: paths.unitservice.departments.root,
-            },
-            { name: 'Employees' }, /// edit
-          ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.unitservice.employees.new} /// edit
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Employee
-            </Button> /// edit
-          }
-          sx={{
-            mb: { xs: 3, md: 5 },
-            mt: { xs: 3, md: 5 },
-          }}
-        />
+        
 
         <Card>
           <Tabs
@@ -294,21 +257,23 @@ export default function EmployeesTableView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && employeesData.length}
+                    {tab.value === 'all' && activitiesData.length}
                     {tab.value === 'active' &&
-                      employeesData.filter((order) => order.status === 'active').length}
+                      activitiesData.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      employeesData.filter((order) => order.status === 'inactive').length}
+                      activitiesData.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
             ))}
           </Tabs>
+
           <TableDetailToolbar
             onPrint={printHandler}
             filters={filters}
             onFilters={handleFilters}
-            // onDownload={handleDownload}
+            onDownload={handleDownload}
+            onAdd={handleCreate}
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}
@@ -359,7 +324,7 @@ export default function EmployeesTableView() {
               color={
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
-                  .some((info) => info.status === 'inactive')
+                  .some((data) => data.status === 'inactive')
                   ? 'primary'
                   : 'error'
               }
@@ -392,12 +357,11 @@ export default function EmployeesTableView() {
                       <TableDetailRow
                         key={row._id}
                         row={row}
-                        filters={filters}
-                        setFilters={setFilters}
                         selected={table.selected.includes(row._id)}
+                        setFilters={setFilters}
+                        filters={filters}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row._id)}
-                        onViewRow={() => handleViewRow(row._id)}
                         onInactivate={() => handleInactivate(row._id)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
@@ -405,7 +369,7 @@ export default function EmployeesTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, employeesData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, activitiesData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -493,22 +457,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.first_name && data?.first_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.last_name && data?.last_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.name_english &&
-          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.country?.name_english &&
-          data?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.country?.name_arabic &&
-          data?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.city?.name_english &&
-          data?.city?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.city?.name_arabic &&
-          data?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.nationality?.name_english &&
-          data?.nationality?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.nationality?.name_arabic &&
-          data?.nationality?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+          data?.name_english?.toLowerCase()?.indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase()?.indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
@@ -520,3 +472,6 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   return inputData;
 }
+ActivitesTableView.propTypes = {
+  departmentData: PropTypes.object,
+};

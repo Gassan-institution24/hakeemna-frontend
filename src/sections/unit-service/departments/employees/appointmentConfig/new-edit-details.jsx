@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -24,7 +25,7 @@ const weekDays = [
   { value: 'friday', label: 'Friday' },
 ];
 
-export default function NewEditDetails({appointmentConfigData}) {
+export default function NewEditDetails({ appointmentConfigData }) {
   const { control, watch, getValues } = useFormContext();
 
   const values = getValues();
@@ -50,7 +51,10 @@ export default function NewEditDetails({appointmentConfigData}) {
         minutesNum = calculateMinutesDifference(new Date(work_start_time), new Date(work_end_time));
       }
       if (break_end_time && break_start_time) {
-        minutesNum -= calculateMinutesDifference(new Date(break_start_time), new Date(break_end_time));
+        minutesNum -= calculateMinutesDifference(
+          new Date(break_start_time),
+          new Date(break_end_time)
+        );
       }
       sum += 1;
       if (values.appointment_time) {
@@ -62,109 +66,129 @@ export default function NewEditDetails({appointmentConfigData}) {
   }
 
   return (
-    <Stack sx={{ p: 3 }}>
-      <Typography variant="p" sx={{ color: 'text.disabled' }}>
-        Weekly Days Off:
-      </Typography>
-      <Stack
-        spacing={2}
-        direction={{ xs: 'column', sm: 'row' }}
-        sx={{ p: 3, bgcolor: 'background.neutral' }}
-      >
-        <RHFMultiCheckbox
-          size="small"
-          name="weekend"
-          options={weekDays}
+    <>
+      <Divider flexItem sx={{ borderStyle: 'solid' }} />
+      <Stack sx={{ p: 3 }}>
+        <Typography
+          variant="p"
+          sx={{ color: 'text.secondary', mb: 3, fontWeight: '710', textTransform: 'capitalize' }}
+        >
+          Weekly Days Off:
+        </Typography>
+        <Stack
+          spacing={2}
+          direction={{ xs: 'column', sm: 'row' }}
+          sx={{ p: 3, bgcolor: 'background.neutral' }}
+        >
+          <RHFMultiCheckbox
+            size="small"
+            name="weekend"
+            options={weekDays}
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                md: 'repeat(7, 1fr)',
+                sm: 'repeat(4, 1fr)',
+                xs: 'repeat(2, 1fr)',
+              },
+            }}
+          />
+        </Stack>
+        <Typography
+          variant="p"
           sx={{
-            display: 'grid',
-            gridTemplateColumns: {
-              md: 'repeat(7, 1fr)',
-              sm: 'repeat(4, 1fr)',
-              xs: 'repeat(2, 1fr)',
-            },
+            color: 'text.secondary',
+            mb: 1,
+            ml: 1,
+            fontWeight: '550',
+            textTransform: 'capitalize',
           }}
-        />
-      </Stack>
-      <Typography variant="p" sx={{ color: 'text.disabled' }}>
-        Details:
-      </Typography>
-      <Stack
-        spacing={2}
-        direction={{ xs: 'column', sm: 'row' }}
-        sx={{ p: 3, bgcolor: 'background.neutral', width: { xs: '100%', md: 'auto' } }}
-      >
-        <RHFSelect
-          native
-          size="small"
-          name="work_shift"
-          label="Work Shift"
-          InputLabelProps={{ shrink: true }}
-          PaperPropsSx={{ textTransform: 'capitalize' }}
-          disabled={Boolean(appointmentConfigData)}
         >
-          <option value={null}> </option>
-          {workShiftsData.map((option) => (
-            <option key={option._id} value={option._id}>
-              {option.name_english}
-            </option>
-          ))}
-        </RHFSelect>
-        <RHFSelect
-          native
-          size="small"
-          name="work_group"
-          label="Work Group"
-          InputLabelProps={{ shrink: true }}
-          PaperPropsSx={{ textTransform: 'capitalize' }}
-          disabled={Boolean(appointmentConfigData)}
+          Details:
+        </Typography>
+        <Stack
+          spacing={2}
+          direction={{ xs: 'column', sm: 'row' }}
+          sx={{ p: 3, bgcolor: 'background.neutral', width: { xs: '100%', md: 'auto' } }}
         >
-          <option value={null}> </option>
-          {workGroupsData.map((option) => (
-            <option key={option._id} value={option._id}>
-              {option.name_english}
-            </option>
-          ))}
-        </RHFSelect>
-        <RHFTextField
-          size="small"
-          InputProps={{
-            endAdornment: <InputAdornment position="end" >
-              <Box sx={{ fontSize: '0.8rem'}}>
-              min
-              </Box></InputAdornment>,
-          }}
-          name="appointment_time"
-          label="Appointment Duration Time"
-          inputProps={{ min: 5, max: 180,step: 5 }}
-          type="number"
-          InputLabelProps={{ shrink: true }}
-        />
-        <RHFTextField
-          size="small"
-          InputProps={{
-            startAdornment:  <InputAdornment position="start"><Box  sx={{ fontSize: '0.8rem'}}>
-            for the next
-            </Box></InputAdornment>,
-            endAdornment: <InputAdornment position="end"><Box sx={{ fontSize: '0.8rem'}}>
-            days
-            </Box></InputAdornment>,
-          }}
-          name="config_frequency"
-          label="Configuration Frequency"
-          type="number"
-          inputProps={{ min: 0, max: 30, textAlign: 'center' }}
-          InputLabelProps={{ shrink: true }}
-        />
-        <RHFTextField
-          disabled
-          size="small"
-          name="appointments_number"
-          label="Daily Appointments Number"
-          InputLabelProps={{ shrink: true }}
-          value={calculateAverageAppointmentNumber()}
-        />
+          <RHFSelect
+            native
+            size="small"
+            name="work_shift"
+            label="Work Shift"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+            disabled={Boolean(appointmentConfigData)}
+          >
+            <option value={null}> </option>
+            {workShiftsData.map((option) => (
+              <option key={option._id} value={option._id}>
+                {option.name_english}
+              </option>
+            ))}
+          </RHFSelect>
+          <RHFSelect
+            native
+            size="small"
+            name="work_group"
+            label="Work Group"
+            InputLabelProps={{ shrink: true }}
+            PaperPropsSx={{ textTransform: 'capitalize' }}
+            disabled={Boolean(appointmentConfigData)}
+          >
+            <option value={null}> </option>
+            {workGroupsData.map((option) => (
+              <option key={option._id} value={option._id}>
+                {option.name_english}
+              </option>
+            ))}
+          </RHFSelect>
+          <RHFTextField
+            size="small"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Box sx={{ fontSize: '0.8rem' }}>min</Box>
+                </InputAdornment>
+              ),
+            }}
+            name="appointment_time"
+            label="Appointment Duration Time"
+            inputProps={{ min: 5, max: 180, step: 5 }}
+            type="number"
+            InputLabelProps={{ shrink: true }}
+          />
+          <RHFTextField
+            size="small"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Box sx={{ fontSize: '0.8rem' }}>for the next</Box>
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Box sx={{ fontSize: '0.8rem' }}>days</Box>
+                </InputAdornment>
+              ),
+            }}
+            name="config_frequency"
+            label="Configuration Frequency"
+            type="number"
+            inputProps={{ min: 0, max: 30, textAlign: 'center' }}
+            InputLabelProps={{ shrink: true }}
+          />
+          <RHFTextField
+            disabled
+            size="small"
+            name="appointments_number"
+            label="Daily Appointments Number"
+            InputLabelProps={{ shrink: true }}
+            value={calculateAverageAppointmentNumber()}
+          />
+        </Stack>
       </Stack>
-    </Stack>
+    </>
   );
 }
 
