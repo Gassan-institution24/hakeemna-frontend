@@ -13,60 +13,47 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetCategories, useGetSymptoms } from 'src/api/tables';
+import { useGetUnitservices, useGetDepartments } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFTextField, RHFMultiSelect, RHFSelect } from 'src/components/hook-form';
-import axiosHandler from 'src/utils/axios-handler';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import { endpoints } from 'src/utils/axios';
-import { useAuthContext } from 'src/auth/hooks';
+import axiosHandler from 'src/utils/axios-handler';
 import axios from 'axios';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function CountriesNewEditForm({ currentSelected }) {
+export default function TableNewEditForm({ departmentData, currentTable }) {
   const router = useRouter();
 
   const { user } = useAuthContext();
 
-  const { categories } = useGetCategories();
+  const { unitservicesData } = useGetUnitservices();
 
-  const { tableData } = useGetSymptoms();
-
-  const symptomsMultiSelect = tableData?.reduce((acc, data) => {
-    acc.push({
-      value: data._id,
-      label: data.name_english || data.name,
-    });
-    return acc;
-  }, []);
-  console.log('multiii', symptomsMultiSelect);
   const { enqueueSnackbar } = useSnackbar();
 
-  const NewSchema = Yup.object().shape({
-    name_english: Yup.string().required('Name is required'),
+  const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
-    description: Yup.string().required('Description is required'),
-    description_arabic: Yup.string().required('Description is required'),
-    category: Yup.string().required('Description is required'),
-    symptoms: Yup.array(),
+    name_english: Yup.string().required('Name is required'),
+    details: Yup.string(),
+    details_arabic: Yup.string(),
   });
 
   const defaultValues = useMemo(
-    /// edit
     () => ({
-      name_arabic: currentSelected?.name_arabic || '',
-      name_english: currentSelected?.name_english || '',
-      description: currentSelected?.description || '',
-      description_arabic: currentSelected?.description_arabic || '',
-      category: currentSelected?.category?._id || '',
-      symptoms: currentSelected?.symptoms?.map((disease) => disease._id) || [],
+      department: departmentData._id,
+      unit_service: departmentData.unit_service._id,
+      name_english: currentTable?.name_english || '',
+      name_arabic: currentTable?.name_arabic || '',
+      details: currentTable?.details || '',
+      details_arabic: currentTable?.details_arabic || '',
     }),
-    [currentSelected]
+    [currentTable, departmentData]
   );
 
   const methods = useForm({
-    resolver: yupResolver(NewSchema),
+    resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
 
@@ -97,27 +84,32 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const address = await axios.get('https://geolocation-db.com/json/');
-      if (currentSelected) {
+      if (currentTable) {
         await axiosHandler({
           method: 'PATCH',
-          path: endpoints.tables.disease(currentSelected._id),
+          path: `${endpoints.tables.activity(currentTable._id)}`,
           data: {
-            modifications_nums: (currentSelected.modifications_nums || 0) + 1,
+            modifications_nums: (currentTable.modifications_nums || 0) + 1,
             ip_address_user_modification: address.data.IPv4,
             user_modification: user._id,
             ...data,
           },
-        }); /// edit
+        });
       } else {
         await axiosHandler({
           method: 'POST',
-          path: endpoints.tables.diseases,
-          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
-        }); /// edit
+          path: `${endpoints.tables.activities}`,
+          data: {
+            ip_address_user_creation: address.data.IPv4,
+            user_creation: user._id,
+            ...data,
+          },
+        });
       }
       reset();
-      enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
-      router.push(paths.superadmin.tables.diseases.root); /// edit
+      router.push(paths.unitservice.departments.activities.root(departmentData._id));
+      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
@@ -136,7 +128,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
               gridTemplateColumns={{
                 xs: 'repeat(1, 1fr)',
                 sm: 'repeat(2, 1fr)',
-              }} /// edit
+              }}
             >
               <RHFTextField
                 lang="en"
@@ -150,60 +142,23 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 name="name_arabic"
                 label="name arabic"
               />
-            </Box>
-
-            <Box
-              rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(1, 1fr)',
-              }}
-            >
               <RHFTextField
                 lang="en"
                 onChange={handleEnglishInputChange}
-                sx={{ mt: 3 }}
-                name="description"
-                label="description"
-                multiline
-                colSpan={14}
-                rows={3}
+                name="details"
+                label="Details"
               />
               <RHFTextField
                 lang="ar"
                 onChange={handleArabicInputChange}
-                sx={{ mt: 3 }}
-                name="description_arabic"
-                label="description arabic"
-                multiline
-                colSpan={14}
-                rows={3}
+                name="details_arabic"
+                label="Details Arabic"
               />
-
-              <RHFSelect native name="category" label="category">
-                <option> </option>
-                {categories.map((category) => (
-                  <option key={category._id} value={category._id}>
-                    {category.name_english}
-                  </option>
-                ))}
-              </RHFSelect>
-
-              {symptomsMultiSelect && (
-                <RHFMultiSelect
-                  checkbox
-                  name="symptoms"
-                  label="Symptoms"
-                  options={symptomsMultiSelect}
-                />
-              )}
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentSelected ? 'Create One' : 'Save Changes'}
+                {!currentTable ? 'Create' : 'Save Changes'}
               </LoadingButton>
             </Stack>
           </Card>
@@ -213,6 +168,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
   );
 }
 
-CountriesNewEditForm.propTypes = {
-  currentSelected: PropTypes.object,
+TableNewEditForm.propTypes = {
+  currentTable: PropTypes.object,
+  departmentData: PropTypes.object,
 };

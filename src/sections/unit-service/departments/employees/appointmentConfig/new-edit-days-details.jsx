@@ -21,6 +21,7 @@ import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import NewEditDayAppointmentsDetails from './new-edit-days-appointments-details';
 
 // ----------------------------------------------------------------------
 const weekDays = [
@@ -62,177 +63,202 @@ export default function NewEditDayDetails() {
   };
 
   return (
-    <Box sx={{ px: 3, pb: 3 }}>
-      <Typography variant="p" sx={{ color: 'text.disabled', mb: 3 }}>
-        Days Details:
-      </Typography>
-
-      <Stack
-        sx={{ mt: 3 }}
-        divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
-        spacing={3}
-      >
-        {fields.map((item, index) => (
-          <Stack
-            key={item.id}
-            alignItems="flex-start"
-            flexWrap="wrap"
-            spacing={1.5}
-            sx={{ width: { xs: '100%' } }}
-          >
-            <Stack
-              direction={{ xs: 'column', md: 'row' }}
-              spacing={2}
-              sx={{ width: { xs: '100%' } }}
-            >
-              <RHFSelect size="small" native name={`days_details[${index}].day`} label="Day">
-                <option>{null}</option>
-                {weekDays
-                  .filter(
-                    (option) =>
-                      !values.weekend.includes(option.value) &&
-                      !values.days_details.some(
-                        (detail) =>
-                          detail.day === option.value &&
-                          values.days_details[index]?.day !== option.value
-                      )
-                  )
-                  .map((option) => (
-                    <option value={option.value}>{option.label}</option>
-                  ))}
-              </RHFSelect>
-
-              <Controller
-                name={`days_details[${index}].work_start_time`}
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <MobileTimePicker
-                    label="Work Start Time"
-                    value={
-                      values.days_details[index].work_start_time
-                        ? new Date(values.days_details[index].work_start_time)
-                        : null
-                    }
-                    onChange={(newValue) => {
-                      field.onChange(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
-              />
-              <Controller
-                name={`days_details[${index}].work_end_time`}
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <MobileTimePicker
-                    label="Work End Time"
-                    value={
-                      values.days_details[index].work_end_time
-                        ? new Date(values.days_details[index].work_end_time)
-                        : null
-                    }
-                    onChange={(newValue) => {
-                      field.onChange(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
-              />
-              <Controller
-                name={`days_details[${index}].break_start_time`}
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <MobileTimePicker
-                    label="Break Start Time"
-                    value={
-                      values.days_details[index].break_start_time
-                        ? new Date(values.days_details[index].break_start_time)
-                        : null
-                    }
-                    onChange={(newValue) => {
-                      field.onChange(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
-              />
-              <Controller
-                name={`days_details[${index}].break_end_time`}
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <MobileTimePicker
-                    label="Break End Time"
-                    value={
-                      values.days_details[index].break_end_time
-                        ? new Date(values.days_details[index].break_end_time)
-                        : null
-                    }
-                    onChange={(newValue) => {
-                      field.onChange(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
-              />
-              <IconButton
-                size="small"
-                color="error"
-                sx={{ justifySelf: { xs: 'flex-end' }, alignSelf: { xs: 'flex-end' }, width: 35 }}
-                onClick={() => handleRemove(index)}
-              >
-                <Iconify icon="solar:trash-bin-trash-bold" />
-              </IconButton>
-            </Stack>
-          </Stack>
-        ))}
-      </Stack>
-
-      <Divider sx={{ mt: 3, mb: 1, borderStyle: 'dashed' }} />
-
-      <Stack
-        spacing={3}
-        direction={{ xs: 'column', md: 'row' }}
-        alignItems={{ xs: 'flex-end', md: 'center' }}
-      >
-        <Button
-          size="small"
-          color="primary"
-          startIcon={<Iconify icon="tdesign:plus" />}
-          sx={{ padding: 1 }}
-          onClick={handleAdd}
-          // sx={{ flexShrink: 0 }}
+    <>
+      <Divider flexItem sx={{ borderStyle: 'solid' }} />
+      <Box sx={{ p: 3 }}>
+        <Typography
+          variant="p"
+          sx={{ color: 'text.secondary', mb: 3, fontWeight: '710', textTransform: 'capitalize' }}
         >
-          Add Item
-        </Button>
-      </Stack>
-    </Box>
+          Days Details:
+        </Typography>
+
+        <Stack
+          sx={{ mt: 3 }}
+          divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
+          spacing={3}
+        >
+          {fields.map((item, index) => (
+            <Stack
+              key={item.id}
+              // alignItems="flex-start"
+              // flexWrap="wrap"
+              spacing={1.5}
+              sx={{ width: '100%' }}
+            >
+              <Typography
+                variant="p"
+                sx={{
+                  color: 'text.secondary',
+                  mb: 1,
+                  ml: 1,
+                  fontWeight: '550',
+                  textTransform: 'capitalize',
+                }}
+              >
+                - {values.days_details[index].day}
+              </Typography>
+
+              <Divider flexItem sx={{ borderStyle: 'solid' }} />
+              <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                spacing={2}
+                sx={{ width: '100%', mt: 2 }}
+              >
+                <RHFSelect size="small" native name={`days_details[${index}].day`} label="Day">
+                  <option>{null}</option>
+                  {weekDays
+                    .filter(
+                      (option) =>
+                        !values.weekend.includes(option.value) &&
+                        !values.days_details.some(
+                          (detail) =>
+                            detail.day === option.value &&
+                            values.days_details[index]?.day !== option.value
+                        )
+                    )
+                    .map((option) => (
+                      <option value={option.value}>{option.label}</option>
+                    ))}
+                </RHFSelect>
+
+                <Controller
+                  name={`days_details[${index}].work_start_time`}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <MobileTimePicker
+                      minutesStep="5"
+                      label="Work Start Time"
+                      value={
+                        values.days_details[index].work_start_time
+                          ? new Date(values.days_details[index].work_start_time)
+                          : null
+                      }
+                      onChange={(newValue) => {
+                        field.onChange(newValue);
+                      }}
+                      slotProps={{
+                        textField: {
+                          size: 'small',
+                          fullWidth: true,
+                          error: !!error,
+                          helperText: error?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  name={`days_details[${index}].work_end_time`}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <MobileTimePicker
+                      minutesStep="5"
+                      label="Work End Time"
+                      value={
+                        values.days_details[index].work_end_time
+                          ? new Date(values.days_details[index].work_end_time)
+                          : null
+                      }
+                      onChange={(newValue) => {
+                        field.onChange(newValue);
+                      }}
+                      slotProps={{
+                        textField: {
+                          size: 'small',
+                          fullWidth: true,
+                          error: !!error,
+                          helperText: error?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  name={`days_details[${index}].break_start_time`}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <MobileTimePicker
+                      minutesStep="5"
+                      label="Break Start Time"
+                      value={
+                        values.days_details[index].break_start_time
+                          ? new Date(values.days_details[index].break_start_time)
+                          : null
+                      }
+                      onChange={(newValue) => {
+                        field.onChange(newValue);
+                      }}
+                      slotProps={{
+                        textField: {
+                          size: 'small',
+                          fullWidth: true,
+                          error: !!error,
+                          helperText: error?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  name={`days_details[${index}].break_end_time`}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <MobileTimePicker
+                      minutesStep="5"
+                      label="Break End Time"
+                      value={
+                        values.days_details[index].break_end_time
+                          ? new Date(values.days_details[index].break_end_time)
+                          : null
+                      }
+                      onChange={(newValue) => {
+                        field.onChange(newValue);
+                      }}
+                      slotProps={{
+                        textField: {
+                          size: 'small',
+                          fullWidth: true,
+                          error: !!error,
+                          helperText: error?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <IconButton
+                  size="small"
+                  color="error"
+                  sx={{ justifySelf: { xs: 'flex-end' }, alignSelf: { xs: 'flex-end' }, width: 35 }}
+                  onClick={() => handleRemove(index)}
+                >
+                  <Iconify icon="solar:trash-bin-trash-bold" />
+                </IconButton>
+              </Stack>
+              <NewEditDayAppointmentsDetails ParentIndex={index} />
+            </Stack>
+          ))}
+        </Stack>
+
+        <Divider sx={{ mt: 3, mb: 1, borderStyle: 'dashed' }} />
+
+        <Stack
+          spacing={3}
+          direction={{ xs: 'column', md: 'row' }}
+          alignItems={{ xs: 'flex-end', md: 'center' }}
+        >
+          <Button
+            size="small"
+            color="primary"
+            startIcon={<Iconify icon="tdesign:plus" />}
+            sx={{ padding: 1 }}
+            onClick={handleAdd}
+            // sx={{ flexShrink: 0 }}
+          >
+            Add New Day
+          </Button>
+        </Stack>
+      </Box>
+    </>
   );
 }

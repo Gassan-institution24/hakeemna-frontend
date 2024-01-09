@@ -45,108 +45,126 @@ export default function NewEditLongHolidays() {
   };
 
   return (
-    <Box sx={{ px: 3, pb: 3 }}>
-      <Typography variant="p" sx={{ color: 'text.disabled', mb: 3 }}>
-        Long Holidays:
-      </Typography>
+    <>
+      <Divider flexItem sx={{ borderStyle: 'solid' }} />
+      <Box sx={{ p: 3 }}>
+        <Typography
+          variant="p"
+          sx={{ color: 'text.secondary', mb: 3, fontWeight: '710', textTransform: 'capitalize' }}
+        >
+          Long Holidays:
+        </Typography>
 
-      <Stack
-        sx={{ mt: 3 }}
-        divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
-        spacing={3}
-      >
-        {fields.map((item, index) => (
-          <Stack
-            key={item.id}
-            alignItems="flex-start"
-            spacing={1.5}
-            sx={{ width: { xs: '100%', md: 'auto' } }}
-          >
+        <Stack
+          sx={{ mt: 3 }}
+          divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
+          spacing={3}
+        >
+          {fields.map((item, index) => (
             <Stack
-              direction={{ xs: 'column', md: 'row' }}
-              spacing={2}
+              key={item.id}
+              alignItems="flex-start"
+              spacing={1.5}
               sx={{ width: { xs: '100%', md: 'auto' } }}
             >
-              <RHFTextField
-                size="small"
-                name={`long_holidays[${index}].description`}
-                label="Description"
-                // sx={{ flex: 2 }}
-              />
-              <Controller
-                name={`long_holidays[${index}].start_date`}
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <DatePicker
-                    label="Start Date"
-                    // sx={{ flex: 1 }}
-                    value={new Date(values.long_holidays[index].start_date)}
-                    onChange={(newValue) => {
-                      field.onChange(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
-              />
-              <Controller
-                name={`long_holidays[${index}].end_date`}
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <DatePicker
-                    label="End Date"
-                    // sx={{ flex: 1 }}
-                    value={new Date(values.long_holidays[index].end_date)}
-                    onChange={(newValue) => {
-                      field.onChange(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
-              />
-              <IconButton
-                size="small"
-                color="error"
-                sx={{ justifySelf: 'flex-end', alignSelf: 'flex-end', width: 35 }}
-                onClick={() => handleRemove(index)}
+              <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                spacing={2}
+                sx={{ width: { xs: '100%', md: 'auto' } }}
               >
-                <Iconify icon="solar:trash-bin-trash-bold" />
-              </IconButton>
+                <RHFTextField
+                  size="small"
+                  name={`long_holidays[${index}].description`}
+                  label="Description"
+                  // sx={{ flex: 2 }}
+                />
+                <Controller
+                  name={`long_holidays[${index}].start_date`}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <DatePicker
+                      label="Start Date"
+                      // sx={{ flex: 1 }}
+                      value={
+                        new Date(
+                          values.long_holidays[index].start_date
+                            ? values.long_holidays[index].start_date
+                            : ''
+                        )
+                      }
+                      onChange={(newValue) => {
+                        field.onChange(newValue);
+                      }}
+                      slotProps={{
+                        textField: {
+                          size: 'small',
+                          fullWidth: true,
+                          error: !!error,
+                          helperText: error?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <Controller
+                  name={`long_holidays[${index}].end_date`}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <DatePicker
+                      label="End Date"
+                      // sx={{ flex: 1 }}
+                      value={
+                        new Date(
+                          values.long_holidays[index].end_date
+                            ? values.long_holidays[index].end_date
+                            : ''
+                        )
+                      }
+                      onChange={(newValue) => {
+                        field.onChange(newValue);
+                      }}
+                      slotProps={{
+                        textField: {
+                          size: 'small',
+                          fullWidth: true,
+                          error: !!error,
+                          helperText: error?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <IconButton
+                  size="small"
+                  color="error"
+                  sx={{ justifySelf: 'flex-end', alignSelf: 'flex-end', width: 35 }}
+                  onClick={() => handleRemove(index)}
+                >
+                  <Iconify icon="solar:trash-bin-trash-bold" />
+                </IconButton>
+              </Stack>
             </Stack>
-          </Stack>
-        ))}
-      </Stack>
+          ))}
+        </Stack>
 
-      <Divider sx={{ mt: 3, mb: 1, borderStyle: 'dashed' }} />
+        <Divider sx={{ mt: 3, mb: 1, borderStyle: 'dashed' }} />
 
-      <Stack
-        spacing={1}
-        direction={{ xs: 'column', md: 'row' }}
-        alignItems={{ xs: 'flex-end', md: 'center' }}
-      >
-        <Button
-          size="small"
-          color="primary"
-          startIcon={<Iconify icon="tdesign:plus" />}
-          sx={{ padding: 1 }}
-          onClick={handleAdd}
+        <Stack
+          spacing={1}
+          direction={{ xs: 'column', md: 'row' }}
+          alignItems={{ xs: 'flex-end', md: 'center' }}
         >
-          Add Item
-        </Button>
-      </Stack>
-    </Box>
+          <Button
+            size="small"
+            color="primary"
+            startIcon={<Iconify icon="tdesign:plus" />}
+            sx={{ padding: 1 }}
+            onClick={handleAdd}
+          >
+            Add Long Holiday
+          </Button>
+        </Stack>
+      </Box>
+    </>
   );
 }

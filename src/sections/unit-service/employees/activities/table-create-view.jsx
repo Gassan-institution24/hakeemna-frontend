@@ -6,17 +6,17 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import TableNewEditForm from '../create-edit-employee';
+import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableCreateView({ departmentData }) {
+export default function TableCreateView({departmentData}) {
   const settings = useSettingsContext();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new Employee Account"
+        heading="Create a new Activity"
         links={[
           {
             name: 'Dashboard',
@@ -27,10 +27,10 @@ export default function TableCreateView({ departmentData }) {
             href: paths.unitservice.departments.root,
           },
           {
-            name: `${departmentData.name_english || 'Department'} Employees`,
-            href: paths.unitservice.departments.employees.root,
+            name: `${departmentData.name_english || ''} Activities`,
+            href: paths.unitservice.departments.activities.root(departmentData._id),
           },
-          { name: 'New Employee' },
+          { name: 'New Activity' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

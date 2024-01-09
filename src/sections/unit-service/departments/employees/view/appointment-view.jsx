@@ -44,18 +44,16 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useGetAppointmentTypes, useGetDepartmentAppointments } from 'src/api/tables';
-import PatientHistoryRow from '../appointment-row';
-import PatientHistoryToolbar from '../appointment-toolbar';
-import HistoryFiltersResult from '../appointment-filters-result';
+import PatientHistoryRow from '../appointments/appointment-row';
+import PatientHistoryToolbar from '../appointments/appointment-toolbar';
+import HistoryFiltersResult from '../appointments/appointment-filters-result';
+import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  // { id: 'name_english', label: 'Name', align: 'center' },
-  // { id: 'unit_service', label: 'Unit Service' },
   { id: 'appointment_type', label: 'Appointment Type' },
-  // { id: 'payment_method', label: 'Payment Method' },
   { id: 'start_time', label: 'Start Time' },
   { id: 'end_time', label: 'End Time' },
   { id: 'price_in_JOD', label: 'Price' },
@@ -81,7 +79,9 @@ export default function AppointHistoryView({ departmentData }) {
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
+  const addModal = useBoolean();
   const confirm = useBoolean();
+  const confirmUnCancel = useBoolean();
 
   const { appointmentsData, refetch } = useGetDepartmentAppointments(departmentData._id);
 
@@ -206,9 +206,30 @@ export default function AppointHistoryView({ departmentData }) {
     },
     [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table]
   );
-  const handleAddRow = useCallback(() => {
-    router.push(paths.superadmin.patients.history.addAppointment(departmentData._id));
-  }, [router, departmentData._id]);
+  const handleUnCancelRows = useCallback(
+    async (id) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointments}/uncancel`,
+        data: { ids: table.selected },
+      });
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointments}/uncancel`,
+        data: { ids: table.selected },
+      });
+      refetch();
+      table.onUpdatePageDeleteRows({
+        totalRows: appointmentsData.length,
+        totalRowsInPage: dataInPage.length,
+        totalRowsFiltered: dataFiltered.length,
+      });
+    },
+    [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table]
+  );
+  // const handleAddRow = useCallback(() => {
+  //   router.push(paths.superadmin.patients.history.addAppointment(departmentData._id));
+  // }, [router, departmentData._id]);
 
   const handleViewRow = useCallback(
     (id) => {
@@ -263,7 +284,7 @@ export default function AppointHistoryView({ departmentData }) {
           <PatientHistoryToolbar
             filters={filters}
             onFilters={handleFilters}
-            onAdd={handleAddRow}
+            onAdd={()=>addModal.onTrue()}
             //
             dateError={dateError}
             serviceOptions={appointmenttypesData.map((option) => option)}
@@ -293,13 +314,27 @@ export default function AppointHistoryView({ departmentData }) {
                 )
               }
               action={
-                <Tooltip title="Unbook all">
-                  <IconButton color="error" onClick={confirm.onTrue}>
-                    <Iconify icon="mdi:bell-cancel" />
-                  </IconButton>
-                </Tooltip>
-              }
-              color="error"
+                  <>
+                    {dataFiltered
+                      .filter((row) => table.selected.includes(row._id))
+                      .some((data) => data.status === 'canceled') ? (
+                      <Tooltip title="uncancel all">
+                        <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
+                          <Iconify icon="material-symbols-light:notifications-active-rounded" />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="cancel all">
+                        <IconButton color="error" onClick={confirm.onTrue}>
+                          <Iconify icon="mdi:bell-cancel" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </>
+                }
+              color={dataFiltered
+                .filter((row) => table.selected.includes(row._id))
+                .some((data) => data.status === 'canceled') ?"primary":'error'}
             />
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
@@ -360,6 +395,8 @@ export default function AppointHistoryView({ departmentData }) {
         </Card>
       </Container>
 
+      <AddEmegencyAppointment open={addModal.value} onClose={addModal.onFalse} />
+
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
@@ -379,6 +416,28 @@ export default function AppointHistoryView({ departmentData }) {
             }}
           >
             Cancel
+          </Button>
+        }
+      />
+      <ConfirmDialog
+        open={confirmUnCancel.value}
+        onClose={confirmUnCancel.onFalse}
+        title="UnCancel"
+        content={
+          <>
+            Are you sure want to uncancel <strong> {table.selected.length} </strong> items?
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              confirmUnCancel.onFalse();
+              handleUnCancelRows();
+            }}
+          >
+            uncancel
           </Button>
         }
       />

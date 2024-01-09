@@ -147,7 +147,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             work_end_time: null,
             break_start_time: null,
             break_end_time: null,
-            appointments: [],
           },
         ],
       });

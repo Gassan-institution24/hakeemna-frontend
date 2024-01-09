@@ -82,7 +82,7 @@ export function RHFMultiSelect({
   const { control } = useFormContext();
 
   const renderValues = (selectedIds) => {
-    const selectedItems = options.filter((item) => selectedIds?.includes(item.value));
+    const selectedItems = options.filter((item) => selectedIds?.includes(item._id));
 
     if (!selectedItems.length && placeholder) {
       return <Box sx={{ color: 'text.disabled' }}>{placeholder}</Box>;
@@ -92,13 +92,13 @@ export function RHFMultiSelect({
       return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
           {selectedItems.map((item) => (
-            <Chip key={item.value} size="small" label={item.label} />
+            <Chip key={item._id} size="small" label={item.name_english} />
           ))}
         </Box>
       );
     }
 
-    return selectedItems.map((item) => item.label).join(', ');
+    return selectedItems.map((item) => item.name_english).join(', ');
   };
 
   return (
@@ -119,13 +119,13 @@ export function RHFMultiSelect({
             renderValue={renderValues}
           >
             {options.map((option) => {
-              const selected = field?.value?.includes(option.value);
+              const selected = field?.value?.includes(option._id);
 
               return (
-                <MenuItem key={option.value} value={option.value}>
+                <MenuItem key={option._id} value={option._id}>
                   {checkbox && <Checkbox size="small" disableRipple checked={selected} />}
 
-                  {option.label}
+                  {option.name_english}
                 </MenuItem>
               );
             })}

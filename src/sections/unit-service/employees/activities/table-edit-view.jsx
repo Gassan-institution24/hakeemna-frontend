@@ -6,17 +6,16 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import TableNewEditForm from '../create-edit-employee';
+import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableCreateView({ departmentData }) {
+export default function TableEditView({departmentData,activityData}) {
   const settings = useSettingsContext();
-
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new Employee Account"
+        heading={`Edit ${activityData.name_english||''} Activity`}
         links={[
           {
             name: 'Dashboard',
@@ -27,20 +26,20 @@ export default function TableCreateView({ departmentData }) {
             href: paths.unitservice.departments.root,
           },
           {
-            name: `${departmentData.name_english || 'Department'} Employees`,
-            href: paths.unitservice.departments.employees.root,
+            name: `${departmentData.name_english || ''} Activities`,
+            href: paths.unitservice.departments.activities.root(departmentData._id),
           },
-          { name: 'New Employee' },
+          { name: `Edit ${activityData.name_english||''} Activity` },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
-
-      <TableNewEditForm departmentData={departmentData} />
+      {activityData && <TableNewEditForm departmentData={departmentData} currentTable={activityData} />}
     </Container>
   );
 }
-TableCreateView.propTypes = {
+TableEditView.propTypes = {
+  activityData: PropTypes.object,
   departmentData: PropTypes.object,
 };
