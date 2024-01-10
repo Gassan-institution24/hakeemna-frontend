@@ -223,6 +223,7 @@ export function AuthProvider({ children }) {
       //
       login,
       register,
+      initialize,
       // registerAsUS,
       confirmRegister,
       resendCodeRegister,
@@ -234,6 +235,7 @@ export function AuthProvider({ children }) {
       login,
       logout,
       register,
+      initialize,
       // registerAsUS,
       confirmRegister,
       resendCodeRegister,

@@ -3,8 +3,6 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
-import ListItemText from '@mui/material/ListItemText';
-import { fDate } from 'src/utils/format-time';
 import Iconify from 'src/components/iconify';
 import Divider from '@mui/material/Divider';
 import { useAuthContext } from 'src/auth/hooks';
@@ -14,17 +12,20 @@ import Image from 'src/components/image/image';
 export default function ProfileHome() {
   const [currentDate, setCurrentDate] = useState(new Date());
   function calculateAge(birthDate) {
-    const today = new Date();
-    const dob = new Date(birthDate);
+    if (birthDate) {
+      const today = new Date();
+      const dob = new Date(birthDate);
 
-    const age = today.getFullYear() - dob.getFullYear();
-    return age;
+      const age = today.getFullYear() - dob.getFullYear();
+      return age;
+    }
+    return '';
   }
   const { user } = useAuthContext();
   console.log(user?.patient);
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
-      {user.patient.drug_allergies.length > 0 && (
+      {user.patient.drug_allergies?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -221,7 +222,7 @@ export default function ProfileHome() {
       <div>
         <Image
           alt="profile"
-          src={`http://localhost:3000/${user?.patient.profile_picture?.replace(/\\/g, '/')}`}
+          src={user?.patient.profile_picture.replace(/\\/g, '/')}
           sx={{
             height: '150px',
             width: '100px',
