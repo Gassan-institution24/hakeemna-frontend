@@ -39,77 +39,70 @@ export default function NewEditDetails({ appointmentConfigData }) {
     return minutesDifference;
   }
 
-  function calculateAverageAppointmentNumber() {
-    // let minutesNum = 0;
-    let sum = 0;
-    let numberOfAppoint = 0;
-
-    values.days_details.forEach((item, index) => {
-      const { work_end_time, work_start_time, break_end_time, break_start_time } = item;
-      let minutesNum = 0;
-      if (work_end_time && work_start_time) {
-        minutesNum = calculateMinutesDifference(new Date(work_start_time), new Date(work_end_time));
-      }
-      if (break_end_time && break_start_time) {
-        minutesNum -= calculateMinutesDifference(
-          new Date(break_start_time),
-          new Date(break_end_time)
-        );
-      }
-      sum += 1;
-      if (values.appointment_time) {
-        numberOfAppoint += Math.floor(minutesNum / values.appointment_time);
-      }
-    });
-    // return Math.floor(sum > 0 && values.appointment_time ? minutesNum * sum / values.appointment_time : 0);
-    return Math.floor(numberOfAppoint / sum);
-  }
-
   return (
     <>
       <Divider flexItem sx={{ borderStyle: 'solid' }} />
       <Stack sx={{ p: 3 }}>
-        <Typography
+        {/* <Typography
           variant="p"
-          sx={{ color: 'text.secondary', mb: 3, fontWeight: '710', textTransform: 'capitalize' }}
-        >
-          Weekly Days Off:
-        </Typography>
-        <Stack
-          spacing={2}
-          direction={{ xs: 'column', sm: 'row' }}
-          sx={{ p: 3, bgcolor: 'background.neutral' }}
-        >
-          <RHFMultiCheckbox
-            size="small"
-            name="weekend"
-            options={weekDays}
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: {
-                md: 'repeat(7, 1fr)',
-                sm: 'repeat(4, 1fr)',
-                xs: 'repeat(2, 1fr)',
-              },
-            }}
-          />
-        </Stack>
-        <Typography
-          variant="p"
-          sx={{
-            color: 'text.secondary',
-            mb: 1,
-            ml: 1,
-            fontWeight: '550',
-            textTransform: 'capitalize',
-          }}
+          sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
         >
           Details:
-        </Typography>
+        </Typography> */}
         <Stack
           spacing={2}
           direction={{ xs: 'column', sm: 'row' }}
           sx={{ p: 3, bgcolor: 'background.neutral', width: { xs: '100%', md: 'auto' } }}
+        >
+          <Controller
+            name='start_date'
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <DatePicker
+                label="Start Date"
+                // sx={{ flex: 1 }}
+                value={new Date(values.start_date || '')}
+                onChange={(newValue) => {
+                  field.onChange(newValue);
+                }}
+                slotProps={{
+                  textField: {
+                    // size: 'small',
+                    fullWidth: true,
+                    error: !!error,
+                    helperText: error?.message,
+                  },
+                }}
+              />
+            )}
+          />
+          <Controller
+            name="end_date"
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <DatePicker
+                label="End Date"
+                // sx={{ flex: 1 }}
+                value={new Date(values.end_date || '')}
+                onChange={(newValue) => {
+                  field.onChange(newValue);
+                }}
+                slotProps={{
+                  textField: {
+                    // size: 'small',
+                    fullWidth: true,
+                    error: !!error,
+                    helperText: error?.message,
+                  },
+                }}
+              />
+            )}
+          />
+        </Stack>
+        <Stack
+          spacing={2}
+          direction={{ xs: 'column', sm: 'row' }}
+          sx={{ px: 3,pb:3, bgcolor: 'background.neutral', width: { xs: '100%', md: 'auto' } }}
         >
           <RHFSelect
             native
@@ -178,13 +171,30 @@ export default function NewEditDetails({ appointmentConfigData }) {
             inputProps={{ min: 0, max: 30, textAlign: 'center' }}
             InputLabelProps={{ shrink: true }}
           />
-          <RHFTextField
-            disabled
+        </Stack>
+        <Typography
+          variant="p"
+          sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
+        >
+          Weekly Days Off:
+        </Typography>
+        <Stack
+          spacing={2}
+          direction={{ xs: 'column', sm: 'row' }}
+          sx={{ p: 3, bgcolor: 'background.neutral' }}
+        >
+          <RHFMultiCheckbox
             size="small"
-            name="appointments_number"
-            label="Daily Appointments Number"
-            InputLabelProps={{ shrink: true }}
-            value={calculateAverageAppointmentNumber()}
+            name="weekend"
+            options={weekDays}
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                md: 'repeat(7, 1fr)',
+                sm: 'repeat(4, 1fr)',
+                xs: 'repeat(2, 1fr)',
+              },
+            }}
           />
         </Stack>
       </Stack>

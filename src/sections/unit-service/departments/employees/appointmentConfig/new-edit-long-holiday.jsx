@@ -50,7 +50,7 @@ export default function NewEditLongHolidays() {
       <Box sx={{ p: 3 }}>
         <Typography
           variant="p"
-          sx={{ color: 'text.secondary', mb: 3, fontWeight: '710', textTransform: 'capitalize' }}
+          sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
         >
           Long Holidays:
         </Typography>

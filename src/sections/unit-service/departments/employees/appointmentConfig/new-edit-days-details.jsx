@@ -1,6 +1,7 @@
+import * as Yup from 'yup';
 import sum from 'lodash/sum';
 import { format, isValid } from 'date-fns';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -16,6 +17,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 import { fCurrency } from 'src/utils/format-number';
+import { useBoolean } from 'src/hooks/use-boolean';
 
 import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
@@ -42,7 +44,9 @@ export default function NewEditDayDetails() {
     name: 'days_details',
   });
 
-  console.log('fields', fields);
+  const [showAppointments, setShowAppointments] = useState({});
+
+  // console.log('fields', fields);
   const values = getValues();
 
   const handleAdd = () => {
@@ -52,14 +56,226 @@ export default function NewEditDayDetails() {
       work_end_time: null,
       break_start_time: null,
       break_end_time: null,
+      appointments: [],
     };
-    const existingData = values.days_details[values.days_details.length - 1]; // Get the current form values
+    const existingData = values.days_details
+      ? values.days_details[values.days_details.length - 1]
+      : ''; // Get the current form values
     const newItem = { ...defaultItem, ...existingData, day: '' };
     append(newItem);
   };
 
   const handleRemove = (index) => {
     remove(index);
+  };
+  function calculateMinutesDifference(date1, date2) {
+    const first = new Date(date1);
+    const second = new Date(date2);
+    const diffInMilliseconds = Math.abs(second - first);
+    const minutesDifference = Math.floor(diffInMilliseconds / (1000 * 60));
+    return minutesDifference;
+  }
+
+  const createAppointmentsBefore = (item, index, minBeforeBreak) => {
+    if (minBeforeBreak > 0) {
+      const newStartTime = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate(),
+        new Date(item.break_start_time).getHours(),
+        new Date(item.break_start_time).getMinutes() - minBeforeBreak
+      );
+      const isDuplicate = values.days_details[index].appointments.some((appoint) => {
+        // Convert existing appointment's start_time to a comparable format
+        const existingStartTime = new Date(appoint.start_time);
+
+        // Extract hours and minutes from both Date objects
+        const newTime = newStartTime.getHours() * 60 + newStartTime.getMinutes();
+        const existingTime = existingStartTime.getHours() * 60 + existingStartTime.getMinutes();
+
+        // Check if hours and minutes are equal
+        return newTime === existingTime;
+      });
+      if (!isDuplicate) {
+        setValue(`days_details[${index}].appointments`, [
+          ...values.days_details[index].appointments,
+          {
+            appointment_type: null,
+            start_time: newStartTime,
+            price: null,
+            service_types: [],
+          },
+        ]);
+      }
+
+      minBeforeBreak -= values.appointment_time;
+
+      // Return a promise to control the flow
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(createAppointmentsBefore(item, index, minBeforeBreak));
+        }, 0);
+      });
+    }
+    return Promise.resolve(); // Resolve the promise when done
+  };
+
+  const createAppointmentsAfter = (item, index, minAfterBreak) => {
+    if (minAfterBreak > 0) {
+      const newStartTime = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate(),
+        new Date(item.work_end_time).getHours(),
+        new Date(item.work_end_time).getMinutes() - minAfterBreak
+      );
+      const isDuplicate = values.days_details[index].appointments.some((appoint) => {
+        // Convert existing appointment's start_time to a comparable format
+        const existingStartTime = new Date(appoint.start_time);
+
+        // Extract hours and minutes from both Date objects
+        const newTime = newStartTime.getHours() * 60 + newStartTime.getMinutes();
+        const existingTime = existingStartTime.getHours() * 60 + existingStartTime.getMinutes();
+
+        // Check if hours and minutes are equal
+        return newTime === existingTime;
+      });
+      if (!isDuplicate) {
+        setValue(`days_details[${index}].appointments`, [
+          ...values.days_details[index].appointments,
+          {
+            appointment_type: null,
+            start_time: newStartTime,
+            price: null,
+            service_types: [],
+          },
+        ]);
+      }
+
+      minAfterBreak -= values.appointment_time;
+
+      // Return a promise to control the flow
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(createAppointmentsAfter(item, index, minAfterBreak));
+        }, 0);
+      });
+    }
+    return Promise.resolve(); // Resolve the promise when done
+  };
+
+  const createAppointmentsAll = (item, index, minDay) => {
+    if (minDay > 0) {
+      const newStartTime = new Date(
+        new Date(item.work_end_time).getFullYear(),
+        new Date(item.work_end_time).getMonth(),
+        new Date(item.work_end_time).getDate(),
+        new Date(item.work_end_time).getHours(),
+        new Date(item.work_end_time).getMinutes() - minDay
+      );
+      const isDuplicate = values.days_details[index].appointments.some((appoint) => {
+        // Convert existing appointment's start_time to a comparable format
+        const existingStartTime = new Date(appoint.start_time);
+
+        // Extract hours and minutes from both Date objects
+        const newTime = newStartTime.getHours() * 60 + newStartTime.getMinutes();
+        const existingTime = existingStartTime.getHours() * 60 + existingStartTime.getMinutes();
+
+        // Check if hours and minutes are equal
+        return newTime === existingTime;
+      });
+      if (!isDuplicate) {
+        setValue(`days_details[${index}].appointments`, [
+          ...values.days_details[index].appointments,
+          {
+            appointment_type: null,
+            start_time: newStartTime,
+            price: null,
+            service_types: [],
+          },
+        ]);
+      }
+      minDay -= values.appointment_time;
+
+      // Return a promise to control the flow
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(createAppointmentsAll(item, index, minDay));
+        }, 0);
+      });
+    }
+    return Promise.resolve(); // Resolve the promise when done
+  };
+
+  const processDayDetails = async (index) => {
+    // let index = 0;
+
+    // const processNextItem = async () => {
+    // function filterIsNotInTimes (){
+    const arr = [];
+    const appointment_time = values.appointment_time;
+    const work_end = values.days_details[index].work_end_time;
+    const work_start = values.days_details[index].work_start_time;
+    const break_start = values.days_details[index].break_start_time;
+    const break_end = values.days_details[index].break_end_time;
+    const work_end_min = new Date(work_end).getHours() * 60 + new Date(work_end).getMinutes();
+    const work_start_min = new Date(work_start).getHours() * 60 + new Date(work_start).getMinutes();
+    const break_start_min =
+      new Date(break_start).getHours() * 60 + new Date(break_start).getMinutes();
+    const break_end_min = new Date(break_end).getHours() * 60 + new Date(break_end).getMinutes();
+    let current_min = work_start_min;
+    let current_after_min = break_end_min;
+    if (break_start && break_end) {
+      while (current_min < break_start_min) {
+        arr.push(current_min);
+        current_min += appointment_time;
+      }
+      while (current_after_min < work_end_min) {
+        arr.push(current_after_min);
+        current_after_min += appointment_time;
+      }
+    } else {
+      while (current_min < work_end_min) {
+        arr.push(current_min);
+        current_min += appointment_time;
+      }
+    }
+    const filteredAppoint = values.days_details[index].appointments.filter((appoint) =>
+      arr.includes(
+        new Date(appoint.start_time).getHours() * 60 + new Date(appoint.start_time).getMinutes()
+      )
+    );
+    setValue(`days_details[${index}].appointments`, filteredAppoint);
+    // }
+
+    if (index < values.days_details.length) {
+      const item = values.days_details[index];
+
+      if (item.break_start_time && item.break_end_time) {
+        await createAppointmentsBefore(
+          item,
+          index,
+          calculateMinutesDifference(item.work_start_time, item.break_start_time)
+        );
+        await createAppointmentsAfter(
+          item,
+          index,
+          calculateMinutesDifference(item.break_end_time, item.work_end_time)
+        );
+      } else {
+        await createAppointmentsAll(
+          item,
+          index,
+          calculateMinutesDifference(item.work_start_time, item.work_end_time)
+        );
+      }
+
+      // index += 1;
+      // await processNextItem();
+    }
+    // };
+
+    // await processNextItem();
   };
 
   return (
@@ -68,7 +284,7 @@ export default function NewEditDayDetails() {
       <Box sx={{ p: 3 }}>
         <Typography
           variant="p"
-          sx={{ color: 'text.secondary', mb: 3, fontWeight: '710', textTransform: 'capitalize' }}
+          sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
         >
           Days Details:
         </Typography>
@@ -86,20 +302,6 @@ export default function NewEditDayDetails() {
               spacing={1.5}
               sx={{ width: '100%' }}
             >
-              <Typography
-                variant="p"
-                sx={{
-                  color: 'text.secondary',
-                  mb: 1,
-                  ml: 1,
-                  fontWeight: '550',
-                  textTransform: 'capitalize',
-                }}
-              >
-                - {values.days_details[index].day}
-              </Typography>
-
-              <Divider flexItem sx={{ borderStyle: 'solid' }} />
               <Stack
                 direction={{ xs: 'column', md: 'row' }}
                 spacing={2}
@@ -226,16 +428,39 @@ export default function NewEditDayDetails() {
                     />
                   )}
                 />
-                <IconButton
+                <RHFTextField
+                  disabled
                   size="small"
-                  color="error"
-                  sx={{ justifySelf: { xs: 'flex-end' }, alignSelf: { xs: 'flex-end' }, width: 35 }}
-                  onClick={() => handleRemove(index)}
+                  name={`days_details[${index}].appointment_number`}
+                  label="Appointments Number"
+                  InputLabelProps={{ shrink: true }}
+                  value={values.days_details[index].appointments.length}
+                />
+                <Stack
+                  direction={{ xs: 'column', md: 'row' }}
+                  spacing={0.2}
+                  sx={{ justifySelf: { xs: 'flex-end' }, alignSelf: { xs: 'flex-end' } }}
                 >
-                  <Iconify icon="solar:trash-bin-trash-bold" />
-                </IconButton>
+                  <IconButton size="small" onClick={() => processDayDetails(index)}>
+                    <Iconify icon="zondicons:refresh" />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    onClick={() =>
+                      setShowAppointments({
+                        ...showAppointments,
+                        [index]: !showAppointments[index],
+                      })
+                    }
+                  >
+                    <Iconify icon="tabler:list-details" />
+                  </IconButton>
+                  <IconButton size="small" color="error" onClick={() => handleRemove(index)}>
+                    <Iconify icon="solar:trash-bin-trash-bold" />
+                  </IconButton>
+                </Stack>
               </Stack>
-              <NewEditDayAppointmentsDetails ParentIndex={index} />
+              <NewEditDayAppointmentsDetails open={showAppointments[index]} ParentIndex={index} />
             </Stack>
           ))}
         </Stack>

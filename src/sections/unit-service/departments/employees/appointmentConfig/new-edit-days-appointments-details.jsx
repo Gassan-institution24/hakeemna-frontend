@@ -7,8 +7,10 @@ import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog'; 
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
+import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -26,7 +28,7 @@ import { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-for
 
 // ----------------------------------------------------------------------
 
-export default function NewEditDayAppointmentsDetails({ ParentIndex }) {
+export default function NewEditDayAppointmentsDetails({ ParentIndex,open }) {
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -43,28 +45,24 @@ export default function NewEditDayAppointmentsDetails({ ParentIndex }) {
     const defaultItem = {
       appointment_type: null,
       start_time: null,
-      end_time: null,
       price: null,
       service_types: [],
     };
     const existingData =
-      values.days_details[ParentIndex].appointments[
+    values.days_details[ParentIndex].appointments?values.days_details[ParentIndex].appointments[
         values.days_details[ParentIndex].appointments.length - 1
-      ] || null;
+      ] : null;
     const start_time = new Date(
       existingData ? existingData.start_time : values.days_details[ParentIndex].work_start_time
     );
     if (existingData) {
       start_time.setMinutes(start_time.getMinutes() + values.appointment_time);
     }
-    const end_time = new Date(start_time);
-    end_time.setMinutes(end_time.getMinutes() + values.appointment_time);
 
     const newItem = {
       ...defaultItem,
       ...existingData,
       start_time,
-      end_time,
     };
     append(newItem);
   };
@@ -74,8 +72,15 @@ export default function NewEditDayAppointmentsDetails({ ParentIndex }) {
   };
 
   return (
+    // <Dialog maxWidth="sm" open={open}>
+    <Collapse
+          in={open}
+          // timeout="auto"
+          // unmountOnExit
+          sx={{ bgcolor: 'background.neutral' }}
+        >
     <Box sx={{ px: 2, pb: 0 }}>
-      {values.days_details[ParentIndex].appointments.length > 0 && (
+      {values.days_details[ParentIndex].appointments&&values.days_details[ParentIndex].appointments.length > 0 && (
         <Typography variant="p" sx={{ color: 'text.disabled', mb: 3, fontSize: 14 }}>
           appointments:
         </Typography>
@@ -123,38 +128,6 @@ export default function NewEditDayAppointmentsDetails({ ParentIndex }) {
                     }
                     onChange={(newValue) => {
                       field.onChange(newValue);
-                      const endTime = new Date(newValue);
-                      endTime.setMinutes(endTime.getMinutes() + values.appointment_time);
-                      setValue(
-                        `days_details[${ParentIndex}].appointments[${index}].end_time`,
-                        endTime
-                      );
-                    }}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
-              />
-              <Controller
-                name={`days_details[${ParentIndex}].appointments[${index}].end_time`}
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <MobileTimePicker
-                    minutesStep="5"
-                    label="End Time"
-                    value={
-                      values.days_details[ParentIndex].appointments[index].end_time
-                        ? new Date(values.days_details[ParentIndex].appointments[index].end_time)
-                        : new Date()
-                    }
-                    onChange={(newValue) => {
-                      field.onChange(newValue);
                     }}
                     slotProps={{
                       textField: {
@@ -170,6 +143,12 @@ export default function NewEditDayAppointmentsDetails({ ParentIndex }) {
                 <RHFMultiSelect
                   size="small"
                   checkbox
+                  onChange={(newValue) => {
+                    setValue(`days_details[${ParentIndex}].appointments[${index}].service_types`,newValue);
+                    let price = 0 
+                    newValue.forEach((info)=>{price+=info.price_per_unit})
+                    setValue(`days_details[${ParentIndex}].appointments[${index}].price`,price);
+                  }}
                   name={`days_details[${ParentIndex}].appointments[${index}].service_types`}
                   label="Service Types"
                   options={serviceTypesData}
@@ -198,7 +177,7 @@ export default function NewEditDayAppointmentsDetails({ ParentIndex }) {
 
       <Divider
         sx={{
-          mt: values.days_details[ParentIndex].appointments.length > 0 ? 3 : 0,
+          mt: values.days_details[ParentIndex].appointments && values.days_details[ParentIndex].appointments.length > 0 ? 3 : 0,
           mb: 1,
           borderStyle: 'dashed',
         }}
@@ -221,8 +200,11 @@ export default function NewEditDayAppointmentsDetails({ ParentIndex }) {
         </Button>
       </Stack>
     </Box>
+    </Collapse>
+  // </Dialog> 
   );
 }
 NewEditDayAppointmentsDetails.propTypes = {
   ParentIndex: PropTypes.number,
+  open: PropTypes.bool,
 };
