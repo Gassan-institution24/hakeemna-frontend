@@ -165,7 +165,7 @@ export default function FormDialog() {
               Cancel
             </Button>
             <Button type="submit" loading={isSubmitting} variant="contained">
-              Subscribe
+              Upload
             </Button>
           </DialogActions>
       </FormProvider>
