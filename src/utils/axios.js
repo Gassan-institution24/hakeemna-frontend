@@ -3,6 +3,7 @@ import axios from 'axios';
 import { HOST_API } from 'src/config-global';
 // import { idText } from 'typescript';
 
+
 // https://axios-http.com/docs/instance
 // ----------------------------------------------------------------------
 
@@ -28,6 +29,7 @@ export const fetcher = async (args) => {
 // ----------------------------------------------------------------------
 
 export const endpoints = {
+
   allTables: '/tables',
   tables: {
     countries: `/api/countries`,
@@ -169,6 +171,7 @@ export const endpoints = {
     stakeholderIncomePaymentControl: (id) => `/api/incomepayment/stakeholder/${id}`,
     systemErrors: '/api/systemerrors',
     systemError: (id) => `/api/systemerrors/${id}`,
+    user: `/api/patient/`,
   },
   chat: '/api/chat',
   kanban: '/api/kanban',

@@ -71,7 +71,7 @@ export default function UserCardList() {
 
       {currentTab === 'My Appointments' && (
         <>
-          <h3>test</h3>
+          <h3>Current Appointment</h3>
           <Box
             gap={3}
             display="grid"
@@ -84,7 +84,7 @@ export default function UserCardList() {
             <Appoinment user={user.patient._id} />
           </Box>
           <hr />
-          <h3>test</h3>
+          <h3>Finished Appointment</h3>
           <Box
             gap={3}
             display="grid"

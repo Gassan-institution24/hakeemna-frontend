@@ -9,13 +9,19 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
-import { MenuItem,Typography, Button} from '@mui/material';
-import FormProvider, { RHFTextField, RHFSelect, RHFUploadAvatar, RHFSwitch } from 'src/components/hook-form';
+import { MenuItem, Typography, Button } from '@mui/material';
+import FormProvider, {
+  RHFTextField,
+  RHFSelect,
+  RHFUploadAvatar,
+  RHFSwitch,
+} from 'src/components/hook-form';
 import { useGetCities, useGetCountries } from 'src/api/tables';
 import axiosHandler from 'src/utils/axios-handler';
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
-
+import axios, { endpoints, fetcher } from 'src/utils/axios';
+import { HOST_API } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +32,7 @@ export default function AccountGeneral() {
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
   const { tableData } = useGetCities();
-  const { user } = useAuthContext();
+  const { user , initialize} = useAuthContext();
   console.log(user);
   const router = useRouter();
   const UpdateUserSchema = Yup.object().shape({
@@ -72,53 +78,56 @@ export default function AccountGeneral() {
     address: user?.patient?.address || '',
     sport_exercises: user?.patient?.sport_exercises || '',
     smoking: user?.patient?.smoking || '',
-    profile_picture: user?.patient?.profile_picture || '',
+    profile_picture:user?.patient.profile_picture.replace(/\\/g, '//') || '',
   };
-  
 
   const methods = useForm({
     resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });
   const {
+    getValues,
     setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-
+  const values = getValues()
 
   const fuser = (fuserSize) => {
     const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif'];
-  
+
     const isValidFile = (fileName) => {
-      const fileExtension = fileName.slice(fileName.lastIndexOf(".")).toLowerCase();
+      const fileExtension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
       const isExtensionAllowed = allowedExtensions.includes(fileExtension);
       return isExtensionAllowed;
     };
     const isValidSize = (fileSize) => fileSize <= 3145728;
-  
 
-  
     return {
       validateFile: isValidFile,
-      validateSize: isValidSize
+      validateSize: isValidSize,
     };
   };
-// Inside the AccountGeneral component
-const handleDrop = (acceptedFiles) => {
-  const file = acceptedFiles[0];
-  
-  // Validate file before setting the profile picture
-  const fileValidator = fuser(file.size);
 
-  if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
-    setProfilePicture(file); // Save the file in state
-  } else {
-    // Handle invalid file type or size
-    enqueueSnackbar('Invalid file type or size', { variant: 'error' });
-  }
-};
+  const handleDrop = (acceptedFiles) => {
+    const file = acceptedFiles[0];
+
+ 
+    const fileValidator = fuser(file.size);
+
+    if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
+      setProfilePicture(file); 
+      console.log(file)
+      const newFile = Object.assign(file, { 
+        preview: URL.createObjectURL(file), 
+      });
+      setValue('profile_picture',newFile)
+    } else {
+      enqueueSnackbar('Invalid file type or size', { variant: 'error' });
+    }
+  };
+  console.log(values)
 
   const onSubmit = async (data) => {
     // Create a new FormData object
@@ -126,62 +135,46 @@ const handleDrop = (acceptedFiles) => {
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
     });
-
-
+    
     if (profilePicture) {
       formData.append('ter', profilePicture);
     }
-
-    // Handle form submission with the updated form data
     try {
       // Use your API endpoint to submit the form data
-      const response = await fetch(`http://localhost:3000/api/patient/${user?.patient._id}`, {
-        method: 'PATCH',
-        body: formData,
-      });
-
-      if (response.ok) {
-        // Update successful, perform actions like showing success message and redirection
-        console.log(formData);
-        enqueueSnackbar('Profile updated successfully', { variant: 'success' });
-        router.push(paths.dashboard.user.profile);
-      } else {
-        // Update failed, handle errors
-        throw new Error('Failed to update profile');
-      }
+      const response = await axios.patch(`${endpoints.tables.user}${user?.patient._id}`, formData);
+      enqueueSnackbar('Profile updated successfully', { variant: 'success' });
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
     } catch (error) {
       console.log(error.message);
       enqueueSnackbar('Failed to update profile', { variant: 'error' });
     }
-  
   };
-
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
         {/* img */}
         <Grid xs={12} md={4}>
-          <Card sx={{ pt: 10, height: {md:'100%'},pb:{xs:5}, px: 3, textAlign: 'center' }}>
+          <Card sx={{ pt: 10, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
             <RHFUploadAvatar
               name="profile_picture"
-              value = {`http://localhost:3000/${user?.patient.profile_picture}`}
               onDrop={handleDrop}
               helperText={
                 <Typography
-                variant="caption"
-                sx={{
-                  mt: 3,
-                  mx: 'auto',
-                  display: 'block',
-                  textAlign: 'center',
-                  color: 'text.disabled',
-                }}
-              >
-                Allowed *.jpeg, *.jpg, *.png, *.gif
-                <br /> max size of  3MB
-              </Typography>
-              
+                  variant="caption"
+                  sx={{
+                    mt: 3,
+                    mx: 'auto',
+                    display: 'block',
+                    textAlign: 'center',
+                    color: 'text.disabled',
+                  }}
+                >
+                  Allowed *.jpeg, *.jpg, *.png, *.gif
+                  <br /> max size of 3MB
+                </Typography>
               }
             />
           </Card>
