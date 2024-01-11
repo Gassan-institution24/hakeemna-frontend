@@ -1,5 +1,6 @@
 import Dialog from '@mui/material/Dialog';
 import TextField from '@mui/material/TextField';
+import { DatePicker } from '@mui/x-date-pickers';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -7,14 +8,14 @@ import Iconify from 'src/components/iconify/iconify';
 import { useBoolean } from 'src/hooks/use-boolean';
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 import { MenuItem, Typography, Button } from '@mui/material';
-import FormProvider, { RHFSelect } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFUpload } from 'src/components/hook-form';
 
 import axios from 'axios';
 
@@ -27,8 +28,8 @@ export default function FormDialog() {
 
   const router = useRouter();
   const oldPresctiptionSchema = Yup.object().shape({
-    // type: Yup.string(),
-    // date: Yup.date(),
+    type: Yup.string(),
+    date: Yup.date(),
     // file: Yup.string(),
   });
 
@@ -46,6 +47,7 @@ export default function FormDialog() {
   });
   const {
     setValue,
+    control,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -83,7 +85,7 @@ export default function FormDialog() {
   const dialog = useBoolean();
 
   const onSubmit = async (data) => {
-    console.log("data",data)
+    console.log('data', data);
     const formData = new FormData();
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
@@ -115,8 +117,8 @@ export default function FormDialog() {
         <Iconify icon="mingcute:add-line" />
       </Button>
 
-        <Dialog open={dialog.value} onClose={dialog.onFalse}>
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <Dialog open={dialog.value} onClose={dialog.onFalse}>
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
             IMPORTANT
           </DialogTitle>
@@ -132,6 +134,7 @@ export default function FormDialog() {
               name="type"
               InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
+              sx={{ mb: 1}}
             >
               {TYPE.map((test) => (
                 <MenuItem value={test} key={test._id}>
@@ -139,26 +142,34 @@ export default function FormDialog() {
                 </MenuItem>
               ))}
             </RHFSelect>
-            <TextField
-              autoFocus
-              fullWidth
+            <Controller
               name="date"
-              type="date"
-              margin="dense"
-              variant="outlined"
-              // label="Date"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <DatePicker
+                  {...field}
+                  sx={{ mb: 1}}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      error: !!error,
+                      helperText: error?.message,
+                    },
+                  }}
+                />
+              )}
             />
-             <TextField
+            <RHFUpload
               autoFocus
               fullWidth
               name="file"
-              type="file"
+              // type="file"
               margin="dense"
               variant="outlined"
               onDrop={handleDrop}
               // label="File"
             />
-          </DialogContent> 
+          </DialogContent>
 
           <DialogActions>
             <Button onClick={dialog.onFalse} variant="outlined" color="inherit">
@@ -168,8 +179,8 @@ export default function FormDialog() {
               Upload
             </Button>
           </DialogActions>
-      </FormProvider>
-        </Dialog>
+        </FormProvider>
+      </Dialog>
     </>
   );
 }

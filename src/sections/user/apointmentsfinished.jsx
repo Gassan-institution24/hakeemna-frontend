@@ -95,9 +95,7 @@ const finishedAppointments = appointmentsData.filter(
             },
             {
               label: info?.name_english,
-              icon: (
-                <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
-              ),
+              icon: <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
             },
           ].map((item) => (
             <Stack

@@ -25,7 +25,7 @@ export default function Share() {
     <Container
       sx={{
         position: 'relative',
-        py: { xs: 0, md: 8 },
+        py: { xs: 0, md: 2 },
         maxWidth: '100%',
       }}
     >

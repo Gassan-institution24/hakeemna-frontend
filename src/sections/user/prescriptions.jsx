@@ -18,9 +18,6 @@ import { useAuthContext } from 'src/auth/hooks';
 import { fDate } from 'src/utils/format-time';
 import Doclogo from '../../components/logo/doc.png';
 
-
-
-
 export default function Prescriptions() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const { user } = useAuthContext();
@@ -35,13 +32,13 @@ export default function Prescriptions() {
   function calculateDuration(startDate, endDate) {
     const start = new Date(startDate);
     const end = new Date(endDate);
-  
+
     const difference = end.getTime() - start.getTime();
     const daysDifference = Math.ceil(difference / (1000 * 3600 * 24));
-  
+
     return daysDifference;
   }
-  
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentDate(new Date());
@@ -104,12 +101,10 @@ export default function Prescriptions() {
       borderWidth: 1,
       borderRightWidth: 0,
       borderBottomWidth: 0,
-     
     },
     tableRow: {
       margin: 'auto',
       flexDirection: 'row',
-     
     },
     tableCol: {
       width: '25%',
@@ -117,13 +112,12 @@ export default function Prescriptions() {
       borderWidth: 1,
       borderLeftWidth: 0,
       borderTopWidth: 0,
-     
     },
     tableCell: {
       margin: 'auto',
       marginTop: 5,
       fontSize: 10,
-      padding:1,
+      padding: 1,
     },
   });
 
@@ -174,7 +168,9 @@ export default function Prescriptions() {
                     <Text style={styles.tableCell}>{med.frequently}</Text>
                   </View>
                   <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>{calculateDuration(med.startdate, med.enddate)} Days</Text>
+                    <Text style={styles.tableCell}>
+                      {calculateDuration(med.startdate, med.enddate)} Days
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -190,7 +186,7 @@ export default function Prescriptions() {
       {user.patient.medicines.map((med) => (
         <List key={med.id} sx={{ bgcolor: 'aliceblue' }}>
           <ListItem sx={{ mb: 1 }}>
-            <ListItemAvatar>
+            <ListItemAvatar sx={{ display: { xs: 'none', md: 'inline' } }}>
               <Avatar>
                 <Iconify icon="streamline-emojis:pill" />
               </Avatar>
@@ -198,14 +194,35 @@ export default function Prescriptions() {
             <ListItemText primary="Name" secondary={med.medicine.trade_name} sx={{ ml: 2 }} />
             <ListItemText primary="Dose" secondary={med.dose} />
             <ListItemText primary="Frequently" secondary={med.frequently} />
-            <ListItemText primary="Start Date" secondary={fDate(med.startdate)} />
-            <ListItemText primary="End Date" secondary={fDate(med.enddate)} />
+            <ListItemText
+              primary="Start Date"
+              secondary={fDate(med.startdate)}
+              sx={{ display: { xs: 'none', md: 'inline' } }}
+            />
+            <ListItemText
+              primary="End Date"
+              secondary={fDate(med.enddate)}
+              sx={{ display: { xs: 'none', md: 'inline' } }}
+            />
             <PDFDownloadLink
               document={<PrescriptionPDF medicines={[med]} />}
               fileName={`${user.patient.first_name} prescription.pdf`}
             >
               {({ loading }) =>
-                loading ? 'Loading document...' : <Iconify icon="teenyicons:pdf-outline" />
+                loading ? (
+                  'Loading document...'
+                ) : (
+                  <Iconify
+                    icon="teenyicons:pdf-outline"
+                    sx={{
+                      color: { xs: 'green', md: 'blue' },
+                      height: { xs: '25px', md: '25px' },
+                      width: { xs: '25px', md: '25px' },
+                      position: { md: 'relative' },
+                      top: {  md: '6px' },
+                    }}
+                  />
+                )
               }
             </PDFDownloadLink>
           </ListItem>
