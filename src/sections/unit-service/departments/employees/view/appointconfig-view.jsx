@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -31,6 +31,9 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const router = useRouter();
 
   const { id, emid } = useParams();
+
+  const [appointTime,setAppointTime] =useState(0)
+
   const settings = useSettingsContext();
 
   const loadingSave = useBoolean();
@@ -39,6 +42,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   const NewConfigSchema = Yup.object().shape({
     weekend: Yup.array(),
+    start_date: Yup.date(),
+    end_date: Yup.date(),
     appointment_time: Yup.number()
       .required('Appointment Time is required')
       .min(5, 'Appointment Time must be at least 5')
@@ -61,54 +66,56 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             work_start_time &&
             schema.min(work_start_time, 'Work End Time must be after Work Start Time')
         ),
-        break_start_time: Yup.date()
-          .when(
-            'work_end_time',
-            (work_end_time, schema) =>
-              work_end_time &&
-              schema.max(
-                work_end_time,
-                'Break Time must be between Work Start Time and Work End Time'
-              )
-          )
-          .when(
-            'work_start_time',
-            (work_start_time, schema) =>
-              work_start_time &&
-              schema.min(
-                work_start_time,
-                'Break Time must be between Work Start Time and Work End Time'
-              )
-          ),
-        break_end_time: Yup.date()
-          .when(
-            'work_start_time',
-            (work_start_time, schema) =>
-              work_start_time &&
-              schema.min(
-                work_start_time,
-                'Break Time must be between Work Start Time and Work End Time'
-              )
-          )
-          .when(
-            'work_end_time',
-            (work_end_time, schema) =>
-              work_end_time &&
-              schema.max(
-                work_end_time,
-                'Break Time must be between Work Start Time and Work End Time'
-              )
-          )
-          .when(
-            'break_start_time',
-            (break_start_time, schema) =>
-              break_start_time &&
-              schema.min(
-                break_start_time,
-                'Break Time must be between Work Start Time and Work End Time'
-              )
-          ),
+        // break_start_time: Yup.date().nullable()
+        //   .when(
+        //     'work_end_time',
+        //     (work_end_time, schema) =>
+        //       schema.isType(null)||(work_end_time &&
+        //       schema.max(
+        //         work_end_time,
+        //         'Break Time must be between Work Start Time and Work End Time'
+        //       ))
+        //   ),
+        //   .when(
+        //     'work_start_time',
+        //     (work_start_time, schema) =>
+        //       work_start_time &&
+        //       schema.min(
+        //         work_start_time,
+        //         'Break Time must be between Work Start Time and Work End Time'
+        //       )
+        //   ),
+        // break_end_time: Yup.date().nullable()
+        //   .when(
+        //     'work_start_time',
+        //     (work_start_time, schema) =>
+        //       work_start_time &&
+        //       schema.min(
+        //         work_start_time,
+        //         'Break Time must be between Work Start Time and Work End Time'
+        //       )
+        //   )
+        //   .when(
+        //     'work_end_time',
+        //     (work_end_time, schema) =>
+        //       work_end_time &&
+        //       schema.max(
+        //         work_end_time,
+        //         'Break Time must be between Work Start Time and Work End Time'
+        //       )
+        //   )
+        //   .when(
+        //     'break_start_time',
+        //     (break_start_time, schema) =>
+        //       break_start_time &&
+        //       schema.min(
+        //         break_start_time,
+        //         'Break Time must be between Work Start Time and Work End Time'
+        //       )
+        //   ),
         appointments: Yup.array(),
+        service_types: Yup.array(),
+        appointment_type: Yup.string(),
       })
     ),
   });
@@ -140,6 +147,9 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           work_end_time: null,
           break_start_time: null,
           break_end_time: null,
+          appointments:[],
+          service_types: [],
+          appointment_type: null,
         },
       ],
     }),
@@ -151,7 +161,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     defaultValues,
   });
   console.log('methods', methods);
-
   const {
     reset,
 
@@ -171,7 +180,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       } else {
         await axios.post(endpoints.tables.appointmentconfigs, { ...data, department: id });
       }
-      reset();
+      // reset();
       loadingSend.onFalse();
       // router.push(paths.dashboard.invoice.root);
       await refetch();
@@ -222,8 +231,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       <FormProvider methods={methods}>
         {!loading && (
           <Card>
-            <NewEditDetails appointmentConfigData={appointmentConfigData} />
-            <NewEditDaysDetails />
+            <NewEditDetails setAppointTime={setAppointTime} appointmentConfigData={appointmentConfigData} />
+            <NewEditDaysDetails appointTime={appointTime}  />
             <NewEditHolidays />
             <NewEditLongHolidays />
           </Card>

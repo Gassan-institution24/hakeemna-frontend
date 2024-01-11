@@ -1,4 +1,5 @@
 import { Controller, useFormContext } from 'react-hook-form';
+import { useParams } from 'react-router';
 
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -9,10 +10,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import TextField from '@mui/material/TextField';
 
 import Iconify from 'src/components/iconify';
+import { useAuthContext } from 'src/auth/hooks';
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
-import { useGetWorkGroups, useGetWorkShifts } from 'src/api/tables';
+import { useGetDepartmentEmployeeWorkGroups, useGetUSWorkShifts } from 'src/api/tables';
 
 // ----------------------------------------------------------------------
 const weekDays = [
@@ -25,19 +28,17 @@ const weekDays = [
   { value: 'friday', label: 'Friday' },
 ];
 
-export default function NewEditDetails({ appointmentConfigData }) {
-  const { control, watch, getValues } = useFormContext();
+export default function NewEditDetails({ appointmentConfigData, setAppointTime }) {
+  const { control, watch, getValues, setValue } = useFormContext();
 
   const values = getValues();
 
-  const { workGroupsData } = useGetWorkGroups();
-  const { workShiftsData } = useGetWorkShifts();
+  const {user} = useAuthContext()
 
-  function calculateMinutesDifference(date1, date2) {
-    const diffInMilliseconds = Math.abs(date2 - date1);
-    const minutesDifference = Math.floor(diffInMilliseconds / (1000 * 60));
-    return minutesDifference;
-  }
+  const {id,emid} = useParams()
+
+  const { workGroupsData } = useGetDepartmentEmployeeWorkGroups(id,emid);
+  const { workShiftsData } = useGetUSWorkShifts(user.unit_service._id);
 
   return (
     <>
@@ -55,7 +56,7 @@ export default function NewEditDetails({ appointmentConfigData }) {
           sx={{ p: 3, bgcolor: 'background.neutral', width: { xs: '100%', md: 'auto' } }}
         >
           <Controller
-            name='start_date'
+            name="start_date"
             control={control}
             render={({ field, fieldState: { error } }) => (
               <DatePicker
@@ -102,7 +103,7 @@ export default function NewEditDetails({ appointmentConfigData }) {
         <Stack
           spacing={2}
           direction={{ xs: 'column', sm: 'row' }}
-          sx={{ px: 3,pb:3, bgcolor: 'background.neutral', width: { xs: '100%', md: 'auto' } }}
+          sx={{ px: 3, pb: 3, bgcolor: 'background.neutral', width: { xs: '100%', md: 'auto' } }}
         >
           <RHFSelect
             native
@@ -114,7 +115,7 @@ export default function NewEditDetails({ appointmentConfigData }) {
             disabled={Boolean(appointmentConfigData)}
           >
             <option value={null}> </option>
-            {workShiftsData.map((option) => (
+            {workShiftsData&&workShiftsData.map((option) => (
               <option key={option._id} value={option._id}>
                 {option.name_english}
               </option>
@@ -130,26 +131,36 @@ export default function NewEditDetails({ appointmentConfigData }) {
             disabled={Boolean(appointmentConfigData)}
           >
             <option value={null}> </option>
-            {workGroupsData.map((option) => (
+            {workGroupsData&&workGroupsData?.map((option) => (
               <option key={option._id} value={option._id}>
                 {option.name_english}
               </option>
             ))}
           </RHFSelect>
-          <RHFTextField
-            size="small"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Box sx={{ fontSize: '0.8rem' }}>min</Box>
-                </InputAdornment>
-              ),
-            }}
+          <Controller
             name="appointment_time"
-            label="Appointment Duration Time"
-            inputProps={{ min: 5, max: 180, step: 5 }}
-            type="number"
-            InputLabelProps={{ shrink: true }}
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <TextField
+                fullWidth
+                label="Appointment Time"
+                type='number'
+                value={field.value === 0 ? '' : field.value}
+                onChange={(event) => {
+                    field.onChange(Number(event.target.value));
+                    setAppointTime(event.target.value)
+                }}
+                error={!!error}
+                size="small"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Box sx={{ fontSize: '0.8rem' }}>min</Box>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
           />
           <RHFTextField
             size="small"
@@ -204,4 +215,5 @@ export default function NewEditDetails({ appointmentConfigData }) {
 
 NewEditDetails.propTypes = {
   appointmentConfigData: PropTypes.object,
+  setAppointTime: PropTypes.func,
 };
