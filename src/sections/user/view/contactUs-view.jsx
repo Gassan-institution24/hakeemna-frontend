@@ -9,7 +9,7 @@ import { _userList } from 'src/_mock';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import UserNewEditForm from '../contactus';
+import Contact from '../contactus';
 
 // ----------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ export default function ContactUsView({ id }) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit"
+        heading="Contact Us"
         links={[
           {
             name: 'Dashboard',
@@ -38,7 +38,7 @@ export default function ContactUsView({ id }) {
         }}
       />
 
-      <UserNewEditForm currentUser={currentUser} />
+      <Contact currentUser={currentUser} />
     </Container>
   );
 }

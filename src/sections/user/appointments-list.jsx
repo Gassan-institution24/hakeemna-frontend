@@ -1,9 +1,6 @@
 import { useAuthContext } from 'src/auth/hooks';
-
 import { useState, useCallback } from 'react';
-
 import Tab from '@mui/material/Tab';
-import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
 import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import Box from '@mui/material/Box';
@@ -14,19 +11,6 @@ import Appoinment from './apointments';
 import FinishedAppoinment from './apointmentsfinished';
 import AppointmentBooking from './apointmentsbooking';
 // ----------------------------------------------------------------------
-const TABS = [
-  {
-    value: 'My Appointments',
-    label: 'My Appointments',
-    icon: <Iconify icon="solar:user-id-bold" width={24} />,
-  },
-  {
-    value: 'BookAppointment',
-    label: 'Book Appointment',
-    icon: <Iconify icon="icon-park-outline:medicine-chest" width={24} />,
-  },
-  
-];
 
 export default function UserCardList() {
   const { user } = useAuthContext();
@@ -34,40 +18,36 @@ export default function UserCardList() {
   const [currentTab, setCurrentTab] = useState('My Appointments');
   const { data } = useGetPatient(user.patient._id);
   
+  const TABS = [
+    {
+      value: 'My Appointments',
+      label: 'My Appointments',
+      icon: <Iconify icon="solar:user-id-bold" width={24} />,
+    },
+    {
+      value: 'BookAppointment',
+      label: 'Book Appointment',
+      icon: <Iconify icon="icon-park-outline:medicine-chest" width={24} />,
+    },
+    
+  ];
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
   return (
     <Container>
-      <Card
-        sx={{
-          mb: 5,
-          height: 50,
-        }}
-      >
-        <Tabs
-          value={currentTab}
-          onChange={handleChangeTab}
-          sx={{
-            width: 1,
-            bottom: 0,
-            zIndex: 9,
-            position: 'absolute',
-            bgcolor: 'background.paper',
-            [`& .${tabsClasses.flexContainer}`]: {
-              pr: { md: 3 },
-              justifyContent: {
-                sm: 'center',
-                md: 'flex-end',
-              },
-            },
-          }}
-        >
-          {TABS.map((tab) => (
-            <Tab key={tab.value} value={tab.value} icon={tab.icon} label={tab.label} />
-          ))}
-        </Tabs>
-      </Card>
+    <Tabs
+      value={currentTab}
+      onChange={handleChangeTab}
+      sx={{
+        mb: { xs: 3, md: 5 },
+        mt: { md: -1 },
+      }}
+    >
+      {TABS.map((tab) => (
+        <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
+      ))}
+    </Tabs>
 
       {currentTab === 'My Appointments' && (
         <>
