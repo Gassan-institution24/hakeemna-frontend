@@ -1,16 +1,23 @@
 import * as Yup from 'yup';
 import sum from 'lodash/sum';
 import { format, isValid } from 'date-fns';
+import PropTypes from 'prop-types';
 import { useEffect, useCallback, useState } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
 import InputAdornment from '@mui/material/InputAdornment';
 import { inputBaseClasses } from '@mui/material/InputBase';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -18,6 +25,8 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 import { fCurrency } from 'src/utils/format-number';
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useGetAppointmentTypes, useGetUSServiceTypes } from 'src/api/tables';
+import { useAuthContext } from 'src/auth/hooks';
 
 import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
@@ -36,7 +45,7 @@ const weekDays = [
   { value: 'friday', label: 'Friday' },
 ];
 
-export default function NewEditDayDetails() {
+export default function NewEditDayDetails({ appointTime }) {
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -44,7 +53,12 @@ export default function NewEditDayDetails() {
     name: 'days_details',
   });
 
+  const {user} = useAuthContext()
+
   const [showAppointments, setShowAppointments] = useState({});
+  const [appointmentsNum, setAppointmentsNum] = useState({});
+  const { appointmenttypesData } = useGetAppointmentTypes();
+  const { serviceTypesData } = useGetUSServiceTypes(user.unit_service._id);
 
   // console.log('fields', fields);
   const values = getValues();
@@ -57,11 +71,13 @@ export default function NewEditDayDetails() {
       break_start_time: null,
       break_end_time: null,
       appointments: [],
+      service_types:  [],
+      appointment_type: null,
     };
     const existingData = values.days_details
       ? values.days_details[values.days_details.length - 1]
       : ''; // Get the current form values
-    const newItem = { ...defaultItem, ...existingData, day: '' };
+    const newItem = { ...defaultItem, ...existingData, day: '',appointments:[] };
     append(newItem);
   };
 
@@ -76,206 +92,143 @@ export default function NewEditDayDetails() {
     return minutesDifference;
   }
 
-  const createAppointmentsBefore = (item, index, minBeforeBreak) => {
-    if (minBeforeBreak > 0) {
-      const newStartTime = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth(),
-        new Date().getDate(),
-        new Date(item.break_start_time).getHours(),
-        new Date(item.break_start_time).getMinutes() - minBeforeBreak
-      );
-      const isDuplicate = values.days_details[index].appointments.some((appoint) => {
-        // Convert existing appointment's start_time to a comparable format
-        const existingStartTime = new Date(appoint.start_time);
+  async function processDayDetails(index) {
+    const results = [];
 
-        // Extract hours and minutes from both Date objects
-        const newTime = newStartTime.getHours() * 60 + newStartTime.getMinutes();
-        const existingTime = existingStartTime.getHours() * 60 + existingStartTime.getMinutes();
+    const appointment_time = appointTime;
+    if (!appointment_time) {
+      console.log('no_appointment_time');
+      return;
+    }
+    const calculateMins = (date) => {
+      const formatedDate = new Date(date);
+      return formatedDate.getHours() * 60 + formatedDate.getMinutes();
+    };
+    const RemovingMinToDate = (date, mins) => {
+      const formatedDate = new Date(date);
+      return new Date(formatedDate.getTime() - mins * 60000);
+    };
 
-        // Check if hours and minutes are equal
-        return newTime === existingTime;
-      });
-      if (!isDuplicate) {
-        setValue(`days_details[${index}].appointments`, [
-          ...values.days_details[index].appointments,
-          {
-            appointment_type: null,
+    const item = values.days_details[index];
+
+    let minDay = calculateMinutesDifference(item.work_start_time, item.work_end_time);
+    let minBeforeBreak = calculateMinutesDifference(item.work_start_time, item.break_start_time);
+    let minAfterBreak = calculateMinutesDifference(item.break_end_time, item.work_end_time);
+
+
+    const createAppointmentsAll = () => {
+      if (minDay > 0) {
+        const newStartTime = RemovingMinToDate(item.work_end_time,minDay)
+        const duplicated = item.appointments.filter((appoint) => {
+          const newTime = calculateMins(newStartTime);
+          const existingTime = calculateMins(appoint.start_time);
+          return newTime === existingTime;
+        })[0];
+        if (duplicated) {
+          results.push(duplicated);
+        } else {
+          results.push({
+            appointment_type: item.appointment_type || null,
             start_time: newStartTime,
             price: null,
-            service_types: [],
-          },
-        ]);
+            service_types: item.service_types || [],
+          });
+        }
+        minDay -= values.appointment_time;
+
+        // Return a promise to control the flow
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(createAppointmentsAll(item, index, minDay));
+          }, 0);
+        });
       }
-
-      minBeforeBreak -= values.appointment_time;
-
-      // Return a promise to control the flow
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(createAppointmentsBefore(item, index, minBeforeBreak));
-        }, 0);
-      });
-    }
-    return Promise.resolve(); // Resolve the promise when done
-  };
-
-  const createAppointmentsAfter = (item, index, minAfterBreak) => {
-    if (minAfterBreak > 0) {
-      const newStartTime = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth(),
-        new Date().getDate(),
-        new Date(item.work_end_time).getHours(),
-        new Date(item.work_end_time).getMinutes() - minAfterBreak
-      );
-      const isDuplicate = values.days_details[index].appointments.some((appoint) => {
-        // Convert existing appointment's start_time to a comparable format
-        const existingStartTime = new Date(appoint.start_time);
-
-        // Extract hours and minutes from both Date objects
-        const newTime = newStartTime.getHours() * 60 + newStartTime.getMinutes();
-        const existingTime = existingStartTime.getHours() * 60 + existingStartTime.getMinutes();
-
-        // Check if hours and minutes are equal
-        return newTime === existingTime;
-      });
-      if (!isDuplicate) {
-        setValue(`days_details[${index}].appointments`, [
-          ...values.days_details[index].appointments,
-          {
-            appointment_type: null,
+      return Promise.resolve(); // Resolve the promise when done
+    };
+    const createAppointmentsBefore = () => {
+      if (minBeforeBreak > 0) {
+        const newStartTime = RemovingMinToDate(item.break_start_time,minBeforeBreak)
+        const duplicated = item.appointments.filter((appoint) => {
+          const newTime = calculateMins(newStartTime);
+          const existingTime = calculateMins(appoint.start_time);
+          return newTime === existingTime;
+        })[0];
+        if (duplicated) {
+          results.push(duplicated);
+        } else {
+          results.push({
+            appointment_type: item.appointment_type || null,
             start_time: newStartTime,
             price: null,
-            service_types: [],
-          },
-        ]);
+            service_types: item.service_types || [],
+          });
+        }
+        minBeforeBreak -= values.appointment_time;
+
+        // Return a promise to control the flow
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(createAppointmentsBefore(item, index, minBeforeBreak));
+          }, 0);
+        });
       }
-
-      minAfterBreak -= values.appointment_time;
-
-      // Return a promise to control the flow
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(createAppointmentsAfter(item, index, minAfterBreak));
-        }, 0);
-      });
-    }
-    return Promise.resolve(); // Resolve the promise when done
-  };
-
-  const createAppointmentsAll = (item, index, minDay) => {
-    if (minDay > 0) {
-      const newStartTime = new Date(
-        new Date(item.work_end_time).getFullYear(),
-        new Date(item.work_end_time).getMonth(),
-        new Date(item.work_end_time).getDate(),
-        new Date(item.work_end_time).getHours(),
-        new Date(item.work_end_time).getMinutes() - minDay
-      );
-      const isDuplicate = values.days_details[index].appointments.some((appoint) => {
-        // Convert existing appointment's start_time to a comparable format
-        const existingStartTime = new Date(appoint.start_time);
-
-        // Extract hours and minutes from both Date objects
-        const newTime = newStartTime.getHours() * 60 + newStartTime.getMinutes();
-        const existingTime = existingStartTime.getHours() * 60 + existingStartTime.getMinutes();
-
-        // Check if hours and minutes are equal
-        return newTime === existingTime;
-      });
-      if (!isDuplicate) {
-        setValue(`days_details[${index}].appointments`, [
-          ...values.days_details[index].appointments,
-          {
-            appointment_type: null,
+      return Promise.resolve(); // Resolve the promise when done
+    };
+    const createAppointmentsAfter = () => {
+      if (minAfterBreak > 0) {
+        const newStartTime = RemovingMinToDate(item.work_end_time,minAfterBreak)
+        const duplicated = item.appointments.filter((appoint) => {
+          const newTime = calculateMins(newStartTime);
+          const existingTime = calculateMins(appoint.start_time);
+          return newTime === existingTime;
+        })[0];
+        if (duplicated) {
+          results.push(duplicated);
+        } else {
+          results.push({
+            appointment_type: item.appointment_type || null,
             start_time: newStartTime,
             price: null,
-            service_types: [],
-          },
-        ]);
-      }
-      minDay -= values.appointment_time;
+            service_types: item.service_types || [],
+          });
+        }
+        minAfterBreak -= values.appointment_time;
 
-      // Return a promise to control the flow
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(createAppointmentsAll(item, index, minDay));
-        }, 0);
-      });
-    }
-    return Promise.resolve(); // Resolve the promise when done
-  };
-
-  const processDayDetails = async (index) => {
-    // let index = 0;
-
-    // const processNextItem = async () => {
-    // function filterIsNotInTimes (){
-    const arr = [];
-    const appointment_time = values.appointment_time;
-    const work_end = values.days_details[index].work_end_time;
-    const work_start = values.days_details[index].work_start_time;
-    const break_start = values.days_details[index].break_start_time;
-    const break_end = values.days_details[index].break_end_time;
-    const work_end_min = new Date(work_end).getHours() * 60 + new Date(work_end).getMinutes();
-    const work_start_min = new Date(work_start).getHours() * 60 + new Date(work_start).getMinutes();
-    const break_start_min =
-      new Date(break_start).getHours() * 60 + new Date(break_start).getMinutes();
-    const break_end_min = new Date(break_end).getHours() * 60 + new Date(break_end).getMinutes();
-    let current_min = work_start_min;
-    let current_after_min = break_end_min;
-    if (break_start && break_end) {
-      while (current_min < break_start_min) {
-        arr.push(current_min);
-        current_min += appointment_time;
+        // Return a promise to control the flow
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(createAppointmentsAfter(item, index, minAfterBreak));
+          }, 0);
+        });
       }
-      while (current_after_min < work_end_min) {
-        arr.push(current_after_min);
-        current_after_min += appointment_time;
-      }
+      return Promise.resolve(); // Resolve the promise when done
+    };
+
+    if (item.break_start_time && item.break_end_time) {
+      await createAppointmentsBefore();
+      console.log('results', results);
+      await createAppointmentsAfter();
+      console.log('results', results);
     } else {
-      while (current_min < work_end_min) {
-        arr.push(current_min);
-        current_min += appointment_time;
-      }
+      console.log('results', results);
+      await createAppointmentsAll();
+      console.log('results', results);
     }
-    const filteredAppoint = values.days_details[index].appointments.filter((appoint) =>
-      arr.includes(
-        new Date(appoint.start_time).getHours() * 60 + new Date(appoint.start_time).getMinutes()
-      )
-    );
-    setValue(`days_details[${index}].appointments`, filteredAppoint);
-    // }
 
-    if (index < values.days_details.length) {
-      const item = values.days_details[index];
+    console.log('results', results);
+    setAppointmentsNum({...appointmentsNum,[index]:results.length})
+    setValue(`days_details[${index}].appointments`, results);
+  }
 
-      if (item.break_start_time && item.break_end_time) {
-        await createAppointmentsBefore(
-          item,
-          index,
-          calculateMinutesDifference(item.work_start_time, item.break_start_time)
-        );
-        await createAppointmentsAfter(
-          item,
-          index,
-          calculateMinutesDifference(item.break_end_time, item.work_end_time)
-        );
-      } else {
-        await createAppointmentsAll(
-          item,
-          index,
-          calculateMinutesDifference(item.work_start_time, item.work_end_time)
-        );
-      }
-
-      // index += 1;
-      // await processNextItem();
-    }
-    // };
-
-    // await processNextItem();
+  const renderValues = (selectedIds) => {
+    const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item._id));
+    const results = []
+    return selectedItems?.map((item) => (
+      item.name_english
+      // price += item.Price_per_unit || 0
+    )).join(', ');
+    // setOverAllPrice(price)
+    // return results.join(', ')
   };
 
   return (
@@ -307,6 +260,11 @@ export default function NewEditDayDetails() {
                 spacing={2}
                 sx={{ width: '100%', mt: 2 }}
               >
+                <Stack
+                direction={{ xs: 'column', md: 'column' }}
+                spacing={2}
+                sx={{ width: '100%', mt: 2 }}
+              >
                 <RHFSelect size="small" native name={`days_details[${index}].day`} label="Day">
                   <option>{null}</option>
                   {weekDays
@@ -323,7 +281,20 @@ export default function NewEditDayDetails() {
                       <option value={option.value}>{option.label}</option>
                     ))}
                 </RHFSelect>
-
+                <RHFTextField
+                  disabled
+                  size="small"
+                  name={`days_details[${index}].appointment_number`}
+                  label="Appointments Number"
+                  InputLabelProps={{ shrink: true }}
+                  value={appointmentsNum[index]}
+                />
+                </Stack>
+                <Stack
+                direction={{ xs: 'column', md: 'column' }}
+                spacing={2}
+                sx={{ width: '100%', mt: 2 }}
+              >
                 <Controller
                   name={`days_details[${index}].work_start_time`}
                   control={control}
@@ -350,16 +321,16 @@ export default function NewEditDayDetails() {
                     />
                   )}
                 />
-                <Controller
-                  name={`days_details[${index}].work_end_time`}
+                 <Controller
+                  name={`days_details[${index}].break_start_time`}
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <MobileTimePicker
                       minutesStep="5"
-                      label="Work End Time"
+                      label="Break Start Time"
                       value={
-                        values.days_details[index].work_end_time
-                          ? new Date(values.days_details[index].work_end_time)
+                        values.days_details[index].break_start_time
+                          ? new Date(values.days_details[index].break_start_time)
                           : null
                       }
                       onChange={(newValue) => {
@@ -376,16 +347,22 @@ export default function NewEditDayDetails() {
                     />
                   )}
                 />
+                </Stack>
+                <Stack
+                direction={{ xs: 'column', md: 'column' }}
+                spacing={2}
+                sx={{ width: '100%', mt: 2 }}
+              >
                 <Controller
-                  name={`days_details[${index}].break_start_time`}
+                  name={`days_details[${index}].work_end_time`}
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <MobileTimePicker
                       minutesStep="5"
-                      label="Break Start Time"
+                      label="Work End Time"
                       value={
-                        values.days_details[index].break_start_time
-                          ? new Date(values.days_details[index].break_start_time)
+                        values.days_details[index].work_end_time
+                          ? new Date(values.days_details[index].work_end_time)
                           : null
                       }
                       onChange={(newValue) => {
@@ -428,19 +405,64 @@ export default function NewEditDayDetails() {
                     />
                   )}
                 />
-                <RHFTextField
-                  disabled
-                  size="small"
-                  name={`days_details[${index}].appointment_number`}
-                  label="Appointments Number"
-                  InputLabelProps={{ shrink: true }}
-                  value={values.days_details[index].appointments.length}
-                />
+                </Stack>
                 <Stack
-                  direction={{ xs: 'column', md: 'row' }}
+                direction={{ xs: 'column', md: 'column' }}
+                spacing={2}
+                sx={{ width: '100%', mt: 2 }}
+              >
+                <RHFSelect
+                  size="small"
+                  InputLabelProps={{ shrink: true }}
+                  native
+                  name={`days_details[${index}].appointment_type`}
+                  label="Appointment Type"
+                >
+                  <option>{null}</option>
+                  {appointmenttypesData?.map((option) => (
+                    <option value={option._id}>{option.name_english}</option>
+                  ))}
+                </RHFSelect>
+                <Controller
+                  name={`days_details[${index}].service_types`}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <FormControl error={!!error} size="small" sx={{ width: '100%', shrink: true }}>
+                      <InputLabel> Service Types </InputLabel>
+
+                      <Select
+                        {...field}
+                        multiple
+                        id={`multiple-days_details[${index}].service_types`}
+                        label="Service Types"
+                        renderValue={renderValues}
+                      >
+                        {serviceTypesData?.map((option) => {
+                          const selected = field?.value?.includes(option._id);
+
+                          return (
+                            <MenuItem key={option._id} value={option._id}>
+                              <Checkbox size="small" disableRipple checked={selected} />
+
+                              {option.name_english}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+
+                      {!!error && <FormHelperText error={!!error}>{error?.message}</FormHelperText>}
+                    </FormControl>
+                  )}
+                />
+                </Stack>
+                <Stack
+                  direction={{ xs: 'column', md: 'column' }}
                   spacing={0.2}
                   sx={{ justifySelf: { xs: 'flex-end' }, alignSelf: { xs: 'flex-end' } }}
                 >
+                  <IconButton size="small" color="error" onClick={() => handleRemove(index)}>
+                    <Iconify icon="solar:trash-bin-trash-bold" />
+                  </IconButton>
                   <IconButton size="small" onClick={() => processDayDetails(index)}>
                     <Iconify icon="zondicons:refresh" />
                   </IconButton>
@@ -455,12 +477,9 @@ export default function NewEditDayDetails() {
                   >
                     <Iconify icon="tabler:list-details" />
                   </IconButton>
-                  <IconButton size="small" color="error" onClick={() => handleRemove(index)}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
                 </Stack>
               </Stack>
-              <NewEditDayAppointmentsDetails open={showAppointments[index]} ParentIndex={index} />
+              <NewEditDayAppointmentsDetails serviceTypesData={serviceTypesData} appointmenttypesData={appointmenttypesData} open={showAppointments[index]} ParentIndex={index} />
             </Stack>
           ))}
         </Stack>
@@ -487,3 +506,6 @@ export default function NewEditDayDetails() {
     </>
   );
 }
+NewEditDayDetails.propTypes = {
+  appointTime: PropTypes.number,
+};
