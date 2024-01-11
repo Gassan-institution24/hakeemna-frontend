@@ -223,24 +223,7 @@ export default function AppointmentBooking({ patientData }) {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-        heading="Book Appointment"
-        links={[
-          { name: 'Dashboard', href: paths.superadmin.root },
-          {
-            name: 'Patients',
-            href: paths.superadmin.patients.root,
-          },
-          {
-            name: 'History',
-            href: paths.superadmin.patients.history.root(patientData._id),
-          },
-          { name: 'Appointments' },
-        ]}
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      />
+    
 
       <Stack
         spacing={2.5}
