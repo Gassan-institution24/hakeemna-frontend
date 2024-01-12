@@ -30,7 +30,7 @@ export default function FormDialog() {
   const oldPresctiptionSchema = Yup.object().shape({
     type: Yup.string(),
     date: Yup.date(),
-    // file: Yup.string(),
+    file: Yup.string(),
   });
 
   const TYPE = ['Blod Test', 'X-ray', 'Health Check'];
@@ -163,7 +163,6 @@ export default function FormDialog() {
               autoFocus
               fullWidth
               name="file"
-              // type="file"
               margin="dense"
               variant="outlined"
               onDrop={handleDrop}
