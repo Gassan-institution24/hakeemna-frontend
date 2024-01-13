@@ -29,7 +29,7 @@ import { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-for
 
 // ----------------------------------------------------------------------
 
-export default function NewEditDayAppointmentsDetails({ ParentIndex, open,appointmenttypesData,serviceTypesData }) {
+export default function NewEditDayAppointmentsDetails({ ParentIndex, open,appointmenttypesData,serviceTypesData,setAppointmentsNum }) {
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -39,7 +39,6 @@ export default function NewEditDayAppointmentsDetails({ ParentIndex, open,appoin
 
   const values = getValues();
 
-  console.log('serviceTypesData', serviceTypesData);
   const handleAdd = () => {
     const defaultItem = {
       appointment_type: null,
@@ -69,6 +68,7 @@ export default function NewEditDayAppointmentsDetails({ ParentIndex, open,appoin
 
   const handleRemove = (index) => {
     remove(index);
+    setAppointmentsNum((prev) => ({ ...prev, [ParentIndex]: prev[ParentIndex] - 1 }));
   };
 
   const renderValues = (selectedIds) => {
@@ -81,7 +81,6 @@ export default function NewEditDayAppointmentsDetails({ ParentIndex, open,appoin
     // setOverAllPrice(price)
     // return results.join(', ')
   };
-  console.log('values',values)
   return (
     // <Dialog maxWidth="sm" open={open}>
     <Collapse
@@ -245,4 +244,5 @@ NewEditDayAppointmentsDetails.propTypes = {
   open: PropTypes.bool,
   serviceTypesData: PropTypes.array,
   appointmenttypesData: PropTypes.array,
+  setAppointmentsNum: PropTypes.func,
 };

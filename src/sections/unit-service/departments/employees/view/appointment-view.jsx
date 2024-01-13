@@ -55,7 +55,7 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'appointment_type', label: 'Appointment Type' },
   { id: 'start_time', label: 'Start Time' },
-  { id: 'end_time', label: 'End Time' },
+  // { id: 'end_time', label: 'End Time' },
   { id: 'price_in_JOD', label: 'Price' },
   { id: 'status', label: 'Status' },
   { id: '' },

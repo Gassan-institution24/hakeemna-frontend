@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Container from '@mui/material/Container';
 
@@ -19,6 +20,7 @@ import { _addressBooks } from 'src/_mock';
 
 import axios, { endpoints } from 'src/utils/axios';
 import FormProvider from 'src/components/hook-form';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 
 import NewEditHolidays from '../appointmentConfig/new-edit-holidays';
 import NewEditLongHolidays from '../appointmentConfig/new-edit-long-holiday';
@@ -32,11 +34,15 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   const { id, emid } = useParams();
 
-  const [appointTime,setAppointTime] =useState(0)
+  const [appointTime, setAppointTime] = useState(0);
+
+  const [dataToUpdate, setDataToUpdate] = useState([]);
 
   const settings = useSettingsContext();
 
   const loadingSave = useBoolean();
+
+  const confirm = useBoolean();
 
   const loadingSend = useBoolean();
 
@@ -54,8 +60,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       .max(360, 'must be at most 360'),
     holidays: Yup.array(),
     long_holidays: Yup.array(),
-    work_group: Yup.string().required('Work Group is required'),
-    work_shift: Yup.string().required('Work Shift is required'),
+    // work_group: Yup.string().required('Work Group is required'),
+    // work_shift: Yup.string().required('Work Shift is required'),
     days_details: Yup.array().of(
       Yup.object().shape({
         day: Yup.string().required('Day is required'),
@@ -122,6 +128,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   const defaultValues = useMemo(
     () => ({
+      start_date: appointmentConfigData?.start_date || null,
+      end_date: appointmentConfigData?.end_date || null,
       weekend: appointmentConfigData?.weekend || [],
       appointment_time: appointmentConfigData?.appointment_time || null,
       config_frequency: appointmentConfigData?.config_frequency || null,
@@ -147,7 +155,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           work_end_time: null,
           break_start_time: null,
           break_end_time: null,
-          appointments:[],
+          appointments: [],
           service_types: [],
           appointment_type: null,
         },
@@ -160,7 +168,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     resolver: yupResolver(NewConfigSchema),
     defaultValues,
   });
-  console.log('methods', methods);
   const {
     reset,
 
@@ -170,13 +177,25 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   const handleSave = handleSubmit(async (data) => {
     loadingSend.onTrue();
-    console.log('submitted data ', data);
+    const now = new Date();
+    const thisFrequentEndDate = new Date(
+      now.getTime() + data.config_frequency * 24 * 60 * 60 * 1000
+    );
     try {
       if (appointmentConfigData) {
-        await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
-          ...data,
-          department: id,
-        });
+        if (
+          (!data.start_date && !data.end_date) ||
+          (new Date(data.end_date) > now &&
+            (new Date(data.start_date) <= now || new Date(data.start_date) < thisFrequentEndDate))
+        ) {
+          setDataToUpdate(data)
+          confirm.onTrue();
+        }
+
+        // await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
+        //   ...data,
+        //   department: id,
+        // });
       } else {
         await axios.post(endpoints.tables.appointmentconfigs, { ...data, department: id });
       }
@@ -194,6 +213,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   useEffect(() => {
     if (appointmentConfigData) {
       methods.reset({
+        start_date: appointmentConfigData?.start_date || null,
+        end_date: appointmentConfigData?.end_date || null,
         weekend: appointmentConfigData?.weekend || [],
         appointment_time: appointmentConfigData?.appointment_time || null,
         config_frequency: appointmentConfigData?.config_frequency || null,
@@ -227,28 +248,81 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   }, [appointmentConfigData, methods]);
 
   return (
-    <Container maxWidth="lg">
-      <FormProvider methods={methods}>
-        {!loading && (
-          <Card>
-            <NewEditDetails setAppointTime={setAppointTime} appointmentConfigData={appointmentConfigData} />
-            <NewEditDaysDetails appointTime={appointTime}  />
-            <NewEditHolidays />
-            <NewEditLongHolidays />
-          </Card>
-        )}
+    <>
+      <Container maxWidth="lg">
+        <FormProvider methods={methods}>
+          {!loading && (
+            <Card>
+              <NewEditDetails
+                setAppointTime={setAppointTime}
+                appointmentConfigData={appointmentConfigData}
+              />
+              <NewEditDaysDetails appointTime={appointTime} />
+              <NewEditHolidays />
+              <NewEditLongHolidays />
+            </Card>
+          )}
 
-        <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
-          <LoadingButton
-            variant="contained"
-            loading={loadingSend.value && isSubmitting}
-            onClick={handleSave}
-          >
-            Save
-          </LoadingButton>
-        </Stack>
-      </FormProvider>
-    </Container>
+          <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
+            <LoadingButton
+              variant="contained"
+              loading={loadingSend.value && isSubmitting}
+              onClick={handleSave}
+            >
+              Save
+            </LoadingButton>
+          </Stack>
+        </FormProvider>
+      </Container>
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="UnCancel"
+        content={
+          <>
+            Do you want to <strong> change your existance appointments</strong> ?
+          </>
+        }
+        action={
+          <>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={async () => {
+                confirm.onFalse();
+                await axios.patch(
+                  `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
+                  {
+                    ...dataToUpdate,
+                    department: id,
+                    ImmediateEdit: true,
+                  }
+                );
+              }}
+            >
+              Yes, I want to change
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={async () => {
+                confirm.onFalse();
+                await axios.patch(
+                  `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
+                  {
+                    ...dataToUpdate,
+                    department: id,
+                    ImmediateEdit: false,
+                  }
+                );
+              }}
+            >
+              No, I want to start from uncreated
+            </Button>
+          </>
+        }
+      />
+    </>
   );
 }
 

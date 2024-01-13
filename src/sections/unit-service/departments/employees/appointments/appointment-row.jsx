@@ -42,7 +42,8 @@ export default function AppointmentsTableRow({
     appointment_type,
     payment_method,
     date,
-    price_in_JOD,
+    price,
+    currency,
     start_time,
     end_time,
     status,
@@ -68,10 +69,7 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell align="center">{code}</TableCell>
-        {/* <TableCell align="center">{name_english}</TableCell> */}
-        {/* <TableCell align="center">{unit_service?.name_english}</TableCell> */}
         <TableCell align="center">{appointment_type?.name_english}</TableCell>
-        {/* <TableCell align="center">{payment_method?.name_english}</TableCell> */}
 
         <TableCell align="center">
           <ListItemText
@@ -85,20 +83,8 @@ export default function AppointmentsTableRow({
             }}
           />
         </TableCell>
-        <TableCell align="center">
-          <ListItemText
-            primary={isValid(new Date(end_time)) && format(new Date(end_time), 'p')}
-            secondary={isValid(new Date(end_time)) && format(new Date(end_time), 'dd MMM yyyy')}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              mt: 0.5,
-              component: 'span',
-              typography: 'caption',
-            }}
-          />
-        </TableCell>
 
-        <TableCell align="center">{price_in_JOD}</TableCell>
+        <TableCell align="center">{currency?.symbol} {price}</TableCell>
 
         <TableCell align="center">
           <Label
