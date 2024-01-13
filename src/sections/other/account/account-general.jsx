@@ -9,19 +9,14 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
-import { MenuItem, Typography, Button } from '@mui/material';
+import { MenuItem, Typography } from '@mui/material';
 import FormProvider, {
   RHFTextField,
   RHFSelect,
   RHFUploadAvatar,
-  RHFSwitch,
 } from 'src/components/hook-form';
 import { useGetCities, useGetCountries } from 'src/api/tables';
-import axiosHandler from 'src/utils/axios-handler';
-import { useRouter } from 'src/routes/hooks';
-import { paths } from 'src/routes/paths';
 import axios, { endpoints, fetcher } from 'src/utils/axios';
-import { HOST_API } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
@@ -32,9 +27,7 @@ export default function AccountGeneral() {
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
   const { tableData } = useGetCities();
-  const { user , initialize} = useAuthContext();
-  console.log(user);
-  const router = useRouter();
+  const { user } = useAuthContext();
   const UpdateUserSchema = Yup.object().shape({
     first_name: Yup.string(),
     last_name: Yup.string(),
@@ -78,7 +71,7 @@ export default function AccountGeneral() {
     address: user?.patient?.address || '',
     sport_exercises: user?.patient?.sport_exercises || '',
     smoking: user?.patient?.smoking || '',
-    profile_picture:user?.patient.profile_picture.replace(/\\/g, '//') || '',
+    profile_picture:user?.patient?.profile_picture?.replace(/\\/g, '//') || '',
   };
 
   const methods = useForm({
@@ -118,7 +111,6 @@ export default function AccountGeneral() {
 
     if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
       setProfilePicture(file); 
-      console.log(file)
       const newFile = Object.assign(file, { 
         preview: URL.createObjectURL(file), 
       });
