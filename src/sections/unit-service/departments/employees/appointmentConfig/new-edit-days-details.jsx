@@ -53,14 +53,13 @@ export default function NewEditDayDetails({ appointTime }) {
     name: 'days_details',
   });
 
-  const {user} = useAuthContext()
+  const {user} = useAuthContext() 
 
   const [showAppointments, setShowAppointments] = useState({});
   const [appointmentsNum, setAppointmentsNum] = useState({});
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { serviceTypesData } = useGetUSServiceTypes(user.unit_service._id);
 
-  // console.log('fields', fields);
   const values = getValues();
 
   const handleAdd = () => {
@@ -95,7 +94,7 @@ export default function NewEditDayDetails({ appointTime }) {
   async function processDayDetails(index) {
     const results = [];
 
-    const appointment_time = appointTime;
+    const appointment_time = appointTime || values.appointment_time;
     if (!appointment_time) {
       console.log('no_appointment_time');
       return;
@@ -206,16 +205,11 @@ export default function NewEditDayDetails({ appointTime }) {
 
     if (item.break_start_time && item.break_end_time) {
       await createAppointmentsBefore();
-      console.log('results', results);
       await createAppointmentsAfter();
-      console.log('results', results);
     } else {
-      console.log('results', results);
       await createAppointmentsAll();
-      console.log('results', results);
     }
 
-    console.log('results', results);
     setAppointmentsNum({...appointmentsNum,[index]:results.length})
     setValue(`days_details[${index}].appointments`, results);
   }
@@ -230,6 +224,18 @@ export default function NewEditDayDetails({ appointTime }) {
     // setOverAllPrice(price)
     // return results.join(', ')
   };
+  function appointEstimatedNum (index){
+    const item = values.days_details[index]
+    if(item.appointments.length){
+      return (item.appointments.length)
+    }
+    if(item.break_start_time&&item.break_end_time){
+      const timeBefore = calculateMinutesDifference(item.work_start_time,item.break_start_time)
+      const timeAfter = calculateMinutesDifference(item.break_end_time,item.work_end_time)
+      return ((timeBefore+timeAfter)/values.appointment_time)
+    }
+    return(calculateMinutesDifference(item.work_start_time,item.work_end_time)/values.appointment_time)
+  }
 
   return (
     <>
@@ -287,7 +293,7 @@ export default function NewEditDayDetails({ appointTime }) {
                   name={`days_details[${index}].appointment_number`}
                   label="Appointments Number"
                   InputLabelProps={{ shrink: true }}
-                  value={appointmentsNum[index]}
+                  value={appointmentsNum[index]||appointEstimatedNum(index)}
                 />
                 </Stack>
                 <Stack
@@ -479,7 +485,7 @@ export default function NewEditDayDetails({ appointTime }) {
                   </IconButton>
                 </Stack>
               </Stack>
-              <NewEditDayAppointmentsDetails serviceTypesData={serviceTypesData} appointmenttypesData={appointmenttypesData} open={showAppointments[index]} ParentIndex={index} />
+              <NewEditDayAppointmentsDetails setAppointmentsNum={setAppointmentsNum} serviceTypesData={serviceTypesData} appointmenttypesData={appointmenttypesData} open={showAppointments[index]} ParentIndex={index} />
             </Stack>
           ))}
         </Stack>
