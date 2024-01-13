@@ -222,7 +222,7 @@ export default function ProfileHome() {
       <div>
         <Image
           alt="profile"
-          src={user?.patient.profile_picture.replace(/\\/g, '/')}
+          src={user?.patient?.profile_picture?.replace(/\\/g, '/')}
           sx={{
             height: '150px',
             width: '100px',
