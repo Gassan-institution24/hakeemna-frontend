@@ -15,7 +15,7 @@ import TextField from '@mui/material/TextField';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/hooks';
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
-import { useGetDepartmentEmployeeWorkGroups, useGetUSWorkShifts } from 'src/api/tables';
+import { useGetUSEmployeeWorkGroups, useGetUSWorkShifts } from 'src/api/tables';
 
 // ----------------------------------------------------------------------
 const weekDays = [
@@ -35,9 +35,9 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
 
   const {user} = useAuthContext()
 
-  const {id,emid} = useParams()
+  const {id} = useParams()
 
-  const { workGroupsData } = useGetDepartmentEmployeeWorkGroups(id,emid);
+  const { workGroupsData } = useGetUSEmployeeWorkGroups(user.unit_service._id,id);
   const { workShiftsData } = useGetUSWorkShifts(user.unit_service._id);
 
   return (
@@ -53,7 +53,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
         <Stack
           spacing={2}
           direction={{ xs: 'column', sm: 'row' }}
-          sx={{ p: 3, bgcolor: 'background.neutral', width: { xs: '100%', md: 'auto' } }}
+          sx={{ p: 3, width: { xs: '100%', md: 'auto' } }}
         >
           <Controller
             name="start_date"
@@ -103,7 +103,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
         <Stack
           spacing={2}
           direction={{ xs: 'column', sm: 'row' }}
-          sx={{ px: 3, pb: 3, bgcolor: 'background.neutral', width: { xs: '100%', md: 'auto' } }}
+          sx={{ px: 3, pb: 3, width: { xs: '100%', md: 'auto' } }}
         >
           <RHFSelect
             native
@@ -192,7 +192,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
         <Stack
           spacing={2}
           direction={{ xs: 'column', sm: 'row' }}
-          sx={{ p: 3, bgcolor: 'background.neutral' }}
+          sx={{ p: 3 }}
         >
           <RHFMultiCheckbox
             size="small"

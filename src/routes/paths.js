@@ -490,7 +490,11 @@ export const paths = {
         edit: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/edit`,
         info: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/info`,
         appointments: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointments`,
-        appointmentconfig: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointmentconfig`,
+        appointmentconfig:{
+          root: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointmentconfig`,
+          details: (id,emid,coid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointmentconfig/${coid}`,
+          new: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointmentconfig/new`,
+        },
         accounting: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/accounting`,
         feedback: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/feedback`,
         attendence: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/attendence`,
@@ -521,10 +525,23 @@ export const paths = {
     employees: {
       root: `${ROOTS.SUPERADMIN}/us/employees`,
       new: `${ROOTS.SUPERADMIN}/us/employees/new`,
-      attendence: `${ROOTS.SUPERADMIN}/us/employees/attendence`,
       edit: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/info`,
       appointments: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/appointments`,
+      appointmentconfig:{
+        root: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/appointmentconfig`,
+        details: (id,coid) => `${ROOTS.SUPERADMIN}/us/employees/${id}/appointmentconfig/${coid}`,
+        new: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/appointmentconfig/new`,
+      },
+      accounting: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/accounting`,
+      feedback: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/feedback`,
+      attendence: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/attendence`,
+      offers: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/offers`,
+      activities: {
+        root:  (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/activities`,
+        new:  (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/activities/new`,
+        edit:  (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/activities`,
+      },
       acl: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/acl`,
     },
     activities: {

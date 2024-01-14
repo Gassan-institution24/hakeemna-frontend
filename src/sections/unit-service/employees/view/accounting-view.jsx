@@ -29,7 +29,7 @@ import PaymentControlView from '../accouting/payment-control/payment-control';
 
 // ----------------------------------------------------------------------
 
-export default function PatientHistoryView({ departmentData }) {
+export default function EmployeeAccountingView({ employeeData }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -59,7 +59,7 @@ export default function PatientHistoryView({ departmentData }) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       {/* <CustomBreadcrumbs
-        heading={`${departmentData.name_english || 'Deaprtment'} History`}
+        heading={`${employeeData.name_english || 'Deaprtment'} History`}
         links={[
           {
             name: 'Dashboard',
@@ -70,7 +70,7 @@ export default function PatientHistoryView({ departmentData }) {
             href: paths.unitservice.departments.root,
           },
           {
-            name: `${departmentData.name_english || 'Deaprtment'} History`,
+            name: `${employeeData.name_english || 'Deaprtment'} History`,
           },
         ]}
         sx={{
@@ -80,12 +80,12 @@ export default function PatientHistoryView({ departmentData }) {
 
       {renderTabs}
 
-      {currentTab === 'Invoices' && <EconomicMovementsView departmentData={departmentData} />}
-      {currentTab === 'Payment Control' && <PaymentControlView departmentData={departmentData} />}
+      {currentTab === 'Invoices' && <EconomicMovementsView employeeData={employeeData} />}
+      {currentTab === 'Payment Control' && <PaymentControlView employeeData={employeeData} />}
     </Container>
   );
 }
 
-PatientHistoryView.propTypes = {
-  departmentData: PropTypes.object,
+EmployeeAccountingView.propTypes = {
+  employeeData: PropTypes.object,
 };

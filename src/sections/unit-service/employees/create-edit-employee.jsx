@@ -29,7 +29,7 @@ import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function TableNewEditForm({ currentTable, departmentData }) {
+export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
   const { user } = useAuthContext();
@@ -63,9 +63,9 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     () => ({
       // unit_service: currentTable?.unit_service || '',
       // department: currentTable?.department || '',
-      unit_service: departmentData.unit_service._id,
-      department: departmentData._id,
-      employee_type: currentTable?.employee_type || '',
+      unit_service: currentTable?.unit_service?._id || user.unit_service._id,
+      department: currentTable?.department?._id || null,
+      employee_type: currentTable?.employee_type?._id || null,
       email: currentTable?.email || '',
       first_name: currentTable?.first_name || '',
       second_name: currentTable?.second_name || '',
@@ -79,7 +79,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       password: currentTable?.password || '',
       confirmPassword: currentTable?.confirmPassword || '',
     }),
-    [currentTable, departmentData]
+    [currentTable,user.unit_service]
   );
 
   const password = useBoolean();
@@ -142,7 +142,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
-      router.push(paths.unitservice.departments.employees.root(departmentData._id));
+      router.push(paths.unitservice.employees.root());
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
@@ -276,5 +276,4 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
 
 TableNewEditForm.propTypes = {
   currentTable: PropTypes.object,
-  departmentData: PropTypes.object,
 };

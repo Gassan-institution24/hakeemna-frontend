@@ -117,7 +117,7 @@ export default function InvoiceTableToolbar({
           <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-          <IconButton onClick={onAdd}>
+          <IconButton color="error" onClick={onAdd}>
             <Iconify icon="zondicons:add-outline" />
           </IconButton>
           </Stack>

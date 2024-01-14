@@ -10,7 +10,7 @@ import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableEditView({departmentData,activityData}) {
+export default function TableEditView({employeeData,activityData}) {
   const settings = useSettingsContext();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -26,8 +26,8 @@ export default function TableEditView({departmentData,activityData}) {
             href: paths.unitservice.departments.root,
           },
           {
-            name: `${departmentData.name_english || ''} Activities`,
-            href: paths.unitservice.departments.activities.root(departmentData._id),
+            name: `${employeeData.name_english || ''} Activities`,
+            href: paths.unitservice.departments.activities.root(employeeData._id),
           },
           { name: `Edit ${activityData.name_english||''} Activity` },
         ]}
@@ -35,11 +35,11 @@ export default function TableEditView({departmentData,activityData}) {
           mb: { xs: 3, md: 5 },
         }}
       />
-      {activityData && <TableNewEditForm departmentData={departmentData} currentTable={activityData} />}
+      {activityData && <TableNewEditForm employeeData={employeeData} currentTable={activityData} />}
     </Container>
   );
 }
 TableEditView.propTypes = {
   activityData: PropTypes.object,
-  departmentData: PropTypes.object,
+  employeeData: PropTypes.object,
 };

@@ -16,7 +16,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-
+import { useAuthContext } from 'src/auth/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
@@ -43,7 +43,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetDepartmentActivities } from 'src/api/tables'; /// edit
+import { useGetUSActivities } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../activities/table-details-row'; /// edit
@@ -69,7 +69,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function ActivitesTableView({departmentData}) {
+export default function ActivitesTableView({employeeData}) {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -78,10 +78,12 @@ export default function ActivitesTableView({departmentData}) {
 
   const router = useRouter();
 
+  const {user} = useAuthContext()
+
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { activitiesData, refetch } = useGetDepartmentActivities(departmentData._id);
+  const { activitiesData, refetch } = useGetUSActivities(user.unit_service._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -197,16 +199,16 @@ export default function ActivitesTableView({departmentData}) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.departments.activities.edit(departmentData._id,id));
+      router.push(paths.unitservice.employees.activities.edit(employeeData._id,id));
     },
-    [router,departmentData]
+    [router,employeeData]
   );
 
   const handleCreate = useCallback(
     (id) => {
-      router.push(paths.unitservice.departments.employees.activities.root(departmentData._id,id));
+      router.push(paths.unitservice.employees.activities.new(employeeData._id));
     },
-    [router,departmentData]
+    [router,employeeData]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -473,5 +475,5 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   return inputData;
 }
 ActivitesTableView.propTypes = {
-  departmentData: PropTypes.object,
+  employeeData: PropTypes.object,
 };

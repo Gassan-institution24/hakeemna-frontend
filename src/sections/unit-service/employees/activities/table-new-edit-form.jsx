@@ -24,7 +24,7 @@ import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function TableNewEditForm({ departmentData, currentTable }) {
+export default function TableNewEditForm({ employeeData, currentTable }) {
   const router = useRouter();
 
   const { user } = useAuthContext();
@@ -42,14 +42,14 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const defaultValues = useMemo(
     () => ({
-      department: departmentData._id,
-      unit_service: departmentData.unit_service._id,
+      department: employeeData._id,
+      unit_service: employeeData.unit_service._id,
       name_english: currentTable?.name_english || '',
       name_arabic: currentTable?.name_arabic || '',
       details: currentTable?.details || '',
       details_arabic: currentTable?.details_arabic || '',
     }),
-    [currentTable, departmentData]
+    [currentTable, employeeData]
   );
 
   const methods = useForm({
@@ -107,7 +107,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
         });
       }
       reset();
-      router.push(paths.unitservice.departments.activities.root(departmentData._id));
+      router.push(paths.unitservice.departments.activities.root(employeeData._id));
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
 
       console.info('DATA', data);
@@ -170,5 +170,5 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
 TableNewEditForm.propTypes = {
   currentTable: PropTypes.object,
-  departmentData: PropTypes.object,
+  employeeData: PropTypes.object,
 };

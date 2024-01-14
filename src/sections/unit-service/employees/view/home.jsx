@@ -16,9 +16,9 @@ import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { useAuthContext } from 'src/auth/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useAuthContext } from 'src/auth/hooks';
 
 import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
@@ -80,9 +80,9 @@ export default function EmployeesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { user } = useAuthContext();
-
   const componentRef = useRef();
+
+  const {user}= useAuthContext()
 
   const settings = useSettingsContext();
 
@@ -91,7 +91,7 @@ export default function EmployeesTableView() {
 
   const router = useRouter();
 
-  const { employeesData, refetch } = useGetUSEmployees(user.unit_service._id);
+  const { employeesData, refetch } =useGetUSEmployees(user.unit_service._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -240,17 +240,13 @@ export default function EmployeesTableView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Employees" /// edit
+          heading='Employees' /// edit
           links={[
             {
               name: 'Dashboard',
               href: paths.unitservice.root,
             },
-            {
-              name: 'Departments',
-              href: paths.unitservice.departments.root,
-            },
-            { name: 'Employees' }, /// edit
+            { name: 'Employees'} , /// edit
           ]}
           action={
             <Button
