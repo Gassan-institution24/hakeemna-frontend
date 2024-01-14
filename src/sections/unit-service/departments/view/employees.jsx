@@ -204,16 +204,16 @@ export default function EmployeesTableView({departmentData}) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.departments.employees.edit(departmentData._id,id)); /// edit
+      router.push(paths.unitservice.employees.edit(id)); /// edit
     },
-    [router,departmentData]
+    [router]
   );
 
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.departments.employees.info(departmentData._id,id)); /// edit
+      router.push(paths.unitservice.employees.info(id)); /// edit
     },
-    [router,departmentData]
+    [router]
   );
 
   const handleResetFilters = useCallback(() => {

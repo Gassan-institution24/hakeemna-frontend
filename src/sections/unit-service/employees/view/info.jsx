@@ -22,7 +22,6 @@ import Markdown from 'src/components/markdown';
 // ----------------------------------------------------------------------
 
 export default function StakeholderInfoContent({ employeeData }) {
-  console.log('employeeData', employeeData);
   const {
     first_name,
     second_name,

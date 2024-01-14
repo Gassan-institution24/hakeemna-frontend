@@ -40,7 +40,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetDepartmentEmployeeFeedbackes } from 'src/api/tables'; /// edit
+import { useGetEmployeeFeedbackes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';
@@ -74,12 +74,12 @@ const STATUS_OPTIONS = [
   { value: 'unread', label: 'Unread' },
 ];
 
-export default function DepartmentFeedbackView({ departmentData }) {
+export default function DepartmentFeedbackView({ employeeData }) {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
   const params = useParams();
-  const { id,emid } = params;
+  const { id } = params;
 
   const componentRef = useRef();
 
@@ -90,7 +90,7 @@ export default function DepartmentFeedbackView({ departmentData }) {
 
   const router = useRouter();
 
-  const { feedbackData } = useGetDepartmentEmployeeFeedbackes(id,emid);
+  const { feedbackData } = useGetEmployeeFeedbackes(id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -117,7 +117,6 @@ export default function DepartmentFeedbackView({ departmentData }) {
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
-  console.log(departmentData);
   const handleDownload = () => {
     const excelBody = dataFiltered.reduce((acc, info) => {
       acc.push({
@@ -324,5 +323,5 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   return inputData;
 }
 DepartmentFeedbackView.propTypes = {
-  departmentData: PropTypes.object,
+  employeeData: PropTypes.object,
 };

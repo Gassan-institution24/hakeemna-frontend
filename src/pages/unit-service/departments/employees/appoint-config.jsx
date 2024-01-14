@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import DepartmentEmployeeAppointconfigView from 'src/sections/unit-service/departments/employees/view/appointconfig-view';
+import DepartmentEmployeeAppointconfigView from 'src/sections/unit-service/departments/employees/view/appoint-config-table';
 import { useGetDepartment, useGetEmployee,useGetDepartmentEmployeeAppointmentConfigs } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 

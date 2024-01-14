@@ -116,7 +116,7 @@ export default function NewEditDayDetails({ appointTime }) {
 
 
     const createAppointmentsAll = () => {
-      if (minDay > 0) {
+      if (minDay >= values.appointment_time) {
         const newStartTime = RemovingMinToDate(item.work_end_time,minDay)
         const duplicated = item.appointments.filter((appoint) => {
           const newTime = calculateMins(newStartTime);
@@ -145,7 +145,7 @@ export default function NewEditDayDetails({ appointTime }) {
       return Promise.resolve(); // Resolve the promise when done
     };
     const createAppointmentsBefore = () => {
-      if (minBeforeBreak > 0) {
+      if (minBeforeBreak >= values.appointment_time) {
         const newStartTime = RemovingMinToDate(item.break_start_time,minBeforeBreak)
         const duplicated = item.appointments.filter((appoint) => {
           const newTime = calculateMins(newStartTime);
@@ -174,7 +174,7 @@ export default function NewEditDayDetails({ appointTime }) {
       return Promise.resolve(); // Resolve the promise when done
     };
     const createAppointmentsAfter = () => {
-      if (minAfterBreak > 0) {
+      if (minAfterBreak >= values.appointment_time) {
         const newStartTime = RemovingMinToDate(item.work_end_time,minAfterBreak)
         const duplicated = item.appointments.filter((appoint) => {
           const newTime = calculateMins(newStartTime);
@@ -230,11 +230,11 @@ export default function NewEditDayDetails({ appointTime }) {
       return (item.appointments.length)
     }
     if(item.break_start_time&&item.break_end_time){
-      const timeBefore = calculateMinutesDifference(item.work_start_time,item.break_start_time)
-      const timeAfter = calculateMinutesDifference(item.break_end_time,item.work_end_time)
-      return ((timeBefore+timeAfter)/values.appointment_time)
+      const AppointBefore = Math.floor(calculateMinutesDifference(item.work_start_time,item.break_start_time)/values.appointment_time)
+      const AppointAfter = Math.floor(calculateMinutesDifference(item.break_end_time,item.work_end_time)/values.appointment_time)
+      return ((AppointBefore+AppointAfter)||0)
     }
-    return(calculateMinutesDifference(item.work_start_time,item.work_end_time)/values.appointment_time)
+    return(Math.floor(calculateMinutesDifference(item.work_start_time,item.work_end_time)/values.appointment_time) || 0)
   }
 
   return (

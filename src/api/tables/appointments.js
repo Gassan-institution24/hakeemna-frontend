@@ -157,6 +157,53 @@ export function useGetDepartmentAppointmentsCount(id) {
   return { ...memoizedValue, refetch };
 }
 
+export function useGetEmployeeAppointments(id) {
+  const URL = endpoints.tables.employeeAppointments(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      appointmentsData: data,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
+
+export function useGetUSEmployeeAppointments(id,emid) {
+  const URL = endpoints.tables.usEmployeeAppointments(id,emid);
+
+  console.log('URL',URL)
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      appointmentsData: data || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
 
 export function useGetAppointment(id) {
   const URL = endpoints.tables.appointment(id);

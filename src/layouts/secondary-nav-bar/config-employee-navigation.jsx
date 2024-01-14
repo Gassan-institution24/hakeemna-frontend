@@ -16,9 +16,9 @@ export function useNavData() {
   const router = useRouter();
   const { t } = useTranslate();
   const { user } = useAuthContext();
-  const {id,emid}= params
+  const {id}= params
 
-  const employeeData = useGetEmployee(emid).data
+  const employeeData = useGetEmployee(id).data
   const data = useMemo(() => {
     const unitServicesItems = [
       
@@ -27,42 +27,42 @@ export function useNavData() {
         items: [
           {
             title: t('appointments'),
-            path: paths.unitservice.departments.employees.appointments(id,emid),
+            path: paths.unitservice.employees.appointments(id),
             icon: <Iconify icon="teenyicons:appointments-solid" />,
           },
           {
             title: t('appointment Configuration'),
-            path: paths.unitservice.departments.employees.appointmentconfig(id,emid),
+            path: paths.unitservice.employees.appointmentconfig.root(id),
             icon: <Iconify icon="fluent:content-settings-16-regular" />,
           },
           {
             title: t('Accounting'),
-            path: paths.unitservice.departments.employees.accounting(id,emid),
+            path: paths.unitservice.employees.accounting(id),
             icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
           },
           {
             title: t('feedback'),
-            path: paths.unitservice.departments.employees.feedback(id,emid),
+            path: paths.unitservice.employees.feedback(id),
             icon: <Iconify icon="healthicons:world-care" />,
           },
           {
             title: t('attendece'),
-            path: paths.unitservice.departments.employees.attendence(id,emid),
+            path: paths.unitservice.employees.attendence(id),
             icon: <Iconify icon="fluent-mdl2:time-entry" />,
           },
           {
             title: t('offers'),
-            path: paths.unitservice.departments.employees.offers(id,emid),
+            path: paths.unitservice.employees.offers(id),
             icon: <Iconify icon="eos-icons:activate-subscriptions" />,
           },
           {
             title: t('activities'),
-            path: paths.unitservice.departments.employees.activities.root(id,emid),
+            path: paths.unitservice.employees.activities.root(id),
             icon: <Iconify icon="ic:baseline-security" />,
           },
           {
             title: t('access control list'),
-            path: paths.unitservice.departments.employees.acl(id,emid),
+            path: paths.unitservice.employees.acl(id),
             icon: <Iconify icon="eos-icons:activate-subscriptions" />,
           },
           
@@ -73,7 +73,7 @@ export function useNavData() {
         items: [
           {
             title: t(`${employeeData?.first_name} ${employeeData?.family_name}`),
-            path: paths.unitservice.departments.employees.info(id,emid),
+            path: paths.unitservice.employees.info(id),
             icon: <Iconify icon="fluent:person-info-20-filled" />,
           },
         ]
@@ -89,7 +89,7 @@ export function useNavData() {
       return [...unitServicesItems];
     }
     return [...unitServicesItems];
-  }, [t, user, router,id,emid,employeeData]);
+  }, [t, user, router,id,employeeData]);
 
   return data;
 }

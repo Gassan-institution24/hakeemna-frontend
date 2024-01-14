@@ -19,6 +19,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+import { useAuthContext } from 'src/auth/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -42,7 +43,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useGetDepartmentEconomicMovements } from 'src/api/tables';
+import { useGetUSEconomicMovements } from 'src/api/tables';
 
 import MovementsAnalytic from '../table-analytic';
 import MovementRow from './invoice-table-row';
@@ -74,10 +75,12 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function EconomicMovementsView({ departmentData }) {
+export default function EconomicMovementsView({ employeeData }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
+
+  const {user} = useAuthContext()
 
   const router = useRouter();
 
@@ -85,7 +88,9 @@ export default function EconomicMovementsView({ departmentData }) {
 
   // const confirm = useBoolean();
 
-  const { economecMovementsData, refetch } = useGetDepartmentEconomicMovements(departmentData._id);
+  const { economecMovementsData, refetch } = useGetUSEconomicMovements(user.unit_service._id);
+
+  console.log('employeeData',employeeData)
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -182,16 +187,16 @@ export default function EconomicMovementsView({ departmentData }) {
 
   const handleEditRow = useCallback(
     (inid) => {
-      router.push(paths.superadmin.patients.history.invoices.edit(departmentData._id, inid));
+      router.push(paths.superadmin.patients.history.invoices.edit(employeeData._id, inid));
     },
-    [router, departmentData._id]
+    [router, employeeData._id]
   );
 
   const handleViewRow = useCallback(
     (inid) => {
-      router.push(paths.superadmin.patients.history.invoices.info(departmentData._id, inid));
+      router.push(paths.superadmin.patients.history.invoices.info(employeeData._id, inid));
     },
-    [router, departmentData._id]
+    [router, employeeData._id]
   );
 
   const handleFilterStatus = useCallback(
@@ -494,5 +499,5 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   return inputData;
 }
 EconomicMovementsView.propTypes = {
-  departmentData: PropTypes.object,
+  employeeData: PropTypes.object,
 };

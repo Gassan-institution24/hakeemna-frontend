@@ -10,7 +10,7 @@ import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableCreateView({departmentData}) {
+export default function TableCreateView({employeeData}) {
   const settings = useSettingsContext();
 
   return (
@@ -23,12 +23,12 @@ export default function TableCreateView({departmentData}) {
             href: paths.unitservice.root,
           },
           {
-            name: 'Departments',
-            href: paths.unitservice.departments.root,
+            name: 'Employees',
+            href: paths.unitservice.employees.root,
           },
           {
-            name: `${departmentData.name_english || ''} Activities`,
-            href: paths.unitservice.departments.activities.root(departmentData._id),
+            name: `${employeeData.name_english || ''} Activities`,
+            href: paths.unitservice.departments.activities.root(employeeData._id),
           },
           { name: 'New Activity' },
         ]}
@@ -37,10 +37,10 @@ export default function TableCreateView({departmentData}) {
         }}
       />
 
-      <TableNewEditForm departmentData={departmentData} />
+      <TableNewEditForm employeeData={employeeData} />
     </Container>
   );
 }
 TableCreateView.propTypes = {
-  departmentData: PropTypes.object,
+  employeeData: PropTypes.object,
 };

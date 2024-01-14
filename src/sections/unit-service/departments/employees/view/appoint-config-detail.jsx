@@ -60,8 +60,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       .max(360, 'must be at most 360'),
     holidays: Yup.array(),
     long_holidays: Yup.array(),
-    // work_group: Yup.string().required('Work Group is required'),
-    // work_shift: Yup.string().required('Work Shift is required'),
+    work_group: Yup.string().required('Work Group is required'),
+    work_shift: Yup.string().required('Work Shift is required'),
     days_details: Yup.array().of(
       Yup.object().shape({
         day: Yup.string().required('Day is required'),
@@ -201,7 +201,9 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       }
       // reset();
       loadingSend.onFalse();
-      // router.push(paths.dashboard.invoice.root);
+      if(!appointmentConfigData){
+        router.push(paths.unitservice.departments.employees.appointmentconfig.root(id,emid));
+      }
       await refetch();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {

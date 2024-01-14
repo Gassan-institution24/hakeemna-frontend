@@ -16,7 +16,7 @@ export default function NavList({ data, depth, slotProps }) {
 
   const pathname = usePathname();
 
-  const active = useActiveLink(data.path, !!data.children);
+  const active = useActiveLink(data.path);
 
   const [openMenu, setOpenMenu] = useState(false);
 

@@ -74,7 +74,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function IncomePaymentControlView({ departmentData }) {
+export default function IncomePaymentControlView({ employeeData }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -85,7 +85,7 @@ export default function IncomePaymentControlView({ departmentData }) {
 
   // const confirm = useBoolean();
 
-  const { incomePaymentData, refetch } = useGetDepartmentPaymentControl(departmentData._id);
+  const { incomePaymentData, refetch } = useGetDepartmentPaymentControl(employeeData._id);
 
   const unitServiceOptions = incomePaymentData.reduce((arr, data) => {
     // Check if the name_english is not already in the array
@@ -184,16 +184,16 @@ export default function IncomePaymentControlView({ departmentData }) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.patients.history.payment.edit(departmentData._id, id));
+      router.push(paths.superadmin.patients.history.payment.edit(employeeData._id, id));
     },
-    [router, departmentData._id]
+    [router, employeeData._id]
   );
 
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.patients.history.payment.info(departmentData._id, id));
+      router.push(paths.superadmin.patients.history.payment.info(employeeData._id, id));
     },
-    [router, departmentData._id]
+    [router, employeeData._id]
   );
 
   const handleFilterStatus = useCallback(
@@ -491,5 +491,5 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   return inputData;
 }
 IncomePaymentControlView.propTypes = {
-  departmentData: PropTypes.object,
+  employeeData: PropTypes.object,
 };

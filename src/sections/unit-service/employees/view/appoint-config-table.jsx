@@ -17,7 +17,7 @@ import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { useRouter,useParams } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -43,22 +43,19 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
-import { useGetAppointmentTypes, useGetDepartmentAppointments } from 'src/api/tables';
-import PatientHistoryRow from '../appointment-row';
-import PatientHistoryToolbar from '../appointment-toolbar';
-import HistoryFiltersResult from '../appointment-filters-result';
+import AppointConfigRow from '../appointmentConfig/appoint-config-row';
+import AppointConfigToolbar from '../appointmentConfig/appointment-toolbar';
+import ConfigFiltersResult from '../appointmentConfig/appointment-filters-result';
+// import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  // { id: 'name_english', label: 'Name', align: 'center' },
-  // { id: 'unit_service', label: 'Unit Service' },
-  { id: 'appointment_type', label: 'Appointment Type' },
-  // { id: 'payment_method', label: 'Payment Method' },
-  { id: 'start_time', label: 'Start Time' },
-  { id: 'end_time', label: 'End Time' },
-  { id: 'price_in_JOD', label: 'Price' },
+  { id: 'start_date', label: 'Start Date' },
+  { id: 'end_date', label: 'End Date' },
+  { id: 'work_shift', label: 'Work Shift' },
+  { id: 'work_group', label: 'Work Group' },
   { id: 'status', label: 'Status' },
   { id: '' },
 ];
@@ -72,7 +69,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointHistoryView({ departmentData }) {
+export default function AppointConfigView({ appointmentConfigData,refetch }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -81,11 +78,13 @@ export default function AppointHistoryView({ departmentData }) {
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
+  const addModal = useBoolean();
   const confirm = useBoolean();
+  const confirmUnCancel = useBoolean();
 
-  const { appointmentsData, refetch } = useGetDepartmentAppointments(departmentData._id);
+  const {id} = useParams()
 
-  const { appointmenttypesData } = useGetAppointmentTypes();
+  console.log('appointmentConfigData',appointmentConfigData)
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -95,7 +94,7 @@ export default function AppointHistoryView({ departmentData }) {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: appointmentsData,
+    inputData: appointmentConfigData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -113,46 +112,22 @@ export default function AppointHistoryView({ departmentData }) {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const getAppointLength = (status) =>
-    appointmentsData.filter((item) => item.status === status).length;
+  const getConfigLength = (status) =>
+    appointmentConfigData.filter((item) => item.status === status).length;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
+    { value: 'all', label: 'All', color: 'default', count: appointmentConfigData.length },
     {
-      value: 'available',
-      label: 'Available',
-      color: 'secondary',
-      count: getAppointLength('available'),
-    },
-    {
-      value: 'pending',
-      label: 'Pending',
-      color: 'warning',
-      count: getAppointLength('pending'),
-    },
-    {
-      value: 'processing',
-      label: 'Processing',
-      color: 'info',
-      count: getAppointLength('processing'),
-    },
-    {
-      value: 'finished',
-      label: 'Finished',
+      value: 'active',
+      label: 'Active',
       color: 'success',
-      count: getAppointLength('finished'),
+      count: getConfigLength('active'),
     },
     {
-      value: 'canceled',
-      label: 'Canceled',
+      value: 'inactive',
+      label: 'Inactive',
       color: 'error',
-      count: getAppointLength('canceled'),
-    },
-    {
-      value: 'not booked',
-      label: 'Not Booked',
-      color: 'secondary',
-      count: getAppointLength('not booked'),
+      count: getConfigLength('inactive'),
     },
   ];
 
@@ -168,8 +143,8 @@ export default function AppointHistoryView({ departmentData }) {
   );
 
   const handleCancelRow = useCallback(
-    async (id) => {
-      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/cancel` });
+    async (_id) => {
+      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(_id)}/cancel` });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -177,8 +152,8 @@ export default function AppointHistoryView({ departmentData }) {
   );
 
   const handleUnCancelRow = useCallback(
-    async (id) => {
-      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/uncancel` });
+    async (_id) => {
+      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(_id)}/uncancel` });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -186,7 +161,7 @@ export default function AppointHistoryView({ departmentData }) {
   );
 
   const handleCancelRows = useCallback(
-    async (id) => {
+    async () => {
       await axiosHandler({
         method: 'PATCH',
         path: `${endpoints.tables.appointments}/cancel`,
@@ -199,22 +174,43 @@ export default function AppointHistoryView({ departmentData }) {
       });
       refetch();
       table.onUpdatePageDeleteRows({
-        totalRows: appointmentsData.length,
+        totalRows: appointmentConfigData.length,
         totalRowsInPage: dataInPage.length,
         totalRowsFiltered: dataFiltered.length,
       });
     },
-    [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table]
+    [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table]
   );
-  const handleAddRow = useCallback(() => {
-    router.push(paths.superadmin.patients.history.addAppointment(departmentData._id));
-  }, [router, departmentData._id]);
+  const handleUnCancelRows = useCallback(
+    async () => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointments}/uncancel`,
+        data: { ids: table.selected },
+      });
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointments}/uncancel`,
+        data: { ids: table.selected },
+      });
+      refetch();
+      table.onUpdatePageDeleteRows({
+        totalRows: appointmentConfigData.length,
+        totalRowsInPage: dataInPage.length,
+        totalRowsFiltered: dataFiltered.length,
+      });
+    },
+    [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table]
+  );
+  const handleAdd = useCallback(() => {
+    router.push(paths.unitservice.employees.appointmentconfig.new(id));
+  }, [router, id]);
 
   const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.invoice.details(id));
+    (_id) => {
+      router.push(paths.unitservice.employees.appointmentconfig.details(id,_id));
     },
-    [router]
+    [router,id]
   );
 
   const handleFilterStatus = useCallback(
@@ -260,17 +256,17 @@ export default function AppointHistoryView({ departmentData }) {
             ))}
           </Tabs>
 
-          <PatientHistoryToolbar
+          <AppointConfigToolbar
             filters={filters}
             onFilters={handleFilters}
-            onAdd={handleAddRow}
+            onAdd={handleAdd}
             //
             dateError={dateError}
-            serviceOptions={appointmenttypesData.map((option) => option)}
+            // serviceOptions={appointmenttypesData.map((option) => option)}
           />
 
           {canReset && (
-            <HistoryFiltersResult
+            <ConfigFiltersResult
               filters={filters}
               onFilters={handleFilters}
               //
@@ -283,7 +279,7 @@ export default function AppointHistoryView({ departmentData }) {
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
-              // dense={table.dense}
+              dense={table.dense}
               numSelected={table.selected.length}
               rowCount={dataFiltered.length}
               onSelectAllRows={(checked) =>
@@ -293,13 +289,27 @@ export default function AppointHistoryView({ departmentData }) {
                 )
               }
               action={
-                <Tooltip title="Unbook all">
-                  <IconButton color="error" onClick={confirm.onTrue}>
-                    <Iconify icon="mdi:bell-cancel" />
-                  </IconButton>
-                </Tooltip>
-              }
-              color="error"
+                  <>
+                    {dataFiltered
+                      .filter((row) => table.selected.includes(row._id))
+                      .some((data) => data.status === 'canceled') ? (
+                      <Tooltip title="uncancel all">
+                        <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
+                          <Iconify icon="material-symbols-light:notifications-active-rounded" />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="cancel all">
+                        <IconButton color="error" onClick={confirm.onTrue}>
+                          <Iconify icon="mdi:bell-cancel" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </>
+                }
+              color={dataFiltered
+                .filter((row) => table.selected.includes(row._id))
+                .some((data) => data.status === 'canceled') ?"primary":'error'}
             />
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
@@ -307,7 +317,7 @@ export default function AppointHistoryView({ departmentData }) {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={appointmentsData.length}
+                  rowCount={appointmentConfigData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
@@ -325,7 +335,7 @@ export default function AppointHistoryView({ departmentData }) {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <PatientHistoryRow
+                       <AppointConfigRow
                         key={row._id}
                         row={row}
                         selected={table.selected.includes(row._id)}
@@ -338,7 +348,7 @@ export default function AppointHistoryView({ departmentData }) {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentConfigData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -360,6 +370,8 @@ export default function AppointHistoryView({ departmentData }) {
         </Card>
       </Container>
 
+      {/* <AddEmegencyAppointment open={addModal.value} onClose={addModal.onFalse} /> */}
+
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
@@ -379,6 +391,28 @@ export default function AppointHistoryView({ departmentData }) {
             }}
           >
             Cancel
+          </Button>
+        }
+      />
+      <ConfirmDialog
+        open={confirmUnCancel.value}
+        onClose={confirmUnCancel.onFalse}
+        title="UnCancel"
+        content={
+          <>
+            Are you sure want to uncancel <strong> {table.selected.length} </strong> items?
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              confirmUnCancel.onFalse();
+              handleUnCancelRows();
+            }}
+          >
+            uncancel
           </Button>
         }
       />
@@ -403,46 +437,49 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   if (name) {
     inputData = inputData.filter(
-      (appointment) =>
-        (appointment?.unit_service?.name_english &&
-          appointment?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
+      (config) =>
+        (config?.work_shift?.name_english &&
+          config?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
             -1) ||
-        (appointment?.unit_service?.name_arabic &&
-          appointment?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
+        (config?.work_shift?.name_arabic &&
+          config?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
             -1) ||
-        (appointment?.name_english &&
-          appointment?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (appointment?.name_arabic &&
-          appointment?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        appointment?._id === name ||
-        JSON.stringify(appointment.code) === name
+        (config?.work_group?.name_english &&
+          config?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
+            -1) ||
+        (config?.work_group?.name_arabic &&
+          config?.work_group?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
+            -1) ||
+        config?._id === name ||
+        JSON.stringify(config.code) === name
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((appointment) => appointment.status === status);
+    inputData = inputData.filter((config) => config.status === status);
   }
 
   if (!dateError) {
     if (startDate && endDate) {
       inputData = inputData.filter(
-        (appointment) =>
-          fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
-          fTimestamp(appointment.start_time) <= fTimestamp(endDate)
+        (config) =>
+          (fTimestamp(config.start_date) <= fTimestamp(startDate) &&
+          fTimestamp(config.end_date) >= fTimestamp(startDate)) ||
+          (fTimestamp(config.start_date) <= fTimestamp(endDate) &&
+          fTimestamp(config.end_date) >= fTimestamp(endDate))
       );
     } else if (startDate) {
-      const endOfDay = new Date(startDate);
-      endOfDay.setDate(endOfDay.getDate() + 1);
       inputData = inputData.filter(
-        (appointment) =>
-          fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
-          fTimestamp(appointment.start_time) < fTimestamp(endOfDay)
+        (config) =>
+          fTimestamp(config.start_date) <= fTimestamp(startDate) &&
+          fTimestamp(config.end_date) > fTimestamp(startDate)
       );
     }
   }
 
   return inputData;
 }
-AppointHistoryView.propTypes = {
-  departmentData: PropTypes.object,
+AppointConfigView.propTypes = {
+  appointmentConfigData: PropTypes.array,
+  refetch: PropTypes.func,
 };
