@@ -119,7 +119,7 @@ export default function AccountGeneral() {
       enqueueSnackbar('Invalid file type or size', { variant: 'error' });
     }
   };
-  console.log(values)
+
 
   const onSubmit = async (data) => {
     // Create a new FormData object

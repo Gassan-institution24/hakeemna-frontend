@@ -327,10 +327,15 @@ export function useNavData() {
             icon: <Iconify icon="bxs:share-alt" />,
           },
           {
+            title: t('emergency'),
+            path: paths.dashboard.user.emergency,
+            icon: <Iconify icon="material-symbols:e911-emergency-outline" />,
+          },
+          {
             title: t('logout'),
-            icon: <Iconify icon="tabler:logout" />,
             onClick: handleLogout,
-            path: '/',
+            path:   paths.auth.login,
+            icon: <Iconify icon="tabler:logout" />,
           },
         ],
       },
