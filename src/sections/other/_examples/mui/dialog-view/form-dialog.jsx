@@ -80,7 +80,6 @@ export default function FormDialog() {
       justifyContent: 'space-between',
       alignItems: 'center',
       padding: '10px',
-      fontSize: '14px',
       borderBottom: 1,
     },
     line: {
@@ -179,6 +178,10 @@ export default function FormDialog() {
 
     if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
       setFiles(file); // Save the file in state
+      const newFile = Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      });
+      setValue('file', newFile);
     } else {
       // Handle invalid file type or size
       enqueueSnackbar('Invalid file type or size', { variant: 'error' });
@@ -218,7 +221,7 @@ export default function FormDialog() {
   return (
     <>
       <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ gap: 1, mb: 5 }}>
-        Upload Your Old Perscription
+        Upload Your Perscription
         <Iconify icon="mingcute:add-line" />
       </Button>
 
@@ -278,18 +281,19 @@ export default function FormDialog() {
             <Button onClick={dialog.onFalse} variant="outlined" color="inherit">
               Cancel
             </Button>
-            <Button
-              type="submit"
-              onClick={dialog.onFalse}
-              loading={isSubmitting}
-              variant="contained"
-            >
+            <Button type="submit" loading={isSubmitting} variant="contained">
               Upload
             </Button>
           </DialogActions>
         </FormProvider>
       </Dialog>
-      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 4 }}>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { md: '1fr 1fr 1fr 1fr', xs: '1fr 1fr' },
+          gap: 4,
+        }}
+      >
         {filesPdf.map((info, i) => (
           <PDFDownloadLink
             key={i}
@@ -300,12 +304,14 @@ export default function FormDialog() {
             <Image
               src={File}
               sx={{
-                width: '80px',
-                height: '80px',
+                width: { md: '80px', xs: '50px' },
+                height: { md: '80px', xs: '50px' },
                 mb: '10px',
               }}
             />
-            <ListItemText>{info.type} File</ListItemText>
+            <ListItemText>
+              {info.type} File
+            </ListItemText>
           </PDFDownloadLink>
         ))}
       </Box>

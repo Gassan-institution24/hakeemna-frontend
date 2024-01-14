@@ -47,6 +47,7 @@ export const paths = {
       details: `/product/${MOCK_ID}`,
     },
   },
+
   post: {
     root: `/post`,
     details: (title) => `/post/${paramCase(title)}`,
@@ -119,6 +120,7 @@ export const paths = {
       financilmovment: `${ROOTS.DASHBOARD}/user/financilmovment`,
       bookappointment: `${ROOTS.DASHBOARD}/user/bookappointment`,
       bmi: `${ROOTS.DASHBOARD}/user/bmi`,
+      emergency: `${ROOTS.DASHBOARD}/user/emergency`,
       edit: (id) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
       demo: {
         edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,
