@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 
 import { paths } from 'src/routes/paths';
 import { HOST_API } from 'src/config-global';
@@ -294,7 +294,7 @@ export function useNavData() {
           {
             title: t('my appointents'),
             path: paths.dashboard.user.cards,
-            icon: <Iconify icon="teenyicons:appointments-solid" />,
+            icon: <Iconify icon="ph:calendar-duotone" />,
           },
           {
             title: t('book appointents'),
@@ -302,14 +302,14 @@ export function useNavData() {
             icon:<Iconify icon="icon-park-outline:medicine-chest"/>,
           },
           {
+            title: t('emergency'),
+            path: paths.dashboard.user.emergency,
+            icon: <Iconify icon="material-symbols:e911-emergency-outline"/>
+          },
+          {
             title: t('medical report'),
             path: paths.dashboard.user.medicalreports,
             icon: <Iconify icon="tabler:report-medical" />,
-          },
-          {
-            title: t('contact us'),
-            path: paths.dashboard.user.demo.edit,
-            icon: <Iconify icon="ic:round-contact-support" />,
           },
           {
             title: t('prescriptions'),
@@ -322,14 +322,14 @@ export function useNavData() {
             icon: <Iconify icon="arcticons:gnucash" />,
           },
           {
-            title: t('share doctorna'),
-            path: paths.dashboard.user.share,
-            icon: <Iconify icon="bxs:share-alt" />,
+            title: t('contact us'),
+            path: paths.dashboard.user.demo.edit,
+            icon: <Iconify icon="ic:round-contact-support" />,
           },
           {
-            title: t('emergency'),
-            path: paths.dashboard.user.emergency,
-            icon: <Iconify icon="material-symbols:e911-emergency-outline" />,
+            title: t('share doctorna'),
+            path: paths.dashboard.user.share,
+            icon: <Iconify icon="bxs:share-alt" sx={{color:'success.main'}}/>,
           },
           {
             title: t('logout'),
@@ -351,7 +351,10 @@ export function useNavData() {
       return [...unitServicesItems, ...employeeItems];
     }
     return [...userItems];
-  }, [t, user, handleLogout, router]);
+}, [t, user, handleLogout, router]);
 
   return data;
 }
+
+
+
