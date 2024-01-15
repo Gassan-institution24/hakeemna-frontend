@@ -55,16 +55,16 @@ export function useNavData() {
             path: paths.unitservice.employees.offers(id),
             icon: <Iconify icon="eos-icons:activate-subscriptions" />,
           },
-          {
-            title: t('activities'),
-            path: paths.unitservice.employees.activities.root(id),
-            icon: <Iconify icon="ic:baseline-security" />,
-          },
-          {
-            title: t('access control list'),
-            path: paths.unitservice.employees.acl(id),
-            icon: <Iconify icon="eos-icons:activate-subscriptions" />,
-          },
+          // {
+          //   title: t('activities'),
+          //   path: paths.unitservice.employees.activities.root(id),
+          //   icon: <Iconify icon="ic:baseline-security" />,
+          // },
+          // {
+          //   title: t('access control list'),
+          //   path: paths.unitservice.employees.acl(id),
+          //   icon: <Iconify icon="eos-icons:activate-subscriptions" />,
+          // },
           
       
         ],

@@ -3,10 +3,12 @@ import sumBy from 'lodash/sumBy';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Stack from '@mui/material/Stack';
+import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
@@ -15,6 +17,7 @@ import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -44,6 +47,8 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
+import { useSnackbar } from 'src/components/snackbar';
+
 import { useGetAppointmentTypes, useGetUSEmployeeAppointments } from 'src/api/tables';
 import PatientHistoryRow from '../appointments/appointment-row';
 import PatientHistoryToolbar from '../appointments/appointment-toolbar';
@@ -78,22 +83,30 @@ export default function AppointHistoryView({ employeeData }) {
 
   const router = useRouter();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const table = useTable({ defaultOrderBy: 'createDate' });
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const addModal = useBoolean();
   const confirm = useBoolean();
   const confirmUnCancel = useBoolean();
+  const confirmDelay = useBoolean();
+  
 
-  const { appointmentsData, refetch } = useGetUSEmployeeAppointments(user.unit_service._id,employeeData._id);
+  const { appointmentsData, refetch } = useGetUSEmployeeAppointments(
+    user.unit_service._id,
+    employeeData._id
+  );
 
-  console.log('appointmentsData',appointmentsData)
-  console.log('user.unit_service._id',user.unit_service._id)
+  console.log('appointmentsData', appointmentsData);
+  console.log('user.unit_service._id', user.unit_service._id);
 
   const { appointmenttypesData } = useGetAppointmentTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
+  const [minToDelay, setMinToDelay] = useState(0);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -176,19 +189,36 @@ export default function AppointHistoryView({ employeeData }) {
   const handleCancelRow = useCallback(
     async (id) => {
       await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/cancel` });
+      enqueueSnackbar('canceled successfully!');
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch,enqueueSnackbar]
+  );
+
+  const handleDelayRow = useCallback(
+    async (id,min) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointment(id)}/delay`,
+        data: { minutes: min },
+      });
+      enqueueSnackbar('delayed successfully!');
+      refetch();
+      setMinToDelay(0);
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch,enqueueSnackbar]
   );
 
   const handleUnCancelRow = useCallback(
     async (id) => {
       await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/uncancel` });
+      enqueueSnackbar('uncanceled successfully!');
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch,enqueueSnackbar]
   );
 
   const handleCancelRows = useCallback(
@@ -198,11 +228,7 @@ export default function AppointHistoryView({ employeeData }) {
         path: `${endpoints.tables.appointments}/cancel`,
         data: { ids: table.selected },
       });
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
-      });
+      enqueueSnackbar('canceled successfully!');
       refetch();
       table.onUpdatePageDeleteRows({
         totalRows: appointmentsData.length,
@@ -210,8 +236,25 @@ export default function AppointHistoryView({ employeeData }) {
         totalRowsFiltered: dataFiltered.length,
       });
     },
-    [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table]
+    [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table,enqueueSnackbar]
   );
+
+  const handleDelayRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.appointments}/delay`,
+      data: { ids: table.selected, minutes: minToDelay },
+    });
+    enqueueSnackbar('delayed successfully!');
+    refetch();
+    setMinToDelay(0);
+    table.onUpdatePageDeleteRows({
+      totalRows: appointmentsData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table, minToDelay,enqueueSnackbar]);
+
   const handleUnCancelRows = useCallback(
     async (id) => {
       await axiosHandler({
@@ -219,11 +262,7 @@ export default function AppointHistoryView({ employeeData }) {
         path: `${endpoints.tables.appointments}/uncancel`,
         data: { ids: table.selected },
       });
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/uncancel`,
-        data: { ids: table.selected },
-      });
+      enqueueSnackbar('uncanceled successfully!');
       refetch();
       table.onUpdatePageDeleteRows({
         totalRows: appointmentsData.length,
@@ -231,7 +270,7 @@ export default function AppointHistoryView({ employeeData }) {
         totalRowsFiltered: dataFiltered.length,
       });
     },
-    [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table]
+    [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table,enqueueSnackbar]
   );
   // const handleAddRow = useCallback(() => {
   //   router.push(paths.superadmin.patients.history.addAppointment(employeeData._id));
@@ -290,7 +329,7 @@ export default function AppointHistoryView({ employeeData }) {
           <PatientHistoryToolbar
             filters={filters}
             onFilters={handleFilters}
-            onAdd={()=>addModal.onTrue()}
+            onAdd={() => addModal.onTrue()}
             //
             dateError={dateError}
             serviceOptions={appointmenttypesData.map((option) => option)}
@@ -320,27 +359,36 @@ export default function AppointHistoryView({ employeeData }) {
                 )
               }
               action={
-                  <>
-                    {dataFiltered
-                      .filter((row) => table.selected.includes(row._id))
-                      .some((data) => data.status === 'canceled') ? (
-                      <Tooltip title="uncancel all">
-                        <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
-                          <Iconify icon="material-symbols-light:notifications-active-rounded" />
-                        </IconButton>
-                      </Tooltip>
-                    ) : (
-                      <Tooltip title="cancel all">
-                        <IconButton color="error" onClick={confirm.onTrue}>
-                          <Iconify icon="mdi:bell-cancel" />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  </>
-                }
-              color={dataFiltered
-                .filter((row) => table.selected.includes(row._id))
-                .some((data) => data.status === 'canceled') ?"primary":'error'}
+                <>
+                  <Tooltip title="delay all">
+                    <IconButton color="info" onClick={confirmDelay.onTrue}>
+                      <Iconify icon="mdi:timer-sync" />
+                    </IconButton>
+                  </Tooltip>
+                  {dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'canceled') ? (
+                    <Tooltip title="uncancel all">
+                      <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
+                        <Iconify icon="material-symbols-light:notifications-active-rounded" />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="cancel all">
+                      <IconButton color="error" onClick={confirm.onTrue}>
+                        <Iconify icon="mdi:bell-cancel" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </>
+              }
+              color={
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'canceled')
+                  ? 'primary'
+                  : 'error'
+              }
             />
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
@@ -372,6 +420,7 @@ export default function AppointHistoryView({ employeeData }) {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onViewRow={() => handleViewRow(row._id)}
+                        onDelayRow={handleDelayRow}
                         onCancelRow={() => handleCancelRow(row._id)}
                         onUnCancelRow={() => handleUnCancelRow(row._id)}
                       />
@@ -444,6 +493,41 @@ export default function AppointHistoryView({ employeeData }) {
             }}
           >
             uncancel
+          </Button>
+        }
+      />
+      <ConfirmDialog
+        open={confirmDelay.value}
+        onClose={confirmDelay.onFalse}
+        title="Delay"
+        content={
+          <>
+            How many minutes do you want to delay items?
+            <TextField
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Box sx={{ fontSize: '0.8rem' }}>min</Box>
+                  </InputAdornment>
+                ),
+              }}
+              type="number"
+              sx={{ p: 2, width: '100%' }}
+              size="small"
+              onChange={(e) => setMinToDelay(e.target.value)}
+            />
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="info"
+            onClick={() => {
+              confirmDelay.onFalse();
+              handleDelayRows();
+            }}
+          >
+            Delay
           </Button>
         }
       />

@@ -311,10 +311,11 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
                     }
                   );
                   enqueueSnackbar('Updated successfully!');
+                  router.push(paths.unitservice.employees.appointmentconfig.root(id));
+                  // await refetch();
                 } catch (e) {
                   enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
                 }
-                await refetch();
               }}
             >
               Yes, I want to change
@@ -331,7 +332,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
                     ImmediateEdit: false,
                   }
                 );
-                await refetch();
+                router.push(paths.unitservice.employees.appointmentconfig.root(id));
+                // await refetch();
               }}
             >
               No, I want to start from uncreated
