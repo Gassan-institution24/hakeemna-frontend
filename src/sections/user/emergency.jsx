@@ -1,138 +1,214 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Container, Typography, Button } from '@mui/material';
-import { useSnackbar } from 'src/components/snackbar';
 import Image from 'src/components/image/image';
 import Iconify from 'src/components/iconify';
 import Emergencypic from './imges/emergency.jpg';
 
 export default function Emergency() {
-
-  const test = ()=>{
-    alert('Dont :-(')
-  }
-  return (
-    <Container
-      sx={{
-        position: 'relative',
-        py: { xs: 0, md: 2 },
-        maxWidth: '100%',
-      }}
-    >
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+  
+const test = () => {
+  alert('Dont :-(');
+};
+return (
+  <Container
+    sx={{
+      py: { xs: 0, md: 2 },
+      maxWidth: '100%',
+    }}
+  >
+    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+      <Iconify
+        icon="radix-icons:dot"
+        sx={{
+          color: '#128CA9',
+          width: '45px',
+          height: '45px',
+          position: 'relative',
+          top: '-8px',
+          display: { md: 'flex', xs: 'none' },
+        }}
+      />
+      <Typography
+        sx={{
+          mb: { md: 10, xs: 6 },
+          mt: { md: 0, xs: 2 },
+          fontSize: { md: 20, xs: 14 },
+        }}
+      >
+        Through our doctor, we can provide advice electronically by contacting you to cover your
+        consultation in the field of general medicine and children.
+      </Typography>
+    </div>
+    <Box>
+      <Image
+        src={Emergencypic}
+        sx={{
+          width: '100%',
+          height: '100%',
+          borderRadius: '10px',
+          display: { md: 'flex', xs: 'none' },
+        }}
+      />
+      <Box
+        sx={{
+          position: 'relative',
+          top: { lg: '-580px', xs: '0' },
+          left: { md: '45.5%', xs: '0' },
+          width: '400px',
+          height: '83px',
+        }}
+      >
         <Iconify
-          icon="radix-icons:dot"
+          icon="material-symbols-light:person-outline"
           sx={{
             color: '#128CA9',
-            width: '45px',
-            height: '45px',
+            width: {md:'100px',xs:'30px'},
+            height: {md:'70px',xs:'50px'},
             position: 'relative',
-            top: '-8px',
+            left: '-8px',
+            top: '2px',
+
           }}
         />
-        <Typography
+
+        <Button
+          onClick={test}
           sx={{
-            fontSize: 20,
-            mb: 10,
+            border: 2,
+            color: '#128CA9',
+            bgcolor: 'white',
+            position: 'relative',
+            left: {md:'-8px', xs:'5px'},
+            top: '-22px',
+            '&:hover': {
+              backgroundColor: '#E0E0E0',
+              color: 'success.main',
+            },
           }}
         >
-          Through our doctor, we can provide advice electronically by contacting you to cover your
-          consultation in the field of general medicine and children.
-        </Typography>
-      </div>
-      <Box>
-        <div style={{ width: '100%' }}>
-          <Image
-            src={Emergencypic}
-            sx={{
-              width: '100%',
-              height: '100%',
-              borderRadius: '10px',
-            }}
-          />
-          <Iconify
-            icon="material-symbols-light:person-outline"
-            sx={{
-              color: '#128CA9',
-              position: 'relative',
-              top: '-575px',
-              left: '494px',
-              width: '100px',
-              height: '70px',
-              fontWeight: '600px',
-            }}
-          />
-          <Button
-          onClick={test}
-            sx={{
-              color: '#128CA9',
-              position: 'relative',
-              top: '-604px',
-              left: '500px',
-              border: 2,
-              bgcolor: 'white',
-              '&:hover': {
-                backgroundColor: '#E0E0E0',
-              },
-            }}
-          >
-            Private consultation covered by patient
-          </Button>
-          <Iconify
-            icon="streamline:insurance-hand"
-            sx={{
-              color: '#128CA9',
-              position: 'relative',
-              top: '-405px',
-              left: '205px',
-              width: '90px',
-              height: '50px',
-            }}
-          />
-          <Button
-          onClick={test}
-            sx={{
-              color: '#128CA9',
-              position: 'relative',
-              top: '-425px',
-              left: '210px',
-              border: 2,
-              bgcolor: 'white',
-              '&:hover': {
-                backgroundColor: '#E0E0E0',
-              },
-            }}
-          >
-            Consultation covered by insurance
-          </Button>
-          <Iconify
-            icon="ion:location-outline"
-            sx={{
-              color: '#128CA9',
-              position: 'relative',
-              top: '-190px',
-              left: '-184px',
-              width: '100px',
-              height: '60px',
-            }}
-          />
-          <Button
-          onClick={test}
-            sx={{
-              color: '#128CA9',
-              position: 'relative',
-              top: '-215px',
-              left: '-180px',
-              border: 2,
-              bgcolor: 'white',
-              '&:hover': {
-                backgroundColor: '#E0E0E0',
-              },
-            }}
-          >
-            Emergency Near Me
-          </Button>
-        </div>
+          Private consultation covered by patient
+        </Button>
       </Box>
-    </Container>
-  );
+      <Box
+        sx={{
+          position: 'relative',
+          top: { md: '-483px', xs: '0' },
+          left: { md: '53%', xs: '0' },
+          width: '400px',
+          height: '83px',
+        }}
+      >
+        <Iconify
+          icon="streamline:insurance-hand"
+          sx={{
+            color: '#128CA9',
+            width: {md:'100px',xs:'25px'},
+            height: {md:'50px',xs:'25px'},
+            position: 'relative',
+            left: '-8px',
+            top: '11px',
+          }}
+        />
+        <Button
+          onClick={test}
+          sx={{
+            border: 2,
+            color: '#128CA9',
+            bgcolor: 'white',
+            position: 'relative',
+            left: {md:'-8px', xs:'9px'},
+            top: '-1px',
+            '&:hover': {
+              backgroundColor: '#E0E0E0',
+              color: 'success.main',
+            },
+          }}
+        >
+          Consultation covered by insurance
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          position: 'relative',
+          top: { md: '-356px', xs: '0' },
+          left: { md: '49%', xs: '0' },
+          width: '400px',
+          height: '83px',
+        }}
+      >
+        <Iconify
+          icon="ion:location-outline"
+          sx={{
+            color: '#128CA9',
+            width: {md:'100px',xs:'25px'},
+            height: {md:'50px',xs:'25px'},
+            position: 'relative',
+            left: '-8px',
+            top: '11px',
+          }}
+        />
+        <Button
+          onClick={test}
+          sx={{
+            border: 2,
+            color: '#128CA9',
+            bgcolor: 'white',
+            position: 'relative',
+            left: {md:'-8px', xs:'10px'},
+            top: '-1px',
+            '&:hover': {
+              backgroundColor: '#E0E0E0',
+              color: 'success.main',
+            },
+          }}
+        >
+          Emergency Near Me
+        </Button>
+      </Box>
+    </Box>
+  </Container>
+);
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
