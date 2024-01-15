@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { format, isValid } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
+import { TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
@@ -13,9 +15,10 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
+import InputAdornment from '@mui/material/InputAdornment';
+
 
 import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fCurrency } from 'src/utils/format-number';
 import { fDateTime } from 'src/utils/format-time';
 
@@ -31,15 +34,19 @@ export default function AppointmentsTableRow({
   selected,
   onSelectRow,
   onViewRow,
+  onDelayRow,
   onCancelRow,
   onUnCancelRow,
   onDeleteRow,
 }) {
   const {
+    _id,
     code,
     name_english,
     unit_service,
     appointment_type,
+    work_group,
+    work_shift,
     payment_method,
     date,
     price,
@@ -56,10 +63,11 @@ export default function AppointmentsTableRow({
     modifications_nums,
   } = row;
 
-  const confirm = useBoolean();
-
   const popover = usePopover();
   const DDL = usePopover();
+  const confirmDelayOne = useBoolean();
+
+  const [minToDelay,setMinToDelay]= useState(0)
 
   return (
     <>
@@ -70,6 +78,8 @@ export default function AppointmentsTableRow({
 
         <TableCell align="center">{code}</TableCell>
         <TableCell align="center">{appointment_type?.name_english}</TableCell>
+        <TableCell align="center">{work_group?.name_english}</TableCell>
+        <TableCell align="center">{work_shift?.name_english}</TableCell>
 
         <TableCell align="center">
           <ListItemText
@@ -140,6 +150,10 @@ export default function AppointmentsTableRow({
           uncancel
         </MenuItem>
         }
+        <MenuItem onClick={confirmDelayOne.onTrue}>
+          <Iconify icon="mdi:timer-sync" />
+          Delay
+        </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
@@ -192,6 +206,41 @@ export default function AppointmentsTableRow({
         </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
       </CustomPopover>
+      <ConfirmDialog
+        open={confirmDelayOne.value}
+        onClose={confirmDelayOne.onFalse}
+        title="Delay"
+        content={
+          <>
+            How many minutes do you want to delay?
+            <TextField
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Box sx={{ fontSize: '0.8rem' }}>min</Box>
+                  </InputAdornment>
+                ),
+              }}
+              type="number"
+              sx={{ p: 2, width: '100%' }}
+              size="small"
+              onChange={(e) => setMinToDelay(e.target.value)}
+            />
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="info"
+            onClick={() => {
+              confirmDelayOne.onFalse();
+              onDelayRow(_id,minToDelay);
+            }}
+          >
+            Delay
+          </Button>
+        }
+      />
     </>
   );
 }
@@ -202,6 +251,7 @@ AppointmentsTableRow.propTypes = {
   onUnCancelRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
+  onDelayRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
 };

@@ -8,11 +8,10 @@ import Button from '@mui/material/Button';
 
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
-import { fDate } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceTableFiltersResult({
+export default function OrderTableFiltersResult({
   filters,
   onFilters,
   //
@@ -22,11 +21,6 @@ export default function InvoiceTableFiltersResult({
   ...other
 }) {
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
-
-  const handleRemoveService = (inputValue) => {
-    const newValue = filters.types.filter((item) => item !== inputValue);
-    onFilters('types', newValue);
-  };
 
   const handleRemoveStatus = () => {
     onFilters('status', 'all');
@@ -47,18 +41,12 @@ export default function InvoiceTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-
         {filters.status !== 'all' && (
           <Block label="Status:">
             <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
           </Block>
         )}
 
-        {filters.startDate && !filters.endDate && (
-          <Block label="Date:">
-            <Chip size="small" label={fDate(filters.startDate)} onDelete={handleRemoveDate} />
-          </Block>
-        )}
         {filters.startDate && filters.endDate && (
           <Block label="Date:">
             <Chip size="small" label={shortLabel} onDelete={handleRemoveDate} />
@@ -77,7 +65,7 @@ export default function InvoiceTableFiltersResult({
   );
 }
 
-InvoiceTableFiltersResult.propTypes = {
+OrderTableFiltersResult.propTypes = {
   filters: PropTypes.object,
   onFilters: PropTypes.func,
   onResetFilters: PropTypes.func,
