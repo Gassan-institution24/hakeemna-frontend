@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { format, isValid } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
+import { TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
@@ -13,9 +15,10 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
+import InputAdornment from '@mui/material/InputAdornment';
+
 
 import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fCurrency } from 'src/utils/format-number';
 import { fDateTime } from 'src/utils/format-time';
 
@@ -23,25 +26,32 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import BookManually from './book-appointment-manually';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceTableRow({
+export default function AppointmentsTableRow({
   row,
   selected,
   onSelectRow,
   onViewRow,
+  onDelayRow,
   onCancelRow,
+  onUnCancelRow,
   onDeleteRow,
 }) {
   const {
+    _id,
     code,
     name_english,
     unit_service,
+    work_group,
+    work_shift,
     appointment_type,
     payment_method,
     date,
-    price_in_JOD,
+    price,
+    currency,
     start_time,
     end_time,
     status,
@@ -54,10 +64,12 @@ export default function InvoiceTableRow({
     modifications_nums,
   } = row;
 
-  const confirm = useBoolean();
-
   const popover = usePopover();
   const DDL = usePopover();
+  const confirmDelayOne = useBoolean();
+  const Book = useBoolean();
+
+  const [minToDelay,setMinToDelay]= useState(0)
 
   return (
     <>
@@ -67,27 +79,14 @@ export default function InvoiceTableRow({
         </TableCell>
 
         <TableCell align="center">{code}</TableCell>
-        <TableCell align="center">{name_english}</TableCell>
-        <TableCell align="center">{unit_service?.name_english}</TableCell>
         <TableCell align="center">{appointment_type?.name_english}</TableCell>
-        <TableCell align="center">{payment_method?.name_english}</TableCell>
+        <TableCell align="center">{work_group?.name_english}</TableCell>
+        <TableCell align="center">{work_shift?.name_english}</TableCell>
 
         <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(date)) && format(new Date(date), 'dd MMM yyyy')}
-            secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              mt: 0.5,
-              component: 'span',
-              typography: 'caption',
-            }}
-          />
-        </TableCell>
-        <TableCell align="center">
-          <ListItemText
-            primary={isValid(new Date(date)) && format(new Date(date), 'dd MMM yyyy')}
-            secondary={isValid(new Date(end_time)) && format(new Date(end_time), 'p')}
+            primary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
+            secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMM yyyy')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -97,16 +96,18 @@ export default function InvoiceTableRow({
           />
         </TableCell>
 
-        <TableCell align="center">{price_in_JOD}</TableCell>
+        <TableCell align="center">{currency?.symbol} {price}</TableCell>
 
         <TableCell align="center">
           <Label
             variant="soft"
             color={
-              (status === 'pending' && 'secondary') ||
+              (status === 'available' && 'secondary') ||
+              (status === 'pending' && 'warning') ||
               (status === 'Processing' && 'info') ||
               (status === 'finished' && 'success') ||
               (status === 'canceled' && 'error') ||
+              (status === 'not booked' && 'secondary') ||
               'default'
             }
           >
@@ -121,12 +122,18 @@ export default function InvoiceTableRow({
         </TableCell>
       </TableRow>
 
+      <BookManually open={Book.value} onClose={Book.onFalse} />
+
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: 140 }}
+        // sx={{ width: 140 }}
       >
+        <MenuItem sx={{color: 'success.main'}} onClick={Book.onTrue}>
+          <Iconify icon="mdi:register" />
+          Book Manually
+        </MenuItem>
         {status !== "canceled" &&
         <MenuItem
           onClick={() => {
@@ -139,6 +146,22 @@ export default function InvoiceTableRow({
           Cancel
         </MenuItem>
         }
+        {status === "canceled" &&
+        <MenuItem
+          onClick={() => {
+            onUnCancelRow();
+            popover.onClose();
+          }}
+          sx={{ color: 'success.main' }}
+        >
+          <Iconify icon="material-symbols-light:notifications-active-rounded" />
+          uncancel
+        </MenuItem>
+        }
+        <MenuItem onClick={confirmDelayOne.onTrue}>
+          <Iconify icon="mdi:timer-sync" />
+          Delay
+        </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
@@ -191,15 +214,52 @@ export default function InvoiceTableRow({
         </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
       </CustomPopover>
+      <ConfirmDialog
+        open={confirmDelayOne.value}
+        onClose={confirmDelayOne.onFalse}
+        title="Delay"
+        content={
+          <>
+            How many minutes do you want to delay?
+            <TextField
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Box sx={{ fontSize: '0.8rem' }}>min</Box>
+                  </InputAdornment>
+                ),
+              }}
+              type="number"
+              sx={{ p: 2, width: '100%' }}
+              size="small"
+              onChange={(e) => setMinToDelay(e.target.value)}
+            />
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="info"
+            onClick={() => {
+              confirmDelayOne.onFalse();
+              onDelayRow(_id,minToDelay);
+            }}
+          >
+            Delay
+          </Button>
+        }
+      />
     </>
   );
 }
 
-InvoiceTableRow.propTypes = {
+AppointmentsTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
   onCancelRow: PropTypes.func,
+  onUnCancelRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
+  onDelayRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
 };

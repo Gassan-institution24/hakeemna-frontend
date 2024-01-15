@@ -50,11 +50,11 @@ export function useNavData() {
             path: paths.unitservice.employees.attendence(id),
             icon: <Iconify icon="fluent-mdl2:time-entry" />,
           },
-          {
-            title: t('offers'),
-            path: paths.unitservice.employees.offers(id),
-            icon: <Iconify icon="eos-icons:activate-subscriptions" />,
-          },
+          // {
+          //   title: t('offers'),
+          //   path: paths.unitservice.employees.offers(id),
+          //   icon: <Iconify icon="eos-icons:activate-subscriptions" />,
+          // },
           // {
           //   title: t('activities'),
           //   path: paths.unitservice.employees.activities.root(id),

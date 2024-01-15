@@ -45,6 +45,8 @@ export default function AppointmentsTableRow({
     name_english,
     unit_service,
     appointment_type,
+    work_group,
+    work_shift,
     payment_method,
     date,
     price,
@@ -76,6 +78,8 @@ export default function AppointmentsTableRow({
 
         <TableCell align="center">{code}</TableCell>
         <TableCell align="center">{appointment_type?.name_english}</TableCell>
+        <TableCell align="center">{work_group?.name_english}</TableCell>
+        <TableCell align="center">{work_shift?.name_english}</TableCell>
 
         <TableCell align="center">
           <ListItemText
