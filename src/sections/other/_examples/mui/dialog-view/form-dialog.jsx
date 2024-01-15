@@ -90,7 +90,7 @@ export default function FormDialog() {
   const oldPresctiptionSchema = Yup.object().shape({
     type: Yup.string().required(),
     date: Yup.date(),
-    file: Yup.string().required(),
+    file: Yup.string()
   });
 
   const TYPE = ['Blod Test', 'X-ray Test', 'Health Check Test', 'Heart examination Test'];
@@ -139,9 +139,9 @@ export default function FormDialog() {
     info: PropTypes.shape({
       type: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
-      file: PropTypes.string.isRequired,
+      file: PropTypes.string,
       created_at: PropTypes.string.isRequired,
-    }).isRequired,
+    })
   };
   const methods = useForm({
     resolver: yupResolver(oldPresctiptionSchema),
