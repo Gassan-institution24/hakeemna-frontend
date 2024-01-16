@@ -302,6 +302,11 @@ export function useNavData() {
             icon:<Iconify icon="icon-park-outline:medicine-chest"/>,
           },
           {
+            title: t('wating room'),
+            path: paths.dashboard.user.watingroom,
+            icon:<Iconify icon="medical-icon:i-waiting-area"/>,
+          },
+          {
             title: t('emergency'),
             path: paths.dashboard.user.emergency,
             icon: <Iconify icon="material-symbols:e911-emergency-outline"/>
