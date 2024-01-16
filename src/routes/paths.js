@@ -119,6 +119,7 @@ export const paths = {
       share: `${ROOTS.DASHBOARD}/user/share`,
       financilmovment: `${ROOTS.DASHBOARD}/user/financilmovment`,
       bookappointment: `${ROOTS.DASHBOARD}/user/bookappointment`,
+      watingroom: `${ROOTS.DASHBOARD}/user/watingroom`,
       bmi: `${ROOTS.DASHBOARD}/user/bmi`,
       emergency: `${ROOTS.DASHBOARD}/user/emergency`,
       edit: (id) => `${ROOTS.DASHBOARD}/user/${id}/edit`,

@@ -42,6 +42,7 @@ const UserCreatePage = lazy(() => import('src/pages/dashboard/user/new'));
 const UserEditPage = lazy(() => import('src/pages/dashboard/user/edit'));
 const Medicalreports = lazy(() => import('src/pages/dashboard/user/Medicalreports'));
 const Emergency = lazy(() => import('src/pages/dashboard/user/emergency'));
+const Watingroom = lazy(() => import('src/pages/dashboard/user/watingroom'));
 const BMI = lazy(() => import('src/sections/user/bmi'));
 
 // BLOG
@@ -99,6 +100,7 @@ export const userRoutes = [
           { path: 'profile', element: <UserProfilePage /> },
           { path: 'medicalreports', element: <Medicalreports /> },
           { path: 'emergency', element: <Emergency /> },
+          { path: 'watingroom', element: <Watingroom /> },
           { path: 'prescriptions', element: <UserListPage /> },
           { path: 'bmi', element: <BMI /> },
           { path: 'appointments', element: <UserAppointmentsPage /> },
