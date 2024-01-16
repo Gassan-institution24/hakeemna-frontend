@@ -53,7 +53,7 @@ export default function NewEditDayDetails({ appointTime }) {
     name: 'days_details',
   });
 
-  const {user} = useAuthContext() 
+  const { user } = useAuthContext();
 
   const [showAppointments, setShowAppointments] = useState({});
   const [appointmentsNum, setAppointmentsNum] = useState({});
@@ -70,13 +70,13 @@ export default function NewEditDayDetails({ appointTime }) {
       break_start_time: null,
       break_end_time: null,
       appointments: [],
-      service_types:  [],
+      service_types: [],
       appointment_type: null,
     };
     const existingData = values.days_details
       ? values.days_details[values.days_details.length - 1]
       : ''; // Get the current form values
-    const newItem = { ...defaultItem, ...existingData, day: '',appointments:[] };
+    const newItem = { ...defaultItem, ...existingData, day: '', appointments: [] };
     append(newItem);
   };
 
@@ -114,10 +114,9 @@ export default function NewEditDayDetails({ appointTime }) {
     let minBeforeBreak = calculateMinutesDifference(item.work_start_time, item.break_start_time);
     let minAfterBreak = calculateMinutesDifference(item.break_end_time, item.work_end_time);
 
-
     const createAppointmentsAll = () => {
       if (minDay >= values.appointment_time) {
-        const newStartTime = RemovingMinToDate(item.work_end_time,minDay)
+        const newStartTime = RemovingMinToDate(item.work_end_time, minDay);
         const duplicated = item.appointments.filter((appoint) => {
           const newTime = calculateMins(newStartTime);
           const existingTime = calculateMins(appoint.start_time);
@@ -146,7 +145,7 @@ export default function NewEditDayDetails({ appointTime }) {
     };
     const createAppointmentsBefore = () => {
       if (minBeforeBreak >= values.appointment_time) {
-        const newStartTime = RemovingMinToDate(item.break_start_time,minBeforeBreak)
+        const newStartTime = RemovingMinToDate(item.break_start_time, minBeforeBreak);
         const duplicated = item.appointments.filter((appoint) => {
           const newTime = calculateMins(newStartTime);
           const existingTime = calculateMins(appoint.start_time);
@@ -175,7 +174,7 @@ export default function NewEditDayDetails({ appointTime }) {
     };
     const createAppointmentsAfter = () => {
       if (minAfterBreak >= values.appointment_time) {
-        const newStartTime = RemovingMinToDate(item.work_end_time,minAfterBreak)
+        const newStartTime = RemovingMinToDate(item.work_end_time, minAfterBreak);
         const duplicated = item.appointments.filter((appoint) => {
           const newTime = calculateMins(newStartTime);
           const existingTime = calculateMins(appoint.start_time);
@@ -210,31 +209,45 @@ export default function NewEditDayDetails({ appointTime }) {
       await createAppointmentsAll();
     }
 
-    setAppointmentsNum({...appointmentsNum,[index]:results.length})
+    setAppointmentsNum({ ...appointmentsNum, [index]: results.length });
     setValue(`days_details[${index}].appointments`, results);
   }
 
   const renderValues = (selectedIds) => {
     const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item._id));
-    const results = []
-    return selectedItems?.map((item) => (
-      item.name_english
-      // price += item.Price_per_unit || 0
-    )).join(', ');
+    const results = [];
+    return selectedItems
+      ?.map(
+        (item) =>
+          item.name_english
+          // price += item.Price_per_unit || 0
+      )
+      .join(', ');
     // setOverAllPrice(price)
     // return results.join(', ')
   };
-  function appointEstimatedNum (index){
-    const item = values.days_details[index]
-    if(item.appointments.length){
-      return (item.appointments.length)
+  function appointEstimatedNum(index) {
+    const item = values.days_details[index];
+    if (item.appointments.length) {
+      return item.appointments.length;
     }
-    if(item.break_start_time&&item.break_end_time){
-      const AppointBefore = Math.floor(calculateMinutesDifference(item.work_start_time,item.break_start_time)/values.appointment_time)
-      const AppointAfter = Math.floor(calculateMinutesDifference(item.break_end_time,item.work_end_time)/values.appointment_time)
-      return ((AppointBefore+AppointAfter)||0)
+    if (item.break_start_time && item.break_end_time) {
+      const AppointBefore = Math.floor(
+        calculateMinutesDifference(item.work_start_time, item.break_start_time) /
+          values.appointment_time
+      );
+      const AppointAfter = Math.floor(
+        calculateMinutesDifference(item.break_end_time, item.work_end_time) /
+          values.appointment_time
+      );
+      return AppointBefore + AppointAfter || 0;
     }
-    return(Math.floor(calculateMinutesDifference(item.work_start_time,item.work_end_time)/values.appointment_time) || 0)
+    return (
+      Math.floor(
+        calculateMinutesDifference(item.work_start_time, item.work_end_time) /
+          values.appointment_time
+      ) || 0
+    );
   }
 
   return (
@@ -267,199 +280,205 @@ export default function NewEditDayDetails({ appointTime }) {
                 sx={{ width: '100%', mt: 2 }}
               >
                 <Stack
-                direction={{ xs: 'column', md: 'column' }}
-                spacing={2}
-                sx={{ width: '100%', mt: 2 }}
-              >
-                <RHFSelect size="small" native name={`days_details[${index}].day`} label="Day">
-                  <option>{null}</option>
-                  {weekDays
-                    .filter(
-                      (option) =>
-                        !values.weekend.includes(option.value) &&
-                        !values.days_details.some(
-                          (detail) =>
-                            detail.day === option.value &&
-                            values.days_details[index]?.day !== option.value
-                        )
-                    )
-                    .map((option) => (
-                      <option value={option.value}>{option.label}</option>
-                    ))}
-                </RHFSelect>
-                <RHFTextField
-                  disabled
-                  size="small"
-                  name={`days_details[${index}].appointment_number`}
-                  label="Appointments Number"
-                  InputLabelProps={{ shrink: true }}
-                  value={appointmentsNum[index]||appointEstimatedNum(index)}
-                />
-                </Stack>
-                <Stack
-                direction={{ xs: 'column', md: 'column' }}
-                spacing={2}
-                sx={{ width: '100%', mt: 2 }}
-              >
-                <Controller
-                  name={`days_details[${index}].work_start_time`}
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <MobileTimePicker
-                      minutesStep="5"
-                      label="Work Start Time"
-                      value={
-                        values.days_details[index].work_start_time
-                          ? new Date(values.days_details[index].work_start_time)
-                          : null
-                      }
-                      onChange={(newValue) => {
-                        field.onChange(newValue);
-                      }}
-                      slotProps={{
-                        textField: {
-                          size: 'small',
-                          fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                 <Controller
-                  name={`days_details[${index}].break_start_time`}
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <MobileTimePicker
-                      minutesStep="5"
-                      label="Break Start Time"
-                      value={
-                        values.days_details[index].break_start_time
-                          ? new Date(values.days_details[index].break_start_time)
-                          : null
-                      }
-                      onChange={(newValue) => {
-                        field.onChange(newValue);
-                      }}
-                      slotProps={{
-                        textField: {
-                          size: 'small',
-                          fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                </Stack>
-                <Stack
-                direction={{ xs: 'column', md: 'column' }}
-                spacing={2}
-                sx={{ width: '100%', mt: 2 }}
-              >
-                <Controller
-                  name={`days_details[${index}].work_end_time`}
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <MobileTimePicker
-                      minutesStep="5"
-                      label="Work End Time"
-                      value={
-                        values.days_details[index].work_end_time
-                          ? new Date(values.days_details[index].work_end_time)
-                          : null
-                      }
-                      onChange={(newValue) => {
-                        field.onChange(newValue);
-                      }}
-                      slotProps={{
-                        textField: {
-                          size: 'small',
-                          fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <Controller
-                  name={`days_details[${index}].break_end_time`}
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <MobileTimePicker
-                      minutesStep="5"
-                      label="Break End Time"
-                      value={
-                        values.days_details[index].break_end_time
-                          ? new Date(values.days_details[index].break_end_time)
-                          : null
-                      }
-                      onChange={(newValue) => {
-                        field.onChange(newValue);
-                      }}
-                      slotProps={{
-                        textField: {
-                          size: 'small',
-                          fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
-                        },
-                      }}
-                    />
-                  )}
-                />
-                </Stack>
-                <Stack
-                direction={{ xs: 'column', md: 'column' }}
-                spacing={2}
-                sx={{ width: '100%', mt: 2 }}
-              >
-                <RHFSelect
-                  size="small"
-                  InputLabelProps={{ shrink: true }}
-                  native
-                  name={`days_details[${index}].appointment_type`}
-                  label="Appointment Type"
+                  direction={{ xs: 'column', md: 'column' }}
+                  spacing={2}
+                  sx={{ width: '100%', mt: 2 }}
                 >
-                  <option>{null}</option>
-                  {appointmenttypesData?.map((option) => (
-                    <option value={option._id}>{option.name_english}</option>
-                  ))}
-                </RHFSelect>
-                <Controller
-                  name={`days_details[${index}].service_types`}
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <FormControl error={!!error} size="small" sx={{ width: '100%', shrink: true }}>
-                      <InputLabel> Service Types </InputLabel>
-
-                      <Select
-                        {...field}
-                        multiple
-                        id={`multiple-days_details[${index}].service_types`}
-                        label="Service Types"
-                        renderValue={renderValues}
+                  <RHFSelect size="small" native name={`days_details[${index}].day`} label="Day">
+                    <MenuItem>{null}</MenuItem>
+                    {weekDays
+                      .filter(
+                        (option) =>
+                          !values.weekend.includes(option.value) &&
+                          !values.days_details.some(
+                            (detail) =>
+                              detail.day === option.value &&
+                              values.days_details[index]?.day !== option.value
+                          )
+                      )
+                      .map((option) => (
+                        <MenuItem value={option.value}>{option.label}</MenuItem>
+                      ))}
+                  </RHFSelect>
+                  <RHFTextField
+                    disabled
+                    size="small"
+                    name={`days_details[${index}].appointment_number`}
+                    label="Appointments Number"
+                    InputLabelProps={{ shrink: true }}
+                    value={appointmentsNum[index] || appointEstimatedNum(index)}
+                  />
+                </Stack>
+                <Stack
+                  direction={{ xs: 'column', md: 'column' }}
+                  spacing={2}
+                  sx={{ width: '100%', mt: 2 }}
+                >
+                  <Controller
+                    name={`days_details[${index}].work_start_time`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <MobileTimePicker
+                        minutesStep="5"
+                        label="Work Start Time"
+                        value={
+                          values.days_details[index].work_start_time
+                            ? new Date(values.days_details[index].work_start_time)
+                            : null
+                        }
+                        onChange={(newValue) => {
+                          field.onChange(newValue);
+                        }}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`days_details[${index}].break_start_time`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <MobileTimePicker
+                        minutesStep="5"
+                        label="Break Start Time"
+                        value={
+                          values.days_details[index].break_start_time
+                            ? new Date(values.days_details[index].break_start_time)
+                            : null
+                        }
+                        onChange={(newValue) => {
+                          field.onChange(newValue);
+                        }}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </Stack>
+                <Stack
+                  direction={{ xs: 'column', md: 'column' }}
+                  spacing={2}
+                  sx={{ width: '100%', mt: 2 }}
+                >
+                  <Controller
+                    name={`days_details[${index}].work_end_time`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <MobileTimePicker
+                        minutesStep="5"
+                        label="Work End Time"
+                        value={
+                          values.days_details[index].work_end_time
+                            ? new Date(values.days_details[index].work_end_time)
+                            : null
+                        }
+                        onChange={(newValue) => {
+                          field.onChange(newValue);
+                        }}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`days_details[${index}].break_end_time`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <MobileTimePicker
+                        minutesStep="5"
+                        label="Break End Time"
+                        value={
+                          values.days_details[index].break_end_time
+                            ? new Date(values.days_details[index].break_end_time)
+                            : null
+                        }
+                        onChange={(newValue) => {
+                          field.onChange(newValue);
+                        }}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </Stack>
+                <Stack
+                  direction={{ xs: 'column', md: 'column' }}
+                  spacing={2}
+                  sx={{ width: '100%', mt: 2 }}
+                >
+                  <RHFSelect
+                    size="small"
+                    InputLabelProps={{ shrink: true }}
+                    native
+                    name={`days_details[${index}].appointment_type`}
+                    label="Appointment Type"
+                  >
+                    <MenuItem>{null}</MenuItem>
+                    {appointmenttypesData?.map((option) => (
+                      <MenuItem value={option._id}>{option.name_english}</MenuItem>
+                    ))}
+                  </RHFSelect>
+                  <Controller
+                    name={`days_details[${index}].service_types`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <FormControl
+                        error={!!error}
+                        size="small"
+                        sx={{ width: '100%', shrink: true }}
                       >
-                        {serviceTypesData?.map((option) => {
-                          const selected = field?.value?.includes(option._id);
+                        <InputLabel> Service Types </InputLabel>
 
-                          return (
-                            <MenuItem key={option._id} value={option._id}>
-                              <Checkbox size="small" disableRipple checked={selected} />
+                        <Select
+                          {...field}
+                          multiple
+                          id={`multiple-days_details[${index}].service_types`}
+                          label="Service Types"
+                          renderValue={renderValues}
+                        >
+                          {serviceTypesData?.map((option) => {
+                            const selected = field?.value?.includes(option._id);
 
-                              {option.name_english}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
+                            return (
+                              <MenuItem key={option._id} value={option._id}>
+                                <Checkbox size="small" disableRipple checked={selected} />
 
-                      {!!error && <FormHelperText error={!!error}>{error?.message}</FormHelperText>}
-                    </FormControl>
-                  )}
-                />
+                                {option.name_english}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+
+                        {!!error && (
+                          <FormHelperText error={!!error}>{error?.message}</FormHelperText>
+                        )}
+                      </FormControl>
+                    )}
+                  />
                 </Stack>
                 <Stack
                   direction={{ xs: 'column', md: 'column' }}
@@ -485,7 +504,13 @@ export default function NewEditDayDetails({ appointTime }) {
                   </IconButton>
                 </Stack>
               </Stack>
-              <NewEditDayAppointmentsDetails setAppointmentsNum={setAppointmentsNum} serviceTypesData={serviceTypesData} appointmenttypesData={appointmenttypesData} open={showAppointments[index]} ParentIndex={index} />
+              <NewEditDayAppointmentsDetails
+                setAppointmentsNum={setAppointmentsNum}
+                serviceTypesData={serviceTypesData}
+                appointmenttypesData={appointmenttypesData}
+                open={showAppointments[index]}
+                ParentIndex={index}
+              />
             </Stack>
           ))}
         </Stack>

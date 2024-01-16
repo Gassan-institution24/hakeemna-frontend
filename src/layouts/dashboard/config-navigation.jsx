@@ -178,11 +178,11 @@ export function useNavData() {
             path: paths.unitservice.appointments.root,
             icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
           },
-          {
-            title: t('appointment configuration'),
-            path: paths.unitservice.appointmentconfiguration.root,
-            icon: <Iconify icon="fluent:content-settings-16-regular" />,
-          },
+          // {
+          //   title: t('appointment configuration'),
+          //   path: paths.unitservice.appointmentconfiguration.root,
+          //   icon: <Iconify icon="fluent:content-settings-16-regular" />,
+          // },
           {
             title: t('Accounting'),
             path: paths.unitservice.accounting.root,
@@ -193,18 +193,18 @@ export function useNavData() {
               { title: t('reciepts'), path: paths.unitservice.accounting.reciepts.root },
             ],
           },
-          {
-            title: t('management tables'),
-            path: paths.unitservice.tables.root,
-            icon: <Iconify icon="icon-park-twotone:data" />,
-            children: [
-              { title: t('appointment types'), path: paths.unitservice.tables.appointypes.root },
-              { title: t('employee types'), path: paths.unitservice.tables.employeetypes.root },
-              { title: t('work shifts'), path: paths.unitservice.tables.workshifts.root },
-              { title: t('work groups'), path: paths.unitservice.tables.workgroups.root },
-              { title: t('rooms'), path: paths.unitservice.tables.rooms.root },
-            ],
-          },
+          // {
+          //   title: t('management tables'),
+          //   path: paths.unitservice.tables.root,
+          //   icon: <Iconify icon="icon-park-twotone:data" />,
+          //   children: [
+          //     // { title: t('appointment types'), path: paths.unitservice.tables.appointypes.root },
+          //     { title: t('employee types'), path: paths.unitservice.tables.employeetypes.root },
+          //     { title: t('work shifts'), path: paths.unitservice.tables.workshifts.root },
+          //     { title: t('work groups'), path: paths.unitservice.tables.workgroups.root },
+          //     { title: t('rooms'), path: paths.unitservice.tables.rooms.root },
+          //   ],
+          // },
           {
             title: t('Insurance'),
             path: paths.unitservice.insurance.root,

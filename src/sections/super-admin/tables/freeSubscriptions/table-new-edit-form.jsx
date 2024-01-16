@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -155,41 +156,41 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect native name="country" label="Country">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {countriesData.map((country) => (
-                  <option key={country._id} value={country._id}>
+                  <MenuItem key={country._id} value={country._id}>
                     {country.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="city" label="city">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {tableData.map((city) => (
-                  <option key={city._id} value={city._id}>
+                  <MenuItem key={city._id} value={city._id}>
                     {city.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="US_type" label="US_type">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {unitserviceTypesData.map((type) => (
-                  <option key={type._id} value={type._id}>
+                  <MenuItem key={type._id} value={type._id}>
                     {type.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="speciality" label="speciality">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {specialtiesData.map((speciality) => (
-                  <option key={speciality._id} value={speciality._id}>
+                  <MenuItem key={speciality._id} value={speciality._id}>
                     {speciality.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="general" label="Is it General?">
-                <option> </option>
-                <option value>Yes </option>
-                <option value={false}>No </option>
+                <MenuItem> </MenuItem>
+                <MenuItem value>Yes </MenuItem>
+                <MenuItem value={false}>No </MenuItem>
               </RHFSelect>
               <DatePicker
                 name="offer_date"

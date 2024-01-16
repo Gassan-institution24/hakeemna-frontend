@@ -55,7 +55,7 @@ const TABLE_HEAD = [
   { id: 'name_english', label: 'Name' },
   { id: 'status', label: 'Status' },
   { id: 'Accounting', label: 'Accounting' },
-  { id: 'Appointment Config', label: 'Appointment Configuration' },
+  // { id: 'Appointment Config', label: 'Appointment Configuration' },
   { id: 'Appointments', label: 'Appointments' },
   { id: 'Activities', label: 'Activities' },
   { id: 'Employees', label: 'Employees' },

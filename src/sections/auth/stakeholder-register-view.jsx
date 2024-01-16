@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -194,46 +195,46 @@ export default function JwtRegisterView() {
         <RHFTextField name="identification_num" label="Identification number" />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect native onChange={handleCountryChange} name="country" label="Country">
-            <option>{null}</option>
+            <MenuItem>{null}</MenuItem>
             {countriesData.map((country) => (
-              <option key={country._id} value={country._id}>
+              <MenuItem key={country._id} value={country._id}>
                 {country.name_english}
-              </option>
+              </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect native name="city" label="City">
-            <option>{null}</option>
+            <MenuItem>{null}</MenuItem>
             {cities.map((city) => (
-              <option key={city._id} value={city._id}>
+              <MenuItem key={city._id} value={city._id}>
                 {city.name_english}
-              </option>
+              </MenuItem>
             ))}
           </RHFSelect>
         </Stack>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect native name="US_type" label="Unit Service Type">
-            <option>{null}</option>
+            <MenuItem>{null}</MenuItem>
             {unitserviceTypesData.map((type) => (
-              <option key={type._id} value={type._id}>
+              <MenuItem key={type._id} value={type._id}>
                 {type.name_english}
-              </option>
+              </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect native name="speciality" label="Speciality">
-            <option>{null}</option>
+            <MenuItem>{null}</MenuItem>
             {specialtiesData.map((specialty) => (
-              <option key={specialty._id} value={specialty._id}>
+              <MenuItem key={specialty._id} value={specialty._id}>
                 {specialty.name_english}
-              </option>
+              </MenuItem>
             ))}
           </RHFSelect>
         </Stack>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect native name="sector_type" label="Sector type">
-            <option>{null}</option>
-            <option value="public">Public</option>
-            <option value="privet">Privet</option>
-            <option value="charity">Charity</option>
+            <MenuItem>{null}</MenuItem>
+            <MenuItem value="public">Public</MenuItem>
+            <MenuItem value="privet">Privet</MenuItem>
+            <MenuItem value="charity">Charity</MenuItem>
           </RHFSelect>
         </Stack>
 

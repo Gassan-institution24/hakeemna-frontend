@@ -35,7 +35,7 @@ export default function CheckoutPaymentMethods({ options, cardOptions, ...other 
           render={({ field, fieldState: { error } }) => (
             <Stack sx={{ px: 3, pb: 3 }}>
               {options.map((option) => (
-                <OptionItem
+                <MenuItemItem
                   option={option}
                   key={option.label}
                   onOpen={newCard.onTrue}
@@ -120,9 +120,9 @@ function OptionItem({ option, cardOptions, selected, isCredit, onOpen, ...other 
         >
           <TextField select fullWidth label="Cards" SelectProps={{ native: true }}>
             {cardOptions.map((card) => (
-              <option key={card.value} value={card.value}>
+              <MenuItem key={card.value} value={card.value}>
                 {card.label}
-              </option>
+              </MenuItem>
             ))}
           </TextField>
 

@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TextField from '@mui/material/TextField';
@@ -34,7 +35,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function AddEmegencyAppointment({ onClose, ...other }) {
+export default function BookManually({ onClose, ...other }) {
   const router = useRouter();
   const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
@@ -78,8 +79,11 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data',data)
-        await axios.post(endpoints.tables.appointments, {...data,emergency:true,unit_service:user.unit_service._id});
+      await axios.post(endpoints.tables.appointments, {
+        ...data,
+        emergency: true,
+        unit_service: user.unit_service._id,
+      });
       reset();
       enqueueSnackbar('Create success!');
       console.info('DATA', data);
@@ -90,7 +94,6 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
     }
   });
 
-  console.log('serviceTypesData', serviceTypesData);
   return (
     <>
       <Dialog maxWidth="lg" onClose={onClose} {...other}>
@@ -112,12 +115,13 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
                   name="start_time"
                   render={({ field, fieldState: { error } }) => (
                     <MobileDateTimePicker
-                    sx={{width:'30vw',minWidth:'300px'}}
-                    onChange={(newValue)=>{
-                      setValue('start_time',newValue)
-                    }}
-                    minutesStep='5'
-                    slotProps={{
+                      label="Start date"
+                      sx={{ width: '30vw', minWidth: '300px' }}
+                      onChange={(newValue) => {
+                        setValue('start_time', newValue);
+                      }}
+                      minutesStep="5"
+                      slotProps={{
                         textField: {
                           fullWidth: true,
                           margin: 'normal',
@@ -136,9 +140,9 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
                   }}
                 >
                   <RHFSelect native name="appointment_type" label="Appointment Type">
-                    <option>{null}</option>
+                    <MenuItem>{null}</MenuItem>
                     {appointmenttypesData.map((option) => (
-                      <option value={option._id}>{option.name_english}</option>
+                      <MenuItem value={option._id}>{option.name_english}</MenuItem>
                     ))}
                   </RHFSelect>
                   <RHFSelect
@@ -147,18 +151,18 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
                     label="Work Shift"
                     PaperPropsSx={{ textTransform: 'capitalize' }}
                   >
-                    <option value={null}> </option>
+                    <MenuItem value={null}> </MenuItem>
                     {workShiftsData &&
                       workShiftsData.map((option) => (
-                        <option key={option._id} value={option._id}>
+                        <MenuItem key={option._id} value={option._id}>
                           {option.name_english}
-                        </option>
+                        </MenuItem>
                       ))}
                   </RHFSelect>
                   <RHFSelect native name="work_group" label="Work Group">
-                    <option>{null}</option>
+                    <MenuItem>{null}</MenuItem>
                     {workGroupsData.map((option) => (
-                      <option value={option._id}>{option.name_english}</option>
+                      <MenuItem value={option._id}>{option.name_english}</MenuItem>
                     ))}
                   </RHFSelect>
                   <RHFMultiSelect
@@ -205,6 +209,6 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
   );
 }
 
-AddEmegencyAppointment.propTypes = {
+BookManually.propTypes = {
   onClose: PropTypes.func,
 };

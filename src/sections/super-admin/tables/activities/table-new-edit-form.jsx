@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -145,19 +146,19 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect native name="unit_service" label="Unit Service">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {unitservicesData.map((unit_service) => (
-                  <option key={unit_service._id} value={unit_service._id}>
+                  <MenuItem key={unit_service._id} value={unit_service._id}>
                     {unit_service.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="department" label="Department">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {departmentsData.map((department) => (
-                  <option key={department._id} value={department._id}>
+                  <MenuItem key={department._id} value={department._id}>
                     {department.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFTextField name="details" label="Details" />

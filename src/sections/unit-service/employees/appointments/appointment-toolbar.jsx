@@ -24,7 +24,7 @@ export default function InvoiceTableToolbar({
   onAdd,
   //
   dateError,
-  serviceOptions,
+  options,
 }) {
   const popover = usePopover();
 
@@ -35,11 +35,11 @@ export default function InvoiceTableToolbar({
     [onFilters]
   );
 
-  const handleFilterService = useCallback(
+  const handleFilterTypes = useCallback(
     (event) => {
       onFilters(
         'types',
-        event
+        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
       );
     },
     [onFilters]
@@ -73,6 +73,34 @@ export default function InvoiceTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
+        <FormControl
+        sx={{
+          flexShrink: 0,
+          width: { xs: 1, md: 200 },
+        }}
+      >
+        <InputLabel>Appointment type</InputLabel>
+
+        <Select
+          multiple
+          value={filters.types}
+          onChange={handleFilterTypes}
+          input={<OutlinedInput label="Appointment types" />}
+          renderValue={(selected) => selected.map((value) => value.name_english).join(', ')}
+          MenuProps={{
+            PaperProps: {
+              sx: { maxHeight: 240 },
+            },
+          }}
+        >
+          {options.map((option) => (
+            <MenuItem key={option._id} value={option._id}>
+              <Checkbox disableRipple size="small" checked={filters.types?.includes(option._id)} />
+              {option.name_english}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
         <DatePicker
           label="Date"
@@ -157,5 +185,5 @@ InvoiceTableToolbar.propTypes = {
   filters: PropTypes.object,
   onFilters: PropTypes.func,
   onAdd: PropTypes.func,
-  serviceOptions: PropTypes.array,
+  options: PropTypes.array,
 };

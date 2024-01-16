@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -54,6 +55,7 @@ export default function JwtRegisterView() {
     password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string().required('confirm Password is required'),
     identification_num: Yup.string().required('Identification number is required'),
+    mobile_num1: Yup.string().required('Mobile number is required'),
     gender: Yup.string().required('Gender is required'),
     country: Yup.string().required('Country is required'),
     city: Yup.string().required('City is required'),
@@ -65,6 +67,7 @@ export default function JwtRegisterView() {
     email: '',
     password: '',
     confirmPassword: '',
+    mobile_num1: '',
     identification_num: '',
     gender: '',
     country: null,
@@ -156,27 +159,28 @@ export default function JwtRegisterView() {
 
         <RHFTextField name="email" label="Email address" />
         <RHFTextField name="identification_num" label="Identification number" />
+        <RHFTextField name="mobile_num1" label="Mobile number" />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect native onChange={handleCountryChange} name="country" label="Country">
-            <option>{null}</option>
+            <MenuItem>{null}</MenuItem>
             {countriesData?.map((country) => (
-              <option key={country?._id} value={country?._id}>
+              <MenuItem key={country?._id} value={country?._id}>
                 {country?.name_english}
-              </option>
+              </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect native name="city" label="City">
-            <option>{null}</option>
+            <MenuItem>{null}</MenuItem>
             {cities?.map((city) => (
-              <option key={city?._id} value={city?._id}>
+              <MenuItem key={city?._id} value={city?._id}>
                 {city?.name_english}
-              </option>
+              </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect native name="gender" label="Gender">
-            <option>{null}</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <MenuItem>{null}</MenuItem>
+            <MenuItem value="male">Male</MenuItem>
+            <MenuItem value="female">Female</MenuItem>
           </RHFSelect>
         </Stack>
         <RHFTextField

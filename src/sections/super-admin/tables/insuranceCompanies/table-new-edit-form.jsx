@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -153,27 +154,27 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect native name="country" label="Country">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {countriesData.map((country) => (
-                  <option key={country._id} value={country._id}>
+                  <MenuItem key={country._id} value={country._id}>
                     {country.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="city" label="city">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {tableData.map((city) => (
-                  <option key={city._id} value={city._id}>
+                  <MenuItem key={city._id} value={city._id}>
                     {city.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="type" label="type">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {insuranseTypesData.map((type) => (
-                  <option key={type._id} value={type._id}>
+                  <MenuItem key={type._id} value={type._id}>
                     {type.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFTextField name="webpage" label="web page link" />

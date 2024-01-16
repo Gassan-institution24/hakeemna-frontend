@@ -50,7 +50,7 @@ import axiosHandler from 'src/utils/axios-handler';
 import { useSnackbar } from 'src/components/snackbar';
 
 import { useGetAppointmentTypes, useGetDepartmentAppointments } from 'src/api/tables';
-import PatientHistoryRow from '../appointments/appointment-row';
+import AppointmentsRow from '../appointments/appointment-row';
 import PatientHistoryToolbar from '../appointments/appointment-toolbar';
 import HistoryFiltersResult from '../appointments/appointment-filters-result';
 import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
@@ -62,8 +62,8 @@ const TABLE_HEAD = [
   { id: 'appointment_type', label: 'Appointment Type' },
   { id: 'work_group', label: 'Work Group' },
   { id: 'work_shift', label: 'Work Shift' },
+  { id: 'patient', label: 'Patient' },
   { id: 'start_time', label: 'Start Time' },
-  { id: 'price_in_JOD', label: 'Price' },
   { id: 'status', label: 'Status' },
   { id: '' },
 ];
@@ -71,13 +71,14 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   status: 'all',
+  types: [],
   startDate: null,
   endDate: null,
 };
 
 // ----------------------------------------------------------------------
 
-export default function AppointHistoryView({ departmentData }) {
+export default function AppointmentsView({ departmentData }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -123,7 +124,7 @@ export default function AppointHistoryView({ departmentData }) {
   const denseHeight = table.dense ? 56 : 76;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || !!filters.startDate || !!filters.endDate;
+    !!filters.name || filters.status !== 'all' || !!filters.startDate || !!filters.endDate || filters.types.length>0;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -354,7 +355,7 @@ export default function AppointHistoryView({ departmentData }) {
             onAdd={() => addModal.onTrue()}
             //
             dateError={dateError}
-            serviceOptions={appointmenttypesData.map((option) => option)}
+            options={appointmenttypesData.map((option) => option)}
           />
 
           {canReset && (
@@ -436,7 +437,8 @@ export default function AppointHistoryView({ departmentData }) {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <PatientHistoryRow
+                      <AppointmentsRow
+                        refetch={refetch}
                         key={row._id}
                         row={row}
                         selected={table.selected.includes(row._id)}
@@ -472,7 +474,7 @@ export default function AppointHistoryView({ departmentData }) {
         </Card>
       </Container>
 
-      <AddEmegencyAppointment open={addModal.value} onClose={addModal.onFalse} />
+      <AddEmegencyAppointment refetch={refetch} open={addModal.value} onClose={addModal.onFalse} />
 
       <ConfirmDialog
         open={confirm.value}
@@ -575,16 +577,16 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (appointment) =>
-        (appointment?.unit_service?.name_english &&
-          appointment?.unit_service?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
+        (appointment?.work_shift?.name_english &&
+          appointment?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
             -1) ||
-        (appointment?.unit_service?.name_arabic &&
-          appointment?.unit_service?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
+        (appointment?.work_shift?.name_arabic &&
+          appointment?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
             -1) ||
-        (appointment?.name_english &&
-          appointment?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (appointment?.name_arabic &&
-          appointment?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (appointment?.work_group?.name_english &&
+          appointment?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (appointment?.work_group?.name_arabic &&
+          appointment?.work_group?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         appointment?._id === name ||
         JSON.stringify(appointment.code) === name
     );
@@ -611,9 +613,12 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       );
     }
   }
+  if (types.length > 0) {
+    inputData = inputData.filter((appoint) => types?.includes(appoint.appointment_type._id));
+  }
 
   return inputData;
 }
-AppointHistoryView.propTypes = {
+AppointmentsView.propTypes = {
   departmentData: PropTypes.object,
 };
