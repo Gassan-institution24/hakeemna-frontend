@@ -257,9 +257,9 @@ export default function ProductNewEditForm({ currentProduct }) {
                 {PRODUCT_CATEGORY_GROUP_OPTIONS.map((category) => (
                   <optgroup key={category.group} label={category.group}>
                     {category.classify.map((classify) => (
-                      <option key={classify} value={classify}>
+                      <MenuItem key={classify} value={classify}>
                         {classify}
-                      </option>
+                      </MenuItem>
                     ))}
                   </optgroup>
                 ))}

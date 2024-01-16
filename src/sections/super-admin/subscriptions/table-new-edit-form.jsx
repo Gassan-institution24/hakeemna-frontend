@@ -9,7 +9,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Typography, Checkbox, FormControlLabel } from '@mui/material';
+import { Typography, Checkbox, FormControlLabel,MenuItem } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 
 import { paths } from 'src/routes/paths';
@@ -173,35 +173,35 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect native name="country" label="Country">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {countriesData.map((country) => (
-                  <option key={country._id} value={country._id}>
+                  <MenuItem key={country._id} value={country._id}>
                     {country.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="city" label="city">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {tableData.map((city) => (
-                  <option key={city._id} value={city._id}>
+                  <MenuItem key={city._id} value={city._id}>
                     {city.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="US_type" label="US_type">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {unitserviceTypesData.map((type) => (
-                  <option key={type._id} value={type._id}>
+                  <MenuItem key={type._id} value={type._id}>
                     {type.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="unit_service" label="Unit Service">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {specialtiesData.map((unit_service) => (
-                  <option key={unit_service._id} value={unit_service._id}>
+                  <MenuItem key={unit_service._id} value={unit_service._id}>
                     {unit_service.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               {/* <DatePicker

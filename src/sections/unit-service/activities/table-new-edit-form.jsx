@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import { MenuItem } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -28,7 +29,7 @@ export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
   const { user } = useAuthContext();
-  const {departmentsData} = useGetUSDepartments(user.unit_service._id)
+  const { departmentsData } = useGetUSDepartments(user.unit_service._id);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -42,14 +43,14 @@ export default function TableNewEditForm({ currentTable }) {
 
   const defaultValues = useMemo(
     () => ({
-      unit_service: currentTable?.unit_service._id ||user.unit_service._id,
-      department: currentTable?.department._id || null ,
+      unit_service: currentTable?.unit_service._id || user.unit_service._id,
+      department: currentTable?.department._id || null,
       name_english: currentTable?.name_english || '',
       name_arabic: currentTable?.name_arabic || '',
       details: currentTable?.details || '',
       details_arabic: currentTable?.details_arabic || '',
     }),
-    [currentTable,user.unit_service]
+    [currentTable, user.unit_service]
   );
 
   const methods = useForm({
@@ -143,11 +144,11 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
               <RHFSelect native name="department" label="Department">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {departmentsData.map((department) => (
-                  <option key={department._id} value={department._id}>
+                  <MenuItem key={department._id} value={department._id}>
                     {department.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFTextField

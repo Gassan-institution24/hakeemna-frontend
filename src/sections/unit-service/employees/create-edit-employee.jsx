@@ -11,6 +11,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import { MenuItem } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -79,7 +80,7 @@ export default function TableNewEditForm({ currentTable }) {
       password: currentTable?.password || '',
       confirmPassword: currentTable?.confirmPassword || '',
     }),
-    [currentTable,user.unit_service]
+    [currentTable, user.unit_service]
   );
 
   const password = useBoolean();
@@ -120,7 +121,7 @@ export default function TableNewEditForm({ currentTable }) {
           method: 'PATCH',
           path: endpoints.tables.hospital(currentTable._id),
           data: {
-            role:'employee',
+            role: 'employee',
             modifications_nums: (currentTable.modifications_nums || 0) + 1,
             ip_address_user_modification: address.data.IPv4,
             user_modification: user._id,
@@ -134,8 +135,8 @@ export default function TableNewEditForm({ currentTable }) {
           data: {
             ip_address_user_creation: address.data.IPv4,
             user_creation: user._id,
-            role:'employee',
-            userName:`${data.first_name} ${data.family_name}`,
+            role: 'employee',
+            userName: `${data.first_name} ${data.family_name}`,
             ...data,
           },
         });
@@ -190,33 +191,33 @@ export default function TableNewEditForm({ currentTable }) {
               <RHFTextField name="phone" label="Phone" type="number" />
 
               <RHFSelect native name="nationality" label="Nationality">
-                <option>{null}</option>
+                <MenuItem>{null}</MenuItem>
                 {countriesData.map((nationality) => (
-                  <option key={nationality._id} value={nationality._id}>
+                  <MenuItem key={nationality._id} value={nationality._id}>
                     {nationality.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="employee_type" label="Employee Type">
-                <option>{null}</option>
+                <MenuItem>{null}</MenuItem>
                 {employeeTypesData.map((employee_type) => (
-                  <option key={employee_type._id} value={employee_type._id}>
+                  <MenuItem key={employee_type._id} value={employee_type._id}>
                     {employee_type.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="speciality" label="Speciality">
-                <option>{null}</option>
+                <MenuItem>{null}</MenuItem>
                 {specialtiesData.map((speciality) => (
-                  <option key={speciality._id} value={speciality._id}>
+                  <MenuItem key={speciality._id} value={speciality._id}>
                     {speciality.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="gender" label="Gender">
-                <option> </option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <MenuItem> </MenuItem>
+                <MenuItem value="male">Male</MenuItem>
+                <MenuItem value="female">Female</MenuItem>
               </RHFSelect>
             </Box>
             <Box
@@ -229,38 +230,39 @@ export default function TableNewEditForm({ currentTable }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
+              <RHFTextField name="email" label="Email" />
               <RHFTextField
-                name="email"
-                label="Email"
+                name="password"
+                label="Password"
+                type={password.value ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={password.onToggle} edge="end">
+                        <Iconify
+                          icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
+                        />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <RHFTextField
-          name="password"
-          label="Password"
-          type={password.value ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={password.onToggle} edge="end">
-                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-        <RHFTextField
-          name="confirmPassword"
-          label="Confirm Password"
-          type={password.value ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={password.onToggle} edge="end">
-                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
+                name="confirmPassword"
+                label="Confirm Password"
+                type={password.value ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={password.onToggle} edge="end">
+                        <Iconify
+                          icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
+                        />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
             </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

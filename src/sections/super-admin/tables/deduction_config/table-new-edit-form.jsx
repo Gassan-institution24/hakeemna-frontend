@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -157,33 +158,33 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect native name="unit_service" label="Unit Service">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {unitservicesData.map((unit_service) => (
-                  <option key={unit_service._id} value={unit_service._id}>
+                  <MenuItem key={unit_service._id} value={unit_service._id}>
                     {unit_service.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="Employee" label="Employee">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {employeesData.map((Employee) => (
-                  <option key={Employee._id} value={Employee._id}>
+                  <MenuItem key={Employee._id} value={Employee._id}>
                     {Employee.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="Service" label="Service">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {serviceTypesData.map((type) => (
-                  <option key={type._id} value={type._id}>
+                  <MenuItem key={type._id} value={type._id}>
                     {type.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="type" label="Type">
-                <option> </option>
-                <option value="from income">from income </option>
-                <option value="from sales">from sales </option>
+                <MenuItem> </MenuItem>
+                <MenuItem value="from income">from income </MenuItem>
+                <MenuItem value="from sales">from sales </MenuItem>
               </RHFSelect>
               <RHFTextField name="Place_of_service" label="Place of service" />
               <RHFTextField type="number" name="percentage" label="percentage %" />

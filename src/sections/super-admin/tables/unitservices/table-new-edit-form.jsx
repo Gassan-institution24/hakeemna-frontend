@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import { MenuItem } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -210,20 +211,20 @@ export default function CountriesNewEditForm({ currentSelected }) {
               }}
             >
               <RHFSelect native name="country" label="country">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {countriesData.map((country) => (
-                  <option key={country._id} value={country._id}>
+                  <MenuItem key={country._id} value={country._id}>
                     {country.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
 
               <RHFSelect native name="family" label="family">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {families.map((family) => (
-                  <option key={family._id} value={family._id}>
+                  <MenuItem key={family._id} value={family._id}>
                     {family.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
 

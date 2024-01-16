@@ -29,7 +29,13 @@ import { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-for
 
 // ----------------------------------------------------------------------
 
-export default function NewEditDayAppointmentsDetails({ ParentIndex, open,appointmenttypesData,serviceTypesData,setAppointmentsNum }) {
+export default function NewEditDayAppointmentsDetails({
+  ParentIndex,
+  open,
+  appointmenttypesData,
+  serviceTypesData,
+  setAppointmentsNum,
+}) {
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -74,11 +80,14 @@ export default function NewEditDayAppointmentsDetails({ ParentIndex, open,appoin
 
   const renderValues = (selectedIds) => {
     const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item._id));
-    const results = []
-    return selectedItems?.map((item) => (
-      item.name_english
-      // price += item.Price_per_unit || 0
-    )).join(', ');
+    const results = [];
+    return selectedItems
+      ?.map(
+        (item) =>
+          item.name_english
+          // price += item.Price_per_unit || 0
+      )
+      .join(', ');
     // setOverAllPrice(price)
     // return results.join(', ')
   };
@@ -120,9 +129,9 @@ export default function NewEditDayAppointmentsDetails({ ParentIndex, open,appoin
                   name={`days_details[${ParentIndex}].appointments[${index}].appointment_type`}
                   label="Appointment Type"
                 >
-                  <option>{null}</option>
+                  <MenuItem>{null}</MenuItem>
                   {appointmenttypesData?.map((option) => (
-                    <option value={option._id}>{option.name_english}</option>
+                    <MenuItem value={option._id}>{option.name_english}</MenuItem>
                   ))}
                 </RHFSelect>
 

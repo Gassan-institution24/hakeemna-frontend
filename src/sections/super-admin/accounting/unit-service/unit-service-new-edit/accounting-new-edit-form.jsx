@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -124,33 +125,33 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
               }} /// edit
             >
               <RHFSelect native name="free_subscription" label="Free Subscription">
-                <option>{null}</option>
+                <MenuItem>{null}</MenuItem>
                 {freeSubscriptionsData.map((subscription) => (
-                  <option key={subscription._id} value={subscription._id}>
+                  <MenuItem key={subscription._id} value={subscription._id}>
                     {subscription.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="subscription" label="subscription">
-                <option>{null}</option>
+                <MenuItem>{null}</MenuItem>
                 {subscriptionsData.map((backage) => (
-                  <option key={backage._id} value={backage._id}>
+                  <MenuItem key={backage._id} value={backage._id}>
                     {backage.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="Payment_method" label="Payment method">
-                <option>{null}</option>
+                <MenuItem>{null}</MenuItem>
                 {paymentMethodsData.map((method) => (
-                  <option key={method._id} value={method._id}>
+                  <MenuItem key={method._id} value={method._id}>
                     {method.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="Payment_frequency" label="Payment Frequency">
-                <option>{null}</option>
-                <option value="once a week">once a week</option>
-                <option value="once a month">once a month</option>
+                <MenuItem>{null}</MenuItem>
+                <MenuItem value="once a week">once a week</MenuItem>
+                <MenuItem value="once a month">once a month</MenuItem>
               </RHFSelect>
               <DatePicker
                 name="Start_date"

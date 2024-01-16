@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TextField from '@mui/material/TextField';
@@ -49,7 +50,7 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
       appointment_type: null,
       date: null,
       start_time: null,
-      services:[]
+      services: [],
     }),
     []
   );
@@ -78,7 +79,7 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
     }
   });
 
-  console.log('serviceTypesData',serviceTypesData)
+  console.log('serviceTypesData', serviceTypesData);
   return (
     <>
       <Dialog maxWidth="sm" onClose={onClose} {...other}>
@@ -121,9 +122,9 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
                   name="appointment_type"
                   label="Appointment Type"
                 >
-                  <option>{null}</option>
+                  <MenuItem>{null}</MenuItem>
                   {appointmenttypesData.map((option) => (
-                    <option value={option._id}>{option.name_english}</option>
+                    <MenuItem value={option._id}>{option.name_english}</MenuItem>
                   ))}
                 </RHFSelect>
                 <RHFMultiSelect
@@ -138,9 +139,9 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
                   name="work_group"
                   label="Work Group"
                 >
-                  <option>{null}</option>
+                  <MenuItem>{null}</MenuItem>
                   {workGroupsData.map((option) => (
-                    <option value={option._id}>{option.name_english}</option>
+                    <MenuItem value={option._id}>{option.name_english}</MenuItem>
                   ))}
                 </RHFSelect>
               </Box>

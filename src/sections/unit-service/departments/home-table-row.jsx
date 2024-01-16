@@ -58,7 +58,7 @@ export default function CountriesTableRow({
   } = row;
   const popover = usePopover();
   const DDL = usePopover();
-  const { appointmentConfigCount } = useGetDepartmentAppointmentConfigsCount(row._id);
+  // const { appointmentConfigCount } = useGetDepartmentAppointmentConfigsCount(row._id);
   const { activitiesCount } = useGetDepartmentActivitiesCount(row._id);
   const { appointmentsCount } = useGetDepartmentAppointmentsCount(row._id);
   const { economecMovementsCount } = useGetDepartmentEconomicMovementsCount(row._id);
@@ -94,7 +94,7 @@ export default function CountriesTableRow({
       >
         {economecMovementsCount}
       </TableCell>
-      <TableCell
+      {/* <TableCell
         align="center"
         sx={{
           cursor: 'pointer',
@@ -103,7 +103,7 @@ export default function CountriesTableRow({
         onClick={showAppointmentConfig}
       >
         {appointmentConfigCount}
-      </TableCell>
+      </TableCell> */}
       <TableCell
         align="center"
         sx={{

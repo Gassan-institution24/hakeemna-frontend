@@ -155,6 +155,7 @@ export const endpoints = {
     appointments: '/api/appointments',
     availableAppointments: '/api/appointments/available',
     appointment: (id) => `/api/appointments/${id}`,
+    createPatientAndBookAppoint: (id) => `/api/appointments/${id}/newpatient`,
     usAppointments: (id) => `/api/appointments/unitservice/${id}`,
     usAppointmentsCount: (id) => `/api/appointments/unitservice/${id}/count`,
     departmentAppointments: (id) => `/api/appointments/department/${id}`,

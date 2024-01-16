@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
@@ -146,11 +147,11 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect native name="unit_service" label="unit_service">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {unitservicesData.map((unit_service) => (
-                  <option key={unit_service._id} value={unit_service._id}>
+                  <MenuItem key={unit_service._id} value={unit_service._id}>
                     {unit_service.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <TimePicker

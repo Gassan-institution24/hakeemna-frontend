@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useCallback,useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import Chip from '@mui/material/Chip';
 import Radio from '@mui/material/Radio';
@@ -39,12 +39,11 @@ export default function JobFilters({
   citiesOptions,
   unitServicesOptions,
   appointmentTypeOptions,
-  dateError
+  dateError,
 }) {
   const [selectedCountry, setSelectedCountry] = useState('');
 
   const [cities, setCities] = useState([]);
-
 
   const handleFilterAppointtypes = useCallback(
     (newValue) => {
@@ -85,9 +84,6 @@ export default function JobFilters({
     [onFilters]
   );
 
-
-
-
   const renderHead = (
     <Stack
       direction="row"
@@ -119,11 +115,7 @@ export default function JobFilters({
         Time
       </Typography>
       <Stack spacing={2.5}>
-        <DatePicker
-          label="From"
-          value={filters.start_date}
-          onChange={handleFilterStartDate}
-        />
+        <DatePicker label="From" value={filters.start_date} onChange={handleFilterStartDate} />
 
         <DatePicker
           label="To"
@@ -196,11 +188,11 @@ export default function JobFilters({
   //       Countries
   //     </Typography>
   //     <RHFSelect native onChange={handleFilterCountries} name="country" label="Country">
-  //           <option>{null}</option>
+  //           <MenuItem>{null}</MenuItem>
   //           {countriesOptions.map((country) => (
-  //             <option key={country._id} value={country._id}>
+  //             <MenuItem key={country._id} value={country._id}>
   //               {country.name_english}
-  //             </option>
+  //             </MenuItem>
   //           ))}
   //         </RHFSelect>
   //   </Stack>
@@ -266,13 +258,12 @@ export default function JobFilters({
             {renderDate}
 
             {renderUnitServices}
-            
+
             {/* {renderCountries} */}
 
             {renderappointtypes}
 
             {renderappointmentPaymentMethods}
-
           </Stack>
         </Scrollbar>
       </Drawer>

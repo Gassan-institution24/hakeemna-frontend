@@ -235,9 +235,9 @@ export default function Textfield({ variant }) {
           helperText="Please select your currency"
         >
           {CURRENCIES.map((option) => (
-            <option key={option.value} value={option.value}>
+            <MenuItem key={option.value} value={option.value}>
               {option.label}
-            </option>
+            </MenuItem>
           ))}
         </TextField>
       </ComponentBlock>

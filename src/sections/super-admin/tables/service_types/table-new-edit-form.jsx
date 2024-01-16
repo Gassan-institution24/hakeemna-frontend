@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -152,27 +153,27 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect native name="unit_service" label="unit_service">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {unitservicesData.map((unit_service) => (
-                  <option key={unit_service._id} value={unit_service._id}>
+                  <MenuItem key={unit_service._id} value={unit_service._id}>
                     {unit_service.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="work_shift" label="work_shift">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {workShiftsData.map((work_shift) => (
-                  <option key={work_shift._id} value={work_shift._id}>
+                  <MenuItem key={work_shift._id} value={work_shift._id}>
                     {work_shift.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect native name="Measurement_type" label="Measurement_type">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {measurmentTypesData.map((type) => (
-                  <option key={type._id} value={type._id}>
+                  <MenuItem key={type._id} value={type._id}>
                     {type.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFTextField type="number" name="Price_per_unit" label="Price Per Unit" />

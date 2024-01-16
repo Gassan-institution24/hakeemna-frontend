@@ -61,7 +61,7 @@ export default function PaymentMethods() {
 
         <Stack spacing={3}>
           {PAYMENT_OPTIONS.map((option) => (
-            <OptionItem
+            <MenuItemItem
               key={option.label}
               option={option}
               selected={method === option.value}
@@ -137,9 +137,9 @@ function OptionItem({ option, selected, isCredit, onOpen, ...other }) {
         >
           <TextField select fullWidth label="Cards" SelectProps={{ native: true }}>
             {CARD_OPTIONS.map((card) => (
-              <option key={card.value} value={card.value}>
+              <MenuItem key={card.value} value={card.value}>
                 {card.label}
-              </option>
+              </MenuItem>
             ))}
           </TextField>
 

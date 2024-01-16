@@ -143,11 +143,11 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect native name="department" label="department">
-                <option> </option>
+                <MenuItem> </MenuItem>
                 {departmentsData.map((department) => (
-                  <option key={department._id} value={department._id}>
+                  <MenuItem key={department._id} value={department._id}>
                     {department.name_english}
-                  </option>
+                  </MenuItem>
                 ))}
               </RHFSelect>
               <RHFTextField

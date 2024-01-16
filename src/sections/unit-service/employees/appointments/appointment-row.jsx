@@ -17,7 +17,6 @@ import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 import InputAdornment from '@mui/material/InputAdornment';
 
-
 import { useBoolean } from 'src/hooks/use-boolean';
 import { fCurrency } from 'src/utils/format-number';
 import { fDateTime } from 'src/utils/format-time';
@@ -26,6 +25,7 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import BookManually from './book-appointment-manually';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +33,7 @@ export default function AppointmentsTableRow({
   row,
   selected,
   onSelectRow,
+  refetch,
   onViewRow,
   onDelayRow,
   onCancelRow,
@@ -44,13 +45,14 @@ export default function AppointmentsTableRow({
     code,
     name_english,
     unit_service,
-    appointment_type,
     work_group,
     work_shift,
+    appointment_type,
     payment_method,
     date,
     price,
     currency,
+    patient,
     start_time,
     end_time,
     status,
@@ -66,8 +68,9 @@ export default function AppointmentsTableRow({
   const popover = usePopover();
   const DDL = usePopover();
   const confirmDelayOne = useBoolean();
+  const Book = useBoolean();
 
-  const [minToDelay,setMinToDelay]= useState(0)
+  const [minToDelay, setMinToDelay] = useState(0);
 
   return (
     <>
@@ -80,6 +83,7 @@ export default function AppointmentsTableRow({
         <TableCell align="center">{appointment_type?.name_english}</TableCell>
         <TableCell align="center">{work_group?.name_english}</TableCell>
         <TableCell align="center">{work_shift?.name_english}</TableCell>
+        <TableCell align="center">{patient?.first_name} {patient?.last_name}</TableCell>
 
         <TableCell align="center">
           <ListItemText
@@ -93,8 +97,6 @@ export default function AppointmentsTableRow({
             }}
           />
         </TableCell>
-
-        <TableCell align="center">{currency?.symbol} {price}</TableCell>
 
         <TableCell align="center">
           <Label
@@ -120,36 +122,55 @@ export default function AppointmentsTableRow({
         </TableCell>
       </TableRow>
 
+      <BookManually
+        refetch={refetch}
+        appointment_id={_id}
+        open={Book.value}
+        onClose={Book.onFalse}
+      />
+
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: 140 }}
+        sx={{ width: 155 }}
       >
-        {status !== "canceled" &&
-        <MenuItem
-          onClick={() => {
-            onCancelRow();
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="mdi:bell-cancel" />
-          Cancel
-        </MenuItem>
-        }
-        {status === "canceled" &&
-        <MenuItem
-          onClick={() => {
-            onUnCancelRow();
-            popover.onClose();
-          }}
-          sx={{ color: 'success.main' }}
-        >
-          <Iconify icon="material-symbols-light:notifications-active-rounded" />
-          uncancel
-        </MenuItem>
-        }
+        {status === 'available' && (
+          <MenuItem
+            sx={{ color: 'success.main' }}
+            onClick={() => {
+              Book.onTrue();
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="mdi:register" />
+            Book Manually
+          </MenuItem>
+        )}
+        {status !== 'canceled' && (
+          <MenuItem
+            onClick={() => {
+              onCancelRow();
+              popover.onClose();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="mdi:bell-cancel" />
+            Cancel
+          </MenuItem>
+        )}
+        {status === 'canceled' && (
+          <MenuItem
+            onClick={() => {
+              onUnCancelRow();
+              popover.onClose();
+            }}
+            sx={{ color: 'success.main' }}
+          >
+            <Iconify icon="material-symbols-light:notifications-active-rounded" />
+            uncancel
+          </MenuItem>
+        )}
         <MenuItem onClick={confirmDelayOne.onTrue}>
           <Iconify icon="mdi:timer-sync" />
           Delay
@@ -234,7 +255,7 @@ export default function AppointmentsTableRow({
             color="info"
             onClick={() => {
               confirmDelayOne.onFalse();
-              onDelayRow(_id,minToDelay);
+              onDelayRow(_id, minToDelay);
             }}
           >
             Delay
@@ -252,6 +273,7 @@ AppointmentsTableRow.propTypes = {
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
   onDelayRow: PropTypes.func,
+  refetch: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
 };

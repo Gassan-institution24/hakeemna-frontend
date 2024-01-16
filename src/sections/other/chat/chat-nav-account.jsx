@@ -92,9 +92,9 @@ export default function ChatNavAccount() {
               }}
             >
               {['online', 'alway', 'busy', 'offline'].map((option) => (
-                <option key={option} value={option}>
+                <MenuItem key={option} value={option}>
                   {option}
-                </option>
+                </MenuItem>
               ))}
             </Select>
           </MenuItem>
