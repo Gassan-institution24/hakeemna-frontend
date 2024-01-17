@@ -323,7 +323,7 @@ export default function ProfileHome() {
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
         {
-          label: 'Second Mobile Number',
+          label: 'Alternative Number',
           value: user.patient.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },

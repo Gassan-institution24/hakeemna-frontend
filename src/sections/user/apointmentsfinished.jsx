@@ -47,7 +47,7 @@ const finishedAppointments = appointmentsData.filter(
           <ListItemText
             secondary={
               <Link color="inherit">
-                {info.name_english}
+                {info?.name_english}
               </Link>
             }
             primaryTypographyProps={{
@@ -84,7 +84,7 @@ const finishedAppointments = appointmentsData.filter(
               icon: <Iconify width={16} icon="icon-park-solid:time" sx={{ flexShrink: 0 }} />,
             },
             {
-              label: info?.department.english_department_name,
+              label: info?.department?.name_english,
               icon: (
                 <Iconify width={16} icon="medical-icon:health-services" sx={{ flexShrink: 0 }} />
               ),

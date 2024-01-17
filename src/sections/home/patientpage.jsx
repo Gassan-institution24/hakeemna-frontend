@@ -1,6 +1,7 @@
 import Container from '@mui/material/Container';
 import { Button, Grid, Paper, Typography } from '@mui/material';
 import * as React from 'react';
+import { paths } from 'src/routes/paths';
 import { styled } from '@mui/material/styles';
 import { m } from 'framer-motion';
 import { varFade, MotionViewport } from 'src/components/animate';
@@ -51,11 +52,12 @@ export default function Patient() {
               tempore odio Lorem ipsum sit amet consectetur adipjkisicing.
             </p>
             <Button
+              href={paths.auth.register}
               sx={{
                 bgcolor: 'success.main',
                 color: '#fff',
                 width: '130px',
-
+              
                 '&:hover': {
                   bgcolor: '#fff',
                   color: 'success.main',

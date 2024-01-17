@@ -1,10 +1,9 @@
 import Container from '@mui/material/Container';
-import { Button, Grid, Paper, Typography } from '@mui/material';
+import { Button, Grid, Paper } from '@mui/material';
 import * as React from 'react';
+import { paths } from 'src/routes/paths';
 import { styled } from '@mui/material/styles';
-import { m } from 'framer-motion';
-import { varFade, MotionViewport } from 'src/components/animate';
-import Stack from '@mui/material/Stack';
+import { MotionViewport } from 'src/components/animate';
 import doctors from './images/class-medical.png';
 import circleside from './images/circleside.png';
 
@@ -66,7 +65,7 @@ export default function Patient() {
               top: { md: '120px' },
               p: 1,
               width: { md: '500px', xs: '280px' },
-              fontSize:18
+              fontSize: 18,
             }}
           >
             <h1 style={{ color: 'green' }}>I am a unitservices</h1>
@@ -76,6 +75,7 @@ export default function Patient() {
               tempore odio Lorem ipsum sit amet consectetur adipjkisicing.
             </p>
             <Button
+              href={paths.auth.registersu}
               sx={{
                 bgcolor: 'success.main',
                 color: '#fff',

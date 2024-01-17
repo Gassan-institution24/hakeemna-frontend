@@ -118,16 +118,16 @@ export default function AppointmentBooking({ patientData }) {
       if (inputValue) {
         const results = appointmentsData.filter(
           (appointment) =>
-            (appointment.name_english &&
-              appointment.name_english?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
-            (appointment.name_arabic &&
-              appointment.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
+            (appointment?.name_english &&
+              appointment?.name_english?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
+            (appointment?.name_arabic &&
+              appointment?.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
             (appointment.unit_service &&
-              appointment.unit_service.name_english
+              appointment.unit_service?.name_english
                 ?.toLowerCase()
                 .indexOf(search.query.toLowerCase()) !== -1) ||
             (appointment.unit_service &&
-              appointment.unit_service.name_arabic
+              appointment.unit_service?.name_arabic
                 ?.toLowerCase()
                 .indexOf(search.query.toLowerCase()) !== -1) ||
             (appointment.work_group &&
@@ -146,7 +146,7 @@ export default function AppointmentBooking({ patientData }) {
               appointment.work_group.employees &&
               appointment.work_group.employees.some(
                 (employee) =>
-                  employee.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+                  employee?.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
               )) ||
             appointment?._id === search.query.toLowerCase() ||
             JSON.stringify(appointment.code) === search.query.toLowerCase()
