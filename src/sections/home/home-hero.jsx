@@ -216,7 +216,6 @@ export default function HomeHero() {
             size="large"
             variant="outlined"
             startIcon={<Iconify icon="eva:external-link-fill" width={24} />}
-            target="_blank"
             rel="noopener"
             href={paths.auth.register}
             sx={{ borderColor: 'text.primary' }}

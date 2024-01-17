@@ -186,8 +186,8 @@ export default function AccountGeneral() {
               <RHFTextField name="first_name" label="First Name" />
               <RHFTextField name="last_name" label="Last Name" />
               <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="mobile_num1" label="Phone Number" />
-              <RHFTextField name="mobile_num2" label="Phone Number" />
+              <RHFTextField name="mobile_num1" label="Mobile Number" />
+              <RHFTextField name="mobile_num2" label="Alternative Mobile Number" />
               <RHFTextField name="address" label="Address" />
 
               <RHFSelect
