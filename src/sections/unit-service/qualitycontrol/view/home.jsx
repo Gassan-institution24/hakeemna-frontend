@@ -80,7 +80,7 @@ export default function UnitServicesFeedbackView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const {user}= useAuthContext()
+  const { user } = useAuthContext();
 
   const componentRef = useRef();
 
@@ -91,7 +91,7 @@ export default function UnitServicesFeedbackView() {
 
   const router = useRouter();
 
-  const { feedbackData } = useGetUSFeedbackes(user.unit_service._id);
+  const { feedbackData } = useGetUSFeedbackes(user?.unit_service._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -161,7 +161,7 @@ export default function UnitServicesFeedbackView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading='Feedback' /// edit
+          heading="Feedback" /// edit
           links={[
             {
               name: 'Dashboard',

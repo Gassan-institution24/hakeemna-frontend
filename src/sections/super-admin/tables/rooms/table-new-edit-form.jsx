@@ -142,8 +142,7 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect native name="department" label="department">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="department" label="department">
                 {departmentsData.map((department) => (
                   <MenuItem key={department._id} value={department._id}>
                     {department.name_english}

@@ -210,8 +210,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
-              <RHFSelect native name="country" label="country">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="country" label="country">
                 {countriesData.map((country) => (
                   <MenuItem key={country._id} value={country._id}>
                     {country.name_english}
@@ -219,8 +218,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 ))}
               </RHFSelect>
 
-              <RHFSelect native name="family" label="family">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="family" label="family">
                 {families.map((family) => (
                   <MenuItem key={family._id} value={family._id}>
                     {family.name_english}

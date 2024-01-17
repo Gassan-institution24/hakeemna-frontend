@@ -157,32 +157,28 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect native name="unit_service" label="Unit Service">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="unit_service" label="Unit Service">
                 {unitservicesData.map((unit_service) => (
                   <MenuItem key={unit_service._id} value={unit_service._id}>
                     {unit_service.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="Employee" label="Employee">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="Employee" label="Employee">
                 {employeesData.map((Employee) => (
                   <MenuItem key={Employee._id} value={Employee._id}>
                     {Employee.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="Service" label="Service">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="Service" label="Service">
                 {serviceTypesData.map((type) => (
                   <MenuItem key={type._id} value={type._id}>
                     {type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="type" label="Type">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="type" label="Type">
                 <MenuItem value="from income">from income </MenuItem>
                 <MenuItem value="from sales">from sales </MenuItem>
               </RHFSelect>

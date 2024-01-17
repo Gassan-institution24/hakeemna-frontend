@@ -49,7 +49,7 @@ import { endpoints } from 'src/utils/axios';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import { enqueueSnackbar } from 'notistack';
-import { useGetInsuranceCos,useGetUnitservice } from 'src/api/tables';
+import { useGetInsuranceCos, useGetUnitservice } from 'src/api/tables';
 import { useTranslate } from 'src/locales';
 import InsuranceRow from '../insurance-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -94,12 +94,12 @@ export default function UnitServicesInsuranceView() {
 
   const settings = useSettingsContext();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const [filters, setFilters] = useState(defaultFilters);
 
   const { insuranseCosData } = useGetInsuranceCos();
-  const {data,refetch} = useGetUnitservice(user.unit_service._id);
+  const { data, refetch } = useGetUnitservice(user?.unit_service._id);
   const filteredInsuranceCos = insuranseCosData
     .filter((company) => !data?.insurance?.some((info) => info._id === company._id))
     .filter((info) => info.status === 'active');
@@ -267,11 +267,9 @@ export default function UnitServicesInsuranceView() {
                   >
                     {tab.value === 'all' && data?.insurance?.length}
                     {tab.value === 'active' &&
-                      data?.insurance.filter((order) => order.status === 'active')
-                        .length}
+                      data?.insurance.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      data?.insurance.filter((order) => order.status === 'inactive')
-                        .length}
+                      data?.insurance.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
@@ -337,11 +335,7 @@ export default function UnitServicesInsuranceView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(
-                      table.page,
-                      table.rowsPerPage,
-                      data?.insurance.length
-                    )}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, data?.insurance.length)}
                   />
 
                   <TableNoData notFound={notFound} />

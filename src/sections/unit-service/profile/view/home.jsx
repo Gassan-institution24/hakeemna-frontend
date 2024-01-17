@@ -26,11 +26,11 @@ const TABS = [
   //   label: 'Notifications',
   //   icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
   // },
-  {
-    value: 'security',
-    label: 'Security',
-    icon: <Iconify icon="ic:round-vpn-key" width={24} />,
-  },
+  // {
+  //   value: 'security',
+  //   label: 'Security',
+  //   icon: <Iconify icon="ic:round-vpn-key" width={24} />,
+  // },
 ];
 
 // ----------------------------------------------------------------------
@@ -40,9 +40,9 @@ export default function AccountView() {
 
   const [currentTab, setCurrentTab] = useState('general');
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
-  const {data,refetch} = useGetUnitservice(user.unit_service._id)
+  const { data, refetch } = useGetUnitservice(user?.unit_service._id);
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
@@ -51,16 +51,13 @@ export default function AccountView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Profile"
-        links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Profile' },
-        ]}
+        heading="Unit Service Info"
+        links={[{ name: 'Dashboard', href: paths.dashboard.root }, { name: 'Unit Service Info' }]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
-      <Tabs
+      {/* <Tabs
         value={currentTab}
         onChange={handleChangeTab}
         sx={{
@@ -70,10 +67,12 @@ export default function AccountView() {
         {TABS.map((tab) => (
           <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
-      </Tabs>
-      {currentTab === 'general' && data&& <AccountGeneral unitServiceData={data} refetch={refetch}/>}
+      </Tabs> */}
+      {currentTab === 'general' && data && (
+        <AccountGeneral unitServiceData={data} refetch={refetch} />
+      )}
       {/* {currentTab === 'notifications' && <AccountNotifications />} */}
-      {currentTab === 'security' && <AccountChangePassword />}
+      {/* {currentTab === 'security' && <AccountChangePassword />} */}
     </Container>
   );
 }

@@ -97,7 +97,7 @@ export default function AppointmentsView() {
   const confirmUnCancel = useBoolean();
   const confirmDelay = useBoolean();
 
-  const { appointmentsData, refetch } = useGetUSAppointments(user.unit_service._id);
+  const { appointmentsData, refetch } = useGetUSAppointments(user?.unit_service._id);
 
   const { appointmenttypesData } = useGetAppointmentTypes();
 

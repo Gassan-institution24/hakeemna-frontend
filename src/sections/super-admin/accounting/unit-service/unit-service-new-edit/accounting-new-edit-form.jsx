@@ -124,32 +124,28 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
                 sm: 'repeat(2, 1fr)',
               }} /// edit
             >
-              <RHFSelect native name="free_subscription" label="Free Subscription">
-                <MenuItem>{null}</MenuItem>
+              <RHFSelect name="free_subscription" label="Free Subscription">
                 {freeSubscriptionsData.map((subscription) => (
                   <MenuItem key={subscription._id} value={subscription._id}>
                     {subscription.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="subscription" label="subscription">
-                <MenuItem>{null}</MenuItem>
+              <RHFSelect name="subscription" label="subscription">
                 {subscriptionsData.map((backage) => (
                   <MenuItem key={backage._id} value={backage._id}>
                     {backage.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="Payment_method" label="Payment method">
-                <MenuItem>{null}</MenuItem>
+              <RHFSelect name="Payment_method" label="Payment method">
                 {paymentMethodsData.map((method) => (
                   <MenuItem key={method._id} value={method._id}>
                     {method.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="Payment_frequency" label="Payment Frequency">
-                <MenuItem>{null}</MenuItem>
+              <RHFSelect name="Payment_frequency" label="Payment Frequency">
                 <MenuItem value="once a week">once a week</MenuItem>
                 <MenuItem value="once a month">once a month</MenuItem>
               </RHFSelect>

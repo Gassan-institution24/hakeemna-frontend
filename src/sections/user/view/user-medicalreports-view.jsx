@@ -74,10 +74,10 @@ export default function UserCardList() {
           }}
           sx={{ width: '100%' }}
         >
-          <Medicalreports user={user.patient._id} />
+          <Medicalreports user={user?.patient._id} />
         </Box>
       )}
-      {currentTab === 'oldmedicaloeports' && <OldMedicalReports user={user.patient._id}/>}
+      {currentTab === 'oldmedicaloeports' && <OldMedicalReports user={user?.patient._id} />}
       {currentTab === 'bmi' && <Bmi />}
     </Container>
   );

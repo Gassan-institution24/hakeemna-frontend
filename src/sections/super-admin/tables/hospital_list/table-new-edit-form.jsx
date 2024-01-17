@@ -160,16 +160,14 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect native onChange={handleCountryChange} name="country" label="Country">
-                <MenuItem> </MenuItem>
+              <RHFSelect onChange={handleCountryChange} name="country" label="Country">
                 {countriesData.map((country) => (
                   <MenuItem key={country._id} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="city" label="City">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="city" label="City">
                 {cities.map((city) => (
                   <MenuItem key={city._id} value={city._id}>
                     {city.name_english}

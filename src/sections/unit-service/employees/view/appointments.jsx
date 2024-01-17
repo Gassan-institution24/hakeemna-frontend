@@ -95,11 +95,13 @@ export default function AppointmentsView({ employeeData }) {
   const confirm = useBoolean();
   const confirmUnCancel = useBoolean();
   const confirmDelay = useBoolean();
-  
 
-  const { appointmentsData, refetch } = useGetUSEmployeeAppointments(user.unit_service._id,employeeData._id);
-  console.log('employeeData',employeeData)
-  console.log('appointmentsData',appointmentsData)
+  const { appointmentsData, refetch } = useGetUSEmployeeAppointments(
+    user?.unit_service._id,
+    employeeData._id
+  );
+  console.log('employeeData', employeeData);
+  console.log('appointmentsData', appointmentsData);
 
   const { appointmenttypesData } = useGetAppointmentTypes();
 
@@ -126,7 +128,11 @@ export default function AppointmentsView({ employeeData }) {
   const denseHeight = table.dense ? 56 : 76;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || !!filters.startDate || !!filters.endDate || filters.types.length>0;
+    !!filters.name ||
+    filters.status !== 'all' ||
+    !!filters.startDate ||
+    !!filters.endDate ||
+    filters.types.length > 0;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -191,11 +197,11 @@ export default function AppointmentsView({ employeeData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch,enqueueSnackbar]
+    [dataInPage.length, table, refetch, enqueueSnackbar]
   );
 
   const handleDelayRow = useCallback(
-    async (id,min) => {
+    async (id, min) => {
       await axiosHandler({
         method: 'PATCH',
         path: `${endpoints.tables.appointment(id)}/delay`,
@@ -206,7 +212,7 @@ export default function AppointmentsView({ employeeData }) {
       setMinToDelay(0);
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch,enqueueSnackbar]
+    [dataInPage.length, table, refetch, enqueueSnackbar]
   );
 
   const handleUnCancelRow = useCallback(
@@ -216,7 +222,7 @@ export default function AppointmentsView({ employeeData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch,enqueueSnackbar]
+    [dataInPage.length, table, refetch, enqueueSnackbar]
   );
 
   const handleCancelRows = useCallback(
@@ -234,7 +240,14 @@ export default function AppointmentsView({ employeeData }) {
         totalRowsFiltered: dataFiltered.length,
       });
     },
-    [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table,enqueueSnackbar]
+    [
+      refetch,
+      dataFiltered.length,
+      dataInPage.length,
+      appointmentsData.length,
+      table,
+      enqueueSnackbar,
+    ]
   );
 
   const handleDelayRows = useCallback(async () => {
@@ -251,7 +264,15 @@ export default function AppointmentsView({ employeeData }) {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table, minToDelay,enqueueSnackbar]);
+  }, [
+    refetch,
+    dataFiltered.length,
+    dataInPage.length,
+    appointmentsData.length,
+    table,
+    minToDelay,
+    enqueueSnackbar,
+  ]);
 
   const handleUnCancelRows = useCallback(
     async (id) => {
@@ -268,7 +289,14 @@ export default function AppointmentsView({ employeeData }) {
         totalRowsFiltered: dataFiltered.length,
       });
     },
-    [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table,enqueueSnackbar]
+    [
+      refetch,
+      dataFiltered.length,
+      dataInPage.length,
+      appointmentsData.length,
+      table,
+      enqueueSnackbar,
+    ]
   );
 
   const handleViewRow = useCallback(
@@ -292,8 +320,8 @@ export default function AppointmentsView({ employeeData }) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-          heading='Appointments' /// edit
+        <CustomBreadcrumbs
+          heading="Appointments" /// edit
           links={[
             {
               name: 'Dashboard',
@@ -563,11 +591,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter(
       (appointment) =>
         (appointment?.work_shift?.name_english &&
-          appointment?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          appointment?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (appointment?.work_shift?.name_arabic &&
-          appointment?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          appointment?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (appointment?.work_group?.name_english &&
           appointment?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (appointment?.work_group?.name_arabic &&

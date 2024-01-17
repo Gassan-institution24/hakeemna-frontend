@@ -488,38 +488,49 @@ export const paths = {
       employees: {
         root: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees`,
         new: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/new`,
-        edit: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/edit`,
-        info: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/info`,
-        appointments: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointments`,
-        appointmentconfig:{
-          root: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointmentconfig`,
-          details: (id,emid,coid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointmentconfig/${coid}`,
-          new: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointmentconfig/new`,
+        edit: (id, emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/edit`,
+        info: (id, emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/info`,
+        appointments: (id, emid) =>
+          `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointments`,
+        appointmentconfig: {
+          root: (id, emid) =>
+            `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointmentconfig`,
+          details: (id, emid, coid) =>
+            `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointmentconfig/${coid}`,
+          new: (id, emid) =>
+            `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/appointmentconfig/new`,
         },
-        accounting: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/accounting`,
-        feedback: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/feedback`,
-        attendence: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/attendence`,
-        offers: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/offers`,
+        accounting: (id, emid) =>
+          `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/accounting`,
+        feedback: (id, emid) =>
+          `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/feedback`,
+        attendence: (id, emid) =>
+          `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/attendence`,
+        offers: (id, emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/offers`,
         activities: {
-          root:  (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/activities`,
-          new:  (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/activities/new`,
-          edit:  (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/activities`,
+          root: (id, emid) =>
+            `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/activities`,
+          new: (id, emid) =>
+            `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/activities/new`,
+          edit: (id, emid) =>
+            `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/activities`,
         },
-        acl: (id,emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/acl`,
+        acl: (id, emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/employees/${emid}/acl`,
       },
       accounting: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/accounting`,
       activities: {
         root: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/activities`,
         new: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/activities/new`,
-        edit: (id,acid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/activities/${acid}/edit`,
+        edit: (id, acid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/activities/${acid}/edit`,
       },
       rooms: {
         root: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/rooms`,
         new: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/rooms/new`,
-        edit: (id,acid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/rooms/${acid}/edit`,
+        edit: (id, acid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/rooms/${acid}/edit`,
       },
       appointments: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/appointments`,
-      appointmentconfiguration: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/appointmentconfiguration`,
+      appointmentconfiguration: (id) =>
+        `${ROOTS.SUPERADMIN}/us/departments/${id}/appointmentconfiguration`,
       qualityControl: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/qc`,
       edit: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/edit`,
     },
@@ -529,9 +540,9 @@ export const paths = {
       edit: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/info`,
       appointments: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/appointments`,
-      appointmentconfig:{
+      appointmentconfig: {
         root: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/appointmentconfig`,
-        details: (id,coid) => `${ROOTS.SUPERADMIN}/us/employees/${id}/appointmentconfig/${coid}`,
+        details: (id, coid) => `${ROOTS.SUPERADMIN}/us/employees/${id}/appointmentconfig/${coid}`,
         new: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/appointmentconfig/new`,
       },
       accounting: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/accounting`,
@@ -539,9 +550,9 @@ export const paths = {
       attendence: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/attendence`,
       offers: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/offers`,
       activities: {
-        root:  (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/activities`,
-        new:  (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/activities/new`,
-        edit:  (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/activities`,
+        root: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/activities`,
+        new: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/activities/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/activities`,
       },
       acl: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/acl`,
     },
@@ -646,6 +657,12 @@ export const paths = {
     appointments: {
       root: `${ROOTS.SUPERADMIN}/appointments`,
       info: (id) => `${ROOTS.SUPERADMIN}/appointments/${id}/info`,
+    },
+    appointmentconfiguration: {
+      root: `${ROOTS.SUPERADMIN}/appointmentconfig`,
+      new: `${ROOTS.SUPERADMIN}/appointmentconfig/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/appointmentconfig/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/appointmentconfig/${id}/info`,
     },
     accounting: {
       root: `${ROOTS.SUPERADMIN}/accounting`,

@@ -178,18 +178,19 @@ export function useNavData() {
             path: paths.unitservice.appointments.root,
             icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
           },
-          // {
-          //   title: t('appointment configuration'),
-          //   path: paths.unitservice.appointmentconfiguration.root,
-          //   icon: <Iconify icon="fluent:content-settings-16-regular" />,
-          // },
           {
             title: t('Accounting'),
             path: paths.unitservice.accounting.root,
             icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
             children: [
-              { title: t('economic movements'), path: paths.unitservice.accounting.economicmovements.root },
-              { title: t('payment control'), path: paths.unitservice.accounting.paymentcontrol.root },
+              {
+                title: t('economic movements'),
+                path: paths.unitservice.accounting.economicmovements.root,
+              },
+              {
+                title: t('payment control'),
+                path: paths.unitservice.accounting.paymentcontrol.root,
+              },
               { title: t('reciepts'), path: paths.unitservice.accounting.reciepts.root },
             ],
           },
@@ -231,7 +232,7 @@ export function useNavData() {
             icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
           },
           {
-            title: t('Profile'),
+            title: t('Service Unit Info'),
             path: paths.unitservice.profile.root,
             icon: <Iconify icon="fa-solid:clinic-medical" />,
           },
@@ -251,6 +252,11 @@ export function useNavData() {
             title: t('appointments'),
             path: paths.employee.appointments.root,
             icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+          },
+          {
+            title: t('appointment configuration'),
+            path: paths.employee.appointmentconfiguration.root,
+            icon: <Iconify icon="fluent:content-settings-16-regular" />,
           },
           {
             title: t('accounting'),
@@ -299,17 +305,17 @@ export function useNavData() {
           {
             title: t('book appointents'),
             path: paths.dashboard.user.bookappointment,
-            icon:<Iconify icon="icon-park-outline:medicine-chest"/>,
+            icon: <Iconify icon="icon-park-outline:medicine-chest" />,
           },
           {
             title: t('wating room'),
             path: paths.dashboard.user.watingroom,
-            icon:<Iconify icon="medical-icon:i-waiting-area"/>,
+            icon: <Iconify icon="medical-icon:i-waiting-area" />,
           },
           {
             title: t('emergency'),
             path: paths.dashboard.user.emergency,
-            icon: <Iconify icon="material-symbols:e911-emergency-outline"/>
+            icon: <Iconify icon="material-symbols:e911-emergency-outline" />,
           },
           {
             title: t('medical report'),
@@ -334,12 +340,12 @@ export function useNavData() {
           {
             title: t('share doctorna'),
             path: paths.dashboard.user.share,
-            icon: <Iconify icon="bxs:share-alt" sx={{color:'success.main'}}/>,
+            icon: <Iconify icon="bxs:share-alt" sx={{ color: 'success.main' }} />,
           },
           {
             title: t('logout'),
             onClick: handleLogout,
-            path:   paths.auth.login,
+            path: paths.auth.login,
             icon: <Iconify icon="tabler:logout" />,
           },
         ],
@@ -355,11 +361,11 @@ export function useNavData() {
     if (user?.role === 'admin') {
       return [...unitServicesItems, ...employeeItems];
     }
+    if (user?.role === 'employee') {
+      return [...unitServicesItems, ...employeeItems];
+    }
     return [...userItems];
-}, [t, user, handleLogout, router]);
+  }, [t, user, handleLogout, router]);
 
   return data;
 }
-
-
-

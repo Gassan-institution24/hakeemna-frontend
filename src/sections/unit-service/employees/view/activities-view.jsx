@@ -69,7 +69,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function ActivitesTableView({employeeData}) {
+export default function ActivitesTableView({ employeeData }) {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -78,12 +78,12 @@ export default function ActivitesTableView({employeeData}) {
 
   const router = useRouter();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { activitiesData, refetch } = useGetUSActivities(user.unit_service._id);
+  const { activitiesData, refetch } = useGetUSActivities(user?.unit_service._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -199,16 +199,16 @@ export default function ActivitesTableView({employeeData}) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.employees.activities.edit(employeeData._id,id));
+      router.push(paths.unitservice.employees.activities.edit(employeeData._id, id));
     },
-    [router,employeeData]
+    [router, employeeData]
   );
 
   const handleCreate = useCallback(
     (id) => {
       router.push(paths.unitservice.employees.activities.new(employeeData._id));
     },
-    [router,employeeData]
+    [router, employeeData]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -231,8 +231,6 @@ export default function ActivitesTableView({employeeData}) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        
-
         <Card>
           <Tabs
             value={filters.status}

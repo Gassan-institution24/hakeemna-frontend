@@ -137,8 +137,7 @@ export default function CitiesNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect native name="unit_service" label="unit service">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="unit_service" label="unit service">
                 {unitservicesData.map((unit) => (
                   <MenuItem key={unit._id} value={unit._id}>
                     {unit.name_english}

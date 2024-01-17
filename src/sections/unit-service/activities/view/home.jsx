@@ -79,12 +79,12 @@ export default function ActivitesTableView() {
 
   const router = useRouter();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { activitiesData, refetch } = useGetUSActivities(user.unit_service._id);
+  const { activitiesData, refetch } = useGetUSActivities(user?.unit_service._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -232,8 +232,8 @@ export default function ActivitesTableView() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-          heading={`${user.unit_service.name_english || 'Service Unit'} Activities`} /// edit
+        <CustomBreadcrumbs
+          heading={`${user?.unit_service.name_english || 'Service Unit'} Activities`} /// edit
           links={[
             {
               name: 'Dashboard',

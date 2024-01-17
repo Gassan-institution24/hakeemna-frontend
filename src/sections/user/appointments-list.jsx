@@ -16,8 +16,8 @@ export default function UserCardList() {
   const { user } = useAuthContext();
   const settings = useSettingsContext();
   const [currentTab, setCurrentTab] = useState('My Appointments');
-  const { data } = useGetPatient(user.patient._id);
-  
+  const { data } = useGetPatient(user?.patient._id);
+
   const TABS = [
     {
       value: 'My Appointments',
@@ -29,25 +29,24 @@ export default function UserCardList() {
       label: 'Book Appointment',
       icon: <Iconify icon="icon-park-outline:medicine-chest" width={24} />,
     },
-    
   ];
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
   return (
     <Container>
-    <Tabs
-      value={currentTab}
-      onChange={handleChangeTab}
-      sx={{
-        mb: { xs: 3, md: 5 },
-        mt: { md: -1 },
-      }}
-    >
-      {TABS.map((tab) => (
-        <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
-      ))}
-    </Tabs>
+      <Tabs
+        value={currentTab}
+        onChange={handleChangeTab}
+        sx={{
+          mb: { xs: 3, md: 5 },
+          mt: { md: -1 },
+        }}
+      >
+        {TABS.map((tab) => (
+          <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
+        ))}
+      </Tabs>
 
       {currentTab === 'My Appointments' && (
         <>
@@ -61,7 +60,7 @@ export default function UserCardList() {
               md: 'repeat(3, 1fr)',
             }}
           >
-            <Appoinment user={user.patient._id} />
+            <Appoinment user={user?.patient._id} />
           </Box>
           <hr />
           <h3>Finished Appointment</h3>
@@ -74,13 +73,12 @@ export default function UserCardList() {
               md: 'repeat(3, 1fr)',
             }}
           >
-            <FinishedAppoinment user={user.patient._id} />
+            <FinishedAppoinment user={user?.patient._id} />
           </Box>
         </>
       )}
 
       {currentTab === 'BookAppointment' && <AppointmentBooking patientData={data} />}
-
     </Container>
   );
 }

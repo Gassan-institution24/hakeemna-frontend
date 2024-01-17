@@ -43,10 +43,11 @@ export default function BookManually({ onClose, ...other }) {
   const { id } = useParams();
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSServiceTypes(user.unit_service._id);
-  const { workGroupsData } = useGetUSEmployeeWorkGroups(user.unit_service._id, id);
-  const { workShiftsData } = useGetUSWorkShifts(user.unit_service._id);
+  const { serviceTypesData } = useGetUSServiceTypes(user?.unit_service._id);
+  const { workGroupsData } = useGetUSEmployeeWorkGroups(user?.unit_service._id, id);
+  const { workShiftsData } = useGetUSWorkShifts(user?.unit_service._id);
 
+  console.log('workShiftsData', workShiftsData);
   const NewUserSchema = Yup.object().shape({
     work_shift: Yup.string().required('Work Shift is required'),
     work_group: Yup.string().required('Work Group is required'),
@@ -82,7 +83,7 @@ export default function BookManually({ onClose, ...other }) {
       await axios.post(endpoints.tables.appointments, {
         ...data,
         emergency: true,
-        unit_service: user.unit_service._id,
+        unit_service: user?.unit_service._id,
       });
       reset();
       enqueueSnackbar('Create success!');
@@ -139,28 +140,23 @@ export default function BookManually({ onClose, ...other }) {
                     sm: 'repeat(2, 1fr)',
                   }}
                 >
-                  <RHFSelect native name="appointment_type" label="Appointment Type">
-                    <MenuItem>{null}</MenuItem>
+                  <RHFSelect name="appointment_type" label="Appointment Type">
                     {appointmenttypesData.map((option) => (
                       <MenuItem value={option._id}>{option.name_english}</MenuItem>
                     ))}
                   </RHFSelect>
                   <RHFSelect
-                    native
                     name="work_shift"
                     label="Work Shift"
                     PaperPropsSx={{ textTransform: 'capitalize' }}
                   >
-                    <MenuItem value={null}> </MenuItem>
-                    {workShiftsData &&
-                      workShiftsData.map((option) => (
-                        <MenuItem key={option._id} value={option._id}>
-                          {option.name_english}
-                        </MenuItem>
-                      ))}
+                    {workShiftsData.map((option) => (
+                      <MenuItem key={option._id} value={option._id}>
+                        {option.name_english}
+                      </MenuItem>
+                    ))}
                   </RHFSelect>
-                  <RHFSelect native name="work_group" label="Work Group">
-                    <MenuItem>{null}</MenuItem>
+                  <RHFSelect name="work_group" label="Work Group">
                     {workGroupsData.map((option) => (
                       <MenuItem value={option._id}>{option.name_english}</MenuItem>
                     ))}
