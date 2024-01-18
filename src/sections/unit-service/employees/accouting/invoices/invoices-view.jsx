@@ -80,7 +80,7 @@ export default function EconomicMovementsView({ employeeData }) {
 
   const settings = useSettingsContext();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
   const router = useRouter();
 
@@ -88,9 +88,11 @@ export default function EconomicMovementsView({ employeeData }) {
 
   // const confirm = useBoolean();
 
-  const { economecMovementsData, refetch } = useGetUSEconomicMovements(user.unit_service._id);
+  const { economecMovementsData, refetch } = useGetUSEconomicMovements(
+    user?.employee_engagement?.unit_service._id
+  );
 
-  console.log('employeeData',employeeData)
+  console.log('employeeData', employeeData);
 
   const [filters, setFilters] = useState(defaultFilters);
 

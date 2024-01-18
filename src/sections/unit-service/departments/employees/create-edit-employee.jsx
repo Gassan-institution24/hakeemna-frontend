@@ -40,6 +40,8 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
   const { employeeTypesData } = useGetEmployeeTypes();
   const { specialtiesData } = useGetSpecialties();
 
+  console.log('countriesData', countriesData);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
@@ -190,32 +192,28 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
               />
               <RHFTextField name="phone" label="Phone" type="number" />
 
-              <RHFSelect native name="nationality" label="Nationality">
-                <MenuItem>{null}</MenuItem>
+              <RHFSelect name="nationality" label="Nationality">
                 {countriesData.map((nationality) => (
                   <MenuItem key={nationality._id} value={nationality._id}>
                     {nationality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="employee_type" label="Employee Type">
-                <MenuItem>{null}</MenuItem>
+              <RHFSelect name="employee_type" label="Employee Type">
                 {employeeTypesData.map((employee_type) => (
                   <MenuItem key={employee_type._id} value={employee_type._id}>
                     {employee_type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="speciality" label="Speciality">
-                <MenuItem>{null}</MenuItem>
+              <RHFSelect name="speciality" label="Speciality">
                 {specialtiesData.map((speciality) => (
                   <MenuItem key={speciality._id} value={speciality._id}>
                     {speciality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="gender" label="Gender">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="gender" label="Gender">
                 <MenuItem value="male">Male</MenuItem>
                 <MenuItem value="female">Female</MenuItem>
               </RHFSelect>

@@ -29,7 +29,7 @@ export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
   const { user } = useAuthContext();
-  const { departmentsData } = useGetUSDepartments(user.unit_service._id);
+  const { departmentsData } = useGetUSDepartments(user?.employee_engagement?.unit_service._id);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -43,14 +43,14 @@ export default function TableNewEditForm({ currentTable }) {
 
   const defaultValues = useMemo(
     () => ({
-      unit_service: currentTable?.unit_service._id || user.unit_service._id,
+      unit_service: currentTable?.unit_service._id || user?.employee_engagement?.unit_service._id,
       department: currentTable?.department._id || null,
       name_english: currentTable?.name_english || '',
       name_arabic: currentTable?.name_arabic || '',
       details: currentTable?.details || '',
       details_arabic: currentTable?.details_arabic || '',
     }),
-    [currentTable, user.unit_service]
+    [currentTable, user?.employee_engagement?.unit_service]
   );
 
   const methods = useForm({
@@ -143,8 +143,7 @@ export default function TableNewEditForm({ currentTable }) {
                 name="name_arabic"
                 label="name arabic"
               />
-              <RHFSelect native name="department" label="Department">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="department" label="Department">
                 {departmentsData.map((department) => (
                   <MenuItem key={department._id} value={department._id}>
                     {department.name_english}

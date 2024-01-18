@@ -37,8 +37,11 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
 
   const { id } = useParams();
 
-  const { workGroupsData } = useGetUSEmployeeWorkGroups(user.unit_service._id, id);
-  const { workShiftsData } = useGetUSWorkShifts(user.unit_service._id);
+  const { workGroupsData } = useGetUSEmployeeWorkGroups(
+    user?.employee_engagement?.unit_service._id,
+    id
+  );
+  const { workShiftsData } = useGetUSWorkShifts(user?.employee_engagement?.unit_service._id);
 
   return (
     <>
@@ -114,7 +117,6 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
           >
-            <MenuItem value={null}> </MenuItem>
             {workShiftsData &&
               workShiftsData.map((option) => (
                 <MenuItem key={option._id} value={option._id}>
@@ -131,7 +133,6 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
           >
-            <MenuItem value={null}> </MenuItem>
             {workGroupsData &&
               workGroupsData?.map((option) => (
                 <MenuItem key={option._id} value={option._id}>

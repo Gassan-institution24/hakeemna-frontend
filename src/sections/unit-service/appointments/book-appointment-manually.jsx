@@ -275,7 +275,6 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                   label="Nationality"
                   InputLabelProps={{ shrink: true }}
                 >
-                  <MenuItem>{null}</MenuItem>
                   {countriesData.map((option) => (
                     <MenuItem value={option._id}>{option.name_english}</MenuItem>
                   ))}
@@ -287,7 +286,6 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                   label="Country"
                   InputLabelProps={{ shrink: true }}
                 >
-                  <MenuItem>{null}</MenuItem>
                   {countriesData.map((option) => (
                     <MenuItem value={option._id}>{option.name_english}</MenuItem>
                   ))}
@@ -299,7 +297,6 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                   InputLabelProps={{ shrink: true }}
                 >
-                  <MenuItem value={null}> </MenuItem>
                   {cities.map((option) => (
                     <MenuItem key={option._id} value={option._id}>
                       {option.name_english}
@@ -312,15 +309,13 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                   label="Marital status"
                   InputLabelProps={{ shrink: true }}
                 >
-                  <MenuItem>{null}</MenuItem>
                   <MenuItem value="single">Single</MenuItem>
                   <MenuItem value="married">Married</MenuItem>
                   <MenuItem value="widowed">Widowed</MenuItem>
                   <MenuItem value="separated">Separated</MenuItem>
                   <MenuItem value="divorced">Divorced </MenuItem>
                 </RHFSelect>
-                <RHFSelect native name="gender" label="Gender" InputLabelProps={{ shrink: true }}>
-                  <MenuItem>{null}</MenuItem>
+                <RHFSelect name="gender" label="Gender" InputLabelProps={{ shrink: true }}>
                   <MenuItem value="male">Male</MenuItem>
                   <MenuItem value="female">Female</MenuItem>
                 </RHFSelect>

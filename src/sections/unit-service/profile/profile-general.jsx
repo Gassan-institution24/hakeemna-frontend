@@ -19,9 +19,9 @@ import { fData } from 'src/utils/format-number';
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral({ unitServiceData, refetch }) {
-
   const [selectedCountry, setSelectedCountry] = useState('');
   const [cities, setCities] = useState([]);
+  const [companyLogo, setCompanyLog] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -32,7 +32,7 @@ export default function AccountGeneral({ unitServiceData, refetch }) {
 
   const { user } = useAuthContext();
 
-  console.log('unitServiceData',unitServiceData)
+  console.log('unitServiceData', unitServiceData);
 
   const UpdateUserSchema = Yup.object().shape({
     name_english: Yup.string().required('Name is required.'),
@@ -97,26 +97,10 @@ export default function AccountGeneral({ unitServiceData, refetch }) {
 
   const values = getValues();
 
-  // const fuser = (fuserSize) => {
-  //   const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif'];
-
-  //   const isValidFile = (fileName) => {
-  //     const fileExtension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
-  //     const isExtensionAllowed = allowedExtensions.includes(fileExtension);
-  //     return isExtensionAllowed;
-  //   };
-  //   const isValidSize = (fileSize) => fileSize <= 3145728;
-
-  //   return {
-  //     validateFile: isValidFile,
-  //     validateSize: isValidSize,
-  //   };
-  // };
-
   const handleDrop = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
-
+      setCompanyLog(file);
       const newFile = Object.assign(file, {
         preview: URL.createObjectURL(file),
       });
@@ -127,55 +111,30 @@ export default function AccountGeneral({ unitServiceData, refetch }) {
     },
     [setValue]
   );
-  // const handleDrop = (acceptedFiles) => {
-  //   const file = acceptedFiles[0];
-
-  //   const fileValidator = fuser(file.size);
-
-  //   if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
-  //     setProfilePicture(file);
-  //     const newFile = Object.assign(file, {
-  //       preview: URL.createObjectURL(file),
-  //     });
-  //     setValue('company_logo', newFile);
-  //   } else {
-  //     enqueueSnackbar('Invalid file type or size', { variant: 'error' });
-  //   }
-  // };
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await axios.patch(endpoints.tables.unitservice(user.unit_service._id), data);
+      console.log('data', data);
+      const formData = new FormData();
+      if (companyLogo) {
+        formData.append('company_logo_pic', companyLogo);
+        await axios.patch(
+          `${endpoints.tables.unitservice(user?.employee_engagement?.unit_service._id)}/updatelogo`,
+          formData
+        );
+      }
+      await axios.patch(
+        endpoints.tables.unitservice(user?.employee_engagement?.unit_service._id),
+        data
+      );
       enqueueSnackbar('Update success!');
       console.info('DATA', data);
     } catch (error) {
-      enqueueSnackbar('Update failed!' ,{ variant: 'error' });
+      enqueueSnackbar('Update failed!', { variant: 'error' });
       console.error(error);
     }
   });
-  // const onSubmit = async (data) => {
-  //   // Create a new FormData object
-  //   console.log('data',data)
-  //   const formData = new FormData();
-  //     formData.append('company_logo', data.company_logo);
 
-  //   if (profilePicture) {
-  //     formData.append('ter', profilePicture);
-  //   }
-
-  //   try {
-  //     // Use your API endpoint to submit the form data
-  //     const response = await axios.patch(endpoints.tables.unitservice(user.unit_service._id), data);
-  //     refetch()
-  //     enqueueSnackbar('Profile updated successfully', { variant: 'success' });
-  //     // setTimeout(() => {
-  //     //   window.location.reload();
-  //     // }, 1000);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     enqueueSnackbar('Failed to update profile', { variant: 'error' });
-  //   }
-  // };
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
     const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
@@ -191,7 +150,8 @@ export default function AccountGeneral({ unitServiceData, refetch }) {
         {/* img */}
         <Grid xs={12} md={4}>
           <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
-            <RHFUploadAvatar helperText={
+            <RHFUploadAvatar
+              helperText={
                 <Typography
                   variant="caption"
                   sx={{
@@ -205,8 +165,10 @@ export default function AccountGeneral({ unitServiceData, refetch }) {
                   max size of {fData(3145728)}
                 </Typography>
               }
-             maxSize={3145728} name="company_logo" onDrop={handleDrop} />
-             <img src={values.company_logo} alt="Company Logo" />
+              maxSize={3145728}
+              name="company_logo"
+              onDrop={handleDrop}
+            />
             <Box
               rowGap={3}
               columnGap={2}

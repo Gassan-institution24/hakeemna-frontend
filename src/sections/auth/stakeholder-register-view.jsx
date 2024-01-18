@@ -194,16 +194,14 @@ export default function JwtRegisterView() {
         <RHFTextField name="email" label="Email address" />
         <RHFTextField name="identification_num" label="Identification number" />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFSelect native onChange={handleCountryChange} name="country" label="Country">
-            <MenuItem>{null}</MenuItem>
+          <RHFSelect onChange={handleCountryChange} name="country" label="Country">
             {countriesData.map((country) => (
               <MenuItem key={country._id} value={country._id}>
                 {country.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
-          <RHFSelect native name="city" label="City">
-            <MenuItem>{null}</MenuItem>
+          <RHFSelect name="city" label="City">
             {cities.map((city) => (
               <MenuItem key={city._id} value={city._id}>
                 {city.name_english}
@@ -212,16 +210,14 @@ export default function JwtRegisterView() {
           </RHFSelect>
         </Stack>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFSelect native name="US_type" label="Unit Service Type">
-            <MenuItem>{null}</MenuItem>
+          <RHFSelect name="US_type" label="Unit Service Type">
             {unitserviceTypesData.map((type) => (
               <MenuItem key={type._id} value={type._id}>
                 {type.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
-          <RHFSelect native name="speciality" label="Speciality">
-            <MenuItem>{null}</MenuItem>
+          <RHFSelect name="speciality" label="Speciality">
             {specialtiesData.map((specialty) => (
               <MenuItem key={specialty._id} value={specialty._id}>
                 {specialty.name_english}
@@ -230,8 +226,7 @@ export default function JwtRegisterView() {
           </RHFSelect>
         </Stack>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFSelect native name="sector_type" label="Sector type">
-            <MenuItem>{null}</MenuItem>
+          <RHFSelect name="sector_type" label="Sector type">
             <MenuItem value="public">Public</MenuItem>
             <MenuItem value="privet">Privet</MenuItem>
             <MenuItem value="charity">Charity</MenuItem>

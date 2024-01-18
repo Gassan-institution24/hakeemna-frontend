@@ -90,7 +90,7 @@ export default function FormDialog() {
   const oldPresctiptionSchema = Yup.object().shape({
     type: Yup.string().required(),
     date: Yup.date(),
-    file: Yup.string()
+    file: Yup.string(),
   });
 
   const TYPE = ['Blod Test', 'X-ray Test', 'Health Check Test', 'Heart examination Test'];
@@ -141,7 +141,7 @@ export default function FormDialog() {
       date: PropTypes.string.isRequired,
       file: PropTypes.string,
       created_at: PropTypes.string.isRequired,
-    })
+    }),
   };
   const methods = useForm({
     resolver: yupResolver(oldPresctiptionSchema),
@@ -298,7 +298,7 @@ export default function FormDialog() {
           <PDFDownloadLink
             key={i}
             document={<PrescriptionPDF info={info} />}
-            fileName={`${user.patient.first_name} MediacalReport.pdf`}
+            fileName={`${user?.patient.first_name} MediacalReport.pdf`}
             style={styles.line}
           >
             <Image
@@ -309,9 +309,7 @@ export default function FormDialog() {
                 mb: '10px',
               }}
             />
-            <ListItemText>
-              {info.type} File
-            </ListItemText>
+            <ListItemText>{info.type} File</ListItemText>
           </PDFDownloadLink>
         ))}
       </Box>

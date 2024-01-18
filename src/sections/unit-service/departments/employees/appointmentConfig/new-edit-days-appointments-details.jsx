@@ -83,9 +83,8 @@ export default function NewEditDayAppointmentsDetails({
     const results = [];
     return selectedItems
       ?.map(
-        (item) =>
-          item.name_english
-          // price += item.Price_per_unit || 0
+        (item) => item.name_english
+        // price += item.Price_per_unit || 0
       )
       .join(', ');
     // setOverAllPrice(price)
@@ -129,7 +128,6 @@ export default function NewEditDayAppointmentsDetails({
                   name={`days_details[${ParentIndex}].appointments[${index}].appointment_type`}
                   label="Appointment Type"
                 >
-                  <MenuItem>{null}</MenuItem>
                   {appointmenttypesData?.map((option) => (
                     <MenuItem value={option._id}>{option.name_english}</MenuItem>
                   ))}

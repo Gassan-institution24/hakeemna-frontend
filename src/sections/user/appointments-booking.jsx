@@ -1,4 +1,3 @@
-
 import orderBy from 'lodash/orderBy';
 import isEqual from 'lodash/isEqual';
 import { useState, useCallback } from 'react';
@@ -7,10 +6,7 @@ import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 import { useBoolean } from 'src/hooks/use-boolean';
-import {
-  _jobs,
-  _roles,
-} from 'src/_mock';
+import { _jobs, _roles } from 'src/_mock';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 import {
@@ -43,7 +39,7 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function AppointmentBooking() {
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
   const settings = useSettingsContext();
 
   const openFilters = useBoolean();
@@ -211,8 +207,6 @@ export default function AppointmentBooking() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-    
-
       <Stack
         spacing={2.5}
         sx={{
@@ -226,7 +220,11 @@ export default function AppointmentBooking() {
 
       {notFound && <EmptyContent filled title="No Data" sx={{ py: 10 }} />}
 
-      <AppointmentList patientData={user.patient._id} refetch={refetch} appointments={dataFiltered} />
+      <AppointmentList
+        patientData={user?.patient._id}
+        refetch={refetch}
+        appointments={dataFiltered}
+      />
     </Container>
   );
 }

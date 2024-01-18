@@ -82,7 +82,7 @@ export default function EmployeesTableView() {
 
   const componentRef = useRef();
 
-  const {user}= useAuthContext()
+  const { user } = useAuthContext();
 
   const settings = useSettingsContext();
 
@@ -91,7 +91,7 @@ export default function EmployeesTableView() {
 
   const router = useRouter();
 
-  const { employeesData, refetch } =useGetUSEmployees(user.unit_service._id);
+  const { employeesData, refetch } = useGetUSEmployees(user?.employee_engagement?.unit_service._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -240,13 +240,13 @@ export default function EmployeesTableView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading='Employees' /// edit
+          heading="Employees" /// edit
           links={[
             {
               name: 'Dashboard',
               href: paths.unitservice.root,
             },
-            { name: 'Employees'} , /// edit
+            { name: 'Employees' }, /// edit
           ]}
           action={
             <Button

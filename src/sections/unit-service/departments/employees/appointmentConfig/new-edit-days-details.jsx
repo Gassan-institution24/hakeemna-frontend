@@ -58,7 +58,7 @@ export default function NewEditDayDetails({ appointTime }) {
   const [showAppointments, setShowAppointments] = useState({});
   const [appointmentsNum, setAppointmentsNum] = useState({});
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSServiceTypes(user.unit_service._id);
+  const { serviceTypesData } = useGetUSServiceTypes(user?.employee_engagement?.unit_service._id);
 
   const values = getValues();
 
@@ -218,9 +218,8 @@ export default function NewEditDayDetails({ appointTime }) {
     const results = [];
     return selectedItems
       ?.map(
-        (item) =>
-          item.name_english
-          // price += item.Price_per_unit || 0
+        (item) => item.name_english
+        // price += item.Price_per_unit || 0
       )
       .join(', ');
     // setOverAllPrice(price)
@@ -285,7 +284,6 @@ export default function NewEditDayDetails({ appointTime }) {
                   sx={{ width: '100%', mt: 2 }}
                 >
                   <RHFSelect size="small" native name={`days_details[${index}].day`} label="Day">
-                    <MenuItem>{null}</MenuItem>
                     {weekDays
                       .filter(
                         (option) =>
@@ -437,7 +435,6 @@ export default function NewEditDayDetails({ appointTime }) {
                     name={`days_details[${index}].appointment_type`}
                     label="Appointment Type"
                   >
-                    <MenuItem>{null}</MenuItem>
                     {appointmenttypesData?.map((option) => (
                       <MenuItem value={option._id}>{option.name_english}</MenuItem>
                     ))}

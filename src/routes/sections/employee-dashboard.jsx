@@ -56,6 +56,17 @@ const QCHomePage = lazy(() => import('src/pages/employee/qualitycontrol/home'));
 const ProfileHomePage = lazy(() => import('src/pages/employee/profile/home'));
 const ProfileEditPage = lazy(() => import('src/pages/employee/profile/edit'));
 
+// APPOINTMENT CONFIGURATION
+const AppointmentConfigPage = lazy(() =>
+  import('src/pages/employee/appoint-config/appoint-config')
+);
+const AppointmentConfigDetailsPage = lazy(() =>
+  import('src/pages/employee/appoint-config/appoint-config-detail')
+);
+const NewAppointmentConfigPage = lazy(() =>
+  import('src/pages/employee/appoint-config/new-appoint-config')
+);
+
 // ----------------------------------------------------------------------
 
 export const unitServiceEmployeeDashboardRoutes = [
@@ -86,6 +97,14 @@ export const unitServiceEmployeeDashboardRoutes = [
         children: [
           { element: <AppointmentsHomePage />, index: true },
           { path: ':id/info', element: <AppointmentsInfoPage /> },
+        ],
+      },
+      {
+        path: 'appointmentconfig',
+        children: [
+          { element: <AppointmentConfigPage />, index: true },
+          { path: 'new', element: <NewAppointmentConfigPage /> },
+          { path: ':coid', element: <AppointmentConfigDetailsPage /> },
         ],
       },
       {

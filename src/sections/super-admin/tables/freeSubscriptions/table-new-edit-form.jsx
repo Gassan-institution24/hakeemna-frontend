@@ -155,40 +155,35 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect native name="country" label="Country">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="country" label="Country">
                 {countriesData.map((country) => (
                   <MenuItem key={country._id} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="city" label="city">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="city" label="city">
                 {tableData.map((city) => (
                   <MenuItem key={city._id} value={city._id}>
                     {city.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="US_type" label="US_type">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="US_type" label="US_type">
                 {unitserviceTypesData.map((type) => (
                   <MenuItem key={type._id} value={type._id}>
                     {type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="speciality" label="speciality">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="speciality" label="speciality">
                 {specialtiesData.map((speciality) => (
                   <MenuItem key={speciality._id} value={speciality._id}>
                     {speciality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="general" label="Is it General?">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="general" label="Is it General?">
                 <MenuItem value>Yes </MenuItem>
                 <MenuItem value={false}>No </MenuItem>
               </RHFSelect>

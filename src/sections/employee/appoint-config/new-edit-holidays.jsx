@@ -1,0 +1,137 @@
+import sum from 'lodash/sum';
+import { useEffect, useCallback } from 'react';
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import InputAdornment from '@mui/material/InputAdornment';
+import { inputBaseClasses } from '@mui/material/InputBase';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+import { fCurrency } from 'src/utils/format-number';
+
+import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
+
+import Iconify from 'src/components/iconify';
+import { RHFSelect, RHFTextField } from 'src/components/hook-form';
+
+// ----------------------------------------------------------------------
+
+export default function NewEditHolidays() {
+  const { control, setValue, watch, resetField, getValues } = useFormContext();
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'holidays',
+  });
+
+  const values = getValues();
+
+  const handleAdd = () => {
+    append({
+      date: null,
+      description: '',
+    });
+  };
+
+  const handleRemove = (index) => {
+    remove(index);
+  };
+
+  return (
+    <>
+      <Divider flexItem sx={{ borderStyle: 'solid' }} />
+      <Box sx={{ p: 3 }}>
+        <Typography
+          variant="p"
+          sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
+        >
+          Holidays:
+        </Typography>
+
+        <Stack
+          sx={{ mt: 3 }}
+          divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
+          spacing={2}
+        >
+          {fields.map((item, index) => (
+            <Stack
+              key={item.id}
+              alignItems="flex-start"
+              spacing={1.5}
+              sx={{ width: { xs: '100%', md: 'auto' } }}
+            >
+              <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                spacing={2}
+                sx={{ width: { xs: '100%', md: 'auto' } }}
+              >
+                <RHFTextField
+                  size="small"
+                  name={`holidays[${index}].description`}
+                  label="Description"
+                  // sx={{ flex: 2 }}
+                />
+                <Controller
+                  name={`holidays[${index}].date`}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <DatePicker
+                      label="Date"
+                      // sx={{ flex: 1 }}
+                      value={
+                        new Date(values.holidays[index].date ? values.holidays[index].date : '')
+                      }
+                      onChange={(newValue) => {
+                        field.onChange(newValue);
+                      }}
+                      slotProps={{
+                        textField: {
+                          size: 'small',
+                          fullWidth: true,
+                          error: !!error,
+                          helperText: error?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <IconButton
+                  sx={{ justifySelf: 'flex-end', alignSelf: 'flex-end', width: 35 }}
+                  size="small"
+                  color="error"
+                  onClick={() => handleRemove(index)}
+                >
+                  <Iconify icon="solar:trash-bin-trash-bold" />
+                </IconButton>
+              </Stack>
+            </Stack>
+          ))}
+        </Stack>
+
+        <Divider sx={{ mt: 3, mb: 1, borderStyle: 'dashed' }} />
+
+        <Stack
+          spacing={3}
+          direction={{ xs: 'column', md: 'row' }}
+          alignItems={{ xs: 'flex-end', md: 'center' }}
+        >
+          <Button
+            size="small"
+            color="primary"
+            startIcon={<Iconify icon="tdesign:plus" />}
+            sx={{ padding: 1 }}
+            onClick={handleAdd}
+          >
+            Add Holiday
+          </Button>
+        </Stack>
+      </Box>
+    </>
+  );
+}

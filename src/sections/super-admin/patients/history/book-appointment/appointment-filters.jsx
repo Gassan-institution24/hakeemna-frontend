@@ -187,8 +187,8 @@ export default function JobFilters({
   //     <Typography variant="subtitle2" sx={{ mb: 1 }}>
   //       Countries
   //     </Typography>
-  //     <RHFSelect native onChange={handleFilterCountries} name="country" label="Country">
-  //           <MenuItem>{null}</MenuItem>
+  //     <RHFSelect  onChange={handleFilterCountries} name="country" label="Country">
+  //
   //           {countriesOptions.map((country) => (
   //             <MenuItem key={country._id} value={country._id}>
   //               {country.name_english}

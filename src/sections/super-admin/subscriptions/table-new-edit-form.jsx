@@ -9,7 +9,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Typography, Checkbox, FormControlLabel,MenuItem } from '@mui/material';
+import { Typography, Checkbox, FormControlLabel, MenuItem } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 
 import { paths } from 'src/routes/paths';
@@ -172,32 +172,28 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect native name="country" label="Country">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="country" label="Country">
                 {countriesData.map((country) => (
                   <MenuItem key={country._id} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="city" label="city">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="city" label="city">
                 {tableData.map((city) => (
                   <MenuItem key={city._id} value={city._id}>
                     {city.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="US_type" label="US_type">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="US_type" label="US_type">
                 {unitserviceTypesData.map((type) => (
                   <MenuItem key={type._id} value={type._id}>
                     {type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect native name="unit_service" label="Unit Service">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="unit_service" label="Unit Service">
                 {specialtiesData.map((unit_service) => (
                   <MenuItem key={unit_service._id} value={unit_service._id}>
                     {unit_service.name_english}

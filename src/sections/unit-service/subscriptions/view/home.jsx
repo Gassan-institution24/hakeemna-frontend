@@ -86,7 +86,7 @@ export default function UnitServicesAccountingView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const {user}= useAuthContext()
+  const { user } = useAuthContext();
 
   const componentRef = useRef();
 
@@ -97,7 +97,9 @@ export default function UnitServicesAccountingView() {
 
   const router = useRouter();
 
-  const { licenseMovements, refetch } = useGetUSLicenseMovement(user.unit_service._id);
+  const { licenseMovements, refetch } = useGetUSLicenseMovement(
+    user?.employee_engagement?.unit_service._id
+  );
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -174,7 +176,7 @@ export default function UnitServicesAccountingView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading='Subscriptions' /// edit
+          heading="Subscriptions" /// edit
           links={[
             {
               name: 'Dashboard',
@@ -185,7 +187,7 @@ export default function UnitServicesAccountingView() {
           // action={
           //   <Button
           //     component={RouterLink}
-          //     href={paths.superadmin.unitservices.newAccounting(user.unit_service._id)} /// edit
+          //     href={paths.superadmin.unitservices.newAccounting(user?.employee_engagement?.unit_service._id)} /// edit
           //     variant="contained"
           //     startIcon={<Iconify icon="mingcute:add-line" />}
           //   >

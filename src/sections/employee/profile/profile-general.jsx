@@ -1,0 +1,412 @@
+import * as Yup from 'yup';
+import PropTypes from 'prop-types';
+import { useState, useEffect, useCallback } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import Grid from '@mui/material/Unstable_Grid2';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { MenuItem, Typography, TextField } from '@mui/material';
+
+import { useAuthContext } from 'src/auth/hooks';
+import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, {
+  RHFTextField,
+  RHFSelect,
+  RHFUploadAvatar,
+  RHFUploadBox,
+} from 'src/components/hook-form';
+import {
+  useGetCities,
+  useGetCountries,
+  useGetSpecialties,
+  useGetEmployeeTypes,
+} from 'src/api/tables';
+import axios, { endpoints, fetcher } from 'src/utils/axios';
+import { fData } from 'src/utils/format-number';
+
+// ----------------------------------------------------------------------
+
+export default function AccountGeneral({ employeeData, refetch }) {
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [cities, setCities] = useState([]);
+  const [companyLogo, setCompanyLog] = useState();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { countriesData } = useGetCountries();
+  const { tableData } = useGetCities();
+  const { employeeTypesData } = useGetEmployeeTypes();
+  const { specialtiesData } = useGetSpecialties();
+
+  const { user } = useAuthContext();
+
+  console.log('employeeData', employeeData);
+
+  const UpdateUserSchema = Yup.object().shape({
+    employee_type: Yup.string().required('Employee type is required.'),
+    email: Yup.string().required('Email is required.'),
+    first_name: Yup.string().required('First name is required.'),
+    second_name: Yup.string().required('Second name is required.'),
+    family_name: Yup.string().required('Family name is required.'),
+    nationality: Yup.string().required('Nationality is required.'),
+    profrssion_practice_num: Yup.string().required('Profrssion practice number is required.'),
+    identification_num: Yup.string().required('ID number is required.'),
+    tax_num: Yup.string(),
+    phone: Yup.string().required('Phone number is required'),
+    mobile_num: Yup.string(),
+    speciality: Yup.string().required('speciality'),
+    gender: Yup.string().required('gender'),
+    birth_date: Yup.date().required('birth_date'),
+    Bachelor_year_graduation: Yup.number(),
+    University_graduation_Bachelor: Yup.string(),
+    University_graduation_Specialty: Yup.string(),
+    scanned_identity: Yup.mixed().nullable(),
+    signature: Yup.mixed().nullable(),
+    stamp: Yup.mixed().nullable(),
+    picture: Yup.mixed().nullable(),
+  });
+
+  const handleCountryChange = (event) => {
+    const selectedCountryId = event.target.value;
+    methods.setValue('country', selectedCountryId, { shouldValidate: true });
+    setSelectedCountry(selectedCountryId);
+  };
+
+  useEffect(() => {
+    setCities(
+      selectedCountry
+        ? tableData.filter((data) => data?.country?._id === selectedCountry)
+        : tableData
+    );
+  }, [tableData, selectedCountry]);
+
+  const defaultValues = {
+    employee_type: employeeData?.employee_type?._id || null,
+    email: employeeData?.email || '',
+    first_name: employeeData?.first_name || '',
+    second_name: employeeData?.second_name || '',
+    family_name: employeeData?.family_name || '',
+    nationality: employeeData?.nationality?._id || '',
+    profrssion_practice_num: employeeData?.profrssion_practice_num || '',
+    identification_num: employeeData?.identification_num || '',
+    tax_num: employeeData?.tax_num || '',
+    phone: employeeData?.phone || '',
+    mobile_num: employeeData?.mobile_num || '',
+    speciality: employeeData?.speciality?._id || null,
+    gender: employeeData?.gender || '',
+    birth_date: employeeData?.birth_date || null,
+    Bachelor_year_graduation: employeeData?.Bachelor_year_graduation || '',
+    University_graduation_Bachelor: employeeData?.University_graduation_Bachelor || '',
+    University_graduation_Specialty: employeeData?.University_graduation_Specialty || '',
+    scanned_identity: employeeData?.scanned_identity || null,
+    signature: employeeData?.signature || null,
+    stamp: employeeData?.stamp || null,
+    picture: employeeData?.picture || null,
+  };
+
+  const methods = useForm({
+    resolver: yupResolver(UpdateUserSchema),
+    defaultValues,
+  });
+  const {
+    getValues,
+    setValue,
+    handleSubmit,
+    control,
+    formState: { isSubmitting },
+  } = methods;
+
+  const values = getValues();
+
+  const handleDrop = useCallback(
+    (name, acceptedFiles) => {
+      const file = acceptedFiles[0];
+      // setCompanyLog(file);
+      // const newFile = Object.assign(file, {
+      //   preview: URL.createObjectURL(file),
+      // });
+
+      if (file) {
+        setValue(name, file, { shouldValidate: true });
+      }
+    },
+    [setValue]
+  );
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      console.log('data', data);
+      const formData = new FormData();
+      Object.keys(data).forEach((key) => {
+        if(data[key]!==defaultValues[key]){
+          formData.append(key, data[key]);
+        }
+      });
+      
+      console.log('formData', formData);
+      await axios.patch(endpoints.tables.employee(employeeData._id), formData);
+      enqueueSnackbar('Update success!');
+      console.info('DATA', data);
+    } catch (error) {
+      enqueueSnackbar('Update failed!', { variant: 'error' });
+      console.error(error);
+    }
+  });
+
+  const handleEnglishInputChange = (event) => {
+    // Validate the input based on English language rules
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
+
+    if (englishRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
+  return (
+    <FormProvider methods={methods} onSubmit={onSubmit}>
+      <Grid container spacing={3}>
+        {/* img */}
+        <Grid xs={12} md={4}>
+          <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
+            <RHFUploadAvatar
+              // helperText={
+              //   <Typography
+              //     variant="caption"
+              //     sx={{
+              //       mt: 3,
+              //       mx: 'auto',
+              //       display: 'block',
+              //       textAlign: 'center',
+              //       color: 'text.disabled',
+              //     }}
+              //   >
+              //     max size of {fData(3145728)}
+              //   </Typography>
+              // }
+              maxSize={3145728}
+              name="picture"
+              onDrop={(acceptedFiles) => handleDrop('picture', acceptedFiles)}
+            />
+            <Box
+              rowGap={3}
+              columnGap={2}
+              sx={{ mt: 5 }}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(1, 1fr)',
+              }}
+            >
+              <RHFTextField
+                // disabled
+                variant="filled"
+                name="identification_num"
+                label="ID number :"
+              />
+              <RHFTextField
+                // disabled
+                variant="filled"
+                name="profrssion_practice_num"
+                label="Profrssion practice number :"
+              />
+              <RHFTextField type="email" variant="filled" name="email" label="Email :" />
+              <RHFTextField type="number" variant="filled" name="phone" label="Phone Number :" />
+              <Box
+                rowGap={3}
+                columnGap={2}
+                display="grid"
+                gridTemplateColumns={{
+                  xs: 'repeat(1, 1fr)',
+                  sm: 'repeat(3, 1fr)',
+                }}
+              >
+                <Box>
+                  <RHFUploadBox
+                    sx={{
+                      mx: 'auto',
+                    }}
+                    name="scanned_identity"
+                    label="Scanned ID"
+                    onDrop={(acceptedFiles) => handleDrop('scanned_identity', acceptedFiles)}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      mx: 'auto',
+                      display: 'block',
+                      textAlign: 'center',
+                      color: 'text.disabled',
+                    }}
+                  >
+                    Scanned ID
+                  </Typography>
+                </Box>
+                <Box>
+                  <RHFUploadBox
+                    sx={{
+                      mx: 'auto',
+                    }}
+                    name="signature"
+                    label="Signature"
+                    onDrop={(acceptedFiles) => handleDrop('signature', acceptedFiles)}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      mx: 'auto',
+                      display: 'block',
+                      textAlign: 'center',
+                      color: 'text.disabled',
+                    }}
+                  >
+                    Signature
+                  </Typography>
+                </Box>
+                <Box>
+                  <RHFUploadBox
+                    sx={{
+                      mx: 'auto',
+                    }}
+                    name="stamp"
+                    label="Stamp"
+                    onDrop={(acceptedFiles) => handleDrop('stamp', acceptedFiles)}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      mx: 'auto',
+                      display: 'block',
+                      textAlign: 'center',
+                      color: 'text.disabled',
+                    }}
+                  >
+                    Stamp
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          </Card>
+        </Grid>
+        <Grid xs={12} md={8}>
+          <Card sx={{ p: 3, pt: 5 }}>
+            <Box
+              rowGap={3}
+              columnGap={2}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
+              }}
+            >
+              <RHFTextField name="first_name" label="First name :" />
+              <RHFTextField name="second_name" label="Second name :" />
+              <RHFTextField name="family_name" label="Family name :" />
+              <RHFSelect
+                label="Nationality"
+                fullWidth
+                name="nationality"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {countriesData.map((country) => (
+                  <MenuItem key={country._id} value={country._id}>
+                    {country.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFTextField type="number" name="tax_num" label="Tax number" />
+              <RHFTextField type="number" name="mobile_num" label="Alternative mobile number" />
+              <RHFSelect
+                label="Speciality"
+                fullWidth
+                name="speciality"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {specialtiesData.map((specialty) => (
+                  <MenuItem value={specialty._id} key={specialty._id}>
+                    {specialty.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFSelect
+                label="Gender"
+                fullWidth
+                name="gender"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                <MenuItem value="male">male</MenuItem>
+                <MenuItem value="female">female</MenuItem>
+              </RHFSelect>
+              <RHFSelect
+                label="Employee type"
+                fullWidth
+                name="employee_type"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {employeeTypesData.map((type) => (
+                  <MenuItem value={type._id} key={type._id}>
+                    {type.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+
+              <RHFTextField
+                type="number"
+                name="Bachelor_year_graduation"
+                label="Bachelor year graduation"
+              />
+              <RHFTextField
+                name="University_graduation_Bachelor"
+                label="University graduation bachelor"
+              />
+              <RHFTextField
+                name="University_graduation_Specialty"
+                label="University_graduation_Specialty"
+              />
+              <Controller
+                name="birth_date"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <DatePicker
+                    label="Birth date"
+                    // sx={{ flex: 1 }}
+                    value={new Date(values.birth_date ? values.birth_date : '')}
+                    onChange={(newValue) => {
+                      field.onChange(newValue);
+                    }}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!error,
+                        helperText: error?.message,
+                      },
+                    }}
+                  />
+                )}
+              />
+            </Box>
+            <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label="Address" />
+
+            <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
+              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                Save Changes
+              </LoadingButton>
+            </Stack>
+          </Card>
+        </Grid>
+      </Grid>
+    </FormProvider>
+  );
+}
+AccountGeneral.propTypes = {
+  employeeData: PropTypes.object,
+  refetch: PropTypes.func,
+};

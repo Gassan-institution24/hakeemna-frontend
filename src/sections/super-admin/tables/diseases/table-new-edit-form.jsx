@@ -183,8 +183,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 rows={3}
               />
 
-              <RHFSelect native name="category" label="category">
-                <MenuItem> </MenuItem>
+              <RHFSelect name="category" label="category">
                 {categories.map((category) => (
                   <MenuItem key={category._id} value={category._id}>
                     {category.name_english}
