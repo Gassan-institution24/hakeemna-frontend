@@ -15,12 +15,10 @@ import Radio from '@mui/material/Radio';
 import Image from 'src/components/image';
 import { useSnackbar } from 'src/components/snackbar';
 import axios from 'src/utils/axios';
-// import axios from 'axios';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { Rating, Input } from '@mui/material';
 import FormProvider from 'src/components/hook-form/form-provider';
-import { RHFSelect } from 'src/components/hook-form';
-import { fTime } from 'src/utils/format-time';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -32,14 +30,17 @@ export default function MaxWidthDialog() {
     Selection: Yup.string().nullable(),
   });
   const [rating, setRating] = useState();
-  const [appointment, setAppointment] = useState();
+  const [appointment, setAppointment] = useState({});
+
+  const { user } = useAuthContext();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/api/appointments/');
-        setAppointment(response.data);
-        // console.log(fTime(response.data.start_time));
+        const response = await axios.get(
+          `/api/appointments/patient/${user.patient._id}/lastappointment`
+        );
+        setAppointment(response?.data);
       } catch (error) {
         console.error('Error fetching data:', error.message);
         throw error;
@@ -47,9 +48,19 @@ export default function MaxWidthDialog() {
     };
 
     fetchData();
-  }, []);
+  }, [user.patient]);
 
-  console.log('jkjkjhj', appointment);
+  const skipfunction = async () => {
+    try {
+      const response = await axios.patch(`api/appointments/${appointment._id}`, {
+        hasFeedback: true,
+      });
+      dialog.onFalse();
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   const handleRatingClick = (e) => {
     setRating(parseFloat(e.target.value));
   };
@@ -63,9 +74,7 @@ export default function MaxWidthDialog() {
     defaultValues,
   });
   const {
-    getValues,
     register,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -82,31 +91,32 @@ export default function MaxWidthDialog() {
     inputProps: { 'aria-label': item },
   });
 
-  // Update handleChange
   const handleChange = (event, item) => {
     setSelectedValue(item);
   };
 
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState('xs');
-
   const onSubmit = async (data) => {
     try {
       const newData = {
         ...data,
         Selection: selectedValue,
         Rate: rating,
+        patient: user.patient._id,
+        appointment: appointment._id,
+        department: appointment.department?._id,
+        unit_service: appointment.unit_service?._id,
       };
       const response = await axios.post('api/feedback', newData);
-      if (response.status === 200) {
-        enqueueSnackbar('Your answer uploaded successfully', { variant: 'success' });
-        setTimeout(() => {
-          dialog.onFalse();
-          window.location.reload();
-        }, 2000);
-      } else {
-        throw new Error('Failed to upload Your answer');
-      }
+      await axios.patch(`api/appointments/${appointment._id}`, {
+        hasFeedback: true, // Increment the skip value by 1
+      });
+      enqueueSnackbar('Your answer uploaded successfully', { variant: 'success' });
+      setTimeout(() => {
+        dialog.onFalse();
+        window.location.reload();
+      }, 2000);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Failed to upload Your answer', { variant: 'error' });
@@ -115,100 +125,107 @@ export default function MaxWidthDialog() {
 
   return (
     <>
-      {appointment?.map((infotwo, i) => {
-        const startTime = new Date(infotwo?.start_time);
-        const endTime = new Date(infotwo?.end_time);
+      {appointment?.start_time &&
+        appointment?.end_time &&
+        (() => {
+          const startTime = new Date(appointment.start_time);
+          const endTime = new Date(appointment.end_time);
 
-        const isPastAppointment = Date.now() > endTime;
-        return (
-          <>
-            {isPastAppointment ? (
-              <span>
-                <Dialog
-                  open={dialog.value}
-                  maxWidth={maxWidth}
-                  onClose={dialog.onTrue}
-                  fullWidth={fullWidth}
-                >
-                  <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        margin: '20px',
-                        gap: '10px',
-                      }}
+          const isPastAppointment = Date.now() > endTime;
+
+          if (appointment.hasFeedback === false) {
+            return (
+              <>
+                {isPastAppointment ? (
+                  <span>
+                    <Dialog
+                      open={dialog.value}
+                      maxWidth={maxWidth}
+                      onClose={dialog.onTrue}
+                      fullWidth={fullWidth}
                     >
-                      <DialogTitle>Rate your appointment</DialogTitle>
-                      <Image
-                        src="https://cdn.altibbi.com/cdn/large/0/10/logo_1296490409_651.gif"
-                        sx={{ width: '60px', height: '60px', border: 1, borderRadius: '50px' }}
-                      />
-                      <Typography sx={{ color: 'black' }}>Department Name</Typography>
-                      <Rating
-                        size="large"
-                        precision={1}
-                        max={5}
-                        name="Rate"
-                        value={rating}
-                        onChange={handleRatingClick}
-                      />
-                    </div>
+                      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                            margin: '20px',
+                            gap: '10px',
+                          }}
+                        >
+                          <DialogTitle>Rate your appointment</DialogTitle>
+                          <Image
+                            src="https://cdn.altibbi.com/cdn/large/0/10/logo_1296490409_651.gif"
+                            sx={{ width: '60px', height: '60px', border: 1, borderRadius: '50px' }}
+                          />
+                          <Typography sx={{ color: 'black' }}>Department Name</Typography>
+                          <Rating
+                            size="large"
+                            precision={1}
+                            max={5}
+                            name="Rate"
+                            value={rating}
+                            onChange={handleRatingClick}
+                          />
+                        </div>
 
-                    {rating < 5 ? (
-                      <DialogContent>
-                        <Box component="form" noValidate>
-                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-                            {RATEELEMENTS.map((info, index) => (
-                              <div key={index}>
-                                <Box
-                                  sx={{
-                                    fontSize: { md: '15px', xs: '9px' },
-                                    fontWeight: { md: '400', xs: 'bolder' },
-                                  }}
-                                >
-                                  <Radio {...controlProps(info)} name="Selection" />
-                                  {info}
-                                </Box>
+                        {rating < 5 ? (
+                          <DialogContent>
+                            <Box component="form" noValidate>
+                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+                                {RATEELEMENTS?.map((info, index) => (
+                                  <div key={index}>
+                                    <Box
+                                      sx={{
+                                        fontSize: { md: '15px', xs: '9px' },
+                                        fontWeight: { md: '400', xs: 'bolder' },
+                                      }}
+                                    >
+                                      <Radio {...controlProps(info)} name="Selection" />
+                                      {info}
+                                    </Box>
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                          <FormControl sx={{ my: 3, minWidth: '100%' }}>
-                            <InputLabel htmlFor="max-width">More issues</InputLabel>
-                            <Input id="max-width" {...register('Body')} />
-                          </FormControl>
-                        </Box>
-                      </DialogContent>
-                    ) : (
-                      <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
-                        We hope that everything was to your satisfaction
-                      </Typography>
-                    )}
+                              <FormControl sx={{ my: 3, minWidth: '100%' }}>
+                                <InputLabel htmlFor="max-width">More issues</InputLabel>
+                                <Input id="max-width" {...register('Body')} />
+                              </FormControl>
+                            </Box>
+                          </DialogContent>
+                        ) : (
+                          <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
+                            We hope that everything was to your satisfaction
+                          </Typography>
+                        )}
 
-                    <DialogActions>
-                      <Button
-                        onClick={dialog.onFalse}
-                        loading={isSubmitting}
-                        variant="outlined"
-                        color="inherit"
-                      >
-                        Skip
-                      </Button>
-                      <Button type="submit" variant="contained">
-                        Submit
-                      </Button>
-                    </DialogActions>
-                  </FormProvider>
-                </Dialog>
-              </span>
-            ) : (
-              <span>Appointment is still ongoing</span>
-            )}
-          </>
-        );
-      })}
+                        <DialogActions>
+                          <Button
+                            onClick={skipfunction}
+                            loading={isSubmitting}
+                            variant="outlined"
+                            color="inherit"
+                            type="submit"
+                          >
+                            Skip
+                          </Button>
+                          <Button type="submit" variant="contained">
+                            Submit
+                          </Button>
+                        </DialogActions>
+                      </FormProvider>
+                    </Dialog>
+                  </span>
+                ) : (
+                  <span>Appointment is still ongoing</span>
+                )}
+              </>
+            );
+          }
+          return null;
+        })()}
     </>
   );
 }
