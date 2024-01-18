@@ -11,6 +11,7 @@ import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled } f
 
 import { useSettingsContext } from 'src/components/settings';
 
+import Image from 'src/components/image/image';
 import AppWidget from '../app-widget';
 import AppWelcome from '../app-welcome';
 import AppFeatured from '../app-featured';
@@ -21,7 +22,7 @@ import AppAreaInstalled from '../app-area-installed';
 import AppWidgetSummary from '../app-widget-summary';
 import AppCurrentDownload from '../app-current-download';
 import AppTopInstalledCountries from '../app-top-installed-countries';
-
+import Photo from './photo.png'
 // ----------------------------------------------------------------------
 
 export default function OverviewAppView() {
@@ -35,10 +36,10 @@ export default function OverviewAppView() {
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
-          <AppWelcome
-            title={`Welcome back 👋 \n ${user?.userName}`}
+        <AppWelcome
+            title={`Good Morning 🌞 🌚 \n ${user?.userName}`}
             description="If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything."
-            img={<SeoIllustration />}
+            img={<Image src={Photo} />}
             action={
               <Button variant="contained" color="primary">
                 Go Now
