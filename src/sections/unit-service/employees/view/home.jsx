@@ -91,7 +91,7 @@ export default function EmployeesTableView() {
 
   const router = useRouter();
 
-  const { employeesData, refetch } = useGetUSEmployees(user?.unit_service._id);
+  const { employeesData, refetch } = useGetUSEmployees(user?.employee_engagement?.unit_service._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 

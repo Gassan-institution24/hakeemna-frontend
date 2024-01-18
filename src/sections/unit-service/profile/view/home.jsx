@@ -41,8 +41,11 @@ export default function AccountView() {
   const [currentTab, setCurrentTab] = useState('general');
 
   const { user } = useAuthContext();
+  console.log('user',user)
 
-  const { data, refetch } = useGetUnitservice(user?.unit_service._id);
+  const { data, refetch } = useGetUnitservice(
+    user?.employee_engagement?.unit_service?._id
+  );
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);

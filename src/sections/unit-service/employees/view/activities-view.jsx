@@ -83,7 +83,9 @@ export default function ActivitesTableView({ employeeData }) {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { activitiesData, refetch } = useGetUSActivities(user?.unit_service._id);
+  const { activitiesData, refetch } = useGetUSActivities(
+    user?.employee_engagement?.unit_service._id
+  );
 
   const [filters, setFilters] = useState(defaultFilters);
 

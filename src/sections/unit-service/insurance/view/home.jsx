@@ -99,7 +99,7 @@ export default function UnitServicesInsuranceView() {
   const [filters, setFilters] = useState(defaultFilters);
 
   const { insuranseCosData } = useGetInsuranceCos();
-  const { data, refetch } = useGetUnitservice(user?.unit_service._id);
+  const { data, refetch } = useGetUnitservice(user?.employee_engagement?.unit_service._id);
   const filteredInsuranceCos = insuranseCosData
     .filter((company) => !data?.insurance?.some((info) => info._id === company._id))
     .filter((info) => info.status === 'active');

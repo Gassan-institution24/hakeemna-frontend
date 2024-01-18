@@ -1,18 +1,31 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useState, useEffect, useCallback } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { MenuItem, Typography, TextField } from '@mui/material';
+
 import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
-import { MenuItem, Typography, TextField } from '@mui/material';
-import FormProvider, { RHFTextField, RHFSelect, RHFUploadAvatar } from 'src/components/hook-form';
-import { useGetCities, useGetCountries, useGetSpecialties, useGetUSTypes } from 'src/api/tables';
+import FormProvider, {
+  RHFTextField,
+  RHFSelect,
+  RHFUploadAvatar,
+  RHFUploadBox,
+} from 'src/components/hook-form';
+import {
+  useGetCities,
+  useGetCountries,
+  useGetSpecialties,
+  useGetEmployeeTypes,
+} from 'src/api/tables';
 import axios, { endpoints, fetcher } from 'src/utils/axios';
 import { fData } from 'src/utils/format-number';
 
@@ -27,7 +40,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
-  const { unitserviceTypesData } = useGetUSTypes();
+  const { employeeTypesData } = useGetEmployeeTypes();
   const { specialtiesData } = useGetSpecialties();
 
   const { user } = useAuthContext();
@@ -35,21 +48,27 @@ export default function AccountGeneral({ employeeData, refetch }) {
   console.log('employeeData', employeeData);
 
   const UpdateUserSchema = Yup.object().shape({
-    name_english: Yup.string().required('Name is required.'),
-    country: Yup.string().required('Country is required.'),
-    city: Yup.string().required('City is required.'),
-    US_type: Yup.string().required('Unit service type is required.'),
+    employee_type: Yup.string().required('Employee type is required.'),
     email: Yup.string().required('Email is required.'),
-    sector_type: Yup.string().required('Sector type is required.'),
-    speciality: Yup.string().required('Specialty is required.'),
+    first_name: Yup.string().required('First name is required.'),
+    second_name: Yup.string().required('Second name is required.'),
+    family_name: Yup.string().required('Family name is required.'),
+    nationality: Yup.string().required('Nationality is required.'),
+    profrssion_practice_num: Yup.string().required('Profrssion practice number is required.'),
     identification_num: Yup.string().required('ID number is required.'),
-    address: Yup.string(),
-    web_page: Yup.string(),
-    phone: Yup.string().required('Phone number is required.'),
+    tax_num: Yup.string(),
+    phone: Yup.string().required('Phone number is required'),
     mobile_num: Yup.string(),
-    introduction_letter: Yup.string(),
-    location_gps: Yup.string(),
-    company_logo: Yup.mixed(),
+    speciality: Yup.string().required('speciality'),
+    gender: Yup.string().required('gender'),
+    birth_date: Yup.date().required('birth_date'),
+    Bachelor_year_graduation: Yup.number(),
+    University_graduation_Bachelor: Yup.string(),
+    University_graduation_Specialty: Yup.string(),
+    scanned_identity: Yup.mixed().nullable(),
+    signature: Yup.mixed().nullable(),
+    stamp: Yup.mixed().nullable(),
+    picture: Yup.mixed().nullable(),
   });
 
   const handleCountryChange = (event) => {
@@ -67,21 +86,27 @@ export default function AccountGeneral({ employeeData, refetch }) {
   }, [tableData, selectedCountry]);
 
   const defaultValues = {
-    name_english: employeeData?.name_english || '',
-    country: employeeData?.country?._id || null,
-    city: employeeData?.city?._id || null,
-    US_type: employeeData?.US_type?._id || null,
+    employee_type: employeeData?.employee_type?._id || null,
     email: employeeData?.email || '',
-    sector_type: employeeData?.sector_type || '',
-    speciality: employeeData?.speciality?._id || null,
+    first_name: employeeData?.first_name || '',
+    second_name: employeeData?.second_name || '',
+    family_name: employeeData?.family_name || '',
+    nationality: employeeData?.nationality?._id || '',
+    profrssion_practice_num: employeeData?.profrssion_practice_num || '',
     identification_num: employeeData?.identification_num || '',
-    address: employeeData?.address || '',
-    web_page: employeeData?.web_page || '',
+    tax_num: employeeData?.tax_num || '',
     phone: employeeData?.phone || '',
     mobile_num: employeeData?.mobile_num || '',
-    introduction_letter: employeeData?.introduction_letter || '',
-    location_gps: employeeData?.location_gps || '',
-    company_logo: employeeData?.company_logo || '',
+    speciality: employeeData?.speciality?._id || null,
+    gender: employeeData?.gender || '',
+    birth_date: employeeData?.birth_date || null,
+    Bachelor_year_graduation: employeeData?.Bachelor_year_graduation || '',
+    University_graduation_Bachelor: employeeData?.University_graduation_Bachelor || '',
+    University_graduation_Specialty: employeeData?.University_graduation_Specialty || '',
+    scanned_identity: employeeData?.scanned_identity || null,
+    signature: employeeData?.signature || null,
+    stamp: employeeData?.stamp || null,
+    picture: employeeData?.picture || null,
   };
 
   const methods = useForm({
@@ -92,21 +117,22 @@ export default function AccountGeneral({ employeeData, refetch }) {
     getValues,
     setValue,
     handleSubmit,
+    control,
     formState: { isSubmitting },
   } = methods;
 
   const values = getValues();
 
   const handleDrop = useCallback(
-    (acceptedFiles) => {
+    (name, acceptedFiles) => {
       const file = acceptedFiles[0];
-      setCompanyLog(file);
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
+      // setCompanyLog(file);
+      // const newFile = Object.assign(file, {
+      //   preview: URL.createObjectURL(file),
+      // });
 
       if (file) {
-        setValue('company_logo', newFile, { shouldValidate: true });
+        setValue(name, file, { shouldValidate: true });
       }
     },
     [setValue]
@@ -116,14 +142,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
     try {
       console.log('data', data);
       const formData = new FormData();
-      if (companyLogo) {
-        formData.append('company_logo_pic', companyLogo);
-        await axios.patch(
-          `${endpoints.tables.employee(employeeData._id)}/updatelogo`,
-          formData
-        );
-      }
-      await axios.patch(endpoints.tables.employee(employeeData._id), data);
+      Object.keys(data).forEach((key) => {
+        if(data[key]!==defaultValues[key]){
+          formData.append(key, data[key]);
+        }
+      });
+      
+      console.log('formData', formData);
+      await axios.patch(endpoints.tables.employee(employeeData._id), formData);
       enqueueSnackbar('Update success!');
       console.info('DATA', data);
     } catch (error) {
@@ -148,23 +174,23 @@ export default function AccountGeneral({ employeeData, refetch }) {
         <Grid xs={12} md={4}>
           <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
             <RHFUploadAvatar
-              helperText={
-                <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 3,
-                    mx: 'auto',
-                    display: 'block',
-                    textAlign: 'center',
-                    color: 'text.disabled',
-                  }}
-                >
-                  max size of {fData(3145728)}
-                </Typography>
-              }
+              // helperText={
+              //   <Typography
+              //     variant="caption"
+              //     sx={{
+              //       mt: 3,
+              //       mx: 'auto',
+              //       display: 'block',
+              //       textAlign: 'center',
+              //       color: 'text.disabled',
+              //     }}
+              //   >
+              //     max size of {fData(3145728)}
+              //   </Typography>
+              // }
               maxSize={3145728}
-              name="company_logo"
-              onDrop={handleDrop}
+              name="picture"
+              onDrop={(acceptedFiles) => handleDrop('picture', acceptedFiles)}
             />
             <Box
               rowGap={3}
@@ -177,14 +203,92 @@ export default function AccountGeneral({ employeeData, refetch }) {
               }}
             >
               <RHFTextField
-                disabled
+                // disabled
                 variant="filled"
                 name="identification_num"
                 label="ID number :"
               />
-              <RHFTextField variant="filled" name="name_english" label="Name :" />
+              <RHFTextField
+                // disabled
+                variant="filled"
+                name="profrssion_practice_num"
+                label="Profrssion practice number :"
+              />
               <RHFTextField type="email" variant="filled" name="email" label="Email :" />
               <RHFTextField type="number" variant="filled" name="phone" label="Phone Number :" />
+              <Box
+                rowGap={3}
+                columnGap={2}
+                display="grid"
+                gridTemplateColumns={{
+                  xs: 'repeat(1, 1fr)',
+                  sm: 'repeat(3, 1fr)',
+                }}
+              >
+                <Box>
+                  <RHFUploadBox
+                    sx={{
+                      mx: 'auto',
+                    }}
+                    name="scanned_identity"
+                    label="Scanned ID"
+                    onDrop={(acceptedFiles) => handleDrop('scanned_identity', acceptedFiles)}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      mx: 'auto',
+                      display: 'block',
+                      textAlign: 'center',
+                      color: 'text.disabled',
+                    }}
+                  >
+                    Scanned ID
+                  </Typography>
+                </Box>
+                <Box>
+                  <RHFUploadBox
+                    sx={{
+                      mx: 'auto',
+                    }}
+                    name="signature"
+                    label="Signature"
+                    onDrop={(acceptedFiles) => handleDrop('signature', acceptedFiles)}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      mx: 'auto',
+                      display: 'block',
+                      textAlign: 'center',
+                      color: 'text.disabled',
+                    }}
+                  >
+                    Signature
+                  </Typography>
+                </Box>
+                <Box>
+                  <RHFUploadBox
+                    sx={{
+                      mx: 'auto',
+                    }}
+                    name="stamp"
+                    label="Stamp"
+                    onDrop={(acceptedFiles) => handleDrop('stamp', acceptedFiles)}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      mx: 'auto',
+                      display: 'block',
+                      textAlign: 'center',
+                      color: 'text.disabled',
+                    }}
+                  >
+                    Stamp
+                  </Typography>
+                </Box>
+              </Box>
             </Box>
           </Card>
         </Grid>
@@ -199,13 +303,15 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
+              <RHFTextField name="first_name" label="First name :" />
+              <RHFTextField name="second_name" label="Second name :" />
+              <RHFTextField name="family_name" label="Family name :" />
               <RHFSelect
-                label="Country"
+                label="Nationality"
                 fullWidth
-                name="country"
+                name="nationality"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                onChange={handleCountryChange}
               >
                 {countriesData.map((country) => (
                   <MenuItem key={country._id} value={country._id}>
@@ -213,35 +319,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-
-              <RHFSelect
-                label="City"
-                fullWidth
-                name="city"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {cities.map((city) => (
-                  <MenuItem key={city._id} value={city._id}>
-                    {city.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-
-              <RHFSelect
-                label="Unit service type"
-                fullWidth
-                name="US_type"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {unitserviceTypesData.map((type) => (
-                  <MenuItem value={type._id} key={type._id}>
-                    {type.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-
+              <RHFTextField type="number" name="tax_num" label="Tax number" />
+              <RHFTextField type="number" name="mobile_num" label="Alternative mobile number" />
               <RHFSelect
                 label="Speciality"
                 fullWidth
@@ -256,30 +335,65 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 ))}
               </RHFSelect>
               <RHFSelect
-                label="Sector type"
+                label="Gender"
                 fullWidth
-                name="sector_type"
+                name="gender"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                <MenuItem value="public">Public</MenuItem>
-                <MenuItem value="privet">Privet</MenuItem>
-                <MenuItem value="charity">Charity</MenuItem>
+                <MenuItem value="male">male</MenuItem>
+                <MenuItem value="female">female</MenuItem>
               </RHFSelect>
-              <RHFTextField name="web_page" label="Web page" />
-              <RHFTextField type="number" name="mobile_num" label="Alternative mobile number" />
-              <RHFTextField name="location_gps" label="Location GPS" />
+              <RHFSelect
+                label="Employee type"
+                fullWidth
+                name="employee_type"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {employeeTypesData.map((type) => (
+                  <MenuItem value={type._id} key={type._id}>
+                    {type.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+
+              <RHFTextField
+                type="number"
+                name="Bachelor_year_graduation"
+                label="Bachelor year graduation"
+              />
+              <RHFTextField
+                name="University_graduation_Bachelor"
+                label="University graduation bachelor"
+              />
+              <RHFTextField
+                name="University_graduation_Specialty"
+                label="University_graduation_Specialty"
+              />
+              <Controller
+                name="birth_date"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <DatePicker
+                    label="Birth date"
+                    // sx={{ flex: 1 }}
+                    value={new Date(values.birth_date ? values.birth_date : '')}
+                    onChange={(newValue) => {
+                      field.onChange(newValue);
+                    }}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!error,
+                        helperText: error?.message,
+                      },
+                    }}
+                  />
+                )}
+              />
             </Box>
             <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label="Address" />
-            <RHFTextField
-              multiline
-              colSpan={14}
-              rows={4}
-              sx={{ mt: 3 }}
-              onChange={handleEnglishInputChange}
-              name="introduction_letter"
-              label="Introduction letter"
-            />
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

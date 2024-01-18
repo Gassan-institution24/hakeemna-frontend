@@ -97,8 +97,8 @@ export default function AppointmentsView() {
   const confirmDelay = useBoolean();
 
   const { appointmentsData, refetch } = useGetUSEmployeeAppointments(
-    user?.unit_service?._id,
-    user?.employee?._id
+    user?.employee_engagement?.unit_service?._id,
+    user?.employee_engagement?.employee?._id
   );
   console.log('appointmentsData', appointmentsData);
 

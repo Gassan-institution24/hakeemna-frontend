@@ -84,7 +84,9 @@ export default function ActivitesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { activitiesData, refetch } = useGetUSActivities(user?.unit_service._id);
+  const { activitiesData, refetch } = useGetUSActivities(
+    user?.employee_engagement?.unit_service._id
+  );
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -233,7 +235,9 @@ export default function ActivitesTableView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={`${user?.unit_service.name_english || 'Service Unit'} Activities`} /// edit
+          heading={`${
+            user?.employee_engagement?.unit_service.name_english || 'Service Unit'
+          } Activities`} /// edit
           links={[
             {
               name: 'Dashboard',

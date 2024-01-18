@@ -133,7 +133,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   const defaultValues = useMemo(
     () => ({
-      unit_service: appointmentConfigData?.unit_service || user?.unit_service._id,
+      unit_service:
+        appointmentConfigData?.unit_service || user?.employee_engagement?.unit_service._id,
       department: appointmentConfigData?.department || null,
       start_date: appointmentConfigData?.start_date || null,
       end_date: appointmentConfigData?.end_date || null,
@@ -222,7 +223,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   useEffect(() => {
     if (appointmentConfigData) {
       methods.reset({
-        unit_service: appointmentConfigData?.unit_service || user?.unit_service._id,
+        unit_service:
+          appointmentConfigData?.unit_service || user?.employee_engagement?.unit_service._id,
         department: appointmentConfigData?.department || null,
         start_date: appointmentConfigData?.start_date || null,
         end_date: appointmentConfigData?.end_date || null,
@@ -261,7 +263,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   return (
     <>
       <Container maxWidth="lg">
-      <CustomBreadcrumbs
+        <CustomBreadcrumbs
           heading="Configuration Detail" /// edit
           links={[
             {

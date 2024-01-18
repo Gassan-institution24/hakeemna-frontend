@@ -119,11 +119,14 @@ export default function AccountGeneral({ unitServiceData, refetch }) {
       if (companyLogo) {
         formData.append('company_logo_pic', companyLogo);
         await axios.patch(
-          `${endpoints.tables.unitservice(user?.unit_service._id)}/updatelogo`,
+          `${endpoints.tables.unitservice(user?.employee_engagement?.unit_service._id)}/updatelogo`,
           formData
         );
       }
-      await axios.patch(endpoints.tables.unitservice(user?.unit_service._id), data);
+      await axios.patch(
+        endpoints.tables.unitservice(user?.employee_engagement?.unit_service._id),
+        data
+      );
       enqueueSnackbar('Update success!');
       console.info('DATA', data);
     } catch (error) {

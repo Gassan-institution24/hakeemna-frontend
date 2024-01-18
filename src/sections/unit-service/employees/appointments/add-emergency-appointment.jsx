@@ -43,9 +43,12 @@ export default function BookManually({ onClose, ...other }) {
   const { id } = useParams();
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSServiceTypes(user?.unit_service._id);
-  const { workGroupsData } = useGetUSEmployeeWorkGroups(user?.unit_service._id, id);
-  const { workShiftsData } = useGetUSWorkShifts(user?.unit_service._id);
+  const { serviceTypesData } = useGetUSServiceTypes(user?.employee_engagement?.unit_service._id);
+  const { workGroupsData } = useGetUSEmployeeWorkGroups(
+    user?.employee_engagement?.unit_service._id,
+    id
+  );
+  const { workShiftsData } = useGetUSWorkShifts(user?.employee_engagement?.unit_service._id);
 
   const NewUserSchema = Yup.object().shape({
     work_shift: Yup.string().required('Work Shift is required'),
@@ -82,7 +85,7 @@ export default function BookManually({ onClose, ...other }) {
       await axios.post(endpoints.tables.appointments, {
         ...data,
         emergency: true,
-        unit_service: user?.unit_service._id,
+        unit_service: user?.employee_engagement?.unit_service._id,
       });
       reset();
       enqueueSnackbar('Create success!');

@@ -87,7 +87,7 @@ export default function TableNewEditForm({ currentTable }) {
             modifications_nums: (currentTable.modifications_nums || 0) + 1,
             ip_address_user_modification: address.data.IPv4,
             user_modification: user._id,
-            unit_service: user?.unit_service._id,
+            unit_service: user?.employee_engagement?.unit_service._id,
             ...data,
           },
         });
@@ -99,7 +99,7 @@ export default function TableNewEditForm({ currentTable }) {
             ip_address_user_creation: address.data.IPv4,
             user_creation: user._id,
             ...data,
-            unit_service: user?.unit_service._id,
+            unit_service: user?.employee_engagement?.unit_service._id,
           },
         });
       }

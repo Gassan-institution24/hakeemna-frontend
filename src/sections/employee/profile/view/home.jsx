@@ -42,7 +42,7 @@ export default function AccountView() {
 
   const { user } = useAuthContext();
 
-  const { data, refetch } = useGetEmployee(user?.employee?._id);
+  const { data, refetch } = useGetEmployee(user?.employee_engagement?.employee?._id);
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
@@ -68,9 +68,7 @@ export default function AccountView() {
           <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
       </Tabs>
-      {currentTab === 'general' && data && (
-        <AccountGeneral employeeData={data} refetch={refetch} />
-      )}
+      {currentTab === 'general' && data && <AccountGeneral employeeData={data} refetch={refetch} />}
       {/* {currentTab === 'notifications' && <AccountNotifications />} */}
       {currentTab === 'security' && <AccountChangePassword />}
     </Container>

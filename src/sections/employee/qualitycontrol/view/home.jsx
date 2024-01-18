@@ -80,9 +80,9 @@ export default function DepartmentFeedbackView() {
 
   const componentRef = useRef();
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
 
-  console.log('user',user)
+  console.log('user', user);
 
   const settings = useSettingsContext();
 
@@ -91,7 +91,7 @@ export default function DepartmentFeedbackView() {
 
   const router = useRouter();
 
-  const { feedbackData } = useGetEmployeeFeedbackes(user?.employee?._id);
+  const { feedbackData } = useGetEmployeeFeedbackes(user?.employee_engagement?.employee?._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -160,7 +160,7 @@ export default function DepartmentFeedbackView() {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
+        <CustomBreadcrumbs
           heading="Quality control" /// edit
           links={[
             {

@@ -13,7 +13,7 @@ export default function EmployeeAppointconfigPage() {
   const { id } = params;
   const employeeData = useGetEmployee(id).data;
   const { appointmentConfigData, loading, refetch } = useGetUSEmployeeAppointmentConfigs(
-    user?.unit_service._id,
+    user?.employee_engagement?.unit_service._id,
     id
   );
   const name = employeeData?.first_name;
