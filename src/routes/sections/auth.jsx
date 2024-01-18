@@ -38,7 +38,7 @@ export const authRoutes =
       ),
     },
     {
-      path: 'register/us',
+      path: 'register/sarviceunit',
       element: (
         <AuthClassicLayout title="Manage the job more effectively with Minimal">
           <JwtUSRegisterPage />

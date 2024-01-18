@@ -59,6 +59,7 @@ export const paths = {
   auth: {
     login: `/login`,
     register: `/register`,
+    registersu: `/register/sarviceunit`,
     verify: `/verify`,
     newPassword: `/new-password`,
     forgotPassword: `/forgot-password`,
