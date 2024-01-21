@@ -8,9 +8,11 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import { SeoIllustration } from 'src/assets/illustrations';
 import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled } from 'src/_mock';
-
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { useSettingsContext } from 'src/components/settings';
-
+import { paths } from 'src/routes/paths';
+import Bmi from 'src/sections/user/bmi';
 import Image from 'src/components/image/image';
 import AppWidget from '../app-widget';
 import AppWelcome from '../app-welcome';
@@ -22,7 +24,7 @@ import AppAreaInstalled from '../app-area-installed';
 import AppWidgetSummary from '../app-widget-summary';
 import AppCurrentDownload from '../app-current-download';
 import AppTopInstalledCountries from '../app-top-installed-countries';
-import Photo from './photo.png'
+import Photo from './photo.png';
 // ----------------------------------------------------------------------
 
 export default function OverviewAppView() {
@@ -31,18 +33,21 @@ export default function OverviewAppView() {
   const theme = useTheme();
 
   const settings = useSettingsContext();
+  const currentHour = new Date().getHours();
+  const isMorning = currentHour >= 0 && currentHour < 12;
+  const greeting = isMorning ? 'Good Morning 🌞' : 'Good Evening 🌚';
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
-        <AppWelcome
-            title={`Good Morning 🌞 🌚 \n ${user?.userName}`}
-            description="If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything."
+          <AppWelcome
+            title={`${greeting} \n ${user?.userName}`}
+            description="Nourish your body, empower your mind – wellness is the key to a vibrant life."
             img={<Image src={Photo} />}
             action={
               <Button variant="contained" color="primary">
-                Go Now
+                Calculate your BMI
               </Button>
             }
           />
@@ -52,153 +57,27 @@ export default function OverviewAppView() {
           <AppFeatured list={_appFeatured} />
         </Grid>
 
-        <Grid xs={12} md={4}>
-          <AppWidgetSummary
-            title="Total Active Users"
-            percent={2.6}
-            total={18765}
-            chart={{
-              series: [5, 18, 12, 51, 68, 11, 39, 37, 27, 20],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} md={4}>
-          <AppWidgetSummary
-            title="Total Installed"
-            percent={0.2}
-            total={4876}
-            chart={{
-              colors: [theme.palette.info.light, theme.palette.info.main],
-              series: [20, 41, 63, 33, 28, 35, 50, 46, 11, 26],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} md={4}>
-          <AppWidgetSummary
-            title="Total Downloads"
-            percent={-0.1}
-            total={678}
-            chart={{
-              colors: [theme.palette.warning.light, theme.palette.warning.main],
-              series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AppCurrentDownload
-            title="Current Download"
-            chart={{
-              series: [
-                { label: 'Mac', value: 12244 },
-                { label: 'Window', value: 53345 },
-                { label: 'iOS', value: 44313 },
-                { label: 'Android', value: 78343 },
-              ],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={8}>
-          <AppAreaInstalled
-            title="Area Installed"
-            subheader="(+43%) than last year"
-            chart={{
-              categories: [
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'May',
-                'Jun',
-                'Jul',
-                'Aug',
-                'Sep',
-                'Oct',
-                'Nov',
-                'Dec',
-              ],
-              series: [
-                {
-                  year: '2019',
-                  data: [
-                    {
-                      name: 'Asia',
-                      data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 35, 51, 49],
-                    },
-                    {
-                      name: 'America',
-                      data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 13, 56, 77],
-                    },
-                  ],
-                },
-                {
-                  year: '2020',
-                  data: [
-                    {
-                      name: 'Asia',
-                      data: [51, 35, 41, 10, 91, 69, 62, 148, 91, 69, 62, 49],
-                    },
-                    {
-                      name: 'America',
-                      data: [56, 13, 34, 10, 77, 99, 88, 45, 77, 99, 88, 77],
-                    },
-                  ],
-                },
-              ],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} lg={8}>
-          <AppNewInvoice
-            title="New Invoice"
-            tableData={_appInvoices}
-            tableLabels={[
-              { id: 'id', label: 'Invoice ID' },
-              { id: 'category', label: 'Category' },
-              { id: 'price', label: 'Price' },
-              { id: 'status', label: 'Status' },
-              { id: '' },
-            ]}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AppTopRelated title="Top Related Applications" list={_appRelated} />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AppTopInstalledCountries title="Top Installed Countries" list={_appInstalled} />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AppTopAuthors title="Top Authors" list={_appAuthors} />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <Stack spacing={3}>
-            <AppWidget
-              title="Conversion"
-              total={38566}
-              icon="solar:user-rounded-bold"
-              chart={{
-                series: 48,
-              }}
-            />
-
-            <AppWidget
-              title="Applications"
-              total={55566}
-              icon="fluent:mail-24-filled"
-              color="info"
-              chart={{
-                series: 75,
-              }}
-            />
-          </Stack>
+        <Grid xs={12} md={6} lg={12}>
+          <Typography variant='Bode2'>How To Use</Typography>
+          <Box sx={{ position: 'relative' }}>
+            <div style={{ position: 'relative', paddingBottom: '56%', width: '100%' }}>
+              <iframe
+                src="https://www.youtube.com/embed/IGsRxmC40Bw?si=gULZ3W4Jy6BPk7p6"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '50%',
+                  borderRadius: '10px',
+                  border: 'none',
+                }}
+              />
+            </div>
+          </Box>
         </Grid>
       </Grid>
     </Container>
