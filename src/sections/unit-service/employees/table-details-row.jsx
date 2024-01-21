@@ -20,7 +20,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function CountriesTableRow({
+export default function UnitServiceEmployeesRow({
   row,
   selected,
   onEditRow,
@@ -33,12 +33,7 @@ export default function CountriesTableRow({
 }) {
   const {
     code,
-    employee_type,
-    email,
-    first_name,
-    family_name,
-    nationality,
-    validatd_identity,
+    employee,
     Adjust_schedule,
     status,
     created_at,
@@ -67,12 +62,12 @@ export default function CountriesTableRow({
           color: '#3F54EB',
           // textDecoration: 'underline',
         }} onClick={onViewRow} align="center">
-        {first_name} {family_name}
+        {employee.first_name} {employee.family_name}
       </TableCell>
-      <TableCell align="center">{employee_type?.name_english}</TableCell>
-      <TableCell align="center">{email}</TableCell>
-      <TableCell align="center">{nationality?.name_english}</TableCell>
-      <TableCell align="center"><Iconify icon={validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} /></TableCell>
+      <TableCell align="center">{employee.employee_type?.name_english}</TableCell>
+      <TableCell align="center">{employee.email}</TableCell>
+      <TableCell align="center">{employee.nationality?.name_english}</TableCell>
+      <TableCell align="center"><Iconify icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} /></TableCell>
       <TableCell align="center"><Iconify icon={Adjust_schedule ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} /></TableCell>
       <TableCell align="center">
         <Label
@@ -148,14 +143,14 @@ export default function CountriesTableRow({
         <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.employee.email}</Box>
 
         <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.employee.email}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
@@ -166,7 +161,7 @@ export default function CountriesTableRow({
   );
 }
 
-CountriesTableRow.propTypes = {
+UnitServiceEmployeesRow.propTypes = {
   onSelectRow: PropTypes.func,
   setFilters: PropTypes.func,
   onActivate: PropTypes.func,

@@ -22,7 +22,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function AccountBillingPlan({ cardList, addressBook}) {
+export default function AccountBillingPlan({ cardList, addressBook }) {
   const openAddress = useBoolean();
 
   const openCards = useBoolean();
@@ -98,9 +98,9 @@ export default function AccountBillingPlan({ cardList, addressBook}) {
         <Label>fgfgfgfg</Label>
 
         <Box sx={{ width: 48, height: 48 }}>
-{/* plan.subscription === 'basic' && */}
-           <PlanFreeIcon />
-{/* plan.subscription === 'starter' &&  */}
+          {/* plan.subscription === 'basic' && */}
+          <PlanFreeIcon />
+          {/* plan.subscription === 'starter' &&  */}
           <PlanStarterIcon />
           {/* plan.subscription === 'premium' &&  */}
           <PlanPremiumIcon />
@@ -119,7 +119,7 @@ export default function AccountBillingPlan({ cardList, addressBook}) {
 
         <Stack direction="row" alignItems="center" sx={{ typography: 'h4' }}>
           {/* {plan.price || 'Free'} */}
-llppp
+          llppp
           {/* {!!plan.price && (
             <Box component="span" sx={{ typography: 'body2', color: 'text.disabled', ml: 0.5 }}>
               /mo
@@ -153,7 +153,7 @@ llppp
             <Grid xs={12} md={4} sx={{ color: 'text.secondary' }}>
               Billing name
             </Grid>
-            <Grid xs={12} md={8}>
+            <Grid xs={12} maxWidth="md">
               <Button
                 // onClick={openAddress.onTrue}
                 endIcon={<Iconify width={16} icon="eva:arrow-ios-downward-fill" />}
@@ -186,7 +186,7 @@ llppp
             <Grid xs={12} md={4} sx={{ color: 'text.secondary' }}>
               Payment method
             </Grid>
-            <Grid xs={12} md={8}>
+            <Grid xs={12} maxWidth="md">
               <Button
                 // onClick={openCards.onTrue}
                 endIcon={<Iconify width={16} icon="eva:arrow-ios-downward-fill" />}

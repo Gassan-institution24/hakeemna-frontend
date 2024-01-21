@@ -89,7 +89,7 @@ export default function AccountNotifications() {
               />
             </Grid>
 
-            <Grid xs={12} md={8}>
+            <Grid xs={12} maxWidth="md">
               <Stack spacing={1} sx={{ p: 3, borderRadius: 2, bgcolor: 'background.neutral' }}>
                 <Controller
                   name="selected"

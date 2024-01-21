@@ -43,6 +43,7 @@ export default function CountriesTableRow({
   showEmployees,
   showQualityControl,
   showRooms,
+  showWorkGroups
 }) {
   const {
     code,
@@ -154,6 +155,16 @@ export default function CountriesTableRow({
       >
         {roomsCount}
       </TableCell>
+      <TableCell
+        align="center"
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={showWorkGroups}
+      >
+        {roomsCount}
+      </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
@@ -252,6 +263,7 @@ CountriesTableRow.propTypes = {
   showEmployees: PropTypes.func,
   showQualityControl: PropTypes.func,
   showRooms: PropTypes.func,
+  showWorkGroups: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
 };

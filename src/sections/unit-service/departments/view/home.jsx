@@ -61,6 +61,7 @@ const TABLE_HEAD = [
   { id: 'Employees', label: 'Employees' },
   { id: 'Quality Control', label: 'Quality Control' },
   { id: 'Rooms', label: 'Rooms' },
+  { id: 'Work Groups', label: 'Work Groups' },
   { id: '', width: 88 },
 ];
 
@@ -256,6 +257,12 @@ export default function UnitServicesTableView() {
     },
     [router]
   );
+  const handleShowWorkGroupsRow = useCallback(
+    (id) => {
+      router.push(paths.unitservice.departments.workGroups.root(id)); /// edit
+    },
+    [router]
+  );
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -440,6 +447,7 @@ export default function UnitServicesTableView() {
                         showEmployees={() => handleShowemployeesRow(row._id)}
                         showQualityControl={() => handleShowQualityControlRow(row._id)}
                         showRooms={() => handleShowRoomsRow(row._id)}
+                        showWorkGroups={() => handleShowWorkGroupsRow(row._id)}
                         onInactivate={() => handleInactivate(row._id)}
                         onEditRow={() => handleEditRow(row._id)}
                       />

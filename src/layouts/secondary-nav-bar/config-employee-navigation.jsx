@@ -6,7 +6,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useRouter,useParams } from 'src/routes/hooks';
 
 import Iconify from 'src/components/iconify';
-import { useGetEmployee } from 'src/api/tables';
+import { useGetEmployeeEngagement } from 'src/api/tables';
 
 
 // ----------------------------------------------------------------------
@@ -18,7 +18,8 @@ export function useNavData() {
   const { user } = useAuthContext();
   const {id}= params
 
-  const employeeData = useGetEmployee(id).data
+  const employeeData = useGetEmployeeEngagement(id).data
+
   const data = useMemo(() => {
     const unitServicesItems = [
       
@@ -72,7 +73,7 @@ export function useNavData() {
       {
         items: [
           {
-            title: t(`${employeeData?.first_name} ${employeeData?.family_name}`),
+            title: t(`${employeeData?.employee?.first_name} ${employeeData?.employee?.family_name}`),
             path: paths.unitservice.employees.info(id),
             icon: <Iconify icon="fluent:person-info-20-filled" />,
           },

@@ -49,7 +49,7 @@ import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useSnackbar } from 'src/components/snackbar';
 
-import { useGetAppointmentTypes, useGetUSEmployeeAppointments } from 'src/api/tables';
+import { useGetAppointmentTypes } from 'src/api/tables';
 import AppointmentsRow from '../appointments/appointment-row';
 import PatientHistoryToolbar from '../appointments/appointment-toolbar';
 import HistoryFiltersResult from '../appointments/appointment-filters-result';
@@ -78,7 +78,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsView({ employeeData }) {
+export default function AppointmentsView({ employeeData,appointmentsData,refetch }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -95,13 +95,6 @@ export default function AppointmentsView({ employeeData }) {
   const confirm = useBoolean();
   const confirmUnCancel = useBoolean();
   const confirmDelay = useBoolean();
-
-  const { appointmentsData, refetch } = useGetUSEmployeeAppointments(
-    user?.employee_engagement?.unit_service._id,
-    employeeData._id
-  );
-  console.log('employeeData', employeeData);
-  console.log('appointmentsData', appointmentsData);
 
   const { appointmenttypesData } = useGetAppointmentTypes();
 
@@ -368,7 +361,7 @@ export default function AppointmentsView({ employeeData }) {
             onAdd={() => addModal.onTrue()}
             //
             dateError={dateError}
-            options={appointmenttypesData.map((option) => option)}
+            options={appointmenttypesData}
           />
 
           {canReset && (
@@ -379,6 +372,7 @@ export default function AppointmentsView({ employeeData }) {
               onResetFilters={handleResetFilters}
               //
               results={dataFiltered.length}
+              
               sx={{ p: 2.5, pt: 0 }}
             />
           )}
@@ -391,7 +385,7 @@ export default function AppointmentsView({ employeeData }) {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered?.map((row) => row._id)
                 )
               }
               action={
@@ -438,7 +432,7 @@ export default function AppointmentsView({ employeeData }) {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered?.map((row) => row._id)
                     )
                   }
                 />
@@ -449,7 +443,7 @@ export default function AppointmentsView({ employeeData }) {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    ?.map((row) => (
                       <AppointmentsRow
                         refetch={refetch}
                         key={row._id}
@@ -577,7 +571,7 @@ export default function AppointmentsView({ employeeData }) {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { name, status, types, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -585,7 +579,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
@@ -632,4 +626,6 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 }
 AppointmentsView.propTypes = {
   employeeData: PropTypes.object,
+  appointmentsData: PropTypes.array,
+  refetch: PropTypes.func,
 };

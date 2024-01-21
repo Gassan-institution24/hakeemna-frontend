@@ -35,6 +35,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
 
   const { user } = useAuthContext();
 
+  console.log('user', user);
   console.log('currr', currentTable);
   const { countriesData } = useGetCountries();
   const { employeeTypesData } = useGetEmployeeTypes();
@@ -66,7 +67,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     () => ({
       // unit_service: currentTable?.unit_service || '',
       // department: currentTable?.department || '',
-      unit_service: departmentData.unit_service._id,
+      unit_service: user?.employee_engagement?.unit_service?._id || departmentData.unit_service._id,
       department: departmentData._id,
       employee_type: currentTable?.employee_type || '',
       email: currentTable?.email || '',
@@ -82,7 +83,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       password: currentTable?.password || '',
       confirmPassword: currentTable?.confirmPassword || '',
     }),
-    [currentTable, departmentData]
+    [currentTable, departmentData, user.employee_engagement.unit_service]
   );
 
   const password = useBoolean();
@@ -117,6 +118,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      console.log('data',data)
       const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
         await axiosHandler({
@@ -155,7 +157,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
+        <Grid xs={12} maxWidth="md">
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}

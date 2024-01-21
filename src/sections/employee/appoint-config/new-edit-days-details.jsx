@@ -283,7 +283,7 @@ export default function NewEditDayDetails({ appointTime }) {
                   spacing={2}
                   sx={{ width: '100%', mt: 2 }}
                 >
-                  <RHFSelect size="small" native name={`days_details[${index}].day`} label="Day">
+                  <RHFSelect size="small" name={`days_details[${index}].day`} label="Day">
                     {weekDays
                       .filter(
                         (option) =>

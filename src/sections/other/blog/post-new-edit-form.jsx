@@ -136,7 +136,7 @@ export default function PostNewEditForm({ currentPost }) {
         </Grid>
       )}
 
-      <Grid xs={12} md={8}>
+      <Grid xs={12} maxWidth="md">
         <Card>
           {!mdUp && <CardHeader title="Details" />}
 
@@ -178,7 +178,7 @@ export default function PostNewEditForm({ currentPost }) {
         </Grid>
       )}
 
-      <Grid xs={12} md={8}>
+      <Grid xs={12} maxWidth="md">
         <Card>
           {!mdUp && <CardHeader title="Properties" />}
 

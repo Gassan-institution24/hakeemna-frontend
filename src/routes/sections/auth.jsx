@@ -20,52 +20,52 @@ const NewPasswordPage = lazy(() => import('src/pages/auth/jwt/new-password'));
 
 // ----------------------------------------------------------------------
 
-export const authRoutes = 
-    [{
-      path: 'login',
-      element: (
-        <AuthClassicLayout>
-          <JwtLoginPage />
-        </AuthClassicLayout>
-      ),
-    },
-    {
-      path: 'register',
-      element: (
-        <AuthClassicLayout title="Manage the job more effectively with Minimal">
-          <JwtRegisterPage />
-        </AuthClassicLayout>
-      ),
-    },
-    {
-      path: 'register/sarviceunit',
-      element: (
-        <AuthClassicLayout title="Manage the job more effectively with Minimal">
-          <JwtUSRegisterPage />
-        </AuthClassicLayout>
-      ),
-    },
-    {
-      path: 'register/stakeholder',
-      element: (
-        <AuthClassicLayout title="Manage the job more effectively with Minimal">
-          <JwtStakeholderRegisterPage />
-        </AuthClassicLayout>
-      ),
-    },
-    {
-      element: (
-        <CompactLayout>
-          <Outlet />
-        </CompactLayout>
-      ),
-      children: [
-        { path: 'verify', element: <VerifyPage /> },
-        { path: 'new-password', element: <NewPasswordPage /> },
-        { path: 'forgot-password', element: <ForgetPasswordPage /> },
-      ],
-    },
-  ]
+export const authRoutes = [
+  {
+    path: 'login',
+    element: (
+      <AuthClassicLayout>
+        <JwtLoginPage />
+      </AuthClassicLayout>
+    ),
+  },
+  {
+    path: 'register',
+    element: (
+      <AuthClassicLayout title="Manage the job more effectively with Minimal">
+        <JwtRegisterPage />
+      </AuthClassicLayout>
+    ),
+  },
+  {
+    path: 'register/serviceunit',
+    element: (
+      <AuthClassicLayout title="Manage the job more effectively with Minimal">
+        <JwtUSRegisterPage />
+      </AuthClassicLayout>
+    ),
+  },
+  {
+    path: 'register/stakeholder',
+    element: (
+      <AuthClassicLayout title="Manage the job more effectively with Minimal">
+        <JwtStakeholderRegisterPage />
+      </AuthClassicLayout>
+    ),
+  },
+  {
+    element: (
+      <CompactLayout>
+        <Outlet />
+      </CompactLayout>
+    ),
+    children: [
+      { path: 'verify', element: <VerifyPage /> },
+      { path: 'new-password', element: <NewPasswordPage /> },
+      { path: 'forgot-password', element: <ForgetPasswordPage /> },
+    ],
+  },
+];
 
 // export const authRoutes = [
 //   {

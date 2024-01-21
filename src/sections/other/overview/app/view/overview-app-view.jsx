@@ -22,7 +22,7 @@ import AppAreaInstalled from '../app-area-installed';
 import AppWidgetSummary from '../app-widget-summary';
 import AppCurrentDownload from '../app-current-download';
 import AppTopInstalledCountries from '../app-top-installed-countries';
-import Photo from './photo.png'
+import Photo from './photo.png';
 // ----------------------------------------------------------------------
 
 export default function OverviewAppView() {
@@ -35,8 +35,8 @@ export default function OverviewAppView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
-        <AppWelcome
+        <Grid xs={12} maxWidth="md">
+          <AppWelcome
             title={`Good Morning 🌞 🌚 \n ${user?.userName}`}
             description="If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything."
             img={<Image src={Photo} />}

@@ -21,7 +21,7 @@ import Markdown from 'src/components/markdown';
 
 // ----------------------------------------------------------------------
 
-export default function StakeholderInfoContent({ employeeData }) {
+export default function EmployeeEngagementInfoContent({ employeeData }) {
   console.log('employeeData', employeeData);
   const {
     first_name,
@@ -203,6 +203,6 @@ export default function StakeholderInfoContent({ employeeData }) {
   );
 }
 
-StakeholderInfoContent.propTypes = {
+EmployeeEngagementInfoContent.propTypes = {
   employeeData: PropTypes.object,
 };

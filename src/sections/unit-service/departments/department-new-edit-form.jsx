@@ -115,7 +115,7 @@ export default function TableNewEditForm({ currentTable }) {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
+        <Grid xs={12} maxWidth="md">
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}
@@ -123,7 +123,7 @@ export default function TableNewEditForm({ currentTable }) {
               display="grid"
               gridTemplateColumns={{
                 xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
+                sm: 'repeat(1, 1fr)',
               }}
             >
               <RHFTextField

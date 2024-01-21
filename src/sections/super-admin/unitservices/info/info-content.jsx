@@ -20,7 +20,7 @@ import Markdown from 'src/components/markdown';
 // ----------------------------------------------------------------------
 
 export default function UnitServiceInfoContent({ unitServiceData }) {
-  console.log("unitServiceData",unitServiceData)
+  console.log('unitServiceData', unitServiceData);
   const {
     code,
     name_english,
@@ -86,12 +86,12 @@ export default function UnitServiceInfoContent({ unitServiceData }) {
         },
         {
           label: 'insurance',
-          value: insurance?.map((company)=>company.name_english).join(', '),
+          value: insurance?.map((company) => company.name_english).join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Subscriptions',
-          value: subscriptions?.map((subscription)=>`${subscription?.name_english}`).join(', '),
+          value: subscriptions?.map((subscription) => `${subscription?.name_english}`).join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
@@ -128,33 +128,35 @@ export default function UnitServiceInfoContent({ unitServiceData }) {
           label: 'Specialty',
           value: speciality?.name_english,
           icon: <Iconify icon="solar:wad-of-money-bold" />,
-        }
+        },
       ].map((item) => (
         <>
-        {item.value && <Stack key={item.label} spacing={1.5}>
-          {/* {item.icon} */}
-          <ListItemText
-            primary={item.label}
-            secondary={item.value}
-            primaryTypographyProps={{
-              typography: 'body2',
-              color: 'text.secondary',
-              mb: 0.5,
-            }}
-            secondaryTypographyProps={{
-              typography: 'subtitle2',
-              color: 'text.primary',
-              component: 'span',
-            }}
-          />
-        </Stack>}
+          {item.value && (
+            <Stack key={item.label} spacing={1.5}>
+              {/* {item.icon} */}
+              <ListItemText
+                primary={item.label}
+                secondary={item.value}
+                primaryTypographyProps={{
+                  typography: 'body2',
+                  color: 'text.secondary',
+                  mb: 0.5,
+                }}
+                secondaryTypographyProps={{
+                  typography: 'subtitle2',
+                  color: 'text.primary',
+                  component: 'span',
+                }}
+              />
+            </Stack>
+          )}
         </>
       ))}
     </Stack>
   );
   return (
     <Grid container spacing={3}>
-      <Grid xs={12} md={8}>
+      <Grid xs={12} maxWidth="md">
         {renderOverview}
       </Grid>
     </Grid>

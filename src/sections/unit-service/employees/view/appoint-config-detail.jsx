@@ -21,8 +21,9 @@ import { _addressBooks } from 'src/_mock';
 
 import axios, { endpoints } from 'src/utils/axios';
 import FormProvider from 'src/components/hook-form';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSnackbar } from 'src/components/snackbar';
+import { useGetEmployeeEngagement } from 'src/api/tables';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 
 import NewEditHolidays from '../appointmentConfig/new-edit-holidays';
 import NewEditLongHolidays from '../appointmentConfig/new-edit-long-holiday';
@@ -35,10 +36,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const router = useRouter();
 
   const { id } = useParams();
-
+  
   const { user } = useAuthContext();
-
+  
+  const employeeInfo = useGetEmployeeEngagement(id).data
+  
   const [appointTime, setAppointTime] = useState(0);
+  console.log('employeeInfo',employeeInfo)
 
   const [dataToUpdate, setDataToUpdate] = useState([]);
 
@@ -131,12 +135,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       })
     ),
   });
+  console.log('user',user)
 
   const defaultValues = useMemo(
     () => ({
       unit_service:
-        appointmentConfigData?.unit_service || user?.employee_engagement?.unit_service._id,
-      department: appointmentConfigData?.department || null,
+        appointmentConfigData?.unit_service._id || user?.employee_engagement?.unit_service._id,
+      department: employeeInfo?.department?._id||user?.employee_engagement?.department?._id,
       start_date: appointmentConfigData?.start_date || null,
       end_date: appointmentConfigData?.end_date || null,
       weekend: appointmentConfigData?.weekend || [],
@@ -170,7 +175,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         },
       ],
     }),
-    [appointmentConfigData, user]
+    [appointmentConfigData, user?.employee_engagement,employeeInfo?.department]
   );
 
   const methods = useForm({
@@ -226,7 +231,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       methods.reset({
         unit_service:
           appointmentConfigData?.unit_service || user?.employee_engagement?.unit_service._id,
-        department: appointmentConfigData?.department || null,
+          department: employeeInfo?.department?._id||user?.employee_engagement?.department?._id,
         start_date: appointmentConfigData?.start_date || null,
         end_date: appointmentConfigData?.end_date || null,
         weekend: appointmentConfigData?.weekend || [],
@@ -259,7 +264,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ],
       });
     }
-  }, [appointmentConfigData, methods, user]);
+  }, [appointmentConfigData, methods, user,employeeInfo?.department]);
 
   return (
     <>

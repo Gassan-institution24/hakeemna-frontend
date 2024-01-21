@@ -90,6 +90,8 @@ export default function EmployeesTableView({departmentData}) {
 
   const { employeesData, refetch } =useGetDepartmentEmployees(departmentData._id);
 
+  console.log('employeesData',employeesData)
+
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
