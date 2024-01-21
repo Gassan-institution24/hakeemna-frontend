@@ -55,21 +55,25 @@ function CarouselItem({ item, active }) {
 
   const { coverUrl, title, description } = item;
 
+  const IMGES = [
+    'https://pbs.twimg.com/media/ETOK9wUUcAQTLWn.png',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl1D6wCIYA8krMnIhzkvBvzPj8cc1_GJqFrg&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSovMdcd6fWFK49CNXERHeqygbop8Tywm_oBQ&usqp=CAU',
+  ];
+
   const renderImg = (
     <Image
-      alt={title}
-      src={coverUrl}
-      overlay={`linear-gradient(to bottom, ${alpha(theme.palette.grey[900], 0)} 0%, ${
-        theme.palette.grey[900]
-      } 75%)`}
-      sx={{
-        width: 1,
-        height: {
-          xs: 280,
-          xl: 320,
-        },
-      }}
-    />
+    alt={title}
+    src={IMGES[0]}
+    overlay={`linear-gradient(to bottom, ${alpha(theme.palette.grey[900], 0)} 0%, ${theme.palette.grey[700]} 85%)`}
+    sx={{
+      width: 1,
+      height: {
+        xs: 280,
+        xl: 320,
+      },
+    }}
+  />
   );
 
   return (
@@ -88,21 +92,23 @@ function CarouselItem({ item, active }) {
       >
         <m.div variants={varFade().inRight}>
           <Typography variant="overline" sx={{ color: 'primary.light' }}>
-            Featured App
+            Available Offers
           </Typography>
         </m.div>
 
         <m.div variants={varFade().inRight}>
           <Link color="inherit" underline="none">
             <Typography variant="h5" noWrap>
-              {title}
+              {/* {title} */}
+              25% discount
             </Typography>
           </Link>
         </m.div>
 
         <m.div variants={varFade().inRight}>
           <Typography variant="body2" noWrap>
-            {description}
+            {/* {description} */}
+            25% discount on all medicines for a month
           </Typography>
         </m.div>
       </Stack>
