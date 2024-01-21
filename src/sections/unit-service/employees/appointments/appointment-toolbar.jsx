@@ -86,7 +86,7 @@ export default function InvoiceTableToolbar({
           value={filters.types}
           onChange={handleFilterTypes}
           input={<OutlinedInput label="Appointment types" />}
-          renderValue={(selected) => selected.map((value) => value.name_english).join(', ')}
+          renderValue={(selected) => options.filter((value) => selected.includes(value._id)).map((value)=>value.name_english).join(', ')}
           MenuProps={{
             PaperProps: {
               sx: { maxHeight: 240 },

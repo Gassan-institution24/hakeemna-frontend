@@ -41,7 +41,7 @@ export default function OrderDetailsView({ id }) {
       />
 
       <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
+        <Grid xs={12} maxWidth="md">
           <Stack spacing={3} direction={{ xs: 'column-reverse', md: 'column' }}>
             <OrderDetailsItems
               items={currentOrder?.items}

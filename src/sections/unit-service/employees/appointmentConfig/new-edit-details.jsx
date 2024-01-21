@@ -15,7 +15,7 @@ import TextField from '@mui/material/TextField';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/hooks';
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
-import { useGetUSEmployeeWorkGroups, useGetUSWorkShifts } from 'src/api/tables';
+import { useGetEmployeeWorkGroups, useGetUSWorkShifts } from 'src/api/tables';
 
 // ----------------------------------------------------------------------
 const weekDays = [
@@ -37,10 +37,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
 
   const { id } = useParams();
 
-  const { workGroupsData } = useGetUSEmployeeWorkGroups(
-    user?.employee_engagement?.unit_service._id,
-    id
-  );
+  const { workGroupsData } = useGetEmployeeWorkGroups(id);
   const { workShiftsData } = useGetUSWorkShifts(user?.employee_engagement?.unit_service._id);
 
   return (
@@ -109,7 +106,6 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           sx={{ px: 3, pb: 3, width: { xs: '100%', md: 'auto' } }}
         >
           <RHFSelect
-            native
             size="small"
             name="work_shift"
             label="Work Shift"
@@ -117,15 +113,13 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
           >
-            {workShiftsData &&
-              workShiftsData.map((option) => (
+            {workShiftsData.map((option) => (
                 <MenuItem key={option._id} value={option._id}>
                   {option.name_english}
                 </MenuItem>
               ))}
           </RHFSelect>
           <RHFSelect
-            native
             size="small"
             name="work_group"
             label="Work Group"

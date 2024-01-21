@@ -19,7 +19,7 @@ import Markdown from 'src/components/markdown';
 
 // ----------------------------------------------------------------------
 
-export default function StakeholderInfoContent({ stakeholderData,offerData }) {
+export default function StakeholderInfoContent({ stakeholderData, offerData }) {
   const {
     code,
     employee_type,
@@ -41,8 +41,6 @@ export default function StakeholderInfoContent({ stakeholderData,offerData }) {
     patients_beneficiary,
     status,
 
-
-
     identification_num,
     stakeholder_type,
     stakeholder_registration,
@@ -57,7 +55,7 @@ export default function StakeholderInfoContent({ stakeholderData,offerData }) {
     email,
     insurance,
   } = offerData;
-  
+
   const renderOverview = (
     <Stack component={Card} spacing={2} sx={{ p: 3 }}>
       {[
@@ -118,51 +116,56 @@ export default function StakeholderInfoContent({ stakeholderData,offerData }) {
         },
         {
           label: 'Services',
-          value: services.map((service)=>service.name_english).join(', '),
+          value: services.map((service) => service.name_english).join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Unit Services Beneficiary',
-          value: unit_services_beneficiary.map((unitService)=>unitService.name_english).join(', '),
+          value: unit_services_beneficiary
+            .map((unitService) => unitService.name_english)
+            .join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Employee Beneficiary',
-          value: employee_beneficiary.map((employee)=>employee.name_english).join(', '),
+          value: employee_beneficiary.map((employee) => employee.name_english).join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Patients Beneficiary',
-          value: patients_beneficiary.map((patient)=>`${patient.first_name} ${patient.last_name}`).join(', '),
+          value: patients_beneficiary
+            .map((patient) => `${patient.first_name} ${patient.last_name}`)
+            .join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
-       
       ].map((item) => (
         <>
-        {item.value && <Stack key={item.label} spacing={1.5}>
-          {/* {item.icon} */}
-          <ListItemText
-            primary={item.label}
-            secondary={item.value}
-            primaryTypographyProps={{
-              typography: 'body2',
-              color: 'text.secondary',
-              mb: 0.5,
-            }}
-            secondaryTypographyProps={{
-              typography: 'subtitle2',
-              color: 'text.primary',
-              component: 'span',
-            }}
-          />
-        </Stack>}
+          {item.value && (
+            <Stack key={item.label} spacing={1.5}>
+              {/* {item.icon} */}
+              <ListItemText
+                primary={item.label}
+                secondary={item.value}
+                primaryTypographyProps={{
+                  typography: 'body2',
+                  color: 'text.secondary',
+                  mb: 0.5,
+                }}
+                secondaryTypographyProps={{
+                  typography: 'subtitle2',
+                  color: 'text.primary',
+                  component: 'span',
+                }}
+              />
+            </Stack>
+          )}
         </>
       ))}
     </Stack>
   );
   return (
     <Grid container spacing={3}>
-      <Grid xs={12} md={8}>
+      <Grid xs={12} maxWidth="md">
         {renderOverview}
       </Grid>
     </Grid>

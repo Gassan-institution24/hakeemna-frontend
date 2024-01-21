@@ -20,7 +20,7 @@ import Markdown from 'src/components/markdown';
 // ----------------------------------------------------------------------
 
 export default function StakeholderInfoContent({ stakeholderData }) {
-  console.log("stakeholderData",stakeholderData)
+  console.log('stakeholderData', stakeholderData);
   const {
     code,
     name_english,
@@ -68,7 +68,7 @@ export default function StakeholderInfoContent({ stakeholderData }) {
         },
         {
           label: 'insurance',
-          value: insurance.map((company)=>company.name_english).join(', '),
+          value: insurance.map((company) => company.name_english).join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
@@ -115,33 +115,35 @@ export default function StakeholderInfoContent({ stakeholderData }) {
           label: 'Specialty',
           value: specialty?.name_english,
           icon: <Iconify icon="solar:wad-of-money-bold" />,
-        }
+        },
       ].map((item) => (
         <>
-        {item.value && <Stack key={item.label} spacing={1.5}>
-          {/* {item.icon} */}
-          <ListItemText
-            primary={item.label}
-            secondary={item.value}
-            primaryTypographyProps={{
-              typography: 'body2',
-              color: 'text.secondary',
-              mb: 0.5,
-            }}
-            secondaryTypographyProps={{
-              typography: 'subtitle2',
-              color: 'text.primary',
-              component: 'span',
-            }}
-          />
-        </Stack>}
+          {item.value && (
+            <Stack key={item.label} spacing={1.5}>
+              {/* {item.icon} */}
+              <ListItemText
+                primary={item.label}
+                secondary={item.value}
+                primaryTypographyProps={{
+                  typography: 'body2',
+                  color: 'text.secondary',
+                  mb: 0.5,
+                }}
+                secondaryTypographyProps={{
+                  typography: 'subtitle2',
+                  color: 'text.primary',
+                  component: 'span',
+                }}
+              />
+            </Stack>
+          )}
         </>
       ))}
     </Stack>
   );
   return (
     <Grid container spacing={3}>
-      <Grid xs={12} md={8}>
+      <Grid xs={12} maxWidth="md">
         {renderOverview}
       </Grid>
     </Grid>

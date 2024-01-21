@@ -138,67 +138,107 @@ export default function MovementInfoContent({ economicMovementData }) {
         </Label>
       </Typography>
 
-      {drug_allergies &&<Stack spacing={2}>
-        <Typography style={{ fontWeight:600 }} variant="h6">Drug Allergies</Typography>
-        <Stack spacing={1}>
-          {drug_allergies?.map((drug) => (
-            <li key={drug._id}>{drug.scientific_name}</li>
-          ))}
+      {drug_allergies && (
+        <Stack spacing={2}>
+          <Typography style={{ fontWeight: 600 }} variant="h6">
+            Drug Allergies
+          </Typography>
+          <Stack spacing={1}>
+            {drug_allergies?.map((drug) => (
+              <li key={drug._id}>{drug.scientific_name}</li>
+            ))}
+          </Stack>
         </Stack>
-      </Stack>}
-      {diseases &&<Stack spacing={2}>
-        <Typography style={{ fontWeight:600 }} variant="h6">Diseases</Typography>
-        <Stack spacing={1}>
-          {diseases?.map((disease) => (
-            <li key={disease._id}>{disease.name_english}</li>
-          ))}
+      )}
+      {diseases && (
+        <Stack spacing={2}>
+          <Typography style={{ fontWeight: 600 }} variant="h6">
+            Diseases
+          </Typography>
+          <Stack spacing={1}>
+            {diseases?.map((disease) => (
+              <li key={disease._id}>{disease.name_english}</li>
+            ))}
+          </Stack>
         </Stack>
-      </Stack>}
-      {surgeries &&<Stack spacing={2}>
-        <Typography style={{ fontWeight:600 }} variant="h6">Surgeries</Typography>
-        <Stack spacing={1}>
-          {surgeries?.map((surgery) => (
-            <li key={surgery._id}>{surgery.name_english}</li>
-          ))}
+      )}
+      {surgeries && (
+        <Stack spacing={2}>
+          <Typography style={{ fontWeight: 600 }} variant="h6">
+            Surgeries
+          </Typography>
+          <Stack spacing={1}>
+            {surgeries?.map((surgery) => (
+              <li key={surgery._id}>{surgery.name_english}</li>
+            ))}
+          </Stack>
         </Stack>
-      </Stack>}
-      {medicines &&<Stack spacing={2}>
-        <Typography style={{ fontWeight:600 }} variant="h6">Medicines</Typography>
-        <Stack spacing={1}>
-          {medicines?.map((data) => (
-            <li key={data?.medicine._id} >{data?.medicine.trade_name}</li>
-          ))}
+      )}
+      {medicines && (
+        <Stack spacing={2}>
+          <Typography style={{ fontWeight: 600 }} variant="h6">
+            Medicines
+          </Typography>
+          <Stack spacing={1}>
+            {medicines?.map((data) => (
+              <li key={data?.medicine._id}>{data?.medicine.trade_name}</li>
+            ))}
+          </Stack>
         </Stack>
-      </Stack>}
-      {insurance &&<Stack spacing={2}>
-        <Typography style={{ fontWeight:600 }} variant="h6">Insurance</Typography>
-        <Stack spacing={1}>
-          {insurance?.map((company) => (
-            <li key={company._id}>{company?.name_english}</li>
-          ))}
+      )}
+      {insurance && (
+        <Stack spacing={2}>
+          <Typography style={{ fontWeight: 600 }} variant="h6">
+            Insurance
+          </Typography>
+          <Stack spacing={1}>
+            {insurance?.map((company) => (
+              <li key={company._id}>{company?.name_english}</li>
+            ))}
+          </Stack>
         </Stack>
-      </Stack>}
+      )}
 
-      {sport_exercises &&<Stack spacing={2}>
-        <Typography style={{ fontWeight:600 }} variant="h6">Sport Exercises</Typography>
-        <li>{sport_exercises}</li>
-      </Stack>}
-      {eating_diet &&<Stack spacing={2}>
-        <Typography style={{ fontWeight:600 }} variant="h6">Eating Diet</Typography>
-        <li>{eating_diet?.name_english}</li>
-      </Stack>}
-       {alcohol_consumption &&<Stack spacing={2}>
-        <Typography style={{ fontWeight:600 }} variant="h6">Alcohol Consumption</Typography>
-        <li>{alcohol_consumption}</li>
-      </Stack>}
-      {smoking &&<Stack spacing={2}>
-        <Typography style={{ fontWeight:600 }} variant="h6">Smoking</Typography>
-        <li>{smoking}</li>
-      </Stack>}
-       {other_medication_notes &&<Stack spacing={2}>
-        <Typography style={{ fontWeight:600 }} variant="h6">Other Medication Notes</Typography>
-        <li>{other_medication_notes}</li>
-      </Stack>}
+      {sport_exercises && (
+        <Stack spacing={2}>
+          <Typography style={{ fontWeight: 600 }} variant="h6">
+            Sport Exercises
+          </Typography>
+          <li>{sport_exercises}</li>
+        </Stack>
+      )}
+      {eating_diet && (
+        <Stack spacing={2}>
+          <Typography style={{ fontWeight: 600 }} variant="h6">
+            Eating Diet
+          </Typography>
+          <li>{eating_diet?.name_english}</li>
+        </Stack>
+      )}
+      {alcohol_consumption && (
+        <Stack spacing={2}>
+          <Typography style={{ fontWeight: 600 }} variant="h6">
+            Alcohol Consumption
+          </Typography>
+          <li>{alcohol_consumption}</li>
+        </Stack>
+      )}
+      {smoking && (
+        <Stack spacing={2}>
+          <Typography style={{ fontWeight: 600 }} variant="h6">
+            Smoking
+          </Typography>
+          <li>{smoking}</li>
+        </Stack>
+      )}
+      {other_medication_notes && (
+        <Stack spacing={2}>
+          <Typography style={{ fontWeight: 600 }} variant="h6">
+            Other Medication Notes
+          </Typography>
+          <li>{other_medication_notes}</li>
+        </Stack>
+      )}
     </Stack>
   );
 
@@ -257,7 +297,10 @@ export default function MovementInfoContent({ economicMovementData }) {
         },
         {
           label: 'Address',
-          value: country?.name_english&&city?.name_english &&`${country?.name_english} ${city?.name_english}`,
+          value:
+            country?.name_english &&
+            city?.name_english &&
+            `${country?.name_english} ${city?.name_english}`,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
@@ -277,30 +320,32 @@ export default function MovementInfoContent({ economicMovementData }) {
         },
       ].map((item) => (
         <>
-        {item.value && <Stack key={item.label} spacing={1.5}>
-          {/* {item.icon} */}
-          <ListItemText
-            primary={item.label}
-            secondary={item.value}
-            primaryTypographyProps={{
-              typography: 'body2',
-              color: 'text.secondary',
-              mb: 0.5,
-            }}
-            secondaryTypographyProps={{
-              typography: 'subtitle2',
-              color: 'text.primary',
-              component: 'span',
-            }}
-          />
-        </Stack>}
+          {item.value && (
+            <Stack key={item.label} spacing={1.5}>
+              {/* {item.icon} */}
+              <ListItemText
+                primary={item.label}
+                secondary={item.value}
+                primaryTypographyProps={{
+                  typography: 'body2',
+                  color: 'text.secondary',
+                  mb: 0.5,
+                }}
+                secondaryTypographyProps={{
+                  typography: 'subtitle2',
+                  color: 'text.primary',
+                  component: 'span',
+                }}
+              />
+            </Stack>
+          )}
         </>
       ))}
     </Stack>
   );
   return (
     <Grid container spacing={3}>
-      <Grid xs={12} md={8}>
+      <Grid xs={12} maxWidth="md">
         {renderContent}
       </Grid>
 

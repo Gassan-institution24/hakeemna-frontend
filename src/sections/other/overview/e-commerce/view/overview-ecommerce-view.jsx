@@ -37,7 +37,7 @@ export default function OverviewEcommerceView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
+        <Grid xs={12} maxWidth="md">
           <EcommerceWelcome
             title={`Congratulations! \n ${user?.displayName}`}
             description="Best seller of the month You have done 57.6% more sales today."

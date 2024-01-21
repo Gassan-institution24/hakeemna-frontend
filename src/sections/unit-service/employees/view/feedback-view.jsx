@@ -74,7 +74,7 @@ const STATUS_OPTIONS = [
   { value: 'unread', label: 'Unread' },
 ];
 
-export default function DepartmentFeedbackView({ employeeData }) {
+export default function EmployeeFeedbackView({ employeeData }) {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -322,6 +322,6 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   return inputData;
 }
-DepartmentFeedbackView.propTypes = {
+EmployeeFeedbackView.propTypes = {
   employeeData: PropTypes.object,
 };

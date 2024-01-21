@@ -23,7 +23,7 @@ export default function CheckoutCart() {
 
   return (
     <Grid container spacing={3}>
-      <Grid xs={12} md={8}>
+      <Grid xs={12} maxWidth="md">
         <Card sx={{ mb: 3 }}>
           <CardHeader
             title={

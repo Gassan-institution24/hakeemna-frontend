@@ -94,7 +94,7 @@ export default function CheckoutPayment() {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
+        <Grid xs={12} maxWidth="md">
           <CheckoutDelivery onApplyShipping={checkout.onApplyShipping} options={DELIVERY_OPTIONS} />
 
           <CheckoutPaymentMethods

@@ -137,7 +137,7 @@ export default function JwtRegisterView() {
   }, [tableData, selectedCountry]);
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Typography variant="h4">Get started absolutely free</Typography>
+      <Typography variant="h4">Sign up as service unit</Typography>
 
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> Already have an account? </Typography>
@@ -148,15 +148,15 @@ export default function JwtRegisterView() {
       </Stack>
     </Stack>
   );
-
+  
   const renderTerms = (
     <Typography
-      component="div"
-      sx={{
-        color: 'text.secondary',
-        mt: 2.5,
-        typography: 'caption',
-        textAlign: 'center',
+    component="div"
+    sx={{
+      color: 'text.secondary',
+      mt: 2.5,
+      typography: 'caption',
+      textAlign: 'center',
       }}
     >
       {'By signing up, I agree to '}
@@ -170,7 +170,7 @@ export default function JwtRegisterView() {
       .
     </Typography>
   );
-
+  
   const renderForm = (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={2}>

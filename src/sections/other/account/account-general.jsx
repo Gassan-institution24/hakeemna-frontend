@@ -10,11 +10,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
 import { MenuItem, Typography } from '@mui/material';
-import FormProvider, {
-  RHFTextField,
-  RHFSelect,
-  RHFUploadAvatar,
-} from 'src/components/hook-form';
+import FormProvider, { RHFTextField, RHFSelect, RHFUploadAvatar } from 'src/components/hook-form';
 import { useGetCities, useGetCountries } from 'src/api/tables';
 import axios, { endpoints, fetcher } from 'src/utils/axios';
 
@@ -71,7 +67,7 @@ export default function AccountGeneral() {
     address: user?.patient?.address || '',
     sport_exercises: user?.patient?.sport_exercises || '',
     smoking: user?.patient?.smoking || '',
-    profile_picture:user?.patient?.profile_picture?.replace(/\\/g, '//') || '',
+    profile_picture: user?.patient?.profile_picture?.replace(/\\/g, '//') || '',
   };
 
   const methods = useForm({
@@ -85,7 +81,7 @@ export default function AccountGeneral() {
     formState: { isSubmitting },
   } = methods;
 
-  const values = getValues()
+  const values = getValues();
 
   const fuser = (fuserSize) => {
     const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif'];
@@ -106,20 +102,18 @@ export default function AccountGeneral() {
   const handleDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
 
- 
     const fileValidator = fuser(file.size);
 
     if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
-      setProfilePicture(file); 
-      const newFile = Object.assign(file, { 
-        preview: URL.createObjectURL(file), 
+      setProfilePicture(file);
+      const newFile = Object.assign(file, {
+        preview: URL.createObjectURL(file),
       });
-      setValue('profile_picture',newFile)
+      setValue('profile_picture', newFile);
     } else {
       enqueueSnackbar('Invalid file type or size', { variant: 'error' });
     }
   };
-
 
   const onSubmit = async (data) => {
     // Create a new FormData object
@@ -127,7 +121,7 @@ export default function AccountGeneral() {
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
     });
-    
+
     if (profilePicture) {
       formData.append('ter', profilePicture);
     }
@@ -135,9 +129,9 @@ export default function AccountGeneral() {
       // Use your API endpoint to submit the form data
       const response = await axios.patch(`${endpoints.tables.user}${user?.patient._id}`, formData);
       enqueueSnackbar('Profile updated successfully', { variant: 'success' });
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.log(error.message);
       enqueueSnackbar('Failed to update profile', { variant: 'error' });
@@ -172,7 +166,7 @@ export default function AccountGeneral() {
           </Card>
         </Grid>
         {/* img */}
-        <Grid xs={12} md={8}>
+        <Grid xs={12} maxWidth="md">
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}

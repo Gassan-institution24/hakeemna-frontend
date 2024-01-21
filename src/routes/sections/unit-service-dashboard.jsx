@@ -51,6 +51,11 @@ const DepartmentsNewRoomsPage = lazy(() => import('src/pages/unit-service/depart
 const DepartmentsEditRoomsPage = lazy(() =>
   import('src/pages/unit-service/departments/rooms/edit')
 );
+const DepartmentsWorkGroupsPage = lazy(() => import('src/pages/unit-service/departments/work-groups/rooms'));
+const DepartmentsNewWorkGroupsPage = lazy(() => import('src/pages/unit-service/departments/work-groups/add'));
+const DepartmentsEditWorkGroupsPage = lazy(() =>
+  import('src/pages/unit-service/departments/work-groups/edit')
+);
 const DepartmentsEditPage = lazy(() => import('src/pages/unit-service/departments/edit'));
 // EMPLOYEES
 const EmployeesHomePage = lazy(() => import('src/pages/unit-service/employees/home'));
@@ -247,6 +252,14 @@ export const unitServiceDashboardRoutes = [
               { element: <DepartmentsRoomsPage />, index: true },
               { path: 'new', element: <DepartmentsNewRoomsPage /> },
               { path: ':acid/edit', element: <DepartmentsEditRoomsPage /> },
+            ],
+          },
+          {
+            path: ':id/wgroups',
+            children: [
+              { element: <DepartmentsWorkGroupsPage />, index: true },
+              { path: 'new', element: <DepartmentsNewWorkGroupsPage /> },
+              { path: ':acid/edit', element: <DepartmentsEditWorkGroupsPage /> },
             ],
           },
           { path: ':id/appointments', element: <DepartmentsAppointmentsPage /> },

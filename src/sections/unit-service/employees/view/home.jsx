@@ -145,7 +145,7 @@ export default function EmployeesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `${endpoints.tables.employee(id)}/updatestatus`,
+        path: `${endpoints.tables.employeeEngagement(id)}/updatestatus`,
         data: { status: 'active' },
       });
       refetch();
@@ -157,7 +157,7 @@ export default function EmployeesTableView() {
     async (id) => {
       await axiosHandler({
         method: 'PATCH',
-        path: `${endpoints.tables.employee(id)}/updatestatus`,
+        path: `${endpoints.tables.employeeEngagement(id)}/updatestatus`,
         data: { status: 'inactive' },
       });
       refetch();
@@ -169,7 +169,7 @@ export default function EmployeesTableView() {
   const handleActivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `${endpoints.tables.employees}/updatestatus`,
+      path: `${endpoints.tables.employeeEngagements}/updatestatus`,
       data: { status: 'active', ids: table.selected },
     });
     refetch();
@@ -183,7 +183,7 @@ export default function EmployeesTableView() {
   const handleInactivateRows = useCallback(async () => {
     await axiosHandler({
       method: 'PATCH',
-      path: `${endpoints.tables.employees}/updatestatus`,
+      path: `${endpoints.tables.employeeEngagements}/updatestatus`,
       data: { status: 'inactive', ids: table.selected },
     });
     refetch();
@@ -292,9 +292,9 @@ export default function EmployeesTableView() {
                   >
                     {tab.value === 'all' && employeesData.length}
                     {tab.value === 'active' &&
-                      employeesData.filter((order) => order.status === 'active').length}
+                      employeesData.filter((employee) => employee.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      employeesData.filter((order) => order.status === 'inactive').length}
+                      employeesData.filter((employee) => employee.status === 'inactive').length}
                   </Label>
                 }
               />

@@ -1,0 +1,226 @@
+import * as Yup from 'yup';
+import PropTypes from 'prop-types';
+import { useMemo } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import Grid from '@mui/material/Unstable_Grid2';
+import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
+import { endpoints } from 'src/utils/axios';
+
+import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, { RHFAutocomplete, RHFSelect, RHFTextField } from 'src/components/hook-form';
+
+import axios from 'axios';
+import axiosHandler from 'src/utils/axios-handler';
+import { useAuthContext } from 'src/auth/hooks';
+
+// ----------------------------------------------------------------------
+
+export default function TableNewEditForm({ currentTable }) {
+  const router = useRouter();
+
+  const { user } = useAuthContext();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const NewUserSchema = Yup.object().shape({
+    name_arabic: Yup.string().required('Name is required'),
+    name_english: Yup.string().required('Name is required'),
+    start_time: Yup.date().required('Start time is required'),
+    end_time: Yup.date().required('End time is required'),
+  });
+
+  const defaultValues = useMemo(
+    () => ({
+      unit_service: user.employee_engagement.unit_service._id,
+      name_arabic: currentTable?.name_arabic || '',
+      name_english: currentTable?.name_english || '',
+      start_time: currentTable?.start_time || null,
+      end_time: currentTable?.end_time || null,
+    }),
+    [currentTable, user.employee_engagement.unit_service]
+  );
+
+  const methods = useForm({
+    resolver: yupResolver(NewUserSchema),
+    defaultValues,
+  });
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+
+    if (arabicRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
+  const handleEnglishInputChange = (event) => {
+    // Validate the input based on English language rules
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
+
+    if (englishRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
+  const {
+    reset,
+    getValues,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+
+  const values = getValues()
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      console.log('data', data);
+      const address = await axios.get('https://geolocation-db.com/json/');
+      console.log('dataa', {
+        ip_address_user_modification: address.data.IPv4,
+        user_modification: user._id,
+        ...data,
+      });
+      if (currentTable) {
+        await axiosHandler({
+          method: 'PATCH',
+          path: endpoints.tables.workshift(currentTable._id),
+          data: {
+            modifications_nums: (currentTable.modifications_nums || 0) + 1,
+            ip_address_user_modification: address.data.IPv4,
+            user_modification: user._id,
+            ...data,
+          },
+        });
+      } else {
+        await axiosHandler({
+          method: 'POST',
+          path: endpoints.tables.workshifts,
+          data: {
+            ip_address_user_creation: address.data.IPv4,
+            user_creation: user._id,
+            ...data,
+          },
+        });
+      }
+      reset();
+      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      router.push(paths.unitservice.tables.workshifts.root);
+      console.info('DATA', data);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  return (
+    <FormProvider methods={methods} onSubmit={onSubmit}>
+      <Grid xs={12} maxWidth="md">
+        <Card sx={{ p: 3 }}>
+          <Box
+            rowGap={3}
+            columnGap={2}
+            display="grid"
+            gridTemplateColumns={{
+              xs: 'repeat(1, 1fr)',
+              sm: 'repeat(1, 1fr)',
+            }}
+          >
+            <RHFTextField
+              lang="en"
+              onChange={handleEnglishInputChange}
+              name="name_english"
+              label="name english"
+            />
+            <RHFTextField
+              lang="ar"
+              onChange={handleArabicInputChange}
+              name="name_arabic"
+              label="name arabic"
+            />
+            <Box
+              rowGap={3}
+              columnGap={2}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(2, 1fr)',
+              }}
+            >
+              <Controller
+                name="start_time"
+                // control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <MobileTimePicker
+                    minutesStep="5"
+                    label="Start time"
+                    value={
+                      values.start_time
+                        ? new Date(values.start_time)
+                        : null
+                    }
+                    onChange={(newValue) => {
+                      field.onChange(newValue);
+                    }}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!error,
+                        helperText: error?.message,
+                      },
+                    }}
+                  />
+                )}
+              />
+              <Controller
+                name="end_time"
+                // control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <MobileTimePicker
+                    minutesStep="5"
+                    label="End time"
+                    value={
+                      values.end_time
+                        ? new Date(values.end_time)
+                        : null
+                    }
+                    onChange={(newValue) => {
+                      field.onChange(newValue);
+                    }}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!error,
+                        helperText: error?.message,
+                      },
+                    }}
+                  />
+                )}
+              />
+            </Box>
+          </Box>
+
+          <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+            <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+              {!currentTable ? 'Create' : 'Save Changes'}
+            </LoadingButton>
+          </Stack>
+        </Card>
+      </Grid>
+    </FormProvider>
+  );
+}
+
+TableNewEditForm.propTypes = {
+  currentTable: PropTypes.object,
+};

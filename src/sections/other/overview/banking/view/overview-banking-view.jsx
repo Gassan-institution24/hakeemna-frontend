@@ -85,7 +85,7 @@ export default function OverviewBankingView() {
           <BankingCurrentBalance list={_bankingCreditCard} />
         </Grid>
 
-        <Grid xs={12} md={8}>
+        <Grid xs={12} maxWidth="md">
           <Stack spacing={3}>
             <BankingBalanceStatistics
               title="Balance Statistics"

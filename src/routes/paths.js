@@ -59,7 +59,7 @@ export const paths = {
   auth: {
     login: `/login`,
     register: `/register`,
-    registersu: `/register/sarviceunit`,
+    registersu: `/register/serviceunit`,
     verify: `/verify`,
     newPassword: `/new-password`,
     forgotPassword: `/forgot-password`,
@@ -529,6 +529,11 @@ export const paths = {
         new: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/rooms/new`,
         edit: (id, acid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/rooms/${acid}/edit`,
       },
+      workGroups: {
+        root: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups`,
+        new: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups/new`,
+        edit: (id, acid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups/${acid}/edit`,
+      },
       appointments: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/appointments`,
       appointmentconfiguration: (id) =>
         `${ROOTS.SUPERADMIN}/us/departments/${id}/appointmentconfiguration`,
@@ -628,6 +633,7 @@ export const paths = {
       employeetypes: {
         root: `${ROOTS.SUPERADMIN}/us/tables/employee_types`,
         new: `${ROOTS.SUPERADMIN}/us/tables/employee_types/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/us/tables/employee_types/${id}/edit`,
       },
       workshifts: {
         root: `${ROOTS.SUPERADMIN}/us/tables/work_shifts`,

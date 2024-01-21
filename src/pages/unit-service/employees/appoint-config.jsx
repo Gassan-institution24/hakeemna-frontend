@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import EmployeeAppointconfigView from 'src/sections/unit-service/employees/view/appoint-config-table';
-import { useGetEmployee, useGetUSEmployeeAppointmentConfigs } from 'src/api/tables';
+import { useGetEmployeeEngagement, useGetEmployeeAppointmentConfigs } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -11,11 +11,12 @@ export default function EmployeeAppointconfigPage() {
   const params = useParams();
   const { user } = useAuthContext();
   const { id } = params;
-  const employeeData = useGetEmployee(id).data;
-  const { appointmentConfigData, loading, refetch } = useGetUSEmployeeAppointmentConfigs(
-    user?.employee_engagement?.unit_service._id,
+  const employeeData = useGetEmployeeEngagement(id).data;
+  const { appointmentConfigData, loading, refetch } = useGetEmployeeAppointmentConfigs(
     id
   );
+console.log('employeeData',employeeData)
+console.log('appointmentConfigData',appointmentConfigData)
   const name = employeeData?.first_name;
 
   return (

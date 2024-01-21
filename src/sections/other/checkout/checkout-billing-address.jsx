@@ -22,7 +22,7 @@ export default function CheckoutBillingAddress() {
   return (
     <>
       <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
+        <Grid xs={12} maxWidth="md">
           {_addressBooks.slice(0, 4).map((address) => (
             <AddressItem
               key={address.id}
