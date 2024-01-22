@@ -59,11 +59,11 @@ import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'appointment_type', label: 'Appointment Type' },
-  { id: 'work_group', label: 'Work Group' },
-  { id: 'work_shift', label: 'Work Shift' },
+  { id: 'appointment_type', label: 'Appointment type' },
+  { id: 'work_group', label: 'Work group' },
+  { id: 'work_shift', label: 'Work shift' },
   { id: 'patient', label: 'Patient' },
-  { id: 'start_time', label: 'Start Time' },
+  { id: 'start_time', label: 'Start time' },
   { id: 'status', label: 'Status' },
   { id: '' },
 ];
