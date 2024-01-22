@@ -12,27 +12,28 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
 import { MenuItem, Typography, TextField } from '@mui/material';
 import FormProvider, { RHFTextField, RHFSelect, RHFUploadAvatar } from 'src/components/hook-form';
-import { useGetCities, useGetCountries, useGetSpecialties, useGetUSTypes } from 'src/api/tables';
+import { useGetUnitservice,useGetCities, useGetCountries, useGetSpecialties, useGetUSTypes } from 'src/api/tables';
 import axios, { endpoints, fetcher } from 'src/utils/axios';
 import { fData } from 'src/utils/format-number';
 
 // ----------------------------------------------------------------------
 
-export default function AccountGeneral({ unitServiceData, refetch }) {
+export default function AccountGeneral({ unitServiceData }) {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [cities, setCities] = useState([]);
   const [companyLogo, setCompanyLog] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
 
+  const { user } = useAuthContext();
+
+  const { data, refetch } = useGetUnitservice(user?.employee_engagement?.unit_service?._id);
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { unitserviceTypesData } = useGetUSTypes();
   const { specialtiesData } = useGetSpecialties();
 
-  const { user } = useAuthContext();
-
-  console.log('unitServiceData', unitServiceData);
+  console.log('unitServiceData', data);
 
   const UpdateUserSchema = Yup.object().shape({
     name_english: Yup.string().required('Name is required.'),
@@ -61,27 +62,27 @@ export default function AccountGeneral({ unitServiceData, refetch }) {
   useEffect(() => {
     setCities(
       selectedCountry
-        ? tableData.filter((data) => data?.country?._id === selectedCountry)
+        ? tableData.filter((info) => info?.country?._id === selectedCountry)
         : tableData
     );
   }, [tableData, selectedCountry]);
 
   const defaultValues = {
-    name_english: unitServiceData?.name_english || '',
-    country: unitServiceData?.country._id || null,
-    city: unitServiceData?.city._id || null,
-    US_type: unitServiceData?.US_type?._id || null,
-    email: unitServiceData?.email || '',
-    sector_type: unitServiceData?.sector_type || '',
-    speciality: unitServiceData?.speciality?._id || null,
-    identification_num: unitServiceData?.identification_num || '',
-    address: unitServiceData?.address || '',
-    web_page: unitServiceData?.web_page || '',
-    phone: unitServiceData?.phone || '',
-    mobile_num: unitServiceData?.mobile_num || '',
-    introduction_letter: unitServiceData?.introduction_letter || '',
-    location_gps: unitServiceData?.location_gps || '',
-    company_logo: unitServiceData?.company_logo || '',
+    name_english: data?.name_english || '',
+    country: data?.country._id || null,
+    city: data?.city._id || null,
+    US_type: data?.US_type?._id || null,
+    email: data?.email || '',
+    sector_type: data?.sector_type || '',
+    speciality: data?.speciality?._id || null,
+    identification_num: data?.identification_num || '',
+    address: data?.address || '',
+    web_page: data?.web_page || '',
+    phone: data?.phone || '',
+    mobile_num: data?.mobile_num || '',
+    introduction_letter: data?.introduction_letter || '',
+    location_gps: data?.location_gps || '',
+    company_logo: data?.company_logo || '',
   };
 
   const methods = useForm({
@@ -112,9 +113,9 @@ export default function AccountGeneral({ unitServiceData, refetch }) {
     [setValue]
   );
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (dataToSend) => {
     try {
-      console.log('data', data);
+      console.log('dataToSend', dataToSend);
       const formData = new FormData();
       if (companyLogo) {
         formData.append('company_logo_pic', companyLogo);
@@ -125,10 +126,11 @@ export default function AccountGeneral({ unitServiceData, refetch }) {
       }
       await axios.patch(
         endpoints.tables.unitservice(user?.employee_engagement?.unit_service._id),
-        data
+        dataToSend
       );
       enqueueSnackbar('Update success!');
-      console.info('DATA', data);
+      refetch()
+      console.info('DATA', dataToSend);
     } catch (error) {
       enqueueSnackbar('Update failed!', { variant: 'error' });
       console.error(error);
@@ -297,5 +299,5 @@ export default function AccountGeneral({ unitServiceData, refetch }) {
 }
 AccountGeneral.propTypes = {
   unitServiceData: PropTypes.object,
-  refetch: PropTypes.func,
+  // refetch: PropTypes.func,
 };

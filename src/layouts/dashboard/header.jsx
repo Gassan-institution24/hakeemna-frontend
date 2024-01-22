@@ -15,6 +15,7 @@ import Logo from 'src/components/logo';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
 
+
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
 import SettingsButton from '../common/settings-button';
@@ -22,6 +23,7 @@ import AccountPopover from '../common/account-popover';
 import ContactsPopover from '../common/contacts-popover';
 import LanguagePopover from '../common/language-popover';
 import NotificationsPopover from '../common/notifications-popover';
+import TimeOutInActive from '../common/time-out-inactive';
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +54,7 @@ export default function Header({ onOpenNav }) {
 
       <Searchbar />
 
+      <TimeOutInActive/>
       <Stack
         flexGrow={1}
         direction="row"

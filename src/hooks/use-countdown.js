@@ -17,7 +17,7 @@ export function useCountdownDate(date) {
   }, []);
 
   const setNewTime = () => {
-    const startTime = date;
+    const startTime = new Date(date);
 
     const endTime = new Date();
 

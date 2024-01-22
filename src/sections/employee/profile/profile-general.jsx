@@ -28,13 +28,14 @@ import {
 } from 'src/api/tables';
 import axios, { endpoints, fetcher } from 'src/utils/axios';
 import { fData } from 'src/utils/format-number';
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral({ employeeData, refetch }) {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [cities, setCities] = useState([]);
-  const [companyLogo, setCompanyLog] = useState();
+  const [companyLogo, setProfilePic] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -126,13 +127,13 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const handleDrop = useCallback(
     (name, acceptedFiles) => {
       const file = acceptedFiles[0];
-      // setCompanyLog(file);
-      // const newFile = Object.assign(file, {
-      //   preview: URL.createObjectURL(file),
-      // });
+      setProfilePic(file);
+      const newFile = Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      });
 
       if (file) {
-        setValue(name, file, { shouldValidate: true });
+        setValue(name, newFile, { shouldValidate: true });
       }
     },
     [setValue]
@@ -143,14 +144,15 @@ export default function AccountGeneral({ employeeData, refetch }) {
       console.log('data', data);
       const formData = new FormData();
       Object.keys(data).forEach((key) => {
-        if(data[key]!==defaultValues[key]){
+        if (data[key] !== defaultValues[key]) {
           formData.append(key, data[key]);
         }
       });
-      
+
       console.log('formData', formData);
       await axios.patch(endpoints.tables.employee(employeeData._id), formData);
       enqueueSnackbar('Update success!');
+      refetch();
       console.info('DATA', data);
     } catch (error) {
       enqueueSnackbar('Update failed!', { variant: 'error' });
@@ -238,13 +240,15 @@ export default function AccountGeneral({ employeeData, refetch }) {
                     variant="caption"
                     sx={{
                       mx: 'auto',
+                      mb:1,
                       display: 'block',
                       textAlign: 'center',
                       color: 'text.disabled',
                     }}
                   >
-                    Scanned ID
+                    Scanned ID 
                   </Typography>
+                  {values.scanned_identity && <Iconify icon="flat-color-icons:ok" />}
                 </Box>
                 <Box>
                   <RHFUploadBox
@@ -259,6 +263,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                     variant="caption"
                     sx={{
                       mx: 'auto',
+                      mb:1,
                       display: 'block',
                       textAlign: 'center',
                       color: 'text.disabled',
@@ -266,6 +271,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   >
                     Signature
                   </Typography>
+                  {values.signature && <Iconify icon="flat-color-icons:ok" />}
                 </Box>
                 <Box>
                   <RHFUploadBox
@@ -280,6 +286,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                     variant="caption"
                     sx={{
                       mx: 'auto',
+                      mb:1,
                       display: 'block',
                       textAlign: 'center',
                       color: 'text.disabled',
@@ -287,6 +294,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   >
                     Stamp
                   </Typography>
+                  {values.stamp && <Iconify icon="flat-color-icons:ok" />}
                 </Box>
               </Box>
             </Box>
@@ -369,7 +377,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               />
               <RHFTextField
                 name="University_graduation_Specialty"
-                label="University_graduation_Specialty"
+                label="University graduation Specialty"
               />
               <Controller
                 name="birth_date"
