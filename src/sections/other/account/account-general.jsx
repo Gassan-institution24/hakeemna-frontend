@@ -166,7 +166,7 @@ export default function AccountGeneral() {
           </Card>
         </Grid>
         {/* img */}
-        <Grid xs={12} maxWidth="md">
+        <Grid xs={12}  md={8}>
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}
