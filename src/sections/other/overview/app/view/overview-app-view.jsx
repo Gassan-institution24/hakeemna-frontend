@@ -1,9 +1,7 @@
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
-
 import { useAuthContext } from 'src/auth/hooks';
 
 import { SeoIllustration } from 'src/assets/illustrations';
@@ -11,8 +9,8 @@ import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled } f
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useSettingsContext } from 'src/components/settings';
-import { paths } from 'src/routes/paths';
-import Bmi from 'src/sections/user/bmi';
+import Iconify from 'src/components/iconify';
+import Divider from '@mui/material/Divider';
 import Image from 'src/components/image/image';
 import AppWidget from '../app-widget';
 import AppWelcome from '../app-welcome';
@@ -25,6 +23,7 @@ import AppWidgetSummary from '../app-widget-summary';
 import AppCurrentDownload from '../app-current-download';
 import AppTopInstalledCountries from '../app-top-installed-countries';
 import Photo from './photo.png';
+
 // ----------------------------------------------------------------------
 
 export default function OverviewAppView() {
@@ -38,48 +37,50 @@ export default function OverviewAppView() {
   const greeting = isMorning ? 'Good Morning 🌞' : 'Good Evening 🌚';
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
-          <AppWelcome
-            title={`${greeting} \n ${user?.userName}`}
-            description="Nourish your body, empower your mind – wellness is the key to a vibrant life."
-            img={<Image src={Photo} />}
-            action={
-              <Button variant="contained" color="primary">
-                Calculate your BMI
-              </Button>
-            }
-          />
-        </Grid>
+    <>
+      <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+        <Grid container spacing={3}>
+          <Grid xs={12} md={8}>
+            <AppWelcome
+              title={`${greeting} \n ${user?.userName}`}
+              description="Nourish your body, empower your mind – wellness is the key to a vibrant life."
+              img={<Image src={Photo} />}
+              action={
+                <Button variant="contained" color="primary">
+                  Calculate your BMI
+                </Button>
+              }
+            />
+          </Grid>
 
-        <Grid xs={12} md={4}>
-          <AppFeatured list={_appFeatured} />
-        </Grid>
+          <Grid xs={12} md={4}>
+            <AppFeatured list={_appFeatured} />
+          </Grid>
 
-        <Grid xs={12} md={6} lg={12}>
-          <Typography variant='Bode2'>How To Use</Typography>
-          <Box sx={{ position: 'relative' }}>
-            <div style={{ position: 'relative', paddingBottom: '56%', width: '100%' }}>
-              <iframe
-                src="https://www.youtube.com/embed/IGsRxmC40Bw?si=gULZ3W4Jy6BPk7p6"
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '50%',
-                  borderRadius: '10px',
-                  border: 'none',
-                }}
-              />
-            </div>
-          </Box>
+          <Grid xs={12} md={6} lg={12}>
+            <Typography variant="h3">How To Use</Typography>
+            <Box sx={{ position: 'relative', mt: 1 }}>
+              <div style={{ position: 'relative', paddingBottom: '56%', width: '100%' }}>
+                <iframe
+                  src="https://www.youtube.com/embed/IGsRxmC40Bw?si=gULZ3W4Jy6BPk7p6"
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '50%',
+                    borderRadius: '10px',
+                    border: 'none',
+                  }}
+                />
+              </div>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </>
   );
 }
