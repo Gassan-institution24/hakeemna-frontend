@@ -11,10 +11,11 @@ const stickySidebarStyle = {
   display: 'flex',
   right: 0,
   zIndex: 1,
+  height: 'auto',
+  width: 'auto',
   margin: 3,
   position: 'fixed',
   backgroundColor: 'rgba(255, 255, 255, 0.700)',
-  height: '35.3%',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.4)',
   borderRadius: '15px 0px 0px 15px',
 };
@@ -22,54 +23,52 @@ const insidestickySidebar = {
   transform: 'translate(2%, 2%)',
 };
 
-
-
-
-
 export default function Sidebar() {
-    const router = useRouter();
-    const goto = () =>{
-        router.push(paths.dashboard.root);
-    }
+  const router = useRouter();
+  const goto = () => {
+    router.push(paths.dashboard.root);
+  };
   return (
     <Box style={stickySidebarStyle}>
       <Box style={insidestickySidebar}>
-        <Button sx={{ display: 'inline', '&:hover': {
+        <Button sx={{ display: 'inline','&:hover': {
       bgcolor:'inherit',
     }, }} onClick={goto} >
-          <Iconify sx={{ color: 'green' }} icon="cil:home" />
-          <Typography>Home</Typography>
+          <Iconify sx={{ color: 'green',  width:'50%', height:'40%'  }} icon="cil:home" />
+          <Typography sx={{ fontSize:12}} >Home</Typography>
         </Button>
 
         <Divider />
         <Button sx={{ display: 'inline', '&:hover': {
       bgcolor:'inherit',
     }, }}>
-          <Iconify sx={{ color: 'green' }} icon="ic:baseline-search" />
-          <Typography>Search</Typography>
+          <Iconify sx={{ color: 'green',  width:'50%', height:'40%'  }} icon="bx:search" />
+          <Typography sx={{ fontSize:12}} >Search</Typography>
         </Button>
         <Divider />
         <Button sx={{ display: 'inline', '&:hover': {
       bgcolor:'inherit',
     }, }}>
-          <Iconify sx={{ color: 'green' }} icon="gg:profile" />
-          <Typography>Profile</Typography>
+          <Iconify sx={{ color: 'green',  width:'50%', height:'40%'  }} icon="gg:profile" />
+          <Typography sx={{ fontSize:12}} >Profile</Typography>
         </Button>
         <Divider />
         <Button sx={{ display: 'inline', '&:hover': {
       bgcolor:'inherit',
     }, }}>
-          <Iconify sx={{ color: 'green' }} icon="material-symbols:wifi-sharp" />
-          <Typography>Test</Typography>
+          <Iconify sx={{ color: 'green',  width:'50%', height:'40%'  }} icon="material-symbols:wifi-sharp" />
+          <Typography sx={{ fontSize:12}} >Test</Typography>
         </Button>
         <Divider />
         <Button sx={{ display: 'inline', '&:hover': {
       bgcolor:'inherit',
     }, }}>
-          <Iconify sx={{ color: 'green' }} icon="ant-design:setting-outlined" />
-          <Typography>Setting</Typography>
+          <Iconify sx={{ color: 'green',  width:'50%', height:'40%'  }} icon="ant-design:setting-outlined" />
+          <Typography sx={{ fontSize:12}} >Setting</Typography>
         </Button>
       </Box>
     </Box>
+
+
   );
 }

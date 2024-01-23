@@ -1,8 +1,10 @@
 import React from 'react';
-import { Box, Container, Typography, Button } from '@mui/material';
-import Divider from '@mui/material/Divider';
+
+import { Box, Button, Container, Typography } from '@mui/material';
+
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
+
 import Emergencypic from '../../components/logo/doc.png';
 
 export default function Emergency() {
