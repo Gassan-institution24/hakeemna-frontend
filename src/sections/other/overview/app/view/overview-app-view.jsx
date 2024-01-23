@@ -34,7 +34,7 @@ export default function OverviewAppView() {
   const settings = useSettingsContext();
   const currentHour = new Date().getHours();
   const isMorning = currentHour >= 0 && currentHour < 12;
-  const greeting = isMorning ? 'Good Morning 🌞' : 'Good Evening 🌚';
+  const greeting = isMorning ? 'Good Morning ☀️' : 'Good Evening 🌑';
 
   return (
     <>

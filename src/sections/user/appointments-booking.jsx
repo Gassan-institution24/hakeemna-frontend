@@ -16,6 +16,7 @@ import {
   useGetCountries,
   useGetAppointmentTypes,
   useGetPaymentMethods,
+  useGetDepartments
 } from 'src/api/tables';
 import { fTimestamp } from 'src/utils/format-time';
 
@@ -34,6 +35,7 @@ const defaultFilters = {
   end_date: null,
   appointtypes: 'all',
   payment_methods: 'all',
+  departments: 'all',
 };
 
 // ----------------------------------------------------------------------
@@ -57,6 +59,7 @@ export default function AppointmentBooking() {
   const { unitservicesData } = useGetUnitservices();
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { paymentMethodsData } = useGetPaymentMethods();
+  const { departmentsData } = useGetDepartments();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -180,6 +183,7 @@ export default function AppointmentBooking() {
           unitServicesOptions={unitservicesData}
           appointmentTypeOptions={appointmenttypesData}
           paymentMethodsOptions={paymentMethodsData}
+          departmentsData={departmentsData}
           dateError={dateError}
         />
 
@@ -195,6 +199,7 @@ export default function AppointmentBooking() {
       unitServicesOptions={unitservicesData}
       appointmentTypeOptions={appointmenttypesData}
       paymentMethodsOptions={paymentMethodsData}
+      departmentsData={departmentsData}
       filters={filters}
       onResetFilters={handleResetFilters}
       //
@@ -218,7 +223,7 @@ export default function AppointmentBooking() {
         {canReset && renderResults}
       </Stack>
 
-      {notFound && <EmptyContent filled title="No Data" sx={{ py: 10 }} />}
+      {notFound && <EmptyContent filled title="No appointments for today" sx={{ py: 10 }} />}
 
       <AppointmentList
         patientData={user?.patient._id}
@@ -235,6 +240,7 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
   const {
     appointtypes,
     payment_methods,
+    departments,
     date,
     start_date,
     end_date,
@@ -242,7 +248,7 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
     countries,
     cities,
   } = filters;
-
+  console.log(inputData,'erererre');
   // SORT BY
   if (sortBy === 'latest') {
     inputData = orderBy(inputData, ['start_time'], ['desc']);
@@ -262,6 +268,11 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
   if (payment_methods !== 'all') {
     inputData = inputData.filter(
       (appointment) => appointment?.payment_method?._id === payment_methods
+    );
+  }
+  if (departments !== 'all') {
+    inputData = inputData.filter(
+      (appointment) => appointment?.department?.insurance?._id === departments
     );
   }
   if (!dateError) {
