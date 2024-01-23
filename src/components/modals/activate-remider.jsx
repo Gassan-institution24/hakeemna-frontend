@@ -39,7 +39,7 @@ export default function BookManually({ onClose, ...other }) {
 
   return (
       <Dialog maxWidth="lg" onClose={onClose} {...other}>
-          <DialogTitle sx={{ mb: 1 }}> New Emergency Appointment </DialogTitle>
+          <DialogTitle sx={{ mb: 1 }}>Activation needed </DialogTitle>
 
           <DialogContent sx={{ overflow: 'unset' }}>
             <Typography>Your Account needs to activate</Typography>

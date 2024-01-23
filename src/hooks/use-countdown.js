@@ -4,10 +4,10 @@ import { useState, useEffect, useCallback } from 'react';
 
 export function useCountdownDate(date) {
   const [countdown, setCountdown] = useState({
-    days: '00',
-    hours: '00',
-    minutes: '00',
-    seconds: '00',
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   });
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export function useCountdownDate(date) {
   }, []);
 
   const setNewTime = () => {
-    const startTime = new Date(date);
+    const startTime = date;
 
     const endTime = new Date();
 
@@ -33,14 +33,15 @@ export function useCountdownDate(date) {
 
     const getSeconds = `0${Math.floor((distanceToNow % (1000 * 60)) / 1000)}`.slice(-2);
 
-    setCountdown({
-      days: getDays.toString() || '000',
-      hours: getHours || '000',
-      minutes: getMinutes || '000',
-      seconds: getSeconds || '000',
-    });
+    if (date) {
+      setCountdown({
+        days: getDays.toString().padStart(2, '0'),
+        hours: getHours.toString().padStart(2, '0'),
+        minutes: getMinutes.toString().padStart(2, '0'),
+        seconds: getSeconds.toString().padStart(2, '0'),
+      });
+    }
   };
-
   return {
     days: countdown.days,
     hours: countdown.hours,
