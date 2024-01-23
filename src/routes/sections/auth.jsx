@@ -17,6 +17,7 @@ const JwtStakeholderRegisterPage = lazy(() => import('src/pages/auth/jwt/stakeho
 const ForgetPasswordPage = lazy(() => import('src/pages/auth/jwt/forgot-password'));
 const VerifyPage = lazy(() => import('src/pages/auth/jwt/verify'));
 const NewPasswordPage = lazy(() => import('src/pages/auth/jwt/new-password'));
+const ActivationPage = lazy(() => import('src/pages/auth/jwt/activation'));
 
 // ----------------------------------------------------------------------
 
@@ -61,6 +62,7 @@ export const authRoutes = [
     ),
     children: [
       { path: 'verify', element: <VerifyPage /> },
+      { path: 'activation/:token', element: <ActivationPage /> },
       { path: 'new-password', element: <NewPasswordPage /> },
       { path: 'forgot-password', element: <ForgetPasswordPage /> },
     ],

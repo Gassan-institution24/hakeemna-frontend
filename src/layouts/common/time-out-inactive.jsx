@@ -12,8 +12,9 @@ import { useCountdownDate } from 'src/hooks/use-countdown';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'notistack';
-import { Alert } from '@mui/material';
+import { Alert, Typography } from '@mui/material';
 import BookManually from 'src/components/modals/activate-remider';
+import Iconify from 'src/components/iconify/iconify';
 
 export default function TimeOutInActive() {
   const { user, logout } = useAuthContext();
@@ -25,15 +26,19 @@ export default function TimeOutInActive() {
   const showAlert = useBoolean(true);
 
   const unitServiceCountdown = useCountdownDate(
-    new Date(user?.employee_engagement?.unit_service?.created_at).getTime() +
-      3 * 24 * 60 * 60 * 1000
+    new Date(
+      new Date(user?.employee_engagement?.unit_service?.created_at).getTime() +
+        3 * 24 * 60 * 60 * 1000
+    )
   );
 
-  const employeeCountdown = useCountdownDate(
-    new Date(user?.employee_engagement?.employee?.created_at).getTime() + 3 * 24 * 60 * 60 * 1000
+  const userCountDown = useCountdownDate(
+    new Date(
+      new Date(user?.created_at).getTime() + 3 * 24 * 60 * 60 * 1000
+    )
   );
   const subscriptionExpired = useCountdownDate(
-    user?.employee_engagement?.unit_service?.subscription_end_date
+    new Date(user?.employee_engagement?.unit_service?.subscription_end_date)
   );
 
   useEffect(() => {
@@ -44,6 +49,7 @@ export default function TimeOutInActive() {
         new Date(user.employee_engagement.unit_service.created_at).getTime() <
           new Date().getTime() - 3 * 24 * 60 * 60 * 1000
       ) {
+        console.log('this user is in activate and has to logout')
         try {
           await logout();
         } catch (error) {
@@ -51,13 +57,13 @@ export default function TimeOutInActive() {
           enqueueSnackbar('Unable to logout!', { variant: 'error' });
         }
       }
-
       if (
-        user.employee_engagement &&
-        user.employee_engagement.employee.status === 'inactive' &&
-        new Date(user.employee_engagement.employee.created_at).getTime() <
+        user &&
+        user.status === 'inactive' &&
+        new Date(user.created_at).getTime() <
           new Date().getTime() - 3 * 24 * 60 * 60 * 1000
-      ) {
+          ) {
+        console.log('this user is in activate and has to logout')
         try {
           await logout();
         } catch (error) {
@@ -71,58 +77,65 @@ export default function TimeOutInActive() {
   }, [user, logout, enqueueSnackbar]);
 
   if (
-    user &&
+    user.role === 'admin' &&
     user.employee_engagement &&
     user.employee_engagement.unit_service.status === 'inactive'
   ) {
     const { days, hours, minutes, seconds } = unitServiceCountdown;
     content = (
       <>
-        <Alert sx={{ ml: 3 }} severity="error">
+        <Alert sx={{ ml: 3, px: 0.6, py: 0.3 }} severity="error">
           <Stack
             direction="row"
             justifyContent="center"
-            divider={<Box sx={{ mx: { xs: 1, sm: 1 } }}>:</Box>}
-            sx={{ typography: 'body2' }}
+            divider={<Box sx={{ px: 1 }}>:</Box>}
+            sx={{ typography: 'body2', pr: 0.5 }}
           >
             <TimeBlock label="Days" value={days} />
 
             <TimeBlock label="Hours" value={hours} />
+            {days < 3 && (
+              <Typography sx={{ typography: 'body2' }}>
+                Your service unit is about to expired
+              </Typography>
+            )}
 
             {/* <TimeBlock label="Minutes" value={minutes} />
   
       <TimeBlock label="Seconds" value={seconds} /> */}
           </Stack>
         </Alert>
-        <BookManually open={showAlert.value} onClose={showAlert.onFalse} />
+        {/* <BookManually open={showAlert.value} onClose={showAlert.onFalse} /> */}
       </>
     );
   } else if (
     user &&
-    user.employee_engagement &&
-    user.employee_engagement.employee.status === 'inactive'
+    user.status === 'inactive'
   ) {
-    const { days, hours, minutes, seconds } = employeeCountdown;
+    const { days, hours, minutes, seconds } = userCountDown;
     content = (
       <>
         {' '}
-        <Alert sx={{ ml: 2 }} severity="error">
+        <Alert sx={{ ml: 2, px: 0.6, py: 0.3 }} severity="error">
           <Stack
             direction="row"
             justifyContent="center"
-            divider={<Box>:</Box>}
-            sx={{ typography: 'body2' }}
+            divider={<Box sx={{ px: 1 }}>:</Box>}
+            sx={{ typography: 'body2', pr: 0.5 }}
           >
             <TimeBlock label="Days" value={days} />
 
             <TimeBlock label="Hours" value={hours} />
+            {days < 3 && (
+              <Typography sx={{ typography: 'body2' }}>Your account is about to expired</Typography>
+            )}
 
             {/* <TimeBlock label="Minutes" value={minutes} />
   
       <TimeBlock label="Seconds" value={seconds} /> */}
           </Stack>
         </Alert>
-        <BookManually open={showAlert.value} onClose={showAlert.onFalse} />
+        {/* <BookManually open={showAlert.value} onClose={showAlert.onFalse} /> */}
       </>
     );
   } else if (
@@ -133,19 +146,62 @@ export default function TimeOutInActive() {
     const { days } = subscriptionExpired;
     content = (
       <>
-        <Alert sx={{ ml: 2 }}>
-          <Stack
-            direction="row"
-            justifyContent="center"
-            divider={<Box>:</Box>}
-            sx={{ typography: 'body2' }}
-          >
-            <TimeBlock label="Days" value={days} />
-          </Stack>
-        </Alert>
+        {typeof days === 'string' && days > 3 && (
+          <>
+            <Iconify sx={{ ml: 2, mr: 1 }} icon="flat-color-icons:ok" width={22} />
+            <Stack
+              direction="row"
+              justifyContent="center"
+              divider={<Box sx={{ px: 1 }}>:</Box>}
+              sx={{ typography: 'body2', pr: 0.5 }}
+            >
+              <TimeBlock label="Days" value={days} />
+            </Stack>
+          </>
+        )}
+        {typeof days === 'string' && days < 3 && (
+          <Alert sx={{ ml: 2, px: 0.6, py: 0.3 }} severity="error">
+            <Stack
+              direction="row"
+              justifyContent="center"
+              divider={<Box sx={{ px: 1 }}>:</Box>}
+              sx={{ typography: 'body2', pr: 0.5 }}
+            >
+              <TimeBlock label="Days" value={days} />
+              <Typography sx={{ typography: 'body2' }}>Your account is about to expired</Typography>
+            </Stack>
+          </Alert>
+        )}
       </>
-    );
-  }
+    )}
+  // } else if (user.role === 'patient') {
+  //   const { days, hours, minutes, seconds } = patientExpired;
+  //   content = (
+  //     <>
+  //       {' '}
+  //       <Alert sx={{ ml: 2, px: 0.6, py: 0.3 }} severity="error">
+  //         <Stack
+  //           direction="row"
+  //           justifyContent="center"
+  //           divider={<Box sx={{ px: 1 }}>:</Box>}
+  //           sx={{ typography: 'body2', pr: 0.5 }}
+  //         >
+  //           <TimeBlock label="Days" value={days} />
+
+  //           <TimeBlock label="Hours" value={hours} />
+  //           {days < 3 && (
+  //             <Typography sx={{ typography: 'body2' }}>Your account is about to expired</Typography>
+  //           )}
+
+  //           {/* <TimeBlock label="Minutes" value={minutes} />
+  
+  //     <TimeBlock label="Seconds" value={seconds} /> */}
+  //         </Stack>
+  //       </Alert>
+  //       {/* <BookManually open={showAlert.value} onClose={showAlert.onFalse} /> */}
+  //     </>
+  //   );
+  // }
   return content;
 }
 

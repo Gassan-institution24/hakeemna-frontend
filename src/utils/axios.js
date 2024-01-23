@@ -193,6 +193,7 @@ export const endpoints = {
   auth: {
     me: '/api/auth/me',
     login: '/api/auth/login',
+    activate: (token)=>`/api/auth/activate/${token}`,
     register: '/api/auth/signup',
     forgotpassword: '/api/auth/forgotpassword',
     resetpassword: '/api/auth/resetpassword',
