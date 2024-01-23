@@ -15,7 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
+import { MenuItem } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { RHFSelect } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
@@ -35,6 +35,7 @@ export default function JobFilters({
   onResetFilters,
   //
   paymentMethodsOptions,
+  departmentsData,
   countriesOptions,
   citiesOptions,
   unitServicesOptions,
@@ -42,6 +43,7 @@ export default function JobFilters({
   dateError,
 }) {
   const [selectedCountry, setSelectedCountry] = useState('');
+  const [selecteDdepartments, setSelecteDdepartments] = useState('');
 
   const [cities, setCities] = useState([]);
 
@@ -61,6 +63,13 @@ export default function JobFilters({
     (newValue) => {
       setSelectedCountry(newValue);
       onFilters('countries', newValue);
+    },
+    [onFilters]
+  );
+  const handleFilterDepartments = useCallback(
+    (newValue) => {
+      setSelecteDdepartments(newValue);
+      onFilters('departments', newValue);
     },
     [onFilters]
   );
@@ -182,21 +191,41 @@ export default function JobFilters({
     </Stack>
   );
 
-  // const renderCountries = (
-  //   <Stack>
-  //     <Typography variant="subtitle2" sx={{ mb: 1 }}>
-  //       Countries
-  //     </Typography>
-  //     <RHFSelect  onChange={handleFilterCountries} name="country" label="Country">
-  //
-  //           {countriesOptions.map((country) => (
-  //             <MenuItem key={country._id} value={country._id}>
-  //               {country.name_english}
-  //             </MenuItem>
-  //           ))}
-  //         </RHFSelect>
-  //   </Stack>
-  // );
+  const renderCountries = (
+    <Stack>
+      <Typography variant="subtitle2" sx={{ mb: 1 }}>
+        Countries
+      </Typography>
+      <select  onChange={handleFilterCountries} name="country" label="Country">
+  
+            {countriesOptions?.map((country) => (
+              <option key={country._id} value={country._id}>
+                {country?.name_english}
+              </option>
+            ))}
+          </select>
+    </Stack>
+  );
+  const renderDepartments = (
+    <Stack>
+      <Typography variant="subtitle2" sx={{ mb: 1 }}>
+      insurance
+      </Typography>
+      <select  onChange={handleFilterDepartments} name="departments" label="insurance">
+  
+            {departmentsData?.map((info) => (
+              <>
+               <option>z</option>
+              <option key={info._id} value={info._id}>
+                {info?.department?.insurance?.name_english}
+              </option>
+              
+              </>
+             
+            ))}
+          </select>
+    </Stack>
+  );
 
   const renderUnitServices = (
     <Stack>
@@ -259,7 +288,9 @@ export default function JobFilters({
 
             {renderUnitServices}
 
-            {/* {renderCountries} */}
+            {renderCountries}
+            
+            {renderDepartments}
 
             {renderappointtypes}
 
@@ -277,6 +308,7 @@ JobFilters.propTypes = {
   unitServicesOptions: PropTypes.array,
   countriesOptions: PropTypes.array,
   paymentMethodsOptions: PropTypes.array,
+  departmentsData: PropTypes.array,
   canReset: PropTypes.bool,
   filters: PropTypes.object,
   onClose: PropTypes.func,

@@ -111,20 +111,20 @@ export default function Medicalreports() {
           <View>
             <View style={styles.gridContainer}>
               <PdfImage src={Doclogo} style={styles.image} />
-              <Text style={styles.text3}>{info.department.name_english}</Text>
+              <Text style={styles.text3}>{info.department?.name_english}</Text>
               <Text style={styles.text4}>Al Waha_cercle at0349</Text>
               <Text style={styles.text4}>+962776088372</Text>
             </View>
             <View style={styles.gridBody}>
               <Text style={styles.text}>Medical Report</Text>
               <Text style={styles.text2}>
-                Name: {user?.patient.first_name} {user?.patient.last_name}
+                Name: {user?.patient?.first_name} {user?.patient?.last_name}
               </Text>
               <Text style={styles.text2}>Age: {fDate(user?.patient.birth_date)}</Text>
               <Text style={styles.text2}>ID no: {user?.patient.identification_num}</Text>
             </View>
             <View style={styles.gridFooter}>
-              <Text>{info.description}</Text>
+              <Text>{info?.description}</Text>
               <PdfImage src={Doclogo} style={styles.department} />
               <PdfImage src={Doclogo} style={styles.doctor} />
             </View>
@@ -146,13 +146,13 @@ export default function Medicalreports() {
     >
       <Stack sx={{ p: 2, pb: 1, height: 150 }}>
         <Avatar
-          alt={info.name_english}
+          alt={info?.name_english}
           src={Avatar}
           variant="rounded"
           sx={{ width: 48, height: 48, mb: 2 }}
         />
         <ListItemText
-          primary={<Link color="black">{info.department.name_english}</Link>}
+          primary={<Link color="black">{info?.department?.name_english}</Link>}
           primaryTypographyProps={{
             typography: 'subtitle1',
           }}
@@ -170,7 +170,7 @@ export default function Medicalreports() {
         <PDFDownloadLink
           style={styles.pdf}
           document={<PrescriptionPDF medicines={[info]} />}
-          fileName={`${user?.patient.first_name} MediacalReport.pdf`}
+          fileName={`${user?.patient?.first_name} MediacalReport.pdf`}
         >
           {({ loading }) =>
             loading ? (
@@ -192,7 +192,7 @@ export default function Medicalreports() {
       >
         {[
           {
-            label: info?.department.name_english,
+            label: info?.department?.name_english,
             icon: <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />,
           },
           {
@@ -201,7 +201,7 @@ export default function Medicalreports() {
             icon: <Iconify width={16} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
           },
           {
-            label: `${user?.patient.first_name} ${user?.patient.last_name}`,
+            label: `${user?.patient?.first_name} ${user?.patient?.last_name}`,
             icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
           },
           {
