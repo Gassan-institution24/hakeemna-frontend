@@ -16,7 +16,8 @@ import {
   useGetCountries,
   useGetAppointmentTypes,
   useGetPaymentMethods,
-  useGetDepartments
+  useGetDepartments,
+  useGetInsuranceCos,
 } from 'src/api/tables';
 import { fTimestamp } from 'src/utils/format-time';
 
@@ -36,6 +37,7 @@ const defaultFilters = {
   appointtypes: 'all',
   payment_methods: 'all',
   departments: 'all',
+  insurance: 'all',
 };
 
 // ----------------------------------------------------------------------
@@ -60,6 +62,7 @@ export default function AppointmentBooking() {
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { paymentMethodsData } = useGetPaymentMethods();
   const { departmentsData } = useGetDepartments();
+  const { insuranseCosData } = useGetInsuranceCos();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -103,41 +106,44 @@ export default function AppointmentBooking() {
       }));
 
       if (inputValue) {
+        console.log('inputValue',inputValue)
         const results = appointmentsData.filter(
           (appointment) =>
-            (appointment.name_english &&
-              appointment.name_english?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
-            (appointment.name_arabic &&
-              appointment.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
-            (appointment.unit_service &&
-              appointment.unit_service.name_english
-                ?.toLowerCase()
-                .indexOf(search.query.toLowerCase()) !== -1) ||
-            (appointment.unit_service &&
-              appointment.unit_service.name_arabic
-                ?.toLowerCase()
-                .indexOf(search.query.toLowerCase()) !== -1) ||
-            (appointment.work_group &&
-              appointment.work_group.employees &&
-              appointment.work_group.employees.some(
-                (employee) =>
-                  employee.first_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
-              )) ||
-            (appointment.work_group &&
-              appointment.work_group.employees &&
-              appointment.work_group.employees.some(
-                (employee) =>
-                  employee.last_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
-              )) ||
-            (appointment.work_group &&
-              appointment.work_group.employees &&
-              appointment.work_group.employees.some(
-                (employee) =>
-                  employee.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
-              )) ||
+          // (appointment && appointment?.unit_service?.name_english?.toLowerCase()) ||
+          (appointment &&appointment?.unit_service?.name_english?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1) ||
+            // (appointment.name_arabic &&
+            //   appointment.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
+            // (appointment.unit_service &&
+            //   appointment.unit_service.name_english
+            //     ?.toLowerCase()
+            //     .indexOf(search.query.toLowerCase()) !== -1) ||
+            // (appointment.unit_service &&
+            //   appointment.unit_service.name_arabic
+            //     ?.toLowerCase()
+            //     .indexOf(search.query.toLowerCase()) !== -1) ||
+            // (appointment.work_group &&
+            //   appointment.work_group.employees &&
+            //   appointment.work_group.employees.some(
+              //     (employee) =>
+              //       employee.first_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+              //   )) ||
+            // (appointment.work_group &&
+            //   appointment.work_group.employees &&
+            //   appointment.work_group.employees.some(
+            //     (employee) =>
+            //       employee.last_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+            //   )) ||
+            // (appointment.work_group &&
+            //   appointment.work_group.employees &&
+            //   appointment.work_group.employees.some(
+            //     (employee) =>
+            //       employee.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+            //   )) ||
             appointment?._id === search.query.toLowerCase() ||
             JSON.stringify(appointment.code) === search.query.toLowerCase()
-        );
+            );
+            // const tofilter = results.map((info)=>info._id)
+            console.log('results',results)
 
         setSearch((prevState) => ({
           ...prevState,
@@ -184,6 +190,7 @@ export default function AppointmentBooking() {
           appointmentTypeOptions={appointmenttypesData}
           paymentMethodsOptions={paymentMethodsData}
           departmentsData={departmentsData}
+          insuranseCosData={insuranseCosData}
           dateError={dateError}
         />
 
@@ -199,7 +206,7 @@ export default function AppointmentBooking() {
       unitServicesOptions={unitservicesData}
       appointmentTypeOptions={appointmenttypesData}
       paymentMethodsOptions={paymentMethodsData}
-      departmentsData={departmentsData}
+      insuranseCosData={insuranseCosData}
       filters={filters}
       onResetFilters={handleResetFilters}
       //
@@ -240,6 +247,7 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
   const {
     appointtypes,
     payment_methods,
+    insurance,
     departments,
     date,
     start_date,
@@ -248,7 +256,7 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
     countries,
     cities,
   } = filters;
-  console.log(inputData,'erererre');
+  console.log(inputData, 'erererre');
   // SORT BY
   if (sortBy === 'latest') {
     inputData = orderBy(inputData, ['start_time'], ['desc']);
@@ -270,9 +278,9 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
       (appointment) => appointment?.payment_method?._id === payment_methods
     );
   }
-  if (departments !== 'all') {
-    inputData = inputData.filter(
-      (appointment) => appointment?.department?.insurance?._id === departments
+  if (insurance !== 'all') {
+    inputData = inputData.filter((appointment) =>
+      appointment?.unit_service?.insurance.some((insur) => insur._id === insurance)
     );
   }
   if (!dateError) {
