@@ -41,7 +41,7 @@ export default function AppointmentSearch({ query, results, onSearch, hrefItem }
       popupIcon={null}
       options={results.map((result) => result)}
       onInputChange={(event, newValue) => onSearch(newValue)}
-      getOptionLabel={(option) => option.name_english}
+      getOptionLabel={(option) => option._id}
       noOptionsText={<SearchNotFound query={query} sx={{ bgcolor: 'unset' }} />}
       isOptionEqualToValue={(option, value) => option._id === value._id}
       renderInput={(params) => (
@@ -60,8 +60,8 @@ export default function AppointmentSearch({ query, results, onSearch, hrefItem }
         />
       )}
       renderOption={(props, appointment, { inputValue }) => {
-        const matches = match(appointment.name_english, inputValue);
-        const parts = parse(appointment.name_english, matches);
+        const matches = match(appointment._id, inputValue);
+        const parts = parse(appointment._id, matches);
 
         return (
           <Box
@@ -70,7 +70,7 @@ export default function AppointmentSearch({ query, results, onSearch, hrefItem }
             // onClick={() => handleClick(appointment._id)}
             key={appointment._id}
           >
-            <div>
+            {/* <div>
               {parts.map((part, index) => (
                 <Typography
                   key={index}
@@ -84,7 +84,7 @@ export default function AppointmentSearch({ query, results, onSearch, hrefItem }
                   {part.text}
                 </Typography>
               ))}
-            </div>
+            </div> */}
           </Box>
         );
       }}

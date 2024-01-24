@@ -224,7 +224,7 @@ export default function MaxWidthDialog() {
               </>
             );
           }
-          return null;
+          return  <Typography>you dont have any appointments for today</Typography> 
         })()}
     </>
   );

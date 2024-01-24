@@ -34,6 +34,7 @@ export default function JobFilters({
   canReset,
   onResetFilters,
   //
+  insuranseCosData,
   paymentMethodsOptions,
   departmentsData,
   countriesOptions,
@@ -43,7 +44,7 @@ export default function JobFilters({
   dateError,
 }) {
   const [selectedCountry, setSelectedCountry] = useState('');
-  const [selecteDdepartments, setSelecteDdepartments] = useState('');
+  const [selectedInsurance, setSelectedInsurance] = useState('');
 
   const [cities, setCities] = useState([]);
 
@@ -66,10 +67,9 @@ export default function JobFilters({
     },
     [onFilters]
   );
-  const handleFilterDepartments = useCallback(
-    (newValue) => {
-      setSelecteDdepartments(newValue);
-      onFilters('departments', newValue);
+  const handleFiltedInsurance = useCallback(
+    (e) => {
+      onFilters('insurance', e.target.value);
     },
     [onFilters]
   );
@@ -211,13 +211,13 @@ export default function JobFilters({
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
       insurance
       </Typography>
-      <select  onChange={handleFilterDepartments} name="departments" label="insurance">
+      <select  onChange={handleFiltedInsurance} name="insurance" label="insurance">
   
-            {departmentsData?.map((info) => (
+            {insuranseCosData?.map((info) => (
               <>
-               <option>z</option>
-              <option key={info._id} value={info._id}>
-                {info?.department?.insurance?.name_english}
+               <option/>
+              <option key={info._id} value={info._id} >
+                {info?.name_english}
               </option>
               
               </>
@@ -308,6 +308,7 @@ JobFilters.propTypes = {
   unitServicesOptions: PropTypes.array,
   countriesOptions: PropTypes.array,
   paymentMethodsOptions: PropTypes.array,
+  insuranseCosData: PropTypes.array,
   departmentsData: PropTypes.array,
   canReset: PropTypes.bool,
   filters: PropTypes.object,

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
-
+import React,{useEffect, useState} from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
@@ -26,6 +26,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function AppointmentItem({ appointment, onBook, onView, onEdit, onDelete }) {
   const popover = usePopover();
+const [insuranceNames, setInsuranceNames] = useState()
 
   const {
     _id,
@@ -49,8 +50,14 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
     price_in_JOD,
     status,
   } = appointment;
-
+  useEffect(() => {
+    if (unit_service?.insurance) {
+      const names = unit_service.insurance.map(test => test.name_english);
+      setInsuranceNames(names);
+    }
+  }, [unit_service]);
   return (
+    
     <>
       <Card>
         {/* <IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
@@ -69,7 +76,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
             // sx={{ mb: 0 }}
             primary={
               <Link component={RouterLink} href={paths.dashboard.job.details(_id)} color="inherit">
-                {name_english}
+               {insuranceNames}
               </Link>
             }
             secondary={
@@ -104,14 +111,19 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Box rowGap={1.5} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3, justifyContent: 'space-between' }}>
+        <Box
+          rowGap={1.5}
+          display="grid"
+          gridTemplateColumns="repeat(2, 1fr)"
+          sx={{ p: 3, justifyContent: 'space-between' }}
+        >
           {[
             {
               label: format(new Date(start_time), 'p'),
               icon: <Iconify width={16} icon="icon-park-solid:time" sx={{ flexShrink: 0 }} />,
             },
             {
-              label: department?.name_english,
+              label: insuranceNames,
               icon: (
                 <Iconify width={16} icon="medical-icon:health-services" sx={{ flexShrink: 0 }} />
               ),
@@ -141,7 +153,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
               </Typography>
             </Stack>
           ))}
-          <Button onClick={onBook} sx={{mt:3,width:100}} variant="outlined" color="success">
+          <Button onClick={onBook} sx={{ mt: 3, width: 100 }} variant="outlined" color="success">
             Book
           </Button>
         </Box>
