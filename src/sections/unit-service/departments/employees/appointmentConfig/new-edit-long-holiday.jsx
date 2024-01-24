@@ -1,4 +1,4 @@
-import sum from 'lodash/sum';
+
 import { useEffect, useCallback } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 

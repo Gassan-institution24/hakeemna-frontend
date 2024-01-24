@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import timezones from 'timezones-list';
 
 import Box from '@mui/material/Box';
+import { Chip } from '@mui/material';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -14,7 +16,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFAutocomplete, RHFSelect, RHFTextField } from 'src/components/hook-form';
 import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
@@ -32,6 +34,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const NewSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
+    time_zone: Yup.string().required('Time zone is required'),
   });
 
   const defaultValues = useMemo(
@@ -39,11 +42,10 @@ export default function CountriesNewEditForm({ currentSelected }) {
     () => ({
       name_arabic: currentSelected?.name_arabic || '',
       name_english: currentSelected?.name_english || '',
+      time_zone: currentSelected?.time_zone || '',
     }),
     [currentSelected]
   );
-  console.log(currentSelected);
-  console.log(defaultValues);
 
   const methods = useForm({
     resolver: yupResolver(NewSchema),
@@ -129,6 +131,30 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label="name arabic"
+              />
+              <RHFAutocomplete
+                name="time_zone"
+                label="Time zone"
+                // disableCloseOnSelect
+                options={timezones.map((option) => option.tzCode)}
+                getOptionLabel={(option) => option}
+                renderOption={(props, option) => (
+                  <li {...props} key={option} value={option}>
+                    {option}
+                  </li>
+                )}
+                renderTags={(selected, getTagProps) =>
+                  selected.map((option, index) => (
+                    <Chip
+                      {...getTagProps({ index })}
+                      key={option}
+                      label={option}
+                      size="small"
+                      color="info"
+                      variant="soft"
+                    />
+                  ))
+                }
               />
             </Box>
 

@@ -43,6 +43,7 @@ export default function AppointmentsTableRow({
   const {
     _id,
     code,
+    appoint_number,
     name_english,
     unit_service,
     work_group,
@@ -80,6 +81,7 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell align="center">{code}</TableCell>
+        <TableCell align="center">{appoint_number}</TableCell>
         <TableCell align="center">{appointment_type?.name_english}</TableCell>
         <TableCell align="center">{work_group?.name_english}</TableCell>
         <TableCell align="center">{work_shift?.name_english}</TableCell>

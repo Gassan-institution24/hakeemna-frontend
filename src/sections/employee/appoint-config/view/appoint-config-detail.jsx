@@ -45,7 +45,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   const settings = useSettingsContext();
 
-  const loadingSave = useBoolean();
+  const saving = useBoolean();
+  const updating = useBoolean();
 
   const confirm = useBoolean();
 
@@ -183,6 +184,48 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     formState: { isSubmitting },
   } = methods;
 
+  const handleSaving = async () => {
+    saving.onTrue()
+    try{
+      await axios.patch(
+        `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
+        {
+          ...dataToUpdate,
+          ImmediateEdit: false,
+        }
+        );
+        enqueueSnackbar('Updated successfully!');
+        confirm.onFalse();
+        router.push(paths.employee.appointmentconfiguration.root);
+        saving.onFalse()
+    }
+    catch(e){
+      enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
+      saving.onFalse()
+    }
+  }
+  const handleUpdating = async () => {
+    updating.onTrue()
+    try {
+      await axios.patch(
+        `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
+        {
+          ...dataToUpdate,
+          ImmediateEdit: true,
+        }
+        );
+        enqueueSnackbar('Updated successfully!');
+        router.push(paths.employee.appointmentconfiguration.root);
+        confirm.onFalse();
+        updating.onFalse()
+        // await refetch();
+      } catch (e) {
+        enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
+        confirm.onFalse();
+        updating.onFalse()
+    }
+  }
+
   const handleSave = handleSubmit(async (data) => {
     loadingSend.onTrue();
     const now = new Date();
@@ -296,7 +339,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
             <LoadingButton
               variant="contained"
-              loading={loadingSend.value && isSubmitting}
+              loading={isSubmitting || updating || saving}
               onClick={handleSave}
             >
               Save
@@ -315,47 +358,22 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         }
         action={
           <>
-            <Button
+            <LoadingButton
               variant="contained"
+              loading={updating}
               color="error"
-              onClick={async () => {
-                confirm.onFalse();
-                try {
-                  await axios.patch(
-                    `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
-                    {
-                      ...dataToUpdate,
-                      ImmediateEdit: true,
-                    }
-                  );
-                  enqueueSnackbar('Updated successfully!');
-                  router.push(paths.employee.appointmentconfiguration.root);
-                  // await refetch();
-                } catch (e) {
-                  enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
-                }
-              }}
+              onClick={handleUpdating}
             >
               Yes, I want to change
-            </Button>
-            <Button
+            </LoadingButton>
+            <LoadingButton
+            loading={saving}
               variant="contained"
               color="success"
-              onClick={async () => {
-                confirm.onFalse();
-                await axios.patch(
-                  `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
-                  {
-                    ...dataToUpdate,
-                    ImmediateEdit: false,
-                  }
-                );
-                router.push(paths.employee.appointmentconfiguration.root);
-                // await refetch();
-              }}
+              onClick={handleSaving}
             >
               No, I want to start from uncreated
-            </Button>
+            </LoadingButton>
           </>
         }
       />

@@ -7,8 +7,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Container from '@mui/material/Container';
+
+import Typewriter from 'typewriter-effect';
 
 import { paths } from 'src/routes/paths';
 import { useRouter, useParams } from 'src/routes/hooks';
@@ -36,13 +39,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const router = useRouter();
 
   const { id } = useParams();
-  
+
   const { user } = useAuthContext();
-  
-  const employeeInfo = useGetEmployeeEngagement(id).data
-  
+
+  const employeeInfo = useGetEmployeeEngagement(id).data;
+
   const [appointTime, setAppointTime] = useState(0);
-  console.log('employeeInfo',employeeInfo)
+  console.log('employeeInfo', employeeInfo);
 
   const [dataToUpdate, setDataToUpdate] = useState([]);
 
@@ -50,7 +53,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   const settings = useSettingsContext();
 
-  const loadingSave = useBoolean();
+  const saving = useBoolean(false);
+  const updating = useBoolean(false);
 
   const confirm = useBoolean();
 
@@ -135,13 +139,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       })
     ),
   });
-  console.log('user',user)
+  console.log('user', user);
 
   const defaultValues = useMemo(
     () => ({
       unit_service:
         appointmentConfigData?.unit_service._id || user?.employee_engagement?.unit_service._id,
-      department: employeeInfo?.department?._id||user?.employee_engagement?.department?._id,
+      department: employeeInfo?.department?._id || user?.employee_engagement?.department?._id,
       start_date: appointmentConfigData?.start_date || null,
       end_date: appointmentConfigData?.end_date || null,
       weekend: appointmentConfigData?.weekend || [],
@@ -175,7 +179,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         },
       ],
     }),
-    [appointmentConfigData, user?.employee_engagement,employeeInfo?.department]
+    [appointmentConfigData, user?.employee_engagement, employeeInfo?.department]
   );
 
   const methods = useForm({
@@ -184,10 +188,48 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   });
   const {
     reset,
-
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  console.log('isSubmitting', isSubmitting);
+  console.log('saving', saving);
+  console.log('updating', updating);
+
+  const handleSaving = async () => {
+    saving.onTrue();
+    try {
+      await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
+        ...dataToUpdate,
+        ImmediateEdit: false,
+      });
+      enqueueSnackbar('Updated successfully!');
+      saving.onFalse();
+      confirm.onFalse();
+      router.push(paths.unitservice.employees.appointmentconfig.root(id))
+    } catch (e) {
+      saving.onFalse();
+      enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
+    }
+  };
+  const handleUpdating = async () => {
+    updating.onTrue();
+    try {
+      await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
+        ...dataToUpdate,
+        ImmediateEdit: true,
+      });
+      updating.onFalse();
+      confirm.onFalse();
+      enqueueSnackbar('Updated successfully!');
+      router.push(paths.unitservice.employees.appointmentconfig.root(id));
+      // await refetch();
+    } catch (e) {
+      updating.onFalse();
+      confirm.onFalse();
+      enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
+    }
+  };
 
   const handleSave = handleSubmit(async (data) => {
     loadingSend.onTrue();
@@ -205,11 +247,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           setDataToUpdate(data);
           confirm.onTrue();
         }
-
-        // await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
-        //   ...data,
-        //   department: id,
-        // });
       } else {
         await axios.post(endpoints.tables.appointmentconfigs, data);
         enqueueSnackbar('Added Successfully!');
@@ -231,7 +268,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       methods.reset({
         unit_service:
           appointmentConfigData?.unit_service || user?.employee_engagement?.unit_service._id,
-          department: employeeInfo?.department?._id||user?.employee_engagement?.department?._id,
+        department: employeeInfo?.department?._id || user?.employee_engagement?.department?._id,
         start_date: appointmentConfigData?.start_date || null,
         end_date: appointmentConfigData?.end_date || null,
         weekend: appointmentConfigData?.weekend || [],
@@ -264,7 +301,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ],
       });
     }
-  }, [appointmentConfigData, methods, user,employeeInfo?.department]);
+  }, [appointmentConfigData, methods, user, employeeInfo?.department]);
 
   return (
     <>
@@ -285,7 +322,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
             <LoadingButton
               variant="contained"
-              loading={loadingSend.value && isSubmitting}
+              loading={isSubmitting || saving.value || updating.value}
               onClick={handleSave}
             >
               Save
@@ -296,55 +333,60 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="UnCancel"
+        title={updating.value ? 'Creating appointments...' : 'Save changes'}
         content={
-          <>
-            Do you want to <strong> change your existance appointments</strong> ?
-          </>
+          updating.value ? (
+            <>
+              {/* <Typography variant="body1" component="h6" sx={{ mt: 1 }}>
+                Appointment creating...
+              </Typography> */}
+              <Typewriter
+                options={{
+                  strings: [
+                    'It might take several minutes..',
+                    'We are getting appointments ready..',
+                    'We are almost done..',
+                  ],
+                  autoStart: true,
+                  loop: true,
+                  deleteSpeed: 5,
+                  cursor: '',
+                  delay: 20,
+                }}
+              />
+            </>
+          ) : (
+            <>
+              <Typography variant="body1" component="h6" sx={{ mt: 1 }}>
+                Do you want to change your existance appointments?
+              </Typography>
+              <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                press<strong> yes</strong> to change existance appointments
+              </Typography>
+              <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                press<strong> No</strong> to start changing when creating new appointments
+              </Typography>
+            </>
+          )
         }
         action={
           <>
-            <Button
+            <LoadingButton
               variant="contained"
-              color="error"
-              onClick={async () => {
-                confirm.onFalse();
-                try {
-                  await axios.patch(
-                    `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
-                    {
-                      ...dataToUpdate,
-                      ImmediateEdit: true,
-                    }
-                  );
-                  enqueueSnackbar('Updated successfully!');
-                  router.push(paths.unitservice.employees.appointmentconfig.root(id));
-                  // await refetch();
-                } catch (e) {
-                  enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
-                }
-              }}
+              loading={updating.value}
+              color="warning"
+              onClick={handleUpdating}
             >
-              Yes, I want to change
-            </Button>
-            <Button
+              Yes
+            </LoadingButton>
+            <LoadingButton
+              loading={saving.value}
               variant="contained"
               color="success"
-              onClick={async () => {
-                confirm.onFalse();
-                await axios.patch(
-                  `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
-                  {
-                    ...dataToUpdate,
-                    ImmediateEdit: false,
-                  }
-                );
-                router.push(paths.unitservice.employees.appointmentconfig.root(id));
-                // await refetch();
-              }}
+              onClick={handleSaving}
             >
-              No, I want to start from uncreated
-            </Button>
+              No
+            </LoadingButton>
           </>
         }
       />

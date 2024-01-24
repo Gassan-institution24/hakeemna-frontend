@@ -84,6 +84,8 @@
     "stylis": "^4.3.0",
     "stylis-plugin-rtl": "^2.0.2",
     "swr": "^2.2.4",
+    "timezones-list": "^3.0.3",
+    "typewriter-effect": "^2.21.0",
     "worker-loader": "^3.0.8",
     "xlsx": "^0.18.5",
     "yet-another-react-lightbox": "^3.13.0",

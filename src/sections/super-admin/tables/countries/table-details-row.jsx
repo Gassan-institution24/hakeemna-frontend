@@ -32,6 +32,7 @@ export default function CountriesTableRow({
     name_english,
     status,
     created_at,
+    time_zone,
     user_creation,
     ip_address_user_creation,
     updated_at,
@@ -55,6 +56,7 @@ export default function CountriesTableRow({
       </TableCell>
 
       <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{time_zone}</TableCell>
 
       <TableCell align="center">
         <Label

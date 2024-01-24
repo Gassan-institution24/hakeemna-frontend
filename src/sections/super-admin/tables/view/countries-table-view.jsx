@@ -57,6 +57,7 @@ const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name', label: 'name' },
+  { id: 'time_zone', label: 'Time zone' },
   { id: 'status', label: 'Status' },
   // { id: 'created_at', label: 'Date Of Creation' },
   // { id: 'user_creation', label: 'Creater' },
