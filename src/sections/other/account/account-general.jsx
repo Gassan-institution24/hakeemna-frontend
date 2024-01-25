@@ -9,7 +9,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
-import { MenuItem, Typography } from '@mui/material';
+import { Button, MenuItem, Typography } from '@mui/material';
 import FormProvider, { RHFTextField, RHFSelect, RHFUploadAvatar } from 'src/components/hook-form';
 import { useGetCities, useGetCountries } from 'src/api/tables';
 import axios, { endpoints, fetcher } from 'src/utils/axios';
@@ -151,11 +151,12 @@ export default function AccountGeneral() {
                 <Typography
                   variant="caption"
                   sx={{
-                    mt: 3,
+                    mt: 6,
                     mx: 'auto',
                     display: 'block',
                     textAlign: 'center',
                     color: 'text.disabled',
+                    fontSize:17,
                   }}
                 >
                   Allowed *.jpeg, *.jpg, *.png, *.gif
@@ -166,7 +167,7 @@ export default function AccountGeneral() {
           </Card>
         </Grid>
         {/* img */}
-        <Grid xs={12}  md={8}>
+        <Grid xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}

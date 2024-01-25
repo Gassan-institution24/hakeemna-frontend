@@ -12,7 +12,7 @@ import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import { useGetPatient } from 'src/api/tables';
 import Medicalreports from '../medicalreports';
-import OldMedicalReports from '../oldprescriptions';
+import OldMedicalReports from '../oldmedicalrepots';
 import Bmi from '../bmi';
 // ----------------------------------------------------------------------
 
