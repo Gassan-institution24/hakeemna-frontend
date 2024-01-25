@@ -9,9 +9,21 @@ import { useRouter } from 'src/routes/hooks';
 
 export default function SmallSidebar() {
   const router = useRouter();
-  const goto = () => {
+  const gotoHome = () => {
     router.push(paths.dashboard.root);
   };
+  const gotoProfile = () => {
+    router.push(paths.dashboard.user.profile);
+  };
+  const gotoSetting = () => {
+    router.push(paths.dashboard.user.account);
+  };
+  // const gotoHome = () => {
+  //   router.push(paths.dashboard.root);
+  // };
+  // const gotoHome = () => {
+  //   router.push(paths.dashboard.root);
+  // };
   return (
     <div
       style={{
@@ -33,7 +45,7 @@ export default function SmallSidebar() {
       >
         <li style={{ listStyle: 'none', width: '100%' }}>
           <Button sx={{position:'relative', right:'25%'}}>
-            <Iconify sx={{ color: 'green' , width:'50%', height:'40%' }} icon="gg:profile" />
+            <Iconify sx={{ color: 'green' , width:'50%', height:'40%' }} icon="gg:profile" onClick={gotoProfile}/>
           </Button>
         </li>
         <li style={{ listStyle: 'none', width: '100%' }}>
@@ -42,7 +54,7 @@ export default function SmallSidebar() {
           </Button>
         </li>
         <li style={{ listStyle: 'none', width: '100%' }}>
-          <Button sx={{position:'relative', right:'25%'}} onClick={goto}>
+          <Button sx={{position:'relative', right:'25%'}} onClick={gotoHome}>
             <Iconify sx={{ color: 'green' , width:'50%', height:'40%' }} icon="cil:home" />
           </Button>
         </li>
@@ -53,7 +65,7 @@ export default function SmallSidebar() {
         </li>
         <li style={{ listStyle: 'none', width: '100%' }}>
           <Button sx={{position:'relative', right:'25%'}}>
-            <Iconify sx={{ color: 'green' , width:'50%', height:'40%' }} icon="ant-design:setting-outlined" />
+            <Iconify sx={{ color: 'green' , width:'50%', height:'40%' }} icon="ant-design:setting-outlined" onClick={gotoSetting}/>
           </Button>
         </li>
       </ul>
