@@ -25,50 +25,94 @@ const insidestickySidebar = {
 
 export default function Sidebar() {
   const router = useRouter();
-  const goto = () => {
+  const gotoHome = () => {
     router.push(paths.dashboard.root);
   };
+  const gotoProfile = () => {
+    router.push(paths.dashboard.user.profile);
+  };
+  const gotoSetting = () => {
+    router.push(paths.dashboard.user.account);
+  };
+  // const gotoHome = () => {
+  //   router.push(paths.dashboard.root);
+  // };
+  // const gotoHome = () => {
+  //   router.push(paths.dashboard.root);
+  // };
   return (
     <Box style={stickySidebarStyle}>
       <Box style={insidestickySidebar}>
-        <Button sx={{ display: 'inline','&:hover': {
-      bgcolor:'inherit',
-    }, }} onClick={goto} >
-          <Iconify sx={{ color: 'green',  width:'50%', height:'40%'  }} icon="cil:home" />
-          <Typography sx={{ fontSize:12}} >Home</Typography>
+        <Button
+          sx={{
+            display: 'inline',
+            '&:hover': {
+              bgcolor: 'inherit',
+            },
+          }}
+          onClick={gotoHome}
+        >
+          <Iconify sx={{ color: 'green', width: '50%', height: '40%' }} icon="cil:home" />
+          <Typography sx={{ fontSize: 12 }}>Home</Typography>
         </Button>
 
         <Divider />
-        <Button sx={{ display: 'inline', '&:hover': {
-      bgcolor:'inherit',
-    }, }}>
-          <Iconify sx={{ color: 'green',  width:'50%', height:'40%'  }} icon="bx:search" />
-          <Typography sx={{ fontSize:12}} >Search</Typography>
+        <Button
+          sx={{
+            display: 'inline',
+            '&:hover': {
+              bgcolor: 'inherit',
+            },
+          }}
+        >
+          <Iconify sx={{ color: 'green', width: '50%', height: '40%' }} icon="bx:search" />
+          <Typography sx={{ fontSize: 12 }}>Search</Typography>
         </Button>
         <Divider />
-        <Button sx={{ display: 'inline', '&:hover': {
-      bgcolor:'inherit',
-    }, }}>
-          <Iconify sx={{ color: 'green',  width:'50%', height:'40%'  }} icon="gg:profile" />
-          <Typography sx={{ fontSize:12}} >Profile</Typography>
+        <Button
+          sx={{
+            display: 'inline',
+            '&:hover': {
+              bgcolor: 'inherit',
+            },
+          }}
+          onClick={gotoProfile}
+        >
+          <Iconify sx={{ color: 'green', width: '50%', height: '40%' }} icon="gg:profile" />
+          <Typography sx={{ fontSize: 12 }}>Profile</Typography>
         </Button>
         <Divider />
-        <Button sx={{ display: 'inline', '&:hover': {
-      bgcolor:'inherit',
-    }, }}>
-          <Iconify sx={{ color: 'green',  width:'50%', height:'40%'  }} icon="material-symbols:wifi-sharp" />
-          <Typography sx={{ fontSize:12}} >Test</Typography>
+        <Button
+          sx={{
+            display: 'inline',
+            '&:hover': {
+              bgcolor: 'inherit',
+            },
+          }}
+        >
+          <Iconify
+            sx={{ color: 'green', width: '50%', height: '40%' }}
+            icon="material-symbols:wifi-sharp"
+          />
+          <Typography sx={{ fontSize: 12 }}>Test</Typography>
         </Button>
         <Divider />
-        <Button sx={{ display: 'inline', '&:hover': {
-      bgcolor:'inherit',
-    }, }}>
-          <Iconify sx={{ color: 'green',  width:'50%', height:'40%'  }} icon="ant-design:setting-outlined" />
-          <Typography sx={{ fontSize:12}} >Setting</Typography>
+        <Button
+          sx={{
+            display: 'inline',
+            '&:hover': {
+              bgcolor: 'inherit',
+            },
+          }}
+          onClick={gotoSetting}
+        >
+          <Iconify
+            sx={{ color: 'green', width: '50%', height: '40%' }}
+            icon="ant-design:setting-outlined"
+          />
+          <Typography sx={{ fontSize: 12 }}>Setting</Typography>
         </Button>
       </Box>
     </Box>
-
-
   );
 }

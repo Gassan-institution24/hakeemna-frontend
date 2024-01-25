@@ -12,12 +12,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hooks';
 import { MenuItem, Typography, Button } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 import FormProvider, { RHFSelect, RHFUpload } from 'src/components/hook-form';
 import axios from 'src/utils/axios';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import Image from 'src/components/image/image';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+ 
 import {
   Page,
   Text,
@@ -34,8 +37,11 @@ import File from './File.png';
 // ----------------------------------------------------------------------
 
 export default function FormDialog() {
+  const popover = usePopover();
+
   const [files, setFiles] = useState(null);
   const [filesPdf, setfilesPdf] = useState([]);
+  const [filesPdftodelete, setfilesPdftodelete] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
 
@@ -51,7 +57,21 @@ export default function FormDialog() {
 
     fetchData();
   }, []);
-  console.log(filesPdf);
+
+
+  const delteeFile = async () => {
+    try {
+      await axios.delete(`/api/oldDrugsPerscription/${filesPdftodelete._id}`);
+      enqueueSnackbar('Medical report deleted successfully', { variant: 'success' });
+      const response = await axios.get('/api/oldDrugsPerscription');
+      setfilesPdf(response.data);
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      enqueueSnackbar('Unable to delete', { variant: 'error' });
+    }
+  };
+
   const styles = StyleSheet.create({
     icon: {
       color: 'blue',
@@ -89,8 +109,8 @@ export default function FormDialog() {
   const router = useRouter();
   const oldPresctiptionSchema = Yup.object().shape({
     type: Yup.string().required(),
-    date: Yup.date(),
-    file: Yup.string(),
+    date: Yup.date().required(),
+    file: Yup.string().required(),
   });
 
   const TYPE = ['Blod Test', 'X-ray Test', 'Health Check Test', 'Heart examination Test'];
@@ -217,7 +237,7 @@ export default function FormDialog() {
       enqueueSnackbar('Failed to upload prescription', { variant: 'error' });
     }
   };
-
+  const patientIdToDelete = filesPdftodelete._id
   return (
     <>
       <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ gap: 1, mb: 5 }}>
@@ -295,22 +315,57 @@ export default function FormDialog() {
         }}
       >
         {filesPdf.map((info, i) => (
-          <PDFDownloadLink
-            key={i}
-            document={<PrescriptionPDF info={info} />}
-            fileName={`${user?.patient.first_name} MediacalReport.pdf`}
-            style={styles.line}
-          >
-            <Image
-              src={File}
-              sx={{
-                width: { md: '80px', xs: '50px' },
-                height: { md: '80px', xs: '50px' },
-                mb: '10px',
+          <Box>
+            <Box>
+              <Image
+                src={File}
+                sx={{
+                  width: { md: '80px', xs: '50px' },
+                  height: { md: '80px', xs: '50px' },
+                  mb: '15px',
+                }}
+              />
+              <IconButton onClick={(event)=>{
+                popover.onOpen(event)
+                setfilesPdftodelete(info)
               }}
-            />
-            <ListItemText>{info.type} File</ListItemText>
-          </PDFDownloadLink>
+              sx={{ position: 'absolute' }}>
+                <Iconify icon="eva:more-vertical-fill" />
+              </IconButton>
+              <ListItemText>{info.type} File</ListItemText>
+            </Box>
+
+            <CustomPopover
+              open={popover.open}
+              onClose={popover.onClose}
+              arrow="left-bottom"
+              sx={{ boxShadow: 'none', width: 'auto' }}
+            >
+              <PDFDownloadLink
+                key={i}
+                document={<PrescriptionPDF info={info} />}
+                fileName={`${user?.patient.first_name} ${info.type} MediacalReport.pdf`}
+                style={styles.line}
+              >
+                <MenuItem
+                  sx={{ color: 'rgb(41, 41, 41)' }}
+                  onClick={() => {
+                    popover.onClose();
+                  }}
+                >
+                  <Iconify icon="heroicons-solid:folder-download" />
+                  Download
+                </MenuItem>
+              </PDFDownloadLink>
+              <MenuItem
+                onClick={delteeFile}
+                sx={{ color: 'red' }}
+              >
+                <Iconify icon="material-symbols:delete-outline" />
+                Delete
+              </MenuItem>
+            </CustomPopover>
+          </Box>
         ))}
       </Box>
     </>
