@@ -11,6 +11,7 @@ import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
@@ -168,6 +169,11 @@ export function useNavData() {
             path: paths.unitservice.employees.root,
             icon: <Iconify icon="fluent:people-20-filled" />,
           },
+          // {
+          //   title: t('access control'),
+          //   path: paths.unitservice.acl,
+          //   icon: <Iconify icon="mdi:account-secure" />,
+          // },
           {
             title: t('activities'),
             path: paths.unitservice.activities.root,

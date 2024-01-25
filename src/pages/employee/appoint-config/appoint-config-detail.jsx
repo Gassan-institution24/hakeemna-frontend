@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import AppointconfigDetailView from 'src/sections/employee/appoint-config/view/appoint-config-detail';
 import { useGetEmployee, useGetAppointmentConfig } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
@@ -13,6 +14,7 @@ export default function EmployeeAppointconfigPage() {
 
   return (
     <>
+<ACLGuard hasContent category='appointment_config' acl='update'>
       <Helmet>
         <title> Appointment Config Detail</title>
       </Helmet>
@@ -24,6 +26,7 @@ export default function EmployeeAppointconfigPage() {
           loading={loading}
         />
       )}
+    </ACLGuard>
     </>
   );
 }

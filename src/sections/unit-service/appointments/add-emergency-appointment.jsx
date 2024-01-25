@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -25,7 +26,7 @@ import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/compo
 import {
   useGetAppointmentTypes,
   useGetUSServiceTypes,
-  useGetUSEmployeeWorkGroups,
+  useGetUSWorkGroups,
   useGetUSWorkShifts,
 } from 'src/api/tables';
 import { useAuthContext } from 'src/auth/hooks';
@@ -35,22 +36,19 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function BookManually({ onClose, ...other }) {
+export default function BookManually({ onClose, refetch, ...other }) {
   const router = useRouter();
   const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
-  const { id } = useParams();
 
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { serviceTypesData } = useGetUSServiceTypes(user?.employee_engagement?.unit_service._id);
-  const { workGroupsData } = useGetUSEmployeeWorkGroups(
-    user?.employee_engagement?.unit_service._id,
-    id
-  );
+  const { workGroupsData } = useGetUSWorkGroups(user.employee_engagement?.unit_service?._id);
   const { workShiftsData } = useGetUSWorkShifts(user?.employee_engagement?.unit_service._id);
 
-  console.log('workShiftsData', workShiftsData);
+  console.log('workGroupsData', workGroupsData);
+
   const NewUserSchema = Yup.object().shape({
     work_shift: Yup.string().required('Work Shift is required'),
     work_group: Yup.string().required('Work Group is required'),
@@ -90,6 +88,7 @@ export default function BookManually({ onClose, ...other }) {
       });
       reset();
       enqueueSnackbar('Create success!');
+      refetch();
       console.info('DATA', data);
       onClose();
     } catch (error) {
@@ -122,7 +121,11 @@ export default function BookManually({ onClose, ...other }) {
                       label="Start date"
                       sx={{ width: '30vw', minWidth: '300px' }}
                       onChange={(newValue) => {
-                        setValue('start_time', newValue);
+                        const selectedTime = zonedTimeToUtc(
+                          newValue,
+                          user?.employee_engagement?.unit_service?.country?.time_zone
+                        );
+                        setValue('start_time', new Date(selectedTime));
                       }}
                       minutesStep="5"
                       slotProps={{
@@ -153,15 +156,18 @@ export default function BookManually({ onClose, ...other }) {
                     label="Work Shift"
                     PaperPropsSx={{ textTransform: 'capitalize' }}
                   >
-                    {workShiftsData.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.name_english}
-                      </MenuItem>
-                    ))}
+                    {workShiftsData &&
+                      workShiftsData.map((option) => (
+                        <MenuItem key={option._id} value={option._id}>
+                          {option.name_english}
+                        </MenuItem>
+                      ))}
                   </RHFSelect>
                   <RHFSelect name="work_group" label="Work Group">
                     {workGroupsData.map((option) => (
-                      <MenuItem value={option._id}>{option.name_english}</MenuItem>
+                      <MenuItem key={option._id} value={option._id}>
+                        {option.name_english}
+                      </MenuItem>
                     ))}
                   </RHFSelect>
                   <RHFMultiSelect
@@ -210,4 +216,5 @@ export default function BookManually({ onClose, ...other }) {
 
 BookManually.propTypes = {
   onClose: PropTypes.func,
+  refetch: PropTypes.func,
 };

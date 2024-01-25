@@ -96,7 +96,16 @@ const [insuranceNames, setInsuranceNames] = useState()
           />
 
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-            {fDate(start_time)}
+          <ListItemText
+            primary={new Date(start_time).toLocaleTimeString('en-US', { timeZone: unit_service?.country?.time_zone })}
+            secondary={new Date(start_time).toLocaleDateString('en-US', { timeZone: unit_service?.country?.time_zone })}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              mt: 0.5,
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
           </Stack>
           <Stack
             spacing={0.5}

@@ -49,7 +49,7 @@ import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useSnackbar } from 'src/components/snackbar';
 
-import { useGetAppointmentTypes, useGetUSEmployeeAppointments } from 'src/api/tables';
+import { useGetAppointmentTypes } from 'src/api/tables';
 import AppointmentsRow from '../appointment-row';
 import PatientHistoryToolbar from '../appointment-toolbar';
 import HistoryFiltersResult from '../appointment-filters-result';
@@ -59,11 +59,12 @@ import AddEmegencyAppointment from '../add-emergency-appointment';
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'appointment_type', label: 'Appointment Type' },
-  { id: 'work_group', label: 'Work Group' },
-  { id: 'work_shift', label: 'Work Shift' },
+  { id: 'sequence', label: 'Sequence' },
+  { id: 'appointment_type', label: 'Appointment type' },
+  { id: 'work_group', label: 'Work group' },
+  { id: 'work_shift', label: 'Work shift' },
   { id: 'patient', label: 'Patient' },
-  { id: 'start_time', label: 'Start Time' },
+  { id: 'start_time', label: 'Start time' },
   { id: 'status', label: 'Status' },
   { id: '' },
 ];
@@ -78,7 +79,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsView() {
+export default function AppointmentsView({ appointmentsData, refetch }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -96,12 +97,6 @@ export default function AppointmentsView() {
   const confirmUnCancel = useBoolean();
   const confirmDelay = useBoolean();
 
-  const { appointmentsData, refetch } = useGetUSEmployeeAppointments(
-    user?.employee_engagement?.unit_service?._id,
-    user?.employee_engagement?.employee?._id
-  );
-  console.log('appointmentsData', appointmentsData);
-
   const { appointmenttypesData } = useGetAppointmentTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -118,6 +113,8 @@ export default function AppointmentsView() {
     filters,
     dateError,
   });
+
+  console.log('appointmentsData',appointmentsData)
 
   const dataInPage = dataFiltered.slice(
     table.page * table.rowsPerPage,
@@ -367,7 +364,7 @@ export default function AppointmentsView() {
             onAdd={() => addModal.onTrue()}
             //
             dateError={dateError}
-            options={appointmenttypesData.map((option) => option)}
+            options={appointmenttypesData}
           />
 
           {canReset && (
@@ -390,7 +387,7 @@ export default function AppointmentsView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered?.map((row) => row._id)
                 )
               }
               action={
@@ -437,7 +434,7 @@ export default function AppointmentsView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered?.map((row) => row._id)
                     )
                   }
                 />
@@ -448,7 +445,7 @@ export default function AppointmentsView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    ?.map((row) => (
                       <AppointmentsRow
                         refetch={refetch}
                         key={row._id}
@@ -576,7 +573,7 @@ export default function AppointmentsView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { name, status, types, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -584,7 +581,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
@@ -629,3 +626,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   return inputData;
 }
+AppointmentsView.propTypes = {
+  appointmentsData: PropTypes.array,
+  refetch: PropTypes.func,
+};

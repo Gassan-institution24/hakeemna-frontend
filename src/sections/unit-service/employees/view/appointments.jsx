@@ -79,7 +79,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsView({ employeeData,appointmentsData,refetch }) {
+export default function AppointmentsView({ employeeData, appointmentsData, refetch }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -373,7 +373,6 @@ export default function AppointmentsView({ employeeData,appointmentsData,refetch
               onResetFilters={handleResetFilters}
               //
               results={dataFiltered.length}
-              
               sx={{ p: 2.5, pt: 0 }}
             />
           )}

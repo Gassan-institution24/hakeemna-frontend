@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -15,42 +16,54 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import InputAdornment from '@mui/material/InputAdornment';
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 import axios, { endpoints } from 'src/utils/axios';
 import { useSnackbar } from 'src/components/snackbar';
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { useParams, useRouter } from 'src/routes/hooks';
 import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
-import { useGetAppointmentTypes, useGetServiceTypes, useGetWorkGroups } from 'src/api/tables';
+import {
+  useGetAppointmentTypes,
+  useGetUSServiceTypes,
+  useGetEmployeeWorkGroups,
+  useGetUSWorkShifts,
+} from 'src/api/tables';
+import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function AddEmegencyAppointment({ onClose, ...other }) {
+export default function BookManually({ onClose, refetch, ...other }) {
   const router = useRouter();
   const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
+  const { user } = useAuthContext();
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetServiceTypes();
-  const { workGroupsData } = useGetWorkGroups();
+  const { serviceTypesData } = useGetUSServiceTypes(user?.employee_engagement?.unit_service?._id);
+  const { workGroupsData } = useGetEmployeeWorkGroups(user.employee_engagement?.employee?._id);
+  const { workShiftsData } = useGetUSWorkShifts(user?.employee_engagement?.unit_service?._id);
+
+  console.log('workGroupsData', workGroupsData);
 
   const NewUserSchema = Yup.object().shape({
-    // appointment_type: Yup.string().required('Unit Service is required'),
-    // date: Yup.string().required('Name is required'),
-    // start_time: Yup.string().required('Name is required'),
-    // end_time: Yup.string().required('Unit Service is required'),
+    work_shift: Yup.string().required('Work Shift is required'),
+    work_group: Yup.string().required('Work Group is required'),
+    service_types: Yup.array(),
+    appointment_type: Yup.string().required('Appointment Type is required'),
+    start_time: Yup.date().required('Start time is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
       appointment_type: null,
-      date: null,
       start_time: null,
-      services: [],
+      work_group: null,
+      work_shift: null,
+      service_types: [],
     }),
     []
   );
@@ -68,23 +81,27 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      //   await axios.post(endpoints.tables.appointments, data);
+      await axios.post(endpoints.tables.appointments, {
+        ...data,
+        emergency: true,
+        unit_service: user?.employee_engagement?.unit_service._id,
+      });
       reset();
       enqueueSnackbar('Create success!');
+      refetch();
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      enqueueSnackbar('Please try again later!', { variant: 'error' });
+      enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }
   });
 
-  console.log('serviceTypesData', serviceTypesData);
   return (
     <>
-      <Dialog maxWidth="sm" onClose={onClose} {...other}>
+      <Dialog maxWidth="lg" onClose={onClose} {...other}>
         <FormProvider methods={methods} onSubmit={onSubmit}>
-          <DialogTitle> New Emergency Appointment </DialogTitle>
+          <DialogTitle sx={{ mb: 1 }}> New Emergency Appointment </DialogTitle>
 
           <DialogContent sx={{ overflow: 'unset' }}>
             <Stack spacing={2.5}>
@@ -94,54 +111,72 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
                 display="grid"
                 gridTemplateColumns={{
                   xs: 'repeat(1, 1fr)',
-                  sm: 'repeat(2, 1fr)',
+                  sm: 'repeat(1, 1fr)',
                 }}
               >
                 <Controller
                   name="start_time"
                   render={({ field, fieldState: { error } }) => (
-                    <MobileTimePicker
-                      minutesStep="5"
-                      label="Start Time"
+                    <MobileDateTimePicker
+                      label="Start date"
+                      sx={{ width: '30vw', minWidth: '300px' }}
                       onChange={(newValue) => {
-                        setValue('start_time', newValue);
+                        const selectedTime = zonedTimeToUtc(
+                          newValue,
+                          user?.employee_engagement?.unit_service?.country?.time_zone
+                        );
+                        setValue('start_time', new Date(selectedTime));
                       }}
+                      minutesStep="5"
                       slotProps={{
                         textField: {
                           fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
+                          margin: 'normal',
                         },
                       }}
                     />
                   )}
                 />
-                <RHFSelect
-                  InputLabelProps={{ shrink: true }}
-                  native
-                  name="appointment_type"
-                  label="Appointment Type"
+                <Box
+                  rowGap={3}
+                  columnGap={2}
+                  display="grid"
+                  gridTemplateColumns={{
+                    xs: 'repeat(1, 1fr)',
+                    sm: 'repeat(2, 1fr)',
+                  }}
                 >
-                  {appointmenttypesData.map((option) => (
-                    <MenuItem value={option._id}>{option.name_english}</MenuItem>
-                  ))}
-                </RHFSelect>
-                <RHFMultiSelect
-                  checkbox
-                  name="services"
-                  label="services"
-                  options={serviceTypesData}
-                />
-                <RHFSelect
-                  InputLabelProps={{ shrink: true }}
-                  native
-                  name="work_group"
-                  label="Work Group"
-                >
-                  {workGroupsData.map((option) => (
-                    <MenuItem value={option._id}>{option.name_english}</MenuItem>
-                  ))}
-                </RHFSelect>
+                  <RHFSelect name="appointment_type" label="Appointment Type">
+                    {appointmenttypesData.map((option) => (
+                      <MenuItem value={option._id}>{option.name_english}</MenuItem>
+                    ))}
+                  </RHFSelect>
+                  <RHFSelect
+                    name="work_shift"
+                    label="Work Shift"
+                    PaperPropsSx={{ textTransform: 'capitalize' }}
+                  >
+                    {workShiftsData &&
+                      workShiftsData.map((option) => (
+                        <MenuItem key={option._id} value={option._id}>
+                          {option.name_english}
+                        </MenuItem>
+                      ))}
+                  </RHFSelect>
+                  <RHFSelect name="work_group" label="Work Group">
+                    {workGroupsData.map((option) => (
+                      <MenuItem key={option._id} value={option._id}>
+                        {option.name_english}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                  <RHFMultiSelect
+                    checkbox
+                    name="service_types"
+                    label="Service Types"
+                    options={serviceTypesData}
+                  />
+                </Box>
               </Box>
 
               <Stack
@@ -179,6 +214,7 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
   );
 }
 
-AddEmegencyAppointment.propTypes = {
+BookManually.propTypes = {
   onClose: PropTypes.func,
+  refetch: PropTypes.func,
 };

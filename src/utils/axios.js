@@ -113,6 +113,7 @@ export const endpoints = {
     workshift: (id) => `/api/wshifts/${id}`,
     workgroups: '/api/wgroups',
     departmentWorkgroups: (id) => `/api/wgroups/department/${id}`,
+    usWorkgroups: (id) => `/api/wgroups/unitservice/${id}`,
     employeeWorkgroups: (id) => `/api/wgroups/employee/${id}`,
     departmentemployeeWorkgroups: (id,emid) => `/api/wgroups/department/${id}/employee/${emid}`,
     usemployeeWorkgroups: (id,emid) => `/api/wgroups/unitservice/${id}/employee/${emid}`,

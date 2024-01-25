@@ -49,7 +49,7 @@ import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useSnackbar } from 'src/components/snackbar';
 
-import { useGetAppointmentTypes, useGetDepartmentAppointments } from 'src/api/tables';
+import { useGetAppointmentTypes } from 'src/api/tables';
 import AppointmentsRow from '../appointments/appointment-row';
 import PatientHistoryToolbar from '../appointments/appointment-toolbar';
 import HistoryFiltersResult from '../appointments/appointment-filters-result';
@@ -59,11 +59,12 @@ import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'appointment_type', label: 'Appointment Type' },
-  { id: 'work_group', label: 'Work Group' },
-  { id: 'work_shift', label: 'Work Shift' },
+  { id: 'sequence', label: 'Sequence' },
+  { id: 'appointment_type', label: 'Appointment type' },
+  { id: 'work_group', label: 'Work group' },
+  { id: 'work_shift', label: 'Work shift' },
   { id: 'patient', label: 'Patient' },
-  { id: 'start_time', label: 'Start Time' },
+  { id: 'start_time', label: 'Start time' },
   { id: 'status', label: 'Status' },
   { id: '' },
 ];
@@ -78,7 +79,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsView({ departmentData }) {
+export default function AppointmentsView({ employeeData, appointmentsData, refetch }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -95,9 +96,6 @@ export default function AppointmentsView({ departmentData }) {
   const confirm = useBoolean();
   const confirmUnCancel = useBoolean();
   const confirmDelay = useBoolean();
-  
-
-  const { appointmentsData, refetch } = useGetDepartmentAppointments(departmentData._id);
 
   const { appointmenttypesData } = useGetAppointmentTypes();
 
@@ -124,7 +122,11 @@ export default function AppointmentsView({ departmentData }) {
   const denseHeight = table.dense ? 56 : 76;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || !!filters.startDate || !!filters.endDate || filters.types.length>0;
+    !!filters.name ||
+    filters.status !== 'all' ||
+    !!filters.startDate ||
+    !!filters.endDate ||
+    filters.types.length > 0;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -189,11 +191,11 @@ export default function AppointmentsView({ departmentData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch,enqueueSnackbar]
+    [dataInPage.length, table, refetch, enqueueSnackbar]
   );
 
   const handleDelayRow = useCallback(
-    async (id,min) => {
+    async (id, min) => {
       await axiosHandler({
         method: 'PATCH',
         path: `${endpoints.tables.appointment(id)}/delay`,
@@ -204,7 +206,7 @@ export default function AppointmentsView({ departmentData }) {
       setMinToDelay(0);
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch,enqueueSnackbar]
+    [dataInPage.length, table, refetch, enqueueSnackbar]
   );
 
   const handleUnCancelRow = useCallback(
@@ -214,7 +216,7 @@ export default function AppointmentsView({ departmentData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch,enqueueSnackbar]
+    [dataInPage.length, table, refetch, enqueueSnackbar]
   );
 
   const handleCancelRows = useCallback(
@@ -232,7 +234,14 @@ export default function AppointmentsView({ departmentData }) {
         totalRowsFiltered: dataFiltered.length,
       });
     },
-    [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table,enqueueSnackbar]
+    [
+      refetch,
+      dataFiltered.length,
+      dataInPage.length,
+      appointmentsData.length,
+      table,
+      enqueueSnackbar,
+    ]
   );
 
   const handleDelayRows = useCallback(async () => {
@@ -249,7 +258,15 @@ export default function AppointmentsView({ departmentData }) {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table, minToDelay,enqueueSnackbar]);
+  }, [
+    refetch,
+    dataFiltered.length,
+    dataInPage.length,
+    appointmentsData.length,
+    table,
+    minToDelay,
+    enqueueSnackbar,
+  ]);
 
   const handleUnCancelRows = useCallback(
     async (id) => {
@@ -266,11 +283,15 @@ export default function AppointmentsView({ departmentData }) {
         totalRowsFiltered: dataFiltered.length,
       });
     },
-    [refetch, dataFiltered.length, dataInPage.length, appointmentsData.length, table,enqueueSnackbar]
+    [
+      refetch,
+      dataFiltered.length,
+      dataInPage.length,
+      appointmentsData.length,
+      table,
+      enqueueSnackbar,
+    ]
   );
-  // const handleAddRow = useCallback(() => {
-  //   router.push(paths.superadmin.patients.history.addAppointment(departmentData._id));
-  // }, [router, departmentData._id]);
 
   const handleViewRow = useCallback(
     (id) => {
@@ -293,29 +314,15 @@ export default function AppointmentsView({ departmentData }) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-          heading={`${departmentData.name_english || 'Department'} Appointments`} /// edit
+        <CustomBreadcrumbs
+          heading="Appointments" /// edit
           links={[
             {
               name: 'Dashboard',
               href: paths.unitservice.root,
             },
-            {
-              name: 'Departments',
-              href: paths.unitservice.departments.root,
-            },
-            { name: `${departmentData.name_english || 'Department'} Appointments` },
+            { name: 'Appointments' },
           ]}
-          // action={
-          //   <Button
-          //     component={RouterLink}
-          //     href={paths.unitservice.departments.activities.new(departmentData._id)}
-          //     variant="contained"
-          //     startIcon={<Iconify icon="mingcute:add-line" />}
-          //   >
-          //     New Activity
-          //   </Button>
-          // }
           sx={{
             mb: { xs: 3, md: 5 },
           }}
@@ -355,7 +362,7 @@ export default function AppointmentsView({ departmentData }) {
             onAdd={() => addModal.onTrue()}
             //
             dateError={dateError}
-            options={appointmenttypesData.map((option) => option)}
+            options={appointmenttypesData}
           />
 
           {canReset && (
@@ -378,7 +385,7 @@ export default function AppointmentsView({ departmentData }) {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered?.map((row) => row._id)
                 )
               }
               action={
@@ -425,7 +432,7 @@ export default function AppointmentsView({ departmentData }) {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered?.map((row) => row._id)
                     )
                   }
                 />
@@ -436,7 +443,7 @@ export default function AppointmentsView({ departmentData }) {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    ?.map((row) => (
                       <AppointmentsRow
                         refetch={refetch}
                         key={row._id}
@@ -564,7 +571,7 @@ export default function AppointmentsView({ departmentData }) {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { name, status, types, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -572,17 +579,15 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
       (appointment) =>
         (appointment?.work_shift?.name_english &&
-          appointment?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          appointment?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (appointment?.work_shift?.name_arabic &&
-          appointment?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          appointment?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (appointment?.work_group?.name_english &&
           appointment?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (appointment?.work_group?.name_arabic &&
@@ -620,5 +625,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   return inputData;
 }
 AppointmentsView.propTypes = {
-  departmentData: PropTypes.object,
+  employeeData: PropTypes.object,
+  appointmentsData: PropTypes.array,
+  refetch: PropTypes.func,
 };

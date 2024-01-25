@@ -1,23 +1,21 @@
 import { Helmet } from 'react-helmet-async';
+import { useParams } from 'react-router';
+import { useGetEmployeeEngagement } from 'src/api/tables';
 
-import EmployeeACLView from 'src/sections/unit-service/employees/view/acl';
-import { useGetEmployee } from 'src/api/tables';
-import { useParams } from 'src/routes/hooks';
+import EmployeeACLView from 'src/sections/unit-service/acl/view/acl';
 
 // ----------------------------------------------------------------------
 
 export default function EmployeeACLPage() {
-  const params = useParams();
-  const { id } = params;
-  const { data } = useGetEmployee(id);
-  const name = data?.name_english
+  const {id} = useParams()
+  const acl = useGetEmployeeEngagement(id).data?.acl;
   return (
     <>
       <Helmet>
-        <title>{name||''} Employee ACL</title>
+        <title>Access control list</title>
       </Helmet>
 
-      {data && <EmployeeACLView employeeData={data} />}
+      {acl&&<EmployeeACLView acl={acl} />}
     </>
   );
 }

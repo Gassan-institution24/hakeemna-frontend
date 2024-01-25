@@ -25,7 +25,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 import Iconify from 'src/components/iconify';
-import { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
+import { RHFSelect, RHFTextField, RHFMultiSelect, RHFCheckbox } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -50,6 +50,7 @@ export default function NewEditDayAppointmentsDetails({
       appointment_type: null,
       start_time: null,
       price: null,
+      online_available: true,
       service_types: [],
     };
     const existingData = values.days_details[ParentIndex].appointments
@@ -124,7 +125,6 @@ export default function NewEditDayAppointmentsDetails({
                 <RHFSelect
                   size="small"
                   InputLabelProps={{ shrink: true }}
-                  native
                   name={`days_details[${ParentIndex}].appointments[${index}].appointment_type`}
                   label="Appointment Type"
                 >
@@ -191,6 +191,12 @@ export default function NewEditDayAppointmentsDetails({
                       {!!error && <FormHelperText error={!!error}>{error?.message}</FormHelperText>}
                     </FormControl>
                   )}
+                />
+                <RHFCheckbox
+                  size="small"
+                  InputLabelProps={{ shrink: true }}
+                  name={`days_details[${ParentIndex}].appointments[${index}].online_available`}
+                  label={<Typography sx={{fontSize:12}}>Online avaliable</Typography>}
                 />
                 {/* <RHFTextField
                   size="small"
