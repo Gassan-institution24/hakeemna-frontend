@@ -82,8 +82,6 @@ export default function AppointConfigView({ appointmentConfigData,refetch }) {
   const confirm = useBoolean();
   const confirmUnCancel = useBoolean();
 
-  const {id} = useParams()
-
   console.log('appointmentConfigData',appointmentConfigData)
 
   const [filters, setFilters] = useState(defaultFilters);

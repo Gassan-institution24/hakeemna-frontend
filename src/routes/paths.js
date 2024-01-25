@@ -482,6 +482,7 @@ export const paths = {
   // unit service
   unitservice: {
     root: `${ROOTS.SUPERADMIN}/us`,
+    acl:`${ROOTS.SUPERADMIN}/us/acl`,
     departments: {
       root: `${ROOTS.SUPERADMIN}/us/departments`,
       new: `${ROOTS.SUPERADMIN}/us/departments/new`,

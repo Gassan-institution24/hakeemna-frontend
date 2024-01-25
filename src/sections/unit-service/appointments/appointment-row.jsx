@@ -43,12 +43,12 @@ export default function AppointmentsTableRow({
   const {
     _id,
     code,
+    appoint_number,
     name_english,
     unit_service,
     work_group,
     work_shift,
     appointment_type,
-    department,
     payment_method,
     date,
     price,
@@ -81,16 +81,16 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell align="center">{code}</TableCell>
+        <TableCell align="center">{appoint_number}</TableCell>
         <TableCell align="center">{appointment_type?.name_english}</TableCell>
-        <TableCell align="center">{department?.name_english}</TableCell>
         <TableCell align="center">{work_group?.name_english}</TableCell>
         <TableCell align="center">{work_shift?.name_english}</TableCell>
         <TableCell align="center">{patient?.first_name} {patient?.last_name}</TableCell>
 
         <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
-            secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMM yyyy')}
+            primary={isValid(new Date(start_time)) && new Date(start_time).toLocaleTimeString('en-US', { timeZone: unit_service?.country?.time_zone })}
+            secondary={isValid(new Date(start_time)) && new Date(start_time).toLocaleDateString('en-US', { timeZone: unit_service?.country?.time_zone })}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,

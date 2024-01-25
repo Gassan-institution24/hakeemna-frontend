@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
+import { useTheme  } from '@mui/system';
 import Stack from '@mui/material/Stack';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -12,18 +13,22 @@ import { useCountdownDate } from 'src/hooks/use-countdown';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'notistack';
-import { Alert, Typography } from '@mui/material';
+import { Alert, Typography,useMediaQuery } from '@mui/material';
 import BookManually from 'src/components/modals/activate-remider';
 import Iconify from 'src/components/iconify/iconify';
 
 export default function TimeOutInActive() {
   const { user, logout } = useAuthContext();
 
+  const theme = useTheme();
+
   let content;
 
   const { enqueueSnackbar } = useSnackbar();
 
   const showAlert = useBoolean(true);
+
+  const isXsScreen = useMediaQuery('(max-width:600px)');
 
   const unitServiceCountdown = useCountdownDate(
     new Date(
@@ -33,9 +38,7 @@ export default function TimeOutInActive() {
   );
 
   const userCountDown = useCountdownDate(
-    new Date(
-      new Date(user?.created_at).getTime() + 3 * 24 * 60 * 60 * 1000
-    )
+    new Date(new Date(user?.created_at).getTime() + 3 * 24 * 60 * 60 * 1000)
   );
   const subscriptionExpired = useCountdownDate(
     new Date(user?.employee_engagement?.unit_service?.subscription_end_date)
@@ -49,7 +52,7 @@ export default function TimeOutInActive() {
         new Date(user.employee_engagement.unit_service.created_at).getTime() <
           new Date().getTime() - 3 * 24 * 60 * 60 * 1000
       ) {
-        console.log('this user is in activate and has to logout')
+        console.log('this user is in activate and has to logout');
         try {
           await logout();
         } catch (error) {
@@ -60,10 +63,9 @@ export default function TimeOutInActive() {
       if (
         user &&
         user.status === 'inactive' &&
-        new Date(user.created_at).getTime() <
-          new Date().getTime() - 3 * 24 * 60 * 60 * 1000
-          ) {
-        console.log('this user is in activate and has to logout')
+        new Date(user.created_at).getTime() < new Date().getTime() - 3 * 24 * 60 * 60 * 1000
+      ) {
+        console.log('this user is in activate and has to logout');
         try {
           await logout();
         } catch (error) {
@@ -84,7 +86,16 @@ export default function TimeOutInActive() {
     const { days, hours, minutes, seconds } = unitServiceCountdown;
     content = (
       <>
-        <Alert sx={{ ml: 3, px: 0.6, py: 0.3 }} severity="error">
+        <Alert
+          sx={{
+            ml: { xs: 1, md: 3 },
+            px: 0.6,
+            py: 0.3,
+            ...(isXsScreen &&
+              theme.breakpoints.down('xs') && { '& .MuiAlert-icon': { display: 'none' } }),
+          }}
+          severity="error"
+        >
           <Stack
             direction="row"
             justifyContent="center"
@@ -108,15 +119,20 @@ export default function TimeOutInActive() {
         {/* <BookManually open={showAlert.value} onClose={showAlert.onFalse} /> */}
       </>
     );
-  } else if (
-    user &&
-    user.status === 'inactive'
-  ) {
+  } else if (user && user.status === 'inactive') {
     const { days, hours, minutes, seconds } = userCountDown;
     content = (
       <>
         {' '}
-        <Alert sx={{ ml: 2, px: 0.6, py: 0.3 }} severity="error">
+        <Alert
+          sx={{
+            ml: { xs: 1, md: 3 },
+            px: 0.6,
+            py: 0.3,
+            ...(isXsScreen &&theme.breakpoints.down('xs') && { '& .MuiAlert-icon': { display: 'none' } }),
+          }}
+          severity="error"
+        >
           <Stack
             direction="row"
             justifyContent="center"
@@ -148,7 +164,7 @@ export default function TimeOutInActive() {
       <>
         {typeof days === 'string' && days > 3 && (
           <>
-            <Iconify sx={{ ml: 2, mr: 1 }} icon="flat-color-icons:ok" width={22} />
+            <Iconify sx={{ ml: { xs: 1, md: 3 }, mr: 1 }} icon="flat-color-icons:ok" width={22} />
             <Stack
               direction="row"
               justifyContent="center"
@@ -160,7 +176,15 @@ export default function TimeOutInActive() {
           </>
         )}
         {typeof days === 'string' && days < 3 && (
-          <Alert sx={{ ml: 2, px: 0.6, py: 0.3 }} severity="error">
+          <Alert
+            sx={{
+              ml: { xs: 1, md: 3 },
+              px: 0.6,
+              py: 0.3,
+              ...(isXsScreen &&theme.breakpoints.down('xs') && { '& .MuiAlert-icon': { display: 'none' } }),
+            }}
+            severity="error"
+          >
             <Stack
               direction="row"
               justifyContent="center"
@@ -173,13 +197,14 @@ export default function TimeOutInActive() {
           </Alert>
         )}
       </>
-    )}
+    );
+  }
   // } else if (user.role === 'patient') {
   //   const { days, hours, minutes, seconds } = patientExpired;
   //   content = (
   //     <>
   //       {' '}
-  //       <Alert sx={{ ml: 2, px: 0.6, py: 0.3 }} severity="error">
+  //       <Alert sx={{ ml:{xs:1,md:3}, px: 0.6, py: 0.3 }} severity="error">
   //         <Stack
   //           direction="row"
   //           justifyContent="center"
@@ -194,7 +219,7 @@ export default function TimeOutInActive() {
   //           )}
 
   //           {/* <TimeBlock label="Minutes" value={minutes} />
-  
+
   //     <TimeBlock label="Seconds" value={seconds} /> */}
   //         </Stack>
   //       </Alert>
@@ -211,7 +236,7 @@ function TimeBlock({ label, value }) {
   return (
     <div style={{ display: 'flex' }}>
       <Box sx={{ pr: 0.5 }}> {value} </Box>
-      <Box sx={{ typography: 'body2' }}>{label}</Box>
+      <Box sx={{ typography: 'body2', display: { xs: 'none', md: 'inline-block' } }}>{label}</Box>
     </div>
   );
 }

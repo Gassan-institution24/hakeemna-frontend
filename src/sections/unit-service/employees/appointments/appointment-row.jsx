@@ -89,8 +89,8 @@ export default function AppointmentsTableRow({
 
         <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
-            secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMM yyyy')}
+            primary={isValid(new Date(start_time)) && new Date(start_time).toLocaleTimeString('en-US', { timeZone: unit_service?.country?.time_zone })}
+            secondary={isValid(new Date(start_time)) && new Date(start_time).toLocaleDateString('en-US', { timeZone: unit_service?.country?.time_zone })}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,

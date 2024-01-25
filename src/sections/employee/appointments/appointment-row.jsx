@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { format, isValid } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
+import { TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
@@ -13,9 +15,9 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fCurrency } from 'src/utils/format-number';
 import { fDateTime } from 'src/utils/format-time';
 
@@ -23,6 +25,7 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import BookManually from './book-appointment-manually';
 
 // ----------------------------------------------------------------------
 
@@ -30,20 +33,27 @@ export default function AppointmentsTableRow({
   row,
   selected,
   onSelectRow,
+  refetch,
   onViewRow,
+  onDelayRow,
   onCancelRow,
   onUnCancelRow,
   onDeleteRow,
 }) {
   const {
+    _id,
     code,
+    appoint_number,
     name_english,
     unit_service,
+    work_group,
+    work_shift,
     appointment_type,
     payment_method,
     date,
     price,
     currency,
+    patient,
     start_time,
     end_time,
     status,
@@ -56,10 +66,12 @@ export default function AppointmentsTableRow({
     modifications_nums,
   } = row;
 
-  const confirm = useBoolean();
-
   const popover = usePopover();
   const DDL = usePopover();
+  const confirmDelayOne = useBoolean();
+  const Book = useBoolean();
+
+  const [minToDelay, setMinToDelay] = useState(0);
 
   return (
     <>
@@ -69,12 +81,16 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell align="center">{code}</TableCell>
+        <TableCell align="center">{appoint_number}</TableCell>
         <TableCell align="center">{appointment_type?.name_english}</TableCell>
+        <TableCell align="center">{work_group?.name_english}</TableCell>
+        <TableCell align="center">{work_shift?.name_english}</TableCell>
+        <TableCell align="center">{patient?.first_name} {patient?.last_name}</TableCell>
 
         <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
-            secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMM yyyy')}
+            primary={isValid(new Date(start_time)) && new Date(start_time).toLocaleTimeString('en-US', { timeZone: unit_service?.country?.time_zone })}
+            secondary={isValid(new Date(start_time)) && new Date(start_time).toLocaleDateString('en-US', { timeZone: unit_service?.country?.time_zone })}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -83,8 +99,6 @@ export default function AppointmentsTableRow({
             }}
           />
         </TableCell>
-
-        <TableCell align="center">{currency?.symbol} {price}</TableCell>
 
         <TableCell align="center">
           <Label
@@ -110,36 +124,59 @@ export default function AppointmentsTableRow({
         </TableCell>
       </TableRow>
 
+      <BookManually
+        refetch={refetch}
+        appointment_id={_id}
+        open={Book.value}
+        onClose={Book.onFalse}
+      />
+
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: 140 }}
+        sx={{ width: 155 }}
       >
-        {status !== "canceled" &&
-        <MenuItem
-          onClick={() => {
-            onCancelRow();
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="mdi:bell-cancel" />
-          Cancel
+        {status === 'available' && (
+          <MenuItem
+            sx={{ color: 'success.main' }}
+            onClick={() => {
+              Book.onTrue();
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="mdi:register" />
+            Book Manually
+          </MenuItem>
+        )}
+        {status !== 'canceled' && (
+          <MenuItem
+            onClick={() => {
+              onCancelRow();
+              popover.onClose();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="mdi:bell-cancel" />
+            Cancel
+          </MenuItem>
+        )}
+        {status === 'canceled' && (
+          <MenuItem
+            onClick={() => {
+              onUnCancelRow();
+              popover.onClose();
+            }}
+            sx={{ color: 'success.main' }}
+          >
+            <Iconify icon="material-symbols-light:notifications-active-rounded" />
+            uncancel
+          </MenuItem>
+        )}
+        <MenuItem onClick={confirmDelayOne.onTrue}>
+          <Iconify icon="mdi:timer-sync" />
+          Delay
         </MenuItem>
-        }
-        {status === "canceled" &&
-        <MenuItem
-          onClick={() => {
-            onUnCancelRow();
-            popover.onClose();
-          }}
-          sx={{ color: 'success.main' }}
-        >
-          <Iconify icon="material-symbols-light:notifications-active-rounded" />
-          uncancel
-        </MenuItem>
-        }
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
@@ -192,6 +229,41 @@ export default function AppointmentsTableRow({
         </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
       </CustomPopover>
+      <ConfirmDialog
+        open={confirmDelayOne.value}
+        onClose={confirmDelayOne.onFalse}
+        title="Delay"
+        content={
+          <>
+            How many minutes do you want to delay?
+            <TextField
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Box sx={{ fontSize: '0.8rem' }}>min</Box>
+                  </InputAdornment>
+                ),
+              }}
+              type="number"
+              sx={{ p: 2, width: '100%' }}
+              size="small"
+              onChange={(e) => setMinToDelay(e.target.value)}
+            />
+          </>
+        }
+        action={
+          <Button
+            variant="contained"
+            color="info"
+            onClick={() => {
+              confirmDelayOne.onFalse();
+              onDelayRow(_id, minToDelay);
+            }}
+          >
+            Delay
+          </Button>
+        }
+      />
     </>
   );
 }
@@ -202,6 +274,8 @@ AppointmentsTableRow.propTypes = {
   onUnCancelRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
+  onDelayRow: PropTypes.func,
+  refetch: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
 };

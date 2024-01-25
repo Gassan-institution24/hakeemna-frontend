@@ -206,7 +206,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       enqueueSnackbar('Updated successfully!');
       saving.onFalse();
       confirm.onFalse();
-      router.push(paths.unitservice.employees.appointmentconfig.root(id))
+      router.push(paths.unitservice.employees.appointmentconfig.root(id));
     } catch (e) {
       saving.onFalse();
       enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });

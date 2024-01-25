@@ -431,7 +431,6 @@ export default function NewEditDayDetails({ appointTime }) {
                   <RHFSelect
                     size="small"
                     InputLabelProps={{ shrink: true }}
-                    native
                     name={`days_details[${index}].appointment_type`}
                     label="Appointment Type"
                   >
