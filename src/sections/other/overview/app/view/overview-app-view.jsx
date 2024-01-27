@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
@@ -9,7 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
-
+import axios from 'src/utils/axios';
 
 import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled } from 'src/_mock';
 import Box from '@mui/material/Box';
@@ -27,20 +27,41 @@ export default function OverviewAppView() {
   const { user } = useAuthContext();
   const dialog = useBoolean(true);
   const router = useRouter();
-
-  const theme = useTheme();
-
+  const [oldpatientsdata, setOldpatientsdata] = useState([]);
+  const [oldData, setOlddata] = useState();
   const settings = useSettingsContext();
   const currentHour = new Date().getHours();
   const isMorning = currentHour >= 0 && currentHour < 12;
   const greeting = isMorning ? 'Good Morning ☀️' : 'Good Evening 🌑';
 
-const yesfunction = () =>{
-  router.push(paths.dashboard.user.oldpatientdata);
-}
-const nofunction = () =>{
-  dialog.onFalse() 
-}
+  const yesfunction = () => {
+    router.push(paths.dashboard.user.oldpatientdata);
+  };
+  const nofunction = () => {
+    dialog.onFalse();
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('/api/oldpatientsdata/details', {
+          identification_num: user.patient.identification_num,
+        });
+        setOldpatientsdata(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [user.patient.identification_num]);
+
+  useEffect(() => {
+    if (oldpatientsdata.length > 0) {
+      const mappedData = oldpatientsdata.map((Data) => Data);
+      setOlddata(mappedData[0].identification_num);
+    }
+  }, [oldpatientsdata, oldData]);
 
   return (
     <>
@@ -86,19 +107,17 @@ const nofunction = () =>{
             </Box>
           </Grid>
         </Grid>
-        {user ? (
+        { user.patient.identification_num === oldData  ? (
           <Dialog open={dialog.value} onClose={dialog.onTrue}>
-            <DialogTitle>We found that you have data stored in عياده ركتورنا do you want to store it in your profile</DialogTitle>
+            <DialogTitle>
+              We found that you have data stored in عياده ركتورنا do you want to store it in your
+              profile
+            </DialogTitle>
             <DialogActions>
-              <Button
-                onClick={yesfunction}
-                variant="outlined"
-                color="success"
-                type="submit"
-              >
+              <Button onClick={yesfunction} variant="outlined" color="success" type="submit">
                 yes
               </Button>
-              <Button type="submit" variant="contained"  color="inherit" onClick={nofunction}>
+              <Button type="submit" variant="contained" color="inherit" onClick={nofunction}>
                 no
               </Button>
             </DialogActions>
