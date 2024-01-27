@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import { useTheme  } from '@mui/system';
+import { useTheme } from '@mui/system';
 import Stack from '@mui/material/Stack';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -13,7 +13,7 @@ import { useCountdownDate } from 'src/hooks/use-countdown';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'notistack';
-import { Alert, Typography,useMediaQuery } from '@mui/material';
+import { Alert, Typography, useMediaQuery } from '@mui/material';
 import BookManually from 'src/components/modals/activate-remider';
 import Iconify from 'src/components/iconify/iconify';
 
@@ -32,7 +32,11 @@ export default function TimeOutInActive() {
 
   const unitServiceCountdown = useCountdownDate(
     new Date(
-      new Date(user?.employee_engagement?.unit_service?.created_at).getTime() +
+      new Date(
+        user?.employee?.employee_engagements[
+          user.employee.selected_engagement
+        ]?.unit_service?.created_at
+      ).getTime() +
         3 * 24 * 60 * 60 * 1000
     )
   );
@@ -41,15 +45,24 @@ export default function TimeOutInActive() {
     new Date(new Date(user?.created_at).getTime() + 3 * 24 * 60 * 60 * 1000)
   );
   const subscriptionExpired = useCountdownDate(
-    new Date(user?.employee_engagement?.unit_service?.subscription_end_date)
+    new Date(
+      user?.employee?.employee_engagements[
+        user.employee.selected_engagement
+      ]?.unit_service?.subscription_end_date
+    )
   );
 
   useEffect(() => {
     const checkAndLogout = async () => {
       if (
         user.employee_engagement &&
-        user.employee_engagement.unit_service.status === 'inactive' &&
-        new Date(user.employee_engagement.unit_service.created_at).getTime() <
+        user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service
+          .status === 'inactive' &&
+        new Date(
+          user?.employee?.employee_engagements[
+            user.employee.selected_engagement
+          ]?.unit_service.created_at
+        ).getTime() <
           new Date().getTime() - 3 * 24 * 60 * 60 * 1000
       ) {
         console.log('this user is in activate and has to logout');
@@ -60,6 +73,7 @@ export default function TimeOutInActive() {
           enqueueSnackbar('Unable to logout!', { variant: 'error' });
         }
       }
+      console.log('user', user);
       if (
         user &&
         user.status === 'inactive' &&
@@ -81,7 +95,8 @@ export default function TimeOutInActive() {
   if (
     user.role === 'admin' &&
     user.employee_engagement &&
-    user.employee_engagement.unit_service.status === 'inactive'
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service.status ===
+      'inactive'
   ) {
     const { days, hours, minutes, seconds } = unitServiceCountdown;
     content = (
@@ -129,7 +144,8 @@ export default function TimeOutInActive() {
             ml: { xs: 1, md: 3 },
             px: 0.6,
             py: 0.3,
-            ...(isXsScreen &&theme.breakpoints.down('xs') && { '& .MuiAlert-icon': { display: 'none' } }),
+            ...(isXsScreen &&
+              theme.breakpoints.down('xs') && { '& .MuiAlert-icon': { display: 'none' } }),
           }}
           severity="error"
         >
@@ -157,7 +173,7 @@ export default function TimeOutInActive() {
   } else if (
     user.role === 'admin' &&
     user.employee_engagement &&
-    user.employee_engagement.unit_service
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service
   ) {
     const { days } = subscriptionExpired;
     content = (
@@ -181,7 +197,8 @@ export default function TimeOutInActive() {
               ml: { xs: 1, md: 3 },
               px: 0.6,
               py: 0.3,
-              ...(isXsScreen &&theme.breakpoints.down('xs') && { '& .MuiAlert-icon': { display: 'none' } }),
+              ...(isXsScreen &&
+                theme.breakpoints.down('xs') && { '& .MuiAlert-icon': { display: 'none' } }),
             }}
             severity="error"
           >

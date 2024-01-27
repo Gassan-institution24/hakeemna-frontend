@@ -43,6 +43,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetUSActivities } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
@@ -83,8 +84,8 @@ export default function ActivitesTableView({ employeeData }) {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { activitiesData, refetch } = useGetUSActivities(
-    user?.employee_engagement?.unit_service._id
+  const { activitiesData, loading, refetch } = useGetUSActivities(
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
   );
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -230,6 +231,11 @@ export default function ActivitesTableView({ employeeData }) {
     },
     [handleFilters]
   );
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

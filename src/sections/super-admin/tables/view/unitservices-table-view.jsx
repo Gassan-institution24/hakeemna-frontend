@@ -45,6 +45,7 @@ import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../unitservices/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -98,7 +99,7 @@ export default function UnitServicesTableView() {
 
   const router = useRouter();
 
-  const { unitservicesData, refetch } = useGetUnitservices();
+  const { unitservicesData, loading, refetch } = useGetUnitservices();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -235,6 +236,8 @@ export default function UnitServicesTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

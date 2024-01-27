@@ -4,6 +4,7 @@ import EditUnitServiceAccounting from 'src/sections/super-admin/unitservices/acc
 import { useGetLicenseMovement, useGetUnitservice } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 import { useTranslate } from 'src/locales';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -12,15 +13,15 @@ export default function AccountingEditPage() {
   const params = useParams();
   const { id, acid } = params;
   const { data } = useGetUnitservice(id);
-  const { licenseMovementData } = useGetLicenseMovement(acid);
+  const { licenseMovementData,loading } = useGetLicenseMovement(acid);
   const unitServiceName = data?.name_english || 'unit service';
   return (
     <>
       <Helmet>
         <title> {t(unitServiceName)} Accounting</title>
       </Helmet>
-
-      <EditUnitServiceAccounting unitServiceData={data} licenseMovementData={licenseMovementData} />
+      {loading&& <LoadingScreen/>}
+      {!loading&&<EditUnitServiceAccounting unitServiceData={data} licenseMovementData={licenseMovementData} />}
     </>
   );
 }

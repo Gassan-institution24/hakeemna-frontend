@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 import AppointmentConfigHomeView from 'src/sections/unit-service/appointmentsConfiguration/view/home';
 
@@ -7,11 +8,13 @@ import AppointmentConfigHomeView from 'src/sections/unit-service/appointmentsCon
 export default function AppointmentConfigHomePage() {
   return (
     <>
+    <ACLGuard hasContent category='appointment_config' acl='read'>
       <Helmet>
         <title> Appointment Configurations</title>
       </Helmet>
 
        <AppointmentConfigHomeView />
+       </ACLGuard>
     </>
   );
 }

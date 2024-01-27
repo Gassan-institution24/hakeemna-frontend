@@ -43,13 +43,17 @@ export default function TableNewEditForm({ currentTable }) {
 
   const defaultValues = useMemo(
     () => ({
-      unit_service: user.employee_engagement.unit_service._id,
+      unit_service:
+        user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
       start_time: currentTable?.start_time || null,
       end_time: currentTable?.end_time || null,
     }),
-    [currentTable, user.employee_engagement.unit_service]
+    [
+      currentTable,
+      user.employee,
+    ]
   );
 
   const methods = useForm({
@@ -81,7 +85,7 @@ export default function TableNewEditForm({ currentTable }) {
     formState: { isSubmitting },
   } = methods;
 
-  const values = getValues()
+  const values = getValues();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -164,11 +168,7 @@ export default function TableNewEditForm({ currentTable }) {
                   <MobileTimePicker
                     minutesStep="5"
                     label="Start time"
-                    value={
-                      values.start_time
-                        ? new Date(values.start_time)
-                        : null
-                    }
+                    value={values.start_time ? new Date(values.start_time) : null}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
@@ -189,11 +189,7 @@ export default function TableNewEditForm({ currentTable }) {
                   <MobileTimePicker
                     minutesStep="5"
                     label="End time"
-                    value={
-                      values.end_time
-                        ? new Date(values.end_time)
-                        : null
-                    }
+                    value={values.end_time ? new Date(values.end_time) : null}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}

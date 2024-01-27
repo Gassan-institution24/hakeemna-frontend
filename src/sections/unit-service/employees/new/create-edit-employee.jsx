@@ -62,9 +62,9 @@ export default function TableNewEditForm({ currentTable }) {
 
   const defaultValues = useMemo(
     () => ({
-      // unit_service: currentTable?.unit_service || '',
-      // department: currentTable?.department || '',
-      unit_service: currentTable?.unit_service?._id || user?.employee_engagement?.unit_service._id,
+      unit_service:
+        currentTable?.unit_service?._id ||
+        user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id,
       department: currentTable?.department?._id || null,
       employee_type: currentTable?.employee_type?._id || null,
       email: currentTable?.email || '',
@@ -80,7 +80,10 @@ export default function TableNewEditForm({ currentTable }) {
       password: currentTable?.password || '',
       confirmPassword: currentTable?.confirmPassword || '',
     }),
-    [currentTable, user?.employee_engagement?.unit_service]
+    [
+      currentTable,
+      user.employee,
+    ]
   );
 
   const password = useBoolean();
@@ -142,8 +145,8 @@ export default function TableNewEditForm({ currentTable }) {
         });
       }
       reset();
-      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
       router.push(paths.unitservice.employees.root());
+      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
       console.info('DATA', data);
     } catch (error) {
       console.error(error);

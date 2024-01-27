@@ -47,6 +47,7 @@ import { useTranslate } from 'src/locales';
 import FeedbackRow from './feedback-row'; /// edit
 import FeedbackToolbar from './feedback-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -89,7 +90,7 @@ export default function StakeholderFeedbackView({ stakeholderData }) {
 
   const router = useRouter();
 
-  const { feedbackData } = useGetStakeholderFeedbacks(id);
+  const { feedbackData, loading } = useGetStakeholderFeedbacks(id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -157,6 +158,9 @@ export default function StakeholderFeedbackView({ stakeholderData }) {
     [handleFilters]
   );
   const stakeholderName = stakeholderData.name_english || 'Stakeholder';
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

@@ -47,6 +47,7 @@ import { useGetAppointmentTypes, useGetPatientAppointments } from 'src/api/table
 import PatientHistoryRow from './appoint-history-row';
 import PatientHistoryToolbar from './appoint-history-toolbar';
 import HistoryFiltersResult from './appoint-history-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -83,7 +84,7 @@ export default function AppointHistoryView({ patientData }) {
 
   const confirm = useBoolean();
 
-  const { appointmentsData, refetch } = useGetPatientAppointments(patientData._id);
+  const { appointmentsData, refetch, loading } = useGetPatientAppointments(patientData._id);
 
   const { appointmenttypesData } = useGetAppointmentTypes();
 
@@ -213,6 +214,8 @@ export default function AppointHistoryView({ patientData }) {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

@@ -30,14 +30,14 @@ import AppointHistory from './appointment-history/appoint-history';
 import EconomicMovementsView from './invoices/invoices-view';
 import PaymentControlView from './payment-control/payment-control';
 import PatientHistoryAnalytic from './appointment-history/appoint-history-analytic';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
 export default function PatientHistoryView({ patientData }) {
   const theme = useTheme();
 
-  const { appointmentsData } = useGetPatientAppointments(patientData._id);
-  console.log('app da', appointmentsData);
+  const { appointmentsData, loading } = useGetPatientAppointments(patientData._id);
 
   const settings = useSettingsContext();
 
@@ -98,6 +98,9 @@ export default function PatientHistoryView({ patientData }) {
     (patientData?.first_name && patientData?.first_name) ||
     (patientData?.last_name && patientData?.last_name) ||
     'Patient';
+
+    if(loading) {return(<LoadingScreen/>)}
+    
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

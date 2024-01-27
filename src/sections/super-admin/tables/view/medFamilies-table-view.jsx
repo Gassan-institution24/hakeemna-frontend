@@ -33,6 +33,7 @@ import { useGetMedFamilies } from 'src/api/tables'; /// edit
 import TableDetailRow from '../medFamilies/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -68,7 +69,7 @@ export default function FamiliesTableView() {
 
   const router = useRouter();
 
-  const { families } = useGetMedFamilies();
+  const { families, loading } = useGetMedFamilies();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -147,6 +148,8 @@ export default function FamiliesTableView() {
   //   [router]
   // );
 
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

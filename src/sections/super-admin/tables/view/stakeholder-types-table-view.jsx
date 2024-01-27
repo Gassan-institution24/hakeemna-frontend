@@ -48,6 +48,7 @@ import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../stakeholder_types/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -89,7 +90,7 @@ export default function StakeholderTypesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { stakeholderTypesData, refetch } = useGetStakeholderTypes();
+  const { stakeholderTypesData, loading, refetch } = useGetStakeholderTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -227,6 +228,9 @@ export default function StakeholderTypesTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

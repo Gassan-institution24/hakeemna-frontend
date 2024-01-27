@@ -33,6 +33,7 @@ import { useGetAnalyses } from 'src/api/tables'; /// edit
 import TableDetailRow from '../analyses/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -61,7 +62,7 @@ export default function AnalysesTableView() {
 
   const router = useRouter();
 
-  const { analysesData } = useGetAnalyses();
+  const { analysesData, loading } = useGetAnalyses();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -139,6 +140,8 @@ export default function AnalysesTableView() {
   //   },
   //   [router]
   // );
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

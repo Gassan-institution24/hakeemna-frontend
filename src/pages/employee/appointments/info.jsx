@@ -4,13 +4,14 @@ import ApointmentInfoView from 'src/sections/employee/appointments/view/info';
 import { useGetAppointment } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
 export default function EditPage() {
   const params = useParams();
   const { id } = params;
-  const { data } = useGetAppointment(id);
+  const { data, loading } = useGetAppointment(id);
   const name = data?.name_english;
   return (
     <>
@@ -18,7 +19,7 @@ export default function EditPage() {
       <Helmet>
         <title> {name||''} Appointment Accounting</title>
       </Helmet>
-
+      {loading&& <LoadingScreen/>}
       {data &&<ApointmentInfoView appointmentData={data} />}
     </ACLGuard>
     </>

@@ -88,9 +88,8 @@ export default function EmployeesTableView({departmentData}) {
 
   const router = useRouter();
 
-  const { employeesData, refetch } =useGetDepartmentEmployees(departmentData._id);
+  const { employeesData, loading, refetch } =useGetDepartmentEmployees(departmentData._id);
 
-  console.log('employeesData',employeesData)
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -234,6 +233,8 @@ export default function EmployeesTableView({departmentData}) {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

@@ -33,6 +33,7 @@ import {
 import TablesTableRow from '../tables-table-row';
 import TablesTableToolbar from '../tables-table-toolbar';
 import TablesTableFiltersResult from '../tables-table-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -52,8 +53,8 @@ export default function TablesListView() {
 
   const confirm = useBoolean();
 
-  const { tableData } = useGetTables();
-  console.log('all tablessss', tableData);
+  const { tableData,loading } = useGetTables();
+
   const [filters, setFilters] = useState(defaultFilters);
 
   const TABLE_HEAD = [
@@ -136,6 +137,8 @@ export default function TablesListView() {
     },
     [router]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

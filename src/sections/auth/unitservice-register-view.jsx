@@ -64,9 +64,9 @@ export default function JwtRegisterView() {
     us_country: Yup.string().required('Country is required'),
     us_city: Yup.string().required('City is required'),
     US_type: Yup.string().required('Unit Service type is required'),
-    // us_speciality: Yup.string().nullable(),
-    // us_sector_type: Yup.string().required('Sector type is required'),
-    // us_phone: Yup.string().required('Phone number is required'),
+    us_speciality: Yup.string().nullable(),
+    us_sector_type: Yup.string().required('Sector type is required'),
+    us_phone: Yup.string().required('Phone number is required'),
 
     em_first_name: Yup.string().required('name is required'),
     em_second_name: Yup.string().required('name is required'),
@@ -245,7 +245,7 @@ export default function JwtRegisterView() {
 
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <RHFTextField name="us_email" label="Email address" />
-        <RHFTextField type="us_number" name="phone" label="Phone number" />
+        <RHFTextField type="us_number" name="us_phone" label="Phone number" />
       </Stack>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <RHFSelect onChange={handleCountryChange} name="us_country" label="Country">

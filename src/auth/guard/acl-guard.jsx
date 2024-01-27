@@ -17,9 +17,9 @@ export default function ACLGuard({ hasContent, category, acl, children, sx }) {
   const { user } = useAuthContext();
 
   // const currentACL = 'user';
-  const currentACL = user?.employee_engagement?.acl; // admin;
+  const currentACL = user?.employee?.employee_engagements[user.employee.selected_engagement]?.acl; // admin;
 
-  if (typeof acl === 'undefined' || ! currentACL[category].includes(acl)) {
+  if (typeof acl === 'undefined' || !currentACL[category].includes(acl)) {
     return hasContent ? (
       <Container component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
         <m.div variants={varBounce().in}>

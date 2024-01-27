@@ -45,6 +45,7 @@ import { endpoints } from 'src/utils/axios';
 import TableDetailRow from './table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -90,9 +91,7 @@ export default function PatientTableView() {
 
   const router = useRouter();
 
-  const { patientsData, refetch } = useGetPatients();
-  const { data } = useGetPatient('657d610698f13d11740e4d98');
-  console.log('pat dataaa', data);
+  const { patientsData, loading, refetch } = useGetPatients();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -260,6 +259,8 @@ export default function PatientTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

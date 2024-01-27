@@ -8,7 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 
 // ----------------------------------------------------------------------
 
-export default function ConfirmDialog({ title, content, action, open, onClose, ...other }) {
+export default function ConfirmDialog({ title, content, action, open, onClose, disabled, ...other }) {
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose} {...other}>
       <DialogTitle sx={{ pb: 2 }}>{title}</DialogTitle>
@@ -18,7 +18,7 @@ export default function ConfirmDialog({ title, content, action, open, onClose, .
       <DialogActions>
         {action}
 
-        <Button variant="outlined" color="inherit" onClick={onClose}>
+        <Button variant="outlined" color="inherit" onClick={onClose} disabled={disabled}>
           Cancel
         </Button>
       </DialogActions>
@@ -31,13 +31,6 @@ ConfirmDialog.propTypes = {
   content: PropTypes.node,
   onClose: PropTypes.func,
   open: PropTypes.bool,
-  title: PropTypes.string,
-};
-
-ConfirmDialog.propTypes = {
-  action: PropTypes.node,
-  content: PropTypes.node,
-  onClose: PropTypes.func,
-  open: PropTypes.bool,
+  disabled: PropTypes.bool,
   title: PropTypes.string,
 };

@@ -44,6 +44,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetUSWorkShifts } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
@@ -72,8 +73,8 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function WorkGroupsTableView() {
-  const { user } = useAuthContext()
-  
+  const { user } = useAuthContext();
+
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -85,9 +86,9 @@ export default function WorkGroupsTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { workShiftsData, refetch } = useGetUSWorkShifts(user.employee_engagement.unit_service._id);
-
-  console.log('workShiftsData',workShiftsData)
+  const { workShiftsData, loading, refetch } = useGetUSWorkShifts(
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+  );
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -225,11 +226,14 @@ export default function WorkGroupsTableView() {
     },
     [handleFilters]
   );
+  if (loading) {
+    return <LoadingScreen />;
+  }
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading='Work shifts'/// edit
+          heading="Work shifts" /// edit
           links={[
             {
               name: 'Dashboard',
@@ -480,17 +484,20 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         (data?.name_arabic &&
           data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employees &&
-          data?.employees?.some((employee) =>
-            employee.employee.first_name.toLowerCase().indexOf(name.toLowerCase())
-           !== -1)) ||
+          data?.employees?.some(
+            (employee) =>
+              employee.employee.first_name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+          )) ||
         (data?.employees &&
-          data?.employees?.some((employee) =>
-            employee.employee.second_name.toLowerCase().indexOf(name.toLowerCase())
-           !== -1)) ||
+          data?.employees?.some(
+            (employee) =>
+              employee.employee.second_name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+          )) ||
         (data?.employees &&
-          data?.employees?.some((employee) =>
-            employee.employee.family_name.toLowerCase().indexOf(name.toLowerCase())
-           !== -1)) ||
+          data?.employees?.some(
+            (employee) =>
+              employee.employee.family_name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+          )) ||
         // (data?.employees &&
         //   data?.employees?.some((employee) =>
         //     employee.employee.name_arabic.toLowerCase().indexOf(name.toLowerCase())

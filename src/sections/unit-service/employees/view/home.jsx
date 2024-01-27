@@ -42,6 +42,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetUSEmployees } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
@@ -91,7 +92,9 @@ export default function EmployeesTableView() {
 
   const router = useRouter();
 
-  const { employeesData, refetch } = useGetUSEmployees(user?.employee_engagement?.unit_service._id);
+  const { employeesData, loading, refetch } = useGetUSEmployees(
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+  );
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -235,6 +238,10 @@ export default function EmployeesTableView() {
     },
     [handleFilters]
   );
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

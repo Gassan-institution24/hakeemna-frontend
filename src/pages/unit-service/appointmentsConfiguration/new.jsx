@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 import AppointmentConfigNewView from 'src/sections/unit-service/appointmentsConfiguration/view/new';
 
@@ -7,11 +8,13 @@ import AppointmentConfigNewView from 'src/sections/unit-service/appointmentsConf
 export default function AppointmentConfigNewPage() {
   return (
     <>
-      <Helmet>
-        <title>New Appointment Configurations</title>
-      </Helmet>
+      <ACLGuard hasContent category="appointment_config" acl="create">
+        <Helmet>
+          <title>New Appointment Configurations</title>
+        </Helmet>
 
-       <AppointmentConfigNewView />
+        <AppointmentConfigNewView />
+      </ACLGuard>
     </>
   );
 }

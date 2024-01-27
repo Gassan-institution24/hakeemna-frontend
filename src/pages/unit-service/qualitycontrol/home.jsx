@@ -1,15 +1,18 @@
 import { Helmet } from 'react-helmet-async';
-import QualityControlView from 'src/sections/unit-service/qualitycontrol/view/home'
+import ACLGuard from 'src/auth/guard/acl-guard';
+import QualityControlView from 'src/sections/unit-service/qualitycontrol/view/home';
 // ----------------------------------------------------------------------
 
 export default function QualityControlPage() {
   return (
     <>
-      <Helmet>
-        <title>Quality Control</title>
-      </Helmet>
+      <ACLGuard hasContent category="appointment_config" acl="read">
+        <Helmet>
+          <title>Quality Control</title>
+        </Helmet>
 
-      <QualityControlView />
+        <QualityControlView />
+      </ACLGuard>
     </>
   );
 }

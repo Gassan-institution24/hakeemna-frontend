@@ -45,7 +45,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const employeeInfo = useGetEmployeeEngagement(id).data;
 
   const [appointTime, setAppointTime] = useState(0);
-  console.log('employeeInfo', employeeInfo);
 
   const [dataToUpdate, setDataToUpdate] = useState([]);
 
@@ -144,7 +143,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const defaultValues = useMemo(
     () => ({
       unit_service:
-        appointmentConfigData?.unit_service._id || user?.employee_engagement?.unit_service._id,
+        appointmentConfigData?.unit_service._id ||
+        user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id,
       department: employeeInfo?.department?._id || user?.employee_engagement?.department?._id,
       start_date: appointmentConfigData?.start_date || null,
       end_date: appointmentConfigData?.end_date || null,
@@ -179,7 +179,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         },
       ],
     }),
-    [appointmentConfigData, user?.employee_engagement, employeeInfo?.department]
+    [appointmentConfigData, user.employee, employeeInfo?.department]
   );
 
   const methods = useForm({
@@ -246,9 +246,17 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ) {
           setDataToUpdate(data);
           confirm.onTrue();
+        } else {
+          await axios.patch(
+            `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
+            data
+          );
+          router.push(paths.unitservice.employees.appointmentconfig.root(id));
         }
       } else {
+        updating.onTrue();
         await axios.post(endpoints.tables.appointmentconfigs, data);
+        updating.onFalse();
         enqueueSnackbar('Added Successfully!');
         router.push(paths.unitservice.employees.appointmentconfig.root(id));
       }
@@ -267,7 +275,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     if (appointmentConfigData) {
       methods.reset({
         unit_service:
-          appointmentConfigData?.unit_service || user?.employee_engagement?.unit_service._id,
+          appointmentConfigData?.unit_service ||
+          user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id,
         department: employeeInfo?.department?._id || user?.employee_engagement?.department?._id,
         start_date: appointmentConfigData?.start_date || null,
         end_date: appointmentConfigData?.end_date || null,
@@ -331,7 +340,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         </FormProvider>
       </Container>
       <ConfirmDialog
-        open={confirm.value}
+        disabled={updating.value}
+        open={updating.value || confirm.value}
         onClose={confirm.onFalse}
         title={updating.value ? 'Creating appointments...' : 'Save changes'}
         content={
@@ -380,6 +390,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
               Yes
             </LoadingButton>
             <LoadingButton
+              disabled={updating.value}
               loading={saving.value}
               variant="contained"
               color="success"

@@ -9,6 +9,7 @@ import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useGetUnitservice } from 'src/api/tables';
+import { LoadingScreen } from 'src/components/loading-screen';
 import AccountGeneral from '../profile-general';
 import AccountNotifications from '../profile-notifications';
 import AccountChangePassword from '../profile-change-password';
@@ -21,7 +22,13 @@ export default function AccountView() {
   const { user } = useAuthContext();
   console.log('user', user);
 
-  const { data, refetch } = useGetUnitservice(user?.employee_engagement?.unit_service?._id);
+  const { data, loading, refetch } = useGetUnitservice(
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service?._id
+  );
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

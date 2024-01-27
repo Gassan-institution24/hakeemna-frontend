@@ -48,6 +48,7 @@ import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../payment_methods/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -86,7 +87,7 @@ export default function PaymentMethodsTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { paymentMethodsData, refetch } = useGetPaymentMethods();
+  const { paymentMethodsData, loading, refetch } = useGetPaymentMethods();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -224,6 +225,9 @@ export default function PaymentMethodsTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

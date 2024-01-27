@@ -12,7 +12,13 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
 import { MenuItem, Typography, TextField } from '@mui/material';
 import FormProvider, { RHFTextField, RHFSelect, RHFUploadAvatar } from 'src/components/hook-form';
-import { useGetUnitservice,useGetCities, useGetCountries, useGetSpecialties, useGetUSTypes } from 'src/api/tables';
+import {
+  useGetUnitservice,
+  useGetCities,
+  useGetCountries,
+  useGetSpecialties,
+  useGetUSTypes,
+} from 'src/api/tables';
 import axios, { endpoints, fetcher } from 'src/utils/axios';
 import { fData } from 'src/utils/format-number';
 
@@ -27,7 +33,9 @@ export default function AccountGeneral({ unitServiceData }) {
 
   const { user } = useAuthContext();
 
-  const { data, refetch } = useGetUnitservice(user?.employee_engagement?.unit_service?._id);
+  const { data, refetch } = useGetUnitservice(
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service?._id
+  );
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { unitserviceTypesData } = useGetUSTypes();
@@ -120,16 +128,21 @@ export default function AccountGeneral({ unitServiceData }) {
       if (companyLogo) {
         formData.append('company_logo_pic', companyLogo);
         await axios.patch(
-          `${endpoints.tables.unitservice(user?.employee_engagement?.unit_service._id)}/updatelogo`,
+          `${endpoints.tables.unitservice(
+            user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service
+              ._id
+          )}/updatelogo`,
           formData
         );
       }
       await axios.patch(
-        endpoints.tables.unitservice(user?.employee_engagement?.unit_service._id),
+        endpoints.tables.unitservice(
+          user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+        ),
         dataToSend
       );
       enqueueSnackbar('Update success!');
-      refetch()
+      refetch();
       console.info('DATA', dataToSend);
     } catch (error) {
       enqueueSnackbar('Update failed!', { variant: 'error' });

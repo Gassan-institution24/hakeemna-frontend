@@ -47,6 +47,7 @@ import { useTranslate } from 'src/locales';
 import FeedbackRow from '../quality-control/feedback-row'; /// edit
 import FeedbackToolbar from '../quality-control/feedback-toolbar';
 import TableDetailFiltersResult from '../quality-control/feedback-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -92,7 +93,7 @@ export default function DepartmentFeedbackView({ departmentData }) {
 
   const router = useRouter();
 
-  const { feedbackData } = useGetDepartmentFeedbackes(id);
+  const { feedbackData, loading } = useGetDepartmentFeedbackes(id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -159,6 +160,9 @@ export default function DepartmentFeedbackView({ departmentData }) {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

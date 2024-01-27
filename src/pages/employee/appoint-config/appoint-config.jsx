@@ -5,6 +5,7 @@ import { useGetEmployee, useGetEmployeeAppointmentConfigs } from 'src/api/tables
 import { useParams } from 'src/routes/hooks';
 import { useAuthContext } from 'src/auth/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -12,23 +13,23 @@ export default function EmployeeAppointconfigPage() {
   const params = useParams();
   const { user } = useAuthContext();
   const { appointmentConfigData, loading, refetch } = useGetEmployeeAppointmentConfigs(
-    user?.employee_engagement?.employee?._id
+    user?.employee?._id
   );
 
   return (
     <>
-    <ACLGuard hasContent category='accounting' acl='read' >
-      <Helmet>
-        <title> Appointment Config</title>
-      </Helmet>
-
-      {!loading && (
-        <EmployeeAppointconfigView
-          appointmentConfigData={appointmentConfigData}
-          refetch={refetch}
-          loading={loading}
-        />
-      )}
+      <ACLGuard hasContent category="accounting" acl="read">
+        <Helmet>
+          <title> Appointment Config</title>
+        </Helmet>
+        {loading && <LoadingScreen />}
+        {!loading && (
+          <EmployeeAppointconfigView
+            appointmentConfigData={appointmentConfigData}
+            refetch={refetch}
+            loading={loading}
+          />
+        )}
       </ACLGuard>
     </>
   );

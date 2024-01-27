@@ -3,20 +3,21 @@ import { Helmet } from 'react-helmet-async';
 import DepartmentRoomNewView from 'src/sections/unit-service/departments/rooms/table-create-view';
 import { useGetDepartment } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
 export default function DepartmentRoomNewPage() {
   const params = useParams();
   const { id } = params;
-  const { data } = useGetDepartment(id);
+  const { data,loading } = useGetDepartment(id);
   return (
     <>
       <Helmet>
         <title> Add Room </title>
       </Helmet>
-
-      {data && <DepartmentRoomNewView departmentData={data} />}
+      {loading&& <LoadingScreen/>}
+      {!loading && <DepartmentRoomNewView departmentData={data} />}
     </>
   );
 }

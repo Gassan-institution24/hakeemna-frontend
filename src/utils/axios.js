@@ -3,7 +3,6 @@ import axios from 'axios';
 import { HOST_API } from 'src/config-global';
 // import { idText } from 'typescript';
 
-
 // https://axios-http.com/docs/instance
 // ----------------------------------------------------------------------
 
@@ -29,7 +28,6 @@ export const fetcher = async (args) => {
 // ----------------------------------------------------------------------
 
 export const endpoints = {
-
   allTables: '/tables',
   tables: {
     countries: `/api/countries`,
@@ -61,7 +59,7 @@ export const endpoints = {
     unitservices: '/api/unitservice',
     unitservice: (id) => `/api/unitservice/${id}`,
     departments: '/api/departments',
-    unitServiceDepartments: (id)=> `/api/departments/unitservice/${id}`,
+    unitServiceDepartments: (id) => `/api/departments/unitservice/${id}`,
     department: (id) => `/api/departments/${id}`,
     specialities: '/api/specialities',
     speciality: (id) => `/api/specialities/${id}`,
@@ -71,9 +69,11 @@ export const endpoints = {
     appointmenttype: (id) => `/api/appointments/types/${id}`,
     appointmentconfigs: '/api/appointments/config',
     employeeAppointmentconfig: (emid) => `/api/appointments/config/employee/${emid}`,
-    usEmployeeAppointmentconfig: (id,emid) => `/api/appointments/config/unitservice/${id}/employee/${emid}`,
-    usEmployeeAppointments: (id,emid) => `/api/appointments/unitservice/${id}/employee/${emid}`,
-    departmentEmployeeAppointmentconfig: (id,emid) => `/api/appointments/config/department/${id}/employee/${emid}`,
+    usEmployeeAppointmentconfig: (id, emid) =>
+      `/api/appointments/config/unitservice/${id}/employee/${emid}`,
+    usEmployeeAppointments: (id, emid) => `/api/appointments/unitservice/${id}/employee/${emid}`,
+    departmentEmployeeAppointmentconfig: (id, emid) =>
+      `/api/appointments/config/department/${id}/employee/${emid}`,
     appointmentconfig: (id) => `/api/appointments/config/${id}`,
     usappointmentconfig: (id) => `/api/appointments/config/unitservice/${id}`,
     usappointmentconfigcount: (id) => `/api/appointments/config//unitservice${id}/count`,
@@ -86,17 +86,18 @@ export const endpoints = {
     taxes: '/api/taxes',
     tax: (id) => `/api/taxes/${id}`,
     activities: '/api/activities',
-    usActivities: (id)=>`/api/activities/unitservice/${id}`,
-    usActivitiesCount: (id)=>`/api/activities/unitservice${id}/count`,
-    departmentActivities: (id)=>`/api/activities/department/${id}`,
-    departmentActivitiesCount: (id)=>`/api/activities/department/${id}/count`,
+    usActivities: (id) => `/api/activities/unitservice/${id}`,
+    usActivitiesCount: (id) => `/api/activities/unitservice${id}/count`,
+    departmentActivities: (id) => `/api/activities/department/${id}`,
+    departmentActivitiesCount: (id) => `/api/activities/department/${id}/count`,
     activity: (id) => `/api/activities/${id}`,
     employeetypes: '/api/employeetypes',
     usEmployeetypes: (id) => `/api/employeetypes/unitservice/${id}`,
     employeetype: (id) => `/api/employeetypes/${id}`,
     employees: '/api/employees',
     employee: (id) => `/api/employees/${id}`,
-    employeeEngagements:`/api/employees/engagement`,
+    findEmployee: `/api/employees/find`,
+    employeeEngagements: `/api/employees/engagement`,
     employeeEngagement: (id) => `/api/employees/engagement/${id}`,
     usEmployees: (id) => `/api/employees/engagement/unitservice/${id}`,
     usEmployeesCount: (id) => `/api/employees/engagement/unitservice/${id}/count`,
@@ -115,8 +116,8 @@ export const endpoints = {
     departmentWorkgroups: (id) => `/api/wgroups/department/${id}`,
     usWorkgroups: (id) => `/api/wgroups/unitservice/${id}`,
     employeeWorkgroups: (id) => `/api/wgroups/employee/${id}`,
-    departmentemployeeWorkgroups: (id,emid) => `/api/wgroups/department/${id}/employee/${emid}`,
-    usemployeeWorkgroups: (id,emid) => `/api/wgroups/unitservice/${id}/employee/${emid}`,
+    departmentemployeeWorkgroups: (id, emid) => `/api/wgroups/department/${id}/employee/${emid}`,
+    usemployeeWorkgroups: (id, emid) => `/api/wgroups/unitservice/${id}/employee/${emid}`,
     workgroup: (id) => `/api/wgroups/${id}`,
     servicetypes: '/api/servicetypes',
     servicetype: (id) => `/api/servicetypes/${id}`,
@@ -153,8 +154,8 @@ export const endpoints = {
     USfeedbacksCount: (id) => `/api/feedback/unitservice/${id}/count`,
     departmentfeedbacks: (id) => `/api/feedback/department/${id}`,
     employeefeedbacks: (id) => `/api/feedback/employee/${id}`,
-    usemployeefeedbacks: (id,emid) => `/api/feedback/unitservice/${id}/employee/${emid}`,
-    departmentemployeefeedbacks: (id,emid) => `/api/feedback/department/${id}/employee/${emid}`,
+    usemployeefeedbacks: (id, emid) => `/api/feedback/unitservice/${id}/employee/${emid}`,
+    departmentemployeefeedbacks: (id, emid) => `/api/feedback/department/${id}/employee/${emid}`,
     departmentfeedbacksCount: (id) => `/api/feedback/department/${id}/count`,
     patientfeedbacks: (id) => `/api/feedback/patient/${id}`,
     stakeholderFeedbacks: (id) => `/api/feedback/stakeholder/${id}`,
@@ -195,7 +196,7 @@ export const endpoints = {
   auth: {
     me: '/api/auth/me',
     login: '/api/auth/login',
-    activate: (token)=>`/api/auth/activate/${token}`,
+    activate: (token) => `/api/auth/activate/${token}`,
     register: '/api/auth/signup',
     forgotpassword: '/api/auth/forgotpassword',
     resetpassword: '/api/auth/resetpassword',

@@ -67,7 +67,9 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     () => ({
       // unit_service: currentTable?.unit_service || '',
       // department: currentTable?.department || '',
-      unit_service: user?.employee_engagement?.unit_service?._id || departmentData.unit_service._id,
+      unit_service:
+        user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service
+          ?._id || departmentData.unit_service._id,
       department: departmentData._id,
       employee_type: currentTable?.employee_type || '',
       email: currentTable?.email || '',
@@ -83,7 +85,11 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       password: currentTable?.password || '',
       confirmPassword: currentTable?.confirmPassword || '',
     }),
-    [currentTable, departmentData, user.employee_engagement.unit_service]
+    [
+      currentTable,
+      departmentData,
+      user.employee,
+    ]
   );
 
   const password = useBoolean();
@@ -118,7 +124,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data',data)
+      console.log('data', data);
       const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
         await axiosHandler({

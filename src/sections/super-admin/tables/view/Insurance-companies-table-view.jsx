@@ -48,6 +48,7 @@ import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../insuranceCompanies/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -93,7 +94,7 @@ export default function InsuranceCompaniesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { insuranseCosData, refetch } = useGetInsuranceCos();
+  const { insuranseCosData, loading, refetch } = useGetInsuranceCos();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -232,6 +233,9 @@ export default function InsuranceCompaniesTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

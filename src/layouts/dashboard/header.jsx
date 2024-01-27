@@ -24,6 +24,7 @@ import ContactsPopover from '../common/contacts-popover';
 import LanguagePopover from '../common/language-popover';
 import NotificationsPopover from '../common/notifications-popover';
 import TimeOutInActive from '../common/time-out-inactive';
+import ServiceUnitPopover from '../common/service-unit-popover';
 
 // ----------------------------------------------------------------------
 
@@ -62,6 +63,8 @@ export default function Header({ onOpenNav }) {
         justifyContent="flex-end"
         spacing={{ xs: 0.5, sm: 1 }}
       >
+        <ServiceUnitPopover />
+
         <LanguagePopover />
 
         <NotificationsPopover />

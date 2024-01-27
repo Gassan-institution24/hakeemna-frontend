@@ -9,6 +9,7 @@ import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useGetEmployee } from 'src/api/tables';
+import { LoadingScreen } from 'src/components/loading-screen';
 import AccountGeneral from '../profile-general';
 // import AccountNotifications from '../profile-notifications';
 import AccountChangePassword from '../profile-change-password';
@@ -42,11 +43,15 @@ export default function AccountView() {
 
   const { user } = useAuthContext();
 
-  const { data, refetch } = useGetEmployee(user?.employee_engagement?.employee?._id);
+  const { data, loading, refetch } = useGetEmployee(user?.employee?._id);
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>

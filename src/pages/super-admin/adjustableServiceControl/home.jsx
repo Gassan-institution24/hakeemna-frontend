@@ -9,15 +9,15 @@ import { useParams } from 'src/routes/hooks';
 export default function AdjustableServicePage() {
   const params = useParams();
   const { id } = params;
-  const { data } = useGetUnitservice(id);
+  const { data, loading } = useGetUnitservice(id);
   const unitServiceName = data?.name_english || 'unit service';
   return (
     <>
       <Helmet>
         <title> {unitServiceName} Accounting</title>
       </Helmet>
-
-      <AdjustableService unitServiceData={data} />
+      {loading&& <LoadingScreen/>}
+      {!loading&&<AdjustableService unitServiceData={data} />}
     </>
   );
 }

@@ -47,6 +47,7 @@ import { useTranslate } from 'src/locales';
 import FeedbackRow from './feedback-row'; /// edit
 import FeedbackToolbar from './feedback-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -90,7 +91,7 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
 
   const router = useRouter();
 
-  const { feedbackData } = useGetUSFeedbackes(id);
+  const { feedbackData, loading } = useGetUSFeedbackes(id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -158,6 +159,9 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
     [handleFilters]
   );
   const unitserviceName = unitServiceData?.name_english;
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

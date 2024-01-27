@@ -54,6 +54,7 @@ import { useTranslate } from 'src/locales';
 import InsuranceRow from './insurance-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -94,7 +95,8 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { insuranseCosData } = useGetInsuranceCos();
+  const { insuranseCosData, loading } = useGetInsuranceCos();
+
   const filteredInsuranceCos = insuranseCosData
     .filter((company) => !unitServiceData?.insurance?.some((data) => data._id === company._id))
     .filter((data) => data.status === 'active');
@@ -203,6 +205,9 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
     [handleFilters]
   );
   const unitserviceName = unitServiceData?.name_english;
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

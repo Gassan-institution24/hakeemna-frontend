@@ -47,6 +47,7 @@ import { useTranslate } from 'src/locales';
 import AccountingRow from './accounting-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -98,7 +99,7 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
 
   const router = useRouter();
 
-  const { licenseMovements, refetch } = useGetUSLicenseMovement(id);
+  const { licenseMovements, loading, refetch } = useGetUSLicenseMovement(id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -173,6 +174,9 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
     [handleFilters]
   );
   const unitserviceName = unitServiceData?.name_english;
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

@@ -49,6 +49,7 @@ import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../rooms/table-details-row'; /// edit
 import TableDetailToolbar from '../rooms/table-details-toolbar';
 import TableDetailFiltersResult from '../rooms/table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -81,7 +82,7 @@ export default function RoomsTableView({departmentData}) {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { roomsData, refetch } = useGetDepartmentRooms(departmentData._id);
+  const { roomsData, loading, refetch } = useGetDepartmentRooms(departmentData._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -219,6 +220,9 @@ export default function RoomsTableView({departmentData}) {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

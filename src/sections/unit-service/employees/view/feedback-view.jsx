@@ -47,6 +47,7 @@ import { useTranslate } from 'src/locales';
 import FeedbackRow from '../feedback/feedback-row'; /// edit
 import FeedbackToolbar from '../feedback/feedback-toolbar';
 import TableDetailFiltersResult from '../feedback/feedback-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -90,7 +91,7 @@ export default function EmployeeFeedbackView({ employeeData }) {
 
   const router = useRouter();
 
-  const { feedbackData } = useGetEmployeeFeedbackes(id);
+  const { feedbackData, loading } = useGetEmployeeFeedbackes(id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -156,6 +157,9 @@ export default function EmployeeFeedbackView({ employeeData }) {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

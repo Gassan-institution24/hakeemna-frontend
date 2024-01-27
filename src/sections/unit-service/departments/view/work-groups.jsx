@@ -49,6 +49,7 @@ import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../work-groups/table-details-row'; /// edit
 import TableDetailToolbar from '../work-groups/table-details-toolbar';
 import TableDetailFiltersResult from '../work-groups/table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -81,9 +82,7 @@ export default function WorkGroupsTableView({ departmentData }) {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { workGroupsData, refetch } = useGetDepartmentWorkGroups(departmentData._id);
-
-  console.log('workGroupsData',workGroupsData)
+  const { workGroupsData, loading, refetch } = useGetDepartmentWorkGroups(departmentData._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -221,6 +220,9 @@ export default function WorkGroupsTableView({ departmentData }) {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
