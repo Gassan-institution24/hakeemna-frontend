@@ -48,6 +48,7 @@ import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from '../cities/cities-table-details-row';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -87,7 +88,7 @@ export default function CitiesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { tableData, refetch } = useGetCities();
+  const { tableData, loading, refetch } = useGetCities();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -226,6 +227,9 @@ export default function CitiesTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

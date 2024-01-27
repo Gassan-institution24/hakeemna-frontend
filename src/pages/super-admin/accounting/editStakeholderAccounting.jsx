@@ -4,6 +4,7 @@ import EditStakeholderAccounting from 'src/sections/super-admin/accounting/stake
 import { useGetLicenseMovement, useGetStakeholder } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 import { useTranslate } from 'src/locales';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -12,15 +13,15 @@ export default function AccountingEditPage() {
   const params = useParams();
   const { id, acid } = params;
   const { data } = useGetStakeholder(id);
-  const { licenseMovementData } = useGetLicenseMovement(acid);
+  const { licenseMovementData,loading } = useGetLicenseMovement(acid);
   const stakeholderName = data?.name_english || 'Stakeholder';
   return (
     <>
       <Helmet>
         <title> {t(stakeholderName)} Accounting</title>
       </Helmet>
-
-      <EditStakeholderAccounting stakeholderData={data} licenseMovementData={licenseMovementData} />
+      {loading&& <LoadingScreen/>}
+      {!loading&&<EditStakeholderAccounting stakeholderData={data} licenseMovementData={licenseMovementData} />}
     </>
   );
 }

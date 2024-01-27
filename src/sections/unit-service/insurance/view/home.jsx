@@ -48,6 +48,7 @@ import { endpoints } from 'src/utils/axios';
 
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { enqueueSnackbar } from 'notistack';
 import { useGetInsuranceCos, useGetUnitservice } from 'src/api/tables';
 import { useTranslate } from 'src/locales';
@@ -98,8 +99,11 @@ export default function UnitServicesInsuranceView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { insuranseCosData } = useGetInsuranceCos();
-  const { data, refetch } = useGetUnitservice(user?.employee_engagement?.unit_service._id);
+  const { insuranseCosData, loading } = useGetInsuranceCos();
+
+  const { data, refetch } = useGetUnitservice(
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+  );
   const filteredInsuranceCos = insuranseCosData
     .filter((company) => !data?.insurance?.some((info) => info._id === company._id))
     .filter((info) => info.status === 'active');
@@ -208,6 +212,9 @@ export default function UnitServicesInsuranceView() {
     [handleFilters]
   );
   const unitserviceName = data?.name_english;
+  if (loading) {
+    return <LoadingScreen />;
+  }
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

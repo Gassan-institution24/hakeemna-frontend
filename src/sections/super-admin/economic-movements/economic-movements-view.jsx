@@ -47,6 +47,7 @@ import MovementsAnalytic from './movement-analytic';
 import MovementRow from './movement-table-row';
 import MovementTableToolbar from './movement-table-toolbar';
 import MovementTableFiltersResult from './movement-table-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -83,7 +84,7 @@ export default function EconomicMovementsView() {
 
   // const confirm = useBoolean();
 
-  const { economecMovementsData, refetch } = useGetEconomicMovements();
+  const { economecMovementsData, loading, refetch } = useGetEconomicMovements();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -210,6 +211,8 @@ export default function EconomicMovementsView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

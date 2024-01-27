@@ -3,21 +3,22 @@ import { Helmet } from 'react-helmet-async';
 import EditActivityView from 'src/sections/unit-service/activities/view/edit';
 import { useGetActivity } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
 export default function ActivityEditPage() {
   const params = useParams();
   const { id } = params;
-  const { data } = useGetActivity(id);
+  const { data,loading } = useGetActivity(id);
   const name = data?.name_english;
   return (
     <>
       <Helmet>
         <title>Edit {name||''} Activity</title>
       </Helmet>
-
-      {data &&<EditActivityView activityData={data} />}
+      {loading&& <LoadingScreen/>}
+      {!loading &&<EditActivityView activityData={data} />}
     </>
   );
 }

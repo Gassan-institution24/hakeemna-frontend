@@ -3,21 +3,25 @@ import { Helmet } from 'react-helmet-async';
 import EmployeeTypeEditView from 'src/sections/unit-service/tables/employee-types/view/edit';
 import { useGetEmployeeType } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
+import ACLGuard from 'src/auth/guard/acl-guard';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
 export default function EmployeeTypeEditPage() {
   const params = useParams();
   const { id } = params;
-  const { data } = useGetEmployeeType(id);
-  const name = data?.name_english
+  const { data, loading } = useGetEmployeeType(id);
+  const name = data?.name_english;
   return (
     <>
-      <Helmet>
-        <title>Edit {name||''} Employee Type</title>
-      </Helmet>
-
-      {data && <EmployeeTypeEditView employeeTypeData={data} />}
+      <ACLGuard hasContent category="appointment_config" acl="update">
+        <Helmet>
+          <title>Edit {name || ''} Employee Type</title>
+        </Helmet>
+        {loading&& <LoadingScreen/>}
+        {!loading && <EmployeeTypeEditView employeeTypeData={data} />}
+      </ACLGuard>
     </>
   );
 }

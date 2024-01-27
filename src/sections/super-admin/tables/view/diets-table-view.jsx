@@ -34,6 +34,7 @@ import { useGetDiets } from 'src/api/tables'; /// edit
 import TableDetailRow from '../diets/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -69,7 +70,9 @@ export default function DietsTableView() {
 
   const router = useRouter();
 
-  const { dietsData } = useGetDiets();
+  const { dietsData, loading } = useGetDiets();
+
+  if(loading) {return(<LoadingScreen/>)}
 
   const [filters, setFilters] = useState(defaultFilters);
 

@@ -48,6 +48,7 @@ import MovementsAnalytic from '../table-analytic';
 import MovementRow from './invoice-table-row';
 import MovementTableToolbar from './invoices-table-toolbar';
 import MovementTableFiltersResult from './invoices-table-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -85,7 +86,7 @@ export default function EconomicMovementsView({ stakeholderData }) {
 
   // const confirm = useBoolean();
 
-  const { economecMovementsData, refetch } = useGetStackeholderEconomicMovements(
+  const { economecMovementsData, loading, refetch } = useGetStackeholderEconomicMovements(
     stakeholderData._id
   );
 
@@ -228,6 +229,8 @@ export default function EconomicMovementsView({ stakeholderData }) {
     setFilters(defaultFilters);
   }, []);
 
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

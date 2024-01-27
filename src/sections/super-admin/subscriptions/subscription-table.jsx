@@ -48,6 +48,7 @@ import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from './table-details-row'; /// edit
 import TableDetailToolbar from './table-details-toolbar';
 import TableDetailFiltersResult from './table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -88,7 +89,7 @@ export default function SubscriptionTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { subscriptionsData, refetch } = useGetSubscriptions();
+  const { subscriptionsData, loading, refetch } = useGetSubscriptions();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -227,6 +228,9 @@ export default function SubscriptionTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

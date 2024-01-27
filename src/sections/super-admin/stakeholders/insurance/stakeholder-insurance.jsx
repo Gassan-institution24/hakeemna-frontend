@@ -54,6 +54,7 @@ import { useTranslate } from 'src/locales';
 import InsuranceRow from './stakeholder-insurance-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -96,7 +97,8 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { insuranseCosData } = useGetInsuranceCos();
+  const { insuranseCosData, loading } = useGetInsuranceCos();
+
   const filteredInsuranceCos = insuranseCosData
     ?.filter((company) => !stakeholderData?.insurance?.some((data) => data._id === company._id))
     ?.filter((data) => data.status === 'active');
@@ -205,6 +207,9 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
     [handleFilters]
   );
   const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

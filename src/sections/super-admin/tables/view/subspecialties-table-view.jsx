@@ -47,6 +47,7 @@ import { useGetSubSpecialties } from 'src/api/tables'; /// edit
 import TableDetailRow from '../subspecialties/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -87,7 +88,7 @@ export default function SubSpecialtiesTableView() {
   // const confirmActivate = useBoolean();
   // const confirmInactivate = useBoolean();
 
-  const { subspecialtiesData } = useGetSubSpecialties();
+  const { subspecialtiesData, loading } = useGetSubSpecialties();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -226,6 +227,9 @@ export default function SubSpecialtiesTableView() {
   //   },
   //   [handleFilters]
   // );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

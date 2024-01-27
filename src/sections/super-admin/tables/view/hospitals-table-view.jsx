@@ -48,6 +48,7 @@ import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../hospital_list/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -88,7 +89,7 @@ export default function HospitalsTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { hospitalsData, refetch } = useGetHospitals();
+  const { hospitalsData, loading, refetch } = useGetHospitals();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -226,6 +227,9 @@ export default function HospitalsTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

@@ -40,6 +40,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetUSLicenseMovement } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
@@ -97,8 +98,8 @@ export default function UnitServicesAccountingView() {
 
   const router = useRouter();
 
-  const { licenseMovements, refetch } = useGetUSLicenseMovement(
-    user?.employee_engagement?.unit_service._id
+  const { licenseMovements, loading, refetch } = useGetUSLicenseMovement(
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
   );
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -172,6 +173,9 @@ export default function UnitServicesAccountingView() {
     },
     [handleFilters]
   );
+  if (loading) {
+    return <LoadingScreen />;
+  }
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -187,7 +191,7 @@ export default function UnitServicesAccountingView() {
           // action={
           //   <Button
           //     component={RouterLink}
-          //     href={paths.superadmin.unitservices.newAccounting(user?.employee_engagement?.unit_service._id)} /// edit
+          //     href={paths.superadmin.unitservices.newAccounting(user?.employee?.employee_engagements[selected||user.employee.selected_engagement]?.unit_service._id)} /// edit
           //     variant="contained"
           //     startIcon={<Iconify icon="mingcute:add-line" />}
           //   >

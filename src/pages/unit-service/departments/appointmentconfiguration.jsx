@@ -3,21 +3,26 @@ import { Helmet } from 'react-helmet-async';
 import DepartmentAppointmentConfigView from 'src/sections/unit-service/departments/view/appointmentconfiguration';
 import { useGetDepartment } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
+import ACLGuard from 'src/auth/guard/acl-guard';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
 export default function DepartmentAppointmentConfigPage() {
   const params = useParams();
   const { id } = params;
-  const { data } = useGetDepartment(id);
+  const { data,loading } = useGetDepartment(id);
   const name = data?.name_english
   return (
     <>
+        <ACLGuard hasContent category='appointment_config' acl='create'>
+
       <Helmet>
         <title>{name||''} Department Appointment Configuration</title>
       </Helmet>
-
-      {data && <DepartmentAppointmentConfigView departmentData={data} />}
+      {loading&& <LoadingScreen/>}
+      {!loading && <DepartmentAppointmentConfigView departmentData={data} />}
+      </ACLGuard>
     </>
   );
 }

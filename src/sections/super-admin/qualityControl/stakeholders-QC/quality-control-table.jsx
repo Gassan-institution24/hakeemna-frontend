@@ -47,6 +47,7 @@ import { useGetStakeholdersFeedbackes } from 'src/api/tables';
 import QCTableRow from './quality-control-table-row';
 import QCTableToolbar from './quality-control-table-toolbar';
 import QCTableFiltersResult from './quality-control-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -77,8 +78,8 @@ export default function StakeholdersFeedbacks() {
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
-  const { feedbackData, refetch } = useGetStakeholdersFeedbackes();
-  console.log('old dataa', feedbackData);
+  const { feedbackData, loading, refetch } = useGetStakeholdersFeedbackes();
+
   const separateEachStakeholderFeedbacks = useCallback(() => {
     const results = {};
 
@@ -185,6 +186,8 @@ export default function StakeholdersFeedbacks() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

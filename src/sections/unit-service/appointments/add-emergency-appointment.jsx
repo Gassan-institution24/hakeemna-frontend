@@ -43,9 +43,15 @@ export default function BookManually({ onClose, refetch, ...other }) {
   const { user } = useAuthContext();
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSServiceTypes(user?.employee_engagement?.unit_service._id);
-  const { workGroupsData } = useGetUSWorkGroups(user.employee_engagement?.unit_service?._id);
-  const { workShiftsData } = useGetUSWorkShifts(user?.employee_engagement?.unit_service._id);
+  const { serviceTypesData } = useGetUSServiceTypes(
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+  );
+  const { workGroupsData } = useGetUSWorkGroups(
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service?._id
+  );
+  const { workShiftsData } = useGetUSWorkShifts(
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+  );
 
   console.log('workGroupsData', workGroupsData);
 
@@ -84,7 +90,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
       await axios.post(endpoints.tables.appointments, {
         ...data,
         emergency: true,
-        unit_service: user?.employee_engagement?.unit_service._id,
+        unit_service:
+          user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id,
       });
       reset();
       enqueueSnackbar('Create success!');
@@ -123,7 +130,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
                       onChange={(newValue) => {
                         const selectedTime = zonedTimeToUtc(
                           newValue,
-                          user?.employee_engagement?.unit_service?.country?.time_zone
+                          user?.employee?.employee_engagements[user.employee.selected_engagement]
+                            ?.unit_service?.country?.time_zone
                         );
                         setValue('start_time', new Date(selectedTime));
                       }}

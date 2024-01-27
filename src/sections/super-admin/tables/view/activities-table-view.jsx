@@ -48,6 +48,7 @@ import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../activities/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -88,7 +89,7 @@ export default function ActivitesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { activitiesData, refetch } = useGetActivities();
+  const { activitiesData, loading, refetch } = useGetActivities();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -226,6 +227,9 @@ export default function ActivitesTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

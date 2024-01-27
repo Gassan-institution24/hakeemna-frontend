@@ -4,13 +4,14 @@ import AppointmentInfoView from 'src/sections/unit-service/appointments/view/inf
 import { useGetAppointment } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
 export default function AppointmentEditPage() {
   const params = useParams();
   const { id } = params;
-  const { data } = useGetAppointment(id);
+  const { data,loading } = useGetAppointment(id);
   const name = data?.name_english;
   return (
     <>
@@ -18,8 +19,8 @@ export default function AppointmentEditPage() {
       <Helmet>
         <title>{name||''} Appointment Info</title>
       </Helmet>
-
-      {data &&<AppointmentInfoView appointmentData={data} />}
+      {loading&& <LoadingScreen/>}
+      {!loading &&<AppointmentInfoView appointmentData={data} />}
       </ACLGuard>
     </>
   );

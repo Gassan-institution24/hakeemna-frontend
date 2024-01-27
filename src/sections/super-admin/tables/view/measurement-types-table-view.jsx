@@ -48,6 +48,7 @@ import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../measurement_types/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -87,7 +88,7 @@ export default function MeasurmentTypesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { measurmentTypesData, refetch } = useGetMeasurmentTypes();
+  const { measurmentTypesData, loading, refetch } = useGetMeasurmentTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -225,6 +226,9 @@ export default function MeasurmentTypesTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

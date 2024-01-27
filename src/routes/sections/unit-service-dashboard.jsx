@@ -13,18 +13,42 @@ import RecieptsInfoPage from 'src/pages/employee/accounting/reciepts/info';
 const DepartmentsHomePage = lazy(() => import('src/pages/unit-service/departments/home'));
 const DepartmentsNewPage = lazy(() => import('src/pages/unit-service/departments/new'));
 const DepartmentsInfoPage = lazy(() => import('src/pages/unit-service/departments/info'));
-const DepartmentsEmployeesPage = lazy(() => import('src/pages/unit-service/departments/employees/home'));
-const DepartmentsEmployeesNewPage = lazy(() => import('src/pages/unit-service/departments/employees/new'));
-const DepartmentsEmployeesInfoPage = lazy(() => import('src/pages/unit-service/departments/employees/info'));
-const DepartmentsEmployeesAppointmentsPage = lazy(() => import('src/pages/unit-service/departments/employees/appointment'));
-const DepartmentsEmployeesAppointmentConfigDetailPage = lazy(() => import('src/pages/unit-service/departments/employees/appoint-config-detail'));
-const DepartmentsEmployeesAppointmentConfigPage = lazy(() => import('src/pages/unit-service/departments/employees/appoint-config'));
-const DepartmentsEmployeesAccountingPage = lazy(() => import('src/pages/unit-service/departments/employees/accounting'));
-const DepartmentsEmployeesFeedbackPage = lazy(() => import('src/pages/unit-service/departments/employees/feedback'));
-const DepartmentsEmployeesAttendencePage = lazy(() => import('src/pages/unit-service/departments/employees/attendence'));
-const DepartmentsEmployeesOffersPage = lazy(() => import('src/pages/unit-service/departments/employees/offers'));
-const DepartmentsEmployeesActivitiesPage = lazy(() => import('src/pages/unit-service/departments/employees/activities'));
-const DepartmentsEmployeesACLPage = lazy(() => import('src/pages/unit-service/departments/employees/acl'));
+const DepartmentsEmployeesPage = lazy(() =>
+  import('src/pages/unit-service/departments/employees/home')
+);
+const DepartmentsEmployeesNewPage = lazy(() =>
+  import('src/pages/unit-service/departments/employees/new')
+);
+const DepartmentsEmployeesInfoPage = lazy(() =>
+  import('src/pages/unit-service/departments/employees/info')
+);
+const DepartmentsEmployeesAppointmentsPage = lazy(() =>
+  import('src/pages/unit-service/departments/employees/appointment')
+);
+const DepartmentsEmployeesAppointmentConfigDetailPage = lazy(() =>
+  import('src/pages/unit-service/departments/employees/appoint-config-detail')
+);
+const DepartmentsEmployeesAppointmentConfigPage = lazy(() =>
+  import('src/pages/unit-service/departments/employees/appoint-config')
+);
+const DepartmentsEmployeesAccountingPage = lazy(() =>
+  import('src/pages/unit-service/departments/employees/accounting')
+);
+const DepartmentsEmployeesFeedbackPage = lazy(() =>
+  import('src/pages/unit-service/departments/employees/feedback')
+);
+const DepartmentsEmployeesAttendencePage = lazy(() =>
+  import('src/pages/unit-service/departments/employees/attendence')
+);
+const DepartmentsEmployeesOffersPage = lazy(() =>
+  import('src/pages/unit-service/departments/employees/offers')
+);
+const DepartmentsEmployeesActivitiesPage = lazy(() =>
+  import('src/pages/unit-service/departments/employees/activities')
+);
+const DepartmentsEmployeesACLPage = lazy(() =>
+  import('src/pages/unit-service/departments/employees/acl')
+);
 const DepartmentsAccountingPage = lazy(() =>
   import('src/pages/unit-service/departments/accounting')
 );
@@ -51,8 +75,12 @@ const DepartmentsNewRoomsPage = lazy(() => import('src/pages/unit-service/depart
 const DepartmentsEditRoomsPage = lazy(() =>
   import('src/pages/unit-service/departments/rooms/edit')
 );
-const DepartmentsWorkGroupsPage = lazy(() => import('src/pages/unit-service/departments/work-groups/rooms'));
-const DepartmentsNewWorkGroupsPage = lazy(() => import('src/pages/unit-service/departments/work-groups/add'));
+const DepartmentsWorkGroupsPage = lazy(() =>
+  import('src/pages/unit-service/departments/work-groups/home')
+);
+const DepartmentsNewWorkGroupsPage = lazy(() =>
+  import('src/pages/unit-service/departments/work-groups/add')
+);
 const DepartmentsEditWorkGroupsPage = lazy(() =>
   import('src/pages/unit-service/departments/work-groups/edit')
 );
@@ -72,12 +100,8 @@ const EmployeesAppointmentConfigDetailsPage = lazy(() =>
 const EmployeesNewAppointmentConfigPage = lazy(() =>
   import('src/pages/unit-service/employees/new-appoint-config')
 );
-const EmployeesAccountingPage = lazy(() =>
-  import('src/pages/unit-service/employees/accounting')
-);
-const EmployeesFeedbackPage = lazy(() =>
-  import('src/pages/unit-service/employees/feedback')
-);
+const EmployeesAccountingPage = lazy(() => import('src/pages/unit-service/employees/accounting'));
+const EmployeesFeedbackPage = lazy(() => import('src/pages/unit-service/employees/feedback'));
 const EmployeesAttendencePage = lazy(() => import('src/pages/unit-service/employees/attendence'));
 const EmployeesOffersPage = lazy(() => import('src/pages/unit-service/employees/offers'));
 const EmployeesActivitiesPage = lazy(() => import('src/pages/unit-service/employees/activities'));
@@ -225,8 +249,14 @@ export const unitServiceDashboardRoutes = [
                 children: [
                   { path: 'info', element: <DepartmentsEmployeesInfoPage /> },
                   { path: 'appointments', element: <DepartmentsEmployeesAppointmentsPage /> },
-                  { path: 'appointmentconfig/:coid', element: <DepartmentsEmployeesAppointmentConfigDetailPage /> },
-                  { path: 'appointmentconfig', element: <DepartmentsEmployeesAppointmentConfigPage /> },
+                  {
+                    path: 'appointmentconfig/:coid',
+                    element: <DepartmentsEmployeesAppointmentConfigDetailPage />,
+                  },
+                  {
+                    path: 'appointmentconfig',
+                    element: <DepartmentsEmployeesAppointmentConfigPage />,
+                  },
                   { path: 'accounting', element: <DepartmentsEmployeesAccountingPage /> },
                   { path: 'feedback', element: <DepartmentsEmployeesFeedbackPage /> },
                   { path: 'attendence', element: <DepartmentsEmployeesAttendencePage /> },
@@ -285,7 +315,10 @@ export const unitServiceDashboardRoutes = [
               { path: 'appointments', element: <EmployeesAppointmentsPage /> },
               { path: 'appointmentconfig', element: <EmployeesAppointmentConfigPage /> },
               { path: 'appointmentconfig/new', element: <EmployeesNewAppointmentConfigPage /> },
-              { path: 'appointmentconfig/:coid', element: <EmployeesAppointmentConfigDetailsPage /> },
+              {
+                path: 'appointmentconfig/:coid',
+                element: <EmployeesAppointmentConfigDetailsPage />,
+              },
               { path: 'accounting', element: <EmployeesAccountingPage /> },
               { path: 'feedback', element: <EmployeesFeedbackPage /> },
               { path: 'attendence', element: <EmployeesAttendencePage /> },

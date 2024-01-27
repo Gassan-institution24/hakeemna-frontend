@@ -135,7 +135,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const defaultValues = useMemo(
     () => ({
       unit_service:
-        appointmentConfigData?.unit_service || user?.employee_engagement?.unit_service._id,
+        appointmentConfigData?.unit_service ||
+        user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id,
       department: appointmentConfigData?.department || null,
       start_date: appointmentConfigData?.start_date || null,
       end_date: appointmentConfigData?.end_date || null,
@@ -185,46 +186,39 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   } = methods;
 
   const handleSaving = async () => {
-    saving.onTrue()
-    try{
-      await axios.patch(
-        `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
-        {
-          ...dataToUpdate,
-          ImmediateEdit: false,
-        }
-        );
-        enqueueSnackbar('Updated successfully!');
-        confirm.onFalse();
-        router.push(paths.employee.appointmentconfiguration.root);
-        saving.onFalse()
-    }
-    catch(e){
-      enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
-      saving.onFalse()
-    }
-  }
-  const handleUpdating = async () => {
-    updating.onTrue()
+    saving.onTrue();
     try {
-      await axios.patch(
-        `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
-        {
-          ...dataToUpdate,
-          ImmediateEdit: true,
-        }
-        );
-        enqueueSnackbar('Updated successfully!');
-        router.push(paths.employee.appointmentconfiguration.root);
-        confirm.onFalse();
-        updating.onFalse()
-        // await refetch();
-      } catch (e) {
-        enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
-        confirm.onFalse();
-        updating.onFalse()
+      await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
+        ...dataToUpdate,
+        ImmediateEdit: false,
+      });
+      enqueueSnackbar('Updated successfully!');
+      confirm.onFalse();
+      router.push(paths.employee.appointmentconfiguration.root);
+      saving.onFalse();
+    } catch (e) {
+      enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
+      saving.onFalse();
     }
-  }
+  };
+  const handleUpdating = async () => {
+    updating.onTrue();
+    try {
+      await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
+        ...dataToUpdate,
+        ImmediateEdit: true,
+      });
+      enqueueSnackbar('Updated successfully!');
+      router.push(paths.employee.appointmentconfiguration.root);
+      confirm.onFalse();
+      updating.onFalse();
+      // await refetch();
+    } catch (e) {
+      enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
+      confirm.onFalse();
+      updating.onFalse();
+    }
+  };
 
   const handleSave = handleSubmit(async (data) => {
     loadingSend.onTrue();
@@ -267,7 +261,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     if (appointmentConfigData) {
       methods.reset({
         unit_service:
-          appointmentConfigData?.unit_service || user?.employee_engagement?.unit_service._id,
+          appointmentConfigData?.unit_service ||
+          user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id,
         department: appointmentConfigData?.department || null,
         start_date: appointmentConfigData?.start_date || null,
         end_date: appointmentConfigData?.end_date || null,
@@ -367,7 +362,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
               Yes, I want to change
             </LoadingButton>
             <LoadingButton
-            loading={saving}
+              loading={saving}
               variant="contained"
               color="success"
               onClick={handleSaving}

@@ -48,6 +48,7 @@ import { useGetSpecialties } from 'src/api/tables'; /// edit
 import TableDetailRow from '../specialties/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -87,7 +88,7 @@ export default function SpecialtiesTableView() {
   // const confirmActivate = useBoolean();
   // const confirmInactivate = useBoolean();
 
-  const { specialtiesData } = useGetSpecialties();
+  const { specialtiesData, loading } = useGetSpecialties();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -226,6 +227,9 @@ export default function SpecialtiesTableView() {
   //   },
   //   [handleFilters]
   // );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

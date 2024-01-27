@@ -44,6 +44,7 @@ import {
 } from 'src/components/table';
 import { useGetUSLicenseMovement } from 'src/api/tables';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import TableAnalytic from '../../patients/history/table-analytic';
 import AccountingTableRow from './accounting-table-row';
 import MovementTableToolbar from './accounting-table-toolbar';
@@ -84,9 +85,8 @@ export default function USlicenseMovementView({ unitServiceData }) {
 
   // const confirm = useBoolean();
 
-  const { licenseMovements, refetch } = useGetUSLicenseMovement(unitServiceData._id);
-  console.log('licenseMovements', unitServiceData._id);
-  console.log('licenseMovements', licenseMovements);
+  const { licenseMovements, loading, refetch } = useGetUSLicenseMovement(unitServiceData._id);
+
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -223,6 +223,8 @@ export default function USlicenseMovementView({ unitServiceData }) {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

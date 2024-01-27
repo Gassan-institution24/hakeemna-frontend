@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 import OffersHomeView from 'src/sections/unit-service/offers/view/home';
 
@@ -7,11 +8,13 @@ import OffersHomeView from 'src/sections/unit-service/offers/view/home';
 export default function OffersHomePage() {
   return (
     <>
-      <Helmet>
-        <title>Offers</title>
-      </Helmet>
+      <ACLGuard hasContent category="appointment_config" acl="read">
+        <Helmet>
+          <title>Offers</title>
+        </Helmet>
 
-      <OffersHomeView />
+        <OffersHomeView />
+      </ACLGuard>
     </>
   );
 }

@@ -44,6 +44,7 @@ import {
 } from 'src/components/table';
 import { useGetStakeholderLicenseMovement } from 'src/api/tables';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import TableAnalytic from '../../patients/history/table-analytic';
 import AccountingTableRow from './accounting-table-row';
 import MovementTableToolbar from './accounting-table-toolbar';
@@ -84,9 +85,8 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
 
   // const confirm = useBoolean();
 
-  const { licenseMovements, refetch } = useGetStakeholderLicenseMovement(stakeholderData._id);
-  console.log('licenseMovements', stakeholderData._id);
-  console.log('licenseMovements', licenseMovements);
+  const { licenseMovements,loading,  refetch } = useGetStakeholderLicenseMovement(stakeholderData._id);
+
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -223,6 +223,8 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

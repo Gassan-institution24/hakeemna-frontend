@@ -35,6 +35,7 @@ import { useGetDiseases } from 'src/api/tables'; /// edit
 import TableDetailRow from '../diseases/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -72,7 +73,9 @@ export default function DiseasesTableView() {
 
   const router = useRouter();
 
-  const { tableData } = useGetDiseases();
+  const { tableData, loading } = useGetDiseases();
+
+  if(loading) {return(<LoadingScreen/>)}
 
   const [filters, setFilters] = useState(defaultFilters);
 

@@ -37,6 +37,7 @@ import { useGetSymptoms } from 'src/api/tables'; /// edit
 import TableDetailRow from '../symptoms/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -77,7 +78,7 @@ export default function SymptomsTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { tableData, refetch } = useGetSymptoms();
+  const { tableData, loading, refetch } = useGetSymptoms();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -149,12 +150,7 @@ export default function SymptomsTableView() {
     setFilters(defaultFilters);
   }, []);
 
-  // const handleViewRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.order.details(id));
-  //   },
-  //   [router]
-  // );
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

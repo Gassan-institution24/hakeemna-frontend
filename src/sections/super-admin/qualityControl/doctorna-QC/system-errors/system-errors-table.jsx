@@ -47,6 +47,7 @@ import { useTranslate } from 'src/locales';
 import ErrosRow from './errors-row'; /// edit
 import FeedbackToolbar from './errors-toolbar';
 import TableDetailFiltersResult from './table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -85,7 +86,7 @@ export default function DoctornaSystemErrorsView() {
 
   const router = useRouter();
 
-  const { systemErrorsData, refetch } = useGetSystemErrors();
+  const { systemErrorsData, loading, refetch } = useGetSystemErrors();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -182,6 +183,8 @@ export default function DoctornaSystemErrorsView() {
     },
     [dataInPage.length, table, refetch]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

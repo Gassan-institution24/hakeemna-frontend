@@ -49,6 +49,23 @@ export default function FileManagerView() {
   const upload = useBoolean();
 
   const [view, setView] = useState('list');
+  
+  const {
+    dense,
+    page,
+    order,
+    orderBy,
+    rowsPerPage,
+    //
+    selected,
+    onSelectRow,
+    onSelectAllRows,
+    //
+    onSort,
+    onChangeDense,
+    onChangePage,
+    onChangeRowsPerPage,
+  } = table;
 
   const [tableData, setTableData] = useState(_allFiles);
 

@@ -44,6 +44,7 @@ import {
 } from 'src/components/table';
 import { useGetStakeholderLicenseMovements } from 'src/api/tables';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import TableAnalytic from '../../patients/history/table-analytic';
 import AccountingTableRow from './accounting-table-row';
 import MovementTableToolbar from './accounting-table-toolbar';
@@ -79,7 +80,7 @@ export default function LicenseMovementsView() {
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
-  const { licenseMovements, refetch } = useGetStakeholderLicenseMovements();
+  const { licenseMovements, loading, refetch } = useGetStakeholderLicenseMovements();
 
   const separateEachUsMovement = useCallback(() => {
     const results = {};
@@ -205,6 +206,8 @@ export default function LicenseMovementsView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

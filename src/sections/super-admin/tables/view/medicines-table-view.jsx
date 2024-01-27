@@ -45,6 +45,7 @@ import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from '../medicines/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -84,7 +85,7 @@ export default function MedicinesTableView() {
 
   const router = useRouter();
 
-  const { medicines, refetch } = useGetMedicines();
+  const { medicines, loading, refetch } = useGetMedicines();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -221,6 +222,9 @@ export default function MedicinesTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

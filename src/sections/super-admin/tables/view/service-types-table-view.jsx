@@ -48,6 +48,7 @@ import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../service_types/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -90,7 +91,7 @@ export default function ServiceTypesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { serviceTypesData, refetch } = useGetServiceTypes();
+  const { serviceTypesData, loading, refetch } = useGetServiceTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -228,6 +229,9 @@ export default function ServiceTypesTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

@@ -40,6 +40,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetEmployeeFeedbackes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
@@ -91,7 +92,7 @@ export default function DepartmentFeedbackView() {
 
   const router = useRouter();
 
-  const { feedbackData } = useGetEmployeeFeedbackes(user?.employee_engagement?.employee?._id);
+  const { feedbackData, loading } = useGetEmployeeFeedbackes(user?.employee?._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -157,6 +158,11 @@ export default function DepartmentFeedbackView() {
     },
     [handleFilters]
   );
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

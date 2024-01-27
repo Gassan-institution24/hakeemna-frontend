@@ -40,6 +40,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetPatientFeedbacks } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
@@ -91,7 +92,7 @@ export default function PatientFeedbackView({ patientData }) {
 
   const router = useRouter();
 
-  const { feedbackData } = useGetPatientFeedbacks(id);
+  const { feedbackData, loading } = useGetPatientFeedbacks(id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -165,6 +166,9 @@ export default function PatientFeedbackView({ patientData }) {
     (patientData?.first_name && patientData?.first_name) ||
     (patientData?.last_name && patientData?.last_name) ||
     'Patient';
+
+    if(loading) {return(<LoadingScreen/>)}
+    
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

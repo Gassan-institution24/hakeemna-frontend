@@ -38,7 +38,9 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
   const { id } = useParams();
 
   const { workGroupsData } = useGetEmployeeWorkGroups(id);
-  const { workShiftsData } = useGetUSWorkShifts(user?.employee_engagement?.unit_service._id);
+  const { workShiftsData } = useGetUSWorkShifts(
+    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+  );
 
   return (
     <>
@@ -114,10 +116,10 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             disabled={Boolean(appointmentConfigData)}
           >
             {workShiftsData.map((option) => (
-                <MenuItem key={option._id} value={option._id}>
-                  {option.name_english}
-                </MenuItem>
-              ))}
+              <MenuItem key={option._id} value={option._id}>
+                {option.name_english}
+              </MenuItem>
+            ))}
           </RHFSelect>
           <RHFSelect
             size="small"

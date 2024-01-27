@@ -48,6 +48,7 @@ import PaymentControlAnalytic from '../table-analytic';
 import PaymentControlRow from './payment-control-row';
 import PaymentControlTableToolbar from './payment-table-toolbar';
 import PaymentTableFiltersResult from './payment-control-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -85,7 +86,7 @@ export default function IncomePaymentControlView({ patientData }) {
 
   // const confirm = useBoolean();
 
-  const { incomePaymentData, refetch } = useGetPatientIncomePaymentControl(patientData._id);
+  const { incomePaymentData, loading, refetch } = useGetPatientIncomePaymentControl(patientData._id);
 
   const unitServiceOptions = incomePaymentData.reduce((arr, data) => {
     // Check if the name_english is not already in the array
@@ -211,6 +212,8 @@ export default function IncomePaymentControlView({ patientData }) {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

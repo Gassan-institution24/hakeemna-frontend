@@ -47,6 +47,7 @@ import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from '../surgeries/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -85,7 +86,7 @@ export default function SurgeriesTableView() {
 
   const settings = useSettingsContext();
 
-  const { tableData, refetch } = useGetSurgeries();
+  const { tableData, loading, refetch } = useGetSurgeries();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -157,6 +158,8 @@ export default function SurgeriesTableView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

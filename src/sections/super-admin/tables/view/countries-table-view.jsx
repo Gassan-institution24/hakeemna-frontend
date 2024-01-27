@@ -48,6 +48,7 @@ import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from '../countries/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -89,7 +90,7 @@ export default function CountriesTableView() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { countriesData, refetch } = useGetCountries();
+  const { countriesData, loading, refetch } = useGetCountries();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -229,6 +230,9 @@ export default function CountriesTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

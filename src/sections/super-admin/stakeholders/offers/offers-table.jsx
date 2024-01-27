@@ -48,6 +48,7 @@ import { useTranslate } from 'src/locales';
 import OfferTableRow from './offer-row'; /// edit
 import FeedbackToolbar from './offers-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -96,7 +97,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
 
   const router = useRouter();
 
-  const { offersData, refetch } = useGetStakeholderOffers(id);
+  const { offersData, loading, refetch } = useGetStakeholderOffers(id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -232,6 +233,8 @@ export default function StakeholderOffersView({ stakeholderData }) {
       totalRowsFiltered: dataFiltered.length,
     });
   }, [dataFiltered.length, dataInPage.length, table, offersData, refetch]);
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>
