@@ -137,6 +137,7 @@ export const endpoints = {
     patients: '/api/patient',
     findPatients: '/api/patient/find',
     patient: (id) => `/api/patient/${id}`,
+    oldpatient: () => `/api/oldpatientsdata/details`,
     unitServiceLicenseMovement: (id) => `/api/licensemovements/unitservice/${id}`,
     unitServiceLicenseMovements: `/api/licensemovements/unitservice`,
     stakeholderLicenseMovement: (id) => `/api/licensemovements/stakeholder/${id}`,

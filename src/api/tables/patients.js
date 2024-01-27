@@ -26,9 +26,7 @@ export function useGetPatients() {
   }
   
   export function useGetPatient(id) {
-    const URL = endpoints.tables.patient(id);
-    // console.log('url',URL)
-  
+    const URL = endpoints.tables.patient(id); 
     const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
     const memoizedValue = useMemo(
       () => ({
@@ -47,6 +45,31 @@ export function useGetPatients() {
   
     return { ...memoizedValue, refetch };
   }
+  
+
+  export function useGetOldPatient() {
+    const URL = endpoints.tables.oldpatient(); 
+    const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+    const memoizedValue = useMemo(
+      () => ({
+        data,
+        loading: isLoading,
+        error,
+        validating: isValidating,
+        empty: !isLoading && !data?.length,
+      }),
+      [data, error, isLoading, isValidating]
+    );
+    const refetch = async () => {
+      // Use the mutate function to re-fetch the data for the specified key (URL)
+      await mutate(URL);
+    };
+  
+    return { ...memoizedValue, refetch };
+  }
+
+
+
   
   export function useGetFindPatient(obj) {
     const URL = endpoints.tables.findPatients;
