@@ -20,7 +20,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import Image from 'src/components/image/image';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
- 
+
 import {
   Page,
   Text,
@@ -42,13 +42,14 @@ export default function FormDialog() {
   const [files, setFiles] = useState(null);
   const [filesPdf, setfilesPdf] = useState([]);
   const [filesPdftodelete, setfilesPdftodelete] = useState([]);
+
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/api/oldDrugsPerscription');
+        const response = await axios.get('/api/oldmedicalreports');
         setfilesPdf(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -59,13 +60,13 @@ export default function FormDialog() {
   }, []);
 
 
+
   const delteeFile = async () => {
     try {
-      await axios.delete(`/api/oldDrugsPerscription/${filesPdftodelete._id}`);
+      await axios.delete(`/api/oldmedicalreports/${filesPdftodelete._id}`);
       enqueueSnackbar('Medical report deleted successfully', { variant: 'success' });
-      const response = await axios.get('/api/oldDrugsPerscription');
+      const response = await axios.get('/api/oldmedicalreports');
       setfilesPdf(response.data);
-
     } catch (error) {
       console.error('Error fetching data:', error);
       enqueueSnackbar('Unable to delete', { variant: 'error' });
@@ -107,7 +108,7 @@ export default function FormDialog() {
     },
   });
   const router = useRouter();
-  const oldPresctiptionSchema = Yup.object().shape({
+  const oldMedicalReportsSchema = Yup.object().shape({
     type: Yup.string().required(),
     date: Yup.date().required(),
     file: Yup.string().required(),
@@ -121,7 +122,7 @@ export default function FormDialog() {
     file: '',
   };
 
-  const PrescriptionPDF = (
+  const MedicalreportsnPDF = (
     { info } // Destructure info from props
   ) => (
     <Document>
@@ -155,7 +156,7 @@ export default function FormDialog() {
     </Document>
   );
 
-  PrescriptionPDF.propTypes = {
+  MedicalreportsnPDF.propTypes = {
     info: PropTypes.shape({
       type: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
@@ -164,7 +165,7 @@ export default function FormDialog() {
     }),
   };
   const methods = useForm({
-    resolver: yupResolver(oldPresctiptionSchema),
+    resolver: yupResolver(oldMedicalReportsSchema),
     defaultValues,
   });
   const {
@@ -218,26 +219,21 @@ export default function FormDialog() {
     });
 
     if (files) {
-      formData.append('prescriptions', files);
+      formData.append('medicalreports', files);
     }
 
     try {
-      const response = await axios.post('/api/oldDrugsPerscription', formData);
-
-      if (response.status === 200) {
-        enqueueSnackbar('Prescription uploaded successfully', { variant: 'success' });
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      } else {
-        throw new Error('Failed to upload prescription');
-      }
+      await axios.post('/api/oldmedicalreports', formData);
+      enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
+      dialog.onFalse();
+      const response = await axios.get('/api/oldmedicalreports');
+      setfilesPdf(response.data);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('Failed to upload prescription', { variant: 'error' });
+      enqueueSnackbar('Failed to upload medical report', { variant: 'error' });
     }
   };
-  const patientIdToDelete = filesPdftodelete._id
+  const patientIdToDelete = filesPdftodelete._id;
   return (
     <>
       <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ gap: 1, mb: 5 }}>
@@ -325,11 +321,13 @@ export default function FormDialog() {
                   mb: '15px',
                 }}
               />
-              <IconButton onClick={(event)=>{
-                popover.onOpen(event)
-                setfilesPdftodelete(info)
-              }}
-              sx={{ position: 'absolute' }}>
+              <IconButton
+                onClick={(event) => {
+                  popover.onOpen(event);
+                  setfilesPdftodelete(info);
+                }}
+                sx={{ position: 'absolute' }}
+              >
                 <Iconify icon="eva:more-vertical-fill" />
               </IconButton>
               <ListItemText>{info.type} File</ListItemText>
@@ -343,7 +341,7 @@ export default function FormDialog() {
             >
               <PDFDownloadLink
                 key={i}
-                document={<PrescriptionPDF info={info} />}
+                document={<MedicalreportsnPDF info={info} />}
                 fileName={`${user?.patient.first_name} ${info.type} MediacalReport.pdf`}
                 style={styles.line}
               >
@@ -358,7 +356,11 @@ export default function FormDialog() {
                 </MenuItem>
               </PDFDownloadLink>
               <MenuItem
-                onClick={delteeFile}
+                onClick={() => {
+                  delteeFile();
+                  popover.onClose();
+                }}
+                onClose={popover.onClose}
                 sx={{ color: 'red' }}
               >
                 <Iconify icon="material-symbols:delete-outline" />

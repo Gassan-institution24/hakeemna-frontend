@@ -23,7 +23,6 @@ import Doclogo from '../../components/logo/doc.png';
 
 export default function Medicalreports() {
   const { user } = useAuthContext();
-  console.log(user);
   const styles = StyleSheet.create({
     icon: {
       color: 'blue',
