@@ -55,7 +55,7 @@ export default function TimeOutInActive() {
   useEffect(() => {
     const checkAndLogout = async () => {
       if (
-        user.employee.employee_engagements[user.employee.selected_engagement] &&
+        user.employee?.employee_engagements[user.employee.selected_engagement] &&
         user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service
           .status === 'inactive' &&
         new Date(
