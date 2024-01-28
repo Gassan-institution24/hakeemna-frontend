@@ -120,7 +120,7 @@ export default function Medicalreports() {
                 Name: {user?.patient?.first_name} {user?.patient?.last_name}
               </Text>
               <Text style={styles.text2}>Age: {fDate(user?.patient.birth_date)}</Text>
-              <Text style={styles.text2}>ID no: {user?.patient.identification_num}</Text>
+              <Text style={styles.text2}>ID no: {user?.patient?.identification_num}</Text>
             </View>
             <View style={styles.gridFooter}>
               <Text>{info?.description}</Text>

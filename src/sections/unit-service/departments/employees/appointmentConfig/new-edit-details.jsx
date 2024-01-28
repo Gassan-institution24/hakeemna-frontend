@@ -38,11 +38,11 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
   const { id } = useParams();
 
   const { workGroupsData } = useGetUSEmployeeWorkGroups(
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id,
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
     id
   );
   const { workShiftsData } = useGetUSWorkShifts(
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
   return (

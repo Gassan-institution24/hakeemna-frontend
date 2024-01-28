@@ -94,7 +94,7 @@ export default function UnitServicesTableView() {
   const router = useRouter();
 
   const { departmentsData, loading, refetch } = useGetUSDepartments(
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
   const [filters, setFilters] = useState(defaultFilters);

@@ -11,7 +11,7 @@ import AppointmentsHomeView from 'src/sections/unit-service/appointments/view/ho
 export default function AppointmentsHomePage() {
   const { user } = useAuthContext();
   const { appointmentsData, loading, refetch } = useGetUSAppointments(
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
   return (
     <>

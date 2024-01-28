@@ -102,7 +102,7 @@ export default function UnitServicesInsuranceView() {
   const { insuranseCosData, loading } = useGetInsuranceCos();
 
   const { data, refetch } = useGetUnitservice(
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
   const filteredInsuranceCos = insuranseCosData
     .filter((company) => !data?.insurance?.some((info) => info._id === company._id))

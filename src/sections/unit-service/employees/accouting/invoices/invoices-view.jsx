@@ -89,7 +89,7 @@ export default function EconomicMovementsView({ employeeData }) {
   // const confirm = useBoolean();
 
   const { economecMovementsData, refetch } = useGetUSEconomicMovements(
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
   console.log('employeeData', employeeData);

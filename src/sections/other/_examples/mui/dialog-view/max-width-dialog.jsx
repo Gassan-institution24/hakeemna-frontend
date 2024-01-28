@@ -38,7 +38,7 @@ export default function MaxWidthDialog() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/api/appointments/patient/${user.patient._id}/lastappointment`
+          `/api/appointments/patient/${user?.patient._id}/lastappointment`
         );
         setAppointment(response?.data);
       } catch (error) {
@@ -48,7 +48,7 @@ export default function MaxWidthDialog() {
     };
 
     fetchData();
-  }, [user.patient]);
+  }, [user?.patient]);
 
   const skipfunction = async () => {
     try {
@@ -103,7 +103,7 @@ export default function MaxWidthDialog() {
         ...data,
         Selection: selectedValue,
         Rate: rating,
-        patient: user.patient._id,
+        patient: user?.patient._id,
         appointment: appointment._id,
         department: appointment.department?._id,
         unit_service: appointment.unit_service?._id,
@@ -224,7 +224,7 @@ export default function MaxWidthDialog() {
               </>
             );
           }
-          return  <Typography>you dont have any appointments for today</Typography> 
+          return <Typography>you dont have any appointments for today</Typography>;
         })()}
     </>
   );
