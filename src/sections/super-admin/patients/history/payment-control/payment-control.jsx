@@ -44,11 +44,11 @@ import {
 } from 'src/components/table';
 import { useGetPatientIncomePaymentControl } from 'src/api/tables';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import PaymentControlAnalytic from '../table-analytic';
 import PaymentControlRow from './payment-control-row';
 import PaymentControlTableToolbar from './payment-table-toolbar';
 import PaymentTableFiltersResult from './payment-control-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

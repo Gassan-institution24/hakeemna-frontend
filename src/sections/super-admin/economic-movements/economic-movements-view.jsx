@@ -43,11 +43,11 @@ import {
 } from 'src/components/table';
 import { useGetEconomicMovements } from 'src/api/tables/economic-movements';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import MovementsAnalytic from './movement-analytic';
 import MovementRow from './movement-table-row';
 import MovementTableToolbar from './movement-table-toolbar';
 import MovementTableFiltersResult from './movement-table-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

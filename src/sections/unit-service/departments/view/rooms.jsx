@@ -43,13 +43,13 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetDepartmentRooms } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../rooms/table-details-row'; /// edit
 import TableDetailToolbar from '../rooms/table-details-toolbar';
 import TableDetailFiltersResult from '../rooms/table-details-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

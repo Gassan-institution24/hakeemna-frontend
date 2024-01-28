@@ -31,11 +31,11 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetCurrencies } from 'src/api/tables'; /// edit
 import TableDetailRow from '../currency/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -73,8 +73,6 @@ export default function CurrencyTableView() {
   const router = useRouter();
 
   const { currencies, loading } = useGetCurrencies();
-
-  if(loading) {return(<LoadingScreen/>)}
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -153,6 +151,8 @@ export default function CurrencyTableView() {
   //   },
   //   [router]
   // );
+
+  if(loading) {return(<LoadingScreen/>)}
 
   return (
     <>

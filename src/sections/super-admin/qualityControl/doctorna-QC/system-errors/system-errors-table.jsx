@@ -40,6 +40,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetSystemErrors } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
@@ -47,7 +48,6 @@ import { useTranslate } from 'src/locales';
 import ErrosRow from './errors-row'; /// edit
 import FeedbackToolbar from './errors-toolbar';
 import TableDetailFiltersResult from './table-details-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

@@ -44,11 +44,11 @@ import {
 } from 'src/components/table';
 import { useGetPatientEconomicMovements } from 'src/api/tables';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import MovementsAnalytic from '../table-analytic';
 import MovementRow from './invoice-table-row';
 import MovementTableToolbar from './invoices-table-toolbar';
 import MovementTableFiltersResult from './invoices-table-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

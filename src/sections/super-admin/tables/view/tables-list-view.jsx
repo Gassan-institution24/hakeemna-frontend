@@ -30,10 +30,10 @@ import {
   TableHeadCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import TablesTableRow from '../tables-table-row';
 import TablesTableToolbar from '../tables-table-toolbar';
 import TablesTableFiltersResult from '../tables-table-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

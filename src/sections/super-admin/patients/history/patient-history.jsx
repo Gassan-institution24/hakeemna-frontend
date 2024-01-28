@@ -26,11 +26,11 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 
 import { useGetPatientAppointments } from 'src/api/tables';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import AppointHistory from './appointment-history/appoint-history';
 import EconomicMovementsView from './invoices/invoices-view';
 import PaymentControlView from './payment-control/payment-control';
 import PatientHistoryAnalytic from './appointment-history/appoint-history-analytic';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

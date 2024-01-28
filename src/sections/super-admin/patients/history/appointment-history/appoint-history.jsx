@@ -42,12 +42,12 @@ import {
 
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetAppointmentTypes, useGetPatientAppointments } from 'src/api/tables';
 // import PatientHistoryAnalytic from './appoint-history-analytic';
 import PatientHistoryRow from './appoint-history-row';
 import PatientHistoryToolbar from './appoint-history-toolbar';
 import HistoryFiltersResult from './appoint-history-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

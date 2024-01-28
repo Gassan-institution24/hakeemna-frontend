@@ -42,13 +42,13 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetDeductions } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../deduction_config/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -96,8 +96,6 @@ export default function DeductionConfigTableView() {
   const confirmInactivate = useBoolean();
 
   const { deductionsData, loading, refetch } = useGetDeductions();
-
-  if(loading) {return(<LoadingScreen/>)}
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -235,6 +233,9 @@ export default function DeductionConfigTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

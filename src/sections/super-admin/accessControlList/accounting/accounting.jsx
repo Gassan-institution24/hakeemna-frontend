@@ -47,6 +47,7 @@ import { useTranslate } from 'src/locales';
 import AccountingRow from './accounting-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
