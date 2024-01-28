@@ -22,7 +22,6 @@ export default function ProfileHome() {
     return '';
   }
   const { user } = useAuthContext();
-  console.log(user?.patient);
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
       {user?.patient.drug_allergies?.length > 0 && (

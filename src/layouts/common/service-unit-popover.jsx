@@ -83,15 +83,12 @@ export default function ServiceUnitPopover() {
         }}
       >
         <Typography variant="body1" sx={{ textAlign: 'center' }}>
-          {selected?.unit_service?.name_english
-            .split(' ')
-            .map((word) => word.charAt(0).toUpperCase())
-            .join('')}
+          {selected.unit_service.name_english.split(' ').map(word => word.charAt(0).toUpperCase()).join('')}
         </Typography>
       </IconButton>
 
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 160 }}>
-        {user?.employee?.employee_engagements.map((option, index) => (
+        {user.employee.employee_engagements.map((option,index) => (
           <MenuItem
             key={option.unit_service?._id}
             selected={option?.unit_service?._id === selected?.unit_service?._id}
