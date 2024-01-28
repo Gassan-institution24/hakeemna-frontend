@@ -48,13 +48,13 @@ import { endpoints } from 'src/utils/axios';
 
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { enqueueSnackbar } from 'notistack';
 import { useGetInsuranceCos } from 'src/api/tables';
 import { useTranslate } from 'src/locales';
 import InsuranceRow from './patient-insurance-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

@@ -19,7 +19,7 @@ export default function WorkShiftEditPage() {
         <Helmet>
           <title>Edit {name || ''} Work Shift</title>
         </Helmet>
-        {loading&& <LoadingScreen/>}
+        {loading && <LoadingScreen />}
         {!loading && <WorkShiftEditView workShiftData={data} />}
       </ACLGuard>
     </>

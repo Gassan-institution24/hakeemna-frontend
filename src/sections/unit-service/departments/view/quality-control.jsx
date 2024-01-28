@@ -40,6 +40,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetDepartmentFeedbackes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
@@ -47,7 +48,6 @@ import { useTranslate } from 'src/locales';
 import FeedbackRow from '../quality-control/feedback-row'; /// edit
 import FeedbackToolbar from '../quality-control/feedback-toolbar';
 import TableDetailFiltersResult from '../quality-control/feedback-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

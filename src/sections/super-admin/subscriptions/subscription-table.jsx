@@ -42,13 +42,13 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetSubscriptions } from 'src/api/tables'; /// edit
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from './table-details-row'; /// edit
 import TableDetailToolbar from './table-details-toolbar';
 import TableDetailFiltersResult from './table-details-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

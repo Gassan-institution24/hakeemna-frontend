@@ -8,8 +8,8 @@ import { _userAbout, _userPlans, _userPayment, _userInvoices, _userAddressBook }
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { useGetEmployee } from 'src/api/tables';
 import { LoadingScreen } from 'src/components/loading-screen';
+import { useGetEmployee } from 'src/api/tables';
 import AccountGeneral from '../profile-general';
 // import AccountNotifications from '../profile-notifications';
 import AccountChangePassword from '../profile-change-password';

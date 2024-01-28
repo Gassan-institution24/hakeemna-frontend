@@ -44,10 +44,10 @@ import {
 } from 'src/components/table';
 import { useGetUSsFeedbackes } from 'src/api/tables';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import QCTableRow from './quality-control-table-row';
 import QCTableToolbar from './quality-control-table-toolbar';
 import QCTableFiltersResult from './quality-control-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

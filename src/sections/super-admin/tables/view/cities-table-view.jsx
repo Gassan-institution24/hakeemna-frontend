@@ -42,13 +42,13 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetCities } from 'src/api/tables';
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from '../cities/cities-table-details-row';
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

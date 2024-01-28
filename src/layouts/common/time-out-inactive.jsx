@@ -55,7 +55,7 @@ export default function TimeOutInActive() {
   useEffect(() => {
     const checkAndLogout = async () => {
       if (
-        user.employee_engagement &&
+        user.employee.employee_engagements[user.employee.selected_engagement] &&
         user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service
           .status === 'inactive' &&
         new Date(
@@ -94,7 +94,7 @@ export default function TimeOutInActive() {
 
   if (
     user.role === 'admin' &&
-    user.employee_engagement &&
+    user.employee.employee_engagements[user.employee.selected_engagement] &&
     user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service.status ===
       'inactive'
   ) {
@@ -172,7 +172,7 @@ export default function TimeOutInActive() {
     );
   } else if (
     user.role === 'admin' &&
-    user.employee_engagement &&
+    user.employee.employee_engagements[user.employee.selected_engagement] &&
     user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service
   ) {
     const { days } = subscriptionExpired;

@@ -43,13 +43,13 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetDepartmentWorkGroups } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../work-groups/table-details-row'; /// edit
 import TableDetailToolbar from '../work-groups/table-details-toolbar';
 import TableDetailFiltersResult from '../work-groups/table-details-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 

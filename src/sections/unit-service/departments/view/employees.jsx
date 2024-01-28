@@ -41,6 +41,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetDepartmentEmployees } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';

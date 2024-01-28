@@ -42,13 +42,13 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetEmployeeTypes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../employee_types/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -89,8 +89,6 @@ export default function EmployeeTypesTableView() {
   const confirmInactivate = useBoolean();
 
   const { employeeTypesData, loading, refetch } = useGetEmployeeTypes();
-
-  if(loading) {return(<LoadingScreen/>)}
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -228,6 +226,9 @@ export default function EmployeeTypesTableView() {
     },
     [handleFilters]
   );
+
+  if(loading) {return(<LoadingScreen/>)}
+  
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
