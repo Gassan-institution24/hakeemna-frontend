@@ -30,7 +30,7 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { user } = useAuthContext();
   const { departmentsData } = useGetUSDepartments(
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
   const { enqueueSnackbar } = useSnackbar();
@@ -47,17 +47,14 @@ export default function TableNewEditForm({ currentTable }) {
     () => ({
       unit_service:
         currentTable?.unit_service._id ||
-        user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id,
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
       department: currentTable?.department._id || null,
       name_english: currentTable?.name_english || '',
       name_arabic: currentTable?.name_arabic || '',
       details: currentTable?.details || '',
       details_arabic: currentTable?.details_arabic || '',
     }),
-    [
-      currentTable,
-      user.employee,
-    ]
+    [currentTable, user?.employee]
   );
 
   const methods = useForm({

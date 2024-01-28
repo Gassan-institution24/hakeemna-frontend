@@ -26,7 +26,7 @@ export default function TableCreateView({ employeeData }) {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Create a new Employee Account"
+          heading="New employee"
           links={[
             {
               name: 'Dashboard',
@@ -36,7 +36,7 @@ export default function TableCreateView({ employeeData }) {
               name: 'Employees',
               href: paths.unitservice.employees.root,
             },
-            { name: 'New Employee' },
+            { name: 'New employee' },
           ]}
           sx={{
             mb: { xs: 3, md: 5 },

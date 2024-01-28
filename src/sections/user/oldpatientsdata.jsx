@@ -29,7 +29,7 @@ export default function Oldpatientsdata() {
     const fetchData = async () => {
       try {
         const response = await axios.post('/api/oldpatientsdata/details', {
-          identification_num: user.patient.identification_num,
+          identification_num: user?.patient?.identification_num,
         });
         setOldpatientsdata(response.data);
       } catch (error) {
@@ -38,7 +38,7 @@ export default function Oldpatientsdata() {
     };
 
     fetchData();
-  }, [user.patient.identification_num]);
+  }, [user?.patient?.identification_num]);
 
   useEffect(() => {
     const mappedData = oldpatientsdata.map((Data) => Data);
@@ -47,7 +47,7 @@ export default function Oldpatientsdata() {
 
   return (
     <>
-      {user.patient.identification_num ? (
+      {user?.patient?.identification_num ? (
         <>
           <Box
             sx={{
@@ -82,15 +82,67 @@ export default function Oldpatientsdata() {
             </Container>
           </Box>
 
-          <Container sx={{ my: 7, }}>
+          <Container sx={{ my: 7 }}>
             <Stack spacing={5}>
               <ComponentBlock>
                 {oldData?.map((info) => (
-                  <Box sx={{display:'block', position:'absolute', left: '28%'}}>
-                    <Typography sx={{padding:'10px'}}> <span style={{border:'1px dashed black', padding:7, backgroundColor:'gray', color:'white'}}>first_name</span> &#160; &#160; {info.first_name}</Typography>
-                    <Typography sx={{padding:'10px'}}> <span style={{border:'1px dashed black', padding:7, backgroundColor:'gray', color:'white'}}>last_name</span>&#160; &#160; {info.last_name}</Typography>
-                    <Typography sx={{padding:'10px'}}> <span style={{border:'1px dashed black', padding:7, backgroundColor:'gray', color:'white'}}>Middle_name</span> &#160; &#160;{info.Middle_name}</Typography>
-                    <Typography sx={{padding:'10px'}}> <span style={{border:'1px dashed black', padding:7, backgroundColor:'gray', color:'white'}}>identification_num</span> &#160; &#160;{info.identification_num}</Typography>
+                  <Box sx={{ display: 'block', position: 'absolute', left: '28%' }}>
+                    <Typography sx={{ padding: '10px' }}>
+                      {' '}
+                      <span
+                        style={{
+                          border: '1px dashed black',
+                          padding: 7,
+                          backgroundColor: 'gray',
+                          color: 'white',
+                        }}
+                      >
+                        first_name
+                      </span>{' '}
+                      &#160; &#160; {info.first_name}
+                    </Typography>
+                    <Typography sx={{ padding: '10px' }}>
+                      {' '}
+                      <span
+                        style={{
+                          border: '1px dashed black',
+                          padding: 7,
+                          backgroundColor: 'gray',
+                          color: 'white',
+                        }}
+                      >
+                        last_name
+                      </span>
+                      &#160; &#160; {info.last_name}
+                    </Typography>
+                    <Typography sx={{ padding: '10px' }}>
+                      {' '}
+                      <span
+                        style={{
+                          border: '1px dashed black',
+                          padding: 7,
+                          backgroundColor: 'gray',
+                          color: 'white',
+                        }}
+                      >
+                        Middle_name
+                      </span>{' '}
+                      &#160; &#160;{info.Middle_name}
+                    </Typography>
+                    <Typography sx={{ padding: '10px' }}>
+                      {' '}
+                      <span
+                        style={{
+                          border: '1px dashed black',
+                          padding: 7,
+                          backgroundColor: 'gray',
+                          color: 'white',
+                        }}
+                      >
+                        identification_num
+                      </span>{' '}
+                      &#160; &#160;{info.identification_num}
+                    </Typography>
                   </Box>
                 ))}
               </ComponentBlock>

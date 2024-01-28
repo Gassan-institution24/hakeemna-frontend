@@ -37,13 +37,14 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { useAuthContext } from 'src/auth/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
+import { Upload, UploadBox } from 'src/components/upload';
 import { useSettingsContext } from 'src/components/settings';
 
 import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api/tables';
 import axios, { endpoints } from 'src/utils/axios';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFUploadBox } from 'src/components/hook-form';
 
 import ExistEmployeesRow from './exist-employees-row';
 
@@ -93,112 +94,8 @@ export default function TableNewEditForm() {
     onChangePage,
     onChangeRowsPerPage,
   } = table;
-
-  const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
-
-    if (arabicRegex.test(event.target.value)) {
-      setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-    }
-  };
-
-  const handleEnglishInputChange = (event) => {
-    // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
-
-    if (englishRegex.test(event.target.value)) {
-      setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-    }
-  };
-
-  const handleEmployment = async (id) => {
-    try {
-      await axios.post(endpoints.tables.employeeEngagements, {
-        unit_service:
-          user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-        employee: id,
-      });
-      enqueueSnackbar('employment successfully!');
-    } catch (e) {
-      console.log(e);
-      enqueueSnackbar('failed to employment!', { variant: 'error' });
-    }
-  };
-
-  useEffect(() => {
-    async function getExistEmployees() {
-      if (Object.keys(filters).length) {
-        const { data } = await axios.post(endpoints.tables.findEmployee, {
-          unit_service:
-            user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service
-              ._id,
-          filters,
-        });
-        setResults(data);
-      }
-    }
-    getExistEmployees();
-  }, [filters, user?.employee]);
-  console.log('results', results);
   return (
-    <Box>
-      <Card sx={{ p: 3 }}>
-        <Box
-          rowGap={3}
-          columnGap={2}
-          display="grid"
-          gridTemplateColumns={{
-            xs: 'repeat(1, 1fr)',
-            sm: 'repeat(4, 1fr)',
-          }}
-        >
-          <TextField
-            onChange={(event) =>
-              setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }))
-            }
-            type="email"
-            name="email"
-            label="Email"
-          />
-          <TextField
-            onChange={handleEnglishInputChange}
-            name="identification_num"
-            label="ID number"
-          />
-          <TextField
-            onChange={handleEnglishInputChange}
-            name="code"
-            label="Account code"
-            type="number"
-          />
-          <TextField onChange={handleEnglishInputChange} name="phone" label="Phone" type="number" />
-          <TextField
-            onChange={handleEnglishInputChange}
-            name="profrssion_practice_num"
-            label="Profrssion practice number"
-          />
-          <TextField
-            lang="en"
-            onChange={handleEnglishInputChange}
-            name="first_name"
-            label="First name"
-          />
-          <TextField
-            lang="en"
-            onChange={handleEnglishInputChange}
-            name="second_name"
-            label="Second name"
-          />
-          <TextField
-            lang="en"
-            onChange={handleEnglishInputChange}
-            name="family_name"
-            label="Family name"
-          />
-        </Box>
-      </Card>
-
+    <>
       <Table
         size={dense ? 'small' : 'medium'}
         sx={{
@@ -233,7 +130,7 @@ export default function TableNewEditForm() {
             <ExistEmployeesRow
               key={row.id}
               row={row}
-              onEmploymentRow={() => handleEmployment(row._id)}
+              // onEmploymentRow={() => handleEmployment(row._id)}
             />
           ))}
 
@@ -262,6 +159,6 @@ export default function TableNewEditForm() {
           },
         }}
       />
-    </Box>
+    </>
   );
 }

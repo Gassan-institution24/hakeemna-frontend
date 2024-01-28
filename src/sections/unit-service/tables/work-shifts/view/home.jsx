@@ -87,7 +87,7 @@ export default function WorkGroupsTableView() {
   const confirmInactivate = useBoolean();
 
   const { workShiftsData, loading, refetch } = useGetUSWorkShifts(
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
   const [filters, setFilters] = useState(defaultFilters);

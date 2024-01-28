@@ -45,7 +45,7 @@ export default function OverviewAppView() {
     const fetchData = async () => {
       try {
         const response = await axios.post('/api/oldpatientsdata/details', {
-          identification_num: user.patient.identification_num,
+          identification_num: user?.patient?.identification_num,
         });
         setOldpatientsdata(response.data);
       } catch (error) {
@@ -54,7 +54,7 @@ export default function OverviewAppView() {
     };
 
     fetchData();
-  }, [user.patient.identification_num]);
+  }, [user?.patient?.identification_num]);
 
   useEffect(() => {
     if (oldpatientsdata.length > 0) {
@@ -107,7 +107,7 @@ export default function OverviewAppView() {
             </Box>
           </Grid>
         </Grid>
-        { user.patient.identification_num === oldData  ? (
+        {user?.patient?.identification_num === oldData ? (
           <Dialog open={dialog.value} onClose={dialog.onTrue}>
             <DialogTitle>
               We found that you have data stored in عياده ركتورنا do you want to store it in your

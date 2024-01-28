@@ -23,7 +23,7 @@ export default function AccountView() {
   console.log('user', user);
 
   const { data, loading, refetch } = useGetUnitservice(
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
 
   if (loading) {

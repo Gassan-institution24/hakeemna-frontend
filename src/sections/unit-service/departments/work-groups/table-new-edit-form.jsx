@@ -47,14 +47,14 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const defaultValues = useMemo(
     () => ({
       unit_service:
-        user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id ||
-        departmentData.unit_service._id,
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+          ._id || departmentData.unit_service._id,
       department: departmentData._id,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
       employees: currentTable?.employees || [],
     }),
-    [currentTable, departmentData, user.employee]
+    [currentTable, departmentData, user?.employee]
   );
 
   const methods = useForm({

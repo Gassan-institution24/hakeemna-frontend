@@ -137,7 +137,8 @@ export const endpoints = {
     patients: '/api/patient',
     findPatients: '/api/patient/find',
     patient: (id) => `/api/patient/${id}`,
-    oldpatient: () => `/api/oldpatientsdata/details`,
+    oldpatient:`/api/oldpatientsdata/details`,
+    newOldPatient:`/api/oldpatientsdata/`,
     unitServiceLicenseMovement: (id) => `/api/licensemovements/unitservice/${id}`,
     unitServiceLicenseMovements: `/api/licensemovements/unitservice`,
     stakeholderLicenseMovement: (id) => `/api/licensemovements/stakeholder/${id}`,
@@ -201,6 +202,7 @@ export const endpoints = {
     forgotpassword: '/api/auth/forgotpassword',
     resetpassword: '/api/auth/resetpassword',
     updatepassword: '/api/auth/updateCurrentPassowrd',
+    checkPassword: '/api/auth/checkpassword',
   },
   mail: {
     list: '/api/mail/list',

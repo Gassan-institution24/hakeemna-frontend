@@ -86,7 +86,7 @@ export default function ActivitesTableView() {
   const confirmInactivate = useBoolean();
 
   const { activitiesData, loading, refetch } = useGetUSActivities(
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -242,7 +242,7 @@ export default function ActivitesTableView() {
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading={`${
-            user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service
+            user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
               .name_english || 'Service Unit'
           } Activities`} /// edit
           links={[

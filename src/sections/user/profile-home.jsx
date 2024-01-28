@@ -299,7 +299,7 @@ export default function ProfileHome() {
       {[
         {
           label: 'Identification Number',
-          value: user?.patient.identification_num,
+          value: user?.patient?.identification_num,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
@@ -358,7 +358,7 @@ export default function ProfileHome() {
       {[
         {
           label: 'Identification Number',
-          value: user?.patient.identification_num,
+          value: user?.patient?.identification_num,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {

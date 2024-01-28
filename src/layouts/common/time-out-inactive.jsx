@@ -34,7 +34,7 @@ export default function TimeOutInActive() {
     new Date(
       new Date(
         user?.employee?.employee_engagements[
-          user.employee.selected_engagement
+          user?.employee.selected_engagement
         ]?.unit_service?.created_at
       ).getTime() +
         3 * 24 * 60 * 60 * 1000
@@ -47,37 +47,38 @@ export default function TimeOutInActive() {
   const subscriptionExpired = useCountdownDate(
     new Date(
       user?.employee?.employee_engagements[
-        user.employee.selected_engagement
+        user?.employee.selected_engagement
       ]?.unit_service?.subscription_end_date
     )
   );
 
   useEffect(() => {
     const checkAndLogout = async () => {
-      if (
-        user.employee.employee_engagements[user.employee.selected_engagement] &&
-        user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service
-          .status === 'inactive' &&
-        new Date(
-          user?.employee?.employee_engagements[
-            user.employee.selected_engagement
-          ]?.unit_service.created_at
-        ).getTime() <
-          new Date().getTime() - 3 * 24 * 60 * 60 * 1000
-      ) {
-        console.log('this user is in activate and has to logout');
-        try {
-          await logout();
-        } catch (error) {
-          console.error(error);
-          enqueueSnackbar('Unable to logout!', { variant: 'error' });
-        }
-      }
+      // if (
+      //   user?.employee&&
+      //   user?.employee.employee_engagements[user?.employee.selected_engagement] &&
+      //   user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+      //     .status === 'inactive' &&
+      //   new Date(
+      //     user?.employee?.employee_engagements[
+      //       user?.employee.selected_engagement
+      //     ]?.unit_service.created_at
+      //   ).getTime() <
+      //     new Date().getTime() - 3 * 24 * 60 * 60 * 1000
+      // ) {
+      //   console.log('this user is in activate and has to logout');
+      //   try {
+      //     await logout();
+      //   } catch (error) {
+      //     console.error(error);
+      //     enqueueSnackbar('Unable to logout!', { variant: 'error' });
+      //   }
+      // }
       console.log('user', user);
       if (
         user &&
-        user.status === 'inactive' &&
-        new Date(user.created_at).getTime() < new Date().getTime() - 3 * 24 * 60 * 60 * 1000
+        user?.status === 'inactive' &&
+        new Date(user?.created_at).getTime() < new Date().getTime() - 3 * 24 * 60 * 60 * 1000
       ) {
         console.log('this user is in activate and has to logout');
         try {
@@ -92,49 +93,50 @@ export default function TimeOutInActive() {
     checkAndLogout();
   }, [user, logout, enqueueSnackbar]);
 
-  if (
-    user.role === 'admin' &&
-    user.employee.employee_engagements[user.employee.selected_engagement] &&
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service.status ===
-      'inactive'
-  ) {
-    const { days, hours, minutes, seconds } = unitServiceCountdown;
-    content = (
-      <>
-        <Alert
-          sx={{
-            ml: { xs: 1, md: 3 },
-            px: 0.6,
-            py: 0.3,
-            ...(isXsScreen &&
-              theme.breakpoints.down('xs') && { '& .MuiAlert-icon': { display: 'none' } }),
-          }}
-          severity="error"
-        >
-          <Stack
-            direction="row"
-            justifyContent="center"
-            divider={<Box sx={{ px: 1 }}>:</Box>}
-            sx={{ typography: 'body2', pr: 0.5 }}
-          >
-            <TimeBlock label="Days" value={days} />
+  // if (
+  //   user?.role === 'admin' &&
+  //   user?.employee.employee_engagements[user?.employee.selected_engagement] &&
+  //   user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service.status ===
+  //     'inactive'
+  // ) {
+  //   const { days, hours, minutes, seconds } = unitServiceCountdown;
+  //   content = (
+  //     <>
+  //       <Alert
+  //         sx={{
+  //           ml: { xs: 1, md: 3 },
+  //           px: 0.6,
+  //           py: 0.3,
+  //           ...(isXsScreen &&
+  //             theme.breakpoints.down('xs') && { '& .MuiAlert-icon': { display: 'none' } }),
+  //         }}
+  //         severity="error"
+  //       >
+  //         <Stack
+  //           direction="row"
+  //           justifyContent="center"
+  //           divider={<Box sx={{ px: 1 }}>:</Box>}
+  //           sx={{ typography: 'body2', pr: 0.5 }}
+  //         >
+  //           <TimeBlock label="Days" value={days} />
 
-            <TimeBlock label="Hours" value={hours} />
-            {days < 3 && (
-              <Typography sx={{ typography: 'body2' }}>
-                Your service unit is about to expired
-              </Typography>
-            )}
+  //           <TimeBlock label="Hours" value={hours} />
+  //           {days < 3 && (
+  //             <Typography sx={{ typography: 'body2' }}>
+  //               Your service unit is about to expired
+  //             </Typography>
+  //           )}
 
-            {/* <TimeBlock label="Minutes" value={minutes} />
-  
-      <TimeBlock label="Seconds" value={seconds} /> */}
-          </Stack>
-        </Alert>
-        {/* <BookManually open={showAlert.value} onClose={showAlert.onFalse} /> */}
-      </>
-    );
-  } else if (user && user.status === 'inactive') {
+  //           {/* <TimeBlock label="Minutes" value={minutes} />
+
+  //     <TimeBlock label="Seconds" value={seconds} /> */}
+  //         </Stack>
+  //       </Alert>
+  //       {/* <BookManually open={showAlert.value} onClose={showAlert.onFalse} /> */}
+  //     </>
+  //   );
+  // } else
+  if (user && user?.status === 'inactive') {
     const { days, hours, minutes, seconds } = userCountDown;
     content = (
       <>
@@ -159,7 +161,7 @@ export default function TimeOutInActive() {
 
             <TimeBlock label="Hours" value={hours} />
             {days < 3 && (
-              <Typography sx={{ typography: 'body2' }}>Your account is about to expired</Typography>
+              <Typography sx={{ typography: 'body2' }}>Your account is about to expire</Typography>
             )}
 
             {/* <TimeBlock label="Minutes" value={minutes} />
@@ -170,53 +172,54 @@ export default function TimeOutInActive() {
         {/* <BookManually open={showAlert.value} onClose={showAlert.onFalse} /> */}
       </>
     );
-  } else if (
-    user.role === 'admin' &&
-    user.employee.employee_engagements[user.employee.selected_engagement] &&
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service
-  ) {
-    const { days } = subscriptionExpired;
-    content = (
-      <>
-        {typeof days === 'string' && days > 3 && (
-          <>
-            <Iconify sx={{ ml: { xs: 1, md: 3 }, mr: 1 }} icon="flat-color-icons:ok" width={22} />
-            <Stack
-              direction="row"
-              justifyContent="center"
-              divider={<Box sx={{ px: 1 }}>:</Box>}
-              sx={{ typography: 'body2', pr: 0.5 }}
-            >
-              <TimeBlock label="Days" value={days} />
-            </Stack>
-          </>
-        )}
-        {typeof days === 'string' && days < 3 && (
-          <Alert
-            sx={{
-              ml: { xs: 1, md: 3 },
-              px: 0.6,
-              py: 0.3,
-              ...(isXsScreen &&
-                theme.breakpoints.down('xs') && { '& .MuiAlert-icon': { display: 'none' } }),
-            }}
-            severity="error"
-          >
-            <Stack
-              direction="row"
-              justifyContent="center"
-              divider={<Box sx={{ px: 1 }}>:</Box>}
-              sx={{ typography: 'body2', pr: 0.5 }}
-            >
-              <TimeBlock label="Days" value={days} />
-              <Typography sx={{ typography: 'body2' }}>Your account is about to expired</Typography>
-            </Stack>
-          </Alert>
-        )}
-      </>
-    );
   }
-  // } else if (user.role === 'patient') {
+  // else if (
+  //   user?.role === 'admin' &&
+  //   user?.employee.employee_engagements[user?.employee.selected_engagement] &&
+  //   user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+  // ) {
+  //   const { days } = subscriptionExpired;
+  //   content = (
+  //     <>
+  //       {typeof days === 'string' && days > 3 && (
+  //         <>
+  //           <Iconify sx={{ ml: { xs: 1, md: 3 }, mr: 1 }} icon="flat-color-icons:ok" width={22} />
+  //           <Stack
+  //             direction="row"
+  //             justifyContent="center"
+  //             divider={<Box sx={{ px: 1 }}>:</Box>}
+  //             sx={{ typography: 'body2', pr: 0.5 }}
+  //           >
+  //             <TimeBlock label="Days" value={days} />
+  //           </Stack>
+  //         </>
+  //       )}
+  //       {typeof days === 'string' && days < 3 && (
+  //         <Alert
+  //           sx={{
+  //             ml: { xs: 1, md: 3 },
+  //             px: 0.6,
+  //             py: 0.3,
+  //             ...(isXsScreen &&
+  //               theme.breakpoints.down('xs') && { '& .MuiAlert-icon': { display: 'none' } }),
+  //           }}
+  //           severity="error"
+  //         >
+  //           <Stack
+  //             direction="row"
+  //             justifyContent="center"
+  //             divider={<Box sx={{ px: 1 }}>:</Box>}
+  //             sx={{ typography: 'body2', pr: 0.5 }}
+  //           >
+  //             <TimeBlock label="Days" value={days} />
+  //             <Typography sx={{ typography: 'body2' }}>Your account is about to expired</Typography>
+  //           </Stack>
+  //         </Alert>
+  //       )}
+  //     </>
+  //   );
+  // }
+  // } else if (user?.role === 'patient') {
   //   const { days, hours, minutes, seconds } = patientExpired;
   //   content = (
   //     <>

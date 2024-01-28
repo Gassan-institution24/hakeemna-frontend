@@ -64,7 +64,7 @@ export default function TableNewEditForm({ currentTable }) {
     () => ({
       unit_service:
         currentTable?.unit_service?._id ||
-        user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id,
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
       department: currentTable?.department?._id || null,
       employee_type: currentTable?.employee_type?._id || null,
       email: currentTable?.email || '',
@@ -80,10 +80,7 @@ export default function TableNewEditForm({ currentTable }) {
       password: currentTable?.password || '',
       confirmPassword: currentTable?.confirmPassword || '',
     }),
-    [
-      currentTable,
-      user.employee,
-    ]
+    [currentTable, user?.employee]
   );
 
   const password = useBoolean();

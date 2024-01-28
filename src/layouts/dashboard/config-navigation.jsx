@@ -242,6 +242,11 @@ export function useNavData() {
             path: paths.unitservice.profile.root,
             icon: <Iconify icon="fa-solid:clinic-medical" />,
           },
+          {
+            title: t('Old patient data'),
+            path: paths.unitservice.oldPatient,
+            icon: <Iconify icon="entypo:upload" />,
+          },
         ],
       },
     ];
@@ -358,7 +363,7 @@ export function useNavData() {
       },
     ];
 
-    if (!user) {
+    if (!user||!user.role) {
       router.replace('/');
     }
     if (user?.role === 'superadmin') {

@@ -59,7 +59,7 @@ export default function NewEditDayDetails({ appointTime }) {
   const [appointmentsNum, setAppointmentsNum] = useState({});
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { serviceTypesData } = useGetUSServiceTypes(
-    user?.employee?.employee_engagements[user.employee.selected_engagement]?.unit_service._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
   const values = getValues();
