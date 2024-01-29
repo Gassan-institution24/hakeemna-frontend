@@ -50,7 +50,7 @@ export default function Oldpatientsdata() {
 
   const yesFunction = async () => {
     try {
-      const response = await axios.patch(`/api/oldpatientsdata/${oldDataId}/updateonboard`, {
+      const response = await axios.patch(`/api/oldpatientsdata/${oldDataId}/copydata`, {
         is_onboarded: true,
       });
       enqueueSnackbar(`Thanks for your cooperation`, { variant: 'success' });
