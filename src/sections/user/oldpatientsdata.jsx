@@ -47,12 +47,10 @@ export default function Oldpatientsdata() {
             sx={{
               py: 5,
               bgcolor: theme.palette.mode === 'light' ? 'grey.200' : 'grey.800',
-              
             }}
           >
-            <Container sx={{display:{md:'grid', xs:'inline-flex'} }}>
+            <Container sx={{ display: { md: 'grid', xs: 'inline-flex' } }}>
               <CustomBreadcrumbs
-           
                 heading="Please confirm your data"
                 links={[{ name: 'Home', href: paths.dashboard.root }, { name: 'Confirming Data' }]}
               />
@@ -81,9 +79,9 @@ export default function Oldpatientsdata() {
             </Container>
           </Box>
 
-          <Container sx={{ my: 7, }}>
+          <Container sx={{ my: 7 }}>
             <Stack spacing={5}>
-              <ComponentBlock>
+              {/* <ComponentBlock>
                 {oldData?.map((info) => (
                   <Box sx={{display:'block', position:'absolute', left: '28%'}}>
                     <Typography sx={{padding:'10px'}}> <span style={{border:'1px dashed black', padding:7, backgroundColor:'gray', color:'white'}}>first_name</span> &#160; &#160; {info.first_name}</Typography>
@@ -92,7 +90,7 @@ export default function Oldpatientsdata() {
                     <Typography sx={{padding:'10px'}}> <span style={{border:'1px dashed black', padding:7, backgroundColor:'gray', color:'white'}}>identification_num</span> &#160; &#160;{info.identification_num}</Typography>
                   </Box>
                 ))}
-              </ComponentBlock>
+              </ComponentBlock> */}
             </Stack>
           </Container>
         </>
