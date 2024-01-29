@@ -47,12 +47,10 @@ export default function Oldpatientsdata() {
             sx={{
               py: 5,
               bgcolor: theme.palette.mode === 'light' ? 'grey.200' : 'grey.800',
-              
             }}
           >
-            <Container sx={{display:{md:'grid', xs:'inline-flex'} }}>
+            <Container sx={{ display: { md: 'grid', xs: 'inline-flex' } }}>
               <CustomBreadcrumbs
-           
                 heading="Please confirm your data"
                 links={[{ name: 'Home', href: paths.dashboard.root }, { name: 'Confirming Data' }]}
               />
