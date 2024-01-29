@@ -24,7 +24,7 @@ export default function ProfileHome() {
   const { user } = useAuthContext();
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
-      {user?.patient.drug_allergies?.length > 0 && (
+      {user?.patient?.drug_allergies?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -34,17 +34,17 @@ export default function ProfileHome() {
             Drug Allergies{' '}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient.drug_allergies?.map((drug) => (
+            {user?.patient?.drug_allergies?.map((drug) => (
               <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={drug?._id}>
                 {' '}
-                {drug.trade_name}
+                 -&nbsp; {drug?.trade_name}
               </li>
             ))}
           </Stack>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient.diseases?.length > 0 && (
+      {user?.patient?.diseases?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -54,20 +54,20 @@ export default function ProfileHome() {
             Diseases{' '}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient.diseases?.map((disease) => (
+            {user?.patient?.diseases?.map((disease) => (
               <li
                 style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
-                key={disease._id}
+                key={disease?._id}
               >
                 {' '}
-                {disease.name_english}
+                 -&nbsp; {disease?.name_english}
               </li>
             ))}
           </Stack>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient.surgeries.length > 0 && (
+      {user?.patient?.surgeries?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -77,20 +77,20 @@ export default function ProfileHome() {
             Surgeries{' '}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient.surgeries.map((surgery) => (
+            {user?.patient?.surgeries?.map((surgery) => (
               <li
                 style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                 key={surgery._id}
               >
                 {' '}
-                {surgery.name}
+                 -&nbsp; {surgery.name}
               </li>
             ))}
           </Stack>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient.medicines.length > 0 && (
+      {user?.patient?.medicines?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -100,17 +100,17 @@ export default function ProfileHome() {
             Medicines{' '}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient.medicines?.map((data) => (
+            {user?.patient?.medicines?.map((data) => (
               <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={data._id}>
                 {' '}
-                {data?.frequently}
+                 -&nbsp; {data?.frequently}
               </li>
             ))}
           </Stack>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient.insurance.length > 0 && (
+      {user?.patient?.insurance?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -120,12 +120,12 @@ export default function ProfileHome() {
             Insurance{' '}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient.insurance.map((company) => (
+            {user?.patient?.insurance?.map((company) => (
               <li
                 style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                 key={company._id}
               >
-                {company?.name_english}
+                 -&nbsp; {company?.name_english}
               </li>
             ))}
           </Stack>
@@ -144,12 +144,12 @@ export default function ProfileHome() {
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
             {' '}
-            {user?.patient.sport_exercises}
+             -&nbsp; {user?.patient?.sport_exercises}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient.eating_diet && (
+      {user?.patient?.eating_diet && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -160,12 +160,12 @@ export default function ProfileHome() {
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
             {' '}
-            {user?.patient.eating_diet?.name_english}
+            -&nbsp; {user?.patient?.eating_diet?.name_english}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient.alcohol_consumption && (
+      {user?.patient?.alcohol_consumption && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -176,12 +176,12 @@ export default function ProfileHome() {
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
             {' '}
-            {user?.patient.alcohol_consumption}
+             -&nbsp; {user?.patient?.alcohol_consumption}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient.smoking && (
+      {user?.patient?.smoking && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -192,12 +192,12 @@ export default function ProfileHome() {
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
             {' '}
-            {user?.patient.smoking}
+             -&nbsp; {user?.patient?.smoking}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient.other_medication_notes && (
+      {user?.patient?.other_medication_notes?.length > 0 ? (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -206,13 +206,13 @@ export default function ProfileHome() {
             />{' '}
             Notes
           </Typography>
-          {user?.patient.other_medication_notes.map((note, index) => (
+          {user?.patient?.other_medication_notes?.map((note, index) => (
             <li key={index} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-              {note}
+               -&nbsp; {note}
             </li>
           ))}
         </Stack>
-      )}
+      ): ''}
     </Stack>
   );
 
@@ -226,9 +226,6 @@ export default function ProfileHome() {
             height: '150px',
             width: '100px',
             boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
-            // borderLeft: 2,
-            // borderColor: 'rgb(0, 156, 0)',
-            // borderRadius: '12px',
           }}
         />
         <Iconify
@@ -250,22 +247,22 @@ export default function ProfileHome() {
       {[
         {
           label: 'Gender',
-          value: user?.patient.gender,
+          value: user?.patient?.gender,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Age',
-          value: calculateAge(user?.patient.birth_date),
+          value: calculateAge(user?.patient?.birth_date),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Height',
-          value: user?.patient.height,
+          value: user?.patient?.height,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Weight',
-          value: user?.patient.weight,
+          value: user?.patient?.weight,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
       ].map((item) => (
@@ -303,27 +300,27 @@ export default function ProfileHome() {
         },
         {
           label: 'Blood Type',
-          value: user?.patient.blood_type,
+          value: user?.patient?.blood_type,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Marital Status',
-          value: user?.patient.marital_status,
+          value: user?.patient?.marital_status,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Address',
-          value: user?.patient.address,
+          value: user?.patient?.address,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
           label: 'Mobile Number',
-          value: user?.patient.mobile_num1,
+          value: user?.patient?.mobile_num1,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
         {
           label: 'Second Mobile Number',
-          value: user?.patient.mobile_num2,
+          value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
       ].map((item) => (
@@ -362,32 +359,32 @@ export default function ProfileHome() {
         },
         {
           label: 'Blood Type',
-          value: user?.patient.blood_type,
+          value: user?.patient?.blood_type,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Pregnant',
-          value: user?.patient.pregnant ? 'Yes' : 'No',
+          value: user?.patient?.pregnant ? 'Yes' : 'No',
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Marital Status',
-          value: user?.patient.marital_status,
+          value: user?.patient?.marital_status,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Address',
-          value: user?.patient.address,
+          value: user?.patient?.address,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
           label: 'Mobile Number',
-          value: user?.patient.mobile_num1,
+          value: user?.patient?.mobile_num1,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
         {
           label: 'Second Mobile Number',
-          value: user?.patient.mobile_num2,
+          value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
       ].map((item) => (
@@ -423,7 +420,7 @@ export default function ProfileHome() {
       </Grid>
 
       <Grid xs={12} md={8}>
-        {renderContent}
+        {renderContent.length > 0 ? renderContent : '' }
       </Grid>
     </Grid>
   );
