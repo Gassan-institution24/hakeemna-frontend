@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import Link from '@mui/material/Link';
 import Step from '@mui/material/Step';
@@ -9,7 +10,7 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Stepper from '@mui/material/Stepper';
-import { Box, MenuItem } from '@mui/material';
+import { Box, MenuItem, Select, TextField } from '@mui/material';
 import StepLabel from '@mui/material/StepLabel';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -26,12 +27,18 @@ import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFTextField, RHFSelect } from 'src/components/hook-form';
-import { useGetCities, useGetCountries, useGetSpecialties, useGetUSTypes } from 'src/api/tables';
+import FormProvider, { RHFTextField, RHFSelect, RHFAutocomplete } from 'src/components/hook-form';
+import {
+  useGetCities,
+  useGetCountries,
+  useGetEmployeeTypes,
+  useGetSpecialties,
+  useGetUSTypes,
+} from 'src/api/tables';
 
 // ----------------------------------------------------------------------
 
-const steps = ['Service unit', 'Employee', 'Account'];
+const steps = ['Service unit', 'Admin', 'Account'];
 
 export default function JwtRegisterView() {
   const { register } = useAuthContext();
@@ -42,11 +49,14 @@ export default function JwtRegisterView() {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [page, setPage] = useState(0);
   const [cities, setCities] = useState([]);
+  const [us_phone, setUSphone] = useState();
+  const [em_phone, setEMphone] = useState();
 
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { unitserviceTypesData } = useGetUSTypes();
   const { specialtiesData } = useGetSpecialties();
+  // const { employeeTypesData } = useGetEmployeeTypes();
 
   const searchParams = useSearchParams();
 
@@ -55,31 +65,34 @@ export default function JwtRegisterView() {
   const password = useBoolean();
 
   const RegisterSchema = Yup.object().shape({
-    us_name_arabic: Yup.string().required('name is required'),
-    us_name_english: Yup.string().required('name is required'),
+    us_name_arabic: Yup.string().required('Service unit name is required'),
+    us_name_english: Yup.string().required('Service unit name is required'),
     us_email: Yup.string()
-      .required('Email is required')
-      .email('Email must be a valid email address'),
-    us_identification_num: Yup.string().required('Identification number is required'),
-    us_country: Yup.string().required('Country is required'),
-    us_city: Yup.string().required('City is required'),
-    US_type: Yup.string().required('Unit Service type is required'),
+      .required('Service unit email is required')
+      .email('Service unit email must be a valid email address'),
+    us_identification_num: Yup.string().required('Service unit ID number is required'),
+    us_country: Yup.string().required('Service unit country is required'),
+    us_city: Yup.string().required('Service unit city is required'),
+    US_type: Yup.string().required('Service unit type is required'),
     us_speciality: Yup.string().nullable(),
-    us_sector_type: Yup.string().required('Sector type is required'),
-    us_phone: Yup.string().required('Phone number is required'),
+    us_sector_type: Yup.string().required('Service unit sector is required'),
+    us_phone: Yup.string().required('Service unit phone is required'),
 
-    em_first_name: Yup.string().required('name is required'),
-    em_second_name: Yup.string().required('name is required'),
-    em_family_name: Yup.string().required('name is required'),
-    em_nationality: Yup.string().required('Nationality is required'),
-    em_identification_num: Yup.string().required('Identification number is required'),
-    em_profrssion_practice_num: Yup.string().required('Prefession practice number is required'),
-    em_phone: Yup.string().required('Phone number is required'),
+    em_first_name: Yup.string().required('Employee first name is required'),
+    em_second_name: Yup.string().required('Employee second name is required'),
+    em_family_name: Yup.string().required('Employee family name is required'),
+    em_nationality: Yup.string().required('Employee nationality is required'),
+    em_identification_num: Yup.string().required('Employee ID number is required'),
+    em_profrssion_practice_num: Yup.string().required(
+      'Employee prefession practice number is required'
+    ),
+    // em_type: Yup.string().required('Employee type is required'),
+    em_phone: Yup.string().required('Employee phone is required'),
     em_speciality: Yup.string().nullable(),
 
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().min(8, 'Password is required'),
-    confirmPassword: Yup.string().min(8, 'confirm Password is required'),
+    password: Yup.string().min(8, 'Password must be at least 8 character'),
+    confirmPassword: Yup.string().min(8, 'Confirm password must be at least 8 character'),
   });
 
   const defaultValues = {
@@ -99,6 +112,7 @@ export default function JwtRegisterView() {
     em_nationality: null,
     em_identification_num: '',
     em_profrssion_practice_num: '',
+    // em_type: '',
     em_phone: '',
     em_speciality: null,
     email: '',
@@ -113,14 +127,20 @@ export default function JwtRegisterView() {
 
   const {
     reset,
+    trigger,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid, errors },
   } = methods;
+
+  const values = methods.getValues();
+  console.log('values.us_phone', values.us_phone);
+
+  console.log('isValid', isValid);
+  console.log('errors', errors);
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
-
     if (arabicRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
     }
@@ -143,6 +163,7 @@ export default function JwtRegisterView() {
   };
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log(data);
     try {
       console.log(data);
       await register?.({
@@ -165,6 +186,16 @@ export default function JwtRegisterView() {
         : tableData
     );
   }, [tableData, selectedCountry]);
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+      console.log(errors);
+      setErrorMsg(
+        Object.keys(errors)
+          .map((key) => errors?.[key]?.message)
+          .join('<br>')
+      );
+    }
+  }, [errors]);
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 3, position: 'relative' }}>
       <Typography variant="h4">Sign up as service unit</Typography>
@@ -226,7 +257,11 @@ export default function JwtRegisterView() {
 
   const renderForm = (
     <Stack spacing={2}>
-      {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+      {!!errorMsg && (
+        <Alert severity="error">
+          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+        </Alert>
+      )}
       {/* <Alert severity="info">Service unit information</Alert> */}
       <RHFTextField
         lang="en"
@@ -240,12 +275,19 @@ export default function JwtRegisterView() {
         name="us_name_arabic"
         label="Name in arabic"
       />
-      {/* <RHFTextField type='number' name="us_phone" label="Phone number" /> */}
       <RHFTextField name="us_identification_num" label="Identification number" />
+      <MuiTelInput
+        forceCallingCode
+        value={us_phone}
+        onChange={(newPhone) => {
+          matchIsValidTel(newPhone);
+          setUSphone(newPhone);
+          methods.setValue('us_phone', newPhone);
+        }}
+      />
 
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <RHFTextField name="us_email" label="Email address" />
-        <RHFTextField type="us_number" name="us_phone" label="Phone number" />
       </Stack>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <RHFSelect onChange={handleCountryChange} name="us_country" label="Country">
@@ -284,7 +326,7 @@ export default function JwtRegisterView() {
         <RHFSelect name="us_sector_type" label="Sector type">
           <MenuItem value="public">Public</MenuItem>
           <MenuItem value="privet">Privet</MenuItem>
-          <MenuItem value="charity">Charity</MenuItem>
+          <MenuItem value="non profit organization">Non profit organization</MenuItem>
         </RHFSelect>
       </Stack>
 
@@ -293,6 +335,7 @@ export default function JwtRegisterView() {
         color="inherit"
         size="large"
         variant="contained"
+        type="submit"
         onClick={() => setPage((prev) => prev + 1)}
       >
         Next Step <Iconify width={20} className="arrow" icon="eva:arrow-ios-forward-fill" />
@@ -301,7 +344,11 @@ export default function JwtRegisterView() {
   );
   const renderFormEmployee = (
     <Stack spacing={2}>
-      {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+      {!!errorMsg && (
+        <Alert severity="error">
+          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+        </Alert>
+      )}
       {/* <Alert severity="info">Employee information</Alert> */}
 
       <Box
@@ -338,6 +385,13 @@ export default function JwtRegisterView() {
             </MenuItem>
           ))}
         </RHFSelect>
+        {/* <RHFSelect name="em_type" label="Employee type">
+          {employeeTypesData.map((type) => (
+            <MenuItem key={type._id} value={type._id}>
+              {type.name_english}
+            </MenuItem>
+          ))}
+        </RHFSelect> */}
       </Box>
       <Box
         rowGap={3}
@@ -357,7 +411,15 @@ export default function JwtRegisterView() {
         </RHFSelect>
         <RHFTextField name="em_identification_num" label="Identification number" />
         <RHFTextField name="em_profrssion_practice_num" label="Profrssion practice number" />
-        <RHFTextField name="em_phone" label="Phone number" />
+        <MuiTelInput
+          forceCallingCode
+          value={em_phone}
+          onChange={(newPhone) => {
+            matchIsValidTel(newPhone);
+            setUSphone(newPhone);
+            methods.setValue('em_phone', newPhone);
+          }}
+        />
       </Box>
 
       <LoadingButton
@@ -365,6 +427,7 @@ export default function JwtRegisterView() {
         color="inherit"
         size="large"
         variant="contained"
+        type="submit"
         onClick={() => setPage((prev) => prev + 1)}
       >
         Next Step <Iconify width={20} className="arrow" icon="eva:arrow-ios-forward-fill" />
@@ -373,7 +436,11 @@ export default function JwtRegisterView() {
   );
   const renderFormAuth = (
     <Stack spacing={2}>
-      {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+      {!!errorMsg && (
+        <Alert severity="error">
+          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+        </Alert>
+      )}
       {/* <Alert severity="info">Sign in information</Alert> */}
       <RHFTextField name="email" label="Email address" />
       <RHFTextField

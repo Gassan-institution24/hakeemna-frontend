@@ -19,11 +19,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function ExistEmployeesRow({
-  row,
-  selected,
-  onEmploymentRow,
-}) {
+export default function OldPatientsRow({ row, selected, onEmploymentRow }) {
   const {
     code,
     first_name,
@@ -33,8 +29,8 @@ export default function ExistEmployeesRow({
     email,
     phone,
     birth_date,
+    files,
   } = row;
-
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -42,28 +38,26 @@ export default function ExistEmployeesRow({
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell align="center">{first_name} {second_name} {family_name}</TableCell>
+      <TableCell align="center">
+        {first_name} {second_name} {family_name}
+      </TableCell>
       <TableCell align="center">{identification_num}</TableCell>
       <TableCell align="center">{email}</TableCell>
       <TableCell align="center">{phone}</TableCell>
-      <TableCell align="center">{fDate(birth_date)}</TableCell>
+      <TableCell align="center">{files?.length}</TableCell>
 
-      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      {/* <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton onClick={onEmploymentRow}>
           <Iconify icon="zondicons:user-add" />
         </IconButton>
-      </TableCell>
+      </TableCell> */}
     </TableRow>
   );
 
-  return (
-    <>
-      {renderPrimary}
-    </>
-  );
+  return <>{renderPrimary}</>;
 }
 
-ExistEmployeesRow.propTypes = {
+OldPatientsRow.propTypes = {
   onEmploymentRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,

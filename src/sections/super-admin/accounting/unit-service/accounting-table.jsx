@@ -85,7 +85,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
 
   // const confirm = useBoolean();
 
-  const { licenseMovements, loading, refetch } = useGetUSLicenseMovement(unitServiceData._id);
+  const { licenseMovements, loading, refetch } = useGetUSLicenseMovement(unitServiceData?._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -201,9 +201,9 @@ export default function USlicenseMovementView({ unitServiceData }) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.accounting.unitservice.edit(unitServiceData._id, id));
+      router.push(paths.superadmin.accounting.unitservice.edit(unitServiceData?._id, id));
     },
-    [router, unitServiceData._id]
+    [router, unitServiceData?._id]
   );
 
   const handleViewRow = useCallback(
@@ -249,7 +249,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
           action={
             <Button
               component={RouterLink}
-              href={paths.superadmin.accounting.unitservice.add(unitServiceData._id)} /// edit
+              href={paths.superadmin.accounting.unitservice.add(unitServiceData?._id)} /// edit
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
@@ -375,12 +375,12 @@ export default function USlicenseMovementView({ unitServiceData }) {
                     )
                     .map((row) => (
                       <AccountingTableRow
-                        key={row.id}
+                        key={row?._id}
                         row={row}
                         // selected={table.selected.includes(row.id)}
                         // onSelectRow={() => table.onSelectRow(row.id)}
-                        onViewRow={() => handleViewRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
+                        onViewRow={() => handleViewRow(row?._id)}
+                        onEditRow={() => handleEditRow(row?._id)}
                         // onDeleteRow={() => handleDeleteRow(row.id)}
                       />
                     ))}

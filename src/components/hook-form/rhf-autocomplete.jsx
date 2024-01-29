@@ -6,7 +6,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 
 // ----------------------------------------------------------------------
 
-export default function RHFAutocomplete({ name, label, placeholder, helperText, ...other }) {
+export default function RHFAutocomplete({ name, label, placeholder, helperText, variant, ...other }) {
   const { control, setValue } = useFormContext();
 
   return (
@@ -20,6 +20,7 @@ export default function RHFAutocomplete({ name, label, placeholder, helperText, 
           renderInput={(params) => (
             <TextField
               label={label}
+              variant={variant}
               placeholder={placeholder}
               error={!!error}
               helperText={error ? error?.message : helperText}
@@ -37,5 +38,6 @@ RHFAutocomplete.propTypes = {
   helperText: PropTypes.string,
   label: PropTypes.string,
   name: PropTypes.string,
+  variant: PropTypes.string,
   placeholder: PropTypes.string,
 };

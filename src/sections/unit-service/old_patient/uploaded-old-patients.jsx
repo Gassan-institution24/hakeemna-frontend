@@ -46,7 +46,7 @@ import axios, { endpoints } from 'src/utils/axios';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFUploadBox } from 'src/components/hook-form';
 
-import ExistEmployeesRow from './exist-employees-row';
+import ExistEmployeesRow from './old-patients-row';
 
 // ----------------------------------------------------------------------
 
@@ -56,23 +56,18 @@ const TABLE_HEAD = [
   { id: 'identification_num', label: 'ID number' },
   { id: 'email', label: 'Email' },
   { id: 'phone', label: 'Phone' },
-  { id: 'birth_date', label: 'Birth date' },
-  { id: '', width: 88 },
+  { id: 'files', label: 'Files number' },
+  // { id: '', width: 88 },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function TableNewEditForm() {
+export default function UploadedOldPatients({ oldPatients }) {
   const router = useRouter();
 
   const table = useTable({ defaultRowsPerPage: 10 });
 
-  const settings = useSettingsContext();
-
   const { user } = useAuthContext();
-
-  const [results, setResults] = useState([]);
-  const [filters, setFilters] = useState({});
 
   const theme = useTheme();
 
@@ -126,7 +121,7 @@ export default function TableNewEditForm() {
         />
 
         <TableBody>
-          {results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+          {oldPatients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
             <ExistEmployeesRow
               key={row.id}
               row={row}
@@ -135,7 +130,7 @@ export default function TableNewEditForm() {
           ))}
 
           <TableNoData
-            notFound={results.length === 0}
+            notFound={oldPatients.length === 0}
             sx={{
               m: -2,
               borderRadius: 1.5,
@@ -145,7 +140,7 @@ export default function TableNewEditForm() {
         </TableBody>
       </Table>
       <TablePaginationCustom
-        count={results.length}
+        count={oldPatients.length}
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onChangePage}
@@ -162,3 +157,6 @@ export default function TableNewEditForm() {
     </>
   );
 }
+UploadedOldPatients.propTypes = {
+  oldPatients: PropTypes.array,
+};

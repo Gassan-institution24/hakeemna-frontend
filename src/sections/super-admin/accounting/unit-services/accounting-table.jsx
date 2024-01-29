@@ -86,33 +86,33 @@ export default function LicenseMovementsView() {
     const results = {};
     const now = new Date();
     licenseMovements.forEach((movement) => {
-      if (!results[movement.unit_service._id]) {
-        results[movement.unit_service._id] = {};
-        results[movement.unit_service._id].unit_service = movement.unit_service;
+      if (!results[movement?.unit_service?._id]) {
+        results[movement?.unit_service?._id] = {};
+        results[movement?.unit_service?._id].unit_service = movement?.unit_service;
       }
-      if (results[movement.unit_service._id].count) {
-        results[movement.unit_service._id].count += 1;
+      if (results[movement?.unit_service?._id].count) {
+        results[movement?.unit_service?._id].count += 1;
       } else {
-        results[movement.unit_service._id].count = 1;
+        results[movement?.unit_service?._id].count = 1;
       }
-      if (results[movement.unit_service._id].payments) {
-        results[movement.unit_service._id].payments += movement.price;
+      if (results[movement?.unit_service?._id].payments) {
+        results[movement?.unit_service?._id].payments += movement.price;
       } else {
-        results[movement.unit_service._id].payments = movement.price;
+        results[movement?.unit_service?._id].payments = movement.price;
       }
       if (
-        !results[movement.unit_service._id].start_date ||
-        results[movement.unit_service._id].start_date > movement.Start_date
+        !results[movement?.unit_service?._id].start_date ||
+        results[movement?.unit_service?._id].start_date > movement?.Start_date
       ) {
-        results[movement.unit_service._id].start_date = movement.Start_date;
+        results[movement?.unit_service?._id].start_date = movement?.Start_date;
       }
 
       if (
-        !results[movement.unit_service._id].end_date ||
-        results[movement.unit_service._id].end_date < movement.End_date
+        !results[movement?.unit_service?._id].end_date ||
+        results[movement?.unit_service?._id].end_date < movement?.End_date
       ) {
-        results[movement.unit_service._id].end_date = movement.End_date;
-        results[movement.unit_service._id].user_no = movement.Users_num;
+        results[movement?.unit_service?._id].end_date = movement?.End_date;
+        results[movement?.unit_service?._id].user_no = movement?.Users_num;
       }
     });
     const resultsArr = Object.keys(results).map((key) => ({
