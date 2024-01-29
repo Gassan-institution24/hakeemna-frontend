@@ -44,7 +44,7 @@ export default function MovementTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell>{stakeholder.code}</TableCell>
+        <TableCell>{stakeholder?.code}</TableCell>
 
         <TableCell align="center">
           <ListItemText

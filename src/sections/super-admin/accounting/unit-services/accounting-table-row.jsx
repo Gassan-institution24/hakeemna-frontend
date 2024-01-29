@@ -34,6 +34,7 @@ export default function MovementTableRow({
   onEditRow,
   onDeleteRow,
 }) {
+  console.log('row',row)
   const { unit_service, start_date, end_date, count, payments, user_no, status } = row;
 
   const confirm = useBoolean();
@@ -44,7 +45,7 @@ export default function MovementTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell>{unit_service.code}</TableCell>
+        <TableCell>{unit_service?.code}</TableCell>
 
         <TableCell align="center">
           <ListItemText

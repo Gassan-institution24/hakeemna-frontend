@@ -52,11 +52,11 @@ import FormProvider, {
   RHFUploadBox,
 } from 'src/components/hook-form';
 
-import ExistEmployeesRow from './exist-employees-row';
+import ExistEmployeesRow from './old-patients-row';
 
 // ----------------------------------------------------------------------
 
-export default function UploadOldPatient() {
+export default function UploadOldPatient({ refetch }) {
   const router = useRouter();
 
   const table = useTable({ defaultRowsPerPage: 10 });
@@ -66,18 +66,18 @@ export default function UploadOldPatient() {
   const { user } = useAuthContext();
 
   const [results, setResults] = useState([]);
-  const [filters, setFilters] = useState({});
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
   const theme = useTheme();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    first_name: Yup.string(),
+    first_name: Yup.string().required('First name is required'),
     middle_name: Yup.string(),
-    last_name: Yup.string(),
+    last_name: Yup.string().required('Last name is required'),
     identification_num: Yup.string(),
-    phone: Yup.string(),
+    phone: Yup.string().required('Phone is required'),
     files: Yup.array(),
   });
 
@@ -108,9 +108,8 @@ export default function UploadOldPatient() {
     formState: { isSubmitting },
   } = methods;
 
-  console.log('getValues', getValues());
-
   const values = getValues();
+  console.log('getValues', getValues());
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -127,12 +126,14 @@ export default function UploadOldPatient() {
       console.log('data', data);
       console.log('formData', formData);
       await axios.post(endpoints.tables.newOldPatient, formData);
-      // reset();
+      refetch();
+      reset();
       enqueueSnackbar('Uploaded success!');
       // router.push(paths.unitservice.tables.employeetypes.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
+      enqueueSnackbar('Uploaded failed!', { variant: 'error' });
     }
   });
 
@@ -157,7 +158,8 @@ export default function UploadOldPatient() {
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
       console.log('acceptedFiles', acceptedFiles);
-      const files = values.files || [];
+      const files = values.files || uploadedFiles;
+      console.log('files', files);
 
       const newFiles = acceptedFiles.map((file) =>
         Object.assign(file, {
@@ -166,11 +168,15 @@ export default function UploadOldPatient() {
       );
       console.log('newFiles', newFiles);
 
-      setValue('files', [...files, ...newFiles], {
+      // Concatenate the new files with the existing ones
+      const updatedFiles = [...files, ...newFiles];
+
+      setUploadedFiles(updatedFiles);
+      setValue('files', updatedFiles, {
         shouldValidate: true,
       });
     },
-    [setValue, values.files]
+    [setValue, values.files, uploadedFiles]
   );
 
   return (
@@ -222,15 +228,22 @@ export default function UploadOldPatient() {
           name="files"
           maxSize={3145728}
           onDrop={handleDropMultiFile}
-          onRemove={(inputFile) =>
+          onRemove={(inputFile) => {
             setValue('files', values.files && values.files?.filter((file) => file !== inputFile), {
               shouldValidate: true,
-            })
-          }
-          onRemoveAll={() => setValue('files', [], { shouldValidate: true })}
+            });
+            setUploadedFiles(uploadedFiles.filter((file) => file !== inputFile));
+          }}
+          onRemoveAll={() => {
+            setValue('files', [], { shouldValidate: true });
+            setUploadedFiles([]);
+          }}
           onUpload={onSubmit}
         />
       </Card>
     </FormProvider>
   );
 }
+UploadOldPatient.propTypes = {
+  refetch: PropTypes.func,
+};
