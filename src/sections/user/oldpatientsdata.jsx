@@ -11,19 +11,26 @@ import { useAuthContext } from 'src/auth/hooks';
 import axios from 'src/utils/axios';
 import { paths } from 'src/routes/paths';
 import { _mock } from 'src/_mock';
+import { useRouter } from 'src/routes/hooks';
+import { useSnackbar } from 'src/components/snackbar';
+
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 export default function Oldpatientsdata() {
   const theme = useTheme();
+  const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
   const [oldpatientsdata, setOldpatientsdata] = useState([]);
-  const [oldData, setOlddata] = useState();
-  console.log(oldData, 'sdsdsdsdsdsdsd');
+  const [oldDataId, setOlddataID] = useState();
+
+  console.log(user);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.post('/api/oldpatientsdata/details', {
-          identification_num: user.patient.identification_num,
+          identification_num: user?.patient?.identification_num,
         });
         setOldpatientsdata(response.data);
       } catch (error) {
@@ -35,9 +42,44 @@ export default function Oldpatientsdata() {
   }, [user.patient.identification_num]);
 
   useEffect(() => {
-    const mappedData = oldpatientsdata.map((Data) => Data);
-    setOlddata(mappedData);
-  }, [oldpatientsdata]);
+    if (oldpatientsdata.length > 0) {
+      const mapdData = oldpatientsdata?.map((Data) => Data);
+      setOlddataID(mapdData[0]._id);
+    }
+  }, [oldpatientsdata, oldDataId]);
+
+  const yesFunction = async () => {
+    try {
+      const response = await axios.patch(`/api/oldpatientsdata/${oldDataId}/updateonboard`, {
+        is_onboarded: true,
+      });
+      enqueueSnackbar(`Thanks for your cooperation`, { variant: 'success' });
+    } catch (error) {
+      console.error('Error updating data:', error);
+    }
+
+    enqueueSnackbar(`Thanks for your cooperation, data saved to profile successfully`, {
+      variant: 'success',
+    });
+    setTimeout(() => {
+      router.push(paths.dashboard.user.profile);
+    }, 1000);
+  };
+  const noFunction = async () => {
+    try {
+      const response = await axios.patch(`/api/oldpatientsdata/${oldDataId}/updateonboard`, {
+        is_onboarded: false,
+      });
+      enqueueSnackbar(`Thanks for your cooperation`, { variant: 'success' });
+    } catch (error) {
+      console.error('Error updating data:', error);
+    }
+
+    enqueueSnackbar(`Thanks for your cooperation`, { variant: 'success' });
+    setTimeout(() => {
+      router.push(paths.dashboard.root);
+    }, 1000);
+  };
 
   return (
     <>
@@ -49,7 +91,7 @@ export default function Oldpatientsdata() {
               bgcolor: theme.palette.mode === 'light' ? 'grey.200' : 'grey.800',
             }}
           >
-            <Container sx={{ display: { md: 'grid', xs: 'inline-flex' } }}>
+            <Container>
               <CustomBreadcrumbs
                 heading="Please confirm your data"
                 links={[{ name: 'Home', href: paths.dashboard.root }, { name: 'Confirming Data' }]}
@@ -58,6 +100,7 @@ export default function Oldpatientsdata() {
                 <Typography sx={{ mb: 1, padding: 1, fontSize: { md: 16, xs: 14 } }}>
                   Click{' '}
                   <Button
+                    onClick={yesFunction}
                     variant="contained"
                     sx={{ border: 1, height: { md: '25px', xs: '20px' }, bgcolor: 'success.main' }}
                   >
@@ -68,6 +111,7 @@ export default function Oldpatientsdata() {
                 <Typography sx={{ mb: 1, padding: 1, fontSize: { md: 16, xs: 14 } }}>
                   Click{' '}
                   <Button
+                    onClick={noFunction}
                     variant="contained"
                     sx={{ border: 1, height: { md: '25px', xs: '20px' } }}
                   >
@@ -79,9 +123,9 @@ export default function Oldpatientsdata() {
             </Container>
           </Box>
 
-          {oldData && (
+          {oldpatientsdata && (
             <div>
-              {oldData.map((item, index) => (
+              {oldpatientsdata?.map((item, index) => (
                 <Stack
                   component={Card}
                   spacing={1}
@@ -92,13 +136,39 @@ export default function Oldpatientsdata() {
                     sx={{
                       display: 'grid',
                       gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' },
-
                       p: 1,
                       ml: 1,
                       mt: 1,
                     }}
                   >
-                    {item?.drug_allergies.length > 0 && (
+                    {item?.identification_num?.length > 0 && (
+                      <Stack spacing={2} sx={{ mt: 1 }}>
+                        <Typography style={{ color: 'gray' }} variant="body1">
+                          <Iconify
+                            style={{
+                              color: 'rgb(0,156,0)',
+                              position: 'relative',
+                              left: '-3px',
+                              top: '2px',
+                            }}
+                            icon="heroicons:identification"
+                          />{' '}
+                          Identification Num{' '}
+                        </Typography>
+                        <Stack spacing={1}>
+                          <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
+                            -&nbsp; {item?.identification_num}
+                          </li>
+                        </Stack>
+                        <Divider
+                          sx={{
+                            borderStyle: 'dashed',
+                            borderColor: 'rgba(128, 128, 128, 0.512)',
+                          }}
+                        />
+                      </Stack>
+                    )}
+                    {item?.drug_allergies?.length > 0 && (
                       <Stack spacing={2} sx={{ mt: 1 }}>
                         <Typography style={{ color: 'gray' }} variant="body1">
                           <Iconify
@@ -118,7 +188,7 @@ export default function Oldpatientsdata() {
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                               key={drug?._id}
                             >
-                              -&nbsp; {drug.trade_name}
+                              -&nbsp; {drug?.trade_name}
                             </li>
                           ))}
                         </Stack>
@@ -130,7 +200,7 @@ export default function Oldpatientsdata() {
                         />
                       </Stack>
                     )}
-                    {item?.diseases.length > 0 && (
+                    {item?.diseases?.length > 0 && (
                       <Stack spacing={2} sx={{ mt: 1 }}>
                         <Typography style={{ color: 'gray' }} variant="body1">
                           <Iconify
@@ -164,7 +234,7 @@ export default function Oldpatientsdata() {
                       </Stack>
                     )}
 
-                    {item?.surgeries.length > 0 && (
+                    {item?.surgeries?.length > 0 && (
                       <Stack spacing={2} sx={{ mt: 1 }}>
                         <Typography style={{ color: 'gray' }} variant="body1">
                           <Iconify
@@ -179,7 +249,7 @@ export default function Oldpatientsdata() {
                           Surgeries{' '}
                         </Typography>
                         <Stack spacing={1}>
-                          {item?.surgeries.map((surgery) => (
+                          {item?.surgeries?.map((surgery) => (
                             <li
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                               key={surgery._id}
@@ -197,7 +267,7 @@ export default function Oldpatientsdata() {
                         />
                       </Stack>
                     )}
-                    {item?.medicines.length > 0 && (
+                    {item?.medicines?.length > 0 && (
                       <Stack spacing={2} sx={{ mt: 1 }}>
                         <Typography style={{ color: 'gray' }} variant="body1">
                           <Iconify
@@ -212,7 +282,7 @@ export default function Oldpatientsdata() {
                           Medicines{' '}
                         </Typography>
                         <Stack spacing={1}>
-                          {item?.medicines.map((data) => (
+                          {item?.medicines?.map((data) => (
                             <li
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                               key={data._id}
@@ -231,7 +301,7 @@ export default function Oldpatientsdata() {
                       </Stack>
                     )}
 
-                    {item?.insurance.length > 0 && (
+                    {item?.insurance?.length > 0 && (
                       <Stack spacing={2} sx={{ mt: 1 }}>
                         <Typography style={{ color: 'gray' }} variant="body1">
                           <Iconify
@@ -246,10 +316,10 @@ export default function Oldpatientsdata() {
                           Insurance{' '}
                         </Typography>
                         <Stack spacing={1}>
-                          {item?.insurance.map((company) => (
+                          {item?.insurance?.map((company) => (
                             <li
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
-                              key={company._id}
+                              key={company?._id}
                             >
                               -&nbsp; {company?.name_english}
                             </li>
@@ -370,9 +440,20 @@ export default function Oldpatientsdata() {
                         />
                       </Stack>
                     )}
+
+                    {item?.identification_num?.length && (
+                      <Stack spacing={2} sx={{ mt: '13.6%' }}>
+                        <Divider
+                          sx={{
+                            borderStyle: 'dashed',
+                            borderColor: 'rgba(128, 128, 128, 0.512)',
+                          }}
+                        />
+                      </Stack>
+                    )}
                   </Stack>
 
-                  {item?.other_medication_notes.length > 0 && (
+                  {item?.other_medication_notes?.length > 0 && (
                     <Stack spacing={2} sx={{ mt: 1, ml: 2 }}>
                       <Typography style={{ color: 'gray' }} variant="body1">
                         <Iconify
@@ -386,7 +467,7 @@ export default function Oldpatientsdata() {
                         />{' '}
                         Notes
                       </Typography>
-                      {item?.other_medication_notes.map((note, indexnumtwo) => (
+                      {item?.other_medication_notes?.map((note, indexnumtwo) => (
                         <li
                           key={indexnumtwo}
                           style={{

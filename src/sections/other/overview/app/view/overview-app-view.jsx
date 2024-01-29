@@ -10,7 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 import axios from 'src/utils/axios';
-
+import { useSnackbar } from 'src/components/snackbar';
 import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled } from 'src/_mock';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -27,17 +27,40 @@ export default function OverviewAppView() {
   const { user } = useAuthContext();
   const dialog = useBoolean(true);
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
   const [oldpatientsdata, setOldpatientsdata] = useState([]);
   const [oldData, setOlddata] = useState();
+
+  console.log(user);
+
   const settings = useSettingsContext();
   const currentHour = new Date().getHours();
   const isMorning = currentHour >= 0 && currentHour < 12;
   const greeting = isMorning ? 'Good Morning ☀️' : 'Good Evening 🌑';
 
-  const yesfunction = () => {
+  const yesfunction = async () => {
+    try {
+      const response = await axios.patch(`/api/patient/${user?.patient?._id}/updateonboard`, {
+        is_onboarded: true,
+      });
+      setOldpatientsdata(response.data);
+      enqueueSnackbar(`Please check your data`, { variant: 'success' });
+    } catch (error) {
+      console.error('Error updating data:', error);
+    }
     router.push(paths.dashboard.user.oldpatientdata);
   };
-  const nofunction = () => {
+
+  const nofunction = async () => {
+    try {
+      const response = await axios.patch(`/api/patient/${user?.patient?._id}/updateonboard`, {
+        is_onboarded: true,
+      });
+      setOldpatientsdata(response.data);
+      enqueueSnackbar(`Thanks for your cooperation`, { variant: 'success' });
+    } catch (error) {
+      console.error('Error updating data:', error);
+    }
     dialog.onFalse();
   };
 
@@ -84,34 +107,38 @@ export default function OverviewAppView() {
             <AppFeatured list={_appFeatured} />
           </Grid>
 
-          <Grid xs={12} md={6} lg={12}>
+          <Grid xs={12} md={12} sx={{ height: '400px' }}>
             <Typography variant="h3">How To Use</Typography>
             <Box sx={{ position: 'relative', mt: 1 }}>
-              <div style={{ position: 'relative', paddingBottom: '56%', width: '100%' }}>
-                <iframe
-                  src="https://www.youtube.com/embed/IGsRxmC40Bw?si=gULZ3W4Jy6BPk7p6"
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowfullscreen
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '50%',
-                    borderRadius: '10px',
-                    border: 'none',
-                  }}
-                />
-              </div>
+              <iframe
+                src="https://www.youtube.com/embed/IGsRxmC40Bw?si=gULZ3W4Jy6BPk7p6"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  height: '320px',
+                  width: '100%',
+                  borderRadius: '10px',
+                  border: 'none',
+                }}
+              />
             </Box>
           </Grid>
         </Grid>
-        {user?.patient?.identification_num === oldData ? (
+        {user?.patient?.identification_num === oldData && user?.patient?.is_onboarded === false ? (
           <Dialog open={dialog.value} onClose={dialog.onTrue}>
             <DialogTitle>
-              We found that you have data stored in عياده ركتورنا do you want to store it in your
-              profile
+              We found that you have data stored in
+              <ol>
+                <li>اسم عيادة</li>
+                <li>اسم عيادة</li>
+                <li>اسم عيادة</li>
+                <li>اسم عيادة</li>
+              </ol>
+              do you want to store it in your profile
             </DialogTitle>
             <DialogActions>
               <Button onClick={yesfunction} variant="outlined" color="success" type="submit">

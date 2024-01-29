@@ -17,6 +17,8 @@ import axios, { endpoints, fetcher } from 'src/utils/axios';
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
+  const [oldpatientsdata, setOldpatientsdata] = useState();
+
   const [profilePicture, setProfilePicture] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries();
@@ -24,6 +26,21 @@ export default function AccountGeneral() {
   const [selectedCountry, setSelectedCountry] = useState('');
   const { tableData } = useGetCities();
   const { user } = useAuthContext();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('/api/oldpatientsdata/details', {
+          identification_num: user?.patient?.identification_num,
+        });
+        setOldpatientsdata(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
+    fetchData();
+  }, [user.patient.identification_num]);
   const UpdateUserSchema = Yup.object().shape({
     first_name: Yup.string(),
     last_name: Yup.string(),
@@ -54,6 +71,7 @@ export default function AccountGeneral() {
         : tableData
     );
   }, [tableData, selectedCountry]);
+
 
   const defaultValues = {
     first_name: user?.patient?.first_name || '',
