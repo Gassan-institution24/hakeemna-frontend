@@ -30,7 +30,7 @@ export default function Whydoc() {
   );
 
   const renderContent = (
-    <Box sx={{ flexGrow: 1, position: 'relative', left: { xs: '7%', md:' 12% '}, mt: 5 }}>
+    <Box sx={{ flexGrow: 1, position: 'relative', left: { xs: '10%',md:' 12% '}, mt: 5 }}>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6} md={6}>
           <Item

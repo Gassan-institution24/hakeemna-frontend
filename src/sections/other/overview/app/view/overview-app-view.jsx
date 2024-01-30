@@ -94,7 +94,7 @@ export default function OverviewAppView() {
         <Grid container spacing={3}>
           <Grid xs={12} md={8}>
             <AppWelcome
-              title={`${greeting} \n ${user?.userName}`}
+              title={`${greeting} \n ${user?.patient?.first_name} ${user?.patient?.last_name}`}
               description="Nourish your body, empower your mind – wellness is the key to a vibrant life."
               img={<Image src={Photo} />}
               action={
