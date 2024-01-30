@@ -2,9 +2,7 @@ import { m, useScroll } from 'framer-motion';
 import { useRef, useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -12,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import { alpha, styled, useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
-import { RouterLink } from 'src/routes/components';
+
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -21,8 +19,6 @@ import { bgBlur, bgGradient, textGradient } from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
 import { varFade, MotionContainer } from 'src/components/animate';
-import { PATH_BEFORE_LOGIN } from 'src/config-global';
-import yourroll from './view/patientservices';
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({

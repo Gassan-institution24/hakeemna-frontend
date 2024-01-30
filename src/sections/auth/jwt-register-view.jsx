@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
+import { Button, MenuItem } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -120,6 +120,13 @@ export default function JwtRegisterView() {
 
         <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
           Sign in
+        </Link>
+      </Stack>
+      
+      <Stack direction="row" spacing={0.5}>
+        <Typography variant="body2"> I am unit services </Typography>
+        <Link href={paths.auth.registersu} component={RouterLink} variant="subtitle2">
+          Sign up
         </Link>
       </Stack>
     </Stack>
