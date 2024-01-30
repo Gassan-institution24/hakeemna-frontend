@@ -22,6 +22,8 @@ export default function ProfileHome() {
     return '';
   }
   const { user } = useAuthContext();
+  console.log(user);
+
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
       {user?.patient?.drug_allergies?.length > 0 && (
@@ -206,11 +208,11 @@ export default function ProfileHome() {
             />{' '}
             Notes
           </Typography>
-          {user?.patient?.other_medication_notes?.map((note, index) => (
-            <li key={index} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-               -&nbsp; {note}
+  
+            <li  style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
+               -&nbsp; {user?.patient?.other_medication_notes }
             </li>
-          ))}
+       
         </Stack>
       ): ''}
     </Stack>
@@ -420,7 +422,7 @@ export default function ProfileHome() {
       </Grid>
 
       <Grid xs={12} md={8}>
-        {renderContent.length > 0 ? renderContent : '' }
+        {renderContent }
       </Grid>
     </Grid>
   );
