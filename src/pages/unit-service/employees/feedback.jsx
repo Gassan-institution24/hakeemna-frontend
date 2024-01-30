@@ -15,13 +15,11 @@ export default function EmployeeFeedbackPage() {
   const name = data?.first_name;
   return (
     <>
-      <ACLGuard hasContent category="appointment_config" acl="read">
         <Helmet>
           <title> {name || ''} Employee Feedback</title>
         </Helmet>
         {loading&& <LoadingScreen/>}
         {!loading && <EmployeeFeedbackView employeeData={data} />}
-      </ACLGuard>
     </>
   );
 }

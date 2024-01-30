@@ -15,7 +15,7 @@ export default function DepartmentEditPage() {
   const name = data?.name_english;
   return (
     <>
-      <ACLGuard hasContent category="appointment_config" acl="update">
+      <ACLGuard hasContent category="department" subcategory='department_info' acl="update">
         <Helmet>
           <title> Edit {name || ''} Department </title>
         </Helmet>

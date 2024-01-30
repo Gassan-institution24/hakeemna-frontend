@@ -1,15 +1,18 @@
 import { Helmet } from 'react-helmet-async';
-import NewEntranceManagementView from 'src/sections/employee/entranceManagement/view/new'
+import ACLGuard from 'src/auth/guard/acl-guard';
+import NewEntranceManagementView from 'src/sections/employee/entranceManagement/view/new';
 // ----------------------------------------------------------------------
 
 export default function EntranceManagementNewPage() {
   return (
     <>
-      <Helmet>
-        <title>New Entrance Management</title>
-      </Helmet>
+      <ACLGuard hasContent category="employee" subcategory="entrance_management" acl="create">
+        <Helmet>
+          <title>New Entrance Management</title>
+        </Helmet>
 
-      <NewEntranceManagementView />
+        <NewEntranceManagementView />
+      </ACLGuard>
     </>
   );
 }

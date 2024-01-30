@@ -13,7 +13,7 @@ export default function EmployeeACLPage() {
   const {data,loading} = useGetEmployeeEngagement(id);
   return (
     <>
-      <ACLGuard hasContent category="appointment_config" acl="update">
+      <ACLGuard hasContent category="employee" subcategory='acl' acl="update">
         <Helmet>
           <title>Access control list</title>
         </Helmet>

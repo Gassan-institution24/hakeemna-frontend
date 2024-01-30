@@ -32,7 +32,7 @@ export default function CollapsibleTable() {
   return (
     <TableContainer sx={{ mt: 3, overflow: 'unset' }}>
       <Scrollbar>
-        <Table sx={{ minWidth: 800 }}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell />

@@ -416,7 +416,7 @@ export default function JwtRegisterView() {
           value={em_phone}
           onChange={(newPhone) => {
             matchIsValidTel(newPhone);
-            setUSphone(newPhone);
+            setEMphone(newPhone);
             methods.setValue('em_phone', newPhone);
           }}
         />

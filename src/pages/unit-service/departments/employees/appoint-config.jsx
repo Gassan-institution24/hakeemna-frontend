@@ -1,8 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 
 import DepartmentEmployeeAppointconfigView from 'src/sections/unit-service/departments/employees/view/appoint-config-table';
-import { useGetDepartment, useGetEmployee,useGetDepartmentEmployeeAppointmentConfigs } from 'src/api/tables';
+import {
+  useGetDepartment,
+  useGetEmployee,
+  useGetDepartmentEmployeeAppointmentConfigs,
+} from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
@@ -11,18 +16,29 @@ export default function DepartmentEmployeeAppointconfigPage() {
   const { id, emid } = params;
   const { data } = useGetDepartment(id);
   const employeeData = useGetEmployee(emid).data;
-  const {appointmentConfigData,loading, refetch} = useGetDepartmentEmployeeAppointmentConfigs(id,emid)
+  const { appointmentConfigData, loading, refetch } = useGetDepartmentEmployeeAppointmentConfigs(
+    id,
+    emid
+  );
   const name = employeeData?.first_name;
 
   return (
     <>
-      <Helmet>
-        <title> {name || ''} Employee Appointment Config</title>
-      </Helmet>
+      <ACLGuard hasContent category="employee" subcategory="appointment_configs" acl="read">
+        <Helmet>
+          <title> {name || ''} Employee Appointment Config</title>
+        </Helmet>
 
-      {!loading && (
-        <DepartmentEmployeeAppointconfigView appointmentConfigData={appointmentConfigData} employeeData={employeeData} departmentData={data} refetch={refetch} loading={loading}/>
-      )} 
+        {!loading && (
+          <DepartmentEmployeeAppointconfigView
+            appointmentConfigData={appointmentConfigData}
+            employeeData={employeeData}
+            departmentData={data}
+            refetch={refetch}
+            loading={loading}
+          />
+        )}
+      </ACLGuard>
     </>
   );
 }

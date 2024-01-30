@@ -6,7 +6,7 @@ import EconomicMovementNewView from 'src/sections/employee/accounting/economic-m
 export default function EconomicMovementNewPage() {
   return (
     <>
-    <ACLGuard hasContent category='accounting' acl='create' >
+    <ACLGuard hasContent category='employee' subcategory='accounting' acl='create' >
       <Helmet>
         <title>New Economic Movement</title>
       </Helmet>

@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import DepartmentEmployeeActivitiesView from 'src/sections/unit-service/departments/employees/view/activities-view';
 import { useGetDepartment, useGetEmployee } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
@@ -14,13 +15,15 @@ export default function DepartmentEmployeeActivitiesPage() {
   const name = employeeData?.first_name;
   return (
     <>
-      <Helmet>
-        <title> {name || ''} Employee Activities</title>
-      </Helmet>
+      <ACLGuard hasContent category="employee" subcategory="activities" acl="read">
+        <Helmet>
+          <title> {name || ''} Employee Activities</title>
+        </Helmet>
 
-      {data && employeeData && (
-        <DepartmentEmployeeActivitiesView employeeData={employeeData} departmentData={data} />
-      )}
+        {data && employeeData && (
+          <DepartmentEmployeeActivitiesView employeeData={employeeData} departmentData={data} />
+        )}
+      </ACLGuard>
     </>
   );
 }

@@ -12,15 +12,15 @@ export default function DepartmentAppointmentsPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetDepartment(id);
-  const { appointmentsData, refetch,loading } = useGetDepartmentAppointments(id);
+  const { appointmentsData, refetch, loading } = useGetDepartmentAppointments(id);
   const name = data?.name_english;
   return (
     <>
-      <ACLGuard hasContent category="appointment" acl="read">
+      <ACLGuard hasContent category="department" subcategory="appointments" acl="read">
         <Helmet>
           <title>{name || ''} Department Appointments</title>
         </Helmet>
-        {loading&& <LoadingScreen/>}
+        {loading && <LoadingScreen />}
         {!loading && (
           <DepartmentAppointmentsView
             departmentData={data}

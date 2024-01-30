@@ -15,11 +15,11 @@ export default function DepartmentQCPage() {
   const name = data?.name_english;
   return (
     <>
-      <ACLGuard hasContent category="appointment_config" acl="read">
+      <ACLGuard hasContent category="department" subcategory="quality_control" acl="read">
         <Helmet>
           <title>{name || ''} Department Quality Control</title>
         </Helmet>
-        {loading&& <LoadingScreen/>}
+        {loading && <LoadingScreen />}
         {!loading && <DepartmentQCView departmentData={data} />}
       </ACLGuard>
     </>

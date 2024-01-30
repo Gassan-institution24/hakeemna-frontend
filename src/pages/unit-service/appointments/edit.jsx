@@ -15,7 +15,7 @@ export default function AppointmentEditPage() {
   const name = data?.name_english;
   return (
     <>
-    <ACLGuard hasContent category='appointment' acl='update'>
+    <ACLGuard hasContent category='unit_service' subcategory='appointments' acl='update'>
       <Helmet>
         <title>Edit {name||''} Appointment</title>
       </Helmet>

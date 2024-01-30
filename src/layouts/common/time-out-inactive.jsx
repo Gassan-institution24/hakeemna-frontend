@@ -29,69 +29,31 @@ export default function TimeOutInActive() {
   const showAlert = useBoolean(true);
 
   const isXsScreen = useMediaQuery('(max-width:600px)');
+  console.log('user', user);
 
   const unitServiceCountdown = useCountdownDate(
     new Date(
       new Date(
-        user?.employee?.employee_engagements[
-          user?.employee.selected_engagement
+        user?.employee?.employee_engagements?.[
+          user?.employee?.selected_engagement
         ]?.unit_service?.created_at
       ).getTime() +
         3 * 24 * 60 * 60 * 1000
     )
   );
+  console.log('unitServiceCountdown', unitServiceCountdown);
 
   const userCountDown = useCountdownDate(
     new Date(new Date(user?.created_at).getTime() + 3 * 24 * 60 * 60 * 1000)
   );
   const subscriptionExpired = useCountdownDate(
     new Date(
-      user?.employee?.employee_engagements[
-        user?.employee.selected_engagement
+      user?.employee?.employee_engagements?.[
+        user?.employee?.selected_engagement
       ]?.unit_service?.subscription_end_date
     )
   );
-
-  useEffect(() => {
-    const checkAndLogout = async () => {
-      // if (
-      //   user?.employee&&
-      //   user?.employee.employee_engagements[user?.employee.selected_engagement] &&
-      //   user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-      //     .status === 'inactive' &&
-      //   new Date(
-      //     user?.employee?.employee_engagements[
-      //       user?.employee.selected_engagement
-      //     ]?.unit_service.created_at
-      //   ).getTime() <
-      //     new Date().getTime() - 3 * 24 * 60 * 60 * 1000
-      // ) {
-      //   console.log('this user is in activate and has to logout');
-      //   try {
-      //     await logout();
-      //   } catch (error) {
-      //     console.error(error);
-      //     enqueueSnackbar('Unable to logout!', { variant: 'error' });
-      //   }
-      // }
-      console.log('user', user);
-      if (
-        user &&
-        user?.status === 'inactive' &&
-        new Date(user?.created_at).getTime() < new Date().getTime() - 3 * 24 * 60 * 60 * 1000
-      ) {
-        console.log('this user is in activate and has to logout');
-        try {
-          await logout();
-        } catch (error) {
-          console.error(error);
-          enqueueSnackbar('Unable to logout!', { variant: 'error' });
-        }
-      }
-    };
-
-    checkAndLogout();
-  }, [user, logout, enqueueSnackbar]);
+  console.log('userCountDown', userCountDown);
 
   // if (
   //   user?.role === 'admin' &&
@@ -136,8 +98,9 @@ export default function TimeOutInActive() {
   //     </>
   //   );
   // } else
-  if (user && user?.status === 'inactive') {
+  if (user && user.status === 'inactive') {
     const { days, hours, minutes, seconds } = userCountDown;
+    console.log(days, hours);
     content = (
       <>
         {' '}
@@ -247,6 +210,7 @@ export default function TimeOutInActive() {
   //     </>
   //   );
   // }
+  console.log('content', content);
   return content;
 }
 

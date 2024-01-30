@@ -15,7 +15,7 @@ export default function SubscriptionsInfoPage() {
   const name = data?.name_english;
   return (
     <>
-      <ACLGuard hasContent category="appointment_config" acl="read">
+      <ACLGuard hasContent category="unit_service" subcategory='subscriptions' acl="read">
         <Helmet>
           <title>{name || ''} Subscription Info</title>
         </Helmet>

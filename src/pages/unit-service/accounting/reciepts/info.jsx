@@ -6,7 +6,7 @@ import RecieptsInfoView from 'src/sections/unit-service/accounting/reciepts/view
 export default function RecieptsInfoPage() {
   return (
     <>
-    <ACLGuard hasContent category='invoices' acl='read'>
+    <ACLGuard hasContent category='unit_service' subcategory='accounting' acl='read'>
       <Helmet>
         <title>Reciept Info</title>
       </Helmet>

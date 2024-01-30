@@ -15,7 +15,7 @@ export default function AppointmentsHomePage() {
   );
   return (
     <>
-      <ACLGuard hasContent category="appointment" acl="read">
+      <ACLGuard hasContent category="unit_service" subcategory='appointments' acl="read">
         <Helmet>
           <title>Appointments</title>
         </Helmet>

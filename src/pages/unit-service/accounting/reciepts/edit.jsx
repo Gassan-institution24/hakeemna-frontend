@@ -6,7 +6,7 @@ import RecieptsEditView from 'src/sections/unit-service/accounting/reciepts/view
 export default function RecieptsEditPage() {
   return (
     <>
-    <ACLGuard hasContent category='invoices' acl='update'>
+    <ACLGuard hasContent category='unit_service' subcategory='accounting' acl='update'>
       <Helmet>
         <title>Edit Reciept</title>
       </Helmet>
