@@ -1,15 +1,18 @@
 import { Helmet } from 'react-helmet-async';
-import Communication from 'src/sections/employee/communication/view/home'
+import ACLGuard from 'src/auth/guard/acl-guard';
+import Communication from 'src/sections/employee/communication/view/home';
 // ----------------------------------------------------------------------
 
 export default function HomePage() {
   return (
     <>
-      <Helmet>
-        <title>Communication</title>
-      </Helmet>
+      <ACLGuard hasContent category="employee" subcategory="communication" acl="read">
+        <Helmet>
+          <title>Communication</title>
+        </Helmet>
 
-      <Communication />
+        <Communication />
+      </ACLGuard>
     </>
   );
 }

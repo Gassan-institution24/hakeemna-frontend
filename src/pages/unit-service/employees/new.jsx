@@ -8,7 +8,7 @@ import EmployeeNewView from 'src/sections/unit-service/employees/view/new';
 export default function EmployeeNewPage() {
   return (
     <>
-      <ACLGuard hasContent category="appointment_config" acl="create">
+      <ACLGuard hasContent category="unit_service" subcategory="employees" acl="create">
         <Helmet>
           <title>New Employee</title>
         </Helmet>

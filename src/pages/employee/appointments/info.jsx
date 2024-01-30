@@ -15,7 +15,7 @@ export default function EditPage() {
   const name = data?.name_english;
   return (
     <>
-    <ACLGuard hasContent category='appointment' acl='read'>
+    <ACLGuard hasContent category='employee' subcategory='appointments' acl='read'>
       <Helmet>
         <title> {name||''} Appointment Accounting</title>
       </Helmet>

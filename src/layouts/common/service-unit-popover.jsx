@@ -33,7 +33,7 @@ export default function ServiceUnitPopover() {
   const [selectedIndex, setSelectedIndex] = useState();
   const [error, setError] = useState();
 
-  const selected = user?.employee?.employee_engagements[user?.employee?.selected_engagement];
+  const selected = user?.employee?.employee_engagements?.[user?.employee?.selected_engagement];
 
   const handleCheckPassword = async () => {
     try {

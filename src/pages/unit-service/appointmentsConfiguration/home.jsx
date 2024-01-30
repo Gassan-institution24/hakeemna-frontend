@@ -8,7 +8,7 @@ import AppointmentConfigHomeView from 'src/sections/unit-service/appointmentsCon
 export default function AppointmentConfigHomePage() {
   return (
     <>
-    <ACLGuard hasContent category='appointment_config' acl='read'>
+    <ACLGuard hasContent category='unit_service' subcategory='appointment_configs' acl='read'>
       <Helmet>
         <title> Appointment Configurations</title>
       </Helmet>

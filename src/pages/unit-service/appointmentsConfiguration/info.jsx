@@ -14,7 +14,7 @@ export default function AppointmentConfigInfoPage() {
   const name = data?.name_english;
   return (
     <>
-      <ACLGuard hasContent category="appointment_config" acl="read">
+      <ACLGuard hasContent category="unit_service" subcategory='appointment_configs' acl="read">
         <Helmet>
           <title>{name || ''} Appointment Configuration Info</title>
         </Helmet>

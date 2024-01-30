@@ -14,7 +14,7 @@ export default function AppointmentsHomePage() {
   console.log('appointmentsData', appointmentsData);
   return (
     <>
-      <ACLGuard hasContent category="appointment" acl="read">
+      <ACLGuard hasContent category="employee" subcategory='appointments' acl="read">
         <Helmet>
           <title>Appointments</title>
         </Helmet>

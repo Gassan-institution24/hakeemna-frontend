@@ -8,7 +8,7 @@ import NewAppointmentsView from 'src/sections/unit-service/appointments/view/new
 export default function AppointmentsNewPage() {
   return (
     <>
-    <ACLGuard hasContent category='appointment' acl='create'>
+    <ACLGuard hasContent category='unit_service' subcategory='appointments' acl='create'>
       <Helmet>
         <title>New Appointments</title>
       </Helmet>

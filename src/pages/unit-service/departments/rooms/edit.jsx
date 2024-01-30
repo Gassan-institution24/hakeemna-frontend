@@ -4,6 +4,7 @@ import DepartmentRoomEditView from 'src/sections/unit-service/departments/rooms/
 import { useGetDepartment,useGetRoom } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
 import { LoadingScreen } from 'src/components/loading-screen';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
@@ -15,11 +16,13 @@ export default function DepartmentRoomEditPage() {
   const name = data?.name_english
   return (
     <>
+    <ACLGuard hasContent category='department' subcategory='rooms' acl='update'>
       <Helmet>
         <title> Edit {name||''} Room </title>
       </Helmet>
       {loading && <LoadingScreen/>}
       {!loading && <DepartmentRoomEditView roomData={data} departmentData={departmentData} />}
+      </ACLGuard>
     </>
   );
 }

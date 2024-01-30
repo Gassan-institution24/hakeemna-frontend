@@ -15,7 +15,7 @@ export default function EmployeeAccountingPage() {
   const name = data?.first_name;
   return (
     <>
-      <ACLGuard hasContent category="accounting" acl="read">
+      <ACLGuard hasContent category="employee" subcategory='accounting' acl="read">
         <Helmet>
           <title> {name || ''} Employee Accounting</title>
         </Helmet>

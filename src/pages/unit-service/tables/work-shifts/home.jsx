@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 import WorkShiftHomeView from 'src/sections/unit-service/tables/work-shifts/view/home';
 
@@ -7,11 +8,13 @@ import WorkShiftHomeView from 'src/sections/unit-service/tables/work-shifts/view
 export default function WorkShiftHomePage() {
   return (
     <>
-      <Helmet>
-        <title>Work Shifts</title>
-      </Helmet>
+      <ACLGuard hasContent category="unit_service" subcategory="work_shift" acl="read">
+        <Helmet>
+          <title>Work Shifts</title>
+        </Helmet>
 
-      <WorkShiftHomeView />
+        <WorkShiftHomeView />
+      </ACLGuard>
     </>
   );
 }

@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import DepartmentEmployeeAccountingView from 'src/sections/unit-service/departments/employees/view/accounting-view';
 import { useGetDepartment, useGetEmployee } from 'src/api/tables';
 import { useParams } from 'src/routes/hooks';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
@@ -14,6 +15,7 @@ export default function DepartmentEmployeeAccountingPage() {
   const name = employeeData?.first_name;
   return (
     <>
+    <ACLGuard hasContent category='employee' subcategory='accounting' acl='read'>
       <Helmet>
         <title> {name || ''} Employee Accounting</title>
       </Helmet>
@@ -21,6 +23,7 @@ export default function DepartmentEmployeeAccountingPage() {
       {data && employeeData && (
         <DepartmentEmployeeAccountingView employeeData={employeeData} departmentData={data} />
       )}
+      </ACLGuard>
     </>
   );
 }

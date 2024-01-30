@@ -11,15 +11,15 @@ import { LoadingScreen } from 'src/components/loading-screen';
 export default function EmployeeActivitiesPage() {
   const params = useParams();
   const { id } = params;
-  const {data,loading} = useGetEmployee(id);
+  const { data, loading } = useGetEmployee(id);
   const name = data?.first_name;
   return (
     <>
-      <ACLGuard hasContent category="appointment_config" acl="read">
+      <ACLGuard hasContent category="employee" subcategory="activities" acl="read">
         <Helmet>
           <title> {name || ''} Employee Activities</title>
         </Helmet>
-        {loading&& <LoadingScreen/>}
+        {loading && <LoadingScreen />}
         {!loading && <EmployeeActivitiesView employeeData={data} />}
       </ACLGuard>
     </>

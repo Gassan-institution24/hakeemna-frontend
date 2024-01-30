@@ -6,7 +6,7 @@ import PaymentControlView from 'src/sections/employee/accounting/payment-control
 export default function PaymentControlPage() {
   return (
     <>
-    <ACLGuard hasContent category='accounting' acl='read' >
+    <ACLGuard hasContent category='employee' subcategory='accounting' acl='read' >
       <Helmet>
         <title>Payment Control</title>
       </Helmet>

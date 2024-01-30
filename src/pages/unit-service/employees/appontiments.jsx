@@ -12,15 +12,15 @@ export default function EmployeeAppointmentsPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetEmployeeEngagement(id);
-  const { appointmentsData, refetch,loading } = useGetEmployeeAppointments(id);
+  const { appointmentsData, refetch, loading } = useGetEmployeeAppointments(id);
   const name = data?.name_english;
   return (
     <>
-      <ACLGuard hasContent category="appointment" acl="read">
+      <ACLGuard hasContent category="unit_service" subcategory="appointments" acl="read">
         <Helmet>
           <title>{name || ''} Employee Appointments</title>
         </Helmet>
-        {loading&& <LoadingScreen/>}
+        {loading && <LoadingScreen />}
         {!loading && (
           <EmployeeAppointmentsView
             appointmentsData={appointmentsData}

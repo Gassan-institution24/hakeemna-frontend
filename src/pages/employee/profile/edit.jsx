@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 import EmployeeEditProfileView from 'src/sections/employee/profile/view/edit';
 
@@ -7,11 +8,13 @@ import EmployeeEditProfileView from 'src/sections/employee/profile/view/edit';
 export default function EditPage() {
   return (
     <>
-      <Helmet>
-        <title>Edit Profile</title>
-      </Helmet>
+      <ACLGuard hasContent category="employee" subcategory="info" acl="update">
+        <Helmet>
+          <title>Edit Profile</title>
+        </Helmet>
 
-     <EmployeeEditProfileView />
+        <EmployeeEditProfileView />
+      </ACLGuard>
     </>
   );
 }

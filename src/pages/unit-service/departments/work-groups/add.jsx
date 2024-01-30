@@ -14,7 +14,7 @@ export default function DepartmentWorkGroupNewPage() {
   const { data,loading } = useGetDepartment(id);
   return (
     <>
-      <ACLGuard hasContent category="appointment_config" acl="create">
+      <ACLGuard hasContent category="department" subcategory='work_groups' acl="create">
         <Helmet>
           <title> New Work Group </title>
         </Helmet>

@@ -98,21 +98,49 @@ export function AuthProvider({ children }) {
   }, [initialize]);
 
   // LOGIN
-  const login = useCallback(async (email, password) => {
-    const data = {
-      email:email.toLowerCase(),
-      password,
-    };
+  const login = useCallback(
+    async (email, password) => {
+      const data = {
+        email: email.toLowerCase(),
+        password,
+      };
 
-    const response = await axios.post(endpoints.auth.login, data);
+      const response = await axios.post(endpoints.auth.login, data);
 
-    const { accessToken, user ,message } = response.data;
+      const { accessToken, user, message } = response.data;
 
-    if(accessToken && user){
+      if (accessToken && user) {
+        setSession(accessToken);
+
+        dispatch({
+          type: 'LOGIN',
+          payload: {
+            user: {
+              ...user,
+              accessToken,
+            },
+          },
+        });
+        initialize();
+      } else throw new Error(message);
+    },
+    [initialize]
+  );
+
+  // REGISTER
+  const register = useCallback(
+    async (data) => {
+      const response = await axios.post(endpoints.auth.register, {
+        ...data,
+        email: data.email.toLowerCase(),
+      });
+
+      const { accessToken, user } = response.data;
+
       setSession(accessToken);
-  
+
       dispatch({
-        type: 'LOGIN',
+        type: 'REGISTER',
         payload: {
           user: {
             ...user,
@@ -120,33 +148,10 @@ export function AuthProvider({ children }) {
           },
         },
       });
-      initialize()
-    }
-    else throw new Error(message);
-
-  }, [initialize]);
-
-  // REGISTER
-  const register = useCallback(async (data) => {
-    console.log('user dataaaaa', data);
-
-    const response = await axios.post(endpoints.auth.register, {...data,email:data.email.toLowerCase()});
-
-    const { accessToken, user } = response.data;
-
-    sessionStorage.setItem(STORAGE_KEY, accessToken);
-
-    dispatch({
-      type: 'REGISTER',
-      payload: {
-        user: {
-          ...user,
-          accessToken,
-        },
-      },
-    });
-    initialize()
-  }, [initialize]);
+      initialize();
+    },
+    [initialize]
+  );
   // const registerAsUS = useCallback(async (info) => {
   //   const data = {
   //     email:info.email,
@@ -191,12 +196,17 @@ export function AuthProvider({ children }) {
 
   // FORGOT PASSWORD
   const forgotPassword = useCallback(async (email) => {
-    await axios.post(endpoints.auth.forgotpassword, {email:email.toLowerCase()});
+    await axios.post(endpoints.auth.forgotpassword, { email: email.toLowerCase() });
   }, []);
 
   // NEW PASSWORD
-  const newPassword = useCallback(async (email, code, password,confirmPassword) => {
-     await axios.patch(endpoints.auth.resetpassword, {email:email.toLowerCase(),resetToken:code,password,confirmPassword});
+  const newPassword = useCallback(async (email, code, password, confirmPassword) => {
+    await axios.patch(endpoints.auth.resetpassword, {
+      email: email.toLowerCase(),
+      resetToken: code,
+      password,
+      confirmPassword,
+    });
   }, []);
 
   // LOGOUT
