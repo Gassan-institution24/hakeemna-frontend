@@ -3,6 +3,8 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
+import { useGetPatient } from 'src/api/tables';
+import { useAuthContext } from 'src/auth/hooks';
 import { _userAbout, _userPlans, _userPayment, _userInvoices, _userAddressBook } from 'src/_mock';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
@@ -34,6 +36,8 @@ const TABS = [
 // ----------------------------------------------------------------------
 
 export default function AccountView() {
+  const { user } = useAuthContext()
+  const { data, refetch, loading} = useGetPatient(user?.patient?._id)
   const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('general');
@@ -66,7 +70,7 @@ export default function AccountView() {
           <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
       </Tabs>
-      {currentTab === 'general' && <AccountGeneral />}
+      {currentTab === 'general' &&  !loading && <AccountGeneral data={data} refetch={refetch}/> }
       {currentTab === 'notifications' && <AccountNotifications />}
       {currentTab === 'security' && <AccountChangePassword />}
     </Container>

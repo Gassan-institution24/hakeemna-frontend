@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
@@ -11,21 +12,21 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
 import { Button, MenuItem, Typography } from '@mui/material';
 import FormProvider, { RHFTextField, RHFSelect, RHFUploadAvatar } from 'src/components/hook-form';
-import { useGetCities, useGetCountries } from 'src/api/tables';
+import { useGetCities, useGetCountries, useGetPatient } from 'src/api/tables';
 import axios, { endpoints, fetcher } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
-export default function AccountGeneral() {
+export default function AccountGeneral({data,refetch}) {
   const [oldpatientsdata, setOldpatientsdata] = useState();
-
+  const { user } = useAuthContext();
   const [profilePicture, setProfilePicture] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries();
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
   const { tableData } = useGetCities();
-  const { user } = useAuthContext();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,25 +68,25 @@ export default function AccountGeneral() {
   useEffect(() => {
     setCities(
       selectedCountry
-        ? tableData.filter((data) => data?.country?._id === selectedCountry)
+        ? tableData.filter((countryData) => countryData?.country?._id === selectedCountry)
         : tableData
     );
   }, [tableData, selectedCountry]);
 
 
   const defaultValues = {
-    first_name: user?.patient?.first_name || '',
-    last_name: user?.patient?.last_name || '',
-    email: user?.email || '',
-    mobile_num1: user?.patient?.mobile_num1 || '',
-    mobile_num2: user?.patient?.mobile_num2 || '',
-    nationality: user?.patient?.nationality || null,
-    country: user?.patient?.country?._id || null,
-    city: user?.patient?.city?._id || null,
-    address: user?.patient?.address || '',
-    sport_exercises: user?.patient?.sport_exercises || '',
-    smoking: user?.patient?.smoking || '',
-    profile_picture: user?.patient?.profile_picture?.replace(/\\/g, '//') || '',
+    first_name: data?.first_name || '',
+    last_name: data?.last_name || '',
+    email: data?.email || '',
+    mobile_num1: data?.mobile_num1 || '',
+    mobile_num2: data?.mobile_num2 || '',
+    nationality: user.patient?.nationality || null,
+    country: user.patient?.country?._id || null,
+    city: user.patient?.city?._id || null,
+    address: data?.address || '',
+    sport_exercises: data?.sport_exercises || '',
+    smoking: data?.smoking || '',
+    profile_picture: data?.profile_picture?.replace(/\\/g, '//') || '',
   };
 
   const methods = useForm({
@@ -133,23 +134,20 @@ export default function AccountGeneral() {
     }
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (profileData) => {
     // Create a new FormData object
     const formData = new FormData();
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key]);
+    Object.keys(profileData).forEach((key) => {
+      formData.append(key, profileData[key]);
     });
 
     if (profilePicture) {
       formData.append('ter', profilePicture);
     }
     try {
-      // Use your API endpoint to submit the form data
       const response = await axios.patch(`${endpoints.tables.user}${user?.patient._id}`, formData);
       enqueueSnackbar('Profile updated successfully', { variant: 'success' });
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      refetch()
     } catch (error) {
       console.log(error.message);
       enqueueSnackbar('Failed to update profile', { variant: 'error' });
@@ -177,7 +175,7 @@ export default function AccountGeneral() {
                     fontSize:17,
                   }}
                 >
-                  Allowed *.jpeg, *.jpg, *.png, *.gif
+                  Allowed *.jpeg, *.jpg, *.png, *.gif *.pdf
                   <br /> max size of 3MB
                 </Typography>
               }
@@ -286,3 +284,7 @@ export default function AccountGeneral() {
     </FormProvider>
   );
 }
+AccountGeneral.propTypes = {
+  data: PropTypes.func,
+  refetch: PropTypes.func,
+};
