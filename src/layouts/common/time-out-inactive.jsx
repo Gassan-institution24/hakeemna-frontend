@@ -29,7 +29,6 @@ export default function TimeOutInActive() {
   const showAlert = useBoolean(true);
 
   const isXsScreen = useMediaQuery('(max-width:600px)');
-  console.log('user', user);
 
   const unitServiceCountdown = useCountdownDate(
     new Date(
@@ -41,7 +40,6 @@ export default function TimeOutInActive() {
         3 * 24 * 60 * 60 * 1000
     )
   );
-  console.log('unitServiceCountdown', unitServiceCountdown);
 
   const userCountDown = useCountdownDate(
     new Date(new Date(user?.created_at).getTime() + 3 * 24 * 60 * 60 * 1000)
@@ -53,7 +51,6 @@ export default function TimeOutInActive() {
       ]?.unit_service?.subscription_end_date
     )
   );
-  console.log('userCountDown', userCountDown);
 
   // if (
   //   user?.role === 'admin' &&
@@ -100,7 +97,6 @@ export default function TimeOutInActive() {
   // } else
   if (user && user.status === 'inactive') {
     const { days, hours, minutes, seconds } = userCountDown;
-    console.log(days, hours);
     content = (
       <>
         {' '}
@@ -210,7 +206,6 @@ export default function TimeOutInActive() {
   //     </>
   //   );
   // }
-  console.log('content', content);
   return content;
 }
 
