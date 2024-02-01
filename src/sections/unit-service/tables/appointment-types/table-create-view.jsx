@@ -10,7 +10,7 @@ import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableCreateView({departmentData}) {
+export default function TableCreateView({ departmentData }) {
   const settings = useSettingsContext();
 
   return (
@@ -19,15 +19,15 @@ export default function TableCreateView({departmentData}) {
         heading="Create a new work group"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Departments',
+            name: t('departments'),
             href: paths.unitservice.departments.root,
           },
           {
-            name: `${departmentData.name_english||'Department'} work groups`,
+            name: `${departmentData.name_english || 'Department'} work groups`,
             href: paths.unitservice.departments.workGroups.root(departmentData._id),
           },
           { name: 'New work group' },

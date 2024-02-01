@@ -50,7 +50,7 @@ export default function OrderTableToolbar({
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Search name or number..."
+            placeholder={t('Search name or number...')}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -95,7 +95,7 @@ export default function OrderTableToolbar({
 
         <MenuItem
           onClick={() => {
-            onDownload()
+            onDownload();
             popover.onClose();
           }}
         >

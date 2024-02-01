@@ -15,12 +15,12 @@ export default function AppointmentConfigEditPage() {
   const name = data?.name_english;
   return (
     <>
-    <ACLGuard hasContent category='unit_service' subcategory='appointment_configs' acl='update'>
-      <Helmet>
-        <title>Edit {name || ''} Appointment Configuration</title>
-      </Helmet>
-      {loading&& <LoadingScreen/>}
-      {!loading && <EditAppointmentConfigView appointmentConfigData={data} />}
+      <ACLGuard hasContent category="unit_service" subcategory="appointment_configs" acl="update">
+        <Helmet>
+          <title>Edit {name || ''} Appointment Configuration</title>
+        </Helmet>
+        {loading && <LoadingScreen />}
+        {!loading && <EditAppointmentConfigView appointmentConfigData={data} />}
       </ACLGuard>
     </>
   );

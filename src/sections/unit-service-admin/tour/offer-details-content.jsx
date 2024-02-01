@@ -16,13 +16,9 @@ import { fDate } from 'src/utils/format-time';
 // ----------------------------------------------------------------------
 
 export default function TourDetailsContent({ tour }) {
-
   const renderGallery = (
     <>
-      <Box
-        gap={1}
-        display="grid"
-      >
+      <Box gap={1} display="grid">
         <m.div
           key={tour.Offer_img}
           whileHover="hover"
@@ -34,7 +30,7 @@ export default function TourDetailsContent({ tour }) {
             alt="offer img"
             src={tour.Offer_img}
             ratio="1/1"
-            sx={{ borderRadius: 2, cursor: 'pointer', height: '50%', width: '70%', ml: 7.7}}
+            sx={{ borderRadius: 2, cursor: 'pointer', height: '50%', width: '70%', ml: 7.7 }}
           />
         </m.div>
       </Box>
@@ -43,7 +39,7 @@ export default function TourDetailsContent({ tour }) {
 
   const renderHead = (
     <>
-      <Stack direction="row" sx={{ mb: 3, mt: -25}}>
+      <Stack direction="row" sx={{ mb: 3, mt: -25 }}>
         <Typography variant="h4" sx={{ flexGrow: 1 }}>
           {tour.Offer_name}
         </Typography>
@@ -69,7 +65,7 @@ export default function TourDetailsContent({ tour }) {
       {[
         {
           label: 'Available',
-          value:` ${fDate(tour.Offer_start_date)} - ${fDate(tour.Offer_end_date)}` ,
+          value: ` ${fDate(tour.Offer_start_date)} - ${fDate(tour.Offer_end_date)}`,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
@@ -79,7 +75,7 @@ export default function TourDetailsContent({ tour }) {
         },
         {
           label: 'Offer Price',
-          value:  tour.Offer_price,
+          value: tour.Offer_price,
           icon: <Iconify icon="tdesign:money" />,
         },
       ].map((item) => (

@@ -21,7 +21,7 @@ export default function TableCreatePage() {
       <Helmet>
         <title> Patients: {patientName} Insurance </title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
+      {loading && <LoadingScreen />}
       {!loading && <PatientInsurance patientData={data} refetch={refetch} />}
     </>
   );

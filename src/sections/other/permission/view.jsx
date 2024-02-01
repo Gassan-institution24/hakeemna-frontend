@@ -34,7 +34,7 @@ export default function PermissionDeniedView() {
         heading="Permission Denied"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {

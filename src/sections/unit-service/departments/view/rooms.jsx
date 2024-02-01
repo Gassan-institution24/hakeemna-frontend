@@ -43,25 +43,19 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { useTranslate } from 'src/locales';
+import { endpoints } from 'src/utils/axios';
+import ACLGuard from 'src/auth/guard/acl-guard';
+import axiosHandler from 'src/utils/axios-handler';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetDepartmentRooms } from 'src/api/tables'; /// edit
-import axiosHandler from 'src/utils/axios-handler';
-import { endpoints } from 'src/utils/axios';
+import { StatusOptions } from 'src/assets/data/status-options';
+
 import TableDetailRow from '../rooms/table-details-row'; /// edit
 import TableDetailToolbar from '../rooms/table-details-toolbar';
 import TableDetailFiltersResult from '../rooms/table-details-filters-result';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
-
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'name', label: 'Name' },
-  { id: 'general_info', label: 'General Info' },
-  { id: 'status', label: 'Status' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -70,7 +64,18 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function RoomsTableView({departmentData}) {
+export default function RoomsTableView({ departmentData }) {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'name', label: t('name') },
+    { id: 'general_info', label: t('general info') },
+    { id: 'status', label: t('status') },
+    { id: '', width: 88 },
+  ];
+
+  const {STATUS_OPTIONS} = StatusOptions()
+  
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -198,9 +203,9 @@ export default function RoomsTableView({departmentData}) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.departments.rooms.edit(departmentData._id,id));
+      router.push(paths.unitservice.departments.rooms.edit(departmentData._id, id));
     },
-    [router,departmentData]
+    [router, departmentData]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -221,33 +226,37 @@ export default function RoomsTableView({departmentData}) {
     [handleFilters]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
-  
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={`${departmentData.name_english||'Department'} Rooms`} /// edit
+          heading={`${departmentData.name_english || ''} ${t('department rooms')}`} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.unitservice.root,
             },
             {
-              name: 'Departments',
+              name: t('departments'),
               href: paths.unitservice.departments.root,
             },
-            { name: `${departmentData.name_english||'Department'} Rooms` },
+            { name: t('department rooms') },
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={paths.unitservice.departments.rooms.new(departmentData._id)}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Room
-            </Button>
+            ACLGuard({ category: 'department', subcategory: 'rooms', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                href={paths.unitservice.departments.rooms.new(departmentData._id)}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                New Room
+              </Button>
+            )
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -325,25 +334,28 @@ export default function RoomsTableView({departmentData}) {
                 )
               }
               action={
-                <>
-                  {dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'inactive') ? (
-                    <Tooltip title="Activate all">
-                      <IconButton color="primary" onClick={confirmActivate.onTrue}>
-                        <Iconify icon="codicon:run-all" />
-                      </IconButton>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip title="Inactivate all">
-                      <IconButton color="error" onClick={confirmInactivate.onTrue}>
-                        <Iconify icon="iconoir:pause-solid" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </>
+                ACLGuard({ category: 'department', subcategory: 'rooms', acl: 'update' }) && (
+                  <>
+                    {dataFiltered
+                      .filter((row) => table.selected.includes(row._id))
+                      .some((data) => data.status === 'inactive') ? (
+                      <Tooltip title="Activate all">
+                        <IconButton color="primary" onClick={confirmActivate.onTrue}>
+                          <Iconify icon="codicon:run-all" />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Inactivate all">
+                        <IconButton color="error" onClick={confirmInactivate.onTrue}>
+                          <Iconify icon="iconoir:pause-solid" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </>
+                )
               }
               color={
+                ACLGuard({ category: 'department', subcategory: 'rooms', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')

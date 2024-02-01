@@ -196,7 +196,7 @@ export default function NewEditDayAppointmentsDetails({
                   size="small"
                   InputLabelProps={{ shrink: true }}
                   name={`days_details[${ParentIndex}].appointments[${index}].online_available`}
-                  label={<Typography sx={{fontSize:12}}>Online avaliable</Typography>}
+                  label={<Typography sx={{ fontSize: 12 }}>Online avaliable</Typography>}
                 />
                 {/* <RHFTextField
                   size="small"

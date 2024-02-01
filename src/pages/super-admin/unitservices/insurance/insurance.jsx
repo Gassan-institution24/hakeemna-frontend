@@ -17,8 +17,8 @@ export default function TableEditPage() {
       <Helmet>
         <title> {unitServiceName} Accounting</title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
-      {!loading&&<UnitServiceInsurance unitServiceData={data} refetch={refetch} />}
+      {loading && <LoadingScreen />}
+      {!loading && <UnitServiceInsurance unitServiceData={data} refetch={refetch} />}
     </>
   );
 }

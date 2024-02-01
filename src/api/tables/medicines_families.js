@@ -9,7 +9,7 @@ export function useGetMedFamilies() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      families: data || [] ,
+      families: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

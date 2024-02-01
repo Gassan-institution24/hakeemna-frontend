@@ -86,7 +86,9 @@ export default function EconomicMovementsView({ patientData }) {
 
   // const confirm = useBoolean();
 
-  const { economecMovementsData, loading, refetch } = useGetPatientEconomicMovements(patientData._id);
+  const { economecMovementsData, loading, refetch } = useGetPatientEconomicMovements(
+    patientData._id
+  );
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -227,7 +229,9 @@ export default function EconomicMovementsView({ patientData }) {
     setFilters(defaultFilters);
   }, []);
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

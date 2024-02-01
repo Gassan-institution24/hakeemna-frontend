@@ -39,7 +39,7 @@ export default function AccountGeneral({data,refetch}) {
         console.error('Error fetching data:', error);
       }
     };
-  
+
     fetchData();
   }, [user.patient.identification_num]);
   const UpdateUserSchema = Yup.object().shape({
@@ -72,7 +72,6 @@ export default function AccountGeneral({data,refetch}) {
         : tableData
     );
   }, [tableData, selectedCountry]);
-
 
   const defaultValues = {
     first_name: data?.first_name || '',
@@ -172,7 +171,7 @@ export default function AccountGeneral({data,refetch}) {
                     display: 'block',
                     textAlign: 'center',
                     color: 'text.disabled',
-                    fontSize:17,
+                    fontSize: 17,
                   }}
                 >
                   Allowed *.jpeg, *.jpg, *.png, *.gif *.pdf

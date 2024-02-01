@@ -10,7 +10,7 @@ export default function TableCreatePage() {
   const params = useParams();
   const { id } = params;
   console.log('iddd', id);
-  const { data,loading } = useGetPatient(id);
+  const { data, loading } = useGetPatient(id);
   console.log('patient dataa', data);
   const patientName =
     (data?.first_name && data?.last_name && `${data?.first_name} ${data?.last_name}`) ||
@@ -22,7 +22,7 @@ export default function TableCreatePage() {
       <Helmet>
         <title> Patients: {patientName} Info </title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
+      {loading && <LoadingScreen />}
       {!loading && <PatientInfo patientData={data} />}
     </>
   );

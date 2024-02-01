@@ -24,7 +24,7 @@ export default function TableEditView() {
         heading="Update room"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin,
           },
           {

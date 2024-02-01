@@ -18,7 +18,6 @@ import { useSnackbar } from 'src/components/snackbar';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-
 export default function Oldpatientsdata() {
   const theme = useTheme();
   const router = useRouter();
@@ -26,8 +25,6 @@ export default function Oldpatientsdata() {
   const { user } = useAuthContext();
   const [oldpatientsdata, setOldpatientsdata] = useState();
   const [oldDataId, setOlddataID] = useState();
-
-
 
   const dataTosubmit = useMemo(
     () => ( {
@@ -39,12 +36,10 @@ export default function Oldpatientsdata() {
     diseases: oldpatientsdata?.length ?[...user.patient.diseases.map((item)=>item._id) ,...oldpatientsdata[0].diseases.map((item)=>item._id)]:[],
     surgeries: oldpatientsdata?.length ?[...user.patient.surgeries.map((item)=>item._id) ,...oldpatientsdata[0].surgeries.map((item)=>item._id)]:[],
     other_medication_notes: oldpatientsdata?.length ?[...user.patient.other_medication_notes,...oldpatientsdata[0].other_medication_notes]:[],
-    height: user?.patient?.height || oldpatientsdata?.[0]?.height,
-    eating_diet: user?.patient?.eating_diet || oldpatientsdata?.[0]?.eating_diet,
-    weight:user?.patient?.weight || oldpatientsdata?.[0]?.weight,
-    smoking: user?.patient?.smoking || oldpatientsdata?.[0]?.smoking,
-    sport_exercises: user?.patient?.sport_exercises || oldpatientsdata?.[0]?.sport_exercises,
-    marital_status: user?.patient?.marital_status || oldpatientsdata?.[0]?.marital_status,
+    height: user?.patient?.height,
+    weight: user.patient.weight,
+    smoking: user?.patient?.smoking,
+    marital_status: oldpatientsdata?.length ? user.patient.marital_status : '',
     upload_historical_reports: user.patient.upload_historical_reports,
     insurance: oldpatientsdata?.length ?[...user.patient.insurance.map((item)=>item._id) ,...oldpatientsdata[0].insurance.map((item)=>item._id)]:[],
     files: oldpatientsdata?.length ?[...user.patient.files,...oldpatientsdata[0].files]:[],
@@ -59,7 +54,7 @@ export default function Oldpatientsdata() {
         const response = await axios.post('/api/oldpatientsdata/details', {
           identification_num: user?.patient?.identification_num,
         });
-        console.log('response',response)
+        console.log('response', response);
         setOldpatientsdata(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -79,7 +74,6 @@ export default function Oldpatientsdata() {
   const yesFunction = async () => {
     try {
       const response = await axios.patch(endpoints.tables.patient(user.patient._id),dataTosubmit);
-      console.log(response.data);
     } catch (error) {
       console.error('Error updating data:', error);
     }

@@ -34,6 +34,7 @@ import {
 } from 'src/components/table';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { useRouter } from 'src/routes/hooks';
 import { useAuthContext } from 'src/auth/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -50,19 +51,20 @@ import ExistEmployeesRow from './old-patients-row';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'name', label: 'Name' },
-  { id: 'identification_num', label: 'ID number' },
-  { id: 'email', label: 'Email' },
-  { id: 'phone', label: 'Phone' },
-  { id: 'files', label: 'Files number' },
-  // { id: '', width: 88 },
-];
-
 // ----------------------------------------------------------------------
 
 export default function UploadedOldPatients({ oldPatients }) {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'name', label: t('name') },
+    { id: 'identification_num', label: t('ID number') },
+    { id: 'email', label: t('email') },
+    { id: 'phone', label: t('phone') },
+    { id: 'files', label: t('files number') },
+    // { id: '', width: 88 },
+  ];
+  
   const router = useRouter();
 
   const table = useTable({ defaultRowsPerPage: 10 });

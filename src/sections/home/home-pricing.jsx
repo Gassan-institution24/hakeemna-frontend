@@ -36,7 +36,7 @@ export default function HomePricing() {
     <Stack spacing={3} sx={{ mb: 10, textAlign: 'center' }}>
       <m.div variants={varFade().inUp}>
         <Typography component="div" variant="overline" sx={{ mb: 2, color: 'text.disabled' }}>
-        Subscriptions
+          Subscriptions
         </Typography>
       </m.div>
 
@@ -200,8 +200,7 @@ function PlanCard({ plan, sx, ...other }) {
         </Box>
       </Stack>
 
-
-{/* icons: figma-js-ts */}
+      {/* icons: figma-js-ts */}
       {/* {standardLicense ? (
         <Box component="img" alt={icons[1]} src={icons[1]} sx={{ width: 20, height: 20 }} />
       ) : (

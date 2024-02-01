@@ -212,7 +212,9 @@ export default function EconomicMovementsView() {
     setFilters(defaultFilters);
   }, []);
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles';
 
 import { RouterLink } from 'src/routes/components';
 
-import Doclogo from './doc.png'
+import Doclogo from './doc.png';
 // ----------------------------------------------------------------------
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
@@ -24,7 +24,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       }}
       {...other}
     >
-     <img src={Doclogo} alt='logo'/>
+      <img src={Doclogo} alt="logo" />
     </Box>
   );
 

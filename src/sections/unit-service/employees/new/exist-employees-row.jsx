@@ -19,11 +19,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function ExistEmployeesRow({
-  row,
-  selected,
-  onEmploymentRow,
-}) {
+export default function ExistEmployeesRow({ row, selected, onEmploymentRow }) {
   const {
     code,
     first_name,
@@ -35,14 +31,15 @@ export default function ExistEmployeesRow({
     birth_date,
   } = row;
 
-
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell align="center">{first_name} {second_name} {family_name}</TableCell>
+      <TableCell align="center">
+        {first_name} {second_name} {family_name}
+      </TableCell>
       <TableCell align="center">{identification_num}</TableCell>
       <TableCell align="center">{email}</TableCell>
       <TableCell align="center">{phone}</TableCell>
@@ -56,11 +53,7 @@ export default function ExistEmployeesRow({
     </TableRow>
   );
 
-  return (
-    <>
-      {renderPrimary}
-    </>
-  );
+  return <>{renderPrimary}</>;
 }
 
 ExistEmployeesRow.propTypes = {

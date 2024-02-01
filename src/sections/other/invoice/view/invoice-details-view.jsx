@@ -24,7 +24,7 @@ export default function InvoiceDetailsView({ id }) {
         heading={currentInvoice?.invoiceNumber}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {

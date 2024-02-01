@@ -13,7 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import DialogActions from '@mui/material/DialogActions';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { useParams,useRouter } from 'src/routes/hooks';
+import { useParams, useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -24,9 +24,14 @@ import InvoicePDF from './payment-pdf';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceToolbar({ paymentData, currentStatus, statusOptions, onChangeStatus }) {
+export default function InvoiceToolbar({
+  paymentData,
+  currentStatus,
+  statusOptions,
+  onChangeStatus,
+}) {
   const params = useParams();
-  const {id} = params
+  const { id } = params;
 
   const router = useRouter();
 
@@ -74,7 +79,7 @@ export default function InvoiceToolbar({ paymentData, currentStatus, statusOptio
               </Tooltip>
             )}
           </PDFDownloadLink>
-{/* 
+          {/* 
           <Tooltip title="Print">
             <IconButton>
               <Iconify icon="solar:printer-minimalistic-bold" />

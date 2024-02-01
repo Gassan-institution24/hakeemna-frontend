@@ -476,7 +476,6 @@ export const unitServiceDashboardRoutes = [
               { path: ':id/edit', element: <RoomsEditPage /> },
             ],
           },
-          
         ],
       },
     ],

@@ -23,8 +23,8 @@ export default function Main({ children, sx, ...other }) {
         display: 'flex',
         flexDirection: 'column',
         pt: `4rem`,
-        mb:0,
-        pb:0,
+        mb: 0,
+        pb: 0,
         ...(lgUp && {
           px: 2,
         }),

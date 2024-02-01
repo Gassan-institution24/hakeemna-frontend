@@ -36,26 +36,25 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 export default function BookManually({ onClose, ...other }) {
-
   return (
-      <Dialog maxWidth="lg" onClose={onClose} {...other}>
-          <DialogTitle sx={{ mb: 1 }}>Activation needed </DialogTitle>
+    <Dialog maxWidth="lg" onClose={onClose} {...other}>
+      <DialogTitle sx={{ mb: 1 }}>Activation needed </DialogTitle>
 
-          <DialogContent sx={{ overflow: 'unset' }}>
-            <Typography>Your Account needs to activate</Typography>
-            <Typography>Did you get the activation email ?</Typography>
-          </DialogContent>
+      <DialogContent sx={{ overflow: 'unset' }}>
+        <Typography>Your Account needs to activate</Typography>
+        <Typography>Did you get the activation email ?</Typography>
+      </DialogContent>
 
-          <DialogActions>
-            <Button color="inherit" variant="outlined" onClick={onClose}>
-              Cancel
-            </Button>
+      <DialogActions>
+        <Button color="inherit" variant="outlined" onClick={onClose}>
+          Cancel
+        </Button>
 
-            <Button type="submit" variant="contained">
-              Resend
-            </Button>
-          </DialogActions>
-      </Dialog>  
+        <Button type="submit" variant="contained">
+          Resend
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 

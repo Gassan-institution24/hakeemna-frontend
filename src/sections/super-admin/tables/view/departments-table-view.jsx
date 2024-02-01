@@ -26,6 +26,7 @@ import { saveAs } from 'file-saver';
 import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
 
 import Label from 'src/components/label';
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -78,6 +79,8 @@ const defaultFilters = {
 
 export default function DepartmentsTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
+
+  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -228,23 +231,25 @@ export default function DepartmentsTableView() {
     [handleFilters]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
-  
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Departments" /// edit
+          heading="departments" /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Departments' }, /// edit
+            { name: t('departments') }, /// edit
           ]}
           action={
             <Button

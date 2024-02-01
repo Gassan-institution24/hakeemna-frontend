@@ -16,42 +16,45 @@ const Grid = styled(MuiGrid)(({ theme }) => ({
 
 const DATA = [
   {
-    headline : 'Recording and storing data electronically.'
+    headline: 'Recording and storing data electronically.',
   },
   {
-    headline : 'Storing old medical history and recording recent data in an automated manner.'
+    headline: 'Storing old medical history and recording recent data in an automated manner.',
   },
   {
-    headline : 'Storing medical files and images electronically.'
+    headline: 'Storing medical files and images electronically.',
   },
   {
-    headline : 'Communicate with all medical institutions and doctors electronically in the same country or in other countries.'
+    headline:
+      'Communicate with all medical institutions and doctors electronically in the same country or in other countries.',
   },
   {
-    headline : 'Request remote medical consultations and appointments.'
+    headline: 'Request remote medical consultations and appointments.',
   },
   {
-    headline : 'Book appointments electronically.'
+    headline: 'Book appointments electronically.',
   },
   {
-    headline : 'Subscribe to the medical journal.'
+    headline: 'Subscribe to the medical journal.',
   },
   {
-    headline : 'View medical developments.'
+    headline: 'View medical developments.',
   },
   {
-    headline : 'Providing various services to patients traveling to another country for medical treatment.'
+    headline:
+      'Providing various services to patients traveling to another country for medical treatment.',
   },
   {
-    headline : ' Follow up and manage all medical affairs through the application or on the browser.'
+    headline:
+      ' Follow up and manage all medical affairs through the application or on the browser.',
   },
   {
-    headline : 'Belonging to the Arab Medical Society Network.'
+    headline: 'Belonging to the Arab Medical Society Network.',
   },
   {
-    headline : 'Free subscription.'
+    headline: 'Free subscription.',
   },
-]
+];
 
 export default function VerticalDividerText() {
   const theme = useTheme();
@@ -68,10 +71,10 @@ export default function VerticalDividerText() {
               fontWeight: 600,
             }}
           >
-              <ul style={{ margin: 10 }}>
+            <ul style={{ margin: 10 }}>
               {DATA.map((data) => (
                 <>
-                  <li style={{margin: 5}}>{data.headline}</li>
+                  <li style={{ margin: 5 }}>{data.headline}</li>
                 </>
               ))}
             </ul>
@@ -116,10 +119,10 @@ export default function VerticalDividerText() {
               fontWeight: 500,
             }}
           >
-              <ul style={{ margin: 10 }}>
+            <ul style={{ margin: 10 }}>
               {DATA.map((data) => (
                 <>
-                  <li style={{margin: 5}}>{data.headline}</li>
+                  <li style={{ margin: 5 }}>{data.headline}</li>
                 </>
               ))}
             </ul>
@@ -129,6 +132,3 @@ export default function VerticalDividerText() {
     </Grid>
   );
 }
-
-
-

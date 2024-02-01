@@ -10,11 +10,11 @@ export default function RoomEditPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetRoom(id);
-  const name = data?.name_english
+  const name = data?.name_english;
   return (
     <>
       <Helmet>
-        <title>Edit {name||''} Room</title>
+        <title>Edit {name || ''} Room</title>
       </Helmet>
 
       {data && <RoomEditView roomData={data} />}

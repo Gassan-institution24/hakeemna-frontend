@@ -6,6 +6,7 @@ import { Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useSettingsContext } from 'src/components/settings';
@@ -19,6 +20,7 @@ import FindExistPatient from '../new/find-exist-employee';
 
 export default function TableCreateView({ employeeData }) {
   const settings = useSettingsContext();
+  const { t } = useTranslate();
   const [selectedPage, setSelectedPage] = useState();
   const select = useBoolean(true);
 
@@ -26,17 +28,17 @@ export default function TableCreateView({ employeeData }) {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="New employee"
+          heading={t('New employee')}
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.unitservice.root,
             },
             {
-              name: 'Employees',
+              name: t('employees'),
               href: paths.unitservice.employees.root,
             },
-            { name: 'New employee' },
+            { name: t('New employee') },
           ]}
           sx={{
             mb: { xs: 3, md: 5 },

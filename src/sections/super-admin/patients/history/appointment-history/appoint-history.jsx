@@ -215,7 +215,9 @@ export default function AppointHistoryView({ patientData }) {
     setFilters(defaultFilters);
   }, []);
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

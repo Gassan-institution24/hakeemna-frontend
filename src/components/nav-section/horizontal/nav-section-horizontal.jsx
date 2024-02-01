@@ -23,18 +23,18 @@ function NavSectionHorizontal({ data, slotProps, sx, ...other }) {
     >
       {data.map((group, index) => (
         <Stack
-        component="nav"
-        id="nav-section-horizontal"
-        direction="row"
-        alignItems="center"
-        spacing={`${slotProps?.gap || 8}px`}
-        sx={{
-          mx: '2rem',
-          ...sx,
-        }}
-        {...other}
-      >
-        <Group key={group.subheader || index} items={group.items} slotProps={slotProps} />
+          component="nav"
+          id="nav-section-horizontal"
+          direction="row"
+          alignItems="center"
+          spacing={`${slotProps?.gap || 8}px`}
+          sx={{
+            mx: '2rem',
+            ...sx,
+          }}
+          {...other}
+        >
+          <Group key={group.subheader || index} items={group.items} slotProps={slotProps} />
         </Stack>
       ))}
     </Stack>

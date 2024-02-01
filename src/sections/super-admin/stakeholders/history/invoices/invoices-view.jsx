@@ -229,8 +229,10 @@ export default function EconomicMovementsView({ stakeholderData }) {
     setFilters(defaultFilters);
   }, []);
 
-  if(loading) {return(<LoadingScreen/>)}
-  
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

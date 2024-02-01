@@ -9,7 +9,7 @@ export function useGetAnalyses() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      analysesData: data || [] ,
+      analysesData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

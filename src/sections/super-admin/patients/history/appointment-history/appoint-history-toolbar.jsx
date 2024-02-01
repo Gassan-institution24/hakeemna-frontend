@@ -37,10 +37,7 @@ export default function InvoiceTableToolbar({
 
   const handleFilterService = useCallback(
     (event) => {
-      onFilters(
-        'types',
-        event
-      );
+      onFilters('types', event);
     },
     [onFilters]
   );
@@ -73,7 +70,6 @@ export default function InvoiceTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-
         <DatePicker
           label="Start date"
           value={filters.startDate}
@@ -114,12 +110,12 @@ export default function InvoiceTableToolbar({
             }}
           />
           <Stack direction="row">
-          <IconButton onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-          <IconButton onClick={onAdd}>
-            <Iconify icon="zondicons:add-outline" />
-          </IconButton>
+            <IconButton onClick={popover.onOpen}>
+              <Iconify icon="eva:more-vertical-fill" />
+            </IconButton>
+            <IconButton onClick={onAdd}>
+              <Iconify icon="zondicons:add-outline" />
+            </IconButton>
           </Stack>
         </Stack>
       </Stack>

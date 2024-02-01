@@ -2,6 +2,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useState, useCallback } from 'react';
 import Tab from '@mui/material/Tab';
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import Card from '@mui/material/Card';
@@ -18,6 +19,7 @@ import Bmi from '../bmi';
 
 export default function UserCardList() {
   const { user } = useAuthContext();
+  const { t } = useTranslate();
   const [currentTab, setCurrentTab] = useState('Medicalreports');
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
@@ -43,11 +45,11 @@ export default function UserCardList() {
   return (
     <Container>
       <CustomBreadcrumbs
-        heading="Medical Reports"
+        heading={t('medical reports')}
         links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'User', href: paths.dashboard.user.root },
-          { name: 'Medical Reports' },
+          { name: t('dashboard'), href: paths.dashboard.root },
+          { name: t('user'), href: paths.dashboard.user.root },
+          { name: t('medical reports') },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />

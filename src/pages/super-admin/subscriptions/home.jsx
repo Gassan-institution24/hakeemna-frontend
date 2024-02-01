@@ -17,8 +17,8 @@ export default function SubscriptionsPage() {
       <Helmet>
         <title> {unitServiceName} Accounting</title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
-      {!loading&&<Subscriptions unitServiceData={data} />}
+      {loading && <LoadingScreen />}
+      {!loading && <Subscriptions unitServiceData={data} />}
     </>
   );
 }

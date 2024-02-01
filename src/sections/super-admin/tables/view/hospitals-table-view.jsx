@@ -16,6 +16,7 @@ import { RouterLink } from 'src/routes/components';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
@@ -79,6 +80,8 @@ const defaultFilters = {
 
 export default function HospitalsTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
+
+  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -228,7 +231,9 @@ export default function HospitalsTableView() {
     [handleFilters]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
@@ -237,7 +242,7 @@ export default function HospitalsTableView() {
           heading="Hospital List" /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {

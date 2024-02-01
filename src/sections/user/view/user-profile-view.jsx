@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { _userAbout } from 'src/_mock';
 import { useSettingsContext } from 'src/components/settings';
@@ -11,6 +12,7 @@ import ProfileHome from '../profile-home';
 
 export default function UserProfileView() {
   const settings = useSettingsContext();
+  const { t } = useTranslate();
   const { user } = useAuthContext();
   const [currentTab, setCurrentTab] = useState('profile');
   return (
@@ -18,8 +20,8 @@ export default function UserProfileView() {
       <CustomBreadcrumbs
         heading="Profile"
         links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'User', href: paths.dashboard.root },
+          { name: t('dashboard'), href: paths.dashboard.root },
+          { name: t('user'), href: paths.dashboard.root },
           { name: user?.userName },
         ]}
         sx={{

@@ -4,7 +4,7 @@ import HomeView from 'src/sections/home/view/home-view';
 
 // ----------------------------------------------------------------------
 
-export default function HomePage({divRef,divRef2}) {
+export default function HomePage({ divRef, divRef2 }) {
   return (
     <>
       <Helmet>

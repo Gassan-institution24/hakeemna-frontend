@@ -15,11 +15,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function MovementToolbar({
-  backLink,
-  editLink,
-  ...other
-}) {
+export default function MovementToolbar({ backLink, editLink, ...other }) {
   const popover = usePopover();
 
   return (

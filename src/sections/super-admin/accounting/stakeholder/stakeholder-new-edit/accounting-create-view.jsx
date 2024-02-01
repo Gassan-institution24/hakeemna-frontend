@@ -4,6 +4,7 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 
 import { useParams } from 'react-router';
+import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -14,20 +15,23 @@ import TableNewEditForm from './accounting-new-edit-form';
 
 export default function USAccountingCreateView({ stakeholderData }) {
   const settings = useSettingsContext();
-  const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
+
+  const { t } = useTranslate();
   const params = useParams();
   const { id } = params;
+
+  const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
         heading={`Create new ${stakeholderName} accounting`} /// edit
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin,
           },
           {
-            name: 'Accounting',
+            name: t('accounting'),
             href: paths.superadmin.accounting.root,
           },
           {

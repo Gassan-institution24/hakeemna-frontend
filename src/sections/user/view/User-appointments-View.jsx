@@ -2,6 +2,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { RouterLink } from 'src/routes/components';
 
 import { _userCards } from 'src/_mock';
@@ -16,15 +17,15 @@ import UserCardList from '../appointments-list';
 
 export default function Financilmovment() {
   const settings = useSettingsContext();
-
+  const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Appointments"
+        heading={t('appointments')}
         links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'User', href: paths.dashboard.user.root },
-          { name: 'Appointment' },
+          { name: t('dashboard'), href: paths.dashboard.root },
+          { name: t('user'), href: paths.dashboard.user.root },
+          { name: t('appointments') },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />

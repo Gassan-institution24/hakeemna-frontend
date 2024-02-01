@@ -79,7 +79,7 @@ export default function DepartmentFeedbackView({ departmentData }) {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const params = useParams();
-  const { id,emid } = params;
+  const { id, emid } = params;
 
   const componentRef = useRef();
 
@@ -90,7 +90,7 @@ export default function DepartmentFeedbackView({ departmentData }) {
 
   const router = useRouter();
 
-  const { feedbackData } = useGetDepartmentEmployeeFeedbackes(id,emid);
+  const { feedbackData } = useGetDepartmentEmployeeFeedbackes(id, emid);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -160,7 +160,6 @@ export default function DepartmentFeedbackView({ departmentData }) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-
         <Card>
           <Tabs
             value={filters.status}

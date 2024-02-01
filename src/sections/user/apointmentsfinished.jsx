@@ -26,12 +26,10 @@ import { useSettingsContext } from 'src/components/settings';
 // ----------------------------------------------------------------------
 
 export default function FinishedAppoinment({ user }) {
-const theme = useTheme();
-const {appointmentsData} = useGetPatientAppointments(user)
+  const theme = useTheme();
+  const { appointmentsData } = useGetPatientAppointments(user);
 
-const finishedAppointments = appointmentsData.filter(
-  (info) => info.status === 'finished'
-);
+  const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');
 
   return finishedAppointments.map((info, index) => (
     <>
@@ -45,11 +43,7 @@ const finishedAppointments = appointmentsData.filter(
           />
 
           <ListItemText
-            secondary={
-              <Link color="inherit">
-                {info?.name_english}
-              </Link>
-            }
+            secondary={<Link color="inherit">{info?.name_english}</Link>}
             primaryTypographyProps={{
               typography: 'subtitle1',
             }}
@@ -77,10 +71,15 @@ const finishedAppointments = appointmentsData.filter(
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Box rowGap={1.5} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3, justifyContent: 'space-between' }}>
+        <Box
+          rowGap={1.5}
+          display="grid"
+          gridTemplateColumns="repeat(2, 1fr)"
+          sx={{ p: 3, justifyContent: 'space-between' }}
+        >
           {[
             {
-              label: `${fTime(info.start_time)} ${fTime(info.end_time)}` ,
+              label: `${fTime(info.start_time)} ${fTime(info.end_time)}`,
               icon: <Iconify width={16} icon="icon-park-solid:time" sx={{ flexShrink: 0 }} />,
             },
             {
@@ -90,12 +89,14 @@ const finishedAppointments = appointmentsData.filter(
               ),
             },
             {
-              label:  info?.status,
+              label: info?.status,
               icon: <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }} />,
             },
             {
               label: info?.name_english,
-              icon: <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
+              icon: (
+                <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
+              ),
             },
           ].map((item) => (
             <Stack

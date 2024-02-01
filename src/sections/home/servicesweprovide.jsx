@@ -9,9 +9,8 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { varFade, MotionViewport } from 'src/components/animate';
 import { Button } from '@mui/material';
-import { PATH_FOR_PATIENT_SERVICES,PATH_FOR_US_SERVICES  } from 'src/config-global';
+import { PATH_FOR_PATIENT_SERVICES, PATH_FOR_US_SERVICES } from 'src/config-global';
 
- 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -30,7 +29,7 @@ export default function Whydoc() {
   );
 
   const renderContent = (
-    <Box sx={{ flexGrow: 1, position: 'relative', left: { xs: '10%',md:' 12% '}, mt: 5 }}>
+    <Box sx={{ flexGrow: 1, position: 'relative', left: { xs: '10%', md: ' 12% ' }, mt: 5 }}>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6} md={6}>
           <Item

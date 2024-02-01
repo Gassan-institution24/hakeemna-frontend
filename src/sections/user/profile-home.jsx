@@ -39,7 +39,7 @@ export default function ProfileHome() {
             {user?.patient?.drug_allergies?.map((drug) => (
               <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={drug?._id}>
                 {' '}
-                 -&nbsp; {drug?.trade_name}
+                -&nbsp; {drug?.trade_name}
               </li>
             ))}
           </Stack>
@@ -62,7 +62,7 @@ export default function ProfileHome() {
                 key={disease?._id}
               >
                 {' '}
-                 -&nbsp; {disease?.name_english}
+                -&nbsp; {disease?.name_english}
               </li>
             ))}
           </Stack>
@@ -85,7 +85,7 @@ export default function ProfileHome() {
                 key={surgery._id}
               >
                 {' '}
-                 -&nbsp; {surgery.name}
+                -&nbsp; {surgery.name}
               </li>
             ))}
           </Stack>
@@ -105,7 +105,7 @@ export default function ProfileHome() {
             {user?.patient?.medicines?.map((data) => (
               <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={data._id}>
                 {' '}
-                 -&nbsp; {data?.frequently}
+                -&nbsp; {data?.frequently}
               </li>
             ))}
           </Stack>
@@ -127,7 +127,7 @@ export default function ProfileHome() {
                 style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                 key={company._id}
               >
-                 -&nbsp; {company?.name_english}
+                -&nbsp; {company?.name_english}
               </li>
             ))}
           </Stack>
@@ -146,7 +146,7 @@ export default function ProfileHome() {
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
             {' '}
-             -&nbsp; {user?.patient?.sport_exercises}
+            -&nbsp; {user?.patient?.sport_exercises}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
@@ -178,7 +178,7 @@ export default function ProfileHome() {
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
             {' '}
-             -&nbsp; {user?.patient?.alcohol_consumption}
+            -&nbsp; {user?.patient?.alcohol_consumption}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
@@ -194,7 +194,7 @@ export default function ProfileHome() {
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
             {' '}
-             -&nbsp; {user?.patient?.smoking}
+            -&nbsp; {user?.patient?.smoking}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
@@ -208,13 +208,14 @@ export default function ProfileHome() {
             />{' '}
             Notes
           </Typography>
-  
-            <li  style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-               -&nbsp; {user?.patient?.other_medication_notes }
-            </li>
-       
+
+          <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
+            -&nbsp; {user?.patient?.other_medication_notes}
+          </li>
         </Stack>
-      ): ''}
+      ) : (
+        ''
+      )}
     </Stack>
   );
 
@@ -422,7 +423,7 @@ export default function ProfileHome() {
       </Grid>
 
       <Grid xs={12} md={8}>
-        {renderContent }
+        {renderContent}
       </Grid>
     </Grid>
   );

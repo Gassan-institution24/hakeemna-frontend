@@ -15,7 +15,7 @@ export default function EmployeeAppointconfigPage() {
 
   return (
     <>
-      <ACLGuard hasContent category="employee" subcategory='appointment_configs' acl="update">
+      <ACLGuard hasContent category="employee" subcategory="appointment_configs" acl="update">
         <Helmet>
           <title> Appointment Config Detail</title>
         </Helmet>

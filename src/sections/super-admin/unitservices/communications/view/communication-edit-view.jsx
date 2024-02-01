@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 
 import { _jobs } from 'src/_mock';
 
@@ -16,6 +17,8 @@ import JobNewEditForm from '../communications-new-edit-form';
 export default function JobEditView({ id }) {
   const settings = useSettingsContext();
 
+  const { t } = useTranslate();
+
   const currentJob = _jobs.find((job) => job.id === id);
 
   return (
@@ -24,7 +27,7 @@ export default function JobEditView({ id }) {
         heading="Edit"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {

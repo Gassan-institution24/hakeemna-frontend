@@ -15,14 +15,14 @@ export default function DepartmentEmployeeAccountingPage() {
   const name = employeeData?.first_name;
   return (
     <>
-    <ACLGuard hasContent category='employee' subcategory='accounting' acl='read'>
-      <Helmet>
-        <title> {name || ''} Employee Accounting</title>
-      </Helmet>
+      <ACLGuard hasContent category="employee" subcategory="accounting" acl="read">
+        <Helmet>
+          <title> {name || ''} Employee Accounting</title>
+        </Helmet>
 
-      {data && employeeData && (
-        <DepartmentEmployeeAccountingView employeeData={employeeData} departmentData={data} />
-      )}
+        {data && employeeData && (
+          <DepartmentEmployeeAccountingView employeeData={employeeData} departmentData={data} />
+        )}
       </ACLGuard>
     </>
   );

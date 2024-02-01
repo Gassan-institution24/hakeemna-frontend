@@ -24,7 +24,7 @@ export default function PostEditView({ title }) {
         heading="Edit"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {

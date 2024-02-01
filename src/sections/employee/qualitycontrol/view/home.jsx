@@ -40,27 +40,18 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetEmployeeFeedbackes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';
+
 import FeedbackRow from '../feedback-row'; /// edit
 import FeedbackToolbar from '../feedback-toolbar';
 import TableDetailFiltersResult from '../feedback-filters-result';
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  /// to edit
-  { id: 'code', label: 'Code' },
-  { id: 'appointments', label: 'Appointments' },
-  { id: 'title', label: 'Title' },
-  { id: 'status', label: 'Status' },
-  { id: 'Body', label: 'Body' },
-  { id: 'Rate', label: 'Rate' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -69,13 +60,21 @@ const defaultFilters = {
 };
 
 // ----------------------------------------------------------------------
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'read', label: 'Read' },
-  { value: 'unread', label: 'Unread' },
-];
 
 export default function DepartmentFeedbackView() {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    /// to edit
+    { id: 'code', label: t('code') },
+    { id: 'appointments', label: t('appointments') },
+    { id: 'title', label: t('title') },
+    { id: 'status', label: t('status') },
+    { id: 'Body', label: t('body') },
+    { id: 'Rate', label: t('rate') },
+    { id: '', width: 88 },
+  ];
+  const { QC_STATUS_OPTIONS } = StatusOptions();
+
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -107,8 +106,6 @@ export default function DepartmentFeedbackView() {
     filters,
     dateError,
   });
-
-  const { t } = useTranslate();
 
   const denseHeight = table.dense ? 52 : 72;
 
@@ -167,14 +164,14 @@ export default function DepartmentFeedbackView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Quality control" /// edit
+          heading={t('quality control')} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.employee.root,
             },
 
-            { name: 'Quality control' },
+            { name: t('quality control') },
           ]}
           sx={{
             mb: { xs: 3, md: 5 },
@@ -189,7 +186,7 @@ export default function DepartmentFeedbackView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {QC_STATUS_OPTIONS.map((tab) => (
               <Tab
                 key={tab.value}
                 iconPosition="end"

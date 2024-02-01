@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -57,6 +58,8 @@ const defaultFilters = {
 
 export default function AppointmentListView({ stakeholderData }) {
   const settings = useSettingsContext();
+
+  const { t } = useTranslate();
 
   const openFilters = useBoolean();
 
@@ -228,16 +231,16 @@ export default function AppointmentListView({ stakeholderData }) {
       <CustomBreadcrumbs
         heading="Book Appointment"
         links={[
-          { name: 'Dashboard', href: paths.superadmin.root },
+          { name: t('dashboard'), href: paths.superadmin.root },
           {
-            name: 'Stakeholders',
+            name: t('stakeholders'),
             href: paths.superadmin.stakeholders.root,
           },
           {
             name: 'History',
             href: paths.superadmin.stakeholders.history.root,
           },
-          { name: 'Appointments' },
+          { name: t('appointments') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

@@ -9,13 +9,13 @@ import { LoadingScreen } from 'src/components/loading-screen';
 export default function TableCreatePage() {
   const params = useParams();
   const { inid } = params;
-  const { data,loading } = useGetEconomicMovement(inid);
+  const { data, loading } = useGetEconomicMovement(inid);
   return (
     <>
       <Helmet>
         <title> Economic Movement </title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
+      {loading && <LoadingScreen />}
       {!loading && <InvoiceInfo economicMovementData={data} />}
     </>
   );

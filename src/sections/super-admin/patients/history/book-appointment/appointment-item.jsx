@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
-import React,{useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
@@ -26,7 +26,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function AppointmentItem({ appointment, onBook, onView, onEdit, onDelete }) {
   const popover = usePopover();
-const [insuranceNames, setInsuranceNames] = useState()
+  const [insuranceNames, setInsuranceNames] = useState();
 
   const {
     _id,
@@ -52,12 +52,11 @@ const [insuranceNames, setInsuranceNames] = useState()
   } = appointment;
   useEffect(() => {
     if (unit_service?.insurance) {
-      const names = unit_service.insurance.map(test => test.name_english);
+      const names = unit_service.insurance.map((test) => test.name_english);
       setInsuranceNames(names);
     }
   }, [unit_service]);
   return (
-    
     <>
       <Card>
         {/* <IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
@@ -76,7 +75,7 @@ const [insuranceNames, setInsuranceNames] = useState()
             // sx={{ mb: 0 }}
             primary={
               <Link component={RouterLink} href={paths.dashboard.job.details(_id)} color="inherit">
-               {insuranceNames}
+                {insuranceNames}
               </Link>
             }
             secondary={
@@ -96,16 +95,20 @@ const [insuranceNames, setInsuranceNames] = useState()
           />
 
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-          <ListItemText
-            primary={new Date(start_time).toLocaleTimeString('en-US', { timeZone: unit_service?.country?.time_zone })}
-            secondary={new Date(start_time).toLocaleDateString('en-US', { timeZone: unit_service?.country?.time_zone })}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              mt: 0.5,
-              component: 'span',
-              typography: 'caption',
-            }}
-          />
+            <ListItemText
+              primary={new Date(start_time).toLocaleTimeString('en-US', {
+                timeZone: unit_service?.country?.time_zone,
+              })}
+              secondary={new Date(start_time).toLocaleDateString('en-US', {
+                timeZone: unit_service?.country?.time_zone,
+              })}
+              primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+              secondaryTypographyProps={{
+                mt: 0.5,
+                component: 'span',
+                typography: 'caption',
+              }}
+            />
           </Stack>
           <Stack
             spacing={0.5}

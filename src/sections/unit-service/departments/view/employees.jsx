@@ -41,28 +41,19 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetDepartmentEmployees } from 'src/api/tables'; /// edit
-import axiosHandler from 'src/utils/axios-handler';
+import { useTranslate } from 'src/locales';
 import { endpoints } from 'src/utils/axios';
+import ACLGuard from 'src/auth/guard/acl-guard';
+import axiosHandler from 'src/utils/axios-handler';
+import { LoadingScreen } from 'src/components/loading-screen';
+import { StatusOptions } from 'src/assets/data/status-options';
+
+import { useGetDepartmentEmployees } from 'src/api/tables'; /// edit
 import TableDetailRow from '../employees/table-details-row'; /// edit
 import TableDetailToolbar from '../employees/table-details-toolbar';
 import TableDetailFiltersResult from '../employees/table-details-filters-result';
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  /// to edit
-  { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name' },
-  { id: 'employee_type', label: 'Employee Type' },
-  { id: 'email', label: 'email' },
-  { id: 'nationality', label: 'Nationality' },
-  { id: 'validatd_identity', label: 'Validated Identity' },
-  { id: 'Adjust_schedule', label: 'Adjust schedule' },
-  { id: 'status', label: 'Status' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -70,13 +61,24 @@ const defaultFilters = {
 };
 
 // ----------------------------------------------------------------------
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-];
 
-export default function EmployeesTableView({departmentData}) {
+export default function EmployeesTableView({ departmentData }) {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    /// to edit
+    { id: 'code', label: t('code') },
+    { id: 'name_english', label: t('name') },
+    { id: 'employee_type', label: t('employee type') },
+    { id: 'email', label: t('email') },
+    { id: 'nationality', label: t('nationality') },
+    { id: 'validatd_identity', label: t('validated identity') },
+    { id: 'Adjust_schedule', label: t('adjust schedule') },
+    { id: 'status', label: t('status') },
+    { id: '', width: 88 },
+  ];
+
+  const { STATUS_OPTIONS } = StatusOptions();
+
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -89,8 +91,7 @@ export default function EmployeesTableView({departmentData}) {
 
   const router = useRouter();
 
-  const { employeesData, loading, refetch } =useGetDepartmentEmployees(departmentData._id);
-
+  const { employeesData, loading, refetch } = useGetDepartmentEmployees(departmentData._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -235,33 +236,37 @@ export default function EmployeesTableView({departmentData}) {
     [handleFilters]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={`${departmentData.name_english || ''} Department Employees`} /// edit
+          heading={`${departmentData.name_english || ''} ${t('department employees')}`} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.unitservice.root,
             },
             {
-              name: 'Departments',
+              name: t('departments'),
               href: paths.unitservice.departments.root,
             },
-            { name: `${departmentData.name_english || 'Department'} Employees`} , /// edit
+            { name: t('department employees') },
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={paths.unitservice.departments.employees.new(departmentData._id)} /// edit
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Employee
-            </Button> /// edit
+            ACLGuard({ category: 'department', subcategory: 'employees', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                href={paths.unitservice.departments.employees.new(departmentData._id)} /// edit
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                New Employee
+              </Button>
+            ) /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -339,25 +344,28 @@ export default function EmployeesTableView({departmentData}) {
                 )
               }
               action={
-                <>
-                  {dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'inactive') ? (
-                    <Tooltip title="Activate all">
-                      <IconButton color="primary" onClick={confirmActivate.onTrue}>
-                        <Iconify icon="codicon:run-all" />
-                      </IconButton>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip title="Inactivate all">
-                      <IconButton color="error" onClick={confirmInactivate.onTrue}>
-                        <Iconify icon="iconoir:pause-solid" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </>
+                ACLGuard({ category: 'department', subcategory: 'employees', acl: 'update' }) && (
+                  <>
+                    {dataFiltered
+                      .filter((row) => table.selected.includes(row._id))
+                      .some((data) => data.status === 'inactive') ? (
+                      <Tooltip title="Activate all">
+                        <IconButton color="primary" onClick={confirmActivate.onTrue}>
+                          <Iconify icon="codicon:run-all" />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Inactivate all">
+                        <IconButton color="error" onClick={confirmInactivate.onTrue}>
+                          <Iconify icon="iconoir:pause-solid" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </>
+                )
               }
               color={
+                ACLGuard({ category: 'department', subcategory: 'employees', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((info) => info.status === 'inactive')

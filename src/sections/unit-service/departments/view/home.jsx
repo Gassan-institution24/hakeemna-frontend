@@ -16,8 +16,9 @@ import { RouterLink } from 'src/routes/components';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useBoolean } from 'src/hooks/use-boolean';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
@@ -25,6 +26,7 @@ import { saveAs } from 'file-saver';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import ACLGuard from 'src/auth/guard/acl-guard';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
@@ -40,31 +42,17 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetUSDepartments } from 'src/api/tables'; /// edit
-import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
+import { useGetUSDepartments } from 'src/api/tables'; /// edit
+import { StatusOptions } from 'src/assets/data/status-options';
+import { LoadingScreen } from 'src/components/loading-screen';
+
 import TableDetailRow from '../home-table-row'; /// edit
 import TableDetailToolbar from '../home-table-toolbar';
 import TableDetailFiltersResult from '../home-table-filters-result';
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  /// to edit
-  { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name' },
-  { id: 'status', label: 'Status' },
-  { id: 'Accounting', label: 'Accounting' },
-  // { id: 'Appointment Config', label: 'Appointment Configuration' },
-  { id: 'Appointments', label: 'Appointments' },
-  { id: 'Activities', label: 'Activities' },
-  { id: 'Employees', label: 'Employees' },
-  { id: 'Quality Control', label: 'Quality Control' },
-  { id: 'Rooms', label: 'Rooms' },
-  { id: 'Work Groups', label: 'Work Groups' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -72,13 +60,28 @@ const defaultFilters = {
 };
 
 // ----------------------------------------------------------------------
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-];
 
 export default function UnitServicesTableView() {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const TABLE_HEAD = [
+    /// to edit
+    { id: 'code', label: t('code') },
+    { id: 'name_english', label: t('name') },
+    { id: 'status', label: t('status') },
+    { id: 'Accounting', label: t('accounting') },
+    // { id: 'Appointment Config', label: t('Appointment Configuration' },
+    { id: 'Appointments', label: t('appointments') },
+    { id: 'Activities', label: t('activities') },
+    { id: 'Employees', label: t('employees') },
+    { id: 'Quality Control', label: t('quality control') },
+    { id: 'Rooms', label: t('rooms') },
+    { id: 'Work Groups', label: t('work groups') },
+    { id: '', width: 88 },
+  ];
+
+  const { STATUS_OPTIONS } = StatusOptions();
+
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -87,6 +90,8 @@ export default function UnitServicesTableView() {
   const componentRef = useRef();
 
   const settings = useSettingsContext();
+
+  console.log('settings', settings);
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
@@ -290,23 +295,25 @@ export default function UnitServicesTableView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Departments" /// edit
+          heading={t('departments')} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.unitservice.root,
             },
-            { name: 'Departments' }, /// edit
+            { name: t('departments') }, /// edit
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={paths.unitservice.departments.new} /// edit
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Department
-            </Button> /// edit
+            ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                href={paths.unitservice.departments.new} /// edit
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                {t('new department')}
+              </Button>
+            ) /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },

@@ -63,17 +63,19 @@ function CarouselItem({ item, active }) {
 
   const renderImg = (
     <Image
-    alt={title}
-    src={IMGES[0]}
-    overlay={`linear-gradient(to bottom, ${alpha(theme.palette.grey[900], 0)} 0%, ${theme.palette.grey[700]} 85%)`}
-    sx={{
-      width: 1,
-      height: {
-        xs: 280,
-        xl: 320,
-      },
-    }}
-  />
+      alt={title}
+      src={IMGES[0]}
+      overlay={`linear-gradient(to bottom, ${alpha(theme.palette.grey[900], 0)} 0%, ${
+        theme.palette.grey[700]
+      } 85%)`}
+      sx={{
+        width: 1,
+        height: {
+          xs: 280,
+          xl: 320,
+        },
+      }}
+    />
   );
 
   return (

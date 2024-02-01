@@ -5,6 +5,7 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
+import { useTranslate } from 'src/locales';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetFreeSubscription } from 'src/api/tables';
@@ -15,8 +16,13 @@ import TableNewEditForm from './table-new-edit-form';
 
 export default function TableEditView() {
   const settings = useSettingsContext();
+
+  const { t } = useTranslate();
+
   const params = useParams();
+
   const { id } = params;
+
   const { data } = useGetFreeSubscription(id);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -24,7 +30,7 @@ export default function TableEditView() {
         heading="Update Free Subscription"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin,
           },
           {

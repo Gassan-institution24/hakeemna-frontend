@@ -17,15 +17,17 @@ import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter,useParams } from 'src/routes/hooks';
+import { useRouter, useParams } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { useTranslate } from 'src/locales';
 import { fTimestamp } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import ACLGuard from 'src/auth/guard/acl-guard';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
@@ -50,16 +52,6 @@ import ConfigFiltersResult from '../appointmentConfig/appointment-filters-result
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'start_date', label: 'Start Date' },
-  { id: 'end_date', label: 'End Date' },
-  { id: 'work_shift', label: 'Work Shift' },
-  { id: 'work_group', label: 'Work Group' },
-  { id: 'status', label: 'Status' },
-  { id: '' },
-];
-
 const defaultFilters = {
   name: '',
   status: 'all',
@@ -69,7 +61,18 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointConfigView({ appointmentConfigData,refetch }) {
+export default function AppointConfigView({ appointmentConfigData, refetch }) {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'start_date', label: t('start date') },
+    { id: 'end_date', label: t('end date') },
+    { id: 'work_shift', label: t('work shift') },
+    { id: 'work_group', label: t('work group') },
+    { id: 'status', label: t('status') },
+    { id: '' },
+  ];
+
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -82,9 +85,7 @@ export default function AppointConfigView({ appointmentConfigData,refetch }) {
   const confirm = useBoolean();
   const confirmUnCancel = useBoolean();
 
-  const {id} = useParams()
-
-  console.log('appointmentConfigData',appointmentConfigData)
+  const { id } = useParams();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -153,64 +154,61 @@ export default function AppointConfigView({ appointmentConfigData,refetch }) {
 
   const handleUnCancelRow = useCallback(
     async (_id) => {
-      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(_id)}/uncancel` });
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointment(_id)}/uncancel`,
+      });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
     [dataInPage.length, table, refetch]
   );
 
-  const handleCancelRows = useCallback(
-    async () => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
-      });
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
-      });
-      refetch();
-      table.onUpdatePageDeleteRows({
-        totalRows: appointmentConfigData.length,
-        totalRowsInPage: dataInPage.length,
-        totalRowsFiltered: dataFiltered.length,
-      });
-    },
-    [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table]
-  );
-  const handleUnCancelRows = useCallback(
-    async () => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/uncancel`,
-        data: { ids: table.selected },
-      });
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/uncancel`,
-        data: { ids: table.selected },
-      });
-      refetch();
-      table.onUpdatePageDeleteRows({
-        totalRows: appointmentConfigData.length,
-        totalRowsInPage: dataInPage.length,
-        totalRowsFiltered: dataFiltered.length,
-      });
-    },
-    [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table]
-  );
+  const handleCancelRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.appointments}/cancel`,
+      data: { ids: table.selected },
+    });
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.appointments}/cancel`,
+      data: { ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: appointmentConfigData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table]);
+  const handleUnCancelRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.appointments}/uncancel`,
+      data: { ids: table.selected },
+    });
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.appointments}/uncancel`,
+      data: { ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: appointmentConfigData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table]);
   const handleAdd = useCallback(() => {
     router.push(paths.unitservice.employees.appointmentconfig.new(id));
   }, [router, id]);
 
   const handleViewRow = useCallback(
     (_id) => {
-      router.push(paths.unitservice.employees.appointmentconfig.details(id,_id));
+      router.push(paths.unitservice.employees.appointmentconfig.details(id, _id));
     },
-    [router,id]
+    [router, id]
   );
 
   const handleFilterStatus = useCallback(
@@ -289,6 +287,11 @@ export default function AppointConfigView({ appointmentConfigData,refetch }) {
                 )
               }
               action={
+                ACLGuard({
+                  category: 'employee',
+                  subcategory: 'appointment_configs',
+                  acl: 'update',
+                }) && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -306,10 +309,20 @@ export default function AppointConfigView({ appointmentConfigData,refetch }) {
                       </Tooltip>
                     )}
                   </>
-                }
-              color={dataFiltered
-                .filter((row) => table.selected.includes(row._id))
-                .some((data) => data.status === 'canceled') ?"primary":'error'}
+                )
+              }
+              color={
+                ACLGuard({
+                  category: 'employee',
+                  subcategory: 'appointment_configs',
+                  acl: 'update',
+                }) &&
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'canceled')
+                  ? 'primary'
+                  : 'error'
+              }
             />
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
@@ -335,7 +348,7 @@ export default function AppointConfigView({ appointmentConfigData,refetch }) {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                       <AppointConfigRow
+                      <AppointConfigRow
                         key={row._id}
                         row={row}
                         selected={table.selected.includes(row._id)}
@@ -348,7 +361,11 @@ export default function AppointConfigView({ appointmentConfigData,refetch }) {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentConfigData.length)}
+                    emptyRows={emptyRows(
+                      table.page,
+                      table.rowsPerPage,
+                      appointmentConfigData.length
+                    )}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -439,17 +456,13 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter(
       (config) =>
         (config?.work_shift?.name_english &&
-          config?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          config?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (config?.work_shift?.name_arabic &&
-          config?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          config?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (config?.work_group?.name_english &&
-          config?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          config?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (config?.work_group?.name_arabic &&
-          config?.work_group?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          config?.work_group?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         config?._id === name ||
         JSON.stringify(config.code) === name
     );
@@ -464,9 +477,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       inputData = inputData.filter(
         (config) =>
           (fTimestamp(config.start_date) <= fTimestamp(startDate) &&
-          fTimestamp(config.end_date) >= fTimestamp(startDate)) ||
+            fTimestamp(config.end_date) >= fTimestamp(startDate)) ||
           (fTimestamp(config.start_date) <= fTimestamp(endDate) &&
-          fTimestamp(config.end_date) >= fTimestamp(endDate))
+            fTimestamp(config.end_date) >= fTimestamp(endDate))
       );
     } else if (startDate) {
       inputData = inputData.filter(

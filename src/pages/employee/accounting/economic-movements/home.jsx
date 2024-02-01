@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 import ACLGuard from 'src/auth/guard/acl-guard';
-import EconomicMovementView from 'src/sections/employee/accounting/economic-movements/view/home'
+import EconomicMovementView from 'src/sections/employee/accounting/economic-movements/view/home';
 // ----------------------------------------------------------------------
 
 export default function EconomicMovementPage() {
   return (
     <>
-    <ACLGuard hasContent category='employee' subcategory='accounting' acl='read' >
-      <Helmet>
-        <title>Economic Movements</title>
-      </Helmet>
+      <ACLGuard hasContent category="employee" subcategory="accounting" acl="read">
+        <Helmet>
+          <title>Economic Movements</title>
+        </Helmet>
 
-      <EconomicMovementView />
+        <EconomicMovementView />
       </ACLGuard>
     </>
   );

@@ -14,6 +14,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import Iconify from 'src/components/iconify';
+import ACLGuard from 'src/auth/guard/acl-guard';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
@@ -74,33 +75,42 @@ export default function InvoiceTableToolbar({
         }}
       >
         <FormControl
-        sx={{
-          flexShrink: 0,
-          width: { xs: 1, md: 200 },
-        }}
-      >
-        <InputLabel>Appointment type</InputLabel>
-
-        <Select
-          multiple
-          value={filters.types}
-          onChange={handleFilterTypes}
-          input={<OutlinedInput label="Appointment types" />}
-          renderValue={(selected) => options.filter((value) => selected.includes(value._id)).map((value)=>value.name_english).join(', ')}
-          MenuProps={{
-            PaperProps: {
-              sx: { maxHeight: 240 },
-            },
+          sx={{
+            flexShrink: 0,
+            width: { xs: 1, md: 200 },
           }}
         >
-          {options.map((option) => (
-            <MenuItem key={option._id} value={option._id}>
-              <Checkbox disableRipple size="small" checked={filters.types?.includes(option._id)} />
-              {option.name_english}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          <InputLabel>Appointment type</InputLabel>
+
+          <Select
+            multiple
+            value={filters.types}
+            onChange={handleFilterTypes}
+            input={<OutlinedInput label="Appointment types" />}
+            renderValue={(selected) =>
+              options
+                .filter((value) => selected.includes(value._id))
+                .map((value) => value.name_english)
+                .join(', ')
+            }
+            MenuProps={{
+              PaperProps: {
+                sx: { maxHeight: 240 },
+              },
+            }}
+          >
+            {options.map((option) => (
+              <MenuItem key={option._id} value={option._id}>
+                <Checkbox
+                  disableRipple
+                  size="small"
+                  checked={filters.types?.includes(option._id)}
+                />
+                {option.name_english}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
         <DatePicker
           label="Date"
@@ -142,12 +152,14 @@ export default function InvoiceTableToolbar({
             }}
           />
           <Stack direction="row">
-          <IconButton onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-          <IconButton color="error" onClick={onAdd}>
-            <Iconify icon="zondicons:add-outline" />
-          </IconButton>
+            <IconButton onClick={popover.onOpen}>
+              <Iconify icon="eva:more-vertical-fill" />
+            </IconButton>
+            {ACLGuard({ category: 'unit_service', subcategory: 'appointments', acl: 'create' }) && (
+              <IconButton color="error" onClick={onAdd}>
+                <Iconify icon="zondicons:add-outline" />
+              </IconButton>
+            )}
           </Stack>
         </Stack>
       </Stack>

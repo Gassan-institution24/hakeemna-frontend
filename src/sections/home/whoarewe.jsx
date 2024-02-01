@@ -13,24 +13,28 @@ import { varFade, MotionViewport } from 'src/components/animate';
 
 const CARDS = [
   {
-    icon: "https://static.vecteezy.com/system/resources/thumbnails/021/809/795/small/doctors-day-illustration-png.png",
+    icon: 'https://static.vecteezy.com/system/resources/thumbnails/021/809/795/small/doctors-day-illustration-png.png',
     title: 'Medical Hub',
-    description: 'An integrated platform that brings both medical service providers and beneficiaries in one place',
+    description:
+      'An integrated platform that brings both medical service providers and beneficiaries in one place',
   },
   {
     icon: 'https://png.pngtree.com/png-vector/20220831/ourmid/pngtree-banyan-tree-logo-design-vector-png-image_6131481.png',
     title: 'Green Managment',
-    description: 'An integrated platform that brings both medical service providers and beneficiaries in one place',
+    description:
+      'An integrated platform that brings both medical service providers and beneficiaries in one place',
   },
   {
     icon: 'https://cdn-icons-png.flaticon.com/512/5695/5695909.png',
     title: 'User Friendly',
-    description: 'An integrated platform that brings both medical service providers and beneficiaries in one place',
+    description:
+      'An integrated platform that brings both medical service providers and beneficiaries in one place',
   },
   {
     icon: 'https://www.zevenet.com/wp-content/uploads/2019/10/zevenet_website_icons-ABOUT_US_Research_and_development_Green-.svg',
     title: 'R & D Support',
-    description: 'An integrated platform that brings both medical service providers and beneficiaries in one place',
+    description:
+      'An integrated platform that brings both medical service providers and beneficiaries in one place',
   },
 ];
 
@@ -58,9 +62,7 @@ export default function whoAreWe() {
         </m.div>
 
         <m.div variants={varFade().inDown}>
-          <Typography variant="h2">
-          Who are we  ?
-          </Typography>
+          <Typography variant="h2">Who are we ?</Typography>
         </m.div>
       </Stack>
 
@@ -81,7 +83,6 @@ export default function whoAreWe() {
                 boxShadow: { md: 'none' },
                 bgcolor: 'rgba(102, 255, 102, 0)',
                 p: (theme) => theme.spacing(10, 5),
-         
               }}
             >
               <Box
@@ -92,7 +93,7 @@ export default function whoAreWe() {
               />
 
               <Typography variant="h5" sx={{ mt: 8, mb: 2 }}>
-              {card.title}
+                {card.title}
               </Typography>
 
               <Typography sx={{ color: 'text.secondary' }}>{card.description}</Typography>

@@ -2,6 +2,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { RouterLink } from 'src/routes/components';
 
 import { _userCards } from 'src/_mock';
@@ -16,15 +17,15 @@ import Share from '../Share';
 
 export default function Financilmovment() {
   const settings = useSettingsContext();
-
+  const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Share"
+        heading={t('share')}
         links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'User', href: paths.dashboard.user.root },
-          { name: 'Share' },
+          { name: t('dashboard'), href: paths.dashboard.root },
+          { name: t('user'), href: paths.dashboard.user.root },
+          { name: t('share') },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />

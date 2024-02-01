@@ -18,6 +18,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { useAuthContext } from 'src/auth/hooks';
 
+import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useReactToPrint } from 'react-to-print';
@@ -26,6 +27,7 @@ import { saveAs } from 'file-saver';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import ACLGuard from 'src/auth/guard/acl-guard';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
@@ -42,28 +44,17 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetUSEmployees } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  /// to edit
-  { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name' },
-  { id: 'employee_type', label: 'Employee Type' },
-  { id: 'email', label: 'email' },
-  { id: 'nationality', label: 'Nationality' },
-  { id: 'validatd_identity', label: 'Validated Identity' },
-  { id: 'Adjust_schedule', label: 'Adjust schedule' },
-  { id: 'status', label: 'Status' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -71,13 +62,23 @@ const defaultFilters = {
 };
 
 // ----------------------------------------------------------------------
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-];
 
 export default function EmployeesTableView() {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    /// to edit
+    { id: 'code', label: t('code') },
+    { id: 'name_english', label: t('name') },
+    { id: 'employee_type', label: t('employee type') },
+    { id: 'email', label: t('email') },
+    { id: 'nationality', label: t('nationality') },
+    { id: 'validatd_identity', label: t('validated identity') },
+    { id: 'Adjust_schedule', label: t('adjust schedule') },
+    { id: 'status', label: t('status') },
+    { id: '', width: 88 },
+  ];
+
+  const { STATUS_OPTIONS } = StatusOptions();
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -247,23 +248,25 @@ export default function EmployeesTableView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Employees" /// edit
+          heading={t('employees')} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.unitservice.root,
             },
-            { name: 'Employees' }, /// edit
+            { name: t('employees') }, /// edit
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={paths.unitservice.employees.new} /// edit
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Employee
-            </Button> /// edit
+            ACLGuard({ category: 'unit_service', subcategory: 'employees', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                href={paths.unitservice.employees.new} /// edit
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                New Employee
+              </Button>
+            ) /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },

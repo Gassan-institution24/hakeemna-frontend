@@ -13,6 +13,7 @@ import Container from '@mui/material/Container';
 import { alpha, useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 
 import { _jobs, JOB_DETAILS_TABS, JOB_PUBLISH_OPTIONS } from 'src/_mock';
 
@@ -36,6 +37,8 @@ import PatientHistoryAnalytic from './appointment-history/appoint-history-analyt
 
 export default function PatientHistoryView({ patientData }) {
   const theme = useTheme();
+
+  const { t } = useTranslate();
 
   const { appointmentsData, loading } = useGetPatientAppointments(patientData._id);
 
@@ -99,19 +102,21 @@ export default function PatientHistoryView({ patientData }) {
     (patientData?.last_name && patientData?.last_name) ||
     'Patient';
 
-    if(loading) {return(<LoadingScreen/>)}
-    
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
         heading={`${patientName} History`}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin.root,
           },
           {
-            name: 'Patients',
+            name: t('patients'),
             href: paths.superadmin.patients.root,
           },
           {

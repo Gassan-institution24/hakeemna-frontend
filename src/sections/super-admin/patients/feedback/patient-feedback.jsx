@@ -167,8 +167,10 @@ export default function PatientFeedbackView({ patientData }) {
     (patientData?.last_name && patientData?.last_name) ||
     'Patient';
 
-    if(loading) {return(<LoadingScreen/>)}
-    
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -176,11 +178,11 @@ export default function PatientFeedbackView({ patientData }) {
           heading={`${patientName} feedback`} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {
-              name: 'Patients',
+              name: t('patients'),
               href: paths.superadmin.patients.root,
             },
             { name: t(`${patientName} feedback`) }, /// edit

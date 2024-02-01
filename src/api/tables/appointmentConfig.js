@@ -25,8 +25,8 @@ export function useGetAppointmentConfigs() {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetUSEmployeeAppointmentConfigs(id,emid) {
-  const URL = endpoints.tables.usEmployeeAppointmentconfig(id,emid);
+export function useGetUSEmployeeAppointmentConfigs(id, emid) {
+  const URL = endpoints.tables.usEmployeeAppointmentconfig(id, emid);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -69,13 +69,13 @@ export function useGetEmployeeAppointmentConfigs(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetDepartmentEmployeeAppointmentConfigs(id,emid) {
-  const URL = endpoints.tables.departmentEmployeeAppointmentconfig(id,emid);
+export function useGetDepartmentEmployeeAppointmentConfigs(id, emid) {
+  const URL = endpoints.tables.departmentEmployeeAppointmentconfig(id, emid);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      appointmentConfigData: data ,
+      appointmentConfigData: data,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -118,7 +118,7 @@ export function useGetUSAppointmentConfigsCount(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      appointmentConfigCount: data ,
+      appointmentConfigCount: data,
       loading: isLoading,
       error,
       validating: isValidating,

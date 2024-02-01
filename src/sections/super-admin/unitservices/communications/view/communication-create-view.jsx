@@ -1,6 +1,7 @@
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -11,6 +12,7 @@ import JobNewEditForm from '../communications-new-edit-form';
 
 export default function JobCreateView() {
   const settings = useSettingsContext();
+  const { t } = useTranslate();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -18,7 +20,7 @@ export default function JobCreateView() {
         heading="Create a new job"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {

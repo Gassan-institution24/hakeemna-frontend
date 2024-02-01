@@ -15,11 +15,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function PaymentDetailsToolbar({
-  backLink,
-  editLink,
-  ...other
-}) {
+export default function PaymentDetailsToolbar({ backLink, editLink, ...other }) {
   const popover = usePopover();
 
   return (
@@ -41,7 +37,6 @@ export default function PaymentDetailsToolbar({
         </Button>
 
         <Box sx={{ flexGrow: 1 }} />
-
       </Stack>
     </>
   );

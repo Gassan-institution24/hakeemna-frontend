@@ -9,7 +9,7 @@ export function useGetSubSpecialties() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      subspecialtiesData: data || [] ,
+      subspecialtiesData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

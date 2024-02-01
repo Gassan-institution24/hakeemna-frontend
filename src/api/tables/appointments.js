@@ -47,7 +47,6 @@ export function useGetAvailableAppointments() {
   return { ...memoizedValue, refetch };
 }
 
-
 export function useGetPatientAppointments(id) {
   const URL = endpoints.tables.patientAppointments(id);
 
@@ -113,7 +112,6 @@ export function useGetUSAppointmentsCount(id) {
   return { ...memoizedValue, refetch };
 }
 
-
 export function useGetDepartmentAppointments(id) {
   const URL = endpoints.tables.departmentAppointments(id);
 
@@ -159,13 +157,13 @@ export function useGetDepartmentAppointmentsCount(id) {
 
 export function useGetEmployeeAppointments(id) {
   const URL = endpoints.tables.employeeAppointments(id);
-  console.log('URL',URL)
-  
+  console.log('URL', URL);
+
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  console.log('data',data)
-  console.log('isLoading',isLoading)
-  console.log('isValidating',isValidating)
-  console.log('error',error)
+  console.log('data', data);
+  console.log('isLoading', isLoading);
+  console.log('isValidating', isValidating);
+  console.log('error', error);
   const memoizedValue = useMemo(
     () => ({
       appointmentsData: data,
@@ -184,11 +182,10 @@ export function useGetEmployeeAppointments(id) {
   return { ...memoizedValue, refetch };
 }
 
+export function useGetUSEmployeeAppointments(id, emid) {
+  const URL = endpoints.tables.usEmployeeAppointments(id, emid);
 
-export function useGetUSEmployeeAppointments(id,emid) {
-  const URL = endpoints.tables.usEmployeeAppointments(id,emid);
-
-  console.log('URL',URL)
+  console.log('URL', URL);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -208,7 +205,6 @@ export function useGetUSEmployeeAppointments(id,emid) {
 
   return { ...memoizedValue, refetch };
 }
-
 
 export function useGetAppointment(id) {
   const URL = endpoints.tables.appointment(id);

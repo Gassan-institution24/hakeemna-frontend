@@ -8,7 +8,15 @@ import DialogContent from '@mui/material/DialogContent';
 
 // ----------------------------------------------------------------------
 
-export default function ConfirmDialog({ title, content, action, open, onClose, disabled, ...other }) {
+export default function ConfirmDialog({
+  title,
+  content,
+  action,
+  open,
+  onClose,
+  disabled,
+  ...other
+}) {
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose} {...other}>
       <DialogTitle sx={{ pb: 2 }}>{title}</DialogTitle>

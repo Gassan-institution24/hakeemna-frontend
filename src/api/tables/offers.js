@@ -9,7 +9,7 @@ export function useGetOffers() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      offersData: data || [] ,
+      offersData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -31,7 +31,7 @@ export function useGetStakeholderOffers(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      offersData: data || [] ,
+      offersData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -53,7 +53,7 @@ export function useGetOffer(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      offerData:data,
+      offerData: data,
       loading: isLoading,
       error,
       validating: isValidating,

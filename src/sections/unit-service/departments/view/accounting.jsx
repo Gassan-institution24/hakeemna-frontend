@@ -20,6 +20,7 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
+import { useTranslate } from 'src/locales';
 import { RouterLink } from 'src/routes/components';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
@@ -31,6 +32,8 @@ import PaymentControlView from '../accounting/payment-control/payment-control';
 
 export default function PatientHistoryView({ departmentData }) {
   const theme = useTheme();
+
+  const { t } = useTranslate();
 
   const settings = useSettingsContext();
 
@@ -62,11 +65,11 @@ export default function PatientHistoryView({ departmentData }) {
         heading={`${departmentData.name_english || 'Deaprtment'} History`}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Departments',
+            name: t('departments'),
             href: paths.unitservice.departments.root,
           },
           {

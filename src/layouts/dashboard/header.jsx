@@ -15,7 +15,6 @@ import Logo from 'src/components/logo';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
 
-
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
 import SettingsButton from '../common/settings-button';
@@ -55,7 +54,7 @@ export default function Header({ onOpenNav }) {
 
       <Searchbar />
 
-      <TimeOutInActive/>
+      <TimeOutInActive />
       <Stack
         flexGrow={1}
         direction="row"

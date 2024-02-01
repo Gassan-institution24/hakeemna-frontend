@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import Patientservices from 'src/sections/home/view/patientservices'
+import Patientservices from 'src/sections/home/view/patientservices';
 // ----------------------------------------------------------------------
 
 export default function patients() {
@@ -9,7 +9,7 @@ export default function patients() {
         <title>Patientservices</title>
       </Helmet>
 
-      <Patientservices/>
+      <Patientservices />
     </>
   );
 }

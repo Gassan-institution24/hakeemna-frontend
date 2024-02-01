@@ -9,6 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { useRouter } from 'src/routes/hooks';
 
 import { useReactToPrint } from 'react-to-print';
@@ -63,6 +64,8 @@ const defaultFilters = {
 export default function DietsTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
+
+  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -160,7 +163,7 @@ export default function DietsTableView() {
           heading="Diets" /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {

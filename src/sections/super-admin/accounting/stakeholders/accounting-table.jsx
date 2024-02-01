@@ -207,7 +207,9 @@ export default function LicenseMovementsView() {
     setFilters(defaultFilters);
   }, []);
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

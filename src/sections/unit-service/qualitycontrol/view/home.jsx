@@ -40,29 +40,18 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetUSFeedbackes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';
+
 import FeedbackRow from '../feedback-row'; /// edit
 import FeedbackToolbar from '../feedback-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  /// to edit
-  { id: 'code', label: 'Code' },
-  { id: 'department', label: 'Department' },
-  { id: 'appointments', label: 'Appointments' },
-  { id: 'employees', label: 'Employees' },
-  { id: 'title', label: 'Title' },
-  { id: 'status', label: 'Status' },
-  { id: 'Body', label: 'Body' },
-  { id: 'Rate', label: 'Rate' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -71,13 +60,23 @@ const defaultFilters = {
 };
 
 // ----------------------------------------------------------------------
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'read', label: 'Read' },
-  { value: 'unread', label: 'Unread' },
-];
-
 export default function UnitServicesFeedbackView() {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    /// to edit
+    { id: 'code', label: t('code') },
+    { id: 'department', label: t('department') },
+    { id: 'appointments', label: t('appointments') },
+    { id: 'employees', label: t('employees') },
+    { id: 'title', label: t('title') },
+    { id: 'status', label: t('status') },
+    { id: 'Body', label: t('body') },
+    { id: 'Rate', label: t('rate') },
+    { id: '', width: 88 },
+  ];
+
+  const {QC_STATUS_OPTIONS} = StatusOptions()
+
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -109,8 +108,6 @@ export default function UnitServicesFeedbackView() {
     filters,
     dateError,
   });
-
-  const { t } = useTranslate();
 
   const denseHeight = table.dense ? 52 : 72;
 
@@ -169,13 +166,13 @@ export default function UnitServicesFeedbackView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Feedback" /// edit
+          heading={t('feedback')} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
-            { name: t('Feedback') }, /// edit
+            { name: t('feedback') }, /// edit
           ]}
           sx={{
             mb: { xs: 3, md: 5 },
@@ -191,7 +188,7 @@ export default function UnitServicesFeedbackView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {QC_STATUS_OPTIONS.map((tab) => (
               <Tab
                 key={tab.value}
                 iconPosition="end"

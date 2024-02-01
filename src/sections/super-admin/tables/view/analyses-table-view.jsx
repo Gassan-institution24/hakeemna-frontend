@@ -9,6 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { useRouter } from 'src/routes/hooks';
 
 import { useReactToPrint } from 'react-to-print';
@@ -55,6 +56,8 @@ const defaultFilters = {
 export default function AnalysesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
+
+  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -141,7 +144,9 @@ export default function AnalysesTableView() {
   //   [router]
   // );
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
@@ -150,7 +155,7 @@ export default function AnalysesTableView() {
           heading="Analyses" /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {

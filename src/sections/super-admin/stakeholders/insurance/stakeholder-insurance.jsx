@@ -208,8 +208,10 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
   );
   const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
 
-  if(loading) {return(<LoadingScreen/>)}
-  
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -217,11 +219,11 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
           heading={`${stakeholderName} Insurance`} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {
-              name: 'Stakeholders',
+              name: t('stakeholders'),
               href: paths.superadmin.stakeholders.root,
             },
             { name: t(`${stakeholderName} Insurance`) }, /// edit

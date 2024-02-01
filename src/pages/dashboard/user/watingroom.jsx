@@ -10,7 +10,7 @@ export default function Watingroomstatus() {
       <Helmet>
         <title>watingroom</title>
       </Helmet>
-  
+
       <MaxWidthDialog />
     </>
   );

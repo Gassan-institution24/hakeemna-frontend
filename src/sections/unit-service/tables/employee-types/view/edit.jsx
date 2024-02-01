@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -10,22 +11,23 @@ import TableNewEditForm from '../table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableEditView({employeeTypeData}) {
+export default function TableEditView({ employeeTypeData }) {
   const settings = useSettingsContext();
+  const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit employee type"
+        heading={t('edit employee type')}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Employee types',
+            name: t('employee types'),
             href: paths.unitservice.tables.employeetypes.root,
           },
-          { name: 'Edit employee type' },
+          { name: t('edit employee type') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

@@ -9,7 +9,7 @@ export function useGetTaxes() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      taxesData: data || [] ,
+      taxesData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

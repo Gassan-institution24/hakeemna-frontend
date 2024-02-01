@@ -15,14 +15,14 @@ import Iconify from 'src/components/iconify';
 
 export default function AccountBillingHistory() {
   const showMore = useBoolean();
-const DATA =[
-  {
-    value:'test'
-  }
-]
+  const DATA = [
+    {
+      value: 'test',
+    },
+  ];
   return (
     <Card>
-      <CardHeader/>
+      <CardHeader />
 
       <Stack spacing={1.5} sx={{ px: 3, pt: 3 }}>
         {(showMore.value ? DATA : DATA.slice(0, 8)).map((invoice) => (

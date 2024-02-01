@@ -97,7 +97,7 @@ export function useGetDepartmentEmployeesCount(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      employeesCount: data ,
+      employeesCount: data,
       loading: isLoading,
       error,
       validating: isValidating,

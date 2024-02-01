@@ -50,7 +50,7 @@ export default function TableDetailsRow({
   const DDL = usePopover();
   const details = usePopover();
 
-  console.log('employees',employees)
+  console.log('employees', employees);
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
@@ -62,7 +62,11 @@ export default function TableDetailsRow({
       </TableCell>
 
       <TableCell align="center">{name_english}</TableCell>
-      <TableCell align="center">{employees.map((employee)=>`${employee.employee.first_name} ${employee.employee.family_name}`).join(', ')}</TableCell>
+      <TableCell align="center">
+        {employees
+          .map((employee) => `${employee.employee.first_name} ${employee.employee.family_name}`)
+          .join(', ')}
+      </TableCell>
       <TableCell align="center">
         <Label
           variant="soft"

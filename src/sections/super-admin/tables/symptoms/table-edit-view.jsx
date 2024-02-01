@@ -5,6 +5,7 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
+import { useTranslate } from 'src/locales';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetSymptom } from 'src/api/tables';
@@ -15,6 +16,9 @@ import TableNewEditForm from './table-new-edit-form';
 
 export default function TableEditView() {
   const settings = useSettingsContext();
+
+  const { t } = useTranslate();
+
   const params = useParams();
   const { id } = params;
   const { data } = useGetSymptom(id);
@@ -25,7 +29,7 @@ export default function TableEditView() {
         heading="Update Symptom"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin,
           },
           {

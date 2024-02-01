@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -46,6 +47,8 @@ const defaultFilters = {
 
 export default function CommunicationListView() {
   const settings = useSettingsContext();
+
+  const { t } = useTranslate();
 
   const openFilters = useBoolean();
 
@@ -159,7 +162,7 @@ export default function CommunicationListView() {
       <CustomBreadcrumbs
         heading="List"
         links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
+          { name: t('dashboard'), href: paths.dashboard.root },
           {
             name: 'Job',
             href: paths.dashboard.job.root,

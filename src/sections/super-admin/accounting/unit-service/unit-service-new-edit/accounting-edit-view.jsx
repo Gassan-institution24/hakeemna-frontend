@@ -6,6 +6,7 @@ import { paths } from 'src/routes/paths';
 
 import { useParams } from 'react-router';
 
+import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -15,6 +16,9 @@ import TableNewEditForm from './accounting-new-edit-form';
 
 export default function USAppointmentEditView({ unitServiceData, licenseMovementData }) {
   const settings = useSettingsContext();
+
+  const { t } = useTranslate();
+
   const unitServiceName = unitServiceData?.name_english || 'Unit Service';
   const params = useParams();
   const { id } = params;
@@ -24,11 +28,11 @@ export default function USAppointmentEditView({ unitServiceData, licenseMovement
         heading={`Edit ${unitServiceName} Accounting`} /// edit
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin,
           },
           {
-            name: 'Accounting',
+            name: t('accounting'),
             href: paths.superadmin.accounting.root,
           },
           {

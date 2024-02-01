@@ -6,6 +6,7 @@ import { paths } from 'src/routes/paths';
 import { useAuthContext } from 'src/auth/hooks';
 import { _userAbout, _userPlans, _userPayment, _userInvoices, _userAddressBook } from 'src/_mock';
 import Iconify from 'src/components/iconify';
+import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useGetUnitservice } from 'src/api/tables';
@@ -18,7 +19,7 @@ import AccountChangePassword from '../profile-change-password';
 
 export default function AccountView() {
   const settings = useSettingsContext();
-
+  const { t } = useTranslate();
   const { user } = useAuthContext();
   console.log('user', user);
 
@@ -32,8 +33,11 @@ export default function AccountView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Unit Service Info"
-        links={[{ name: 'Dashboard', href: paths.dashboard.root }, { name: 'Unit Service Info' }]}
+        heading={t('unit service info')}
+        links={[
+          { name: t('dashboard'), href: paths.dashboard.root },
+          { name: t('unit service info') },
+        ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}

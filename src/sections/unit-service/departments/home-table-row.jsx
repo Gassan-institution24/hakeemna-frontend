@@ -26,6 +26,7 @@ import {
   useGetDepartmentFeedbackesCount,
   useGetDepartmentRoomsCount,
 } from 'src/api/tables';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +44,7 @@ export default function CountriesTableRow({
   showEmployees,
   showQualityControl,
   showRooms,
-  showWorkGroups
+  showWorkGroups,
 }) {
   const {
     code,
@@ -183,38 +184,42 @@ export default function CountriesTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'active' ? (
+        {status === 'active'
+          ? ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'delete' }) && (
+              <MenuItem
+                onClick={() => {
+                  onInactivate();
+                  // popover.onClose();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon="ic:baseline-pause" />
+                Inactivate
+              </MenuItem>
+            )
+          : ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
+              <MenuItem
+                onClick={() => {
+                  onActivate();
+                  // popover.onClose();
+                }}
+                sx={{ color: 'success.main' }}
+              >
+                <Iconify icon="bi:play-fill" />
+                activate
+              </MenuItem>
+            )}
+        {ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
           <MenuItem
             onClick={() => {
-              onInactivate();
-              // popover.onClose();
+              onEditRow();
+              popover.onClose();
             }}
-            sx={{ color: 'error.main' }}
           >
-            <Iconify icon="ic:baseline-pause" />
-            Inactivate
-          </MenuItem>
-        ) : (
-          <MenuItem
-            onClick={() => {
-              onActivate();
-              // popover.onClose();
-            }}
-            sx={{ color: 'success.main' }}
-          >
-            <Iconify icon="bi:play-fill" />
-            activate
+            <Iconify icon="fluent:edit-32-filled" />
+            Edit
           </MenuItem>
         )}
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="fluent:edit-32-filled" />
-          Edit
-        </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL

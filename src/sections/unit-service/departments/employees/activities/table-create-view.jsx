@@ -10,7 +10,7 @@ import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableCreateView({departmentData}) {
+export default function TableCreateView({ departmentData }) {
   const settings = useSettingsContext();
 
   return (
@@ -19,11 +19,11 @@ export default function TableCreateView({departmentData}) {
         heading="Create a new Activity"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Departments',
+            name: t('departments'),
             href: paths.unitservice.departments.root,
           },
           {

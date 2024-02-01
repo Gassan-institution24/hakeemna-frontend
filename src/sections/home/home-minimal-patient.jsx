@@ -13,14 +13,16 @@ import { varFade, MotionViewport } from 'src/components/animate';
 
 const CARDS = [
   {
-    icon: "https://www.aha.org/sites/default/files/2023-04/Hospital2_icon.png",
+    icon: 'https://www.aha.org/sites/default/files/2023-04/Hospital2_icon.png',
     title: 'MedicalHub',
-    description: 'An integrated platform that brings both medical service providers and beneficiaries in one place',
+    description:
+      'An integrated platform that brings both medical service providers and beneficiaries in one place',
   },
   {
     icon: 'https://static.vecteezy.com/system/resources/thumbnails/004/607/791/small/man-face-emotive-icon-smiling-male-character-in-blue-shirt-flat-illustration-isolated-on-white-happy-human-psychological-portrait-positive-emotions-user-avatar-for-app-web-design-vector.jpg',
     title: 'User-friendly',
-    description: 'The kit is built on the principles of the atomic design system. It helps you to create projects fastest and easily customized packages for your projects.',
+    description:
+      'The kit is built on the principles of the atomic design system. It helps you to create projects fastest and easily customized packages for your projects.',
   },
   {
     icon: 'https://logodix.com/logo/366948.png',
@@ -95,7 +97,7 @@ export default function HomeMinimalpatient() {
               />
 
               <Typography variant="h5" sx={{ mt: 8, mb: 2 }}>
-              {card.title}
+                {card.title}
               </Typography>
 
               <Typography sx={{ color: 'text.secondary' }}>{card.description}</Typography>

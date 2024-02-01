@@ -17,6 +17,7 @@ import { fDateTime } from 'src/utils/format-time';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
@@ -52,23 +53,40 @@ export default function UnitServiceEmployeesRow({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell sx={{
+      <TableCell
+        sx={{
           cursor: 'pointer',
           color: '#3F54EB',
           // textDecoration: 'underline',
-        }} onClick={onViewRow} align="center">{code}</TableCell>
-      <TableCell sx={{
+        }}
+        onClick={onViewRow}
+        align="center"
+      >
+        {code}
+      </TableCell>
+      <TableCell
+        sx={{
           cursor: 'pointer',
           color: '#3F54EB',
           // textDecoration: 'underline',
-        }} onClick={onViewRow} align="center">
+        }}
+        onClick={onViewRow}
+        align="center"
+      >
         {employee.first_name} {employee.family_name}
       </TableCell>
       <TableCell align="center">{employee.employee_type?.name_english}</TableCell>
       <TableCell align="center">{employee.email}</TableCell>
       <TableCell align="center">{employee.nationality?.name_english}</TableCell>
-      <TableCell align="center"><Iconify icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} /></TableCell>
-      <TableCell align="center"><Iconify icon={Adjust_schedule ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} /></TableCell>
+      <TableCell align="center">
+        <Iconify
+          icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'}
+          width={16}
+        />
+      </TableCell>
+      <TableCell align="center">
+        <Iconify icon={Adjust_schedule ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
+      </TableCell>
       <TableCell align="center">
         <Label
           variant="soft"
@@ -98,29 +116,31 @@ export default function UnitServiceEmployeesRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'active' ? (
-          <MenuItem
-            onClick={() => {
-              onInactivate();
-              popover.onClose();
-            }}
-            sx={{ color: 'error.main' }}
-          >
-            <Iconify icon="ic:baseline-pause" />
-            Inactivate
-          </MenuItem>
-        ) : (
-          <MenuItem
-            onClick={() => {
-              onActivate();
-              popover.onClose();
-            }}
-            sx={{ color: 'success.main' }}
-          >
-            <Iconify icon="bi:play-fill" />
-            activate
-          </MenuItem>
-        )}
+        {status === 'active'
+          ? ACLGuard({ category: 'unit_service', subcategory: 'employees', acl: 'delete' }) && (
+              <MenuItem
+                onClick={() => {
+                  onInactivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon="ic:baseline-pause" />
+                Inactivate
+              </MenuItem>
+            )
+          : ACLGuard({ category: 'unit_service', subcategory: 'employees', acl: 'update' }) && (
+              <MenuItem
+                onClick={() => {
+                  onActivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'success.main' }}
+              >
+                <Iconify icon="bi:play-fill" />
+                activate
+              </MenuItem>
+            )}
         <MenuItem onClick={onViewRow}>
           <Iconify icon="solar:eye-bold" />
           View
@@ -150,7 +170,9 @@ export default function UnitServiceEmployeesRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.employee.email}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          {user_modification?.employee.email}
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}

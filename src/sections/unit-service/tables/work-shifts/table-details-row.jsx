@@ -15,6 +15,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fDateTime } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
+import ACLGuard from 'src/auth/guard/acl-guard';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -64,29 +65,29 @@ export default function TableDetailsRow({
         <Box>{code}</Box>
       </TableCell>
       <TableCell align="center">
-          <ListItemText
-            primary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
-            // secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMM yyyy')}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            // secondaryTypographyProps={{
-            //   mt: 0.5,
-            //   component: 'span',
-            //   typography: 'caption',
-            // }}
-          />
-        </TableCell>
+        <ListItemText
+          primary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
+          // secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMM yyyy')}
+          primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+          // secondaryTypographyProps={{
+          //   mt: 0.5,
+          //   component: 'span',
+          //   typography: 'caption',
+          // }}
+        />
+      </TableCell>
       <TableCell align="center">
-          <ListItemText
-            primary={isValid(new Date(end_time)) && format(new Date(end_time), 'p')}
-            // secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMM yyyy')}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            // secondaryTypographyProps={{
-            //   mt: 0.5,
-            //   component: 'span',
-            //   typography: 'caption',
-            // }}
-          />
-        </TableCell>
+        <ListItemText
+          primary={isValid(new Date(end_time)) && format(new Date(end_time), 'p')}
+          // secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMM yyyy')}
+          primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+          // secondaryTypographyProps={{
+          //   mt: 0.5,
+          //   component: 'span',
+          //   typography: 'caption',
+          // }}
+        />
+      </TableCell>
 
       <TableCell align="center">{name_english}</TableCell>
       <TableCell align="center">
@@ -130,39 +131,43 @@ export default function TableDetailsRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'active' ? (
+        {status === 'active'
+          ? ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'delete' }) && (
+              <MenuItem
+                onClick={() => {
+                  onInactivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon="ic:baseline-pause" />
+                Inactivate
+              </MenuItem>
+            )
+          : ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'update' }) && (
+              <MenuItem
+                onClick={() => {
+                  onActivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'success.main' }}
+              >
+                <Iconify icon="bi:play-fill" />
+                activate
+              </MenuItem>
+            )}
+
+        {ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'update' }) && (
           <MenuItem
             onClick={() => {
-              onInactivate();
+              onEditRow();
               popover.onClose();
             }}
-            sx={{ color: 'error.main' }}
           >
-            <Iconify icon="ic:baseline-pause" />
-            Inactivate
-          </MenuItem>
-        ) : (
-          <MenuItem
-            onClick={() => {
-              onActivate();
-              popover.onClose();
-            }}
-            sx={{ color: 'success.main' }}
-          >
-            <Iconify icon="bi:play-fill" />
-            activate
+            <Iconify icon="fluent:edit-32-filled" />
+            Edit
           </MenuItem>
         )}
-
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="fluent:edit-32-filled" />
-          Edit
-        </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL

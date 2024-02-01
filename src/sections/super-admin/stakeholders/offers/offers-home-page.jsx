@@ -10,6 +10,7 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 
+import { useTranslate } from 'src/locales';
 import { alpha, useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
@@ -30,6 +31,8 @@ import OffersView from './offers-table';
 
 export default function StakeholderOffersView({ stakeholderData }) {
   const theme = useTheme();
+
+  const { t } = useTranslate();
 
   const settings = useSettingsContext();
 
@@ -61,11 +64,11 @@ export default function StakeholderOffersView({ stakeholderData }) {
         heading={`${stakeholderName} Offers`}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin.root,
           },
           {
-            name: 'Stakeholders',
+            name: t('stakeholders'),
             href: paths.superadmin.stakeholders.root,
           },
           {

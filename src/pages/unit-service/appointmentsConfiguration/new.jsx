@@ -8,7 +8,7 @@ import AppointmentConfigNewView from 'src/sections/unit-service/appointmentsConf
 export default function AppointmentConfigNewPage() {
   return (
     <>
-      <ACLGuard hasContent category="unit_service" subcategory='appointment_configs' acl="create">
+      <ACLGuard hasContent category="unit_service" subcategory="appointment_configs" acl="create">
         <Helmet>
           <title>New Appointment Configurations</title>
         </Helmet>

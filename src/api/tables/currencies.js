@@ -9,7 +9,7 @@ export function useGetCurrencies() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      currencies: data || [] ,
+      currencies: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

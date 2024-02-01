@@ -41,11 +41,11 @@ function NavEmployee() {
         }}
       >
         <Scrollbar
-          // sx={{
-          //   '& .simplebar-content': {
-          //     display: 'flex',
-          //   },
-          // }}
+        // sx={{
+        //   '& .simplebar-content': {
+        //     display: 'flex',
+        //   },
+        // }}
         >
           <NavSectionHorizontal
             data={navData}

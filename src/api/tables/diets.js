@@ -9,7 +9,7 @@ export function useGetDiets() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      dietsData: data || [] ,
+      dietsData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

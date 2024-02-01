@@ -43,25 +43,19 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetDepartmentActivities } from 'src/api/tables'; /// edit
-import axiosHandler from 'src/utils/axios-handler';
+import { useTranslate } from 'src/locales';
 import { endpoints } from 'src/utils/axios';
+import ACLGuard from 'src/auth/guard/acl-guard';
+import axiosHandler from 'src/utils/axios-handler';
+import { useGetDepartmentActivities } from 'src/api/tables'; /// edit
+import { LoadingScreen } from 'src/components/loading-screen';
+import { StatusOptions } from 'src/assets/data/status-options';
+
 import TableDetailRow from '../activities/table-details-row'; /// edit
 import TableDetailToolbar from '../activities/table-details-toolbar';
 import TableDetailFiltersResult from '../activities/table-details-filters-result';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
-
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'name', label: 'Name' },
-  { id: 'details', label: 'Details' },
-  { id: 'status', label: 'Status' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -70,7 +64,18 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function ActivitesTableView({departmentData}) {
+export default function ActivitesTableView({ departmentData }) {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'name', label: t('name') },
+    { id: 'details', label: t('details') },
+    { id: 'status', label: t('status') },
+    { id: '', width: 88 },
+  ];
+
+  const { STATUS_OPTIONS } = StatusOptions();
+
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -198,9 +203,9 @@ export default function ActivitesTableView({departmentData}) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.departments.activities.edit(departmentData._id,id));
+      router.push(paths.unitservice.departments.activities.edit(departmentData._id, id));
     },
-    [router,departmentData]
+    [router, departmentData]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -221,33 +226,37 @@ export default function ActivitesTableView({departmentData}) {
     [handleFilters]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
-  
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={`${departmentData.name_english || 'Department'} Activities`} /// edit
+          heading={`${departmentData.name_english || t('department')} ${t('activities')}`} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.unitservice.root,
             },
             {
-              name: 'Departments',
+              name: t('departments'),
               href: paths.unitservice.departments.root,
             },
-            { name: `${departmentData.name_english || 'Department'} Activities` },
+            { name: t('activities') },
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={paths.unitservice.departments.activities.new(departmentData._id)}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Activity
-            </Button>
+            ACLGuard({ category: 'department', subcategory: 'activities', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                href={paths.unitservice.departments.activities.new(departmentData._id)}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                New Activity
+              </Button>
+            )
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -325,23 +334,25 @@ export default function ActivitesTableView({departmentData}) {
                 )
               }
               action={
-                <>
-                  {dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'inactive') ? (
-                    <Tooltip title="Activate all">
-                      <IconButton color="primary" onClick={confirmActivate.onTrue}>
-                        <Iconify icon="codicon:run-all" />
-                      </IconButton>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip title="Inactivate all">
-                      <IconButton color="error" onClick={confirmInactivate.onTrue}>
-                        <Iconify icon="iconoir:pause-solid" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </>
+                ACLGuard({ category: 'department', subcategory: 'activities', acl: 'update' }) && (
+                  <>
+                    {dataFiltered
+                      .filter((row) => table.selected.includes(row._id))
+                      .some((data) => data.status === 'inactive') ? (
+                      <Tooltip title="Activate all">
+                        <IconButton color="primary" onClick={confirmActivate.onTrue}>
+                          <Iconify icon="codicon:run-all" />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Inactivate all">
+                        <IconButton color="error" onClick={confirmInactivate.onTrue}>
+                          <Iconify icon="iconoir:pause-solid" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </>
+                )
               }
               color={
                 dataFiltered

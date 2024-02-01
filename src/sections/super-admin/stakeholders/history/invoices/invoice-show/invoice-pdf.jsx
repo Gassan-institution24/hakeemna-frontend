@@ -108,7 +108,6 @@ export default function InvoicePDF({ invoice, currentStatus }) {
     user_creation,
     created_at,
 
-
     items,
     taxes,
     dueDate,
@@ -139,8 +138,13 @@ export default function InvoicePDF({ invoice, currentStatus }) {
         <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>Invoice from</Text>
-            <Text style={styles.body2}>{stakeholder.first_name} {stakeholder.last_name}</Text>
-            <Text style={styles.body2}>{stakeholder.country}{stakeholder.city}</Text>
+            <Text style={styles.body2}>
+              {stakeholder.first_name} {stakeholder.last_name}
+            </Text>
+            <Text style={styles.body2}>
+              {stakeholder.country}
+              {stakeholder.city}
+            </Text>
             <Text style={styles.body2}>{stakeholder.mobile_num1}</Text>
             <Text style={styles.body2}>{stakeholder.email}</Text>
           </View>
@@ -148,7 +152,10 @@ export default function InvoicePDF({ invoice, currentStatus }) {
           <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>Invoice to</Text>
             <Text style={styles.body2}>{unit_service?.name_english}</Text>
-            <Text style={styles.body2}>{unit_service?.country?.name_english}{unit_service?.city?.name_english}</Text>
+            <Text style={styles.body2}>
+              {unit_service?.country?.name_english}
+              {unit_service?.city?.name_english}
+            </Text>
             <Text style={styles.body2}>{unit_service?.phone}</Text>
             <Text style={styles.body2}>{unit_service?.email}</Text>
           </View>
@@ -196,7 +203,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
             {Provided_services.map((item, index) => (
               <View style={styles.tableRow} key={item.code}>
                 <View style={styles.tableCell_1}>
-                  <Text>{index+1}</Text>
+                  <Text>{index + 1}</Text>
                 </View>
 
                 <View style={styles.tableCell_2}>

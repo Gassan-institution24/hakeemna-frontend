@@ -44,28 +44,39 @@ export default function SmallSidebar() {
         }}
       >
         <li style={{ listStyle: 'none', width: '100%' }}>
-          <Button sx={{position:'relative', right:'25%'}}>
-            <Iconify sx={{ color: 'green' , width:'50%', height:'40%' }} icon="gg:profile" onClick={gotoProfile}/>
+          <Button sx={{ position: 'relative', right: '25%' }}>
+            <Iconify
+              sx={{ color: 'green', width: '50%', height: '40%' }}
+              icon="gg:profile"
+              onClick={gotoProfile}
+            />
           </Button>
         </li>
         <li style={{ listStyle: 'none', width: '100%' }}>
-          <Button sx={{position:'relative', right:'25%'}}>
-            <Iconify sx={{ color: 'green' , width:'50%', height:'40%' }} icon="bx:search" />
+          <Button sx={{ position: 'relative', right: '25%' }}>
+            <Iconify sx={{ color: 'green', width: '50%', height: '40%' }} icon="bx:search" />
           </Button>
         </li>
         <li style={{ listStyle: 'none', width: '100%' }}>
-          <Button sx={{position:'relative', right:'25%'}} onClick={gotoHome}>
-            <Iconify sx={{ color: 'green' , width:'50%', height:'40%' }} icon="cil:home" />
+          <Button sx={{ position: 'relative', right: '25%' }} onClick={gotoHome}>
+            <Iconify sx={{ color: 'green', width: '50%', height: '40%' }} icon="cil:home" />
           </Button>
         </li>
         <li style={{ listStyle: 'none', width: '100%' }}>
-          <Button sx={{position:'relative', right:'25%'}}>
-            <Iconify sx={{ color: 'green' , width:'50%', height:'40%' }} icon="material-symbols:wifi-sharp" />
+          <Button sx={{ position: 'relative', right: '25%' }}>
+            <Iconify
+              sx={{ color: 'green', width: '50%', height: '40%' }}
+              icon="material-symbols:wifi-sharp"
+            />
           </Button>
         </li>
         <li style={{ listStyle: 'none', width: '100%' }}>
-          <Button sx={{position:'relative', right:'25%'}}>
-            <Iconify sx={{ color: 'green' , width:'50%', height:'40%' }} icon="ant-design:setting-outlined" onClick={gotoSetting}/>
+          <Button sx={{ position: 'relative', right: '25%' }}>
+            <Iconify
+              sx={{ color: 'green', width: '50%', height: '40%' }}
+              icon="ant-design:setting-outlined"
+              onClick={gotoSetting}
+            />
           </Button>
         </li>
       </ul>

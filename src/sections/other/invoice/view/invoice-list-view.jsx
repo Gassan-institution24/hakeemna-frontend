@@ -213,7 +213,7 @@ export default function InvoiceListView() {
           heading="List"
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.dashboard.root,
             },
             {

@@ -1,5 +1,5 @@
 /* eslint-disable perfectionist/sort-imports */
-import 'src/utils/mapboxgl'
+import 'src/utils/mapboxgl';
 import Map from 'react-map-gl';
 import { useState } from 'react';
 import PropTypes from 'prop-types';

@@ -257,7 +257,9 @@ export default function UnitServicesTableView() {
     [handleFilters]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
@@ -266,10 +268,10 @@ export default function UnitServicesTableView() {
           heading="Unit Services" /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
-            { name: 'Unit Services' }, /// edit
+            { name: t('Unit Services') }, /// edit
           ]}
           // action={
           //   <Button

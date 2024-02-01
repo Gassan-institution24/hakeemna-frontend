@@ -84,7 +84,7 @@ export const userRoutes = [
             <Outlet />
           </Suspense>
         </UserDashboardLayout>
-     </AuthGuard>
+      </AuthGuard>
     ),
     children: [
       { element: <IndexPage />, index: true },

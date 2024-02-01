@@ -15,6 +15,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { useRouter } from 'src/routes/hooks';
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -43,27 +44,19 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
+import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetUSWorkShifts } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
-
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'name', label: 'Name' },
-  { id: 'start_time', label: 'Start time' },
-  { id: 'end_time', label: 'End time' },
-  { id: 'status', label: 'Status' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -73,6 +66,18 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function WorkGroupsTableView() {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'name', label: t('name') },
+    { id: 'start_time', label: t('start time') },
+    { id: 'end_time', label: t('end time') },
+    { id: 'status', label: t('status') },
+    { id: '', width: 88 },
+  ];
+
+  const { STATUS_OPTIONS } = StatusOptions();
+
   const { user } = useAuthContext();
 
   const table = useTable({ defaultOrderBy: 'code' });
@@ -233,23 +238,25 @@ export default function WorkGroupsTableView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Work shifts" /// edit
+          heading={t('work shifts')} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.unitservice.root,
             },
-            { name: 'Work shifts' },
+            { name: t('work shifts') },
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={paths.unitservice.tables.workshifts.new}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New work shift
-            </Button>
+            ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                href={paths.unitservice.tables.workshifts.new}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                New work shift
+              </Button>
+            )
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -327,25 +334,32 @@ export default function WorkGroupsTableView() {
                 )
               }
               action={
-                <>
-                  {dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'inactive') ? (
-                    <Tooltip title="Activate all">
-                      <IconButton color="primary" onClick={confirmActivate.onTrue}>
-                        <Iconify icon="codicon:run-all" />
-                      </IconButton>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip title="Inactivate all">
-                      <IconButton color="error" onClick={confirmInactivate.onTrue}>
-                        <Iconify icon="iconoir:pause-solid" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </>
+                ACLGuard({
+                  category: 'unit_service',
+                  subcategory: 'work_shift',
+                  acl: 'update',
+                }) && (
+                  <>
+                    {dataFiltered
+                      .filter((row) => table.selected.includes(row._id))
+                      .some((data) => data.status === 'inactive') ? (
+                      <Tooltip title="Activate all">
+                        <IconButton color="primary" onClick={confirmActivate.onTrue}>
+                          <Iconify icon="codicon:run-all" />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Inactivate all">
+                        <IconButton color="error" onClick={confirmInactivate.onTrue}>
+                          <Iconify icon="iconoir:pause-solid" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </>
+                )
               }
               color={
+                ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')

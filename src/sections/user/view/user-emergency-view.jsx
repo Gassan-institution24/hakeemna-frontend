@@ -2,6 +2,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { RouterLink } from 'src/routes/components';
 
 import { _userCards } from 'src/_mock';
@@ -16,15 +17,15 @@ import Emergency from '../emergency';
 
 export default function EmergencyView() {
   const settings = useSettingsContext();
-
+  const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="emergency"
+        heading={t('emergency')}
         links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'User', href: paths.dashboard.user.root },
-          { name: 'Semergencyhare' },
+          { name: t('dashboard'), href: paths.dashboard.root },
+          { name: t('user'), href: paths.dashboard.user.root },
+          { name: t('semergencyhare') },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />

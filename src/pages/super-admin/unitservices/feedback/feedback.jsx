@@ -16,8 +16,8 @@ export default function TableCreatePage() {
       <Helmet>
         <title> {unitServiceName} Feedback </title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
-      {!loading&&<UnitServiceFeedback unitServiceData={data} />}
+      {loading && <LoadingScreen />}
+      {!loading && <UnitServiceFeedback unitServiceData={data} />}
     </>
   );
 }

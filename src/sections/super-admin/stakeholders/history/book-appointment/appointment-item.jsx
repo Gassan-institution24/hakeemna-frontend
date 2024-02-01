@@ -104,7 +104,12 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <Box rowGap={1.5} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3, justifyContent: 'space-between' }}>
+        <Box
+          rowGap={1.5}
+          display="grid"
+          gridTemplateColumns="repeat(2, 1fr)"
+          sx={{ p: 3, justifyContent: 'space-between' }}
+        >
           {[
             {
               label: format(new Date(start_time), 'p'),
@@ -141,7 +146,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
               </Typography>
             </Stack>
           ))}
-          <Button onClick={onBook} sx={{mt:3,width:100}} variant="outlined" color="success">
+          <Button onClick={onBook} sx={{ mt: 3, width: 100 }} variant="outlined" color="success">
             Book
           </Button>
         </Box>

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -10,22 +11,23 @@ import TableNewEditForm from '../table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableEditView({workShiftData}) {
+export default function TableEditView({ workShiftData }) {
   const settings = useSettingsContext();
+  const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit work Shift"
+        heading={t('edit work shift')}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Work shifts',
+            name: t('work shifts'),
             href: paths.unitservice.tables.workshifts.root,
           },
-          { name: 'Edit work Shift' },
+          { name: t('edit work shift') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

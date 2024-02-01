@@ -16,6 +16,7 @@ import { RouterLink } from 'src/routes/components';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
@@ -78,6 +79,8 @@ const defaultFilters = {
 
 export default function MeasurmentTypesTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
+
+  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -227,8 +230,10 @@ export default function MeasurmentTypesTableView() {
     [handleFilters]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
-  
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -236,7 +241,7 @@ export default function MeasurmentTypesTableView() {
           heading="Measurment Types" /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {

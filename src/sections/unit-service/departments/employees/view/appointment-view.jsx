@@ -284,7 +284,7 @@ export default function AppointHistoryView({ departmentData }) {
           <PatientHistoryToolbar
             filters={filters}
             onFilters={handleFilters}
-            onAdd={()=>addModal.onTrue()}
+            onAdd={() => addModal.onTrue()}
             //
             dateError={dateError}
             serviceOptions={appointmenttypesData.map((option) => option)}
@@ -314,27 +314,31 @@ export default function AppointHistoryView({ departmentData }) {
                 )
               }
               action={
-                  <>
-                    {dataFiltered
-                      .filter((row) => table.selected.includes(row._id))
-                      .some((data) => data.status === 'canceled') ? (
-                      <Tooltip title="uncancel all">
-                        <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
-                          <Iconify icon="material-symbols-light:notifications-active-rounded" />
-                        </IconButton>
-                      </Tooltip>
-                    ) : (
-                      <Tooltip title="cancel all">
-                        <IconButton color="error" onClick={confirm.onTrue}>
-                          <Iconify icon="mdi:bell-cancel" />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  </>
-                }
-              color={dataFiltered
-                .filter((row) => table.selected.includes(row._id))
-                .some((data) => data.status === 'canceled') ?"primary":'error'}
+                <>
+                  {dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'canceled') ? (
+                    <Tooltip title="uncancel all">
+                      <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
+                        <Iconify icon="material-symbols-light:notifications-active-rounded" />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="cancel all">
+                      <IconButton color="error" onClick={confirm.onTrue}>
+                        <Iconify icon="mdi:bell-cancel" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </>
+              }
+              color={
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'canceled')
+                  ? 'primary'
+                  : 'error'
+              }
             />
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>

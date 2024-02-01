@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -10,8 +11,9 @@ import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableCreateView({departmentData}) {
+export default function TableCreateView({ departmentData }) {
   const settings = useSettingsContext();
+  const { t } = useTranslate();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -19,11 +21,11 @@ export default function TableCreateView({departmentData}) {
         heading="Create a new Activity"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Departments',
+            name: t('departments'),
             href: paths.unitservice.departments.root,
           },
           {

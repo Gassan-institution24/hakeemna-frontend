@@ -19,8 +19,8 @@ export default function AccountingAddPage() {
       <Helmet>
         <title> {t(stakeholderName)} Accounting</title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
-      {!loading&&<AddStakeholderAccounting stakeholderData={data} />}
+      {loading && <LoadingScreen />}
+      {!loading && <AddStakeholderAccounting stakeholderData={data} />}
     </>
   );
 }

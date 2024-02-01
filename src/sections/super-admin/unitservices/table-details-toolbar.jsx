@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -23,7 +24,7 @@ export default function OrderTableToolbar({
   onResetFilters,
 }) {
   const popover = usePopover();
-
+  const { t } = useTranslate();
   const handleFilterName = useCallback(
     (event) => {
       onFilters('name', event.target.value);
@@ -50,7 +51,7 @@ export default function OrderTableToolbar({
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Search name or number..."
+            placeholder={t('Search name or number...')}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -95,7 +96,7 @@ export default function OrderTableToolbar({
 
         <MenuItem
           onClick={() => {
-            onDownload()
+            onDownload();
             popover.onClose();
           }}
         >

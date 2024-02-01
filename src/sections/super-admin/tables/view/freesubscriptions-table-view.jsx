@@ -16,6 +16,7 @@ import { RouterLink } from 'src/routes/components';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
@@ -86,6 +87,8 @@ const defaultFilters = {
 
 export default function FreeSubscriptionTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
+
+  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -236,8 +239,10 @@ export default function FreeSubscriptionTableView() {
     [handleFilters]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
-  
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -245,7 +250,7 @@ export default function FreeSubscriptionTableView() {
           heading="Free Subscriptions" /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {

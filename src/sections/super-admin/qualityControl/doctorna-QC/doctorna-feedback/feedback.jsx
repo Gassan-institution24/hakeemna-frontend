@@ -186,7 +186,9 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
     [dataInPage.length, table, refetch]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

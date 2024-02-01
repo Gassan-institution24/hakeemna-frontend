@@ -38,7 +38,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
     ip_address_user_modification,
     modifications_nums,
   } = row;
-  
+
   const popover = usePopover();
   const DDL = usePopover();
 

@@ -10,7 +10,7 @@ import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableEditView({WorkGroupData,departmentData}) {
+export default function TableEditView({ WorkGroupData, departmentData }) {
   const settings = useSettingsContext();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -18,15 +18,15 @@ export default function TableEditView({WorkGroupData,departmentData}) {
         heading="Edit Room"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Departments',
+            name: t('departments'),
             href: paths.unitservice.departments.root,
           },
           {
-            name: `${departmentData.name_english||'Department'} Work group`,
+            name: `${departmentData.name_english || 'Department'} Work group`,
             href: paths.unitservice.departments.workGroups.root(departmentData._id),
           },
           { name: 'Edit Room' },
@@ -35,7 +35,9 @@ export default function TableEditView({WorkGroupData,departmentData}) {
           mb: { xs: 3, md: 5 },
         }}
       />
-      {WorkGroupData && departmentData && <TableNewEditForm departmentData={departmentData} currentTable={WorkGroupData} />}
+      {WorkGroupData && departmentData && (
+        <TableNewEditForm departmentData={departmentData} currentTable={WorkGroupData} />
+      )}
     </Container>
   );
 }

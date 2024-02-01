@@ -3,6 +3,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
+import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -12,20 +13,21 @@ import TableNewEditForm from '../department-new-edit-form';
 
 export default function TableEditView({ departmentData }) {
   const settings = useSettingsContext();
+  const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Update Department"
+        heading={t("update department")}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice,
           },
           {
-            name: 'Departments',
+            name: t('departments'),
             href: paths.unitservice.departments.root,
           },
-          { name: 'Update Department' },
+          { name: t('update department') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

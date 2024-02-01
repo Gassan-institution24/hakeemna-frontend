@@ -13,20 +13,10 @@ import { useAuthContext } from '../hooks';
 // ----------------------------------------------------------------------
 
 export default function ACLGuard({ hasContent, category, subcategory, acl, children, sx }) {
-  // Logic here to get current user role
   const { user } = useAuthContext();
 
-  // const currentACL = 'user';
-  const currentACL = user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.acl; // admin;
-  // console.log('currentACL', currentACL);
-  // console.log('category', category);
-  // console.log('subcategory', subcategory);
-  // console.log('currentACL?.accounting', currentACL?.accounting);
-  // console.log('currentACL?.[category]?.[subcategory]', currentACL?.[category]?.[subcategory]);
-  // console.log(
-  //   'currentACL?.[category]?.[subcategory]?.includes(acl)',
-  //   currentACL?.[category]?.[subcategory]?.includes(acl)
-  // );
+  const currentACL = user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.acl;
+
   if (typeof acl === 'undefined' || !currentACL?.[category]?.[subcategory]?.includes(acl)) {
     return hasContent ? (
       <Container component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
@@ -56,7 +46,7 @@ export default function ACLGuard({ hasContent, category, subcategory, acl, child
     );
   }
 
-  return <> {children || false} </>;
+  return <> {hasContent ? children : true} </>;
 }
 
 ACLGuard.propTypes = {

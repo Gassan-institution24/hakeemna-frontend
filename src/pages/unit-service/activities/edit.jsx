@@ -11,16 +11,16 @@ import ACLGuard from 'src/auth/guard/acl-guard';
 export default function ActivityEditPage() {
   const params = useParams();
   const { id } = params;
-  const { data,loading } = useGetActivity(id);
+  const { data, loading } = useGetActivity(id);
   const name = data?.name_english;
   return (
     <>
-    <ACLGuard hasContent category='unit_service' subcategory='activities' acl='update'>
-      <Helmet>
-        <title>Edit {name||''} Activity</title>
-      </Helmet>
-      {loading&& <LoadingScreen/>}
-      {!loading &&<EditActivityView activityData={data} />}
+      <ACLGuard hasContent category="unit_service" subcategory="activities" acl="update">
+        <Helmet>
+          <title>Edit {name || ''} Activity</title>
+        </Helmet>
+        {loading && <LoadingScreen />}
+        {!loading && <EditActivityView activityData={data} />}
       </ACLGuard>
     </>
   );

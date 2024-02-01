@@ -2,6 +2,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
+import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -16,6 +17,7 @@ import TableNewEditForm from './table-new-edit-form';
 export default function TableEditView() {
   const settings = useSettingsContext();
   const params = useParams();
+  const { t } = useTranslate();
   const { id } = params;
   const { data } = useGetDepartment(id);
   return (
@@ -24,7 +26,7 @@ export default function TableEditView() {
         heading="Update Department"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin,
           },
           {
@@ -32,7 +34,7 @@ export default function TableEditView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Departments',
+            name: t('departments'),
             href: paths.superadmin.tables.departments.root,
           },
           { name: 'Update Department' },

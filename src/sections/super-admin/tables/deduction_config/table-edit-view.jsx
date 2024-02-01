@@ -2,6 +2,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
+import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -15,6 +16,9 @@ import TableNewEditForm from './table-new-edit-form';
 
 export default function TableEditView() {
   const settings = useSettingsContext();
+
+  const { t } = useTranslate();
+
   const params = useParams();
   const { id } = params;
   const { data } = useGetDeduction(id);
@@ -24,7 +28,7 @@ export default function TableEditView() {
         heading="Update Deduction"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin,
           },
           {
