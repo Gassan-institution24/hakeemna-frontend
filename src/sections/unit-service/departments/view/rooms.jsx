@@ -254,7 +254,7 @@ export default function RoomsTableView({ departmentData }) {
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >
-                New Room
+                {t('new room')}
               </Button>
             )
           }

@@ -230,7 +230,7 @@ export default function UnitServicesInsuranceView() {
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >
-                New Insurance
+                {t('new insurance')}
               </Button>
             ) /// edit
           }

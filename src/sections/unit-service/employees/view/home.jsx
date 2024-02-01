@@ -264,7 +264,7 @@ export default function EmployeesTableView() {
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >
-                New Employee
+                {t('new employee')}
               </Button>
             ) /// edit
           }

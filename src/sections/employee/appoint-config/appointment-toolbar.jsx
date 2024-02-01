@@ -13,6 +13,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -28,6 +29,8 @@ export default function ConfigTableToolbar({
   serviceOptions,
 }) {
   const popover = usePopover();
+
+  const { t } = useTranslate();
 
   const handleFilterName = useCallback(
     (event) => {
@@ -101,7 +104,7 @@ export default function ConfigTableToolbar({
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Search customer or invoice number..."
+            placeholder={t('Search name or number...')}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

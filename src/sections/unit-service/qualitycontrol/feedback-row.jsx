@@ -11,6 +11,7 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import { Rating } from '@mui/material';
 
+import { useLocales, useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDateTime } from 'src/utils/format-time';
@@ -35,6 +36,12 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
     user_creation,
     ip_address_user_creation,
   } = row;
+
+  const { t } = useTranslate();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const popover = usePopover();
   const DDL = usePopover();
 
@@ -45,19 +52,19 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
         align="center"
         onClick={() => setFilters({ ...filters, name: department?.name_english })}
       >
-        {department?.name_english}
+        {curLangAr ? department?.name_arabic: department?.name_english}
       </TableCell>
       <TableCell
         align="center"
         onClick={() => setFilters({ ...filters, name: appointment?.name_english })}
       >
-        {appointment?.name_english}
+        {appointment?.code}
       </TableCell>
       <TableCell
         align="center"
         onClick={() => setFilters({ ...filters, name: employee?.name_english })}
       >
-        {employee?.name_english}
+        {curLangAr ? employee?.name_arabic: employee?.name_english}
       </TableCell>
       <TableCell align="center">{title}</TableCell>
       <TableCell align="center">
@@ -65,7 +72,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
           variant="soft"
           color={(status === 'read' && 'success') || (status === 'unread' && 'error') || 'default'}
         >
-          {status}
+          {t(status)}
         </Label>
       </TableCell>
       <TableCell align="center">{Body}</TableCell>

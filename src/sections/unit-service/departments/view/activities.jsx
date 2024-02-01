@@ -254,7 +254,7 @@ export default function ActivitesTableView({ departmentData }) {
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >
-                New Activity
+                {t('new activity')}
               </Button>
             )
           }

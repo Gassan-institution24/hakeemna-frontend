@@ -14,6 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
+import { useLocales, useTranslate } from 'src/locales';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -51,6 +52,11 @@ export default function AppointmentsTableRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
+
+  const { t } = useTranslate();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const confirm = useBoolean();
 
@@ -90,10 +96,10 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell onClick={onViewRow} align="center">
-          {work_shift?.name_english}
+          {curLangAr ? work_shift?.name_arabic: work_shift?.name_english}
         </TableCell>
         <TableCell onClick={onViewRow} align="center">
-          {work_group?.name_english}
+          {curLangAr ? work_group?.name_arabic: work_group?.name_english}
         </TableCell>
 
         <TableCell align="center">
@@ -103,8 +109,8 @@ export default function AppointmentsTableRow({
               (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
             }
           >
-            {status}
-          </Label>
+            {t(status)}
+        </Label>
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
@@ -154,7 +160,7 @@ export default function AppointmentsTableRow({
         )}
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
-          DDL
+          {t('DDL')}
         </MenuItem>
       </CustomPopover>
 

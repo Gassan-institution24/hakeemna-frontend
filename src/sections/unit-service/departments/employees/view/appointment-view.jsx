@@ -117,40 +117,40 @@ export default function AppointHistoryView({ departmentData }) {
     appointmentsData.filter((item) => item.status === status).length;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
+    { value: 'all', label: 'all', color: 'default', count: appointmentsData.length },
     {
       value: 'available',
-      label: 'Available',
+      label: 'available',
       color: 'secondary',
       count: getAppointLength('available'),
     },
     {
       value: 'pending',
-      label: 'Pending',
+      label: 'pending',
       color: 'warning',
       count: getAppointLength('pending'),
     },
     {
       value: 'processing',
-      label: 'Processing',
+      label: 'processing',
       color: 'info',
       count: getAppointLength('processing'),
     },
     {
       value: 'finished',
-      label: 'Finished',
+      label: 'finished',
       color: 'success',
       count: getAppointLength('finished'),
     },
     {
       value: 'canceled',
-      label: 'Canceled',
+      label: 'canceled',
       color: 'error',
       count: getAppointLength('canceled'),
     },
     {
       value: 'not booked',
-      label: 'Not Booked',
+      label: 'not booked',
       color: 'secondary',
       count: getAppointLength('not booked'),
     },

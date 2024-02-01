@@ -254,7 +254,7 @@ export default function WorkGroupsTableView() {
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >
-                New work shift
+                {t('new work shift')}
               </Button>
             )
           }

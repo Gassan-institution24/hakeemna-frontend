@@ -14,6 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
+import { useLocales, useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fCurrency } from 'src/utils/format-number';
@@ -56,6 +57,11 @@ export default function MovementTableRow({
     modifications_nums,
   } = row;
 
+  const { t } = useTranslate();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const confirm = useBoolean();
 
   const DDL = usePopover();
@@ -93,7 +99,7 @@ export default function MovementTableRow({
 
         <TableCell align="center">
           <ListItemText
-            primary={unit_service?.name_english}
+            primary={curLangAr ? unit_service?.name_arabic: unit_service?.name_english}
             secondary={employee?.first_name}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
@@ -106,7 +112,7 @@ export default function MovementTableRow({
 
         <TableCell align="center">
           <ListItemText
-            primary={appointment?.name_english}
+            primary={appointment?.code}
             secondary={
               (isValid(new Date(appointment?.start_time)) &&
                 format(new Date(appointment?.start_time), 'dd MMM yyyy p')) ||
@@ -121,7 +127,7 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell align="center">{stakeholder?.name_english}</TableCell>
+        <TableCell align="center">{curLangAr ? stakeholder?.name_arabic: stakeholder?.name_english}</TableCell>
         <TableCell align="center">{Provided_services.length}</TableCell>
 
         <TableCell align="center">
@@ -139,8 +145,8 @@ export default function MovementTableRow({
               'default'
             }
           >
-            {status}
-          </Label>
+            {t(status)}
+        </Label>
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
@@ -163,7 +169,7 @@ export default function MovementTableRow({
           }}
         >
           <Iconify icon="solar:eye-bold" />
-          View
+          {t('view')}
         </MenuItem>
 
         {/* <MenuItem
@@ -173,11 +179,11 @@ export default function MovementTableRow({
           }}
         >
           <Iconify icon="solar:pen-bold" />
-          Edit
-        </MenuItem> */}
+          {t('edit')}
+          </MenuItem> */}
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
-          DDL
+          {t('DDL')}
         </MenuItem>
 
         {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
@@ -202,22 +208,24 @@ export default function MovementTableRow({
           fontSize: '14px',
         }}
       >
-        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>
+          {t('modifications no')}: {modifications_nums}
+        </Box>
       </CustomPopover>
 
       {/* <ConfirmDialog

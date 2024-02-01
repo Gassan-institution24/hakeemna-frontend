@@ -8,6 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
+import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDateTime } from 'src/utils/format-time';
@@ -41,6 +42,8 @@ export default function CitiesTableRow({
     modifications_nums,
   } = row;
 
+  const { t } = useTranslate();
+
   const confirm = useBoolean();
 
   const popover = usePopover();
@@ -67,7 +70,7 @@ export default function CitiesTableRow({
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {status}
+          {t(status)}
         </Label>
       </TableCell>
 

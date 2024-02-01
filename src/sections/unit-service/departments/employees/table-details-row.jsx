@@ -10,6 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
+import { useLocales, useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDateTime } from 'src/utils/format-time';
@@ -45,6 +46,12 @@ export default function CountriesTableRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
+
+  const { t } = useTranslate();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const popover = usePopover();
   const DDL = usePopover();
 
@@ -75,9 +82,9 @@ export default function CountriesTableRow({
       >
         {employee.first_name} {employee.family_name}
       </TableCell>
-      <TableCell align="center">{employee.employee_type?.name_english}</TableCell>
+      <TableCell align="center">{curLangAr ? employee.employee_type?.name_arabic: employee.employee_type?.name_english}</TableCell>
       <TableCell align="center">{employee.email}</TableCell>
-      <TableCell align="center">{employee.nationality?.name_english}</TableCell>
+      <TableCell align="center">{curLangAr ? employee.nationality?.name_arabic: employee.nationality?.name_english}</TableCell>
       <TableCell align="center">
         <Iconify
           icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'}
@@ -94,7 +101,7 @@ export default function CountriesTableRow({
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {status}
+          {t(status)}
         </Label>
       </TableCell>
 
@@ -126,7 +133,7 @@ export default function CountriesTableRow({
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon="ic:baseline-pause" />
-                Inactivate
+                {t('inactivate')}
               </MenuItem>
             )
           : ACLGuard({ category: 'department', subcategory: 'employees', acl: 'update' }) && (
@@ -138,16 +145,16 @@ export default function CountriesTableRow({
                 sx={{ color: 'success.main' }}
               >
                 <Iconify icon="bi:play-fill" />
-                activate
+                {t('activate')}
               </MenuItem>
             )}
         <MenuItem onClick={onViewRow}>
           <Iconify icon="solar:eye-bold" />
-          View
+          {t('view')}
         </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
-          DDL
+          {t('DDL')}
         </MenuItem>
       </CustomPopover>
 

@@ -10,6 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
+import { useLocales, useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDateTime } from 'src/utils/format-time';
@@ -24,6 +25,7 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
   const {
     code,
     name_english,
+    name_arabic,
     type,
     status,
     webpage,
@@ -37,18 +39,24 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
     ip_address_user_modification,
     modifications_nums,
   } = row;
+
+  const { t } = useTranslate();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const popover = usePopover();
   const DDL = usePopover();
 
   const renderPrimary = (
     <TableRow hover>
       <TableCell align="center">{code}</TableCell>
-      <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{curLangAr ? name_arabic : name_english}</TableCell>
       <TableCell
         align="center"
         onClick={() => setFilters({ ...filters, name: type?.name_english })}
       >
-        {type?.name_english}
+        {curLangAr ? type?.name_arabic: type?.name_english}
       </TableCell>
       <TableCell align="center">
         <Label
@@ -57,7 +65,7 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {status}
+          {t(status)}
         </Label>
       </TableCell>
       <TableCell align="center">{webpage}</TableCell>
@@ -82,7 +90,7 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
       >
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
-          DDL
+          {t('DDL')}
         </MenuItem>
         <MenuItem onClick={onDeleteRow} sx={{ color: 'error.main' }}>
           <Iconify icon="mi:delete" />
@@ -99,22 +107,22 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
           fontSize: '14px',
         }}
       >
-        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
       </CustomPopover> */}
     </>
   );

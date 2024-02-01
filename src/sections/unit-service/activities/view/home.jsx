@@ -260,7 +260,7 @@ export default function ActivitesTableView() {
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >
-                New Activity
+                {t('new activity')}
               </Button>
             )
           }

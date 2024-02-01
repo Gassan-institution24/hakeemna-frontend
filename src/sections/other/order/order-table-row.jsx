@@ -131,7 +131,7 @@ export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, o
             'default'
           }
         >
-          {status}
+          {t(status)}
         </Label>
       </TableCell> */}
 
