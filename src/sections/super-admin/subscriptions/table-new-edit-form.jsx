@@ -21,6 +21,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
 
 import axios from 'axios';
+import { useTranslate } from 'src/locales';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
@@ -29,6 +30,8 @@ import { useAuthContext } from 'src/auth/hooks';
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
+
+  const { t } = useTranslate();
 
   const { user } = useAuthContext();
 
