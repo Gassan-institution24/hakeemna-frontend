@@ -130,7 +130,8 @@ export default function OverviewAppView() {
             </Box>
           </Grid>
         </Grid>
-        {user?.patient?.identification_num === oldData && user?.patient?.is_onboarded === false ? (
+        {/* && user?.patient?.is_onboarded === false  */}
+        {user?.patient?.identification_num === oldData ? (
           <Dialog open={dialog.value} onClose={dialog.onTrue}>
             <DialogTitle>
               We found that you have data stored in

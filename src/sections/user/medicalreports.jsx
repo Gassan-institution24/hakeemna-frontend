@@ -18,7 +18,9 @@ import {
 } from '@react-pdf/renderer';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/hooks';
-import { fDate, fTime } from 'src/utils/format-time';
+import { fDate } from 'src/utils/format-time';
+import EmptyContent from 'src/components/empty-content/empty-content';
+
 import Doclogo from '../../components/logo/doc.png';
 
 export default function Medicalreports() {
@@ -132,97 +134,109 @@ export default function Medicalreports() {
       </Page>
     </Document>
   );
-
-  return user?.patient.Mediacalreports.map((info) => (
-    <Card
-      sx={{
-        backgroundImage: `url(https://mawthook.com/wp-content/uploads/2020/07/%D8%AA%D8%B1%D8%AC%D9%85%D8%A9-%D8%A7%D9%84%D9%85%D8%B5%D8%B7%D9%84%D8%AD%D8%A7%D8%AA-%D8%A7%D9%84%D8%B7%D8%A8%D9%8A%D8%A9.jpg)`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundColor: 'rgba(255, 255, 255, 0.800)',
-        backgroundBlendMode: 'lighten',
-      }}
-    >
-      <Stack sx={{ p: 2, pb: 1, height: 150 }}>
-        <Avatar
-          alt={info?.name_english}
-          src={Avatar}
-          variant="rounded"
-          sx={{ width: 48, height: 48, mb: 2 }}
-        />
-        <ListItemText
-          primary={<Link color="black">{info?.department?.name_english}</Link>}
-          primaryTypographyProps={{
-            typography: 'subtitle1',
-          }}
-          secondaryTypographyProps={{
-            mt: 1,
-            component: 'span',
-            typography: 'caption',
-            color: 'text.disabled',
-          }}
-        />
-
-        <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-          {fDate(info?.created_at)}
-        </Stack>
-        <PDFDownloadLink
-          style={styles.pdf}
-          document={<PrescriptionPDF medicines={[info]} />}
-          fileName={`${user?.patient?.first_name} MediacalReport.pdf`}
-        >
-          {({ loading }) =>
-            loading ? (
-              'Loading document...'
-            ) : (
-              <Iconify style={styles.pdf2} icon="teenyicons:pdf-outline" />
-            )
-          }
-        </PDFDownloadLink>
-      </Stack>
-
-      <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
-
-      <Box
-        rowGap={1.5}
-        display="grid"
-        gridTemplateColumns="repeat(2, 1fr)"
-        sx={{ p: 3, justifyContent: 'space-between' }}
+  console.log(user?.patient);
+return user?.patient.Mediacalreports?.length > 0 ? (
+    user?.patient.Mediacalreports.map((info) => (
+      <Card
+        sx={{
+          backgroundImage: `url(https://mawthook.com/wp-content/uploads/2020/07/%D8%AA%D8%B1%D8%AC%D9%85%D8%A9-%D8%A7%D9%84%D9%85%D8%B5%D8%B7%D9%84%D8%AD%D8%A7%D8%AA-%D8%A7%D9%84%D8%B7%D8%A8%D9%8A%D8%A9.jpg)`,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundColor: 'rgba(255, 255, 255, 0.800)',
+          backgroundBlendMode: 'lighten',
+        }}
       >
-        {[
-          {
-            label: info?.department?.name_english,
-            icon: <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />,
-          },
-          {
-            // info.patient.Mediacalreports?.employee
-            label: 'THE EMPLOYEE NAME',
-            icon: <Iconify width={16} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
-          },
-          {
-            label: `${user?.patient?.first_name} ${user?.patient?.last_name}`,
-            icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
-          },
-          {
-            label: `ESG`,
-            icon: <Iconify width={16} icon="fa6-solid:file-prescription" sx={{ flexShrink: 0 }} />,
-          },
-        ].map((item) => (
-          <Stack
-            key={item.label}
-            spacing={0.5}
-            flexShrink={0}
-            direction="row"
-            alignItems="center"
-            sx={{ color: 'black', minWidth: 0 }}
-          >
-            {item?.icon}
-            <Typography variant="caption" noWrap>
-              {item?.label}
-            </Typography>
+        <Stack sx={{ p: 2, pb: 1, height: 150 }}>
+          <Avatar
+            alt={info?.name_english}
+            src={Avatar}
+            variant="rounded"
+            sx={{ width: 48, height: 48, mb: 2 }}
+          />
+          <ListItemText
+            primary={<Link color="black">{info?.department?.name_english}</Link>}
+            primaryTypographyProps={{
+              typography: 'subtitle1',
+            }}
+            secondaryTypographyProps={{
+              mt: 1,
+              component: 'span',
+              typography: 'caption',
+              color: 'text.disabled',
+            }}
+          />
+
+          <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
+            {fDate(info?.created_at)}
           </Stack>
-        ))}
-      </Box>
-    </Card>
-  ));
+          <PDFDownloadLink
+            style={styles.pdf}
+            document={<PrescriptionPDF medicines={[info]} />}
+            fileName={`${user?.patient?.first_name} MediacalReport.pdf`}
+          >
+            {({ loading }) =>
+              loading ? (
+                'Loading document...'
+              ) : (
+                <Iconify style={styles.pdf2} icon="teenyicons:pdf-outline" />
+              )
+            }
+          </PDFDownloadLink>
+        </Stack>
+
+        <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
+
+        <Box
+          rowGap={1.5}
+          display="grid"
+          gridTemplateColumns="repeat(2, 1fr)"
+          sx={{ p: 3, justifyContent: 'space-between' }}
+        >
+          {[
+            {
+              label: info?.department?.name_english,
+              icon: <Iconify width={16} icon="teenyicons:hospital-solid" sx={{ flexShrink: 0 }} />,
+            },
+            {
+              // info.patient.Mediacalreports?.employee
+              label: 'THE EMPLOYEE NAME',
+              icon: <Iconify width={16} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
+            },
+            {
+              label: `${user?.patient?.first_name} ${user?.patient?.last_name}`,
+              icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
+            },
+            {
+              label: `ESG`,
+              icon: (
+                <Iconify width={16} icon="fa6-solid:file-prescription" sx={{ flexShrink: 0 }} />
+              ),
+            },
+          ].map((item) => (
+            <Stack
+              key={item.label}
+              spacing={0.5}
+              flexShrink={0}
+              direction="row"
+              alignItems="center"
+              sx={{ color: 'black', minWidth: 0 }}
+            >
+              {item?.icon}
+              <Typography variant="caption" noWrap>
+                {item?.label}
+              </Typography>
+            </Stack>
+          ))}
+        </Box>
+      </Card>
+    ))
+  ) : (
+    <EmptyContent
+    filled
+    title="No Data"
+    sx={{
+      py: 10,
+    }}
+  />
+  );
 }

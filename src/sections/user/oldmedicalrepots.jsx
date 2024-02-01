@@ -290,17 +290,16 @@ export default function OldMedicalReports() {
               rather in the presence of a physician who is consulted on those results and taking
               into account the full medical context of the patient’s condition.
             </Typography>
-            <RHFTextField lang="en" name="name" label="File name" />
+            <RHFTextField lang="en" name="name" label="File name" sx={{ mb: 1.5 }} />
             <RHFSelect
               label="type"
               fullWidth
               name="type"
-              InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ mb: 1 }}
+              sx={{ mb: 1.5 }}
             >
               {TYPE.map((test) => (
-                <MenuItem value={test} key={test._id}>
+                <MenuItem value={test} key={test._id} sx={{mb:1}}>
                   {test}
                 </MenuItem>
               ))}
@@ -310,12 +309,11 @@ export default function OldMedicalReports() {
               label="Specialty"
               fullWidth
               name="specialty"
-              InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
               sx={{ mb: 1 }}
             >
               {SPECIALTY.map((test) => (
-                <MenuItem value={test} key={test._id}>
+                <MenuItem value={test} key={test._id} sx={{mb:1}}>
                   {test}
                 </MenuItem>
               ))}
@@ -343,10 +341,11 @@ export default function OldMedicalReports() {
               fullWidth
               name="file"
               margin="dense"
+              sx={{ mb: 1 }}
               variant="outlined"
               onDrop={handleDrop}
             />
-            <RHFTextField lang="en" name="note" label="Patient note" />
+            <RHFTextField lang="en" name="note" label="More information" />
           </DialogContent>
 
           <DialogActions>

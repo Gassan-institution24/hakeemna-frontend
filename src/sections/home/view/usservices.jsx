@@ -4,15 +4,7 @@ import MuiGrid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import unit from 'src/sections/home/view/uns.webp';
 import Image from 'src/components/image';
-import { useMediaQuery } from '@mui/material';
-
-const Grid = styled(MuiGrid)(({ theme }) => ({
-  width: '100%',
-  ...theme.typography.body2,
-  '& [role="separator"]': {
-    margin: theme.spacing(0, 2),
-  },
-}));
+import { Box } from '@mui/system';
 
 const DATA = [
   {
@@ -83,77 +75,24 @@ const DATA = [
 
 export default function VerticalDividerText() {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <Grid container spacing={isMobile ? 2 : 0}>
-      {!isMobile ? (
-        <Grid container>
-          <Grid
-            item
-            xs
-            sx={{
-              fontWeight: 600,
-            }}
-          >
-            <ul style={{ margin: 10 }}>
-              {DATA.map((data) => (
-                <>
-                  <li style={{ margin: 5 }}>{data.headline}</li>
-                </>
-              ))}
-            </ul>
-          </Grid>
-          <Divider orientation="vertical" flexItem>
-            <h1>
-              {' '}
-              SERVICES <br /> <span style={{ color: 'rgb(0, 186, 0)' }}>FOR</span>
-              <br />
-              UNITSERVICES
-            </h1>
-          </Divider>
-          <Grid item xs>
-            <Image
-              alt="unit servic"
-              src={unit}
-              sx={{
-                width: 'auto',
-                height: 'auto',
-              }}
-            />
-          </Grid>
-        </Grid>
-      ) : (
-        <Grid>
-          <Divider
-            orientation="vertical"
-            flexItem
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <h2>SERVICES FOR UNITSERVICES</h2>
-            <hr />
-          </Divider>
-          <Grid
-            sx={{
-              width: '380px',
-              p: 2,
-              fontWeight: 500,
-            }}
-          >
-            <ul style={{ margin: 10 }}>
-              {DATA.map((data) => (
-                <>
-                  <li style={{ margin: 5 }}>{data.headline}</li>
-                </>
-              ))}
-            </ul>
-          </Grid>
-        </Grid>
-      )}
-    </Grid>
+    <>
+      <Divider orientation="vertical" flexItem>
+        <h1>
+          {' '}
+          SERVICES <span style={{ color: 'rgb(0, 186, 0)' }}>FOR</span> UNITSERVICES
+        </h1>
+      </Divider>
+      <Box container>
+        <ul style={{ margin: 10, display:'grid', gridTemplateColumns:'1fr 1fr 1fr' }}>
+          {DATA.map((data) => (
+            <>
+              <li style={{ margin: 5 }}>{data.headline}</li>
+            </>
+          ))}
+        </ul>
+      </Box>
+    </>
   );
 }
