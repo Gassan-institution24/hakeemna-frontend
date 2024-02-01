@@ -6,6 +6,8 @@ import { Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
+import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -23,28 +25,33 @@ import UploadedOldPatients from '../uploaded-old-patients';
 export default function TableCreateView() {
   const settings = useSettingsContext();
   const { user } = useAuthContext();
-
+  const { t } = useTranslate();
   const { oldPatients, refetch, loading } = useGetEmployeeOldPatient(user?.employee?._id);
 
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Old patient"
+          heading={t('old patient data')}
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.unitservice.root,
             },
-            { name: 'Old patient' },
+            { name: t('old patient data') },
           ]}
           sx={{
             mb: { xs: 3, md: 5 },
           }}
         />
         {loading && <LoadingScreen />}
-        <UploadOldPatient refetch={refetch} />
-        {!loading && <UploadedOldPatients oldPatients={oldPatients} />}
+        {ACLGuard({ category: 'unit_service', subcategory: 'old_patient', acl: 'create' }) && (
+          <UploadOldPatient refetch={refetch} />
+        )}
+        {!loading &&
+          ACLGuard({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && (
+            <UploadedOldPatients oldPatients={oldPatients} />
+          )}
       </Container>
     </>
   );

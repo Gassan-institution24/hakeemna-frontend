@@ -16,7 +16,7 @@ export default function StakeholderInsuranceView() {
       <Helmet>
         <title> stakeholders: {stakeholderName} Insurance </title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
+      {loading && <LoadingScreen />}
       {!loading && <StakeholderInsurance stakeholderData={data} refetch={refetch} />}
     </>
   );

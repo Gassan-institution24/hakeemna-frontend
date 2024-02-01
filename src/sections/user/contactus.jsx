@@ -1,4 +1,3 @@
-
 import * as Yup from 'yup';
 import { useState } from 'react';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -49,10 +48,9 @@ export default function ContactUs() {
       if (response) {
         enqueueSnackbar('Your message sent successfully', { variant: 'success' });
         setTimeout(() => {
-          window.location.reload(); 
+          window.location.reload();
         }, 2000);
-      }
-      else {
+      } else {
         enqueueSnackbar('Somthing went wront, please try again later', { variant: 'error' });
       }
     } catch (err) {
@@ -61,49 +59,47 @@ export default function ContactUs() {
     }
   });
   return (
-  
-      <FormProvider onSubmit={onSubmit}>
-        <Stack
-          component={MotionViewport}
-          spacing={3}
-          sx={{
-            bgcolor: 'background.paper',
-            boxShadow: 7,
-            borderRadius: 2,
-            p: 3,
-            minWidth: 300,
-          }}
-        >
+    <FormProvider onSubmit={onSubmit}>
+      <Stack
+        component={MotionViewport}
+        spacing={3}
+        sx={{
+          bgcolor: 'background.paper',
+          boxShadow: 7,
+          borderRadius: 2,
+          p: 3,
+          minWidth: 300,
+        }}
+      >
+        <m.div variants={varFade().inUp}>
+          <Typography variant="h5">
+            Any proplem! <br />
+            Feel free to contact us.
+          </Typography>
+        </m.div>
+
+        <Stack spacing={3}>
           <m.div variants={varFade().inUp}>
-            <Typography variant="h5">
-              Any proplem! <br />
-              Feel free to contact us.
-            </Typography>
+            <TextField fullWidth label="Subject" {...methods.register('title')} />
           </m.div>
 
-          <Stack spacing={3}>
-            <m.div variants={varFade().inUp}>
-              <TextField fullWidth label="Subject" {...methods.register('title')} />
-            </m.div>
-
-            <m.div variants={varFade().inUp}>
-              <TextField
-                fullWidth
-                label="Enter your message here."
-                multiline
-                rows={5}
-                {...methods.register('Body')}
-              />
-            </m.div>
-          </Stack>
-
           <m.div variants={varFade().inUp}>
-            <Button size="large" type="submit" variant="contained" methods={methods}>
-              Submit Now
-            </Button>
+            <TextField
+              fullWidth
+              label="Enter your message here."
+              multiline
+              rows={5}
+              {...methods.register('Body')}
+            />
           </m.div>
         </Stack>
-      </FormProvider>
- 
+
+        <m.div variants={varFade().inUp}>
+          <Button size="large" type="submit" variant="contained" methods={methods}>
+            Submit Now
+          </Button>
+        </m.div>
+      </Stack>
+    </FormProvider>
   );
 }

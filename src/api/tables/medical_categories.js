@@ -9,7 +9,7 @@ export function useGetCategories() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      categories: data || [] ,
+      categories: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

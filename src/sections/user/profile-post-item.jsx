@@ -198,11 +198,12 @@ export default function ProfilePostItem({ post }) {
   //   </Stack>
   // );
 
- 
   return (
     <>
-      {posts.map((info,i) => (
-        <Card key={i}> {/* Ensure to provide a unique key for each iteration */}
+      {posts.map((info, i) => (
+        <Card key={i}>
+          {' '}
+          {/* Ensure to provide a unique key for each iteration */}
           <CardHeader
             disableTypography
             avatar={<Avatar src={Doclogo} />}

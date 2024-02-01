@@ -49,7 +49,7 @@ export default function FileManagerView() {
   const upload = useBoolean();
 
   const [view, setView] = useState('list');
-  
+
   const {
     dense,
     page,

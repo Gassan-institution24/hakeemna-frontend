@@ -13,7 +13,7 @@ import AppointmentItem from './appointment-item';
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentList({ patientData,appointments,refetch }) {
+export default function AppointmentList({ patientData, appointments, refetch }) {
   const router = useRouter();
 
   const handleView = useCallback(
@@ -24,10 +24,14 @@ export default function AppointmentList({ patientData,appointments,refetch }) {
   );
   const handleBook = useCallback(
     async (id) => {
-      await axiosHandler({method:'PATCH',path:`${endpoints.tables.appointment(id)}/book`,data:{patient:patientData._id}});
-      refetch()
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointment(id)}/book`,
+        data: { patient: patientData._id },
+      });
+      refetch();
     },
-    [patientData._id,refetch]
+    [patientData._id, refetch]
   );
 
   const handleEdit = useCallback(

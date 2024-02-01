@@ -11,15 +11,15 @@ import { LoadingScreen } from 'src/components/loading-screen';
 export default function EmployeeFeedbackPage() {
   const params = useParams();
   const { id } = params;
-  const {data,loading} = useGetEmployeeEngagement(id);
+  const { data, loading } = useGetEmployeeEngagement(id);
   const name = data?.first_name;
   return (
     <>
-        <Helmet>
-          <title> {name || ''} Employee Feedback</title>
-        </Helmet>
-        {loading&& <LoadingScreen/>}
-        {!loading && <EmployeeFeedbackView employeeData={data} />}
+      <Helmet>
+        <title> {name || ''} Employee Feedback</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <EmployeeFeedbackView employeeData={data} />}
     </>
   );
 }

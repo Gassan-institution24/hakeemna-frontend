@@ -24,7 +24,7 @@ export default function InvoiceEditView({ id }) {
         heading="Edit"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {

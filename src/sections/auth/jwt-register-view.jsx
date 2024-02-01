@@ -122,7 +122,7 @@ export default function JwtRegisterView() {
           Sign in
         </Link>
       </Stack>
-      
+
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> I am unit services </Typography>
         <Link href={paths.auth.registersu} component={RouterLink} variant="subtitle2">

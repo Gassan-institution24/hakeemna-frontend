@@ -53,7 +53,7 @@ export function useGetUSActivitiesCount(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      activitiesCount: data ,
+      activitiesCount: data,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -97,7 +97,7 @@ export function useGetDepartmentActivitiesCount(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      activitiesCount: data ,
+      activitiesCount: data,
       loading: isLoading,
       error,
       validating: isValidating,

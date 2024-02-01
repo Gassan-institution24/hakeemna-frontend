@@ -28,12 +28,12 @@ export default function PaymentNewCardDialog({ onClose, ...other }) {
 
   const onChangeExp = (e) => {
     const { value } = e.target;
-    const formattedExpDate = expriy_format(value); 
+    const formattedExpDate = expriy_format(value);
     setCard({
       ...card,
-      expirydt: value, 
+      expirydt: value,
     });
-    methods.setValue('expiration_date', formattedExpDate); 
+    methods.setValue('expiration_date', formattedExpDate);
   };
 
   const expriy_format = (value) => {
@@ -69,13 +69,13 @@ export default function PaymentNewCardDialog({ onClose, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log("data",data)
-      const newData = {...data,'expiration_date':expriy_date_format(data.expiration_date)}
-      console.log("data",newData)
+      console.log('data', data);
+      const newData = { ...data, expiration_date: expriy_date_format(data.expiration_date) };
+      console.log('data', newData);
       const response = await axiosHandler({
         method: 'POST',
         path: `/api/paymentmethods`,
-        data:newData,
+        data: newData,
       });
       if (response) {
         console.log(response);
@@ -88,8 +88,6 @@ export default function PaymentNewCardDialog({ onClose, ...other }) {
     }
   });
 
-
-
   const expriy_date_format = (value) => {
     const [month, year] = value.split('/'); // Splitting month and year
     const currentYear = new Date().getFullYear(); // Getting the current year
@@ -97,7 +95,7 @@ export default function PaymentNewCardDialog({ onClose, ...other }) {
 
     // Creating a string in the format 'YYYY-MM-DD' for a proper Date object
     const formattedDate = `${formattedYear}-${month}-01`;
-    const result = new Date(formattedDate)
+    const result = new Date(formattedDate);
     return result;
   };
 
@@ -171,7 +169,7 @@ export default function PaymentNewCardDialog({ onClose, ...other }) {
         sx={{ maxWidth: 200, typography: 'body2', textAlign: 'center' }}
       >
         Three-digit number on the back of your VISA card
-      </CustomPopover> 
+      </CustomPopover>
     </>
   );
 }

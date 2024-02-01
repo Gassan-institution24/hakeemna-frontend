@@ -36,14 +36,15 @@ import {
   useGetEmployeeEngagement,
 } from 'src/api/tables';
 import Scrollbar from 'src/components/scrollbar';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
 
-import axios, { endpoints } from 'src/utils/axios';
-import { useAuthContext } from 'src/auth/hooks';
-import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
+import { useAuthContext } from 'src/auth/hooks';
+import axios, { endpoints } from 'src/utils/axios';
+import { useBoolean } from 'src/hooks/use-boolean';
 
 // ----------------------------------------------------------------------
 
@@ -174,11 +175,13 @@ export default function TableNewEditForm({ acl }) {
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Stack alignItems="flex-end" sx={{ mb: 3, mr: 3 }}>
-        <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-          Save Changes
-        </LoadingButton>
-      </Stack>
+      {ACLGuard({ category: 'employee', subcategory: 'acl', acl: 'update' }) && (
+        <Stack alignItems="flex-end" sx={{ mb: 3, mr: 3 }}>
+          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+            Save Changes
+          </LoadingButton>
+        </Stack>
+      )}
       <Box
         gap={{ xs: 3, lg: 10 }}
         height="1500px"

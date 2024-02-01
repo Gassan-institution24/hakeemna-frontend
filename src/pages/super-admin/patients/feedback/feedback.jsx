@@ -20,7 +20,7 @@ export default function TableCreatePage() {
       <Helmet>
         <title> Patients: {patientName} Feedback </title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
+      {loading && <LoadingScreen />}
       {!loading && <PatientFeedback patientData={data} />}
     </>
   );

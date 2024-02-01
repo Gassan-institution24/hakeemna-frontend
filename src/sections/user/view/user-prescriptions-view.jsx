@@ -1,3 +1,4 @@
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import { useState, useCallback } from 'react';
@@ -16,6 +17,7 @@ import Pharmaces from '../pharmacies';
 // ----------------------------------------------------------------------
 
 export default function UserCardList() {
+  const { t } = useTranslate();
   const { user } = useAuthContext();
   const settings = useSettingsContext();
   const [currentTab, setCurrentTab] = useState('Prescriptions');
@@ -41,8 +43,8 @@ export default function UserCardList() {
       <CustomBreadcrumbs
         heading="My Prescriptions"
         links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'User', href: paths.dashboard.user.root },
+          { name: t('dashboard'), href: paths.dashboard.root },
+          { name: t('user'), href: paths.dashboard.user.root },
           { name: 'My Prescriptions' },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}

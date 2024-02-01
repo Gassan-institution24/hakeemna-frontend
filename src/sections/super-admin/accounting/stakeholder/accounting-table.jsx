@@ -27,6 +27,7 @@ import { fTimestamp } from 'src/utils/format-time';
 import { _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
 import Label from 'src/components/label';
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -77,6 +78,8 @@ const defaultFilters = {
 export default function StakeholderlicenseMovementView({ stakeholderData }) {
   const theme = useTheme();
 
+  const { t } = useTranslate();
+
   const settings = useSettingsContext();
 
   const router = useRouter();
@@ -85,7 +88,9 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
 
   // const confirm = useBoolean();
 
-  const { licenseMovements,loading,  refetch } = useGetStakeholderLicenseMovement(stakeholderData._id);
+  const { licenseMovements, loading, refetch } = useGetStakeholderLicenseMovement(
+    stakeholderData._id
+  );
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -224,20 +229,22 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
     setFilters(defaultFilters);
   }, []);
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Accounting"
+          heading={t('accounting')}
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {
-              name: 'Accounting',
+              name: t('accounting'),
               href: paths.superadmin.accounting.root,
             },
             {

@@ -234,7 +234,9 @@ export default function StakeholderOffersView({ stakeholderData }) {
     });
   }, [dataFiltered.length, dataInPage.length, table, offersData, refetch]);
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

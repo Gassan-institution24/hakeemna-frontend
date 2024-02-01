@@ -188,7 +188,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           (new Date(data.end_date) > now &&
             (new Date(data.start_date) <= now || new Date(data.start_date) < thisFrequentEndDate))
         ) {
-          setDataToUpdate(data)
+          setDataToUpdate(data);
           confirm.onTrue();
         }
 
@@ -201,8 +201,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       }
       // reset();
       loadingSend.onFalse();
-      if(!appointmentConfigData){
-        router.push(paths.unitservice.departments.employees.appointmentconfig.root(id,emid));
+      if (!appointmentConfigData) {
+        router.push(paths.unitservice.departments.employees.appointmentconfig.root(id, emid));
       }
       await refetch();
       console.info('DATA', JSON.stringify(data, null, 2));

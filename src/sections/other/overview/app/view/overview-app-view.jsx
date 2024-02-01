@@ -44,7 +44,7 @@ export default function OverviewAppView() {
         is_onboarded: true,
       });
       setOldpatientsdata(response.data);
-      user.patient.is_onboarded = true
+      user.patient.is_onboarded = true;
       enqueueSnackbar(`Please check your data`, { variant: 'success' });
     } catch (error) {
       console.error('Error updating data:', error);
@@ -58,7 +58,7 @@ export default function OverviewAppView() {
         is_onboarded: true,
       });
       setOldpatientsdata(response.data);
-      user.patient.is_onboarded = true
+      user.patient.is_onboarded = true;
       enqueueSnackbar(`Thanks for your cooperation`, { variant: 'success' });
     } catch (error) {
       console.error('Error updating data:', error);

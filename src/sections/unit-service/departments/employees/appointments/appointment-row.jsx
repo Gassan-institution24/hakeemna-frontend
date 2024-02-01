@@ -84,7 +84,9 @@ export default function AppointmentsTableRow({
           />
         </TableCell>
 
-        <TableCell align="center">{currency?.symbol} {price}</TableCell>
+        <TableCell align="center">
+          {currency?.symbol} {price}
+        </TableCell>
 
         <TableCell align="center">
           <Label
@@ -116,30 +118,30 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status !== "canceled" &&
-        <MenuItem
-          onClick={() => {
-            onCancelRow();
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="mdi:bell-cancel" />
-          Cancel
-        </MenuItem>
-        }
-        {status === "canceled" &&
-        <MenuItem
-          onClick={() => {
-            onUnCancelRow();
-            popover.onClose();
-          }}
-          sx={{ color: 'success.main' }}
-        >
-          <Iconify icon="material-symbols-light:notifications-active-rounded" />
-          uncancel
-        </MenuItem>
-        }
+        {status !== 'canceled' && (
+          <MenuItem
+            onClick={() => {
+              onCancelRow();
+              popover.onClose();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="mdi:bell-cancel" />
+            Cancel
+          </MenuItem>
+        )}
+        {status === 'canceled' && (
+          <MenuItem
+            onClick={() => {
+              onUnCancelRow();
+              popover.onClose();
+            }}
+            sx={{ color: 'success.main' }}
+          >
+            <Iconify icon="material-symbols-light:notifications-active-rounded" />
+            uncancel
+          </MenuItem>
+        )}
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL

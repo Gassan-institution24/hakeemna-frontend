@@ -29,7 +29,7 @@ import FormProvider, {
   RHFMultiSelect,
   RHFAutocomplete,
   RHFMultiCheckbox,
-  RHFSelect
+  RHFSelect,
 } from 'src/components/hook-form';
 
 import { FormSchema } from './schema';

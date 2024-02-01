@@ -196,34 +196,30 @@ export default function JobFilters({
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Countries
       </Typography>
-      <select  onChange={handleFilterCountries} name="country" label="Country">
-  
-            {countriesOptions?.map((country) => (
-              <option key={country._id} value={country._id}>
-                {country?.name_english}
-              </option>
-            ))}
-          </select>
+      <select onChange={handleFilterCountries} name="country" label="Country">
+        {countriesOptions?.map((country) => (
+          <option key={country._id} value={country._id}>
+            {country?.name_english}
+          </option>
+        ))}
+      </select>
     </Stack>
   );
   const renderDepartments = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-      insurance
+        insurance
       </Typography>
-      <select  onChange={handleFiltedInsurance} name="insurance" label="insurance">
-  
-            {insuranseCosData?.map((info) => (
-              <>
-               <option/>
-              <option key={info._id} value={info._id} >
-                {info?.name_english}
-              </option>
-              
-              </>
-             
-            ))}
-          </select>
+      <select onChange={handleFiltedInsurance} name="insurance" label="insurance">
+        {insuranseCosData?.map((info) => (
+          <>
+            <option />
+            <option key={info._id} value={info._id}>
+              {info?.name_english}
+            </option>
+          </>
+        ))}
+      </select>
     </Stack>
   );
 
@@ -289,7 +285,7 @@ export default function JobFilters({
             {renderUnitServices}
 
             {renderCountries}
-            
+
             {renderDepartments}
 
             {renderappointtypes}

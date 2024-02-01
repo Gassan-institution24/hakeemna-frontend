@@ -11,13 +11,13 @@ export default function EmployeeInfoPage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetEmployeeEngagement(id);
-  const name = data?.name_english
+  const name = data?.name_english;
   return (
     <>
       <Helmet>
-        <title>{name||''} Employee Info</title>
+        <title>{name || ''} Employee Info</title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
+      {loading && <LoadingScreen />}
       {!loading && <EmployeeInfoView employeeData={data} />}
     </>
   );

@@ -16,7 +16,7 @@ export default function TableCreatePage() {
       <Helmet>
         <title> stakeholders: Edit {stakeholderName} </title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
+      {loading && <LoadingScreen />}
       {!loading && <EditPatient stakeholderData={data} />}
     </>
   );

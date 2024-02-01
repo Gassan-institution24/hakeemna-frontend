@@ -5,20 +5,21 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
+import { useTranslate } from 'src/locales';
 import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
 export default function TableCreateView() {
   const settings = useSettingsContext();
-
+  const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
         heading="Create a new Department"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin,
           },
           {
@@ -26,7 +27,7 @@ export default function TableCreateView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Departments',
+            name: t('departments'),
             href: paths.superadmin.tables.departments.root,
           },
           { name: 'New Department' },

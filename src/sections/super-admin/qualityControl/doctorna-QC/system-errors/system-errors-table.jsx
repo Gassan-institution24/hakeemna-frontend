@@ -184,7 +184,9 @@ export default function DoctornaSystemErrorsView() {
     [dataInPage.length, table, refetch]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

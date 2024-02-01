@@ -9,7 +9,7 @@ export function useGetDepartments() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      departmentsData: data || [] ,
+      departmentsData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -31,7 +31,7 @@ export function useGetUSDepartments(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      departmentsData: data || [] ,
+      departmentsData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

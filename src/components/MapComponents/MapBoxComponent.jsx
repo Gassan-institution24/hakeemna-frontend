@@ -6,14 +6,14 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiZG8xYS04MTEiLCJhIjoiY2xyYXp5NXd1MGdxMjJpbXdnZmtvcWVzbSJ9.BgX2_RdiJZ5SESKin6RSvw';
-  mapboxgl.setRTLTextPlugin(
-    'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
-    null,
-    true
-  );
+mapboxgl.setRTLTextPlugin(
+  'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
+  null,
+  true
+);
 const MapBoxComponent = () => {
   const mapContainerRef = useRef(null);
-  const map = useRef(null)
+  const map = useRef(null);
 
   const [lng] = useState(-97.7431);
   const [lat] = useState(30.2672);
@@ -51,7 +51,7 @@ const MapBoxComponent = () => {
     const marker1 = new mapboxgl.Marker()
       .setLngLat([35.88532536800162, 32.01232757863414])
       .addTo(map.current)
-      .setPopup(popup)
+      .setPopup(popup);
     // Clean up on unmount
     return () => map.current.remove();
   }, [lat, lng, zoom]);

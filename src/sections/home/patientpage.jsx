@@ -42,7 +42,7 @@ export default function Patient() {
               top: { md: '120px' },
               p: 1,
               width: { md: '500px', xs: '280px' },
-              fontSize:18
+              fontSize: 18,
             }}
           >
             <h1 style={{ color: 'green' }}>I am a patient</h1>
@@ -57,7 +57,7 @@ export default function Patient() {
                 bgcolor: 'success.main',
                 color: '#fff',
                 width: '130px',
-              
+
                 '&:hover': {
                   bgcolor: '#fff',
                   color: 'success.main',

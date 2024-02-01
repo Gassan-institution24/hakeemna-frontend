@@ -13,15 +13,20 @@ export default function AccountingEditPage() {
   const params = useParams();
   const { id, acid } = params;
   const { data } = useGetUnitservice(id);
-  const { licenseMovementData , loading } = useGetLicenseMovement(acid);
+  const { licenseMovementData, loading } = useGetLicenseMovement(acid);
   const unitServiceName = data?.name_english || 'unit service';
   return (
     <>
       <Helmet>
         <title> {t(unitServiceName)} Accounting</title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
-      {!loading&&<EditUnitServiceAccounting unitServiceData={data} licenseMovementData={licenseMovementData} />}
+      {loading && <LoadingScreen />}
+      {!loading && (
+        <EditUnitServiceAccounting
+          unitServiceData={data}
+          licenseMovementData={licenseMovementData}
+        />
+      )}
     </>
   );
 }

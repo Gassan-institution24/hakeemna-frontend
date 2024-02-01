@@ -9,7 +9,7 @@ import Header from './header';
 
 // ----------------------------------------------------------------------
 
-export default function MainLayout({ children,scrollToDiv,scrollToDiv2 }) {
+export default function MainLayout({ children, scrollToDiv, scrollToDiv2 }) {
   const pathname = usePathname();
 
   const homePage = pathname === '/';

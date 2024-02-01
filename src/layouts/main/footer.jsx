@@ -59,7 +59,7 @@ export default function Footer() {
       }}
     >
       <Container>
-        <Logo sx={{ mb: 1, mx: 'auto', position:'relative', left: 40, }} />
+        <Logo sx={{ mb: 1, mx: 'auto', position: 'relative', left: 40 }} />
 
         <Typography variant="caption" component="div">
           © All rights reserved
@@ -104,7 +104,7 @@ export default function Footer() {
                 mx: { xs: 'auto', md: 'unset' },
               }}
             >
-              Manage all your data with  doctorna
+              Manage all your data with doctorna
             </Typography>
 
             <Stack

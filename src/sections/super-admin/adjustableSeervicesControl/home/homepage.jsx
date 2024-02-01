@@ -14,6 +14,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -79,6 +80,8 @@ const STATUS_OPTIONS = [
 export default function UnitServicesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
+
+  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -265,10 +268,10 @@ export default function UnitServicesTableView() {
           heading="Unit Services" /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
-            { name: 'Unit Services' }, /// edit
+            { name: t('Unit Services') }, /// edit
           ]}
           // action={
           //   <Button

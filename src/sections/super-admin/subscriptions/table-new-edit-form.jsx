@@ -237,7 +237,7 @@ export default function TableNewEditForm({ currentTable }) {
                 name="package_accounting"
                 control={<Checkbox defaultChecked={defaultValues.package_accounting} />}
                 onChange={(event) => methods.setValue('package_accounting', event.target.checked)}
-                label="Accounting"
+                label={t('accounting')}
               />
               <FormControlLabel
                 name="package_docotor_report"

@@ -9,7 +9,7 @@ export function useGetUnitservices() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      unitservicesData: data || [] ,
+      unitservicesData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

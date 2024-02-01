@@ -17,7 +17,7 @@ import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter,useParams } from 'src/routes/hooks';
+import { useRouter, useParams } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -69,7 +69,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointConfigView({ appointmentConfigData,refetch }) {
+export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -82,9 +82,9 @@ export default function AppointConfigView({ appointmentConfigData,refetch }) {
   const confirm = useBoolean();
   const confirmUnCancel = useBoolean();
 
-  const {id,emid} = useParams()
+  const { id, emid } = useParams();
 
-  console.log('appointmentConfigData',appointmentConfigData)
+  console.log('appointmentConfigData', appointmentConfigData);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -153,64 +153,61 @@ export default function AppointConfigView({ appointmentConfigData,refetch }) {
 
   const handleUnCancelRow = useCallback(
     async (_id) => {
-      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(_id)}/uncancel` });
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointment(_id)}/uncancel`,
+      });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
     [dataInPage.length, table, refetch]
   );
 
-  const handleCancelRows = useCallback(
-    async () => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
-      });
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
-      });
-      refetch();
-      table.onUpdatePageDeleteRows({
-        totalRows: appointmentConfigData.length,
-        totalRowsInPage: dataInPage.length,
-        totalRowsFiltered: dataFiltered.length,
-      });
-    },
-    [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table]
-  );
-  const handleUnCancelRows = useCallback(
-    async () => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/uncancel`,
-        data: { ids: table.selected },
-      });
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/uncancel`,
-        data: { ids: table.selected },
-      });
-      refetch();
-      table.onUpdatePageDeleteRows({
-        totalRows: appointmentConfigData.length,
-        totalRowsInPage: dataInPage.length,
-        totalRowsFiltered: dataFiltered.length,
-      });
-    },
-    [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table]
-  );
+  const handleCancelRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.appointments}/cancel`,
+      data: { ids: table.selected },
+    });
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.appointments}/cancel`,
+      data: { ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: appointmentConfigData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table]);
+  const handleUnCancelRows = useCallback(async () => {
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.appointments}/uncancel`,
+      data: { ids: table.selected },
+    });
+    await axiosHandler({
+      method: 'PATCH',
+      path: `${endpoints.tables.appointments}/uncancel`,
+      data: { ids: table.selected },
+    });
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: appointmentConfigData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table]);
   const handleAdd = useCallback(() => {
-    router.push(paths.unitservice.departments.employees.appointmentconfig.new(id,emid));
-  }, [router, id,emid]);
+    router.push(paths.unitservice.departments.employees.appointmentconfig.new(id, emid));
+  }, [router, id, emid]);
 
   const handleViewRow = useCallback(
     (_id) => {
-      router.push(paths.unitservice.departments.employees.appointmentconfig.details(id,emid,_id));
+      router.push(paths.unitservice.departments.employees.appointmentconfig.details(id, emid, _id));
     },
-    [router,id,emid]
+    [router, id, emid]
   );
 
   const handleFilterStatus = useCallback(
@@ -289,27 +286,31 @@ export default function AppointConfigView({ appointmentConfigData,refetch }) {
                 )
               }
               action={
-                  <>
-                    {dataFiltered
-                      .filter((row) => table.selected.includes(row._id))
-                      .some((data) => data.status === 'canceled') ? (
-                      <Tooltip title="uncancel all">
-                        <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
-                          <Iconify icon="material-symbols-light:notifications-active-rounded" />
-                        </IconButton>
-                      </Tooltip>
-                    ) : (
-                      <Tooltip title="cancel all">
-                        <IconButton color="error" onClick={confirm.onTrue}>
-                          <Iconify icon="mdi:bell-cancel" />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  </>
-                }
-              color={dataFiltered
-                .filter((row) => table.selected.includes(row._id))
-                .some((data) => data.status === 'canceled') ?"primary":'error'}
+                <>
+                  {dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'canceled') ? (
+                    <Tooltip title="uncancel all">
+                      <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
+                        <Iconify icon="material-symbols-light:notifications-active-rounded" />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="cancel all">
+                      <IconButton color="error" onClick={confirm.onTrue}>
+                        <Iconify icon="mdi:bell-cancel" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </>
+              }
+              color={
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'canceled')
+                  ? 'primary'
+                  : 'error'
+              }
             />
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
@@ -335,7 +336,7 @@ export default function AppointConfigView({ appointmentConfigData,refetch }) {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                       <AppointConfigRow
+                      <AppointConfigRow
                         key={row._id}
                         row={row}
                         selected={table.selected.includes(row._id)}
@@ -348,7 +349,11 @@ export default function AppointConfigView({ appointmentConfigData,refetch }) {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentConfigData.length)}
+                    emptyRows={emptyRows(
+                      table.page,
+                      table.rowsPerPage,
+                      appointmentConfigData.length
+                    )}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -439,17 +444,13 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter(
       (config) =>
         (config?.work_shift?.name_english &&
-          config?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          config?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (config?.work_shift?.name_arabic &&
-          config?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          config?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (config?.work_group?.name_english &&
-          config?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          config?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (config?.work_group?.name_arabic &&
-          config?.work_group?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          config?.work_group?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         config?._id === name ||
         JSON.stringify(config.code) === name
     );
@@ -464,9 +465,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
       inputData = inputData.filter(
         (config) =>
           (fTimestamp(config.start_date) <= fTimestamp(startDate) &&
-          fTimestamp(config.end_date) >= fTimestamp(startDate)) ||
+            fTimestamp(config.end_date) >= fTimestamp(startDate)) ||
           (fTimestamp(config.start_date) <= fTimestamp(endDate) &&
-          fTimestamp(config.end_date) >= fTimestamp(endDate))
+            fTimestamp(config.end_date) >= fTimestamp(endDate))
       );
     } else if (startDate) {
       inputData = inputData.filter(

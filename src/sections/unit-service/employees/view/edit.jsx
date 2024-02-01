@@ -3,6 +3,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
+import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -12,21 +13,21 @@ import TableNewEditForm from '../new/create-edit-employee';
 
 export default function TableCreateView({ employeeData }) {
   const settings = useSettingsContext();
-
+  const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit Employee Account"
+        heading={t('Edit Employee Account')}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Employees',
+            name: t('employees'),
             href: paths.unitservice.employees.root,
           },
-          { name: `Edit ${employeeData.first_name || ''} Employee` },
+          { name: t('sdit') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

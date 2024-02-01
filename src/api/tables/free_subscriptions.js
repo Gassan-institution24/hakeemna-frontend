@@ -9,7 +9,7 @@ export function useGetFreeSubscriptions() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      freeSubscriptionsData: data || [] ,
+      freeSubscriptionsData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

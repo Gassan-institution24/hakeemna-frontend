@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 
 import { useParams } from 'react-router';
 
@@ -15,6 +16,9 @@ import TableNewEditForm from './accounting-new-edit-form';
 
 export default function USAppointmentEditView({ unitServiceData, licenseMovementData }) {
   const settings = useSettingsContext();
+
+  const { t } = useTranslate();
+
   const unitServiceName = unitServiceData?.name_english || 'Unit Service';
   const params = useParams();
   const { id } = params;
@@ -24,11 +28,11 @@ export default function USAppointmentEditView({ unitServiceData, licenseMovement
         heading={`Edit ${unitServiceName} Accounting`} /// edit
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin,
           },
           {
-            name: 'Unit Services',
+            name: t('Unit Services'),
             href: paths.superadmin.unitservices.root,
           },
           {

@@ -86,7 +86,9 @@ export default function IncomePaymentControlView({ patientData }) {
 
   // const confirm = useBoolean();
 
-  const { incomePaymentData, loading, refetch } = useGetPatientIncomePaymentControl(patientData._id);
+  const { incomePaymentData, loading, refetch } = useGetPatientIncomePaymentControl(
+    patientData._id
+  );
 
   const unitServiceOptions = incomePaymentData.reduce((arr, data) => {
     // Check if the name_english is not already in the array
@@ -213,7 +215,9 @@ export default function IncomePaymentControlView({ patientData }) {
     setFilters(defaultFilters);
   }, []);
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

@@ -15,6 +15,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { Rating } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
@@ -25,8 +26,10 @@ export default function TablesTableToolbar({
   //
   canReset,
   onResetFilters,
-  dateError
+  dateError,
 }) {
+  const { t } = useTranslate();
+
   const handleFilterName = useCallback(
     (event) => {
       onFilters('name', event.target.value);
@@ -73,29 +76,29 @@ export default function TablesTableToolbar({
       }}
     >
       <DatePicker
-          label="Start date"
-          value={filters.start_date}
-          onChange={handleFilterStartDate}
-          slotProps={{ textField: { fullWidth: true } }}
-          sx={{
-            maxWidth: { md: 180 },
-          }}
-        />
+        label="Start date"
+        value={filters.start_date}
+        onChange={handleFilterStartDate}
+        slotProps={{ textField: { fullWidth: true } }}
+        sx={{
+          maxWidth: { md: 180 },
+        }}
+      />
 
-        <DatePicker
-          label="End date"
-          value={filters.end_date}
-          onChange={handleFilterEndDate}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              error: dateError,
-            },
-          }}
-          sx={{
-            maxWidth: { md: 180 },
-          }}
-        />
+      <DatePicker
+        label="End date"
+        value={filters.end_date}
+        onChange={handleFilterEndDate}
+        slotProps={{
+          textField: {
+            fullWidth: true,
+            error: dateError,
+          },
+        }}
+        sx={{
+          maxWidth: { md: 180 },
+        }}
+      />
       {/* <FormControl
         sx={{
           flexShrink: 0,
@@ -130,7 +133,7 @@ export default function TablesTableToolbar({
           fullWidth
           value={filters.name}
           onChange={handleFilterName}
-          placeholder="Search table name..."
+          placeholder={t('Search name or number...')}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">

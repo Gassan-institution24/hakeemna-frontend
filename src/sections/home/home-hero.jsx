@@ -11,7 +11,6 @@ import { alpha, styled, useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
 
-
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { HEADER } from 'src/layouts/config-layout';

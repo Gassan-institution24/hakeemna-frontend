@@ -16,6 +16,7 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +51,6 @@ export default function TableDetailsRow({
   const DDL = usePopover();
   const details = usePopover();
 
-  console.log('employees',employees)
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
@@ -62,7 +62,11 @@ export default function TableDetailsRow({
       </TableCell>
 
       <TableCell align="center">{name_english}</TableCell>
-      <TableCell align="center">{employees.map((employee)=>`${employee.employee.first_name} ${employee.employee.family_name}`).join(', ')}</TableCell>
+      <TableCell align="center">
+        {employees
+          .map((employee) => `${employee.employee.first_name} ${employee.employee.family_name}`)
+          .join(', ')}
+      </TableCell>
       <TableCell align="center">
         <Label
           variant="soft"
@@ -104,39 +108,43 @@ export default function TableDetailsRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'active' ? (
+        {status === 'active'
+          ? ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'delete' }) && (
+              <MenuItem
+                onClick={() => {
+                  onInactivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon="ic:baseline-pause" />
+                Inactivate
+              </MenuItem>
+            )
+          : ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
+              <MenuItem
+                onClick={() => {
+                  onActivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'success.main' }}
+              >
+                <Iconify icon="bi:play-fill" />
+                activate
+              </MenuItem>
+            )}
+
+        {ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
           <MenuItem
             onClick={() => {
-              onInactivate();
+              onEditRow();
               popover.onClose();
             }}
-            sx={{ color: 'error.main' }}
           >
-            <Iconify icon="ic:baseline-pause" />
-            Inactivate
-          </MenuItem>
-        ) : (
-          <MenuItem
-            onClick={() => {
-              onActivate();
-              popover.onClose();
-            }}
-            sx={{ color: 'success.main' }}
-          >
-            <Iconify icon="bi:play-fill" />
-            activate
+            <Iconify icon="fluent:edit-32-filled" />
+            Edit
           </MenuItem>
         )}
-
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="fluent:edit-32-filled" />
-          Edit
-        </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL

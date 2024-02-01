@@ -11,9 +11,11 @@ export default function Whydoc() {
   const settings = useSettingsContext();
 
   const renderDescription = (
-    <Stack spacing={3} sx={{ textAlign: 'center', mb:10 }}>
+    <Stack spacing={3} sx={{ textAlign: 'center', mb: 10 }}>
       <m.div variants={varFade().inDown}>
-        <Typography variant="h2">Why Doctorna <span style={{ color: 'green' }}>?</span></Typography>
+        <Typography variant="h2">
+          Why Doctorna <span style={{ color: 'green' }}>?</span>
+        </Typography>
       </m.div>
     </Stack>
   );
@@ -37,8 +39,13 @@ export default function Whydoc() {
           }}
         />
       </div>
-      <Typography variant="h6" sx={{ textAlign: 'center' }}> Dr.Grendizer </Typography>
-      <Typography sx={{ fontSize: 15, textAlign: 'center', marginTop: '10px' }}>Protection and bombing specialist based on the earth </Typography>
+      <Typography variant="h6" sx={{ textAlign: 'center' }}>
+        {' '}
+        Dr.Grendizer{' '}
+      </Typography>
+      <Typography sx={{ fontSize: 15, textAlign: 'center', marginTop: '10px' }}>
+        Protection and bombing specialist based on the earth{' '}
+      </Typography>
     </Box>
   );
 

@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-
 export function useGetCountries() {
   const URL = endpoints.tables.countries;
 

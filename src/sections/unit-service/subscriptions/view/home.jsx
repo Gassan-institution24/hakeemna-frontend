@@ -40,33 +40,18 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetUSLicenseMovement } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';
+
 import AccountingRow from '../subscription-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  /// to edit
-  { id: 'code', label: 'Code' },
-  // { id: 'unit_service', label: 'Unit Service' },
-  { id: 'free_subscription', label: 'Free Subscription' },
-  { id: 'subscription', label: 'subscription' },
-  { id: 'status', label: 'Status' },
-  { id: 'Start_date', label: 'Start Date' },
-  { id: 'End_date', label: 'End Date' },
-  { id: 'Users_num', label: 'Users no' },
-  { id: 'price', label: 'Price' },
-  { id: 'Payment_method', label: 'Payment Method' },
-  { id: 'Payment_frequency', label: 'Payment Frequency' },
-  { id: 'notes', label: 'Notes' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -74,16 +59,28 @@ const defaultFilters = {
 };
 
 // ----------------------------------------------------------------------
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  // { value: 'public', label: 'public' },
-  // { value: 'privet', label: 'privet' },
-  // { value: 'charity', label: 'charity' },
-];
 
 export default function UnitServicesAccountingView() {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    /// to edit
+    { id: 'code', label: t('code') },
+    // { id: 'unit_service', label: t('Unit Service') },
+    { id: 'free_subscription', label: t('free subscription') },
+    { id: 'subscription', label: t('subscription') },
+    { id: 'status', label: t('status') },
+    { id: 'Start_date', label: t('start date') },
+    { id: 'End_date', label: t('end date') },
+    { id: 'Users_num', label: t('users no') },
+    { id: 'price', label: t('price') },
+    { id: 'Payment_method', label: t('payment method') },
+    { id: 'Payment_frequency', label: t('payment frequency') },
+    { id: 'notes', label: t('notes') },
+    { id: '', width: 88 },
+  ];
+
+  const { STATUS_OPTIONS } = StatusOptions();
+
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -115,8 +112,6 @@ export default function UnitServicesAccountingView() {
     filters,
     dateError,
   });
-
-  const { t } = useTranslate();
 
   const denseHeight = table.dense ? 52 : 72;
 
@@ -180,13 +175,13 @@ export default function UnitServicesAccountingView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Subscriptions" /// edit
+          heading={t('subscriptions')} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.dashboard.root,
             },
-            { name: 'Subscriptions' }, /// edit
+            { name: t('subscriptions') }, /// edit
           ]}
           // action={
           //   <Button

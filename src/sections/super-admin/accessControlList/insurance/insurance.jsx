@@ -206,7 +206,9 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
   );
   const unitserviceName = unitServiceData?.name_english;
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
@@ -215,11 +217,11 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
           heading={`${unitserviceName} Insurance`} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {
-              name: 'Unit Services',
+              name: t('Unit Services'),
               href: paths.superadmin.unitservices.root,
             },
             { name: t(`${unitserviceName} Insurance`) }, /// edit

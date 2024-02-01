@@ -9,7 +9,7 @@ export function useGetSpecialties() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      specialtiesData: data || [] ,
+      specialtiesData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

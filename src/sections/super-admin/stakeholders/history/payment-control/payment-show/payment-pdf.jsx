@@ -114,7 +114,6 @@ export default function InvoicePDF({ paymentData, currentStatus }) {
     created_at,
     due_date,
 
-
     items,
     taxes,
     discount,
@@ -144,8 +143,13 @@ export default function InvoicePDF({ paymentData, currentStatus }) {
         <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>From</Text>
-            <Text style={styles.body2}>{stakeholder.first_name} {stakeholder.last_name}</Text>
-            <Text style={styles.body2}>{stakeholder.country}{stakeholder.city}</Text>
+            <Text style={styles.body2}>
+              {stakeholder.first_name} {stakeholder.last_name}
+            </Text>
+            <Text style={styles.body2}>
+              {stakeholder.country}
+              {stakeholder.city}
+            </Text>
             <Text style={styles.body2}>{stakeholder.mobile_num1}</Text>
             <Text style={styles.body2}>{stakeholder.email}</Text>
           </View>
@@ -153,7 +157,10 @@ export default function InvoicePDF({ paymentData, currentStatus }) {
           <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>To</Text>
             <Text style={styles.body2}>{unit_service?.name_english}</Text>
-            <Text style={styles.body2}>{unit_service?.country?.name_english}{unit_service?.city?.name_english}</Text>
+            <Text style={styles.body2}>
+              {unit_service?.country?.name_english}
+              {unit_service?.city?.name_english}
+            </Text>
             <Text style={styles.body2}>{unit_service?.phone}</Text>
             <Text style={styles.body2}>{unit_service?.email}</Text>
           </View>
@@ -201,32 +208,32 @@ export default function InvoicePDF({ paymentData, currentStatus }) {
           </View>
 
           <View>
-              <View style={styles.tableRow} key={code}>
-                <View style={styles.tableCell_1}>
-                  <Text>{code}</Text>
-                </View>
-
-                <View style={styles.tableCell_2}>
-                  <Text style={styles.subtitle2}>{amount}</Text>
-                  {/* <Text>{description}</Text> */}
-                </View>
-
-                <View style={styles.tableCell_3}>
-                  <Text>{invoice?.code}</Text>
-                </View>
-
-                <View style={styles.tableCell_3}>
-                  <Text>{invoice?.Balance}</Text>
-                </View>
-
-                <View style={styles.tableCell_3}>
-                  <Text>{invoice?.Balance}</Text>
-                </View>
-
-                <View style={[styles.tableCell_3, styles.alignRight]}>
-                  <Text>{fCurrency(30)}</Text>
-                </View>
+            <View style={styles.tableRow} key={code}>
+              <View style={styles.tableCell_1}>
+                <Text>{code}</Text>
               </View>
+
+              <View style={styles.tableCell_2}>
+                <Text style={styles.subtitle2}>{amount}</Text>
+                {/* <Text>{description}</Text> */}
+              </View>
+
+              <View style={styles.tableCell_3}>
+                <Text>{invoice?.code}</Text>
+              </View>
+
+              <View style={styles.tableCell_3}>
+                <Text>{invoice?.Balance}</Text>
+              </View>
+
+              <View style={styles.tableCell_3}>
+                <Text>{invoice?.Balance}</Text>
+              </View>
+
+              <View style={[styles.tableCell_3, styles.alignRight]}>
+                <Text>{fCurrency(30)}</Text>
+              </View>
+            </View>
 
             <View style={[styles.tableRow, styles.noBorder]}>
               <View style={styles.tableCell_1} />

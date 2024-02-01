@@ -13,6 +13,7 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -28,6 +29,8 @@ export default function OrderTableToolbar({
   onResetFilters,
 }) {
   const popover = usePopover();
+
+  const { t } = useTranslate();
 
   const handleFilterName = useCallback(
     (event) => {
@@ -45,7 +48,7 @@ export default function OrderTableToolbar({
     },
     [onFilters]
   );
-  const FeesOptions = ['Free','$50 and less', '$100 and less', 'More than $100'];
+  const FeesOptions = ['Free', '$50 and less', '$100 and less', 'More than $100'];
 
   return (
     <>
@@ -62,39 +65,39 @@ export default function OrderTableToolbar({
         }}
       >
         <FormControl
-        sx={{
-          flexShrink: 0,
-          width: { xs: 1, md: 200 },
-        }}
-      >
-        <InputLabel>Fees</InputLabel>
-
-        <Select
-          multiple
-          value={filters.fees}
-          onChange={handleFilterFees}
-          input={<OutlinedInput label="Fees" />}
-          renderValue={(selected) => selected.map((value) => value).join(', ')}
-          MenuProps={{
-            PaperProps: {
-              sx: { maxHeight: 240 },
-            },
+          sx={{
+            flexShrink: 0,
+            width: { xs: 1, md: 200 },
           }}
         >
-          {FeesOptions.map((option) => (
-            <MenuItem key={option} value={option}>
-              <Checkbox disableRipple size="small" checked={filters.fees.includes(option)} />
-              {option}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          <InputLabel>Fees</InputLabel>
+
+          <Select
+            multiple
+            value={filters.fees}
+            onChange={handleFilterFees}
+            input={<OutlinedInput label="Fees" />}
+            renderValue={(selected) => selected.map((value) => value).join(', ')}
+            MenuProps={{
+              PaperProps: {
+                sx: { maxHeight: 240 },
+              },
+            }}
+          >
+            {FeesOptions.map((option) => (
+              <MenuItem key={option} value={option}>
+                <Checkbox disableRipple size="small" checked={filters.fees.includes(option)} />
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Search name or number..."
+            placeholder={t('Search name or number...')}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -139,7 +142,7 @@ export default function OrderTableToolbar({
 
         <MenuItem
           onClick={() => {
-            onDownload()
+            onDownload();
             popover.onClose();
           }}
         >

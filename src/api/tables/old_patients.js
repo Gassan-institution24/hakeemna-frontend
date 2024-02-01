@@ -29,7 +29,7 @@ export function useGetUSOldPatient(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      oldPatients:data,
+      oldPatients: data,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -50,7 +50,7 @@ export function useGetEmployeeOldPatient(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      oldPatients:data,
+      oldPatients: data,
       loading: isLoading,
       error,
       validating: isValidating,

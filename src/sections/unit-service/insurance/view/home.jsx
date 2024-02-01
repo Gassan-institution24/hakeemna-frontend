@@ -43,32 +43,23 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+import ACLGuard from 'src/auth/guard/acl-guard';
+import axiosHandler from 'src/utils/axios-handler';
 
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
+import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { enqueueSnackbar } from 'notistack';
 import { useGetInsuranceCos, useGetUnitservice } from 'src/api/tables';
 import { useTranslate } from 'src/locales';
+
 import InsuranceRow from '../insurance-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  /// to edit
-  { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name' },
-  { id: 'type', label: 'Type' },
-  { id: 'status', label: 'Status' },
-  { id: 'webpage', label: 'Webpage' },
-  { id: 'phone', label: 'Phone' },
-  { id: 'address', label: 'Address' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -76,16 +67,23 @@ const defaultFilters = {
 };
 
 // ----------------------------------------------------------------------
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  // { value: 'public', label: 'public' },
-  // { value: 'privet', label: 'privet' },
-  // { value: 'charity', label: 'charity' },
-];
 
 export default function UnitServicesInsuranceView() {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    /// to edit
+    { id: 'code', label: t('code') },
+    { id: 'name_english', label: t('name') },
+    { id: 'type', label: t('type') },
+    { id: 'status', label: t('status') },
+    { id: 'webpage', label: t('webpage') },
+    { id: 'phone', label: t('phone') },
+    { id: 'address', label: t('address') },
+    { id: '', width: 88 },
+  ];
+
+  const { STATUS_OPTIONS } = StatusOptions();
+
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -119,9 +117,6 @@ export default function UnitServicesInsuranceView() {
     filters,
     dateError,
   });
-
-  console.log('dataata', data);
-  const { t } = useTranslate();
 
   const dataInPage = dataFiltered?.slice(
     table.page * table.rowsPerPage,
@@ -219,27 +214,25 @@ export default function UnitServicesInsuranceView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={`${unitserviceName} Insurance`} /// edit
+          heading={t('insurance')} /// edit
           links={[
             {
-              name: 'Dashboard',
-              href: paths.superadmin.root,
+              name: t('dashboard'),
+              href: paths.unitservice.root,
             },
-            {
-              name: 'Unit Services',
-              href: paths.superadmin.unitservices.root,
-            },
-            { name: t(`${unitserviceName} Insurance`) }, /// edit
+            { name: t('insurance') }, /// edit
           ]}
           action={
-            <Button
-              component={RouterLink}
-              onClick={popover.onOpen}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Insurance
-            </Button> /// edit
+            ACLGuard({ category: 'unit_service', subcategory: 'insurance', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                onClick={popover.onOpen}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                New Insurance
+              </Button>
+            ) /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },

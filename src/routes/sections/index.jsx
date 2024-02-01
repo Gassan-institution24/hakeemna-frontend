@@ -31,15 +31,12 @@ export default function Router() {
     }
   };
 
-
-
-
   return useRoutes([
     {
       path: '/',
       element: (
         <MainLayout scrollToDiv={scrollToDiv} scrollToDiv2={scrollToDiv2}>
-          <HomePage divRef={divRef} divRef2={divRef2}/>
+          <HomePage divRef={divRef} divRef2={divRef2} />
         </MainLayout>
       ),
     },
@@ -56,7 +53,7 @@ export default function Router() {
 
     // unit service employee dashboard routes
     ...unitServiceEmployeeDashboardRoutes,
-    
+
     // Main routes
     ...mainRoutes,
 

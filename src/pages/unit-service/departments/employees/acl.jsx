@@ -15,14 +15,14 @@ export default function DepartmentEmployeeACLPage() {
   const name = employeeData?.first_name;
   return (
     <>
-    <ACLGuard hasContent category='employee' subcategory='acl' acl='update'>
-      <Helmet>
-        <title> {name || ''} Employee ACL</title>
-      </Helmet>
+      <ACLGuard hasContent category="employee" subcategory="acl" acl="update">
+        <Helmet>
+          <title> {name || ''} Employee ACL</title>
+        </Helmet>
 
-      {data && employeeData && (
-        <DepartmentEmployeeACLView employeeData={employeeData} departmentData={data} />
-      )}
+        {data && employeeData && (
+          <DepartmentEmployeeACLView employeeData={employeeData} departmentData={data} />
+        )}
       </ACLGuard>
     </>
   );

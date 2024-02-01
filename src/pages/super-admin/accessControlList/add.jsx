@@ -13,14 +13,14 @@ export default function AccountingAddPage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetUnitservice(id);
-  const unitServiceName = data?.name_english || 'unit service'
+  const unitServiceName = data?.name_english || 'unit service';
   return (
     <>
       <Helmet>
         <title> {t(unitServiceName)} Accounting</title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
-    {!loading && <AddUnitServiceAccounting  unitServiceData={data} />}
+      {loading && <LoadingScreen />}
+      {!loading && <AddUnitServiceAccounting unitServiceData={data} />}
     </>
   );
 }

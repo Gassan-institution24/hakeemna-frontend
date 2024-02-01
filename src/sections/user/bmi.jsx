@@ -48,7 +48,7 @@ export default function Bmi() {
             fullWidth
             label={
               <span>
-                Height<span style={{ color: 'green', fontWeight:600 }}>/</span>cm
+                Height<span style={{ color: 'green', fontWeight: 600 }}>/</span>cm
               </span>
             }
             type="Number"
@@ -57,11 +57,11 @@ export default function Bmi() {
           />
         </m.div>
         <m.div variants={varFade().inUp}>
-        <TextField
+          <TextField
             fullWidth
             label={
               <span>
-                Weight<span style={{ color: 'green', fontWeight:600 }}>/</span>kg
+                Weight<span style={{ color: 'green', fontWeight: 600 }}>/</span>kg
               </span>
             }
             type="Number"

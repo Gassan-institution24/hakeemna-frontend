@@ -79,31 +79,28 @@ export default function PaymentTableToolbar({
           }}
         >
           <InputLabel>Unit Services</InputLabel>
-            <Select
-              multiple
-              value={filters.service}
-              onChange={handleFilterService}
-              input={<OutlinedInput label="Unit Services" />}
-              renderValue={(selected) => selected.map((value) => value).join(', ')}
-              sx={{ textTransform: 'capitalize' }}
-              // MenuProps={{
-              //   PaperProps: {
-              //     style: {
-              //       position:'absolute'
-              //     },
-              //   },
-              // }}
-            >
-              {serviceOptions.map((option) => (
-                <MenuItem
-                  key={option}
-                  value={option}
-                >
-                  <Checkbox disableRipple size="small" checked={filters.service.includes(option)} />
-                  {option}
-                </MenuItem>
-              ))}
-            </Select>
+          <Select
+            multiple
+            value={filters.service}
+            onChange={handleFilterService}
+            input={<OutlinedInput label="Unit Services" />}
+            renderValue={(selected) => selected.map((value) => value).join(', ')}
+            sx={{ textTransform: 'capitalize' }}
+            // MenuProps={{
+            //   PaperProps: {
+            //     style: {
+            //       position:'absolute'
+            //     },
+            //   },
+            // }}
+          >
+            {serviceOptions.map((option) => (
+              <MenuItem key={option} value={option}>
+                <Checkbox disableRipple size="small" checked={filters.service.includes(option)} />
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
         </FormControl>
 
         <DatePicker

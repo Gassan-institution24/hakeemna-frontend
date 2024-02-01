@@ -13,6 +13,7 @@ import Container from '@mui/material/Container';
 import { alpha, useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 
 import { _jobs, JOB_DETAILS_TABS, JOB_PUBLISH_OPTIONS } from 'src/_mock';
 
@@ -35,6 +36,8 @@ import StakeholderHistoryAnalytic from './appointment-history/appoint-history-an
 
 export default function StakeholderHistoryView({ stakeholderData }) {
   const theme = useTheme();
+
+  const { t } = useTranslate();
 
   const settings = useSettingsContext();
 
@@ -72,11 +75,11 @@ export default function StakeholderHistoryView({ stakeholderData }) {
         heading={`${stakeholderName} History`}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin.root,
           },
           {
-            name: 'Stakeholders',
+            name: t('stakeholders'),
             href: paths.superadmin.stakeholders.root,
           },
           {

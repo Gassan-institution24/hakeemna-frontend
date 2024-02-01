@@ -1,10 +1,5 @@
-
 import { _mock } from './_mock';
 // ----------------------------------------------------------------------
-
-
-
-  
 
 export const ORDER_STATUS_OPTIONS = [
   { value: 'active', label: 'Active' },

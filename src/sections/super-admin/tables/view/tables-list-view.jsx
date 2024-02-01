@@ -53,7 +53,7 @@ export default function TablesListView() {
 
   const confirm = useBoolean();
 
-  const { tableData,loading } = useGetTables();
+  const { tableData, loading } = useGetTables();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -138,7 +138,9 @@ export default function TablesListView() {
     [router]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

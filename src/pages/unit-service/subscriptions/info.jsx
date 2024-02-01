@@ -15,11 +15,11 @@ export default function SubscriptionsInfoPage() {
   const name = data?.name_english;
   return (
     <>
-      <ACLGuard hasContent category="unit_service" subcategory='subscriptions' acl="read">
+      <ACLGuard hasContent category="unit_service" subcategory="subscriptions" acl="read">
         <Helmet>
           <title>{name || ''} Subscription Info</title>
         </Helmet>
-        {loading&& <LoadingScreen/>}
+        {loading && <LoadingScreen />}
         {!loading && <SubscriptionsInfoView subscriptionData={data} />}
       </ACLGuard>
     </>

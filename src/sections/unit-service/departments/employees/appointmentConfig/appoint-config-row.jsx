@@ -62,12 +62,18 @@ export default function AppointmentsTableRow({
         <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
-        
-        <TableCell sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }} onClick={onViewRow} align="center">{code}</TableCell>
+
+        <TableCell
+          sx={{
+            cursor: 'pointer',
+            color: '#3F54EB',
+            // textDecoration: 'underline',
+          }}
+          onClick={onViewRow}
+          align="center"
+        >
+          {code}
+        </TableCell>
 
         <TableCell onClick={onViewRow} align="center">
           <ListItemText
@@ -82,16 +88,18 @@ export default function AppointmentsTableRow({
           />
         </TableCell>
 
-        <TableCell  onClick={onViewRow} align="center">{work_shift?.name_english}</TableCell>
-        <TableCell onClick={onViewRow} align="center">{work_group?.name_english}</TableCell>
+        <TableCell onClick={onViewRow} align="center">
+          {work_shift?.name_english}
+        </TableCell>
+        <TableCell onClick={onViewRow} align="center">
+          {work_group?.name_english}
+        </TableCell>
 
         <TableCell align="center">
           <Label
             variant="soft"
             color={
-              (status === 'active' && 'success') ||
-              (status === 'inactive' && 'error') ||
-              'default'
+              (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
             }
           >
             {status}
@@ -111,30 +119,30 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status !== "canceled" &&
-        <MenuItem
-          onClick={() => {
-            onCancelRow();
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="mdi:bell-cancel" />
-          Cancel
-        </MenuItem>
-        }
-        {status === "canceled" &&
-        <MenuItem
-          onClick={() => {
-            onUnCancelRow();
-            popover.onClose();
-          }}
-          sx={{ color: 'success.main' }}
-        >
-          <Iconify icon="material-symbols-light:notifications-active-rounded" />
-          uncancel
-        </MenuItem>
-        }
+        {status !== 'canceled' && (
+          <MenuItem
+            onClick={() => {
+              onCancelRow();
+              popover.onClose();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="mdi:bell-cancel" />
+            Cancel
+          </MenuItem>
+        )}
+        {status === 'canceled' && (
+          <MenuItem
+            onClick={() => {
+              onUnCancelRow();
+              popover.onClose();
+            }}
+            sx={{ color: 'success.main' }}
+          >
+            <Iconify icon="material-symbols-light:notifications-active-rounded" />
+            uncancel
+          </MenuItem>
+        )}
         <MenuItem onClick={onViewRow}>
           <Iconify icon="solar:eye-bold" />
           View

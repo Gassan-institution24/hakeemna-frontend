@@ -6,8 +6,6 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-
-
 export const navConfig = [
   {
     title: 'Home',
@@ -51,7 +49,7 @@ export const navConfig = [
   //       subheader: 'Auth Demo',
   //       items: [
   //       { title: 'Login', path: paths.authDemo.classic.login },
-  //         { title: 'Register', path: paths.authDemo.classic.register },  
+  //         { title: 'Register', path: paths.authDemo.classic.register },
   //         {
   //           title: 'Forgot password',
   //           path: paths.authDemo.classic.forgotPassword,
@@ -88,16 +86,16 @@ export const navConfig = [
   {
     title: 'R&D',
     icon: <Iconify icon="solar:notebook-bold-duotone" />,
-    path: "https://www.business.qld.gov.au/running-business/growing-business/research-development#:~:text=Research%20and%20development%20(R%26D)%20is,services%20to%20fit%20these%20needs.",
+    path: 'https://www.business.qld.gov.au/running-business/growing-business/research-development#:~:text=Research%20and%20development%20(R%26D)%20is,services%20to%20fit%20these%20needs.',
   },
   {
     title: 'Services',
     icon: <Iconify icon="solar:notebook-bold-duotone" />,
-    path: "https://www.business.qld.gov.au/running-business/growing-business/research-development#:~:text=Research%20and%20development%20(R%26D)%20is,services%20to%20fit%20these%20needs.",
+    path: 'https://www.business.qld.gov.au/running-business/growing-business/research-development#:~:text=Research%20and%20development%20(R%26D)%20is,services%20to%20fit%20these%20needs.',
   },
   {
     title: 'About',
     icon: <Iconify icon="solar:notebook-bold-duotone" />,
-    path: "https://www.business.qld.gov.au/running-business/growing-business/research-development#:~:text=Research%20and%20development%20(R%26D)%20is,services%20to%20fit%20these%20needs.",
+    path: 'https://www.business.qld.gov.au/running-business/growing-business/research-development#:~:text=Research%20and%20development%20(R%26D)%20is,services%20to%20fit%20these%20needs.',
   },
 ];

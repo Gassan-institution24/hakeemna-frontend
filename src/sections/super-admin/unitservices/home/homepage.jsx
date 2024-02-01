@@ -23,6 +23,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
 import Label from 'src/components/label';
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -81,6 +82,8 @@ export default function UnitServicesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
+  const { t } = useTranslate();
+
   const componentRef = useRef();
 
   const confirmActivate = useBoolean();
@@ -92,7 +95,7 @@ export default function UnitServicesTableView() {
 
   const { unitservicesData, loading, refetch } = useGetUnitservices();
 
-  console.log('unitservicesData',unitservicesData)
+  console.log('unitservicesData', unitservicesData);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -261,8 +264,10 @@ export default function UnitServicesTableView() {
     [handleFilters]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
-  
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -270,10 +275,10 @@ export default function UnitServicesTableView() {
           heading="Unit Services" /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
-            { name: 'Unit Services' }, /// edit
+            { name: t('Unit Services') }, /// edit
           ]}
           // action={
           //   <Button

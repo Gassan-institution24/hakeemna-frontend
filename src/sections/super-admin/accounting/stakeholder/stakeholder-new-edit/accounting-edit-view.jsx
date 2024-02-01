@@ -5,6 +5,7 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 
 import { useParams } from 'react-router';
+import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -15,20 +16,24 @@ import TableNewEditForm from './accounting-new-edit-form';
 
 export default function USAppointmentEditView({ stakeholderData, licenseMovementData }) {
   const settings = useSettingsContext();
-  const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
+
   const params = useParams();
   const { id } = params;
+
+  const { t } = useTranslate();
+
+  const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
         heading={`Edit ${stakeholderName} Accounting`} /// edit
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin,
           },
           {
-            name: 'Accounting',
+            name: t('accounting'),
             href: paths.superadmin.accounting.root,
           },
           {

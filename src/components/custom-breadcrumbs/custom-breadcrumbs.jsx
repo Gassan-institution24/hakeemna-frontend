@@ -24,7 +24,7 @@ export default function CustomBreadcrumbs({
   return (
     <Box sx={{ ...sx }}>
       <Stack direction="row" alignItems="center">
-        <Box  sx={{ flexGrow: 1,display:'flex',gap:3,alignItems:'center' }}>
+        <Box sx={{ flexGrow: 1, display: 'flex', gap: 3, alignItems: 'center' }}>
           {/* HEADING */}
           {heading && (
             <Typography variant="h4" gutterBottom>
@@ -33,7 +33,7 @@ export default function CustomBreadcrumbs({
           )}
 
           {/* BREADCRUMBS */}
-          {links&&!!links.length && (
+          {links && !!links.length && (
             <Breadcrumbs separator={<Separator />} {...other}>
               {links?.map((link) => (
                 <LinkItem

@@ -18,7 +18,7 @@ export default function JobCreateView() {
         heading="Create a new job"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {

@@ -20,6 +20,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
+import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
@@ -76,6 +77,8 @@ const defaultFilters = {
 
 export default function USlicenseMovementView({ unitServiceData }) {
   const theme = useTheme();
+
+  const { t } = useTranslate();
 
   const settings = useSettingsContext();
 
@@ -224,20 +227,22 @@ export default function USlicenseMovementView({ unitServiceData }) {
     setFilters(defaultFilters);
   }, []);
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Accounting"
+          heading={t('accounting')}
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {
-              name: 'Accounting',
+              name: t('accounting'),
               href: paths.superadmin.accounting.root,
             },
             {

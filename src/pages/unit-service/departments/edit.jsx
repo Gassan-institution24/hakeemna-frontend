@@ -11,15 +11,15 @@ import { LoadingScreen } from 'src/components/loading-screen';
 export default function DepartmentEditPage() {
   const params = useParams();
   const { id } = params;
-  const { data,loading } = useGetDepartment(id);
+  const { data, loading } = useGetDepartment(id);
   const name = data?.name_english;
   return (
     <>
-      <ACLGuard hasContent category="department" subcategory='department_info' acl="update">
+      <ACLGuard hasContent category="department" subcategory="department_info" acl="update">
         <Helmet>
           <title> Edit {name || ''} Department </title>
         </Helmet>
-        {loading&& <LoadingScreen/>}
+        {loading && <LoadingScreen />}
         {!loading && <DepartmentEditView departmentData={data} />}
       </ACLGuard>
     </>

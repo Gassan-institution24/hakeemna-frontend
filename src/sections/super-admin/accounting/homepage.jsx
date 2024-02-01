@@ -20,6 +20,7 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
+import { useTranslate } from 'src/locales';
 import { RouterLink } from 'src/routes/components';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -32,6 +33,8 @@ import TableAnalytic from '../patients/history/table-analytic';
 
 export default function AccountingHomePage() {
   const theme = useTheme();
+
+  const { t } = useTranslate();
 
   const settings = useSettingsContext();
 
@@ -59,14 +62,14 @@ export default function AccountingHomePage() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Accounting"
+        heading={t('accounting')}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin.root,
           },
           {
-            name: 'Accounting',
+            name: t('accounting'),
           },
         ]}
         sx={{

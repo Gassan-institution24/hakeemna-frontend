@@ -18,7 +18,7 @@ export default function InvoiceCreateView() {
         heading="Create a new invoice"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {

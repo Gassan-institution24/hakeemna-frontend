@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -41,6 +42,8 @@ const defaultFilters = {
 
 export default function TourListView() {
   const settings = useSettingsContext();
+
+  const { t } = useTranslate();
 
   const openFilters = useBoolean();
 
@@ -164,7 +167,7 @@ export default function TourListView() {
       <CustomBreadcrumbs
         heading="List"
         links={[
-          { name: 'Dashboard', href: paths.dashboard.root },
+          { name: t('dashboard'), href: paths.dashboard.root },
           {
             name: 'Tour',
             href: paths.dashboard.tour.root,

@@ -8,8 +8,8 @@ import NavEmployee from './nav-employee';
 export default function SecondaryNavLayout({ children }) {
   return (
     <>
-        <NavEmployee/>
-        <Main>{children}</Main>
+      <NavEmployee />
+      <Main>{children}</Main>
     </>
   );
 }

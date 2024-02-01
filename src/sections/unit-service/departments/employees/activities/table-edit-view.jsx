@@ -10,32 +10,34 @@ import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableEditView({departmentData,activityData}) {
+export default function TableEditView({ departmentData, activityData }) {
   const settings = useSettingsContext();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={`Edit ${activityData.name_english||''} Activity`}
+        heading={`Edit ${activityData.name_english || ''} Activity`}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Departments',
+            name: t('departments'),
             href: paths.unitservice.departments.root,
           },
           {
             name: `${departmentData.name_english || ''} Activities`,
             href: paths.unitservice.departments.activities.root(departmentData._id),
           },
-          { name: `Edit ${activityData.name_english||''} Activity` },
+          { name: `Edit ${activityData.name_english || ''} Activity` },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
-      {activityData && <TableNewEditForm departmentData={departmentData} currentTable={activityData} />}
+      {activityData && (
+        <TableNewEditForm departmentData={departmentData} currentTable={activityData} />
+      )}
     </Container>
   );
 }

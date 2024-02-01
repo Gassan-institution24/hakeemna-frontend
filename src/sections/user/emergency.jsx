@@ -12,10 +12,7 @@ export default function Emergency() {
     alert('Dont :-(');
   };
 
-  
-
   return (
- 
     <Container
       sx={{
         py: { xs: 0, md: 2 },
@@ -37,7 +34,7 @@ export default function Emergency() {
         />
         <Typography
           sx={{
-            mb: { md: 4,xl:10, xs: 6 },
+            mb: { md: 4, xl: 10, xs: 6 },
             mt: { md: 0, xs: 2 },
             fontSize: { md: 20, xs: 14 },
           }}
@@ -46,7 +43,7 @@ export default function Emergency() {
           consultation in the field of general medicine and children.
         </Typography>
       </Box>
-      <Typography variant="h3" sx={{position:'relative', top:'-20px'}}>
+      <Typography variant="h3" sx={{ position: 'relative', top: '-20px' }}>
         The types of emergency of we provide
       </Typography>
       <Box
@@ -137,7 +134,7 @@ export default function Emergency() {
             alignItems: 'center',
             justifyContent: 'center',
             bgcolor: { md: '#128CA9', xs: 'none' },
-            width: { xl:'143%', lg:'143%', md: '170%',xs:'143%' },
+            width: { xl: '143%', lg: '143%', md: '170%', xs: '143%' },
             position: 'relative',
             left: '-43%',
             borderRight: '#128CA9',

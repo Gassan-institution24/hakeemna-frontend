@@ -240,13 +240,13 @@ export default function AccountGeneral({ employeeData, refetch }) {
                     variant="caption"
                     sx={{
                       mx: 'auto',
-                      mb:1,
+                      mb: 1,
                       display: 'block',
                       textAlign: 'center',
                       color: 'text.disabled',
                     }}
                   >
-                    Scanned ID 
+                    Scanned ID
                   </Typography>
                   {values.scanned_identity && <Iconify icon="flat-color-icons:ok" />}
                 </Box>
@@ -263,7 +263,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                     variant="caption"
                     sx={{
                       mx: 'auto',
-                      mb:1,
+                      mb: 1,
                       display: 'block',
                       textAlign: 'center',
                       color: 'text.disabled',
@@ -286,7 +286,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                     variant="caption"
                     sx={{
                       mx: 'auto',
-                      mb:1,
+                      mb: 1,
                       display: 'block',
                       textAlign: 'center',
                       color: 'text.disabled',

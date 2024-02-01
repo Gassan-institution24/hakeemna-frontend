@@ -127,18 +127,18 @@ export default function InvoiceTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status !== "canceled" &&
-        <MenuItem
-          onClick={() => {
-            onCancelRow();
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="mdi:bell-cancel" />
-          Cancel
-        </MenuItem>
-        }
+        {status !== 'canceled' && (
+          <MenuItem
+            onClick={() => {
+              onCancelRow();
+              popover.onClose();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="mdi:bell-cancel" />
+            Cancel
+          </MenuItem>
+        )}
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL

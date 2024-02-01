@@ -27,6 +27,7 @@ import { saveAs } from 'file-saver';
 import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
 
 import Label from 'src/components/label';
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -43,25 +44,17 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetUSActivities } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+
 import TableDetailRow from '../activities/table-details-row'; /// edit
 import TableDetailToolbar from '../activities/table-details-toolbar';
 import TableDetailFiltersResult from '../activities/table-details-filters-result';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
-
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'name', label: 'Name' },
-  { id: 'details', label: 'Details' },
-  { id: 'status', label: 'Status' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -71,6 +64,17 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function ActivitesTableView({ employeeData }) {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'name', label: t('name') },
+    { id: 'details', label: t('details') },
+    { id: 'status', label: t('status') },
+    { id: '', width: 88 },
+  ];
+
+  const { STATUS_OPTIONS } = StatusOptions();
+
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();

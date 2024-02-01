@@ -9,7 +9,7 @@ export function useGetDiseases() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      tableData: data || [] ,
+      tableData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

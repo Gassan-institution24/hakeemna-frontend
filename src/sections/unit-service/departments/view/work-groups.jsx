@@ -43,25 +43,19 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { useTranslate } from 'src/locales';
+import { endpoints } from 'src/utils/axios';
+import ACLGuard from 'src/auth/guard/acl-guard';
+import axiosHandler from 'src/utils/axios-handler';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetDepartmentWorkGroups } from 'src/api/tables'; /// edit
-import axiosHandler from 'src/utils/axios-handler';
-import { endpoints } from 'src/utils/axios';
+import { StatusOptions } from 'src/assets/data/status-options';
+
 import TableDetailRow from '../work-groups/table-details-row'; /// edit
 import TableDetailToolbar from '../work-groups/table-details-toolbar';
 import TableDetailFiltersResult from '../work-groups/table-details-filters-result';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
-
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'name', label: 'Name' },
-  { id: 'employees', label: 'Employees' },
-  { id: 'status', label: 'Status' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -71,6 +65,17 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function WorkGroupsTableView({ departmentData }) {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'name', label: t('name') },
+    { id: 'employees', label: t('employees') },
+    { id: 'status', label: t('status') },
+    { id: '', width: 88 },
+  ];
+
+  const {STATUS_OPTIONS} = StatusOptions()
+
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -221,33 +226,37 @@ export default function WorkGroupsTableView({ departmentData }) {
     [handleFilters]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
-  
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={`${departmentData.name_english || 'Department'} work groups`} /// edit
+          heading={`${departmentData.name_english || ''} ${t('department work groups')} `} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.unitservice.root,
             },
             {
-              name: 'Departments',
+              name: t('departments'),
               href: paths.unitservice.departments.root,
             },
-            { name: `${departmentData.name_english || 'Department'} work groups` },
+            { name: t('department work groups') },
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={paths.unitservice.departments.workGroups.new(departmentData._id)}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New work group
-            </Button>
+            ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                href={paths.unitservice.departments.workGroups.new(departmentData._id)}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                New work group
+              </Button>
+            )
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -325,25 +334,28 @@ export default function WorkGroupsTableView({ departmentData }) {
                 )
               }
               action={
-                <>
-                  {dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'inactive') ? (
-                    <Tooltip title="Activate all">
-                      <IconButton color="primary" onClick={confirmActivate.onTrue}>
-                        <Iconify icon="codicon:run-all" />
-                      </IconButton>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip title="Inactivate all">
-                      <IconButton color="error" onClick={confirmInactivate.onTrue}>
-                        <Iconify icon="iconoir:pause-solid" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </>
+                ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
+                  <>
+                    {dataFiltered
+                      .filter((row) => table.selected.includes(row._id))
+                      .some((data) => data.status === 'inactive') ? (
+                      <Tooltip title="Activate all">
+                        <IconButton color="primary" onClick={confirmActivate.onTrue}>
+                          <Iconify icon="codicon:run-all" />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Inactivate all">
+                        <IconButton color="error" onClick={confirmInactivate.onTrue}>
+                          <Iconify icon="iconoir:pause-solid" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </>
+                )
               }
               color={
+                ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')
@@ -482,17 +494,20 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         (data?.name_arabic &&
           data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employees &&
-          data?.employees?.some((employee) =>
-            employee.employee.first_name.toLowerCase().indexOf(name.toLowerCase())
-           !== -1)) ||
+          data?.employees?.some(
+            (employee) =>
+              employee.employee.first_name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+          )) ||
         (data?.employees &&
-          data?.employees?.some((employee) =>
-            employee.employee.second_name.toLowerCase().indexOf(name.toLowerCase())
-           !== -1)) ||
+          data?.employees?.some(
+            (employee) =>
+              employee.employee.second_name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+          )) ||
         (data?.employees &&
-          data?.employees?.some((employee) =>
-            employee.employee.family_name.toLowerCase().indexOf(name.toLowerCase())
-           !== -1)) ||
+          data?.employees?.some(
+            (employee) =>
+              employee.employee.family_name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+          )) ||
         // (data?.employees &&
         //   data?.employees?.some((employee) =>
         //     employee.employee.name_arabic.toLowerCase().indexOf(name.toLowerCase())

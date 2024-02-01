@@ -20,6 +20,7 @@ import TableContainer from '@mui/material/TableContainer';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 import { useAuthContext } from 'src/auth/hooks';
@@ -49,25 +50,15 @@ import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useSnackbar } from 'src/components/snackbar';
 
+import ACLGuard from 'src/auth/guard/acl-guard';
 import { useGetAppointmentTypes } from 'src/api/tables';
 import AppointmentsRow from '../appointment-row';
+
 import PatientHistoryToolbar from '../appointment-toolbar';
 import HistoryFiltersResult from '../appointment-filters-result';
 import AddEmegencyAppointment from '../add-emergency-appointment';
 
 // ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'sequence', label: 'Sequence' },
-  { id: 'appointment_type', label: 'Appointment type' },
-  { id: 'work_group', label: 'Work group' },
-  { id: 'work_shift', label: 'Work shift' },
-  { id: 'patient', label: 'Patient' },
-  { id: 'start_time', label: 'Start time' },
-  { id: 'status', label: 'Status' },
-  { id: '' },
-];
 
 const defaultFilters = {
   name: '',
@@ -79,7 +70,20 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsView({ employeeData,appointmentsData,refetch }) {
+export default function AppointmentsView({ employeeData, appointmentsData, refetch }) {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'sequence', label: t('sequence') },
+    { id: 'appointment_type', label: t('appointment type') },
+    { id: 'work_group', label: t('work group') },
+    { id: 'work_shift', label: t('work shift') },
+    { id: 'patient', label: t('patient') },
+    { id: 'start_time', label: t('start time') },
+    { id: 'status', label: t('status') },
+    { id: '' },
+  ];
+
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -315,13 +319,13 @@ export default function AppointmentsView({ employeeData,appointmentsData,refetch
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Appointments" /// edit
+          heading={t('appointments')} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.unitservice.root,
             },
-            { name: 'Appointments' },
+            { name: t('appointments') },
           ]}
           sx={{
             mb: { xs: 3, md: 5 },
@@ -373,7 +377,6 @@ export default function AppointmentsView({ employeeData,appointmentsData,refetch
               onResetFilters={handleResetFilters}
               //
               results={dataFiltered.length}
-              
               sx={{ p: 2.5, pt: 0 }}
             />
           )}
@@ -390,28 +393,34 @@ export default function AppointmentsView({ employeeData,appointmentsData,refetch
                 )
               }
               action={
-                <>
-                  <Tooltip title="delay all">
-                    <IconButton color="info" onClick={confirmDelay.onTrue}>
-                      <Iconify icon="mdi:timer-sync" />
-                    </IconButton>
-                  </Tooltip>
-                  {dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'canceled') ? (
-                    <Tooltip title="uncancel all">
-                      <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
-                        <Iconify icon="material-symbols-light:notifications-active-rounded" />
+                ACLGuard({
+                  category: 'unit_service',
+                  subcategory: 'appointments',
+                  acl: 'update',
+                }) && (
+                  <>
+                    <Tooltip title="delay all">
+                      <IconButton color="info" onClick={confirmDelay.onTrue}>
+                        <Iconify icon="mdi:timer-sync" />
                       </IconButton>
                     </Tooltip>
-                  ) : (
-                    <Tooltip title="cancel all">
-                      <IconButton color="error" onClick={confirm.onTrue}>
-                        <Iconify icon="mdi:bell-cancel" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </>
+                    {dataFiltered
+                      .filter((row) => table.selected.includes(row._id))
+                      .some((data) => data.status === 'canceled') ? (
+                      <Tooltip title="uncancel all">
+                        <IconButton color="primary" onClick={confirmUnCancel.onTrue}>
+                          <Iconify icon="material-symbols-light:notifications-active-rounded" />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="cancel all">
+                        <IconButton color="error" onClick={confirm.onTrue}>
+                          <Iconify icon="mdi:bell-cancel" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </>
+                )
               }
               color={
                 dataFiltered
@@ -437,7 +446,6 @@ export default function AppointmentsView({ employeeData,appointmentsData,refetch
                     )
                   }
                 />
-
                 <TableBody>
                   {dataFiltered
                     .slice(

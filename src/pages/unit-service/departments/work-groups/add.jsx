@@ -11,14 +11,14 @@ import { LoadingScreen } from 'src/components/loading-screen';
 export default function DepartmentWorkGroupNewPage() {
   const params = useParams();
   const { id } = params;
-  const { data,loading } = useGetDepartment(id);
+  const { data, loading } = useGetDepartment(id);
   return (
     <>
-      <ACLGuard hasContent category="department" subcategory='work_groups' acl="create">
+      <ACLGuard hasContent category="department" subcategory="work_groups" acl="create">
         <Helmet>
           <title> New Work Group </title>
         </Helmet>
-        {loading&& <LoadingScreen/>}
+        {loading && <LoadingScreen />}
         {!loading && <DepartmentWorkGroupNewView departmentData={data} />}
       </ACLGuard>
     </>

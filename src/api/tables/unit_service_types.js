@@ -9,7 +9,7 @@ export function useGetUSTypes() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      unitserviceTypesData: data || [] ,
+      unitserviceTypesData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -41,4 +41,3 @@ export function useGetUSType(id) {
 
   return memoizedValue;
 }
-

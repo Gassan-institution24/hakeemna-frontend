@@ -15,7 +15,7 @@ export default function WorkShiftEditPage() {
   const name = data?.name_english;
   return (
     <>
-      <ACLGuard hasContent category="unit_service" subcategory='work_shift' acl="update">
+      <ACLGuard hasContent category="unit_service" subcategory="work_shift" acl="update">
         <Helmet>
           <title>Edit {name || ''} Work Shift</title>
         </Helmet>

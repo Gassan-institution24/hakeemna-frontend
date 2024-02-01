@@ -17,6 +17,7 @@ import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import ACLGuard from 'src/auth/guard/acl-guard';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { fCurrency } from 'src/utils/format-number';
 import { fDateTime } from 'src/utils/format-time';
@@ -85,12 +86,24 @@ export default function AppointmentsTableRow({
         <TableCell align="center">{appointment_type?.name_english}</TableCell>
         <TableCell align="center">{work_group?.name_english}</TableCell>
         <TableCell align="center">{work_shift?.name_english}</TableCell>
-        <TableCell align="center">{patient?.first_name} {patient?.last_name}</TableCell>
+        <TableCell align="center">
+          {patient?.first_name} {patient?.last_name}
+        </TableCell>
 
         <TableCell align="center">
           <ListItemText
-            primary={isValid(new Date(start_time)) && new Date(start_time).toLocaleTimeString('en-US', { timeZone: unit_service?.country?.time_zone })}
-            secondary={isValid(new Date(start_time)) && new Date(start_time).toLocaleDateString('en-US', { timeZone: unit_service?.country?.time_zone })}
+            primary={
+              isValid(new Date(start_time)) &&
+              new Date(start_time).toLocaleTimeString('en-US', {
+                timeZone: unit_service?.country?.time_zone,
+              })
+            }
+            secondary={
+              isValid(new Date(start_time)) &&
+              new Date(start_time).toLocaleDateString('en-US', {
+                timeZone: unit_service?.country?.time_zone,
+              })
+            }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -137,46 +150,51 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 155 }}
       >
-        {status === 'available' && (
-          <MenuItem
-            sx={{ color: 'success.main' }}
-            onClick={() => {
-              Book.onTrue();
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="mdi:register" />
-            Book Manually
+        {status === 'available' &&
+          ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+            <MenuItem
+              sx={{ color: 'success.main' }}
+              onClick={() => {
+                Book.onTrue();
+                popover.onClose();
+              }}
+            >
+              <Iconify icon="mdi:register" />
+              Book Manually
+            </MenuItem>
+          )}
+        {status !== 'canceled' &&
+          ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'delete' }) && (
+            <MenuItem
+              onClick={() => {
+                onCancelRow();
+                popover.onClose();
+              }}
+              sx={{ color: 'error.main' }}
+            >
+              <Iconify icon="mdi:bell-cancel" />
+              Cancel
+            </MenuItem>
+          )}
+        {status === 'canceled' &&
+          ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+            <MenuItem
+              onClick={() => {
+                onUnCancelRow();
+                popover.onClose();
+              }}
+              sx={{ color: 'success.main' }}
+            >
+              <Iconify icon="material-symbols-light:notifications-active-rounded" />
+              uncancel
+            </MenuItem>
+          )}
+        {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+          <MenuItem onClick={confirmDelayOne.onTrue}>
+            <Iconify icon="mdi:timer-sync" />
+            Delay
           </MenuItem>
         )}
-        {status !== 'canceled' && (
-          <MenuItem
-            onClick={() => {
-              onCancelRow();
-              popover.onClose();
-            }}
-            sx={{ color: 'error.main' }}
-          >
-            <Iconify icon="mdi:bell-cancel" />
-            Cancel
-          </MenuItem>
-        )}
-        {status === 'canceled' && (
-          <MenuItem
-            onClick={() => {
-              onUnCancelRow();
-              popover.onClose();
-            }}
-            sx={{ color: 'success.main' }}
-          >
-            <Iconify icon="material-symbols-light:notifications-active-rounded" />
-            uncancel
-          </MenuItem>
-        )}
-        <MenuItem onClick={confirmDelayOne.onTrue}>
-          <Iconify icon="mdi:timer-sync" />
-          Delay
-        </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL

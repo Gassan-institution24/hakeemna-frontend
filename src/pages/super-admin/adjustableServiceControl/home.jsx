@@ -17,8 +17,8 @@ export default function AdjustableServicePage() {
       <Helmet>
         <title> {unitServiceName} Accounting</title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
-      {!loading&&<AdjustableService unitServiceData={data} />}
+      {loading && <LoadingScreen />}
+      {!loading && <AdjustableService unitServiceData={data} />}
     </>
   );
 }

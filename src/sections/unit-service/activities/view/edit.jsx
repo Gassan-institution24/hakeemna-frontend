@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -10,22 +11,23 @@ import TableNewEditForm from '../table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableEditView({activityData}) {
+export default function TableEditView({ activityData }) {
   const settings = useSettingsContext();
+  const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={`Edit ${activityData.name_english||''} Activity`}
+        heading={t('Edit Activity')}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Activities',
+            name: t('activities'),
             href: paths.unitservice.activities.root,
           },
-          { name: `Edit ${activityData.name_english||''} Activity` },
+          { name: t('edit') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

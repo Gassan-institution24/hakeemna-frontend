@@ -18,7 +18,7 @@ export default function ProductCreateView() {
         heading="Create a new product"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {

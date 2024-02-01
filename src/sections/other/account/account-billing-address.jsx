@@ -19,9 +19,7 @@ import { AddressItem, AddressNewForm } from '../address';
 
 export default function AccountBillingAddress({ addressBook }) {
   const [addressId, setAddressId] = useState('');
-  const DATA = [
-    {value : 'test'}
-  ]
+  const DATA = [{ value: 'test' }];
   const popover = usePopover();
 
   const addressForm = useBoolean();
@@ -82,7 +80,6 @@ export default function AccountBillingAddress({ addressBook }) {
                   borderRadius: 1,
                 }}
               />
-              
             </>
           ))}
         </Stack>

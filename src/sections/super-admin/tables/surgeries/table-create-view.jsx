@@ -1,6 +1,7 @@
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -11,6 +12,7 @@ import TableNewEditForm from './table-new-edit-form';
 
 export default function CountryCreateView() {
   const settings = useSettingsContext();
+  const { t } = useTranslate();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -18,7 +20,7 @@ export default function CountryCreateView() {
         heading="Create a new Surgery" /// edit
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin,
           },
           {

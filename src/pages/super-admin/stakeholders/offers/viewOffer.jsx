@@ -10,14 +10,14 @@ export default function StackholderFeedbackPage() {
   const params = useParams();
   const { id, ofid } = params;
   const { data } = useGetStakeholder(id);
-  const { offerData,loading } = useGetOffer(ofid);
+  const { offerData, loading } = useGetOffer(ofid);
   const stakeholderName = data?.name_english || 'Stackeholder';
   return (
     <>
       <Helmet>
         <title> stakeholders: {stakeholderName} Feedback </title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
+      {loading && <LoadingScreen />}
       {!loading && <StakeholderOfferView stakeholderData={data} offerData={offerData} />}
     </>
   );

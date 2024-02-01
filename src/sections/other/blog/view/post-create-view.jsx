@@ -18,7 +18,7 @@ export default function PostCreateView() {
         heading="Create a new post"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {

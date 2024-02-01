@@ -7,6 +7,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import { useParams } from 'src/routes/hooks';
 
+import { useTranslate } from 'src/locales';
 import { useGetCountry } from 'src/api/tables';
 
 import TableNewEditForm from './table-new-edit-form';
@@ -15,6 +16,9 @@ import TableNewEditForm from './table-new-edit-form';
 
 export default function CountryEditView() {
   const settings = useSettingsContext();
+
+  const { t } = useTranslate();
+
   const params = useParams();
   const { id } = params;
   const { data } = useGetCountry(id);
@@ -25,7 +29,7 @@ export default function CountryEditView() {
         heading="Update Country"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.superadmin,
           },
           {

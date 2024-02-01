@@ -69,7 +69,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function ActivitesTableView({departmentData}) {
+export default function ActivitesTableView({ departmentData }) {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -197,16 +197,16 @@ export default function ActivitesTableView({departmentData}) {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.departments.activities.edit(departmentData._id,id));
+      router.push(paths.unitservice.departments.activities.edit(departmentData._id, id));
     },
-    [router,departmentData]
+    [router, departmentData]
   );
 
   const handleCreate = useCallback(
     (id) => {
-      router.push(paths.unitservice.departments.employees.activities.root(departmentData._id,id));
+      router.push(paths.unitservice.departments.employees.activities.root(departmentData._id, id));
     },
-    [router,departmentData]
+    [router, departmentData]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -229,8 +229,6 @@ export default function ActivitesTableView({departmentData}) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        
-
         <Card>
           <Tabs
             value={filters.status}

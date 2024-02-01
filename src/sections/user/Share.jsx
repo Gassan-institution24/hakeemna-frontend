@@ -60,7 +60,7 @@ export default function Share() {
               borderRadius: 10,
               backgroundColor: '#eaeaea40',
               border: '2px solid #bba9bb4d',
-              paddingRight: '40px', 
+              paddingRight: '40px',
               transition: 'background-color 0.3s ease-in-out',
               '&:hover': {
                 backgroundColor: '#d9d9d9',

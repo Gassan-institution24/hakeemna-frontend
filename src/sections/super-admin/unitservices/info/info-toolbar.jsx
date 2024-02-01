@@ -15,11 +15,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function UnitServiceDetailsToolbar({
-  backLink,
-  editLink,
-  ...other
-}) {
+export default function UnitServiceDetailsToolbar({ backLink, editLink, ...other }) {
   const popover = usePopover();
 
   return (

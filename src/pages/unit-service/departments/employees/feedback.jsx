@@ -15,13 +15,13 @@ export default function DepartmentEmployeeFeedbackPage() {
   const name = employeeData?.first_name;
   return (
     <>
-        <Helmet>
-          <title> {name || ''} Employee Feedback</title>
-        </Helmet>
+      <Helmet>
+        <title> {name || ''} Employee Feedback</title>
+      </Helmet>
 
-        {data && employeeData && (
-          <DepartmentEmployeeFeedbackView employeeData={employeeData} departmentData={data} />
-        )}
+      {data && employeeData && (
+        <DepartmentEmployeeFeedbackView employeeData={employeeData} departmentData={data} />
+      )}
     </>
   );
 }

@@ -106,11 +106,14 @@ export default function AppointmentBooking() {
       }));
 
       if (inputValue) {
-        console.log('inputValue',inputValue)
+        console.log('inputValue', inputValue);
         const results = appointmentsData.filter(
           (appointment) =>
-          // (appointment && appointment?.unit_service?.name_english?.toLowerCase()) ||
-          (appointment &&appointment?.unit_service?.name_english?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1) ||
+            // (appointment && appointment?.unit_service?.name_english?.toLowerCase()) ||
+            (appointment &&
+              appointment?.unit_service?.name_english
+                ?.toLowerCase()
+                .indexOf(inputValue.toLowerCase()) !== -1) ||
             // (appointment.name_arabic &&
             //   appointment.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
             // (appointment.unit_service &&
@@ -124,9 +127,9 @@ export default function AppointmentBooking() {
             // (appointment.work_group &&
             //   appointment.work_group.employees &&
             //   appointment.work_group.employees.some(
-              //     (employee) =>
-              //       employee.first_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
-              //   )) ||
+            //     (employee) =>
+            //       employee.first_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+            //   )) ||
             // (appointment.work_group &&
             //   appointment.work_group.employees &&
             //   appointment.work_group.employees.some(
@@ -141,9 +144,9 @@ export default function AppointmentBooking() {
             //   )) ||
             appointment?._id === search.query.toLowerCase() ||
             JSON.stringify(appointment.code) === search.query.toLowerCase()
-            );
-            // const tofilter = results.map((info)=>info._id)
-            console.log('results',results)
+        );
+        // const tofilter = results.map((info)=>info._id)
+        console.log('results', results);
 
         setSearch((prevState) => ({
           ...prevState,

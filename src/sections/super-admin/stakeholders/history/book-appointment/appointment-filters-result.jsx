@@ -58,8 +58,7 @@ export default function JobFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-
-      {filters.start_date && filters.end_date && (
+        {filters.start_date && filters.end_date && (
           <Block label="Time:">
             <Chip size="small" label={shortLabel} onDelete={handleRemoveTime} />
           </Block>
@@ -67,26 +66,52 @@ export default function JobFiltersResult({
 
         {filters.appointtypes !== 'all' && (
           <Block label="Appointment Types:">
-            <Chip size="small" label={appointmentTypeOptions.filter((type)=>type._id === filters.appointtypes)[0].name_english} onDelete={handleRemoveAppointmentTypes} />
+            <Chip
+              size="small"
+              label={
+                appointmentTypeOptions.filter((type) => type._id === filters.appointtypes)[0]
+                  .name_english
+              }
+              onDelete={handleRemoveAppointmentTypes}
+            />
           </Block>
         )}
 
         {filters.payment_methods !== 'all' && (
           <Block label="Payment Methods:">
-            <Chip size="small" label={paymentMethodsOptions.filter((type)=>type._id === filters.payment_methods)[0].name_english} onDelete={handleRemovePaymentMethod} />
+            <Chip
+              size="small"
+              label={
+                paymentMethodsOptions.filter((type) => type._id === filters.payment_methods)[0]
+                  .name_english
+              }
+              onDelete={handleRemovePaymentMethod}
+            />
           </Block>
         )}
         {filters.countries !== 'all' && (
           <Block label="Countries:">
-            <Chip size="small" label={countriesOptions.filter((type)=>type._id === filters.countries)[0].name_english} onDelete={handleRemoveCountries} />
+            <Chip
+              size="small"
+              label={
+                countriesOptions.filter((type) => type._id === filters.countries)[0].name_english
+              }
+              onDelete={handleRemoveCountries}
+            />
           </Block>
         )}
         {filters.unitServices !== 'all' && (
           <Block label="Unit Services:">
-            <Chip size="small" label={unitServicesOptions.filter((type)=>type._id === filters.unitServices)[0].name_english} onDelete={handleRemoveUnitServices} />
+            <Chip
+              size="small"
+              label={
+                unitServicesOptions.filter((type) => type._id === filters.unitServices)[0]
+                  .name_english
+              }
+              onDelete={handleRemoveUnitServices}
+            />
           </Block>
         )}
-
 
         {canReset && (
           <Button

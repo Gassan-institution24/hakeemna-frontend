@@ -81,7 +81,7 @@ export default function PostListView() {
         heading="List"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.dashboard.root,
           },
           {

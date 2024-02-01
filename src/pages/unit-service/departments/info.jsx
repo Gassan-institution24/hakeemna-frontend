@@ -11,15 +11,15 @@ import { LoadingScreen } from 'src/components/loading-screen';
 export default function DepartmentInfoPage() {
   const params = useParams();
   const { id } = params;
-  const { data,loading } = useGetDepartment(id);
+  const { data, loading } = useGetDepartment(id);
   const name = data?.name_english;
   return (
     <>
-      <ACLGuard hasContent category="department" subcategory='department_info' acl="read">
+      <ACLGuard hasContent category="department" subcategory="department_info" acl="read">
         <Helmet>
           <title>{name || ''} Department Info</title>
         </Helmet>
-        {loading&& <LoadingScreen/>}
+        {loading && <LoadingScreen />}
         {!loading && <DepartmentInfoView departmentData={data} />}
       </ACLGuard>
     </>

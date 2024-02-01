@@ -10,7 +10,7 @@ import TableNewEditForm from '../employees/activities/table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableCreateView({employeeData}) {
+export default function TableCreateView({ employeeData }) {
   const settings = useSettingsContext();
 
   return (
@@ -19,11 +19,11 @@ export default function TableCreateView({employeeData}) {
         heading="Create a new Activity"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Employees',
+            name: t('employees'),
             href: paths.unitservice.employees.root,
           },
           {

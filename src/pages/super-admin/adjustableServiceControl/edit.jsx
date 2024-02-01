@@ -20,8 +20,13 @@ export default function AccountingEditPage() {
       <Helmet>
         <title> {t(unitServiceName)} Accounting</title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
-      {!loading && <EditUnitServiceAccounting unitServiceData={data} licenseMovementData={licenseMovementData} />}
+      {loading && <LoadingScreen />}
+      {!loading && (
+        <EditUnitServiceAccounting
+          unitServiceData={data}
+          licenseMovementData={licenseMovementData}
+        />
+      )}
     </>
   );
 }

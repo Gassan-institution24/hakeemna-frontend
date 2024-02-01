@@ -16,7 +16,7 @@ export default function TableCreatePage() {
       <Helmet>
         <title> {stakeholderName}: Book an appointment </title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
+      {loading && <LoadingScreen />}
       {!loading && <BookAppointment stakeholderData={data} />}
     </>
   );

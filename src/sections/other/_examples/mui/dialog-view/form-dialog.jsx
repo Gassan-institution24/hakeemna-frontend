@@ -59,8 +59,6 @@ export default function FormDialog() {
     fetchData();
   }, []);
 
-
-
   const delteeFile = async () => {
     try {
       await axios.delete(`/api/oldmedicalreports/${filesPdftodelete._id}`);

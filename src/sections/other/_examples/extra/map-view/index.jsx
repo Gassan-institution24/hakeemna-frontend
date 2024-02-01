@@ -1,5 +1,5 @@
 /* eslint-disable perfectionist/sort-imports */
-import 'src/utils/mapboxgl'
+import 'src/utils/mapboxgl';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';

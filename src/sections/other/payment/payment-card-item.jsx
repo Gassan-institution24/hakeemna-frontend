@@ -31,20 +31,14 @@ export default function PaymentCardItem() {
         // {...other}
       >
         <Stack direction="row" alignItems="center" spacing={1}>
-          <Iconify
-            icon='logos:visa'
-            width={36}
-          />
+          <Iconify icon="logos:visa" width={36} />
 
           {/* {card.primary && <Label color="info">Default</Label>} */}
           <Label color="info">Default</Label>
         </Stack>
-        {
-          paymentmethods.map((paymentmethod)=>(
-             <Typography variant="subtitle2">{paymentmethod.identification_num}</Typography>
-          ))
-        }
-       
+        {paymentmethods.map((paymentmethod) => (
+          <Typography variant="subtitle2">{paymentmethod.identification_num}</Typography>
+        ))}
 
         <IconButton
           onClick={popover.onOpen}

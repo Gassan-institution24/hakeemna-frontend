@@ -14,6 +14,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import Iconify from 'src/components/iconify';
+import ACLGuard from 'src/auth/guard/acl-guard';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
@@ -37,10 +38,7 @@ export default function ConfigTableToolbar({
 
   const handleFilterService = useCallback(
     (event) => {
-      onFilters(
-        'types',
-        event
-      );
+      onFilters('types', event);
     },
     [onFilters]
   );
@@ -73,7 +71,6 @@ export default function ConfigTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-
         <DatePicker
           label="Date"
           value={filters.startDate}
@@ -114,12 +111,18 @@ export default function ConfigTableToolbar({
             }}
           />
           <Stack direction="row">
-          <IconButton onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-          <IconButton onClick={onAdd}>
-            <Iconify icon="zondicons:add-outline" />
-          </IconButton>
+            <IconButton onClick={popover.onOpen}>
+              <Iconify icon="eva:more-vertical-fill" />
+            </IconButton>
+            {ACLGuard({
+              category: 'employee',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            }) && (
+              <IconButton onClick={onAdd}>
+                <Iconify icon="zondicons:add-outline" />
+              </IconButton>
+            )}
           </Stack>
         </Stack>
       </Stack>

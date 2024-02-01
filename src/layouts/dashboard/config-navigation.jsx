@@ -155,141 +155,187 @@ export function useNavData() {
         ],
       },
     ];
-    const unitServicesItems = [
+    const unitServiceItems = [
       {
-        subheader: t('control panel'),
-        items: [
+        show: ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'read' }),
+        title: t('departments'),
+        path: paths.unitservice.departments.root,
+        icon: <Iconify icon="uis:web-section-alt" />,
+      },
+      {
+        show: ACLGuard({ category: 'unit_service', subcategory: 'employees', acl: 'read' }),
+        title: t('employees'),
+        path: paths.unitservice.employees.root,
+        icon: <Iconify icon="fluent:people-20-filled" />,
+      },
+      // {
+      // show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+      // title: t('access control'),
+      //   path: paths.unitservice.acl,
+      //   icon: <Iconify icon="mdi:account-secure" />,
+      // },
+      {
+        show: ACLGuard({ category: 'unit_service', subcategory: 'activities', acl: 'read' }),
+        title: t('activities'),
+        path: paths.unitservice.activities.root,
+        icon: <Iconify icon="material-symbols:volunteer-activism" />,
+      },
+      {
+        show: ACLGuard({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
+        title: t('appointments'),
+        path: paths.unitservice.appointments.root,
+        icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+      },
+      {
+        show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+        title: t('accounting'),
+        path: paths.unitservice.accounting.root,
+        icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
+        children: [
           {
-            title: t('departments'),
-            path: paths.unitservice.departments.root,
-            icon: <Iconify icon="uis:web-section-alt" />,
+            show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            title: t('economic movements'),
+            path: paths.unitservice.accounting.economicmovements.root,
           },
           {
-            title: t('employees'),
-            path: paths.unitservice.employees.root,
-            icon: <Iconify icon="fluent:people-20-filled" />,
-          },
-          // {
-          //   title: t('access control'),
-          //   path: paths.unitservice.acl,
-          //   icon: <Iconify icon="mdi:account-secure" />,
-          // },
-          {
-            title: t('activities'),
-            path: paths.unitservice.activities.root,
-            icon: <Iconify icon="material-symbols:volunteer-activism" />,
+            show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            title: t('payment control'),
+            path: paths.unitservice.accounting.paymentcontrol.root,
           },
           {
-            title: t('Appointments'),
-            path: paths.unitservice.appointments.root,
-            icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
-          },
-          {
-            title: t('Accounting'),
-            path: paths.unitservice.accounting.root,
-            icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
-            children: [
-              {
-                title: t('economic movements'),
-                path: paths.unitservice.accounting.economicmovements.root,
-              },
-              {
-                title: t('payment control'),
-                path: paths.unitservice.accounting.paymentcontrol.root,
-              },
-              { title: t('reciepts'), path: paths.unitservice.accounting.reciepts.root },
-            ],
-          },
-          {
-            title: t('management tables'),
-            path: paths.unitservice.tables.root,
-            icon: <Iconify icon="icon-park-twotone:data" />,
-            children: [
-              // { title: t('appointment types'), path: paths.unitservice.tables.appointypes.root },
-              { title: t('employee types'), path: paths.unitservice.tables.employeetypes.root },
-              { title: t('work shifts'), path: paths.unitservice.tables.workshifts.root },
-              // { title: t('work groups'), path: paths.unitservice.tables.workgroups.root },
-              // { title: t('rooms'), path: paths.unitservice.tables.rooms.root },
-            ],
-          },
-          {
-            title: t('Insurance'),
-            path: paths.unitservice.insurance.root,
-            icon: <Iconify icon="ic:baseline-security" />,
-          },
-          {
-            title: t('suppliers offers'),
-            path: paths.unitservice.offers.root,
-            icon: <Iconify icon="eos-icons:activate-subscriptions" />,
-          },
-          {
-            title: t('communication'),
-            path: paths.unitservice.communication.root,
-            icon: <Iconify icon="solar:call-chat-bold" />,
-          },
-          {
-            title: t('quality control'),
-            path: paths.unitservice.qualityControl.root,
-            icon: <Iconify icon="healthicons:world-care" />,
-          },
-          {
-            title: t('Subscriptions'),
-            path: paths.unitservice.subscriptions.root,
-            icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
-          },
-          {
-            title: t('Service Unit Info'),
-            path: paths.unitservice.profile.root,
-            icon: <Iconify icon="fa-solid:clinic-medical" />,
-          },
-          {
-            title: t('Old patient data'),
-            path: paths.unitservice.oldPatient,
-            icon: <Iconify icon="entypo:upload" />,
+            show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            title: t('reciepts'),
+            path: paths.unitservice.accounting.reciepts.root,
           },
         ],
+      },
+      {
+        show:
+          ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }) ||
+          ACLGuard({ category: 'unit_service', subcategory: 'employee_type', acl: 'read' }),
+        title: t('management tables'),
+        path: paths.unitservice.tables.root,
+        icon: <Iconify icon="icon-park-twotone:data" />,
+        children: [
+          // show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }), {
+          //   title: t('appointment types'), path: paths.unitservice.tables.appointypes.root },
+          {
+            show: ACLGuard({ category: 'unit_service', subcategory: 'employee_type', acl: 'read' }),
+            title: t('employee types'),
+            path: paths.unitservice.tables.employeetypes.root,
+          },
+          {
+            show: ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }),
+            title: t('work shifts'),
+            path: paths.unitservice.tables.workshifts.root,
+          },
+          // show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }), {
+          //   title: t('work groups'), path: paths.unitservice.tables.workgroups.root },
+          // show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }), {
+          //   title: t('rooms'), path: paths.unitservice.tables.rooms.root },
+        ],
+      },
+      {
+        show: ACLGuard({ category: 'unit_service', subcategory: 'insurance', acl: 'read' }),
+        title: t('insurance'),
+        path: paths.unitservice.insurance.root,
+        icon: <Iconify icon="ic:baseline-security" />,
+      },
+      {
+        show: ACLGuard({ category: 'unit_service', subcategory: 'offers', acl: 'read' }),
+        title: t('suppliers offers'),
+        path: paths.unitservice.offers.root,
+        icon: <Iconify icon="eos-icons:activate-subscriptions" />,
+      },
+      {
+        show: ACLGuard({ category: 'unit_service', subcategory: 'communication', acl: 'read' }),
+        title: t('communication'),
+        path: paths.unitservice.communication.root,
+        icon: <Iconify icon="solar:call-chat-bold" />,
+      },
+      {
+        show: ACLGuard({ category: 'unit_service', subcategory: 'quality_control', acl: 'read' }),
+        title: t('quality control'),
+        path: paths.unitservice.qualityControl.root,
+        icon: <Iconify icon="healthicons:world-care" />,
+      },
+      {
+        show: ACLGuard({ category: 'unit_service', subcategory: 'subscriptions', acl: 'read' }),
+        title: t('subscriptions'),
+        path: paths.unitservice.subscriptions.root,
+        icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
+      },
+      {
+        show: ACLGuard({
+          category: 'unit_service',
+          subcategory: 'unit_service_info',
+          acl: 'update',
+        }),
+        title: t('service unit info'),
+        path: paths.unitservice.profile.root,
+        icon: <Iconify icon="fa-solid:clinic-medical" />,
+      },
+      {
+        show: ACLGuard({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
+        title: t('old patient data'),
+        path: paths.unitservice.oldPatient,
+        icon: <Iconify icon="entypo:upload" />,
+      },
+    ];
+    const unitServicesDashboars = [
+      {
+        subheader: t('control panel'),
+        items: unitServiceItems.filter((item) => item.show),
       },
     ];
     const employeeItems = [
       {
-        subheader: t('Employee dashboard'),
-        items: [
-          {
-            title: t('entrance management'),
-            path: paths.employee.entrancemanagement.root,
-            icon: <Iconify icon="oi:timer" />,
-          },
-          {
-            title: t('appointments'),
-            path: paths.employee.appointments.root,
-            icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
-          },
-          {
-            title: t('appointment configuration'),
-            path: paths.employee.appointmentconfiguration.root,
-            icon: <Iconify icon="fluent:content-settings-16-regular" />,
-          },
-          {
-            title: t('accounting'),
-            path: paths.employee.accounting.root,
-            icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
-          },
-          {
-            title: t('communications'),
-            path: paths.employee.communication.root,
-            icon: <Iconify icon="solar:call-chat-bold" />,
-          },
-          {
-            title: t('quality control'),
-            path: paths.employee.qualityControl.root,
-            icon: <Iconify icon="healthicons:world-care" />,
-          },
-          {
-            title: t('profile'),
-            path: paths.employee.profile.root,
-            icon: <Iconify icon="iconamoon:profile-bold" />,
-          },
-        ],
+        show: ACLGuard({ category: 'employee', subcategory: 'entrance_management', acl: 'read' }),
+        title: t('entrance management'),
+        path: paths.employee.entrancemanagement.root,
+        icon: <Iconify icon="oi:timer" />,
+      },
+      {
+        show: ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'read' }),
+        title: t('appointments'),
+        path: paths.employee.appointments.root,
+        icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+      },
+      {
+        show: ACLGuard({ category: 'employee', subcategory: 'appointment_configs', acl: 'read' }),
+        title: t('appointment configuration'),
+        path: paths.employee.appointmentconfiguration.root,
+        icon: <Iconify icon="fluent:content-settings-16-regular" />,
+      },
+      {
+        show: ACLGuard({ category: 'employee', subcategory: 'accounting', acl: 'read' }),
+        title: t('accounting'),
+        path: paths.employee.accounting.root,
+        icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
+      },
+      {
+        show: ACLGuard({ category: 'employee', subcategory: 'communication', acl: 'read' }),
+        title: t('communication'),
+        path: paths.employee.communication.root,
+        icon: <Iconify icon="solar:call-chat-bold" />,
+      },
+      {
+        show: true,
+        title: t('quality control'),
+        path: paths.employee.qualityControl.root,
+        icon: <Iconify icon="healthicons:world-care" />,
+      },
+      {
+        show: ACLGuard({ category: 'employee', subcategory: 'info', acl: 'read' }),
+        title: t('profile'),
+        path: paths.employee.profile.root,
+        icon: <Iconify icon="iconamoon:profile-bold" />,
+      },
+    ];
+    const employeeDashboard = [
+      {
+        subheader: t('employee dashboard'),
+        items: employeeItems.filter((item) => item.show),
       },
     ];
 
@@ -363,17 +409,17 @@ export function useNavData() {
       },
     ];
 
-    if (!user||!user.role) {
+    if (!user || !user.role) {
       router.replace('/');
     }
     if (user?.role === 'superadmin') {
       return superAdminItems;
     }
     if (user?.role === 'admin') {
-      return [...unitServicesItems, ...employeeItems];
+      return [...unitServicesDashboars, ...employeeDashboard];
     }
     if (user?.role === 'employee') {
-      return [...unitServicesItems, ...employeeItems];
+      return [...unitServicesDashboars, ...employeeDashboard];
     }
     return [...userItems];
   }, [t, user, handleLogout, router]);

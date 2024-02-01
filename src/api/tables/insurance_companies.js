@@ -9,7 +9,7 @@ export function useGetInsuranceCos() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      insuranseCosData: data || [] ,
+      insuranseCosData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -31,7 +31,7 @@ export function useGetInsuranceCo(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      isuranceData:data,
+      isuranceData: data,
       loading: isLoading,
       error,
       validating: isValidating,

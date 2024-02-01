@@ -11,16 +11,16 @@ import { LoadingScreen } from 'src/components/loading-screen';
 export default function AppointmentEditPage() {
   const params = useParams();
   const { id } = params;
-  const { data,loading } = useGetAppointment(id);
+  const { data, loading } = useGetAppointment(id);
   const name = data?.name_english;
   return (
     <>
-    <ACLGuard hasContent category='unit_service' subcategory='appointments' acl='update'>
-      <Helmet>
-        <title>Edit {name||''} Appointment</title>
-      </Helmet>
-      {loading&& <LoadingScreen/>}
-      {!loading &&<EditAppointmentView appointmentData={data} />}
+      <ACLGuard hasContent category="unit_service" subcategory="appointments" acl="update">
+        <Helmet>
+          <title>Edit {name || ''} Appointment</title>
+        </Helmet>
+        {loading && <LoadingScreen />}
+        {!loading && <EditAppointmentView appointmentData={data} />}
       </ACLGuard>
     </>
   );

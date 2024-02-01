@@ -18,6 +18,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { useAuthContext } from 'src/auth/hooks';
 
+import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
@@ -43,26 +44,19 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
+import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetUSEmployeeTypes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
-
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'name', label: 'Name' },
-  // { id: 'employees', label: 'Employees' },
-  { id: 'status', label: 'Status' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -72,6 +66,17 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function EmployeeTypesTable() {
+  const { t } = useTranslate();
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'name', label: t('name') },
+    // { id: 'employees', label: t('Employees') },
+    { id: 'status', label: t('status') },
+    { id: '', width: 88 },
+  ];
+
+  const {STATUS_OPTIONS} = StatusOptions()
+
   const { user } = useAuthContext();
 
   const table = useTable({ defaultOrderBy: 'code' });
@@ -232,23 +237,25 @@ export default function EmployeeTypesTable() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Employee types" /// edit
+          heading={t('employee types')} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.unitservice.root,
             },
-            { name: 'Employee types' },
+            { name: t('employee types') },
           ]}
           action={
-            <Button
-              component={RouterLink}
-              href={paths.unitservice.tables.employeetypes.new}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New employee type
-            </Button>
+            ACLGuard({ category: 'unit_service', subcategory: 'employee_type', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                href={paths.unitservice.tables.employeetypes.new}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                {t('new employee type')}
+              </Button>
+            )
           }
           sx={{
             mb: { xs: 3, md: 5 },

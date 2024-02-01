@@ -22,6 +22,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { useTranslate } from 'src/locales';
 import { fTimestamp } from 'src/utils/format-time';
 
 import { _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
@@ -72,6 +73,8 @@ const defaultFilters = {
 export default function USsFeedbacks() {
   const theme = useTheme();
 
+  const { t } = useTranslate();
+
   const settings = useSettingsContext();
 
   const router = useRouter();
@@ -79,7 +82,7 @@ export default function USsFeedbacks() {
   const table = useTable({ defaultOrderBy: 'createDate' });
 
   const { feedbackData, loading, refetch } = useGetUSsFeedbackes();
-  
+
   const separateEachunitServiceFeedbacks = useCallback(() => {
     const results = {};
 
@@ -171,7 +174,9 @@ export default function USsFeedbacks() {
     setFilters(defaultFilters);
   }, []);
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
@@ -180,7 +185,7 @@ export default function USsFeedbacks() {
           heading="Unit Services Quality Control"
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {

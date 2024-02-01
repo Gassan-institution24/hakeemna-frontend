@@ -165,11 +165,11 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
           heading={`${unitserviceName} feedback`} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {
-              name: 'Unit Services',
+              name: t('Unit Services'),
               href: paths.superadmin.unitservices.root,
             },
             { name: t(`${unitserviceName} feedback`) }, /// edit

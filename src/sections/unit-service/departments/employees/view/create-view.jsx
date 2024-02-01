@@ -3,6 +3,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
+import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -10,24 +11,24 @@ import TableNewEditForm from '../create-edit-employee';
 
 // ----------------------------------------------------------------------
 
-export default function TableCreateView({departmentData}) {
+export default function TableCreateView({ departmentData }) {
   const settings = useSettingsContext();
-
+  const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
         heading="Create a new Employee Account"
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Departments',
+            name: t('departments'),
             href: paths.unitservice.departments.root,
           },
           {
-            name: `${departmentData.name_english||'Department'} Employees`,
+            name: `${departmentData.name_english || 'Department'} Employees`,
             href: paths.unitservice.departments.employees.root,
           },
           { name: 'New Employee' },

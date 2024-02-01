@@ -62,11 +62,11 @@ export default function PatientHistoryView({ departmentData }) {
         heading={`${departmentData.name_english || 'Deaprtment'} History`}
         links={[
           {
-            name: 'Dashboard',
+            name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Departments',
+            name: t('departments'),
             href: paths.unitservice.departments.root,
           },
           {

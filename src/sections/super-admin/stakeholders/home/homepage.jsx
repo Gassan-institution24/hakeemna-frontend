@@ -16,6 +16,7 @@ import { RouterLink } from 'src/routes/components';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useReactToPrint } from 'react-to-print';
@@ -81,6 +82,8 @@ const STATUS_OPTIONS = [
 export default function StakeholderTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
+
+  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -266,19 +269,21 @@ export default function StakeholderTableView() {
     [handleFilters]
   );
 
-  if(loading) {return(<LoadingScreen/>)}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Stakeholders" /// edit
+          heading={t('Stakeholders')} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
-            { name: 'Stakeholders' }, /// edit
+            { name: t('stakeholders') }, /// edit
           ]}
           // action={
           //   <Button

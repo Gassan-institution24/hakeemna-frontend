@@ -15,7 +15,7 @@ export default function TableCreatePage() {
       <Helmet>
         <title> stakeholders: Payment Control </title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
+      {loading && <LoadingScreen />}
       {!loading && <PaymentInfo paymentData={data} />}
     </>
   );

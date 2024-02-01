@@ -160,8 +160,10 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
   );
   const unitserviceName = unitServiceData?.name_english;
 
-  if(loading) {return(<LoadingScreen/>)}
-  
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -169,11 +171,11 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
           heading={`${unitserviceName} feedback`} /// edit
           links={[
             {
-              name: 'Dashboard',
+              name: t('dashboard'),
               href: paths.superadmin.root,
             },
             {
-              name: 'Unit Services',
+              name: t('Unit Services'),
               href: paths.superadmin.unitservices.root,
             },
             { name: t(`${unitserviceName} feedback`) }, /// edit

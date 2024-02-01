@@ -14,6 +14,7 @@ import { fDateTime } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import ACLGuard from 'src/auth/guard/acl-guard';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -104,39 +105,43 @@ export default function TableDetailsRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'active' ? (
+        {status === 'active'
+          ? ACLGuard({ category: 'unit_service', subcategory: 'employee_type', acl: 'delete' }) && (
+              <MenuItem
+                onClick={() => {
+                  onInactivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon="ic:baseline-pause" />
+                Inactivate
+              </MenuItem>
+            )
+          : ACLGuard({ category: 'unit_service', subcategory: 'employee_type', acl: 'update' }) && (
+              <MenuItem
+                onClick={() => {
+                  onActivate();
+                  popover.onClose();
+                }}
+                sx={{ color: 'success.main' }}
+              >
+                <Iconify icon="bi:play-fill" />
+                activate
+              </MenuItem>
+            )}
+
+        {ACLGuard({ category: 'unit_service', subcategory: 'employee_type', acl: 'update' }) && (
           <MenuItem
             onClick={() => {
-              onInactivate();
+              onEditRow();
               popover.onClose();
             }}
-            sx={{ color: 'error.main' }}
           >
-            <Iconify icon="ic:baseline-pause" />
-            Inactivate
-          </MenuItem>
-        ) : (
-          <MenuItem
-            onClick={() => {
-              onActivate();
-              popover.onClose();
-            }}
-            sx={{ color: 'success.main' }}
-          >
-            <Iconify icon="bi:play-fill" />
-            activate
+            <Iconify icon="fluent:edit-32-filled" />
+            Edit
           </MenuItem>
         )}
-
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="fluent:edit-32-filled" />
-          Edit
-        </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL

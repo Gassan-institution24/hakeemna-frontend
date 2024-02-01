@@ -13,15 +13,20 @@ export default function AccountingEditPage() {
   const params = useParams();
   const { id, acid } = params;
   const { data } = useGetStakeholder(id);
-  const { licenseMovementData,loading } = useGetLicenseMovement(acid);
+  const { licenseMovementData, loading } = useGetLicenseMovement(acid);
   const stakeholderName = data?.name_english || 'Stakeholder';
   return (
     <>
       <Helmet>
         <title> {t(stakeholderName)} Accounting</title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
-      {!loading&&<EditStakeholderAccounting stakeholderData={data} licenseMovementData={licenseMovementData} />}
+      {loading && <LoadingScreen />}
+      {!loading && (
+        <EditStakeholderAccounting
+          stakeholderData={data}
+          licenseMovementData={licenseMovementData}
+        />
+      )}
     </>
   );
 }

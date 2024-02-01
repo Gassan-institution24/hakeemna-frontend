@@ -16,7 +16,7 @@ export default function StakeholderInfoPage() {
       <Helmet>
         <title> stakeholders: {stakeholderName} Info </title>
       </Helmet>
-      {loading&& <LoadingScreen/>}
+      {loading && <LoadingScreen />}
       {!loading && <StakeholderInfo stakeholderData={data} />}
     </>
   );

@@ -61,11 +61,7 @@ export default function TableDetailsRow({
 
       <TableCell align="center">{name_english}</TableCell>
 
-      <TableCell
-        align="center"
-      >
-        {details}
-      </TableCell>
+      <TableCell align="center">{details}</TableCell>
       <TableCell align="center">
         <Label
           variant="soft"

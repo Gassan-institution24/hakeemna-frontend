@@ -33,7 +33,7 @@ export default function AccountChangePassword() {
         'New password must be different than old password',
         (value, { parent }) => value !== parent.passwordCurrent
       ),
-      confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Passwords must match'),
+    confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Passwords must match'),
   });
 
   const defaultValues = {
@@ -54,24 +54,23 @@ export default function AccountChangePassword() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-  try {
-   
-    const { passwordCurrent, password, confirmPassword } = data;
-    const requestData = { passwordCurrent, password, confirmPassword };
+    try {
+      const { passwordCurrent, password, confirmPassword } = data;
+      const requestData = { passwordCurrent, password, confirmPassword };
 
-    const response = await axios.patch(endpoints.auth.updatepassword, requestData);
-    console.log(response);
-    if (response.status === 201) {
-      reset();
-      enqueueSnackbar('Password updated successfully!', { variant: 'success' });
-    } else {
-      enqueueSnackbar(response.data || 'Password update failed!', { variant: 'error' });
+      const response = await axios.patch(endpoints.auth.updatepassword, requestData);
+      console.log(response);
+      if (response.status === 201) {
+        reset();
+        enqueueSnackbar('Password updated successfully!', { variant: 'success' });
+      } else {
+        enqueueSnackbar(response.data || 'Password update failed!', { variant: 'error' });
+      }
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('An error occurred. Please try again.', { variant: 'error' });
     }
-  } catch (error) {
-    console.error(error);
-    enqueueSnackbar('An error occurred. Please try again.', { variant: 'error' });
-  }
-});
+  });
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -84,7 +83,9 @@ export default function AccountChangePassword() {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton onClick={showpasswordCurrent.onToggle} edge="end">
-                  <Iconify icon={showpasswordCurrent.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                  <Iconify
+                    icon={showpasswordCurrent.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
+                  />
                 </IconButton>
               </InputAdornment>
             ),
@@ -120,7 +121,9 @@ export default function AccountChangePassword() {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton onClick={showconfirmPassword.onToggle} edge="end">
-                  <Iconify icon={showconfirmPassword.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                  <Iconify
+                    icon={showconfirmPassword.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
+                  />
                 </IconButton>
               </InputAdornment>
             ),

@@ -119,7 +119,8 @@ export default function AppointmentBooking({ patientData }) {
         const results = appointmentsData.filter(
           (appointment) =>
             (appointment?.name_english &&
-              appointment?.name_english?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
+              appointment?.name_english?.toLowerCase().indexOf(search.query.toLowerCase()) !==
+                -1) ||
             (appointment?.name_arabic &&
               appointment?.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
             (appointment.unit_service &&
@@ -223,8 +224,6 @@ export default function AppointmentBooking({ patientData }) {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-    
-
       <Stack
         spacing={2.5}
         sx={{
