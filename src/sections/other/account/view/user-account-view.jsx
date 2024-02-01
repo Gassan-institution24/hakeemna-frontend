@@ -6,6 +6,8 @@ import Container from '@mui/material/Container';
 
 import { useTranslate } from 'src/locales';
 import { paths } from 'src/routes/paths';
+import { useGetPatient } from 'src/api/tables';
+import { useAuthContext } from 'src/auth/hooks';
 import { _userAbout, _userPlans, _userPayment, _userInvoices, _userAddressBook } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
@@ -39,6 +41,8 @@ const TABS = [
 // ----------------------------------------------------------------------
 
 export default function AccountView() {
+  const { user } = useAuthContext()
+  const { data, refetch, loading} = useGetPatient(user?.patient?._id)
   const settings = useSettingsContext();
 
   const { t } = useTranslate();
@@ -73,7 +77,7 @@ export default function AccountView() {
           <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
       </Tabs>
-      {currentTab === 'general' && <AccountGeneral />}
+      {currentTab === 'general' &&  !loading && <AccountGeneral data={data} refetch={refetch}/> }
       {currentTab === 'notifications' && <AccountNotifications />}
       {currentTab === 'security' && <AccountChangePassword />}
     </Container>
