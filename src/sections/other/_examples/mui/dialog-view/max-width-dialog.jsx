@@ -19,6 +19,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { Rating, Input } from '@mui/material';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { useAuthContext } from 'src/auth/hooks';
+import EmptyContent from 'src/components/empty-content';
 
 // ----------------------------------------------------------------------
 
@@ -133,7 +134,7 @@ export default function MaxWidthDialog() {
 
           const isPastAppointment = Date.now() > endTime;
 
-          if (appointment.hasFeedback === false) {
+          if (appointment.hasFeedback === false && isPastAppointment) {
             return (
               <>
                 {isPastAppointment ? (
@@ -224,7 +225,8 @@ export default function MaxWidthDialog() {
               </>
             );
           }
-          return <Typography>you dont have any appointments for today</Typography>;
+          return  <EmptyContent filled title="No Data" sx={{ py: 10 }} />
+
         })()}
     </>
   );

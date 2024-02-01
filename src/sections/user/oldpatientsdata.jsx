@@ -15,6 +15,7 @@ import { paths } from 'src/routes/paths';
 import { _mock } from 'src/_mock';
 import { useRouter } from 'src/routes/hooks';
 import { useSnackbar } from 'src/components/snackbar';
+import isEqual from 'lodash/isEqual';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -73,18 +74,33 @@ export default function Oldpatientsdata() {
 
   const yesFunction = async () => {
     try {
-      const response = await axios.patch(endpoints.tables.patient(user.patient._id),dataTosubmit);
+      const existingDataResponse = await axios.get(endpoints.tables.patient(user.patient._id));
+      const existingData = existingDataResponse.data;
+  
+      const updatedData = {};
+  
+      // Iterate over keys in dataTosubmit
+      Object.keys(dataTosubmit).forEach((key) => {
+        if (!isEqual(existingData[key], dataTosubmit[key])) {
+          // Update only if the data doesn't match
+          updatedData[key] = dataTosubmit[key];
+        }
+      });
+  
+      const response = await axios.patch(endpoints.tables.patient(user.patient._id), updatedData);
+  
+      enqueueSnackbar('Thanks for your cooperation, data saved to profile successfully', {
+        variant: 'success',
+      });
     } catch (error) {
       console.error('Error updating data:', error);
+      enqueueSnackbar('Failed to update data.', {
+        variant: 'error',
+      });
     }
-
-    enqueueSnackbar(`Thanks for your cooperation, data saved to profile successfully`, {
-      variant: 'success',
-    });
-    // setTimeout(() => {
-    //   router.push(paths.dashboard.user.profile);
-    // }, 1000);
   };
+  
+  
   const noFunction = async () => {
     try {
       const response = await axios.patch(`/api/oldpatientsdata/${oldDataId}/updateonboard`, {
