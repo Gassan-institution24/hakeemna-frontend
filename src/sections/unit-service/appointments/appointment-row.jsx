@@ -17,6 +17,7 @@ import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import { useLocales, useTranslate } from 'src/locales';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { fDateTime } from 'src/utils/format-time';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -67,6 +68,11 @@ export default function AppointmentsTableRow({
     modifications_nums,
   } = row;
 
+  const { t } = useTranslate();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const popover = usePopover();
   const DDL = usePopover();
   const confirmDelayOne = useBoolean();
@@ -83,9 +89,9 @@ export default function AppointmentsTableRow({
 
         <TableCell align="center">{code}</TableCell>
         <TableCell align="center">{appoint_number}</TableCell>
-        <TableCell align="center">{appointment_type?.name_english}</TableCell>
-        <TableCell align="center">{work_group?.name_english}</TableCell>
-        <TableCell align="center">{work_shift?.name_english}</TableCell>
+        <TableCell align="center">{curLangAr ? appointment_type?.name_arabic: appointment_type?.name_english}</TableCell>
+        <TableCell align="center">{curLangAr ? work_group?.name_arabic: work_group?.name_english}</TableCell>
+        <TableCell align="center">{curLangAr ? work_shift?.name_arabic: work_shift?.name_english}</TableCell>
         <TableCell align="center">
           {patient?.first_name} {patient?.last_name}
         </TableCell>
@@ -126,8 +132,8 @@ export default function AppointmentsTableRow({
               'default'
             }
           >
-            {status}
-          </Label>
+            {t(status)}
+        </Label>
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
@@ -197,7 +203,7 @@ export default function AppointmentsTableRow({
         )}
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
-          DDL
+          {t('DDL')}
         </MenuItem>
       </CustomPopover>
 

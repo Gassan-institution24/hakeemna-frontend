@@ -8,6 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
+import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDateTime } from 'src/utils/format-time';
@@ -49,6 +50,8 @@ export default function TableDetailsRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
+
+  const { t } = useTranslate();
 
   const DDL = usePopover();
   const details = usePopover();
@@ -123,7 +126,7 @@ export default function TableDetailsRow({
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {status}
+          {t(status)}
         </Label>
       </TableCell>
 

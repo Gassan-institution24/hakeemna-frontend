@@ -254,7 +254,7 @@ export default function WorkGroupsTableView({ departmentData }) {
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >
-                New work group
+                {t('new work group')}
               </Button>
             )
           }

@@ -10,6 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
+import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDateTime } from 'src/utils/format-time';
@@ -41,6 +42,9 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
     ip_address_user_modification,
     modifications_nums,
   } = row;
+
+  const { t } = useTranslate();
+
   const popover = usePopover();
   const DDL = usePopover();
 
@@ -66,7 +70,7 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {status}
+          {t(status)}
         </Label>
       </TableCell>
       <TableCell align="center">{fDateTime(Start_date)}</TableCell>
@@ -105,11 +109,11 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
           }}
         >
           <Iconify icon="fluent:edit-32-filled" />
-          Edit
-        </MenuItem>
+          {t('edit')}
+          </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
-          DDL
+          {t('DDL')}
         </MenuItem>
       </CustomPopover>
 
@@ -122,22 +126,22 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
           fontSize: '14px',
         }}
       >
-        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
       </CustomPopover>
     </>
   );

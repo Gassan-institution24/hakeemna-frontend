@@ -13,6 +13,7 @@ export function useLocales() {
   const langStorage = localStorageGetItem('i18nextLng');
 
   const currentLang = allLangs.find((lang) => lang.value === langStorage) || defaultLang;
+  console.log('currentLang',currentLang)
   return {
     allLangs,
     currentLang,

@@ -10,6 +10,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
+import { useTranslate } from 'src/locales';
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
@@ -54,6 +55,8 @@ export default function PatientInfoContent({ patientData }) {
     patient_father,
     status,
   } = patientData;
+
+  const { t } = useTranslate();
 
   // const MDData = (
   //   <div>
@@ -134,7 +137,7 @@ export default function PatientInfoContent({ patientData }) {
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {status}
+          {t(status)}
         </Label>
       </Typography>
 

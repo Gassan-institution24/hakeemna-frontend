@@ -11,6 +11,7 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import { Rating } from '@mui/material';
 
+import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDateTime } from 'src/utils/format-time';
@@ -39,6 +40,9 @@ export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRe
     ip_address_user_modification,
     modifications_nums,
   } = row;
+
+  const { t } = useTranslate();
+
   const popover = usePopover();
   const DDL = usePopover();
 
@@ -57,7 +61,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRe
             (status === 'read' && 'success') || (status === 'not read' && 'error') || 'default'
           }
         >
-          {status}
+          {t(status)}
         </Label>
       </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>

@@ -52,7 +52,6 @@ import ConfigFiltersResult from '../appointment-filters-result';
 
 // ----------------------------------------------------------------------
 
-
 const defaultFilters = {
   name: '',
   status: 'all',
@@ -73,7 +72,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     { id: 'status', label: t('status') },
     { id: '' },
   ];
-  
+
   const theme = useTheme();
 
   const settings = useSettingsContext();
@@ -116,16 +115,16 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     appointmentConfigData.filter((item) => item.status === status).length;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: appointmentConfigData.length },
+    { value: 'all', label: t('all'), color: 'default', count: appointmentConfigData.length },
     {
       value: 'active',
-      label: 'Active',
+      label: t('active'),
       color: 'success',
       count: getConfigLength('active'),
     },
     {
       value: 'inactive',
-      label: 'Inactive',
+      label: t('inactive'),
       color: 'error',
       count: getConfigLength('inactive'),
     },

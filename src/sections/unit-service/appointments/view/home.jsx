@@ -138,40 +138,40 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
     appointmentsData.filter((item) => item.status === status).length;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
+    { value: 'all', label: t('all'), color: 'default', count: appointmentsData.length },
     {
       value: 'available',
-      label: 'Available',
+      label: t('available'),
       color: 'secondary',
       count: getAppointLength('available'),
     },
     {
       value: 'pending',
-      label: 'Pending',
+      label: t('pending'),
       color: 'warning',
       count: getAppointLength('pending'),
     },
     {
       value: 'processing',
-      label: 'Processing',
+      label: t('processing'),
       color: 'info',
       count: getAppointLength('processing'),
     },
     {
       value: 'finished',
-      label: 'Finished',
+      label: t('finished'),
       color: 'success',
       count: getAppointLength('finished'),
     },
     {
       value: 'canceled',
-      label: 'Canceled',
+      label: t('canceled'),
       color: 'error',
       count: getAppointLength('canceled'),
     },
     {
       value: 'not booked',
-      label: 'Not Booked',
+      label: t('not booked'),
       color: 'secondary',
       count: getAppointLength('not booked'),
     },

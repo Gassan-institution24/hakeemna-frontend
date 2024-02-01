@@ -8,6 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
+import { useLocales, useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDateTime } from 'src/utils/format-time';
@@ -32,7 +33,9 @@ export default function TableDetailsRow({
   const {
     code,
     name_english,
+    name_arabic,
     details,
+    details_arabic,
     status,
     created_at,
     user_creation,
@@ -42,6 +45,11 @@ export default function TableDetailsRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
+
+  const { t } = useTranslate();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const confirm = useBoolean();
 
@@ -59,9 +67,9 @@ export default function TableDetailsRow({
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{curLangAr ? name_arabic : name_english}</TableCell>
 
-      <TableCell align="center">{details}</TableCell>
+      <TableCell align="center">{curLangAr ? details_arabic : details}</TableCell>
       <TableCell align="center">
         <Label
           variant="soft"
@@ -69,7 +77,7 @@ export default function TableDetailsRow({
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {status}
+          {t(status)}
         </Label>
       </TableCell>
 
@@ -100,8 +108,8 @@ export default function TableDetailsRow({
             sx={{ color: 'error.main' }}
           >
             <Iconify icon="ic:baseline-pause" />
-            Inactivate
-          </MenuItem>
+            {t('inactivate')}
+              </MenuItem>
         ) : (
           <MenuItem
             onClick={() => {
@@ -111,8 +119,8 @@ export default function TableDetailsRow({
             sx={{ color: 'success.main' }}
           >
             <Iconify icon="bi:play-fill" />
-            activate
-          </MenuItem>
+            {t('activate')}
+              </MenuItem>
         )}
 
         <MenuItem
@@ -122,11 +130,11 @@ export default function TableDetailsRow({
           }}
         >
           <Iconify icon="fluent:edit-32-filled" />
-          Edit
-        </MenuItem>
+          {t('edit')}
+          </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
-          DDL
+          {t('DDL')}
         </MenuItem>
       </CustomPopover>
 
@@ -139,22 +147,22 @@ export default function TableDetailsRow({
           fontSize: '14px',
         }}
       >
-        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
       </CustomPopover>
     </>
   );
