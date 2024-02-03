@@ -5,6 +5,7 @@ import Divider from '@mui/material/Divider';
 import unit from 'src/sections/home/view/uns.webp';
 import Image from 'src/components/image';
 import { Box } from '@mui/system';
+import Iconify from 'src/components/iconify';
 
 const DATA = [
   {
@@ -78,20 +79,74 @@ export default function VerticalDividerText() {
 
   return (
     <>
-      <Divider orientation="vertical" flexItem>
+      <Divider orientation="vertical" flexItem sx={{mb:10}}>
         <h1>
           {' '}
           SERVICES <span style={{ color: 'rgb(0, 186, 0)' }}>FOR</span> UNITSERVICES
         </h1>
+        <h5 style={{color:'gray'}}>Lorem ipsum dolor sit amet consectetur adipisicing elit</h5>
       </Divider>
-      <Box container>
-        <ul style={{ margin: 10, display:'grid', gridTemplateColumns:'1fr 1fr 1fr' }}>
-          {DATA.map((data) => (
-            <>
-              <li style={{ margin: 5 }}>{data.headline}</li>
-            </>
-          ))}
+      <Box container sx={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', placeItems: 'center', gap:10 }}>
+       <div style={{border:'1px solid red', width:'50%', height:'100%'}}>
+        <div style={{border:'1px solid red', backgroundColor:'green', width:'15%', height:'20%', display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <Iconify icon="iconoir:healthcare"/>
+        </div>
+        <h2>Manage patients and medical records</h2>
+        <ul>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
         </ul>
+       </div>
+       <div style={{border:'1px solid red', width:'50%', height:'100%'}}>
+       <div style={{border:'1px solid red', backgroundColor:'green', width:'15%', height:'20%', display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <Iconify icon="iconoir:healthcare"/>
+        </div>
+        <h2>Marketing and public relations</h2>
+        <ul>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+        </ul>
+       </div>
+       <div style={{border:'1px solid red', width:'50%', height:'100%'}}>
+        <div style={{border:'1px solid red', backgroundColor:'green', width:'15%', height:'20%', display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <Iconify icon="iconoir:healthcare"/>
+        </div>
+        <h2>Business and Finance Administration</h2>
+        <ul>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+        </ul>
+       </div>
+       <div style={{border:'1px solid red', width:'50%', height:'100%'}}>
+        <div style={{border:'1px solid red', backgroundColor:'green', width:'15%', height:'20%', display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <Iconify icon="iconoir:healthcare"/>
+        </div>
+        <h2>Management of medical institutions</h2>
+        <ul>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+          <li>Lorem, ipsum.</li>
+        </ul>
+       </div>
+       <div style={{border:'1px solid red', width:'50%', height:'100%'}}>
+        <div style={{border:'1px solid red', backgroundColor:'green', width:'15%', height:'20%', display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <Iconify icon="iconoir:healthcare"/>
+        </div>
+        <h2>Flexibility in services</h2>
+        <ul>
+          <li>Lorem, ipsum.</li>
+        </ul>
+       </div>
       </Box>
     </>
   );
