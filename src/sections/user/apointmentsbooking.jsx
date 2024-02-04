@@ -29,11 +29,11 @@ import {
 } from 'src/api/tables';
 import { fTimestamp } from 'src/utils/format-time';
 
-import AppointmentList from '../super-admin/patients/history/book-appointment/appointment-list';
-import AppointmentSort from '../super-admin/patients/history/book-appointment/appointment-sort';
-import AppointmentSearch from '../super-admin/patients/history/book-appointment/appointment-search';
-import AppointmentFilters from '../super-admin/patients/history/book-appointment/appointment-filters';
-import AppointmentFiltersResult from '../super-admin/patients/history/book-appointment/appointment-filters-result';
+import AppointmentList from '../super-admin/patients/history/book-appointment/appointment-list-user';
+import AppointmentSort from '../super-admin/patients/history/book-appointment/appointment-sort-user';
+import AppointmentSearch from '../super-admin/patients/history/book-appointment/appointment-search-user';
+import AppointmentFilters from '../super-admin/patients/history/book-appointment/appointment-filters-user';
+import AppointmentFiltersResult from '../super-admin/patients/history/book-appointment/appointment-filters-result-user';
 
 // ----------------------------------------------------------------------
 
@@ -78,7 +78,7 @@ export default function AppointmentBooking({ patientData }) {
     filters.Offer_start_date && filters.Offer_end_date
       ? filters.Offer_start_date.getTime() > filters.Offer_end_date.getTime()
       : false;
-
+console.log(appointmentsData);
   const dataFiltered = applyFilter({
     inputData: appointmentsData,
     filters,
