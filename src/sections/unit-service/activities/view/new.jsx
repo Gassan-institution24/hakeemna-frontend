@@ -17,17 +17,17 @@ export default function TableCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new Activity"
+        heading={t("Create a new activity")}
         links={[
           {
             name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: 'Activities',
+            name: t('activities'),
             href: paths.unitservice.activities.root,
           },
-          { name: 'New Activity' },
+          { name: t('new') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

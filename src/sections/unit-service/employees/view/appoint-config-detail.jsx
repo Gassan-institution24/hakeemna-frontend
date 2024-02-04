@@ -25,6 +25,7 @@ import { _addressBooks } from 'src/_mock';
 import axios, { endpoints } from 'src/utils/axios';
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetEmployeeEngagement } from 'src/api/tables';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 
@@ -37,6 +38,10 @@ import NewEditDetails from '../appointmentConfig/new-edit-details';
 
 export default function AppointConfigNewEditForm({ appointmentConfigData, refetch, loading }) {
   const router = useRouter();
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { id } = useParams();
 
@@ -169,16 +174,16 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       work_group: appointmentConfigData?.work_group?._id || null,
       work_shift: appointmentConfigData?.work_shift?._id || null,
       days_details: appointmentConfigData?.days_details || [
-        {
-          day: '',
-          work_start_time: null,
-          work_end_time: null,
-          break_start_time: null,
-          break_end_time: null,
-          appointments: [],
-          service_types: [],
-          appointment_type: null,
-        },
+        // {
+        //   day: '',
+        //   // work_start_time: null,
+        //   // work_end_time: null,
+        //   // break_start_time: null,
+        //   // break_end_time: null,
+        //   appointments: [],
+        //   // service_types: [],
+        //   appointment_type: null,
+        // },
       ],
     }),
     [appointmentConfigData, user?.employee, employeeInfo?.department]
@@ -194,10 +199,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     formState: { isSubmitting },
   } = methods;
 
-  console.log('isSubmitting', isSubmitting);
-  console.log('saving', saving);
-  console.log('updating', updating);
-
   const handleSaving = async () => {
     saving.onTrue();
     try {
@@ -205,13 +206,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ...dataToUpdate,
         ImmediateEdit: false,
       });
-      enqueueSnackbar('Updated successfully!');
+      enqueueSnackbar(t('updated successfully!'));
       saving.onFalse();
       confirm.onFalse();
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
     } catch (e) {
       saving.onFalse();
-      enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
+      enqueueSnackbar(t(`failed to update!`), { variant: 'error' });
     }
   };
   const handleUpdating = async () => {
@@ -223,13 +224,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       });
       updating.onFalse();
       confirm.onFalse();
-      enqueueSnackbar('Updated successfully!');
+      enqueueSnackbar(t('Updated successfully!'));
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
       // await refetch();
     } catch (e) {
       updating.onFalse();
       confirm.onFalse();
-      enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
+      enqueueSnackbar(t(`Failed to update!`), { variant: 'error' });
     }
   };
 
@@ -259,7 +260,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         updating.onTrue();
         await axios.post(endpoints.tables.appointmentconfigs, data);
         updating.onFalse();
-        enqueueSnackbar('Added Successfully!');
+        enqueueSnackbar(t('added successfully!'));
         router.push(paths.unitservice.employees.appointmentconfig.root(id));
       }
       // reset();
@@ -267,7 +268,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
       console.log(error);
-      enqueueSnackbar(`Failed to Add: ${error}`, { variant: 'error' });
+      enqueueSnackbar(t(`failed to add!`), { variant: 'error' });
       console.error(error);
       loadingSend.onFalse();
     }
@@ -339,7 +340,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
               loading={isSubmitting || saving.value || updating.value}
               onClick={handleSave}
             >
-              Save
+              {t('save')}
             </LoadingButton>
           </Stack>
         </FormProvider>
@@ -373,14 +374,28 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           ) : (
             <>
               <Typography variant="body1" component="h6" sx={{ mt: 1 }}>
-                Do you want to change your existance appointments?
+                {curLangAr
+                  ? 'هل تريد تغيير المواعيد المنشأة مسبقا؟'
+                  : 'Do you want to change your existance appointments?'}
               </Typography>
-              <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
-                press<strong> yes</strong> to change existance appointments
-              </Typography>
-              <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
-                press<strong> No</strong> to start changing when creating new appointments
-              </Typography>
+              {curLangAr ? (
+                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                  اضغط <strong> نعم </strong> لتغيير المواعيد المنشأة
+                </Typography>
+              ) : (
+                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                  press<strong> yes</strong> to change existance appointments
+                </Typography>
+              )}
+              {curLangAr ? (
+                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                  اضغط <strong> لا </strong> لحفظ الاعدادات للبدء من المواعيد التي يراد إنشائها
+                </Typography>
+              ) : (
+                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                  press<strong> No</strong> to start changing when creating new appointments
+                </Typography>
+              )}
             </>
           )
         }
@@ -392,7 +407,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
               color="warning"
               onClick={handleUpdating}
             >
-              Yes
+              {t('yes')}
             </LoadingButton>
             <LoadingButton
               disabled={updating.value}
@@ -401,7 +416,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
               color="success"
               onClick={handleSaving}
             >
-              No
+              {t('no')}
             </LoadingButton>
           </>
         }

@@ -139,7 +139,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
           <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>Invoice from</Text>
             <Text style={styles.body2}>
-              {patient.first_name} {patient.last_name}
+              {patient.first_name} {patient.family_name}
             </Text>
             <Text style={styles.body2}>
               {patient.country}

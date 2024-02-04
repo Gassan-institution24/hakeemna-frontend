@@ -17,12 +17,15 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function NewEditHolidays() {
+  const { t } = useTranslate();
+
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -72,6 +75,7 @@ export default function NewEditHolidays() {
                 sx={{ width: { xs: '100%', md: 'auto' } }}
               >
                 <RHFTextField
+              lang="ar"
                   size="small"
                   name={`holidays[${index}].description`}
                   label="Description"
@@ -82,7 +86,7 @@ export default function NewEditHolidays() {
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
-                      label="Date"
+                      label={t('date')}
                       // sx={{ flex: 1 }}
                       value={
                         new Date(values.holidays[index].date ? values.holidays[index].date : '')

@@ -117,16 +117,16 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     appointmentConfigData.filter((item) => item.status === status).length;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: appointmentConfigData.length },
+    { value: 'all', label: t('all'), color: 'default', count: appointmentConfigData.length },
     {
       value: 'active',
-      label: 'Active',
+      label: t('active'),
       color: 'success',
       count: getConfigLength('active'),
     },
     {
       value: 'inactive',
-      label: 'Inactive',
+      label: t('inactive'),
       color: 'error',
       count: getConfigLength('inactive'),
     },
@@ -242,6 +242,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                 iconPosition="end"
                 icon={
                   <Label
+                    lang="ar"
                     variant={
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }

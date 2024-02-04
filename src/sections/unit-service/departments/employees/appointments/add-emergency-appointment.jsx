@@ -24,6 +24,7 @@ import { useRouter } from 'src/routes/hooks';
 import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
 import { useGetAppointmentTypes, useGetServiceTypes, useGetWorkGroups } from 'src/api/tables';
 
+import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -33,6 +34,10 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
   const router = useRouter();
   const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { serviceTypesData } = useGetServiceTypes();
@@ -79,12 +84,11 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
     }
   });
 
-  console.log('serviceTypesData', serviceTypesData);
   return (
     <>
       <Dialog maxWidth="sm" onClose={onClose} {...other}>
         <FormProvider methods={methods} onSubmit={onSubmit}>
-          <DialogTitle> New Emergency Appointment </DialogTitle>
+          <DialogTitle>{curLangAr ? 'إنشاء موعد طوارئ جديد': 'New Emergency Appointment'}</DialogTitle>
 
           <DialogContent sx={{ overflow: 'unset' }}>
             <Stack spacing={2.5}>
@@ -101,8 +105,9 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
                   name="start_time"
                   render={({ field, fieldState: { error } }) => (
                     <MobileTimePicker
+              lang="ar"
                       minutesStep="5"
-                      label="Start Time"
+                      label={t("start time")}
                       onChange={(newValue) => {
                         setValue('start_time', newValue);
                       }}
@@ -120,61 +125,51 @@ export default function AddEmegencyAppointment({ onClose, ...other }) {
                   InputLabelProps={{ shrink: true }}
                   native
                   name="appointment_type"
-                  label="Appointment Type"
+                  label={t("appointment type")}
                 >
                   {appointmenttypesData.map((option) => (
-                    <MenuItem value={option._id}>{option.name_english}</MenuItem>
+                    <MenuItem value={option._id}>
+                      {curLangAr ? option?.name_arabic : option?.name_english}
+                    </MenuItem>
                   ))}
                 </RHFSelect>
                 <RHFMultiSelect
                   checkbox
                   name="services"
-                  label="services"
+                  label={t("services")}
                   options={serviceTypesData}
                 />
                 <RHFSelect
                   InputLabelProps={{ shrink: true }}
                   native
                   name="work_group"
-                  label="Work Group"
+                  label={t("work group")}
                 >
                   {workGroupsData.map((option) => (
-                    <MenuItem value={option._id}>{option.name_english}</MenuItem>
+                    <MenuItem value={option._id}>
+                      {curLangAr ? option?.name_arabic : option?.name_english}
+                    </MenuItem>
                   ))}
                 </RHFSelect>
               </Box>
 
-              <Stack
-                direction="row"
-                alignItems="center"
-                sx={{ typography: 'caption', color: 'text.disabled' }}
-              >
-                <Iconify icon="carbon:locked" sx={{ mr: 0.5 }} />
-                Your transaction is secured with SSL encryption
-              </Stack>
+
             </Stack>
           </DialogContent>
 
           <DialogActions>
             <Button color="inherit" variant="outlined" onClick={onClose}>
-              Cancel
+              {t('cancel')}
             </Button>
 
             <Button type="submit" variant="contained">
-              Add
+              {t('add')}
             </Button>
           </DialogActions>
         </FormProvider>
       </Dialog>
 
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="bottom-center"
-        sx={{ maxWidth: 200, typography: 'body2', textAlign: 'center' }}
-      >
-        Three-digit number on the back of your VISA card
-      </CustomPopover>
+      
     </>
   );
 }

@@ -204,10 +204,10 @@ export default function TableNewEditForm({ acl }) {
             </Typography>
             {Object.keys(values[name]).map((subCategory) => (
               <TableRow key={subCategory}>
-                <TableCell component="th" scope="row">
+                <TableCell lang="ar" component="th" scope="row">
                   {subCategory}
                 </TableCell>
-                <TableCell align="center">
+                <TableCell lang="ar" align="center">
                   <RHFMultiCheckbox
                     name={`${name}.${subCategory}`}
                     options={options}

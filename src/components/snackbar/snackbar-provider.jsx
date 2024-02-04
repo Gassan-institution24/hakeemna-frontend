@@ -26,7 +26,7 @@ export default function SnackbarProvider({ children }) {
       autoHideDuration={3000}
       TransitionComponent={isRTL ? Collapse : undefined}
       variant="success" // Set default variant
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: 'top', horizontal: isRTL?'left':'right' }}
       iconVariant={{
         info: (
           <StyledIcon color="info">

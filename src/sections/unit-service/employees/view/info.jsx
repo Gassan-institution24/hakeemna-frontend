@@ -11,8 +11,9 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDate } from 'src/utils/format-time';
+import { fMonth } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
+import { useLocales, useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 
 import Label from 'src/components/label/label';
@@ -24,7 +25,7 @@ import Markdown from 'src/components/markdown';
 export default function EmployeeInfoContent({ employeeData }) {
   const {
     first_name,
-    second_name,
+    middle_name,
     family_name,
     nationality,
     profrssion_practice_num,
@@ -48,6 +49,10 @@ export default function EmployeeInfoContent({ employeeData }) {
 
   const settings = useSettingsContext();
 
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const renderOverview = (
     <Stack component={Card} spacing={2} sx={{ p: 3 }}>
       <Box
@@ -61,107 +66,107 @@ export default function EmployeeInfoContent({ employeeData }) {
       >
         {[
           {
-            label: 'first_name',
+            label: t('first name'),
             value: first_name,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'second_name',
-            value: second_name,
+            label: t('middle name'),
+            value: middle_name,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'family_name',
+            label: t('family name'),
             value: family_name,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'gender',
-            value: gender,
+            label: t('gender'),
+            value: t(gender),
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'nationality',
-            value: nationality?.userName,
+            label: t('nationality'),
+            value: curLangAr?nationality?.name_arabic:nationality?.name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'Unit Service',
-            value: unit_service?.name_english,
+            label: t('unit service'),
+            value: curLangAr?unit_service?.name_arabic:unit_service?.name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'department',
-            value: department?.name_english,
+            label: t('department'),
+            value: curLangAr?department?.name_arabic:department?.name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'employee_type',
-            value: employee_type?.name_english,
+            label: t('employee type'),
+            value: curLangAr?employee_type?.name_arabic:employee_type?.name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'speciality',
-            value: speciality?.name_english,
+            label: t('specialty'),
+            value: curLangAr?speciality?.name_arabic:speciality?.name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'email',
+            label: t('email'),
             value: email,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'Identification Number',
+            label: t('ID number'),
             value: identification_num,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'profrssion_practice_num',
+            label: t('profrssion practice number'),
             value: profrssion_practice_num,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'Tax Number',
+            label: t('tax number'),
             value: tax_num,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'address',
+            label: t('address'),
             value: address,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'Web Page',
+            label: t('webpage'),
             value: web_page,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'Phone Number',
+            label: t('phone'),
             value: phone,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'Mobile Number',
+            label: t('mobile Number'),
             value: mobile_num,
             icon: <Iconify icon="solar:clock-circle-bold" />,
           },
           {
-            label: 'birth_date',
-            value: birth_date,
+            label: t('birth date'),
+            value: fMonth(birth_date),
             icon: <Iconify icon="solar:wad-of-money-bold" />,
           },
           {
-            label: 'Bachelor_year_graduation',
+            label: t('bachelor year graduation'),
             value: Bachelor_year_graduation,
             icon: <Iconify icon="solar:wad-of-money-bold" />,
           },
           {
-            label: 'University_graduation_Bachelor',
+            label: t('university graduation bachelor'),
             value: University_graduation_Bachelor,
             icon: <Iconify icon="solar:wad-of-money-bold" />,
           },
           {
-            label: 'University_graduation_Specialty',
+            label: t('university graduation specialty'),
             value: University_graduation_Specialty,
             icon: <Iconify icon="solar:wad-of-money-bold" />,
           },

@@ -70,7 +70,7 @@ export default function MovementTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        {/* <TableCell padding="checkbox">
+        {/* <TableCell lang="ar" padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell> */}
 
@@ -97,7 +97,7 @@ export default function MovementTableRow({
           /> */}
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           <ListItemText
             primary={curLangAr ? unit_service?.name_arabic: unit_service?.name_english}
             secondary={employee?.first_name}
@@ -110,7 +110,7 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           <ListItemText
             primary={appointment?.code}
             secondary={
@@ -127,16 +127,17 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell align="center">{curLangAr ? stakeholder?.name_arabic: stakeholder?.name_english}</TableCell>
-        <TableCell align="center">{Provided_services.length}</TableCell>
+        <TableCell lang="ar" align="center">{curLangAr ? stakeholder?.name_arabic: stakeholder?.name_english}</TableCell>
+        <TableCell lang="ar" align="center">{Provided_services.length}</TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           {Currency?.symbol}
           {Balance}
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           <Label
+                    lang="ar"
             variant="soft"
             color={
               (status === 'paid' && 'success') ||
@@ -149,7 +150,7 @@ export default function MovementTableRow({
         </Label>
         </TableCell>
 
-        <TableCell align="right" sx={{ px: 1 }}>
+        <TableCell lang="ar" align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>

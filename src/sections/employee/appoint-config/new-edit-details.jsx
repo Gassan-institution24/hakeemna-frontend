@@ -12,6 +12,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
 
+import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/hooks';
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
@@ -29,6 +30,10 @@ const weekDays = [
 ];
 
 export default function NewEditDetails({ appointmentConfigData, setAppointTime }) {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const { control, watch, getValues, setValue } = useFormContext();
 
   const values = getValues();
@@ -60,7 +65,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             control={control}
             render={({ field, fieldState: { error } }) => (
               <DatePicker
-                label="Start Date"
+                label={t("start date")}
                 // sx={{ flex: 1 }}
                 value={new Date(values.start_date || '')}
                 onChange={(newValue) => {
@@ -82,7 +87,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             control={control}
             render={({ field, fieldState: { error } }) => (
               <DatePicker
-                label="End Date"
+                label={t('end date')}
                 // sx={{ flex: 1 }}
                 value={new Date(values.end_date || '')}
                 onChange={(newValue) => {
@@ -108,21 +113,21 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           <RHFSelect
             size="small"
             name="work_shift"
-            label="Work Shift"
+            label={t("work shift")}
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
           >
             {workShiftsData.map((option) => (
               <MenuItem key={option._id} value={option._id}>
-                {option.name_english}
+                {curLangAr ? option?.name_arabic: option?.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect
             size="small"
             name="work_group"
-            label="Work Group"
+            label={t("work group")}
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
@@ -130,7 +135,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             {workGroupsData &&
               workGroupsData?.map((option) => (
                 <MenuItem key={option._id} value={option._id}>
-                  {option.name_english}
+                  {curLangAr ? option?.name_arabic: option?.name_english}
                 </MenuItem>
               ))}
           </RHFSelect>
@@ -160,6 +165,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             )}
           />
           <RHFTextField
+              lang="ar"
             size="small"
             InputProps={{
               startAdornment: (

@@ -17,12 +17,17 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
+import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function NewEditLongHolidays() {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -52,7 +57,7 @@ export default function NewEditLongHolidays() {
           variant="p"
           sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
         >
-          Long Holidays:
+          {curLangAr?'عطل طويلة':'Long Holidays'}:
         </Typography>
 
         <Stack
@@ -73,9 +78,10 @@ export default function NewEditLongHolidays() {
                 sx={{ width: { xs: '100%', md: 'auto' } }}
               >
                 <RHFTextField
+              lang="ar"
                   size="small"
                   name={`long_holidays[${index}].description`}
-                  label="Description"
+                  label={t("description")}
                   // sx={{ flex: 2 }}
                 />
                 <Controller
@@ -83,7 +89,7 @@ export default function NewEditLongHolidays() {
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
-                      label="Start Date"
+                      label={t("start date")}
                       // sx={{ flex: 1 }}
                       value={
                         new Date(
@@ -111,7 +117,7 @@ export default function NewEditLongHolidays() {
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
-                      label="End Date"
+                      label={t('end date')}
                       // sx={{ flex: 1 }}
                       value={
                         new Date(
@@ -161,7 +167,7 @@ export default function NewEditLongHolidays() {
             sx={{ padding: 1 }}
             onClick={handleAdd}
           >
-            Add Long Holiday
+            {curLangAr?'إضافة عطل طويلة':'add long holiday'}
           </Button>
         </Stack>
       </Box>

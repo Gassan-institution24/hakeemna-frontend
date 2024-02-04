@@ -21,11 +21,16 @@ import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import axios from 'axios';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ departmentData, currentTable }) {
   const router = useRouter();
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
 
@@ -108,7 +113,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       }
       reset();
       router.push(paths.unitservice.departments.activities.root(departmentData._id));
-      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
 
       console.info('DATA', data);
     } catch (error) {
@@ -131,34 +136,38 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
               }}
             >
               <RHFTextField
+              lang="ar"
                 lang="en"
                 onChange={handleEnglishInputChange}
                 name="name_english"
-                label="name english"
+                label={t('name english')}
               />
               <RHFTextField
+              lang="ar"
                 lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
-                label="name arabic"
+                label={t('name arabic')}
               />
               <RHFTextField
+              lang="ar"
                 lang="en"
                 onChange={handleEnglishInputChange}
                 name="details"
-                label="Details"
+                label={t('details')}
               />
               <RHFTextField
+              lang="ar"
                 lang="ar"
                 onChange={handleArabicInputChange}
                 name="details_arabic"
-                label="Details Arabic"
+                label={t('details arabic')}
               />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentTable ? 'Create' : 'Save Changes'}
+                {!currentTable ? t('create') : t('save changes')}
               </LoadingButton>
             </Stack>
           </Card>

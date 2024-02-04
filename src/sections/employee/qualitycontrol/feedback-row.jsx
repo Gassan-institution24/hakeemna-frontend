@@ -47,21 +47,21 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
 
   const renderPrimary = (
     <TableRow hover>
-      <TableCell align="center">{code}</TableCell>
-      <TableCell
+      <TableCell lang="ar"  align="center">{code}</TableCell>
+      <TableCell lang="ar" 
         align="center"
         onClick={() => setFilters({ ...filters, name: appointment?.name_english })}
       >
         {appointment?.code}
       </TableCell>
-      <TableCell
+      <TableCell lang="ar" 
         align="center"
         onClick={() => setFilters({ ...filters, name: employee?.name_english })}
       >
         {employee?.name_english}
       </TableCell>
-      <TableCell align="center">{title}</TableCell>
-      <TableCell align="center">
+      <TableCell lang="ar"  align="center">{title}</TableCell>
+      <TableCell lang="ar"  align="center">
         <Label
           variant="soft"
           color={(status === 'read' && 'success') || (status === 'unread' && 'error') || 'default'}
@@ -69,11 +69,11 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
           {t(status)}
         </Label>
       </TableCell>
-      <TableCell align="center">{Body}</TableCell>
-      <TableCell>
+      <TableCell lang="ar"  align="center">{Body}</TableCell>
+      <TableCell lang="ar" >
         <Rating size="small" readOnly value={Rate} precision={0.1} max={5} />
       </TableCell>
-      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      <TableCell lang="ar"  align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
         </IconButton>

@@ -83,20 +83,20 @@ export default function AppointmentsTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
+        <TableCell lang="ar"  padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell align="center">{code}</TableCell>
-        <TableCell align="center">{appoint_number}</TableCell>
-        <TableCell align="center">{curLangAr ? appointment_type?.name_arabic: appointment_type?.name_english}</TableCell>
-        <TableCell align="center">{curLangAr ? work_group?.name_arabic: work_group?.name_english}</TableCell>
-        <TableCell align="center">{curLangAr ? work_shift?.name_arabic: work_shift?.name_english}</TableCell>
-        <TableCell align="center">
+        <TableCell lang="ar"  align="center">{code}</TableCell>
+        <TableCell lang="ar"  align="center">{appoint_number}</TableCell>
+        <TableCell lang="ar"  align="center">{curLangAr ? appointment_type?.name_arabic: appointment_type?.name_english}</TableCell>
+        <TableCell lang="ar"  align="center">{curLangAr ? work_group?.name_arabic: work_group?.name_english}</TableCell>
+        <TableCell lang="ar"  align="center">{curLangAr ? work_shift?.name_arabic: work_shift?.name_english}</TableCell>
+        <TableCell lang="ar"  align="center">
           {patient?.first_name} {patient?.last_name}
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar"  align="center">
           <ListItemText
             primary={
               isValid(new Date(start_time)) &&
@@ -119,7 +119,7 @@ export default function AppointmentsTableRow({
           />
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar"  align="center">
           <Label
             variant="soft"
             color={
@@ -136,7 +136,7 @@ export default function AppointmentsTableRow({
         </Label>
         </TableCell>
 
-        <TableCell align="right" sx={{ px: 1 }}>
+        <TableCell lang="ar"  align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
@@ -179,7 +179,7 @@ export default function AppointmentsTableRow({
               sx={{ color: 'error.main' }}
             >
               <Iconify icon="mdi:bell-cancel" />
-              Cancel
+              {t('cancel')}
             </MenuItem>
           )}
         {status === 'canceled' &&
@@ -192,7 +192,7 @@ export default function AppointmentsTableRow({
               sx={{ color: 'success.main' }}
             >
               <Iconify icon="material-symbols-light:notifications-active-rounded" />
-              uncancel
+              {t('uncancel')}
             </MenuItem>
           )}
         {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
@@ -256,7 +256,7 @@ export default function AppointmentsTableRow({
       <ConfirmDialog
         open={confirmDelayOne.value}
         onClose={confirmDelayOne.onFalse}
-        title="Delay"
+        title={t("delay")}
         content={
           <>
             How many minutes do you want to delay?
@@ -284,8 +284,8 @@ export default function AppointmentsTableRow({
               onDelayRow(_id, minToDelay);
             }}
           >
-            Delay
-          </Button>
+            {t('delay')}         
+            </Button>
         }
       />
     </>

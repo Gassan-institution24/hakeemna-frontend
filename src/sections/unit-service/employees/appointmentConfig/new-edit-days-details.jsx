@@ -30,22 +30,27 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
+import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import NewEditDayAppointmentsDetails from './new-edit-days-appointments-details';
 
 // ----------------------------------------------------------------------
-const weekDays = [
-  { value: 'saturday', label: 'Saturday' },
-  { value: 'sunday', label: 'Sunday' },
-  { value: 'monday', label: 'Monday' },
-  { value: 'tuesday', label: 'Tuesday' },
-  { value: 'wednesday', label: 'Wednesday' },
-  { value: 'thursday', label: 'Thursday' },
-  { value: 'friday', label: 'Friday' },
-];
-
 export default function NewEditDayDetails({ appointTime }) {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
+  const weekDays = [
+    { value: 'saturday', label: t('Saturday') },
+    { value: 'sunday', label: t('Sunday') },
+    { value: 'Monday', label: t('Monday') },
+    { value: 'tuesday', label: t('Tuesday') },
+    { value: 'wednesday', label: t('Wednesday') },
+    { value: 'thursday', label: t('Thursday') },
+    { value: 'friday', label: t('Friday') },
+  ];
+
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -259,7 +264,7 @@ export default function NewEditDayDetails({ appointTime }) {
           variant="p"
           sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
         >
-          Days Details:
+          {curLangAr?'تفاصيل اليوم':'Days Details'}:
         </Typography>
 
         <Stack
@@ -285,7 +290,7 @@ export default function NewEditDayDetails({ appointTime }) {
                   spacing={2}
                   sx={{ width: '100%', mt: 2 }}
                 >
-                  <RHFSelect size="small" name={`days_details[${index}].day`} label="Day">
+                  <RHFSelect size="small" name={`days_details[${index}].day`} label={t("day")}>
                     {weekDays
                       .filter(
                         (option) =>
@@ -301,10 +306,11 @@ export default function NewEditDayDetails({ appointTime }) {
                       ))}
                   </RHFSelect>
                   <RHFTextField
+              lang="ar"
                     disabled
                     size="small"
                     name={`days_details[${index}].appointment_number`}
-                    label="Appointments Number"
+                    label={t("appointments number")}
                     InputLabelProps={{ shrink: true }}
                     value={appointmentsNum[index] || appointEstimatedNum(index)}
                   />
@@ -319,8 +325,9 @@ export default function NewEditDayDetails({ appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
+              lang="ar"
                         minutesStep="5"
-                        label="Work Start Time"
+                        label={t("work start time")}
                         value={
                           values.days_details[index].work_start_time
                             ? new Date(values.days_details[index].work_start_time)
@@ -345,8 +352,9 @@ export default function NewEditDayDetails({ appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
+              lang="ar"
                         minutesStep="5"
-                        label="Break Start Time"
+                        label={t("break start time")}
                         value={
                           values.days_details[index].break_start_time
                             ? new Date(values.days_details[index].break_start_time)
@@ -377,8 +385,9 @@ export default function NewEditDayDetails({ appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
+              lang="ar"
                         minutesStep="5"
-                        label="Work End Time"
+                        label={t("work end time")}
                         value={
                           values.days_details[index].work_end_time
                             ? new Date(values.days_details[index].work_end_time)
@@ -403,8 +412,9 @@ export default function NewEditDayDetails({ appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
+              lang="ar"
                         minutesStep="5"
-                        label="Break End Time"
+                        label={t("break end time")}
                         value={
                           values.days_details[index].break_end_time
                             ? new Date(values.days_details[index].break_end_time)
@@ -434,10 +444,12 @@ export default function NewEditDayDetails({ appointTime }) {
                     size="small"
                     InputLabelProps={{ shrink: true }}
                     name={`days_details[${index}].appointment_type`}
-                    label="Appointment Type"
+                    label={t('appointment type')}
                   >
                     {appointmenttypesData?.map((option) => (
-                      <MenuItem value={option._id}>{option.name_english}</MenuItem>
+                      <MenuItem value={option._id}>
+                        {curLangAr ? option?.name_arabic : option?.name_english}
+                      </MenuItem>
                     ))}
                   </RHFSelect>
                   <Controller
@@ -449,13 +461,13 @@ export default function NewEditDayDetails({ appointTime }) {
                         size="small"
                         sx={{ width: '100%', shrink: true }}
                       >
-                        <InputLabel> Service Types </InputLabel>
+                        <InputLabel> {t('service types')} </InputLabel>
 
                         <Select
                           {...field}
                           multiple
                           id={`multiple-days_details[${index}].service_types`}
-                          label="Service Types"
+                          label={t('service types')}
                           renderValue={renderValues}
                         >
                           {serviceTypesData?.map((option) => {
@@ -465,7 +477,7 @@ export default function NewEditDayDetails({ appointTime }) {
                               <MenuItem key={option._id} value={option._id}>
                                 <Checkbox size="small" disableRipple checked={selected} />
 
-                                {option.name_english}
+                                {curLangAr ? option?.name_arabic : option?.name_english}
                               </MenuItem>
                             );
                           })}
@@ -528,7 +540,7 @@ export default function NewEditDayDetails({ appointTime }) {
             onClick={handleAdd}
             // sx={{ flexShrink: 0 }}
           >
-            Add New Day
+            {curLangAr?'إضافة يوم جديد':'add new day'}
           </Button>
         </Stack>
       </Box>

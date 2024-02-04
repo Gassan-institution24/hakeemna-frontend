@@ -64,7 +64,7 @@ const NavItem = forwardRef(
 
         {title && (
           <Box component="span" sx={{ flex: '1 1 auto', minWidth: 0 }}>
-            <Box component="span" className="label">
+            <Box component="span" className="label" lang="ar">
               {title}
             </Box>
 

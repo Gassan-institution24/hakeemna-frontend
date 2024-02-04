@@ -4,6 +4,8 @@ import Stack from '@mui/material/Stack';
 import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 // ----------------------------------------------------------------------
 
 export default function TableSelectedAction({
@@ -16,6 +18,9 @@ export default function TableSelectedAction({
   color,
   ...other
 }) {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   if (!numSelected) {
     return null;
   }
@@ -59,7 +64,7 @@ export default function TableSelectedAction({
           }),
         }}
       >
-        {numSelected} selected
+        {numSelected} {t('selected')}
       </Typography>
 
       {action && action}

@@ -13,6 +13,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -25,6 +26,7 @@ export default function PaymentTableToolbar({
   dateError,
   serviceOptions,
 }) {
+  const { t } = useTranslate();
   const popover = usePopover();
 
   const handleFilterName = useCallback(
@@ -104,7 +106,7 @@ export default function PaymentTableToolbar({
         </FormControl>
 
         <DatePicker
-          label="Start date"
+          label={t("start date")}
           value={filters.startDate}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
@@ -114,7 +116,7 @@ export default function PaymentTableToolbar({
         />
 
         <DatePicker
-          label="End date"
+          label={t("end date")}
           value={filters.endDate}
           onChange={handleFilterEndDate}
           slotProps={{
@@ -161,7 +163,7 @@ export default function PaymentTableToolbar({
           }}
         >
           <Iconify icon="solar:printer-minimalistic-bold" />
-          Print
+          {t('print')}
         </MenuItem>
 
         <MenuItem
@@ -179,7 +181,7 @@ export default function PaymentTableToolbar({
           }}
         >
           <Iconify icon="solar:export-bold" />
-          Export
+          {t('export')}
         </MenuItem>
       </CustomPopover>
     </>

@@ -25,7 +25,7 @@ export default function EmployeeEngagementInfoContent({ employeeData }) {
   console.log('employeeData', employeeData);
   const {
     first_name,
-    second_name,
+    middle_name,
     family_name,
     nationality,
     profrssion_practice_num,
@@ -67,8 +67,8 @@ export default function EmployeeEngagementInfoContent({ employeeData }) {
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: 'second_name',
-            value: second_name,
+            label: 'middle_name',
+            value: middle_name,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {

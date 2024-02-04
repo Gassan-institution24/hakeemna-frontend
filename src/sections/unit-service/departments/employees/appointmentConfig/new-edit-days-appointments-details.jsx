@@ -24,6 +24,7 @@ import { inputBaseClasses } from '@mui/material/InputBase';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
+import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
 
@@ -37,6 +38,10 @@ export default function NewEditDayAppointmentsDetails({
   setAppointmentsNum,
 }) {
   const { control, setValue, watch, resetField, getValues } = useFormContext();
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -126,10 +131,12 @@ export default function NewEditDayAppointmentsDetails({
                   InputLabelProps={{ shrink: true }}
                   native
                   name={`days_details[${ParentIndex}].appointments[${index}].appointment_type`}
-                  label="Appointment Type"
+                  label={t("appointment type")}
                 >
                   {appointmenttypesData?.map((option) => (
-                    <MenuItem value={option._id}>{option.name_english}</MenuItem>
+                    <MenuItem value={option._id}>
+                      {curLangAr ? option?.name_arabic : option?.name_english}
+                    </MenuItem>
                   ))}
                 </RHFSelect>
 
@@ -138,8 +145,9 @@ export default function NewEditDayAppointmentsDetails({
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <MobileTimePicker
+              lang="ar"
                       minutesStep="5"
-                      label="Start Time"
+                      label={t("start time")}
                       value={
                         values.days_details[ParentIndex].appointments[index].start_time
                           ? new Date(
@@ -172,7 +180,7 @@ export default function NewEditDayAppointmentsDetails({
                         {...field}
                         multiple
                         id={`multiple-days_details[${ParentIndex}].appointments[${index}].service_types`}
-                        label="Service Types"
+                        label={t("service types")}
                         renderValue={renderValues}
                       >
                         {serviceTypesData?.map((option) => {
@@ -182,7 +190,7 @@ export default function NewEditDayAppointmentsDetails({
                             <MenuItem key={option._id} value={option._id}>
                               <Checkbox size="small" disableRipple checked={selected} />
 
-                              {option.name_english}
+                              {curLangAr ? option?.name_arabic : option?.name_english}
                             </MenuItem>
                           );
                         })}
@@ -193,6 +201,7 @@ export default function NewEditDayAppointmentsDetails({
                   )}
                 />
                 {/* <RHFTextField
+              lang="ar"
                   size="small"
                   name={`days_details[${ParentIndex}].appointments[${index}].price`}
                   label="Price"

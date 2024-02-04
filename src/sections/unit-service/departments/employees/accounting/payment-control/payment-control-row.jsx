@@ -75,13 +75,13 @@ export default function MovementTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        {/* <TableCell padding="checkbox">
+        {/* <TableCell lang="ar" padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell> */}
 
         <TableCell>{code}</TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           <ListItemText
             primary={curLangAr ? unit_service?.name_arabic: unit_service?.name_english}
             secondary={employee?.first_name}
@@ -94,7 +94,7 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           <ListItemText
             primary={curLangAr ? stakeholder?.name_arabic: stakeholder?.name_english}
             secondary={stakeholder?.unit_service?.name_english}
@@ -107,7 +107,7 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           <ListItemText
             primary={invoice?.code}
             secondary={
@@ -123,7 +123,7 @@ export default function MovementTableRow({
             }}
           />
         </TableCell>
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           <ListItemText
             primary={required_amount}
             // secondary={format(new Date(work_shift?.start_time), 'p')}
@@ -135,19 +135,20 @@ export default function MovementTableRow({
             // }}
           />
         </TableCell>
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           {isValid(new Date(due_date)) ? format(new Date(due_date), 'dd MMM yyyy') : ''}
         </TableCell>
 
-        <TableCell align="center">{fCurrency(amount)}</TableCell>
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">{fCurrency(amount)}</TableCell>
+        <TableCell lang="ar" align="center">
           {isValid(new Date(recieved_real_date))
             ? format(new Date(recieved_real_date), 'dd MMM yyyy')
             : ''}
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           <Label
+                    lang="ar"
             variant="soft"
             color={
               (status === 'paid' && 'success') ||
@@ -160,7 +161,7 @@ export default function MovementTableRow({
         </Label>
         </TableCell>
 
-        <TableCell align="right" sx={{ px: 1 }}>
+        <TableCell lang="ar" align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>

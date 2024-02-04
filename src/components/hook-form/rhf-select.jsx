@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useLocales } from 'src/locales';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -79,6 +80,9 @@ export function RHFMultiSelect({
   helperText,
   ...other
 }) {
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const { control } = useFormContext();
 
   const renderValues = (selectedIds) => {
@@ -92,13 +96,19 @@ export function RHFMultiSelect({
       return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
           {selectedItems.map((item) => (
-            <Chip key={item._id} size="small" label={item.name_english} />
+            <Chip
+              key={item._id}
+              size="small"
+              label={curLangAr ? item.name_arabic : item.name_english}
+            />
           ))}
         </Box>
       );
     }
 
-    return selectedItems.map((item) => item.name_english).join(', ');
+    return selectedItems
+      .map((item) => (curLangAr ? item.name_arabic : item.name_english))
+      .join(', ');
   };
 
   return (
@@ -125,7 +135,7 @@ export function RHFMultiSelect({
                 <MenuItem key={option._id} value={option._id}>
                   {checkbox && <Checkbox size="small" disableRipple checked={selected} />}
 
-                  {option.name_english}
+                  {curLangAr ? option.name_arabic : option.name_english}
                 </MenuItem>
               );
             })}

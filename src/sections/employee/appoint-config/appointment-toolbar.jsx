@@ -75,7 +75,7 @@ export default function ConfigTableToolbar({
         }}
       >
         <DatePicker
-          label="Date"
+          label={t("date")}
           value={filters.startDate}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
@@ -85,7 +85,7 @@ export default function ConfigTableToolbar({
         />
 
         <DatePicker
-          label="End date"
+          label={t("end date")}
           value={filters.endDate}
           onChange={handleFilterEndDate}
           slotProps={{
@@ -142,7 +142,7 @@ export default function ConfigTableToolbar({
           }}
         >
           <Iconify icon="solar:printer-minimalistic-bold" />
-          Print
+          {t('print')}
         </MenuItem>
 
         <MenuItem
@@ -151,7 +151,7 @@ export default function ConfigTableToolbar({
           }}
         >
           <Iconify icon="solar:export-bold" />
-          Export
+          {t('export')}
         </MenuItem>
       </CustomPopover>
     </>

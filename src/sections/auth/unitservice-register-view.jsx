@@ -79,7 +79,7 @@ export default function JwtRegisterView() {
     us_phone: Yup.string().required('Service unit phone is required'),
 
     em_first_name: Yup.string().required('Employee first name is required'),
-    em_second_name: Yup.string().required('Employee second name is required'),
+    em_middle_name: Yup.string().required('Employee middle name is required'),
     em_family_name: Yup.string().required('Employee family name is required'),
     em_nationality: Yup.string().required('Employee nationality is required'),
     em_identification_num: Yup.string().required('Employee ID number is required'),
@@ -107,7 +107,7 @@ export default function JwtRegisterView() {
     us_sector_type: '',
     us_phone: '',
     em_first_name: '',
-    em_second_name: '',
+    em_middle_name: '',
     em_family_name: '',
     em_nationality: null,
     em_identification_num: '',
@@ -369,8 +369,8 @@ export default function JwtRegisterView() {
         <RHFTextField
           lang="en"
           onChange={handleEnglishInputChange}
-          name="em_second_name"
-          label="Second name"
+          name="em_middle_name"
+          label="middle name"
         />
         <RHFTextField
           lang="en"

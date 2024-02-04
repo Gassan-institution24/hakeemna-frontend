@@ -27,7 +27,7 @@ export default function TableEditView({ workShiftData }) {
             name: t('work shifts'),
             href: paths.unitservice.tables.workshifts.root,
           },
-          { name: t('edit work shift') },
+          { name: t('edit') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

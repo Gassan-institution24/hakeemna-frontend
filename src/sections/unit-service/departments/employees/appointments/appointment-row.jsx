@@ -70,14 +70,14 @@ export default function AppointmentsTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
+        <TableCell lang="ar" padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell align="center">{code}</TableCell>
-        <TableCell align="center">{curLangAr ? appointment_type?.name_arabic: appointment_type?.name_english}</TableCell>
+        <TableCell lang="ar" align="center">{code}</TableCell>
+        <TableCell lang="ar" align="center">{curLangAr ? appointment_type?.name_arabic: appointment_type?.name_english}</TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           <ListItemText
             primary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
             secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMM yyyy')}
@@ -90,12 +90,13 @@ export default function AppointmentsTableRow({
           />
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           {currency?.symbol} {price}
         </TableCell>
 
-        <TableCell align="center">
+        <TableCell lang="ar" align="center">
           <Label
+                    lang="ar"
             variant="soft"
             color={
               (status === 'available' && 'secondary') ||
@@ -111,7 +112,7 @@ export default function AppointmentsTableRow({
         </Label>
         </TableCell>
 
-        <TableCell align="right" sx={{ px: 1 }}>
+        <TableCell lang="ar" align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
@@ -154,7 +155,7 @@ export default function AppointmentsTableRow({
         </MenuItem>
       </CustomPopover>
 
-      <CustomPopover
+            <CustomPopover
         open={DDL.open}
         onClose={DDL.onClose}
         arrow="right-top"
@@ -163,7 +164,7 @@ export default function AppointmentsTableRow({
           fontSize: '14px',
         }}
       >
-        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
             primary={format(new Date(created_at), 'dd MMM yyyy')}
@@ -175,30 +176,20 @@ export default function AppointmentsTableRow({
             }}
           />
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-          <ListItemText
-            primary={format(new Date(updated_at), 'dd MMM yyyy')}
-            secondary={format(new Date(updated_at), 'p')}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              component: 'span',
-              typography: 'caption',
-            }}
-          />
-        </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
       </CustomPopover>
     </>
   );

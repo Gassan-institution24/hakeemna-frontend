@@ -64,13 +64,13 @@ export default function TablesTableToolbar({
           width: { xs: 1, md: 200 },
         }}
       >
-        <InputLabel>rate</InputLabel>
+        <InputLabel>{t('rate')}</InputLabel>
 
         <Select
           multiple
           value={filters.rate}
           onChange={handleFilterRate}
-          input={<OutlinedInput label="Rate" />}
+          input={<OutlinedInput label={t("rate")} />}
           renderValue={(selected) => selected.map((value) => value).join(', ')}
           MenuProps={{
             PaperProps: {
@@ -110,7 +110,7 @@ export default function TablesTableToolbar({
           onClick={onResetFilters}
           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
         >
-          Clear
+          {t('clear')}
         </Button>
       )}
     </Stack>

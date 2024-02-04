@@ -279,6 +279,7 @@ export default function EmployeeTypesTable() {
                 label={tab.label}
                 icon={
                   <Label
+                    lang="ar"
                     variant={
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
@@ -497,7 +498,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         (data?.employees &&
           data?.employees?.some(
             (employee) =>
-              employee.employee.second_name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+              employee.employee.middle_name.toLowerCase().indexOf(name.toLowerCase()) !== -1
           )) ||
         (data?.employees &&
           data?.employees?.some(

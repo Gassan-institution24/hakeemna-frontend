@@ -19,13 +19,18 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import axios from 'axios';
-import axiosHandler from 'src/utils/axios-handler';
 import { useAuthContext } from 'src/auth/hooks';
+import axiosHandler from 'src/utils/axios-handler';
+import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ departmentData, currentTable }) {
   const router = useRouter();
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
   console.log('department ddd', departmentData);
@@ -108,7 +113,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
         });
       }
       reset();
-      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.unitservice.departments.rooms.root(departmentData._id));
       console.info('DATA', data);
     } catch (error) {
@@ -131,28 +136,31 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
               }}
             >
               <RHFTextField
+              lang="ar"
                 lang="en"
                 onChange={handleEnglishInputChange}
                 name="name_english"
-                label="name english"
+                label={t('name english')}
               />
               <RHFTextField
+              lang="ar"
                 lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
-                label="name arabic"
+                label={t('name arabic')}
               />
               <RHFTextField
+              lang="ar"
                 lang="en"
                 onChange={handleEnglishInputChange}
                 name="general_info"
-                label="general_info"
+                label={t('general info')}
               />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentTable ? 'Create' : 'Save Changes'}
+                {!currentTable ? t('create') : t('save changes')}
               </LoadingButton>
             </Stack>
           </Card>

@@ -23,7 +23,7 @@ export default function OldPatientsRow({ row, selected, onEmploymentRow }) {
   const {
     code,
     first_name,
-    second_name,
+    middle_name,
     family_name,
     identification_num,
     email,
@@ -34,19 +34,19 @@ export default function OldPatientsRow({ row, selected, onEmploymentRow }) {
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell align="center">
+      <TableCell lang="ar" align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell align="center">
-        {first_name} {second_name} {family_name}
+      <TableCell lang="ar" align="center">
+        {first_name} {middle_name} {family_name}
       </TableCell>
-      <TableCell align="center">{identification_num}</TableCell>
-      <TableCell align="center">{email}</TableCell>
-      <TableCell align="center">{phone}</TableCell>
-      <TableCell align="center">{files?.length}</TableCell>
+      <TableCell lang="ar" align="center">{identification_num}</TableCell>
+      <TableCell lang="ar" align="center">{email}</TableCell>
+      <TableCell lang="ar" align="center">{phone}</TableCell>
+      <TableCell lang="ar" align="center">{files?.length}</TableCell>
 
-      {/* <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      {/* <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton onClick={onEmploymentRow}>
           <Iconify icon="zondicons:user-add" />
         </IconButton>

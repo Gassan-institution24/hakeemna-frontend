@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -14,11 +14,13 @@ import TableNewEditForm from './table-new-edit-form';
 export default function TableCreateView({ departmentData }) {
   const settings = useSettingsContext();
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new Room"
+        heading={t('Create new room')}
         links={[
           {
             name: t('dashboard'),
@@ -29,10 +31,14 @@ export default function TableCreateView({ departmentData }) {
             href: paths.unitservice.departments.root,
           },
           {
-            name: `${departmentData.name_english || 'Department'} Rooms`,
+            name: `${
+              curLangAr
+                ? departmentData.name_arabic
+                : departmentData.name_english || t('Department')
+            } ${t('rooms')}`,
             href: paths.unitservice.departments.rooms.root(departmentData._id),
           },
-          { name: 'New Room' },
+          { name: t('new') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

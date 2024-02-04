@@ -30,6 +30,7 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
+import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import NewEditDayAppointmentsDetails from './new-edit-days-appointments-details';
@@ -54,6 +55,10 @@ export default function NewEditDayDetails({ appointTime }) {
   });
 
   const { user } = useAuthContext();
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const [showAppointments, setShowAppointments] = useState({});
   const [appointmentsNum, setAppointmentsNum] = useState({});
@@ -301,6 +306,7 @@ export default function NewEditDayDetails({ appointTime }) {
                       ))}
                   </RHFSelect>
                   <RHFTextField
+              lang="ar"
                     disabled
                     size="small"
                     name={`days_details[${index}].appointment_number`}
@@ -434,10 +440,12 @@ export default function NewEditDayDetails({ appointTime }) {
                     size="small"
                     InputLabelProps={{ shrink: true }}
                     name={`days_details[${index}].appointment_type`}
-                    label="Appointment Type"
+                    label={t("appointment type")}
                   >
                     {appointmenttypesData?.map((option) => (
-                      <MenuItem value={option._id}>{option.name_english}</MenuItem>
+                      <MenuItem value={option._id}>
+                        {curLangAr ? option?.name_arabic : option?.name_english}
+                      </MenuItem>
                     ))}
                   </RHFSelect>
                   <Controller
@@ -455,7 +463,7 @@ export default function NewEditDayDetails({ appointTime }) {
                           {...field}
                           multiple
                           id={`multiple-days_details[${index}].service_types`}
-                          label="Service Types"
+                          label={t("service types")}
                           renderValue={renderValues}
                         >
                           {serviceTypesData?.map((option) => {
@@ -465,7 +473,7 @@ export default function NewEditDayDetails({ appointTime }) {
                               <MenuItem key={option._id} value={option._id}>
                                 <Checkbox size="small" disableRipple checked={selected} />
 
-                                {option.name_english}
+                                {curLangAr ? option?.name_arabic : option?.name_english}
                               </MenuItem>
                             );
                           })}

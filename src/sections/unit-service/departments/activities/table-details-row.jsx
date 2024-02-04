@@ -60,19 +60,20 @@ export default function TableDetailsRow({
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
+      <TableCell lang="ar" padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell align="center">
+      <TableCell lang="ar" align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell align="center">{curLangAr ? name_arabic : name_english}</TableCell>
+      <TableCell lang="ar" align="center">{curLangAr ? name_arabic : name_english}</TableCell>
 
-      <TableCell align="center">{curLangAr ? details_arabic : details}</TableCell>
-      <TableCell align="center">
+      <TableCell lang="ar" align="center">{curLangAr ? details_arabic : details}</TableCell>
+      <TableCell lang="ar" align="center">
         <Label
+                    lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -82,7 +83,7 @@ export default function TableDetailsRow({
         </Label>
       </TableCell>
 
-      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
