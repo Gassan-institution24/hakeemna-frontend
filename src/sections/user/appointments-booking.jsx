@@ -82,6 +82,7 @@ export default function AppointmentBooking() {
     sortBy,
     dateError,
   });
+  console.log('filters',filters)
 
   const canReset = !isEqual(defaultFilters, filters);
 
@@ -147,7 +148,7 @@ export default function AppointmentBooking() {
         );
         // const tofilter = results.map((info)=>info._id)
         console.log('results', results);
-
+        
         setSearch((prevState) => ({
           ...prevState,
           results,
@@ -155,7 +156,8 @@ export default function AppointmentBooking() {
       }
     },
     [search.query, appointmentsData]
-  );
+    );
+    console.log('dataFiltered', dataFiltered);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);

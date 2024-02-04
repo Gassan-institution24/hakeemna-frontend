@@ -27,28 +27,6 @@ export default function Oldpatientsdata() {
   const [oldpatientsdata, setOldpatientsdata] = useState();
   const [oldDataId, setOlddataID] = useState();
 
-  const dataTosubmit = useMemo(
-    () => ( {
-    Mediacalreports: oldpatientsdata?.length ?[...user.patient.Mediacalreports,...oldpatientsdata[0].Mediacalreports]:[],
-    pregnant: user.patient.pregnant,
-    oldDrugsPrescriptions: oldpatientsdata?.length ?[...user.patient.oldDrugsPrescriptions.map((item)=>item._id) ,...oldpatientsdata[0].oldDrugsPrescriptions.map((item)=>item._id)]:[],
-    drug_allergies: oldpatientsdata?.length ?[...user.patient.drug_allergies.map((item)=>item._id),...oldpatientsdata[0].drug_allergies.map((item)=>item._id)]:[],
-    drugs_prescriptions: oldpatientsdata?.length ?[...user.patient.drugs_prescriptions.map((item)=>item._id) ,...oldpatientsdata[0].drugs_prescriptions.map((item)=>item._id)]:[],
-    diseases: oldpatientsdata?.length ?[...user.patient.diseases.map((item)=>item._id) ,...oldpatientsdata[0].diseases.map((item)=>item._id)]:[],
-    surgeries: oldpatientsdata?.length ?[...user.patient.surgeries.map((item)=>item._id) ,...oldpatientsdata[0].surgeries.map((item)=>item._id)]:[],
-    other_medication_notes: oldpatientsdata?.length ?[...user.patient.other_medication_notes,...oldpatientsdata[0].other_medication_notes]:[],
-    height: user?.patient?.height,
-    weight: user.patient.weight,
-    smoking: user?.patient?.smoking,
-    marital_status: oldpatientsdata?.length ? user.patient.marital_status : '',
-    upload_historical_reports: user.patient.upload_historical_reports,
-    insurance: oldpatientsdata?.length ?[...user.patient.insurance.map((item)=>item._id) ,...oldpatientsdata[0].insurance.map((item)=>item._id)]:[],
-    files: oldpatientsdata?.length ?[...user.patient.files,...oldpatientsdata[0].files]:[],
-    medicines: oldpatientsdata?.length ?[...user.patient.medicines.map((item)=>item._id) ,...oldpatientsdata[0].medicines.map((item)=>item._id)]:[],
-  }),[user.patient,oldpatientsdata]);
-
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,19 +54,17 @@ export default function Oldpatientsdata() {
     try {
       const existingDataResponse = await axios.get(endpoints.tables.patient(user.patient._id));
       const existingData = existingDataResponse.data;
-  
-      const updatedData = {};
-  
-      // Iterate over keys in dataTosubmit
-      Object.keys(dataTosubmit).forEach((key) => {
-        if (!isEqual(existingData[key], dataTosubmit[key])) {
-          // Update only if the data doesn't match
-          updatedData[key] = dataTosubmit[key];
+
+      const newData = { ...oldpatientsdata[0] };
+
+      Object.keys(user.patient).forEach((prop) => {
+        if (user.patient[prop] !== "") {
+          newData[prop] = user.patient[prop];
         }
       });
-  
-      const response = await axios.patch(endpoints.tables.patient(user.patient._id), updatedData);
-  
+
+      const response = await axios.patch(endpoints.tables.patient(user.patient._id), newData);
+
       enqueueSnackbar('Thanks for your cooperation, data saved to profile successfully', {
         variant: 'success',
       });
@@ -99,8 +75,7 @@ export default function Oldpatientsdata() {
       });
     }
   };
-  
-  
+
   const noFunction = async () => {
     try {
       const response = await axios.patch(`/api/oldpatientsdata/${oldDataId}/updateonboard`, {
