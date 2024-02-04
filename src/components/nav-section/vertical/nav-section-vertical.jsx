@@ -53,6 +53,7 @@ function Group({ subheader, items, slotProps }) {
             disableGutters
             disableSticky
             onClick={handleToggle}
+            lang="ar"
             sx={{
               fontSize: 11,
               cursor: 'pointer',
@@ -77,7 +78,7 @@ function Group({ subheader, items, slotProps }) {
           <Collapse in={open}>{renderContent}</Collapse>
         </>
       ) : (
-        renderContent
+         renderContent 
       )}
     </Stack>
   );

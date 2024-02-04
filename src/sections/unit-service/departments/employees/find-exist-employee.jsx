@@ -52,7 +52,7 @@ import ExistEmployeesRow from './exist-employees-row';
 
 // ----------------------------------------------------------------------
 
-export default function TableNewEditForm() {
+export default function TableNewEditForm({ departmentData }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -122,6 +122,7 @@ export default function TableNewEditForm() {
       await axios.post(endpoints.tables.employeeEngagements, {
         unit_service:
           user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+        department: departmentData._id,
         employee: id,
       });
       enqueueSnackbar(t('employment successfully!'));
@@ -270,3 +271,6 @@ export default function TableNewEditForm() {
     </Box>
   );
 }
+TableNewEditForm.propTypes = {
+  departmentData: PropTypes.object,
+};

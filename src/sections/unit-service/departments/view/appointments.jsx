@@ -324,6 +324,10 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
               name: t('dashboard'),
               href: paths.unitservice.root,
             },
+            {
+              name: t('departments'),
+              href: paths.unitservice.departments.root,
+            },
             { name: t('appointments') },
           ]}
           sx={{
@@ -347,6 +351,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
                 iconPosition="end"
                 icon={
                   <Label
+                    lang="ar"
                     variant={
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
@@ -539,7 +544,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
       <ConfirmDialog
         open={confirmDelay.value}
         onClose={confirmDelay.onFalse}
-        title="Delay"
+        title={t("delay")}
         content={
           <>
             How many minutes do you want to delay items?
@@ -567,8 +572,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
               handleDelayRows();
             }}
           >
-            Delay
-          </Button>
+            {t('delay')}         </Button>
         }
       />
     </>

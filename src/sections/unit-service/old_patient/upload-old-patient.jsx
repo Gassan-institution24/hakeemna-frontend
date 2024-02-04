@@ -43,6 +43,7 @@ import { useSettingsContext } from 'src/components/settings';
 
 import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api/tables';
 import axios, { endpoints } from 'src/utils/axios';
+import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
@@ -58,6 +59,10 @@ import ExistEmployeesRow from './old-patients-row';
 
 export default function UploadOldPatient({ refetch }) {
   const router = useRouter();
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const table = useTable({ defaultRowsPerPage: 10 });
 
@@ -75,7 +80,7 @@ export default function UploadOldPatient({ refetch }) {
   const NewUserSchema = Yup.object().shape({
     first_name: Yup.string().required('First name is required'),
     middle_name: Yup.string(),
-    last_name: Yup.string().required('Last name is required'),
+    family_name: Yup.string().required('family name is required'),
     identification_num: Yup.string(),
     phone: Yup.string().required('Phone is required'),
     files: Yup.array(),
@@ -88,7 +93,7 @@ export default function UploadOldPatient({ refetch }) {
       employee: user?.employee?._id,
       first_name: '',
       middle_name: '',
-      last_name: '',
+      family_name: '',
       identification_num: '',
       phone: '',
       files: [],
@@ -193,33 +198,35 @@ export default function UploadOldPatient({ refetch }) {
           }}
         >
           <RHFTextField
-            lang="en"
+            lang="ar"
             onChange={handleEnglishInputChange}
             name="first_name"
-            label="First name"
+            label={t('first name')}
           />
           <RHFTextField
-            lang="en"
+            lang="ar"
             onChange={handleEnglishInputChange}
             name="middle_name"
-            label="Middle name"
+            label={t("middle name")}
           />
           <RHFTextField
-            lang="en"
+            lang="ar"
             onChange={handleEnglishInputChange}
-            name="last_name"
-            label="Last name"
+            name="family_name"
+            label={t("family name")}
           />
-          <RHFTextField type="email" name="email" label="Email" />
+          <RHFTextField lang="ar" type="email" name="email" label={t('email')} />
           <RHFTextField
+            lang="ar"
             onChange={handleEnglishInputChange}
             name="identification_num"
-            label="ID number"
+            label={t('ID number')}
           />
           <RHFTextField
+            lang="ar"
             onChange={handleEnglishInputChange}
             name="phone"
-            label="Phone"
+            label={t('phone')}
             type="number"
           />
         </Box>

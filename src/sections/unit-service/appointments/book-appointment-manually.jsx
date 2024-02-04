@@ -26,6 +26,7 @@ import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/compo
 import { useGetCountries, useGetCities } from 'src/api/tables';
 import { useAuthContext } from 'src/auth/hooks';
 
+import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -39,6 +40,10 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
   const { user } = useAuthContext();
   const { id } = useParams();
 
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const [email, setEmail] = useState();
   const [identification_num, setID] = useState();
   const [mobile_num1, setPhoneNumber] = useState();
@@ -51,7 +56,7 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
 
   const NewUserSchema = Yup.object().shape({
     first_name: Yup.string().required('First name is required'),
-    last_name: Yup.string().required('Last name is required'),
+    family_name: Yup.string().required('family name is required'),
     identification_num: Yup.string().required('ID is required'),
     birth_date: Yup.date().nullable(),
     marital_status: Yup.string(),
@@ -67,7 +72,7 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
   const defaultValues = useMemo(
     () => ({
       first_name: '',
-      last_name: '',
+      family_name: '',
       identification_num: '',
       birth_date: null,
       marital_status: '',
@@ -157,7 +162,7 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
     reset({
       _id: info._id || null,
       first_name: info.first_name || '',
-      last_name: info.last_name || '',
+      family_name: info.family_name || '',
       identification_num: info.identification_num || '',
       birth_date: info.birth_date || '',
       marital_status: info.marital_status || '',
@@ -186,7 +191,7 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
             >
               We found a record with similar information for{' '}
               <strong>
-                {patient.first_name} {patient.last_name}
+                {patient.first_name} {patient.family_name}
               </strong>
               . Is this you?
               <br />
@@ -222,25 +227,30 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                   sm: 'repeat(2, 1fr)',
                 }}
               >
-                <RHFTextField name="first_name" label="First name" />
-                <RHFTextField name="last_name" label="Last name" />
                 <RHFTextField
+              lang="ar" name="first_name" label={t("first name")} />
+                <RHFTextField
+              lang="ar" name="family_name" label="family name" />
+                <RHFTextField
+              lang="ar"
                   onChange={(e) => {
                     setValue('email', e.target.value);
                     setEmail(e.target.value);
                   }}
                   name="email"
-                  label="Email"
+                  label={t("email")}
                 />
                 <RHFTextField
+              lang="ar"
                   onChange={(e) => {
                     setValue('identification_num', e.target.value);
                     setID(e.target.value);
                   }}
                   name="identification_num"
-                  label="ID number"
+                  label={t("ID number")}
                 />
                 <RHFTextField
+              lang="ar"
                   type="number"
                   onChange={(e) => {
                     setValue('mobile_num1', e.target.value);
@@ -249,7 +259,8 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                   name="mobile_num1"
                   label="Mobile number"
                 />
-                <RHFTextField type="number" name="mobile_num2" label="Additional mobile number" />
+                <RHFTextField
+              lang="ar" type="number" name="mobile_num2" label="Additional mobile number" />
                 <Controller
                   name="birth_date"
                   render={({ field, fieldState: { error } }) => (
@@ -272,11 +283,13 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                 <RHFSelect
                   native
                   name="nationality"
-                  label="Nationality"
+                  label={t("nationality")}
                   InputLabelProps={{ shrink: true }}
                 >
                   {countriesData.map((option) => (
-                    <MenuItem value={option._id}>{option.name_english}</MenuItem>
+                    <MenuItem value={option._id}>
+                      {curLangAr ? option?.name_arabic : option?.name_english}
+                    </MenuItem>
                   ))}
                 </RHFSelect>
                 <RHFSelect
@@ -287,7 +300,9 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                   InputLabelProps={{ shrink: true }}
                 >
                   {countriesData.map((option) => (
-                    <MenuItem value={option._id}>{option.name_english}</MenuItem>
+                    <MenuItem value={option._id}>
+                      {curLangAr ? option?.name_arabic : option?.name_english}
+                    </MenuItem>
                   ))}
                 </RHFSelect>
                 <RHFSelect
@@ -299,7 +314,7 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                 >
                   {cities.map((option) => (
                     <MenuItem key={option._id} value={option._id}>
-                      {option.name_english}
+                      {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
                 </RHFSelect>
@@ -315,43 +330,29 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                   <MenuItem value="separated">Separated</MenuItem>
                   <MenuItem value="divorced">Divorced </MenuItem>
                 </RHFSelect>
-                <RHFSelect name="gender" label="Gender" InputLabelProps={{ shrink: true }}>
+                <RHFSelect name="gender" label={t("gender")} InputLabelProps={{ shrink: true }}>
                   <MenuItem value="male">Male</MenuItem>
                   <MenuItem value="female">Female</MenuItem>
                 </RHFSelect>
               </Box>
 
-              <Stack
-                direction="row"
-                alignItems="center"
-                sx={{ typography: 'caption', color: 'text.disabled' }}
-              >
-                <Iconify icon="carbon:locked" sx={{ mr: 0.5 }} />
-                Your transaction is secured with SSL encryption
-              </Stack>
+
             </Stack>
           </DialogContent>
 
           <DialogActions>
             <Button color="inherit" variant="outlined" onClick={onClose}>
-              Cancel
+              {t('cancel')}
             </Button>
 
             <Button type="submit" variant="contained">
-              Add
+              {t('add')}
             </Button>
           </DialogActions>
         </FormProvider>
       </Dialog>
 
-      {/* <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="bottom-center"
-        sx={{ maxWidth: 200, typography: 'body2', textAlign: 'center' }}
-      >
-        Three-digit number on the back of your VISA card
-      </CustomPopover> */}
+      {/*  */}
     </>
   );
 }

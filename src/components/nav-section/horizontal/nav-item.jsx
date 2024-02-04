@@ -52,7 +52,7 @@ const NavItem = forwardRef(
         )}
 
         {title && (
-          <Box component="span" className="label">
+          <Box component="span" className="label" lang='ar'>
             {title}
           </Box>
         )}

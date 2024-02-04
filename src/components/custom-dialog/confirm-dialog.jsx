@@ -6,6 +6,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 // ----------------------------------------------------------------------
 
 export default function ConfirmDialog({
@@ -17,6 +19,9 @@ export default function ConfirmDialog({
   disabled,
   ...other
 }) {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose} {...other}>
       <DialogTitle sx={{ pb: 2 }}>{title}</DialogTitle>
@@ -27,7 +32,7 @@ export default function ConfirmDialog({
         {action}
 
         <Button variant="outlined" color="inherit" onClick={onClose} disabled={disabled}>
-          Cancel
+          {t('cancel')}
         </Button>
       </DialogActions>
     </Dialog>

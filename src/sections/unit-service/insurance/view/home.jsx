@@ -53,7 +53,7 @@ import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { enqueueSnackbar } from 'notistack';
 import { useGetInsuranceCos, useGetUnitservice } from 'src/api/tables';
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import InsuranceRow from '../insurance-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -70,6 +70,9 @@ const defaultFilters = {
 
 export default function UnitServicesInsuranceView() {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const TABLE_HEAD = [
     /// to edit
     { id: 'code', label: t('code') },
@@ -256,6 +259,7 @@ export default function UnitServicesInsuranceView() {
                 label={tab.label}
                 icon={
                   <Label
+                    lang="ar"
                     variant={
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
@@ -368,7 +372,7 @@ export default function UnitServicesInsuranceView() {
           {filteredInsuranceCos?.map((company) => (
             <MenuItem onClick={() => handleAddRow(company._id)}>
               {/* <Iconify icon="ic:baseline-add" /> */}
-              {company?.name_english}
+              {curLangAr?company?.name_arabic:company?.name_english}
             </MenuItem>
           ))}
         </div>

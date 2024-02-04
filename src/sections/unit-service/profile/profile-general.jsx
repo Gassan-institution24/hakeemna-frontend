@@ -19,8 +19,9 @@ import {
   useGetSpecialties,
   useGetUSTypes,
 } from 'src/api/tables';
-import axios, { endpoints, fetcher } from 'src/utils/axios';
 import { fData } from 'src/utils/format-number';
+import { useLocales, useTranslate } from 'src/locales';
+import axios, { endpoints, fetcher } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +41,10 @@ export default function AccountGeneral({ unitServiceData }) {
   const { tableData } = useGetCities();
   const { unitserviceTypesData } = useGetUSTypes();
   const { specialtiesData } = useGetSpecialties();
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   console.log('unitServiceData', data);
 
@@ -195,14 +200,18 @@ export default function AccountGeneral({ unitServiceData }) {
               }}
             >
               <RHFTextField
+              lang="ar"
                 disabled
                 variant="filled"
                 name="identification_num"
                 label="ID number :"
               />
-              <RHFTextField variant="filled" name="name_english" label="Name :" />
-              <RHFTextField type="email" variant="filled" name="email" label="Email :" />
-              <RHFTextField type="number" variant="filled" name="phone" label="Phone Number :" />
+              <RHFTextField
+              lang="ar" variant="filled" name="name_english" label="Name :" />
+              <RHFTextField
+              lang="ar" type="email" variant="filled" name="email" label="Email :" />
+              <RHFTextField
+              lang="ar" type="number" variant="filled" name="phone" label="Phone Number :" />
             </Box>
           </Card>
         </Grid>
@@ -261,7 +270,7 @@ export default function AccountGeneral({ unitServiceData }) {
               </RHFSelect>
 
               <RHFSelect
-                label="Speciality"
+                label={t('specialty')}
                 fullWidth
                 name="speciality"
                 InputLabelProps={{ shrink: true }}
@@ -284,12 +293,17 @@ export default function AccountGeneral({ unitServiceData }) {
                 <MenuItem value="privet">Privet</MenuItem>
                 <MenuItem value="charity">Charity</MenuItem>
               </RHFSelect>
-              <RHFTextField name="web_page" label="Web page" />
-              <RHFTextField type="number" name="mobile_num" label="Alternative mobile number" />
-              <RHFTextField name="location_gps" label="Location GPS" />
+              <RHFTextField
+              lang="ar" name="web_page" label="Web page" />
+              <RHFTextField
+              lang="ar" type="number" name="mobile_num" label="Alternative mobile number" />
+              <RHFTextField
+              lang="ar" name="location_gps" label="Location GPS" />
             </Box>
-            <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label="Address" />
             <RHFTextField
+              lang="ar" multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} />
+            <RHFTextField
+              lang="ar"
               multiline
               colSpan={14}
               rows={4}

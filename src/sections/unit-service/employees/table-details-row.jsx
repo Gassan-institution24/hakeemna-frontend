@@ -57,7 +57,7 @@ export default function UnitServiceEmployeesRow({
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
+      <TableCell lang="ar" padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
       <TableCell
@@ -82,20 +82,21 @@ export default function UnitServiceEmployeesRow({
       >
         {employee.first_name} {employee.family_name}
       </TableCell>
-      <TableCell align="center">{curLangAr ? employee.employee_type?.name_arabic: employee.employee_type?.name_english}</TableCell>
-      <TableCell align="center">{employee.email}</TableCell>
-      <TableCell align="center">{curLangAr ? employee.nationality?.name_arabic: employee.nationality?.name_english}</TableCell>
-      <TableCell align="center">
+      <TableCell lang="ar" align="center">{curLangAr ? employee.employee_type?.name_arabic: employee.employee_type?.name_english}</TableCell>
+      <TableCell lang="ar" align="center">{employee.email}</TableCell>
+      <TableCell lang="ar" align="center">{curLangAr ? employee.nationality?.name_arabic: employee.nationality?.name_english}</TableCell>
+      <TableCell lang="ar" align="center">
         <Iconify
           icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'}
           width={16}
         />
       </TableCell>
-      <TableCell align="center">
+      <TableCell lang="ar" align="center">
         <Iconify icon={Adjust_schedule ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
       </TableCell>
-      <TableCell align="center">
+      <TableCell lang="ar" align="center">
         <Label
+                    lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -105,7 +106,7 @@ export default function UnitServiceEmployeesRow({
         </Label>
       </TableCell>
 
-      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -167,24 +168,22 @@ export default function UnitServiceEmployeesRow({
           fontSize: '14px',
         }}
       >
-        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.employee.email}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-          {user_modification?.employee.email}
-        </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
       </CustomPopover>
     </>
   );

@@ -6,7 +6,7 @@ import { Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useSettingsContext } from 'src/components/settings';
@@ -21,6 +21,8 @@ import FindExistPatient from '../new/find-exist-employee';
 export default function TableCreateView({ employeeData }) {
   const settings = useSettingsContext();
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const [selectedPage, setSelectedPage] = useState();
   const select = useBoolean(true);
 
@@ -28,7 +30,7 @@ export default function TableCreateView({ employeeData }) {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={t('New employee')}
+          heading={t('new employee')}
           links={[
             {
               name: t('dashboard'),
@@ -38,7 +40,7 @@ export default function TableCreateView({ employeeData }) {
               name: t('employees'),
               href: paths.unitservice.employees.root,
             },
-            { name: t('New employee') },
+            { name: t('new') },
           ]}
           sx={{
             mb: { xs: 3, md: 5 },
@@ -52,18 +54,30 @@ export default function TableCreateView({ employeeData }) {
       <ConfirmDialog
         open={select.value}
         onClose={select.onFalse}
-        title="Does the employee have an account?"
+        title={curLangAr ? 'هل لدى الموظف حساب لدينا؟' : 'Does the employee have an account?'}
         content={
           <>
             {/* <Typography variant="body1" component="h6" sx={{ mt: 1 }}>
                 Do you want to change your existance appointments?
               </Typography> */}
-            <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
-              press<strong> yes</strong> to search for it and add it
-            </Typography>
-            <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
-              press<strong> No</strong> to create one
-            </Typography>
+            {curLangAr ? (
+              <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                اضغط<strong> نعم </strong> للبحث عنه واضافته
+              </Typography>
+            ) : (
+              <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                press<strong> yes</strong> to search for it and add it
+              </Typography>
+            )}
+            {curLangAr ? (
+              <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                اضغط<strong> لا</strong> لإنشاء حساب جديد
+              </Typography>
+            ) : (
+              <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                press<strong> No</strong> to create one
+              </Typography>
+            )}
           </>
         }
         action={
@@ -76,7 +90,7 @@ export default function TableCreateView({ employeeData }) {
                 select.onFalse(e);
               }}
             >
-              Yes
+              {t('yes')}
             </LoadingButton>
             <LoadingButton
               variant="contained"
@@ -86,7 +100,7 @@ export default function TableCreateView({ employeeData }) {
                 select.onFalse(e);
               }}
             >
-              No
+              {t('no')}
             </LoadingButton>
           </>
         }

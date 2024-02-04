@@ -72,7 +72,7 @@ export default function OrderTableToolbar({
             onClick={onResetFilters}
             startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
           >
-            Clear
+            {t('clear')}
           </Button>
         )}
       </Stack>
@@ -90,7 +90,7 @@ export default function OrderTableToolbar({
           }}
         >
           <Iconify icon="solar:printer-minimalistic-bold" />
-          Print
+          {t('print')}
         </MenuItem>
 
         <MenuItem
@@ -111,7 +111,7 @@ export default function OrderTableToolbar({
           }}
         >
           <Iconify icon="solar:export-bold" />
-          Export
+          {t('export')}
         </MenuItem> */}
       </CustomPopover>
     </>

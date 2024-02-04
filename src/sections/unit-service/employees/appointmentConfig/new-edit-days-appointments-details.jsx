@@ -24,6 +24,7 @@ import { inputBaseClasses } from '@mui/material/InputBase';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
+import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField, RHFMultiSelect, RHFCheckbox } from 'src/components/hook-form';
 
@@ -36,6 +37,10 @@ export default function NewEditDayAppointmentsDetails({
   serviceTypesData,
   setAppointmentsNum,
 }) {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -103,7 +108,7 @@ export default function NewEditDayAppointmentsDetails({
         {values.days_details[ParentIndex].appointments &&
           values.days_details[ParentIndex].appointments.length > 0 && (
             <Typography variant="p" sx={{ color: 'text.disabled', mb: 3, fontSize: 14 }}>
-              appointments:
+              {t('appointments')}:
             </Typography>
           )}
 
@@ -126,10 +131,12 @@ export default function NewEditDayAppointmentsDetails({
                   size="small"
                   InputLabelProps={{ shrink: true }}
                   name={`days_details[${ParentIndex}].appointments[${index}].appointment_type`}
-                  label="Appointment Type"
+                  label={t('appointment type')}
                 >
                   {appointmenttypesData?.map((option) => (
-                    <MenuItem value={option._id}>{option.name_english}</MenuItem>
+                    <MenuItem value={option._id}>
+                      {curLangAr ? option?.name_arabic : option?.name_english}
+                    </MenuItem>
                   ))}
                 </RHFSelect>
 
@@ -138,8 +145,9 @@ export default function NewEditDayAppointmentsDetails({
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <MobileTimePicker
+                      lang="ar"
                       minutesStep="5"
-                      label="Start Time"
+                      label={t('start time')}
                       value={
                         values.days_details[ParentIndex].appointments[index].start_time
                           ? new Date(
@@ -166,13 +174,13 @@ export default function NewEditDayAppointmentsDetails({
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <FormControl error={!!error} size="small" sx={{ width: '100%', shrink: true }}>
-                      <InputLabel> Service Types </InputLabel>
+                      <InputLabel> {t('service types')} </InputLabel>
 
                       <Select
                         {...field}
                         multiple
                         id={`multiple-days_details[${ParentIndex}].appointments[${index}].service_types`}
-                        label="Service Types"
+                        label={t('service types')}
                         renderValue={renderValues}
                       >
                         {serviceTypesData?.map((option) => {
@@ -182,7 +190,7 @@ export default function NewEditDayAppointmentsDetails({
                             <MenuItem key={option._id} value={option._id}>
                               <Checkbox size="small" disableRipple checked={selected} />
 
-                              {option.name_english}
+                              {curLangAr ? option?.name_arabic : option?.name_english}
                             </MenuItem>
                           );
                         })}
@@ -196,9 +204,10 @@ export default function NewEditDayAppointmentsDetails({
                   size="small"
                   InputLabelProps={{ shrink: true }}
                   name={`days_details[${ParentIndex}].appointments[${index}].online_available`}
-                  label={<Typography sx={{ fontSize: 12 }}>Online avaliable</Typography>}
+                  label={<Typography sx={{ fontSize: 12 }}>{t('online avaliable')}</Typography>}
                 />
                 {/* <RHFTextField
+              lang="ar"
                   size="small"
                   name={`days_details[${ParentIndex}].appointments[${index}].price`}
                   label="Price"
@@ -245,7 +254,7 @@ export default function NewEditDayAppointmentsDetails({
             onClick={handleAdd}
             // sx={{ flexShrink: 0 }}
           >
-            Add Detailed Appointment
+            {curLangAr ? 'إضافة مواعيد بالتفصيل' : 'Add Detailed Appointment'}
           </Button>
         </Stack>
       </Box>

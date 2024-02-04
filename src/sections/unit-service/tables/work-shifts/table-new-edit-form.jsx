@@ -22,6 +22,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFAutocomplete, RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import axios from 'axios';
+import { useTranslate } from 'src/locales';
 import axiosHandler from 'src/utils/axios-handler';
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -31,6 +32,8 @@ export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
   const { user } = useAuthContext();
+
+  const { t } = useTranslate();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -116,7 +119,7 @@ export default function TableNewEditForm({ currentTable }) {
         });
       }
       reset();
-      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.unitservice.tables.workshifts.root);
       console.info('DATA', data);
     } catch (error) {
@@ -138,16 +141,16 @@ export default function TableNewEditForm({ currentTable }) {
             }}
           >
             <RHFTextField
-              lang="en"
+              lang="ar"
               onChange={handleEnglishInputChange}
               name="name_english"
-              label="name english"
+              label={t('name english')}
             />
             <RHFTextField
               lang="ar"
               onChange={handleArabicInputChange}
               name="name_arabic"
-              label="name arabic"
+              label={t('name arabic')}
             />
             <Box
               rowGap={3}
@@ -163,14 +166,15 @@ export default function TableNewEditForm({ currentTable }) {
                 // control={control}
                 render={({ field, fieldState: { error } }) => (
                   <MobileTimePicker
+                    lang="ar"
                     minutesStep="5"
-                    label="Start time"
+                    label={t('start time')}
                     value={values.start_time ? new Date(values.start_time) : null}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
                     slotProps={{
-                      textField: {
+                      textField: { lang:"ar",
                         fullWidth: true,
                         error: !!error,
                         helperText: error?.message,
@@ -184,14 +188,15 @@ export default function TableNewEditForm({ currentTable }) {
                 // control={control}
                 render={({ field, fieldState: { error } }) => (
                   <MobileTimePicker
+                    lang="ar"
                     minutesStep="5"
-                    label="End time"
+                    label={t("end time")}
                     value={values.end_time ? new Date(values.end_time) : null}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
                     slotProps={{
-                      textField: {
+                      textField: { lang:"ar",
                         fullWidth: true,
                         error: !!error,
                         helperText: error?.message,
@@ -205,7 +210,7 @@ export default function TableNewEditForm({ currentTable }) {
 
           <Stack alignItems="flex-end" sx={{ mt: 3 }}>
             <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-              {!currentTable ? 'Create' : 'Save Changes'}
+              {!currentTable ? t('create') : t('save changes')}
             </LoadingButton>
           </Stack>
         </Card>

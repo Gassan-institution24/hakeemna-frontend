@@ -17,14 +17,14 @@ export default function TableCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t('create a new employee type')}
+        heading={t('create new employee type')}
         links={[
           {
             name: t('dashboard'),
             href: paths.unitservice.root,
           },
           {
-            name: t('employee type'),
+            name: t('employee types'),
             href: paths.unitservice.tables.employeetypes.root,
           },
           { name: t('new') },

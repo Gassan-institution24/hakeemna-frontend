@@ -17,12 +17,17 @@ import { fCurrency } from 'src/utils/format-number';
 
 import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
+import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function NewEditHolidays() {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -51,7 +56,7 @@ export default function NewEditHolidays() {
           variant="p"
           sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
         >
-          Holidays:
+          {curLangAr?'العطل':'Holidays'}:
         </Typography>
 
         <Stack
@@ -72,9 +77,10 @@ export default function NewEditHolidays() {
                 sx={{ width: { xs: '100%', md: 'auto' } }}
               >
                 <RHFTextField
+              lang="ar"
                   size="small"
                   name={`holidays[${index}].description`}
-                  label="Description"
+                  label={t("description")}
                   // sx={{ flex: 2 }}
                 />
                 <Controller
@@ -82,7 +88,7 @@ export default function NewEditHolidays() {
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
-                      label="Date"
+                      label={t('date')}
                       // sx={{ flex: 1 }}
                       value={
                         new Date(values.holidays[index].date ? values.holidays[index].date : '')
@@ -128,7 +134,7 @@ export default function NewEditHolidays() {
             sx={{ padding: 1 }}
             onClick={handleAdd}
           >
-            Add Holiday
+            {curLangAr?'إضافة أيام عطل':'add holiday'}
           </Button>
         </Stack>
       </Box>

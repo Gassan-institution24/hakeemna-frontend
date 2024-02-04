@@ -43,7 +43,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { endpoints } from 'src/utils/axios';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import axiosHandler from 'src/utils/axios-handler';
@@ -66,6 +66,9 @@ const defaultFilters = {
 
 export default function RoomsTableView({ departmentData }) {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
     { id: 'name', label: t('name') },
@@ -234,7 +237,7 @@ export default function RoomsTableView({ departmentData }) {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={`${departmentData.name_english || ''} ${t('department rooms')}`} /// edit
+          heading={`${curLangAr?departmentData.name_arabic:departmentData.name_english || ''} ${t('department rooms')}`} /// edit
           links={[
             {
               name: t('dashboard'),
@@ -280,6 +283,7 @@ export default function RoomsTableView({ departmentData }) {
                 label={tab.label}
                 icon={
                   <Label
+                    lang="ar"
                     variant={
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }

@@ -17,7 +17,7 @@ export default function TableEditView({ departmentData, activityData }) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={`Edit ${activityData.name_english || ''} Activity`}
+        heading={`${t('edit')} ${activityData.name_english || ''} ${t('activity')}`}
         links={[
           {
             name: t('dashboard'),
@@ -28,10 +28,10 @@ export default function TableEditView({ departmentData, activityData }) {
             href: paths.unitservice.departments.root,
           },
           {
-            name: `${departmentData.name_english || ''} Activities`,
+            name: `${departmentData.name_english || ''} ${t('activities')}`,
             href: paths.unitservice.departments.activities.root(departmentData._id),
           },
-          { name: `Edit ${activityData.name_english || ''} Activity` },
+          { name: t('edit') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

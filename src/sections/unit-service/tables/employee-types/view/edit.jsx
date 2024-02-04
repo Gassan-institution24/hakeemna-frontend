@@ -27,7 +27,7 @@ export default function TableEditView({ employeeTypeData }) {
             name: t('employee types'),
             href: paths.unitservice.tables.employeetypes.root,
           },
-          { name: t('edit employee type') },
+          { name: t('edit') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

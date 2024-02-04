@@ -16,7 +16,7 @@ export default function TableCreateView({ departmentData }) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new Activity"
+        heading={t("Create a new activity")}
         links={[
           {
             name: t('dashboard'),
@@ -27,10 +27,10 @@ export default function TableCreateView({ departmentData }) {
             href: paths.unitservice.departments.root,
           },
           {
-            name: `${departmentData.name_english || ''} Activities`,
+            name: `${departmentData.name_english || ''} ${t('activities')}`,
             href: paths.unitservice.departments.activities.root(departmentData._id),
           },
-          { name: 'New Activity' },
+          { name: t('new') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

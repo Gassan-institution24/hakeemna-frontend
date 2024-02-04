@@ -291,6 +291,7 @@ export default function EmployeesTableView() {
                 label={tab.label}
                 icon={
                   <Label
+                    lang="ar"
                     variant={
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
@@ -500,7 +501,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter(
       (data) =>
         (data?.first_name && data?.first_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.last_name && data?.last_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.family_name && data?.family_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.name_english &&
           data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.country?.name_english &&

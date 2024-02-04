@@ -24,21 +24,17 @@ export default function USAccountingCreateView({ unitServiceData }) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t('create new accounting')} /// edit
+        heading={t('create new department')} /// edit
         links={[
           {
             name: t('dashboard'),
-            href: paths.superadmin,
+            href: paths.unitservice.root,
           },
           {
-            name: t('Unit Services'),
-            href: paths.superadmin.unitservices.root,
+            name: t('departments'),
+            href: paths.unitservice.departments.root,
           },
-          {
-            name: `${unitServiceName} ${t('accounting')}`, /// edit
-            href: paths.superadmin.unitservices.accounting(id),
-          },
-          { name: `${t('new')} ${unitServiceName} ${t('accounting')}` },
+          { name: t('new') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

@@ -536,7 +536,7 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
       <ConfirmDialog
         open={confirmDelay.value}
         onClose={confirmDelay.onFalse}
-        title="Delay"
+        title={t("delay")}
         content={
           <>
             How many minutes do you want to delay items?
@@ -564,8 +564,7 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
               handleDelayRows();
             }}
           >
-            Delay
-          </Button>
+            {t('delay')}         </Button>
         }
       />
     </>

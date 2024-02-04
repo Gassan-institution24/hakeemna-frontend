@@ -50,7 +50,7 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
 
   const renderPrimary = (
     <TableRow hover>
-      <TableCell align="center">{code}</TableCell>
+      <TableCell lang="ar" align="center">{code}</TableCell>
       <TableCell
         align="center"
         onClick={() => setFilters({ ...filters, name: free_subscription?.name_english })}
@@ -63,8 +63,9 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
       >
         {subscription?.name_english}
       </TableCell>
-      <TableCell align="center">
+      <TableCell lang="ar" align="center">
         <Label
+                    lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -73,19 +74,19 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
           {t(status)}
         </Label>
       </TableCell>
-      <TableCell align="center">{fDateTime(Start_date)}</TableCell>
-      <TableCell align="center">{fDateTime(End_date)}</TableCell>
-      <TableCell align="center">{Users_num}</TableCell>
-      <TableCell align="center">{price}</TableCell>
+      <TableCell lang="ar" align="center">{fDateTime(Start_date)}</TableCell>
+      <TableCell lang="ar" align="center">{fDateTime(End_date)}</TableCell>
+      <TableCell lang="ar" align="center">{Users_num}</TableCell>
+      <TableCell lang="ar" align="center">{price}</TableCell>
       <TableCell
         align="center"
         onClick={() => setFilters({ ...filters, name: Payment_method?.name_english })}
       >
         {Payment_method?.name_english}
       </TableCell>
-      <TableCell align="center">{Payment_frequency}</TableCell>
-      <TableCell align="center">{note}</TableCell>
-      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      <TableCell lang="ar" align="center">{Payment_frequency}</TableCell>
+      <TableCell lang="ar" align="center">{note}</TableCell>
+      <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>

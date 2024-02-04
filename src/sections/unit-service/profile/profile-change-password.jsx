@@ -76,6 +76,7 @@ export default function AccountChangePassword() {
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack component={Card} spacing={3} sx={{ p: 3 }}>
         <RHFTextField
+              lang="ar"
           name="passwordCurrent"
           type={showpasswordCurrent.value ? 'text' : 'password'}
           label="Current Password"
@@ -93,6 +94,7 @@ export default function AccountChangePassword() {
         />
 
         <RHFTextField
+              lang="ar"
           name="password"
           label="New Password"
           type={showpassword.value ? 'text' : 'password'}
@@ -114,6 +116,7 @@ export default function AccountChangePassword() {
         />
 
         <RHFTextField
+              lang="ar"
           name="confirmPassword"
           type={showconfirmPassword.value ? 'text' : 'password'}
           label="Confirm New Password"

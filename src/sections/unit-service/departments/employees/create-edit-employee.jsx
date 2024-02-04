@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -27,21 +28,24 @@ import axios from 'axios';
 import Iconify from 'src/components/iconify';
 import axiosHandler from 'src/utils/axios-handler';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable, departmentData }) {
   const router = useRouter();
 
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const { user } = useAuthContext();
 
-  console.log('user', user);
-  console.log('currr', currentTable);
   const { countriesData } = useGetCountries();
   const { employeeTypesData } = useGetEmployeeTypes();
   const { specialtiesData } = useGetSpecialties();
 
-  console.log('countriesData', countriesData);
+  const [phone, setPhone] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -51,7 +55,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     employee_type: Yup.string().required('Employee Type is required'),
     email: Yup.string().required('email is required'),
     first_name: Yup.string().required('First name is required'),
-    second_name: Yup.string(),
+    middle_name: Yup.string(),
     family_name: Yup.string().required('Family name is required'),
     nationality: Yup.string().required('Nationality is required'),
     address: Yup.string(),
@@ -74,7 +78,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       employee_type: currentTable?.employee_type || '',
       email: currentTable?.email || '',
       first_name: currentTable?.first_name || '',
-      second_name: currentTable?.second_name || '',
+      middle_name: currentTable?.middle_name || '',
       family_name: currentTable?.family_name || '',
       nationality: currentTable?.nationality || '',
       address: currentTable?.address || '',
@@ -148,7 +152,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
         });
       }
       reset();
-      enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
+      enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.unitservice.departments.employees.root(departmentData._id));
       console.info('DATA', data);
     } catch (error) {
@@ -171,55 +175,63 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
               }}
             >
               <RHFTextField
-                lang="en"
+                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="first_name"
-                label="First name"
+                label={t('first name')}
               />
               <RHFTextField
-                lang="en"
+                lang="ar"
                 onChange={handleEnglishInputChange}
-                name="second_name"
-                label="Second name"
+                name="middle_name"
+                label={t('middle name')}
               />
               <RHFTextField
-                lang="en"
+                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="family_name"
-                label="Family name"
+                label={t('family name')}
               />
               <RHFTextField
-                lang="en"
+                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="address"
-                label="Address"
+                label={t('address')}
               />
-              <RHFTextField name="phone" label="Phone" type="number" />
+              <MuiTelInput
+                forceCallingCode
+                value={phone}
+                onChange={(newPhone) => {
+                  matchIsValidTel(newPhone);
+                  setPhone(newPhone);
+                  methods.setValue('phone', newPhone);
+                }}
+              />
 
-              <RHFSelect name="nationality" label="Nationality">
+              <RHFSelect name="nationality" label={t('nationality')}>
                 {countriesData.map((nationality) => (
                   <MenuItem key={nationality._id} value={nationality._id}>
-                    {nationality.name_english}
+                    {curLangAr ? nationality.name_arabic : nationality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="employee_type" label="Employee Type">
+              <RHFSelect name="employee_type" label={t('employee type')}>
                 {employeeTypesData.map((employee_type) => (
                   <MenuItem key={employee_type._id} value={employee_type._id}>
-                    {employee_type.name_english}
+                    {curLangAr ? employee_type.name_arabic : employee_type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="speciality" label="Speciality">
+              <RHFSelect name="speciality" label={t('specialty')}>
                 {specialtiesData.map((speciality) => (
                   <MenuItem key={speciality._id} value={speciality._id}>
-                    {speciality.name_english}
+                    {curLangAr ? speciality.name_arabic : speciality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="gender" label="Gender">
-                <MenuItem value="male">Male</MenuItem>
-                <MenuItem value="female">Female</MenuItem>
+              <RHFSelect name="gender" label={t('gender')}>
+                <MenuItem value="male">{curLangAr ? 'ذكر' : 'Male'}</MenuItem>
+                <MenuItem value="female">{curLangAr ? 'انثى' : 'Female'}</MenuItem>
               </RHFSelect>
             </Box>
             <Box
@@ -232,10 +244,11 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
-              <RHFTextField name="email" label="Email" />
+              <RHFTextField lang="ar" name="email" label={t('email')} />
               <RHFTextField
+                lang="ar"
                 name="password"
-                label="Password"
+                label={t('password')}
                 type={password.value ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (
@@ -250,8 +263,9 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 }}
               />
               <RHFTextField
+                lang="ar"
                 name="confirmPassword"
-                label="Confirm Password"
+                label={t('confirm password')}
                 type={password.value ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (
@@ -268,7 +282,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
             </Box>
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentTable ? 'Create' : 'Save Changes'}
+                {!currentTable ? t('create') : t('save changes')}
               </LoadingButton>
             </Stack>
           </Card>

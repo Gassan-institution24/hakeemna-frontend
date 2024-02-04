@@ -14,7 +14,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { Rating } from '@mui/material';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
@@ -27,6 +27,8 @@ export default function TablesTableToolbar({
   onResetFilters,
 }) {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const handleFilterName = useCallback(
     (event) => {
@@ -64,13 +66,13 @@ export default function TablesTableToolbar({
           width: { xs: 1, md: 200 },
         }}
       >
-        <InputLabel>rate</InputLabel>
+        <InputLabel>{t('rate')}</InputLabel>
 
         <Select
           multiple
           value={filters.rate}
           onChange={handleFilterRate}
-          input={<OutlinedInput label="Rate" />}
+          input={<OutlinedInput label={t("rate")} />}
           renderValue={(selected) => selected.map((value) => value).join(', ')}
           MenuProps={{
             PaperProps: {
@@ -110,7 +112,7 @@ export default function TablesTableToolbar({
           onClick={onResetFilters}
           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
         >
-          Clear
+          {t('clear')}
         </Button>
       )}
     </Stack>

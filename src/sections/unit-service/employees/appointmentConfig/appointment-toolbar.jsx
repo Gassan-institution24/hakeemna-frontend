@@ -13,6 +13,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -27,6 +28,7 @@ export default function ConfigTableToolbar({
   dateError,
   serviceOptions,
 }) {
+  const { t } = useTranslate();
   const popover = usePopover();
 
   const handleFilterName = useCallback(
@@ -72,7 +74,7 @@ export default function ConfigTableToolbar({
         }}
       >
         <DatePicker
-          label="Date"
+          label={t('date')}
           value={filters.startDate}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
@@ -82,7 +84,7 @@ export default function ConfigTableToolbar({
         />
 
         <DatePicker
-          label="End date"
+          label={t('end date')}
           value={filters.endDate}
           onChange={handleFilterEndDate}
           slotProps={{
@@ -101,7 +103,7 @@ export default function ConfigTableToolbar({
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Search customer or invoice number..."
+            placeholder={t('Search name or number...')}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -139,7 +141,7 @@ export default function ConfigTableToolbar({
           }}
         >
           <Iconify icon="solar:printer-minimalistic-bold" />
-          Print
+          {t('print')}
         </MenuItem>
 
         <MenuItem
@@ -148,7 +150,7 @@ export default function ConfigTableToolbar({
           }}
         >
           <Iconify icon="solar:export-bold" />
-          Export
+          {t('export')}
         </MenuItem>
       </CustomPopover>
     </>

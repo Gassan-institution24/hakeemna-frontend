@@ -26,6 +26,7 @@ import {
   useGetSpecialties,
   useGetEmployeeTypes,
 } from 'src/api/tables';
+import { useLocales, useTranslate } from 'src/locales';
 import axios, { endpoints, fetcher } from 'src/utils/axios';
 import { fData } from 'src/utils/format-number';
 import Iconify from 'src/components/iconify';
@@ -46,13 +47,17 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
   const { user } = useAuthContext();
 
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   console.log('employeeData', employeeData);
 
   const UpdateUserSchema = Yup.object().shape({
     employee_type: Yup.string().required('Employee type is required.'),
     email: Yup.string().required('Email is required.'),
     first_name: Yup.string().required('First name is required.'),
-    second_name: Yup.string().required('Second name is required.'),
+    middle_name: Yup.string().required('middle name is required.'),
     family_name: Yup.string().required('Family name is required.'),
     nationality: Yup.string().required('Nationality is required.'),
     profrssion_practice_num: Yup.string().required('Profrssion practice number is required.'),
@@ -90,7 +95,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     employee_type: employeeData?.employee_type?._id || null,
     email: employeeData?.email || '',
     first_name: employeeData?.first_name || '',
-    second_name: employeeData?.second_name || '',
+    middle_name: employeeData?.middle_name || '',
     family_name: employeeData?.family_name || '',
     nationality: employeeData?.nationality?._id || '',
     profrssion_practice_num: employeeData?.profrssion_practice_num || '',
@@ -205,19 +210,23 @@ export default function AccountGeneral({ employeeData, refetch }) {
               }}
             >
               <RHFTextField
+              lang="ar"
                 // disabled
                 variant="filled"
                 name="identification_num"
                 label="ID number :"
               />
               <RHFTextField
+              lang="ar"
                 // disabled
                 variant="filled"
                 name="profrssion_practice_num"
                 label="Profrssion practice number :"
               />
-              <RHFTextField type="email" variant="filled" name="email" label="Email :" />
-              <RHFTextField type="number" variant="filled" name="phone" label="Phone Number :" />
+              <RHFTextField
+              lang="ar" type="email" variant="filled" name="email" label="Email :" />
+              <RHFTextField
+              lang="ar" type="number" variant="filled" name="phone" label="Phone Number :" />
               <Box
                 rowGap={3}
                 columnGap={2}
@@ -311,11 +320,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="first_name" label="First name :" />
-              <RHFTextField name="second_name" label="Second name :" />
-              <RHFTextField name="family_name" label="Family name :" />
+              <RHFTextField
+              lang="ar" name="first_name" label="First name :" />
+              <RHFTextField
+              lang="ar" name="middle_name" label="middle name :" />
+              <RHFTextField
+              lang="ar" name="family_name" label="Family name :" />
               <RHFSelect
-                label="Nationality"
+                label={t('nationality')}
                 fullWidth
                 name="nationality"
                 InputLabelProps={{ shrink: true }}
@@ -327,10 +339,12 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFTextField type="number" name="tax_num" label="Tax number" />
-              <RHFTextField type="number" name="mobile_num" label="Alternative mobile number" />
+              <RHFTextField
+              lang="ar" type="number" name="tax_num" label="Tax number" />
+              <RHFTextField
+              lang="ar" type="number" name="mobile_num" label="Alternative mobile number" />
               <RHFSelect
-                label="Speciality"
+                label={t('specialty')}
                 fullWidth
                 name="speciality"
                 InputLabelProps={{ shrink: true }}
@@ -343,7 +357,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 ))}
               </RHFSelect>
               <RHFSelect
-                label="Gender"
+                label={t('gender')}
                 fullWidth
                 name="gender"
                 InputLabelProps={{ shrink: true }}
@@ -353,7 +367,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 <MenuItem value="female">female</MenuItem>
               </RHFSelect>
               <RHFSelect
-                label="Employee type"
+                label={t('employee type')}
                 fullWidth
                 name="employee_type"
                 InputLabelProps={{ shrink: true }}
@@ -367,15 +381,18 @@ export default function AccountGeneral({ employeeData, refetch }) {
               </RHFSelect>
 
               <RHFTextField
+              lang="ar"
                 type="number"
                 name="Bachelor_year_graduation"
                 label="Bachelor year graduation"
               />
               <RHFTextField
+              lang="ar"
                 name="University_graduation_Bachelor"
                 label="University graduation bachelor"
               />
               <RHFTextField
+              lang="ar"
                 name="University_graduation_Specialty"
                 label="University graduation Specialty"
               />
@@ -401,7 +418,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 )}
               />
             </Box>
-            <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label="Address" />
+            <RHFTextField
+              lang="ar" multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} />
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
