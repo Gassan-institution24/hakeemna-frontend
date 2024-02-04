@@ -4,7 +4,7 @@ import { _userCards } from 'src/_mock';
 import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import AppointmentBooking from '../appointments-booking';
+import UserCardList from '../appointments-list';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ export default function BookingAppointment() {
         sx={{ mb: { xs: 3, md: 5 } }}
       />
 
-      <AppointmentBooking users={_userCards} />
+      <UserCardList users={_userCards} />
     </Container>
   );
 }
