@@ -59,7 +59,6 @@ export default function AccountChangePassword() {
       const requestData = { passwordCurrent, password, confirmPassword };
 
       const response = await axios.patch(endpoints.auth.updatepassword, requestData);
-      console.log(response);
       if (response.status === 201) {
         reset();
         enqueueSnackbar('Password updated successfully!', { variant: 'success' });
@@ -67,7 +66,6 @@ export default function AccountChangePassword() {
         enqueueSnackbar(response.data || 'Password update failed!', { variant: 'error' });
       }
     } catch (error) {
-      console.error(error);
       enqueueSnackbar('An error occurred. Please try again.', { variant: 'error' });
     }
   });

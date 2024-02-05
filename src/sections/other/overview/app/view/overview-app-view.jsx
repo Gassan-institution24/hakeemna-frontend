@@ -31,7 +31,6 @@ export default function OverviewAppView() {
   const [oldpatientsdata, setOldpatientsdata] = useState([]);
   const [oldData, setOlddata] = useState();
 
-  console.log(user);
 
   const settings = useSettingsContext();
   const currentHour = new Date().getHours();
@@ -87,7 +86,6 @@ export default function OverviewAppView() {
       setOlddata(mappedData[0].identification_num);
     }
   }, [oldpatientsdata, oldData]);
-
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -131,7 +129,7 @@ export default function OverviewAppView() {
           </Grid>
         </Grid>
         {/* && user?.patient?.is_onboarded === false  */}
-        {user?.patient?.identification_num === oldData ? (
+        {user?.patient?.identification_num === oldData && user?.role === "patient" ? (
           <Dialog open={dialog.value} onClose={dialog.onTrue}>
             <DialogTitle>
               We found that you have data stored in

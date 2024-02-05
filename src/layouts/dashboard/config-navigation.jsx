@@ -362,7 +362,7 @@ export function useNavData() {
           },
           {
             title: t('my appointents'),
-            path: paths.dashboard.user.cards,
+            path: paths.dashboard.user.patientsappointments,
             icon: <Iconify icon="ph:calendar-duotone" />,
           },
           {

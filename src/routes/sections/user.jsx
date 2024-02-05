@@ -32,7 +32,7 @@ const TablesListPage = lazy(() => import('src/pages/dashboard/tables/list'));
 // USER
 const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
 const UserAppointmentsPage = lazy(() => import('src/pages/dashboard/user/appointments'));
-const Booking = lazy(() => import('src/pages/dashboard/user/booking'));
+const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
 const Share = lazy(() => import('src/pages/dashboard/user/share'));
 const FinancilMovment = lazy(() => import('src/pages/dashboard/user/FinancilMovment'));
 const UserListPage = lazy(() => import('src/pages/dashboard/user/list'));
