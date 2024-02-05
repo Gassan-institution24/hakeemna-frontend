@@ -119,6 +119,7 @@ export const paths = {
       account: `${ROOTS.DASHBOARD}/user/account`,
       share: `${ROOTS.DASHBOARD}/user/share`,
       financilmovment: `${ROOTS.DASHBOARD}/user/financilmovment`,
+      patientsappointments: `${ROOTS.DASHBOARD}/user/appointments`,
       bookappointment: `${ROOTS.DASHBOARD}/user/bookappointment`,
       watingroom: `${ROOTS.DASHBOARD}/user/watingroom`,
       bmi: `${ROOTS.DASHBOARD}/user/bmi`,

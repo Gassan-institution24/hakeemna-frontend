@@ -100,10 +100,11 @@ export default function OldMedicalReports() {
     gridContainer2: {
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      justifyContent:'flex-start',
       alignItems: 'center',
       padding: '10px',
       borderBottom: 1,
+      gap:132
     },
     line: {
       textDecoration: 'none',
@@ -116,10 +117,10 @@ export default function OldMedicalReports() {
   const router = useRouter();
   const oldMedicalReportsSchema = Yup.object().shape({
     type: Yup.string().required(),
-    date: Yup.date().required(),
+    date: Yup.date().required('Date is required'),
     file: Yup.string().required(),
-    name: Yup.string().required(),
-    note: Yup.string().required(),
+    name: Yup.string().required('File name is required'),
+    note: Yup.string(),
     specialty: Yup.string().required(),
   });
 
@@ -170,7 +171,7 @@ export default function OldMedicalReports() {
             </Text>
             <Text style={styles.text}>
               <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                specialty:
+                Specialty:
               </Text>{' '}
               {info.specialty}
             </Text>
@@ -290,9 +291,9 @@ export default function OldMedicalReports() {
               rather in the presence of a physician who is consulted on those results and taking
               into account the full medical context of the patient’s condition.
             </Typography>
-            <RHFTextField lang="en" name="name" label="File name" sx={{ mb: 1.5 }} />
+            <RHFTextField lang="en" name="name" label="File name*" sx={{ mb: 1.5 }} />
             <RHFSelect
-              label="type"
+              label="Type*"
               fullWidth
               name="type"
               PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -306,7 +307,7 @@ export default function OldMedicalReports() {
             </RHFSelect>
 
             <RHFSelect
-              label="Specialty"
+              label="Specialty*"
               fullWidth
               name="specialty"
               PaperPropsSx={{ textTransform: 'capitalize' }}

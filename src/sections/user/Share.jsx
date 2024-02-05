@@ -49,6 +49,7 @@ export default function Share() {
         </Typography>
         <div style={{ position: 'relative', width: '100%' }}>
           <input
+            disabled
             type="text"
             value={link}
             onChange={(e) => setLink(e.target.value)}

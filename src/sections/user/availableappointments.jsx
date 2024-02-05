@@ -11,10 +11,6 @@ import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import {
-  _jobs,
-  _roles,
-} from 'src/_mock';
 
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
@@ -26,6 +22,7 @@ import {
   useGetCountries,
   useGetAppointmentTypes,
   useGetPaymentMethods,
+  useGetInsuranceCos,
 } from 'src/api/tables';
 import { fTimestamp } from 'src/utils/format-time';
 
@@ -63,6 +60,7 @@ export default function AppointmentBooking({ patientData }) {
   const { appointmentsData, refetch } = useGetAvailableAppointments();
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
+  const {insuranseCosData } = useGetInsuranceCos()
   const { unitservicesData } = useGetUnitservices();
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { paymentMethodsData } = useGetPaymentMethods();
@@ -78,7 +76,6 @@ export default function AppointmentBooking({ patientData }) {
     filters.Offer_start_date && filters.Offer_end_date
       ? filters.Offer_start_date.getTime() > filters.Offer_end_date.getTime()
       : false;
-console.log(appointmentsData);
   const dataFiltered = applyFilter({
     inputData: appointmentsData,
     filters,
@@ -111,11 +108,6 @@ console.log(appointmentsData);
       if (inputValue) {
         const results = appointmentsData.filter(
           (appointment) =>
-            (appointment?.name_english &&
-              appointment?.name_english?.toLowerCase().indexOf(search.query.toLowerCase()) !==
-                -1) ||
-            (appointment?.name_arabic &&
-              appointment?.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1) ||
             (appointment.unit_service &&
               appointment.unit_service?.name_english
                 ?.toLowerCase()
@@ -124,18 +116,6 @@ console.log(appointmentsData);
               appointment.unit_service?.name_arabic
                 ?.toLowerCase()
                 .indexOf(search.query.toLowerCase()) !== -1) ||
-            (appointment.work_group &&
-              appointment.work_group.employees &&
-              appointment.work_group.employees.some(
-                (employee) =>
-                  employee.first_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
-              )) ||
-            (appointment.work_group &&
-              appointment.work_group.employees &&
-              appointment.work_group.employees.some(
-                (employee) =>
-                  employee.last_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
-              )) ||
             (appointment.work_group &&
               appointment.work_group.employees &&
               appointment.work_group.employees.some(
@@ -186,6 +166,7 @@ console.log(appointmentsData);
           onResetFilters={handleResetFilters}
           //
           countriesOptions={countriesData}
+          insuranseCosData={insuranseCosData}
           citiesOptions={tableData}
           unitServicesOptions={unitservicesData}
           appointmentTypeOptions={appointmenttypesData}

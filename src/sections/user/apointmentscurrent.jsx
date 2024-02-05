@@ -25,7 +25,7 @@ import { useGetPatientAppointments } from 'src/api/tables';
 import { useSettingsContext } from 'src/components/settings';
 // ----------------------------------------------------------------------
 
-export default function Appoinment({ user }) {
+export default function Currentappoinment({ user }) {
   const theme = useTheme();
   const { appointmentsData } = useGetPatientAppointments(user);
   console.log(appointmentsData);
@@ -120,6 +120,6 @@ export default function Appoinment({ user }) {
   ));
 }
 
-Appoinment.propTypes = {
+Currentappoinment.propTypes = {
   user: PropTypes.object,
 };

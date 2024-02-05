@@ -9,21 +9,24 @@ import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
-import Checkbox from '@mui/material/Checkbox';
-import TextField from '@mui/material/TextField';
+import { Controller, useFormContext } from 'react-hook-form';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { MenuItem } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { RHFSelect } from 'src/components/hook-form';
+import Rating from '@mui/material/Rating';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 // ----------------------------------------------------------------------
 
-export default function JobFilters({
+export default function AppointmentsFilters({
   open,
   onOpen,
   onClose,
@@ -44,9 +47,10 @@ export default function JobFilters({
   dateError,
 }) {
 
+
   const handleFilterAppointtypes = useCallback(
-    (newValue) => {
-      onFilters('appointtypes', newValue);
+    (e) => {
+      onFilters('appointtypes', e.target.value);
     },
     [onFilters]
   );
@@ -131,62 +135,83 @@ export default function JobFilters({
   );
 
   const renderappointtypes = (
-    <Stack>
+    // <Stack>
+    //   <Typography variant="subtitle2" sx={{ mb: 1 }}>
+    //     Appointment Types
+    //   </Typography>
+    //   {appointmentTypeOptions.map((option) => (
+    //     <FormControlLabel
+    //       key={option._id}
+    //       control={
+    //         <Radio
+    //           checked={option._id === filters.appointtypes}
+    //           onClick={() => handleFilterAppointtypes(option._id)}
+    //         />
+    //       }
+    //       label={option.name_english}
+    //       sx={{
+    //         ...(option === 'all' && {
+    //           textTransform: 'capitalize',
+    //         }),
+    //       }}
+    //     />
+    //   ))}
+    // </Stack>
+    <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Appointment Types
       </Typography>
-      {appointmentTypeOptions.map((option) => (
-        <FormControlLabel
-          key={option._id}
-          control={
-            <Radio
-              checked={option._id === filters.appointtypes}
-              onClick={() => handleFilterAppointtypes(option._id)}
-            />
-          }
-          label={option.name_english}
-          sx={{
-            ...(option === 'all' && {
-              textTransform: 'capitalize',
-            }),
-          }}
-        />
-      ))}
-    </Stack>
+      <Select onChange={handleFilterAppointtypes} name="appointment_type">
+        {appointmentTypeOptions.map((option) => (
+          <MenuItem key={option._id} value={option._id}>
+            {option?.name_english}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 
   const renderCountries = (
-    <Stack>
+    <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Countries
       </Typography>
-      <select onChange={handleFilterCountries} name="country" label="Country">
-        {countriesOptions?.map((country) => (
-          <option key={country._id} value={country._id}>
-            {country?.name_english}
-          </option>
+      <Select onChange={handleFilterCountries} name="country">
+        {countriesOptions.map((option) => (
+          <MenuItem key={option._id} value={option._id}>
+            {option?.name_english}
+          </MenuItem>
         ))}
-      </select>
-    </Stack>
+      </Select>
+    </FormControl>
   );
-  const renderDepartments = (
-    <Stack>
+  const renderInsurance = (
+    <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         insurance
       </Typography>
-      <select onChange={handleFiltedInsurance} name="insurance" label="insurance">
-        {insuranseCosData?.map((info) => (
-          <>
-            <option />
-            <option key={info._id} value={info._id}>
-              {info?.name_english}
-            </option>
-          </>
+      <Select onChange={handleFiltedInsurance} name="insurance">
+        {insuranseCosData.map((option) => (
+          <MenuItem key={option._id} value={option._id}>
+            {option?.name_english}
+          </MenuItem>
         ))}
-      </select>
-    </Stack>
+      </Select>
+    </FormControl>
   );
-
+  const renderRate = (
+    <FormControl>
+      <Typography variant="subtitle2" sx={{ mb: 1 }}>
+        Rate
+      </Typography>
+      <Select onChange={handleFiltedInsurance} name="insurance" >
+        {/* {insuranseCosData.map((option) => ( key={option._id} value={option._id}   ))} */}
+      
+          <Rating name="read-only" size="small"/>
+       
+      </Select>
+    </FormControl>
+  );
   const renderUnitServices = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
@@ -245,14 +270,14 @@ export default function JobFilters({
         <Scrollbar sx={{ px: 2.5, py: 3 }}>
           <Stack spacing={3}>
             {renderDate}
+            {renderappointtypes}
 
-            {renderUnitServices}
+            {/* {renderUnitServices} */}
 
             {renderCountries}
 
-            {renderDepartments}
-
-            {renderappointtypes}
+            {renderInsurance}
+            {renderRate}
           </Stack>
         </Scrollbar>
       </Drawer>
@@ -260,7 +285,7 @@ export default function JobFilters({
   );
 }
 
-JobFilters.propTypes = {
+AppointmentsFilters.propTypes = {
   citiesOptions: PropTypes.array,
   appointmentTypeOptions: PropTypes.array,
   unitServicesOptions: PropTypes.array,
