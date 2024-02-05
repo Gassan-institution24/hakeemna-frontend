@@ -178,7 +178,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 lang="ar"
                 onChange={handleEnglishInputChange}
                 name="first_name"
-                label={t('first name')}
+                label={`${t('first name')} *`}
               />
               <RHFTextField
                 lang="ar"
@@ -190,7 +190,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 lang="ar"
                 onChange={handleEnglishInputChange}
                 name="family_name"
-                label={t('family name')}
+                label={`${t('family name')} *`}
               />
               <RHFTextField
                 lang="ar"
@@ -208,28 +208,28 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 }}
               />
 
-              <RHFSelect name="nationality" label={t('nationality')}>
+              <RHFSelect name="nationality" label={`${t('nationality')} *`}>
                 {countriesData.map((nationality) => (
                   <MenuItem key={nationality._id} value={nationality._id}>
                     {curLangAr ? nationality.name_arabic : nationality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="employee_type" label={t('employee type')}>
+              <RHFSelect name="employee_type" label={`${t('employee type')} *`}>
                 {employeeTypesData.map((employee_type) => (
                   <MenuItem key={employee_type._id} value={employee_type._id}>
                     {curLangAr ? employee_type.name_arabic : employee_type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="speciality" label={t('specialty')}>
+              <RHFSelect name="speciality" label={`${t('specialty')} *`}>
                 {specialtiesData.map((speciality) => (
                   <MenuItem key={speciality._id} value={speciality._id}>
                     {curLangAr ? speciality.name_arabic : speciality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="gender" label={t('gender')}>
+              <RHFSelect name="gender" label={`${t('gender')} *`}>
                 <MenuItem value="male">{curLangAr ? 'ذكر' : 'Male'}</MenuItem>
                 <MenuItem value="female">{curLangAr ? 'انثى' : 'Female'}</MenuItem>
               </RHFSelect>
@@ -244,11 +244,11 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
-              <RHFTextField lang="ar" name="email" label={t('email')} />
+              <RHFTextField lang="ar" name="email" label={`${t('email')} *`} />
               <RHFTextField
                 lang="ar"
                 name="password"
-                label={t('password')}
+                label={`${t('password')} *`}
                 type={password.value ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (
@@ -265,7 +265,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
               <RHFTextField
                 lang="ar"
                 name="confirmPassword"
-                label={t('confirm password')}
+                label={`${t('confirm password')} *`}
                 type={password.value ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (

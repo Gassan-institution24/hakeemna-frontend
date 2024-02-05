@@ -317,7 +317,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
+        {/* <CustomBreadcrumbs
           heading={t('appointments')} /// edit
           links={[
             {
@@ -333,7 +333,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           sx={{
             mb: { xs: 3, md: 5 },
           }}
-        />
+        /> */}
         <Card>
           <Tabs
             value={filters.status}

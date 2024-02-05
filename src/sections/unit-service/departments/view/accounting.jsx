@@ -61,7 +61,7 @@ export default function PatientHistoryView({ departmentData }) {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
+      {/* <CustomBreadcrumbs
         heading={`${departmentData.name_english || 'Deaprtment'} History`}
         links={[
           {
@@ -79,7 +79,7 @@ export default function PatientHistoryView({ departmentData }) {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
-      />
+      /> */}
 
       {renderTabs}
 

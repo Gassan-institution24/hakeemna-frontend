@@ -12,13 +12,18 @@ import Grid from '@mui/material/Unstable_Grid2';
 import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import { MenuItem } from '@mui/material';
+import { Alert, MenuItem } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api/tables';
+import {
+  useGetCountries,
+  useGetUSEmployeeTypes,
+  useGetSpecialties,
+  useGetUSDepartments,
+} from 'src/api/tables';
 import { endpoints } from 'src/utils/axios';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -42,20 +47,26 @@ export default function TableNewEditForm({ currentTable }) {
   const { user } = useAuthContext();
 
   const { countriesData } = useGetCountries();
-  const { employeeTypesData } = useGetEmployeeTypes();
+  const { employeeTypesData } = useGetUSEmployeeTypes(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
   const { specialtiesData } = useGetSpecialties();
+  const { departmentsData } = useGetUSDepartments(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
 
   const { enqueueSnackbar } = useSnackbar();
 
   const [phone, setPhone] = useState();
+  const [errorMsg, setErrorMsg] = useState('');
 
   const NewUserSchema = Yup.object().shape({
     // unit_service: Yup.string().required('Unit Service is required'),
-    // department: Yup.string(),
+    department: Yup.string().nullable(),
     employee_type: Yup.string().required('Employee Type is required'),
     email: Yup.string().required('email is required'),
     first_name: Yup.string().required('First name is required'),
-    middle_name: Yup.string(),
+    middle_name: Yup.string().required('Middle name is required'),
     family_name: Yup.string().required('Family name is required'),
     nationality: Yup.string().required('Nationality is required'),
     address: Yup.string(),
@@ -63,8 +74,10 @@ export default function TableNewEditForm({ currentTable }) {
     speciality: Yup.string().required('speciality is required'),
     gender: Yup.string().required('gender is required'),
     birth_date: Yup.string(),
-    password: Yup.string().required('password is required'),
-    confirmPassword: Yup.string().required('confirmPassword is required'),
+    password: Yup.string().min(8, 'Password must be at least 8 characters'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .min(8, 'Confirm password must be at least 8 characters'),
   });
 
   const defaultValues = useMemo(
@@ -117,8 +130,11 @@ export default function TableNewEditForm({ currentTable }) {
   const {
     reset,
     handleSubmit,
+    trigger,
     formState: { isSubmitting },
   } = methods;
+
+  const values = methods.getValues();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -153,15 +169,25 @@ export default function TableNewEditForm({ currentTable }) {
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       console.info('DATA', data);
     } catch (error) {
+      enqueueSnackbar(t('Failed to create!'), { variant: 'error' });
+      setErrorMsg(error);
       console.error(error);
     }
   });
+  // useEffect(() => {
+  //   trigger();
+  // }, [trigger, methods]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
         <Grid xs={12} maxWidth="md">
           <Card sx={{ p: 3 }}>
+            {!!errorMsg && (
+              <Alert sx={{ mb: 3 }} severity="error">
+                <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+              </Alert>
+            )}
             <Box
               rowGap={3}
               columnGap={2}
@@ -172,29 +198,25 @@ export default function TableNewEditForm({ currentTable }) {
               }}
             >
               <RHFTextField
-              lang="ar"
-
+                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="first_name"
-                label={t('first name')}
+                label={`${t('first name')} *`}
               />
               <RHFTextField
-              lang="ar"
-
+                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="middle_name"
-                label={t('middle name')}
+                label={`${t('middle name')} *`}
               />
               <RHFTextField
-              lang="ar"
-
+                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="family_name"
-                label={t('family name')}
+                label={`${t('family name')} *`}
               />
               <RHFTextField
-              lang="ar"
-
+                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="address"
                 label={t('address')}
@@ -202,6 +224,7 @@ export default function TableNewEditForm({ currentTable }) {
               <MuiTelInput
                 forceCallingCode
                 value={phone}
+                label={`${t('phone')} *`}
                 onChange={(newPhone) => {
                   matchIsValidTel(newPhone);
                   setPhone(newPhone);
@@ -209,28 +232,35 @@ export default function TableNewEditForm({ currentTable }) {
                 }}
               />
 
-              <RHFSelect name="nationality" label={t('nationality')}>
+              <RHFSelect name="nationality" label={`${t('nationality')} *`}>
                 {countriesData.map((nationality) => (
                   <MenuItem key={nationality._id} value={nationality._id}>
                     {curLangAr ? nationality.name_arabic : nationality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="employee_type" label={t('employee type')}>
+              <RHFSelect name="department" label={t('department')}>
+                {departmentsData.map((department) => (
+                  <MenuItem key={department._id} value={department._id}>
+                    {curLangAr ? department.name_arabic : department.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFSelect name="employee_type" label={`${t('employee type')} *`}>
                 {employeeTypesData.map((employee_type) => (
                   <MenuItem key={employee_type._id} value={employee_type._id}>
                     {curLangAr ? employee_type.name_arabic : employee_type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="speciality" label={t('specialty')}>
+              <RHFSelect name="speciality" label={`${t('specialty')} *`}>
                 {specialtiesData.map((speciality) => (
                   <MenuItem key={speciality._id} value={speciality._id}>
                     {curLangAr ? speciality.name_arabic : speciality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="gender" label={t('gender')}>
+              <RHFSelect name="gender" label={`${t('gender')} *`}>
                 <MenuItem value="male">Male</MenuItem>
                 <MenuItem value="female">Female</MenuItem>
               </RHFSelect>
@@ -245,12 +275,11 @@ export default function TableNewEditForm({ currentTable }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
+              <RHFTextField lang="ar" name="email" label={`${t('email')} *`} />
               <RHFTextField
-              lang="ar" name="email" label={t('email')} />
-              <RHFTextField
-              lang="ar"
+                lang="ar"
                 name="password"
-                label={t('password')}
+                label={`${t('password')} *`}
                 type={password.value ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (
@@ -265,9 +294,9 @@ export default function TableNewEditForm({ currentTable }) {
                 }}
               />
               <RHFTextField
-              lang="ar"
+                lang="ar"
                 name="confirmPassword"
-                label={t('confirm password')}
+                label={`${t('confirm password')} *`}
                 type={password.value ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (

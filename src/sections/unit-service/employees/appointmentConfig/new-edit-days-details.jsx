@@ -264,7 +264,7 @@ export default function NewEditDayDetails({ appointTime }) {
           variant="p"
           sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
         >
-          {curLangAr?'تفاصيل اليوم':'Days Details'}:
+          {curLangAr ? 'تفاصيل اليوم' : 'Days Details'}:
         </Typography>
 
         <Stack
@@ -290,7 +290,12 @@ export default function NewEditDayDetails({ appointTime }) {
                   spacing={2}
                   sx={{ width: '100%', mt: 2 }}
                 >
-                  <RHFSelect size="small" name={`days_details[${index}].day`} label={t("day")}>
+                  <RHFSelect
+                    InputLabelProps={{ shrink: true }}
+                    size="small"
+                    name={`days_details[${index}].day`}
+                    label={t('day')}
+                  >
                     {weekDays
                       .filter(
                         (option) =>
@@ -306,11 +311,11 @@ export default function NewEditDayDetails({ appointTime }) {
                       ))}
                   </RHFSelect>
                   <RHFTextField
-              lang="ar"
+                    lang="ar"
                     disabled
                     size="small"
                     name={`days_details[${index}].appointment_number`}
-                    label={t("appointments number")}
+                    label={t('appointments number')}
                     InputLabelProps={{ shrink: true }}
                     value={appointmentsNum[index] || appointEstimatedNum(index)}
                   />
@@ -325,9 +330,9 @@ export default function NewEditDayDetails({ appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
-              lang="ar"
+                        lang="ar"
                         minutesStep="5"
-                        label={t("work start time")}
+                        label={t('work start time')}
                         value={
                           values.days_details[index].work_start_time
                             ? new Date(values.days_details[index].work_start_time)
@@ -352,9 +357,9 @@ export default function NewEditDayDetails({ appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
-              lang="ar"
+                        lang="ar"
                         minutesStep="5"
-                        label={t("break start time")}
+                        label={t('break start time')}
                         value={
                           values.days_details[index].break_start_time
                             ? new Date(values.days_details[index].break_start_time)
@@ -385,9 +390,9 @@ export default function NewEditDayDetails({ appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
-              lang="ar"
+                        lang="ar"
                         minutesStep="5"
-                        label={t("work end time")}
+                        label={t('work end time')}
                         value={
                           values.days_details[index].work_end_time
                             ? new Date(values.days_details[index].work_end_time)
@@ -412,9 +417,9 @@ export default function NewEditDayDetails({ appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
-              lang="ar"
+                        lang="ar"
                         minutesStep="5"
-                        label={t("break end time")}
+                        label={t('break end time')}
                         value={
                           values.days_details[index].break_end_time
                             ? new Date(values.days_details[index].break_end_time)
@@ -461,7 +466,7 @@ export default function NewEditDayDetails({ appointTime }) {
                         size="small"
                         sx={{ width: '100%', shrink: true }}
                       >
-                        <InputLabel> {t('service types')} </InputLabel>
+                        <InputLabel shrink> {t('service types')} </InputLabel>
 
                         <Select
                           {...field}
@@ -540,7 +545,7 @@ export default function NewEditDayDetails({ appointTime }) {
             onClick={handleAdd}
             // sx={{ flexShrink: 0 }}
           >
-            {curLangAr?'إضافة يوم جديد':'add new day'}
+            {curLangAr ? 'إضافة يوم جديد' : 'add new day'}
           </Button>
         </Stack>
       </Box>

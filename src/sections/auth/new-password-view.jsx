@@ -45,7 +45,7 @@ export default function NewPasswordView() {
     code: Yup.string().min(6, 'Code must be at least 6 characters').required('Code is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
+      .min(8, 'Password must be at least 8 characters')
       .required('Password is required'),
     confirmPassword: Yup.string()
       .required('Confirm password is required')

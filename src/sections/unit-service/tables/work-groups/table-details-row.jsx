@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import Collapse from '@mui/material/Collapse';
+import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
@@ -17,41 +15,28 @@ import { fDateTime } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import {
-  useGetDepartmentAppointmentConfigsCount,
-  useGetDepartmentActivitiesCount,
-  useGetDepartmentAppointmentsCount,
-  useGetDepartmentEconomicMovementsCount,
-  useGetDepartmentEmployeesCount,
-  useGetDepartmentFeedbackesCount,
-  useGetDepartmentRoomsCount,
-} from 'src/api/tables';
 import ACLGuard from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
-export default function CountriesTableRow({
+export default function TableDetailsRow({
   row,
   selected,
   onEditRow,
   onSelectRow,
-  onActivate,
   onInactivate,
-  onShow,
-  showActivities,
-  showAppointmentConfig,
-  showAppointments,
-  showEmployees,
-  showQualityControl,
-  showRooms,
-  showWorkGroups,
+  onActivate,
+  filters,
+  setFilters,
 }) {
   const {
     code,
-    sequence_number,
     name_english,
     name_arabic,
+    employees,
+    // general_info,
     status,
     created_at,
     user_creation,
@@ -67,60 +52,31 @@ export default function CountriesTableRow({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
+  const confirm = useBoolean();
+
   const popover = usePopover();
   const DDL = usePopover();
-  // const { appointmentConfigCount } = useGetDepartmentAppointmentConfigsCount(row._id);
-  // const { activitiesCount } = useGetDepartmentActivitiesCount(row._id);
-  // const { appointmentsCount } = useGetDepartmentAppointmentsCount(row._id);
-  // const { economecMovementsCount } = useGetDepartmentEconomicMovementsCount(row._id);
-  // const { employeesCount } = useGetDepartmentEmployeesCount(row._id);
-  // const { feedbackCount } = useGetDepartmentFeedbackesCount(row._id);
-  // const { roomsCount } = useGetDepartmentRoomsCount(row._id);
+  const details = usePopover();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell lang="ar" padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onShow}
-        lang="ar"
-        align="center"
-      >
-        {code}
+
+      <TableCell lang="ar" align="center">
+        <Box>{code}</Box>
       </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onShow}
-        lang="ar"
-        align="center"
-      >
-        {sequence_number}
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onShow}
-        lang="ar"
-        align="center"
-      >
-        {curLangAr ? name_arabic : name_english}
+
+      <TableCell lang="ar" align="center">{curLangAr ? name_arabic : name_english}</TableCell>
+      <TableCell lang="ar" align="center">
+        {employees
+          .map((employee) => `${employee.employee.first_name} ${employee.employee.family_name}`)
+          .join(', ')}
       </TableCell>
       <TableCell lang="ar" align="center">
         <Label
-          lang="ar"
+                    lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -129,88 +85,20 @@ export default function CountriesTableRow({
           {t(status)}
         </Label>
       </TableCell>
-      {/* <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onShow}
-      >
-        {economecMovementsCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showAppointmentConfig}
-      >
-        {appointmentConfigCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showAppointments}
-      >
-        {appointmentsCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showActivities}
-      >
-        {activitiesCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showEmployees}
-      >
-        {employeesCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showQualityControl}
-      >
-        {feedbackCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showRooms}
-      >
-        {roomsCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showWorkGroups}
-      >
-        {roomsCount}
-      </TableCell> */}
+
       <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        {/* <IconButton
+          color={collapse.value ? 'inherit' : 'default'}
+          onClick={collapse.onToggle}
+          sx={{
+            ...(collapse.value && {
+              bgcolor: 'action.hover',
+            }),
+          }}
+        >
+          <Iconify icon="eva:arrow-ios-downward-fill" />
+        </IconButton> */}
+
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -229,11 +117,11 @@ export default function CountriesTableRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'delete' }) && (
+          ? ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'delete' }) && (
               <MenuItem
                 onClick={() => {
                   onInactivate();
-                  // popover.onClose();
+                  popover.onClose();
                 }}
                 sx={{ color: 'error.main' }}
               >
@@ -241,11 +129,11 @@ export default function CountriesTableRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
+          : ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
               <MenuItem
                 onClick={() => {
                   onActivate();
-                  // popover.onClose();
+                  popover.onClose();
                 }}
                 sx={{ color: 'success.main' }}
               >
@@ -253,7 +141,8 @@ export default function CountriesTableRow({
                 {t('activate')}
               </MenuItem>
             )}
-        {ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
+
+        {ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
           <MenuItem
             onClick={() => {
               onEditRow();
@@ -294,27 +183,19 @@ export default function CountriesTableRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>
-          {t('modifications no')}: {modifications_nums}
-        </Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
       </CustomPopover>
     </>
   );
 }
 
-CountriesTableRow.propTypes = {
-  onSelectRow: PropTypes.func,
-  onActivate: PropTypes.func,
+TableDetailsRow.propTypes = {
   onInactivate: PropTypes.func,
+  onActivate: PropTypes.func,
+  onSelectRow: PropTypes.func,
+  setFilters: PropTypes.func,
   onEditRow: PropTypes.func,
-  onShow: PropTypes.func,
-  showActivities: PropTypes.func,
-  showAppointmentConfig: PropTypes.func,
-  showAppointments: PropTypes.func,
-  showEmployees: PropTypes.func,
-  showQualityControl: PropTypes.func,
-  showRooms: PropTypes.func,
-  showWorkGroups: PropTypes.func,
   row: PropTypes.object,
+  filters: PropTypes.object,
   selected: PropTypes.bool,
 };

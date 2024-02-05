@@ -64,7 +64,7 @@ export const allLangs = [
   //   icon: 'flagpack:cn',
   // },
   {
-    label: 'Arabic',
+    label: 'العربية',
     value: 'ar',
     systemValue: merge(arSDDataGrid, arSACore),
     adapterLocale: arSAAdapter,

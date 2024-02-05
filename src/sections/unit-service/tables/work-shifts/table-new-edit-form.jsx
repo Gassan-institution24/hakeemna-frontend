@@ -144,13 +144,13 @@ export default function TableNewEditForm({ currentTable }) {
               lang="ar"
               onChange={handleEnglishInputChange}
               name="name_english"
-              label={t('name english')}
+              label={`${t('name english')} *`}
             />
             <RHFTextField
               lang="ar"
               onChange={handleArabicInputChange}
               name="name_arabic"
-              label={t('name arabic')}
+              label={`${t('name arabic')} *`}
             />
             <Box
               rowGap={3}
@@ -174,7 +174,8 @@ export default function TableNewEditForm({ currentTable }) {
                       field.onChange(newValue);
                     }}
                     slotProps={{
-                      textField: { lang:"ar",
+                      textField: {
+                        lang: 'ar',
                         fullWidth: true,
                         error: !!error,
                         helperText: error?.message,
@@ -190,13 +191,14 @@ export default function TableNewEditForm({ currentTable }) {
                   <MobileTimePicker
                     lang="ar"
                     minutesStep="5"
-                    label={t("end time")}
+                    label={t('end time')}
                     value={values.end_time ? new Date(values.end_time) : null}
                     onChange={(newValue) => {
                       field.onChange(newValue);
                     }}
                     slotProps={{
-                      textField: { lang:"ar",
+                      textField: {
+                        lang: 'ar',
                         fullWidth: true,
                         error: !!error,
                         helperText: error?.message,

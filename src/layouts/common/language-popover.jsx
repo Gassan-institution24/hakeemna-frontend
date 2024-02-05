@@ -43,6 +43,7 @@ export default function LanguagePopover() {
           }),
         }}
       >
+        {/* {currentLang.value} */}
         <Iconify icon={currentLang.icon} sx={{ borderRadius: 0.65, width: 28 }} />
       </IconButton>
 
@@ -52,6 +53,7 @@ export default function LanguagePopover() {
             key={option.value}
             selected={option.value === currentLang.value}
             onClick={() => handleChangeLang(option.value)}
+            lang='ar'
           >
             <Iconify icon={option.icon} sx={{ borderRadius: 0.65, width: 28 }} />
 

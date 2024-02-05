@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 
+import { useMediaQuery } from '@mui/material';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
@@ -18,6 +19,7 @@ const NavItem = forwardRef(
     {
       title,
       path,
+      color,
       icon,
       info,
       disabled,
@@ -35,6 +37,9 @@ const NavItem = forwardRef(
     ref
   ) => {
     const subItem = depth !== 1;
+    const isXLScreen = useMediaQuery((theme) => theme.breakpoints.up('xl'));
+    const isMdScreen = useMediaQuery((theme) => theme.breakpoints.down('md'));
+    const isBigMdScreen = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
     const renderContent = (
       <StyledNavItem
@@ -45,14 +50,14 @@ const NavItem = forwardRef(
         disabled={disabled}
         {...other}
       >
-        {icon && (
+        {(isXLScreen || isMdScreen) && icon && (
           <Box component="span" className="icon">
             {icon}
           </Box>
         )}
 
-        {title && (
-          <Box component="span" className="label" lang='ar'>
+        {isBigMdScreen && title && (
+          <Box component="span" className="label" lang="ar">
             {title}
           </Box>
         )}
@@ -128,6 +133,7 @@ NavItem.propTypes = {
   icon: PropTypes.element,
   info: PropTypes.element,
   title: PropTypes.string,
+  color: PropTypes.string,
   disabled: PropTypes.bool,
   hasChild: PropTypes.bool,
   caption: PropTypes.string,

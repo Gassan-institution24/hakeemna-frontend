@@ -237,18 +237,18 @@ export default function RoomsTableView({ departmentData }) {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={`${curLangAr?departmentData.name_arabic:departmentData.name_english || ''} ${t('department rooms')}`} /// edit
-          links={[
-            {
-              name: t('dashboard'),
-              href: paths.unitservice.root,
-            },
-            {
-              name: t('departments'),
-              href: paths.unitservice.departments.root,
-            },
-            { name: t('department rooms') },
-          ]}
+          // heading={`${curLangAr?departmentData.name_arabic:departmentData.name_english || ''} ${t('department rooms')}`} /// edit
+          // links={[
+          //   {
+          //     name: t('dashboard'),
+          //     href: paths.unitservice.root,
+          //   },
+          //   {
+          //     name: t('departments'),
+          //     href: paths.unitservice.departments.root,
+          //   },
+          //   { name: t('department rooms') },
+          // ]}
           action={
             ACLGuard({ category: 'department', subcategory: 'rooms', acl: 'create' }) && (
               <Button

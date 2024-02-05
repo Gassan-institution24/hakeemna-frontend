@@ -60,7 +60,7 @@ export default function Header({ onOpenNav }) {
         direction="row"
         alignItems="center"
         justifyContent="flex-end"
-        spacing={{ xs: 0.5, sm: 1 }}
+        spacing={{ xs: 0.5, sm: 2 }}
       >
         <ServiceUnitPopover />
 
@@ -70,7 +70,7 @@ export default function Header({ onOpenNav }) {
 
         <ContactsPopover />
 
-        <SettingsButton />
+        {/* <SettingsButton /> */}
 
         <AccountPopover />
       </Stack>

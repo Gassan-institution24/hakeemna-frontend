@@ -201,21 +201,21 @@ export default function UploadOldPatient({ refetch }) {
             lang="ar"
             onChange={handleEnglishInputChange}
             name="first_name"
-            label={t('first name')}
+            label={`${t('first name')} *`}
           />
           <RHFTextField
             lang="ar"
             onChange={handleEnglishInputChange}
             name="middle_name"
-            label={t("middle name")}
+            label={t('middle name')}
           />
           <RHFTextField
             lang="ar"
             onChange={handleEnglishInputChange}
             name="family_name"
-            label={t("family name")}
+            label={`${t('family name')} *`}
           />
-          <RHFTextField lang="ar" type="email" name="email" label={t('email')} />
+          <RHFTextField lang="ar" type="email" name="email" label={`${t('email')} *`} />
           <RHFTextField
             lang="ar"
             onChange={handleEnglishInputChange}

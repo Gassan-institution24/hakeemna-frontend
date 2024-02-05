@@ -3,7 +3,8 @@ import { Outlet } from 'react-router-dom';
 
 import { AuthGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
-import SecondaryNavLayout from 'src/layouts/secondary-nav-bar';
+import SecondaryNavLayout from 'src/layouts/employee-topbar';
+import DepartmentNavLayout from 'src/layouts/department-topbar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 import RecieptsInfoPage from 'src/pages/employee/accounting/reciepts/info';
@@ -235,69 +236,53 @@ export const unitServiceDashboardRoutes = [
         children: [
           { element: <DepartmentsHomePage />, index: true },
           { path: 'new', element: <DepartmentsNewPage /> },
-          { path: ':id/info', element: <DepartmentsInfoPage /> },
+          { path: ':id/edit', element: <DepartmentsEditPage /> },
           {
-            path: ':id/employees',
+            path: ':id',
+            element: (
+              <DepartmentNavLayout>
+                <Outlet />
+              </DepartmentNavLayout>
+            ),
             children: [
-              { element: <DepartmentsEmployeesPage />, index: true },
-              { path: 'new', element: <DepartmentsEmployeesNewPage /> },
+              { path: 'info', element: <DepartmentsInfoPage /> },
               {
-                path: ':emid',
-                element: (
-                  <SecondaryNavLayout>
-                    <Outlet />
-                  </SecondaryNavLayout>
-                ),
+                path: 'employees',
                 children: [
-                  { path: 'info', element: <DepartmentsEmployeesInfoPage /> },
-                  { path: 'appointments', element: <DepartmentsEmployeesAppointmentsPage /> },
-                  {
-                    path: 'appointmentconfig/:coid',
-                    element: <DepartmentsEmployeesAppointmentConfigDetailPage />,
-                  },
-                  {
-                    path: 'appointmentconfig',
-                    element: <DepartmentsEmployeesAppointmentConfigPage />,
-                  },
-                  { path: 'accounting', element: <DepartmentsEmployeesAccountingPage /> },
-                  { path: 'feedback', element: <DepartmentsEmployeesFeedbackPage /> },
-                  { path: 'attendence', element: <DepartmentsEmployeesAttendencePage /> },
-                  { path: 'offers', element: <DepartmentsEmployeesOffersPage /> },
-                  { path: 'activities', element: <DepartmentsEmployeesActivitiesPage /> },
-                  { path: 'acl', element: <DepartmentsEmployeesACLPage /> },
+                  { element: <DepartmentsEmployeesPage />, index: true },
+                  { path: 'new', element: <DepartmentsEmployeesNewPage /> },
                 ],
               },
+              { path: 'accounting', element: <DepartmentsAccountingPage /> },
+              {
+                path: 'activities',
+                children: [
+                  { element: <DepartmentsActivitiesPage />, index: true },
+                  { path: 'new', element: <DepartmentsNewActivitiesPage /> },
+                  { path: ':acid/edit', element: <DepartmentsEditActivitiesPage /> },
+                ],
+              },
+              {
+                path: 'rooms',
+                children: [
+                  { element: <DepartmentsRoomsPage />, index: true },
+                  { path: 'new', element: <DepartmentsNewRoomsPage /> },
+                  { path: ':acid/edit', element: <DepartmentsEditRoomsPage /> },
+                ],
+              },
+              {
+                path: 'wgroups',
+                children: [
+                  { element: <DepartmentsWorkGroupsPage />, index: true },
+                  { path: 'new', element: <DepartmentsNewWorkGroupsPage /> },
+                  { path: ':acid/edit', element: <DepartmentsEditWorkGroupsPage /> },
+                ],
+              },
+              { path: 'appointments', element: <DepartmentsAppointmentsPage /> },
+              { path: 'appointmentconfiguration', element: <DepartmentsAppointmentConfigPage /> },
+              { path: 'qc', element: <DepartmentsQualityControlPage /> },
             ],
           },
-          { path: ':id/accounting', element: <DepartmentsAccountingPage /> },
-          {
-            path: ':id/activities',
-            children: [
-              { element: <DepartmentsActivitiesPage />, index: true },
-              { path: 'new', element: <DepartmentsNewActivitiesPage /> },
-              { path: ':acid/edit', element: <DepartmentsEditActivitiesPage /> },
-            ],
-          },
-          {
-            path: ':id/rooms',
-            children: [
-              { element: <DepartmentsRoomsPage />, index: true },
-              { path: 'new', element: <DepartmentsNewRoomsPage /> },
-              { path: ':acid/edit', element: <DepartmentsEditRoomsPage /> },
-            ],
-          },
-          {
-            path: ':id/wgroups',
-            children: [
-              { element: <DepartmentsWorkGroupsPage />, index: true },
-              { path: 'new', element: <DepartmentsNewWorkGroupsPage /> },
-              { path: ':acid/edit', element: <DepartmentsEditWorkGroupsPage /> },
-            ],
-          },
-          { path: ':id/appointments', element: <DepartmentsAppointmentsPage /> },
-          { path: ':id/appointmentconfiguration', element: <DepartmentsAppointmentConfigPage /> },
-          { path: ':id/qc', element: <DepartmentsQualityControlPage /> },
-          { path: ':id/edit', element: <DepartmentsEditPage /> },
         ],
       },
       {

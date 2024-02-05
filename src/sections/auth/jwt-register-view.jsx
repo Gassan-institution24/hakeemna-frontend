@@ -53,7 +53,9 @@ export default function JwtRegisterView() {
     last_name: Yup.string().required('Last name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
-    confirmPassword: Yup.string().required('confirm Password is required'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .min(8, 'Confirm password must be at least 8 characters'),
     identification_num: Yup.string().required('Identification number is required'),
     mobile_num1: Yup.string().required('Mobile number is required'),
     gender: Yup.string().required('Gender is required'),

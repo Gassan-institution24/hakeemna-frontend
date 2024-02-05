@@ -3,18 +3,23 @@ import PropTypes from 'prop-types';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 import EmptyContent from '../empty-content';
 
 // ----------------------------------------------------------------------
 
 export default function TableNoData({ notFound, sx }) {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   return (
     <TableRow>
       {notFound ? (
         <TableCell colSpan={12}>
           <EmptyContent
             filled
-            title="No Data"
+            title={t('No Data')}
             sx={{
               py: 10,
               ...sx,
