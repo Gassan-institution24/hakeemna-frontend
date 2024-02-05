@@ -13,7 +13,6 @@ import axiosHandler from 'src/utils/axios-handler';
 import { varFade, MotionViewport } from 'src/components/animate';
 import { useSnackbar } from 'src/components/snackbar';
 
-import { border } from '@mui/system';
 // ----------------------------------------------------------------------
 
 export default function ContactUs() {
@@ -21,7 +20,7 @@ export default function ContactUs() {
   const [error, setError] = useState();
 
   const contactUsSchema = Yup.object().shape({
-    title: Yup.string(),
+    title: Yup.string().required('Title is required'),
     Body: Yup.string().required('Message is required'),
   });
 
@@ -80,13 +79,13 @@ export default function ContactUs() {
 
         <Stack spacing={3}>
           <m.div variants={varFade().inUp}>
-            <TextField fullWidth label="Subject" {...methods.register('title')} />
+            <TextField fullWidth label="Subject*" {...methods.register('title')} />
           </m.div>
 
           <m.div variants={varFade().inUp}>
             <TextField
               fullWidth
-              label="Enter your message here."
+              label="Enter your message here*"
               multiline
               rows={5}
               {...methods.register('Body')}

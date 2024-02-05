@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { BookingAppointment } from 'src/sections/user/view';
+import { UserAppointmentsBook } from 'src/sections/user/view';
 
 // ----------------------------------------------------------------------
 
-export default function Booking() {
+export default function Sharedoctorna() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: book</title>
+        <title>Book Appointment</title>
       </Helmet>
 
-      <BookingAppointment />
+      <UserAppointmentsBook />
     </>
   );
 }

@@ -32,7 +32,7 @@ export default function ContactUsView({ id }) {
             name: t('user'),
             href: paths.dashboard.user.root,
           },
-          { name: currentUser?.name },
+          { name: t('How can we help')},
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
