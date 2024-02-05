@@ -234,18 +234,18 @@ export default function WorkGroupsTableView({ departmentData }) {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={`${departmentData.name_english || ''} ${t('department work groups')} `} /// edit
-          links={[
-            {
-              name: t('dashboard'),
-              href: paths.unitservice.root,
-            },
-            {
-              name: t('departments'),
-              href: paths.unitservice.departments.root,
-            },
-            { name: t('department work groups') },
-          ]}
+          // heading={`${departmentData.name_english || ''} ${t('department work groups')} `} /// edit
+          // links={[
+          //   {
+          //     name: t('dashboard'),
+          //     href: paths.unitservice.root,
+          //   },
+          //   {
+          //     name: t('departments'),
+          //     href: paths.unitservice.departments.root,
+          //   },
+          //   { name: t('department work groups') },
+          // ]}
           action={
             ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'create' }) && (
               <Button

@@ -141,18 +141,16 @@ export default function TableNewEditForm({ currentTable }) {
               }}
             >
               <RHFTextField
-              lang="ar"
                 lang="ar"
                 onChange={handleEnglishInputChange}
                 name="name_english"
-                label={t("name english")}
+                label={`${t('name english')} *`}
               />
               <RHFTextField
-              lang="ar"
                 lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
-                label={t("name arabic")}
+                label={`${t('name arabic')} *`}
               />
               <RHFSelect lang="ar" name="department" label={t('department')}>
                 {departmentsData.map((department) => (
@@ -162,18 +160,16 @@ export default function TableNewEditForm({ currentTable }) {
                 ))}
               </RHFSelect>
               <RHFTextField
-              lang="ar"
                 lang="ar"
                 onChange={handleEnglishInputChange}
                 name="details"
-                label={t("details")}
+                label={t('details')}
               />
               <RHFTextField
-              lang="ar"
                 lang="ar"
                 onChange={handleArabicInputChange}
                 name="details_arabic"
-                label={t("details arabic")}
+                label={t('details arabic')}
               />
             </Box>
 

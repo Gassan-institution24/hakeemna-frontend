@@ -50,12 +50,13 @@ export default function AccountGeneral({ unitServiceData }) {
 
   const UpdateUserSchema = Yup.object().shape({
     name_english: Yup.string().required('Name is required.'),
+    name_arabic: Yup.string().required('Name is required.'),
     country: Yup.string().required('Country is required.'),
     city: Yup.string().required('City is required.'),
     US_type: Yup.string().required('Unit service type is required.'),
     email: Yup.string().required('Email is required.'),
     sector_type: Yup.string().required('Sector type is required.'),
-    speciality: Yup.string().required('Specialty is required.'),
+    speciality: Yup.string(),
     identification_num: Yup.string().required('ID number is required.'),
     address: Yup.string(),
     web_page: Yup.string(),
@@ -82,6 +83,7 @@ export default function AccountGeneral({ unitServiceData }) {
 
   const defaultValues = {
     name_english: data?.name_english || '',
+    name_arabic: data?.name_arabic || '',
     country: data?.country._id || null,
     city: data?.city._id || null,
     US_type: data?.US_type?._id || null,
@@ -128,7 +130,6 @@ export default function AccountGeneral({ unitServiceData }) {
 
   const onSubmit = handleSubmit(async (dataToSend) => {
     try {
-      console.log('dataToSend', dataToSend);
       const formData = new FormData();
       if (companyLogo) {
         formData.append('company_logo_pic', companyLogo);
@@ -167,7 +168,6 @@ export default function AccountGeneral({ unitServiceData }) {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        {/* img */}
         <Grid xs={12} md={4}>
           <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
             <RHFUploadAvatar
@@ -182,7 +182,7 @@ export default function AccountGeneral({ unitServiceData }) {
                     color: 'text.disabled',
                   }}
                 >
-                  max size of {fData(3145728)}
+                  {t('max size of')} {fData(3145728)}
                 </Typography>
               }
               maxSize={3145728}
@@ -200,18 +200,38 @@ export default function AccountGeneral({ unitServiceData }) {
               }}
             >
               <RHFTextField
-              lang="ar"
+                lang="ar"
                 disabled
                 variant="filled"
                 name="identification_num"
-                label="ID number :"
+                label={`${t('ID number')} :`}
               />
               <RHFTextField
-              lang="ar" variant="filled" name="name_english" label="Name :" />
+                lang="ar"
+                variant="filled"
+                name="name_english"
+                label={`${t('name')} :`}
+              />
               <RHFTextField
-              lang="ar" type="email" variant="filled" name="email" label="Email :" />
+                lang="ar"
+                variant="filled"
+                name="name_arabic"
+                label={`${t('name arabic')} :`}
+              />
               <RHFTextField
-              lang="ar" type="number" variant="filled" name="phone" label="Phone Number :" />
+                lang="ar"
+                type="email"
+                variant="filled"
+                name="email"
+                label={`${t('email')} :`}
+              />
+              <RHFTextField
+                lang="ar"
+                type="number"
+                variant="filled"
+                name="phone"
+                label={`${t('phone')} :`}
+              />
             </Box>
           </Card>
         </Grid>
@@ -227,7 +247,7 @@ export default function AccountGeneral({ unitServiceData }) {
               }}
             >
               <RHFSelect
-                label="Country"
+                label={t('country')}
                 fullWidth
                 name="country"
                 InputLabelProps={{ shrink: true }}
@@ -236,13 +256,13 @@ export default function AccountGeneral({ unitServiceData }) {
               >
                 {countriesData.map((country) => (
                   <MenuItem key={country._id} value={country._id}>
-                    {country.name_english}
+                    {curLangAr ? country.name_arabic : country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
 
               <RHFSelect
-                label="City"
+                label={t('city')}
                 fullWidth
                 name="city"
                 InputLabelProps={{ shrink: true }}
@@ -250,13 +270,13 @@ export default function AccountGeneral({ unitServiceData }) {
               >
                 {cities.map((city) => (
                   <MenuItem key={city._id} value={city._id}>
-                    {city.name_english}
+                    {curLangAr ? city.name_arabic : city.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
 
               <RHFSelect
-                label="Unit service type"
+                label={t('unit service type')}
                 fullWidth
                 name="US_type"
                 InputLabelProps={{ shrink: true }}
@@ -264,13 +284,13 @@ export default function AccountGeneral({ unitServiceData }) {
               >
                 {unitserviceTypesData.map((type) => (
                   <MenuItem value={type._id} key={type._id}>
-                    {type.name_english}
+                    {curLangAr ? type.name_arabic : type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
 
               <RHFSelect
-                label={t('specialty')}
+                label={`${t('specialty')} *`}
                 fullWidth
                 name="speciality"
                 InputLabelProps={{ shrink: true }}
@@ -278,30 +298,38 @@ export default function AccountGeneral({ unitServiceData }) {
               >
                 {specialtiesData.map((specialty) => (
                   <MenuItem value={specialty._id} key={specialty._id}>
-                    {specialty.name_english}
+                    {curLangAr ? specialty.name_arabic : specialty.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect
-                label="Sector type"
+                label={t('sector type')}
                 fullWidth
                 name="sector_type"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                <MenuItem value="public">Public</MenuItem>
-                <MenuItem value="privet">Privet</MenuItem>
-                <MenuItem value="charity">Charity</MenuItem>
+                <MenuItem value="public">{t('Public')}</MenuItem>
+                <MenuItem value="privet">{t('Privet')}</MenuItem>
+                <MenuItem value="charity">{t('Charity')}</MenuItem>
               </RHFSelect>
+              <RHFTextField lang="ar" name="web_page" label={t('webpage')} />
               <RHFTextField
-              lang="ar" name="web_page" label="Web page" />
-              <RHFTextField
-              lang="ar" type="number" name="mobile_num" label="Alternative mobile number" />
-              <RHFTextField
-              lang="ar" name="location_gps" label="Location GPS" />
+                lang="ar"
+                type="number"
+                name="mobile_num"
+                label={t('alternative mobile number')}
+              />
+              <RHFTextField lang="ar" name="location_gps" label={t('location GPS')} />
             </Box>
             <RHFTextField
-              lang="ar" multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} />
+              lang="ar"
+              multiline
+              sx={{ mt: 3 }}
+              rows={2}
+              name="address"
+              label={t('address')}
+            />
             <RHFTextField
               lang="ar"
               multiline
@@ -310,12 +338,12 @@ export default function AccountGeneral({ unitServiceData }) {
               sx={{ mt: 3 }}
               onChange={handleEnglishInputChange}
               name="introduction_letter"
-              label="Introduction letter"
+              label={t('introduction letter')}
             />
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Save Changes
+                {t('save changes')}
               </LoadingButton>
             </Stack>
           </Card>

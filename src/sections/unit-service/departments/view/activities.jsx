@@ -234,18 +234,18 @@ export default function ActivitesTableView({ departmentData }) {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={`${departmentData.name_english || t('department')} ${t('activities')}`} /// edit
-          links={[
-            {
-              name: t('dashboard'),
-              href: paths.unitservice.root,
-            },
-            {
-              name: t('departments'),
-              href: paths.unitservice.departments.root,
-            },
-            { name: t('activities') },
-          ]}
+          // heading={`${departmentData.name_english || t('department')} ${t('activities')}`} /// edit
+          // links={[
+          //   {
+          //     name: t('dashboard'),
+          //     href: paths.unitservice.root,
+          //   },
+          //   {
+          //     name: t('departments'),
+          //     href: paths.unitservice.departments.root,
+          //   },
+          //   { name: t('activities') },
+          // ]}
           action={
             ACLGuard({ category: 'department', subcategory: 'activities', acl: 'create' }) && (
               <Button

@@ -67,16 +67,17 @@ export default function UnitServicesTableView() {
   const TABLE_HEAD = [
     /// to edit
     { id: 'code', label: t('code') },
+    { id: 'sequence', label: t('sequence') },
     { id: 'name_english', label: t('name') },
     { id: 'status', label: t('status') },
-    { id: 'Accounting', label: t('accounting') },
-    // { id: 'Appointment Config', label: t('Appointment Configuration' },
-    { id: 'Appointments', label: t('appointments') },
-    { id: 'Activities', label: t('activities') },
-    { id: 'Employees', label: t('employees') },
-    { id: 'Quality Control', label: t('quality control') },
-    { id: 'Rooms', label: t('rooms') },
-    { id: 'Work Groups', label: t('work groups') },
+    // { id: 'Accounting', label: t('accounting') },
+    // // { id: 'Appointment Config', label: t('Appointment Configuration' },
+    // { id: 'Appointments', label: t('appointments') },
+    // { id: 'Activities', label: t('activities') },
+    // { id: 'Employees', label: t('employees') },
+    // { id: 'Quality Control', label: t('quality control') },
+    // { id: 'Rooms', label: t('rooms') },
+    // { id: 'Work Groups', label: t('work groups') },
     { id: '', width: 88 },
   ];
 
@@ -221,9 +222,9 @@ export default function UnitServicesTableView() {
     [router]
   );
 
-  const handleShowAccountingRow = useCallback(
+  const handleShowRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.departments.accounting(id)); /// edit
+      router.push(paths.unitservice.departments.info(id)); /// edit
     },
     [router]
   );
@@ -453,7 +454,7 @@ export default function UnitServicesTableView() {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row._id)}
-                        showAccounting={() => handleShowAccountingRow(row._id)}
+                        onShow={() => handleShowRow(row._id)}
                         showActivities={() => handleShowActivitiesRow(row._id)}
                         showAppointmentConfig={() => handleShowAppointmentConfidRow(row._id)}
                         showAppointments={() => handleShowAppointmentsRow(row._id)}

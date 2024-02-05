@@ -165,7 +165,7 @@ export default function DepartmentFeedbackView({ departmentData }) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
+        {/* <CustomBreadcrumbs
           heading={`${departmentData.name_english || ''} ${t('department feedbacks')}`} /// edit
           links={[
             {
@@ -181,7 +181,7 @@ export default function DepartmentFeedbackView({ departmentData }) {
           sx={{
             mb: { xs: 3, md: 5 },
           }}
-        />
+        /> */}
 
         <Card>
           <Tabs

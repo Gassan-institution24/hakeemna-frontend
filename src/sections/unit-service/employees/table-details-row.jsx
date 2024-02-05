@@ -35,6 +35,7 @@ export default function UnitServiceEmployeesRow({
 }) {
   const {
     code,
+    sequence_number,
     employee,
     Adjust_schedule,
     status,
@@ -46,6 +47,7 @@ export default function UnitServiceEmployeesRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
+  console.log('row', row);
 
   const { t } = useTranslate();
 
@@ -80,11 +82,28 @@ export default function UnitServiceEmployeesRow({
         onClick={onViewRow}
         align="center"
       >
+        {sequence_number}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+          // textDecoration: 'underline',
+        }}
+        onClick={onViewRow}
+        align="center"
+      >
         {employee.first_name} {employee.family_name}
       </TableCell>
-      <TableCell lang="ar" align="center">{curLangAr ? employee.employee_type?.name_arabic: employee.employee_type?.name_english}</TableCell>
-      <TableCell lang="ar" align="center">{employee.email}</TableCell>
-      <TableCell lang="ar" align="center">{curLangAr ? employee.nationality?.name_arabic: employee.nationality?.name_english}</TableCell>
+      <TableCell lang="ar" align="center">
+        {curLangAr ? employee.employee_type?.name_arabic : employee.employee_type?.name_english}
+      </TableCell>
+      <TableCell lang="ar" align="center">
+        {employee.email}
+      </TableCell>
+      <TableCell lang="ar" align="center">
+        {curLangAr ? employee.nationality?.name_arabic : employee.nationality?.name_english}
+      </TableCell>
       <TableCell lang="ar" align="center">
         <Iconify
           icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'}
@@ -96,7 +115,7 @@ export default function UnitServiceEmployeesRow({
       </TableCell>
       <TableCell lang="ar" align="center">
         <Label
-                    lang="ar"
+          lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -183,7 +202,9 @@ export default function UnitServiceEmployeesRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>
+          {t('modifications no')}: {modifications_nums}
+        </Box>
       </CustomPopover>
     </>
   );

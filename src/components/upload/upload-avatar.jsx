@@ -6,6 +6,8 @@ import Stack from '@mui/material/Stack';
 import { alpha } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
+import { useTranslate } from 'src/locales';
+
 import Image from '../image';
 import Iconify from '../iconify';
 import RejectionFiles from './errors-rejection-files';
@@ -21,6 +23,8 @@ export default function UploadAvatar({ error, file, disabled, helperText, sx, ..
     },
     ...other,
   });
+
+  const { t } = useTranslate();
 
   const hasFile = !!file;
 
@@ -77,7 +81,7 @@ export default function UploadAvatar({ error, file, disabled, helperText, sx, ..
     >
       <Iconify icon="solar:camera-add-bold" width={32} />
 
-      <Typography variant="caption">{file ? 'Update photo' : 'Upload photo'}</Typography>
+      <Typography variant="caption">{file ? t('update photo') : t('upload photo')}</Typography>
     </Stack>
   );
 

@@ -229,10 +229,16 @@ export function useNavData() {
             title: t('work shifts'),
             path: paths.unitservice.tables.workshifts.root,
           },
-          // show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }), {
-          //   title: t('work groups'), path: paths.unitservice.tables.workgroups.root },
-          // show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }), {
-          //   title: t('rooms'), path: paths.unitservice.tables.rooms.root },
+          {
+            show: ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }),
+            title: t('work groups'),
+            path: paths.unitservice.tables.workgroups.root,
+          },
+          {
+            show: ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }),
+            title: t('rooms'),
+            path: paths.unitservice.tables.rooms.root,
+          },
         ],
       },
       {

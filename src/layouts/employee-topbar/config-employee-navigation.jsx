@@ -73,10 +73,6 @@ export function useNavData() {
     ];
     const employeeSecDashboard = [
       {
-        subheader: t('control panel'),
-        items: employeeItems.filter((item) => item.show),
-      },
-      {
         items: [
           {
             title: t(
@@ -86,6 +82,10 @@ export function useNavData() {
             icon: <Iconify icon="fluent:person-info-20-filled" />,
           },
         ],
+      },
+      {
+        subheader: t('control panel'),
+        items: employeeItems.filter((item) => item.show),
       },
     ];
 

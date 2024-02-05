@@ -210,23 +210,33 @@ export default function AccountGeneral({ employeeData, refetch }) {
               }}
             >
               <RHFTextField
-              lang="ar"
+                lang="ar"
                 // disabled
                 variant="filled"
                 name="identification_num"
-                label="ID number :"
+                label={`${t('ID number')} :`}
               />
               <RHFTextField
-              lang="ar"
+                lang="ar"
                 // disabled
                 variant="filled"
                 name="profrssion_practice_num"
-                label="Profrssion practice number :"
+                label={`${t('profrssion practice number')} :`}
               />
               <RHFTextField
-              lang="ar" type="email" variant="filled" name="email" label="Email :" />
+                lang="ar"
+                type="email"
+                variant="filled"
+                name="email"
+                label={`${t('email')} :`}
+              />
               <RHFTextField
-              lang="ar" type="number" variant="filled" name="phone" label="Phone Number :" />
+                lang="ar"
+                type="number"
+                variant="filled"
+                name="phone"
+                label={`${t('phone')} :`}
+              />
               <Box
                 rowGap={3}
                 columnGap={2}
@@ -242,7 +252,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       mx: 'auto',
                     }}
                     name="scanned_identity"
-                    label="Scanned ID"
+                    label={t('scanned ID')}
                     onDrop={(acceptedFiles) => handleDrop('scanned_identity', acceptedFiles)}
                   />
                   <Typography
@@ -255,7 +265,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       color: 'text.disabled',
                     }}
                   >
-                    Scanned ID
+                    {t('scanned ID')}
                   </Typography>
                   {values.scanned_identity && <Iconify icon="flat-color-icons:ok" />}
                 </Box>
@@ -265,7 +275,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       mx: 'auto',
                     }}
                     name="signature"
-                    label="Signature"
+                    label={t('signature')}
                     onDrop={(acceptedFiles) => handleDrop('signature', acceptedFiles)}
                   />
                   <Typography
@@ -278,7 +288,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       color: 'text.disabled',
                     }}
                   >
-                    Signature
+                    {t('signature')}
                   </Typography>
                   {values.signature && <Iconify icon="flat-color-icons:ok" />}
                 </Box>
@@ -288,7 +298,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       mx: 'auto',
                     }}
                     name="stamp"
-                    label="Stamp"
+                    label={t('stamp')}
                     onDrop={(acceptedFiles) => handleDrop('stamp', acceptedFiles)}
                   />
                   <Typography
@@ -301,7 +311,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       color: 'text.disabled',
                     }}
                   >
-                    Stamp
+                    {t('stamp')}
                   </Typography>
                   {values.stamp && <Iconify icon="flat-color-icons:ok" />}
                 </Box>
@@ -320,14 +330,11 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField
-              lang="ar" name="first_name" label="First name :" />
-              <RHFTextField
-              lang="ar" name="middle_name" label="middle name :" />
-              <RHFTextField
-              lang="ar" name="family_name" label="Family name :" />
+              <RHFTextField lang="ar" name="first_name" label={`${`${t('first name')} *`} :`} />
+              <RHFTextField lang="ar" name="middle_name" label={`${t('middle name')} :`} />
+              <RHFTextField lang="ar" name="family_name" label={`${`${t('family name')} *`} :`} />
               <RHFSelect
-                label={t('nationality')}
+                label={`${t('nationality')} *`}
                 fullWidth
                 name="nationality"
                 InputLabelProps={{ shrink: true }}
@@ -339,12 +346,15 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
+              <RHFTextField lang="ar" type="number" name="tax_num" label={t('tax number')} />
               <RHFTextField
-              lang="ar" type="number" name="tax_num" label="Tax number" />
-              <RHFTextField
-              lang="ar" type="number" name="mobile_num" label="Alternative mobile number" />
+                lang="ar"
+                type="number"
+                name="mobile_num"
+                label={t('alternative mobile number')}
+              />
               <RHFSelect
-                label={t('specialty')}
+                label={`${t('specialty')} *`}
                 fullWidth
                 name="speciality"
                 InputLabelProps={{ shrink: true }}
@@ -357,7 +367,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 ))}
               </RHFSelect>
               <RHFSelect
-                label={t('gender')}
+                label={`${t('gender')} *`}
                 fullWidth
                 name="gender"
                 InputLabelProps={{ shrink: true }}
@@ -367,7 +377,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 <MenuItem value="female">female</MenuItem>
               </RHFSelect>
               <RHFSelect
-                label={t('employee type')}
+                label={`${t('employee type')} *`}
                 fullWidth
                 name="employee_type"
                 InputLabelProps={{ shrink: true }}
@@ -381,27 +391,27 @@ export default function AccountGeneral({ employeeData, refetch }) {
               </RHFSelect>
 
               <RHFTextField
-              lang="ar"
+                lang="ar"
                 type="number"
                 name="Bachelor_year_graduation"
-                label="Bachelor year graduation"
+                label={t('bachelor year graduation')}
               />
               <RHFTextField
-              lang="ar"
+                lang="ar"
                 name="University_graduation_Bachelor"
-                label="University graduation bachelor"
+                label={t('university graduation bachelor')}
               />
               <RHFTextField
-              lang="ar"
+                lang="ar"
                 name="University_graduation_Specialty"
-                label="University graduation Specialty"
+                label={t('university graduation specialty')}
               />
               <Controller
                 name="birth_date"
                 control={control}
                 render={({ field, fieldState: { error } }) => (
                   <DatePicker
-                    label="Birth date"
+                    label={t('birth date')}
                     // sx={{ flex: 1 }}
                     value={new Date(values.birth_date ? values.birth_date : '')}
                     onChange={(newValue) => {
@@ -419,11 +429,17 @@ export default function AccountGeneral({ employeeData, refetch }) {
               />
             </Box>
             <RHFTextField
-              lang="ar" multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} />
+              lang="ar"
+              multiline
+              sx={{ mt: 3 }}
+              rows={2}
+              name="address"
+              label={t('address')}
+            />
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Save Changes
+                {t('save changes')}
               </LoadingButton>
             </Stack>
           </Card>

@@ -32,7 +32,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import NavEmployee from 'src/layouts/secondary-nav-bar/nav-employee';
+import NavEmployee from 'src/layouts/employee-topbar/nav-employee';
 import {
   useTable,
   emptyRows,
@@ -68,6 +68,7 @@ export default function EmployeesTableView() {
   const TABLE_HEAD = [
     /// to edit
     { id: 'code', label: t('code') },
+    { id: 'sequence', label: t('sequence') },
     { id: 'name_english', label: t('name') },
     { id: 'employee_type', label: t('employee type') },
     { id: 'email', label: t('email') },
@@ -496,26 +497,35 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   });
 
   inputData = stabilizedThis.map((el) => el[0]);
-
+  console.log('inputData', inputData);
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.first_name && data?.first_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.family_name && data?.family_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.name_english &&
-          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.country?.name_english &&
-          data?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.country?.name_arabic &&
-          data?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.city?.name_english &&
-          data?.city?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.city?.name_arabic &&
-          data?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.nationality?.name_english &&
-          data?.nationality?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.nationality?.name_arabic &&
-          data?.nationality?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.first_name &&
+          data?.employee?.first_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.middle_name &&
+          data?.employee?.middle_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.family_name &&
+          data?.employee?.family_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.name_english &&
+          data?.employee?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.country?.name_english &&
+          data?.employee?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
+            -1) ||
+        (data?.employee?.country?.name_arabic &&
+          data?.employee?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.city?.name_english &&
+          data?.employee?.city?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.city?.name_arabic &&
+          data?.employee?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.nationality?.name_english &&
+          data?.employee?.nationality?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
+            -1) ||
+        (data?.employee?.nationality?.name_arabic &&
+          data?.employee?.nationality?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !==
+            -1) ||
+        (data?.employee?.email &&
+          data?.employee?.email?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

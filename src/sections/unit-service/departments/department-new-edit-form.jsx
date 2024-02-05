@@ -40,6 +40,7 @@ export default function TableNewEditForm({ currentTable }) {
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
     general_info: Yup.string(),
+    general_info_arabic: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -47,11 +48,10 @@ export default function TableNewEditForm({ currentTable }) {
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
       general_info: currentTable?.general_info || '',
+      general_info_arabic: currentTable?.general_info_arabic || '',
     }),
     [currentTable]
   );
-  console.log(currentTable);
-  console.log(defaultValues);
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -136,25 +136,28 @@ export default function TableNewEditForm({ currentTable }) {
               }}
             >
               <RHFTextField
-              lang="ar"
-                lang="en"
+                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="name_english"
-                label={t('name english')}
+                label={`${t('name english')} *`}
               />
               <RHFTextField
-              lang="ar"
                 lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
-                label={t('name arabic')}
+                label={`${t('name arabic')} *`}
               />
               <RHFTextField
-              lang="ar"
-                lang="en"
+                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="general_info"
-                label={t("general info")}
+                label={t('general info')}
+              />
+              <RHFTextField
+                lang="ar"
+                onChange={handleEnglishInputChange}
+                name="general_info_arabic"
+                label={t('general info in arabic')}
               />
             </Box>
 

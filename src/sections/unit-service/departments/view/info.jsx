@@ -1,113 +1,102 @@
 import PropTypes from 'prop-types';
+import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import { alpha } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
+import Avatar from '@mui/material/Avatar';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
-import InputAdornment from '@mui/material/InputAdornment';
-import { outlinedInputClasses } from '@mui/material/OutlinedInput';
+import ListItemText from '@mui/material/ListItemText';
 
-import { useCountdownDate } from 'src/hooks/use-countdown';
+import { fMonth } from 'src/utils/format-time';
+import { fCurrency } from 'src/utils/format-number';
+import { useLocales, useTranslate } from 'src/locales';
+import { useSettingsContext } from 'src/components/settings';
 
-import { _socials } from 'src/_mock';
-import { ComingSoonIllustration } from 'src/assets/illustrations';
-
+import Label from 'src/components/label/label';
 import Iconify from 'src/components/iconify';
+import Markdown from 'src/components/markdown';
 
 // ----------------------------------------------------------------------
 
-export default function ComingSoonView() {
-  const { days, hours, minutes, seconds } = useCountdownDate(new Date('07/07/2024 21:30'));
+export default function DepartmentInfoContent({ departmentData }) {
+  const { name_english, name_arabic, general_info, unit_service } = departmentData;
+  console.log('departmentData');
 
-  return (
-    <>
-      <Typography variant="h3" sx={{ mb: 2 }}>
-        Coming Soon!
-      </Typography>
+  const settings = useSettingsContext();
 
-      <Typography sx={{ color: 'text.secondary' }}>
-        We are currently working hard on this page!
-      </Typography>
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
-      <ComingSoonIllustration sx={{ my: 10, height: 240 }} />
-
-      <Stack
-        direction="row"
-        justifyContent="center"
-        divider={<Box sx={{ mx: { xs: 1, sm: 2.5 } }}>:</Box>}
-        sx={{ typography: 'h2' }}
-      >
-        <TimeBlock label="Days" value={days} />
-
-        <TimeBlock label="Hours" value={hours} />
-
-        <TimeBlock label="Minutes" value={minutes} />
-
-        <TimeBlock label="Seconds" value={seconds} />
-      </Stack>
-
-      <TextField
-        fullWidth
-        placeholder="Enter your email"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <Button variant="contained" size="large">
-                Notify Me
-              </Button>
-            </InputAdornment>
-          ),
-          sx: {
-            pr: 0.5,
-            [`&.${outlinedInputClasses.focused}`]: {
-              boxShadow: (theme) => theme.customShadows.z20,
-              transition: (theme) =>
-                theme.transitions.create(['box-shadow'], {
-                  duration: theme.transitions.duration.shorter,
-                }),
-              [`& .${outlinedInputClasses.notchedOutline}`]: {
-                border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.32)}`,
-              },
-            },
-          },
+  const renderOverview = (
+    <Stack component={Card} spacing={2} sx={{ p: 3 }}>
+      <Box
+        rowGap={3}
+        columnGap={2}
+        display="grid"
+        gridTemplateColumns={{
+          xs: 'repeat(1, 1fr)',
+          sm: 'repeat(2, 1fr)',
         }}
-        sx={{ my: 5 }}
-      />
+      >
+        {[
+          {
+            label: t('name'),
+            value: curLangAr ? name_arabic : name_english,
+            icon: <Iconify icon="solar:calendar-date-bold" />,
+          },
 
-      <Stack spacing={1} alignItems="center" justifyContent="center" direction="row">
-        {_socials.map((social) => (
-          <IconButton
-            key={social.name}
-            sx={{
-              color: social.color,
-              '&:hover': {
-                bgcolor: alpha(social.color, 0.08),
-              },
-            }}
-          >
-            <Iconify icon={social.icon} />
-          </IconButton>
+          {
+            label: t('general info'),
+            value: general_info,
+            icon: <Iconify icon="solar:calendar-date-bold" />,
+          },
+          {
+            label: t('unit service'),
+            value: curLangAr ? unit_service?.name_arabic : unit_service?.name_english,
+            icon: <Iconify icon="solar:calendar-date-bold" />,
+          },
+        ].map((item) => (
+          <>
+            {item.value && (
+              <Stack key={item.label} spacing={1.5}>
+                {/* {item.icon} */}
+                <ListItemText
+                  primary={item.label}
+                  secondary={item.value}
+                  primaryTypographyProps={{
+                    typography: 'body2',
+                    color: 'text.secondary',
+                    mb: 0.5,
+                  }}
+                  secondaryTypographyProps={{
+                    typography: 'subtitle2',
+                    color: 'text.primary',
+                    component: 'span',
+                  }}
+                />
+              </Stack>
+            )}
+          </>
         ))}
-      </Stack>
-    </>
+      </Box>
+    </Stack>
   );
-}
-
-// ----------------------------------------------------------------------
-
-function TimeBlock({ label, value }) {
   return (
-    <div>
-      <Box> {value} </Box>
-      <Box sx={{ color: 'text.secondary', typography: 'body1' }}>{label}</Box>
-    </div>
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Grid container spacing={3} justifyContent="center">
+        <Grid item xs={12} md={8}>
+          {renderOverview}
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 
-TimeBlock.propTypes = {
-  label: PropTypes.string,
-  value: PropTypes.string,
+DepartmentInfoContent.propTypes = {
+  departmentData: PropTypes.object,
 };

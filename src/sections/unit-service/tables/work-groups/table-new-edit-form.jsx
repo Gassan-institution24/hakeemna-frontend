@@ -1,17 +1,17 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -22,9 +22,10 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFAutocomplete, RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import axios from 'axios';
-import axiosHandler from 'src/utils/axios-handler';
 import { useAuthContext } from 'src/auth/hooks';
+import axiosHandler from 'src/utils/axios-handler';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetUSDepartments, useGetUSEmployees } from 'src/api/tables';
 
 // ----------------------------------------------------------------------
 
@@ -37,19 +38,31 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { user } = useAuthContext();
 
+  const { employeesData } = useGetUSEmployees(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
+
+  const { departmentsData } = useGetUSDepartments(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
+
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
+    department: Yup.string().required('department is required'),
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
+    employees: Yup.array().min(1, 'Choose at least one option'),
   });
 
   const defaultValues = useMemo(
     () => ({
       unit_service:
         user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+      department: currentTable?.department?._id || null,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
+      employees: currentTable?.employees || [],
     }),
     [currentTable, user?.employee]
   );
@@ -81,10 +94,11 @@ export default function TableNewEditForm({ currentTable }) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+  console.log('values', methods.getValues());
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log('data', data);
     try {
-      console.log('data', data);
       const address = await axios.get('https://geolocation-db.com/json/');
       console.log('dataa', {
         ip_address_user_modification: address.data.IPv4,
@@ -94,7 +108,7 @@ export default function TableNewEditForm({ currentTable }) {
       if (currentTable) {
         await axiosHandler({
           method: 'PATCH',
-          path: endpoints.tables.employeetype(currentTable._id),
+          path: endpoints.tables.workgroup(currentTable._id),
           data: {
             modifications_nums: (currentTable.modifications_nums || 0) + 1,
             ip_address_user_modification: address.data.IPv4,
@@ -105,7 +119,7 @@ export default function TableNewEditForm({ currentTable }) {
       } else {
         await axiosHandler({
           method: 'POST',
-          path: endpoints.tables.employeetypes,
+          path: endpoints.tables.workgroups,
           data: {
             ip_address_user_creation: address.data.IPv4,
             user_creation: user._id,
@@ -115,7 +129,7 @@ export default function TableNewEditForm({ currentTable }) {
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      router.push(paths.unitservice.tables.employeetypes.root);
+      router.push(paths.unitservice.tables.workgroups.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
@@ -124,6 +138,7 @@ export default function TableNewEditForm({ currentTable }) {
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
+      {/* <Grid container spacing={3}> */}
       <Grid xs={12} maxWidth="md">
         <Card sx={{ p: 3 }}>
           <Box
@@ -137,18 +152,52 @@ export default function TableNewEditForm({ currentTable }) {
           >
             <RHFTextField
               lang="ar"
-              lang="en"
               onChange={handleEnglishInputChange}
               name="name_english"
               label={`${t('name english')} *`}
             />
             <RHFTextField
               lang="ar"
-              lang="ar"
               onChange={handleArabicInputChange}
               name="name_arabic"
               label={`${t('name arabic')} *`}
             />
+            <RHFSelect name="department" label={t('department')}>
+              {departmentsData.map((department) => (
+                <MenuItem key={department._id} value={department._id}>
+                  {curLangAr ? department.name_arabic : department.name_english}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+            {/* <Stack spacing={1.5}> */}
+            {/* <Typography variant="subtitle2">Working schedule</Typography> */}
+            <RHFAutocomplete
+              name="employees"
+              label={`${t('employees')} *`}
+              multiple
+              disableCloseOnSelect
+              options={employeesData.map((option) => option)}
+              getOptionLabel={(option) => option._id}
+              renderOption={(props, option) => (
+                <li {...props} key={option._id} value={option._id}>
+                  {option.employee.first_name} {option.employee.middle_name}{' '}
+                  {option.employee.family_name}
+                </li>
+              )}
+              renderTags={(selected, getTagProps) =>
+                selected.map((option, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    key={option._id}
+                    label={option.employee.first_name}
+                    size="small"
+                    color="info"
+                    variant="soft"
+                  />
+                ))
+              }
+            />
+            {/* </Stack> */}
           </Box>
 
           <Stack alignItems="flex-end" sx={{ mt: 3 }}>
@@ -158,10 +207,12 @@ export default function TableNewEditForm({ currentTable }) {
           </Stack>
         </Card>
       </Grid>
+      {/* </Grid> */}
     </FormProvider>
   );
 }
 
 TableNewEditForm.propTypes = {
   currentTable: PropTypes.object,
+  departmentData: PropTypes.object,
 };
