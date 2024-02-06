@@ -21,6 +21,8 @@ import FormProvider from 'src/components/hook-form/form-provider';
 import { useAuthContext } from 'src/auth/hooks';
 import EmptyContent from 'src/components/empty-content';
 
+
+import { useGetPatientOneAppointments, useGetUnitservice, useGetUSFeedbackes } from 'src/api/tables';
 // ----------------------------------------------------------------------
 
 export default function MaxWidthDialog() {
@@ -31,29 +33,15 @@ export default function MaxWidthDialog() {
     Selection: Yup.string().nullable(),
   });
   const [rating, setRating] = useState();
-  const [appointment, setAppointment] = useState({});
 
   const { user } = useAuthContext();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `/api/appointments/patient/${user?.patient._id}/lastappointment`
-        );
-        setAppointment(response?.data);
-      } catch (error) {
-        console.error('Error fetching data:', error.message);
-        throw error;
-      }
-    };
-
-    fetchData();
-  }, [user?.patient]);
+  const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
+  const { data } = useGetUnitservice(appointmentsData?.unit_service?._id);
+  const { feedbackData } = useGetUSFeedbackes(appointmentsData?.unit_service?._id);
 
   const skipfunction = async () => {
     try {
-      const response = await axios.patch(`api/appointments/${appointment._id}`, {
+      const response = await axios.patch(`api/appointments/${appointmentsData._id}`, {
         hasFeedback: true,
       });
       dialog.onFalse();
@@ -98,136 +86,111 @@ export default function MaxWidthDialog() {
 
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState('xs');
-  const onSubmit = async (data) => {
+  const onSubmit = async (dataSumbmit) => {
     try {
       const newData = {
-        ...data,
+        ...dataSumbmit,
         Selection: selectedValue,
         Rate: rating,
         patient: user?.patient._id,
-        appointment: appointment._id,
-        department: appointment.department?._id,
-        unit_service: appointment.unit_service?._id,
+        appointment: appointmentsData._id,
+        department: appointmentsData.department?._id,
+        unit_service: data?._id,
       };
       const response = await axios.post('api/feedback', newData);
-      await axios.patch(`api/appointments/${appointment._id}`, {
+      await axios.patch(`api/appointments/${appointmentsData._id}`, {
         hasFeedback: true, // Increment the skip value by 1
       });
       enqueueSnackbar('Your answer uploaded successfully', { variant: 'success' });
-      setTimeout(() => {
-        dialog.onFalse();
-        window.location.reload();
-      }, 2000);
+      console.log(response);
+      // setTimeout(() => {
+      //   dialog.onFalse();
+      //   window.location.reload();
+      // }, 2000);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Failed to upload Your answer', { variant: 'error' });
     }
   };
 
-  return (
-    <>
-      {appointment?.start_time &&
-        appointment?.end_time &&
-        (() => {
-          const startTime = new Date(appointment.start_time);
-          const endTime = new Date(appointment.end_time);
+  return appointmentsData?.hasFeedback === false ? (
+    <span>
+      <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              margin: '20px',
+              gap: '10px',
+            }}
+          >
+            <DialogTitle>Rate your appointment</DialogTitle>
+            <Image
+              src="https://cdn.altibbi.com/cdn/large/0/10/logo_1296490409_651.gif"
+              sx={{ width: '60px', height: '60px', border: 1, borderRadius: '50px' }}
+            />
+            <Typography sx={{ color: 'black' }}>Department Name</Typography>
+            <Rating
+              size="large"
+              precision={1}
+              max={5}
+              name="Rate"
+              value={rating}
+              onChange={handleRatingClick}
+            />
+          </div>
 
-          const isPastAppointment = Date.now() > endTime;
+          {rating < 5 ? (
+            <DialogContent>
+              <Box component="form" noValidate>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+                  {RATEELEMENTS?.map((infotwo, indextwo) => (
+                    <div key={indextwo}>
+                      <Box
+                        sx={{
+                          fontSize: { md: '15px', xs: '9px' },
+                          fontWeight: { md: '400', xs: 'bolder' },
+                        }}
+                      >
+                        <Radio {...controlProps(infotwo)} name="Selection" />
+                        {infotwo}
+                      </Box>
+                    </div>
+                  ))}
+                </div>
+                <FormControl sx={{ my: 3, minWidth: '100%' }}>
+                  <InputLabel htmlFor="max-width">More issues</InputLabel>
+                  <Input id="max-width" {...register('Body')} />
+                </FormControl>
+              </Box>
+            </DialogContent>
+          ) : (
+            <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
+              We hope that everything was to your satisfaction
+            </Typography>
+          )}
 
-          if (appointment.hasFeedback === false && isPastAppointment) {
-            return (
-              <>
-                {isPastAppointment ? (
-                  <span>
-                    <Dialog
-                      open={dialog.value}
-                      maxWidth={maxWidth}
-                      onClose={dialog.onTrue}
-                      fullWidth={fullWidth}
-                    >
-                      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-                        <div
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            textAlign: 'center',
-                            margin: '20px',
-                            gap: '10px',
-                          }}
-                        >
-                          <DialogTitle>Rate your appointment</DialogTitle>
-                          <Image
-                            src="https://cdn.altibbi.com/cdn/large/0/10/logo_1296490409_651.gif"
-                            sx={{ width: '60px', height: '60px', border: 1, borderRadius: '50px' }}
-                          />
-                          <Typography sx={{ color: 'black' }}>Department Name</Typography>
-                          <Rating
-                            size="large"
-                            precision={1}
-                            max={5}
-                            name="Rate"
-                            value={rating}
-                            onChange={handleRatingClick}
-                          />
-                        </div>
-
-                        {rating < 5 ? (
-                          <DialogContent>
-                            <Box component="form" noValidate>
-                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-                                {RATEELEMENTS?.map((info, index) => (
-                                  <div key={index}>
-                                    <Box
-                                      sx={{
-                                        fontSize: { md: '15px', xs: '9px' },
-                                        fontWeight: { md: '400', xs: 'bolder' },
-                                      }}
-                                    >
-                                      <Radio {...controlProps(info)} name="Selection" />
-                                      {info}
-                                    </Box>
-                                  </div>
-                                ))}
-                              </div>
-                              <FormControl sx={{ my: 3, minWidth: '100%' }}>
-                                <InputLabel htmlFor="max-width">More issues</InputLabel>
-                                <Input id="max-width" {...register('Body')} />
-                              </FormControl>
-                            </Box>
-                          </DialogContent>
-                        ) : (
-                          <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
-                            We hope that everything was to your satisfaction
-                          </Typography>
-                        )}
-
-                        <DialogActions>
-                          <Button
-                            onClick={skipfunction}
-                            loading={isSubmitting}
-                            variant="outlined"
-                            color="inherit"
-                            type="submit"
-                          >
-                            Skip
-                          </Button>
-                          <Button type="submit" variant="contained">
-                            Submit
-                          </Button>
-                        </DialogActions>
-                      </FormProvider>
-                    </Dialog>
-                  </span>
-                ) : (
-                  <span>Appointment is still ongoing</span>
-                )}
-              </>
-            );
-          }
-          return  <EmptyContent filled title="No Data" sx={{ py: 10 }} />
-
-        })()}
-    </>
+          <DialogActions>
+            <Button
+              onClick={skipfunction}
+              loading={isSubmitting}
+              variant="outlined"
+              color="inherit"
+              type="submit"
+            >
+              Skip
+            </Button>
+            <Button type="submit" variant="contained">
+              Submit
+            </Button>
+          </DialogActions>
+        </FormProvider>
+      </Dialog>
+    </span>
+  ) : (
+    <EmptyContent filled title="No Data" sx={{ py: 10 }} />
   );
 }
