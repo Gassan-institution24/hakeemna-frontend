@@ -16,7 +16,7 @@ import PaymentNewCardDialog from '../payment/payment-new-card-dialog';
 export default function AccountBillingPayment() {
   const { user } = useAuthContext();
   const { paymentmethods } = useGetPaymentmethods();
-  console.log(paymentmethods);
+  // console.log(paymentmethods);
   const newCard = useBoolean();
   return (
     <>

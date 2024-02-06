@@ -20,7 +20,7 @@ import Markdown from 'src/components/markdown';
 // ----------------------------------------------------------------------
 
 export default function UnitServiceInfoContent({ unitServiceData }) {
-  console.log('unitServiceData', unitServiceData);
+  // console.log('unitServiceData', unitServiceData);
   const {
     code,
     name_english,

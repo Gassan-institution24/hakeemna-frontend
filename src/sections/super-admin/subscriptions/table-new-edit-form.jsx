@@ -76,8 +76,8 @@ export default function TableNewEditForm({ currentTable }) {
     }),
     [currentTable]
   );
-  console.log('currrrent', currentTable);
-  console.log(defaultValues);
+  // console.log('currrrent', currentTable);
+  // console.log(defaultValues);
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -110,7 +110,7 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     const address = await axios.get('https://geolocation-db.com/json/');
     try {
-      console.log('data', data);
+      // console.log('data', data);
       // const modifiedData = {
       //   ...data,
       //   package_appointment: Boolean(data.package_appointment),
@@ -120,7 +120,7 @@ export default function TableNewEditForm({ currentTable }) {
       //   package_old_files_Management: Boolean(data.package_old_files_Management),
       //   package_TAX_Income_reporting: Boolean(data.package_TAX_Income_reporting),
       // };
-      // console.log("modifiedData",data)
+      // // console.log("modifiedData",data)
       if (currentTable) {
         await axiosHandler({
           method: 'PATCH',

@@ -33,7 +33,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
-  console.log('department ddd', departmentData);
+  // console.log('department ddd', departmentData);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -45,12 +45,14 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const defaultValues = useMemo(
     () => ({
+      unit_service:
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
       department: departmentData._id,
       general_info: currentTable?.general_info || '',
     }),
-    [currentTable, departmentData]
+    [currentTable, departmentData,user?.employee]
   );
 
   const methods = useForm({
@@ -84,11 +86,6 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const address = await axios.get('https://geolocation-db.com/json/');
-      console.log('dataa', {
-        ip_address_user_modification: address.data.IPv4,
-        user_modification: user._id,
-        ...data,
-      });
       if (currentTable) {
         await axiosHandler({
           method: 'PATCH',
@@ -137,13 +134,11 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
             >
               <RHFTextField
                 lang="ar"
-                lang="en"
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label={`${t('name english')} *`}
               />
               <RHFTextField
-                lang="ar"
                 lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
@@ -151,7 +146,6 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
               />
               <RHFTextField
                 lang="ar"
-                lang="en"
                 onChange={handleEnglishInputChange}
                 name="general_info"
                 label={t('general info')}

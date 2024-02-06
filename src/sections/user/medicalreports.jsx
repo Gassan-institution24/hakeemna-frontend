@@ -134,8 +134,8 @@ export default function Medicalreports() {
       </Page>
     </Document>
   );
-  console.log(user?.patient);
-return user?.patient.Mediacalreports?.length > 0 ? (
+  // console.log(user?.patient);
+  return user?.patient.Mediacalreports?.length > 0 ? (
     user?.patient.Mediacalreports.map((info) => (
       <Card
         sx={{
@@ -232,11 +232,11 @@ return user?.patient.Mediacalreports?.length > 0 ? (
     ))
   ) : (
     <EmptyContent
-    filled
-    title="No Data"
-    sx={{
-      py: 10,
-    }}
-  />
+      filled
+      title="No Data"
+      sx={{
+        py: 10,
+      }}
+    />
   );
 }

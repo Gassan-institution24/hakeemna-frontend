@@ -34,7 +34,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const { employeesData } = useGetDepartmentEmployees(departmentData._id);
 
-  console.log('employeesData', employeesData);
+  // console.log('employeesData', employeesData);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -82,13 +82,13 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-  console.log('values', methods.getValues());
+  // console.log('values', methods.getValues());
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data', data);
+      // console.log('data', data);
       const address = await axios.get('https://geolocation-db.com/json/');
-      console.log('dataa', {
+      // console.log('dataa', {
         ip_address_user_modification: address.data.IPv4,
         user_modification: user._id,
         ...data,

@@ -497,7 +497,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   });
 
   inputData = stabilizedThis.map((el) => el[0]);
-  console.log('inputData', inputData);
+  // console.log('inputData', inputData);
   if (name) {
     inputData = inputData.filter(
       (data) =>

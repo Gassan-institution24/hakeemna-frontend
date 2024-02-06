@@ -111,7 +111,7 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
     dateError,
   });
 
-  console.log('dataata', unitServiceData);
+  // console.log('dataata', unitServiceData);
   const { t } = useTranslate();
 
   const dataInPage = dataFiltered?.slice(

@@ -126,7 +126,7 @@ export default function TableNewEditForm() {
       });
       enqueueSnackbar(t('employment successfully!'));
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       enqueueSnackbar(t('failed to employment!'), { variant: 'error' });
     }
   };
@@ -145,7 +145,7 @@ export default function TableNewEditForm() {
     }
     getExistEmployees();
   }, [filters, user?.employee]);
-  console.log('results', results);
+  // console.log('results', results);
   return (
     <Box>
       <Card sx={{ p: 3 }}>
@@ -164,42 +164,47 @@ export default function TableNewEditForm() {
             }
             type="email"
             name="email"
-            label={t("email")}
+            label={t('email')}
           />
           <TextField
             onChange={handleEnglishInputChange}
             name="identification_num"
-            label={t("ID number")}
+            label={t('ID number')}
           />
           <TextField
             onChange={handleEnglishInputChange}
             name="code"
-            label={t("account code")}
+            label={t('account code')}
             type="number"
           />
-          <TextField onChange={handleEnglishInputChange} name="phone" label={t("phone")} type="number" />
+          <TextField
+            onChange={handleEnglishInputChange}
+            name="phone"
+            label={t('phone')}
+            type="number"
+          />
           <TextField
             onChange={handleEnglishInputChange}
             name="profrssion_practice_num"
-            label={t("profrssion practice number")}
+            label={t('profrssion practice number')}
           />
           <TextField
             lang="en"
             onChange={handleEnglishInputChange}
             name="first_name"
-            label={t("first name")}
+            label={t('first name')}
           />
           <TextField
             lang="en"
             onChange={handleEnglishInputChange}
             name="middle_name"
-            label={t("middle name")}
+            label={t('middle name')}
           />
           <TextField
             lang="en"
             onChange={handleEnglishInputChange}
             name="family_name"
-            label={t("family name")}
+            label={t('family name')}
           />
         </Box>
       </Card>

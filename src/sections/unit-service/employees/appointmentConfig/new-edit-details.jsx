@@ -68,7 +68,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             control={control}
             render={({ field, fieldState: { error } }) => (
               <DatePicker
-                label={t('start date')}
+                label={`${t('start date')} *`}
                 // sx={{ flex: 1 }}
                 value={new Date(values.start_date || '')}
                 onChange={(newValue) => {
@@ -116,7 +116,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           <RHFSelect
             size="small"
             name="work_shift"
-            label={t('work shift')}
+            label={`${t('work shift')} *`}
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
@@ -130,7 +130,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           <RHFSelect
             size="small"
             name="work_group"
-            label={t('work group')}
+            label={`${t('work group')} *`}
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
@@ -150,7 +150,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                 fullWidth
                 label={t('appointment time')}
                 type="number"
-                lang='ar'
+                lang="ar"
                 value={field.value === 0 ? '' : field.value}
                 onChange={(event) => {
                   field.onChange(Number(event.target.value));
@@ -162,7 +162,9 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <Box lang='ar' sx={{ fontSize: '0.8rem' }}>{t('min')}</Box>
+                      <Box lang="ar" sx={{ fontSize: '0.8rem' }}>
+                        {t('min')}
+                      </Box>
                     </InputAdornment>
                   ),
                 }}

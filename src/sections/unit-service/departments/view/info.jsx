@@ -24,7 +24,7 @@ import Markdown from 'src/components/markdown';
 
 export default function DepartmentInfoContent({ departmentData }) {
   const { name_english, name_arabic, general_info, unit_service } = departmentData;
-  console.log('departmentData');
+  // console.log('departmentData');
 
   const settings = useSettingsContext();
 

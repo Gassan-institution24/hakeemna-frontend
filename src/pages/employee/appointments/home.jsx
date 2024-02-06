@@ -9,9 +9,9 @@ import AppointmentHomeView from 'src/sections/employee/appointments/view/home';
 
 export default function AppointmentsHomePage() {
   const { user } = useAuthContext();
-  console.log('user', user);
+  // console.log('user', user);
   const { appointmentsData, loading, refetch } = useGetEmployeeAppointments(user?.employee?._id);
-  console.log('appointmentsData', appointmentsData);
+  // console.log('appointmentsData', appointmentsData);
   return (
     <>
       <ACLGuard hasContent category="employee" subcategory="appointments" acl="read">

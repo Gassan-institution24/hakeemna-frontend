@@ -10,7 +10,7 @@ export default function TableCreatePage() {
   const params = useParams();
   const { id } = params;
   const { data, loading, refetch } = useGetPatient(id);
-  console.log(data);
+  // console.log(data);
   const patientName =
     (data?.first_name && data?.last_name && `${data?.first_name} ${data?.last_name}`) ||
     (data?.first_name && data?.first_name) ||

@@ -28,7 +28,7 @@ import { useSettingsContext } from 'src/components/settings';
 export default function Currentappoinment({ user }) {
   const theme = useTheme();
   const { appointmentsData } = useGetPatientAppointments(user);
-  console.log(appointmentsData);
+  // console.log(appointmentsData);
 
   const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending');
 

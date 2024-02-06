@@ -157,13 +157,13 @@ export function useGetDepartmentAppointmentsCount(id) {
 
 export function useGetEmployeeAppointments(id) {
   const URL = endpoints.tables.employeeAppointments(id);
-  console.log('URL', URL);
+  // console.log('URL', URL);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  console.log('data', data);
-  console.log('isLoading', isLoading);
-  console.log('isValidating', isValidating);
-  console.log('error', error);
+  // console.log('data', data);
+  // console.log('isLoading', isLoading);
+  // console.log('isValidating', isValidating);
+  // console.log('error', error);
   const memoizedValue = useMemo(
     () => ({
       appointmentsData: data,
@@ -185,7 +185,7 @@ export function useGetEmployeeAppointments(id) {
 export function useGetUSEmployeeAppointments(id, emid) {
   const URL = endpoints.tables.usEmployeeAppointments(id, emid);
 
-  console.log('URL', URL);
+  // console.log('URL', URL);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

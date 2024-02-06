@@ -96,7 +96,7 @@ export default function JwtRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log(data);
+      // console.log(data);
       await register?.({ userName: `${data.first_name} ${data.last_name}`, ...data });
 
       router.push(returnTo || PATH_AFTER_LOGIN);

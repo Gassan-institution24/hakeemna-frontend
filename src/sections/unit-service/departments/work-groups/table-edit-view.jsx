@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -14,10 +14,12 @@ import TableNewEditForm from './table-new-edit-form';
 export default function TableEditView({ WorkGroupData, departmentData }) {
   const settings = useSettingsContext();
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-        heading="Edit Room"
+      {/* <CustomBreadcrumbs
+        heading={t('Edit work group')}
         links={[
           {
             name: t('dashboard'),
@@ -28,15 +30,19 @@ export default function TableEditView({ WorkGroupData, departmentData }) {
             href: paths.unitservice.departments.root,
           },
           {
-            name: `${departmentData.name_english || 'Department'} Work group`,
+            name: `${
+              curLangAr
+                ? departmentData.name_arabic
+                : departmentData.name_english || t('department')
+            } ${t('work groups')}`,
             href: paths.unitservice.departments.workGroups.root(departmentData._id),
           },
-          { name: 'Edit Room' },
+          { name: t('edit') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
-      />
+      /> */}
       {WorkGroupData && departmentData && (
         <TableNewEditForm departmentData={departmentData} currentTable={WorkGroupData} />
       )}

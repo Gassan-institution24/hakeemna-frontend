@@ -27,7 +27,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 export default function OrderTableRow({ row, selected, onViewRow, onSelectRow, onDeleteRow }) {
-  console.log('onviewrowwwww', onViewRow);
+  // console.log('onviewrowwwww', onViewRow);
   const {
     tableName,
     documents,

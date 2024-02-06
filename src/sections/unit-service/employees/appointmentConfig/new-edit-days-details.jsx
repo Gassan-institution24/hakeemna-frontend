@@ -103,7 +103,7 @@ export default function NewEditDayDetails({ appointTime }) {
 
     const appointment_time = appointTime || values.appointment_time;
     if (!appointment_time) {
-      console.log('no_appointment_time');
+      // console.log('no_appointment_time');
       return;
     }
     const calculateMins = (date) => {
@@ -449,7 +449,7 @@ export default function NewEditDayDetails({ appointTime }) {
                     size="small"
                     InputLabelProps={{ shrink: true }}
                     name={`days_details[${index}].appointment_type`}
-                    label={t('appointment type')}
+                    label={`${t('appointment type')} *`}
                   >
                     {appointmenttypesData?.map((option) => (
                       <MenuItem value={option._id}>

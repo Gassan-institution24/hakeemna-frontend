@@ -84,13 +84,8 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data', data);
       const address = await axios.get('https://geolocation-db.com/json/');
-      console.log('dataa', {
-        ip_address_user_modification: address.data.IPv4,
-        user_modification: user._id,
-        ...data,
-      });
+      
       if (currentTable) {
         await axiosHandler({
           method: 'PATCH',
@@ -137,13 +132,11 @@ export default function TableNewEditForm({ currentTable }) {
           >
             <RHFTextField
               lang="ar"
-              lang="en"
               onChange={handleEnglishInputChange}
               name="name_english"
               label={`${t('name english')} *`}
             />
             <RHFTextField
-              lang="ar"
               lang="ar"
               onChange={handleArabicInputChange}
               name="name_arabic"

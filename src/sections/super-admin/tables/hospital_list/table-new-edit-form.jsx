@@ -31,13 +31,13 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { user } = useAuthContext();
 
-  console.log('currr', currentTable);
+  // console.log('currr', currentTable);
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const [selectedCountry, setSelectedCountry] = useState(currentTable?.country?._id || null);
   const [cities, setCities] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  console.log('test', cities);
+  // console.log('test', cities);
 
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),

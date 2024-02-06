@@ -21,7 +21,7 @@ export default function AccountView() {
   const settings = useSettingsContext();
   const { t } = useTranslate();
   const { user } = useAuthContext();
-  console.log('user', user);
+  // console.log('user', user);
 
   const { data, loading, refetch } = useGetUnitservice(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id

@@ -100,18 +100,18 @@ export default function OldMedicalReports() {
     gridContainer2: {
       display: 'flex',
       flexDirection: 'row',
-      justifyContent:'flex-start',
+      justifyContent: 'flex-start',
       alignItems: 'center',
       padding: '10px',
       borderBottom: 1,
-      gap:132
+      gap: 132,
     },
     line: {
       textDecoration: 'none',
     },
     gridFooter: {
       borderTop: 1,
-      padding:'10px'
+      padding: '10px',
     },
   });
   const router = useRouter();
@@ -180,7 +180,7 @@ export default function OldMedicalReports() {
             <PdfImage src={info?.file} style={styles.image} />
           </View>
           <View style={styles.gridFooter}>
-          <Text style={styles.text}>
+            <Text style={styles.text}>
               <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
                 Note:
               </Text>{' '}
@@ -267,7 +267,7 @@ export default function OldMedicalReports() {
       const response = await axios.get('/api/oldmedicalreports');
       setfilesPdf(response.data);
       reset();
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Failed to upload medical report', { variant: 'error' });
@@ -300,7 +300,7 @@ export default function OldMedicalReports() {
               sx={{ mb: 1.5 }}
             >
               {TYPE.map((test) => (
-                <MenuItem value={test} key={test._id} sx={{mb:1}}>
+                <MenuItem value={test} key={test._id} sx={{ mb: 1 }}>
                   {test}
                 </MenuItem>
               ))}
@@ -314,7 +314,7 @@ export default function OldMedicalReports() {
               sx={{ mb: 1 }}
             >
               {SPECIALTY.map((test) => (
-                <MenuItem value={test} key={test._id} sx={{mb:1}}>
+                <MenuItem value={test} key={test._id} sx={{ mb: 1 }}>
                   {test}
                 </MenuItem>
               ))}

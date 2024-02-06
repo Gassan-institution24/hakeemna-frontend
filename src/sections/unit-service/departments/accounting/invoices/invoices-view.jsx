@@ -101,7 +101,7 @@ export default function EconomicMovementsView({ departmentData }) {
     dateError,
   });
 
-  console.log('dataFiltered', dataFiltered);
+  // console.log('dataFiltered', dataFiltered);
 
   // const dataInPage = dataFiltered.slice(
   //   table.page * table.rowsPerPage,

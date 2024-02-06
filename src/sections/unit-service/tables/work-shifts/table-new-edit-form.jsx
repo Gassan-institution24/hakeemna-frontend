@@ -89,13 +89,8 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data', data);
+      // console.log('data', data);
       const address = await axios.get('https://geolocation-db.com/json/');
-      console.log('dataa', {
-        ip_address_user_modification: address.data.IPv4,
-        user_modification: user._id,
-        ...data,
-      });
       if (currentTable) {
         await axiosHandler({
           method: 'PATCH',

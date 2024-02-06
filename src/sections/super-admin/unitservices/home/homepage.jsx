@@ -95,7 +95,7 @@ export default function UnitServicesTableView() {
 
   const { unitservicesData, loading, refetch } = useGetUnitservices();
 
-  console.log('unitservicesData', unitservicesData);
+  // console.log('unitservicesData', unitservicesData);
 
   const [filters, setFilters] = useState(defaultFilters);
 

@@ -1,5 +1,5 @@
 import { m } from 'framer-motion';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -18,6 +18,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { _notifications } from 'src/_mock';
+import { HOST_API } from 'src/config-global';
+import { socket } from 'src/socket';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -49,6 +51,8 @@ const TABS = [
 // ----------------------------------------------------------------------
 
 export default function NotificationsPopover() {
+  // console.log('socket',socket)
+
   const drawer = useBoolean();
 
   const smUp = useResponsive('up', 'sm');
@@ -134,6 +138,13 @@ export default function NotificationsPopover() {
     </Scrollbar>
   );
 
+  useEffect(()=>{
+    socket.on('error',(data)=>{
+      console.log('data',data)
+      setNotifications((prev)=>[...prev,data])
+    })
+  },[])
+  
   return (
     <>
       <IconButton

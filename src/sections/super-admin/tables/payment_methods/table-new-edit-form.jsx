@@ -24,7 +24,7 @@ import { useAuthContext } from 'src/auth/hooks';
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
-  console.log('methods', currentTable);
+  // console.log('methods', currentTable);
   const router = useRouter();
 
   const { user } = useAuthContext();

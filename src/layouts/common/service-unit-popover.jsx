@@ -10,6 +10,7 @@ import { useSnackbar } from 'notistack';
 import { useAuthContext } from 'src/auth/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 import axios, { endpoints } from 'src/utils/axios';
+import { useLocales, useTranslate } from 'src/locales';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -28,6 +29,10 @@ export default function ServiceUnitPopover() {
   const { enqueueSnackbar } = useSnackbar();
 
   const { user } = useAuthContext();
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const [password, setPassword] = useState();
   const [selectedIndex, setSelectedIndex] = useState();
@@ -94,24 +99,28 @@ export default function ServiceUnitPopover() {
         {user?.employee?.employee_engagements?.map((option, index) => (
           <MenuItem
             key={option.unit_service?._id}
+            lang="ar"
             selected={option?.unit_service?._id === selected?.unit_service?._id}
             onClick={() => {
               setSelectedIndex(index);
               confirm.onTrue();
             }}
           >
-            {option?.unit_service?.name_english}
+            {curLangAr ? option?.unit_service?.name_arabic : option?.unit_service?.name_english}
           </MenuItem>
         ))}
       </CustomPopover>
 
       <ConfirmDialog
+        lang='ar'
         open={confirm.value || loading.value}
         onClose={confirm.onFalse}
-        title="Confirm password"
+        title={t("confirm password")}
         content={
           <>
-            Enter your password to switch to different service unit
+            {curLangAr
+              ? 'ادخل كلمة المرور الخاصة بك لتبديل وحدة الخدمة'
+              : 'Enter your password to switch to different service unit'}
             <TextField
               name="password"
               type={showPassword.value ? 'text' : 'password'}
@@ -143,7 +152,7 @@ export default function ServiceUnitPopover() {
               // confirm.onFalse();
             }}
           >
-            Switch
+            {curLangAr?"تبديل":"Switch"}
           </LoadingButton>
         }
       />

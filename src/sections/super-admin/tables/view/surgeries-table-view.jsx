@@ -109,7 +109,7 @@ export default function SurgeriesTableView() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-  console.log(dataFiltered);
+  // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.status !== 'all';

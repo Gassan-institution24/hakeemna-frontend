@@ -165,7 +165,7 @@ export function AuthProvider({ children }) {
   //     country:info.country,
   //     city:info.city
   //   };
-  //   console.log('user dataaaaa', data);
+  //   // console.log('user dataaaaa', data);
 
   //   const response = await axios.post(endpoints.auth.register, data);
 

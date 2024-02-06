@@ -85,17 +85,17 @@ export default function InvoiceTableToolbar({
             width: { xs: 1, md: 200 },
           }}
         >
-          <InputLabel>{t('appointment type')}</InputLabel>
+          <InputLabel>{`${t('appointment type')} *`}</InputLabel>
 
           <Select
             multiple
             value={filters.types}
             onChange={handleFilterTypes}
-            input={<OutlinedInput label={t("appointment type")} />}
+            input={<OutlinedInput label={t('appointment type')} />}
             renderValue={(selected) =>
               options
                 .filter((value) => selected.includes(value._id))
-                .map((value) => curLangAr ? value?.name_arabic: value?.name_english)
+                .map((value) => (curLangAr ? value?.name_arabic : value?.name_english))
                 .join(', ')
             }
             MenuProps={{
@@ -111,14 +111,14 @@ export default function InvoiceTableToolbar({
                   size="small"
                   checked={filters.types?.includes(option._id)}
                 />
-                {curLangAr ? option?.name_arabic: option?.name_english}
+                {curLangAr ? option?.name_arabic : option?.name_english}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
 
         <DatePicker
-          label={t("date")}
+          label={t('date')}
           value={filters.startDate}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
@@ -128,7 +128,7 @@ export default function InvoiceTableToolbar({
         />
 
         <DatePicker
-          label={t("end date")}
+          label={t('end date')}
           value={filters.endDate}
           onChange={handleFilterEndDate}
           slotProps={{

@@ -107,7 +107,7 @@ export default function USsFeedbacks() {
     return resultsArr;
   }, [feedbackData]);
 
-  console.log('separateEachunitServiceFeedbacks', separateEachunitServiceFeedbacks());
+  // console.log('separateEachunitServiceFeedbacks', separateEachunitServiceFeedbacks());
 
   const [filters, setFilters] = useState(defaultFilters);
 

@@ -17,7 +17,7 @@ import axios, { endpoints, fetcher } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
-export default function AccountGeneral({data,refetch}) {
+export default function AccountGeneral({ data, refetch }) {
   const [oldpatientsdata, setOldpatientsdata] = useState();
   const { user } = useAuthContext();
   const [profilePicture, setProfilePicture] = useState(null);
@@ -26,7 +26,6 @@ export default function AccountGeneral({data,refetch}) {
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
   const { tableData } = useGetCities();
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -146,9 +145,9 @@ export default function AccountGeneral({data,refetch}) {
     try {
       const response = await axios.patch(`${endpoints.tables.user}${user?.patient._id}`, formData);
       enqueueSnackbar('Profile updated successfully', { variant: 'success' });
-      refetch()
+      refetch();
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
       enqueueSnackbar('Failed to update profile', { variant: 'error' });
     }
   };

@@ -115,7 +115,7 @@ export default function PatientInsuranceView({ patientData, refetch }) {
     dateError,
   });
 
-  console.log('dataata', patientData);
+  // console.log('dataata', patientData);
   const { t } = useTranslate();
 
   const dataInPage = dataFiltered?.slice(
