@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
+import { isEqual } from 'lodash';
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -39,7 +40,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const { employeesData } = useGetDepartmentEmployees(departmentData._id);
 
-  console.log('employeesData', employeesData);
+  const [selectedEmployees, setSelectedEmployees] = useState([]);
+
+  // console.log('employeesData', employeesData);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -89,17 +92,10 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-  console.log('values', methods.getValues());
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('data', data);
     try {
       const address = await axios.get('https://geolocation-db.com/json/');
-      console.log('dataa', {
-        ip_address_user_modification: address.data.IPv4,
-        user_modification: user._id,
-        ...data,
-      });
       if (currentTable) {
         await axiosHandler({
           method: 'PATCH',
@@ -161,10 +157,12 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
             {/* <Typography variant="subtitle2">Working schedule</Typography> */}
             <RHFAutocomplete
               name="employees"
-              placeholder="+ employees"
+              label={`${t('employees')} *`}
               multiple
               disableCloseOnSelect
-              options={employeesData.map((option) => option)}
+              options={employeesData.filter(
+                (option) => !selectedEmployees.some((item) => isEqual(option, item))
+              )}
               getOptionLabel={(option) => option._id}
               renderOption={(props, option) => (
                 <li {...props} key={option._id} value={option._id}>
@@ -172,6 +170,10 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
                   {option.employee.family_name}
                 </li>
               )}
+              onChange={(event, newValue) => {
+                setSelectedEmployees(newValue);
+                methods.setValue('employees', newValue, { shouldValidate: true });
+              }}
               renderTags={(selected, getTagProps) =>
                 selected.map((option, index) => (
                   <Chip

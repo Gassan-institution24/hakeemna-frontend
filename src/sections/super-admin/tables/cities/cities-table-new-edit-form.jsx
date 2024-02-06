@@ -48,8 +48,8 @@ export default function CitiesNewEditForm({ currentCity }) {
     }),
     [currentCity]
   );
-  console.log(currentCity);
-  console.log(defaultValues);
+  // console.log(currentCity);
+  // console.log(defaultValues);
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),

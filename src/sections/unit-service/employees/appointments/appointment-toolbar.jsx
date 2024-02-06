@@ -85,13 +85,13 @@ export default function InvoiceTableToolbar({
             width: { xs: 1, md: 200 },
           }}
         >
-          <InputLabel>{t('appointment type')}</InputLabel>
+          <InputLabel>{`${t('appointment type')} *`}</InputLabel>
 
           <Select
             multiple
             value={filters.types}
             onChange={handleFilterTypes}
-            input={<OutlinedInput label={t('appointment type')} />}
+            input={<OutlinedInput label={`${t('appointment type')} *`} />}
             renderValue={(selected) =>
               options
                 .filter((value) => selected.includes(value._id))

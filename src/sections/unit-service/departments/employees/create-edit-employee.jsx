@@ -25,6 +25,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import axios from 'axios';
+import { socket } from 'src/socket';
 import Iconify from 'src/components/iconify';
 import axiosHandler from 'src/utils/axios-handler';
 import { useAuthContext } from 'src/auth/hooks';
@@ -124,7 +125,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data', data);
+      // console.log('data', data);
       const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
         await axiosHandler({
@@ -156,6 +157,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       router.push(paths.unitservice.departments.employees.root(departmentData._id));
       console.info('DATA', data);
     } catch (error) {
+      socket.emit('error', {error,user:user._id});
       console.error(error);
     }
   });

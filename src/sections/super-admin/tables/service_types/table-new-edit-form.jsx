@@ -31,7 +31,7 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { user } = useAuthContext();
 
-  console.log('currentt', currentTable);
+  // console.log('currentt', currentTable);
   const { unitservicesData } = useGetUnitservices();
   const { measurmentTypesData } = useGetMeasurmentTypes();
   const { workShiftsData } = useGetWorkShifts();

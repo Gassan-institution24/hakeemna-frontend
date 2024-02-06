@@ -33,7 +33,7 @@ export default function Oldpatientsdata() {
         const response = await axios.post('/api/oldpatientsdata/details', {
           identification_num: user?.patient?.identification_num,
         });
-        console.log('response', response);
+        // console.log('response', response);
         setOldpatientsdata(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -58,7 +58,7 @@ export default function Oldpatientsdata() {
       const newData = { ...oldpatientsdata[0] };
 
       Object.keys(user.patient).forEach((prop) => {
-        if (user.patient[prop] !== "") {
+        if (user.patient[prop] !== '') {
           newData[prop] = user.patient[prop];
         }
       });

@@ -67,8 +67,8 @@ export default function TableNewEditForm({ currentTable }) {
     }),
     [currentTable]
   );
-  console.log('currrrent', currentTable);
-  console.log(defaultValues);
+  // console.log('currrrent', currentTable);
+  // console.log(defaultValues);
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),

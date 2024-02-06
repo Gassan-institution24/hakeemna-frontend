@@ -22,7 +22,7 @@ export default function CountryEditView() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetSurgery(id);
-  console.log(data);
+  // console.log(data);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

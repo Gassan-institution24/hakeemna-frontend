@@ -59,7 +59,7 @@ export default function AccountChangePassword() {
       const requestData = { passwordCurrent, password, confirmPassword };
 
       const response = await axios.patch(endpoints.auth.updatepassword, requestData);
-      console.log(response);
+      // console.log(response);
       if (response.status === 201) {
         reset();
         enqueueSnackbar('Password updated successfully!', { variant: 'success' });
@@ -76,7 +76,7 @@ export default function AccountChangePassword() {
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack component={Card} spacing={3} sx={{ p: 3 }}>
         <RHFTextField
-              lang="ar"
+          lang="ar"
           name="passwordCurrent"
           type={showpasswordCurrent.value ? 'text' : 'password'}
           label="Current Password"
@@ -94,7 +94,7 @@ export default function AccountChangePassword() {
         />
 
         <RHFTextField
-              lang="ar"
+          lang="ar"
           name="password"
           label="New Password"
           type={showpassword.value ? 'text' : 'password'}
@@ -116,7 +116,7 @@ export default function AccountChangePassword() {
         />
 
         <RHFTextField
-              lang="ar"
+          lang="ar"
           name="confirmPassword"
           type={showconfirmPassword.value ? 'text' : 'password'}
           label="Confirm New Password"

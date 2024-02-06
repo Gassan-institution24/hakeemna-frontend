@@ -62,7 +62,7 @@ export default function TableNewEditForm({ acl }) {
 
   const { user } = useAuthContext();
 
-  console.log('acl', acl);
+  // console.log('acl', acl);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -159,11 +159,11 @@ export default function TableNewEditForm({ acl }) {
 
   const values = getValues();
 
-  console.log('values', values);
+  // console.log('values', values);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data', data);
+      // console.log('data', data);
       axios.patch(endpoints.tables.employeeEngagement(employeeId), { acl: data });
       enqueueSnackbar('Update success!');
       // router.push(paths.superadmin.subscriptions.root);

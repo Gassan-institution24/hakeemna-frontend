@@ -271,7 +271,7 @@ export default function OldMedicalReports() {
       const response = await axios.get('/api/oldmedicalreports');
       setfilesPdf(response.data);
       reset();
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Failed to upload medical report', { variant: 'error' });

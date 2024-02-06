@@ -57,7 +57,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
-  console.log('workGroupsData', workGroupsData);
+  // console.log('workGroupsData', workGroupsData);
 
   const NewUserSchema = Yup.object().shape({
     work_shift: Yup.string().required('Work Shift is required'),
@@ -97,6 +97,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
         unit_service:
           user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
             ._id,
+        department: workGroupsData.filter((item) => item._id === data.work_group)?.[0]?.department
+          ._id,
       });
       reset();
       enqueueSnackbar('Create success!');
@@ -113,7 +115,9 @@ export default function BookManually({ onClose, refetch, ...other }) {
     <>
       <Dialog maxWidth="lg" onClose={onClose} {...other}>
         <FormProvider methods={methods} onSubmit={onSubmit}>
-          <DialogTitle sx={{ mb: 1 }}>{curLangAr ? 'إنشاء موعد طوارئ جديد': 'New Emergency Appointment'}</DialogTitle>
+          <DialogTitle sx={{ mb: 1 }}>
+            {curLangAr ? 'إنشاء موعد طوارئ جديد' : 'New Emergency Appointment'}
+          </DialogTitle>
 
           <DialogContent sx={{ overflow: 'unset' }}>
             <Stack spacing={2.5}>
@@ -130,7 +134,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
                   name="start_time"
                   render={({ field, fieldState: { error } }) => (
                     <MobileDateTimePicker
-                      label={t("start date")}
+                      label={`${t('start date')} *`}
                       sx={{ width: '30vw', minWidth: '300px' }}
                       onChange={(newValue) => {
                         const selectedTime = zonedTimeToUtc(
@@ -159,7 +163,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
                     sm: 'repeat(2, 1fr)',
                   }}
                 >
-                  <RHFSelect name="appointment_type" label={t("appointment type")}>
+                  <RHFSelect name="appointment_type" label={`${t('appointment type')} *`}>
                     {appointmenttypesData.map((option) => (
                       <MenuItem value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
@@ -168,7 +172,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
                   </RHFSelect>
                   <RHFSelect
                     name="work_shift"
-                    label={t("work shift")}
+                    label={`${t('work shift')} *`}
                     PaperPropsSx={{ textTransform: 'capitalize' }}
                   >
                     {workShiftsData &&
@@ -178,7 +182,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
                         </MenuItem>
                       ))}
                   </RHFSelect>
-                  <RHFSelect name="work_group" label={t("work group")}>
+                  <RHFSelect name="work_group" label={`${t('work group')} *`}>
                     {workGroupsData.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
@@ -188,13 +192,11 @@ export default function BookManually({ onClose, refetch, ...other }) {
                   <RHFMultiSelect
                     checkbox
                     name="service_types"
-                    label={t("service types")}
+                    label={t('service types')}
                     options={serviceTypesData}
                   />
                 </Box>
               </Box>
-
-
             </Stack>
           </DialogContent>
 
@@ -209,8 +211,6 @@ export default function BookManually({ onClose, refetch, ...other }) {
           </DialogActions>
         </FormProvider>
       </Dialog>
-
-      
     </>
   );
 }

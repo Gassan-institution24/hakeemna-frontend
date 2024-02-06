@@ -143,7 +143,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       })
     ),
   });
-  console.log('user', user);
+  // console.log('user', user);
 
   const defaultValues = useMemo(
     () => ({
@@ -173,18 +173,20 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       ],
       work_group: appointmentConfigData?.work_group?._id || null,
       work_shift: appointmentConfigData?.work_shift?._id || null,
-      days_details: appointmentConfigData?.days_details || [
-        // {
-        //   day: '',
-        //   // work_start_time: null,
-        //   // work_end_time: null,
-        //   // break_start_time: null,
-        //   // break_end_time: null,
-        //   appointments: [],
-        //   // service_types: [],
-        //   appointment_type: null,
-        // },
-      ],
+      days_details:
+        appointmentConfigData?.days_details ||
+        [
+          // {
+          //   day: '',
+          //   // work_start_time: null,
+          //   // work_end_time: null,
+          //   // break_start_time: null,
+          //   // break_end_time: null,
+          //   appointments: [],
+          //   // service_types: [],
+          //   appointment_type: null,
+          // },
+        ],
     }),
     [appointmentConfigData, user?.employee, employeeInfo?.department]
   );
@@ -267,7 +269,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       enqueueSnackbar(t(`failed to add!`), { variant: 'error' });
       console.error(error);
       loadingSend.onFalse();

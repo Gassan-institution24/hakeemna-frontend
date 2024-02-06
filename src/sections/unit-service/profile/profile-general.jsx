@@ -46,7 +46,7 @@ export default function AccountGeneral({ unitServiceData }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  console.log('unitServiceData', data);
+  // console.log('unitServiceData', data);
 
   const UpdateUserSchema = Yup.object().shape({
     name_english: Yup.string().required('Name is required.'),

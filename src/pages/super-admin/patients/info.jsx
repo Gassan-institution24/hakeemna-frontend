@@ -9,9 +9,9 @@ import { LoadingScreen } from 'src/components/loading-screen';
 export default function TableCreatePage() {
   const params = useParams();
   const { id } = params;
-  console.log('iddd', id);
+  // console.log('iddd', id);
   const { data, loading } = useGetPatient(id);
-  console.log('patient dataa', data);
+  // console.log('patient dataa', data);
   const patientName =
     (data?.first_name && data?.last_name && `${data?.first_name} ${data?.last_name}`) ||
     (data?.first_name && data?.first_name) ||

@@ -70,7 +70,7 @@ export function useGetPatient(id) {
 
 export function useGetFindPatient(obj) {
   const URL = endpoints.tables.findPatients;
-  console.log('url', URL);
+  // console.log('url', URL);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, axiosInstance.get(URL, obj));
   const memoizedValue = useMemo(

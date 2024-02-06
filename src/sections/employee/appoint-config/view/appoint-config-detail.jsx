@@ -253,7 +253,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       enqueueSnackbar(`Failed to Add: ${error}`, { variant: 'error' });
       console.error(error);
       loadingSend.onFalse();

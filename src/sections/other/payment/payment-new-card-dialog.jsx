@@ -69,16 +69,16 @@ export default function PaymentNewCardDialog({ onClose, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data', data);
+      // console.log('data', data);
       const newData = { ...data, expiration_date: expriy_date_format(data.expiration_date) };
-      console.log('data', newData);
+      // console.log('data', newData);
       const response = await axiosHandler({
         method: 'POST',
         path: `/api/paymentmethods`,
         data: newData,
       });
       if (response) {
-        console.log(response);
+        // console.log(response);
         enqueueSnackbar('Your message sent successfully', { variant: 'success' });
       } else {
         enqueueSnackbar('Something went wrong, please try again later', { variant: 'error' });

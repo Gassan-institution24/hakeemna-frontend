@@ -84,7 +84,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   const { id, emid } = useParams();
 
-  console.log('appointmentConfigData', appointmentConfigData);
+  // console.log('appointmentConfigData', appointmentConfigData);
 
   const [filters, setFilters] = useState(defaultFilters);
 

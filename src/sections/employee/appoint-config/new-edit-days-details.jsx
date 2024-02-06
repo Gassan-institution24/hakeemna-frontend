@@ -103,7 +103,7 @@ export default function NewEditDayDetails({ appointTime }) {
 
     const appointment_time = appointTime || values.appointment_time;
     if (!appointment_time) {
-      console.log('no_appointment_time');
+      // console.log('no_appointment_time');
       return;
     }
     const calculateMins = (date) => {
@@ -306,7 +306,7 @@ export default function NewEditDayDetails({ appointTime }) {
                       ))}
                   </RHFSelect>
                   <RHFTextField
-              lang="ar"
+                    lang="ar"
                     disabled
                     size="small"
                     name={`days_details[${index}].appointment_number`}
@@ -440,7 +440,7 @@ export default function NewEditDayDetails({ appointTime }) {
                     size="small"
                     InputLabelProps={{ shrink: true }}
                     name={`days_details[${index}].appointment_type`}
-                    label={t("appointment type")}
+                    label={t('appointment type')}
                   >
                     {appointmenttypesData?.map((option) => (
                       <MenuItem value={option._id}>
@@ -463,7 +463,7 @@ export default function NewEditDayDetails({ appointTime }) {
                           {...field}
                           multiple
                           id={`multiple-days_details[${index}].service_types`}
-                          label={t("service types")}
+                          label={t('service types')}
                           renderValue={renderValues}
                         >
                           {serviceTypesData?.map((option) => {

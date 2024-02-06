@@ -89,7 +89,7 @@ export default function NewEditDayAppointmentsDetails({
     const results = [];
     return selectedItems
       ?.map(
-        (item) => curLangAr?item.name_arabic:item.name_english
+        (item) => (curLangAr ? item.name_arabic : item.name_english)
         // price += item.Price_per_unit || 0
       )
       .join(', ');
@@ -107,7 +107,7 @@ export default function NewEditDayAppointmentsDetails({
       <Box sx={{ px: 2, pb: 0 }}>
         {values.days_details[ParentIndex].appointments &&
           values.days_details[ParentIndex].appointments.length > 0 && (
-            <Typography variant="p" lang='ar' sx={{ color: 'text.disabled', mb: 3, fontSize: 14 }}>
+            <Typography variant="p" lang="ar" sx={{ color: 'text.disabled', mb: 3, fontSize: 14 }}>
               {t('appointments')}:
             </Typography>
           )}
@@ -131,7 +131,7 @@ export default function NewEditDayAppointmentsDetails({
                   size="small"
                   InputLabelProps={{ shrink: true }}
                   name={`days_details[${ParentIndex}].appointments[${index}].appointment_type`}
-                  label={t('appointment type')}
+                  label={`${t('appointment type')} *`}
                 >
                   {appointmenttypesData?.map((option) => (
                     <MenuItem value={option._id}>
@@ -204,7 +204,11 @@ export default function NewEditDayAppointmentsDetails({
                   size="small"
                   InputLabelProps={{ shrink: true }}
                   name={`days_details[${ParentIndex}].appointments[${index}].online_available`}
-                  label={<Typography lang='ar' sx={{ fontSize: 12 }}>{t('online avaliable')}</Typography>}
+                  label={
+                    <Typography lang="ar" sx={{ fontSize: 12 }}>
+                      {t('online avaliable')}
+                    </Typography>
+                  }
                 />
                 {/* <RHFTextField
               lang="ar"

@@ -58,7 +58,7 @@ export default function TableDetailsRow({
   const DDL = usePopover();
   const details = usePopover();
 
-  // console.log('employees',employees)
+  // // console.log('employees',employees)
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell lang="ar" padding="checkbox">
@@ -69,11 +69,13 @@ export default function TableDetailsRow({
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell lang="ar" align="center">{curLangAr ? name_arabic : name_english}</TableCell>
+      <TableCell lang="ar" align="center">
+        {curLangAr ? name_arabic : name_english}
+      </TableCell>
       {/* <TableCell lang="ar" align="center">{employees.map((employee)=>`${employee.employee.first_name} ${employee.employee.family_name}`).join(', ')}</TableCell> */}
       <TableCell lang="ar" align="center">
         <Label
-                    lang="ar"
+          lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -180,7 +182,9 @@ export default function TableDetailsRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>
+          {t('modifications no')}: {modifications_nums}
+        </Box>
       </CustomPopover>
     </>
   );

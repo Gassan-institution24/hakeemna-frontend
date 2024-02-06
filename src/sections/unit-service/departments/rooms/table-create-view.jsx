@@ -19,7 +19,7 @@ export default function TableCreateView({ departmentData }) {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
+      {/* <CustomBreadcrumbs
         heading={t('Create new room')}
         links={[
           {
@@ -43,7 +43,7 @@ export default function TableCreateView({ departmentData }) {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
-      />
+      /> */}
 
       <TableNewEditForm departmentData={departmentData} />
     </Container>

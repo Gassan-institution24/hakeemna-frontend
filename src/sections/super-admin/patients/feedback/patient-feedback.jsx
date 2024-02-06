@@ -119,7 +119,7 @@ export default function PatientFeedbackView({ patientData }) {
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
-  console.log(patientData);
+  // console.log(patientData);
   const handleDownload = () => {
     const excelBody = dataFiltered.reduce((acc, info) => {
       acc.push({

@@ -51,7 +51,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  console.log('employeeData', employeeData);
+  // console.log('employeeData', employeeData);
 
   const UpdateUserSchema = Yup.object().shape({
     employee_type: Yup.string().required('Employee type is required.'),
@@ -146,7 +146,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('data', data);
+      // console.log('data', data);
       const formData = new FormData();
       Object.keys(data).forEach((key) => {
         if (data[key] !== defaultValues[key]) {
@@ -154,7 +154,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
         }
       });
 
-      console.log('formData', formData);
+      // console.log('formData', formData);
       await axios.patch(endpoints.tables.employee(employeeData._id), formData);
       enqueueSnackbar('Update success!');
       refetch();

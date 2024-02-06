@@ -133,7 +133,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
-  console.log(stakeholderData);
+  // console.log(stakeholderData);
   const handleDownload = () => {
     const excelBody = dataFiltered.reduce((acc, info) => {
       acc.push({

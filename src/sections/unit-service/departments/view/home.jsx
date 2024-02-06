@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -23,6 +23,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { socket } from 'src/socket';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -92,7 +93,7 @@ export default function UnitServicesTableView() {
 
   const settings = useSettingsContext();
 
-  console.log('settings', settings);
+  // console.log('settings', settings);
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();

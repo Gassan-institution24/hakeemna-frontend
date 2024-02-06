@@ -16,7 +16,7 @@ export default function TableEditView({ roomData, departmentData }) {
   const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
+      {/* <CustomBreadcrumbs
         heading="Edit Room"
         links={[
           {
@@ -36,7 +36,7 @@ export default function TableEditView({ roomData, departmentData }) {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
-      />
+      /> */}
       {roomData && departmentData && (
         <TableNewEditForm departmentData={departmentData} currentTable={roomData} />
       )}

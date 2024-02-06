@@ -20,7 +20,7 @@ import Markdown from 'src/components/markdown';
 // ----------------------------------------------------------------------
 
 export default function StakeholderInfoContent({ stakeholderData }) {
-  console.log('stakeholderData', stakeholderData);
+  // console.log('stakeholderData', stakeholderData);
   const {
     code,
     name_english,

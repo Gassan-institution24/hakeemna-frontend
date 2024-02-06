@@ -126,7 +126,7 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
-  console.log(unitServiceData);
+  // console.log(unitServiceData);
   const handleDownload = () => {
     const excelBody = dataFiltered.reduce((acc, info) => {
       acc.push({

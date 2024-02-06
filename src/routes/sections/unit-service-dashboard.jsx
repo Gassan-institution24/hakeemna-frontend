@@ -213,7 +213,7 @@ const RoomsNewPage = lazy(() => import('src/pages/unit-service/tables/rooms/new'
 const RoomsEditPage = lazy(() => import('src/pages/unit-service/tables/rooms/edit'));
 // OLD PATIENT
 const OldPatientPage = lazy(() => import('src/pages/unit-service/old-patient/home'));
-
+const ChatPage = lazy(() => import('src/pages/dashboard/chat'));
 // ----------------------------------------------------------------------
 
 export const unitServiceDashboardRoutes = [
@@ -231,6 +231,7 @@ export const unitServiceDashboardRoutes = [
     children: [
       // { element: <IndexPage />, index: true },
       // { path: '', element: < /> },
+      { path: 'chat', element: <ChatPage /> },
       {
         path: 'departments',
         children: [

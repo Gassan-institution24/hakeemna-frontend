@@ -10,7 +10,18 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Stepper from '@mui/material/Stepper';
-import { Box, MenuItem, Select, TextField } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import StepLabel from '@mui/material/StepLabel';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -19,6 +30,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
+import { useLocales, useTranslate } from 'src/locales';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -38,9 +50,12 @@ import {
 
 // ----------------------------------------------------------------------
 
-const steps = ['Service unit', 'Admin', 'Account'];
-
 export default function JwtRegisterView() {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const steps = [t('service unit'), t('admin'), t('account')];
+
   const { register } = useAuthContext();
 
   const router = useRouter();
@@ -60,9 +75,13 @@ export default function JwtRegisterView() {
 
   const searchParams = useSearchParams();
 
+  const [agree, setAgree] = useState(false);
+
   const returnTo = searchParams.get('returnTo');
 
   const password = useBoolean();
+  const dialog = useBoolean(true);
+  const policyDialog = useBoolean();
 
   const RegisterSchema = Yup.object().shape({
     us_name_arabic: Yup.string().required('Service unit name is required'),
@@ -135,10 +154,6 @@ export default function JwtRegisterView() {
   } = methods;
 
   const values = methods.getValues();
-  console.log('values.us_phone', values.us_phone);
-
-  console.log('isValid', isValid);
-  console.log('errors', errors);
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
@@ -165,9 +180,9 @@ export default function JwtRegisterView() {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
+    // console.log(data);
     try {
-      console.log(data);
+      // console.log(data);
       await register?.({
         role: 'admin',
         userName: `${data.em_first_name} ${data.em_family_name}`,
@@ -190,7 +205,7 @@ export default function JwtRegisterView() {
   }, [tableData, selectedCountry]);
   useEffect(() => {
     if (Object.keys(errors).length) {
-      console.log(errors);
+      // console.log(errors);
       setErrorMsg(
         Object.keys(errors)
           .map((key) => errors?.[key]?.message)
@@ -200,20 +215,21 @@ export default function JwtRegisterView() {
   }, [errors]);
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 3, position: 'relative' }}>
-      <Typography variant="h4">Sign up as service unit</Typography>
+      <Typography variant="h4">
+        {curLangAr ? 'التسجيل كوحدة خدمة' : 'Sign up as service unit'}
+      </Typography>
       <Stack direction="row" spacing={0.5}>
         <Typography sx={{ mb: 3 }} variant="body2">
-          {' '}
-          Already have an account?{' '}
+          {t('Already have an account?')}
         </Typography>
         <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
-          Sign in
+          {t('Sign in')}
         </Link>
       </Stack>
       <Stepper activeStep={page}>
         {steps.map((label, index) => {
           const stepProps = {};
-          const labelProps = {};
+          const labelProps = { lang: 'ar' };
           return (
             <Step key={label} {...stepProps}>
               <StepLabel {...labelProps}>{label}</StepLabel>
@@ -226,32 +242,34 @@ export default function JwtRegisterView() {
 
   const renderTerms = (
     <>
-      <Box sx={{ display: 'flex' }}>
-        <Button
-          color="inherit"
-          disabled={page === 0}
-          onClick={() => setPage((prev) => prev - 1)}
-          sx={{ m: 1 }}
-        >
-          Back
-        </Button>
-      </Box>
       <Typography
         component="div"
         sx={{
           color: 'text.secondary',
-          mt: 2.5,
+          mt: 2,
           typography: 'caption',
-          textAlign: 'center',
+          // textAlign: 'center',
         }}
+        lang="ar"
       >
-        {'By signing up, I agree to '}
-        <Link underline="always" color="text.primary">
-          Terms of Service
+        <Checkbox onChange={(e) => setAgree(e.target.checked)} />
+        {t('By signing up, I agree to ')}
+        <Link
+          onClick={policyDialog.onTrue}
+          sx={{ cursor: 'pointer' }}
+          underline="always"
+          color="text.primary"
+        >
+          {t('Terms of Service')}
         </Link>
-        {' and '}
-        <Link underline="always" color="text.primary">
-          Privacy Policy
+        {t(' and ')}
+        <Link
+          onClick={policyDialog.onTrue}
+          sx={{ cursor: 'pointer' }}
+          underline="always"
+          color="text.primary"
+        >
+          {t('Privacy Policy')}
         </Link>
       </Typography>
     </>
@@ -266,20 +284,21 @@ export default function JwtRegisterView() {
       )}
       {/* <Alert severity="info">Service unit information</Alert> */}
       <RHFTextField
-        lang="en"
+        lang="ar"
         onChange={handleEnglishInputChange}
         name="us_name_english"
-        label="Name in english"
+        label={`${t('name in english')} *`}
       />
       <RHFTextField
         lang="ar"
         onChange={handleArabicInputChange}
         name="us_name_arabic"
-        label="Name in arabic"
+        label={`${t('name in arabic')} *`}
       />
-      <RHFTextField name="us_identification_num" label="Identification number" />
+      <RHFTextField lang="ar" name="us_identification_num" label={`${t('ID number')} *`} />
       <MuiTelInput
         forceCallingCode
+        label={`${t('phone')} *`}
         value={us_phone}
         onChange={(newPhone) => {
           matchIsValidTel(newPhone);
@@ -289,46 +308,51 @@ export default function JwtRegisterView() {
       />
 
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFTextField name="us_email" label="Email address" />
+        <RHFTextField lang="ar" name="us_email" label={`${t('email')} *`} />
       </Stack>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFSelect onChange={handleCountryChange} name="us_country" label="Country">
+        <RHFSelect
+          lang="ar"
+          onChange={handleCountryChange}
+          name="us_country"
+          label={`${t('country')} *`}
+        >
           {countriesData.map((country) => (
             <MenuItem key={country._id} value={country._id}>
-              {country.name_english}
+              {curLangAr ? country.name_arabic : country.name_english}
             </MenuItem>
           ))}
         </RHFSelect>
-        <RHFSelect name="us_city" label="City">
+        <RHFSelect lang="ar" name="us_city" label={`${t('city')} *`}>
           {cities.map((city) => (
             <MenuItem key={city._id} value={city._id}>
-              {city.name_english}
+              {curLangAr ? city.name_arabic : city.name_english}
             </MenuItem>
           ))}
         </RHFSelect>
       </Stack>
 
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFSelect name="US_type" label="Unit Service Type">
+        <RHFSelect lang="ar" name="US_type" label={`${t('service unit type')} *`}>
           {unitserviceTypesData.map((type) => (
             <MenuItem key={type._id} value={type._id}>
-              {type.name_english}
+              {curLangAr ? type.name_arabic : type.name_english}
             </MenuItem>
           ))}
         </RHFSelect>
-        <RHFSelect name="us_speciality" label="Speciality">
+        <RHFSelect lang="ar" name="us_speciality" label={`${t('speciality')} *`}>
           {specialtiesData.map((specialty) => (
             <MenuItem key={specialty._id} value={specialty._id}>
-              {specialty.name_english}
+              {curLangAr ? specialty.name_arabic : specialty.name_english}
             </MenuItem>
           ))}
         </RHFSelect>
       </Stack>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFSelect name="us_sector_type" label="Sector type">
-          <MenuItem value="public">Public</MenuItem>
-          <MenuItem value="privet">Privet</MenuItem>
-          <MenuItem value="non profit organization">Non profit organization</MenuItem>
+        <RHFSelect lang="ar" name="us_sector_type" label={t('sector type')}>
+          <MenuItem value="public">{t('Public')}</MenuItem>
+          <MenuItem value="privet">{t('Privet')}</MenuItem>
+          <MenuItem value="non profit organization">{t('non profit organization')}</MenuItem>
         </RHFSelect>
       </Stack>
 
@@ -340,8 +364,23 @@ export default function JwtRegisterView() {
         type="submit"
         onClick={() => setPage((prev) => prev + 1)}
       >
-        Next Step <Iconify width={20} className="arrow" icon="eva:arrow-ios-forward-fill" />
+        {t('Next Step')}{' '}
+        {curLangAr ? (
+          <Iconify width={20} className="arrow" icon="eva:arrow-ios-back-fill" />
+        ) : (
+          <Iconify width={20} className="arrow" icon="eva:arrow-ios-forward-fill" />
+        )}
       </LoadingButton>
+      <Box sx={{ display: 'flex' }}>
+        <Button
+          color="inherit"
+          disabled={page === 0}
+          onClick={() => setPage((prev) => prev - 1)}
+          // sx={{ m: 1 }}
+        >
+          {t('back')}
+        </Button>
+      </Box>
     </Stack>
   );
   const renderFormEmployee = (
@@ -363,27 +402,27 @@ export default function JwtRegisterView() {
         }}
       >
         <RHFTextField
-          lang="en"
+          lang="ar"
           onChange={handleEnglishInputChange}
           name="em_first_name"
-          label="First name"
+          label={`${t('first name')} *`}
         />
         <RHFTextField
-          lang="en"
+          lang="ar"
           onChange={handleEnglishInputChange}
           name="em_middle_name"
-          label="middle name"
+          label={`${t('middle name')} *`}
         />
         <RHFTextField
-          lang="en"
+          lang="ar"
           onChange={handleEnglishInputChange}
           name="em_family_name"
-          label="Family name"
+          label={`${t('family name')} *`}
         />
-        <RHFSelect name="em_speciality" label="Speciality">
+        <RHFSelect lang="ar" name="em_speciality" label={t('speciality')}>
           {specialtiesData.map((specialty) => (
             <MenuItem key={specialty._id} value={specialty._id}>
-              {specialty.name_english}
+              {curLangAr ? specialty.name_arabic : specialty.name_english}
             </MenuItem>
           ))}
         </RHFSelect>
@@ -404,16 +443,21 @@ export default function JwtRegisterView() {
           sm: 'repeat(1, 1fr)',
         }}
       >
-        <RHFSelect name="em_nationality" label="Nationality">
+        <RHFSelect lang="ar" name="em_nationality" label={`${t('nationality')} *`}>
           {countriesData.map((country) => (
             <MenuItem key={country._id} value={country._id}>
-              {country.name_english}
+              {curLangAr ? country.name_arabic : country.name_english}
             </MenuItem>
           ))}
         </RHFSelect>
-        <RHFTextField name="em_identification_num" label="Identification number" />
-        <RHFTextField name="em_profrssion_practice_num" label="Profrssion practice number" />
+        <RHFTextField lang="ar" name="em_identification_num" label={`${t('ID number')} *`} />
+        <RHFTextField
+          lang="ar"
+          name="em_profrssion_practice_num"
+          label={`${t('profrssion practice number')} *`}
+        />
         <MuiTelInput
+          label={`${t('phone')} *`}
           forceCallingCode
           value={em_phone}
           onChange={(newPhone) => {
@@ -432,8 +476,23 @@ export default function JwtRegisterView() {
         type="submit"
         onClick={() => setPage((prev) => prev + 1)}
       >
-        Next Step <Iconify width={20} className="arrow" icon="eva:arrow-ios-forward-fill" />
+        {t('Next Step')}{' '}
+        {curLangAr ? (
+          <Iconify width={20} className="arrow" icon="eva:arrow-ios-back-fill" />
+        ) : (
+          <Iconify width={20} className="arrow" icon="eva:arrow-ios-forward-fill" />
+        )}
       </LoadingButton>
+      <Box sx={{ display: 'flex' }}>
+        <Button
+          color="inherit"
+          disabled={page === 0}
+          onClick={() => setPage((prev) => prev - 1)}
+          // sx={{ m: 1 }}
+        >
+          {t('back')}
+        </Button>
+      </Box>
     </Stack>
   );
   const renderFormAuth = (
@@ -444,10 +503,11 @@ export default function JwtRegisterView() {
         </Alert>
       )}
       {/* <Alert severity="info">Sign in information</Alert> */}
-      <RHFTextField name="email" label="Email address" />
+      <RHFTextField lang="ar" name="email" label={`${t('email')} *`} />
       <RHFTextField
+        lang="ar"
         name="password"
-        label="Password"
+        label={`${t('password')} *`}
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -460,8 +520,9 @@ export default function JwtRegisterView() {
         }}
       />
       <RHFTextField
+        lang="ar"
         name="confirmPassword"
-        label="Confirm Password"
+        label={`${t('confirm password')} *`}
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -473,17 +534,30 @@ export default function JwtRegisterView() {
           ),
         }}
       />
+      {renderTerms}
 
       <LoadingButton
         fullWidth
+        lang="ar"
         color="inherit"
         size="large"
         type="submit"
+        disabled={!agree}
         variant="contained"
         loading={isSubmitting}
       >
-        Create account
+        {t('create account')}
       </LoadingButton>
+      <Box sx={{ display: 'flex' }}>
+        <Button
+          color="inherit"
+          disabled={page === 0}
+          onClick={() => setPage((prev) => prev - 1)}
+          // sx={{ m: 1 }}
+        >
+          {t('back')}
+        </Button>
+      </Box>
     </Stack>
   );
 
@@ -495,7 +569,56 @@ export default function JwtRegisterView() {
         {page === 1 && renderFormEmployee}
         {page === 2 && renderFormAuth}
       </FormProvider>
-      {renderTerms}
+
+      <Dialog open={dialog.value} onClose={dialog.onFalse} scroll="paper">
+        <DialogTitle sx={{ pb: 2 }}>Subscribe</DialogTitle>
+
+        <DialogContent dividers="paper">
+          <DialogContentText tabIndex={-1}>
+            {[...new Array(50)]
+              .map(
+                () => `Cras mattis consectetur purus sit amet fermentum.
+Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
+              )
+              .join('\n')}
+          </DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={dialog.onFalse}>Cancel</Button>
+
+          <Button variant="contained" onClick={dialog.onFalse}>
+            Subscribe
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={policyDialog.value} onClose={policyDialog.onFalse} scroll="paper">
+        <DialogTitle sx={{ pb: 2 }}>Subscribe</DialogTitle>
+
+        <DialogContent dividers="paper">
+          <DialogContentText tabIndex={-1}>
+            {[...new Array(50)]
+              .map(
+                () => `Cras mattis consectetur purus sit amet fermentum.
+Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
+              )
+              .join('\n')}
+          </DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={policyDialog.onFalse}>Cancel</Button>
+
+          <Button variant="contained" onClick={policyDialog.onFalse}>
+            Subscribe
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

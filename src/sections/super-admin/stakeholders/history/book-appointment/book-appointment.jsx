@@ -72,7 +72,7 @@ export default function AppointmentListView({ stakeholderData }) {
 
   const { appointmentsData, refetch } = useGetAvailableAppointments();
 
-  console.log('dataaaaaaaapp', appointmentsData);
+  // console.log('dataaaaaaaapp', appointmentsData);
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { unitservicesData } = useGetUnitservices();

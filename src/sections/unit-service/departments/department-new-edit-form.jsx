@@ -17,7 +17,9 @@ import { useGetUnitservices } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+
 import axios from 'axios';
+import { socket } from 'src/socket';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
@@ -117,6 +119,7 @@ export default function TableNewEditForm({ currentTable }) {
       router.push(paths.unitservice.departments.root);
       console.info('DATA', data);
     } catch (error) {
+      socket.emit('error',error);
       console.error(error);
     }
   });

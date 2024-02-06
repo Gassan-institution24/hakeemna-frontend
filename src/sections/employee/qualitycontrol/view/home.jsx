@@ -82,7 +82,7 @@ export default function DepartmentFeedbackView() {
 
   const { user } = useAuthContext();
 
-  console.log('user', user);
+  // console.log('user', user);
 
   const settings = useSettingsContext();
 
