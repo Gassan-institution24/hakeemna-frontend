@@ -1,34 +1,24 @@
-import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
-import { alpha, useTheme } from '@mui/material/styles';
-import Tab from '@mui/material/Tab';
+import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
-import Container from '@mui/material/Container';
-import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import Link from '@mui/material/Link';
-import { Button } from '@mui/material';
-import { fShortenNumber } from 'src/utils/format-number';
-
 import { _socials } from 'src/_mock';
-import { AvatarShape } from 'src/assets/illustrations';
 import { fTime, fDate } from 'src/utils/format-time';
-import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import { useGetPatientAppointments } from 'src/api/tables';
-import { useSettingsContext } from 'src/components/settings';
+import { useAuthContext } from 'src/auth/hooks';
 // ----------------------------------------------------------------------
 
-export default function Currentappoinment({ user }) {
+export default function Currentappoinment() {
   const theme = useTheme();
-  const { appointmentsData } = useGetPatientAppointments(user);
-  // console.log(appointmentsData);
+  const { user } = useAuthContext()
+  const { appointmentsData } = useGetPatientAppointments(user?.patient?._id);
 
   const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending');
 

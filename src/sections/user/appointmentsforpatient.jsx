@@ -1,16 +1,17 @@
 import PropTypes from 'prop-types';
-
-import { Box, Divider } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 import FinishedAppoinment from './apointmentsfinished';
 import Currentappoinment from './apointmentscurrent';
 
 export default function AppointmentData({ data }) {
-  // console.log(data);
+  console.log(data);
   return (
     <Box>
-      <FinishedAppoinment />
-      <Divider />
+      <Typography>Test</Typography>
       <Currentappoinment />
+      <Divider />
+      <Typography>Test</Typography>
+      <FinishedAppoinment />
     </Box>
   );
 }

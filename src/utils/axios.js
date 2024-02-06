@@ -174,6 +174,7 @@ export const endpoints = {
     departmentAppointmentsCount: (id) => `/api/appointments/department/${id}/count`,
     employeeAppointments: (id) => `/api/appointments/employee/${id}`,
     patientAppointments: (id) => `/api/appointments/patient/${id}`,
+    patientoneAppointments: (id) => `/api/appointments/onepatient/${id}`,
     economecMovements: '/api/economicmovements',
     economicMovement: (id) => `/api/economicmovements/${id}`,
     patienteconomicMovements: (id) => `/api/economicmovements/patient/${id}`,

@@ -23,6 +23,7 @@ import {
   useGetAppointmentTypes,
   useGetPaymentMethods,
   useGetInsuranceCos,
+  useGetUSFeedbackes,
 } from 'src/api/tables';
 import { fTimestamp } from 'src/utils/format-time';
 
@@ -62,6 +63,7 @@ export default function AppointmentBooking({ patientData }) {
   const { tableData } = useGetCities();
   const {insuranseCosData } = useGetInsuranceCos()
   const { unitservicesData } = useGetUnitservices();
+  const { feedbackData } = useGetUSFeedbackes('655efd4094ccdc14a047acc0')
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { paymentMethodsData } = useGetPaymentMethods();
 
@@ -169,6 +171,7 @@ export default function AppointmentBooking({ patientData }) {
           insuranseCosData={insuranseCosData}
           citiesOptions={tableData}
           unitServicesOptions={unitservicesData}
+          feedbackData={feedbackData}
           appointmentTypeOptions={appointmenttypesData}
           paymentMethodsOptions={paymentMethodsData}
           dateError={dateError}

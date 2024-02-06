@@ -22,12 +22,15 @@ import { fTime, fDate } from 'src/utils/format-time';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import { useGetPatientAppointments } from 'src/api/tables';
+import { useAuthContext } from 'src/auth/hooks';
+
 import { useSettingsContext } from 'src/components/settings';
 // ----------------------------------------------------------------------
 
-export default function FinishedAppoinment({ user }) {
+export default function FinishedAppoinment() {
   const theme = useTheme();
-  const { appointmentsData } = useGetPatientAppointments(user);
+  const { user } = useAuthContext()
+  const { appointmentsData } = useGetPatientAppointments(user?.patient?._id);
 
   const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');
 
