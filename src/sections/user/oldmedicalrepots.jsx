@@ -20,6 +20,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import Image from 'src/components/image/image';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
 
 import {
   Page,
@@ -41,7 +43,7 @@ export default function OldMedicalReports() {
   const [files, setFiles] = useState(null);
   const [filesPdf, setfilesPdf] = useState([]);
   const [filesPdftodelete, setfilesPdftodelete] = useState([]);
-
+  const [checkChange, setCheckChange] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
 
@@ -100,18 +102,18 @@ export default function OldMedicalReports() {
     gridContainer2: {
       display: 'flex',
       flexDirection: 'row',
-      justifyContent:'flex-start',
+      justifyContent: 'flex-start',
       alignItems: 'center',
       padding: '10px',
       borderBottom: 1,
-      gap:132
+      gap: 132,
     },
     line: {
       textDecoration: 'none',
     },
     gridFooter: {
       borderTop: 1,
-      padding:'10px'
+      padding: '10px',
     },
   });
   const router = useRouter();
@@ -121,6 +123,7 @@ export default function OldMedicalReports() {
     file: Yup.string().required(),
     name: Yup.string().required('File name is required'),
     note: Yup.string(),
+    agree: Yup.boolean().required(),
     specialty: Yup.string().required(),
   });
 
@@ -133,6 +136,7 @@ export default function OldMedicalReports() {
     file: '',
     name: '',
     note: '',
+    agree: '',
     specialty: '',
   };
 
@@ -180,7 +184,7 @@ export default function OldMedicalReports() {
             <PdfImage src={info?.file} style={styles.image} />
           </View>
           <View style={styles.gridFooter}>
-          <Text style={styles.text}>
+            <Text style={styles.text}>
               <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
                 Note:
               </Text>{' '}
@@ -300,7 +304,7 @@ export default function OldMedicalReports() {
               sx={{ mb: 1.5 }}
             >
               {TYPE.map((test) => (
-                <MenuItem value={test} key={test._id} sx={{mb:1}}>
+                <MenuItem value={test} key={test._id} sx={{ mb: 1 }}>
                   {test}
                 </MenuItem>
               ))}
@@ -314,7 +318,7 @@ export default function OldMedicalReports() {
               sx={{ mb: 1 }}
             >
               {SPECIALTY.map((test) => (
-                <MenuItem value={test} key={test._id} sx={{mb:1}}>
+                <MenuItem value={test} key={test._id} sx={{ mb: 1 }}>
                   {test}
                 </MenuItem>
               ))}
@@ -348,14 +352,48 @@ export default function OldMedicalReports() {
             />
             <RHFTextField lang="en" name="note" label="More information" />
           </DialogContent>
-
+          <Checkbox
+            size="small"
+            name="agree"
+            color="success"
+            sx={{ position: 'relative', top: 5, left: 25 }}
+            onChange={() => {
+              setCheckChange(!checkChange);
+            }}
+          />
+          <Typography
+            sx={{
+              color: 'text.secondary',
+              mt: { md: -2.5, xs: -2.3 },
+              ml: { md: -19.5, xs: 1 },
+              typography: 'caption',
+              textAlign: 'center',
+              fontSize: { md: 12, xs: 9 },
+            }}
+          >
+            {'I reed the '}
+            <Link underline="always" color="text.primary">
+              Privacy Policy
+            </Link>
+            {' And agree to '}
+            <Link underline="always" color="text.primary">
+              Terms of Service
+            </Link>
+            .
+          </Typography>
           <DialogActions>
             <Button onClick={dialog.onFalse} variant="outlined" color="inherit">
               Cancel
             </Button>
-            <Button type="submit" loading={isSubmitting} variant="contained">
-              Upload
-            </Button>
+            {checkChange === false ? (
+              <Button type="submit" loading={isSubmitting} variant="contained" disabled>
+                Upload
+              </Button>
+            ) : (
+              <Button type="submit" loading={isSubmitting} variant="contained">
+                Upload
+              </Button>
+            )}
           </DialogActions>
         </FormProvider>
       </Dialog>

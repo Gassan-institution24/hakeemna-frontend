@@ -13,6 +13,9 @@ import { Controller, useFormContext } from 'react-hook-form';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import Checkbox from '@mui/material/Checkbox';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import { useTranslate } from 'src/locales';
 
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -23,6 +26,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Rating from '@mui/material/Rating';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { useGetUSFeedbackes } from 'src/api/tables';
 
 // ----------------------------------------------------------------------
 
@@ -40,14 +44,23 @@ export default function AppointmentsFilters({
   insuranseCosData,
   paymentMethodsOptions,
   departmentsData,
+  feedbackData,
   countriesOptions,
   citiesOptions,
   unitServicesOptions,
   appointmentTypeOptions,
   dateError,
 }) {
-
-
+  const handleFilterRate = useCallback(
+    (event) => {
+      onFilters(
+        'rate',
+        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
+      );
+    },
+    [onFilters]
+  );
+  const rateOptions = [1, 2, 3, 4, 5];
   const handleFilterAppointtypes = useCallback(
     (e) => {
       onFilters('appointtypes', e.target.value);
@@ -68,7 +81,7 @@ export default function AppointmentsFilters({
   );
   const handleFilterUnitServices = useCallback(
     (e) => {
-      onFilters('unitServices', e.target.value);
+      onFilters('feedback', e.target.value);
     },
     [onFilters]
   );
@@ -85,6 +98,7 @@ export default function AppointmentsFilters({
     },
     [onFilters]
   );
+  const { t } = useTranslate();
 
   const renderHead = (
     <Stack
@@ -135,28 +149,6 @@ export default function AppointmentsFilters({
   );
 
   const renderappointtypes = (
-    // <Stack>
-    //   <Typography variant="subtitle2" sx={{ mb: 1 }}>
-    //     Appointment Types
-    //   </Typography>
-    //   {appointmentTypeOptions.map((option) => (
-    //     <FormControlLabel
-    //       key={option._id}
-    //       control={
-    //         <Radio
-    //           checked={option._id === filters.appointtypes}
-    //           onClick={() => handleFilterAppointtypes(option._id)}
-    //         />
-    //       }
-    //       label={option.name_english}
-    //       sx={{
-    //         ...(option === 'all' && {
-    //           textTransform: 'capitalize',
-    //         }),
-    //       }}
-    //     />
-    //   ))}
-    // </Stack>
     <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Appointment Types
@@ -170,7 +162,6 @@ export default function AppointmentsFilters({
       </Select>
     </FormControl>
   );
-
   const renderCountries = (
     <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
@@ -180,6 +171,22 @@ export default function AppointmentsFilters({
         {countriesOptions.map((option) => (
           <MenuItem key={option._id} value={option._id}>
             {option?.name_english}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+
+  const renderRating = (
+    <FormControl>
+      <Typography variant="subtitle2" sx={{ mb: 1 }}>
+        {t('Rating')}
+      </Typography>
+      <Select onChange={handleFilterRate} name="appointment_type">
+        {rateOptions.map((option) => (
+          <MenuItem key={option._id} value={option}>
+            <Checkbox disableRipple size="small" checked={filters.rate?.includes(option)} />
+            <Rating size="small" readOnly value={option} precision={0.1} max={5} />
           </MenuItem>
         ))}
       </Select>
@@ -199,43 +206,30 @@ export default function AppointmentsFilters({
       </Select>
     </FormControl>
   );
-  const renderRate = (
-    <FormControl>
-      <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Rate
-      </Typography>
-      <Select onChange={handleFiltedInsurance} name="insurance" >
-        {/* {insuranseCosData.map((option) => ( key={option._id} value={option._id}   ))} */}
-      
-          <Rating name="read-only" size="small"/>
-       
-      </Select>
-    </FormControl>
-  );
-  const renderUnitServices = (
-    <Stack>
-      <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Unit services
-      </Typography>
-      {unitServicesOptions.map((option) => (
-        <FormControlLabel
-          key={option._id}
-          control={
-            <Radio
-              checked={option._id === filters.unitServices}
-              onClick={() => handleFilterUnitServices(option._id)}
-            />
-          }
-          label={option.name_english}
-          sx={{
-            ...(option === 'all' && {
-              textTransform: 'capitalize',
-            }),
-          }}
-        />
-      ))}
-    </Stack>
-  );
+  // const renderUnitServices = (
+  //   <Stack>
+  //     <Typography variant="subtitle2" sx={{ mb: 1 }}>
+  //       Unit services
+  //     </Typography>
+  //     {feedbackData.map((option) => (
+  //       <FormControlLabel
+  //         key={option._id}
+  //         control={
+  //           <Radio
+  //             checked={option._id === filters.unitServices}
+  //             onClick={() => handleFilterUnitServices(option._id)}
+  //           />
+  //         }
+  //         label={option.Rate}
+  //         sx={{
+  //           ...(option === 'all' && {
+  //             textTransform: 'capitalize',
+  //           }),
+  //         }}
+  //       />
+  //     ))}
+  //   </Stack>
+  // );
 
   return (
     <>
@@ -272,12 +266,10 @@ export default function AppointmentsFilters({
             {renderDate}
             {renderappointtypes}
 
-            {/* {renderUnitServices} */}
-
             {renderCountries}
 
             {renderInsurance}
-            {renderRate}
+            {renderRating}
           </Stack>
         </Scrollbar>
       </Drawer>
@@ -290,6 +282,7 @@ AppointmentsFilters.propTypes = {
   appointmentTypeOptions: PropTypes.array,
   unitServicesOptions: PropTypes.array,
   countriesOptions: PropTypes.array,
+  feedbackData: PropTypes.array,
   paymentMethodsOptions: PropTypes.array,
   insuranseCosData: PropTypes.array,
   departmentsData: PropTypes.array,
