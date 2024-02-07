@@ -41,8 +41,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { endpoints } from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import axiosHandler from 'src/utils/axios-handler';
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -81,6 +83,8 @@ export default function EmployeesTableView({ departmentData }) {
 
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
+
+  const { user } = useAuthContext();
 
   const componentRef = useRef();
 
@@ -142,57 +146,93 @@ export default function EmployeesTableView({ departmentData }) {
   //   saveAs(data, 'unitservicesTable.xlsx'); /// edit
   // };
   const handleActivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employee(id)}/updatestatus`,
-        data: { status: 'active' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.employee(row._id)}/updatestatus`,
+          data: { status: 'active' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.employees.root(departmentData._id),
+          msg: `activated an employee <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user, departmentData]
   );
   const handleInactivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employee(id)}/updatestatus`,
-        data: { status: 'inactive' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.employee(row._id)}/updatestatus`,
+          data: { status: 'inactive' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.employees.root(departmentData._id),
+          msg: `inactivated an employee <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user, departmentData]
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.employees}/updatestatus`,
-      data: { status: 'active', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.employees}/updatestatus`,
+        data: { status: 'active', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.departments.employees.root(departmentData._id),
+        msg: `activated many employees in department <strong>${departmentData.name_english}</strong>`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: employeesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, employeesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, employeesData, refetch, departmentData, user]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.employees}/updatestatus`,
-      data: { status: 'inactive', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.employees}/updatestatus`,
+        data: { status: 'inactive', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.departments.employees.root(departmentData._id),
+        msg: `inactivated many employees in department <strong>${departmentData.name_english}</strong>`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: employeesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, employeesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, employeesData, refetch, departmentData, user]);
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -405,9 +445,9 @@ export default function EmployeesTableView({ departmentData }) {
                         setFilters={setFilters}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row._id)}
+                        onActivate={() => handleActivate(row)}
                         onViewRow={() => handleViewRow(row._id)}
-                        onInactivate={() => handleInactivate(row._id)}
+                        onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}

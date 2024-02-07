@@ -43,6 +43,7 @@ import { useSettingsContext } from 'src/components/settings';
 import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api/tables';
 import axios, { endpoints } from 'src/utils/axios';
 
+import { socket } from 'src/socket';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
@@ -70,6 +71,9 @@ export default function TableNewEditForm() {
   const router = useRouter();
 
   const table = useTable({ defaultRowsPerPage: 10 });
+
+  const unitServiceID =
+    user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service._id;
 
   const settings = useSettingsContext();
 
@@ -120,13 +124,16 @@ export default function TableNewEditForm() {
   const handleEmployment = async (id) => {
     try {
       await axios.post(endpoints.tables.employeeEngagements, {
-        unit_service:
-          user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+        unit_service: unitServiceID,
         employee: id,
+      });
+      socket.emit('created', {
+        user,
+        link: `/dashboard/unitservices/${unitServiceID}/employees`,
+        msg: `creating employee <strong>${id}</strong> into <strong>${unitServiceID}</strong> unit service`,
       });
       enqueueSnackbar(t('employment successfully!'));
     } catch (e) {
-      // console.log(e);
       enqueueSnackbar(t('failed to employment!'), { variant: 'error' });
     }
   };

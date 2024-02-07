@@ -20,7 +20,6 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import axios from 'axios';
-import { socket } from 'src/socket';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
@@ -101,8 +100,14 @@ export default function TableNewEditForm({ currentTable }) {
             ...data,
           },
         });
+        socket.emit('updated', {
+          data,
+          user,
+          link: paths.unitservice.departments.info(currentTable._id),
+          msg: `updating department <strong>${data.name_english}</strong>`,
+        });
       } else {
-        await axiosHandler({
+        const newDepartment = await axiosHandler({
           method: 'POST',
           path: endpoints.tables.departments,
           data: {
@@ -114,6 +119,12 @@ export default function TableNewEditForm({ currentTable }) {
                 ._id,
           },
         });
+        socket.emit('created', {
+          data,
+          user,
+          link: paths.unitservice.departments.info(newDepartment._id),
+          msg: `creating department <strong>${data.name_english}</strong>`,
+        });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
@@ -123,7 +134,7 @@ export default function TableNewEditForm({ currentTable }) {
       socket.emit('error', {
         error,
         user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        link: paths.superadmin.systemErrors,
         msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
       });
       socket.emit('error', error);

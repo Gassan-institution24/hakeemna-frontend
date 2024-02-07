@@ -106,6 +106,12 @@ export default function TableNewEditForm({ currentTable }) {
             ...data,
           },
         });
+        socket.emit('updated', {
+          data,
+          user,
+          link: `/dashboard/unitservices/${data.unit_service}/activities`,
+          msg: `updating an activity <strong>${data.name_english}</strong> into <strong>${data.unit_service}</strong> unit service`,
+        });
       } else {
         await axiosHandler({
           method: 'POST',
@@ -115,6 +121,12 @@ export default function TableNewEditForm({ currentTable }) {
             user_creation: user._id,
             ...data,
           },
+        });
+        socket.emit('created', {
+          data,
+          user,
+          link: `/dashboard/unitservices/${data.unit_service}/activities`,
+          msg: `creating a new activity <strong>${data.name_english}</strong> into <strong>${data.unit_service}</strong> unit service`,
         });
       }
       reset();

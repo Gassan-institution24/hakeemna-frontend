@@ -34,7 +34,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
-export default function AddEmegencyAppointment({ refetch, appointment_id, onClose, ...other }) {
+export default function AddEmegencyAppointment({ refetch, appointment, onClose, ...other }) {
   const router = useRouter();
   const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
@@ -103,11 +103,22 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (data._id) {
-        await axios.patch(endpoints.tables.appointment(appointment_id), {
+        await axios.patch(endpoints.tables.appointment(appointment._id), {
           patient: data._id,
         });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.appointments(appointment.department._id),
+          msg: `booked an appointment ${appointment.code} in department <strong>${appointment.department.name_english}</strong>`,
+        });
       } else {
-        await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment_id), data);
+        await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment._id), data);
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.appointments(appointment.department._id),
+          msg: `booked an appointment ${appointment.code} in department <strong>${appointment.department.name_english}</strong>`,
+        });
+        socket.emit('register',data)
       }
       enqueueSnackbar('Create success!');
       refetch();
@@ -175,7 +186,7 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
       marital_status: info.marital_status || '',
       country: info.country || null,
       city: info.city || null,
-      nationality: info.nationality || null,
+      nationality: info.nationality._id || null,
       email: info.email || '',
       mobile_num1: info.mobile_num1 || '',
       mobile_num2: info.mobile_num2 || '',
@@ -367,5 +378,5 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
 AddEmegencyAppointment.propTypes = {
   onClose: PropTypes.func,
   refetch: PropTypes.func,
-  appointment_id: PropTypes.string,
+  appointment: PropTypes.string,
 };

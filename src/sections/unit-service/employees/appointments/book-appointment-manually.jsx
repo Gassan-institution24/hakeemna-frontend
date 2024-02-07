@@ -34,7 +34,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
-export default function AddEmegencyAppointment({ refetch, appointment_id, onClose, ...other }) {
+export default function AddEmegencyAppointment({ refetch, appointment, onClose, ...other }) {
   const router = useRouter();
   const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
@@ -103,12 +103,20 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (data._id) {
-        await axios.patch(endpoints.tables.appointment(appointment_id), {
+        await axios.patch(endpoints.tables.appointment(appointment._id), {
           patient: data._id,
         });
       } else {
-        await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment_id), data);
+        await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment._id), data);
       }
+      socket.emit('updated', {
+        data,
+        user,
+        link: `/dashboard/unitservices/${appointment.unit_service._id}/appointments`,
+        msg: `Booking appointment <strong>${appointment.code}</strong> of <strong>${
+          appointment?.unit_service?.name_english || ''
+        }</strong> unit service`,
+      });
       enqueueSnackbar('Create success!');
       refetch();
       console.info('DATA', data);
@@ -118,7 +126,7 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
         error,
         user,
         link: `/dashboard/systemerrors`,
-        msg: `booking an appointment ${appointment_id} in employee ${id}`,
+        msg: `booking an emergency appointment ${appointment} in employee ${id}`,
       });
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
@@ -367,5 +375,5 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
 AddEmegencyAppointment.propTypes = {
   onClose: PropTypes.func,
   refetch: PropTypes.func,
-  appointment_id: PropTypes.string,
+  appointment: PropTypes.object,
 };

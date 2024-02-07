@@ -257,11 +257,23 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
             data
           );
+          socket.emit('updated', {
+            data,
+            user,
+            link: `/dashboard/unitservices/${data.unit_service}/appoint-config`,
+            msg: `updating appointment configuration ${appointmentConfigData._id} into <strong>${data.unit_service}</strong> unit service`,
+          });
           router.push(paths.unitservice.employees.appointmentconfig.root(id));
         }
       } else {
         updating.onTrue();
         await axios.post(endpoints.tables.appointmentconfigs, data);
+        socket.emit('created', {
+          data,
+          user,
+          link: `/dashboard/unitservices/${data.unit_service}/appoint-config`,
+          msg: `creating appointment config <strong>${data.name_english}</strong> into <strong>${data.unit_service}</strong> unit service`,
+        });
         updating.onFalse();
         enqueueSnackbar(t('added successfully!'));
         router.push(paths.unitservice.employees.appointmentconfig.root(id));

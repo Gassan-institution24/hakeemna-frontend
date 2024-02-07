@@ -6,8 +6,8 @@ import DashboardLayout from 'src/layouts/dashboard';
 import SecondaryNavLayout from 'src/layouts/employee-topbar';
 import DepartmentNavLayout from 'src/layouts/department-topbar';
 
-import { LoadingScreen } from 'src/components/loading-screen';
 import RecieptsInfoPage from 'src/pages/employee/accounting/reciepts/info';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 // DEPARTMENTS

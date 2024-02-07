@@ -102,6 +102,11 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
             ...data,
           },
         });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.activities.root(departmentData._id),
+          msg: `editted an activity <strong>[ ${data.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
+        });
       } else {
         await axiosHandler({
           method: 'POST',
@@ -111,6 +116,11 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
             user_creation: user._id,
             ...data,
           },
+        });
+        socket.emit('created', {
+          user,
+          link: paths.unitservice.departments.activities.root(departmentData._id),
+          msg: `created an activity <strong>[ ${data.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       }
       reset();

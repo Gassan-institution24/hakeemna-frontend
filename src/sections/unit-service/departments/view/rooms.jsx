@@ -43,10 +43,12 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { socket } from 'src/socket';
 import { endpoints } from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import axiosHandler from 'src/utils/axios-handler';
+import { useLocales, useTranslate } from 'src/locales';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetDepartmentRooms } from 'src/api/tables'; /// edit
 import { StatusOptions } from 'src/assets/data/status-options';
@@ -77,8 +79,10 @@ export default function RoomsTableView({ departmentData }) {
     { id: '', width: 88 },
   ];
 
-  const {STATUS_OPTIONS} = StatusOptions()
-  
+  const { user } = useAuthContext();
+
+  const { STATUS_OPTIONS } = StatusOptions();
+
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -152,57 +156,93 @@ export default function RoomsTableView({ departmentData }) {
   );
 
   const handleActivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.room(id)}/updatestatus`, /// edit
-        data: { status: 'active' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
+          data: { status: 'active' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.rooms.root(departmentData._id),
+          msg: `activated room <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user, departmentData]
   );
   const handleInactivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.room(id)}/updatestatus`, /// edit
-        data: { status: 'inactive' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
+          data: { status: 'inactive' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.rooms.root(departmentData._id),
+          msg: `inactivated room <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user, departmentData]
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.rooms}/updatestatus`, /// edit
-      data: { status: 'active', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.rooms}/updatestatus`, /// edit
+        data: { status: 'active', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.departments.rooms.root(departmentData._id),
+        msg: `activated many rooms in department <strong>${departmentData.name_english}</strong>`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: roomsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user, departmentData]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.rooms}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.rooms}/updatestatus`, /// edit
+        data: { status: 'inactive', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.departments.rooms.root(departmentData._id),
+        msg: `inactivated many rooms in department <strong>${departmentData.name_english}</strong>`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: roomsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user, departmentData]);
 
   const handleEditRow = useCallback(
     (id) => {
@@ -397,8 +437,8 @@ export default function RoomsTableView({ departmentData }) {
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row._id)}
-                        onInactivate={() => handleInactivate(row._id)}
+                        onActivate={() => handleActivate(row)}
+                        onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}

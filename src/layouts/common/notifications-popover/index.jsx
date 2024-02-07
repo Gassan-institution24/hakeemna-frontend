@@ -147,6 +147,10 @@ export default function NotificationsPopover() {
       console.log('data',data)
       setNotifications((prev)=>[...prev,data])
     })
+    socket.on('updated',(data)=>{
+      console.log('data',data)
+      setNotifications((prev)=>[...prev,data])
+    })
   },[])
   
   return (

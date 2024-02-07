@@ -43,6 +43,7 @@ import { useSettingsContext } from 'src/components/settings';
 import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api/tables';
 import axios, { endpoints } from 'src/utils/axios';
 
+import { socket } from 'src/socket';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
@@ -117,13 +118,18 @@ export default function TableNewEditForm({ departmentData }) {
     }
   };
 
-  const handleEmployment = async (id) => {
+  const handleEmployment = async (row) => {
     try {
       await axios.post(endpoints.tables.employeeEngagements, {
         unit_service:
           user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
         department: departmentData._id,
-        employee: id,
+        employee: row._id,
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.departments.employees.root(departmentData._id),
+        msg: `employed an employee <strong>[ ${row.first_name} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
       });
       enqueueSnackbar(t('employment successfully!'));
     } catch (e) {
@@ -244,7 +250,7 @@ export default function TableNewEditForm({ departmentData }) {
             <ExistEmployeesRow
               key={row.id}
               row={row}
-              onEmploymentRow={() => handleEmployment(row._id)}
+              onEmploymentRow={() => handleEmployment(row)}
             />
           ))}
 

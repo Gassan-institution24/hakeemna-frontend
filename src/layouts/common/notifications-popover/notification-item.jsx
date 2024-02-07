@@ -38,7 +38,7 @@ export default function NotificationItem({ notification }) {
             src={`/assets/icons/notification/${
               (notification.type === 'error' && 'error') ||
               (notification.type === 'created' && 'created') ||
-              (notification.type === 'mail' && 'ic_mail') ||
+              (notification.type === 'updated' && 'updated') ||
               (notification.type === 'delivery' && 'ic_delivery')
             }.svg`}
             sx={{ width: 24, height: 24 }}

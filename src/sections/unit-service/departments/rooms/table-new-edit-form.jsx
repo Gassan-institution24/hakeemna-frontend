@@ -95,8 +95,15 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
             modifications_nums: (currentTable.modifications_nums || 0) + 1,
             ip_address_user_modification: address.data.IPv4,
             user_modification: user._id,
+            department: departmentData._id,
             ...data,
           },
+        });
+        socket.emit('updated', {
+          data,
+          user,
+          link: paths.unitservice.departments.rooms.root(departmentData._id),
+          msg: `updated room <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       } else {
         await axiosHandler({
@@ -108,6 +115,12 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
             user_creation: user._id,
             ...data,
           },
+        });
+        socket.emit('created', {
+          data,
+          user,
+          link: paths.unitservice.departments.rooms.root(departmentData._id),
+          msg: `created room <strong>${data.name_english}</strong> into <strong>${departmentData.name_english}</strong> department`,
         });
       }
       reset();
