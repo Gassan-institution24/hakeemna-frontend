@@ -9,7 +9,7 @@ import { endpoints } from 'src/utils/axios';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import AppointmentItem from './appointment-item';
+import AppointmentItem from './appointment-item-user';
 
 // ----------------------------------------------------------------------
 
@@ -34,16 +34,7 @@ export default function AppointmentList({ patientData, appointments, refetch }) 
     [patientData, refetch]
   );
 
-  const handleEdit = useCallback(
-    (id) => {
-      router.push(paths.dashboard.job.edit(id));
-    },
-    [router]
-  );
 
-  const handleDelete = useCallback((id) => {
-    console.info('DELETE', id);
-  }, []);
 
   return (
     <>
@@ -60,10 +51,8 @@ export default function AppointmentList({ patientData, appointments, refetch }) 
           <AppointmentItem
             key={appointment.id}
             appointment={appointment}
-            onBook={() => handleBook(appointment._id)}
-            onView={() => handleView(appointment._id)}
-            onEdit={() => handleEdit(appointment._id)}
-            onDelete={() => handleDelete(appointment._id)}
+            onBook={() => handleBook(appointment?._id)}
+            onView={() => handleView(appointment?._id)}
           />
         ))}
       </Box>

@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-
-import orderBy from 'lodash/orderBy';
 import isEqual from 'lodash/isEqual';
+import orderBy from 'lodash/orderBy';
 import { useState, useCallback } from 'react';
+
+import { fTimestamp } from 'src/utils/format-time';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
@@ -11,10 +11,10 @@ import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
+import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetAvailableAppointments,
   useGetCities,
@@ -23,9 +23,7 @@ import {
   useGetAppointmentTypes,
   useGetPaymentMethods,
   useGetInsuranceCos,
-  useGetUSFeedbackes,
 } from 'src/api/tables';
-import { fTimestamp } from 'src/utils/format-time';
 
 import AppointmentList from '../super-admin/patients/history/book-appointment/appointment-list-user';
 import AppointmentSort from '../super-admin/patients/history/book-appointment/appointment-sort-user';
@@ -40,17 +38,18 @@ const defaultFilters = {
   countries: 'all',
   start_date: null,
   end_date: null,
+  rate: 'all',
   appointtypes: 'all',
   payment_methods: 'all',
 };
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentBooking({ patientData }) {
+export default function AppointmentBooking() {
   const settings = useSettingsContext();
 
   const openFilters = useBoolean();
-
+const {user} = useAuthContext()
   const [sortBy, setSortBy] = useState('latest');
 
   const [search, setSearch] = useState({
@@ -61,9 +60,8 @@ export default function AppointmentBooking({ patientData }) {
   const { appointmentsData, refetch } = useGetAvailableAppointments();
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
-  const {insuranseCosData } = useGetInsuranceCos()
+  const { insuranseCosData } = useGetInsuranceCos();
   const { unitservicesData } = useGetUnitservices();
-  const { feedbackData } = useGetUSFeedbackes('655efd4094ccdc14a047acc0')
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { paymentMethodsData } = useGetPaymentMethods();
 
@@ -72,6 +70,7 @@ export default function AppointmentBooking({ patientData }) {
   const sortOptions = [
     { value: 'latest', label: 'Latest' },
     { value: 'oldest', label: 'Oldest' },
+    { value: 'rate', label: 'Ratings' },
   ];
 
   const dateError =
@@ -171,7 +170,7 @@ export default function AppointmentBooking({ patientData }) {
           insuranseCosData={insuranseCosData}
           citiesOptions={tableData}
           unitServicesOptions={unitservicesData}
-          feedbackData={feedbackData}
+          // usrate={usrate}
           appointmentTypeOptions={appointmenttypesData}
           paymentMethodsOptions={paymentMethodsData}
           dateError={dateError}
@@ -214,7 +213,7 @@ export default function AppointmentBooking({ patientData }) {
 
       {notFound && <EmptyContent filled title="No Data" sx={{ py: 10 }} />}
 
-      <AppointmentList patientData={patientData} refetch={refetch} appointments={dataFiltered} />
+      <AppointmentList patientData={user?.patient?._id} refetch={refetch} appointments={dataFiltered} />
     </Container>
   );
 }
@@ -225,12 +224,10 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
   const {
     appointtypes,
     payment_methods,
-    date,
     start_date,
     end_date,
     unitServices,
     countries,
-    cities,
   } = filters;
 
   // SORT BY
@@ -240,6 +237,9 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
 
   if (sortBy === 'oldest') {
     inputData = orderBy(inputData, ['start_time'], ['asc']);
+  }
+  if (sortBy === 'rate') {
+    inputData = orderBy(inputData, ['unit_service.rate'], ['desc']);
   }
 
   // FILTERS
@@ -272,6 +272,4 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
 
   return inputData;
 };
-AppointmentBooking.propTypes = {
-  patientData: PropTypes.object,
-};
+

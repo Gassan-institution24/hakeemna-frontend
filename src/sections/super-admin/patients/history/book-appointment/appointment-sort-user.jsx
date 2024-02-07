@@ -11,7 +11,6 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function JobSort({ sort, onSort, sortOptions }) {
   const popover = usePopover();
-
   return (
     <>
       <Button

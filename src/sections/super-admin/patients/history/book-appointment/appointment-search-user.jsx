@@ -18,18 +18,19 @@ import SearchNotFound from 'src/components/search-not-found';
 export default function AppointmentSearch({ query, results, onSearch, hrefItem }) {
   const router = useRouter();
 
-  // const handleClick = (id) => {
-  //   router.push(hrefItem(id));
-  // };
+  const handleClick = (id) => {
+    // router.push(hrefItem(id));
+    alert('kjkjkjkjkj')
+  };
 
   const handleKeyUp = (event) => {
     if (query) {
       if (event.key === 'Enter') {
         const selectProduct = results.filter(
-          (appointment) => appointment.name_english === query
+          (appointment) => appointment.code === query
         )[0];
 
-        // handleClick(selectProduct._id);
+        handleClick(selectProduct.code);
       }
     }
   };
@@ -60,17 +61,17 @@ export default function AppointmentSearch({ query, results, onSearch, hrefItem }
         />
       )}
       renderOption={(props, appointment, { inputValue }) => {
-        const matches = match(appointment._id, inputValue);
-        const parts = parse(appointment._id, matches);
+        const matches = match(appointment.code, inputValue);
+        const parts = parse(appointment.code, matches);
 
         return (
           <Box
             component="li"
             {...props}
-            // onClick={() => handleClick(appointment._id)}
+            onClick={() => handleClick(appointment._id)}
             key={appointment._id}
           >
-            {/* <div>
+            <div>
               {parts.map((part, index) => (
                 <Typography
                   key={index}
@@ -84,7 +85,7 @@ export default function AppointmentSearch({ query, results, onSearch, hrefItem }
                   {part.text}
                 </Typography>
               ))}
-            </div> */}
+            </div>
           </Box>
         );
       }}
