@@ -6,8 +6,8 @@ import DashboardLayout from 'src/layouts/dashboard';
 import SecondaryNavLayout from 'src/layouts/employee-topbar';
 import DepartmentNavLayout from 'src/layouts/department-topbar';
 
-import { LoadingScreen } from 'src/components/loading-screen';
 import RecieptsInfoPage from 'src/pages/employee/accounting/reciepts/info';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 // DEPARTMENTS
@@ -19,36 +19,6 @@ const DepartmentsEmployeesPage = lazy(() =>
 );
 const DepartmentsEmployeesNewPage = lazy(() =>
   import('src/pages/unit-service/departments/employees/new')
-);
-const DepartmentsEmployeesInfoPage = lazy(() =>
-  import('src/pages/unit-service/departments/employees/info')
-);
-const DepartmentsEmployeesAppointmentsPage = lazy(() =>
-  import('src/pages/unit-service/departments/employees/appointment')
-);
-const DepartmentsEmployeesAppointmentConfigDetailPage = lazy(() =>
-  import('src/pages/unit-service/departments/employees/appoint-config-detail')
-);
-const DepartmentsEmployeesAppointmentConfigPage = lazy(() =>
-  import('src/pages/unit-service/departments/employees/appoint-config')
-);
-const DepartmentsEmployeesAccountingPage = lazy(() =>
-  import('src/pages/unit-service/departments/employees/accounting')
-);
-const DepartmentsEmployeesFeedbackPage = lazy(() =>
-  import('src/pages/unit-service/departments/employees/feedback')
-);
-const DepartmentsEmployeesAttendencePage = lazy(() =>
-  import('src/pages/unit-service/departments/employees/attendence')
-);
-const DepartmentsEmployeesOffersPage = lazy(() =>
-  import('src/pages/unit-service/departments/employees/offers')
-);
-const DepartmentsEmployeesActivitiesPage = lazy(() =>
-  import('src/pages/unit-service/departments/employees/activities')
-);
-const DepartmentsEmployeesACLPage = lazy(() =>
-  import('src/pages/unit-service/departments/employees/acl')
 );
 const DepartmentsAccountingPage = lazy(() =>
   import('src/pages/unit-service/departments/accounting')

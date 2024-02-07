@@ -66,6 +66,12 @@ export default function AccountNotifications() {
       enqueueSnackbar('Update success!');
       console.info('DATA', data);
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
+      });
       console.error(error);
     }
   });

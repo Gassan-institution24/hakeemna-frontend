@@ -22,6 +22,7 @@ import { useSettingsContext } from 'src/components/settings';
 
 import { _addressBooks } from 'src/_mock';
 
+import { socket } from 'src/socket';
 import axios, { endpoints } from 'src/utils/axios';
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
@@ -256,11 +257,23 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
             data
           );
+          socket.emit('updated', {
+            data,
+            user,
+            link: `/dashboard/unitservices/${data.unit_service}/appoint-config`,
+            msg: `updating appointment configuration ${appointmentConfigData._id} into <strong>${data.unit_service}</strong> unit service`,
+          });
           router.push(paths.unitservice.employees.appointmentconfig.root(id));
         }
       } else {
         updating.onTrue();
         await axios.post(endpoints.tables.appointmentconfigs, data);
+        socket.emit('created', {
+          data,
+          user,
+          link: `/dashboard/unitservices/${data.unit_service}/appoint-config`,
+          msg: `creating appointment config <strong>${data.name_english}</strong> into <strong>${data.unit_service}</strong> unit service`,
+        });
         updating.onFalse();
         enqueueSnackbar(t('added successfully!'));
         router.push(paths.unitservice.employees.appointmentconfig.root(id));
@@ -269,6 +282,12 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `creating or updating an appointment configuration of employee ${id} into ${data.unit_service}`,
+      });
       // console.log(error);
       enqueueSnackbar(t(`failed to add!`), { variant: 'error' });
       console.error(error);

@@ -112,6 +112,12 @@ export default function TableNewEditForm({ employeeData, currentTable }) {
 
       console.info('DATA', data);
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
+      });
       console.error(error);
     }
   });
@@ -131,32 +137,32 @@ export default function TableNewEditForm({ employeeData, currentTable }) {
               }}
             >
               <RHFTextField
-              lang="ar"
+                lang="ar"
                 lang="en"
                 onChange={handleEnglishInputChange}
                 name="name_english"
-                label={t("name english")}
+                label={t('name english')}
               />
               <RHFTextField
-              lang="ar"
+                lang="ar"
                 lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
-                label={t("name arabic")}
+                label={t('name arabic')}
               />
               <RHFTextField
-              lang="ar"
+                lang="ar"
                 lang="en"
                 onChange={handleEnglishInputChange}
                 name="details"
-                label={t("details")}
+                label={t('details')}
               />
               <RHFTextField
-              lang="ar"
+                lang="ar"
                 lang="ar"
                 onChange={handleArabicInputChange}
                 name="details_arabic"
-                label={t("details arabic")}
+                label={t('details arabic')}
               />
             </Box>
 

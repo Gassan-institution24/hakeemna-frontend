@@ -14,6 +14,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Alert, MenuItem } from '@mui/material';
 
+import { socket } from 'src/socket';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -139,36 +140,34 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const address = await axios.get('https://geolocation-db.com/json/');
-      if (currentTable) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.hospital(currentTable._id),
-          data: {
-            role: 'employee',
-            modifications_nums: (currentTable.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        });
-      } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.auth.register,
-          data: {
-            ip_address_user_creation: address.data.IPv4,
-            user_creation: user._id,
-            role: 'employee',
-            userName: `${data.first_name} ${data.family_name}`,
-            ...data,
-          },
-        });
-      }
+      await axiosHandler({
+        method: 'POST',
+        path: endpoints.auth.register,
+        data: {
+          ip_address_user_creation: address.data.IPv4,
+          user_creation: user._id,
+          role: 'employee',
+          userName: `${data.first_name} ${data.family_name}`,
+          ...data,
+        },
+      });
+      socket.emit('created', {
+        data,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/employees`,
+        msg: `creating employee <strong>${data.name_english}</strong> in <strong>${data.unit_service}</strong> unit service`,
+      });
       reset();
       router.push(paths.unitservice.employees.root());
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       console.info('DATA', data);
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `creating or updating an employee ${data.first_name} into ${data.unit_service}`,
+      });
       enqueueSnackbar(t('Failed to create!'), { variant: 'error' });
       setErrorMsg(error);
       console.error(error);

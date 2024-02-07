@@ -153,57 +153,93 @@ export default function UnitServicesTableView() {
     saveAs(data, 'unitservicesTable.xlsx'); /// edit
   };
   const handleActivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.department(id)}/updatestatus`,
-        data: { status: 'active' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.department(row._id)}/updatestatus`,
+          data: { status: 'active' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.info(row._id),
+          msg: `activating department <strong>${row.name_english}</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user]
   );
   const handleInactivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.department(id)}/updatestatus`,
-        data: { status: 'inactive' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.department(row._id)}/updatestatus`,
+          data: { status: 'inactive' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.info(row._id),
+          msg: `inactivating department <strong>${row.name_english}</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user]
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.departments}/updatestatus`,
-      data: { status: 'active', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.departments}/updatestatus`,
+        data: { status: 'active', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.departments.root,
+        msg: `activating many departments`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: departmentsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, departmentsData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, departmentsData, refetch, user]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.departments}/updatestatus`,
-      data: { status: 'inactive', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.departments}/updatestatus`,
+        data: { status: 'inactive', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.departments.root,
+        msg: `inactivating many departments`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: departmentsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, departmentsData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, departmentsData, refetch, user]);
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -226,48 +262,6 @@ export default function UnitServicesTableView() {
   const handleShowRow = useCallback(
     (id) => {
       router.push(paths.unitservice.departments.info(id)); /// edit
-    },
-    [router]
-  );
-  const handleShowActivitiesRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.departments.activities.root(id)); /// edit
-    },
-    [router]
-  );
-  const handleShowAppointmentConfidRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.departments.appointmentconfiguration(id)); /// edit
-    },
-    [router]
-  );
-  const handleShowAppointmentsRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.departments.appointments(id)); /// edit
-    },
-    [router]
-  );
-  const handleShowemployeesRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.departments.employees.root(id)); /// edit
-    },
-    [router]
-  );
-  const handleShowQualityControlRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.departments.qualityControl(id)); /// edit
-    },
-    [router]
-  );
-  const handleShowRoomsRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.departments.rooms.root(id)); /// edit
-    },
-    [router]
-  );
-  const handleShowWorkGroupsRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.departments.workGroups.root(id)); /// edit
     },
     [router]
   );
@@ -454,16 +448,9 @@ export default function UnitServicesTableView() {
                         setFilters={setFilters}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row._id)}
+                        onActivate={() => handleActivate(row)}
                         onShow={() => handleShowRow(row._id)}
-                        showActivities={() => handleShowActivitiesRow(row._id)}
-                        showAppointmentConfig={() => handleShowAppointmentConfidRow(row._id)}
-                        showAppointments={() => handleShowAppointmentsRow(row._id)}
-                        showEmployees={() => handleShowemployeesRow(row._id)}
-                        showQualityControl={() => handleShowQualityControlRow(row._id)}
-                        showRooms={() => handleShowRoomsRow(row._id)}
-                        showWorkGroups={() => handleShowWorkGroupsRow(row._id)}
-                        onInactivate={() => handleInactivate(row._id)}
+                        onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}

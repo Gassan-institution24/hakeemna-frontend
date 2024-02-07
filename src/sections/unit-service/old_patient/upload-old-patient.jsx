@@ -21,6 +21,8 @@ import TableContainer from '@mui/material/TableContainer';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
+import { socket } from 'src/socket';
+
 import Iconify from 'src/components/iconify';
 import axiosHandler from 'src/utils/axios-handler';
 
@@ -137,6 +139,12 @@ export default function UploadOldPatient({ refetch }) {
       // router.push(paths.unitservice.tables.employeetypes.root);
       console.info('DATA', data);
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `uploading an old patient data ${data.first_name} `,
+      });
       console.error(error);
       enqueueSnackbar('Uploaded failed!', { variant: 'error' });
     }

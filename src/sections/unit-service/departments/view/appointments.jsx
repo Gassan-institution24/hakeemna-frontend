@@ -21,7 +21,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { useTranslate } from 'src/locales';
-import { useRouter } from 'src/routes/hooks';
+import { useParams, useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -47,6 +47,7 @@ import {
 } from 'src/components/table';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
+import { socket } from 'src/socket';
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useSnackbar } from 'src/components/snackbar';
@@ -69,7 +70,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsView({ employeeData, appointmentsData, refetch }) {
+export default function AppointmentsView({ departmentData, appointmentsData, refetch }) {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
@@ -188,72 +189,122 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
   );
 
   const handleCancelRow = useCallback(
-    async (id) => {
-      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/cancel` });
-      enqueueSnackbar('canceled successfully!');
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.appointment(row._id)}/cancel`,
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.appointments(departmentData._id),
+          msg: `canceled appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
+        });
+        enqueueSnackbar('canceled successfully!');
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user, departmentData]
   );
 
   const handleDelayRow = useCallback(
-    async (id, min) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointment(id)}/delay`,
-        data: { minutes: min },
-      });
-      enqueueSnackbar('delayed successfully!');
+    async (row, min) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.appointment(row._id)}/delay`,
+          data: { minutes: min },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.appointments(departmentData._id),
+          msg: `delayed appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
+        });
+        enqueueSnackbar('delayed successfully!');
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       setMinToDelay(0);
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user, departmentData]
   );
 
   const handleUnCancelRow = useCallback(
-    async (id) => {
-      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/uncancel` });
-      enqueueSnackbar('uncanceled successfully!');
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.appointment(row._id)}/uncancel`,
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.appointments(departmentData._id),
+          msg: `uncanceled appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
+        });
+        enqueueSnackbar('uncanceled successfully!');
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user, departmentData]
   );
 
-  const handleCancelRows = useCallback(
-    async (id) => {
+  const handleCancelRows = useCallback(async () => {
+    try {
       await axiosHandler({
         method: 'PATCH',
         path: `${endpoints.tables.appointments}/cancel`,
         data: { ids: table.selected },
       });
-      enqueueSnackbar('canceled successfully!');
-      refetch();
-      table.onUpdatePageDeleteRows({
-        totalRows: appointmentsData.length,
-        totalRowsInPage: dataInPage.length,
-        totalRowsFiltered: dataFiltered.length,
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.departments.appointments(departmentData._id),
+        msg: `canceled many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
-    },
-    [
-      refetch,
-      dataFiltered.length,
-      dataInPage.length,
-      appointmentsData.length,
-      table,
-      enqueueSnackbar,
-    ]
-  );
+      enqueueSnackbar('canceled successfully!');
+    } catch (e) {
+      console.error(e);
+    }
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: appointmentsData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [
+    refetch,
+    dataFiltered.length,
+    dataInPage.length,
+    appointmentsData.length,
+    table,
+    enqueueSnackbar,
+    departmentData,
+    user,
+  ]);
 
   const handleDelayRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.appointments}/delay`,
-      data: { ids: table.selected, minutes: minToDelay },
-    });
-    enqueueSnackbar('delayed successfully!');
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointments}/delay`,
+        data: { ids: table.selected, minutes: minToDelay },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.departments.appointments(departmentData._id),
+        msg: `delayed many appointments in department <strong>${departmentData.name_english}</strong>`,
+      });
+      enqueueSnackbar('delayed successfully!');
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     setMinToDelay(0);
     table.onUpdatePageDeleteRows({
@@ -269,32 +320,42 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
     table,
     minToDelay,
     enqueueSnackbar,
+    departmentData,
+    user,
   ]);
 
-  const handleUnCancelRows = useCallback(
-    async (id) => {
+  const handleUnCancelRows = useCallback(async () => {
+    try {
       await axiosHandler({
         method: 'PATCH',
         path: `${endpoints.tables.appointments}/uncancel`,
         data: { ids: table.selected },
       });
-      enqueueSnackbar('uncanceled successfully!');
-      refetch();
-      table.onUpdatePageDeleteRows({
-        totalRows: appointmentsData.length,
-        totalRowsInPage: dataInPage.length,
-        totalRowsFiltered: dataFiltered.length,
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.departments.appointments(departmentData._id),
+        msg: `uncanceled many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
-    },
-    [
-      refetch,
-      dataFiltered.length,
-      dataInPage.length,
-      appointmentsData.length,
-      table,
-      enqueueSnackbar,
-    ]
-  );
+      enqueueSnackbar('uncanceled successfully!');
+    } catch (e) {
+      console.error(e);
+    }
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: appointmentsData.length,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [
+    refetch,
+    dataFiltered.length,
+    dataInPage.length,
+    appointmentsData.length,
+    table,
+    enqueueSnackbar,
+    departmentData,
+    user,
+  ]);
 
   const handleViewRow = useCallback(
     (id) => {
@@ -466,8 +527,8 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onViewRow={() => handleViewRow(row._id)}
                         onDelayRow={handleDelayRow}
-                        onCancelRow={() => handleCancelRow(row._id)}
-                        onUnCancelRow={() => handleUnCancelRow(row._id)}
+                        onCancelRow={() => handleCancelRow(row)}
+                        onUnCancelRow={() => handleUnCancelRow(row)}
                       />
                     ))}
 
@@ -495,7 +556,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
         </Card>
       </Container>
 
-      <AddEmegencyAppointment refetch={refetch} open={addModal.value} onClose={addModal.onFalse} />
+      <AddEmegencyAppointment departmentData={departmentData} refetch={refetch} open={addModal.value} onClose={addModal.onFalse} />
 
       <ConfirmDialog
         open={confirm.value}
@@ -544,7 +605,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
       <ConfirmDialog
         open={confirmDelay.value}
         onClose={confirmDelay.onFalse}
-        title={t("delay")}
+        title={t('delay')}
         content={
           <>
             How many minutes do you want to delay items?
@@ -572,7 +633,8 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
               handleDelayRows();
             }}
           >
-            {t('delay')}         </Button>
+            {t('delay')}{' '}
+          </Button>
         }
       />
     </>
@@ -638,7 +700,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   return inputData;
 }
 AppointmentsView.propTypes = {
-  employeeData: PropTypes.object,
+  departmentData: PropTypes.object,
   appointmentsData: PropTypes.array,
   refetch: PropTypes.func,
 };
