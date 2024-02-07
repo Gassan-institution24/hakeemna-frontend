@@ -27,7 +27,7 @@ const { t } = useTranslate();
       sx={{ mb: { xs: 3, md: 5 } }}
     />
 
-    <PatientsAppointment users={_userCards} />
+    <PatientsAppointment/>
   </Container>
 
   );

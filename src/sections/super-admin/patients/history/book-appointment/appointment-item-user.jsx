@@ -13,42 +13,22 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
-import { paths } from 'src/routes/paths';
-import { RouterLink } from 'src/routes/components';
 
-import { fDate } from 'src/utils/format-time';
-import { fCurrency } from 'src/utils/format-number';
+import { fDate, fTime } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentItem({ appointment, onBook, onView, onEdit, onDelete }) {
+export default function AppointmentItem({ appointment, onBook, onView}) {
   const popover = usePopover();
   const [insuranceNames, setInsuranceNames] = useState();
 
   const {
-    _id,
-    code,
     unit_service,
-    department,
-    work_group,
-    work_shift,
     appointment_type,
-    patient,
-    payment_method,
     start_time,
-    end_time,
-    name_english,
-    name_arabic,
-    description,
-    description_arabic,
-    activities,
-    result,
-    drug_prescription,
-    price_in_JOD,
-    status,
   } = appointment;
   useEffect(() => {
     if (unit_service?.insurance) {
@@ -56,12 +36,17 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
       setInsuranceNames(names);
     }
   }, [unit_service]);
+
+  const handleClick = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <>
       <Card>
-        {/* <IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
+        <IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
           <Iconify icon="eva:more-vertical-fill" />
-        </IconButton> */}
+        </IconButton>
 
         <Stack sx={{ p: 3, pb: 2 }}>
           <Avatar
@@ -72,15 +57,15 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
           />
 
           <ListItemText
-            // sx={{ mb: 0 }}
+            sx={{ mb: 1 }}
             primary={
-              <Link component={RouterLink} href={paths.dashboard.job.details(_id)} color="inherit">
-                {insuranceNames}
+              <Link to="#" onClick={handleClick}>
+                {unit_service?.name_english}
               </Link>
             }
             secondary={
-              <Link component={RouterLink} href={paths.dashboard.job.details(_id)} color="inherit">
-                {unit_service?.name_english}
+              <Link to="#" onClick={handleClick} sx={{ color: 'black' }}>
+                {appointment_type?.name_english} appointment
               </Link>
             }
             primaryTypographyProps={{
@@ -94,30 +79,31 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
             }}
           />
 
-          <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-            <ListItemText
-              primary={new Date(start_time).toLocaleTimeString('en-US', {
-                timeZone: unit_service?.country?.time_zone,
-              })}
-              secondary={new Date(start_time).toLocaleDateString('en-US', {
-                timeZone: unit_service?.country?.time_zone,
-              })}
-              primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-              secondaryTypographyProps={{
-                mt: 0.5,
-                component: 'span',
-                typography: 'caption',
-              }}
-            />
+          <Stack
+            spacing={0.5}
+            direction="row"
+            alignItems="center"
+            sx={{ color: 'text.disabled', typography: 'caption' }}
+          >
+            {fDate(appointment.start_time)}
+          </Stack>
+          <Stack
+            direction="row"
+            alignItems="center"
+            sx={{ typography: 'caption', color: 'text.disabled' }}
+          >
+            {fTime(appointment.start_time)}
+            <Iconify icon="fad:digital-colon" />
+            {fTime(appointment.end_time)}
           </Stack>
           <Stack
             spacing={0.5}
             direction="row"
             alignItems="center"
-            sx={{ color: 'primary.main', typography: 'caption' }}
+            sx={{ color: 'text.disabled', typography: 'caption' }}
           >
-            <Iconify width={16} icon="ic:baseline-tag" />
-            {code}
+            {/* <Iconify width={16} icon="ic:baseline-tag" /> */}
+            {/* {address} */} address- address
           </Stack>
         </Stack>
 
@@ -142,18 +128,18 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
             },
             {
               label: appointment_type?.name_english,
-              icon: <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }} />,
+              icon: <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }}  />,
             },
             {
-              label: payment_method?.name_english,
+              label: `${appointment?.price} JOD`,
               icon: (
-                <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
+                <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} /> 
               ),
             },
           ].map((item) => (
             <Stack
               key={item.label}
-              spacing={0.5}
+              spacing={1}
               flexShrink={0}
               direction="row"
               alignItems="center"
@@ -187,27 +173,6 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
           <Iconify icon="solar:eye-bold" />
           View
         </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-            onEdit();
-          }}
-        >
-          <Iconify icon="solar:pen-bold" />
-          Edit
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-            onDelete();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
-        </MenuItem>
       </CustomPopover>
     </>
   );
@@ -215,8 +180,6 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
 
 AppointmentItem.propTypes = {
   appointment: PropTypes.object,
-  onDelete: PropTypes.func,
-  onEdit: PropTypes.func,
   onView: PropTypes.func,
   onBook: PropTypes.func,
 };

@@ -1,32 +1,24 @@
 import PropTypes from 'prop-types';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
-import Chip from '@mui/material/Chip';
-import Radio from '@mui/material/Radio';
 import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
-import { Controller, useFormContext } from 'react-hook-form';
 import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Checkbox from '@mui/material/Checkbox';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import { useTranslate } from 'src/locales';
 
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Autocomplete from '@mui/material/Autocomplete';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { MenuItem } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Rating from '@mui/material/Rating';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { useGetUSFeedbackes } from 'src/api/tables';
 
 // ----------------------------------------------------------------------
 
@@ -44,23 +36,16 @@ export default function AppointmentsFilters({
   insuranseCosData,
   paymentMethodsOptions,
   departmentsData,
-  feedbackData,
+  usrate,
+  rateData,
   countriesOptions,
   citiesOptions,
   unitServicesOptions,
   appointmentTypeOptions,
   dateError,
 }) {
-  const handleFilterRate = useCallback(
-    (event) => {
-      onFilters(
-        'rate',
-        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
-      );
-    },
-    [onFilters]
-  );
-  const rateOptions = [1, 2, 3, 4, 5];
+
+
   const handleFilterAppointtypes = useCallback(
     (e) => {
       onFilters('appointtypes', e.target.value);
@@ -177,21 +162,6 @@ export default function AppointmentsFilters({
     </FormControl>
   );
 
-  const renderRating = (
-    <FormControl>
-      <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        {t('Rating')}
-      </Typography>
-      <Select onChange={handleFilterRate} name="appointment_type">
-        {rateOptions.map((option) => (
-          <MenuItem key={option._id} value={option}>
-            <Checkbox disableRipple size="small" checked={filters.rate?.includes(option)} />
-            <Rating size="small" readOnly value={option} precision={0.1} max={5} />
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
   const renderInsurance = (
     <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
@@ -211,7 +181,7 @@ export default function AppointmentsFilters({
   //     <Typography variant="subtitle2" sx={{ mb: 1 }}>
   //       Unit services
   //     </Typography>
-  //     {feedbackData.map((option) => (
+  //     {ratekData.map((option) => (
   //       <FormControlLabel
   //         key={option._id}
   //         control={
@@ -269,7 +239,7 @@ export default function AppointmentsFilters({
             {renderCountries}
 
             {renderInsurance}
-            {renderRating}
+   
           </Stack>
         </Scrollbar>
       </Drawer>
@@ -282,7 +252,8 @@ AppointmentsFilters.propTypes = {
   appointmentTypeOptions: PropTypes.array,
   unitServicesOptions: PropTypes.array,
   countriesOptions: PropTypes.array,
-  feedbackData: PropTypes.array,
+  rateData: PropTypes.array,
+  usrate: PropTypes.array,
   paymentMethodsOptions: PropTypes.array,
   insuranseCosData: PropTypes.array,
   departmentsData: PropTypes.array,
