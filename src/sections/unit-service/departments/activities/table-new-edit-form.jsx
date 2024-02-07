@@ -20,6 +20,8 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import axios from 'axios';
+
+import { socket } from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -117,6 +119,12 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
       console.info('DATA', data);
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
+      });
       console.error(error);
     }
   });
@@ -137,13 +145,11 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
             >
               <RHFTextField
                 lang="ar"
-                lang="en"
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label={`${t('name english')} *`}
               />
               <RHFTextField
-                lang="ar"
                 lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
@@ -151,13 +157,11 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
               />
               <RHFTextField
                 lang="ar"
-                lang="en"
                 onChange={handleEnglishInputChange}
                 name="details"
                 label={t('details')}
               />
               <RHFTextField
-                lang="ar"
                 lang="ar"
                 onChange={handleArabicInputChange}
                 name="details_arabic"

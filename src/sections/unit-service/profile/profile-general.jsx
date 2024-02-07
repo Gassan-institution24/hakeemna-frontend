@@ -8,6 +8,8 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
+
+import { socket } from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
 import { MenuItem, Typography, TextField } from '@mui/material';
@@ -151,6 +153,12 @@ export default function AccountGeneral({ unitServiceData }) {
       refetch();
       console.info('DATA', dataToSend);
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/systemerrors`,
+        msg: `editing profile data`,
+      });
       enqueueSnackbar('Update failed!', { variant: 'error' });
       console.error(error);
     }

@@ -8,6 +8,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import ListItemText from '@mui/material/ListItemText';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
+import { socket } from 'src/socket';
+import { useAuthContext } from 'src/auth/hooks';
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 
@@ -45,6 +47,8 @@ const NOTIFICATIONS = [
 export default function AccountNotifications() {
   const { enqueueSnackbar } = useSnackbar();
 
+  const { user } = useAuthContext();
+
   const methods = useForm({
     defaultValues: {
       selected: ['activity_comments', 'application_product'],
@@ -66,6 +70,12 @@ export default function AccountNotifications() {
       enqueueSnackbar('Update success!');
       console.info('DATA', data);
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/systemerrors`,
+        msg: `editing the notification setting of employee his self`,
+      });
       console.error(error);
     }
   });

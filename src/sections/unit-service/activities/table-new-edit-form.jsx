@@ -16,6 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useGetUSDepartments } from 'src/api/tables';
 
+import { socket } from 'src/socket';
 import { useLocales, useTranslate } from 'src/locales';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -122,6 +123,12 @@ export default function TableNewEditForm({ currentTable }) {
 
       console.info('DATA', data);
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `creating or updating a new activity ${data.name_english} into ${data.unit_service}`,
+      });
       console.error(error);
     }
   });

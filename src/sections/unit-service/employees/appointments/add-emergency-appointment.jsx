@@ -31,6 +31,7 @@ import {
 } from 'src/api/tables';
 import { useAuthContext } from 'src/auth/hooks';
 
+import { socket } from 'src/socket';
 import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -106,6 +107,16 @@ export default function BookManually({ onClose, refetch, ...other }) {
       console.info('DATA', data);
       onClose();
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+        }/systemerrors`,
+        msg: `creating a new emergency appointment into ${
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+        }`,
+      });
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }

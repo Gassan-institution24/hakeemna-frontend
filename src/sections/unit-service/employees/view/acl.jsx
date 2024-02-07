@@ -38,6 +38,7 @@ import {
 import Scrollbar from 'src/components/scrollbar';
 import ACLGuard from 'src/auth/guard/acl-guard';
 
+import { socket } from 'src/socket';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
 
@@ -169,6 +170,12 @@ export default function TableNewEditForm({ acl }) {
       // router.push(paths.superadmin.subscriptions.root);
       console.info('DATA', data);
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/systemerrors`,
+        msg: `updating access control list of employee ${employeeId}`,
+      });
       console.error(error);
     }
   });

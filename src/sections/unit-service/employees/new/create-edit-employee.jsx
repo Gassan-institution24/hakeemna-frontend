@@ -14,6 +14,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Alert, MenuItem } from '@mui/material';
 
+import { socket } from 'src/socket';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -169,6 +170,12 @@ export default function TableNewEditForm({ currentTable }) {
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       console.info('DATA', data);
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `creating or updating an employee ${data.first_name} into ${data.unit_service}`,
+      });
       enqueueSnackbar(t('Failed to create!'), { variant: 'error' });
       setErrorMsg(error);
       console.error(error);

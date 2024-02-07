@@ -143,6 +143,10 @@ export default function NotificationsPopover() {
       console.log('data',data)
       setNotifications((prev)=>[...prev,data])
     })
+    socket.on('created',(data)=>{
+      console.log('data',data)
+      setNotifications((prev)=>[...prev,data])
+    })
   },[])
   
   return (

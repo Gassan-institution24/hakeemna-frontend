@@ -17,6 +17,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { socket } from 'src/socket';
 import { endpoints } from 'src/utils/axios';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -98,9 +99,7 @@ export default function TableNewEditForm({ currentTable }) {
     formState: { isSubmitting },
   } = methods;
 
-
   const onSubmit = handleSubmit(async (data) => {
-
     try {
       const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
@@ -130,6 +129,12 @@ export default function TableNewEditForm({ currentTable }) {
       router.push(paths.unitservice.tables.workgroups.root);
       console.info('DATA', data);
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `creating or updating a new work group ${data.name_english} into ${data.unit_service}`,
+      });
       console.error(error);
     }
   });

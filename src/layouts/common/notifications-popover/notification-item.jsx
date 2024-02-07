@@ -35,12 +35,12 @@ export default function NotificationItem({ notification }) {
         >
           <Box
             component="img"
-            src={`${HOST_API}/assets/icons/notification/${
-              (notification.type === 'error' && 'error.png') ||
-              (notification.type === 'chat' && 'ic_chat') ||
+            src={`/assets/icons/notification/${
+              (notification.type === 'error' && 'error') ||
+              (notification.type === 'created' && 'created') ||
               (notification.type === 'mail' && 'ic_mail') ||
               (notification.type === 'delivery' && 'ic_delivery')
-            }`}
+            }.svg`}
             sx={{ width: 24, height: 24 }}
           />
         </Stack>
@@ -69,7 +69,7 @@ export default function NotificationItem({ notification }) {
             />
           }
         >
-          {fToNow(notification.createdAt)}
+          {fToNow(notification.created_at)}
           {notification.category}
         </Stack>
       }
@@ -204,6 +204,7 @@ export default function NotificationItem({ notification }) {
   return (
     <ListItemButton
       disableRipple
+      href={notification.link}
       sx={{
         p: 2.5,
         alignItems: 'flex-start',

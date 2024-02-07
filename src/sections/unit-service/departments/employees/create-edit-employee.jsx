@@ -154,10 +154,27 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
+      socket.emit('created', {
+        data,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/department/${data.department}/employees`,
+        msg: `creating a new employee <strong>${data.first_name}</strong> into <strong>${departmentData.name_english}</strong> department`,
+      });
       router.push(paths.unitservice.departments.employees.root(departmentData._id));
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {error,user:user._id});
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
+      });
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
+      });
       console.error(error);
     }
   });
