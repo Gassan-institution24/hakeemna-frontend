@@ -145,7 +145,7 @@ export default function AppointmentsTableRow({
 
       <BookManually
         refetch={refetch}
-        appointment_id={_id}
+        appointment={row}
         open={Book.value}
         onClose={Book.onFalse}
       />

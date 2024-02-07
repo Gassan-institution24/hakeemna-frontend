@@ -87,11 +87,21 @@ export default function AppointmentsTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell lang="ar" align="center">{code}</TableCell>
-        <TableCell lang="ar" align="center">{appoint_number}</TableCell>
-        <TableCell lang="ar" align="center">{curLangAr ? appointment_type?.name_arabic: appointment_type?.name_english}</TableCell>
-        <TableCell lang="ar" align="center">{curLangAr ? work_group?.name_arabic: work_group?.name_english}</TableCell>
-        <TableCell lang="ar" align="center">{curLangAr ? work_shift?.name_arabic: work_shift?.name_english}</TableCell>
+        <TableCell lang="ar" align="center">
+          {code}
+        </TableCell>
+        <TableCell lang="ar" align="center">
+          {appoint_number}
+        </TableCell>
+        <TableCell lang="ar" align="center">
+          {curLangAr ? appointment_type?.name_arabic : appointment_type?.name_english}
+        </TableCell>
+        <TableCell lang="ar" align="center">
+          {curLangAr ? work_group?.name_arabic : work_group?.name_english}
+        </TableCell>
+        <TableCell lang="ar" align="center">
+          {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
+        </TableCell>
         <TableCell lang="ar" align="center">
           {patient?.first_name} {patient?.family_name}
         </TableCell>
@@ -121,7 +131,7 @@ export default function AppointmentsTableRow({
 
         <TableCell lang="ar" align="center">
           <Label
-                    lang="ar"
+            lang="ar"
             variant="soft"
             color={
               (status === 'available' && 'secondary') ||
@@ -134,7 +144,7 @@ export default function AppointmentsTableRow({
             }
           >
             {t(status)}
-        </Label>
+          </Label>
         </TableCell>
 
         <TableCell lang="ar" align="right" sx={{ px: 1 }}>
@@ -146,7 +156,7 @@ export default function AppointmentsTableRow({
 
       <BookManually
         refetch={refetch}
-        appointment_id={_id}
+        appointment={row}
         open={Book.value}
         onClose={Book.onFalse}
       />
@@ -208,7 +218,7 @@ export default function AppointmentsTableRow({
         </MenuItem>
       </CustomPopover>
 
-            <CustomPopover
+      <CustomPopover
         open={DDL.open}
         onClose={DDL.onClose}
         arrow="right-top"
@@ -242,12 +252,14 @@ export default function AppointmentsTableRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>
+          {t('modifications no')}: {modifications_nums}
+        </Box>
       </CustomPopover>
       <ConfirmDialog
         open={confirmDelayOne.value}
         onClose={confirmDelayOne.onFalse}
-        title={t("delay")}
+        title={t('delay')}
         content={
           <>
             How many minutes do you want to delay?
@@ -272,10 +284,11 @@ export default function AppointmentsTableRow({
             color="info"
             onClick={() => {
               confirmDelayOne.onFalse();
-              onDelayRow(_id, minToDelay);
+              onDelayRow(row, minToDelay);
             }}
           >
-            {t('delay')}         </Button>
+            {t('delay')}
+          </Button>
         }
       />
     </>

@@ -43,8 +43,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { endpoints } from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import axiosHandler from 'src/utils/axios-handler';
 import { useGetDepartmentActivities } from 'src/api/tables'; /// edit
@@ -73,6 +75,8 @@ export default function ActivitesTableView({ departmentData }) {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const { user } = useAuthContext();
 
   const { STATUS_OPTIONS } = StatusOptions();
 
@@ -149,57 +153,109 @@ export default function ActivitesTableView({ departmentData }) {
   );
 
   const handleActivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.activity(id)}/updatestatus`, /// edit
-        data: { status: 'active' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.activity(row._id)}/updatestatus`, /// edit
+          data: { status: 'active' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.activities.root(departmentData._id),
+          msg: `activated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, departmentData, user]
   );
   const handleInactivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.activity(id)}/updatestatus`, /// edit
-        data: { status: 'inactive' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.activity(row._id)}/updatestatus`, /// edit
+          data: { status: 'inactive' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.departments.activities.root(departmentData._id),
+          msg: `inactivated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, departmentData, user]
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.activities}/updatestatus`, /// edit
-      data: { status: 'active', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.activities}/updatestatus`, /// edit
+        data: { status: 'active', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.departments.activities.root(departmentData._id),
+        msg: `activated many activities in department <strong>${departmentData.name_english}</strong>`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: activitiesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, activitiesData, refetch]);
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    table,
+    activitiesData,
+    refetch,
+    departmentData,
+    user,
+  ]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.activities}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.activities}/updatestatus`, /// edit
+        data: { status: 'inactive', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.departments.activities.root(departmentData._id),
+        msg: `inactivated many activities in department <strong>${departmentData.name_english}</strong>`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: activitiesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, activitiesData, refetch]);
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    table,
+    activitiesData,
+    refetch,
+    departmentData,
+    user,
+  ]);
 
   const handleEditRow = useCallback(
     (id) => {
@@ -395,8 +451,8 @@ export default function ActivitesTableView({ departmentData }) {
                         setFilters={setFilters}
                         filters={filters}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row._id)}
-                        onInactivate={() => handleInactivate(row._id)}
+                        onActivate={() => handleActivate(row)}
+                        onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}

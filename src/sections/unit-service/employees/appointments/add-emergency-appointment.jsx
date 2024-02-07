@@ -31,6 +31,7 @@ import {
 } from 'src/api/tables';
 import { useAuthContext } from 'src/auth/hooks';
 
+import { socket } from 'src/socket';
 import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -69,13 +70,15 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
   const defaultValues = useMemo(
     () => ({
+      unit_service:
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
       appointment_type: null,
       start_time: null,
       work_group: null,
       work_shift: null,
       service_types: [],
     }),
-    []
+    [user?.employee]
   );
 
   const methods = useForm({
@@ -91,14 +94,17 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await axios.post(endpoints.tables.appointments, {
+      const appoint = await axios.post(endpoints.tables.appointments, {
         ...data,
-        emergency: true,
-        unit_service:
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-            ._id,
         department: workGroupsData.filter((item) => item._id === data.work_group)?.[0]?.department
-          ._id,
+          ?._id,
+        emergency: true,
+      });
+      socket.emit('created', {
+        data,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/appointment`,
+        msg: `creating emergency appointment <strong>${appoint.data.code}</strong> into <strong>${data.unit_service}</strong> unit service`,
       });
       reset();
       enqueueSnackbar('Create success!');
@@ -106,6 +112,16 @@ export default function BookManually({ onClose, refetch, ...other }) {
       console.info('DATA', data);
       onClose();
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+        }/systemerrors`,
+        msg: `creating a new emergency appointment into ${
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+        }`,
+      });
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }

@@ -13,13 +13,13 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { socket } from 'src/socket';
 import { useGetUnitservices } from 'src/api/tables';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import axios from 'axios';
-import { socket } from 'src/socket';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
@@ -100,8 +100,14 @@ export default function TableNewEditForm({ currentTable }) {
             ...data,
           },
         });
+        socket.emit('updated', {
+          data,
+          user,
+          link: paths.unitservice.departments.info(currentTable._id),
+          msg: `updating department <strong>${data.name_english}</strong>`,
+        });
       } else {
-        await axiosHandler({
+        const newDepartment = await axiosHandler({
           method: 'POST',
           path: endpoints.tables.departments,
           data: {
@@ -113,13 +119,25 @@ export default function TableNewEditForm({ currentTable }) {
                 ._id,
           },
         });
+        socket.emit('created', {
+          data,
+          user,
+          link: paths.unitservice.departments.info(newDepartment._id),
+          msg: `creating department <strong>${data.name_english}</strong>`,
+        });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.unitservice.departments.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error',error);
+      socket.emit('error', {
+        error,
+        user,
+        link: paths.superadmin.systemErrors,
+        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
+      });
+      socket.emit('error', error);
       console.error(error);
     }
   });

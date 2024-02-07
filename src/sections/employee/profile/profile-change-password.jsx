@@ -72,6 +72,12 @@ export default function AccountChangePassword() {
         enqueueSnackbar(response.data || t('Password update failed!'), { variant: 'error' });
       }
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
+      });
       console.error(error);
       enqueueSnackbar(t('An error occurred. Please try again.'), { variant: 'error' });
     }

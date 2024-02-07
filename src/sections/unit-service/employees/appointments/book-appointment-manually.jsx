@@ -18,6 +18,7 @@ import DialogContent from '@mui/material/DialogContent';
 import InputAdornment from '@mui/material/InputAdornment';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
+import { socket } from 'src/socket';
 import axios, { endpoints } from 'src/utils/axios';
 import { useSnackbar } from 'src/components/snackbar';
 import { paths } from 'src/routes/paths';
@@ -33,7 +34,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
-export default function AddEmegencyAppointment({ refetch, appointment_id, onClose, ...other }) {
+export default function AddEmegencyAppointment({ refetch, appointment, onClose, ...other }) {
   const router = useRouter();
   const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
@@ -102,17 +103,31 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (data._id) {
-        await axios.patch(endpoints.tables.appointment(appointment_id), {
+        await axios.patch(endpoints.tables.appointment(appointment._id), {
           patient: data._id,
         });
       } else {
-        await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment_id), data);
+        await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment._id), data);
       }
+      socket.emit('updated', {
+        data,
+        user,
+        link: `/dashboard/unitservices/${appointment.unit_service._id}/appointments`,
+        msg: `Booking appointment <strong>${appointment.code}</strong> of <strong>${
+          appointment?.unit_service?.name_english || ''
+        }</strong> unit service`,
+      });
       enqueueSnackbar('Create success!');
       refetch();
       console.info('DATA', data);
       onClose();
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/systemerrors`,
+        msg: `booking an emergency appointment ${appointment} in employee ${id}`,
+      });
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }
@@ -227,30 +242,28 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                   sm: 'repeat(2, 1fr)',
                 }}
               >
+                <RHFTextField lang="ar" name="first_name" label={t('first name')} />
+                <RHFTextField lang="ar" name="family_name" label="family name" />
                 <RHFTextField
-              lang="ar" name="first_name" label={t("first name")} />
-                <RHFTextField
-              lang="ar" name="family_name" label="family name" />
-                <RHFTextField
-              lang="ar"
+                  lang="ar"
                   onChange={(e) => {
                     setValue('email', e.target.value);
                     setEmail(e.target.value);
                   }}
                   name="email"
-                  label={t("email")}
+                  label={t('email')}
                 />
                 <RHFTextField
-              lang="ar"
+                  lang="ar"
                   onChange={(e) => {
                     setValue('identification_num', e.target.value);
                     setID(e.target.value);
                   }}
                   name="identification_num"
-                  label={t("ID number")}
+                  label={t('ID number')}
                 />
                 <RHFTextField
-              lang="ar"
+                  lang="ar"
                   type="number"
                   onChange={(e) => {
                     setValue('mobile_num1', e.target.value);
@@ -260,7 +273,11 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                   label="Mobile number"
                 />
                 <RHFTextField
-              lang="ar" type="number" name="mobile_num2" label="Additional mobile number" />
+                  lang="ar"
+                  type="number"
+                  name="mobile_num2"
+                  label="Additional mobile number"
+                />
                 <Controller
                   name="birth_date"
                   render={({ field, fieldState: { error } }) => (
@@ -283,7 +300,7 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                 <RHFSelect
                   native
                   name="nationality"
-                  label={t("nationality")}
+                  label={t('nationality')}
                   InputLabelProps={{ shrink: true }}
                 >
                   {countriesData.map((option) => (
@@ -330,13 +347,11 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
                   <MenuItem value="separated">Separated</MenuItem>
                   <MenuItem value="divorced">Divorced </MenuItem>
                 </RHFSelect>
-                <RHFSelect name="gender" label={t("gender")} InputLabelProps={{ shrink: true }}>
+                <RHFSelect name="gender" label={t('gender')} InputLabelProps={{ shrink: true }}>
                   <MenuItem value="male">Male</MenuItem>
                   <MenuItem value="female">Female</MenuItem>
                 </RHFSelect>
               </Box>
-
-
             </Stack>
           </DialogContent>
 
@@ -360,5 +375,5 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
 AddEmegencyAppointment.propTypes = {
   onClose: PropTypes.func,
   refetch: PropTypes.func,
-  appointment_id: PropTypes.string,
+  appointment: PropTypes.object,
 };

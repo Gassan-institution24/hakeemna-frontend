@@ -139,6 +139,12 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
             ...data,
           },
         });
+        socket.emit('created', {
+          data,
+          user,
+          link: paths.unitservice.departments.employees.root(departmentData._id),
+          msg: `creating an employee <strong>${data.first_name}</strong> in <strong>${departmentData.name_english}</strong> department`,
+        });
       } else {
         await axiosHandler({
           method: 'POST',
@@ -151,13 +157,24 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
             ...data,
           },
         });
+        socket.emit('updated', {
+          data,
+          user,
+          link: paths.unitservice.departments.employees.root(departmentData._id),
+          msg: `updating an employee <strong>${data.first_name}</strong> in <strong>${departmentData.name_english}</strong> department`,
+        });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.unitservice.departments.employees.root(departmentData._id));
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {error,user:user._id});
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
+      });
       console.error(error);
     }
   });

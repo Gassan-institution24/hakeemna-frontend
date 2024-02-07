@@ -31,13 +31,14 @@ import {
 } from 'src/api/tables';
 import { useAuthContext } from 'src/auth/hooks';
 
+import { socket } from 'src/socket';
 import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function BookManually({ onClose, refetch, ...other }) {
+export default function BookManually({ departmentData, onClose, refetch, ...other }) {
   const router = useRouter();
   const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
@@ -91,14 +92,20 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await axios.post(endpoints.tables.appointments, {
+      const appoint = await axios.post(endpoints.tables.appointments, {
         ...data,
         emergency: true,
         unit_service:
           user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
             ._id,
-        department: workGroupsData.filter((item) => item._id === data.work_group)?.[0]?.department
-          ._id,
+        department: departmentData._id,
+      });
+      console.log('appoint', appoint);
+      socket.emit('created', {
+        data,
+        user,
+        link: paths.unitservice.departments.appointments(departmentData._id),
+        msg: `created an emergency appointment <strong>${appoint?.data?.code}</strong> into <strong>${departmentData.name_english}</strong> department`,
       });
       reset();
       enqueueSnackbar('Create success!');
@@ -106,6 +113,12 @@ export default function BookManually({ onClose, refetch, ...other }) {
       console.info('DATA', data);
       onClose();
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
+        msg: `created a work shift ${data.name_english} into ${data.unit_service}`,
+      });
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }
@@ -218,4 +231,5 @@ export default function BookManually({ onClose, refetch, ...other }) {
 BookManually.propTypes = {
   onClose: PropTypes.func,
   refetch: PropTypes.func,
+  departmentData: PropTypes.object,
 };

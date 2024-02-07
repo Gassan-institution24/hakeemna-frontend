@@ -8,9 +8,11 @@ import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import { socket } from 'src/socket';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import Iconify from 'src/components/iconify';
+import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import axios, { endpoints } from 'src/utils/axios';
@@ -18,6 +20,8 @@ import axios, { endpoints } from 'src/utils/axios';
 
 export default function AccountChangePassword() {
   const { enqueueSnackbar } = useSnackbar();
+
+  const { user } = useAuthContext();
 
   const showpasswordCurrent = useBoolean();
   const showpassword = useBoolean();
@@ -67,6 +71,12 @@ export default function AccountChangePassword() {
         enqueueSnackbar(response.data || 'Password update failed!', { variant: 'error' });
       }
     } catch (error) {
+      socket.emit('error', {
+        error,
+        user,
+        link: `/dashboard/systemerrors`,
+        msg: `editing password `,
+      });
       console.error(error);
       enqueueSnackbar('An error occurred. Please try again.', { variant: 'error' });
     }
