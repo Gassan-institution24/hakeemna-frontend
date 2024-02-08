@@ -51,6 +51,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import { useGetUSEmployeeTypes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+import { socket } from 'src/socket';
 
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -75,7 +76,7 @@ export default function EmployeeTypesTable() {
     { id: '', width: 88 },
   ];
 
-  const {STATUS_OPTIONS} = StatusOptions()
+  const { STATUS_OPTIONS } = StatusOptions();
 
   const { user } = useAuthContext();
 
@@ -154,57 +155,97 @@ export default function EmployeeTypesTable() {
   );
 
   const handleActivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employeetype(id)}/updatestatus`, /// edit
-        data: { status: 'active' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.employeetype(row._id)}/updatestatus`, /// edit
+          data: { status: 'active' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.tables.employeetypes.root,
+          msg: `activated an employee type <strong>${row.name_english}</strong>`,
+        });
+      } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user]
   );
   const handleInactivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employeetype(id)}/updatestatus`, /// edit
-        data: { status: 'inactive' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.employeetype(row._id)}/updatestatus`, /// edit
+          data: { status: 'inactive' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.tables.employeetypes.root,
+          msg: `inactivated an employee type <strong>${row.name_english}</strong>`,
+        });
+      } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user]
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.employeetypes}/updatestatus`, /// edit
-      data: { status: 'active', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.employeetypes}/updatestatus`, /// edit
+        data: { status: 'active', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.tables.employeetypes.root,
+        msg: `activated many employee types`,
+      });
+    } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: employeeTypesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, employeeTypesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, employeeTypesData, refetch, user]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.employeetypes}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.employeetypes}/updatestatus`, /// edit
+        data: { status: 'inactive', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.tables.employeetypes.root,
+        msg: `inactivated many employee types`,
+      });
+    } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: employeeTypesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, employeeTypesData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, employeeTypesData, refetch, user]);
 
   const handleEditRow = useCallback(
     (id) => {
@@ -390,8 +431,8 @@ export default function EmployeeTypesTable() {
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row._id)}
-                        onInactivate={() => handleInactivate(row._id)}
+                        onActivate={() => handleActivate(row)}
+                        onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}

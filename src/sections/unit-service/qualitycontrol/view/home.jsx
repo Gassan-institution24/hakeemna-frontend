@@ -46,6 +46,7 @@ import { useGetUSFeedbackes } from 'src/api/tables'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';
+import { socket } from 'src/socket';
 
 import FeedbackRow from '../feedback-row'; /// edit
 import FeedbackToolbar from '../feedback-toolbar';

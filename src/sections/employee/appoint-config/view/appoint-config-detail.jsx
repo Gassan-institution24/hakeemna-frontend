@@ -197,10 +197,18 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ImmediateEdit: false,
       });
       enqueueSnackbar('Updated successfully!');
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.appointmentconfig.root(
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+        ),
+        msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
+      });
       confirm.onFalse();
       router.push(paths.employee.appointmentconfiguration.root);
       saving.onFalse();
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
       saving.onFalse();
     }
@@ -212,12 +220,20 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ...dataToUpdate,
         ImmediateEdit: true,
       });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.appointmentconfig.root(
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+        ),
+        msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
+      });
       enqueueSnackbar('Updated successfully!');
       router.push(paths.employee.appointmentconfiguration.root);
       confirm.onFalse();
       updating.onFalse();
       // await refetch();
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
       confirm.onFalse();
       updating.onFalse();
@@ -246,21 +262,22 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         //   department: id,
         // });
       } else {
-        await axios.post(endpoints.tables.appointmentconfigs, data);
+        const config = await axios.post(endpoints.tables.appointmentconfigs, data);
         enqueueSnackbar('Added Successfully!');
+        socket.emit('created', {
+          user,
+          link: paths.unitservice.employees.appointmentconfig.root(
+            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+          ),
+          msg: `created an appointment configuration <strong>[ ${config.data?.code} ]</strong>`,
+        })
         router.push(paths.employee.appointmentconfiguration.root);
       }
       // reset();
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
-      });
-      // console.log(error);
+      socket.emit('error',{error,user,location:window.location.href})
       enqueueSnackbar(`Failed to Add: ${error}`, { variant: 'error' });
       console.error(error);
       loadingSend.onFalse();

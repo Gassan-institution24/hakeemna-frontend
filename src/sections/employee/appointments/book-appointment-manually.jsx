@@ -110,16 +110,18 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
         await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment._id), data);
       }
       enqueueSnackbar('Create success!');
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.appointments(
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+        ),
+        msg: `booked an appointment <strong>[ ${appointment.code} ]</strong>`,
+      });
       refetch();
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${appointment.unit_service}/systemerrors`,
-        msg: `booking an appointment ${appointment.code}`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }

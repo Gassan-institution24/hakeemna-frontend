@@ -46,6 +46,7 @@ import {
 } from 'src/components/table';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
+import { socket } from 'src/socket';
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useSnackbar } from 'src/components/snackbar';
@@ -188,47 +189,93 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
   );
 
   const handleCancelRow = useCallback(
-    async (id) => {
-      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/cancel` });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.appointment(row._id)}/cancel`,
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.appointments.root,
+          msg: `canceled an appointment <strong>[ ${row.code} ]</strong>`,
+        });
+      } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+        console.error(e);
+      }
       enqueueSnackbar('canceled successfully!');
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user]
   );
 
   const handleDelayRow = useCallback(
-    async (id, min) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointment(id)}/delay`,
-        data: { minutes: min },
-      });
+    async (row, min) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.appointment(row._id)}/delay`,
+          data: { minutes: min },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.appointments.root,
+          msg: `delayed an appointment <strong>[ ${row.code} ]</strong>`,
+        });
+      } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+        console.error(e);
+      }
       enqueueSnackbar('delayed successfully!');
       refetch();
       setMinToDelay(0);
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user]
   );
 
   const handleUnCancelRow = useCallback(
-    async (id) => {
-      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/uncancel` });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.appointment(row._id)}/uncancel`,
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.appointments.root,
+          msg: `uncanceled an appointment <strong>[ ${row.code} ]</strong>`,
+        });
+      } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+        console.error(e);
+      }
       enqueueSnackbar('uncanceled successfully!');
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user]
   );
 
   const handleCancelRows = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
-      });
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.appointments}/cancel`,
+          data: { ids: table.selected },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.appointments.root,
+          msg: `canceled many appointments`,
+        });
+      } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+        console.error(e);
+      }
       enqueueSnackbar('canceled successfully!');
       refetch();
       table.onUpdatePageDeleteRows({
@@ -244,16 +291,27 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
       appointmentsData.length,
       table,
       enqueueSnackbar,
+      user,
     ]
   );
 
   const handleDelayRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.appointments}/delay`,
-      data: { ids: table.selected, minutes: minToDelay },
-    });
-    enqueueSnackbar('delayed successfully!');
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointments}/delay`,
+        data: { ids: table.selected, minutes: minToDelay },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.appointments.root,
+        msg: `dealayed many appointments`,
+      });
+      enqueueSnackbar('delayed successfully!');
+    } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+      console.error(e);
+    }
     refetch();
     setMinToDelay(0);
     table.onUpdatePageDeleteRows({
@@ -269,16 +327,27 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
     table,
     minToDelay,
     enqueueSnackbar,
+    user,
   ]);
 
   const handleUnCancelRows = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/uncancel`,
-        data: { ids: table.selected },
-      });
-      enqueueSnackbar('uncanceled successfully!');
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.appointments}/uncancel`,
+          data: { ids: table.selected },
+        });
+        enqueueSnackbar('uncanceled successfully!');
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.appointments.root,
+          msg: `uncanceled many appointments`,
+        });
+      } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRows({
         totalRows: appointmentsData.length,
@@ -292,6 +361,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
       dataInPage.length,
       appointmentsData.length,
       table,
+      user,
       enqueueSnackbar,
     ]
   );
@@ -446,8 +516,8 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onViewRow={() => handleViewRow(row._id)}
                         onDelayRow={handleDelayRow}
-                        onCancelRow={() => handleCancelRow(row._id)}
-                        onUnCancelRow={() => handleUnCancelRow(row._id)}
+                        onCancelRow={() => handleCancelRow(row)}
+                        onUnCancelRow={() => handleUnCancelRow(row)}
                       />
                     ))}
 
@@ -524,7 +594,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
       <ConfirmDialog
         open={confirmDelay.value}
         onClose={confirmDelay.onFalse}
-        title={t("delay")}
+        title={t('delay')}
         content={
           <>
             How many minutes do you want to delay items?
@@ -552,7 +622,8 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
               handleDelayRows();
             }}
           >
-            {t('delay')}         </Button>
+            {t('delay')}{' '}
+          </Button>
         }
       />
     </>

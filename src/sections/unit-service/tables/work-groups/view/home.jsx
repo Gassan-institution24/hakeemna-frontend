@@ -43,6 +43,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
@@ -154,57 +155,97 @@ export default function WorkGroupsTableView() {
   );
 
   const handleActivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.workgroup(id)}/updatestatus`, /// edit
-        data: { status: 'active' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.workgroup(row._id)}/updatestatus`, /// edit
+          data: { status: 'active' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.tables.workgroups.root,
+          msg: `activated a work group <strong>${row.name_english}</strong>`,
+        });
+      } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user]
   );
   const handleInactivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.workgroup(id)}/updatestatus`, /// edit
-        data: { status: 'inactive' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.workgroup(row._id)}/updatestatus`, /// edit
+          data: { status: 'inactive' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.tables.workgroups.root,
+          msg: `inactivated a work group <strong>${row.name_english}</strong>`,
+        });
+      } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user]
   );
 
   const handleActivateRows = useCallback(async () => {
+    try{
     await axiosHandler({
       method: 'PATCH',
       path: `${endpoints.tables.workgroups}/updatestatus`, /// edit
       data: { status: 'active', ids: table.selected },
     });
+    socket.emit('updated', {
+      user,
+      link: paths.unitservice.tables.workgroups.root,
+      msg: `activated many work groups`,
+    })
+  } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+    console.error(e);
+  }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: workGroupsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, workGroupsData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, workGroupsData, refetch, user]);
 
   const handleInactivateRows = useCallback(async () => {
+    try{
     await axiosHandler({
       method: 'PATCH',
       path: `${endpoints.tables.workgroups}/updatestatus`, /// edit
       data: { status: 'inactive', ids: table.selected },
     });
+    socket.emit('updated', {
+      user,
+      link: paths.unitservice.tables.workgroups.root,
+      msg: `inactivated many work groups`,
+    })
+  } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+    console.error(e);
+  }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: workGroupsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, workGroupsData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, workGroupsData, refetch, user]);
 
   const handleEditRow = useCallback(
     (id) => {
@@ -395,8 +436,8 @@ export default function WorkGroupsTableView() {
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row._id)}
-                        onInactivate={() => handleInactivate(row._id)}
+                        onActivate={() => handleActivate(row)}
+                        onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}

@@ -146,7 +146,7 @@ export default function AppointmentsTableRow({
 
       <BookManually
         refetch={refetch}
-        appointment_id={_id}
+        appointment={row}
         open={Book.value}
         onClose={Book.onFalse}
       />
@@ -272,7 +272,7 @@ export default function AppointmentsTableRow({
             color="info"
             onClick={() => {
               confirmDelayOne.onFalse();
-              onDelayRow(_id, minToDelay);
+              onDelayRow(row, minToDelay);
             }}
           >
             {t('delay')}         </Button>

@@ -88,11 +88,6 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
     try {
       // console.log('data', data);
       const address = await axios.get('https://geolocation-db.com/json/');
-      // console.log('dataa', {
-        ip_address_user_modification: address.data.IPv4,
-        user_modification: user._id,
-        ...data,
-      });
       if (currentTable) {
         await axiosHandler({
           method: 'PATCH',
@@ -120,12 +115,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       router.push(paths.unitservice.departments.workGroups.root(departmentData._id));
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       console.error(error);
     }
   });
@@ -148,13 +138,13 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
               lang="ar"
               onChange={handleEnglishInputChange}
               name="name_english"
-              label={t("name english")}
+              label={t('name english')}
             />
             <RHFTextField
               lang="ar"
               onChange={handleArabicInputChange}
               name="name_arabic"
-              label={t("name arabic")}
+              label={t('name arabic')}
             />
             {/* <Stack spacing={1.5}> */}
             {/* <Typography variant="subtitle2">Working schedule</Typography> */}

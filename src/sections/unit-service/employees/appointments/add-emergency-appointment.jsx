@@ -103,8 +103,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
       socket.emit('created', {
         data,
         user,
-        link: `/dashboard/unitservices/${data.unit_service}/appointment`,
-        msg: `creating emergency appointment <strong>${appoint.data.code}</strong> into <strong>${data.unit_service}</strong> unit service`,
+        link: paths.unitservice.employees.root,
+        msg: `creatied emergency appointment <strong>[ ${appoint.data.code} ]</strong>`,
       });
       reset();
       enqueueSnackbar('Create success!');
@@ -112,16 +112,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
-        }/systemerrors`,
-        msg: `creating a new emergency appointment into ${
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
-        }`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }

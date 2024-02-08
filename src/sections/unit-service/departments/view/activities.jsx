@@ -166,6 +166,7 @@ export default function ActivitesTableView({ departmentData }) {
           msg: `activated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -187,6 +188,7 @@ export default function ActivitesTableView({ departmentData }) {
           msg: `inactivated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -208,6 +210,7 @@ export default function ActivitesTableView({ departmentData }) {
         msg: `activated many activities in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -239,6 +242,7 @@ export default function ActivitesTableView({ departmentData }) {
         msg: `inactivated many activities in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();

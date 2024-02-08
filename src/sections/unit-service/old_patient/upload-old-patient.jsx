@@ -23,9 +23,6 @@ import { tablePaginationClasses } from '@mui/material/TablePagination';
 
 import { socket } from 'src/socket';
 
-import Iconify from 'src/components/iconify';
-import axiosHandler from 'src/utils/axios-handler';
-
 import {
   emptyRows,
   TableNoData,
@@ -133,18 +130,18 @@ export default function UploadOldPatient({ refetch }) {
       // console.log('data', data);
       // console.log('formData', formData);
       await axios.post(endpoints.tables.newOldPatient, formData);
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.oldPatient,
+        msg: `uploaded an old patient data`,
+      })
       refetch();
       reset();
       enqueueSnackbar('Uploaded success!');
       // router.push(paths.unitservice.tables.employeetypes.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `uploading an old patient data ${data.first_name} `,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       console.error(error);
       enqueueSnackbar('Uploaded failed!', { variant: 'error' });
     }

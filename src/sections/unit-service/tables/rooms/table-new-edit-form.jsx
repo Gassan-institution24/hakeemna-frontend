@@ -58,7 +58,7 @@ export default function TableNewEditForm({ currentTable }) {
       department: currentTable?.department?._id || null,
       general_info: currentTable?.general_info || '',
     }),
-    [currentTable,user?.employee]
+    [currentTable, user?.employee]
   );
 
   const methods = useForm({
@@ -103,6 +103,11 @@ export default function TableNewEditForm({ currentTable }) {
             ...data,
           },
         });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.tables.rooms.root,
+          msg: `updated a room <strong>${data.name_english}</strong>`,
+        });
       } else {
         await axiosHandler({
           method: 'POST',
@@ -113,18 +118,18 @@ export default function TableNewEditForm({ currentTable }) {
             ...data,
           },
         });
+        socket.emit('created', {
+          user,
+          link: paths.unitservice.tables.rooms.root,
+          msg: `created a room <strong>${data.name_english}</strong>`,
+        });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.unitservice.tables.rooms.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `creating or updating a new room ${data.name_english} into ${data.unit_service}`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       console.error(error);
     }
   });

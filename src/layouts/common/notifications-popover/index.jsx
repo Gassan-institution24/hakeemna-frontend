@@ -14,7 +14,10 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
+import { useRouter } from 'src/routes/hooks';
+import axios, { endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useGetNotifications, useGetUnreadNotificationCount } from 'src/api/tables';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { _notifications } from 'src/_mock';
@@ -30,50 +33,58 @@ import NotificationItem from './notification-item';
 
 // ----------------------------------------------------------------------
 
-const TABS = [
-  {
-    value: 'all',
-    label: 'All',
-    count: 22,
-  },
-  {
-    value: 'unread',
-    label: 'Unread',
-    count: 12,
-  },
-  {
-    value: 'archived',
-    label: 'Archived',
-    count: 10,
-  },
-];
+// const TABS = [
+//   {
+//     value: 'all',
+//     label: 'All',
+//     count: 22,
+//   },
+//   {
+//     value: 'unread',
+//     label: 'Unread',
+//     count: 12,
+//   },
+//   {
+//     value: 'archived',
+//     label: 'Archived',
+//     count: 10,
+//   },
+// ];
 
 // ----------------------------------------------------------------------
 
 export default function NotificationsPopover() {
   // console.log('socket',socket)
 
+  const router = useRouter();
+
   const drawer = useBoolean();
 
   const smUp = useResponsive('up', 'sm');
 
-  const [currentTab, setCurrentTab] = useState('all');
+  // const [currentTab, setCurrentTab] = useState('all');
 
-  const handleChangeTab = useCallback((event, newValue) => {
-    setCurrentTab(newValue);
-  }, []);
+  // const handleChangeTab = useCallback((event, newValue) => {
+  //   setCurrentTab(newValue);
+  // }, []);
 
-  const [notifications, setNotifications] = useState(_notifications);
+  const { notifications, refetch } = useGetNotifications();
+  const { notificationscount, recount } = useGetUnreadNotificationCount();
 
-  const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
+  const handleClick = async (id, link) => {
+    const data = await axios.patch(endpoints.tables.readNotification(id));
+    router.push(link);
+    refetch();
+    recount();
+  };
+  // const [notifications, setNotifications] = useState(_notifications);
 
-  const handleMarkAllAsRead = () => {
-    setNotifications(
-      notifications.map((notification) => ({
-        ...notification,
-        isUnRead: false,
-      }))
-    );
+  // const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
+
+  const handleMarkAllAsRead = async () => {
+    await axios.patch(`${endpoints.tables.notifications}/read`, { ids: notificationscount });
+    recount();
+    refetch();
   };
 
   const renderHead = (
@@ -82,7 +93,7 @@ export default function NotificationsPopover() {
         Notifications
       </Typography>
 
-      {!!totalUnRead && (
+      {!!notificationscount.length && (
         <Tooltip title="Mark all as read">
           <IconButton color="primary" onClick={handleMarkAllAsRead}>
             <Iconify icon="eva:done-all-fill" />
@@ -98,61 +109,64 @@ export default function NotificationsPopover() {
     </Stack>
   );
 
-  const renderTabs = (
-    <Tabs value={currentTab} onChange={handleChangeTab}>
-      {TABS.map((tab) => (
-        <Tab
-          key={tab.value}
-          iconPosition="end"
-          value={tab.value}
-          label={tab.label}
-          icon={
-            <Label
-              variant={((tab.value === 'all' || tab.value === currentTab) && 'filled') || 'soft'}
-              color={
-                (tab.value === 'unread' && 'info') ||
-                (tab.value === 'archived' && 'success') ||
-                'default'
-              }
-            >
-              {tab.count}
-            </Label>
-          }
-          sx={{
-            '&:not(:last-of-type)': {
-              mr: 3,
-            },
-          }}
-        />
-      ))}
-    </Tabs>
-  );
+  // const renderTabs = (
+  //   <Tabs value={currentTab} onChange={handleChangeTab}>
+  //     {TABS.map((tab) => (
+  //       <Tab
+  //         key={tab.value}
+  //         iconPosition="end"
+  //         value={tab.value}
+  //         label={tab.label}
+  //         icon={
+  //           <Label
+  //             variant={((tab.value === 'all' || tab.value === currentTab) && 'filled') || 'soft'}
+  //             color={
+  //               (tab.value === 'unread' && 'info') ||
+  //               (tab.value === 'archived' && 'success') ||
+  //               'default'
+  //             }
+  //           >
+  //             {tab.count}
+  //           </Label>
+  //         }
+  //         sx={{
+  //           '&:not(:last-of-type)': {
+  //             mr: 3,
+  //           },
+  //         }}
+  //       />
+  //     ))}
+  //   </Tabs>
+  // );
 
   const renderList = (
     <Scrollbar>
       <List disablePadding>
         {notifications.map((notification) => (
-          <NotificationItem key={notification.id} notification={notification} />
+          <NotificationItem handleClick={handleClick} key={notification.id} notification={notification} />
         ))}
       </List>
     </Scrollbar>
   );
 
-  useEffect(()=>{
-    socket.on('error',(data)=>{
-      console.log('data',data)
-      setNotifications((prev)=>[...prev,data])
-    })
-    socket.on('created',(data)=>{
-      console.log('data',data)
-      setNotifications((prev)=>[...prev,data])
-    })
-    socket.on('updated',(data)=>{
-      console.log('data',data)
-      setNotifications((prev)=>[...prev,data])
-    })
-  },[])
-  
+  useEffect(() => {
+    socket.on('error', (data) => {
+      console.log('data', data);
+      refetch();
+      recount();
+    });
+    socket.on('created', (data) => {
+      console.log('data', data);
+      refetch();
+      recount();
+    });
+    socket.on('updated', (data) => {
+      console.log('data', data);
+      refetch();
+      recount();
+    });
+  }, [refetch, recount]);
+
   return (
     <>
       <IconButton
@@ -163,7 +177,7 @@ export default function NotificationsPopover() {
         color={drawer.value ? 'primary' : 'default'}
         onClick={drawer.onTrue}
       >
-        <Badge badgeContent={totalUnRead} color="error">
+        <Badge badgeContent={notificationscount.length} color="error">
           <Iconify icon="solar:bell-bing-bold-duotone" width={24} />
         </Badge>
       </IconButton>
@@ -181,7 +195,7 @@ export default function NotificationsPopover() {
       >
         {renderHead}
 
-        <Divider />
+        {/* <Divider />
 
         <Stack
           direction="row"
@@ -193,7 +207,7 @@ export default function NotificationsPopover() {
           <IconButton onClick={handleMarkAllAsRead}>
             <Iconify icon="solar:settings-bold-duotone" />
           </IconButton>
-        </Stack>
+        </Stack> */}
 
         <Divider />
 

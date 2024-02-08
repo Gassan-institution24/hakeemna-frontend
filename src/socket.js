@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
+import { HOST_API } from './config-global';
 
-// "undefined" means the URL will be computed from the `window.location` object
-const URL = 'http://localhost:3000';
+const URL = HOST_API;
 
 export const socket = io(URL);

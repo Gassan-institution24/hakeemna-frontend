@@ -94,7 +94,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await axios.post(endpoints.tables.appointments, {
+      const appoint = await axios.post(endpoints.tables.appointments, {
         ...data,
         emergency: true,
         unit_service:
@@ -103,18 +103,20 @@ export default function BookManually({ onClose, refetch, ...other }) {
         department: workGroupsData.filter((item) => item._id === data.work_group)?.[0]?.department
           ._id,
       });
+      socket.emit('created', {
+        user,
+        link: paths.unitservice.employees.appointments(
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+        ),
+        msg: `created an emergency appointment <strong>[ ${appoint.data?.code} ]</strong>`,
+      });
       reset();
-      enqueueSnackbar('Create success!');
+      enqueueSnackbar('Created successfully!');
       refetch();
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }

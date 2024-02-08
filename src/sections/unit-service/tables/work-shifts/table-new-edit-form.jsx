@@ -103,6 +103,11 @@ export default function TableNewEditForm({ currentTable }) {
             ...data,
           },
         });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.tables.workshifts.root,
+          msg: `updated a work shift <strong>${data.name_english}</strong>`,
+        });
       } else {
         await axiosHandler({
           method: 'POST',
@@ -113,18 +118,18 @@ export default function TableNewEditForm({ currentTable }) {
             ...data,
           },
         });
+        socket.emit('created', {
+          user,
+          link: paths.unitservice.tables.workshifts.root,
+          msg: `created a work shift <strong>${data.name_english}</strong>`,
+        });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.unitservice.tables.workshifts.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       console.error(error);
     }
   });

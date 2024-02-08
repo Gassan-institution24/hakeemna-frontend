@@ -209,11 +209,17 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ...dataToUpdate,
         ImmediateEdit: false,
       });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.appointmentconfig.root(id),
+        msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
+      });
       enqueueSnackbar(t('updated successfully!'));
       saving.onFalse();
       confirm.onFalse();
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       saving.onFalse();
       enqueueSnackbar(t(`failed to update!`), { variant: 'error' });
     }
@@ -225,12 +231,18 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ...dataToUpdate,
         ImmediateEdit: true,
       });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.appointmentconfig.root(id),
+        msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
+      });
       updating.onFalse();
       confirm.onFalse();
       enqueueSnackbar(t('Updated successfully!'));
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
       // await refetch();
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       updating.onFalse();
       confirm.onFalse();
       enqueueSnackbar(t(`Failed to update!`), { variant: 'error' });
@@ -260,8 +272,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           socket.emit('updated', {
             data,
             user,
-            link: `/dashboard/unitservices/${data.unit_service}/appoint-config`,
-            msg: `updating appointment configuration ${appointmentConfigData._id} into <strong>${data.unit_service}</strong> unit service`,
+            link: paths.unitservice.employees.appointmentconfig.root(id),
+            msg: `updated an appointment configuration ${appointmentConfigData.code}`,
           });
           router.push(paths.unitservice.employees.appointmentconfig.root(id));
         }
@@ -271,8 +283,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         socket.emit('created', {
           data,
           user,
-          link: `/dashboard/unitservices/${data.unit_service}/appoint-config`,
-          msg: `creating appointment config <strong>${data.name_english}</strong> into <strong>${data.unit_service}</strong> unit service`,
+          link: paths.unitservice.employees.appointmentconfig.root(id),
+          msg: `created an appointment config <strong>${data.name_english}</strong>`,
         });
         updating.onFalse();
         enqueueSnackbar(t('added successfully!'));
@@ -282,13 +294,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `creating or updating an appointment configuration of employee ${id} into ${data.unit_service}`,
-      });
-      // console.log(error);
+      socket.emit('error',{error,user,location:window.location.href})
       enqueueSnackbar(t(`failed to add!`), { variant: 'error' });
       console.error(error);
       loadingSend.onFalse();

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -159,6 +159,7 @@ export default function EmployeesTableView({ departmentData }) {
           msg: `activated an employee <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -180,6 +181,7 @@ export default function EmployeesTableView({ departmentData }) {
           msg: `inactivated an employee <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -201,6 +203,7 @@ export default function EmployeesTableView({ departmentData }) {
         msg: `activated many employees in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -224,6 +227,7 @@ export default function EmployeesTableView({ departmentData }) {
         msg: `inactivated many employees in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -275,6 +279,15 @@ export default function EmployeesTableView({ departmentData }) {
     },
     [handleFilters]
   );
+
+  /* eslint-disable */
+  useEffect(() => {
+    socket.on('employeeStatusUpdated', () => {
+      console.log('employee status updated')
+      refetch(); 
+    });
+  }, []);
+  /* eslint-enable */
 
   if (loading) {
     return <LoadingScreen />;

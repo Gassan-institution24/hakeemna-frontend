@@ -10,14 +10,17 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 
 import { fToNow } from 'src/utils/format-time';
+import { useRouter } from 'src/routes/hooks';
+
+import { HOST_API } from 'src/config-global';
+import axios, { endpoints } from 'src/utils/axios';
 
 import Label from 'src/components/label';
-import { HOST_API } from 'src/config-global';
 import FileThumbnail from 'src/components/file-thumbnail';
 
 // ----------------------------------------------------------------------
 
-export default function NotificationItem({ notification }) {
+export default function NotificationItem({ notification, handleClick }) {
   const renderAvatar = (
     <ListItemAvatar>
       {notification.avatarUrl ? (
@@ -204,7 +207,7 @@ export default function NotificationItem({ notification }) {
   return (
     <ListItemButton
       disableRipple
-      href={notification.link}
+      onClick={() => handleClick(notification._id, notification.link)}
       sx={{
         p: 2.5,
         alignItems: 'flex-start',
@@ -229,6 +232,7 @@ export default function NotificationItem({ notification }) {
 
 NotificationItem.propTypes = {
   notification: PropTypes.object,
+  handleClick: PropTypes.func,
 };
 
 // ----------------------------------------------------------------------

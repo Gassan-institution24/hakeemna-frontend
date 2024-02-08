@@ -166,16 +166,16 @@ export default function TableNewEditForm({ acl }) {
     try {
       // console.log('data', data);
       axios.patch(endpoints.tables.employeeEngagement(employeeId), { acl: data });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.acl(employeeId),
+        msg: `updated an employee permissions`,
+      });
       enqueueSnackbar('Update success!');
       // router.push(paths.superadmin.subscriptions.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/systemerrors`,
-        msg: `updating access control list of employee ${employeeId}`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       console.error(error);
     }
   });

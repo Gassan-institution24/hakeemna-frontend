@@ -34,7 +34,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
-export default function AddEmegencyAppointment({ refetch, appointment_id, onClose, ...other }) {
+export default function AddEmegencyAppointment({ refetch, appointment, onClose, ...other }) {
   const router = useRouter();
   const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
@@ -103,23 +103,23 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (data._id) {
-        await axios.patch(endpoints.tables.appointment(appointment_id), {
+        await axios.patch(endpoints.tables.appointment(appointment._id), {
           patient: data._id,
         });
       } else {
-        await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment_id), data);
+        await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment._id), data);
       }
-      enqueueSnackbar('Create success!');
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.appointments.root,
+        msg: `booked an appointment <strong>[ ${appointment.code} ]</strong>`,
+      });
+      enqueueSnackbar('Booked successfully!');
       refetch();
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }
@@ -367,5 +367,5 @@ export default function AddEmegencyAppointment({ refetch, appointment_id, onClos
 AddEmegencyAppointment.propTypes = {
   onClose: PropTypes.func,
   refetch: PropTypes.func,
-  appointment_id: PropTypes.string,
+  appointment: PropTypes.object,
 };

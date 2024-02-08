@@ -43,6 +43,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+
+import { socket } from 'src/socket';
 import { endpoints } from 'src/utils/axios';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import axiosHandler from 'src/utils/axios-handler';
@@ -157,36 +159,49 @@ export default function UnitServicesInsuranceView() {
 
   const handleAddRow = useCallback(
     async (id) => {
-      if (data.insurance.some((company) => company._id === id)) {
-        enqueueSnackbar('this company already exist', {
-          variant: 'error',
+      try {
+        const info = [...data.insurance, id];
+        await axiosHandler({
+          method: 'PATCH',
+          path: endpoints.tables.unitservice(data?._id), /// to edit
+          data: { insurance: info },
         });
-        return;
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.insurance.root,
+          msg: `added an insurance`,
+        });
+      } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+        console.error(e);
       }
-      const info = [...data.insurance, id];
-
-      await axiosHandler({
-        method: 'PATCH',
-        path: endpoints.tables.unitservice(data?._id), /// to edit
-        data: { insurance: info },
-      });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage?.length);
     },
-    [dataInPage?.length, table, refetch, data?._id, data?.insurance]
+    [dataInPage?.length, table, refetch, data?._id, data?.insurance, user]
   );
   const handleDeleteRow = useCallback(
     async (id) => {
-      const info = data?.insurance?.filter((company) => company?._id !== id);
-      await axiosHandler({
-        method: 'PATCH',
-        path: endpoints.tables.unitservice(data?._id), /// to edit
-        data: { insurance: info },
-      });
+      try {
+        const info = data?.insurance?.filter((company) => company?._id !== id);
+        await axiosHandler({
+          method: 'PATCH',
+          path: endpoints.tables.unitservice(data?._id), /// to edit
+          data: { insurance: info },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.insurance.root,
+          msg: `removed an insurance`,
+        });
+      } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage?.length);
     },
-    [dataInPage?.length, table, refetch, data?._id, data?.insurance]
+    [dataInPage?.length, table, refetch, data?._id, data?.insurance, user]
   );
 
   const handleFilters = useCallback(
@@ -209,7 +224,6 @@ export default function UnitServicesInsuranceView() {
     },
     [handleFilters]
   );
-  const unitserviceName = data?.name_english;
   if (loading) {
     return <LoadingScreen />;
   }
@@ -372,7 +386,7 @@ export default function UnitServicesInsuranceView() {
           {filteredInsuranceCos?.map((company) => (
             <MenuItem onClick={() => handleAddRow(company._id)}>
               {/* <Iconify icon="ic:baseline-add" /> */}
-              {curLangAr?company?.name_arabic:company?.name_english}
+              {curLangAr ? company?.name_arabic : company?.name_english}
             </MenuItem>
           ))}
         </div>

@@ -86,7 +86,7 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const address = await axios.get('https://geolocation-db.com/json/');
-      
+
       if (currentTable) {
         await axiosHandler({
           method: 'PATCH',
@@ -98,6 +98,11 @@ export default function TableNewEditForm({ currentTable }) {
             ...data,
           },
         });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.tables.employeetypes.root,
+          msg: `updated an employee type <strong>${data.name_english}</strong>`,
+        });
       } else {
         await axiosHandler({
           method: 'POST',
@@ -108,18 +113,18 @@ export default function TableNewEditForm({ currentTable }) {
             ...data,
           },
         });
+        socket.emit('created', {
+          user,
+          link: paths.unitservice.tables.employeetypes.root,
+          msg: `created an employee type <strong>${data.name_english}</strong>`,
+        });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.unitservice.tables.employeetypes.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `creating or updating a new employee type ${data.name_english} into ${data.unit_service}`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       console.error(error);
     }
   });

@@ -69,7 +69,13 @@ export default function CountriesTableRow({
         onClick={onViewRow}
         align="center"
       >
-        {code}
+        <div style={{ display: 'flex', gap: 3 }}>
+          <Iconify
+            icon={employee.online ? 'noto:green-circle' : 'noto:red-circle'}
+            style={{ width: '10px' }}
+          />
+          {code}
+        </div>
       </TableCell>
       <TableCell
         sx={{
@@ -82,9 +88,15 @@ export default function CountriesTableRow({
       >
         {employee.first_name} {employee.family_name}
       </TableCell>
-      <TableCell lang="ar" align="center">{curLangAr ? employee.employee_type?.name_arabic: employee.employee_type?.name_english}</TableCell>
-      <TableCell lang="ar" align="center">{employee.email}</TableCell>
-      <TableCell lang="ar" align="center">{curLangAr ? employee.nationality?.name_arabic: employee.nationality?.name_english}</TableCell>
+      <TableCell lang="ar" align="center">
+        {curLangAr ? employee.employee_type?.name_arabic : employee.employee_type?.name_english}
+      </TableCell>
+      <TableCell lang="ar" align="center">
+        {employee.email}
+      </TableCell>
+      <TableCell lang="ar" align="center">
+        {curLangAr ? employee.nationality?.name_arabic : employee.nationality?.name_english}
+      </TableCell>
       <TableCell lang="ar" align="center">
         <Iconify
           icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'}
@@ -96,7 +108,7 @@ export default function CountriesTableRow({
       </TableCell>
       <TableCell lang="ar" align="center">
         <Label
-                    lang="ar"
+          lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -183,7 +195,9 @@ export default function CountriesTableRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>
+          {t('modifications no')}: {modifications_nums}
+        </Box>
       </CustomPopover>
     </>
   );

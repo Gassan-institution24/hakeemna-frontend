@@ -131,13 +131,7 @@ export default function TableNewEditForm({ currentTable }) {
       router.push(paths.unitservice.departments.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: paths.superadmin.systemErrors,
-        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
-      });
-      socket.emit('error', error);
+      socket.emit('error',{error,user,location:window.location.href})
       console.error(error);
     }
   });

@@ -166,6 +166,7 @@ export default function WorkGroupsTableView({ departmentData }) {
           msg: `activated work group <strong>${row.name_english}</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -187,6 +188,7 @@ export default function WorkGroupsTableView({ departmentData }) {
           msg: `inactivated work group <strong>${row.name_english}</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -208,6 +210,7 @@ export default function WorkGroupsTableView({ departmentData }) {
         msg: `activated many work group in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -239,6 +242,7 @@ export default function WorkGroupsTableView({ departmentData }) {
         msg: `inactivated many work group in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
