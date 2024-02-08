@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { m } from 'framer-motion';
 
 import Box from '@mui/material/Box';
@@ -13,15 +14,13 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 // import { useMockedUser } from 'src/hooks/use-mocked-user';
-
+import { socket } from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 
 import { useTranslate } from 'src/locales';
 import { varHover } from 'src/components/animate';
 import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-
-// ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
@@ -67,6 +66,13 @@ export default function AccountPopover() {
     popover.onClose();
     router.push(path);
   };
+
+  useEffect(() => {
+    socket.emit('sendUser', user);
+    return () => {
+      socket.emit('disconnected');
+    };
+  }, [user]);
 
   return (
     <>

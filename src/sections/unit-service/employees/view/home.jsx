@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -277,6 +277,15 @@ export default function EmployeesTableView() {
     },
     [handleFilters]
   );
+
+  /* eslint-disable */
+  useEffect(() => {
+    socket.on('employeeStatusUpdated', () => {
+      console.log('employee status updated')
+      refetch(); 
+    });
+  }, []);
+  /* eslint-enable */
 
   if (loading) {
     return <LoadingScreen />;
