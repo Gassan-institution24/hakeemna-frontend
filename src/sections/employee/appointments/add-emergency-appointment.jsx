@@ -31,6 +31,7 @@ import {
 } from 'src/api/tables';
 import { useAuthContext } from 'src/auth/hooks';
 
+import { socket } from 'src/socket';
 import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';

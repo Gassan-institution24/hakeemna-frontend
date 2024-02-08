@@ -10,7 +10,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { socket } from 'src/socket';
+
 import Iconify from 'src/components/iconify';
+import { useAuthContext } from 'src/auth/hooks';
 import axios, { endpoints } from 'src/utils/axios';
 import { useSnackbar } from 'src/components/snackbar';
 import { useLocales, useTranslate } from 'src/locales';
@@ -19,6 +22,8 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 export default function AccountChangePassword() {
   const { enqueueSnackbar } = useSnackbar();
+
+  const {user} =useAuthContext()
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
