@@ -20,6 +20,7 @@ import { useSettingsContext } from 'src/components/settings';
 import { _addressBooks } from 'src/_mock';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
+import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
 import axios, { endpoints } from 'src/utils/axios';
 import FormProvider from 'src/components/hook-form';
