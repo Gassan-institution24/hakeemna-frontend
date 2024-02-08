@@ -23,9 +23,6 @@ import { tablePaginationClasses } from '@mui/material/TablePagination';
 
 import { socket } from 'src/socket';
 
-import Iconify from 'src/components/iconify';
-import axiosHandler from 'src/utils/axios-handler';
-
 import {
   emptyRows,
   TableNoData,
@@ -133,6 +130,11 @@ export default function UploadOldPatient({ refetch }) {
       // console.log('data', data);
       // console.log('formData', formData);
       await axios.post(endpoints.tables.newOldPatient, formData);
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.oldPatient,
+        msg: `uploaded an old patient data`,
+      })
       refetch();
       reset();
       enqueueSnackbar('Uploaded success!');

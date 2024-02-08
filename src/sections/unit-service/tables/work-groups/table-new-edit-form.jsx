@@ -113,6 +113,11 @@ export default function TableNewEditForm({ currentTable }) {
             ...data,
           },
         });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.tables.workgroups.root,
+          msg: `updated a work group <strong>${data.name_english}</strong>`,
+        })
       } else {
         await axiosHandler({
           method: 'POST',
@@ -123,6 +128,11 @@ export default function TableNewEditForm({ currentTable }) {
             ...data,
           },
         });
+        socket.emit('created', {
+          user,
+          link: paths.unitservice.tables.workgroups.root,
+          msg: `created a work group <strong>${data.name_english}</strong>`,
+        })
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));

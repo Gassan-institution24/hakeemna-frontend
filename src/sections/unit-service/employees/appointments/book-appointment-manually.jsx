@@ -108,14 +108,17 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
         });
       } else {
         await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment._id), data);
+        socket.emit('register', {
+          user,
+          link: paths.unitservice.appointments.root,
+          msg: `registered an appointment`,
+        });
       }
       socket.emit('updated', {
         data,
         user,
-        link: `/dashboard/unitservices/${appointment.unit_service._id}/appointments`,
-        msg: `Booking appointment <strong>${appointment.code}</strong> of <strong>${
-          appointment?.unit_service?.name_english || ''
-        }</strong> unit service`,
+        link: paths.unitservice.employees.root,
+        msg: `Booked an appointment <strong>${appointment.code}</strong>`,
       });
       enqueueSnackbar('Create success!');
       refetch();

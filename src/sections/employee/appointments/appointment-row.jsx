@@ -281,7 +281,7 @@ export default function AppointmentsTableRow({
             color="info"
             onClick={() => {
               confirmDelayOne.onFalse();
-              onDelayRow(_id, minToDelay);
+              onDelayRow(row, minToDelay);
             }}
           >
             {t('delay')}         

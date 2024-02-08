@@ -43,6 +43,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import { socket } from 'src/socket';
 import { endpoints } from 'src/utils/axios';
 import { useGetUSRooms } from 'src/api/tables'; /// edit
 import { useAuthContext } from 'src/auth/hooks';
@@ -157,57 +158,93 @@ export default function RoomsTableView() {
   );
 
   const handleActivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.room(id)}/updatestatus`, /// edit
-        data: { status: 'active' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
+          data: { status: 'active' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.tables.rooms.root,
+          msg: `activated a room <strong>${row.name_english}</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user]
   );
   const handleInactivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.room(id)}/updatestatus`, /// edit
-        data: { status: 'inactive' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
+          data: { status: 'inactive' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.tables.rooms.root,
+          msg: `inactivated a room <strong>${row.name_english}</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user]
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.rooms}/updatestatus`, /// edit
-      data: { status: 'active', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.rooms}/updatestatus`, /// edit
+        data: { status: 'active', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.tables.rooms.root,
+        msg: `activated many rooms`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: roomsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user]);
 
   const handleInactivateRows = useCallback(async () => {
+  try{
     await axiosHandler({
       method: 'PATCH',
       path: `${endpoints.tables.rooms}/updatestatus`, /// edit
       data: { status: 'inactive', ids: table.selected },
     });
+    socket.emit('updated', {
+        user,
+        link: paths.unitservice.tables.rooms.root,
+        msg: `inactivated many rooms`,
+      })
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: roomsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user]);
 
   const handleEditRow = useCallback(
     (id) => {
@@ -402,8 +439,8 @@ export default function RoomsTableView() {
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row._id)}
-                        onInactivate={() => handleInactivate(row._id)}
+                        onActivate={() => handleActivate(row)}
+                        onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}

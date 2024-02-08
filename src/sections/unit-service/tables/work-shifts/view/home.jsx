@@ -19,6 +19,7 @@ import { useTranslate } from 'src/locales';
 import { useRouter } from 'src/routes/hooks';
 import { useAuthContext } from 'src/auth/hooks';
 
+import { socket } from 'src/socket';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
@@ -155,57 +156,93 @@ export default function WorkGroupsTableView() {
   );
 
   const handleActivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.workshift(id)}/updatestatus`, /// edit
-        data: { status: 'active' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.workshift(row._id)}/updatestatus`, /// edit
+          data: { status: 'active' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.tables.workshifts.root,
+          msg: `activated a work shift <strong>${row.name_english}</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user]
   );
   const handleInactivate = useCallback(
-    async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.workshift(id)}/updatestatus`, /// edit
-        data: { status: 'inactive' },
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.workshift(row._id)}/updatestatus`, /// edit
+          data: { status: 'inactive' },
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.tables.workshifts.root,
+          msg: `inactivated a work shift <strong>${row.name_english}</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user]
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.workshifts}/updatestatus`, /// edit
-      data: { status: 'active', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.workshifts}/updatestatus`, /// edit
+        data: { status: 'active', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.tables.workshifts.root,
+        msg: `activated many work shifts`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: workShiftsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, workShiftsData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, workShiftsData, refetch, user]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.workshifts}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.workshifts}/updatestatus`, /// edit
+        data: { status: 'inactive', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.tables.workshifts.root,
+        msg: `inactivated many work shifts`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: workShiftsData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, workShiftsData, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, workShiftsData, refetch, user]);
 
   const handleEditRow = useCallback(
     (id) => {
@@ -398,8 +435,8 @@ export default function WorkGroupsTableView() {
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row._id)}
-                        onInactivate={() => handleInactivate(row._id)}
+                        onActivate={() => handleActivate(row)}
+                        onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}

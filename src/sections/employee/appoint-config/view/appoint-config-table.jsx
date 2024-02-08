@@ -20,6 +20,8 @@ import { paths } from 'src/routes/paths';
 import { useRouter, useParams } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
+import { socket } from 'src/socket';
+import { useAuthContext } from 'src/auth/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import ACLGuard from 'src/auth/guard/acl-guard';
@@ -72,6 +74,8 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     { id: 'status', label: t('status') },
     { id: '' },
   ];
+
+  const { user } = useAuthContext();
 
   const theme = useTheme();
 
@@ -142,62 +146,99 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   );
 
   const handleCancelRow = useCallback(
-    async (_id) => {
-      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(_id)}/cancel` });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.appointment(row._id)}/cancel`,
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.employees.appointmentconfig.root(
+            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+          ),
+          msg: `canceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user]
   );
 
   const handleUnCancelRow = useCallback(
-    async (_id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointment(_id)}/uncancel`,
-      });
+    async (row) => {
+      try {
+        await axiosHandler({
+          method: 'PATCH',
+          path: `${endpoints.tables.appointment(row._id)}/uncancel`,
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.employees.appointmentconfig.root(
+            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+          ),
+          msg: `uncanceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
+        });
+      } catch (e) {
+        console.error(e);
+      }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch]
+    [dataInPage.length, table, refetch, user]
   );
 
   const handleCancelRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.appointments}/cancel`,
-      data: { ids: table.selected },
-    });
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.appointments}/cancel`,
-      data: { ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointments}/cancel`,
+        data: { ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.appointmentconfig.root(
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+        ),
+        msg: `canceled many appointment configurations`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: appointmentConfigData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table]);
+  }, [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table, user]);
   const handleUnCancelRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.appointments}/uncancel`,
-      data: { ids: table.selected },
-    });
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.appointments}/uncancel`,
-      data: { ids: table.selected },
-    });
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointments}/uncancel`,
+        data: { ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.appointmentconfig.root(
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+        ),
+        msg: `uncanceled an appointment configurations`,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: appointmentConfigData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table]);
+  }, [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table, user]);
   const handleAdd = useCallback(() => {
     router.push(paths.employee.appointmentconfiguration.new);
   }, [router]);
@@ -365,8 +406,8 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onViewRow={() => handleViewRow(row._id)}
-                        onCancelRow={() => handleCancelRow(row._id)}
-                        onUnCancelRow={() => handleUnCancelRow(row._id)}
+                        onCancelRow={() => handleCancelRow(row)}
+                        onUnCancelRow={() => handleUnCancelRow(row)}
                       />
                     ))}
 

@@ -121,16 +121,16 @@ export default function TableNewEditForm() {
     }
   };
 
-  const handleEmployment = async (id) => {
+  const handleEmployment = async (row) => {
     try {
       await axios.post(endpoints.tables.employeeEngagements, {
         unit_service: unitServiceID,
-        employee: id,
+        employee: row._id,
       });
       socket.emit('created', {
         user,
-        link: `/dashboard/unitservices/${unitServiceID}/employees`,
-        msg: `creating employee <strong>${id}</strong> into <strong>${unitServiceID}</strong> unit service`,
+        link: paths.unitservice.employees.root,
+        msg: `created an employee <strong>${row.first_name}</strong>`,
       });
       enqueueSnackbar(t('employment successfully!'));
     } catch (e) {
@@ -250,7 +250,7 @@ export default function TableNewEditForm() {
             <ExistEmployeesRow
               key={row.id}
               row={row}
-              onEmploymentRow={() => handleEmployment(row._id)}
+              onEmploymentRow={() => handleEmployment(row)}
             />
           ))}
 

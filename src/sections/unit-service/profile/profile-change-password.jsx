@@ -16,6 +16,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import axios, { endpoints } from 'src/utils/axios';
+import { paths } from 'src/routes/paths';
 // ----------------------------------------------------------------------
 
 export default function AccountChangePassword() {
@@ -63,6 +64,11 @@ export default function AccountChangePassword() {
       const requestData = { passwordCurrent, password, confirmPassword };
 
       const response = await axios.patch(endpoints.auth.updatepassword, requestData);
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.profile.root,
+        msg: `updated the service unit profile`,
+      })
       // console.log(response);
       if (response.status === 201) {
         reset();

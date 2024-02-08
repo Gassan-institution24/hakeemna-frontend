@@ -166,6 +166,11 @@ export default function TableNewEditForm({ acl }) {
     try {
       // console.log('data', data);
       axios.patch(endpoints.tables.employeeEngagement(employeeId), { acl: data });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.acl(employeeId),
+        msg: `updated an employee permissions`,
+      });
       enqueueSnackbar('Update success!');
       // router.push(paths.superadmin.subscriptions.root);
       console.info('DATA', data);

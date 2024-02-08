@@ -93,7 +93,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await axios.post(endpoints.tables.appointments, {
+      const appoint = await axios.post(endpoints.tables.appointments, {
         ...data,
         emergency: true,
         unit_service:
@@ -101,6 +101,11 @@ export default function BookManually({ onClose, refetch, ...other }) {
             ._id,
         department: workGroupsData.filter((item) => item._id === data.work_group)?.[0]?.department
           ._id,
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.appointments.root,
+        msg: `created an emergency appointment <strong>[ ${appoint?.data?.code} ]</strong>`,
       });
       reset();
       enqueueSnackbar('Create success!');

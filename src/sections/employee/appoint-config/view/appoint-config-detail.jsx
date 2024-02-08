@@ -197,6 +197,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ImmediateEdit: false,
       });
       enqueueSnackbar('Updated successfully!');
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.appointmentconfig.root(
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+        ),
+        msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
+      });
       confirm.onFalse();
       router.push(paths.employee.appointmentconfiguration.root);
       saving.onFalse();
@@ -211,6 +218,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
         ...dataToUpdate,
         ImmediateEdit: true,
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.appointmentconfig.root(
+          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+        ),
+        msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
       });
       enqueueSnackbar('Updated successfully!');
       router.push(paths.employee.appointmentconfiguration.root);
@@ -246,8 +260,15 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         //   department: id,
         // });
       } else {
-        await axios.post(endpoints.tables.appointmentconfigs, data);
+        const config = await axios.post(endpoints.tables.appointmentconfigs, data);
         enqueueSnackbar('Added Successfully!');
+        socket.emit('created', {
+          user,
+          link: paths.unitservice.employees.appointmentconfig.root(
+            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+          ),
+          msg: `created an appointment configuration <strong>[ ${config.data?.code} ]</strong>`,
+        })
         router.push(paths.employee.appointmentconfiguration.root);
       }
       // reset();

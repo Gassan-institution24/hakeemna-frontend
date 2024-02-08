@@ -24,6 +24,7 @@ import {
 import { fData } from 'src/utils/format-number';
 import { useLocales, useTranslate } from 'src/locales';
 import axios, { endpoints, fetcher } from 'src/utils/axios';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -142,6 +143,11 @@ export default function AccountGeneral({ unitServiceData }) {
           )}/updatelogo`,
           formData
         );
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.profile.root,
+          msg: `uploaded logo to service unit profile`,
+        })
       }
       await axios.patch(
         endpoints.tables.unitservice(
@@ -150,6 +156,11 @@ export default function AccountGeneral({ unitServiceData }) {
         dataToSend
       );
       enqueueSnackbar('Update success!');
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.profile.root,
+        msg: `updated the service unit profile`,
+      })
       refetch();
       console.info('DATA', dataToSend);
     } catch (error) {

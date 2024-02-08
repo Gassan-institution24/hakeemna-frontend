@@ -154,8 +154,8 @@ export default function TableNewEditForm({ currentTable }) {
       socket.emit('created', {
         data,
         user,
-        link: `/dashboard/unitservices/${data.unit_service}/employees`,
-        msg: `creating employee <strong>${data.name_english}</strong> in <strong>${data.unit_service}</strong> unit service`,
+        link: paths.unitservice.employees.root,
+        msg: `created an employee <strong>${data.name_english}</strong>`,
       });
       reset();
       router.push(paths.unitservice.employees.root());

@@ -209,6 +209,11 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ...dataToUpdate,
         ImmediateEdit: false,
       });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.appointmentconfig.root(id),
+        msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
+      });
       enqueueSnackbar(t('updated successfully!'));
       saving.onFalse();
       confirm.onFalse();
@@ -224,6 +229,11 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
         ...dataToUpdate,
         ImmediateEdit: true,
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.employees.appointmentconfig.root(id),
+        msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
       });
       updating.onFalse();
       confirm.onFalse();
@@ -260,8 +270,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           socket.emit('updated', {
             data,
             user,
-            link: `/dashboard/unitservices/${data.unit_service}/appoint-config`,
-            msg: `updating appointment configuration ${appointmentConfigData._id} into <strong>${data.unit_service}</strong> unit service`,
+            link: paths.unitservice.employees.appointmentconfig.root(id),
+            msg: `updated an appointment configuration ${appointmentConfigData.code}`,
           });
           router.push(paths.unitservice.employees.appointmentconfig.root(id));
         }
@@ -271,8 +281,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         socket.emit('created', {
           data,
           user,
-          link: `/dashboard/unitservices/${data.unit_service}/appoint-config`,
-          msg: `creating appointment config <strong>${data.name_english}</strong> into <strong>${data.unit_service}</strong> unit service`,
+          link: paths.unitservice.employees.appointmentconfig.root(id),
+          msg: `created an appointment config <strong>${data.name_english}</strong>`,
         });
         updating.onFalse();
         enqueueSnackbar(t('added successfully!'));
