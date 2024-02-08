@@ -3,6 +3,9 @@ import * as Yup from 'yup';
 import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useTranslate } from 'src/locales';
+import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
+
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -26,7 +29,26 @@ export default function AccountGeneral({ data, refetch }) {
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
   const { tableData } = useGetCities();
+  const { t } = useTranslate();
+  const [em_phone, setEMphone] = useState(data.mobile_num1);
+  const [em_phone2, setEMphone2] = useState(data.mobile_num2);
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
 
+    if (arabicRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
+  const handleEnglishInputChange = (event) => {
+    // Validate the input based on English language rules
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
+
+    if (englishRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,7 +65,9 @@ export default function AccountGeneral({ data, refetch }) {
   }, [user.patient.identification_num]);
   const UpdateUserSchema = Yup.object().shape({
     first_name: Yup.string(),
-    last_name: Yup.string(),
+    middle_name: Yup.string(),
+    name_arabic: Yup.string(),
+    family_name: Yup.string(),
     email: Yup.string(),
     mobile_num1: Yup.string(),
     mobile_num2: Yup.string(),
@@ -53,6 +77,7 @@ export default function AccountGeneral({ data, refetch }) {
     address: Yup.string(),
     sport_exercises: Yup.string(),
     smoking: Yup.string(),
+    other_medication_notes: Yup.string(),
     profile_picture: Yup.string(),
   });
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
@@ -74,7 +99,9 @@ export default function AccountGeneral({ data, refetch }) {
 
   const defaultValues = {
     first_name: data?.first_name || '',
-    last_name: data?.last_name || '',
+    middle_name: data?.middle_name || '',
+    name_arabic: data?.name_arabic || '',
+    family_name: data?.family_name || '',
     email: data?.email || '',
     mobile_num1: data?.mobile_num1 || '',
     mobile_num2: data?.mobile_num2 || '',
@@ -84,6 +111,7 @@ export default function AccountGeneral({ data, refetch }) {
     address: data?.address || '',
     sport_exercises: data?.sport_exercises || '',
     smoking: data?.smoking || '',
+    other_medication_notes: '',
     profile_picture: data?.profile_picture?.replace(/\\/g, '//') || '',
   };
 
@@ -144,7 +172,7 @@ export default function AccountGeneral({ data, refetch }) {
     }
     try {
       const response = await axios.patch(`${endpoints.tables.user}${user?.patient._id}`, formData);
-      enqueueSnackbar('Profile updated successfully', { variant: 'success' });
+      enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
       refetch();
     } catch (error) {
       // console.log(error.message);
@@ -192,15 +220,55 @@ export default function AccountGeneral({ data, refetch }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="first_name" label="First Name" />
-              <RHFTextField name="last_name" label="Last Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="mobile_num1" label="Mobile Number" />
-              <RHFTextField name="mobile_num2" label="Alternative Mobile Number" />
-              <RHFTextField name="address" label="Address" />
+              <RHFTextField
+                name="first_name"
+                label={t('First Name')}
+                onChange={handleEnglishInputChange}
+              />
+              <RHFTextField
+                name="middle_name"
+                label={t('Middle name')}
+                onChange={handleEnglishInputChange}
+              />
+              <RHFTextField
+                name="name_arabic"
+                label={t('Name in arabic')}
+                onChange={handleArabicInputChange}
+              />
+              <RHFTextField
+                name="family_name"
+                label={t('Last Name')}
+                onChange={handleEnglishInputChange}
+              />
+              <MuiTelInput
+                label={`${t('Mobile Number')} *`}
+                forceCallingCode
+                value={em_phone}
+                onChange={(newPhone) => {
+                  matchIsValidTel(newPhone);
+                  setEMphone(newPhone);
+                  methods.setValue('mobile_num1', newPhone);
+                }}
+              />
+              <MuiTelInput
+                label={`${t('Alternative Mobile Number')} *`}
+                forceCallingCode
+                value={em_phone2}
+                onChange={(newPhone2) => {
+                  matchIsValidTel(newPhone2);
+                  setEMphone2(newPhone2);
+                  methods.setValue('mobile_num2', newPhone2);
+                }}
+              />
+              <RHFTextField
+                name="email"
+                label={t('Email Address')}
+                onChange={handleArabicInputChange}
+              />
+              <RHFTextField name="address" label={t('Address')} />
 
               <RHFSelect
-                label="nationality"
+                label={t('nationality')}
                 fullWidth
                 name="nationality"
                 InputLabelProps={{ shrink: true }}
@@ -214,7 +282,7 @@ export default function AccountGeneral({ data, refetch }) {
               </RHFSelect>
 
               <RHFSelect
-                label="country"
+                label={t('country')}
                 fullWidth
                 name="country"
                 InputLabelProps={{ shrink: true }}
@@ -229,7 +297,7 @@ export default function AccountGeneral({ data, refetch }) {
               </RHFSelect>
 
               <RHFSelect
-                label="city"
+                label={t('city')}
                 fullWidth
                 name="city"
                 InputLabelProps={{ shrink: true }}
@@ -243,7 +311,7 @@ export default function AccountGeneral({ data, refetch }) {
               </RHFSelect>
 
               <RHFSelect
-                label="Sport Exercises"
+                label={t('Sport Exercises')}
                 fullWidth
                 name="sport_exercises"
                 InputLabelProps={{ shrink: true }}
@@ -257,7 +325,7 @@ export default function AccountGeneral({ data, refetch }) {
               </RHFSelect>
 
               <RHFSelect
-                label="Smoking"
+                label={t('Smoking')}
                 fullWidth
                 name="smoking"
                 InputLabelProps={{ shrink: true }}
@@ -269,11 +337,12 @@ export default function AccountGeneral({ data, refetch }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
+              <RHFTextField name="other_medication_notes" label={t('More information')} />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Save Changes
+                {t('Save Changes')}
               </LoadingButton>
             </Stack>
           </Card>

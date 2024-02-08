@@ -2,16 +2,12 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useState, useCallback } from 'react';
 import Tab from '@mui/material/Tab';
 import { paths } from 'src/routes/paths';
-import { useTranslate } from 'src/locales';
+import { useTranslate, useLocales } from 'src/locales';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-
-import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
 import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import Box from '@mui/material/Box';
 import Iconify from 'src/components/iconify';
-import { useSettingsContext } from 'src/components/settings';
-import { useGetPatient } from 'src/api/tables';
 import Medicalreports from '../medicalreports';
 import OldMedicalReports from '../oldmedicalrepots';
 import Bmi from '../bmi';
@@ -20,6 +16,8 @@ import Bmi from '../bmi';
 export default function UserCardList() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const [currentTab, setCurrentTab] = useState('Medicalreports');
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
@@ -28,17 +26,17 @@ export default function UserCardList() {
   const TABS = [
     {
       value: 'Medicalreports',
-      label: 'Medical Reports',
+      label: t('Medical Reports'),
       icon: <Iconify icon="solar:user-id-bold" width={24} />,
     },
     {
       value: 'oldmedicaloeports',
-      label: 'Old Medical Reports',
+      label: t('Old Medical Reports'),
       icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
     },
     {
       value: 'bmi',
-      label: 'BMI',
+      label: `${curLangAr ? 'مؤشر كتلة الجسم' : 'BMI'}`,
       icon: <Iconify icon="fluent:calculator-24-filled" width={24} />,
     },
   ];

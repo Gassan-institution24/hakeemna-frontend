@@ -3,7 +3,6 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { _userAbout } from 'src/_mock';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import ProfileHome from '../profile-home';
@@ -28,7 +27,7 @@ export default function UserProfileView() {
           mb: { xs: 3, md: 5 },
         }}
       />
-      {currentTab === 'profile' && <ProfileHome info={_userAbout} />}
+      {currentTab === 'profile' && <ProfileHome />}
     </Container>
   );
 }

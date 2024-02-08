@@ -3,6 +3,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
+import { useTranslate, useLocales } from 'src/locales';
+
 import Avatar from '@mui/material/Avatar';
 import {
   Page,
@@ -21,7 +23,9 @@ import Doclogo from '../../components/logo/doc.png';
 export default function Prescriptions() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const { user } = useAuthContext();
-
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   function calculateAge(birthDate) {
     const today = new Date();
     const dob = new Date(birthDate);
@@ -191,16 +195,16 @@ export default function Prescriptions() {
                 <Iconify icon="streamline-emojis:pill" />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="Name" secondary={med.medicine.trade_name} sx={{ ml: 2 }} />
-            <ListItemText primary="Dose" secondary={med.dose} />
-            <ListItemText primary="Frequently" secondary={med.frequently} />
+            <ListItemText primary= {t('Name')} secondary={med.medicine.trade_name} sx={{ ml: 2 }} />
+            <ListItemText primary= {t('Dose')} secondary={med.dose} />
+            <ListItemText primary= {t('Frequently')} secondary={med.frequently} />
             <ListItemText
-              primary="Start Date"
+              primary={t('Start Date')}
               secondary={fDate(med.startdate)}
               sx={{ display: { xs: 'none', md: 'inline' } }}
             />
             <ListItemText
-              primary="End Date"
+              primary= {t('End Date')}
               secondary={fDate(med.enddate)}
               sx={{ display: { xs: 'none', md: 'inline' } }}
             />
@@ -210,7 +214,7 @@ export default function Prescriptions() {
             >
               {({ loading }) =>
                 loading ? (
-                  'Loading document...'
+                t('Loading document...')
                 ) : (
                   <Iconify
                     icon="teenyicons:pdf-outline"

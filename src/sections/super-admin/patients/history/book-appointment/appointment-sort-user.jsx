@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import { useTranslate, useLocales } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -11,6 +12,9 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function JobSort({ sort, onSort, sortOptions }) {
   const popover = usePopover();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const { t } = useTranslate();
   return (
     <>
       <Button
@@ -24,7 +28,8 @@ export default function JobSort({ sort, onSort, sortOptions }) {
         }
         sx={{ fontWeight: 'fontWeightSemiBold' }}
       >
-        Sort By:
+        {t('Sort By:')}
+        
         <Box
           component="span"
           sx={{
@@ -41,7 +46,7 @@ export default function JobSort({ sort, onSort, sortOptions }) {
         {sortOptions.map((option) => (
           <MenuItem
             key={option.value}
-            selected={option.value === sort}
+            selected={option.value === sort } 
             onClick={() => {
               popover.onClose();
               onSort(option.value);

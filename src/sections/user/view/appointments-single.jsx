@@ -18,11 +18,11 @@ const { t } = useTranslate();
 
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
     <CustomBreadcrumbs
-      heading={t('Book appointments')}
+      heading={t('Book appointment')}
       links={[
         { name: t('dashboard'), href: paths.dashboard.root },
         { name: t('user'), href: paths.dashboard.user.root },
-        { name: t('book appointments') },
+        { name: t('book appointment') },
       ]}
       sx={{ mb: { xs: 3, md: 5 } }}
     />

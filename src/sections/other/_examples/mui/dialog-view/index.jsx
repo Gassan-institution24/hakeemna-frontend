@@ -10,7 +10,6 @@ import FormDialog from './form-dialog';
 import AlertDialog from './alert-dialog';
 import ScrollDialog from './scroll-dialog';
 import SimpleDialogs from './simple-dialog';
-import MaxWidthDialog from './max-width-dialog';
 import ComponentBlock from '../../component-block';
 import FullScreenDialog from './full-screen-dialog';
 import TransitionsDialog from './transitions-dialog';

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Box, Button, Container, Typography } from '@mui/material';
+import { useTranslate, useLocales } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
@@ -8,6 +9,9 @@ import Image from 'src/components/image/image';
 import Emergencypic from '../../components/logo/doc.png';
 
 export default function Emergency() {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const test = () => {
     alert('Dont :-(');
   };
@@ -39,12 +43,12 @@ export default function Emergency() {
             fontSize: { md: 20, xs: 14 },
           }}
         >
-          Through our doctor, we can provide advice electronically by contacting you to cover your
-          consultation in the field of general medicine and children.
+          {curLangAr ? 'يمكننا من خلال طبيبنا تقديم الاستشارة الكترونيا من خلال التواصل معك لتغطية استشارتك في مجال الطب العام والأطفال.' : 'Through our doctor, we can provide advice electronically by contacting you to cover you consultation in the field of general medicine and children.'}
+
         </Typography>
       </Box>
       <Typography variant="h3" sx={{ position: 'relative', top: '-20px' }}>
-        The types of emergency of we provide
+        {curLangAr ? 'احجز موعد طارئ' : 'The types of emergency of we provide'}
       </Typography>
       <Box
         sx={{
@@ -168,7 +172,8 @@ export default function Emergency() {
               }}
               icon="carbon:person"
             />
-            Private consultation covered by patient
+            {curLangAr ? 'استشارة مدفوة من المستخدم' : 'Private consultation covered by patient'}
+            
           </Button>
           <Button
             onClick={test}
@@ -197,7 +202,7 @@ export default function Emergency() {
               }}
               icon="guidance:card"
             />{' '}
-            Consultation covered by insurance
+            {curLangAr ? 'استشارة مدفوعة من شركة تأمين' : 'Consultation covered by insurance'}
           </Button>
           <Button
             onClick={test}
@@ -226,7 +231,7 @@ export default function Emergency() {
               }}
               icon="fluent:location-28-regular"
             />{' '}
-            Medical emergency near me
+            {curLangAr ? 'عيادات بالقرب مني' : 'Medical emergency near me'}
           </Button>
         </Box>
       </Box>

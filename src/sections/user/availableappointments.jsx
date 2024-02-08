@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate, useLocales } from 'src/locales';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -47,9 +48,11 @@ const defaultFilters = {
 
 export default function AppointmentBooking() {
   const settings = useSettingsContext();
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const { t } = useTranslate();
   const openFilters = useBoolean();
-const {user} = useAuthContext()
+  const { user } = useAuthContext();
   const [sortBy, setSortBy] = useState('latest');
 
   const [search, setSearch] = useState({
@@ -68,9 +71,9 @@ const {user} = useAuthContext()
   const [filters, setFilters] = useState(defaultFilters);
 
   const sortOptions = [
-    { value: 'latest', label: 'Latest' },
-    { value: 'oldest', label: 'Oldest' },
-    { value: 'rate', label: 'Ratings' },
+    { value: 'latest', label: t('Latest') },
+    { value: 'oldest', label: t('Oldest') },
+    { value: 'rate', label: t('Ratings') },
   ];
 
   const dateError =
@@ -211,9 +214,13 @@ const {user} = useAuthContext()
         {canReset && renderResults}
       </Stack>
 
-      {notFound && <EmptyContent filled title="No Data" sx={{ py: 10 }} />}
+      {notFound && <EmptyContent filled title={t("No Data")} sx={{ py: 10 }} />}
 
-      <AppointmentList patientData={user?.patient?._id} refetch={refetch} appointments={dataFiltered} />
+      <AppointmentList
+        patientData={user?.patient?._id}
+        refetch={refetch}
+        appointments={dataFiltered}
+      />
     </Container>
   );
 }
@@ -221,14 +228,7 @@ const {user} = useAuthContext()
 // ----------------------------------------------------------------------
 
 const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
-  const {
-    appointtypes,
-    payment_methods,
-    start_date,
-    end_date,
-    unitServices,
-    countries,
-  } = filters;
+  const { appointtypes, payment_methods, start_date, end_date, unitServices, countries } = filters;
 
   // SORT BY
   if (sortBy === 'latest') {
@@ -272,4 +272,3 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
 
   return inputData;
 };
-

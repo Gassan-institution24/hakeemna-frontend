@@ -35,9 +35,8 @@ const UserAppointmentsPage = lazy(() => import('src/pages/dashboard/user/appoint
 const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
 const Share = lazy(() => import('src/pages/dashboard/user/share'));
 const FinancilMovment = lazy(() => import('src/pages/dashboard/user/FinancilMovment'));
-const UserListPage = lazy(() => import('src/pages/dashboard/user/list'));
+const PatientPrescriptions = lazy(() => import('src/pages/dashboard/user/prescriptions'));
 const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
-const UserCreatePage = lazy(() => import('src/pages/dashboard/user/new'));
 const UserEditPage = lazy(() => import('src/pages/dashboard/user/edit'));
 const Medicalreports = lazy(() => import('src/pages/dashboard/user/Medicalreports'));
 const Emergency = lazy(() => import('src/pages/dashboard/user/emergency'));
@@ -56,10 +55,10 @@ const Oldpatientsdata = lazy(() => import('src/sections/user/oldpatientsdata'));
 // const JobCreatePage = lazy(() => import('src/pages/dashboard/job/new'));
 // const JobEditPage = lazy(() => import('src/pages/dashboard/job/edit'));
 // TOUR
-const TourDetailsPage = lazy(() => import('src/pages/dashboard/tour/details'));
-const TourListPage = lazy(() => import('src/pages/dashboard/tour/list'));
-const TourCreatePage = lazy(() => import('src/pages/dashboard/tour/new'));
-const TourEditPage = lazy(() => import('src/pages/dashboard/tour/edit'));
+// const TourDetailsPage = lazy(() => import('src/pages/dashboard/tour/details'));
+// const TourListPage = lazy(() => import('src/pages/dashboard/tour/list'));
+// const TourCreatePage = lazy(() => import('src/pages/dashboard/tour/new'));
+// const TourEditPage = lazy(() => import('src/pages/dashboard/tour/edit'));
 // FILE MANAGER
 // const FileManagerPage = lazy(() => import('src/pages/dashboard/file-manager'));
 // APP
@@ -101,12 +100,12 @@ export const userRoutes = [
           { path: 'medicalreports', element: <Medicalreports /> },
           { path: 'emergency', element: <Emergency /> },
           { path: 'watingroom', element: <Watingroom /> },
-          { path: 'prescriptions', element: <UserListPage /> },
+          { path: 'prescriptions', element: <PatientPrescriptions /> },
           { path: 'bmi', element: <BMI /> },
           { path: 'oldpatientdata', element: <Oldpatientsdata /> },
           { path: 'appointments', element: <UserAppointmentsPage /> },
           { path: 'bookappointment', element: <Booking /> },
-          { path: 'new', element: <UserCreatePage /> },
+          // { path: 'new', element: <UserCreatePage /> },
           { path: ':id/edit', element: <UserEditPage /> },
           { path: 'account', element: <UserAccountPage /> },
           { path: 'share', element: <Share /> },

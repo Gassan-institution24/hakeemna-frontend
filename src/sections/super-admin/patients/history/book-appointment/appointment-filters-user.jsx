@@ -9,14 +9,12 @@ import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
-import Checkbox from '@mui/material/Checkbox';
-import { useTranslate } from 'src/locales';
+import { useTranslate, useLocales } from 'src/locales';
 
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { MenuItem } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Rating from '@mui/material/Rating';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
@@ -45,7 +43,9 @@ export default function AppointmentsFilters({
   dateError,
 }) {
 
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const { t } = useTranslate();
   const handleFilterAppointtypes = useCallback(
     (e) => {
       onFilters('appointtypes', e.target.value);
@@ -83,7 +83,6 @@ export default function AppointmentsFilters({
     },
     [onFilters]
   );
-  const { t } = useTranslate();
 
   const renderHead = (
     <Stack
@@ -93,7 +92,7 @@ export default function AppointmentsFilters({
       sx={{ py: 2, pr: 1, pl: 2.5 }}
     >
       <Typography variant="h6" sx={{ flexGrow: 1 }}>
-        Filters
+       {t('Filters')}
       </Typography>
 
       <Tooltip title="Reset">
@@ -113,13 +112,13 @@ export default function AppointmentsFilters({
   const renderDate = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-        Time
+       {t('Time')}
       </Typography>
       <Stack spacing={2.5}>
-        <DatePicker label="From" value={filters.start_date} onChange={handleFilterStartDate} />
+        <DatePicker label= {t('From')} value={filters.start_date} onChange={handleFilterStartDate} />
 
         <DatePicker
-          label="To"
+          label= {t('To')}
           value={filters.end_date}
           onChange={handleFilterEndDate}
           slotProps={{
@@ -136,7 +135,7 @@ export default function AppointmentsFilters({
   const renderappointtypes = (
     <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Appointment Types
+        {t('Appointment Types')}
       </Typography>
       <Select onChange={handleFilterAppointtypes} name="appointment_type">
         {appointmentTypeOptions.map((option) => (
@@ -150,7 +149,7 @@ export default function AppointmentsFilters({
   const renderCountries = (
     <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Countries
+        {t('Countries')}
       </Typography>
       <Select onChange={handleFilterCountries} name="country">
         {countriesOptions.map((option) => (
@@ -165,7 +164,7 @@ export default function AppointmentsFilters({
   const renderInsurance = (
     <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        insurance
+        {t('insurance')}
       </Typography>
       <Select onChange={handleFiltedInsurance} name="insurance">
         {insuranseCosData.map((option) => (
@@ -176,30 +175,6 @@ export default function AppointmentsFilters({
       </Select>
     </FormControl>
   );
-  // const renderUnitServices = (
-  //   <Stack>
-  //     <Typography variant="subtitle2" sx={{ mb: 1 }}>
-  //       Unit services
-  //     </Typography>
-  //     {ratekData.map((option) => (
-  //       <FormControlLabel
-  //         key={option._id}
-  //         control={
-  //           <Radio
-  //             checked={option._id === filters.unitServices}
-  //             onClick={() => handleFilterUnitServices(option._id)}
-  //           />
-  //         }
-  //         label={option.Rate}
-  //         sx={{
-  //           ...(option === 'all' && {
-  //             textTransform: 'capitalize',
-  //           }),
-  //         }}
-  //       />
-  //     ))}
-  //   </Stack>
-  // );
 
   return (
     <>
@@ -213,7 +188,7 @@ export default function AppointmentsFilters({
         }
         onClick={onOpen}
       >
-        Filters
+        {t('Filters')}
       </Button>
 
       <Drawer

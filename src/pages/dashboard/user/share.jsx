@@ -1,14 +1,17 @@
 import { Helmet } from 'react-helmet-async';
+import { useTranslate } from 'src/locales';
 
 import { Share } from 'src/sections/user/view';
 
 // ----------------------------------------------------------------------
 
 export default function Sharedoctorna() {
+  const { t } = useTranslate();
+
   return (
     <>
       <Helmet>
-        <title>Share</title>
+        <title> {t('Share')} </title>
       </Helmet>
 
       <Share />
