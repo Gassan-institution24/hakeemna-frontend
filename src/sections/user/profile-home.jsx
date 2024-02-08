@@ -5,12 +5,16 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import Iconify from 'src/components/iconify';
 import Divider from '@mui/material/Divider';
+import { useTranslate } from 'src/locales';
+
 import { useAuthContext } from 'src/auth/hooks';
 import Image from 'src/components/image/image';
 // ----------------------------------------------------------------------
 
 export default function ProfileHome() {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const { t } = useTranslate();
+
   function calculateAge(birthDate) {
     if (birthDate) {
       const today = new Date();
@@ -32,13 +36,12 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="guidance:no-drug-or-substance"
-            />{' '}
-            Drug Allergies{' '}
+            />
+            {t(' Drug Allergies')}
           </Typography>
           <Stack spacing={1}>
             {user?.patient?.drug_allergies?.map((drug) => (
               <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={drug?._id}>
-                {' '}
                 -&nbsp; {drug?.trade_name}
               </li>
             ))}
@@ -52,8 +55,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="ph:virus"
-            />{' '}
-            Diseases{' '}
+            />
+            {t('Diseases')}
           </Typography>
           <Stack spacing={1}>
             {user?.patient?.diseases?.map((disease) => (
@@ -61,7 +64,6 @@ export default function ProfileHome() {
                 style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                 key={disease?._id}
               >
-                {' '}
                 -&nbsp; {disease?.name_english}
               </li>
             ))}
@@ -75,8 +77,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="guidance:surgery"
-            />{' '}
-            Surgeries{' '}
+            />
+            {t('Surgeries')}
           </Typography>
           <Stack spacing={1}>
             {user?.patient?.surgeries?.map((surgery) => (
@@ -84,7 +86,6 @@ export default function ProfileHome() {
                 style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                 key={surgery._id}
               >
-                {' '}
                 -&nbsp; {surgery.name}
               </li>
             ))}
@@ -98,13 +99,12 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="healthicons:medicines-outline"
-            />{' '}
-            Medicines{' '}
+            />
+            {t('Medicines')}
           </Typography>
           <Stack spacing={1}>
             {user?.patient?.medicines?.map((data) => (
               <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={data._id}>
-                {' '}
                 -&nbsp; {data?.frequently}
               </li>
             ))}
@@ -118,8 +118,8 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="streamline:insurance-hand"
-            />{' '}
-            Insurance{' '}
+            />
+            {t('Insurance')}
           </Typography>
           <Stack spacing={1}>
             {user?.patient?.insurance?.map((company) => (
@@ -141,11 +141,10 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="icon-park-outline:sport"
-            />{' '}
-            Sport Exercises
+            />
+            {t('Sport Exercises')}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            {' '}
             -&nbsp; {user?.patient?.sport_exercises}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
@@ -157,11 +156,10 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="fluent:food-apple-20-regular"
-            />{' '}
-            Eating Diet{' '}
+            />
+            {t('Eating Diet')}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            {' '}
             -&nbsp; {user?.patient?.eating_diet?.name_english}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
@@ -173,11 +171,10 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="healthicons:alcohol"
-            />{' '}
-            Alcohol Consumption{' '}
+            />
+            {t('Alcohol Consumption')}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            {' '}
             -&nbsp; {user?.patient?.alcohol_consumption}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
@@ -189,11 +186,10 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="healthicons:smoking-outline"
-            />{' '}
-            Smoking
+            />
+            {t('Smoking')}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            {' '}
             -&nbsp; {user?.patient?.smoking}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
@@ -205,13 +201,14 @@ export default function ProfileHome() {
             <Iconify
               style={{ color: 'rgb(0,156,0)', position: 'relative', left: '-3px', top: '2px' }}
               icon="charm:notes"
-            />{' '}
-            Notes
+            />
+            {t('Notes')}
           </Typography>
-
-          <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            -&nbsp; {user?.patient?.other_medication_notes}
-          </li>
+          {user?.patient?.other_medication_notes.map((info) => (
+            <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
+              -&nbsp; {user?.patient?.other_medication_notes}
+            </li>
+          ))}
         </Stack>
       ) : (
         ''
@@ -249,22 +246,22 @@ export default function ProfileHome() {
       </div>
       {[
         {
-          label: 'Gender',
+          label: t('Gender'),
           value: user?.patient?.gender,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Age',
+          label: t('Age'),
           value: calculateAge(user?.patient?.birth_date),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Height',
+          label: t('Height'),
           value: user?.patient?.height,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Weight',
+          label: t('Weight'),
           value: user?.patient?.weight,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
@@ -273,7 +270,7 @@ export default function ProfileHome() {
           {item.value && (
             <Stack key={item.label}>
               <Typography sx={{ color: 'gray' }} variant="body1">
-                {item.label} :{' '}
+                {item.label} :
                 <span
                   style={{
                     color: 'black',
@@ -297,32 +294,32 @@ export default function ProfileHome() {
     <Stack component={Card} spacing={4} sx={{ p: 3, marginBottom: 2 }}>
       {[
         {
-          label: 'Identification Number',
+          label: t('Identification Number'),
           value: user?.patient?.identification_num,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Blood Type',
+          label: t('Blood Type'),
           value: user?.patient?.blood_type,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Marital Status',
+          label: t('Marital Status'),
           value: user?.patient?.marital_status,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Address',
+          label: t('Address'),
           value: user?.patient?.address,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
-          label: 'Mobile Number',
+          label: t('Mobile Number'),
           value: user?.patient?.mobile_num1,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
         {
-          label: 'Second Mobile Number',
+          label: t('Second Mobile Number'),
           value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
@@ -331,7 +328,7 @@ export default function ProfileHome() {
           {item.value && (
             <Stack key={item.label}>
               <Typography sx={{ color: 'gray' }} variant="body1">
-                {item.label} :{' '}
+                {item.label} :
                 <span
                   style={{
                     color: 'black',
@@ -356,37 +353,37 @@ export default function ProfileHome() {
     <Stack component={Card} spacing={4} sx={{ p: 3, marginBottom: 2 }}>
       {[
         {
-          label: 'Identification Number',
+          label: t('Identification Number'),
           value: user?.patient?.identification_num,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Blood Type',
+          label: t('Blood Type'),
           value: user?.patient?.blood_type,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Pregnant',
+          label: t('Pregnant'),
           value: user?.patient?.pregnant ? 'Yes' : 'No',
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Marital Status',
+          label: t('Marital Status'),
           value: user?.patient?.marital_status,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Address',
+          label: t('Address'),
           value: user?.patient?.address,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
-          label: 'Mobile Number',
+          label: t('Mobile Number'),
           value: user?.patient?.mobile_num1,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
         {
-          label: 'Second Mobile Number',
+          label: t('Second Mobile Number'),
           value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
@@ -395,7 +392,7 @@ export default function ProfileHome() {
           {item.value && (
             <Stack key={item.label} spacing={2}>
               <Typography sx={{ color: 'gray' }} variant="body1">
-                {item.label} :{' '}
+                {item.label} :
                 <span
                   style={{
                     color: 'black',

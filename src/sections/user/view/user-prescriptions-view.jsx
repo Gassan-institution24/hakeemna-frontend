@@ -25,12 +25,12 @@ export default function UserCardList() {
   const TABS = [
     {
       value: 'Prescriptions',
-      label: 'Prescriptions',
+      label: t('Prescriptions'),
       icon: <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />,
     },
     {
       value: 'Pharmaces',
-      label: 'Pharmacies Near Me',
+      label: t('Pharmacies Near Me'),
       icon: <Iconify icon="healthicons:pharmacy-outline" width={24} />,
     },
   ];
@@ -41,11 +41,11 @@ export default function UserCardList() {
   return (
     <Container>
       <CustomBreadcrumbs
-        heading="My Prescriptions"
+        heading={t('My Prescriptions')}
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('user'), href: paths.dashboard.user.root },
-          { name: 'My Prescriptions' },
+          { name: t('My Prescriptions') },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />

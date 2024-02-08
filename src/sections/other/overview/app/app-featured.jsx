@@ -10,10 +10,12 @@ import { alpha, useTheme } from '@mui/material/styles';
 import Image from 'src/components/image';
 import { varFade, MotionContainer } from 'src/components/animate';
 import Carousel, { useCarousel, CarouselDots, CarouselArrows } from 'src/components/carousel';
+import { useTranslate, useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function AppFeatured({ list, ...other }) {
+
   const carousel = useCarousel({
     speed: 800,
     autoplay: true,
@@ -52,7 +54,9 @@ AppFeatured.propTypes = {
 
 function CarouselItem({ item, active }) {
   const theme = useTheme();
-
+  const { t } = useTranslate()
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const { coverUrl, title, description } = item;
 
   const IMGES = [
@@ -93,24 +97,23 @@ function CarouselItem({ item, active }) {
         }}
       >
         <m.div variants={varFade().inRight}>
-          <Typography variant="overline" sx={{ color: 'primary.light' }}>
-            Available Offers
+          <Typography variant="overline" sx={{ color: 'primary.light', fontSize:15 }}>
+            {t('Available Offers')}
           </Typography>
         </m.div>
 
         <m.div variants={varFade().inRight}>
           <Link color="inherit" underline="none">
             <Typography variant="h5" noWrap>
-              {/* {title} */}
-              25% discount
+          { curLangAr ? 'خصم ۲٥ ٪' : '25% discount'}
             </Typography>
           </Link>
         </m.div>
 
         <m.div variants={varFade().inRight}>
           <Typography variant="body2" noWrap>
-            {/* {description} */}
-            25% discount on all medicines for a month
+          {curLangAr? 'خصم ۲٥ ٪ على كل الادوية لمدة شهر' : ' 25% discount on all medicines for a month'}
+           
           </Typography>
         </m.div>
       </Stack>
