@@ -77,12 +77,7 @@ export default function AccountChangePassword() {
         enqueueSnackbar(response.data || 'Password update failed!', { variant: 'error' });
       }
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/systemerrors`,
-        msg: `editing password `,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       console.error(error);
       enqueueSnackbar('An error occurred. Please try again.', { variant: 'error' });
     }

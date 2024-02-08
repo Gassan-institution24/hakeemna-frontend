@@ -201,6 +201,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           msg: `canceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       enqueueSnackbar('canceled successfully!');
@@ -224,6 +225,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           msg: `delayed an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       enqueueSnackbar('delayed successfully!');
@@ -247,6 +249,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           msg: `uncanceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       enqueueSnackbar('uncanceled successfully!');
@@ -270,6 +273,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           msg: `canceled many appointments`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       enqueueSnackbar('canceled successfully!');
@@ -305,6 +309,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
       });
       enqueueSnackbar('delayed successfully!');
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -340,6 +345,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           msg: `uncanceled many appointments`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();

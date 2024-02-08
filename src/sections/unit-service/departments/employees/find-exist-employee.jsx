@@ -133,6 +133,7 @@ export default function TableNewEditForm({ departmentData }) {
       });
       enqueueSnackbar(t('employment successfully!'));
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       // console.log(e);
       enqueueSnackbar(t('failed to employment!'), { variant: 'error' });
     }

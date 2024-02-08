@@ -169,6 +169,7 @@ export default function WorkGroupsTableView() {
           msg: `activated a work shift <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -190,6 +191,7 @@ export default function WorkGroupsTableView() {
           msg: `inactivated a work shift <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -211,6 +213,7 @@ export default function WorkGroupsTableView() {
         msg: `activated many work shifts`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -234,6 +237,7 @@ export default function WorkGroupsTableView() {
         msg: `inactivated many work shifts`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();

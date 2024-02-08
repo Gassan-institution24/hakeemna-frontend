@@ -113,12 +113,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }

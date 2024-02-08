@@ -141,12 +141,7 @@ export default function UploadOldPatient({ refetch }) {
       // router.push(paths.unitservice.tables.employeetypes.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `uploading an old patient data ${data.first_name} `,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       console.error(error);
       enqueueSnackbar('Uploaded failed!', { variant: 'error' });
     }

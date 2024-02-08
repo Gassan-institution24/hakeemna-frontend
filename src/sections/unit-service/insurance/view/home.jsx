@@ -172,6 +172,7 @@ export default function UnitServicesInsuranceView() {
           msg: `added an insurance`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -194,6 +195,7 @@ export default function UnitServicesInsuranceView() {
           msg: `removed an insurance`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();

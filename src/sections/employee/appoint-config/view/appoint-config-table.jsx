@@ -160,6 +160,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
           msg: `canceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -183,6 +184,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
           msg: `uncanceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -206,6 +208,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         msg: `canceled many appointment configurations`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -230,6 +233,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         msg: `uncanceled an appointment configurations`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();

@@ -121,12 +121,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${appointment.unit_service}/systemerrors`,
-        msg: `booking an appointment ${appointment.code}`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }

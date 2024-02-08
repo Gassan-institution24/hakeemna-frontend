@@ -70,12 +70,7 @@ export default function AccountNotifications() {
       enqueueSnackbar('Update success!');
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/systemerrors`,
-        msg: `editing the notification setting of employee his self`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       console.error(error);
     }
   });

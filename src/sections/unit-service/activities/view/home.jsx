@@ -166,6 +166,7 @@ export default function ActivitesTableView() {
           msg: `activated an activity <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -187,6 +188,7 @@ export default function ActivitesTableView() {
           msg: `inactivated an activity <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -208,6 +210,7 @@ export default function ActivitesTableView() {
         msg: `activated many activities`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -231,6 +234,7 @@ export default function ActivitesTableView() {
         msg: `inactivated many activities`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();

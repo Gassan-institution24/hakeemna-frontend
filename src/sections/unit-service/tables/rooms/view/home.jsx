@@ -171,6 +171,7 @@ export default function RoomsTableView() {
           msg: `activated a room <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -192,6 +193,7 @@ export default function RoomsTableView() {
           msg: `inactivated a room <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -213,6 +215,7 @@ export default function RoomsTableView() {
         msg: `activated many rooms`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -236,6 +239,7 @@ export default function RoomsTableView() {
         msg: `inactivated many rooms`,
       })
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();

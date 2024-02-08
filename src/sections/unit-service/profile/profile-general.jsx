@@ -164,12 +164,7 @@ export default function AccountGeneral({ unitServiceData }) {
       refetch();
       console.info('DATA', dataToSend);
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/systemerrors`,
-        msg: `editing profile data`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       enqueueSnackbar('Update failed!', { variant: 'error' });
       console.error(error);
     }

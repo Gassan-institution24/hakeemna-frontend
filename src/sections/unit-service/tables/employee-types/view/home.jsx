@@ -168,6 +168,7 @@ export default function EmployeeTypesTable() {
           msg: `activated an employee type <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -189,6 +190,7 @@ export default function EmployeeTypesTable() {
           msg: `inactivated an employee type <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -210,6 +212,7 @@ export default function EmployeeTypesTable() {
         msg: `activated many employee types`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -233,6 +236,7 @@ export default function EmployeeTypesTable() {
         msg: `inactivated many employee types`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();

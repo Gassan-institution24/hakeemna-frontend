@@ -161,6 +161,7 @@ export default function EmployeesTableView() {
           msg: `activated an employee <strong>${row.employee?.first_name}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -182,6 +183,7 @@ export default function EmployeesTableView() {
           msg: `inactivated an employee <strong>${row.employee?.first_name}</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -203,6 +205,7 @@ export default function EmployeesTableView() {
         msg: `activated many employees`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -226,6 +229,7 @@ export default function EmployeesTableView() {
         msg: `inactivated many employees `,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();

@@ -204,6 +204,7 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
           msg: `canceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -229,6 +230,7 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
           msg: `delayed an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -254,6 +256,7 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
           msg: `uncanceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -279,6 +282,7 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
           msg: `canceled many appointments`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -315,6 +319,7 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
         msg: `delayed many appointments`,
       });
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -352,6 +357,7 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
           msg: `uncanceled many appointments`,
         });
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();

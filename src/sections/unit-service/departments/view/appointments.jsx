@@ -202,6 +202,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
         });
         enqueueSnackbar('canceled successfully!');
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -225,6 +226,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
         });
         enqueueSnackbar('delayed successfully!');
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -248,6 +250,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
         });
         enqueueSnackbar('uncanceled successfully!');
       } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
         console.error(e);
       }
       refetch();
@@ -270,6 +273,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
       });
       enqueueSnackbar('canceled successfully!');
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -303,6 +307,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
       });
       enqueueSnackbar('delayed successfully!');
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();
@@ -338,6 +343,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
       });
       enqueueSnackbar('uncanceled successfully!');
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       console.error(e);
     }
     refetch();

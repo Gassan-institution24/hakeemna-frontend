@@ -134,6 +134,7 @@ export default function TableNewEditForm() {
       });
       enqueueSnackbar(t('employment successfully!'));
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       enqueueSnackbar(t('failed to employment!'), { variant: 'error' });
     }
   };

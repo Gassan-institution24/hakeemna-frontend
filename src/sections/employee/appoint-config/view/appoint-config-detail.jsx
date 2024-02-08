@@ -208,6 +208,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       router.push(paths.employee.appointmentconfiguration.root);
       saving.onFalse();
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
       saving.onFalse();
     }
@@ -232,6 +233,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       updating.onFalse();
       // await refetch();
     } catch (e) {
+      socket.emit('error',{error:e,user,location:window.location.href})
       enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
       confirm.onFalse();
       updating.onFalse();
@@ -275,13 +277,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `creating or updating a new work shift ${data.name_english} into ${data.unit_service}`,
-      });
-      // console.log(error);
+      socket.emit('error',{error,user,location:window.location.href})
       enqueueSnackbar(`Failed to Add: ${error}`, { variant: 'error' });
       console.error(error);
       loadingSend.onFalse();

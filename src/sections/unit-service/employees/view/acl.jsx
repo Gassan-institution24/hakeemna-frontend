@@ -175,12 +175,7 @@ export default function TableNewEditForm({ acl }) {
       // router.push(paths.superadmin.subscriptions.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/systemerrors`,
-        msg: `updating access control list of employee ${employeeId}`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       console.error(error);
     }
   });

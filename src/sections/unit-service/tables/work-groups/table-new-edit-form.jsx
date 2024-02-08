@@ -139,12 +139,7 @@ export default function TableNewEditForm({ currentTable }) {
       router.push(paths.unitservice.tables.workgroups.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', {
-        error,
-        user,
-        link: `/dashboard/unitservices/${data.unit_service}/systemerrors`,
-        msg: `creating or updating a new work group ${data.name_english} into ${data.unit_service}`,
-      });
+      socket.emit('error',{error,user,location:window.location.href})
       console.error(error);
     }
   });
