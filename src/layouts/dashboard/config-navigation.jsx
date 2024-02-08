@@ -361,12 +361,12 @@ export function useNavData() {
             icon: <Iconify icon="solar:settings-bold-duotone" />,
           },
           {
-            title: t('my appointents'),
+            title: t('my appointments'),
             path: paths.dashboard.user.patientsappointments,
             icon: <Iconify icon="ph:calendar-duotone" />,
           },
           {
-            title: t('book appointents'),
+            title: t('book appointment'),
             path: paths.dashboard.user.bookappointment,
             icon: <Iconify icon="icon-park-outline:medicine-chest" />,
           },
@@ -381,7 +381,7 @@ export function useNavData() {
             icon: <Iconify icon="material-symbols:e911-emergency-outline" />,
           },
           {
-            title: t('medical report'),
+            title: t('medical reports'),
             path: paths.dashboard.user.medicalreports,
             icon: <Iconify icon="tabler:report-medical" />,
           },

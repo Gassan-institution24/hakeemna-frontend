@@ -1,10 +1,12 @@
 import * as React from 'react';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
+import { useTranslate, useLocales } from 'src/locales';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
+
 import Card from '@mui/material/Card';
 import Avatar from '@mui/material/Avatar';
 import {
@@ -24,6 +26,9 @@ import EmptyContent from 'src/components/empty-content/empty-content';
 import Doclogo from '../../components/logo/doc.png';
 
 export default function Medicalreports() {
+  const { t } = useTranslate();
+const { currentLang } = useLocales();
+const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const styles = StyleSheet.create({
     icon: {
@@ -233,7 +238,7 @@ export default function Medicalreports() {
   ) : (
     <EmptyContent
       filled
-      title="No Data"
+      title= {t("No Data")}
       sx={{
         py: 10,
       }}

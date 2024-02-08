@@ -18,6 +18,8 @@ import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components
 import axios from 'src/utils/axios';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
+import { useTranslate, useLocales } from 'src/locales';
+
 import Image from 'src/components/image/image';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import Checkbox from '@mui/material/Checkbox';
@@ -39,7 +41,9 @@ import File from '../other/_examples/mui/dialog-view/File.png';
 export default function OldMedicalReports() {
   const popover = usePopover();
   const dialog = useBoolean();
-
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const [files, setFiles] = useState(null);
   const [filesPdf, setfilesPdf] = useState([]);
   const [filesPdftodelete, setfilesPdftodelete] = useState([]);
@@ -60,15 +64,16 @@ export default function OldMedicalReports() {
     fetchData();
   }, []);
 
+
+
   const delteeFile = async () => {
     try {
       await axios.delete(`/api/oldmedicalreports/${filesPdftodelete._id}`);
-      enqueueSnackbar('Medical report deleted successfully', { variant: 'success' });
+      enqueueSnackbar(`${curLangAr ? 'تم حذف التقرير بنجاح' : 'Medical report deleted successfully'}`, { variant: 'success' });
       const response = await axios.get('/api/oldmedicalreports');
       setfilesPdf(response.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
-      enqueueSnackbar('Unable to delete', { variant: 'error' });
+      enqueueSnackbar(`${curLangAr ? 'حدث خطأ ما, الرجاء المحاوله لاحقا' : 'Unable to delete'}`, { variant: 'error' });
     }
   };
 
@@ -220,7 +225,7 @@ export default function OldMedicalReports() {
   } = methods;
 
   const fuser = (fuserSize) => {
-    const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif', 'pdf'];
+    const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif', '.pdf'];
 
     const isValidFile = (fileName) => {
       const fileExtension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
@@ -280,24 +285,22 @@ export default function OldMedicalReports() {
   return (
     <>
       <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ gap: 1, mb: 5 }}>
-        Upload Your Perscription
+        {t('Upload Your Perscription')}
         <Iconify icon="mingcute:add-line" />
       </Button>
 
       <Dialog open={dialog.value} onClose={dialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
-            IMPORTANT
+            {t('IMPORTANT')}
           </DialogTitle>
           <DialogContent>
             <Typography sx={{ mb: 5, fontSize: 14 }}>
-              The interpretation and evaluation of the results should not be done individually, but
-              rather in the presence of a physician who is consulted on those results and taking
-              into account the full medical context of the patient’s condition.
+                {curLangAr ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض' : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
-            <RHFTextField lang="en" name="name" label="File name*" sx={{ mb: 1.5 }} />
+            <RHFTextField lang="en" name="name" label={t('File name*')} sx={{ mb: 1.5 }} />
             <RHFSelect
-              label="Type*"
+              label= {t('Type*')}
               fullWidth
               name="type"
               PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -311,7 +314,7 @@ export default function OldMedicalReports() {
             </RHFSelect>
 
             <RHFSelect
-              label="Specialty*"
+              label={t('Specialty*')}
               fullWidth
               name="specialty"
               PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -325,7 +328,7 @@ export default function OldMedicalReports() {
             </RHFSelect>
 
             <Controller
-              name="date"
+              name={t('date')}
               control={control}
               render={({ field, fieldState: { error } }) => (
                 <DatePicker
@@ -344,13 +347,13 @@ export default function OldMedicalReports() {
             <RHFUpload
               autoFocus
               fullWidth
-              name="file"
+              name={t('file')}
               margin="dense"
               sx={{ mb: 1 }}
               variant="outlined"
               onDrop={handleDrop}
             />
-            <RHFTextField lang="en" name="note" label="More information" />
+            <RHFTextField lang="en" name="note" label={t('More information')}/>
           </DialogContent>
           <Checkbox
             size="small"
@@ -371,27 +374,27 @@ export default function OldMedicalReports() {
               fontSize: { md: 12, xs: 9 },
             }}
           >
-            {'I reed the '}
+            {t('I reed the ')}
             <Link underline="always" color="text.primary">
-              Privacy Policy
+            {t('Privacy Policy')}
             </Link>
-            {' And agree to '}
+            {t('And agree to ')}
             <Link underline="always" color="text.primary">
-              Terms of Service
+              {t('Terms of Service')}
             </Link>
             .
           </Typography>
           <DialogActions>
             <Button onClick={dialog.onFalse} variant="outlined" color="inherit">
-              Cancel
+              {t('Cancel')}
             </Button>
             {checkChange === false ? (
               <Button type="submit" loading={isSubmitting} variant="contained" disabled>
-                Upload
+                {t('Upload')}
               </Button>
             ) : (
               <Button type="submit" loading={isSubmitting} variant="contained">
-                Upload
+                 {t('Upload')}
               </Button>
             )}
           </DialogActions>

@@ -23,12 +23,12 @@ export default function UserAppointmentsPage() {
   const TABS = [
     {
       value: 'appointmentData',
-      label: 'My appointments',
+      label: t('My appointments') ,
       icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
     },
     {
       value: 'bookappointments',
-      label: 'Book appointments',
+      label: t('Book appointment'),
       icon: <Iconify icon="solar:user-id-bold" width={24} />,
     },
   ];
@@ -39,7 +39,7 @@ export default function UserAppointmentsPage() {
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('user'), href: paths.dashboard.user.root },
-          { name: t('medical reports') },
+          { name: t('My appointments') },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />

@@ -17,6 +17,7 @@ import Typography from '@mui/material/Typography';
 import { useSettingsContext } from 'src/components/settings';
 import { useBoolean } from 'src/hooks/use-boolean';
 import Image from 'src/components/image/image';
+import { useTranslate, useLocales } from 'src/locales';
 import AppWelcome from '../app-welcome';
 import AppFeatured from '../app-featured';
 import Photo from './photo.png';
@@ -30,12 +31,14 @@ export default function OverviewAppView() {
   const { enqueueSnackbar } = useSnackbar();
   const [oldpatientsdata, setOldpatientsdata] = useState([]);
   const [oldData, setOlddata] = useState();
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const { t } = useTranslate();
 
   const settings = useSettingsContext();
   const currentHour = new Date().getHours();
   const isMorning = currentHour >= 0 && currentHour < 12;
-  const greeting = isMorning ? 'Good Morning ☀️' : 'Good Evening 🌑';
+  const greeting = isMorning ? t(`Good Morning ☀️`) : t(`Good Evening 🌑`);
 
   const yesfunction = async () => {
     try {
@@ -93,11 +96,11 @@ export default function OverviewAppView() {
           <Grid xs={12} md={8}>
             <AppWelcome
               title={`${greeting} \n ${user?.patient?.first_name} ${user?.patient?.last_name}`}
-              description="Nourish your body, empower your mind – wellness is the key to a vibrant life."
+              description= {curLangAr? 'قم بتغذية جسدك، وتمكين عقلك - فالعافية هي مفتاح الحياة النابضة بالحياة.' : 'Nourish your body, empower your mind – wellness is the key to a vibrant life.'}
               img={<Image src={Photo} />}
               action={
                 <Button variant="contained" color="primary">
-                  Calculate your BMI
+                 {curLangAr?'احسب مؤشر كتلة الجسم':' Calculate your BMI'}
                 </Button>
               }
             />
@@ -108,7 +111,7 @@ export default function OverviewAppView() {
           </Grid>
 
           <Grid xs={12} md={12} sx={{ height: '400px' }}>
-            <Typography variant="h3">How To Use</Typography>
+            <Typography variant="h3">{t('How To Use')}</Typography>
             <Box sx={{ position: 'relative', mt: 1 }}>
               <iframe
                 src="https://www.youtube.com/embed/IGsRxmC40Bw?si=gULZ3W4Jy6BPk7p6"
@@ -128,25 +131,21 @@ export default function OverviewAppView() {
             </Box>
           </Grid>
         </Grid>
-        {/* && user?.patient?.is_onboarded === false  */}
-        {user?.patient?.identification_num === oldData && user?.role === "patient" ? (
+        {user?.patient?.identification_num === oldData && user?.role === 'patient' ? (
           <Dialog open={dialog.value} onClose={dialog.onTrue}>
             <DialogTitle>
-              We found that you have data stored in
+              {curLangAr?'لقد وجدنا بعض معلوماتك مخزنة عند':'We found that you have data stored in'}
               <ol>
-                <li>اسم عيادة</li>
-                <li>اسم عيادة</li>
-                <li>اسم عيادة</li>
-                <li>اسم عيادة</li>
+                <li> {curLangAr? 'اسم العيادة':'Department name'}</li>
               </ol>
-              do you want to store it in your profile
+              {curLangAr?'هل تريد تخزينها في ملفك الشخصي':'do you want to store it in your profile'}
             </DialogTitle>
             <DialogActions>
               <Button onClick={yesfunction} variant="outlined" color="success" type="submit">
-                yes
+                {t('Yes')}
               </Button>
               <Button type="submit" variant="contained" color="inherit" onClick={nofunction}>
-                no
+                {t('No')}
               </Button>
             </DialogActions>
           </Dialog>

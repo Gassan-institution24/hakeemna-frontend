@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Container, Typography } from '@mui/material';
 import { useSnackbar } from 'src/components/snackbar';
+import { useTranslate, useLocales } from 'src/locales';
+
 import Image from 'src/components/image/image';
 import Iconify from 'src/components/iconify';
 import QR from './imges/QR.jpg';
@@ -9,15 +11,17 @@ export default function Share() {
   const [link, setLink] = useState(
     'لقد أعجبني تطبيق Doctorna.Online وأريد مشاركته معك https://doctorna-frontend.vercel.app/'
   );
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const { enqueueSnackbar } = useSnackbar();
   const copyToClipboard = () => {
     navigator.clipboard
       .writeText(link)
       .then(() => {
-        enqueueSnackbar('Link copied successfully', { variant: 'success' });
+        enqueueSnackbar(`${curLangAr ? 'تم النسخ بنجاح' : 'Link copied successfully'}`, { variant: 'success' });
       })
       .catch((err) => {
-        enqueueSnackbar('Something went wrong, please try again later', { variant: 'error' });
+        enqueueSnackbar(`${curLangAr ? 'حدث خطأ ما, الرجاء المحاولة لاحفا' : 'Something went wrong, please try again later'}`, { variant: 'error' });
       });
   };
 
@@ -45,7 +49,8 @@ export default function Share() {
           />
         </div>
         <Typography variant="h6" sx={{ textAlign: 'center' }}>
-          Or copy this link
+          {curLangAr ? 'قم بمشاركة الرابط' : 'Or copy this link'}
+          
         </Typography>
         <div style={{ position: 'relative', width: '100%' }}>
           <input

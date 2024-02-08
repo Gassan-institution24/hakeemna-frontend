@@ -25,7 +25,7 @@ import EmptyContent from 'src/components/empty-content';
 import { useGetPatientOneAppointments, useGetUnitservice, useGetUSFeedbackes } from 'src/api/tables';
 // ----------------------------------------------------------------------
 
-export default function MaxWidthDialog() {
+export default function WatingRoom() {
   const { enqueueSnackbar } = useSnackbar();
 
   const UpdateUserSchema = Yup.object().shape({

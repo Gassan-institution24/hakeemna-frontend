@@ -5,14 +5,17 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 import { m } from 'framer-motion';
+import { useTranslate, useLocales } from 'src/locales';
+
 import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function Bmi() {
   const [height, setHeight] = useState(null);
   const [weight, setWeight] = useState(null);
   const [result, setResult] = useState(null);
-  const [status, setStatus] = useState('');
-
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar'
   const handleHeightChange = useCallback((e) => {
     setHeight(e.target.value);
   }, []);
@@ -39,7 +42,7 @@ export default function Bmi() {
       }}
     >
       <m.div variants={varFade().inUp}>
-        <Typography variant="h5">Calculate Your BMI</Typography>
+        <Typography variant="h5"> {t('Calculate Your BMI')} </Typography>
       </m.div>
 
       <Stack spacing={3}>
@@ -48,7 +51,7 @@ export default function Bmi() {
             fullWidth
             label={
               <span>
-                Height<span style={{ color: 'green', fontWeight: 600 }}>/</span>cm
+                {t('Height')}<span style={{ color: 'green', fontWeight: 600 }}>/</span> {t('cm')}
               </span>
             }
             type="Number"
@@ -61,7 +64,7 @@ export default function Bmi() {
             fullWidth
             label={
               <span>
-                Weight<span style={{ color: 'green', fontWeight: 600 }}>/</span>kg
+               {t('Weight')}<span style={{ color: 'green', fontWeight: 600 }}>/</span> {t('kg')}
               </span>
             }
             type="Number"
@@ -73,7 +76,7 @@ export default function Bmi() {
 
       <m.div variants={varFade().inUp}>
         <Button size="large" type="submit" variant="contained" onClick={calculate}>
-          Calculate
+        {t('Calculate')}
         </Button>
       </m.div>
 
@@ -81,22 +84,22 @@ export default function Bmi() {
         <m.div>
           {result.toFixed(2) >= 18.5 && result.toFixed(2) < 24.9 && (
             <Typography variant="body1" style={{ color: 'green' }}>
-              {result.toFixed(2)} Normal weight
+              {result.toFixed(2)} {t('Normal weight')}
             </Typography>
           )}
           {result.toFixed(2) >= 24.9 && result.toFixed(2) < 29.9 && (
             <Typography variant="body1" style={{ color: 'orange' }}>
-              {result.toFixed(2)} Overweight
+              {result.toFixed(2)} {t('Overweight')}
             </Typography>
           )}
           {result.toFixed(2) >= 29.9 && (
             <Typography variant="body1" style={{ color: 'red' }}>
-              {result.toFixed(2)} Obese
+              {result.toFixed(2)} {t('Obese')}
             </Typography>
           )}
           {result.toFixed(2) < 18.5 && (
             <Typography variant="body1" style={{ color: 'red' }}>
-              {result.toFixed(2)} Underweight
+              {result.toFixed(2)} {t('Underweight')}
             </Typography>
           )}
         </m.div>

@@ -14,10 +14,12 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import axios, { endpoints } from 'src/utils/axios';
+import { useTranslate } from 'src/locales';
 // ----------------------------------------------------------------------
 
 export default function AccountChangePassword() {
   const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslate()
 
   const showpasswordCurrent = useBoolean();
   const showpassword = useBoolean();
@@ -61,12 +63,12 @@ export default function AccountChangePassword() {
       const response = await axios.patch(endpoints.auth.updatepassword, requestData);
       if (response.status === 201) {
         reset();
-        enqueueSnackbar('Password updated successfully!', { variant: 'success' });
+        enqueueSnackbar(`${t('Password updated successfully!')}` , { variant: 'success' });
       } else {
-        enqueueSnackbar(response.data || 'Password update failed!', { variant: 'error' });
+        enqueueSnackbar(response.data || `${t('Password update failed!')}`, { variant: 'error' });
       }
     } catch (error) {
-      enqueueSnackbar('An error occurred. Please try again.', { variant: 'error' });
+      enqueueSnackbar( `${t('An error occurred. Please try again.')}` , { variant: 'error' });
     }
   });
 
@@ -76,7 +78,7 @@ export default function AccountChangePassword() {
         <RHFTextField
           name="passwordCurrent"
           type={showpasswordCurrent.value ? 'text' : 'password'}
-          label="Current Password"
+          label={t("Current Password")}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -92,7 +94,7 @@ export default function AccountChangePassword() {
 
         <RHFTextField
           name="password"
-          label="New Password"
+          label= {t("New Password")}
           type={showpassword.value ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -105,8 +107,7 @@ export default function AccountChangePassword() {
           }}
           helperText={
             <Stack component="span" direction="row" alignItems="center">
-              <Iconify icon="eva:info-fill" width={16} sx={{ mr: 0.5 }} /> Password must be minimum
-              8+
+              <Iconify icon="eva:info-fill" width={16} sx={{ mr: 0.5 }} /> {t("Password must be minimum 8+")}
             </Stack>
           }
         />
@@ -114,7 +115,7 @@ export default function AccountChangePassword() {
         <RHFTextField
           name="confirmPassword"
           type={showconfirmPassword.value ? 'text' : 'password'}
-          label="Confirm New Password"
+          label={t("Confirm New Password")}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -129,7 +130,7 @@ export default function AccountChangePassword() {
         />
 
         <LoadingButton type="submit" variant="contained" loading={isSubmitting} sx={{ ml: 'auto' }}>
-          Save Changes
+          {t("Save Changes")}
         </LoadingButton>
       </Stack>
     </FormProvider>
