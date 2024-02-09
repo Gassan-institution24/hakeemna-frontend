@@ -321,14 +321,21 @@
   "Blood Type": "زمرة الدم",
   "Marital Status": "الحالة الاجتماعية",
   "Second Mobile Number": "رقم هاتف احتياطي",
-  "Pregnant": "الحمل",
   "How can we help": "كيف يمكننا المسساعدة",
+  "Sorry we couldn't find your data": "لم يتم العثور على البيانات",
+  "Pregnant": "الحمل",
+  "Drug Allergies": " حساسية تجاه الادوية",
+  "if this is your data": " اذا كانت هذه بياناتك",
+  "Click": " اضغط ",
+  "if not": " اذا لم تكن بياناتك",
+  "Please confirm your data": "الرجاء التأكيد اذا كانت هذه بياناتك ",
+  "Confirming Data": " تأكيد المعلومات ",
+ "Thanks for your cooperation": "شكرا لتعاونك",
+  "Thanks for your cooperation, data saved to profile successfully": "تم حفظ البيانات بنجاح, شكرا لتعاونك",
+  "Failed to update data.": "فشل التحميل ",
+  "Pregnaasnt": "الحمل",
 
 
-
- 
-  
-  
 
   "list": "قائمة",
   "edit": "تعديل",

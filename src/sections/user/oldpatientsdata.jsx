@@ -15,9 +15,9 @@ import { paths } from 'src/routes/paths';
 import { _mock } from 'src/_mock';
 import { useRouter } from 'src/routes/hooks';
 import { useSnackbar } from 'src/components/snackbar';
-import isEqual from 'lodash/isEqual';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { useTranslate } from 'src/locales';
 
 export default function Oldpatientsdata() {
   const theme = useTheme();
@@ -26,14 +26,13 @@ export default function Oldpatientsdata() {
   const { user } = useAuthContext();
   const [oldpatientsdata, setOldpatientsdata] = useState();
   const [oldDataId, setOlddataID] = useState();
-
+  const { t } = useTranslate();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.post('/api/oldpatientsdata/details', {
           identification_num: user?.patient?.identification_num,
         });
-        // console.log('response', response);
         setOldpatientsdata(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -65,12 +64,14 @@ export default function Oldpatientsdata() {
 
       const response = await axios.patch(endpoints.tables.patient(user.patient._id), newData);
 
-      enqueueSnackbar('Thanks for your cooperation, data saved to profile successfully', {
+      enqueueSnackbar(t('Thanks for your cooperation, data saved to profile successfully'), {
         variant: 'success',
       });
+      setTimeout(() => {
+        router.push(paths.dashboard.user.profile);
+      }, 1000);
     } catch (error) {
-      console.error('Error updating data:', error);
-      enqueueSnackbar('Failed to update data.', {
+      enqueueSnackbar(t('Failed to update data.'), {
         variant: 'error',
       });
     }
@@ -81,12 +82,12 @@ export default function Oldpatientsdata() {
       const response = await axios.patch(`/api/oldpatientsdata/${oldDataId}/updateonboard`, {
         is_onboarded: false,
       });
-      enqueueSnackbar(`Thanks for your cooperation`, { variant: 'success' });
+      enqueueSnackbar(t(`Thanks for your cooperation`), { variant: 'success' });
     } catch (error) {
       console.error('Error updating data:', error);
     }
 
-    enqueueSnackbar(`Thanks for your cooperation`, { variant: 'success' });
+    enqueueSnackbar(t(`Thanks for your cooperation`), { variant: 'success' });
     setTimeout(() => {
       router.push(paths.dashboard.root);
     }, 1000);
@@ -104,31 +105,31 @@ export default function Oldpatientsdata() {
           >
             <Container>
               <CustomBreadcrumbs
-                heading="Please confirm your data"
-                links={[{ name: 'Home', href: paths.dashboard.root }, { name: 'Confirming Data' }]}
+                heading= {t("Please confirm your data")}
+                links={[{ name: t('Home'), href: paths.dashboard.root }, { name: t('Confirming Data') }]}
               />
               <Box sx={{ display: 'block' }}>
                 <Typography sx={{ mb: 1, padding: 1, fontSize: { md: 16, xs: 14 } }}>
-                  Click{' '}
+                  {t('Click')}
                   <Button
                     onClick={yesFunction}
                     variant="contained"
                     sx={{ border: 1, height: { md: '25px', xs: '20px' }, bgcolor: 'success.main' }}
                   >
-                    Yes
-                  </Button>{' '}
-                  if this is your data{' '}
+                    {t('Yes')}
+                  </Button>
+                  {t("if this is your data")}
                 </Typography>
                 <Typography sx={{ mb: 1, padding: 1, fontSize: { md: 16, xs: 14 } }}>
-                  Click{' '}
+                  {t('Click')}
                   <Button
                     onClick={noFunction}
                     variant="contained"
                     sx={{ border: 1, height: { md: '25px', xs: '20px' } }}
                   >
-                    No
-                  </Button>{' '}
-                  if not{' '}
+                    {t('No')}
+                  </Button>
+                  {t('if not')}
                 </Typography>
               </Box>
             </Container>
@@ -163,8 +164,8 @@ export default function Oldpatientsdata() {
                               top: '2px',
                             }}
                             icon="heroicons:identification"
-                          />{' '}
-                          Identification Num{' '}
+                          />
+                          {t("Identification Number")}
                         </Typography>
                         <Stack spacing={1}>
                           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
@@ -190,8 +191,8 @@ export default function Oldpatientsdata() {
                               top: '2px',
                             }}
                             icon="guidance:no-drug-or-substance"
-                          />{' '}
-                          Drug Allergies{' '}
+                          />
+                          {t('Drug Allergies')}
                         </Typography>
                         <Stack spacing={1}>
                           {item?.drug_allergies?.map((drug) => (
@@ -222,8 +223,8 @@ export default function Oldpatientsdata() {
                               top: '2px',
                             }}
                             icon="ph:virus"
-                          />{' '}
-                          Diseases{' '}
+                          />
+                          {t('Diseases')}
                         </Typography>
                         <Stack spacing={1}>
                           {item?.diseases?.map((disease) => (
@@ -231,7 +232,7 @@ export default function Oldpatientsdata() {
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                               key={disease._id}
                             >
-                              {' '}
+                              
                               -&nbsp; {disease.name_english}
                             </li>
                           ))}
@@ -256,8 +257,8 @@ export default function Oldpatientsdata() {
                               top: '2px',
                             }}
                             icon="guidance:surgery"
-                          />{' '}
-                          Surgeries{' '}
+                          />
+                          {t('Surgeries')}
                         </Typography>
                         <Stack spacing={1}>
                           {item?.surgeries?.map((surgery) => (
@@ -265,7 +266,7 @@ export default function Oldpatientsdata() {
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                               key={surgery._id}
                             >
-                              {' '}
+                              
                               -&nbsp; {surgery.name}
                             </li>
                           ))}
@@ -289,8 +290,8 @@ export default function Oldpatientsdata() {
                               top: '2px',
                             }}
                             icon="healthicons:medicines-outline"
-                          />{' '}
-                          Medicines{' '}
+                          />
+                          {t('Medicines')}
                         </Typography>
                         <Stack spacing={1}>
                           {item?.medicines?.map((data) => (
@@ -298,7 +299,7 @@ export default function Oldpatientsdata() {
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                               key={data._id}
                             >
-                              {' '}
+                              
                               -&nbsp; {data?.frequently}
                             </li>
                           ))}
@@ -323,8 +324,8 @@ export default function Oldpatientsdata() {
                               top: '2px',
                             }}
                             icon="streamline:insurance-hand"
-                          />{' '}
-                          Insurance{' '}
+                          />
+                          {t('Insurance')}
                         </Typography>
                         <Stack spacing={1}>
                           {item?.insurance?.map((company) => (
@@ -356,11 +357,11 @@ export default function Oldpatientsdata() {
                               top: '2px',
                             }}
                             icon="icon-park-outline:sport"
-                          />{' '}
-                          Sport Exercises
+                          />
+                          {t('Sport Exercises')}
                         </Typography>
                         <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-                          {' '}
+                          
                           -&nbsp; {item?.sport_exercises}
                         </li>
                         <Divider
@@ -383,11 +384,11 @@ export default function Oldpatientsdata() {
                               top: '2px',
                             }}
                             icon="fluent:food-apple-20-regular"
-                          />{' '}
-                          Eating Diet{' '}
+                          />
+                          {t('Eating Diet')}
                         </Typography>
                         <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-                          {' '}
+                          
                           -&nbsp; {item?.eating_diet?.name_english}
                         </li>
                         <Divider
@@ -409,11 +410,11 @@ export default function Oldpatientsdata() {
                               top: '2px',
                             }}
                             icon="healthicons:alcohol"
-                          />{' '}
-                          Alcohol Consumption{' '}
+                          />
+                          {t('Alcohol Consumption')}
                         </Typography>
                         <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-                          {' '}
+                          
                           -&nbsp; {item?.alcohol_consumption}
                         </li>
                         <Divider
@@ -436,11 +437,11 @@ export default function Oldpatientsdata() {
                               top: '2px',
                             }}
                             icon="healthicons:smoking-outline"
-                          />{' '}
-                          Smoking
+                          />
+                          {t('Smoking')}
                         </Typography>
                         <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-                          {' '}
+                          
                           -&nbsp; {item?.smoking}
                         </li>
                         <Divider
@@ -464,8 +465,8 @@ export default function Oldpatientsdata() {
                             top: '2px',
                           }}
                           icon="charm:notes"
-                        />{' '}
-                        Notes
+                        />
+                        {t('Notes')}
                       </Typography>
                       {item?.other_medication_notes?.map((note, indexnumtwo) => (
                         <li
@@ -488,7 +489,7 @@ export default function Oldpatientsdata() {
           )}
         </>
       ) : (
-        "Sorry we couldn't find your data"
+        t("Sorry we couldn't find your data")
       )}
     </>
   );

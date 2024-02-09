@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
-import { useTranslate } from 'src/locales';
+import { useTranslate, useLocales } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -12,6 +12,8 @@ import ProfileHome from '../profile-home';
 export default function UserProfileView() {
   const settings = useSettingsContext();
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const [currentTab, setCurrentTab] = useState('profile');
   return (
@@ -21,7 +23,7 @@ export default function UserProfileView() {
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('user'), href: paths.dashboard.root },
-          { name: user?.userName },
+          { name: curLangAr? user?.patient?.name_arabic : user?.patient?.name_english },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
