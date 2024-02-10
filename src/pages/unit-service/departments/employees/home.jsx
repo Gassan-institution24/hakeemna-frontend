@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import DepartmentEmployeesView from 'src/sections/unit-service/departments/view/employees';
-import { useGetDepartment } from 'src/api/tables';
+import { useGetDepartment } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 

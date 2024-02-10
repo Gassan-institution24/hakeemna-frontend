@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import EditPatient from 'src/sections/super-admin/patients/edit/edit-patient';
-import { useGetPatient } from 'src/api/tables';
+import { useGetPatient } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import { LoadingScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------

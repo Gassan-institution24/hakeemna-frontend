@@ -1,5 +1,5 @@
 import { Box, Divider, Typography } from '@mui/material';
-import { useGetPatientAppointments } from 'src/api/tables';
+import { useGetPatientAppointments } from 'src/api';
 import { useTranslate, useLocales } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import FinishedAppoinment from './apointmentsfinished';
@@ -18,7 +18,7 @@ export default function AppointmentData() {
       {pendingAppointments.lenght > 0 ? (
         <>
           <Typography variant="h4" sx={{ mb: 2 }}>
-            {curLangAr?'مواعيد لليوم' : 'Appointment for today'}
+            {curLangAr ? 'مواعيد لليوم' : 'Appointment for today'}
           </Typography>
           <Box
             sx={{
@@ -33,8 +33,7 @@ export default function AppointmentData() {
         </>
       ) : (
         <Typography variant="h4" sx={{ mb: 2 }}>
-            {curLangAr?'لا يوجد لديك مواعيد اليوم' : ' No appointment for today'}
-         
+          {curLangAr ? 'لا يوجد لديك مواعيد اليوم' : ' No appointment for today'}
         </Typography>
       )}
 
@@ -42,7 +41,7 @@ export default function AppointmentData() {
         <>
           <Divider sx={{ mb: 2 }} />
           <Typography variant="h4" sx={{ mb: 2 }}>
-           {t('Finished appoinment')}
+            {t('Finished appoinment')}
           </Typography>
           <Box
             sx={{

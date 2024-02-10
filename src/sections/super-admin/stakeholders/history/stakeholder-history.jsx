@@ -15,8 +15,6 @@ import { alpha, useTheme } from '@mui/material/styles';
 import { paths } from 'src/routes/paths';
 import { useTranslate } from 'src/locales';
 
-import { _jobs, JOB_DETAILS_TABS, JOB_PUBLISH_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -25,7 +23,7 @@ import { RouterLink } from 'src/routes/components';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-// import { useGetStakeholderAppointments } from 'src/api/tables';
+// import { useGetStakeholderAppointments } from 'src/api';
 
 import AppointHistory from './appointment-history/appoint-history';
 import EconomicMovementsView from './invoices/invoices-view';

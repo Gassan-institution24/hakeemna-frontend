@@ -13,7 +13,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import { AddressItem, AddressNewForm } from '../address';
+// import { AddressItem, AddressNewForm } from '../address';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ export default function AccountBillingAddress({ addressBook }) {
           }
         /> */}
 
-        <Stack spacing={2.5} sx={{ p: 3 }}>
+        {/* <Stack spacing={2.5} sx={{ p: 3 }}>
           {DATA.map((address) => (
             <>
               <AddressItem
@@ -82,7 +82,7 @@ export default function AccountBillingAddress({ addressBook }) {
               />
             </>
           ))}
-        </Stack>
+        </Stack> */}
       </Card>
 
       {/* <CustomPopover open={popover.open} onClose={handleClose}>
@@ -118,11 +118,11 @@ export default function AccountBillingAddress({ addressBook }) {
         </MenuItem>
       </CustomPopover> */}
 
-      <AddressNewForm
+      {/* <AddressNewForm
         open={addressForm.value}
         onClose={addressForm.onFalse}
         onCreate={handleAddNewAddress}
-      />
+      /> */}
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import EditAppointmentConfigView from 'src/sections/unit-service/appointmentsConfiguration/view/edit';
-import { useGetAppointmentConfig } from 'src/api/tables';
+import { useGetAppointmentConfig } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { LoadingScreen } from 'src/components/loading-screen';

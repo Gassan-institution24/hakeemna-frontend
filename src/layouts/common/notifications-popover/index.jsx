@@ -17,10 +17,9 @@ import Typography from '@mui/material/Typography';
 import { useRouter } from 'src/routes/hooks';
 import axios, { endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useGetNotifications, useGetUnreadNotificationCount } from 'src/api/tables';
+import { useGetNotifications, useGetUnreadNotificationCount } from 'src/api';
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { _notifications } from 'src/_mock';
 import { HOST_API } from 'src/config-global';
 import { socket } from 'src/socket';
 
@@ -143,7 +142,11 @@ export default function NotificationsPopover() {
     <Scrollbar>
       <List disablePadding>
         {notifications.map((notification) => (
-          <NotificationItem handleClick={handleClick} key={notification.id} notification={notification} />
+          <NotificationItem
+            handleClick={handleClick}
+            key={notification.id}
+            notification={notification}
+          />
         ))}
       </List>
     </Scrollbar>

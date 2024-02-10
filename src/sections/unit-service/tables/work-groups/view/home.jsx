@@ -24,8 +24,6 @@ import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
-import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -50,7 +48,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import axiosHandler from 'src/utils/axios-handler';
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetUSWorkGroups } from 'src/api/tables'; /// edit
+import { useGetUSWorkGroups } from 'src/api'; /// edit
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import TableDetailRow from '../table-details-row'; /// edit
@@ -168,7 +166,7 @@ export default function WorkGroupsTableView() {
           msg: `activated a work group <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -190,7 +188,7 @@ export default function WorkGroupsTableView() {
           msg: `inactivated a work group <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -200,21 +198,21 @@ export default function WorkGroupsTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    try{
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.workgroups}/updatestatus`, /// edit
-      data: { status: 'active', ids: table.selected },
-    });
-    socket.emit('updated', {
-      user,
-      link: paths.unitservice.tables.workgroups.root,
-      msg: `activated many work groups`,
-    })
-  } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
-    console.error(e);
-  }
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.workgroups}/updatestatus`, /// edit
+        data: { status: 'active', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.tables.workgroups.root,
+        msg: `activated many work groups`,
+      });
+    } catch (e) {
+      socket.emit('error', { error: e, user, location: window.location.href });
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: workGroupsData.length,
@@ -224,21 +222,21 @@ export default function WorkGroupsTableView() {
   }, [dataFiltered.length, dataInPage.length, table, workGroupsData, refetch, user]);
 
   const handleInactivateRows = useCallback(async () => {
-    try{
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.workgroups}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
-    socket.emit('updated', {
-      user,
-      link: paths.unitservice.tables.workgroups.root,
-      msg: `inactivated many work groups`,
-    })
-  } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
-    console.error(e);
-  }
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.workgroups}/updatestatus`, /// edit
+        data: { status: 'inactive', ids: table.selected },
+      });
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.tables.workgroups.root,
+        msg: `inactivated many work groups`,
+      });
+    } catch (e) {
+      socket.emit('error', { error: e, user, location: window.location.href });
+      console.error(e);
+    }
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: workGroupsData.length,

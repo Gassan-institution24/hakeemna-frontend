@@ -23,7 +23,7 @@ import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField, RHFSelect } from 'src/components/hook-form';
-import { useGetCities, useGetCountries } from 'src/api/tables';
+import { useGetCities, useGetCountries } from 'src/api';
 
 // ----------------------------------------------------------------------
 

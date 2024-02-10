@@ -28,7 +28,7 @@ import {
   useGetUSServiceTypes,
   useGetUSWorkGroups,
   useGetUSWorkShifts,
-} from 'src/api/tables';
+} from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
 import { socket } from 'src/socket';
@@ -113,7 +113,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }

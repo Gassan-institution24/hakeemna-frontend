@@ -19,7 +19,6 @@ import TableContainer from '@mui/material/TableContainer';
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
-import { INVOICE_STATUS_OPTIONS } from 'src/_mock';
 import { useSettingsContext } from 'src/components/settings';
 
 import Label from 'src/components/label';
@@ -71,7 +70,9 @@ export default function InvoiceDetails({ economicMovementData }) {
 
       <StyledTableRow>
         <TableCell lang="ar" colSpan={3} />
-        <TableCell lang="ar" sx={{ color: 'text.secondary' }}>Deduction</TableCell>
+        <TableCell lang="ar" sx={{ color: 'text.secondary' }}>
+          Deduction
+        </TableCell>
         <TableCell lang="ar" width={120} sx={{ color: 'error.main', typography: 'body2' }}>
           {fCurrency(-economicMovementData.Total_deduction_amount)}
         </TableCell>
@@ -79,13 +80,19 @@ export default function InvoiceDetails({ economicMovementData }) {
 
       <StyledTableRow>
         <TableCell lang="ar" colSpan={3} />
-        <TableCell lang="ar" sx={{ color: 'text.secondary' }}>Taxes</TableCell>
-        <TableCell lang="ar" width={120}>{fCurrency(economicMovementData.Total_tax_Amount)}</TableCell>
+        <TableCell lang="ar" sx={{ color: 'text.secondary' }}>
+          Taxes
+        </TableCell>
+        <TableCell lang="ar" width={120}>
+          {fCurrency(economicMovementData.Total_tax_Amount)}
+        </TableCell>
       </StyledTableRow>
 
       <StyledTableRow>
         <TableCell lang="ar" colSpan={3} />
-        <TableCell lang="ar" sx={{ typography: 'subtitle1' }}>Total</TableCell>
+        <TableCell lang="ar" sx={{ typography: 'subtitle1' }}>
+          Total
+        </TableCell>
         <TableCell lang="ar" width={140} sx={{ typography: 'subtitle1' }}>
           {fCurrency(economicMovementData.Balance)}
         </TableCell>
@@ -117,22 +124,34 @@ export default function InvoiceDetails({ economicMovementData }) {
         <Table sx={{ minWidth: 960 }}>
           <TableHead>
             <TableRow>
-              <TableCell lang="ar" width={40}>#</TableCell>
+              <TableCell lang="ar" width={40}>
+                #
+              </TableCell>
 
-              <TableCell lang="ar" sx={{ typography: 'subtitle2' }}>Description</TableCell>
+              <TableCell lang="ar" sx={{ typography: 'subtitle2' }}>
+                Description
+              </TableCell>
 
-              <TableCell lang="ar" align="center">Qty</TableCell>
+              <TableCell lang="ar" align="center">
+                Qty
+              </TableCell>
 
-              <TableCell lang="ar" align="right">Unit price</TableCell>
+              <TableCell lang="ar" align="right">
+                Unit price
+              </TableCell>
 
-              <TableCell lang="ar" align="right">Total</TableCell>
+              <TableCell lang="ar" align="right">
+                Total
+              </TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
             {economicMovementData.Provided_services?.map((row, index) => (
               <TableRow key={index}>
-                <TableCell lang="ar" align="center">{row.index + 1}</TableCell>
+                <TableCell lang="ar" align="center">
+                  {row.index + 1}
+                </TableCell>
 
                 <TableCell lang="ar" align="center">
                   <Box sx={{ maxWidth: 560 }}>
@@ -144,11 +163,17 @@ export default function InvoiceDetails({ economicMovementData }) {
                   </Box>
                 </TableCell>
 
-                <TableCell lang="ar" align="center">{row.service_quantity}</TableCell>
+                <TableCell lang="ar" align="center">
+                  {row.service_quantity}
+                </TableCell>
 
-                <TableCell lang="ar" align="right">{fCurrency(row.total_amount)}</TableCell>
+                <TableCell lang="ar" align="right">
+                  {fCurrency(row.total_amount)}
+                </TableCell>
 
-                <TableCell lang="ar" align="right">{fCurrency(row.accumulated_amount)}</TableCell>
+                <TableCell lang="ar" align="right">
+                  {fCurrency(row.accumulated_amount)}
+                </TableCell>
               </TableRow>
             ))}
 
@@ -182,7 +207,7 @@ export default function InvoiceDetails({ economicMovementData }) {
 
           <Stack spacing={1} alignItems={{ xs: 'flex-start', md: 'flex-end' }}>
             <Label
-                    lang="ar"
+              lang="ar"
               variant="soft"
               color={
                 (economicMovementData.status === 'paid' && 'success') ||

@@ -1,7 +1,6 @@
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 
-import { _userCards } from 'src/_mock';
 import { paths } from 'src/routes/paths';
 import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';

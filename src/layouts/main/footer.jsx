@@ -12,8 +12,6 @@ import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { _socials } from 'src/_mock';
-
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 
@@ -107,7 +105,7 @@ export default function Footer() {
               Manage all your data with doctorna
             </Typography>
 
-            <Stack
+            {/* <Stack
               direction="row"
               justifyContent={{ xs: 'center', md: 'flex-start' }}
               sx={{
@@ -127,7 +125,7 @@ export default function Footer() {
                   <Iconify color={social.color} icon={social.icon} />
                 </IconButton>
               ))}
-            </Stack>
+            </Stack> */}
           </Grid>
 
           <Grid xs={12} md={6}>

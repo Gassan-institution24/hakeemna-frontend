@@ -18,7 +18,7 @@ import axios from 'axios';
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
-import { useGetUnitservices, useGetServiceTypes, useGetEmployees } from 'src/api/tables';
+import { useGetUnitservices, useGetServiceTypes, useGetEmployees } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';

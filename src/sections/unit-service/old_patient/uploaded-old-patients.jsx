@@ -41,7 +41,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { Upload, UploadBox } from 'src/components/upload';
 import { useSettingsContext } from 'src/components/settings';
 
-import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api/tables';
+import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api';
 import axios, { endpoints } from 'src/utils/axios';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -64,7 +64,7 @@ export default function UploadedOldPatients({ oldPatients }) {
     { id: 'files', label: t('files number') },
     // { id: '', width: 88 },
   ];
-  
+
   const router = useRouter();
 
   const table = useTable({ defaultRowsPerPage: 10 });

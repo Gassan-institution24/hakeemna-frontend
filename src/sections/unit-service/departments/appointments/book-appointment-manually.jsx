@@ -23,7 +23,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
-import { useGetCountries, useGetCities } from 'src/api/tables';
+import { useGetCountries, useGetCities } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
 import { socket } from 'src/socket';
@@ -118,14 +118,14 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
           link: paths.unitservice.departments.appointments(appointment.department._id),
           msg: `booked an appointment ${appointment.code} in department <strong>${appointment.department.name_english}</strong>`,
         });
-        socket.emit('register',data)
+        socket.emit('register', data);
       }
       enqueueSnackbar('Create success!');
       refetch();
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }

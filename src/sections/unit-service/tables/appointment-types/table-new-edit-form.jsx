@@ -23,7 +23,7 @@ import FormProvider, { RHFAutocomplete, RHFSelect, RHFTextField } from 'src/comp
 import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetDepartmentEmployees } from 'src/api/tables';
+import { useGetDepartmentEmployees } from 'src/api';
 
 // ----------------------------------------------------------------------
 
@@ -115,7 +115,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       router.push(paths.unitservice.departments.workGroups.root(departmentData._id));
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
     }
   });

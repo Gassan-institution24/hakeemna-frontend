@@ -52,7 +52,7 @@ import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { useSnackbar } from 'src/components/snackbar';
 
-import { useGetAppointmentTypes } from 'src/api/tables';
+import { useGetAppointmentTypes } from 'src/api';
 import AppointmentsRow from '../appointments/appointment-row';
 import PatientHistoryToolbar from '../appointments/appointment-toolbar';
 import HistoryFiltersResult from '../appointments/appointment-filters-result';
@@ -202,7 +202,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
         });
         enqueueSnackbar('canceled successfully!');
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -226,7 +226,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
         });
         enqueueSnackbar('delayed successfully!');
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -250,7 +250,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
         });
         enqueueSnackbar('uncanceled successfully!');
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -273,7 +273,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
       });
       enqueueSnackbar('canceled successfully!');
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -307,7 +307,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
       });
       enqueueSnackbar('delayed successfully!');
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -343,7 +343,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
       });
       enqueueSnackbar('uncanceled successfully!');
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -562,7 +562,12 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
         </Card>
       </Container>
 
-      <AddEmegencyAppointment departmentData={departmentData} refetch={refetch} open={addModal.value} onClose={addModal.onFalse} />
+      <AddEmegencyAppointment
+        departmentData={departmentData}
+        refetch={refetch}
+        open={addModal.value}
+        onClose={addModal.onFalse}
+      />
 
       <ConfirmDialog
         open={confirm.value}

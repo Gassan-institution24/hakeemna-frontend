@@ -8,7 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import Card from '@mui/material/Card';
 import Link from '@mui/material/Link';
-import { _socials } from 'src/_mock';
+
 import MenuItem from '@mui/material/MenuItem';
 import { useCallback } from 'react';
 import { useRouter } from 'src/routes/hooks';
@@ -17,7 +17,7 @@ import { paths } from 'src/routes/paths';
 import { fTime, fDate } from 'src/utils/format-time';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useGetPatientAppointments } from 'src/api/tables';
+import { useGetPatientAppointments } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 // ----------------------------------------------------------------------
 

@@ -6,9 +6,9 @@ import Tab from '@mui/material/Tab';
 import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import { paths } from 'src/routes/paths';
 import { useTranslate } from 'src/locales';
-import { _userCards } from 'src/_mock';
+
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import AppointmentData from '../appointmentsforpatient'
+import AppointmentData from '../appointmentsforpatient';
 import PatientsAppointment from '../availableappointments';
 
 // ----------------------------------------------------------------------
@@ -23,7 +23,7 @@ export default function UserAppointmentsPage() {
   const TABS = [
     {
       value: 'appointmentData',
-      label: t('My appointments') ,
+      label: t('My appointments'),
       icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
     },
     {

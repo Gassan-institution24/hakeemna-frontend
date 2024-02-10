@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import ApointmentInfoView from 'src/sections/employee/appointments/view/info';
-import { useGetAppointment } from 'src/api/tables';
+import { useGetAppointment } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { LoadingScreen } from 'src/components/loading-screen';

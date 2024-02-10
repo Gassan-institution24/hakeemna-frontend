@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import EntranceManagementEditView from 'src/sections/employee/entranceManagement/view/edit';
-import { useGetAppointment } from 'src/api/tables';
+import { useGetAppointment } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 

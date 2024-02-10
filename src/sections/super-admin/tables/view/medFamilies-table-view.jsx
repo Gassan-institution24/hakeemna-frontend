@@ -31,7 +31,7 @@ import {
 } from 'src/components/table';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetMedFamilies } from 'src/api/tables'; /// edit
+import { useGetMedFamilies } from 'src/api'; /// edit
 import TableDetailRow from '../medFamilies/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';

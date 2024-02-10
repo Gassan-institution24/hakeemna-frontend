@@ -1,12 +1,7 @@
 import { paramCase } from 'src/utils/change-case';
 
-import { _id, _postTitles } from 'src/_mock/assets';
 import { useParams } from 'react-router';
 // ----------------------------------------------------------------------
-
-const MOCK_ID = _id[1];
-
-const MOCK_TITLE = _postTitles[2];
 
 const ROOTS = {
   AUTH: '/auth',
@@ -39,22 +34,7 @@ export const paths = {
   freeUI: 'https://mui.com/store/items/minimal-dashboard-free/',
   figma:
     'https://www.figma.com/file/hjxMnGUJCjY7pX8lQbS7kn/%5BPreview%5D-Minimal-Web.v5.4.0?type=design&node-id=0-1&mode=design&t=2fxnS70DuiTLGzND-0',
-  product: {
-    root: `/product`,
-    checkout: `/product/checkout`,
-    details: (id) => `/product/${id}`,
-    demo: {
-      details: `/product/${MOCK_ID}`,
-    },
-  },
 
-  post: {
-    root: `/post`,
-    details: (title) => `/post/${paramCase(title)}`,
-    demo: {
-      details: `/post/${paramCase(MOCK_TITLE)}`,
-    },
-  },
   // AUTH
   auth: {
     login: `/login`,
@@ -63,22 +43,6 @@ export const paths = {
     verify: `/verify`,
     newPassword: `/new-password`,
     forgotPassword: `/forgot-password`,
-  },
-  authDemo: {
-    classic: {
-      login: `${ROOTS.AUTH_DEMO}/classic/login`,
-      register: `${ROOTS.AUTH_DEMO}/classic/register`,
-      forgotPassword: `${ROOTS.AUTH_DEMO}/classic/forgot-password`,
-      newPassword: `${ROOTS.AUTH_DEMO}/classic/new-password`,
-      verify: `${ROOTS.AUTH_DEMO}/classic/verify`,
-    },
-    modern: {
-      login: `${ROOTS.AUTH_DEMO}/modern/login`,
-      register: `${ROOTS.AUTH_DEMO}/modern/register`,
-      forgotPassword: `${ROOTS.AUTH_DEMO}/modern/forgot-password`,
-      newPassword: `${ROOTS.AUTH_DEMO}/modern/new-password`,
-      verify: `${ROOTS.AUTH_DEMO}/modern/verify`,
-    },
   },
 
   // PAGES
@@ -126,66 +90,6 @@ export const paths = {
       oldpatientdata: `${ROOTS.DASHBOARD}/user/oldpatientdata`,
       emergency: `${ROOTS.DASHBOARD}/user/emergency`,
       edit: (id) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
-      demo: {
-        edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,
-      },
-    },
-    product: {
-      root: `${ROOTS.DASHBOARD}/product`,
-      new: `${ROOTS.DASHBOARD}/product/new`,
-      details: (id) => `${ROOTS.DASHBOARD}/product/${id}`,
-      edit: (id) => `${ROOTS.DASHBOARD}/product/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/product/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/product/${MOCK_ID}/edit`,
-      },
-    },
-    invoice: {
-      root: `${ROOTS.DASHBOARD}/invoice`,
-      new: `${ROOTS.DASHBOARD}/invoice/new`,
-      details: (id) => `${ROOTS.DASHBOARD}/invoice/${id}`,
-      edit: (id) => `${ROOTS.DASHBOARD}/invoice/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/invoice/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/invoice/${MOCK_ID}/edit`,
-      },
-    },
-    post: {
-      root: `${ROOTS.DASHBOARD}/post`,
-      new: `${ROOTS.DASHBOARD}/post/new`,
-      details: (title) => `${ROOTS.DASHBOARD}/post/${paramCase(title)}`,
-      edit: (title) => `${ROOTS.DASHBOARD}/post/${paramCase(title)}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/post/${paramCase(MOCK_TITLE)}`,
-        edit: `${ROOTS.DASHBOARD}/post/${paramCase(MOCK_TITLE)}/edit`,
-      },
-    },
-    order: {
-      root: `${ROOTS.DASHBOARD}/order`,
-      details: (id) => `${ROOTS.DASHBOARD}/order/${id}`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/order/${MOCK_ID}`,
-      },
-    },
-    job: {
-      root: `${ROOTS.DASHBOARD}/job`,
-      new: `${ROOTS.DASHBOARD}/job/new`,
-      details: (id) => `${ROOTS.DASHBOARD}/job/${id}`,
-      edit: (id) => `${ROOTS.DASHBOARD}/job/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/job/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/job/${MOCK_ID}/edit`,
-      },
-    },
-    tour: {
-      root: `${ROOTS.USER}/tour`,
-      new: `${ROOTS.USER}/tour/new`,
-      details: (id) => `${ROOTS.USER}/tour/${id}`,
-      edit: (id) => `${ROOTS.USER}/tour/${id}/edit`,
-      demo: {
-        details: `${ROOTS.USER}/tour/${MOCK_ID}`,
-        edit: `${ROOTS.USER}/tour/${MOCK_ID}/edit`,
-      },
     },
   },
   // super adnim

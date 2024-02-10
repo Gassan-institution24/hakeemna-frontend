@@ -24,8 +24,6 @@ import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
-import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -49,7 +47,7 @@ import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import axiosHandler from 'src/utils/axios-handler';
-import { useGetDepartmentActivities } from 'src/api/tables'; /// edit
+import { useGetDepartmentActivities } from 'src/api'; /// edit
 import { LoadingScreen } from 'src/components/loading-screen';
 import { StatusOptions } from 'src/assets/data/status-options';
 
@@ -166,7 +164,7 @@ export default function ActivitesTableView({ departmentData }) {
           msg: `activated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -188,7 +186,7 @@ export default function ActivitesTableView({ departmentData }) {
           msg: `inactivated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -210,7 +208,7 @@ export default function ActivitesTableView({ departmentData }) {
         msg: `activated many activities in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -242,7 +240,7 @@ export default function ActivitesTableView({ departmentData }) {
         msg: `inactivated many activities in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();

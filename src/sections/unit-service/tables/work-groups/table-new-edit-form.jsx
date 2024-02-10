@@ -27,7 +27,7 @@ import axios from 'axios';
 import { useAuthContext } from 'src/auth/hooks';
 import axiosHandler from 'src/utils/axios-handler';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSDepartments, useGetUSEmployees } from 'src/api/tables';
+import { useGetUSDepartments, useGetUSEmployees } from 'src/api';
 
 // ----------------------------------------------------------------------
 
@@ -117,7 +117,7 @@ export default function TableNewEditForm({ currentTable }) {
           user,
           link: paths.unitservice.tables.workgroups.root,
           msg: `updated a work group <strong>${data.name_english}</strong>`,
-        })
+        });
       } else {
         await axiosHandler({
           method: 'POST',
@@ -132,14 +132,14 @@ export default function TableNewEditForm({ currentTable }) {
           user,
           link: paths.unitservice.tables.workgroups.root,
           msg: `created a work group <strong>${data.name_english}</strong>`,
-        })
+        });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.unitservice.tables.workgroups.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
     }
   });

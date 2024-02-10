@@ -31,7 +31,7 @@ import {
 } from 'src/components/table';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetAnalyses } from 'src/api/tables'; /// edit
+import { useGetAnalyses } from 'src/api'; /// edit
 import TableDetailRow from '../analyses/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';

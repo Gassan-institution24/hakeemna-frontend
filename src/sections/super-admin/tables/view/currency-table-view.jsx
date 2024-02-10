@@ -33,7 +33,7 @@ import {
 } from 'src/components/table';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetCurrencies } from 'src/api/tables'; /// edit
+import { useGetCurrencies } from 'src/api'; /// edit
 import TableDetailRow from '../currency/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router';
-import { useGetEmployeeEngagement } from 'src/api/tables';
+import { useGetEmployeeEngagement } from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { LoadingScreen } from 'src/components/loading-screen';
 

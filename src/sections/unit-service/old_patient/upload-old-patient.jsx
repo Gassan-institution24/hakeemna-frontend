@@ -40,7 +40,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { Upload, UploadBox } from 'src/components/upload';
 import { useSettingsContext } from 'src/components/settings';
 
-import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api/tables';
+import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api';
 import axios, { endpoints } from 'src/utils/axios';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -134,14 +134,14 @@ export default function UploadOldPatient({ refetch }) {
         user,
         link: paths.unitservice.oldPatient,
         msg: `uploaded an old patient data`,
-      })
+      });
       refetch();
       reset();
       enqueueSnackbar('Uploaded success!');
       // router.push(paths.unitservice.tables.employeetypes.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
       enqueueSnackbar('Uploaded failed!', { variant: 'error' });
     }

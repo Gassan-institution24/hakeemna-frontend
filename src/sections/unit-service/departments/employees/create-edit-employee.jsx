@@ -18,7 +18,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api/tables';
+import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api';
 import { endpoints } from 'src/utils/axios';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -169,7 +169,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       router.push(paths.unitservice.departments.employees.root(departmentData._id));
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
     }
   });

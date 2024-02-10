@@ -14,7 +14,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { useGetTables } from 'src/api/tables';
+import { useGetTables } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';

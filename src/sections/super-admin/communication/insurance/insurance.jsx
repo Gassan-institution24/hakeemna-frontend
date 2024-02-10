@@ -49,7 +49,7 @@ import { endpoints } from 'src/utils/axios';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import { enqueueSnackbar } from 'notistack';
-import { useGetInsuranceCos } from 'src/api/tables';
+import { useGetInsuranceCos } from 'src/api';
 import { useTranslate } from 'src/locales';
 import InsuranceRow from './insurance-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';

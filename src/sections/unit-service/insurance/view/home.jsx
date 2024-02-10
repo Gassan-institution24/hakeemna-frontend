@@ -54,7 +54,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { enqueueSnackbar } from 'notistack';
-import { useGetInsuranceCos, useGetUnitservice } from 'src/api/tables';
+import { useGetInsuranceCos, useGetUnitservice } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import InsuranceRow from '../insurance-row'; /// edit
@@ -172,7 +172,7 @@ export default function UnitServicesInsuranceView() {
           msg: `added an insurance`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -195,7 +195,7 @@ export default function UnitServicesInsuranceView() {
           msg: `removed an insurance`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();

@@ -24,8 +24,6 @@ import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
-import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -50,7 +48,7 @@ import ACLGuard from 'src/auth/guard/acl-guard';
 import axiosHandler from 'src/utils/axios-handler';
 import { useLocales, useTranslate } from 'src/locales';
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetDepartmentRooms } from 'src/api/tables'; /// edit
+import { useGetDepartmentRooms } from 'src/api'; /// edit
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import TableDetailRow from '../rooms/table-details-row'; /// edit
@@ -169,7 +167,7 @@ export default function RoomsTableView({ departmentData }) {
           msg: `activated room <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -191,7 +189,7 @@ export default function RoomsTableView({ departmentData }) {
           msg: `inactivated room <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -213,7 +211,7 @@ export default function RoomsTableView({ departmentData }) {
         msg: `activated many rooms in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -237,7 +235,7 @@ export default function RoomsTableView({ departmentData }) {
         msg: `inactivated many rooms in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();

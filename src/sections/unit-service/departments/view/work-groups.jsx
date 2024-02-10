@@ -24,8 +24,6 @@ import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
-import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -50,7 +48,7 @@ import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 import axiosHandler from 'src/utils/axios-handler';
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetDepartmentWorkGroups } from 'src/api/tables'; /// edit
+import { useGetDepartmentWorkGroups } from 'src/api'; /// edit
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import TableDetailRow from '../work-groups/table-details-row'; /// edit
@@ -166,7 +164,7 @@ export default function WorkGroupsTableView({ departmentData }) {
           msg: `activated work group <strong>${row.name_english}</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -188,7 +186,7 @@ export default function WorkGroupsTableView({ departmentData }) {
           msg: `inactivated work group <strong>${row.name_english}</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -210,7 +208,7 @@ export default function WorkGroupsTableView({ departmentData }) {
         msg: `activated many work group in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -242,7 +240,7 @@ export default function WorkGroupsTableView({ departmentData }) {
         msg: `inactivated many work group in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();

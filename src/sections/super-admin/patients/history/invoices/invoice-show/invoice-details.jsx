@@ -19,7 +19,6 @@ import TableContainer from '@mui/material/TableContainer';
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
-import { INVOICE_STATUS_OPTIONS } from 'src/_mock';
 import { useSettingsContext } from 'src/components/settings';
 
 import Label from 'src/components/label';

@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import UnitServiceInsurance from 'src/sections/super-admin/unitservices/insurance/insurance';
-import { useGetUnitservice } from 'src/api/tables';
+import { useGetUnitservice } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import { LoadingScreen } from 'src/components/loading-screen';
 

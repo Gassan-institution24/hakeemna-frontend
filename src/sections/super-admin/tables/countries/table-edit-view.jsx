@@ -8,7 +8,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useParams } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
-import { useGetCountry } from 'src/api/tables';
+import { useGetCountry } from 'src/api';
 
 import TableNewEditForm from './table-new-edit-form';
 

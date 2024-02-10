@@ -17,7 +17,6 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSettingsContext } from 'src/components/settings';
 
-import { _addressBooks } from 'src/_mock';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { socket } from 'src/socket';
@@ -208,7 +207,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       router.push(paths.employee.appointmentconfiguration.root);
       saving.onFalse();
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
       saving.onFalse();
     }
@@ -233,7 +232,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       updating.onFalse();
       // await refetch();
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
       confirm.onFalse();
       updating.onFalse();
@@ -270,14 +269,14 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
           ),
           msg: `created an appointment configuration <strong>[ ${config.data?.code} ]</strong>`,
-        })
+        });
         router.push(paths.employee.appointmentconfiguration.root);
       }
       // reset();
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       enqueueSnackbar(`Failed to Add: ${error}`, { variant: 'error' });
       console.error(error);
       loadingSend.onFalse();

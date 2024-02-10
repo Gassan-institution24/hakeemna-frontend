@@ -34,7 +34,7 @@ import FormProvider, {
   RHFSelect,
 } from 'src/components/hook-form';
 import axiosHandler from 'src/utils/axios-handler';
-import { useGetCities } from 'src/api/tables';
+import { useGetCities } from 'src/api';
 import { useGetStackholder } from 'src/api/user';
 // ----------------------------------------------------------------------
 

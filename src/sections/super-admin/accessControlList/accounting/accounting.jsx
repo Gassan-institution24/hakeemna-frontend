@@ -40,7 +40,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetUSLicenseMovement } from 'src/api/tables'; /// edit
+import { useGetUSLicenseMovement } from 'src/api'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';

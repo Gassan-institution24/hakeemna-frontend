@@ -14,15 +14,6 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import {
-  _jobs,
-  _roles,
-  JOB_SORT_OPTIONS,
-  JOB_BENEFIT_OPTIONS,
-  JOB_EXPERIENCE_OPTIONS,
-  JOB_EMPLOYMENT_TYPE_OPTIONS,
-} from 'src/_mock';
-
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
@@ -34,7 +25,7 @@ import {
   useGetCountries,
   useGetAppointmentTypes,
   useGetPaymentMethods,
-} from 'src/api/tables';
+} from 'src/api';
 import { fTimestamp } from 'src/utils/format-time';
 
 import AppointmentList from './appointment-list';

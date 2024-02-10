@@ -20,12 +20,7 @@ import FormProvider, {
   RHFUploadAvatar,
   RHFUploadBox,
 } from 'src/components/hook-form';
-import {
-  useGetCities,
-  useGetCountries,
-  useGetSpecialties,
-  useGetEmployeeTypes,
-} from 'src/api/tables';
+import { useGetCities, useGetCountries, useGetSpecialties, useGetEmployeeTypes } from 'src/api';
 
 import { socket } from 'src/socket';
 
@@ -162,7 +157,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       refetch();
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       enqueueSnackbar('Update failed!', { variant: 'error' });
       console.error(error);
     }

@@ -39,7 +39,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetUnitservices } from 'src/api/tables'; /// edit
+import { useGetUnitservices } from 'src/api'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import TableDetailRow from './table-details-row'; /// edit

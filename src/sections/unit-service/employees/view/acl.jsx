@@ -34,7 +34,7 @@ import {
   useGetSpecialties,
   useGetUSTypes,
   useGetEmployeeEngagement,
-} from 'src/api/tables';
+} from 'src/api';
 import Scrollbar from 'src/components/scrollbar';
 import ACLGuard from 'src/auth/guard/acl-guard';
 
@@ -175,7 +175,7 @@ export default function TableNewEditForm({ acl }) {
       // router.push(paths.superadmin.subscriptions.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
     }
   });

@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import RoomEditView from 'src/sections/unit-service/tables/rooms/view/edit';
-import { useGetRoom } from 'src/api/tables';
+import { useGetRoom } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------

@@ -14,7 +14,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetUSDepartments } from 'src/api/tables';
+import { useGetUSDepartments } from 'src/api';
 
 import { socket } from 'src/socket';
 import { useLocales, useTranslate } from 'src/locales';
@@ -135,7 +135,7 @@ export default function TableNewEditForm({ currentTable }) {
 
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
     }
   });

@@ -50,7 +50,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 import { enqueueSnackbar } from 'notistack';
-import { useGetInsuranceCos } from 'src/api/tables';
+import { useGetInsuranceCos } from 'src/api';
 import { useTranslate } from 'src/locales';
 import InsuranceRow from './stakeholder-insurance-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';

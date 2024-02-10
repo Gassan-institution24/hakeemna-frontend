@@ -42,7 +42,7 @@ import {
 import { fTimestamp } from 'src/utils/format-time';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetStakeholderOffers } from 'src/api/tables'; /// edit
+import { useGetStakeholderOffers } from 'src/api'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';

@@ -9,7 +9,7 @@ import Avatar from '@mui/material/Avatar';
 
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
-import { useGetAnalyses, useGetCities } from 'src/api/tables';
+import { useGetAnalyses, useGetCities } from 'src/api';
 import { useGetStackholder } from 'src/api/user';
 
 // ----------------------------------------------------------------------

@@ -26,7 +26,7 @@ import {
   useGetDepartmentEmployeesCount,
   useGetDepartmentFeedbackesCount,
   useGetDepartmentRoomsCount,
-} from 'src/api/tables';
+} from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------

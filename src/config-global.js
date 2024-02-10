@@ -3,10 +3,8 @@ import { paths } from 'src/routes/paths';
 // API
 // ----------------------------------------------------------------------
 
-export const HOST_API = 'http://localhost:3000';
-export const ASSETS_API = 'http://localhost:3000';
-// export const HOST_API = 'https://doctorna-mauve.vercel.app';
-// export const ASSETS_API = 'https://doctorna-mauve.vercel.app';
+export const HOST_API = process.env.REACT_APP_API_URL;
+export const ASSETS_API = process.env.REACT_APP_API_URL;
 
 export const FIREBASE_API = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,

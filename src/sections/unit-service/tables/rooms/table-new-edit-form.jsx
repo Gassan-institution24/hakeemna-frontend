@@ -24,7 +24,7 @@ import axios from 'axios';
 import { useAuthContext } from 'src/auth/hooks';
 import axiosHandler from 'src/utils/axios-handler';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSDepartments } from 'src/api/tables';
+import { useGetUSDepartments } from 'src/api';
 
 // ----------------------------------------------------------------------
 
@@ -129,7 +129,7 @@ export default function TableNewEditForm({ currentTable }) {
       router.push(paths.unitservice.tables.rooms.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
     }
   });

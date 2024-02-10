@@ -15,8 +15,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
-
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -75,7 +73,7 @@ export default function NewEditHolidays() {
                 sx={{ width: { xs: '100%', md: 'auto' } }}
               >
                 <RHFTextField
-              lang="ar"
+                  lang="ar"
                   size="small"
                   name={`holidays[${index}].description`}
                   label="Description"

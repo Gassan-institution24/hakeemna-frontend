@@ -24,8 +24,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -42,7 +40,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useGetStackholderIncomePaymentControl } from 'src/api/tables';
+import { useGetStackholderIncomePaymentControl } from 'src/api';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 import PaymentControlAnalytic from '../table-analytic';

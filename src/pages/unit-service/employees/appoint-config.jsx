@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import EmployeeAppointconfigView from 'src/sections/unit-service/employees/view/appoint-config-table';
-import { useGetEmployeeEngagement, useGetEmployeeAppointmentConfigs } from 'src/api/tables';
+import { useGetEmployeeEngagement, useGetEmployeeAppointmentConfigs } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import { useAuthContext } from 'src/auth/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';

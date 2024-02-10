@@ -12,7 +12,7 @@ import Container from '@mui/material/Container';
 import { useAuthContext } from 'src/auth/hooks';
 import axios, { endpoints } from 'src/utils/axios';
 import { paths } from 'src/routes/paths';
-import { _mock } from 'src/_mock';
+
 import { useRouter } from 'src/routes/hooks';
 import { useSnackbar } from 'src/components/snackbar';
 
@@ -105,8 +105,11 @@ export default function Oldpatientsdata() {
           >
             <Container>
               <CustomBreadcrumbs
-                heading= {t("Please confirm your data")}
-                links={[{ name: t('Home'), href: paths.dashboard.root }, { name: t('Confirming Data') }]}
+                heading={t('Please confirm your data')}
+                links={[
+                  { name: t('Home'), href: paths.dashboard.root },
+                  { name: t('Confirming Data') },
+                ]}
               />
               <Box sx={{ display: 'block' }}>
                 <Typography sx={{ mb: 1, padding: 1, fontSize: { md: 16, xs: 14 } }}>
@@ -118,7 +121,7 @@ export default function Oldpatientsdata() {
                   >
                     {t('Yes')}
                   </Button>
-                  {t("if this is your data")}
+                  {t('if this is your data')}
                 </Typography>
                 <Typography sx={{ mb: 1, padding: 1, fontSize: { md: 16, xs: 14 } }}>
                   {t('Click')}
@@ -165,7 +168,7 @@ export default function Oldpatientsdata() {
                             }}
                             icon="heroicons:identification"
                           />
-                          {t("Identification Number")}
+                          {t('Identification Number')}
                         </Typography>
                         <Stack spacing={1}>
                           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
@@ -232,7 +235,6 @@ export default function Oldpatientsdata() {
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                               key={disease._id}
                             >
-                              
                               -&nbsp; {disease.name_english}
                             </li>
                           ))}
@@ -266,7 +268,6 @@ export default function Oldpatientsdata() {
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                               key={surgery._id}
                             >
-                              
                               -&nbsp; {surgery.name}
                             </li>
                           ))}
@@ -299,7 +300,6 @@ export default function Oldpatientsdata() {
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                               key={data._id}
                             >
-                              
                               -&nbsp; {data?.frequently}
                             </li>
                           ))}
@@ -361,7 +361,6 @@ export default function Oldpatientsdata() {
                           {t('Sport Exercises')}
                         </Typography>
                         <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-                          
                           -&nbsp; {item?.sport_exercises}
                         </li>
                         <Divider
@@ -388,7 +387,6 @@ export default function Oldpatientsdata() {
                           {t('Eating Diet')}
                         </Typography>
                         <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-                          
                           -&nbsp; {item?.eating_diet?.name_english}
                         </li>
                         <Divider
@@ -414,7 +412,6 @@ export default function Oldpatientsdata() {
                           {t('Alcohol Consumption')}
                         </Typography>
                         <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-                          
                           -&nbsp; {item?.alcohol_consumption}
                         </li>
                         <Divider
@@ -441,7 +438,6 @@ export default function Oldpatientsdata() {
                           {t('Smoking')}
                         </Typography>
                         <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-                          
                           -&nbsp; {item?.smoking}
                         </li>
                         <Divider

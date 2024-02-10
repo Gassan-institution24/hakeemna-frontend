@@ -24,7 +24,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
-import { useGetCountries, useGetCities } from 'src/api/tables';
+import { useGetCountries, useGetCities } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
 import { useLocales, useTranslate } from 'src/locales';
@@ -125,7 +125,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       enqueueSnackbar(`Please try again later!: ${error}`, { variant: 'error' });
       console.error(error);
     }

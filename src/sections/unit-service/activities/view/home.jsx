@@ -25,8 +25,6 @@ import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
-import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -48,7 +46,7 @@ import { StatusOptions } from 'src/assets/data/status-options';
 import { socket } from 'src/socket';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetUSActivities } from 'src/api/tables'; /// edit
+import { useGetUSActivities } from 'src/api'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import TableDetailRow from '../table-details-row'; /// edit
@@ -166,7 +164,7 @@ export default function ActivitesTableView() {
           msg: `activated an activity <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -188,7 +186,7 @@ export default function ActivitesTableView() {
           msg: `inactivated an activity <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -210,7 +208,7 @@ export default function ActivitesTableView() {
         msg: `activated many activities`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -234,7 +232,7 @@ export default function ActivitesTableView() {
         msg: `inactivated many activities`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();

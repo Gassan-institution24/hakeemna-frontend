@@ -8,7 +8,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import { useParams } from 'src/routes/hooks';
 
-import { useGetDepartment } from 'src/api/tables';
+import { useGetDepartment } from 'src/api';
 
 import TableNewEditForm from './table-new-edit-form';
 

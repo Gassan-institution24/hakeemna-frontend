@@ -21,11 +21,7 @@ import FormProvider from 'src/components/hook-form/form-provider';
 import { useAuthContext } from 'src/auth/hooks';
 import EmptyContent from 'src/components/empty-content';
 
-import {
-  useGetPatientOneAppointments,
-  useGetUnitservice,
-  useGetUSFeedbackes,
-} from 'src/api/tables';
+import { useGetPatientOneAppointments, useGetUnitservice, useGetUSFeedbackes } from 'src/api';
 import { useTranslate, useLocales } from 'src/locales';
 // ----------------------------------------------------------------------
 
@@ -45,8 +41,8 @@ export default function WatingRoom() {
   const { data } = useGetUnitservice(appointmentsData?.unit_service?._id);
   const { feedbackData } = useGetUSFeedbackes(appointmentsData?.unit_service?._id);
 
-console.log('appointmentsData', appointmentsData);
-console.log('data', data);
+  console.log('appointmentsData', appointmentsData);
+  console.log('data', data);
 
   const skipfunction = async () => {
     try {
@@ -141,7 +137,9 @@ console.log('data', data);
               src="https://cdn.altibbi.com/cdn/large/0/10/logo_1296490409_651.gif"
               sx={{ width: '60px', height: '60px', border: 1, borderRadius: '50px' }}
             />
-            <Typography sx={{ color: 'black' }}>{currentLang ? `${data?.name_arabic}` : `${data.name_english}`} </Typography>
+            <Typography sx={{ color: 'black' }}>
+              {currentLang ? `${data?.name_arabic}` : `${data.name_english}`}{' '}
+            </Typography>
             <Rating
               size="large"
               precision={1}
@@ -178,7 +176,7 @@ console.log('data', data);
             </DialogContent>
           ) : (
             <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
-             {t('We hope that everything was to your satisfaction')}
+              {t('We hope that everything was to your satisfaction')}
             </Typography>
           )}
 
@@ -200,6 +198,6 @@ console.log('data', data);
       </Dialog>
     </span>
   ) : (
-    <EmptyContent filled title={t("No Data")} sx={{ py: 10 }} />
+    <EmptyContent filled title={t('No Data')} sx={{ py: 10 }} />
   );
 }

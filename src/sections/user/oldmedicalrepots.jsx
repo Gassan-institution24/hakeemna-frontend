@@ -36,7 +36,7 @@ import {
 } from '@react-pdf/renderer';
 import { useAuthContext } from 'src/auth/hooks';
 import { fDate } from 'src/utils/format-time';
-import File from '../other/_examples/mui/dialog-view/File.png';
+// import File from '../other/_examples/mui/dialog-view/File.png';
 
 export default function OldMedicalReports() {
   const popover = usePopover();
@@ -64,16 +64,19 @@ export default function OldMedicalReports() {
     fetchData();
   }, []);
 
-
-
   const delteeFile = async () => {
     try {
       await axios.delete(`/api/oldmedicalreports/${filesPdftodelete._id}`);
-      enqueueSnackbar(`${curLangAr ? 'تم حذف التقرير بنجاح' : 'Medical report deleted successfully'}`, { variant: 'success' });
+      enqueueSnackbar(
+        `${curLangAr ? 'تم حذف التقرير بنجاح' : 'Medical report deleted successfully'}`,
+        { variant: 'success' }
+      );
       const response = await axios.get('/api/oldmedicalreports');
       setfilesPdf(response.data);
     } catch (error) {
-      enqueueSnackbar(`${curLangAr ? 'حدث خطأ ما, الرجاء المحاوله لاحقا' : 'Unable to delete'}`, { variant: 'error' });
+      enqueueSnackbar(`${curLangAr ? 'حدث خطأ ما, الرجاء المحاوله لاحقا' : 'Unable to delete'}`, {
+        variant: 'error',
+      });
     }
   };
 
@@ -296,11 +299,13 @@ export default function OldMedicalReports() {
           </DialogTitle>
           <DialogContent>
             <Typography sx={{ mb: 5, fontSize: 14 }}>
-                {curLangAr ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض' : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
+              {curLangAr
+                ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
+                : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
             <RHFTextField lang="en" name="name" label={t('File name*')} sx={{ mb: 1.5 }} />
             <RHFSelect
-              label= {t('Type*')}
+              label={t('Type*')}
               fullWidth
               name="type"
               PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -353,7 +358,7 @@ export default function OldMedicalReports() {
               variant="outlined"
               onDrop={handleDrop}
             />
-            <RHFTextField lang="en" name="note" label={t('More information')}/>
+            <RHFTextField lang="en" name="note" label={t('More information')} />
           </DialogContent>
           <Checkbox
             size="small"
@@ -376,7 +381,7 @@ export default function OldMedicalReports() {
           >
             {t('I reed the ')}
             <Link underline="always" color="text.primary">
-            {t('Privacy Policy')}
+              {t('Privacy Policy')}
             </Link>
             {t('And agree to ')}
             <Link underline="always" color="text.primary">
@@ -394,7 +399,7 @@ export default function OldMedicalReports() {
               </Button>
             ) : (
               <Button type="submit" loading={isSubmitting} variant="contained">
-                 {t('Upload')}
+                {t('Upload')}
               </Button>
             )}
           </DialogActions>
@@ -410,14 +415,14 @@ export default function OldMedicalReports() {
         {filesPdf.map((info, i) => (
           <Box>
             <Box>
-              <Image
+              {/* <Image
                 src={File}
                 sx={{
                   width: { md: '80px', xs: '50px' },
                   height: { md: '80px', xs: '50px' },
                   mb: '15px',
                 }}
-              />
+              /> */}
               <IconButton
                 onClick={(event) => {
                   popover.onOpen(event);

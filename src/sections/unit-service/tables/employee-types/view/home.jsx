@@ -26,8 +26,6 @@ import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
-import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -48,7 +46,7 @@ import ACLGuard from 'src/auth/guard/acl-guard';
 
 import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetUSEmployeeTypes } from 'src/api/tables'; /// edit
+import { useGetUSEmployeeTypes } from 'src/api'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { socket } from 'src/socket';
@@ -168,7 +166,7 @@ export default function EmployeeTypesTable() {
           msg: `activated an employee type <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -190,7 +188,7 @@ export default function EmployeeTypesTable() {
           msg: `inactivated an employee type <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -212,7 +210,7 @@ export default function EmployeeTypesTable() {
         msg: `activated many employee types`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -236,7 +234,7 @@ export default function EmployeeTypesTable() {
         msg: `inactivated many employee types`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();

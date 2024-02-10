@@ -25,8 +25,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -43,7 +41,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useGetUSEconomicMovements } from 'src/api/tables';
+import { useGetUSEconomicMovements } from 'src/api';
 
 import MovementsAnalytic from '../table-analytic';
 import MovementRow from './invoice-table-row';

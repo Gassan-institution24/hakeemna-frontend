@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { useGetUSAppointments } from 'src/api/tables';
+import { useGetUSAppointments } from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 import { LoadingScreen } from 'src/components/loading-screen';
