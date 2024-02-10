@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import AdjustableService from 'src/sections/super-admin/adjustableSeervicesControl/home/homepage';
-import { useGetUnitservice } from 'src/api/tables';
+import { useGetUnitservice } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import { LoadingScreen } from 'src/components/loading-screen';
 

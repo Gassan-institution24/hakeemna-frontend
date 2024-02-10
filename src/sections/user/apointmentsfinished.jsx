@@ -16,12 +16,11 @@ import Link from '@mui/material/Link';
 import { Button } from '@mui/material';
 import { fShortenNumber } from 'src/utils/format-number';
 
-import { _socials } from 'src/_mock';
 import { AvatarShape } from 'src/assets/illustrations';
 import { fTime, fDate } from 'src/utils/format-time';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
-import { useGetPatientAppointments } from 'src/api/tables';
+import { useGetPatientAppointments } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
 import { useSettingsContext } from 'src/components/settings';
@@ -29,7 +28,7 @@ import { useSettingsContext } from 'src/components/settings';
 
 export default function FinishedAppoinment() {
   const theme = useTheme();
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
   const { appointmentsData } = useGetPatientAppointments(user?.patient?._id);
 
   const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');

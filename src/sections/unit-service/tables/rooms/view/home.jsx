@@ -24,8 +24,6 @@ import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
-import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -45,7 +43,7 @@ import {
 
 import { socket } from 'src/socket';
 import { endpoints } from 'src/utils/axios';
-import { useGetUSRooms } from 'src/api/tables'; /// edit
+import { useGetUSRooms } from 'src/api'; /// edit
 import { useAuthContext } from 'src/auth/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import axiosHandler from 'src/utils/axios-handler';
@@ -171,7 +169,7 @@ export default function RoomsTableView() {
           msg: `activated a room <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -193,7 +191,7 @@ export default function RoomsTableView() {
           msg: `inactivated a room <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -215,7 +213,7 @@ export default function RoomsTableView() {
         msg: `activated many rooms`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -227,19 +225,19 @@ export default function RoomsTableView() {
   }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user]);
 
   const handleInactivateRows = useCallback(async () => {
-  try{
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.rooms}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
-    socket.emit('updated', {
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.rooms}/updatestatus`, /// edit
+        data: { status: 'inactive', ids: table.selected },
+      });
+      socket.emit('updated', {
         user,
         link: paths.unitservice.tables.rooms.root,
         msg: `inactivated many rooms`,
-      })
+      });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();

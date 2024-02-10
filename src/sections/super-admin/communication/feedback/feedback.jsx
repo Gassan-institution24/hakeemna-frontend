@@ -40,7 +40,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { useGetUSFeedbackes } from 'src/api/tables'; /// edit
+import { useGetUSFeedbackes } from 'src/api'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';

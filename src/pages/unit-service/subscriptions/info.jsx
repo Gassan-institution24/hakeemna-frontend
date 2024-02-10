@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import SubscriptionsInfoView from 'src/sections/unit-service/subscriptions/view/info';
-import { useGetSubscription } from 'src/api/tables';
+import { useGetSubscription } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { LoadingScreen } from 'src/components/loading-screen';

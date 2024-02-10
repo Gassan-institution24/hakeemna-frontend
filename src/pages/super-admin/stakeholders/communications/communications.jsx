@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import PatientCommunication from 'src/sections/super-admin/stakeholders/communication/patient-communication';
-import { useGetStakeholder } from 'src/api/tables';
+import { useGetStakeholder } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 // ----------------------------------------------------------------------
 

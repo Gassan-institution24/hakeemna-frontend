@@ -24,8 +24,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
@@ -43,7 +41,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useGetStakeholderLicenseMovement } from 'src/api/tables';
+import { useGetStakeholderLicenseMovement } from 'src/api';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 import TableAnalytic from '../../patients/history/table-analytic';

@@ -46,7 +46,7 @@ import {
   useGetEmployeeTypes,
   useGetSpecialties,
   useGetUSTypes,
-} from 'src/api/tables';
+} from 'src/api';
 
 // ----------------------------------------------------------------------
 

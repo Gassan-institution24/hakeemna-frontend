@@ -46,7 +46,7 @@ import {
 
 import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetUSEmployees } from 'src/api/tables'; /// edit
+import { useGetUSEmployees } from 'src/api'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { socket } from 'src/socket';
@@ -161,7 +161,7 @@ export default function EmployeesTableView() {
           msg: `activated an employee <strong>${row.employee?.first_name}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -183,7 +183,7 @@ export default function EmployeesTableView() {
           msg: `inactivated an employee <strong>${row.employee?.first_name}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -205,7 +205,7 @@ export default function EmployeesTableView() {
         msg: `activated many employees`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -229,7 +229,7 @@ export default function EmployeesTableView() {
         msg: `inactivated many employees `,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -285,8 +285,8 @@ export default function EmployeesTableView() {
   /* eslint-disable */
   useEffect(() => {
     socket.on('employeeStatusUpdated', () => {
-      console.log('employee status updated')
-      refetch(); 
+      console.log('employee status updated');
+      refetch();
     });
   }, []);
   /* eslint-enable */

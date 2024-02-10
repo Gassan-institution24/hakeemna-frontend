@@ -9,7 +9,7 @@ import Iconify from 'src/components/iconify';
 import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { useGetUnitservice } from 'src/api/tables';
+import { useGetUnitservice } from 'src/api';
 import { LoadingScreen } from 'src/components/loading-screen';
 import AccountGeneral from '../profile-general';
 import AccountNotifications from '../profile-notifications';

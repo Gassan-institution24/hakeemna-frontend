@@ -24,7 +24,7 @@ import {
   useGetAppointmentTypes,
   useGetPaymentMethods,
   useGetInsuranceCos,
-} from 'src/api/tables';
+} from 'src/api';
 
 import AppointmentList from '../super-admin/patients/history/book-appointment/appointment-list-user';
 import AppointmentSort from '../super-admin/patients/history/book-appointment/appointment-sort-user';
@@ -214,7 +214,7 @@ export default function AppointmentBooking() {
         {canReset && renderResults}
       </Stack>
 
-      {notFound && <EmptyContent filled title={t("No Data")} sx={{ py: 10 }} />}
+      {notFound && <EmptyContent filled title={t('No Data')} sx={{ py: 10 }} />}
 
       <AppointmentList
         patientData={user?.patient?._id}

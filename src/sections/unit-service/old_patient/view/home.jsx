@@ -16,7 +16,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import { useGetEmployeeOldPatient } from 'src/api/tables';
+import { useGetEmployeeOldPatient } from 'src/api';
 import UploadOldPatient from '../upload-old-patient';
 import UploadedOldPatients from '../uploaded-old-patients';
 

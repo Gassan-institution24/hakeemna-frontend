@@ -34,7 +34,7 @@ import {
   useGetCountries,
   useGetAppointmentTypes,
   useGetPaymentMethods,
-} from 'src/api/tables';
+} from 'src/api';
 import { fTimestamp } from 'src/utils/format-time';
 
 import AppointmentList from './appointment-list';

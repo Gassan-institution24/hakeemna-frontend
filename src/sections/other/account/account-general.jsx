@@ -15,7 +15,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
 import { Button, MenuItem, Typography } from '@mui/material';
 import FormProvider, { RHFTextField, RHFSelect, RHFUploadAvatar } from 'src/components/hook-form';
-import { useGetCities, useGetCountries, useGetPatient } from 'src/api/tables';
+import { useGetCities, useGetCountries, useGetPatient } from 'src/api';
 import axios, { endpoints, fetcher } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
@@ -163,25 +163,28 @@ export default function AccountGeneral({ data, refetch }) {
   const onSubmit = async (profileData) => {
     // Create a new FormData object
     const formData = new FormData();
-    
+
     // Get the old array of other_medication_notes or create an empty array
     const oldOtherMedicationNotes = data?.other_medication_notes || [];
-    
+
     // Combine the old array with the new value
-    const newOtherMedicationNotes = [...oldOtherMedicationNotes, profileData.other_medication_notes];
-    
+    const newOtherMedicationNotes = [
+      ...oldOtherMedicationNotes,
+      profileData.other_medication_notes,
+    ];
+
     // Set the combined array in the profileData
     profileData.other_medication_notes = newOtherMedicationNotes;
-    
+
     // Append each key-value pair to the formData
     Object.keys(profileData).forEach((key) => {
       formData.append(key, profileData[key]);
     });
-  
+
     if (profilePicture) {
       formData.append('ter', profilePicture);
     }
-  
+
     try {
       const response = await axios.patch(`${endpoints.tables.user}${user?.patient._id}`, formData);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
@@ -190,7 +193,6 @@ export default function AccountGeneral({ data, refetch }) {
       enqueueSnackbar('Failed to update profile', { variant: 'error' });
     }
   };
-  
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

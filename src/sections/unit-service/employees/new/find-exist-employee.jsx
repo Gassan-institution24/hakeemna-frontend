@@ -40,7 +40,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useLocales, useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 
-import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api/tables';
+import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api';
 import axios, { endpoints } from 'src/utils/axios';
 
 import { socket } from 'src/socket';
@@ -134,7 +134,7 @@ export default function TableNewEditForm() {
       });
       enqueueSnackbar(t('employment successfully!'));
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       enqueueSnackbar(t('failed to employment!'), { variant: 'error' });
     }
   };

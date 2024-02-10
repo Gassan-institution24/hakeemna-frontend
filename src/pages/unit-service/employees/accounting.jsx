@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import EmployeeAccountingView from 'src/sections/unit-service/employees/view/accounting-view';
-import { useGetEmployee } from 'src/api/tables';
+import { useGetEmployee } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { LoadingScreen } from 'src/components/loading-screen';

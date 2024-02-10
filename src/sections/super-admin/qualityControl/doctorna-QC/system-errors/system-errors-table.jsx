@@ -41,7 +41,7 @@ import {
 } from 'src/components/table';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetSystemErrors } from 'src/api/tables'; /// edit
+import { useGetSystemErrors } from 'src/api'; /// edit
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';

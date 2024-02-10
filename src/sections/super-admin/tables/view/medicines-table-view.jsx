@@ -41,7 +41,7 @@ import {
 } from 'src/components/table';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetMedicines } from 'src/api/tables'; /// edit
+import { useGetMedicines } from 'src/api'; /// edit
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from '../medicines/table-details-row'; /// edit

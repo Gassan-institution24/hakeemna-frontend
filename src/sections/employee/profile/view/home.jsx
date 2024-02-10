@@ -14,7 +14,7 @@ import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetEmployee } from 'src/api/tables';
+import { useGetEmployee } from 'src/api';
 
 import AccountGeneral from '../profile-general';
 // import AccountNotifications from '../profile-notifications';
@@ -38,7 +38,7 @@ export default function AccountView() {
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
-  
+
   const TABS = [
     {
       value: 'general',

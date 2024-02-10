@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import BookAppointment from 'src/sections/super-admin/patients/history/book-appointment/book-appointment';
-import { useGetPatient } from 'src/api/tables';
+import { useGetPatient } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import { LoadingScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------

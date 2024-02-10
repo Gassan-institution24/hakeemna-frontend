@@ -25,7 +25,7 @@ import { RouterLink } from 'src/routes/components';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-// import { useGetStakeholderAppointments } from 'src/api/tables';
+// import { useGetStakeholderAppointments } from 'src/api';
 
 import AppointHistory from './appointment-history/appoint-history';
 import EconomicMovementsView from './invoices/invoices-view';

@@ -16,7 +16,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/hooks';
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
-import { useGetEmployeeWorkGroups, useGetUSWorkShifts } from 'src/api/tables';
+import { useGetEmployeeWorkGroups, useGetUSWorkShifts } from 'src/api';
 
 // ----------------------------------------------------------------------
 

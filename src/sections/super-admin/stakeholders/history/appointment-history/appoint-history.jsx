@@ -42,7 +42,7 @@ import { useSettingsContext } from 'src/components/settings';
 
 // import { endpoints } from 'src/utils/axios';
 // import axiosHandler from 'src/utils/axios-handler';
-// import { useGetAppointmentTypes, useGetStakeholderAppointments } from 'src/api/tables';
+// import { useGetAppointmentTypes, useGetStakeholderAppointments } from 'src/api';
 // // import StakeholderHistoryAnalytic from './appoint-history-analytic';
 // import StakeholderHistoryRow from './appoint-history-row';
 // import StakeholderHistoryToolbar from './appoint-history-toolbar';

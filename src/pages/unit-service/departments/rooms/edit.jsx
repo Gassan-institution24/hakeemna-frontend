@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import DepartmentRoomEditView from 'src/sections/unit-service/departments/rooms/table-edit-view';
-import { useGetDepartment, useGetRoom } from 'src/api/tables';
+import { useGetDepartment, useGetRoom } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import { LoadingScreen } from 'src/components/loading-screen';
 import ACLGuard from 'src/auth/guard/acl-guard';

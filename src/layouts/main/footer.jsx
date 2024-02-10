@@ -12,8 +12,6 @@ import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { _socials } from 'src/_mock';
-
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 

@@ -52,7 +52,7 @@ import axiosHandler from 'src/utils/axios-handler';
 import { useSnackbar } from 'src/components/snackbar';
 
 import ACLGuard from 'src/auth/guard/acl-guard';
-import { useGetAppointmentTypes } from 'src/api/tables';
+import { useGetAppointmentTypes } from 'src/api';
 import AppointmentsRow from '../appointments/appointment-row';
 import PatientHistoryToolbar from '../appointments/appointment-toolbar';
 import HistoryFiltersResult from '../appointments/appointment-filters-result';
@@ -201,7 +201,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           msg: `canceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       enqueueSnackbar('canceled successfully!');
@@ -225,7 +225,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           msg: `delayed an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       enqueueSnackbar('delayed successfully!');
@@ -249,7 +249,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           msg: `uncanceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       enqueueSnackbar('uncanceled successfully!');
@@ -273,7 +273,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           msg: `canceled many appointments`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       enqueueSnackbar('canceled successfully!');
@@ -309,7 +309,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
       });
       enqueueSnackbar('delayed successfully!');
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -345,7 +345,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           msg: `uncanceled many appointments`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();

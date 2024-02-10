@@ -9,7 +9,7 @@ import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import Box from '@mui/material/Box';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
-import { useGetPatient } from 'src/api/tables';
+import { useGetPatient } from 'src/api';
 import { paths } from 'src/routes/paths';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import Prescriptions from '../prescriptions';

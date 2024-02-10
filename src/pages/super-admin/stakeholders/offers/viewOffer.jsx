@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import StakeholderOfferView from 'src/sections/super-admin/stakeholders/offers/offer-view/offer-view';
-import { useGetStakeholder, useGetOffer } from 'src/api/tables';
+import { useGetStakeholder, useGetOffer } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import { LoadingScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------

@@ -15,7 +15,7 @@ import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetUnitservices } from 'src/api/tables';
+import { useGetUnitservices } from 'src/api';
 import { endpoints } from 'src/utils/axios';
 
 import { useSnackbar } from 'src/components/snackbar';

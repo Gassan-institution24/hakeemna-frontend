@@ -1,7 +1,7 @@
 // import { Helmet } from 'react-helmet-async';
 
 // import AccessControlList from 'src/sections/super-admin/accessControlList/home/homepage';
-// import { useGetUnitservice } from 'src/api/tables';
+// import { useGetUnitservice } from 'src/api';
 // import { useParams } from 'src/routes/hooks';
 
 // // ----------------------------------------------------------------------

@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import SubscriptionEditView from 'src/sections/super-admin/subscriptions/table-edit-view';
-import { useGetSubscription } from 'src/api/tables';
+import { useGetSubscription } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import { useTranslate } from 'src/locales';
 

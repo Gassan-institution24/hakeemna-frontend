@@ -24,7 +24,7 @@ import {
   useGetUSEmployeeTypes,
   useGetSpecialties,
   useGetUSDepartments,
-} from 'src/api/tables';
+} from 'src/api';
 import { endpoints } from 'src/utils/axios';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -162,7 +162,7 @@ export default function TableNewEditForm({ currentTable }) {
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       enqueueSnackbar(t('Failed to create!'), { variant: 'error' });
       setErrorMsg(error);
       console.error(error);

@@ -1,5 +1,5 @@
 // import { _mock } from 'src/_mock';
-// import { useGetCities } from 'src/api/tables';
+// import { useGetCities } from 'src/api';
 // import { useGetUser } from 'src/api/user';
 // import { useState } from 'react';
 // // TO GET THE USER FROM THE AUTHCONTEXT, YOU CAN USE

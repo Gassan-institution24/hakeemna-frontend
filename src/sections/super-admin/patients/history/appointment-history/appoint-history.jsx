@@ -43,7 +43,7 @@ import {
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetAppointmentTypes, useGetPatientAppointments } from 'src/api/tables';
+import { useGetAppointmentTypes, useGetPatientAppointments } from 'src/api';
 // import PatientHistoryAnalytic from './appoint-history-analytic';
 import PatientHistoryRow from './appoint-history-row';
 import PatientHistoryToolbar from './appoint-history-toolbar';

@@ -25,7 +25,7 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 import { fCurrency } from 'src/utils/format-number';
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useGetAppointmentTypes, useGetUSServiceTypes } from 'src/api/tables';
+import { useGetAppointmentTypes, useGetUSServiceTypes } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
 import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';

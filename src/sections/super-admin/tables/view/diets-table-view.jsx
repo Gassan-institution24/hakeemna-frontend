@@ -32,7 +32,7 @@ import {
 } from 'src/components/table';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetDiets } from 'src/api/tables'; /// edit
+import { useGetDiets } from 'src/api'; /// edit
 import TableDetailRow from '../diets/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';

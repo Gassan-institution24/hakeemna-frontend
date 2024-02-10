@@ -5,7 +5,7 @@ import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
-import { useGetPatient } from 'src/api/tables';
+import { useGetPatient } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { _userAbout, _userPlans, _userPayment, _userInvoices, _userAddressBook } from 'src/_mock';
 import { useTranslate } from 'src/locales';
@@ -26,7 +26,7 @@ export default function AccountView() {
   const TABS = [
     {
       value: 'general',
-      label:  t('General'),
+      label: t('General'),
       icon: <Iconify icon="solar:user-id-bold" width={24} />,
     },
     // {
@@ -40,11 +40,10 @@ export default function AccountView() {
       icon: <Iconify icon="ic:round-vpn-key" width={24} />,
     },
   ];
-  
+
   const { user } = useAuthContext();
   const { data, refetch, loading } = useGetPatient(user?.patient?._id);
   const settings = useSettingsContext();
-
 
   const [currentTab, setCurrentTab] = useState('general');
 
@@ -55,7 +54,7 @@ export default function AccountView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t("Account")}
+        heading={t('Account')}
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('user'), href: paths.dashboard.user.root },

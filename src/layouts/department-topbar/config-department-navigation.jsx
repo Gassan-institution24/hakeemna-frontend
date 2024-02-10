@@ -7,7 +7,7 @@ import { useRouter, useParams } from 'src/routes/hooks';
 
 import Iconify from 'src/components/iconify';
 import ACLGuard from 'src/auth/guard/acl-guard';
-import { useGetDepartment } from 'src/api/tables';
+import { useGetDepartment } from 'src/api';
 
 // ----------------------------------------------------------------------
 

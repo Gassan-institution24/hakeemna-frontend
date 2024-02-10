@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import OffersInfoView from 'src/sections/unit-service/offers/view/info';
-import { useGetOffer } from 'src/api/tables';
+import { useGetOffer } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 

@@ -27,7 +27,7 @@ import {
   useGetUSServiceTypes,
   useGetUSEmployeeWorkGroups,
   useGetUSWorkShifts,
-} from 'src/api/tables';
+} from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';

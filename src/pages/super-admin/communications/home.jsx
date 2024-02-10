@@ -1,7 +1,7 @@
 // import { Helmet } from 'react-helmet-async';
 
 // import Communication from 'src/sections/super-admin/communication/home/homepage';
-// import { useGetUnitservice } from 'src/api/tables';
+// import { useGetUnitservice } from 'src/api';
 // import { useParams } from 'src/routes/hooks';
 
 // // ----------------------------------------------------------------------

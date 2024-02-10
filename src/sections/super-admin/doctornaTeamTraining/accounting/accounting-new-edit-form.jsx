@@ -20,7 +20,7 @@ import axios from 'axios';
 import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetFreeSubscriptions, useGetPaymentMethods, useGetSubscriptions } from 'src/api/tables';
+import { useGetFreeSubscriptions, useGetPaymentMethods, useGetSubscriptions } from 'src/api';
 
 // ----------------------------------------------------------------------
 

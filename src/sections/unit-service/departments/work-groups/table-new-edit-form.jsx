@@ -26,7 +26,7 @@ import axios from 'axios';
 import { useAuthContext } from 'src/auth/hooks';
 import axiosHandler from 'src/utils/axios-handler';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetDepartmentEmployees } from 'src/api/tables';
+import { useGetDepartmentEmployees } from 'src/api';
 
 // ----------------------------------------------------------------------
 
@@ -136,7 +136,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       router.push(paths.unitservice.departments.workGroups.root(departmentData._id));
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
     }
   });

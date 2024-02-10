@@ -20,7 +20,7 @@ import {
   useGetCountries,
   useGetSpecialties,
   useGetUSTypes,
-} from 'src/api/tables';
+} from 'src/api';
 import { fData } from 'src/utils/format-number';
 import { useLocales, useTranslate } from 'src/locales';
 import axios, { endpoints, fetcher } from 'src/utils/axios';
@@ -147,7 +147,7 @@ export default function AccountGeneral({ unitServiceData }) {
           user,
           link: paths.unitservice.profile.root,
           msg: `uploaded logo to service unit profile`,
-        })
+        });
       }
       await axios.patch(
         endpoints.tables.unitservice(
@@ -160,11 +160,11 @@ export default function AccountGeneral({ unitServiceData }) {
         user,
         link: paths.unitservice.profile.root,
         msg: `updated the service unit profile`,
-      })
+      });
       refetch();
       console.info('DATA', dataToSend);
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       enqueueSnackbar('Update failed!', { variant: 'error' });
       console.error(error);
     }

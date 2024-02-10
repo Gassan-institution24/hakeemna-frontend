@@ -27,7 +27,7 @@ import axios, { endpoints } from 'src/utils/axios';
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetEmployeeEngagement } from 'src/api/tables';
+import { useGetEmployeeEngagement } from 'src/api';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 
 import NewEditHolidays from '../appointmentConfig/new-edit-holidays';
@@ -219,7 +219,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       confirm.onFalse();
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       saving.onFalse();
       enqueueSnackbar(t(`failed to update!`), { variant: 'error' });
     }
@@ -242,7 +242,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
       // await refetch();
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       updating.onFalse();
       confirm.onFalse();
       enqueueSnackbar(t(`Failed to update!`), { variant: 'error' });
@@ -294,7 +294,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       enqueueSnackbar(t(`failed to add!`), { variant: 'error' });
       console.error(error);
       loadingSend.onFalse();

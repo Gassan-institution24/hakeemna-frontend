@@ -45,7 +45,7 @@ import {
 
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
-import { useGetUSDepartments } from 'src/api/tables'; /// edit
+import { useGetUSDepartments } from 'src/api'; /// edit
 import { StatusOptions } from 'src/assets/data/status-options';
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -166,7 +166,7 @@ export default function UnitServicesTableView() {
           msg: `activating department <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -188,7 +188,7 @@ export default function UnitServicesTableView() {
           msg: `inactivating department <strong>${row.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -210,7 +210,7 @@ export default function UnitServicesTableView() {
         msg: `activating many departments`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -234,7 +234,7 @@ export default function UnitServicesTableView() {
         msg: `inactivating many departments`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();

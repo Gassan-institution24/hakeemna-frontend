@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import StakeholderFeedback from 'src/sections/super-admin/stakeholders/feedback/stakeholder-feedback';
-import { useGetStakeholder } from 'src/api/tables';
+import { useGetStakeholder } from 'src/api';
 import { useParams } from 'src/routes/hooks';
 import { LoadingScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------

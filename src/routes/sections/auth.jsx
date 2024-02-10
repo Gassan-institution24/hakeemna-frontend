@@ -10,14 +10,14 @@ import { SplashScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------
 
 // JWT
-const JwtLoginPage = lazy(() => import('src/pages/auth/jwt/login'));
-const JwtRegisterPage = lazy(() => import('src/pages/auth/jwt/register'));
-const JwtUSRegisterPage = lazy(() => import('src/pages/auth/jwt/unit-service-register'));
-const JwtStakeholderRegisterPage = lazy(() => import('src/pages/auth/jwt/stakeholder-register'));
-const ForgetPasswordPage = lazy(() => import('src/pages/auth/jwt/forgot-password'));
-const VerifyPage = lazy(() => import('src/pages/auth/jwt/verify'));
-const NewPasswordPage = lazy(() => import('src/pages/auth/jwt/new-password'));
-const ActivationPage = lazy(() => import('src/pages/auth/jwt/activation'));
+const JwtLoginPage = lazy(() => import('src/pages/auth/login'));
+const JwtRegisterPage = lazy(() => import('src/pages/auth/register'));
+const JwtUSRegisterPage = lazy(() => import('src/pages/auth/unit-service-register'));
+const JwtStakeholderRegisterPage = lazy(() => import('src/pages/auth/stakeholder-register'));
+const ForgetPasswordPage = lazy(() => import('src/pages/auth/forgot-password'));
+const VerifyPage = lazy(() => import('src/pages/auth/verify'));
+const NewPasswordPage = lazy(() => import('src/pages/auth/new-password'));
+const ActivationPage = lazy(() => import('src/pages/auth/activation'));
 
 // ----------------------------------------------------------------------
 

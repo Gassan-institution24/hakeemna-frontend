@@ -50,7 +50,7 @@ import axiosHandler from 'src/utils/axios-handler';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { StatusOptions } from 'src/assets/data/status-options';
 
-import { useGetDepartmentEmployees } from 'src/api/tables'; /// edit
+import { useGetDepartmentEmployees } from 'src/api'; /// edit
 import TableDetailRow from '../employees/table-details-row'; /// edit
 import TableDetailToolbar from '../employees/table-details-toolbar';
 import TableDetailFiltersResult from '../employees/table-details-filters-result';
@@ -159,7 +159,7 @@ export default function EmployeesTableView({ departmentData }) {
           msg: `activated an employee <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -181,7 +181,7 @@ export default function EmployeesTableView({ departmentData }) {
           msg: `inactivated an employee <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+        socket.emit('error', { error: e, user, location: window.location.href });
         console.error(e);
       }
       refetch();
@@ -203,7 +203,7 @@ export default function EmployeesTableView({ departmentData }) {
         msg: `activated many employees in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -227,7 +227,7 @@ export default function EmployeesTableView({ departmentData }) {
         msg: `inactivated many employees in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (e) {
-      socket.emit('error',{error:e,user,location:window.location.href})
+      socket.emit('error', { error: e, user, location: window.location.href });
       console.error(e);
     }
     refetch();
@@ -283,8 +283,8 @@ export default function EmployeesTableView({ departmentData }) {
   /* eslint-disable */
   useEffect(() => {
     socket.on('employeeStatusUpdated', () => {
-      console.log('employee status updated')
-      refetch(); 
+      console.log('employee status updated');
+      refetch();
     });
   }, []);
   /* eslint-enable */

@@ -24,8 +24,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -42,7 +40,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useGetDepartmentPaymentControl } from 'src/api/tables';
+import { useGetDepartmentPaymentControl } from 'src/api';
 
 import PaymentControlAnalytic from '../table-analytic';
 import PaymentControlRow from './payment-control-row';
