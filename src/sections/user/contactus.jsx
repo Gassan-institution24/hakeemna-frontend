@@ -84,7 +84,7 @@ export default function ContactUs() {
 
         <Stack spacing={3}>
           <m.div variants={varFade().inUp}>
-            <TextField fullWidth label={curLangAr? 'الموضوغ' : 'Subject*'} {...methods.register('title')} />
+            <TextField fullWidth label={curLangAr? 'الموضوع' : 'Subject*'} {...methods.register('title')} />
           </m.div>
 
           <m.div variants={varFade().inUp}>

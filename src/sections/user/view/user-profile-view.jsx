@@ -15,7 +15,6 @@ export default function UserProfileView() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
-  const [currentTab, setCurrentTab] = useState('profile');
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -23,13 +22,13 @@ export default function UserProfileView() {
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('user'), href: paths.dashboard.root },
-          { name: curLangAr? user?.patient?.name_arabic : user?.patient?.name_english },
+          { name: curLangAr? user?.patient?.name_arabic : user?.patient?.first_name },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
-      {currentTab === 'profile' && <ProfileHome />}
+      <ProfileHome />
     </Container>
   );
 }
