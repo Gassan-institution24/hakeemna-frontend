@@ -9,7 +9,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------
 
 // OVERVIEW
-// const IndexPage = lazy(() => import('src/pages/dashboard/app'));
+const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 // const OverviewEcommercePage = lazy(() => import('src/pages/dashboard/ecommerce'));
 // const OverviewAnalyticsPage = lazy(() => import('src/pages/dashboard/analytics'));
 // const OverviewBankingPage = lazy(() => import('src/pages/dashboard/banking'));
@@ -356,7 +356,7 @@ export const dashboardRoutes = [
       </AuthGuard>
     ),
     children: [
-      // { element: <IndexPage />, index: true },
+      { element: <IndexPage />, index: true },
       // { path: '', element: < /> },
       {
         path: 'unitservices',

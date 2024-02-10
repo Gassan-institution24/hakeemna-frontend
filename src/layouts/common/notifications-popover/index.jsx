@@ -20,7 +20,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useGetNotifications, useGetUnreadNotificationCount } from 'src/api';
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { _notifications } from 'src/_mock';
 import { HOST_API } from 'src/config-global';
 import { socket } from 'src/socket';
 

@@ -52,7 +52,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-// const STATUS_OPTIONS = [
+const STATUS_OPTIONS = [
   { value: 'all', label: 'all' },
   { value: 'active', label: 'active' },
   { value: 'inactive', label: 'inactive' },

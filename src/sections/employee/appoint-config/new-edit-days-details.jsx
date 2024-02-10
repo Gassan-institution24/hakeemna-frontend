@@ -28,8 +28,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useGetAppointmentTypes, useGetUSServiceTypes } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
-import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
-
 import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';

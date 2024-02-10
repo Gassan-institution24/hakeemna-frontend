@@ -8,8 +8,8 @@ import { useGetPaymentmethods } from 'src/api/user';
 import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/hooks';
-import PaymentCardItem from '../payment/payment-card-item';
-import PaymentNewCardDialog from '../payment/payment-new-card-dialog';
+// import PaymentCardItem from '../payment/payment-card-item';
+// import PaymentNewCardDialog from '../payment/payment-new-card-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ export default function AccountBillingPayment() {
           }
         />
 
-        <Box
+        {/* <Box
           rowGap={2.5}
           columnGap={2}
           display="grid"
@@ -48,10 +48,10 @@ export default function AccountBillingPayment() {
           {paymentmethods?.map((card) => (
             <PaymentCardItem key={card._id} card={card.card_holder} />
           ))}
-        </Box>
+        </Box> */}
       </Card>
 
-      <PaymentNewCardDialog open={newCard.value} onClose={newCard.onFalse} />
+      {/* <PaymentNewCardDialog open={newCard.value} onClose={newCard.onFalse} /> */}
     </>
   );
 }

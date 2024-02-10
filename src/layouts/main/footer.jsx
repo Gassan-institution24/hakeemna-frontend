@@ -105,7 +105,7 @@ export default function Footer() {
               Manage all your data with doctorna
             </Typography>
 
-            <Stack
+            {/* <Stack
               direction="row"
               justifyContent={{ xs: 'center', md: 'flex-start' }}
               sx={{
@@ -125,7 +125,7 @@ export default function Footer() {
                   <Iconify color={social.color} icon={social.icon} />
                 </IconButton>
               ))}
-            </Stack>
+            </Stack> */}
           </Grid>
 
           <Grid xs={12} md={6}>

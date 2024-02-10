@@ -19,7 +19,6 @@ import TableContainer from '@mui/material/TableContainer';
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
-import { INVOICE_STATUS_OPTIONS } from 'src/_mock';
 import { useSettingsContext } from 'src/components/settings';
 
 import Label from 'src/components/label';
@@ -71,7 +70,9 @@ export default function InvoiceDetails({ paymentData }) {
 
       <StyledTableRow>
         <TableCell lang="ar" colSpan={4} />
-        <TableCell lang="ar" sx={{ color: 'text.secondary' }}>Deduction</TableCell>
+        <TableCell lang="ar" sx={{ color: 'text.secondary' }}>
+          Deduction
+        </TableCell>
         <TableCell lang="ar" width={120} sx={{ color: 'error.main', typography: 'body2' }}>
           {fCurrency(-paymentData.deduction_amount)}
         </TableCell>
@@ -79,13 +80,19 @@ export default function InvoiceDetails({ paymentData }) {
 
       <StyledTableRow>
         <TableCell lang="ar" colSpan={4} />
-        <TableCell lang="ar" sx={{ color: 'text.secondary' }}>Taxes</TableCell>
-        <TableCell lang="ar" width={120}>{fCurrency(paymentData.sales_tax_amount)}</TableCell>
+        <TableCell lang="ar" sx={{ color: 'text.secondary' }}>
+          Taxes
+        </TableCell>
+        <TableCell lang="ar" width={120}>
+          {fCurrency(paymentData.sales_tax_amount)}
+        </TableCell>
       </StyledTableRow>
 
       <StyledTableRow>
         <TableCell lang="ar" colSpan={4} />
-        <TableCell lang="ar" sx={{ typography: 'subtitle1' }}>Total</TableCell>
+        <TableCell lang="ar" sx={{ typography: 'subtitle1' }}>
+          Total
+        </TableCell>
         <TableCell lang="ar" width={140} sx={{ typography: 'subtitle1' }}>
           {fCurrency(paymentData.total_amount)}
         </TableCell>
@@ -117,23 +124,37 @@ export default function InvoiceDetails({ paymentData }) {
         <Table sx={{ minWidth: 960 }}>
           <TableHead>
             <TableRow>
-              <TableCell lang="ar" width={40}>#</TableCell>
+              <TableCell lang="ar" width={40}>
+                #
+              </TableCell>
 
-              <TableCell lang="ar" sx={{ typography: 'subtitle2' }}>Received Amount</TableCell>
+              <TableCell lang="ar" sx={{ typography: 'subtitle2' }}>
+                Received Amount
+              </TableCell>
 
-              <TableCell lang="ar" align="center">Invoice no</TableCell>
+              <TableCell lang="ar" align="center">
+                Invoice no
+              </TableCell>
 
-              <TableCell lang="ar" align="right">Invoice Amount</TableCell>
+              <TableCell lang="ar" align="right">
+                Invoice Amount
+              </TableCell>
 
-              <TableCell lang="ar" align="right">Total Received Amount</TableCell>
+              <TableCell lang="ar" align="right">
+                Total Received Amount
+              </TableCell>
 
-              <TableCell lang="ar" align="right">Remained Amount</TableCell>
+              <TableCell lang="ar" align="right">
+                Remained Amount
+              </TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
             <TableRow>
-              <TableCell lang="ar" align="center">{paymentData.code}</TableCell>
+              <TableCell lang="ar" align="center">
+                {paymentData.code}
+              </TableCell>
 
               <TableCell lang="ar" align="center">
                 <Box sx={{ maxWidth: 560 }}>
@@ -145,13 +166,21 @@ export default function InvoiceDetails({ paymentData }) {
                 </Box>
               </TableCell>
 
-              <TableCell lang="ar" align="center">{paymentData.invoice?.code}</TableCell>
+              <TableCell lang="ar" align="center">
+                {paymentData.invoice?.code}
+              </TableCell>
 
-              <TableCell lang="ar" align="right">{fCurrency(paymentData.invoice?.Balance)}</TableCell>
+              <TableCell lang="ar" align="right">
+                {fCurrency(paymentData.invoice?.Balance)}
+              </TableCell>
 
-              <TableCell lang="ar" align="right">{fCurrency(paymentData.invoice?.Balance)}</TableCell>
+              <TableCell lang="ar" align="right">
+                {fCurrency(paymentData.invoice?.Balance)}
+              </TableCell>
 
-              <TableCell lang="ar" align="right">{fCurrency(20)}</TableCell>
+              <TableCell lang="ar" align="right">
+                {fCurrency(20)}
+              </TableCell>
             </TableRow>
 
             {renderTotal}
@@ -184,7 +213,7 @@ export default function InvoiceDetails({ paymentData }) {
 
           <Stack spacing={1} alignItems={{ xs: 'flex-start', md: 'flex-end' }}>
             <Label
-                    lang="ar"
+              lang="ar"
               variant="soft"
               color={
                 (paymentData.status === 'paid' && 'success') ||
