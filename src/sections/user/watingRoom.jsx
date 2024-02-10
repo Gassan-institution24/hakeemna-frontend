@@ -21,13 +21,19 @@ import FormProvider from 'src/components/hook-form/form-provider';
 import { useAuthContext } from 'src/auth/hooks';
 import EmptyContent from 'src/components/empty-content';
 
-
-import { useGetPatientOneAppointments, useGetUnitservice, useGetUSFeedbackes } from 'src/api/tables';
+import {
+  useGetPatientOneAppointments,
+  useGetUnitservice,
+  useGetUSFeedbackes,
+} from 'src/api/tables';
+import { useTranslate, useLocales } from 'src/locales';
 // ----------------------------------------------------------------------
 
 export default function WatingRoom() {
   const { enqueueSnackbar } = useSnackbar();
-
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const UpdateUserSchema = Yup.object().shape({
     Body: Yup.string(),
     Selection: Yup.string().nullable(),
@@ -38,6 +44,9 @@ export default function WatingRoom() {
   const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
   const { data } = useGetUnitservice(appointmentsData?.unit_service?._id);
   const { feedbackData } = useGetUSFeedbackes(appointmentsData?.unit_service?._id);
+
+console.log('appointmentsData', appointmentsData);
+console.log('data', data);
 
   const skipfunction = async () => {
     try {
@@ -101,15 +110,15 @@ export default function WatingRoom() {
       await axios.patch(`api/appointments/${appointmentsData._id}`, {
         hasFeedback: true, // Increment the skip value by 1
       });
-      enqueueSnackbar('Your answer uploaded successfully', { variant: 'success' });
+      enqueueSnackbar(t('Thanks for your cooperation'), { variant: 'success' });
       console.log(response);
-      // setTimeout(() => {
-      //   dialog.onFalse();
-      //   window.location.reload();
-      // }, 2000);
+      setTimeout(() => {
+        dialog.onFalse();
+        window.location.reload();
+      }, 2000);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('Failed to upload Your answer', { variant: 'error' });
+      enqueueSnackbar(t('Failed to upload Your answer'), { variant: 'error' });
     }
   };
 
@@ -127,12 +136,12 @@ export default function WatingRoom() {
               gap: '10px',
             }}
           >
-            <DialogTitle>Rate your appointment</DialogTitle>
+            <DialogTitle>{t('Rate your appointment')}</DialogTitle>
             <Image
               src="https://cdn.altibbi.com/cdn/large/0/10/logo_1296490409_651.gif"
               sx={{ width: '60px', height: '60px', border: 1, borderRadius: '50px' }}
             />
-            <Typography sx={{ color: 'black' }}>Department Name</Typography>
+            <Typography sx={{ color: 'black' }}>{currentLang ? `${data?.name_arabic}` : `${data.name_english}`} </Typography>
             <Rating
               size="large"
               precision={1}
@@ -162,14 +171,14 @@ export default function WatingRoom() {
                   ))}
                 </div>
                 <FormControl sx={{ my: 3, minWidth: '100%' }}>
-                  <InputLabel htmlFor="max-width">More issues</InputLabel>
+                  <InputLabel htmlFor="max-width">Other</InputLabel>
                   <Input id="max-width" {...register('Body')} />
                 </FormControl>
               </Box>
             </DialogContent>
           ) : (
             <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
-              We hope that everything was to your satisfaction
+             {t('We hope that everything was to your satisfaction')}
             </Typography>
           )}
 
@@ -181,16 +190,16 @@ export default function WatingRoom() {
               color="inherit"
               type="submit"
             >
-              Skip
+              {t('Skip')}
             </Button>
             <Button type="submit" variant="contained">
-              Submit
+              {t('Submit')}
             </Button>
           </DialogActions>
         </FormProvider>
       </Dialog>
     </span>
   ) : (
-    <EmptyContent filled title="No Data" sx={{ py: 10 }} />
+    <EmptyContent filled title={t("No Data")} sx={{ py: 10 }} />
   );
 }
