@@ -298,7 +298,7 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
             onFilters={handleFilters}
             //
             dateError={dateError}
-            serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
+            // serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
           />
 
           {canReset && (
