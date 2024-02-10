@@ -31,6 +31,7 @@ export default function OverviewAppView() {
   const { enqueueSnackbar } = useSnackbar();
   const [oldpatientsdata, setOldpatientsdata] = useState([]);
   const [oldData, setOlddata] = useState();
+  const [Us, setUs] = useState();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
@@ -53,7 +54,7 @@ export default function OverviewAppView() {
     }
     router.push(paths.dashboard.user.oldpatientdata);
   };
-
+console.log(oldpatientsdata?.unit_service);
   const nofunction = async () => {
     try {
       const response = await axios.patch(`/api/patient/${user?.patient?._id}/updateonboard`, {
@@ -89,6 +90,14 @@ export default function OverviewAppView() {
       setOlddata(mappedData[0].identification_num);
     }
   }, [oldpatientsdata, oldData]);
+
+  useEffect(() => {
+    if (oldpatientsdata.length > 0) {
+      const mappedData = oldpatientsdata.map((Data) => Data);
+      setUs(mappedData[0].unit_service);
+    }
+  }, [oldpatientsdata, Us]);
+console.log(Us);
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'xl'}>
@@ -136,7 +145,7 @@ export default function OverviewAppView() {
             <DialogTitle>
               {curLangAr?'لقد وجدنا بعض معلوماتك مخزنة عند':'We found that you have data stored in'}
               <ol>
-                <li> {curLangAr? 'اسم العيادة':'Department name'}</li>
+                <li> {curLangAr? `${Us?.name_arabic}` : `${Us?.name_english}`}</li>
               </ol>
               {curLangAr?'هل تريد تخزينها في ملفك الشخصي':'do you want to store it in your profile'}
             </DialogTitle>

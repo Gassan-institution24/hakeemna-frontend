@@ -5,7 +5,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import Iconify from 'src/components/iconify';
 import Divider from '@mui/material/Divider';
-import { useTranslate } from 'src/locales';
+import { useTranslate, useLocales } from 'src/locales';
 
 import { useAuthContext } from 'src/auth/hooks';
 import Image from 'src/components/image/image';
@@ -14,7 +14,8 @@ import Image from 'src/components/image/image';
 export default function ProfileHome() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const { t } = useTranslate();
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   function calculateAge(birthDate) {
     if (birthDate) {
       const today = new Date();
@@ -26,7 +27,7 @@ export default function ProfileHome() {
     return '';
   }
   const { user } = useAuthContext();
-  // console.log(user);
+  console.log(user?.patient?.other_medication_notes);
 
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
@@ -204,11 +205,11 @@ export default function ProfileHome() {
             />
             {t('Notes')}
           </Typography>
-          {user?.patient?.other_medication_notes.map((info) => (
+          {/* {user?.patient?.map((info) => ( */}
             <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
               -&nbsp; {user?.patient?.other_medication_notes}
             </li>
-          ))}
+          {/* ))} */}
         </Stack>
       ) : (
         ''
@@ -241,7 +242,8 @@ export default function ProfileHome() {
           }}
         />
         <Typography variant="h4" sx={{ mt: 2 }}>
-          {user?.patient.first_name} {user?.patient.last_name}
+          
+          {curLangAr? user?.patient.name_arabic : `${user?.patient.first_name}` `${user?.patient.last_name}`}
         </Typography>
       </div>
       {[

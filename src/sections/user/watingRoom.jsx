@@ -21,13 +21,17 @@ import FormProvider from 'src/components/hook-form/form-provider';
 import { useAuthContext } from 'src/auth/hooks';
 import EmptyContent from 'src/components/empty-content';
 
-
-import { useGetPatientOneAppointments, useGetUnitservice, useGetUSFeedbackes } from 'src/api/tables';
+import {
+  useGetPatientOneAppointments,
+  useGetUnitservice,
+  useGetUSFeedbackes,
+} from 'src/api/tables';
+import { useTranslate } from 'src/locales';
 // ----------------------------------------------------------------------
 
 export default function WatingRoom() {
   const { enqueueSnackbar } = useSnackbar();
-
+  const { t } = useTranslate();
   const UpdateUserSchema = Yup.object().shape({
     Body: Yup.string(),
     Selection: Yup.string().nullable(),
