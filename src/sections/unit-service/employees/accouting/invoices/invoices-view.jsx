@@ -298,7 +298,6 @@ export default function EconomicMovementsView({ employeeData }) {
             onFilters={handleFilters}
             //
             dateError={dateError}
-            serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
           />
 
           {canReset && (

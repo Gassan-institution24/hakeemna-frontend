@@ -28,7 +28,7 @@ export default function Financilmovment() {
         sx={{ mb: { xs: 3, md: 5 } }}
       />
 
-      <Share users={_userCards} />
+      <Share/>
     </Container>
   );
 }
