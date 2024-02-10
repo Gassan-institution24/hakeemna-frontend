@@ -218,7 +218,6 @@
   "create account": "إنشاء حساب",
   "non profit organization": "مؤسسة غير ربحية",
 
-
   "Good Morning ☀️": "صباح الخير ☀️",
   "Good Evening 🌑 ": "مساء الخير 🌑",
   "How To Use": "طريقة الأستخدام",
@@ -292,16 +291,16 @@
   "General": "الإعدادات عامة",
   "Notifications": "الاشعارات",
   "Security": "الامان",
-  "Last Name": "الاسم الاخير",
-  "Email Address": "الايميل",
-  "Mobile Number": "رقم الهاتف",
-  "Alternative Mobile Number": "رقم هاتف احتياطي",
-  "Address": "العنوان",
-  "First Name": "الاسم الاول",
+  "Last Name": " الاسم الاخير",
+  "Email Address": " الايميل",
+  "Mobile Number": " رقم الهاتف",
+  "Alternative Mobile Number": " رقم هاتف احتياطي",
+  "Address": " العنوان ",
+  "First Name": " الاسم الاول",
   "Save Changes": "حفظ",
-  "Sport Exercises": "النشاط البدني",
-  "Smoking": "التدخين",
-  "Middle name": "اسم الاب",
+  "Sport Exercises": " النشاط البدني",
+  "Smoking": "  التدخين  ",
+  "Middle name": " اسم الاب",
   "Name in arabic": "الاسم باللغة العربية",
   "Profile updated successfully": "تم تحديث البيانات بنجاح",
   "Current Password": "كلمة السر الحالية",
@@ -311,31 +310,37 @@
   "An error occurred. Please try again.": "حدث خطأ ما, الرجاء المحاولة لاحقا",
   "Password update failed!": "الرجاء تعبئة المعلومات بشكل صحيح",
   "Password updated successfully!": "تم تحديث كلمة المرور بنجاح",
-  "Diseases": "الامراض",
-  "Surgeries": "العمليات الجراحية",
-  "Alcohol Consumption": "استهلاك الكحول",
-  "Eating Diet": "الحمية الغذائية",
-  "Notes": "ملاحظات",
-  "Gender": "الجنس",
+  "Diseases": " الامراض",
+  "Surgeries": " العمليات الجراحية",
+  "Alcohol Consumption": " استهلاك الكحول",
+  "Eating Diet": " الحمية الغذائية",
+  "Notes": " ملاحظات",
+  "Gender": " الجنس",
   "Identification Number": "الرقم الوطني",
   "Blood Type": "زمرة الدم",
   "Marital Status": "الحالة الاجتماعية",
   "Second Mobile Number": "رقم هاتف احتياطي",
   "How can we help": "كيف يمكننا المسساعدة",
   "Sorry we couldn't find your data": "لم يتم العثور على البيانات",
-  "Pregnant": "الحمل",
+  "Pregnant": " الحمل",
   "Drug Allergies": " حساسية تجاه الادوية",
   "if this is your data": " اذا كانت هذه بياناتك",
   "Click": " اضغط ",
   "if not": " اذا لم تكن بياناتك",
   "Please confirm your data": "الرجاء التأكيد اذا كانت هذه بياناتك ",
   "Confirming Data": " تأكيد المعلومات ",
- "Thanks for your cooperation": "شكرا لتعاونك",
+  "Thanks for your cooperation": "شكرا لتعاونك",
   "Thanks for your cooperation, data saved to profile successfully": "تم حفظ البيانات بنجاح, شكرا لتعاونك",
   "Failed to update data.": "فشل التحميل ",
-  "Pregnaasnt": "الحمل",
-
-
+  "Failed to upload Your answer": "حدث خطأ ماو يرجى المحاولة لاحقا",
+  "Rate your appointment": "اخبرنا عن تجربتك",
+  "Department Name": "اسم العيادة",
+  "We hope that everything was to your satisfaction": "نتمنى ان كل شيء كان عند حسن ظنك",
+  "financil movment": "االحركات المالية",
+  "Age": "العمر",
+  "Skip": "تخطي",
+  "Medicines": " ألادوية",
+  "More issues": "أخرى",
 
   "list": "قائمة",
   "edit": "تعديل",

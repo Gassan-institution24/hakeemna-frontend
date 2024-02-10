@@ -105,7 +105,7 @@ console.log(Us);
           <Grid xs={12} md={8}>
             <AppWelcome
               title={`${greeting} \n ${user?.patient?.first_name} ${user?.patient?.last_name}`}
-              description= {curLangAr? 'قم بتغذية جسدك، وتمكين عقلك - فالعافية هي مفتاح الحياة النابضة بالحياة.' : 'Nourish your body, empower your mind – wellness is the key to a vibrant life.'}
+              description= {curLangAr? 'قم بتغذية جسدك، وتمكين عقلك  فالعافية هي مفتاح الحياة النابضة بالحياة.' : 'Nourish your body, empower your mind – wellness is the key to a vibrant life.'}
               img={<Image src={Photo} />}
               action={
                 <Button variant="contained" color="primary">
