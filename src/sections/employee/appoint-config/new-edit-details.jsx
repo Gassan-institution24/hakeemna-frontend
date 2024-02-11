@@ -40,7 +40,9 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
 
   const { user } = useAuthContext();
 
-  const { workGroupsData } = useGetEmployeeWorkGroups(user?.employee?._id);
+  const { workGroupsData } = useGetEmployeeWorkGroups(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+  );
   const { workShiftsData } = useGetUSWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
