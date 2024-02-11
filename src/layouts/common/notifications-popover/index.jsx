@@ -75,16 +75,15 @@ export default function NotificationsPopover() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
   );
 
-  console.log('notifications', notifications);
   const { notificationscount, recount } = useGetMyUnreadNotificationCount(
     user._id,
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
   );
 
   const handleClick = async (id, link) => {
-    await axios.patch(endpoints.tables.readNotification(id));
     drawer.onFalse();
     router.push(link);
+    await axios.patch(endpoints.tables.readNotification(id));
     refetch();
     recount();
   };

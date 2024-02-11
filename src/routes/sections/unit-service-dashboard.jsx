@@ -88,19 +88,7 @@ const AppointmentsHomePage = lazy(() => import('src/pages/unit-service/appointme
 const AppointmentsInfoPage = lazy(() => import('src/pages/unit-service/appointments/info'));
 const AppointmentsEditPage = lazy(() => import('src/pages/unit-service/appointments/edit'));
 const AppointmentsNewPage = lazy(() => import('src/pages/unit-service/appointments/new'));
-// APPOINTMENT CONFIGURATION
-const AppointmentConfigHomePage = lazy(() =>
-  import('src/pages/unit-service/appointmentsConfiguration/home')
-);
-const AppointmentConfigInfoPage = lazy(() =>
-  import('src/pages/unit-service/appointmentsConfiguration/info')
-);
-const AppointmentConfigEditPage = lazy(() =>
-  import('src/pages/unit-service/appointmentsConfiguration/edit')
-);
-const AppointmentConfigNewPage = lazy(() =>
-  import('src/pages/unit-service/appointmentsConfiguration/new')
-);
+
 // ACCOUNTING
 // ECONOMIC MOVEMENTS
 const EconomicHomePage = lazy(() =>
@@ -303,15 +291,6 @@ export const unitServiceDashboardRoutes = [
           { path: ':id/info', element: <AppointmentsInfoPage /> },
           { path: ':id/edit', element: <AppointmentsEditPage /> },
           { path: 'new', element: <AppointmentsNewPage /> },
-        ],
-      },
-      {
-        path: 'appointmentconfiguration',
-        children: [
-          { element: <AppointmentConfigHomePage />, index: true },
-          { path: ':id/info', element: <AppointmentConfigInfoPage /> },
-          { path: ':id/edit', element: <AppointmentConfigEditPage /> },
-          { path: 'new', element: <AppointmentConfigNewPage /> },
         ],
       },
       {

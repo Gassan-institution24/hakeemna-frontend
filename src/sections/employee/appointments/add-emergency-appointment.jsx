@@ -52,7 +52,9 @@ export default function BookManually({ onClose, refetch, ...other }) {
   const { serviceTypesData } = useGetUSServiceTypes(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
-  const { workGroupsData } = useGetEmployeeWorkGroups(user?.employee?._id);
+  const { workGroupsData } = useGetEmployeeWorkGroups(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+  );
   const { workShiftsData } = useGetUSWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
