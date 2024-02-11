@@ -23,7 +23,6 @@ export default function ContactUs() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-
   const contactUsSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     Body: Yup.string().required('Message is required'),
@@ -50,16 +49,33 @@ export default function ContactUs() {
         data: info,
       });
       if (response) {
-        enqueueSnackbar(`${curLangAr ? 'تم ارسال الرسالة بنجاح':'Your message sent successfully'}`, { variant: 'success' });
+        enqueueSnackbar(
+          `${curLangAr ? 'تم ارسال الرسالة بنجاح' : 'Your message sent successfully'}`,
+          { variant: 'success' }
+        );
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       } else {
-        enqueueSnackbar(`${curLangAr ? 'حدث خطأ ما, الرجاء المحاولة لاحقا' : 'Somthing went wront, please try again later'}`, { variant: 'error' });
+        enqueueSnackbar(
+          `${
+            curLangAr
+              ? 'حدث خطأ ما, الرجاء المحاولة لاحقا'
+              : 'Somthing went wront, please try again later'
+          }`,
+          { variant: 'error' }
+        );
       }
     } catch (err) {
       setError(err.message);
-      enqueueSnackbar(`${curLangAr ? 'حدث خطأ ما, الرجاء المحاولة لاحقا' : 'Somthing went wront, please try again later'}`, { variant: 'error' });
+      enqueueSnackbar(
+        `${
+          curLangAr
+            ? 'حدث خطأ ما, الرجاء المحاولة لاحقا'
+            : 'Somthing went wront, please try again later'
+        }`,
+        { variant: 'error' }
+      );
     }
   });
   return (
@@ -84,13 +100,17 @@ export default function ContactUs() {
 
         <Stack spacing={3}>
           <m.div variants={varFade().inUp}>
-            <TextField fullWidth label={curLangAr? 'الموضوع' : 'Subject*'} {...methods.register('title')} />
+            <TextField
+              fullWidth
+              label={curLangAr ? 'الموضوع' : 'Subject*'}
+              {...methods.register('title')}
+            />
           </m.div>
 
           <m.div variants={varFade().inUp}>
             <TextField
               fullWidth
-              label= {curLangAr? 'اخبرنا ما الخطب' : 'Enter your message here*'}
+              label={curLangAr ? 'اخبرنا ما الخطب' : 'Enter your message here*'}
               multiline
               rows={5}
               {...methods.register('Body')}

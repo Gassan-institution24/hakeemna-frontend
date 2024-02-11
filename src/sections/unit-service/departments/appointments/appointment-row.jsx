@@ -154,12 +154,7 @@ export default function AppointmentsTableRow({
         </TableCell>
       </TableRow>
 
-      <BookManually
-        refetch={refetch}
-        appointment={row}
-        open={Book.value}
-        onClose={Book.onFalse}
-      />
+      <BookManually refetch={refetch} appointment={row} open={Book.value} onClose={Book.onFalse} />
 
       <CustomPopover
         open={popover.open}

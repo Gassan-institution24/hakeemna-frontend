@@ -195,16 +195,16 @@ export default function Prescriptions() {
                 <Iconify icon="streamline-emojis:pill" />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary= {t('Name')} secondary={med.medicine.trade_name} sx={{ ml: 2 }} />
-            <ListItemText primary= {t('Dose')} secondary={med.dose} />
-            <ListItemText primary= {t('Frequently')} secondary={med.frequently} />
+            <ListItemText primary={t('Name')} secondary={med.medicine.trade_name} sx={{ ml: 2 }} />
+            <ListItemText primary={t('Dose')} secondary={med.dose} />
+            <ListItemText primary={t('Frequently')} secondary={med.frequently} />
             <ListItemText
               primary={t('Start Date')}
               secondary={fDate(med.startdate)}
               sx={{ display: { xs: 'none', md: 'inline' } }}
             />
             <ListItemText
-              primary= {t('End Date')}
+              primary={t('End Date')}
               secondary={fDate(med.enddate)}
               sx={{ display: { xs: 'none', md: 'inline' } }}
             />
@@ -214,7 +214,7 @@ export default function Prescriptions() {
             >
               {({ loading }) =>
                 loading ? (
-                t('Loading document...')
+                  t('Loading document...')
                 ) : (
                   <Iconify
                     icon="teenyicons:pdf-outline"

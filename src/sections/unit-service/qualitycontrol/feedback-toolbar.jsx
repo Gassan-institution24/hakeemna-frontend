@@ -70,7 +70,7 @@ export default function TablesTableToolbar({
           multiple
           value={filters.rate}
           onChange={handleFilterRate}
-          input={<OutlinedInput label={t("rate")} />}
+          input={<OutlinedInput label={t('rate')} />}
           renderValue={(selected) => selected.map((value) => value).join(', ')}
           MenuProps={{
             PaperProps: {

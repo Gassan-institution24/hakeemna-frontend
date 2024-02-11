@@ -17,7 +17,7 @@ export default function TableEditView({ departmentData }) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t("update department")}
+        heading={t('update department')}
         links={[
           {
             name: t('dashboard'),

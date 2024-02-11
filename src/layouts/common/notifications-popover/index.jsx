@@ -17,11 +17,12 @@ import Typography from '@mui/material/Typography';
 import { useRouter } from 'src/routes/hooks';
 import axios, { endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useGetNotifications, useGetUnreadNotificationCount } from 'src/api';
+import { useGetMyNotifications, useGetMyUnreadNotificationCount } from 'src/api';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { HOST_API } from 'src/config-global';
 import { socket } from 'src/socket';
+import { useAuthContext } from 'src/auth/hooks';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -59,6 +60,8 @@ export default function NotificationsPopover() {
 
   const drawer = useBoolean();
 
+  const { user } = useAuthContext();
+
   const smUp = useResponsive('up', 'sm');
 
   // const [currentTab, setCurrentTab] = useState('all');
@@ -67,11 +70,20 @@ export default function NotificationsPopover() {
   //   setCurrentTab(newValue);
   // }, []);
 
-  const { notifications, refetch } = useGetNotifications();
-  const { notificationscount, recount } = useGetUnreadNotificationCount();
+  const { notifications, refetch, loading } = useGetMyNotifications(
+    user._id,
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
+  );
+
+  console.log('notifications', notifications);
+  const { notificationscount, recount } = useGetMyUnreadNotificationCount(
+    user._id,
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
+  );
 
   const handleClick = async (id, link) => {
-    const data = await axios.patch(endpoints.tables.readNotification(id));
+    await axios.patch(endpoints.tables.readNotification(id));
+    drawer.onFalse();
     router.push(link);
     refetch();
     recount();
@@ -141,13 +153,14 @@ export default function NotificationsPopover() {
   const renderList = (
     <Scrollbar>
       <List disablePadding>
-        {notifications.map((notification) => (
-          <NotificationItem
-            handleClick={handleClick}
-            key={notification.id}
-            notification={notification}
-          />
-        ))}
+        {!loading &&
+          notifications.map((notification) => (
+            <NotificationItem
+              handleClick={handleClick}
+              key={notification.id}
+              notification={notification}
+            />
+          ))}
       </List>
     </Scrollbar>
   );

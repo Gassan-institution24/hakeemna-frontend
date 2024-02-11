@@ -12,7 +12,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { socket } from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
-import { MenuItem, Typography, TextField } from '@mui/material';
+import { MenuItem, Typography } from '@mui/material';
 import FormProvider, { RHFTextField, RHFSelect, RHFUploadAvatar } from 'src/components/hook-form';
 import {
   useGetUnitservice,
@@ -23,7 +23,7 @@ import {
 } from 'src/api';
 import { fData } from 'src/utils/format-number';
 import { useLocales, useTranslate } from 'src/locales';
-import axios, { endpoints, fetcher } from 'src/utils/axios';
+import axios, { endpoints } from 'src/utils/axios';
 import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------

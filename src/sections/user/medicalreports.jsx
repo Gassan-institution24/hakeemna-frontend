@@ -27,8 +27,8 @@ import Doclogo from '../../components/logo/doc.png';
 
 export default function Medicalreports() {
   const { t } = useTranslate();
-const { currentLang } = useLocales();
-const curLangAr = currentLang.value === 'ar';
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const styles = StyleSheet.create({
     icon: {
@@ -238,7 +238,7 @@ const curLangAr = currentLang.value === 'ar';
   ) : (
     <EmptyContent
       filled
-      title= {t("No Data")}
+      title={t('No Data')}
       sx={{
         py: 10,
       }}

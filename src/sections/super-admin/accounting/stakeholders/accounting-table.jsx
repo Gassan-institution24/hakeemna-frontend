@@ -246,7 +246,7 @@ export default function LicenseMovementsView() {
             onFilters={handleFilters}
             //
             dateError={dateError}
-           //
+            //
           />
 
           {canReset && (

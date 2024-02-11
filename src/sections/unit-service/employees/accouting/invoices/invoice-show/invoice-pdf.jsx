@@ -151,7 +151,9 @@ export default function InvoicePDF({ invoice, currentStatus }) {
 
           <View style={styles.col6}>
             <Text style={[styles.subtitle2, styles.mb4]}>Invoice to</Text>
-            <Text style={styles.body2}>{curLangAr ? unit_service?.name_arabic: unit_service?.name_english}</Text>
+            <Text style={styles.body2}>
+              {curLangAr ? unit_service?.name_arabic : unit_service?.name_english}
+            </Text>
             <Text style={styles.body2}>
               {unit_service?.country?.name_english}
               {unit_service?.city?.name_english}

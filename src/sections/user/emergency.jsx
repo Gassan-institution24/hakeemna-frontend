@@ -43,8 +43,9 @@ export default function Emergency() {
             fontSize: { md: 20, xs: 14 },
           }}
         >
-          {curLangAr ? 'يمكننا من خلال طبيبنا تقديم الاستشارة الكترونيا من خلال التواصل معك لتغطية استشارتك في مجال الطب العام والأطفال.' : 'Through our doctor, we can provide advice electronically by contacting you to cover you consultation in the field of general medicine and children.'}
-
+          {curLangAr
+            ? 'يمكننا من خلال طبيبنا تقديم الاستشارة الكترونيا من خلال التواصل معك لتغطية استشارتك في مجال الطب العام والأطفال.'
+            : 'Through our doctor, we can provide advice electronically by contacting you to cover you consultation in the field of general medicine and children.'}
         </Typography>
       </Box>
       <Typography variant="h3" sx={{ position: 'relative', top: '-20px' }}>
@@ -173,7 +174,6 @@ export default function Emergency() {
               icon="carbon:person"
             />
             {curLangAr ? 'استشارة مدفوة من المستخدم' : 'Private consultation covered by patient'}
-            
           </Button>
           <Button
             onClick={test}

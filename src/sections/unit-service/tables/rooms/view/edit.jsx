@@ -33,9 +33,7 @@ export default function TableEditView({ roomData }) {
           mb: { xs: 3, md: 5 },
         }}
       />
-      {roomData && (
-        <TableNewEditForm currentTable={roomData} />
-      )}
+      {roomData && <TableNewEditForm currentTable={roomData} />}
     </Container>
   );
 }

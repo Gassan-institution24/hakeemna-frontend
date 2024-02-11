@@ -83,7 +83,7 @@ export default function MovementTableRow({
 
         <TableCell lang="ar" align="center">
           <ListItemText
-            primary={curLangAr ? unit_service?.name_arabic: unit_service?.name_english}
+            primary={curLangAr ? unit_service?.name_arabic : unit_service?.name_english}
             secondary={employee?.first_name}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
@@ -96,7 +96,7 @@ export default function MovementTableRow({
 
         <TableCell lang="ar" align="center">
           <ListItemText
-            primary={curLangAr ? stakeholder?.name_arabic: stakeholder?.name_english}
+            primary={curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
             secondary={stakeholder?.unit_service?.name_english}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
@@ -139,7 +139,9 @@ export default function MovementTableRow({
           {isValid(new Date(due_date)) ? format(new Date(due_date), 'dd MMM yyyy') : ''}
         </TableCell>
 
-        <TableCell lang="ar" align="center">{fCurrency(amount)}</TableCell>
+        <TableCell lang="ar" align="center">
+          {fCurrency(amount)}
+        </TableCell>
         <TableCell lang="ar" align="center">
           {isValid(new Date(recieved_real_date))
             ? format(new Date(recieved_real_date), 'dd MMM yyyy')
@@ -148,7 +150,7 @@ export default function MovementTableRow({
 
         <TableCell lang="ar" align="center">
           <Label
-                    lang="ar"
+            lang="ar"
             variant="soft"
             color={
               (status === 'paid' && 'success') ||
@@ -158,7 +160,7 @@ export default function MovementTableRow({
             }
           >
             {t(status)}
-        </Label>
+          </Label>
         </TableCell>
 
         <TableCell lang="ar" align="right" sx={{ px: 1 }}>

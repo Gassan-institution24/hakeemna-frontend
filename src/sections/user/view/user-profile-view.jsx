@@ -22,7 +22,7 @@ export default function UserProfileView() {
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('user'), href: paths.dashboard.root },
-          { name: curLangAr? user?.patient?.name_arabic : user?.patient?.first_name },
+          { name: curLangAr ? user?.patient?.name_arabic : user?.patient?.first_name },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

@@ -5,7 +5,6 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
@@ -13,8 +12,6 @@ import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 import { useCountdownDate } from 'src/hooks/use-countdown';
 
 import { ComingSoonIllustration } from 'src/assets/illustrations';
-
-import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 

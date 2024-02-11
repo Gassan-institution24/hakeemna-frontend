@@ -75,8 +75,6 @@ export function useGetStackholder() {
   return { ...memoizedValue, refetch };
 }
 
-
-
 export function useGetOffer(id) {
   const URL = endpoints.offers.getoffer(id);
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
@@ -92,7 +90,6 @@ export function useGetOffer(id) {
   );
   return memoizedValue;
 }
-
 
 export function useGetPaymentmethods() {
   const URL = `${endpoints.payment.getAllpaymentmethods}`;

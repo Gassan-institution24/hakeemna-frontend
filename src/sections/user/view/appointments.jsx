@@ -55,8 +55,8 @@ export default function UserAppointmentsPage() {
           <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
       </Tabs>
-      {currentTab === 'appointmentData' && <AppointmentData/>}
-      {currentTab === 'bookappointments' && <PatientsAppointment/>}
+      {currentTab === 'appointmentData' && <AppointmentData />}
+      {currentTab === 'bookappointments' && <PatientsAppointment />}
     </Container>
   );
 }

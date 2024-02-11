@@ -96,10 +96,12 @@ export default function TableDetailsRow({
         />
       </TableCell>
 
-      <TableCell lang="ar" align="center">{curLangAr ? name_arabic : name_english}</TableCell>
+      <TableCell lang="ar" align="center">
+        {curLangAr ? name_arabic : name_english}
+      </TableCell>
       <TableCell lang="ar" align="center">
         <Label
-                    lang="ar"
+          lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -206,7 +208,9 @@ export default function TableDetailsRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>
+          {t('modifications no')}: {modifications_nums}
+        </Box>
       </CustomPopover>
     </>
   );

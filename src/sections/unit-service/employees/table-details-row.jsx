@@ -71,9 +71,12 @@ export default function UnitServiceEmployeesRow({
         onClick={onViewRow}
         align="center"
       >
-        <div style={{display:'flex',gap:3}}>
-        <Iconify icon={employee.online ? 'noto:green-circle' : 'noto:red-circle'} style={{width:'10px'}} />
-        {code}
+        <div style={{ display: 'flex', gap: 3 }}>
+          <Iconify
+            icon={employee.online ? 'noto:green-circle' : 'noto:red-circle'}
+            style={{ width: '10px' }}
+          />
+          {code}
         </div>
       </TableCell>
       <TableCell

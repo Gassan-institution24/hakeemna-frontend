@@ -33,9 +33,7 @@ export default function TableEditView({ WorkGroupData }) {
           mb: { xs: 3, md: 5 },
         }}
       />
-      {WorkGroupData && (
-        <TableNewEditForm currentTable={WorkGroupData} />
-      )}
+      {WorkGroupData && <TableNewEditForm currentTable={WorkGroupData} />}
     </Container>
   );
 }
