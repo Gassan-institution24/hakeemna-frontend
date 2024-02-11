@@ -75,7 +75,7 @@ export default function NotificationsPopover() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
   );
 
-  console.log('notifications', notifications);
+  // console.log('notifications', notifications);
   const { notificationscount, recount } = useGetMyUnreadNotificationCount(
     user._id,
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
@@ -154,7 +154,7 @@ export default function NotificationsPopover() {
     <Scrollbar>
       <List disablePadding>
         {!loading &&
-          notifications.map((notification) => (
+          notifications?.map((notification) => (
             <NotificationItem
               handleClick={handleClick}
               key={notification.id}

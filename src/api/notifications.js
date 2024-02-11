@@ -68,7 +68,7 @@ export function useGetNotifications() {
   return { ...memoizedValue, refetch };
 }
 export function useGetMyNotifications(id, emid) {
-  console.log(id, emid);
+  // console.log(id, emid);
   const URL = endpoints.tables.myNotifications(id, emid);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
