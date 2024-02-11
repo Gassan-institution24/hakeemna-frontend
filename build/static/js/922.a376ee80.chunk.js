@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[922],{20922:(s,n,t)=>{t.r(n),t.d(n,{default:()=>l});var e=t(6907),i=t(76932),r=t(60308),c=t(80184);function l(){const{t:s}=(0,i.qM)();return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(e.ql,{children:(0,c.jsxs)("title",{children:[s("Appointments")," "]})}),(0,c.jsx)(r.Hg,{})]})}}}]);
+//# sourceMappingURL=922.a376ee80.chunk.js.map
