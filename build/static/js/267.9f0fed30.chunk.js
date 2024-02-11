@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[267],{20267:(e,i,s)=>{s.r(i),s.d(i,{default:()=>t});var n=s(6907),r=s(85362),l=s(80184);function t(){return(0,l.jsxs)(l.Fragment,{children:[(0,l.jsx)(n.ql,{children:(0,l.jsx)("title",{children:" Super Admin: Tables List"})}),(0,l.jsx)(r.d_,{})]})}}}]);
+//# sourceMappingURL=267.9f0fed30.chunk.js.map

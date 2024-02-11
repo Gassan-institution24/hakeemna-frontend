@@ -19,8 +19,10 @@ import {
   DialogContentText,
   DialogTitle,
   MenuItem,
+  Popover,
   Select,
   TextField,
+  Tooltip,
 } from '@mui/material';
 import StepLabel from '@mui/material/StepLabel';
 import IconButton from '@mui/material/IconButton';
@@ -37,6 +39,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField, RHFSelect, RHFAutocomplete } from 'src/components/hook-form';
@@ -55,6 +58,8 @@ export default function JwtRegisterView() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const steps = [t('service unit'), t('admin'), t('account')];
+
+  const clickPopover = usePopover(true);
 
   const { register } = useAuthContext();
 
@@ -252,7 +257,7 @@ export default function JwtRegisterView() {
         }}
         lang="ar"
       >
-        <Checkbox onChange={(e) => setAgree(e.target.checked)} />
+        <Checkbox checked={agree} onChange={(e) => setAgree(e.target.checked)} />
         {t('By signing up, I agree to ')}
         <Link
           onClick={policyDialog.onTrue}
@@ -283,32 +288,42 @@ export default function JwtRegisterView() {
         </Alert>
       )}
       {/* <Alert severity="info">Service unit information</Alert> */}
-      <RHFTextField
-        lang="ar"
-        onChange={handleEnglishInputChange}
-        name="us_name_english"
-        label={`${t('name in english')} *`}
-      />
-      <RHFTextField
-        lang="ar"
-        onChange={handleArabicInputChange}
-        name="us_name_arabic"
-        label={`${t('name in arabic')} *`}
-      />
-      <RHFTextField lang="ar" name="us_identification_num" label={`${t('ID number')} *`} />
-      <MuiTelInput
-        forceCallingCode
-        label={`${t('phone')} *`}
-        value={us_phone}
-        onChange={(newPhone) => {
-          matchIsValidTel(newPhone);
-          setUSphone(newPhone);
-          methods.setValue('us_phone', newPhone);
-        }}
-      />
+      <Tooltip title="Service unit name in english">
+        <RHFTextField
+          lang="ar"
+          onChange={handleEnglishInputChange}
+          name="us_name_english"
+          label={`${t('name english')} *`}
+        />
+      </Tooltip>
+      <Tooltip title="Service unit name in arabic">
+        <RHFTextField
+          lang="ar"
+          onChange={handleArabicInputChange}
+          name="us_name_arabic"
+          label={`${t('name arabic')} *`}
+        />
+      </Tooltip>
+      <Tooltip title="Identification number of service unit">
+        <RHFTextField lang="ar" name="us_identification_num" label={`${t('ID number')} *`} />
+      </Tooltip>
+      <Tooltip title="Phone number of service unit">
+        <MuiTelInput
+          forceCallingCode
+          label={`${t('phone')} *`}
+          value={us_phone}
+          onChange={(newPhone) => {
+            matchIsValidTel(newPhone);
+            setUSphone(newPhone);
+            methods.setValue('us_phone', newPhone);
+          }}
+        />
+      </Tooltip>
 
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFTextField lang="ar" name="us_email" label={`${t('email')} *`} />
+        <Tooltip title="email address of service unit">
+          <RHFTextField lang="ar" name="us_email" label={`${t('email')} *`} />
+        </Tooltip>
       </Stack>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <RHFSelect
