@@ -66,11 +66,12 @@ export default function AppointmentsTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell lang="ar"  padding="checkbox">
+        <TableCell lang="ar" padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell lang="ar" 
+        <TableCell
+          lang="ar"
           sx={{
             cursor: 'pointer',
             color: '#3F54EB',
@@ -82,27 +83,27 @@ export default function AppointmentsTableRow({
           {code}
         </TableCell>
 
-        <TableCell lang="ar"  onClick={onViewRow} align="center">
+        <TableCell lang="ar" onClick={onViewRow} align="center">
           <ListItemText
             primary={isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMM yyyy')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
-        <TableCell lang="ar"  onClick={onViewRow} align="center">
+        <TableCell lang="ar" onClick={onViewRow} align="center">
           <ListItemText
             primary={isValid(new Date(end_date)) && format(new Date(end_date), 'dd MMM yyyy')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
 
-        <TableCell lang="ar"  onClick={onViewRow} align="center">
+        <TableCell lang="ar" onClick={onViewRow} align="center">
           {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
         </TableCell>
-        <TableCell lang="ar"  onClick={onViewRow} align="center">
+        <TableCell lang="ar" onClick={onViewRow} align="center">
           {curLangAr ? work_group?.name_arabic : work_group?.name_english}
         </TableCell>
 
-        <TableCell lang="ar"  align="center">
+        <TableCell lang="ar" align="center">
           <Label
             variant="soft"
             color={
@@ -113,7 +114,7 @@ export default function AppointmentsTableRow({
           </Label>
         </TableCell>
 
-        <TableCell lang="ar"  align="right" sx={{ px: 1 }}>
+        <TableCell lang="ar" align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>

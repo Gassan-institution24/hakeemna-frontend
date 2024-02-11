@@ -13,7 +13,6 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
-
 import { fDate, fTime } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
@@ -21,15 +20,11 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentItem({ appointment, onBook, onView}) {
+export default function AppointmentItem({ appointment, onBook, onView }) {
   const popover = usePopover();
   const [insuranceNames, setInsuranceNames] = useState();
 
-  const {
-    unit_service,
-    appointment_type,
-    start_time,
-  } = appointment;
+  const { unit_service, appointment_type, start_time } = appointment;
   useEffect(() => {
     if (unit_service?.insurance) {
       const names = unit_service.insurance.map((test) => test.name_english);
@@ -128,12 +123,12 @@ export default function AppointmentItem({ appointment, onBook, onView}) {
             },
             {
               label: appointment_type?.name_english,
-              icon: <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }}  />,
+              icon: <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }} />,
             },
             {
               label: `${appointment?.price} JOD`,
               icon: (
-                <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} /> 
+                <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
               ),
             },
           ].map((item) => (

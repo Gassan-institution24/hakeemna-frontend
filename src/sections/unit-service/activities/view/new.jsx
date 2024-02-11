@@ -17,7 +17,7 @@ export default function TableCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t("Create a new activity")}
+        heading={t('Create a new activity')}
         links={[
           {
             name: t('dashboard'),

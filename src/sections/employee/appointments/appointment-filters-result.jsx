@@ -76,7 +76,7 @@ export default function InvoiceTableFiltersResult({
       </Stack>
     </Stack>
   );
-} 
+}
 
 InvoiceTableFiltersResult.propTypes = {
   filters: PropTypes.object,

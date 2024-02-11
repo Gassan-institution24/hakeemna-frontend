@@ -29,7 +29,7 @@ export default function JobSort({ sort, onSort, sortOptions }) {
         sx={{ fontWeight: 'fontWeightSemiBold' }}
       >
         {t('Sort By:')}
-        
+
         <Box
           component="span"
           sx={{
@@ -46,7 +46,7 @@ export default function JobSort({ sort, onSort, sortOptions }) {
         {sortOptions.map((option) => (
           <MenuItem
             key={option.value}
-            selected={option.value === sort } 
+            selected={option.value === sort}
             onClick={() => {
               popover.onClose();
               onSort(option.value);

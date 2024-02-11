@@ -15,7 +15,7 @@ export default function Bmi() {
   const [result, setResult] = useState(null);
   const { t } = useTranslate();
   const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar'
+  const curLangAr = currentLang.value === 'ar';
   const handleHeightChange = useCallback((e) => {
     setHeight(e.target.value);
   }, []);
@@ -51,7 +51,8 @@ export default function Bmi() {
             fullWidth
             label={
               <span>
-                {t('Height')}<span style={{ color: 'green', fontWeight: 600 }}>/</span> {t('cm')}
+                {t('Height')}
+                <span style={{ color: 'green', fontWeight: 600 }}>/</span> {t('cm')}
               </span>
             }
             type="Number"
@@ -64,7 +65,8 @@ export default function Bmi() {
             fullWidth
             label={
               <span>
-               {t('Weight')}<span style={{ color: 'green', fontWeight: 600 }}>/</span> {t('kg')}
+                {t('Weight')}
+                <span style={{ color: 'green', fontWeight: 600 }}>/</span> {t('kg')}
               </span>
             }
             type="Number"
@@ -76,7 +78,7 @@ export default function Bmi() {
 
       <m.div variants={varFade().inUp}>
         <Button size="large" type="submit" variant="contained" onClick={calculate}>
-        {t('Calculate')}
+          {t('Calculate')}
         </Button>
       </m.div>
 

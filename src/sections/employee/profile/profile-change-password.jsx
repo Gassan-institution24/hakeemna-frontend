@@ -23,7 +23,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 export default function AccountChangePassword() {
   const { enqueueSnackbar } = useSnackbar();
 
-  const {user} =useAuthContext()
+  const { user } = useAuthContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -77,7 +77,7 @@ export default function AccountChangePassword() {
         enqueueSnackbar(response.data || t('Password update failed!'), { variant: 'error' });
       }
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
       enqueueSnackbar(t('An error occurred. Please try again.'), { variant: 'error' });
     }

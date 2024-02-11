@@ -14,8 +14,8 @@ import TableNewEditForm from './table-new-edit-form';
 export default function TableCreateView({ departmentData }) {
   const settings = useSettingsContext();
   const { t } = useTranslate();
-  const {currentLang} = useLocales()
-  const curLangAr = currentLang.value === 'ar'
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       {/* <CustomBreadcrumbs

@@ -50,17 +50,21 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
 
   const renderPrimary = (
     <TableRow hover>
-      <TableCell lang="ar" align="center">{code}</TableCell>
-      <TableCell lang="ar" align="center">{curLangAr ? name_arabic : name_english}</TableCell>
+      <TableCell lang="ar" align="center">
+        {code}
+      </TableCell>
+      <TableCell lang="ar" align="center">
+        {curLangAr ? name_arabic : name_english}
+      </TableCell>
       <TableCell
         align="center"
         onClick={() => setFilters({ ...filters, name: type?.name_english })}
       >
-        {curLangAr ? type?.name_arabic: type?.name_english}
+        {curLangAr ? type?.name_arabic : type?.name_english}
       </TableCell>
       <TableCell lang="ar" align="center">
         <Label
-                    lang="ar"
+          lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -69,9 +73,15 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
           {t(status)}
         </Label>
       </TableCell>
-      <TableCell lang="ar" align="center">{webpage}</TableCell>
-      <TableCell lang="ar" align="center">{phone}</TableCell>
-      <TableCell lang="ar" align="center">{address}</TableCell>
+      <TableCell lang="ar" align="center">
+        {webpage}
+      </TableCell>
+      <TableCell lang="ar" align="center">
+        {phone}
+      </TableCell>
+      <TableCell lang="ar" align="center">
+        {address}
+      </TableCell>
       <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton sx={{ color: 'error.main' }} onClick={onDeleteRow}>
           <Iconify icon="mi:delete" />

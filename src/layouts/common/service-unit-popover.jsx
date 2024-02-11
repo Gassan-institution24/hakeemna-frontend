@@ -112,10 +112,10 @@ export default function ServiceUnitPopover() {
       </CustomPopover>
 
       <ConfirmDialog
-        lang='ar'
+        lang="ar"
         open={confirm.value || loading.value}
         onClose={confirm.onFalse}
-        title={t("confirm password")}
+        title={t('confirm password')}
         content={
           <>
             {curLangAr
@@ -152,7 +152,7 @@ export default function ServiceUnitPopover() {
               // confirm.onFalse();
             }}
           >
-            {curLangAr?"تبديل":"Switch"}
+            {curLangAr ? 'تبديل' : 'Switch'}
           </LoadingButton>
         }
       />

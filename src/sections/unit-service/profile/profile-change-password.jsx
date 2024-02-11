@@ -8,11 +8,12 @@ import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { socket } from 'src/socket';
 import { useBoolean } from 'src/hooks/use-boolean';
+import { socket } from 'src/socket';
+
+import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
-import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import axios, { endpoints } from 'src/utils/axios';
@@ -68,7 +69,7 @@ export default function AccountChangePassword() {
         user,
         link: paths.unitservice.profile.root,
         msg: `updated the service unit profile`,
-      })
+      });
       // console.log(response);
       if (response.status === 201) {
         reset();
@@ -77,7 +78,7 @@ export default function AccountChangePassword() {
         enqueueSnackbar(response.data || 'Password update failed!', { variant: 'error' });
       }
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
       enqueueSnackbar('An error occurred. Please try again.', { variant: 'error' });
     }

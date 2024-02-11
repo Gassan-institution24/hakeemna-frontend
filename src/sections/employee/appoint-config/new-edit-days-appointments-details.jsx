@@ -131,7 +131,7 @@ export default function NewEditDayAppointmentsDetails({
                   size="small"
                   InputLabelProps={{ shrink: true }}
                   name={`days_details[${ParentIndex}].appointments[${index}].appointment_type`}
-                  label={t("appointment type")}
+                  label={t('appointment type')}
                 >
                   {appointmenttypesData?.map((option) => (
                     <MenuItem value={option._id}>
@@ -146,7 +146,7 @@ export default function NewEditDayAppointmentsDetails({
                   render={({ field, fieldState: { error } }) => (
                     <MobileTimePicker
                       minutesStep="5"
-                      label={t("start time")}
+                      label={t('start time')}
                       value={
                         values.days_details[ParentIndex].appointments[index].start_time
                           ? new Date(
@@ -179,7 +179,7 @@ export default function NewEditDayAppointmentsDetails({
                         {...field}
                         multiple
                         id={`multiple-days_details[${ParentIndex}].appointments[${index}].service_types`}
-                        label={t("service types")}
+                        label={t('service types')}
                         renderValue={renderValues}
                       >
                         {serviceTypesData?.map((option) => {

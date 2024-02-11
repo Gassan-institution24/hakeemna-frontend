@@ -78,7 +78,7 @@ function Group({ subheader, items, slotProps }) {
           <Collapse in={open}>{renderContent}</Collapse>
         </>
       ) : (
-         renderContent 
+        renderContent
       )}
     </Stack>
   );

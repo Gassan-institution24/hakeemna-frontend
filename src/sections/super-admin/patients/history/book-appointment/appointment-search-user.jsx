@@ -20,15 +20,13 @@ export default function AppointmentSearch({ query, results, onSearch, hrefItem }
 
   const handleClick = (id) => {
     // router.push(hrefItem(id));
-    alert('kjkjkjkjkj')
+    alert('kjkjkjkjkj');
   };
 
   const handleKeyUp = (event) => {
     if (query) {
       if (event.key === 'Enter') {
-        const selectProduct = results.filter(
-          (appointment) => appointment.code === query
-        )[0];
+        const selectProduct = results.filter((appointment) => appointment.code === query)[0];
 
         handleClick(selectProduct.code);
       }

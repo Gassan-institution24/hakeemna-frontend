@@ -27,7 +27,7 @@ export default function CustomBreadcrumbs({
         <Box sx={{ flexGrow: 1, display: 'flex', gap: 3, alignItems: 'center' }}>
           {/* HEADING */}
           {heading && (
-            <Typography variant="h4" gutterBottom >
+            <Typography variant="h4" gutterBottom>
               {heading}
             </Typography>
           )}

@@ -75,7 +75,7 @@ export default function ConfigTableToolbar({
         }}
       >
         <DatePicker
-          label={t("date")}
+          label={t('date')}
           value={filters.startDate}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
@@ -85,7 +85,7 @@ export default function ConfigTableToolbar({
         />
 
         <DatePicker
-          label={t("end date")}
+          label={t('end date')}
           value={filters.endDate}
           onChange={handleFilterEndDate}
           slotProps={{

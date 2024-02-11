@@ -55,9 +55,11 @@ export default function Upload({
     <Stack spacing={3} alignItems="center" justifyContent="center" flexWrap="wrap">
       <UploadIllustration sx={{ width: 1, maxWidth: 200 }} />
       <Stack spacing={1} sx={{ textAlign: 'center' }}>
-        <Typography variant="h6">{curLangAr?' اسحب او اختار ملف':'Drop or Select file'}</Typography>
+        <Typography variant="h6">
+          {curLangAr ? ' اسحب او اختار ملف' : 'Drop or Select file'}
+        </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {curLangAr? 'اسحب الملفات من كمبيوترك او اضغط ':'Drop files here or click'}
+          {curLangAr ? 'اسحب الملفات من كمبيوترك او اضغط ' : 'Drop files here or click'}
           <Box
             component="span"
             sx={{
@@ -66,9 +68,9 @@ export default function Upload({
               textDecoration: 'underline',
             }}
           >
-            {curLangAr?" تصفح ":'browse'}
+            {curLangAr ? ' تصفح ' : 'browse'}
           </Box>
-          {curLangAr?"للاختيار من جهازك":'thorough your machine'}
+          {curLangAr ? 'للاختيار من جهازك' : 'thorough your machine'}
         </Typography>
       </Stack>
     </Stack>

@@ -47,12 +47,14 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
 
   const renderPrimary = (
     <TableRow hover>
-      <TableCell lang="ar" align="center">{code}</TableCell>
+      <TableCell lang="ar" align="center">
+        {code}
+      </TableCell>
       <TableCell
         align="center"
         onClick={() => setFilters({ ...filters, name: department?.name_english })}
       >
-        {curLangAr ? department?.name_arabic: department?.name_english}
+        {curLangAr ? department?.name_arabic : department?.name_english}
       </TableCell>
       <TableCell
         align="center"
@@ -64,19 +66,23 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
         align="center"
         onClick={() => setFilters({ ...filters, name: employee?.name_english })}
       >
-        {curLangAr ? employee?.name_arabic: employee?.name_english}
+        {curLangAr ? employee?.name_arabic : employee?.name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">{title}</TableCell>
+      <TableCell lang="ar" align="center">
+        {title}
+      </TableCell>
       <TableCell lang="ar" align="center">
         <Label
-                    lang="ar"
+          lang="ar"
           variant="soft"
           color={(status === 'read' && 'success') || (status === 'unread' && 'error') || 'default'}
         >
           {t(status)}
         </Label>
       </TableCell>
-      <TableCell lang="ar" align="center">{Body}</TableCell>
+      <TableCell lang="ar" align="center">
+        {Body}
+      </TableCell>
       <TableCell>
         <Rating size="small" readOnly value={Rate} precision={0.1} max={5} />
       </TableCell>

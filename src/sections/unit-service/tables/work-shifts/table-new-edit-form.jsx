@@ -129,7 +129,7 @@ export default function TableNewEditForm({ currentTable }) {
       router.push(paths.unitservice.tables.workshifts.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error',{error,user,location:window.location.href})
+      socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
     }
   });

@@ -96,22 +96,22 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell lang="ar" onClick={onViewRow} align="center">
-          {curLangAr ? work_shift?.name_arabic: work_shift?.name_english}
+          {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
         </TableCell>
         <TableCell lang="ar" onClick={onViewRow} align="center">
-          {curLangAr ? work_group?.name_arabic: work_group?.name_english}
+          {curLangAr ? work_group?.name_arabic : work_group?.name_english}
         </TableCell>
 
         <TableCell lang="ar" align="center">
           <Label
-                    lang="ar"
+            lang="ar"
             variant="soft"
             color={
               (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
             }
           >
             {t(status)}
-        </Label>
+          </Label>
         </TableCell>
 
         <TableCell lang="ar" align="right" sx={{ px: 1 }}>
@@ -163,7 +163,7 @@ export default function AppointmentsTableRow({
         </MenuItem>
       </CustomPopover>
 
-            <CustomPopover
+      <CustomPopover
         open={DDL.open}
         onClose={DDL.onClose}
         arrow="right-top"
@@ -197,7 +197,9 @@ export default function AppointmentsTableRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>
+          {t('modifications no')}: {modifications_nums}
+        </Box>
       </CustomPopover>
     </>
   );

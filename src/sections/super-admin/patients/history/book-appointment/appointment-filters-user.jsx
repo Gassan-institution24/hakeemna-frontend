@@ -42,7 +42,6 @@ export default function AppointmentsFilters({
   appointmentTypeOptions,
   dateError,
 }) {
-
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
@@ -92,7 +91,7 @@ export default function AppointmentsFilters({
       sx={{ py: 2, pr: 1, pl: 2.5 }}
     >
       <Typography variant="h6" sx={{ flexGrow: 1 }}>
-       {t('Filters')}
+        {t('Filters')}
       </Typography>
 
       <Tooltip title="Reset">
@@ -112,13 +111,13 @@ export default function AppointmentsFilters({
   const renderDate = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-       {t('Time')}
+        {t('Time')}
       </Typography>
       <Stack spacing={2.5}>
-        <DatePicker label= {t('From')} value={filters.start_date} onChange={handleFilterStartDate} />
+        <DatePicker label={t('From')} value={filters.start_date} onChange={handleFilterStartDate} />
 
         <DatePicker
-          label= {t('To')}
+          label={t('To')}
           value={filters.end_date}
           onChange={handleFilterEndDate}
           slotProps={{
@@ -214,7 +213,6 @@ export default function AppointmentsFilters({
             {renderCountries}
 
             {renderInsurance}
-   
           </Stack>
         </Scrollbar>
       </Drawer>

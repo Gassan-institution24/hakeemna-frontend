@@ -34,8 +34,6 @@ export default function AppointmentList({ patientData, appointments, refetch }) 
     [patientData, refetch]
   );
 
-
-
   return (
     <>
       <Box

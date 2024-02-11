@@ -87,27 +87,27 @@ export default function EmployeeInfoContent({ employeeData }) {
           },
           {
             label: t('nationality'),
-            value: curLangAr?nationality?.name_arabic:nationality?.name_english,
+            value: curLangAr ? nationality?.name_arabic : nationality?.name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
             label: t('unit service'),
-            value: curLangAr?unit_service?.name_arabic:unit_service?.name_english,
+            value: curLangAr ? unit_service?.name_arabic : unit_service?.name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
             label: t('department'),
-            value: curLangAr?department?.name_arabic:department?.name_english,
+            value: curLangAr ? department?.name_arabic : department?.name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
             label: t('employee type'),
-            value: curLangAr?employee_type?.name_arabic:employee_type?.name_english,
+            value: curLangAr ? employee_type?.name_arabic : employee_type?.name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
             label: t('specialty'),
-            value: curLangAr?speciality?.name_arabic:speciality?.name_english,
+            value: curLangAr ? speciality?.name_arabic : speciality?.name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {

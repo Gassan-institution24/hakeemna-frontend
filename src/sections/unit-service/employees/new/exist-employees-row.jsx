@@ -40,10 +40,18 @@ export default function ExistEmployeesRow({ row, selected, onEmploymentRow }) {
       <TableCell lang="ar" align="center">
         {first_name} {middle_name} {family_name}
       </TableCell>
-      <TableCell lang="ar" align="center">{identification_num}</TableCell>
-      <TableCell lang="ar" align="center">{email}</TableCell>
-      <TableCell lang="ar" align="center">{phone}</TableCell>
-      <TableCell lang="ar" align="center">{fDate(birth_date)}</TableCell>
+      <TableCell lang="ar" align="center">
+        {identification_num}
+      </TableCell>
+      <TableCell lang="ar" align="center">
+        {email}
+      </TableCell>
+      <TableCell lang="ar" align="center">
+        {phone}
+      </TableCell>
+      <TableCell lang="ar" align="center">
+        {fDate(birth_date)}
+      </TableCell>
 
       <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton onClick={onEmploymentRow}>

@@ -106,7 +106,7 @@ export default function PaymentTableToolbar({
         </FormControl>
 
         <DatePicker
-          label={t("start date")}
+          label={t('start date')}
           value={filters.startDate}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
@@ -116,7 +116,7 @@ export default function PaymentTableToolbar({
         />
 
         <DatePicker
-          label={t("end date")}
+          label={t('end date')}
           value={filters.endDate}
           onChange={handleFilterEndDate}
           slotProps={{

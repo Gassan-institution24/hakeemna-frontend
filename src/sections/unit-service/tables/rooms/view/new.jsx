@@ -37,7 +37,7 @@ export default function TableCreateView() {
         }}
       />
 
-      <TableNewEditForm  />
+      <TableNewEditForm />
     </Container>
   );
 }

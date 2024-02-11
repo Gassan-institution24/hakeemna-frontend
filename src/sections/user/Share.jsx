@@ -18,10 +18,19 @@ export default function Share() {
     navigator.clipboard
       .writeText(link)
       .then(() => {
-        enqueueSnackbar(`${curLangAr ? 'تم النسخ بنجاح' : 'Link copied successfully'}`, { variant: 'success' });
+        enqueueSnackbar(`${curLangAr ? 'تم النسخ بنجاح' : 'Link copied successfully'}`, {
+          variant: 'success',
+        });
       })
       .catch((err) => {
-        enqueueSnackbar(`${curLangAr ? 'حدث خطأ ما, الرجاء المحاولة لاحفا' : 'Something went wrong, please try again later'}`, { variant: 'error' });
+        enqueueSnackbar(
+          `${
+            curLangAr
+              ? 'حدث خطأ ما, الرجاء المحاولة لاحفا'
+              : 'Something went wrong, please try again later'
+          }`,
+          { variant: 'error' }
+        );
       });
   };
 
@@ -50,7 +59,6 @@ export default function Share() {
         </div>
         <Typography variant="h6" sx={{ textAlign: 'center' }}>
           {curLangAr ? 'قم بمشاركة الرابط' : 'Or copy this link'}
-          
         </Typography>
         <div style={{ position: 'relative', width: '100%' }}>
           <input
