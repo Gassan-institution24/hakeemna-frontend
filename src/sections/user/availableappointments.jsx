@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual';
 import orderBy from 'lodash/orderBy';
 import { useState, useCallback } from 'react';
 
-import { fTimestamp } from 'src/utils/format-time';
+import { fTime, fTimestamp } from 'src/utils/format-time';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Image from 'src/components/image/image';
@@ -15,6 +15,7 @@ import Button from '@mui/material/Button';
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import { MotionContainer } from 'src/components/animate';
 
 import { useAuthContext } from 'src/auth/hooks';
 import {
@@ -56,13 +57,12 @@ export default function AppointmentBooking() {
   const { user } = useAuthContext();
   const [sortBy, setSortBy] = useState('latest');
   const [Time, setTime] = useState();
-  console.log(Time);
   const [search, setSearch] = useState({
     query: '',
     results: [],
   });
 
-  const { appointmentsData, refetch } = useGetAvailableAppointments();
+  const { appointmentsData, refetch } = useGetAvailableAppointments('65c9b4be0d07c237284b06f4');
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
@@ -71,7 +71,8 @@ export default function AppointmentBooking() {
   const { paymentMethodsData } = useGetPaymentMethods();
 
   const [filters, setFilters] = useState(defaultFilters);
-
+  // console.log(unitservicesData, 'sdsdsdsds');
+  // console.log(appointmentsData, 'dsdsdsds');
   const sortOptions = [
     { value: 'latest', label: t('Latest') },
     { value: 'oldest', label: t('Oldest') },
@@ -83,7 +84,8 @@ export default function AppointmentBooking() {
       ? filters.Offer_start_date.getTime() > filters.Offer_end_date.getTime()
       : false;
   const dataFiltered = applyFilter({
-    inputData: appointmentsData,
+    // inputData: appointmentsData,
+    inputData: unitservicesData,
     filters,
     sortBy,
     dateError,
@@ -202,6 +204,11 @@ export default function AppointmentBooking() {
       results={dataFiltered.length}
     />
   );
+  const handleButtonClick = (appointment) => {
+    setTime(appointment );
+  };
+
+  // console.log(Time);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -216,306 +223,13 @@ export default function AppointmentBooking() {
         {canReset && renderResults}
       </Stack>
 
-      {/* {notFound && <EmptyContent filled title={t('No Data')} sx={{ py: 10 }} />} */}
-      {/* 
+      
       <AppointmentList
         patientData={user?.patient?._id}
         refetch={refetch}
-        appointments={dataFiltered}
-      /> */}
-      <Box sx={{ display: 'flex', border:'1px solid rgba(208, 208, 208, 0.344)' }}>
-        <Box sx={{ width: '60%', margin: 2 }}>
-          <Box sx={{ display: 'flex' }}>
-            <Image
-              src="https://s3-eu-west-1.amazonaws.com/intercare-web-public/wysiwyg-uploads%2F1569586526901-doctor.jpg"
-              sx={{ width: '110px', height: '110px', borderRadius: '100%' }}
-            />
-            <Box sx={{ mt: 1, ml: 2 }}>
-              <Typography sx={{ fontSize: 13 }}>Department name</Typography>
-              <Typography sx={{ fontSize: 13, color: 'grey' }}>
-                Department specialities: specialities(1)
-              </Typography>
-              <Box sx={{ display: 'flex', mt: 0.7, ml: -0.3 }}>
-                <Iconify icon="emojione:star" />
-                &nbsp;
-                <Typography sx={{ fontSize: 13 }}>4.2</Typography>&nbsp;
-                <Typography sx={{ fontSize: 13 }}>(+100)</Typography>
-              </Box>
-              <Box sx={{ position: 'relative', left: '-10.1%' }}>
-                <ul style={{ listStyle: 'none' }}>
-                  <li>
-                    <Iconify sx={{ color: 'info.main' }} icon="mdi:location" /> Service unit address
-                  </li>
-                  <li>
-                    <Iconify sx={{ color: 'warning.main' }} icon="mingcute:time-line" />{' '}
-                    informations
-                  </li>
-                  <li>
-                    <Iconify sx={{ color: 'success.main', }} icon="mdi:cash-multiple" /> Fees: 30 JOD
-                    (Does not include procedures){' '}
-                  </li>
-                </ul>
-              </Box>
-              <Iconify sx={{ transform: 'rotate(-20deg)', color: 'success.main', zIndex:1, position: 'relative', top:12, left:-5 , width:25, height:25}} icon="material-symbols-light:rate-review-outline" /> 
-              <Box sx={{  bgcolor: 'rgba(208, 208, 208, 0.566)',  width:350 }}>
-                <Typography sx={{padding:2}}>
-                  Lorem ipsum, dolor sit amet consectetur adipisicing, Lorem ipsum, dolor sit amet
-                  consectetur adipisicing
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-        {/* <Typography sx={{textAlign:'center'}}>Lorem ipsum dolor sit amet.</Typography> */}
-        <Box
-          sx={{
-            width: '40%',
-            margin: 2,
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr',
-          }}
-        >
-          <ul style={{ listStyle: 'none' }}>
-            <h4 style={{ fontWeight: 600,  }}>Today</h4>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>12:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>13:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>14:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>15:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>16:00 PM</li>
-            </Button>
-            <Button sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
-              Book
-            </Button>
-          </ul>
-          <ul style={{ listStyle: 'none' }}>
-            <h4 style={{ fontWeight: 600 }}>Tomorrow</h4>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>12:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>13:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>14:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>15:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>16:00 PM</li>
-            </Button>
-            <Button sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
-              Book
-            </Button>
-          </ul>
-          <ul style={{ listStyle: 'none' }}>
-            <h4 style={{ fontWeight: 600 }}>Monday 12/2</h4>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>12:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>12:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>12:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>13:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>14:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>15:00 PM</li>
-            </Button>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                height: 20,
-                p: 1,
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-              onClick={(e) => setTime(e.target.value)}
-            >
-              <li>16:00 PM</li>
-            </Button>
-            <Button sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
-              Book
-            </Button>
-          </ul>
-        </Box>
-      </Box>
+        Units={dataFiltered}
+      />
+   
     </Container>
   );
 }

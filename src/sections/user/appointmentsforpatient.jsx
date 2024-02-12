@@ -15,7 +15,7 @@ export default function AppointmentData() {
   const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');
   return (
     <>
-      {pendingAppointments.lenght > 0 ? (
+      {/* {pendingAppointments.lenght > 0 ? ( */}
         <>
           <Typography variant="h4" sx={{ mb: 2 }}>
             {curLangAr ? 'مواعيد لليوم' : 'Appointment for today'}
@@ -28,16 +28,16 @@ export default function AppointmentData() {
               mb: 2,
             }}
           >
-            <Currentappoinment />
+ <Currentappoinment  pendingAppointments={pendingAppointments}/>
           </Box>
         </>
-      ) : (
-        <Typography variant="h4" sx={{ mb: 2 }}>
+      {/* ) : ( */}
+        {/* <Typography variant="h4" sx={{ mb: 2 }}>
           {curLangAr ? 'لا يوجد لديك مواعيد اليوم' : ' No appointment for today'}
-        </Typography>
-      )}
+        </Typography> */}
+      {/* )} */}
 
-      {finishedAppointments ? (
+      {/* {finishedAppointments ? ( */}
         <>
           <Divider sx={{ mb: 2 }} />
           <Typography variant="h4" sx={{ mb: 2 }}>
@@ -54,9 +54,9 @@ export default function AppointmentData() {
             <FinishedAppoinment />
           </Box>
         </>
-      ) : (
-        ''
-      )}
+      {/* ) : ( */}
+        {/* '' */}
+      {/* )} */}
     </>
   );
 }
