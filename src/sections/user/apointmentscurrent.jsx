@@ -17,17 +17,11 @@ import { paths } from 'src/routes/paths';
 import { fTime, fDate } from 'src/utils/format-time';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useGetPatientAppointments } from 'src/api';
-import { useAuthContext } from 'src/auth/hooks';
 // ----------------------------------------------------------------------
 
-export default function Currentappoinment() {
-  const { user } = useAuthContext();
-  const { appointmentsData } = useGetPatientAppointments(user?.patient?._id);
+export default function Currentappoinment({pendingAppointments}) {
   const popover = usePopover();
   const router = useRouter();
-
-  const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending');
   const onView = useCallback(() => {
     router.push(paths.comingSoon);
   }, [router]);

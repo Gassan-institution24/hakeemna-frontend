@@ -38,7 +38,7 @@ export default function JobSort({ sort, onSort, sortOptions }) {
             textTransform: 'capitalize',
           }}
         >
-          {sort}
+          {t(sort)}
         </Box>
       </Button>
 

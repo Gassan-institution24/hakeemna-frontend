@@ -36,7 +36,7 @@ import {
 } from '@react-pdf/renderer';
 import { useAuthContext } from 'src/auth/hooks';
 import { fDate } from 'src/utils/format-time';
-// import File from '../other/_examples/mui/dialog-view/File.png';
+import File from './imges/File.jpg';
 
 export default function OldMedicalReports() {
   const popover = usePopover();
@@ -144,7 +144,7 @@ export default function OldMedicalReports() {
     file: '',
     name: '',
     note: '',
-    agree: '',
+    agree: !checkChange,
     specialty: '',
   };
 
@@ -279,7 +279,7 @@ export default function OldMedicalReports() {
       const response = await axios.get('/api/oldmedicalreports');
       setfilesPdf(response.data);
       reset();
-      // console.log(response.data);
+      setCheckChange(!checkChange)
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Failed to upload medical report', { variant: 'error' });
@@ -333,7 +333,7 @@ export default function OldMedicalReports() {
             </RHFSelect>
 
             <Controller
-              name={t('date')}
+              name='date'
               control={control}
               render={({ field, fieldState: { error } }) => (
                 <DatePicker
@@ -352,7 +352,7 @@ export default function OldMedicalReports() {
             <RHFUpload
               autoFocus
               fullWidth
-              name={t('file')}
+              name="file"
               margin="dense"
               sx={{ mb: 1 }}
               variant="outlined"
@@ -373,19 +373,19 @@ export default function OldMedicalReports() {
             sx={{
               color: 'text.secondary',
               mt: { md: -2.5, xs: -2.3 },
-              ml: { md: -19.5, xs: 1 },
+              ml: curLangAr ? { md: -31, xs: -5 } : { md: -19.5, xs: 4 },
               typography: 'caption',
               textAlign: 'center',
-              fontSize: { md: 12, xs: 9 },
+              fontSize: { md: 12, xs: 10 },
             }}
           >
             {t('I reed the ')}
             <Link underline="always" color="text.primary">
-              {t('Privacy Policy')}
+              {t(' Privacy Policy')}
             </Link>
             {t('And agree to ')}
             <Link underline="always" color="text.primary">
-              {t('Terms of Service')}
+              {t('Terms of Service ')}
             </Link>
             .
           </Typography>
@@ -415,14 +415,14 @@ export default function OldMedicalReports() {
         {filesPdf.map((info, i) => (
           <Box>
             <Box>
-              {/* <Image
+              <Image
                 src={File}
                 sx={{
                   width: { md: '80px', xs: '50px' },
                   height: { md: '80px', xs: '50px' },
                   mb: '15px',
                 }}
-              /> */}
+              />
               <IconButton
                 onClick={(event) => {
                   popover.onOpen(event);
@@ -432,7 +432,10 @@ export default function OldMedicalReports() {
               >
                 <Iconify icon="eva:more-vertical-fill" />
               </IconButton>
-              <ListItemText>{info.type} File</ListItemText>
+              <ListItemText>
+                {info.type} &nbsp;
+                {/* {t('File')} */}File
+              </ListItemText>
             </Box>
 
             <CustomPopover
@@ -454,7 +457,7 @@ export default function OldMedicalReports() {
                   }}
                 >
                   <Iconify icon="heroicons-solid:folder-download" />
-                  Download
+                  {t('Download')}
                 </MenuItem>
               </PDFDownloadLink>
               <MenuItem
@@ -466,7 +469,7 @@ export default function OldMedicalReports() {
                 sx={{ color: 'red' }}
               >
                 <Iconify icon="material-symbols:delete-outline" />
-                Delete
+                {t('Delete')}
               </MenuItem>
             </CustomPopover>
           </Box>
