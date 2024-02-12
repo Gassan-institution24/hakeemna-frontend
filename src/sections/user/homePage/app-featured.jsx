@@ -18,7 +18,7 @@ export default function AppFeatured({ list, ...other }) {
   const carousel = useCarousel({
     speed: 800,
     autoplay: true,
-    ...CarouselDots({
+    ...CarouselDots({ 
       sx: {
         top: 16,
         left: 16,
@@ -27,11 +27,16 @@ export default function AppFeatured({ list, ...other }) {
       },
     }),
   });
+  const IMGES = [
+    'https://pbs.twimg.com/media/ETOK9wUUcAQTLWn.png',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl1D6wCIYA8krMnIhzkvBvzPj8cc1_GJqFrg&usqp=CAU',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSovMdcd6fWFK49CNXERHeqygbop8Tywm_oBQ&usqp=CAU',
+  ];
 
   return (
     <Card {...other}>
       <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
-        {list.map((app, index) => (
+        {IMGES?.map((app, index) => (
           <CarouselItem key={app.id} item={app} active={index === carousel.currentIndex} />
         ))}
       </Carousel>
