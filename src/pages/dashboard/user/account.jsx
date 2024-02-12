@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useTranslate } from 'src/locales';
 
-import { AccountView } from 'src/sections/other/account/view';
+import { AccountView } from 'src/sections/user/account/view';
 
 // ----------------------------------------------------------------------
 

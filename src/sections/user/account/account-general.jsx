@@ -164,18 +164,6 @@ export default function AccountGeneral({ data, refetch }) {
     // Create a new FormData object
     const formData = new FormData();
 
-    // Get the old array of other_medication_notes or create an empty array
-    const oldOtherMedicationNotes = data?.other_medication_notes || [];
-
-    // Combine the old array with the new value
-    const newOtherMedicationNotes = [
-      ...oldOtherMedicationNotes,
-      profileData.other_medication_notes,
-    ];
-
-    // Set the combined array in the profileData
-    profileData.other_medication_notes = newOtherMedicationNotes;
-
     // Append each key-value pair to the formData
     Object.keys(profileData).forEach((key) => {
       formData.append(key, profileData[key]);

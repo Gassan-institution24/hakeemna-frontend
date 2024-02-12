@@ -2,18 +2,20 @@ import isEqual from 'lodash/isEqual';
 import orderBy from 'lodash/orderBy';
 import { useState, useCallback } from 'react';
 
-import { fTimestamp } from 'src/utils/format-time';
-
+import { fTime, fTimestamp } from 'src/utils/format-time';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-
+import Image from 'src/components/image/image';
 import { paths } from 'src/routes/paths';
 import { useTranslate, useLocales } from 'src/locales';
-
+import { Box, Typography } from '@mui/material';
 import { useBoolean } from 'src/hooks/use-boolean';
+import Button from '@mui/material/Button';
 
+import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import { MotionContainer } from 'src/components/animate';
 
 import { useAuthContext } from 'src/auth/hooks';
 import {
@@ -54,13 +56,13 @@ export default function AppointmentBooking() {
   const openFilters = useBoolean();
   const { user } = useAuthContext();
   const [sortBy, setSortBy] = useState('latest');
-
+  const [Time, setTime] = useState();
   const [search, setSearch] = useState({
     query: '',
     results: [],
   });
 
-  const { appointmentsData, refetch } = useGetAvailableAppointments();
+  const { appointmentsData, refetch } = useGetAvailableAppointments('65c9b4be0d07c237284b06f4');
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
@@ -69,7 +71,8 @@ export default function AppointmentBooking() {
   const { paymentMethodsData } = useGetPaymentMethods();
 
   const [filters, setFilters] = useState(defaultFilters);
-
+  // console.log(unitservicesData, 'sdsdsdsds');
+  // console.log(appointmentsData, 'dsdsdsds');
   const sortOptions = [
     { value: 'latest', label: t('Latest') },
     { value: 'oldest', label: t('Oldest') },
@@ -81,7 +84,8 @@ export default function AppointmentBooking() {
       ? filters.Offer_start_date.getTime() > filters.Offer_end_date.getTime()
       : false;
   const dataFiltered = applyFilter({
-    inputData: appointmentsData,
+    // inputData: appointmentsData,
+    inputData: unitservicesData,
     filters,
     sortBy,
     dateError,
@@ -200,6 +204,11 @@ export default function AppointmentBooking() {
       results={dataFiltered.length}
     />
   );
+  const handleButtonClick = (appointment) => {
+    setTime(appointment );
+  };
+
+  // console.log(Time);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -214,13 +223,13 @@ export default function AppointmentBooking() {
         {canReset && renderResults}
       </Stack>
 
-      {notFound && <EmptyContent filled title={t('No Data')} sx={{ py: 10 }} />}
-
+      
       <AppointmentList
         patientData={user?.patient?._id}
         refetch={refetch}
-        appointments={dataFiltered}
+        Units={dataFiltered}
       />
+   
     </Container>
   );
 }
