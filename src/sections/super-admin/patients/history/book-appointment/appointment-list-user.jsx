@@ -13,9 +13,8 @@ import AppointmentItem from './appointment-item-user';
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentList({ patientData, appointments, refetch }) {
+export default function AppointmentList({ patientData, Units, refetch }) {
   const router = useRouter();
-
   const handleView = useCallback(
     (id) => {
       router.push(paths.dashboard.job.details(id));
@@ -45,17 +44,17 @@ export default function AppointmentList({ patientData, appointments, refetch }) 
           md: 'repeat(3, 1fr)',
         }}
       >
-        {appointments.map((appointment) => (
+        {Units.map((unitappointment) => (
           <AppointmentItem
-            key={appointment.id}
-            appointment={appointment}
-            onBook={() => handleBook(appointment?._id)}
-            onView={() => handleView(appointment?._id)}
+            key={unitappointment.id}
+            unitappointment={unitappointment}
+            onBook={handleBook}
+            onView={() => handleView(unitappointment?._id)}
           />
         ))}
       </Box>
 
-      {appointments.length > 8 && (
+      {Units.length > 8 && (
         <Pagination
           count={8}
           sx={{
@@ -71,7 +70,7 @@ export default function AppointmentList({ patientData, appointments, refetch }) 
 }
 
 AppointmentList.propTypes = {
-  appointments: PropTypes.array,
+  Units: PropTypes.array,
   patientData: PropTypes.object,
   refetch: PropTypes.func,
 };
