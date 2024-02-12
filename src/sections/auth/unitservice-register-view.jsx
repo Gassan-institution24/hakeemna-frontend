@@ -258,7 +258,7 @@ export default function JwtRegisterView() {
         lang="ar"
       >
         <Checkbox checked={agree} onChange={(e) => setAgree(e.target.checked)} />
-        {t('By signing up, I agree to ')}
+        {t('I agree to ')}
         <Link
           onClick={policyDialog.onTrue}
           sx={{ cursor: 'pointer' }}
@@ -288,7 +288,7 @@ export default function JwtRegisterView() {
         </Alert>
       )}
       {/* <Alert severity="info">Service unit information</Alert> */}
-      <Tooltip title="Service unit name in english">
+      <Tooltip placement="top" title="Service unit name in english">
         <RHFTextField
           lang="ar"
           onChange={handleEnglishInputChange}
@@ -296,7 +296,7 @@ export default function JwtRegisterView() {
           label={`${t('name english')} *`}
         />
       </Tooltip>
-      <Tooltip title="Service unit name in arabic">
+      <Tooltip placement="top" title="Service unit name in arabic">
         <RHFTextField
           lang="ar"
           onChange={handleArabicInputChange}
@@ -304,10 +304,10 @@ export default function JwtRegisterView() {
           label={`${t('name arabic')} *`}
         />
       </Tooltip>
-      <Tooltip title="Identification number of service unit">
+      <Tooltip placement="top" title="Identification number of service unit">
         <RHFTextField lang="ar" name="us_identification_num" label={`${t('ID number')} *`} />
       </Tooltip>
-      <Tooltip title="Phone number of service unit">
+      <Tooltip placement="top" title="Phone number of service unit">
         <MuiTelInput
           forceCallingCode
           label={`${t('phone')} *`}
@@ -321,54 +321,64 @@ export default function JwtRegisterView() {
       </Tooltip>
 
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <Tooltip title="email address of service unit">
+        <Tooltip placement="top" title="email address of service unit">
           <RHFTextField lang="ar" name="us_email" label={`${t('email')} *`} />
         </Tooltip>
       </Stack>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFSelect
-          lang="ar"
-          onChange={handleCountryChange}
-          name="us_country"
-          label={`${t('country')} *`}
-        >
-          {countriesData.map((country) => (
-            <MenuItem key={country._id} value={country._id}>
-              {curLangAr ? country.name_arabic : country.name_english}
-            </MenuItem>
-          ))}
-        </RHFSelect>
-        <RHFSelect lang="ar" name="us_city" label={`${t('city')} *`}>
-          {cities.map((city) => (
-            <MenuItem key={city._id} value={city._id}>
-              {curLangAr ? city.name_arabic : city.name_english}
-            </MenuItem>
-          ))}
-        </RHFSelect>
+        <Tooltip placement="top" title="country which service unit placed">
+          <RHFSelect
+            lang="ar"
+            onChange={handleCountryChange}
+            name="us_country"
+            label={`${t('country')} *`}
+          >
+            {countriesData.map((country) => (
+              <MenuItem key={country._id} value={country._id}>
+                {curLangAr ? country.name_arabic : country.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+        </Tooltip>
+        <Tooltip placement="top" title="city which service unit placed">
+          <RHFSelect lang="ar" name="us_city" label={`${t('city')} *`}>
+            {cities.map((city) => (
+              <MenuItem key={city._id} value={city._id}>
+                {curLangAr ? city.name_arabic : city.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+        </Tooltip>
       </Stack>
 
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFSelect lang="ar" name="US_type" label={`${t('service unit type')} *`}>
-          {unitserviceTypesData.map((type) => (
-            <MenuItem key={type._id} value={type._id}>
-              {curLangAr ? type.name_arabic : type.name_english}
-            </MenuItem>
-          ))}
-        </RHFSelect>
-        <RHFSelect lang="ar" name="us_speciality" label={`${t('speciality')} *`}>
-          {specialtiesData.map((specialty) => (
-            <MenuItem key={specialty._id} value={specialty._id}>
-              {curLangAr ? specialty.name_arabic : specialty.name_english}
-            </MenuItem>
-          ))}
-        </RHFSelect>
+        <Tooltip placement="top" title="type of the service unit">
+          <RHFSelect lang="ar" name="US_type" label={`${t('service unit type')} *`}>
+            {unitserviceTypesData.map((type) => (
+              <MenuItem key={type._id} value={type._id}>
+                {curLangAr ? type.name_arabic : type.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+        </Tooltip>
+        <Tooltip placement="top" title="unit service speciality">
+          <RHFSelect lang="ar" name="us_speciality" label={`${t('speciality')} *`}>
+            {specialtiesData.map((specialty) => (
+              <MenuItem key={specialty._id} value={specialty._id}>
+                {curLangAr ? specialty.name_arabic : specialty.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+        </Tooltip>
       </Stack>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFSelect lang="ar" name="us_sector_type" label={t('sector type')}>
-          <MenuItem value="public">{t('Public')}</MenuItem>
-          <MenuItem value="privet">{t('Privet')}</MenuItem>
-          <MenuItem value="non profit organization">{t('non profit organization')}</MenuItem>
-        </RHFSelect>
+        <Tooltip placement="top" title="service unit sector type">
+          <RHFSelect lang="ar" name="us_sector_type" label={t('sector type')}>
+            <MenuItem value="public">{t('Public')}</MenuItem>
+            <MenuItem value="privet">{t('Privet')}</MenuItem>
+            <MenuItem value="non profit organization">{t('non profit organization')}</MenuItem>
+          </RHFSelect>
+        </Tooltip>
       </Stack>
 
       <LoadingButton
@@ -416,31 +426,39 @@ export default function JwtRegisterView() {
           sm: 'repeat(2, 1fr)',
         }}
       >
-        <RHFTextField
-          lang="ar"
-          onChange={handleEnglishInputChange}
-          name="em_first_name"
-          label={`${t('first name')} *`}
-        />
-        <RHFTextField
-          lang="ar"
-          onChange={handleEnglishInputChange}
-          name="em_middle_name"
-          label={`${t('middle name')} *`}
-        />
-        <RHFTextField
-          lang="ar"
-          onChange={handleEnglishInputChange}
-          name="em_family_name"
-          label={`${t('family name')} *`}
-        />
-        <RHFSelect lang="ar" name="em_speciality" label={t('speciality')}>
-          {specialtiesData.map((specialty) => (
-            <MenuItem key={specialty._id} value={specialty._id}>
-              {curLangAr ? specialty.name_arabic : specialty.name_english}
-            </MenuItem>
-          ))}
-        </RHFSelect>
+        <Tooltip placement="top" title="admin first name">
+          <RHFTextField
+            lang="ar"
+            onChange={handleEnglishInputChange}
+            name="em_first_name"
+            label={`${t('first name')} *`}
+          />
+        </Tooltip>
+        <Tooltip placement="top" title="admin middle name - father name -">
+          <RHFTextField
+            lang="ar"
+            onChange={handleEnglishInputChange}
+            name="em_middle_name"
+            label={`${t('middle name')} *`}
+          />
+        </Tooltip>
+        <Tooltip placement="top" title="admin family name">
+          <RHFTextField
+            lang="ar"
+            onChange={handleEnglishInputChange}
+            name="em_family_name"
+            label={`${t('family name')} *`}
+          />
+        </Tooltip>
+        <Tooltip placement="top" title="speciality of admin">
+          <RHFSelect lang="ar" name="em_speciality" label={t('speciality')}>
+            {specialtiesData.map((specialty) => (
+              <MenuItem key={specialty._id} value={specialty._id}>
+                {curLangAr ? specialty.name_arabic : specialty.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+        </Tooltip>
         {/* <RHFSelect name="em_type" label="Employee type">
           {employeeTypesData.map((type) => (
             <MenuItem key={type._id} value={type._id}>
@@ -458,29 +476,37 @@ export default function JwtRegisterView() {
           sm: 'repeat(1, 1fr)',
         }}
       >
-        <RHFSelect lang="ar" name="em_nationality" label={`${t('nationality')} *`}>
-          {countriesData.map((country) => (
-            <MenuItem key={country._id} value={country._id}>
-              {curLangAr ? country.name_arabic : country.name_english}
-            </MenuItem>
-          ))}
-        </RHFSelect>
-        <RHFTextField lang="ar" name="em_identification_num" label={`${t('ID number')} *`} />
-        <RHFTextField
-          lang="ar"
-          name="em_profrssion_practice_num"
-          label={`${t('profrssion practice number')} *`}
-        />
-        <MuiTelInput
-          label={`${t('phone')} *`}
-          forceCallingCode
-          value={em_phone}
-          onChange={(newPhone) => {
-            matchIsValidTel(newPhone);
-            setEMphone(newPhone);
-            methods.setValue('em_phone', newPhone);
-          }}
-        />
+        <Tooltip placement="top" title="admin nationality">
+          <RHFSelect lang="ar" name="em_nationality" label={`${t('nationality')} *`}>
+            {countriesData.map((country) => (
+              <MenuItem key={country._id} value={country._id}>
+                {curLangAr ? country.name_arabic : country.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
+        </Tooltip>
+        <Tooltip placement="top" title="admin identification number">
+          <RHFTextField lang="ar" name="em_identification_num" label={`${t('ID number')} *`} />
+        </Tooltip>
+        <Tooltip placement="top" title="admin proffession practice number">
+          <RHFTextField
+            lang="ar"
+            name="em_profrssion_practice_num"
+            label={`${t('profrssion practice number')} *`}
+          />
+        </Tooltip>
+        <Tooltip placement="top" title="admin phone number">
+          <MuiTelInput
+            label={`${t('phone')} *`}
+            forceCallingCode
+            value={em_phone}
+            onChange={(newPhone) => {
+              matchIsValidTel(newPhone);
+              setEMphone(newPhone);
+              methods.setValue('em_phone', newPhone);
+            }}
+          />
+        </Tooltip>
       </Box>
 
       <LoadingButton
@@ -518,37 +544,43 @@ export default function JwtRegisterView() {
         </Alert>
       )}
       {/* <Alert severity="info">Sign in information</Alert> */}
-      <RHFTextField lang="ar" name="email" label={`${t('email')} *`} />
-      <RHFTextField
-        lang="ar"
-        name="password"
-        label={`${t('password')} *`}
-        type={password.value ? 'text' : 'password'}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={password.onToggle} edge="end">
-                <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <RHFTextField
-        lang="ar"
-        name="confirmPassword"
-        label={`${t('confirm password')} *`}
-        type={password.value ? 'text' : 'password'}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={password.onToggle} edge="end">
-                <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
+      <Tooltip placement="top" title="admin email address to sign in">
+        <RHFTextField lang="ar" name="email" label={`${t('email')} *`} />
+      </Tooltip>
+      <Tooltip placement="top" title="admin password to sign in">
+        <RHFTextField
+          lang="ar"
+          name="password"
+          label={`${t('password')} *`}
+          type={password.value ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={password.onToggle} edge="end">
+                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Tooltip>
+      <Tooltip placement="top" title="admin confirm password to sign in">
+        <RHFTextField
+          lang="ar"
+          name="confirmPassword"
+          label={`${t('confirm password')} *`}
+          type={password.value ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={password.onToggle} edge="end">
+                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Tooltip>
       {renderTerms}
 
       <LoadingButton
