@@ -1,180 +1,141 @@
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
-import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import Card from '@mui/material/Card';
 import { Button } from '@mui/material';
-import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
-import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import ListItemText from '@mui/material/ListItemText';
-
-import { fDate, fTime } from 'src/utils/format-time';
-
+import Image from 'src/components/image/image';
+import { useTranslate } from 'src/locales';
+import EmptyContent from 'src/components/empty-content';
+import { useGetAvailableAppointments, useGetUSFeedbackes, useGetUnitservices } from 'src/api';
+import { fTime } from 'src/utils/format-time';
 import Iconify from 'src/components/iconify';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentItem({ appointment, onBook, onView }) {
-  const popover = usePopover();
-  const [insuranceNames, setInsuranceNames] = useState();
-
-  const { unit_service, appointment_type, start_time } = appointment;
-  useEffect(() => {
-    if (unit_service?.insurance) {
-      const names = unit_service.insurance.map((test) => test.name_english);
-      setInsuranceNames(names);
-    }
-  }, [unit_service]);
-
-  const handleClick = (event) => {
-    event.preventDefault();
+export default function AppointmentItem({ unitappointment, onBook, onView }) {
+  const { t } = useTranslate();
+  const { appointmentsData, refetch } = useGetAvailableAppointments(unitappointment?._id);
+  const { unitservicesData } = useGetUnitservices();
+  const { feedbackData } = useGetUSFeedbackes(unitappointment?._id);
+  const kdk = (id) => {
+    onBook(id);
   };
-
+  console.log(feedbackData, 'dsd');
   return (
     <>
-      <Card>
-        <IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
-          <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
-
-        <Stack sx={{ p: 3, pb: 2 }}>
-          <Avatar
-            alt={unit_service?.name_english}
-            src={unit_service?.company_log}
-            variant="rounded"
-            sx={{ width: 48, height: 48, mb: 2 }}
-          />
-
-          <ListItemText
-            sx={{ mb: 1 }}
-            primary={
-              <Link to="#" onClick={handleClick}>
-                {unit_service?.name_english}
-              </Link>
-            }
-            secondary={
-              <Link to="#" onClick={handleClick} sx={{ color: 'black' }}>
-                {appointment_type?.name_english} appointment
-              </Link>
-            }
-            primaryTypographyProps={{
-              typography: 'subtitle1',
-            }}
-            secondaryTypographyProps={{
-              mt: 1,
-              component: 'span',
-              typography: 'caption',
-              color: 'text.disabled',
-            }}
-          />
-
-          <Stack
-            spacing={0.5}
-            direction="row"
-            alignItems="center"
-            sx={{ color: 'text.disabled', typography: 'caption' }}
-          >
-            {fDate(appointment.start_time)}
-          </Stack>
-          <Stack
-            direction="row"
-            alignItems="center"
-            sx={{ typography: 'caption', color: 'text.disabled' }}
-          >
-            {fTime(appointment.start_time)}
-            <Iconify icon="fad:digital-colon" />
-            {fTime(appointment.end_time)}
-          </Stack>
-          <Stack
-            spacing={0.5}
-            direction="row"
-            alignItems="center"
-            sx={{ color: 'text.disabled', typography: 'caption' }}
-          >
-            {/* <Iconify width={16} icon="ic:baseline-tag" /> */}
-            {/* {address} */} address- address
-          </Stack>
-        </Stack>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
+      {unitservicesData.map((info, su) => (
         <Box
-          rowGap={1.5}
-          display="grid"
-          gridTemplateColumns="repeat(2, 1fr)"
-          sx={{ p: 3, justifyContent: 'space-between' }}
+          sx={{ display: 'flex', border: '1px solid rgba(208, 208, 208, 0.344)', width: '160%' }}
         >
-          {[
-            {
-              label: format(new Date(start_time), 'p'),
-              icon: <Iconify width={16} icon="icon-park-solid:time" sx={{ flexShrink: 0 }} />,
-            },
-            {
-              label: insuranceNames,
-              icon: (
-                <Iconify width={16} icon="medical-icon:health-services" sx={{ flexShrink: 0 }} />
-              ),
-            },
-            {
-              label: appointment_type?.name_english,
-              icon: <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }} />,
-            },
-            {
-              label: `${appointment?.price} JOD`,
-              icon: (
-                <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
-              ),
-            },
-          ].map((item) => (
-            <Stack
-              key={item.label}
-              spacing={1}
-              flexShrink={0}
-              direction="row"
-              alignItems="center"
-              sx={{ color: 'text.disabled', minWidth: 0 }}
-            >
-              {item.icon}
-              <Typography variant="caption" noWrap>
-                {item.label}
-              </Typography>
-            </Stack>
-          ))}
-          <Button onClick={onBook} sx={{ mt: 3, width: 100 }} variant="outlined" color="success">
-            Book
-          </Button>
-        </Box>
-      </Card>
+          <Box sx={{ width: '55%', margin: 2 }}>
+            <Box sx={{ display: 'flex' }}>
+              <Image
+                src={info?.company_logo}
+                sx={{ width: '110px', height: '110px', borderRadius: '100%' }}
+              />
+              <Box sx={{ mt: 1, ml: 2 }}>
+                <Typography sx={{ fontSize: 13 }}>{info?.name_english}</Typography>
+                <Typography sx={{ fontSize: 13, color: 'grey' }}>
+                  {info?.speciality?.name_english}
+                </Typography>
+                <Box sx={{ display: 'flex', mt: 0.7, ml: -0.3 }}>
+                  <Iconify icon="emojione:star" />
+                  &nbsp;
+                  <Typography sx={{ fontSize: 13 }}>{info?.rate}</Typography>&nbsp;
+                  <Typography sx={{ fontSize: 13 }}>(+100)</Typography>
+                </Box>
+                <Box sx={{ position: 'relative', left: '-10.1%' }}>
+                  <ul style={{ listStyle: 'none' }}>
+                    <li>
+                      <Iconify width={18} sx={{ color: 'info.main' }} icon="mdi:location" />{' '}
+                      {info?.country?.name_english} {info?.city?.name_english}
+                    </li>
+                    <li>
+                      <Iconify
+                        width={18}
+                        sx={{ color: 'warning.main' }}
+                        icon="mingcute:time-line"
+                      />{' '}
+                      Open 24h
+                    </li>
+                    <li>
+                      <Iconify width={18} sx={{ color: 'success.main' }} icon="mdi:cash-multiple" />{' '}
+                      Fees: 30 JOD (Does not include procedures){' '}
+                    </li>
+                  </ul>
+                </Box>
 
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-        {}
-        <MenuItem
-          onClick={() => {
-            popover.onClose();
-            onView();
-          }}
-        >
-          <Iconify icon="solar:eye-bold" />
-          View
-        </MenuItem>
-      </CustomPopover>
+                {feedbackData.map((feedback) => (
+                  <>
+                    <Iconify
+                      sx={{
+                        transform: 'rotate(-20deg)',
+                        color: 'success.main',
+                        zIndex: 1,
+                        position: 'relative',
+                        top: 12,
+                        left: -5,
+                        width: 25,
+                        height: 25,
+                      }}
+                      icon="material-symbols-light:rate-review-outline"
+                    />
+
+                    <Box sx={{ bgcolor: 'rgba(208, 208, 208, 0.566)', width: 350 }}>
+                      <Box sx={{ padding: 2 }}>
+                        <Typography>{feedback?.patient?.first_name}</Typography>
+                        <Typography sx={{ border: '1px solid white', bgcolor:'white' }}>{feedback?.Body}</Typography>
+                      </Box>
+                    </Box>
+                  </>
+                ))}
+              </Box>
+            </Box>
+          </Box>
+          {/* <Typography sx={{textAlign:'center'}}>Lorem ipsum dolor sit amet.</Typography> */}
+          {appointmentsData.length > 0 ? (
+            <Box
+              sx={{
+                width: '45%',
+                margin: 2,
+                // display: 'grid',
+                // gridTemplateColumns: '1fr 1fr 1fr',
+              }}
+            >
+              <ul style={{ listStyle: 'none' }}>
+                <h4 style={{ fontWeight: 600 }}>Today</h4>
+                {appointmentsData.map((appointments, i) => (
+                  <li key={i}>
+                    <Button
+                      onClick={() => kdk(appointments?._id)}
+                      sx={{
+                        bgcolor: 'rgba(208, 208, 208, 0.566)',
+                        mb: 1,
+                        width: '18%',
+                        borderRadius: 0,
+                        fontWeight: 100,
+                      }}
+                      // onClick={() => handleButtonClick(appointments)}
+                    >
+                      {fTime(appointments?.start_time)}
+                    </Button>
+                  </li>
+                ))}
+                <Button sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
+                  Book
+                </Button>
+              </ul>
+            </Box>
+          ) : (
+            <EmptyContent filled title={t('No Data')} sx={{ borderRadius: '0' }} />
+          )}
+        </Box>
+      ))}
     </>
   );
 }
 
 AppointmentItem.propTypes = {
-  appointment: PropTypes.object,
+  unitappointment: PropTypes.object,
   onView: PropTypes.func,
   onBook: PropTypes.func,
 };

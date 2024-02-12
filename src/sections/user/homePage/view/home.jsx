@@ -118,10 +118,9 @@ export default function OverviewAppView() {
               }
             />
           </Grid>
-
-          {/* <Grid xs={12} md={4}>
-            <AppFeatured list={_appFeatured} />
-          </Grid> */}
+          <Grid xs={12} md={4}>
+            <AppFeatured />
+          </Grid>
 
           <Grid xs={12} md={12} sx={{ height: '400px' }}>
             <Typography variant="h3">{t('How To Use')}</Typography>
