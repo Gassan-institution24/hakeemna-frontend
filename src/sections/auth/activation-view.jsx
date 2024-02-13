@@ -11,8 +11,6 @@ import axios, { endpoints } from 'src/utils/axios';
 
 import { EmailInboxIcon } from 'src/assets/icons';
 
-
-
 // ----------------------------------------------------------------------
 
 export default function ActivationView() {

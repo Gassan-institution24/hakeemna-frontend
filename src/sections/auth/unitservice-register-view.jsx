@@ -36,12 +36,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
 import { useLocales, useTranslate } from 'src/locales';
-import {
-  useGetCities,
-  useGetUSTypes,
-  useGetCountries,
-  useGetSpecialties,
-} from 'src/api';
+import { useGetCities, useGetUSTypes, useGetCountries, useGetSpecialties } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { usePopover } from 'src/components/custom-popover';
@@ -243,35 +238,35 @@ export default function JwtRegisterView() {
 
   const renderTerms = (
     <Typography
-        component="div"
-        sx={{
-          color: 'text.secondary',
-          mt: 2,
-          typography: 'caption',
-          // textAlign: 'center',
-        }}
-        lang="ar"
+      component="div"
+      sx={{
+        color: 'text.secondary',
+        mt: 2,
+        typography: 'caption',
+        // textAlign: 'center',
+      }}
+      lang="ar"
+    >
+      <Checkbox checked={agree} onChange={(e) => setAgree(e.target.checked)} />
+      {t('I agree to ')}
+      <Link
+        onClick={policyDialog.onTrue}
+        sx={{ cursor: 'pointer' }}
+        underline="always"
+        color="text.primary"
       >
-        <Checkbox checked={agree} onChange={(e) => setAgree(e.target.checked)} />
-        {t('I agree to ')}
-        <Link
-          onClick={policyDialog.onTrue}
-          sx={{ cursor: 'pointer' }}
-          underline="always"
-          color="text.primary"
-        >
-          {t('Terms of Service')}
-        </Link>
-        {t(' and ')}
-        <Link
-          onClick={policyDialog.onTrue}
-          sx={{ cursor: 'pointer' }}
-          underline="always"
-          color="text.primary"
-        >
-          {t('Privacy Policy')}
-        </Link>
-      </Typography>
+        {t('Terms of Service')}
+      </Link>
+      {t(' and ')}
+      <Link
+        onClick={policyDialog.onTrue}
+        sx={{ cursor: 'pointer' }}
+        underline="always"
+        color="text.primary"
+      >
+        {t('Privacy Policy')}
+      </Link>
+    </Typography>
   );
 
   const renderForm = (

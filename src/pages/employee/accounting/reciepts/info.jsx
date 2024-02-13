@@ -8,11 +8,11 @@ import RecieptsInfoView from 'src/sections/employee/accounting/reciepts/view/inf
 export default function RecieptsInfoPage() {
   return (
     <ACLGuard hasContent category="employee" subcategory="accounting" acl="read">
-        <Helmet>
-          <title>Reciept Info</title>
-        </Helmet>
+      <Helmet>
+        <title>Reciept Info</title>
+      </Helmet>
 
-        <RecieptsInfoView />
-      </ACLGuard>
+      <RecieptsInfoView />
+    </ACLGuard>
   );
 }

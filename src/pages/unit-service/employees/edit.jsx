@@ -18,11 +18,11 @@ export default function EmployeeEditPage() {
   const name = data?.name_english;
   return (
     <ACLGuard hasContent category="unit_service" subcategory="employees" acl="update">
-        <Helmet>
-          <title>Edit {name || ''} Employee</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && <EmployeeEditView employeeData={data} />}
-      </ACLGuard>
+      <Helmet>
+        <title>Edit {name || ''} Employee</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <EmployeeEditView employeeData={data} />}
+    </ACLGuard>
   );
 }

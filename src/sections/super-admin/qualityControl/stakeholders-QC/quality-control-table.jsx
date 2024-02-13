@@ -177,90 +177,90 @@ export default function StakeholdersFeedbacks() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading={t('Stakeholders Quality Control')}
-          links={[
-            {
-              name: 'dashboard',
-              href: paths.superadmin.root,
-            },
-            {
-              name: t('Stakeholders Quality Control'),
-            },
-          ]}
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
+      <CustomBreadcrumbs
+        heading={t('Stakeholders Quality Control')}
+        links={[
+          {
+            name: 'dashboard',
+            href: paths.superadmin.root,
+          },
+          {
+            name: t('Stakeholders Quality Control'),
+          },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
+      <Card>
+        <QCTableToolbar
+          filters={filters}
+          onFilters={handleFilters}
+          //
+          // dateError={dateError}
         />
-        <Card>
-          <QCTableToolbar
+
+        {canReset && (
+          <QCTableFiltersResult
             filters={filters}
             onFilters={handleFilters}
             //
-            // dateError={dateError}
+            onResetFilters={handleResetFilters}
+            //
+            results={dataFiltered.length}
+            sx={{ p: 2.5, pt: 0 }}
           />
+        )}
 
-          {canReset && (
-            <QCTableFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
+        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+          <Scrollbar>
+            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={separateEachStakeholderFeedbacks().length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+              />
 
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={separateEachStakeholderFeedbacks().length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
+              <TableBody>
+                {dataFiltered
+                  .slice(
+                    table.page * table.rowsPerPage,
+                    table.page * table.rowsPerPage + table.rowsPerPage
+                  )
+                  .map((row) => (
+                    <QCTableRow key={row.id} row={row} onViewRow={() => handleViewRow(row.id)} />
+                  ))}
+
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(
+                    table.page,
+                    table.rowsPerPage,
+                    separateEachStakeholderFeedbacks().length
+                  )}
                 />
 
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row) => (
-                      <QCTableRow key={row.id} row={row} onViewRow={() => handleViewRow(row.id)} />
-                    ))}
+                <TableNoData notFound={notFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
 
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(
-                      table.page,
-                      table.rowsPerPage,
-                      separateEachStakeholderFeedbacks().length
-                    )}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
-          />
-        </Card>
-      </Container>
+        <TablePaginationCustom
+          count={dataFiltered.length}
+          page={table.page}
+          rowsPerPage={table.rowsPerPage}
+          onPageChange={table.onChangePage}
+          onRowsPerPageChange={table.onChangeRowsPerPage}
+          //
+          dense={table.dense}
+          onChangeDense={table.onChangeDense}
+        />
+      </Card>
+    </Container>
   );
 }
 

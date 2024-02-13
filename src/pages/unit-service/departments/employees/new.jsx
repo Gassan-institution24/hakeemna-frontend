@@ -15,11 +15,11 @@ export default function DepartmentEmployeeNewPage() {
   const { data } = useGetDepartment(id);
   return (
     <ACLGuard hasContent category="department" subcategory="employees" acl="create">
-        <Helmet>
-          <title> Add Employee </title>
-        </Helmet>
+      <Helmet>
+        <title> Add Employee </title>
+      </Helmet>
 
-        {data && <DepartmentEmployeeNewView departmentData={data} />}
-      </ACLGuard>
+      {data && <DepartmentEmployeeNewView departmentData={data} />}
+    </ACLGuard>
   );
 }

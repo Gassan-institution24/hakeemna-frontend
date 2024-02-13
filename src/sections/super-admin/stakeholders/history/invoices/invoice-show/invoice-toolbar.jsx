@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
 

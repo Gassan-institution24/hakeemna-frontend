@@ -19,13 +19,13 @@ export default function DepartmentWorkGroupEditPage() {
   const name = data?.name_english;
   return (
     <ACLGuard hasContent category="department" subcategory="work_groups" acl="update">
-        <Helmet>
-          <title> Edit {name || ''} Work Group </title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && (
-          <DepartmentWorkGroupEditView WorkGroupData={data} departmentData={departmentData} />
-        )}
-      </ACLGuard>
+      <Helmet>
+        <title> Edit {name || ''} Work Group </title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && (
+        <DepartmentWorkGroupEditView WorkGroupData={data} departmentData={departmentData} />
+      )}
+    </ACLGuard>
   );
 }

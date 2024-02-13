@@ -8,11 +8,11 @@ import QualityControlView from 'src/sections/unit-service/qualitycontrol/view/ho
 export default function QualityControlPage() {
   return (
     <ACLGuard hasContent category="unit_service" subcategory="quality_control" acl="read">
-        <Helmet>
-          <title>Quality Control</title>
-        </Helmet>
+      <Helmet>
+        <title>Quality Control</title>
+      </Helmet>
 
-        <QualityControlView />
-      </ACLGuard>
+      <QualityControlView />
+    </ACLGuard>
   );
 }

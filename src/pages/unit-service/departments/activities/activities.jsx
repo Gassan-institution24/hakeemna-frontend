@@ -18,11 +18,11 @@ export default function DepartmentActivitiesPage() {
   const name = data?.name_english;
   return (
     <ACLGuard hasContent category="department" subcategory="activities" acl="read">
-        <Helmet>
-          <title>{name || ''} Department Activities</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && <DepartmentActivitiesView departmentData={data} />}
-      </ACLGuard>
+      <Helmet>
+        <title>{name || ''} Department Activities</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <DepartmentActivitiesView departmentData={data} />}
+    </ACLGuard>
   );
 }

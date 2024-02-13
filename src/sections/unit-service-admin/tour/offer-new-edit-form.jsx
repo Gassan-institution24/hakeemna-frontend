@@ -24,10 +24,7 @@ import { useGetCities } from 'src/api';
 import { useGetStackholder } from 'src/api/user';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFSelect,
-  RHFTextField,
-} from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function TourNewEditForm({ currentTour }) {

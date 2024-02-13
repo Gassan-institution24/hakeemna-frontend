@@ -49,7 +49,7 @@ export default function WatingRoom() {
 
   const skipfunction = async () => {
     try {
-       await axios.patch(`api/appointments/${appointmentsData._id}`, {
+      await axios.patch(`api/appointments/${appointmentsData._id}`, {
         hasFeedback: true,
       });
       dialog.onFalse();
@@ -92,8 +92,8 @@ export default function WatingRoom() {
     setSelectedValue(item);
   };
 
-  const {fullWidth} = useState(true);
-  const {maxWidth} = useState('xs');
+  const { fullWidth } = useState(true);
+  const { maxWidth } = useState('xs');
   const onSubmit = async (dataSumbmit) => {
     try {
       const newData = {

@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 
 import Button from '@mui/material/Button';
@@ -7,10 +6,6 @@ import { Typography } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-
-
-
-
 
 // ----------------------------------------------------------------------
 

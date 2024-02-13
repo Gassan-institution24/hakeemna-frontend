@@ -17,11 +17,11 @@ export default function DepartmentActivityNewPage() {
   const { data, loading } = useGetDepartment(id);
   return (
     <ACLGuard hasContent category="department" subcategory="activities" acl="create">
-        <Helmet>
-          <title> Add Activity </title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && <DepartmentActivityNewView departmentData={data} />}
-      </ACLGuard>
+      <Helmet>
+        <title> Add Activity </title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <DepartmentActivityNewView departmentData={data} />}
+    </ACLGuard>
   );
 }

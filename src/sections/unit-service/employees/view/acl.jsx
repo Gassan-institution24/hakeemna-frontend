@@ -7,12 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
-import {
-  Paper,
-  TableRow,
-  TableCell,
-  Typography,
-} from '@mui/material';
+import { Paper, TableRow, TableCell, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';

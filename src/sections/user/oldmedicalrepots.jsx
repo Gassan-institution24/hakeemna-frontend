@@ -284,7 +284,7 @@ export default function OldMedicalReports() {
       const response = await axios.get('/api/oldmedicalreports');
       setfilesPdf(response.data);
       reset();
-      setCheckChange(!checkChange)
+      setCheckChange(!checkChange);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Failed to upload medical report', { variant: 'error' });
@@ -338,7 +338,7 @@ export default function OldMedicalReports() {
             </RHFSelect>
 
             <Controller
-              name='date'
+              name="date"
               control={control}
               render={({ field, fieldState: { error } }) => (
                 <DatePicker

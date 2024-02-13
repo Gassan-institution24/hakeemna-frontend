@@ -9,11 +9,11 @@ import InsuranceHomeView from 'src/sections/unit-service/insurance/view/home';
 export default function InsuranceHomePage() {
   return (
     <ACLGuard hasContent category="unit_service" subcategory="insurance" acl="read">
-        <Helmet>
-          <title>Insurances</title>
-        </Helmet>
+      <Helmet>
+        <title>Insurances</title>
+      </Helmet>
 
-        <InsuranceHomeView />
-      </ACLGuard>
+      <InsuranceHomeView />
+    </ACLGuard>
   );
 }

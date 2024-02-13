@@ -24,27 +24,27 @@ export default function TableCreateView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading={t('old patient data')}
-          links={[
-            {
-              name: t('dashboard'),
-              href: paths.unitservice.root,
-            },
-            { name: t('old patient data') },
-          ]}
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
-        />
-        {loading && <LoadingScreen />}
-        {ACLGuard({ category: 'unit_service', subcategory: 'old_patient', acl: 'create' }) && (
-          <UploadOldPatient refetch={refetch} />
+      <CustomBreadcrumbs
+        heading={t('old patient data')}
+        links={[
+          {
+            name: t('dashboard'),
+            href: paths.unitservice.root,
+          },
+          { name: t('old patient data') },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
+      {loading && <LoadingScreen />}
+      {ACLGuard({ category: 'unit_service', subcategory: 'old_patient', acl: 'create' }) && (
+        <UploadOldPatient refetch={refetch} />
+      )}
+      {!loading &&
+        ACLGuard({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && (
+          <UploadedOldPatients oldPatients={oldPatients} />
         )}
-        {!loading &&
-          ACLGuard({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && (
-            <UploadedOldPatients oldPatients={oldPatients} />
-          )}
-      </Container>
+    </Container>
   );
 }
