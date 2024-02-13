@@ -71,7 +71,7 @@ const NewAppointmentConfigPage = lazy(() =>
 
 export const unitServiceEmployeeDashboardRoutes = [
   {
-    path: 'dashboard',
+    path: 'employee',
     element: (
       <AuthGuard>
         <DashboardLayout>
