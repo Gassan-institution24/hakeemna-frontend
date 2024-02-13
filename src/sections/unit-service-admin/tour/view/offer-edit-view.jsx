@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';

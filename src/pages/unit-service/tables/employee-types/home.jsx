@@ -9,11 +9,11 @@ import EmployeeTypeHomeView from 'src/sections/unit-service/tables/employee-type
 export default function EmployeeTypeHomePage() {
   return (
     <ACLGuard hasContent category="unit_service" subcategory="employee_type" acl="read">
-        <Helmet>
-          <title>Employee Types</title>
-        </Helmet>
+      <Helmet>
+        <title>Employee Types</title>
+      </Helmet>
 
-        <EmployeeTypeHomeView />
-      </ACLGuard>
+      <EmployeeTypeHomeView />
+    </ACLGuard>
   );
 }

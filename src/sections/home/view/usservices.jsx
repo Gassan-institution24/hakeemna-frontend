@@ -6,7 +6,6 @@ import { useTheme } from '@mui/material/styles';
 
 import Iconify from 'src/components/iconify';
 
-
 const DATA = [
   {
     headline: 'Manage old paper patient files.',

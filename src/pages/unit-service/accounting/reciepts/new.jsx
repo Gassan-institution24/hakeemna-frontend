@@ -8,11 +8,11 @@ import RecieptsNewView from 'src/sections/unit-service/accounting/reciepts/view/
 export default function RecieptsNewPage() {
   return (
     <ACLGuard hasContent category="unit_service" subcategory="accounting" acl="create">
-        <Helmet>
-          <title>New Reciept</title>
-        </Helmet>
+      <Helmet>
+        <title>New Reciept</title>
+      </Helmet>
 
-        <RecieptsNewView />
-      </ACLGuard>
+      <RecieptsNewView />
+    </ACLGuard>
   );
 }

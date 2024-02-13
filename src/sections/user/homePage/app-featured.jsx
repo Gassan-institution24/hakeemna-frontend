@@ -19,7 +19,7 @@ export default function AppFeatured({ list, ...other }) {
   const carousel = useCarousel({
     speed: 800,
     autoplay: true,
-    ...CarouselDots({ 
+    ...CarouselDots({
       sx: {
         top: 16,
         left: 16,

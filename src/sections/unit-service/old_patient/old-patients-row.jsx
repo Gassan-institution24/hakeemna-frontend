@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
-
 // ----------------------------------------------------------------------
 
 export default function OldPatientsRow({ row, selected, onEmploymentRow }) {

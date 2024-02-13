@@ -1,4 +1,3 @@
-
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';

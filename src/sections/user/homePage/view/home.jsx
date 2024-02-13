@@ -105,73 +105,73 @@ export default function OverviewAppView() {
   console.log(Us);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-        <Grid container spacing={3}>
-          <Grid xs={12} md={8}>
-            <AppWelcome
-              title={`${greeting} \n ${user?.patient?.first_name} ${user?.patient?.last_name}`}
-              description={
-                curLangAr
-                  ? 'قم بتغذية جسدك، وتمكين عقلك  فالعافية هي مفتاح الحياة النابضة بالحياة.'
-                  : 'Nourish your body, empower your mind – wellness is the key to a vibrant life.'
-              }
-              //   img={<Image src={Photo} />}
-              action={
-                <Button variant="contained" color="primary">
-                  {curLangAr ? 'احسب مؤشر كتلة الجسم' : ' Calculate your BMI'}
-                </Button>
-              }
-            />
-          </Grid>
-          <Grid xs={12} md={4}>
-            <AppFeatured />
-          </Grid>
-
-          <Grid xs={12} md={12} sx={{ height: '400px' }}>
-            <Typography variant="h3">{t('How To Use')}</Typography>
-            <Box sx={{ position: 'relative', mt: 1 }}>
-              <iframe
-                src="https://www.youtube.com/embed/IGsRxmC40Bw?si=gULZ3W4Jy6BPk7p6"
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  height: '320px',
-                  width: '100%',
-                  borderRadius: '10px',
-                  border: 'none',
-                }}
-              />
-            </Box>
-          </Grid>
+      <Grid container spacing={3}>
+        <Grid xs={12} md={8}>
+          <AppWelcome
+            title={`${greeting} \n ${user?.patient?.first_name} ${user?.patient?.last_name}`}
+            description={
+              curLangAr
+                ? 'قم بتغذية جسدك، وتمكين عقلك  فالعافية هي مفتاح الحياة النابضة بالحياة.'
+                : 'Nourish your body, empower your mind – wellness is the key to a vibrant life.'
+            }
+            //   img={<Image src={Photo} />}
+            action={
+              <Button variant="contained" color="primary">
+                {curLangAr ? 'احسب مؤشر كتلة الجسم' : ' Calculate your BMI'}
+              </Button>
+            }
+          />
         </Grid>
-        {user?.patient?.identification_num === oldData && user?.role === 'patient' ? (
-          <Dialog open={dialog.value} onClose={dialog.onTrue}>
-            <DialogTitle>
-              {curLangAr
-                ? 'لقد وجدنا بعض معلوماتك مخزنة عند'
-                : 'We found that you have data stored in'}
-              <ol>
-                <li> {curLangAr ? `${Us?.name_arabic}` : `${Us?.name_english}`}</li>
-              </ol>
-              {curLangAr
-                ? 'هل تريد تخزينها في ملفك الشخصي'
-                : 'do you want to store it in your profile'}
-            </DialogTitle>
-            <DialogActions>
-              <Button onClick={yesfunction} variant="outlined" color="success" type="submit">
-                {t('Yes')}
-              </Button>
-              <Button type="submit" variant="contained" color="inherit" onClick={nofunction}>
-                {t('No')}
-              </Button>
-            </DialogActions>
-          </Dialog>
-        ) : (
-          ''
-        )}
-      </Container>
+        <Grid xs={12} md={4}>
+          <AppFeatured />
+        </Grid>
+
+        <Grid xs={12} md={12} sx={{ height: '400px' }}>
+          <Typography variant="h3">{t('How To Use')}</Typography>
+          <Box sx={{ position: 'relative', mt: 1 }}>
+            <iframe
+              src="https://www.youtube.com/embed/IGsRxmC40Bw?si=gULZ3W4Jy6BPk7p6"
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                height: '320px',
+                width: '100%',
+                borderRadius: '10px',
+                border: 'none',
+              }}
+            />
+          </Box>
+        </Grid>
+      </Grid>
+      {user?.patient?.identification_num === oldData && user?.role === 'patient' ? (
+        <Dialog open={dialog.value} onClose={dialog.onTrue}>
+          <DialogTitle>
+            {curLangAr
+              ? 'لقد وجدنا بعض معلوماتك مخزنة عند'
+              : 'We found that you have data stored in'}
+            <ol>
+              <li> {curLangAr ? `${Us?.name_arabic}` : `${Us?.name_english}`}</li>
+            </ol>
+            {curLangAr
+              ? 'هل تريد تخزينها في ملفك الشخصي'
+              : 'do you want to store it in your profile'}
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={yesfunction} variant="outlined" color="success" type="submit">
+              {t('Yes')}
+            </Button>
+            <Button type="submit" variant="contained" color="inherit" onClick={nofunction}>
+              {t('No')}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      ) : (
+        ''
+      )}
+    </Container>
   );
 }

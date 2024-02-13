@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -13,7 +12,6 @@ import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 import { useCountdownDate } from 'src/hooks/use-countdown';
 
 import { ComingSoonIllustration } from 'src/assets/illustrations';
-
 
 // ----------------------------------------------------------------------
 

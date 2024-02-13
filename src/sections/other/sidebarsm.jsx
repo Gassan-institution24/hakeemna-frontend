@@ -7,7 +7,6 @@ import { useRouter } from 'src/routes/hooks';
 
 import Iconify from 'src/components/iconify';
 
-
 export default function SmallSidebar() {
   const router = useRouter();
   const gotoHome = () => {

@@ -18,46 +18,46 @@ export default function AppointmentData() {
   return (
     <>
       {/* {pendingAppointments.lenght > 0 ? ( */}
-        <>
-          <Typography variant="h4" sx={{ mb: 2 }}>
-            {curLangAr ? 'مواعيد لليوم' : 'Appointment for today'}
-          </Typography>
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: { md: '1fr 1fr 1fr', xs: '1fr' },
-              gap: 5,
-              mb: 2,
-            }}
-          >
- <Currentappoinment  pendingAppointments={pendingAppointments}/>
-          </Box>
-        </>
+      <>
+        <Typography variant="h4" sx={{ mb: 2 }}>
+          {curLangAr ? 'مواعيد لليوم' : 'Appointment for today'}
+        </Typography>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { md: '1fr 1fr 1fr', xs: '1fr' },
+            gap: 5,
+            mb: 2,
+          }}
+        >
+          <Currentappoinment pendingAppointments={pendingAppointments} />
+        </Box>
+      </>
       {/* ) : ( */}
-        {/* <Typography variant="h4" sx={{ mb: 2 }}>
+      {/* <Typography variant="h4" sx={{ mb: 2 }}>
           {curLangAr ? 'لا يوجد لديك مواعيد اليوم' : ' No appointment for today'}
         </Typography> */}
       {/* )} */}
 
       {/* {finishedAppointments ? ( */}
-        <>
-          <Divider sx={{ mb: 2 }} />
-          <Typography variant="h4" sx={{ mb: 2 }}>
-            {t('Finished appoinment')}
-          </Typography>
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: { md: '1fr 1fr 1fr', xs: '1fr' },
-              gap: 5,
-              mb: 2,
-            }}
-          >
-            <FinishedAppoinment />
-          </Box>
-        </>
+      <>
+        <Divider sx={{ mb: 2 }} />
+        <Typography variant="h4" sx={{ mb: 2 }}>
+          {t('Finished appoinment')}
+        </Typography>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { md: '1fr 1fr 1fr', xs: '1fr' },
+            gap: 5,
+            mb: 2,
+          }}
+        >
+          <FinishedAppoinment />
+        </Box>
+      </>
       {/* ) : ( */}
-        {/* '' */}
+      {/* '' */}
       {/* )} */}
     </>
   );

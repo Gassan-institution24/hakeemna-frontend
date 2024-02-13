@@ -8,11 +8,11 @@ import EconomicMovementInfoView from 'src/sections/employee/accounting/economic-
 export default function EconomicMovementInfoPage() {
   return (
     <ACLGuard hasContent category="employee" subcategory="accounting" acl="update">
-        <Helmet>
-          <title>Economic Movement Info</title>
-        </Helmet>
+      <Helmet>
+        <title>Economic Movement Info</title>
+      </Helmet>
 
-        <EconomicMovementInfoView />
-      </ACLGuard>
+      <EconomicMovementInfoView />
+    </ACLGuard>
   );
 }

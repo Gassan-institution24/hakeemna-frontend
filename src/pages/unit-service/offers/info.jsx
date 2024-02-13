@@ -16,11 +16,11 @@ export default function OffersInfoPage() {
   const name = data?.name_english;
   return (
     <ACLGuard hasContent category="unit_service" subcategory="offers" acl="read">
-        <Helmet>
-          <title>{name || ''} Offer Info</title>
-        </Helmet>
+      <Helmet>
+        <title>{name || ''} Offer Info</title>
+      </Helmet>
 
-        {data && <OffersInfoView offerData={data} />}
-      </ACLGuard>
+      {data && <OffersInfoView offerData={data} />}
+    </ACLGuard>
   );
 }

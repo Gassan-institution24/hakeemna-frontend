@@ -18,11 +18,11 @@ export default function EmployeeAccountingPage() {
   const name = data?.first_name;
   return (
     <ACLGuard hasContent category="employee" subcategory="accounting" acl="read">
-        <Helmet>
-          <title> {name || ''} Employee Accounting</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && <EmployeeAccountingView employeeData={data} />}
-      </ACLGuard>
+      <Helmet>
+        <title> {name || ''} Employee Accounting</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <EmployeeAccountingView employeeData={data} />}
+    </ACLGuard>
   );
 }

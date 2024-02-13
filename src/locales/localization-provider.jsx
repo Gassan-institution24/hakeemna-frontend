@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';

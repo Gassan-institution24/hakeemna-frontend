@@ -202,7 +202,7 @@ export default function AppointmentBooking() {
     />
   );
   const handleButtonClick = (appointment) => {
-    setTime(appointment );
+    setTime(appointment);
   };
 
   // console.log(Time);
@@ -220,13 +220,7 @@ export default function AppointmentBooking() {
         {canReset && renderResults}
       </Stack>
 
-      
-      <AppointmentList
-        patientData={user?.patient?._id}
-        refetch={refetch}
-        Units={dataFiltered}
-      />
-   
+      <AppointmentList patientData={user?.patient?._id} refetch={refetch} Units={dataFiltered} />
     </Container>
   );
 }

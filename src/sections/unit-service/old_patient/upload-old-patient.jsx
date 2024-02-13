@@ -17,16 +17,10 @@ import { socket } from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
-import {
-  useTable,
-} from 'src/components/table';
+import { useTable } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
 import { useSettingsContext } from 'src/components/settings';
-import FormProvider, {
-  RHFUpload,
-  RHFTextField,
-} from 'src/components/hook-form';
-
+import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

@@ -32,34 +32,34 @@ export default function MovementTableRow({
 
   return (
     <TableRow hover selected={selected}>
-        <TableCell>{stakeholder.code}</TableCell>
-        <TableCell align="center">
-          <ListItemText
-            primary={stakeholder?.name_english}
-            secondary={stakeholder?.city}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              mt: 0.5,
-              component: 'span',
-              typography: 'caption',
-            }}
-          />
-        </TableCell>
+      <TableCell>{stakeholder.code}</TableCell>
+      <TableCell align="center">
+        <ListItemText
+          primary={stakeholder?.name_english}
+          secondary={stakeholder?.city}
+          primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+          secondaryTypographyProps={{
+            mt: 0.5,
+            component: 'span',
+            typography: 'caption',
+          }}
+        />
+      </TableCell>
 
-        <TableCell align="center">
-          <Rating size="small" readOnly value={overAllRate} precision={0.1} max={5} />
-        </TableCell>
+      <TableCell align="center">
+        <Rating size="small" readOnly value={overAllRate} precision={0.1} max={5} />
+      </TableCell>
 
-        <TableCell align="center">{count}</TableCell>
-        <TableCell align="center">{read}</TableCell>
-        <TableCell align="center">{notRead}</TableCell>
+      <TableCell align="center">{count}</TableCell>
+      <TableCell align="center">{read}</TableCell>
+      <TableCell align="center">{notRead}</TableCell>
 
-        <TableCell align="right" sx={{ px: 1 }}>
-          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={onViewRow}>
-            <Iconify icon="mdi:files" />
-          </IconButton>
-        </TableCell>
-      </TableRow>
+      <TableCell align="right" sx={{ px: 1 }}>
+        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={onViewRow}>
+          <Iconify icon="mdi:files" />
+        </IconButton>
+      </TableCell>
+    </TableRow>
   );
 }
 

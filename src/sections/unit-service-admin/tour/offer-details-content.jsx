@@ -17,21 +17,21 @@ import Iconify from 'src/components/iconify';
 export default function TourDetailsContent({ tour }) {
   const renderGallery = (
     <Box gap={1} display="grid">
-        <m.div
-          key={tour.Offer_img}
-          whileHover="hover"
-          variants={{
-            hover: { opacity: 0.8 },
-          }}
-        >
-          <Image
-            alt="offer img"
-            src={tour.Offer_img}
-            ratio="1/1"
-            sx={{ borderRadius: 2, cursor: 'pointer', height: '50%', width: '70%', ml: 7.7 }}
-          />
-        </m.div>
-      </Box>
+      <m.div
+        key={tour.Offer_img}
+        whileHover="hover"
+        variants={{
+          hover: { opacity: 0.8 },
+        }}
+      >
+        <Image
+          alt="offer img"
+          src={tour.Offer_img}
+          ratio="1/1"
+          sx={{ borderRadius: 2, cursor: 'pointer', height: '50%', width: '70%', ml: 7.7 }}
+        />
+      </m.div>
+    </Box>
   );
 
   const renderHead = (
