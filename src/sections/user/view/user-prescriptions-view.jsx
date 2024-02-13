@@ -12,7 +12,6 @@ import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
-import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import Pharmaces from '../pharmacies';
@@ -22,7 +21,6 @@ import Prescriptions from '../prescriptions';
 export default function UserCardList() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
-  const settings = useSettingsContext();
   const [currentTab, setCurrentTab] = useState('Prescriptions');
   const { data } = useGetPatient(user?.patient._id);
   const TABS = [
