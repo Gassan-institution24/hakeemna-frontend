@@ -10,11 +10,13 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import axios, { endpoints } from 'src/utils/axios';
+
+import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import axios, { endpoints } from 'src/utils/axios';
-import { useTranslate } from 'src/locales';
 // ----------------------------------------------------------------------
 
 export default function AccountChangePassword() {

@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import { useParams } from 'src/routes/hooks';
+
 import { useTranslate } from 'src/locales';
 
 import { UserEditView } from 'src/sections/user/view';

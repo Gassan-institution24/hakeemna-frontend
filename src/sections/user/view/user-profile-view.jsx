@@ -1,10 +1,14 @@
-import { useState, useCallback } from 'react';
+
 import Container from '@mui/material/Container';
+
 import { paths } from 'src/routes/paths';
-import { useTranslate, useLocales } from 'src/locales';
+
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+
 import ProfileHome from '../profile-home';
 
 // ----------------------------------------------------------------------

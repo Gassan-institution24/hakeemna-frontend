@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[2086],{62086:(e,s,a)=>{a.r(s),a.d(s,{default:()=>l});var r=a(6907),i=a(85362),n=a(80184);function l(){return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsx)(r.ql,{children:(0,n.jsx)("title",{children:" Dashboard: Measurment Types Table"})}),(0,n.jsx)(i.Jb,{})]})}}}]);
-//# sourceMappingURL=2086.b7b3045e.chunk.js.map

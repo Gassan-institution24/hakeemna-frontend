@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useTranslate } from 'src/locales';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import Box from '@mui/material/Box';
@@ -11,12 +10,16 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { MenuItem, Typography } from '@mui/material';
+
+import axios, { endpoints } from 'src/utils/axios';
+
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetCities, useGetCountries } from 'src/api';
+
 import { useSnackbar } from 'src/components/snackbar';
-import { Button, MenuItem, Typography } from '@mui/material';
-import FormProvider, { RHFTextField, RHFSelect, RHFUploadAvatar } from 'src/components/hook-form';
-import { useGetCities, useGetCountries, useGetPatient } from 'src/api';
-import axios, { endpoints, fetcher } from 'src/utils/axios';
+import FormProvider, { RHFSelect, RHFTextField, RHFUploadAvatar } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

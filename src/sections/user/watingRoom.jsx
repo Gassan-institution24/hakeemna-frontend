@@ -1,28 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
 import * as Yup from 'yup';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+
+import Box from '@mui/material/Box';
+import Radio from '@mui/material/Radio';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import { Input, Rating } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import Radio from '@mui/material/Radio';
+
+import { useBoolean } from 'src/hooks/use-boolean';
+
+import axios from 'src/utils/axios';
+
+import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetUnitservice, useGetUSFeedbackes, useGetPatientOneAppointments } from 'src/api';
+
 import Image from 'src/components/image';
 import { useSnackbar } from 'src/components/snackbar';
-import axios from 'src/utils/axios';
-import { useBoolean } from 'src/hooks/use-boolean';
-import { Rating, Input } from '@mui/material';
-import FormProvider from 'src/components/hook-form/form-provider';
-import { useAuthContext } from 'src/auth/hooks';
 import EmptyContent from 'src/components/empty-content';
-
-import { useGetPatientOneAppointments, useGetUnitservice, useGetUSFeedbackes } from 'src/api';
-import { useTranslate, useLocales } from 'src/locales';
+import FormProvider from 'src/components/hook-form/form-provider';
 // ----------------------------------------------------------------------
 
 export default function WatingRoom() {

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import MuiGrid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider';
-import unit from 'src/sections/home/view/uns.webp';
-import Image from 'src/components/image';
+
 import { Box } from '@mui/system';
+import Divider from '@mui/material/Divider';
+import { useTheme } from '@mui/material/styles';
+
 import Iconify from 'src/components/iconify';
+
 
 const DATA = [
   {

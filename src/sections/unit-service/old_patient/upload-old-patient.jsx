@@ -1,58 +1,32 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Tesseract from 'tesseract.js';
+import { useMemo, useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import Grid from '@mui/material/Unstable_Grid2';
-import IconButton from '@mui/material/IconButton';
-import LoadingButton from '@mui/lab/LoadingButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import { MenuItem, TextField } from '@mui/material';
-import Table from '@mui/material/Table';
-import Tooltip from '@mui/material/Tooltip';
 import { useTheme } from '@mui/material/styles';
-import TableBody from '@mui/material/TableBody';
-import TableContainer from '@mui/material/TableContainer';
-import { tableCellClasses } from '@mui/material/TableCell';
-import { tablePaginationClasses } from '@mui/material/TablePagination';
-
-import { socket } from 'src/socket';
-
-import {
-  emptyRows,
-  TableNoData,
-  TableEmptyRows,
-  TableHeadCustom,
-  TableSelectedAction,
-  TablePaginationCustom,
-  useTable,
-} from 'src/components/table';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { useAuthContext } from 'src/auth/hooks';
-import { useBoolean } from 'src/hooks/use-boolean';
-import { Upload, UploadBox } from 'src/components/upload';
-import { useSettingsContext } from 'src/components/settings';
 
-import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api';
 import axios, { endpoints } from 'src/utils/axios';
+
+import { socket } from 'src/socket';
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
+import {
+  useTable,
+} from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
+import { useSettingsContext } from 'src/components/settings';
 import FormProvider, {
-  RHFSelect,
-  RHFTextField,
   RHFUpload,
-  RHFUploadBox,
+  RHFTextField,
 } from 'src/components/hook-form';
 
-import ExistEmployeesRow from './old-patients-row';
 
 // ----------------------------------------------------------------------
 

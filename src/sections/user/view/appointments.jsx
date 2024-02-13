@@ -1,13 +1,16 @@
+import { useState, useCallback } from 'react';
+
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 
-import { useState, useCallback } from 'react';
-import Iconify from 'src/components/iconify';
-import Tab from '@mui/material/Tab';
-import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import { paths } from 'src/routes/paths';
+
 import { useTranslate } from 'src/locales';
 
+import Iconify from 'src/components/iconify';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+
 import AppointmentData from '../appointmentsforpatient';
 import PatientsAppointment from '../availableappointments';
 

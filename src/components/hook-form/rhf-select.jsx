@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useLocales } from 'src/locales';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -11,6 +10,8 @@ import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
+
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 

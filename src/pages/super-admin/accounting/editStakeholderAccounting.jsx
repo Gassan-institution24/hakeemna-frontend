@@ -1,10 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 
-import EditStakeholderAccounting from 'src/sections/super-admin/accounting/stakeholder/stakeholder-new-edit/accounting-edit-view';
-import { useGetLicenseMovement, useGetStakeholder } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
 import { useTranslate } from 'src/locales';
+import { useGetStakeholder, useGetLicenseMovement } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import EditStakeholderAccounting from 'src/sections/super-admin/accounting/stakeholder/stakeholder-new-edit/accounting-edit-view';
 
 // ----------------------------------------------------------------------
 

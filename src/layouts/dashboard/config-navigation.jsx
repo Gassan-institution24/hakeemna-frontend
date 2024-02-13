@@ -1,17 +1,15 @@
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback } from 'react';
 
 import { paths } from 'src/routes/paths';
-import { HOST_API } from 'src/config-global';
-import { useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
 import { useRouter } from 'src/routes/hooks';
 
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
-import SvgColor from 'src/components/svg-color';
-import { useSnackbar } from 'src/components/snackbar';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
+
+import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
+import { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 

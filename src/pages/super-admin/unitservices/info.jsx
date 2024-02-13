@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import UnitServiceInfo from 'src/sections/super-admin/unitservices/info/info-page';
-import { useGetUnitservice } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetUnitservice } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import UnitServiceInfo from 'src/sections/super-admin/unitservices/info/info-page';
 // ----------------------------------------------------------------------
 
 export default function UnitServiceInfoPage() {

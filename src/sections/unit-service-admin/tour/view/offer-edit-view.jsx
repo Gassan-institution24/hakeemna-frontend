@@ -1,15 +1,15 @@
+
 import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { _tours } from 'src/_mock';
+import { useGetOffer } from 'src/api/user';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import { useGetOffer } from 'src/api/user';
 import TourNewEditForm from '../offer-new-edit-form';
 
 // ----------------------------------------------------------------------

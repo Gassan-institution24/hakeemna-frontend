@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import Pagination, { paginationClasses } from '@mui/material/Pagination';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+
 import axiosHandler from 'src/utils/axios-handler';
+
 import TourItem from './offer-item';
 
 // ----------------------------------------------------------------------

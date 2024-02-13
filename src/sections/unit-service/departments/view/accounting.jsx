@@ -1,27 +1,14 @@
 import PropTypes from 'prop-types';
-import sumBy from 'lodash/sumBy';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-
-import { alpha, useTheme } from '@mui/material/styles';
-
-import { paths } from 'src/routes/paths';
-
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
+import { useTheme } from '@mui/material/styles';
 
 import { useTranslate } from 'src/locales';
-import { RouterLink } from 'src/routes/components';
+
 import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import EconomicMovementsView from '../accounting/invoices/invoices-view';
 import PaymentControlView from '../accounting/payment-control/payment-control';

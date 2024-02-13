@@ -1,22 +1,27 @@
+import * as React from 'react';
+import { m } from 'framer-motion';
 import PropTypes from 'prop-types';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import { useTheme, styled } from '@mui/material/styles';
-import Container from '@mui/material/Container';
-import Badge, { badgeClasses } from '@mui/material/Badge';
 // dark mode
-import { m } from 'framer-motion';
+import AppBar from '@mui/material/AppBar';
 import Switch from '@mui/material/Switch';
-import { useSettingsContext } from 'src/components/settings';
-import { varFade } from 'src/components/animate';
-import * as React from 'react';
+import Toolbar from '@mui/material/Toolbar';
+import Container from '@mui/material/Container';
+import { styled, useTheme } from '@mui/material/styles';
+import Badge, { badgeClasses } from '@mui/material/Badge';
 import FormControlLabel from '@mui/material/FormControlLabel';
+
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
+
 import { bgBlur } from 'src/theme/css';
+
 import Logo from 'src/components/logo';
+import { varFade } from 'src/components/animate';
+import { useSettingsContext } from 'src/components/settings';
+
 import NavMobile from './nav/mobile';
 import NavDesktop from './nav/desktop';
 import { HEADER } from '../config-layout';

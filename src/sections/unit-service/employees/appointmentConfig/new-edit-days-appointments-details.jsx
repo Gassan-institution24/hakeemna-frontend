@@ -1,32 +1,25 @@
-import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
-import { format, isValid } from 'date-fns';
-import { useEffect, useCallback, useState } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
+import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Collapse from '@mui/material/Collapse';
+import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
-import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import InputAdornment from '@mui/material/InputAdornment';
-import { inputBaseClasses } from '@mui/material/InputBase';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 import { useLocales, useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
-import { RHFSelect, RHFTextField, RHFMultiSelect, RHFCheckbox } from 'src/components/hook-form';
+import { RHFSelect, RHFCheckbox } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

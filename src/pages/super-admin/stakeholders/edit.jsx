@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import EditPatient from 'src/sections/super-admin/stakeholders/edit/edit-patient';
-import { useGetStakeholder } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetStakeholder } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import EditPatient from 'src/sections/super-admin/stakeholders/edit/edit-patient';
 // ----------------------------------------------------------------------
 
 export default function TableCreatePage() {

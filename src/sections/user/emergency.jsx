@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { Box, Button, Container, Typography } from '@mui/material';
-import { useTranslate, useLocales } from 'src/locales';
+
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';

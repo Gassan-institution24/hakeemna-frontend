@@ -2,8 +2,9 @@ import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { AuthGuard } from 'src/auth/guard';
-import { LoadingScreen } from 'src/components/loading-screen';
 import UserDashboardLayout from 'src/layouts/dashboard/indexUser';
+
+import { LoadingScreen } from 'src/components/loading-screen';
 // import TableCreatePage from 'src/pages/dashboard/tables/new';
 // import TableEditPage from 'src/pages/dashboard/tables/edit';
 

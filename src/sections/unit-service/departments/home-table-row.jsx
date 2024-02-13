@@ -1,33 +1,20 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import Collapse from '@mui/material/Collapse';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import { useLocales, useTranslate } from 'src/locales';
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fDateTime } from 'src/utils/format-time';
+
+import ACLGuard from 'src/auth/guard/acl-guard';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import {
-  useGetDepartmentAppointmentConfigsCount,
-  useGetDepartmentActivitiesCount,
-  useGetDepartmentAppointmentsCount,
-  useGetDepartmentEconomicMovementsCount,
-  useGetDepartmentEmployeesCount,
-  useGetDepartmentFeedbackesCount,
-  useGetDepartmentRoomsCount,
-} from 'src/api';
-import ACLGuard from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 

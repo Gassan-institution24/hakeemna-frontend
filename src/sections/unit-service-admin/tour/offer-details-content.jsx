@@ -1,24 +1,22 @@
+import React from 'react';
 import { m } from 'framer-motion';
-
-import Image from 'src/components/image';
-
 import PropTypes from 'prop-types';
+
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
-import React, { useState } from 'react';
-import Iconify from 'src/components/iconify';
 
 import { fDate } from 'src/utils/format-time';
+
+import Image from 'src/components/image';
+import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function TourDetailsContent({ tour }) {
   const renderGallery = (
-    <>
-      <Box gap={1} display="grid">
+    <Box gap={1} display="grid">
         <m.div
           key={tour.Offer_img}
           whileHover="hover"
@@ -34,7 +32,6 @@ export default function TourDetailsContent({ tour }) {
           />
         </m.div>
       </Box>
-    </>
   );
 
   const renderHead = (

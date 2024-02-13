@@ -1,3 +1,4 @@
+import axios from 'axios';
 import * as Yup from 'yup';
 import { isEqual } from 'lodash';
 import PropTypes from 'prop-types';
@@ -11,23 +12,21 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { socket } from 'src/socket';
 import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
+
+import { socket } from 'src/socket';
+import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetUSEmployees, useGetUSDepartments } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFAutocomplete, RHFSelect, RHFTextField } from 'src/components/hook-form';
-
-import axios from 'axios';
-import { useAuthContext } from 'src/auth/hooks';
-import axiosHandler from 'src/utils/axios-handler';
-import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSDepartments, useGetUSEmployees } from 'src/api';
+import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

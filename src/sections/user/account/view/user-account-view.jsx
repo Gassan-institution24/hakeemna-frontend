@@ -5,10 +5,10 @@ import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
-import { useGetPatient } from 'src/api';
-import { useAuthContext } from 'src/auth/hooks';
 
+import { useGetPatient } from 'src/api';
 import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';

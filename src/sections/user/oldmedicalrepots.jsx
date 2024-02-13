@@ -1,41 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import Dialog from '@mui/material/Dialog';
-import { DatePicker } from '@mui/x-date-pickers';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import Iconify from 'src/components/iconify/iconify';
-import { useBoolean } from 'src/hooks/use-boolean';
 import * as Yup from 'yup';
+import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useSnackbar } from 'src/components/snackbar';
-import { useRouter } from 'src/routes/hooks';
-import { MenuItem, Typography, Button } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import PropTypes from 'prop-types';
-import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
-import axios from 'src/utils/axios';
-import ListItemText from '@mui/material/ListItemText';
-import Box from '@mui/material/Box';
-import { useTranslate, useLocales } from 'src/locales';
-
-import Image from 'src/components/image/image';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-
 import {
   Page,
   Text,
   View,
   Document,
-  PDFDownloadLink,
   StyleSheet,
+  PDFDownloadLink,
   Image as PdfImage,
 } from '@react-pdf/renderer';
-import { useAuthContext } from 'src/auth/hooks';
+
+import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import Dialog from '@mui/material/Dialog';
+import Checkbox from '@mui/material/Checkbox';
+import { DatePicker } from '@mui/x-date-pickers';
+import IconButton from '@mui/material/IconButton';
+import DialogTitle from '@mui/material/DialogTitle';
+import ListItemText from '@mui/material/ListItemText';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import { Button, MenuItem, Typography } from '@mui/material';
+
+import { useRouter } from 'src/routes/hooks';
+
+import { useBoolean } from 'src/hooks/use-boolean';
+
+import axios from 'src/utils/axios';
 import { fDate } from 'src/utils/format-time';
+
+import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+
+import Image from 'src/components/image/image';
+import Iconify from 'src/components/iconify/iconify';
+import { useSnackbar } from 'src/components/snackbar';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
+
 import File from './imges/File.jpg';
 
 export default function OldMedicalReports() {
