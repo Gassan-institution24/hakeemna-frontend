@@ -1,17 +1,17 @@
-import { Helmet } from 'react-helmet-async';
+// import { Helmet } from 'react-helmet-async';
 
-import { PaymentView } from 'src/sections/payment/view';
+// import { PaymentView } from 'src/sections/payment/view';
 
-// ----------------------------------------------------------------------
+// // ----------------------------------------------------------------------
 
-export default function PaymentPage() {
-  return (
-    <>
-      <Helmet>
-        <title> Payment</title>
-      </Helmet>
+// export default function PaymentPage() {
+//   return (
+//     <>
+//       <Helmet>
+//         <title> Payment</title>
+//       </Helmet>
 
-      <PaymentView />
-    </>
-  );
-}
+//       <PaymentView />
+//     </>
+//   );
+// }

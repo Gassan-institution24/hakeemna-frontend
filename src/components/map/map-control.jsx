@@ -1,36 +1,36 @@
-import PropTypes from 'prop-types';
-import { ScaleControl, GeolocateControl, NavigationControl, FullscreenControl } from 'react-map-gl';
+// import PropTypes from 'prop-types';
+// import { ScaleControl, GeolocateControl, NavigationControl, FullscreenControl } from 'react-map-gl';
 
-import { StyledMapControls } from './styles';
+// import { StyledMapControls } from './styles';
 
-// ----------------------------------------------------------------------
+// // ----------------------------------------------------------------------
 
-export default function MapControl({
-  hideScaleControl,
-  hideGeolocateControl,
-  hideFullscreenControl,
-  hideNavigationnControl,
-}) {
-  return (
-    <>
-      <StyledMapControls />
+// export default function MapControl({
+//   hideScaleControl,
+//   hideGeolocateControl,
+//   hideFullscreenControl,
+//   hideNavigationnControl,
+// }) {
+//   return (
+//     <>
+//       <StyledMapControls />
 
-      {!hideGeolocateControl && (
-        <GeolocateControl position="top-left" positionOptions={{ enableHighAccuracy: true }} />
-      )}
+//       {!hideGeolocateControl && (
+//         <GeolocateControl position="top-left" positionOptions={{ enableHighAccuracy: true }} />
+//       )}
 
-      {!hideFullscreenControl && <FullscreenControl position="top-left" />}
+//       {!hideFullscreenControl && <FullscreenControl position="top-left" />}
 
-      {!hideScaleControl && <ScaleControl position="bottom-left" />}
+//       {!hideScaleControl && <ScaleControl position="bottom-left" />}
 
-      {!hideNavigationnControl && <NavigationControl position="bottom-left" />}
-    </>
-  );
-}
+//       {!hideNavigationnControl && <NavigationControl position="bottom-left" />}
+//     </>
+//   );
+// }
 
-MapControl.propTypes = {
-  hideFullscreenControl: PropTypes.bool,
-  hideGeolocateControl: PropTypes.bool,
-  hideNavigationnControl: PropTypes.bool,
-  hideScaleControl: PropTypes.bool,
-};
+// MapControl.propTypes = {
+//   hideFullscreenControl: PropTypes.bool,
+//   hideGeolocateControl: PropTypes.bool,
+//   hideNavigationnControl: PropTypes.bool,
+//   hideScaleControl: PropTypes.bool,
+// };

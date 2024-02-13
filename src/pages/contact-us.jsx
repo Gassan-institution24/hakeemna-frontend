@@ -1,17 +1,17 @@
-import { Helmet } from 'react-helmet-async';
+// import { Helmet } from 'react-helmet-async';
 
-import { ContactView } from 'src/sections/contact/view';
+// import { ContactView } from 'src/sections/contact/view';
 
-// ----------------------------------------------------------------------
+// // ----------------------------------------------------------------------
 
-export default function ContactPage() {
-  return (
-    <>
-      <Helmet>
-        <title> Contact us</title>
-      </Helmet>
+// export default function ContactPage() {
+//   return (
+//     <>
+//       <Helmet>
+//         <title> Contact us</title>
+//       </Helmet>
 
-      <ContactView />
-    </>
-  );
-}
+//       <ContactView />
+//     </>
+//   );
+// }
