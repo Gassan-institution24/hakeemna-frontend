@@ -160,7 +160,7 @@ export default function FamiliesTableView() {
           heading="Medicine Family" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

@@ -7,7 +7,6 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 
 import { useGetOffer } from 'src/api/user';
-import { TOUR_PUBLISH_OPTIONS } from 'src/_mock';
 
 import { useSettingsContext } from 'src/components/settings';
 
@@ -65,7 +64,6 @@ export default function TourDetailsView({ id }) {
         liveLink="#"
         publish={publish || ''}
         onChangePublish={handleChangePublish}
-        publishOptions={TOUR_PUBLISH_OPTIONS}
       />
       {renderTabs}
 

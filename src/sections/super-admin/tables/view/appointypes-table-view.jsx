@@ -243,7 +243,7 @@ export default function AppointmentTypesTableView() {
           heading="Appointment Types" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

@@ -29,7 +29,7 @@ export default function TableEditView() {
         heading="Update Free Subscription"
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

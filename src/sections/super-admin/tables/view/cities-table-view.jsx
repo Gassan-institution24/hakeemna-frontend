@@ -244,7 +244,7 @@ export default function CitiesTableView() {
           heading="Cities"
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

@@ -52,7 +52,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
         heading={`${stakeholderName} Offers`}
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin.root,
           },
           {

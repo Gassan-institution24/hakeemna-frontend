@@ -194,16 +194,16 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
   const unitserviceName = unitServiceData?.name_english;
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="lg">
         <CustomBreadcrumbs
           heading={`${unitserviceName} Insurance`} /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {
-              name: t('Unit Services'),
+              name: 'Unit Services',
               href: paths.superadmin.unitservices.root,
             },
             { name: t(`${unitserviceName} Insurance`) }, /// edit

@@ -243,7 +243,7 @@ export default function ActivitesTableView() {
           heading="Activities" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

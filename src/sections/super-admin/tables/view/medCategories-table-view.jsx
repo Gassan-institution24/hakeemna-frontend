@@ -153,7 +153,7 @@ export default function CategoriesTableView() {
           heading="Medical Categories" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

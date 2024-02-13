@@ -14,7 +14,6 @@ import { fTimestamp } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useGetOffers } from 'src/api/user';
-import { _tours, _tourGuides, TOUR_SORT_OPTIONS } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
@@ -85,27 +84,6 @@ export default function TourListView() {
     setSortBy(newValue);
   }, []);
 
-  const handleSearch = useCallback(
-    (inputValue) => {
-      setSearch((prevState) => ({
-        ...prevState,
-        query: inputValue,
-      }));
-
-      if (inputValue) {
-        const results = _tours.filter(
-          (tour) => tour.name.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
-        );
-
-        setSearch((prevState) => ({
-          ...prevState,
-          results,
-        }));
-      }
-    },
-    [search.query]
-  );
-
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
@@ -137,13 +115,12 @@ export default function TourListView() {
           onResetFilters={handleResetFilters}
           //
 
-          tourGuideOptions={_tourGuides}
           // citiesOptions={countries}
           //
           dateError={dateError}
         />
 
-        <TourSort sort={sortBy} onSort={handleSortBy} sortOptions={TOUR_SORT_OPTIONS} />
+        <TourSort sort={sortBy} onSort={handleSortBy} />
       </Stack>
     </Stack>
   );

@@ -21,7 +21,7 @@ export default function TableCreateView() {
         heading="Create a new Measurment Type"
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

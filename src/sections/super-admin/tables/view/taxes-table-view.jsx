@@ -242,7 +242,7 @@ export default function TaxesTableView() {
           heading="Taxes" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

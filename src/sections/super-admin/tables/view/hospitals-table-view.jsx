@@ -243,7 +243,7 @@ export default function HospitalsTableView() {
           heading="Hospital List" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

@@ -241,7 +241,7 @@ export default function WorkShiftsTableView() {
           heading="Unit Service Types" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

@@ -100,7 +100,7 @@ export default function OffersTableRow({
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {t(status)}
+          {status}
         </Label>
       </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>

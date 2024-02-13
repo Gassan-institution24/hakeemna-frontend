@@ -209,11 +209,11 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
           heading={`${unitserviceName} Insurance`} /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {
-              name: t('Unit Services'),
+              name: 'Unit Services',
               href: paths.superadmin.unitservices.root,
             },
             { name: t(`${unitserviceName} Insurance`) }, /// edit

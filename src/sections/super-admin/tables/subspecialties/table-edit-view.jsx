@@ -30,7 +30,7 @@ export default function TableEditView() {
         heading="Update Subspecialty"
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

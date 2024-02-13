@@ -56,7 +56,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRe
             (status === 'read' && 'success') || (status === 'not read' && 'error') || 'default'
           }
         >
-          {t(status)}
+          {status}
         </Label>
       </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>

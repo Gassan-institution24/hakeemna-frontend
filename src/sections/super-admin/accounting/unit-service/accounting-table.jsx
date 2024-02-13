@@ -228,7 +228,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
           heading={t('accounting')}
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

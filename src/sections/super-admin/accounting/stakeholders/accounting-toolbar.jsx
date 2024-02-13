@@ -20,8 +20,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import Iconify from 'src/components/iconify';
 
-import InvoicePDF from './unit-service-accounting-show/accounting-pdf';
-
 // ----------------------------------------------------------------------
 
 export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, onChangeStatus }) {
@@ -53,24 +51,6 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
               <Iconify icon="solar:eye-bold" />
             </IconButton>
           </Tooltip>
-
-          <PDFDownloadLink
-            document={<InvoicePDF invoice={invoice} currentStatus={currentStatus} />}
-            fileName={invoice.invoiceNumber}
-            style={{ textDecoration: 'none' }}
-          >
-            {({ loading }) => (
-              <Tooltip title="Download">
-                <IconButton>
-                  {loading ? (
-                    <CircularProgress size={24} color="inherit" />
-                  ) : (
-                    <Iconify icon="eva:cloud-download-fill" />
-                  )}
-                </IconButton>
-              </Tooltip>
-            )}
-          </PDFDownloadLink>
 
           <Tooltip title="Print">
             <IconButton>
@@ -120,12 +100,6 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
               Close
             </Button>
           </DialogActions>
-
-          <Box sx={{ flexGrow: 1, height: 1, overflow: 'hidden' }}>
-            <PDFViewer width="100%" height="100%" style={{ border: 'none' }}>
-              <InvoicePDF invoice={invoice} currentStatus={currentStatus} />
-            </PDFViewer>
-          </Box>
         </Box>
       </Dialog>
     </>

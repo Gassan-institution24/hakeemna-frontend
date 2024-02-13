@@ -25,7 +25,7 @@ export default function TableEditView() {
         heading="Update Department"
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

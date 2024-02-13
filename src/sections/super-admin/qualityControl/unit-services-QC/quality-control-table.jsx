@@ -165,7 +165,7 @@ export default function USsFeedbacks() {
           heading="Unit Services Quality Control"
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

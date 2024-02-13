@@ -215,7 +215,7 @@ export default function PatientInsuranceView({ patientData, refetch }) {
           heading={`${patientName} Insurance`} /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

@@ -220,7 +220,7 @@ export default function AppointmentListView({ stakeholderData }) {
       <CustomBreadcrumbs
         heading="Book Appointment"
         links={[
-          { name: t('dashboard'), href: paths.superadmin.root },
+          { name: 'dashboard', href: paths.superadmin.root },
           {
             name: t('stakeholders'),
             href: paths.superadmin.stakeholders.root,

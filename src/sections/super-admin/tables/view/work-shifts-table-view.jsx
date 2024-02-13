@@ -244,7 +244,7 @@ export default function WorkShiftsTableView() {
           heading="Work Shifts" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {
