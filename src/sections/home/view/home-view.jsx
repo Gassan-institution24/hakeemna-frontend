@@ -1,13 +1,17 @@
+
 import PropTypes from 'prop-types';
-import { useScroll, m } from 'framer-motion';
+import { useScroll } from 'framer-motion';
+
 import Box from '@mui/material/Box';
+
 import ScrollProgress from 'src/components/scroll-progress';
+
+import Us from '../uspage';
+import Whydoc from '../Why';
 import HomeHero from '../home-hero';
 import Whowweare from '../whoarewe';
-import Servicesweprovide from '../servicesweprovide';
-import Whydoc from '../Why';
 import Patient from '../patientpage';
-import Us from '../uspage';
+import Servicesweprovide from '../servicesweprovide';
 // ----------------------------------------------------------------------
 
 export default function HomeView({ divRef, divRef2 }) {

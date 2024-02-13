@@ -1,8 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 
-import AppointmentTypeEditView from 'src/sections/unit-service/tables/appointment-types/view/edit';
-import { useGetAppointmentType } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetAppointmentType } from 'src/api';
+
+import AppointmentTypeEditView from 'src/sections/unit-service/tables/appointment-types/view/edit';
 
 // ----------------------------------------------------------------------
 

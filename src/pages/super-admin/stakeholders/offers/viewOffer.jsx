@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import StakeholderOfferView from 'src/sections/super-admin/stakeholders/offers/offer-view/offer-view';
-import { useGetStakeholder, useGetOffer } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetOffer, useGetStakeholder } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import StakeholderOfferView from 'src/sections/super-admin/stakeholders/offers/offer-view/offer-view';
 // ----------------------------------------------------------------------
 
 export default function StackholderFeedbackPage() {

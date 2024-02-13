@@ -1,20 +1,18 @@
 import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
-import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { _tours, TOUR_DETAILS_TABS, TOUR_PUBLISH_OPTIONS } from 'src/_mock';
-
-import Label from 'src/components/label';
-import { useSettingsContext } from 'src/components/settings';
 import { useGetOffer } from 'src/api/user';
+import { TOUR_PUBLISH_OPTIONS } from 'src/_mock';
+
+import { useSettingsContext } from 'src/components/settings';
+
 import TourDetailsToolbar from '../offer-details-toolbar';
 import TourDetailsContent from '../offer-details-content';
-import TourDetailsBookers from '../offer-details-bookers';
 
 // ----------------------------------------------------------------------
 

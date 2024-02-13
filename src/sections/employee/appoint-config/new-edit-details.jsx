@@ -1,22 +1,20 @@
-import { Controller, useFormContext } from 'react-hook-form';
-import { useParams } from 'react-router';
-
 import PropTypes from 'prop-types';
+import { Controller, useFormContext } from 'react-hook-form';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import TextField from '@mui/material/TextField';
 
-import { useLocales, useTranslate } from 'src/locales';
-import Iconify from 'src/components/iconify';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetUSWorkShifts, useGetEmployeeWorkGroups } from 'src/api';
+
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
-import { useGetEmployeeWorkGroups, useGetUSWorkShifts } from 'src/api';
 
 // ----------------------------------------------------------------------
 const weekDays = [

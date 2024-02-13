@@ -1,34 +1,34 @@
+import axios from 'axios';
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import { MenuItem } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetCountries, useGetMedFamilies, useGetSymptoms } from 'src/api';
+import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
+
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetSymptoms, useGetCountries, useGetMedFamilies } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
+  RHFSelect,
   RHFTextField,
   RHFMultiSelect,
-  RHFSelect,
   RHFAutocomplete,
 } from 'src/components/hook-form';
-
-import axios from 'axios';
-import axiosHandler from 'src/utils/axios-handler';
-import { endpoints } from 'src/utils/axios';
-import { useAuthContext } from 'src/auth/hooks';
 
 const DefaultDoses = ['5 mg', '10 mg', '50 mg'];
 

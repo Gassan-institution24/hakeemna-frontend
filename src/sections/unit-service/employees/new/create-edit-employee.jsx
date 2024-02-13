@@ -1,7 +1,8 @@
+import axios from 'axios';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
@@ -9,32 +10,32 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
+import { Alert, MenuItem } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import { Alert, MenuItem } from '@mui/material';
 
-import { socket } from 'src/socket';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import {
-  useGetCountries,
-  useGetUSEmployeeTypes,
-  useGetSpecialties,
-  useGetUSDepartments,
-} from 'src/api';
 import { endpoints } from 'src/utils/axios';
-
-import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-
-import axios from 'axios';
-import Iconify from 'src/components/iconify';
 import axiosHandler from 'src/utils/axios-handler';
+
+import { socket } from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import {
+  useGetCountries,
+  useGetSpecialties,
+  useGetUSDepartments,
+  useGetUSEmployeeTypes,
+} from 'src/api';
+
+import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

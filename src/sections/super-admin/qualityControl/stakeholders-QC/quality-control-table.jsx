@@ -1,35 +1,21 @@
-import PropTypes from 'prop-types';
-import sumBy from 'lodash/sumBy';
 import { useState, useCallback } from 'react';
 
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
-import { alpha, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useTranslate } from 'src/locales';
-import { useBoolean } from 'src/hooks/use-boolean';
+import { useGetStakeholdersFeedbackes } from 'src/api';
 
-import { fTimestamp } from 'src/utils/format-time';
-
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -38,12 +24,9 @@ import {
   getComparator,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useGetStakeholdersFeedbackes } from 'src/api';
 
-import { LoadingScreen } from 'src/components/loading-screen';
 import QCTableRow from './quality-control-table-row';
 import QCTableToolbar from './quality-control-table-toolbar';
 import QCTableFiltersResult from './quality-control-filters-result';
@@ -193,8 +176,7 @@ export default function StakeholdersFeedbacks() {
   }
 
   return (
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading={t('Stakeholders Quality Control')}
           links={[
@@ -279,7 +261,6 @@ export default function StakeholdersFeedbacks() {
           />
         </Card>
       </Container>
-    </>
   );
 }
 

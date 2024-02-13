@@ -1,29 +1,21 @@
-import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
+import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
-import { alpha, useTheme } from '@mui/material/styles';
-import Tab from '@mui/material/Tab';
-import Card from '@mui/material/Card';
-import Container from '@mui/material/Container';
-import Tabs, { tabsClasses } from '@mui/material/Tabs';
-import Link from '@mui/material/Link';
-import { Button } from '@mui/material';
-import { fShortenNumber } from 'src/utils/format-number';
 
-import { AvatarShape } from 'src/assets/illustrations';
 import { fTime, fDate } from 'src/utils/format-time';
-import Image from 'src/components/image';
-import Iconify from 'src/components/iconify';
-import { useGetPatientAppointments } from 'src/api';
-import { useAuthContext } from 'src/auth/hooks';
 
-import { useSettingsContext } from 'src/components/settings';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetPatientAppointments } from 'src/api';
+
+import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function FinishedAppoinment() {
@@ -34,8 +26,7 @@ export default function FinishedAppoinment() {
   const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');
 
   return finishedAppointments.map((info, index) => (
-    <>
-      <Card>
+    <Card>
         <Stack sx={{ p: 3, pb: 2 }}>
           <Avatar
             alt={info?.name_english}
@@ -117,7 +108,6 @@ export default function FinishedAppoinment() {
           ))}
         </Box>
       </Card>
-    </>
   ));
 }
 

@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import BookAppointment from 'src/sections/super-admin/stakeholders/history/book-appointment/book-appointment';
-import { useGetStakeholder } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetStakeholder } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import BookAppointment from 'src/sections/super-admin/stakeholders/history/book-appointment/book-appointment';
 // ----------------------------------------------------------------------
 
 export default function TableCreatePage() {

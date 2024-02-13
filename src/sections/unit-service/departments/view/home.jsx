@@ -1,33 +1,37 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { useReactToPrint } from 'react-to-print';
+import { useRef, useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import Tooltip from '@mui/material/Tooltip';
-import { alpha } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
+import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
-import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
-import { useLocales, useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useReactToPrint } from 'react-to-print';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
+
 import { socket } from 'src/socket';
+import { useGetUSDepartments } from 'src/api';
+import { useAuthContext } from 'src/auth/hooks';
+import ACLGuard from 'src/auth/guard/acl-guard';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-import ACLGuard from 'src/auth/guard/acl-guard';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
@@ -41,12 +45,9 @@ import {
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
-} from 'src/components/table';
-
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
-import { useGetUSDepartments } from 'src/api'; /// edit
+} from 'src/components/table'; /// edit
 import { StatusOptions } from 'src/assets/data/status-options';
+
 import { LoadingScreen } from 'src/components/loading-screen';
 
 import TableDetailRow from '../home-table-row'; /// edit

@@ -1,51 +1,30 @@
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
-  Typography,
-  Checkbox,
-  FormControlLabel,
-  MenuItem,
-  TableContainer,
-  Table,
-  TableBody,
-  TableCell,
-  IconButton,
-  Collapse,
   Paper,
   TableRow,
+  TableCell,
+  Typography,
 } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
 
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 
-import {
-  useGetCountries,
-  useGetCities,
-  useGetSpecialties,
-  useGetUSTypes,
-  useGetEmployeeEngagement,
-} from 'src/api';
-import Scrollbar from 'src/components/scrollbar';
-import ACLGuard from 'src/auth/guard/acl-guard';
+import axios, { endpoints } from 'src/utils/axios';
 
 import { socket } from 'src/socket';
-import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
-
-import Iconify from 'src/components/iconify';
+import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
-import axios, { endpoints } from 'src/utils/axios';
-import { useBoolean } from 'src/hooks/use-boolean';
+
+import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, { RHFMultiCheckbox } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import StakeholderInfo from 'src/sections/super-admin/stakeholders/info/stakeholder-info';
-import { useGetStakeholder } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetStakeholder } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import StakeholderInfo from 'src/sections/super-admin/stakeholders/info/stakeholder-info';
 // ----------------------------------------------------------------------
 
 export default function StakeholderInfoPage() {

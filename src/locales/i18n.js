@@ -5,11 +5,11 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { localStorageGetItem } from 'src/utils/storage-available';
 
 import { defaultLang } from './config-lang';
+import translationAr from './langs/ar.json';
+import translationCn from './langs/cn.json';
 import translationEn from './langs/en.json';
 import translationFr from './langs/fr.json';
 import translationVi from './langs/vi.json';
-import translationCn from './langs/cn.json';
-import translationAr from './langs/ar.json';
 
 // ----------------------------------------------------------------------
 

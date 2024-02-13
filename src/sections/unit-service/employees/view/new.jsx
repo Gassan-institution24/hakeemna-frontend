@@ -6,15 +6,17 @@ import { Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
-import { useLocales, useTranslate } from 'src/locales';
+
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useSettingsContext } from 'src/components/settings';
+import { useLocales, useTranslate } from 'src/locales';
+
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import TableNewEditForm from '../new/create-edit-employee';
 import FindExistPatient from '../new/find-exist-employee';
+import TableNewEditForm from '../new/create-edit-employee';
 
 // ----------------------------------------------------------------------
 

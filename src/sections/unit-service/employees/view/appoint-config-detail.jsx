@@ -1,37 +1,37 @@
 import * as Yup from 'yup';
-import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import Typewriter from 'typewriter-effect';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
-import LoadingButton from '@mui/lab/LoadingButton';
 import Container from '@mui/material/Container';
-
-import Typewriter from 'typewriter-effect';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
 import { useRouter, useParams } from 'src/routes/hooks';
-import { useAuthContext } from 'src/auth/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useSettingsContext } from 'src/components/settings';
+
+import axios, { endpoints } from 'src/utils/axios';
 
 import { socket } from 'src/socket';
-import axios, { endpoints } from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetEmployeeEngagement } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
+
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
-import { useLocales, useTranslate } from 'src/locales';
-import { useGetEmployeeEngagement } from 'src/api';
+import { useSettingsContext } from 'src/components/settings';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 
-import NewEditHolidays from '../appointmentConfig/new-edit-holidays';
-import NewEditLongHolidays from '../appointmentConfig/new-edit-long-holiday';
-import NewEditDaysDetails from '../appointmentConfig/new-edit-days-details';
 import NewEditDetails from '../appointmentConfig/new-edit-details';
+import NewEditHolidays from '../appointmentConfig/new-edit-holidays';
+import NewEditDaysDetails from '../appointmentConfig/new-edit-days-details';
+import NewEditLongHolidays from '../appointmentConfig/new-edit-long-holiday';
 
 // ----------------------------------------------------------------------
 

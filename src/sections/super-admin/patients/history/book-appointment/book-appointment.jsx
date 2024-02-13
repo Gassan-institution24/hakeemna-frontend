@@ -1,32 +1,30 @@
 import PropTypes from 'prop-types';
-
 import orderBy from 'lodash/orderBy';
 import isEqual from 'lodash/isEqual';
 import { useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
-import { useTranslate } from 'src/locales';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import Iconify from 'src/components/iconify';
+import { fTimestamp } from 'src/utils/format-time';
+
+import { useTranslate } from 'src/locales';
+import {
+  useGetCities,
+  useGetCountries,
+  useGetUnitservices,
+  useGetPaymentMethods,
+  useGetAppointmentTypes,
+  useGetAvailableAppointments,
+} from 'src/api';
+
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import {
-  useGetAvailableAppointments,
-  useGetCities,
-  useGetUnitservices,
-  useGetCountries,
-  useGetAppointmentTypes,
-  useGetPaymentMethods,
-} from 'src/api';
-import { fTimestamp } from 'src/utils/format-time';
 
 import AppointmentList from './appointment-list';
 import AppointmentSort from './appointment-sort';

@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[3797],{3797:(e,i,r)=>{r.r(i),r.d(i,{default:()=>t});var s=r(6907),n=r(88280),l=r(80184);function t(){return(0,l.jsxs)(l.Fragment,{children:[(0,l.jsx)(s.ql,{children:(0,l.jsx)("title",{children:" Verify"})}),(0,l.jsx)(n.jD,{})]})}}}]);
-//# sourceMappingURL=3797.26047ad3.chunk.js.map

@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import Box from '@mui/material/Box';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
-import Sidebarmd from 'src/sections/other/sidebarmd';
-import SmallSidebar from 'src/sections/other/sidebarsm';
+
 import { useSettingsContext } from 'src/components/settings';
 
 import Main from './main';

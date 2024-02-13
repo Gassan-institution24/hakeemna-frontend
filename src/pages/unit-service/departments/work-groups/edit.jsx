@@ -1,10 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 
-import DepartmentWorkGroupEditView from 'src/sections/unit-service/departments/work-groups/table-edit-view';
-import { useGetDepartment, useGetWorkGroup } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { useGetWorkGroup, useGetDepartment } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import DepartmentWorkGroupEditView from 'src/sections/unit-service/departments/work-groups/table-edit-view';
 
 // ----------------------------------------------------------------------
 
@@ -15,8 +18,7 @@ export default function DepartmentWorkGroupEditPage() {
   const { data, loading } = useGetWorkGroup(acid);
   const name = data?.name_english;
   return (
-    <>
-      <ACLGuard hasContent category="department" subcategory="work_groups" acl="update">
+    <ACLGuard hasContent category="department" subcategory="work_groups" acl="update">
         <Helmet>
           <title> Edit {name || ''} Work Group </title>
         </Helmet>
@@ -25,6 +27,5 @@ export default function DepartmentWorkGroupEditPage() {
           <DepartmentWorkGroupEditView WorkGroupData={data} departmentData={departmentData} />
         )}
       </ACLGuard>
-    </>
   );
 }

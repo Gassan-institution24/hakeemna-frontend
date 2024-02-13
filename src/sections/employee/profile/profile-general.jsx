@@ -1,33 +1,32 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useState, useEffect, useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { MenuItem, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { MenuItem, Typography, TextField } from '@mui/material';
 
-import { useAuthContext } from 'src/auth/hooks';
-import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFTextField,
-  RHFSelect,
-  RHFUploadAvatar,
-  RHFUploadBox,
-} from 'src/components/hook-form';
-import { useGetCities, useGetCountries, useGetSpecialties, useGetEmployeeTypes } from 'src/api';
+import axios, { endpoints } from 'src/utils/axios';
 
 import { socket } from 'src/socket';
-
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import axios, { endpoints, fetcher } from 'src/utils/axios';
-import { fData } from 'src/utils/format-number';
+import { useGetCities, useGetCountries, useGetSpecialties, useGetEmployeeTypes } from 'src/api';
+
 import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, {
+  RHFSelect,
+  RHFTextField,
+  RHFUploadBox,
+  RHFUploadAvatar,
+} from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral({ employeeData, refetch }) {

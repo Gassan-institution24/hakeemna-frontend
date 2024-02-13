@@ -1,10 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 
-import DepartmentActivityEditView from 'src/sections/unit-service/departments/activities/table-edit-view';
-import { useGetDepartment, useGetActivity } from 'src/api';
 import { useParams } from 'src/routes/hooks';
-import { LoadingScreen } from 'src/components/loading-screen';
+
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { useGetActivity, useGetDepartment } from 'src/api';
+
+import { LoadingScreen } from 'src/components/loading-screen';
+
+import DepartmentActivityEditView from 'src/sections/unit-service/departments/activities/table-edit-view';
 
 // ----------------------------------------------------------------------
 
@@ -15,8 +18,7 @@ export default function DepartmentActivityEditPage() {
   const { data, loading } = useGetActivity(acid);
   const name = data?.name_english;
   return (
-    <>
-      <ACLGuard hasContent category="department" subcategory="activities" acl="update">
+    <ACLGuard hasContent category="department" subcategory="activities" acl="update">
         <Helmet>
           <title> Edit {name || ''} Activity </title>
         </Helmet>
@@ -25,6 +27,5 @@ export default function DepartmentActivityEditPage() {
           <DepartmentActivityEditView activityData={data} departmentData={departmentData} />
         )}
       </ACLGuard>
-    </>
   );
 }

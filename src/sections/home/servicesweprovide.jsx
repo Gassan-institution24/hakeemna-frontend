@@ -1,15 +1,18 @@
+import * as React from 'react';
 import { m } from 'framer-motion';
+
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import { Button } from '@mui/material';
+import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
+
+import { PATH_FOR_US_SERVICES, PATH_FOR_PATIENT_SERVICES } from 'src/config-global';
+
 import { varFade, MotionViewport } from 'src/components/animate';
-import { Button } from '@mui/material';
-import { PATH_FOR_PATIENT_SERVICES, PATH_FOR_US_SERVICES } from 'src/config-global';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
