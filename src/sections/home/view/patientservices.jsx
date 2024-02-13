@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+
 import MuiGrid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
-import patient from 'src/sections/home/view/patients.png';
-import Image from 'src/components/image';
 import { useMediaQuery } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+
+import Image from 'src/components/image';
+
+import patient from 'src/sections/home/view/patients.png';
 
 const Grid = styled(MuiGrid)(({ theme }) => ({
   width: '100%',
@@ -73,9 +76,7 @@ export default function VerticalDividerText() {
           >
             <ul style={{ margin: 10 }}>
               {DATA.map((data) => (
-                <>
-                  <li style={{ margin: 5 }}>{data.headline}</li>
-                </>
+                <li style={{ margin: 5 }}>{data.headline}</li>
               ))}
             </ul>
           </Grid>
@@ -121,9 +122,7 @@ export default function VerticalDividerText() {
           >
             <ul style={{ margin: 10 }}>
               {DATA.map((data) => (
-                <>
-                  <li style={{ margin: 5 }}>{data.headline}</li>
-                </>
+                <li style={{ margin: 5 }}>{data.headline}</li>
               ))}
             </ul>
           </Grid>

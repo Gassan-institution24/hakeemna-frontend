@@ -1,6 +1,7 @@
+import axios from 'axios';
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -9,22 +10,20 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Typography, Checkbox, FormControlLabel, MenuItem } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import { Checkbox, MenuItem, Typography, FormControlLabel } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useGetCountries, useGetCities, useGetSpecialties, useGetUSTypes } from 'src/api';
+import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
+
+import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetCities, useGetUSTypes, useGetCountries, useGetSpecialties } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
-
-import axios from 'axios';
-import { useTranslate } from 'src/locales';
-import axiosHandler from 'src/utils/axios-handler';
-import { endpoints } from 'src/utils/axios';
-import { useAuthContext } from 'src/auth/hooks';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

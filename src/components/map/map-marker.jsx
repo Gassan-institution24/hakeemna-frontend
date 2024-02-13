@@ -2,6 +2,7 @@ import { Marker } from 'react-map-gl';
 
 import Box from '@mui/material/Box';
 
+
 // ----------------------------------------------------------------------
 
 const SIZE = 20;

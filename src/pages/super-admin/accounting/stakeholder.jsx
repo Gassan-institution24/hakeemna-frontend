@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import AccountingStakeholder from 'src/sections/super-admin/accounting/stakeholder/accounting-table';
-import { useGetStakeholder } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetStakeholder } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import AccountingStakeholder from 'src/sections/super-admin/accounting/stakeholder/accounting-table';
 
 // ----------------------------------------------------------------------
 

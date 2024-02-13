@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+
 import { useTranslate } from 'src/locales';
 
 import { Medicalreports } from 'src/sections/user/view';

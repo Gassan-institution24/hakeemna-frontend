@@ -5,8 +5,8 @@ import { AuthGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
 import SecondaryNavLayout from 'src/layouts/employee-topbar';
 import DepartmentNavLayout from 'src/layouts/department-topbar';
-
 import RecieptsInfoPage from 'src/pages/employee/accounting/reciepts/info';
+
 import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------

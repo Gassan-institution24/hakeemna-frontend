@@ -1,24 +1,16 @@
 import PropTypes from 'prop-types';
-import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fMonth } from 'src/utils/format-time';
-import { fCurrency } from 'src/utils/format-number';
 import { useLocales, useTranslate } from 'src/locales';
-import { useSettingsContext } from 'src/components/settings';
 
-import Label from 'src/components/label/label';
 import Iconify from 'src/components/iconify';
-import Markdown from 'src/components/markdown';
+import { useSettingsContext } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
 

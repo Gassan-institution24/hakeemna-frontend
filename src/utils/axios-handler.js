@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+
 import { HOST_API } from 'src/config-global';
 
 export default async function axiosHandler({ setData, setError, method, path, data }) {
@@ -13,12 +14,11 @@ export default async function axiosHandler({ setData, setError, method, path, da
     },
     data,
   });
-  if (response.status === 200 || 304) {
-    if (setData) {
-      setData(response.data);
-    }
-    return response;
+
+  if (setData) {
+    setData(response.data);
   }
+
   if (setError) {
     setError(response.data);
   }

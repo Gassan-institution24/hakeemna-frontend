@@ -1,7 +1,9 @@
 import { Helmet } from 'react-helmet-async';
+
 import { useGetUSAppointments } from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
+
 import { LoadingScreen } from 'src/components/loading-screen';
 
 import AppointmentsHomeView from 'src/sections/unit-service/appointments/view/home';
@@ -14,14 +16,12 @@ export default function AppointmentsHomePage() {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
   return (
-    <>
-      <ACLGuard hasContent category="unit_service" subcategory="appointments" acl="read">
+    <ACLGuard hasContent category="unit_service" subcategory="appointments" acl="read">
         <Helmet>
           <title>Appointments</title>
         </Helmet>
         {loading && <LoadingScreen />}
         {!loading && <AppointmentsHomeView appointmentsData={appointmentsData} refetch={refetch} />}
       </ACLGuard>
-    </>
   );
 }

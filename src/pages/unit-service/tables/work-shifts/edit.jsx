@@ -1,10 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 
-import WorkShiftEditView from 'src/sections/unit-service/tables/work-shifts/view/edit';
-import { useGetWorkShift } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetWorkShift } from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import WorkShiftEditView from 'src/sections/unit-service/tables/work-shifts/view/edit';
 
 // ----------------------------------------------------------------------
 
@@ -14,14 +17,12 @@ export default function WorkShiftEditPage() {
   const { data, loading } = useGetWorkShift(id);
   const name = data?.name_english;
   return (
-    <>
-      <ACLGuard hasContent category="unit_service" subcategory="work_shift" acl="update">
+    <ACLGuard hasContent category="unit_service" subcategory="work_shift" acl="update">
         <Helmet>
           <title>Edit {name || ''} Work Shift</title>
         </Helmet>
         {loading && <LoadingScreen />}
         {!loading && <WorkShiftEditView workShiftData={data} />}
       </ACLGuard>
-    </>
   );
 }

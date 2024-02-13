@@ -1,11 +1,12 @@
+import { m } from 'framer-motion';
 import React, { useState, useCallback } from 'react';
-import Box from '@mui/material/Box';
+
+import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { Button } from '@mui/material';
-import { m } from 'framer-motion';
-import { useTranslate, useLocales } from 'src/locales';
+
+import { useLocales, useTranslate } from 'src/locales';
 
 import { varFade, MotionViewport } from 'src/components/animate';
 

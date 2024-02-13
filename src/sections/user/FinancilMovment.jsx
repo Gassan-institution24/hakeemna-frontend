@@ -1,10 +1,14 @@
+
 import PropTypes from 'prop-types';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+
 import { useCountdownDate } from 'src/hooks/use-countdown';
-import { ComingSoonIllustration } from 'src/assets/illustrations';
+
 import { useTranslate } from 'src/locales';
+import { ComingSoonIllustration } from 'src/assets/illustrations';
 
 // ----------------------------------------------------------------------
 

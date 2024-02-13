@@ -1,18 +1,21 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { m } from 'framer-motion';
-import { useTranslate, useLocales } from 'src/locales';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+
 import axiosHandler from 'src/utils/axios-handler';
-import { varFade, MotionViewport } from 'src/components/animate';
+
+import { useLocales, useTranslate } from 'src/locales';
+
+import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
+import { varFade, MotionViewport } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
 

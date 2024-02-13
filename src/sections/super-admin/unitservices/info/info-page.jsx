@@ -1,17 +1,13 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
 
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import Label from 'src/components/label';
 import { useSettingsContext } from 'src/components/settings';
 
-import UnitServiceDetailsToolbar from './info-toolbar';
 import UnitServiceDetailsContent from './info-content';
+import UnitServiceDetailsToolbar from './info-toolbar';
 
 // ----------------------------------------------------------------------
 

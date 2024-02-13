@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
+
 import Button from '@mui/material/Button';
+
 import { RouterLink } from 'src/routes/components';
 
 export default function SigupButton({ sx, scrollToDiv }) {

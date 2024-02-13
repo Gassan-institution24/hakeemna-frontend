@@ -2,10 +2,11 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
+import { useTranslate } from 'src/locales';
+
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import { useTranslate } from 'src/locales';
 import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------

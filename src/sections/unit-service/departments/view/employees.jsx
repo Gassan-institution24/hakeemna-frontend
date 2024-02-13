@@ -1,35 +1,42 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useReactToPrint } from 'react-to-print';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import Tooltip from '@mui/material/Tooltip';
-import { alpha } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
+import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
-import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useReactToPrint } from 'react-to-print';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
+
+import { socket } from 'src/socket';
+import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
+import ACLGuard from 'src/auth/guard/acl-guard';
+import { useGetDepartmentEmployees } from 'src/api';
+import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import NavEmployee from 'src/layouts/employee-topbar/nav-employee';
 import {
   useTable,
   emptyRows,
@@ -39,18 +46,7 @@ import {
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
-} from 'src/components/table';
-
-import { socket } from 'src/socket';
-import { useTranslate } from 'src/locales';
-import { endpoints } from 'src/utils/axios';
-import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
-import axiosHandler from 'src/utils/axios-handler';
-import { LoadingScreen } from 'src/components/loading-screen';
-import { StatusOptions } from 'src/assets/data/status-options';
-
-import { useGetDepartmentEmployees } from 'src/api'; /// edit
+} from 'src/components/table'; /// edit
 import TableDetailRow from '../employees/table-details-row'; /// edit
 import TableDetailToolbar from '../employees/table-details-toolbar';
 import TableDetailFiltersResult from '../employees/table-details-filters-result';

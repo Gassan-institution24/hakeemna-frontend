@@ -1,9 +1,11 @@
-import { color, m } from 'framer-motion';
+
+import { m } from 'framer-motion';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+
 import { useSettingsContext } from 'src/components/settings';
 import { varFade, MotionViewport } from 'src/components/animate';
 
