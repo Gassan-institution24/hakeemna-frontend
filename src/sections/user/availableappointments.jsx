@@ -2,28 +2,31 @@ import isEqual from 'lodash/isEqual';
 import orderBy from 'lodash/orderBy';
 import { useState, useCallback } from 'react';
 
+import { fTime, fTimestamp } from 'src/utils/format-time';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-
+import Image from 'src/components/image/image';
 import { paths } from 'src/routes/paths';
-
+import { useTranslate, useLocales } from 'src/locales';
+import { Box, Typography } from '@mui/material';
 import { useBoolean } from 'src/hooks/use-boolean';
+import Button from '@mui/material/Button';
 
-import { fTimestamp } from 'src/utils/format-time';
+import Iconify from 'src/components/iconify';
+import EmptyContent from 'src/components/empty-content';
+import { useSettingsContext } from 'src/components/settings';
+import { MotionContainer } from 'src/components/animate';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 import {
-  useGetCities,
-  useGetCountries,
-  useGetUnitservices,
-  useGetInsuranceCos,
-  useGetPaymentMethods,
-  useGetAppointmentTypes,
   useGetAvailableAppointments,
+  useGetCities,
+  useGetUnitservices,
+  useGetCountries,
+  useGetAppointmentTypes,
+  useGetPaymentMethods,
+  useGetInsuranceCos,
 } from 'src/api';
-
-import { useSettingsContext } from 'src/components/settings';
 
 import AppointmentList from '../super-admin/patients/history/book-appointment/appointment-list-user';
 import AppointmentSort from '../super-admin/patients/history/book-appointment/appointment-sort-user';
@@ -59,7 +62,7 @@ export default function AppointmentBooking() {
     results: [],
   });
 
-  const { appointmentsData, refetch } = useGetAvailableAppointments('65c9b4be0d07c237284b06f4');
+  const { appointmentsData, refetch } = useGetAvailableAppointments();
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
@@ -202,7 +205,7 @@ export default function AppointmentBooking() {
     />
   );
   const handleButtonClick = (appointment) => {
-    setTime(appointment);
+    setTime(appointment );
   };
 
   // console.log(Time);
@@ -220,7 +223,13 @@ export default function AppointmentBooking() {
         {canReset && renderResults}
       </Stack>
 
-      <AppointmentList patientData={user?.patient?._id} refetch={refetch} Units={dataFiltered} />
+      
+      <AppointmentList
+        patientData={user?.patient?._id}
+        refetch={refetch}
+        Units={dataFiltered}
+      />
+   
     </Container>
   );
 }
