@@ -28,7 +28,7 @@ export default function USAppointmentEditView({ unitServiceData, licenseMovement
         heading={`Edit ${unitServiceName} Accounting`} /// edit
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

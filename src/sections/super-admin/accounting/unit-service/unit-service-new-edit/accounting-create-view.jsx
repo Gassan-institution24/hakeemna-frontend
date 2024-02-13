@@ -29,7 +29,7 @@ export default function USAccountingCreateView({ unitServiceData }) {
         heading={`Create new ${unitServiceName} accounting`} /// edit
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

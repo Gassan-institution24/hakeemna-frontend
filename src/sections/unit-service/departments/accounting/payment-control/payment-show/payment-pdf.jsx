@@ -4,6 +4,7 @@ import { Page, View, Text, Font, Image, Document, StyleSheet } from '@react-pdf/
 
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -127,6 +128,9 @@ export default function InvoicePDF({ paymentData, currentStatus }) {
   } = paymentData;
 
   const styles = useStyles();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   return (
     <Document>

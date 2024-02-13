@@ -28,7 +28,7 @@ export default function USAccountingCreateView({ stakeholderData }) {
         heading={`Create new ${stakeholderName} accounting`} /// edit
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

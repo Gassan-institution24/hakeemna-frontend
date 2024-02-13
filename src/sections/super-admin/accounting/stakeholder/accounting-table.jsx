@@ -230,7 +230,7 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
           heading={t('accounting')}
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

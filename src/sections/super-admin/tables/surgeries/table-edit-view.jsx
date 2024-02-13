@@ -28,7 +28,7 @@ export default function CountryEditView() {
         heading="Update Surgery" /// edit
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

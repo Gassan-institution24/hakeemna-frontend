@@ -69,7 +69,7 @@ export default function CitiesTableRow({
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {t(status)}
+          {status}
         </Label>
       </TableCell>
 

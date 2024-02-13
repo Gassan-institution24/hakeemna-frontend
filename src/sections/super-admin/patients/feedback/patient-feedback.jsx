@@ -168,7 +168,7 @@ export default function PatientFeedbackView({ patientData }) {
           heading={`${patientName} feedback`} /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

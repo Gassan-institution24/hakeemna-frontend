@@ -99,7 +99,7 @@ export default function PatientHistoryView({ patientData }) {
         heading={`${patientName} History`}
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin.root,
           },
           {

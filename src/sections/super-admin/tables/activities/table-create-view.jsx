@@ -20,7 +20,7 @@ export default function TableCreateView() {
         heading={t('Create a new Activity')}
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

@@ -20,7 +20,7 @@ export default function TableCreateView() {
         heading="Create a new Specialty"
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

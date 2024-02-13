@@ -244,7 +244,7 @@ export default function SubscriptionTableView() {
           heading={t('Subscriptions')} /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             { name: t('Subscriptions') }, /// edit

@@ -160,7 +160,7 @@ export default function DietsTableView() {
           heading="Diets" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

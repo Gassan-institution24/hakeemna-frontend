@@ -89,7 +89,7 @@ export default function CountriesTableRow({
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {t(status)}
+          {status}
         </Label>
       </TableCell>
       {/* <TableCell align="center"

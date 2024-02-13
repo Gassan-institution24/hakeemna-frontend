@@ -51,7 +51,7 @@ export default function AccountingHomePage() {
         heading={t('accounting')}
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin.root,
           },
           {

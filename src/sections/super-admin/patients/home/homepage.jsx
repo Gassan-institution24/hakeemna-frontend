@@ -268,7 +268,7 @@ export default function PatientTableView() {
           heading="Patients" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             { name: t('patients') }, /// edit

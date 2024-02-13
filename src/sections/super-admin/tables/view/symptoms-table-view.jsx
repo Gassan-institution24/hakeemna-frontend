@@ -164,7 +164,7 @@ export default function SymptomsTableView() {
           heading="Symptoms" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

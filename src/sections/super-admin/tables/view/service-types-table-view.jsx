@@ -245,7 +245,7 @@ export default function ServiceTypesTableView() {
           heading="Service Types" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

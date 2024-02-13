@@ -251,14 +251,14 @@ export default function UnitServicesTableView() {
           heading="Unit Services" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: t('Unit Services') }, /// edit
+            { name: 'Unit Services' }, /// edit
           ]}
           // action={
           //   <Button

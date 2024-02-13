@@ -12,7 +12,6 @@ import Iconify from 'src/components/iconify';
 export default function UnitServiceInfoContent({ unitServiceData }) {
   // console.log('unitServiceData', unitServiceData);
   const {
-    code,
     name_english,
     country,
     city,
@@ -23,17 +22,12 @@ export default function UnitServiceInfoContent({ unitServiceData }) {
     address,
     email,
     web_page,
-    company_logo,
     phone,
     mobile_num,
-    ip_address,
-    introduction_letter,
-    other_information,
     speciality,
     users_num,
     subscriptions,
     insurance,
-    last_internet_connection,
   } = unitServiceData;
 
   const renderOverview = (
