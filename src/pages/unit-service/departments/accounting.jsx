@@ -18,11 +18,11 @@ export default function DepartmentAccountingPage() {
   const name = data?.name_english;
   return (
     <ACLGuard hasContent category="department" subcategory="accounting" acl="read">
-        <Helmet>
-          <title>{name || ''} Department Accounting</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && <DepartmentAccountingView departmentData={data} />}
-      </ACLGuard>
+      <Helmet>
+        <title>{name || ''} Department Accounting</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <DepartmentAccountingView departmentData={data} />}
+    </ACLGuard>
   );
 }

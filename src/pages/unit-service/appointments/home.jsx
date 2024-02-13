@@ -17,11 +17,11 @@ export default function AppointmentsHomePage() {
   );
   return (
     <ACLGuard hasContent category="unit_service" subcategory="appointments" acl="read">
-        <Helmet>
-          <title>Appointments</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && <AppointmentsHomeView appointmentsData={appointmentsData} refetch={refetch} />}
-      </ACLGuard>
+      <Helmet>
+        <title>Appointments</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <AppointmentsHomeView appointmentsData={appointmentsData} refetch={refetch} />}
+    </ACLGuard>
   );
 }

@@ -9,11 +9,11 @@ import AppointconfigDetailView from 'src/sections/employee/appoint-config/view/a
 export default function NewEmployeeAppointconfigPage() {
   return (
     <ACLGuard hasContent category="employee" subcategory="appointment_configs" acl="create">
-        <Helmet>
-          <title> New Appointment Config</title>
-        </Helmet>
+      <Helmet>
+        <title> New Appointment Config</title>
+      </Helmet>
 
-        <AppointconfigDetailView />
-      </ACLGuard>
+      <AppointconfigDetailView />
+    </ACLGuard>
   );
 }

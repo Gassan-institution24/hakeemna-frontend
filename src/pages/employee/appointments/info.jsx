@@ -18,11 +18,11 @@ export default function EditPage() {
   const name = data?.name_english;
   return (
     <ACLGuard hasContent category="employee" subcategory="appointments" acl="read">
-        <Helmet>
-          <title> {name || ''} Appointment Accounting</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {data && <ApointmentInfoView appointmentData={data} />}
-      </ACLGuard>
+      <Helmet>
+        <title> {name || ''} Appointment Accounting</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {data && <ApointmentInfoView appointmentData={data} />}
+    </ACLGuard>
   );
 }

@@ -9,11 +9,11 @@ import NewAppointmentsView from 'src/sections/unit-service/appointments/view/new
 export default function AppointmentsNewPage() {
   return (
     <ACLGuard hasContent category="unit_service" subcategory="appointments" acl="create">
-        <Helmet>
-          <title>New Appointments</title>
-        </Helmet>
+      <Helmet>
+        <title>New Appointments</title>
+      </Helmet>
 
-        <NewAppointmentsView />
-      </ACLGuard>
+      <NewAppointmentsView />
+    </ACLGuard>
   );
 }

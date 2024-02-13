@@ -16,7 +16,6 @@ import DialogContent from '@mui/material/DialogContent';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -31,7 +30,6 @@ import {
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import { usePopover } from 'src/components/custom-popover';
 import FormProvider, { RHFSelect, RHFMultiSelect } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------

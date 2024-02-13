@@ -17,11 +17,11 @@ export default function DepartmentRoomNewPage() {
   const { data, loading } = useGetDepartment(id);
   return (
     <ACLGuard hasContent category="department" subcategory="rooms" acl="create">
-        <Helmet>
-          <title> Add Room </title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && <DepartmentRoomNewView departmentData={data} />}
-      </ACLGuard>
+      <Helmet>
+        <title> Add Room </title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <DepartmentRoomNewView departmentData={data} />}
+    </ACLGuard>
   );
 }

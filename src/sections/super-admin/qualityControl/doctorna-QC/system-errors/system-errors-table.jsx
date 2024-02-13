@@ -179,126 +179,126 @@ export default function DoctornaSystemErrorsView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <Card>
-          <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === 'read' && 'success') ||
-                      (tab.value === 'not read' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {tab.value === 'all' && systemErrorsData.length}
-                    {tab.value === 'read' &&
-                      systemErrorsData.filter((order) => order.status === 'read').length}
-                    {tab.value === 'not read' &&
-                      systemErrorsData.filter((order) => order.status === 'not read').length}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
-          <FeedbackToolbar
-            onPrint={printHandler}
+      <Card>
+        <Tabs
+          value={filters.status}
+          onChange={handleFilterStatus}
+          sx={{
+            px: 2.5,
+            boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+          }}
+        >
+          {STATUS_OPTIONS.map((tab) => (
+            <Tab
+              key={tab.value}
+              iconPosition="end"
+              value={tab.value}
+              label={tab.label}
+              icon={
+                <Label
+                  variant={
+                    ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                  }
+                  color={
+                    (tab.value === 'read' && 'success') ||
+                    (tab.value === 'not read' && 'error') ||
+                    'default'
+                  }
+                >
+                  {tab.value === 'all' && systemErrorsData.length}
+                  {tab.value === 'read' &&
+                    systemErrorsData.filter((order) => order.status === 'read').length}
+                  {tab.value === 'not read' &&
+                    systemErrorsData.filter((order) => order.status === 'not read').length}
+                </Label>
+              }
+            />
+          ))}
+        </Tabs>
+        <FeedbackToolbar
+          onPrint={printHandler}
+          filters={filters}
+          onFilters={handleFilters}
+          onDownload={handleDownload}
+          codeOptions={codeOptions}
+          //
+          canReset={canReset}
+          onResetFilters={handleResetFilters}
+        />
+
+        {canReset && (
+          <TableDetailFiltersResult
             filters={filters}
             onFilters={handleFilters}
-            onDownload={handleDownload}
-            codeOptions={codeOptions}
             //
-            canReset={canReset}
             onResetFilters={handleResetFilters}
+            //
+            results={dataFiltered.length}
+            sx={{ p: 2.5, pt: 0 }}
           />
+        )}
 
-          {canReset && (
-            <TableDetailFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
+        <TableContainer>
+          <Scrollbar>
+            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={dataFiltered.length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     dataFiltered.map((row) => row._id)
+                //   )
+                // }
+              />
 
-          <TableContainer>
-            <Scrollbar>
-              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     dataFiltered.map((row) => row._id)
-                  //   )
-                  // }
+              <TableBody>
+                {dataFiltered
+                  .slice(
+                    table.page * table.rowsPerPage,
+                    table.page * table.rowsPerPage + table.rowsPerPage
+                  )
+                  .map((row) => (
+                    <ErrosRow
+                      key={row._id}
+                      row={row}
+                      filters={filters}
+                      setFilters={setFilters}
+                      onRead={() => handleRead(row._id)}
+                      onUnread={() => handleUnread(row._id)}
+                      // selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                      // onEditRow={() => handleEditRow(row._id)}
+                    />
+                  ))}
+
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, systemErrorsData.length)}
                 />
 
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row) => (
-                      <ErrosRow
-                        key={row._id}
-                        row={row}
-                        filters={filters}
-                        setFilters={setFilters}
-                        onRead={() => handleRead(row._id)}
-                        onUnread={() => handleUnread(row._id)}
-                        // selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        // onEditRow={() => handleEditRow(row._id)}
-                      />
-                    ))}
+                <TableNoData notFound={notFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
 
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, systemErrorsData.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
-          />
-        </Card>
-      </Container>
+        <TablePaginationCustom
+          count={dataFiltered.length}
+          page={table.page}
+          rowsPerPage={table.rowsPerPage}
+          onPageChange={table.onChangePage}
+          onRowsPerPageChange={table.onChangeRowsPerPage}
+          //
+          dense={table.dense}
+          onChangeDense={table.onChangeDense}
+        />
+      </Card>
+    </Container>
   );
 }
 

@@ -18,7 +18,6 @@ import Iconify from 'src/components/iconify';
 import TextMaxLine from 'src/components/text-max-line';
 import { varFade, MotionViewport } from 'src/components/animate';
 
-
 // ----------------------------------------------------------------------
 
 const CATEGORIES = [

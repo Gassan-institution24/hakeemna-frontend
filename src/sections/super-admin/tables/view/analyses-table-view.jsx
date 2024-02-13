@@ -149,109 +149,109 @@ export default function AnalysesTableView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading="Analyses" /// edit
-          links={[
-            {
-              name: 'dashboard',
-              href: paths.superadmin.root,
-            },
-            {
-              name: 'Tables',
-              href: paths.superadmin.tables.list,
-            },
-            { name: 'Analyses' }, /// edit
-          ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.superadmin.tables.analysis.new} /// edit
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Analysis
-            </Button> /// edit
-          }
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
+      <CustomBreadcrumbs
+        heading="Analyses" /// edit
+        links={[
+          {
+            name: 'dashboard',
+            href: paths.superadmin.root,
+          },
+          {
+            name: 'Tables',
+            href: paths.superadmin.tables.list,
+          },
+          { name: 'Analyses' }, /// edit
+        ]}
+        action={
+          <Button
+            component={RouterLink}
+            href={paths.superadmin.tables.analysis.new} /// edit
+            variant="contained"
+            startIcon={<Iconify icon="mingcute:add-line" />}
+          >
+            New Analysis
+          </Button> /// edit
+        }
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
+
+      <Card>
+        <TableDetailToolbar
+          onPrint={printHandler}
+          filters={filters}
+          onFilters={handleFilters}
+          onDownload={handleDownload}
+          //
+          canReset={canReset}
+          onResetFilters={handleResetFilters}
         />
 
-        <Card>
-          <TableDetailToolbar
-            onPrint={printHandler}
+        {canReset && (
+          <TableDetailFiltersResult
             filters={filters}
             onFilters={handleFilters}
-            onDownload={handleDownload}
             //
-            canReset={canReset}
             onResetFilters={handleResetFilters}
+            //
+            results={dataFiltered.length}
+            sx={{ p: 2.5, pt: 0 }}
           />
+        )}
 
-          {canReset && (
-            <TableDetailFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
+        <TableContainer>
+          <Scrollbar>
+            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={dataFiltered.length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+                onSelectAllRows={false}
+              />
 
-          <TableContainer>
-            <Scrollbar>
-              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  onSelectAllRows={false}
+              <TableBody>
+                {dataFiltered
+                  .slice(
+                    table.page * table.rowsPerPage,
+                    table.page * table.rowsPerPage + table.rowsPerPage
+                  )
+                  .map((row) => (
+                    <TableDetailRow
+                      key={row._id}
+                      row={row}
+                      selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                      onEditRow={() => handleEditRow(row._id)}
+                    />
+                  ))}
+
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, analysesData.length)}
                 />
 
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row) => (
-                      <TableDetailRow
-                        key={row._id}
-                        row={row}
-                        selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
-                      />
-                    ))}
+                <TableNoData notFound={notFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
 
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, analysesData.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
-          />
-        </Card>
-      </Container>
+        <TablePaginationCustom
+          count={dataFiltered.length}
+          page={table.page}
+          rowsPerPage={table.rowsPerPage}
+          onPageChange={table.onChangePage}
+          onRowsPerPageChange={table.onChangeRowsPerPage}
+          //
+          dense={table.dense}
+          onChangeDense={table.onChangeDense}
+        />
+      </Card>
+    </Container>
   );
 }
 

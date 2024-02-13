@@ -75,7 +75,6 @@ const EmployeesAccountingPage = lazy(() => import('src/pages/unit-service/employ
 const EmployeesFeedbackPage = lazy(() => import('src/pages/unit-service/employees/feedback'));
 const EmployeesAttendencePage = lazy(() => import('src/pages/unit-service/employees/attendence'));
 const EmployeesOffersPage = lazy(() => import('src/pages/unit-service/employees/offers'));
-const EmployeesActivitiesPage = lazy(() => import('src/pages/unit-service/employees/activities'));
 const EmployeesEditPage = lazy(() => import('src/pages/unit-service/employees/edit'));
 const EmployeesACLPage = lazy(() => import('src/pages/unit-service/employees/acl'));
 const EmployeesNewPage = lazy(() => import('src/pages/unit-service/employees/new'));
@@ -139,16 +138,16 @@ const SubscriptionsInfoPage = lazy(() => import('src/pages/unit-service/subscrip
 const ProfileHomePage = lazy(() => import('src/pages/unit-service/profile/home'));
 const ProfileEditPage = lazy(() => import('src/pages/unit-service/profile/edit'));
 // TABLES
-// APPOINTMENT TYPES
-const AppointmentTypesHomePage = lazy(() =>
-  import('src/pages/unit-service/tables/appointment-types/home')
-);
-const AppointmentTypesNewPage = lazy(() =>
-  import('src/pages/unit-service/tables/appointment-types/new')
-);
-const AppointmentTypesEditPage = lazy(() =>
-  import('src/pages/unit-service/tables/appointment-types/edit')
-);
+// // APPOINTMENT TYPES
+// const AppointmentTypesHomePage = lazy(() =>
+//   import('src/pages/unit-service/tables/appointment-types/home')
+// );
+// const AppointmentTypesNewPage = lazy(() =>
+//   import('src/pages/unit-service/tables/appointment-types/new')
+// );
+// const AppointmentTypesEditPage = lazy(() =>
+//   import('src/pages/unit-service/tables/appointment-types/edit')
+// );
 // EMPLOYEE TYPES
 const EmployeeTypesHomePage = lazy(() =>
   import('src/pages/unit-service/tables/employee-types/home')
@@ -269,7 +268,6 @@ export const unitServiceDashboardRoutes = [
               { path: 'feedback', element: <EmployeesFeedbackPage /> },
               { path: 'attendence', element: <EmployeesAttendencePage /> },
               { path: 'offers', element: <EmployeesOffersPage /> },
-              { path: 'activities', element: <EmployeesActivitiesPage /> },
               { path: 'acl', element: <EmployeesACLPage /> },
               { path: 'edit', element: <EmployeesEditPage /> },
             ],
@@ -371,14 +369,14 @@ export const unitServiceDashboardRoutes = [
       {
         path: 'tables',
         children: [
-          {
-            path: 'appointment_types',
-            children: [
-              { element: <AppointmentTypesHomePage />, index: true },
-              { path: 'new', element: <AppointmentTypesNewPage /> },
-              { path: ':id/edit', element: <AppointmentTypesEditPage /> },
-            ],
-          },
+          // {
+          //   path: 'appointment_types',
+          //   children: [
+          //     { element: <AppointmentTypesHomePage />, index: true },
+          //     { path: 'new', element: <AppointmentTypesNewPage /> },
+          //     { path: ':id/edit', element: <AppointmentTypesEditPage /> },
+          //   ],
+          // },
           {
             path: 'employee_types',
             children: [

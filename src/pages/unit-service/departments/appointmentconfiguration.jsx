@@ -18,11 +18,11 @@ export default function DepartmentAppointmentConfigPage() {
   const name = data?.name_english;
   return (
     <ACLGuard hasContent category="department" subcategory="appointment_configs" acl="read">
-        <Helmet>
-          <title>{name || ''} Department Appointment Configuration</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && <DepartmentAppointmentConfigView departmentData={data} />}
-      </ACLGuard>
+      <Helmet>
+        <title>{name || ''} Department Appointment Configuration</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <DepartmentAppointmentConfigView departmentData={data} />}
+    </ACLGuard>
   );
 }

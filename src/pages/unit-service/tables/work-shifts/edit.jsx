@@ -18,11 +18,11 @@ export default function WorkShiftEditPage() {
   const name = data?.name_english;
   return (
     <ACLGuard hasContent category="unit_service" subcategory="work_shift" acl="update">
-        <Helmet>
-          <title>Edit {name || ''} Work Shift</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && <WorkShiftEditView workShiftData={data} />}
-      </ACLGuard>
+      <Helmet>
+        <title>Edit {name || ''} Work Shift</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <WorkShiftEditView workShiftData={data} />}
+    </ACLGuard>
   );
 }

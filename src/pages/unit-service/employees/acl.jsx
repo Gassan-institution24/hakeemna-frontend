@@ -15,11 +15,11 @@ export default function EmployeeACLPage() {
   const { data, loading } = useGetEmployeeEngagement(id);
   return (
     <ACLGuard hasContent category="employee" subcategory="acl" acl="update">
-        <Helmet>
-          <title>Access control list</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && <EmployeeACLView acl={data.acl} />}
-      </ACLGuard>
+      <Helmet>
+        <title>Access control list</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <EmployeeACLView acl={data.acl} />}
+    </ACLGuard>
   );
 }
