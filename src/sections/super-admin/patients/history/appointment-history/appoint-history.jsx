@@ -1,15 +1,12 @@
 import PropTypes from 'prop-types';
-import sumBy from 'lodash/sumBy';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
-import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
@@ -18,17 +15,21 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { endpoints } from 'src/utils/axios';
 import { fTimestamp } from 'src/utils/format-time';
+import axiosHandler from 'src/utils/axios-handler';
+
+import { useGetAppointmentTypes, useGetPatientAppointments } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
   emptyRows,
@@ -40,10 +41,6 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
-import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetAppointmentTypes, useGetPatientAppointments } from 'src/api';
 // import PatientHistoryAnalytic from './appoint-history-analytic';
 import PatientHistoryRow from './appoint-history-row';
 import PatientHistoryToolbar from './appoint-history-toolbar';

@@ -2,6 +2,7 @@ import { MaterialDesignContent } from 'notistack';
 
 import { alpha, styled } from '@mui/material/styles';
 
+
 // ----------------------------------------------------------------------
 
 export const StyledNotistack = styled(MaterialDesignContent)(({ theme }) => {

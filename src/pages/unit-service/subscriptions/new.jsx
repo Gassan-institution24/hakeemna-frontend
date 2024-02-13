@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+
 import ACLGuard from 'src/auth/guard/acl-guard';
 
 import SubscriptionNewView from 'src/sections/unit-service/subscriptions/view/new';
@@ -7,14 +8,12 @@ import SubscriptionNewView from 'src/sections/unit-service/subscriptions/view/ne
 
 export default function SubscriptionNewPage() {
   return (
-    <>
-      <ACLGuard hasContent category="unit_service" subcategory="subscriptions" acl="create">
+    <ACLGuard hasContent category="unit_service" subcategory="subscriptions" acl="create">
         <Helmet>
           <title>New Subscription</title>
         </Helmet>
 
         <SubscriptionNewView />
       </ACLGuard>
-    </>
   );
 }

@@ -1,23 +1,17 @@
-import sum from 'lodash/sum';
-import { useEffect, useCallback } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import { inputBaseClasses } from '@mui/material/InputBase';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { fCurrency } from 'src/utils/format-number';
-
 import { useLocales, useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
-import { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

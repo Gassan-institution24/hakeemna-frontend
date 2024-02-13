@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+
 import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';

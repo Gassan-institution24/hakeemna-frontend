@@ -1,14 +1,13 @@
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
-
-import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-
-import { useTranslate } from 'src/locales';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetCity } from 'src/api';
+import { useTranslate } from 'src/locales';
+
+import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TableNewEditForm from './cities-table-new-edit-form';
 

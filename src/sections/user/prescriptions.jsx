@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import { useTranslate, useLocales } from 'src/locales';
-
-import Avatar from '@mui/material/Avatar';
 import {
   Page,
   Text,
   View,
   Document,
-  PDFDownloadLink,
   StyleSheet,
+  PDFDownloadLink,
   Image as PdfImage,
 } from '@react-pdf/renderer';
-import Iconify from 'src/components/iconify';
-import { useAuthContext } from 'src/auth/hooks';
+
+import List from '@mui/material/List';
+import Avatar from '@mui/material/Avatar';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+
 import { fDate } from 'src/utils/format-time';
+
+import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
+
 import Doclogo from '../../components/logo/doc.png';
 
 export default function Prescriptions() {

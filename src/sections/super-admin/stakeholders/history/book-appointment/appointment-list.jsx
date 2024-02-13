@@ -4,10 +4,11 @@ import { useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Pagination, { paginationClasses } from '@mui/material/Pagination';
 
-import axiosHandler from 'src/utils/axios-handler';
-import { endpoints } from 'src/utils/axios';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+
+import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
 
 import AppointmentItem from './appointment-item';
 

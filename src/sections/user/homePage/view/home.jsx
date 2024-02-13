@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react';
+
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { useTheme } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
-import { useAuthContext } from 'src/auth/hooks';
-import Dialog from '@mui/material/Dialog';
+import Typography from '@mui/material/Typography';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
-import { useRouter } from 'src/routes/hooks';
+
 import { paths } from 'src/routes/paths';
-import axios from 'src/utils/axios';
-import { useSnackbar } from 'src/components/snackbar';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { useSettingsContext } from 'src/components/settings';
+import { useRouter } from 'src/routes/hooks';
+
 import { useBoolean } from 'src/hooks/use-boolean';
-import Image from 'src/components/image/image';
-import { useTranslate, useLocales } from 'src/locales';
+
+import axios from 'src/utils/axios';
+
+import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+
+import { useSnackbar } from 'src/components/snackbar';
+import { useSettingsContext } from 'src/components/settings';
+
 import AppWelcome from '../app-welcome';
 import AppFeatured from '../app-featured';
 // import Photo from './photo.png';
@@ -99,8 +104,7 @@ export default function OverviewAppView() {
   }, [oldpatientsdata, Us]);
   console.log(Us);
   return (
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
         <Grid container spacing={3}>
           <Grid xs={12} md={8}>
             <AppWelcome
@@ -169,6 +173,5 @@ export default function OverviewAppView() {
           ''
         )}
       </Container>
-    </>
   );
 }

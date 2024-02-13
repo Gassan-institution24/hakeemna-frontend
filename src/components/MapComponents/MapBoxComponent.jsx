@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import React, { useRef, useState, useEffect } from 'react';
 // import { environment } from '../../../Environments/EnvDev';
 // import '../../../App.css';
 
@@ -11,7 +11,7 @@ mapboxgl.setRTLTextPlugin(
   null,
   true
 );
-const MapBoxComponent = () => {
+function MapBoxComponent() {
   const mapContainerRef = useRef(null);
   const map = useRef(null);
 
@@ -65,6 +65,6 @@ const MapBoxComponent = () => {
       }}
     />
   );
-};
+}
 
 export default MapBoxComponent;

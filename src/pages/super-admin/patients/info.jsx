@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import PatientInfo from 'src/sections/super-admin/patients/info/patient-info';
-import { useGetPatient } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetPatient } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import PatientInfo from 'src/sections/super-admin/patients/info/patient-info';
 // ----------------------------------------------------------------------
 
 export default function TableCreatePage() {

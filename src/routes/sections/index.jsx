@@ -1,17 +1,17 @@
 import React, { useRef } from 'react';
-import { Navigate, useRoutes } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 
 import MainLayout from 'src/layouts/main';
 
 // import { PATH_AFTER_LOGIN } from 'src/config-global';
 import { authRoutes } from './auth';
-// import { authDemoRoutes } from './auth-demo';
+import { userRoutes } from './user';
 import { HomePage, mainRoutes } from './main';
+// import { authDemoRoutes } from './auth-demo';
 import { dashboardRoutes } from './super-admin-dashboard';
 import { unitServiceDashboardRoutes } from './unit-service-dashboard';
-import { unitServiceEmployeeDashboardRoutes } from './employee-dashboard';
 // import { componentsRoutes } from './components';
-import { userRoutes } from './user';
+import { unitServiceEmployeeDashboardRoutes } from './employee-dashboard';
 
 // ----------------------------------------------------------------------
 

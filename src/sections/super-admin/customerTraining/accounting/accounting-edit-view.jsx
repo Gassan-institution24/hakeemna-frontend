@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
+import { useParams } from 'react-router';
 
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
-
-import { useParams } from 'react-router';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';

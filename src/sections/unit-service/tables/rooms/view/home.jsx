@@ -1,5 +1,7 @@
-import PropTypes from 'prop-types';
-import { useState, useCallback, useRef } from 'react';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { useReactToPrint } from 'react-to-print';
+import { useRef, useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -12,17 +14,17 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
-import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fTimestamp } from 'src/utils/format-time';
-import { useReactToPrint } from 'react-to-print';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import { endpoints } from 'src/utils/axios';
+
+import { socket } from 'src/socket';
+import { useGetUSRooms } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -39,17 +41,15 @@ import {
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
-} from 'src/components/table';
+} from 'src/components/table'; /// edit
+import axiosHandler from 'src/utils/axios-handler';
 
-import { socket } from 'src/socket';
-import { endpoints } from 'src/utils/axios';
-import { useGetUSRooms } from 'src/api'; /// edit
 import { useAuthContext } from 'src/auth/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
-import axiosHandler from 'src/utils/axios-handler';
 import { useLocales, useTranslate } from 'src/locales';
-import { LoadingScreen } from 'src/components/loading-screen';
 import { StatusOptions } from 'src/assets/data/status-options';
+
+import { LoadingScreen } from 'src/components/loading-screen';
 
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';

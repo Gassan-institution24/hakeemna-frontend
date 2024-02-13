@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
+import PropTypes from 'prop-types';
 
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';

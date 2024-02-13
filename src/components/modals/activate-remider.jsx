@@ -1,37 +1,16 @@
-import PropTypes from 'prop-types';
-import * as Yup from 'yup';
-import { useMemo } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import { MenuItem, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
+import { Typography } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import InputAdornment from '@mui/material/InputAdornment';
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
-import axios, { endpoints } from 'src/utils/axios';
-import { useSnackbar } from 'src/components/snackbar';
-import { paths } from 'src/routes/paths';
-import { useParams, useRouter } from 'src/routes/hooks';
-import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
-import {
-  useGetAppointmentTypes,
-  useGetUSServiceTypes,
-  useGetUSEmployeeWorkGroups,
-  useGetUSWorkShifts,
-} from 'src/api';
-import { useAuthContext } from 'src/auth/hooks';
 
-import Iconify from 'src/components/iconify';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
+
+
 
 // ----------------------------------------------------------------------
 

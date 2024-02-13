@@ -1,35 +1,24 @@
-import PropTypes from 'prop-types';
 import sumBy from 'lodash/sumBy';
+import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-
-import { alpha, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
+
 import { useTranslate } from 'src/locales';
-
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
-
-import { RouterLink } from 'src/routes/components';
-import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
-
 import { useGetPatientAppointments } from 'src/api';
 
+import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
-import AppointHistory from './appointment-history/appoint-history';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
+
 import EconomicMovementsView from './invoices/invoices-view';
+import AppointHistory from './appointment-history/appoint-history';
 import PaymentControlView from './payment-control/payment-control';
-import PatientHistoryAnalytic from './appointment-history/appoint-history-analytic';
 
 // ----------------------------------------------------------------------
 

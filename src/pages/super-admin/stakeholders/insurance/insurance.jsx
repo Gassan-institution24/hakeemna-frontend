@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import StakeholderInsurance from 'src/sections/super-admin/stakeholders/insurance/stakeholder-insurance';
-import { useGetStakeholder } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetStakeholder } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import StakeholderInsurance from 'src/sections/super-admin/stakeholders/insurance/stakeholder-insurance';
 // ----------------------------------------------------------------------
 
 export default function StakeholderInsuranceView() {

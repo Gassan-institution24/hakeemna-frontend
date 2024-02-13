@@ -1,8 +1,5 @@
-import * as Yup from 'yup';
-import sum from 'lodash/sum';
-import { format, isValid } from 'date-fns';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useEffect, useCallback, useState } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -12,25 +9,20 @@ import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
-import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import InputAdornment from '@mui/material/InputAdornment';
-import { inputBaseClasses } from '@mui/material/InputBase';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
-import { fCurrency } from 'src/utils/format-number';
-import { useBoolean } from 'src/hooks/use-boolean';
-import { useGetAppointmentTypes, useGetUSServiceTypes } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetUSServiceTypes, useGetAppointmentTypes } from 'src/api';
+
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
+
 import NewEditDayAppointmentsDetails from './new-edit-days-appointments-details';
 
 // ----------------------------------------------------------------------

@@ -1,6 +1,4 @@
-import { paramCase } from 'src/utils/change-case';
 
-import { useParams } from 'react-router';
 // ----------------------------------------------------------------------
 
 const ROOTS = {

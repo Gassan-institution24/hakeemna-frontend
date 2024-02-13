@@ -1,4 +1,7 @@
-import { useState, useCallback, useRef } from 'react';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { useReactToPrint } from 'react-to-print';
+import { useRef, useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -11,24 +14,25 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
-import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
-import { useTranslate } from 'src/locales';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fTimestamp } from 'src/utils/format-time';
-import { useReactToPrint } from 'react-to-print';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
+
+import { useGetCities } from 'src/api';
+import { useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -41,12 +45,8 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetCities } from 'src/api';
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
-import TableDetailRow from '../cities/cities-table-details-row';
 import TableDetailToolbar from '../table-details-toolbar';
+import TableDetailRow from '../cities/cities-table-details-row';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------

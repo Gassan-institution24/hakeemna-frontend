@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router';
+import { useRef, useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
@@ -16,9 +17,7 @@ import { fCurrency } from 'src/utils/format-number';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
-import { shortDateLabel } from 'src/components/custom-date-range-picker';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useState, useRef } from 'react';
 
 // ----------------------------------------------------------------------
 

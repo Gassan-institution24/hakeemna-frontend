@@ -7,10 +7,11 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 import Image from 'src/components/image';
 import { varFade, MotionContainer } from 'src/components/animate';
 import Carousel, { useCarousel, CarouselDots, CarouselArrows } from 'src/components/carousel';
-import { useTranslate, useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 

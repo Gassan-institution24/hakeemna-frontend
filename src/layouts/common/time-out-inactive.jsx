@@ -1,21 +1,16 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect, useCallback } from 'react';
+import { useSnackbar } from 'notistack';
 
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/system';
 import Stack from '@mui/material/Stack';
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
-import { SplashScreen } from 'src/components/loading-screen';
-
-import { useCountdownDate } from 'src/hooks/use-countdown';
-import { useBoolean } from 'src/hooks/use-boolean';
-import { useAuthContext } from 'src/auth/hooks';
-import { useSnackbar } from 'notistack';
 import { Alert, Typography, useMediaQuery } from '@mui/material';
-import BookManually from 'src/components/modals/activate-remider';
-import Iconify from 'src/components/iconify/iconify';
+
+import { useBoolean } from 'src/hooks/use-boolean';
+import { useCountdownDate } from 'src/hooks/use-countdown';
+
+import { useAuthContext } from 'src/auth/hooks';
+
 
 export default function TimeOutInActive() {
   const { user, logout } = useAuthContext();
