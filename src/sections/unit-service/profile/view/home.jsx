@@ -1,19 +1,17 @@
-import { useState, useCallback } from 'react';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
+
 import Container from '@mui/material/Container';
+
 import { paths } from 'src/routes/paths';
+
+import { useTranslate } from 'src/locales';
+import { useGetUnitservice } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
-import Iconify from 'src/components/iconify';
-import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { useGetUnitservice } from 'src/api';
 import { LoadingScreen } from 'src/components/loading-screen';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+
 import AccountGeneral from '../profile-general';
-import AccountNotifications from '../profile-notifications';
-import AccountChangePassword from '../profile-change-password';
 
 // ----------------------------------------------------------------------
 

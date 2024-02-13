@@ -3,6 +3,7 @@ import { m, useSpring } from 'framer-motion';
 
 import Box from '@mui/material/Box';
 
+
 // ----------------------------------------------------------------------
 
 export default function ScrollProgress({

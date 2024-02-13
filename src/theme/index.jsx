@@ -9,16 +9,16 @@ import { useLocales } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 
-// system
 import { palette } from './palette';
 import { shadows } from './shadows';
-import { typography } from './typography';
-// options
 import RTL from './options/right-to-left';
+import { typography } from './typography';
+// system
 import { customShadows } from './custom-shadows';
-import { componentsOverrides } from './overrides';
 import { createPresets } from './options/presets';
+import { componentsOverrides } from './overrides';
 import { createContrast } from './options/contrast';
+// options
 
 // ----------------------------------------------------------------------
 

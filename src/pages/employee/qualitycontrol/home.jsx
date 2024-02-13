@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+
 import QualityControlView from 'src/sections/employee/qualitycontrol/view/home';
 // ----------------------------------------------------------------------
 

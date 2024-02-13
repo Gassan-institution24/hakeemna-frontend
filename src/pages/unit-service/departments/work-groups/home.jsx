@@ -1,10 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 
-import DepartmentWorkGroupsView from 'src/sections/unit-service/departments/view/work-groups';
-import { useGetDepartment } from 'src/api';
 import { useParams } from 'src/routes/hooks';
-import { LoadingScreen } from 'src/components/loading-screen';
+
+import { useGetDepartment } from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
+
+import { LoadingScreen } from 'src/components/loading-screen';
+
+import DepartmentWorkGroupsView from 'src/sections/unit-service/departments/view/work-groups';
 
 // ----------------------------------------------------------------------
 
@@ -14,14 +17,12 @@ export default function DepartmentWorkGroupsPage() {
   const { data, loading } = useGetDepartment(id);
   const name = data?.name_english;
   return (
-    <>
-      <ACLGuard hasContent category="department" subcategory="work_groups" acl="read">
+    <ACLGuard hasContent category="department" subcategory="work_groups" acl="read">
         <Helmet>
           <title>{name || ''} Department Work Groups</title>
         </Helmet>
         {loading && <LoadingScreen />}
         {!loading && <DepartmentWorkGroupsView departmentData={data} />}
       </ACLGuard>
-    </>
   );
 }

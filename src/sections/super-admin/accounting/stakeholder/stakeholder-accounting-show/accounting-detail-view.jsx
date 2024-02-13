@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 
-import { useSettingsContext } from 'src/components/settings';
 import Container from '@mui/material/Container';
+
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
+
+import { useSettingsContext } from 'src/components/settings';
 
 import InvoiceDetails from './accounting-details';
 import InvoiceDetailToolbar from './accounting-detail-toolbar';

@@ -1,10 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 
-import DepartmentRoomEditView from 'src/sections/unit-service/departments/rooms/table-edit-view';
-import { useGetDepartment, useGetRoom } from 'src/api';
 import { useParams } from 'src/routes/hooks';
-import { LoadingScreen } from 'src/components/loading-screen';
+
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { useGetRoom, useGetDepartment } from 'src/api';
+
+import { LoadingScreen } from 'src/components/loading-screen';
+
+import DepartmentRoomEditView from 'src/sections/unit-service/departments/rooms/table-edit-view';
 
 // ----------------------------------------------------------------------
 
@@ -15,14 +18,12 @@ export default function DepartmentRoomEditPage() {
   const { data, loading } = useGetRoom(acid);
   const name = data?.name_english;
   return (
-    <>
-      <ACLGuard hasContent category="department" subcategory="rooms" acl="update">
+    <ACLGuard hasContent category="department" subcategory="rooms" acl="update">
         <Helmet>
           <title> Edit {name || ''} Room </title>
         </Helmet>
         {loading && <LoadingScreen />}
         {!loading && <DepartmentRoomEditView roomData={data} departmentData={departmentData} />}
       </ACLGuard>
-    </>
   );
 }

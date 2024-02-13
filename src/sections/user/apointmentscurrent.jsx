@@ -1,20 +1,22 @@
 import PropTypes from 'prop-types';
+import { useCallback } from 'react';
+
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import ListItemText from '@mui/material/ListItemText';
-import IconButton from '@mui/material/IconButton';
-import Card from '@mui/material/Card';
-import Link from '@mui/material/Link';
-
 import MenuItem from '@mui/material/MenuItem';
-import { useCallback } from 'react';
-import { useRouter } from 'src/routes/hooks';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import ListItemText from '@mui/material/ListItemText';
+
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { fTime, fDate } from 'src/utils/format-time';
+
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
@@ -26,8 +28,7 @@ export default function Currentappoinment({pendingAppointments}) {
     router.push(paths.comingSoon);
   }, [router]);
   return pendingAppointments.map((info, index) => (
-    <>
-      <Card>
+    <Card>
         <IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -129,7 +130,6 @@ export default function Currentappoinment({pendingAppointments}) {
           </MenuItem>
         </CustomPopover>
       </Card>
-    </>
   ));
 }
 

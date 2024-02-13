@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import StakeholderFeedback from 'src/sections/super-admin/stakeholders/feedback/stakeholder-feedback';
-import { useGetStakeholder } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetStakeholder } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import StakeholderFeedback from 'src/sections/super-admin/stakeholders/feedback/stakeholder-feedback';
 // ----------------------------------------------------------------------
 
 export default function StackholderFeedbackPage() {

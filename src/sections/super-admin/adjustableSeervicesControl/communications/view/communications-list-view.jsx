@@ -1,5 +1,5 @@
-import orderBy from 'lodash/orderBy';
 import isEqual from 'lodash/isEqual';
+import orderBy from 'lodash/orderBy';
 import { useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';

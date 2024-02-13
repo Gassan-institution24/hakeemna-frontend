@@ -1,8 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 
-import WorkGroupEditView from 'src/sections/unit-service/tables/work-groups/view/edit';
-import { useGetWorkGroup } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetWorkGroup } from 'src/api';
+
+import WorkGroupEditView from 'src/sections/unit-service/tables/work-groups/view/edit';
 
 // ----------------------------------------------------------------------
 

@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import EmployeeInfoView from 'src/sections/unit-service/employees/view/info';
-import { useGetEmployeeEngagement } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetEmployeeEngagement } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import EmployeeInfoView from 'src/sections/unit-service/employees/view/info';
 
 // ----------------------------------------------------------------------
 

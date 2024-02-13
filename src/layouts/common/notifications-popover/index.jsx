@@ -1,9 +1,7 @@
 import { m } from 'framer-motion';
-import { useState, useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 
-import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
@@ -15,16 +13,16 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
 import { useRouter } from 'src/routes/hooks';
-import axios, { endpoints } from 'src/utils/axios';
+
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useGetMyNotifications, useGetMyUnreadNotificationCount } from 'src/api';
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { HOST_API } from 'src/config-global';
+import axios, { endpoints } from 'src/utils/axios';
+
 import { socket } from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetMyNotifications, useGetMyUnreadNotificationCount } from 'src/api';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { varHover } from 'src/components/animate';

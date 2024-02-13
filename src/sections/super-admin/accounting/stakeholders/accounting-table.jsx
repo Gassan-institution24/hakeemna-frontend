@@ -1,35 +1,23 @@
-import PropTypes from 'prop-types';
-import sumBy from 'lodash/sumBy';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
-import { fTimestamp } from 'src/utils/format-time';
+import { useGetStakeholderLicenseMovements } from 'src/api';
 
 import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
   emptyRows,
@@ -37,13 +25,9 @@ import {
   getComparator,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useGetStakeholderLicenseMovements } from 'src/api';
 
-import { LoadingScreen } from 'src/components/loading-screen';
-import TableAnalytic from '../../patients/history/table-analytic';
 import AccountingTableRow from './accounting-table-row';
 import MovementTableToolbar from './accounting-table-toolbar';
 import MovementTableFiltersResult from './accounting-filters-result';
@@ -210,8 +194,7 @@ export default function LicenseMovementsView() {
   }
 
   return (
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <Card>
           <Tabs
             value={filters.status}
@@ -314,7 +297,6 @@ export default function LicenseMovementsView() {
           />
         </Card>
       </Container>
-    </>
   );
 }
 

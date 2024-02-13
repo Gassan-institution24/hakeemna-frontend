@@ -1,33 +1,36 @@
-import { useState, useCallback, useRef } from 'react';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { useReactToPrint } from 'react-to-print';
+import React, { useRef, useState, useCallback } from 'react';
 
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import Tooltip from '@mui/material/Tooltip';
 import { alpha } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
-import TableContainer from '@mui/material/TableContainer';
-import { RouterLink } from 'src/routes/components';
+import {
+  Tab,
+  Card,
+  Tabs,
+  Table,
+  Button,
+  Tooltip,
+  Container,
+  TableBody,
+  IconButton,
+  TableContainer,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useReactToPrint } from 'react-to-print';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import { useTranslate } from 'src/locales';
+import { useGetUnitservices } from 'src/api';
 
 import Label from 'src/components/label';
-import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -38,12 +41,10 @@ import {
   TableHeadCustom,
   TableSelectedAction,
   TablePaginationCustom,
-} from 'src/components/table';
-
-import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetUnitservices } from 'src/api'; /// edit
-import axiosHandler from 'src/utils/axios-handler';
+} from 'src/components/table'; /// edit
 import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
+
 import TableDetailRow from '../unitservices/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
@@ -89,11 +90,12 @@ const STATUS_OPTIONS = [
 
 export default function UnitServicesTableView() {
   /// edit
+  const [filters, setFilters] = useState(defaultFilters);
+  const componentRef = useRef();
+
   const table = useTable({ defaultOrderBy: 'code' });
 
   const { t } = useTranslate();
-
-  const componentRef = useRef();
 
   const settings = useSettingsContext();
 
@@ -103,8 +105,6 @@ export default function UnitServicesTableView() {
   const router = useRouter();
 
   const { unitservicesData, loading, refetch } = useGetUnitservices();
-
-  const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
     filters.startDate && filters.endDate

@@ -1,9 +1,10 @@
+import axios from 'axios';
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import PropTypes from 'prop-types';
+import timezones from 'timezones-list';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import timezones from 'timezones-list';
 
 import Box from '@mui/material/Box';
 import { Chip } from '@mui/material';
@@ -15,12 +16,13 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFAutocomplete, RHFSelect, RHFTextField } from 'src/components/hook-form';
-import axios from 'axios';
-import axiosHandler from 'src/utils/axios-handler';
 import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
+
 import { useAuthContext } from 'src/auth/hooks';
+
+import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

@@ -10,13 +10,13 @@ import { usePathname } from 'src/routes/hooks';
 import { useResponsive } from 'src/hooks/use-responsive';
 // import { useMockedUser } from 'src/hooks/use-mocked-user';
 
+import { useAuthContext } from 'src/auth/hooks';
+
 import Logo from 'src/components/logo';
 import Scrollbar from 'src/components/scrollbar';
 import { NavSectionVertical } from 'src/components/nav-section';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { NAV } from '../config-layout';
-import NavUpgrade from '../common/nav-upgrade';
 import { useNavData } from './config-navigation';
 import NavToggleButton from '../common/nav-toggle-button';
 

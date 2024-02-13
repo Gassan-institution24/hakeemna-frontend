@@ -1,8 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 
-import PatientCommunication from 'src/sections/super-admin/patients/communication/patient-communication';
-import { useGetPatient } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetPatient } from 'src/api';
+
+import PatientCommunication from 'src/sections/super-admin/patients/communication/patient-communication';
 // ----------------------------------------------------------------------
 
 export default function TableCreatePage() {

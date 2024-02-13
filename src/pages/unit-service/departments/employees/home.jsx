@@ -1,9 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 
-import DepartmentEmployeesView from 'src/sections/unit-service/departments/view/employees';
-import { useGetDepartment } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetDepartment } from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
+
+import DepartmentEmployeesView from 'src/sections/unit-service/departments/view/employees';
 
 // ----------------------------------------------------------------------
 
@@ -13,14 +15,12 @@ export default function DepartmentEmployeesPage() {
   const { data } = useGetDepartment(id);
   const name = data?.first_name;
   return (
-    <>
-      <ACLGuard hasContent category="department" subcategory="employees" acl="read">
+    <ACLGuard hasContent category="department" subcategory="employees" acl="read">
         <Helmet>
           <title>{name || ''} Department Employees</title>
         </Helmet>
 
         {data && <DepartmentEmployeesView departmentData={data} />}
       </ACLGuard>
-    </>
   );
 }

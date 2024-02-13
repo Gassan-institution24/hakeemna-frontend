@@ -1,31 +1,29 @@
+import axios from 'axios';
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { socket } from 'src/socket';
 import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
+
+import { socket } from 'src/socket';
+import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFAutocomplete, RHFSelect, RHFTextField } from 'src/components/hook-form';
-
-import axios from 'axios';
-import { useTranslate } from 'src/locales';
-import axiosHandler from 'src/utils/axios-handler';
-import { useAuthContext } from 'src/auth/hooks';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

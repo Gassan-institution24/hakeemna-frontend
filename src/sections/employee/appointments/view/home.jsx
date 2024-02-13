@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import sumBy from 'lodash/sumBy';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
@@ -7,11 +6,9 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Stack from '@mui/material/Stack';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
-import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
@@ -21,19 +18,26 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
-import { useAuthContext } from 'src/auth/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { endpoints } from 'src/utils/axios';
 import { fTimestamp } from 'src/utils/format-time';
+import axiosHandler from 'src/utils/axios-handler';
+
+import { socket } from 'src/socket';
+import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
+import ACLGuard from 'src/auth/guard/acl-guard';
+import { useGetAppointmentTypes } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
   emptyRows,
@@ -44,15 +48,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import { socket } from 'src/socket';
-import { useTranslate } from 'src/locales';
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
-import { useSnackbar } from 'src/components/snackbar';
-
-import { useGetAppointmentTypes } from 'src/api';
 import AppointmentsRow from '../appointment-row';
 import PatientHistoryToolbar from '../appointment-toolbar';
 import HistoryFiltersResult from '../appointment-filters-result';

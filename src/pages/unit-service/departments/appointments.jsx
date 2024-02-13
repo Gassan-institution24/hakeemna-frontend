@@ -1,10 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 
-import DepartmentAppointmentsView from 'src/sections/unit-service/departments/view/appointments';
-import { useGetDepartment, useGetDepartmentAppointments } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { useGetDepartment, useGetDepartmentAppointments } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import DepartmentAppointmentsView from 'src/sections/unit-service/departments/view/appointments';
 
 // ----------------------------------------------------------------------
 
@@ -15,8 +18,7 @@ export default function DepartmentAppointmentsPage() {
   const { appointmentsData, refetch, loading } = useGetDepartmentAppointments(id);
   const name = data?.name_english;
   return (
-    <>
-      <ACLGuard hasContent category="department" subcategory="appointments" acl="read">
+    <ACLGuard hasContent category="department" subcategory="appointments" acl="read">
         <Helmet>
           <title>{name || ''} Department Appointments</title>
         </Helmet>
@@ -29,6 +31,5 @@ export default function DepartmentAppointmentsPage() {
           />
         )}
       </ACLGuard>
-    </>
   );
 }
