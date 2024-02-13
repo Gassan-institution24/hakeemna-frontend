@@ -21,7 +21,7 @@ import axios from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUnitservice, useGetUSFeedbackes, useGetPatientOneAppointments } from 'src/api';
+import { useGetUnitservice, useGetPatientOneAppointments } from 'src/api';
 
 import Image from 'src/components/image';
 import { useSnackbar } from 'src/components/snackbar';
@@ -43,14 +43,13 @@ export default function WatingRoom() {
   const { user } = useAuthContext();
   const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
   const { data } = useGetUnitservice(appointmentsData?.unit_service?._id);
-  const { feedbackData } = useGetUSFeedbackes(appointmentsData?.unit_service?._id);
 
   console.log('appointmentsData', appointmentsData);
   console.log('data', data);
 
   const skipfunction = async () => {
     try {
-      const response = await axios.patch(`api/appointments/${appointmentsData._id}`, {
+       await axios.patch(`api/appointments/${appointmentsData._id}`, {
         hasFeedback: true,
       });
       dialog.onFalse();
@@ -93,8 +92,8 @@ export default function WatingRoom() {
     setSelectedValue(item);
   };
 
-  const [fullWidth, setFullWidth] = useState(true);
-  const [maxWidth, setMaxWidth] = useState('xs');
+  const {fullWidth} = useState(true);
+  const {maxWidth} = useState('xs');
   const onSubmit = async (dataSumbmit) => {
     try {
       const newData = {
@@ -142,7 +141,7 @@ export default function WatingRoom() {
               sx={{ width: '60px', height: '60px', border: 1, borderRadius: '50px' }}
             />
             <Typography sx={{ color: 'black' }}>
-              {currentLang ? `${data?.name_arabic}` : `${data.name_english}`}{' '}
+              {curLangAr ? `${data?.name_arabic}` : `${data.name_english}`}{' '}
             </Typography>
             <Rating
               size="large"

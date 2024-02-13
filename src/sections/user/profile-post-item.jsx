@@ -1,221 +1,222 @@
-import PropTypes from 'prop-types';
 
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Link from '@mui/material/Link';
-import Avatar from '@mui/material/Avatar';
-import CardHeader from '@mui/material/CardHeader';
-import Typography from '@mui/material/Typography';
+// import PropTypes from 'prop-types';
 
-import { useGetPosts } from 'src/api/user';
-import { useAuthContext } from 'src/auth/hooks';
+// import Box from '@mui/material/Box';
+// import Card from '@mui/material/Card';
+// import Link from '@mui/material/Link';
+// import Avatar from '@mui/material/Avatar';
+// import CardHeader from '@mui/material/CardHeader';
+// import Typography from '@mui/material/Typography';
 
-import Image from 'src/components/image';
+// import { useGetPosts } from 'src/api/user';
+// import { useAuthContext } from 'src/auth/hooks';
 
-import Doclogo from '../../components/logo/logo.png';
-// ----------------------------------------------------------------------
+// import Image from 'src/components/image';
 
-export default function ProfilePostItem({ post }) {
-  const { user } = useAuthContext();
-  const { posts } = useGetPosts([]);
+// import Doclogo from '../../components/logo/logo.png';
+// // ----------------------------------------------------------------------
 
-  // const commentRef = useRef(null);
+// export default function ProfilePostItem({ post }) {
+//   const { user } = useAuthContext();
+//   // const { posts } = useGetPosts([]);
 
-  // const fileRef = useRef(null);
+//   // const commentRef = useRef(null);
 
-  // const [message, setMessage] = useState('');
+//   // const fileRef = useRef(null);
 
-  // const handleChangeMessage = useCallback((event) => {
-  //   setMessage(event.target.value);
-  // }, []);
+//   // const [message, setMessage] = useState('');
 
-  // const handleAttach = useCallback(() => {
-  //   if (fileRef.current) {
-  //     fileRef.current.click();
-  //   }
-  // }, []);
+//   // const handleChangeMessage = useCallback((event) => {
+//   //   setMessage(event.target.value);
+//   // }, []);
 
-  // const handleClickComment = useCallback(() => {
-  //   if (commentRef.current) {
-  //     commentRef.current.focus();
-  //   }
-  // }, []);
+//   // const handleAttach = useCallback(() => {
+//   //   if (fileRef.current) {
+//   //     fileRef.current.click();
+//   //   }
+//   // }, []);
 
-  // const renderHead = (
-  //   <CardHeader
-  //     disableTypography
-  //     avatar={<Avatar src={Doclogo} />}
-  //     title={
-  //       <Link color="inherit" variant="subtitle1">
-  //         DOCTORNA
-  //       </Link>
-  //     }
-  //     // subheader={
-  //     //   <Box sx={{ color: 'text.disabled', typography: 'caption', mt: 0.5 }}>
-  //     //     {fDate(post.createdAt)}
-  //     //   </Box>
-  //     // }
-  //     // action={
-  //     //   <IconButton>
-  //     //     <Iconify icon="eva:more-vertical-fill" />
-  //     //   </IconButton>
-  //     // }
-  //   />
-  // );
+//   // const handleClickComment = useCallback(() => {
+//   //   if (commentRef.current) {
+//   //     commentRef.current.focus();
+//   //   }
+//   // }, []);
 
-  // const renderCommentList = (
-  //   <Stack spacing={1.5} sx={{ px: 3, pb: 2 }}>
-  //     {post.comments.map((comment) => (
-  //       <Stack key={comment.id} direction="row" spacing={2}>
-  //         <Avatar alt={comment.author.name} src={comment.author.avatarUrl} />
+//   // const renderHead = (
+//   //   <CardHeader
+//   //     disableTypography
+//   //     avatar={<Avatar src={Doclogo} />}
+//   //     title={
+//   //       <Link color="inherit" variant="subtitle1">
+//   //         DOCTORNA
+//   //       </Link>
+//   //     }
+//   //     // subheader={
+//   //     //   <Box sx={{ color: 'text.disabled', typography: 'caption', mt: 0.5 }}>
+//   //     //     {fDate(post.createdAt)}
+//   //     //   </Box>
+//   //     // }
+//   //     // action={
+//   //     //   <IconButton>
+//   //     //     <Iconify icon="eva:more-vertical-fill" />
+//   //     //   </IconButton>
+//   //     // }
+//   //   />
+//   // );
 
-  //         <Paper
-  //           sx={{
-  //             p: 1.5,
-  //             flexGrow: 1,
-  //             bgcolor: 'background.neutral',
-  //           }}
-  //         >
-  //           <Stack
-  //             sx={{ mb: 0.5 }}
-  //             alignItems={{ sm: 'center' }}
-  //             justifyContent="space-between"
-  //             direction={{ xs: 'column', sm: 'row' }}
-  //           >
-  //             <Box sx={{ typography: 'subtitle2' }}>{comment.author.name}</Box>
+//   // const renderCommentList = (
+//   //   <Stack spacing={1.5} sx={{ px: 3, pb: 2 }}>
+//   //     {post.comments.map((comment) => (
+//   //       <Stack key={comment.id} direction="row" spacing={2}>
+//   //         <Avatar alt={comment.author.name} src={comment.author.avatarUrl} />
 
-  //             <Box sx={{ typography: 'caption', color: 'text.disabled' }}>
-  //               {fDate(comment.createdAt)}
-  //             </Box>
-  //           </Stack>
+//   //         <Paper
+//   //           sx={{
+//   //             p: 1.5,
+//   //             flexGrow: 1,
+//   //             bgcolor: 'background.neutral',
+//   //           }}
+//   //         >
+//   //           <Stack
+//   //             sx={{ mb: 0.5 }}
+//   //             alignItems={{ sm: 'center' }}
+//   //             justifyContent="space-between"
+//   //             direction={{ xs: 'column', sm: 'row' }}
+//   //           >
+//   //             <Box sx={{ typography: 'subtitle2' }}>{comment.author.name}</Box>
 
-  //           <Box sx={{ typography: 'body2', color: 'text.secondary' }}>{comment.message}</Box>
-  //         </Paper>
-  //       </Stack>
-  //     ))}
-  //   </Stack>
-  // );
+//   //             <Box sx={{ typography: 'caption', color: 'text.disabled' }}>
+//   //               {fDate(comment.createdAt)}
+//   //             </Box>
+//   //           </Stack>
 
-  // const renderInput = (
-  //   <Stack
-  //     spacing={2}
-  //     direction="row"
-  //     alignItems="center"
-  //     sx={{
-  //       p: (theme) => theme.spacing(0, 3, 3, 3),
-  //     }}
-  //   >
-  //     <Avatar src={user?.photoURL} alt={user?.displayName} />
+//   //           <Box sx={{ typography: 'body2', color: 'text.secondary' }}>{comment.message}</Box>
+//   //         </Paper>
+//   //       </Stack>
+//   //     ))}
+//   //   </Stack>
+//   // );
 
-  //     <InputBase
-  //       fullWidth
-  //       value={message}
-  //       inputRef={commentRef}
-  //       placeholder="Write a comment…"
-  //       onChange={handleChangeMessage}
-  //       endAdornment={
-  //         <InputAdornment position="end" sx={{ mr: 1 }}>
-  //           <IconButton size="small" onClick={handleAttach}>
-  //             <Iconify icon="solar:gallery-add-bold" />
-  //           </IconButton>
+//   // const renderInput = (
+//   //   <Stack
+//   //     spacing={2}
+//   //     direction="row"
+//   //     alignItems="center"
+//   //     sx={{
+//   //       p: (theme) => theme.spacing(0, 3, 3, 3),
+//   //     }}
+//   //   >
+//   //     <Avatar src={user?.photoURL} alt={user?.displayName} />
 
-  //           <IconButton size="small">
-  //             <Iconify icon="eva:smiling-face-fill" />
-  //           </IconButton>
-  //         </InputAdornment>
-  //       }
-  //       sx={{
-  //         pl: 1.5,
-  //         height: 40,
-  //         borderRadius: 1,
-  //         border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.32)}`,
-  //       }}
-  //     />
+//   //     <InputBase
+//   //       fullWidth
+//   //       value={message}
+//   //       inputRef={commentRef}
+//   //       placeholder="Write a comment…"
+//   //       onChange={handleChangeMessage}
+//   //       endAdornment={
+//   //         <InputAdornment position="end" sx={{ mr: 1 }}>
+//   //           <IconButton size="small" onClick={handleAttach}>
+//   //             <Iconify icon="solar:gallery-add-bold" />
+//   //           </IconButton>
 
-  //     <input type="file" ref={fileRef} style={{ display: 'none' }} />
-  //   </Stack>
-  // );
+//   //           <IconButton size="small">
+//   //             <Iconify icon="eva:smiling-face-fill" />
+//   //           </IconButton>
+//   //         </InputAdornment>
+//   //       }
+//   //       sx={{
+//   //         pl: 1.5,
+//   //         height: 40,
+//   //         borderRadius: 1,
+//   //         border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.32)}`,
+//   //       }}
+//   //     />
 
-  // const renderActions = (
-  //   <Stack
-  //     direction="row"
-  //     alignItems="center"
-  //     sx={{
-  //       p: (theme) => theme.spacing(2, 3, 3, 3),
-  //     }}
-  //   >
-  //     <FormControlLabel
-  //       control={
-  //         <Checkbox
-  //           defaultChecked
-  //           color="error"
-  //           icon={<Iconify icon="solar:heart-bold" />}
-  //           checkedIcon={<Iconify icon="solar:heart-bold" />}
-  //         />
-  //       }
-  //       label={fShortenNumber(post.personLikes.length)}
-  //       sx={{ mr: 1 }}
-  //     />
+//   //     <input type="file" ref={fileRef} style={{ display: 'none' }} />
+//   //   </Stack>
+//   // );
 
-  //     {!!post.personLikes.length && (
-  //       <AvatarGroup
-  //         sx={{
-  //           [`& .${avatarGroupClasses.avatar}`]: {
-  //             width: 32,
-  //             height: 32,
-  //           },
-  //         }}
-  //       >
-  //         {post.personLikes.map((person) => (
-  //           <Avatar key={person.name} alt={person.name} src={person.avatarUrl} />
-  //         ))}
-  //       </AvatarGroup>
-  //     )}
+//   // const renderActions = (
+//   //   <Stack
+//   //     direction="row"
+//   //     alignItems="center"
+//   //     sx={{
+//   //       p: (theme) => theme.spacing(2, 3, 3, 3),
+//   //     }}
+//   //   >
+//   //     <FormControlLabel
+//   //       control={
+//   //         <Checkbox
+//   //           defaultChecked
+//   //           color="error"
+//   //           icon={<Iconify icon="solar:heart-bold" />}
+//   //           checkedIcon={<Iconify icon="solar:heart-bold" />}
+//   //         />
+//   //       }
+//   //       label={fShortenNumber(post.personLikes.length)}
+//   //       sx={{ mr: 1 }}
+//   //     />
 
-  //     <Box sx={{ flexGrow: 1 }} />
+//   //     {!!post.personLikes.length && (
+//   //       <AvatarGroup
+//   //         sx={{
+//   //           [`& .${avatarGroupClasses.avatar}`]: {
+//   //             width: 32,
+//   //             height: 32,
+//   //           },
+//   //         }}
+//   //       >
+//   //         {post.personLikes.map((person) => (
+//   //           <Avatar key={person.name} alt={person.name} src={person.avatarUrl} />
+//   //         ))}
+//   //       </AvatarGroup>
+//   //     )}
 
-  //     <IconButton onClick={handleClickComment}>
-  //       <Iconify icon="solar:chat-round-dots-bold" />
-  //     </IconButton>
+//   //     <Box sx={{ flexGrow: 1 }} />
 
-  //     <IconButton>
-  //       <Iconify icon="solar:share-bold" />
-  //     </IconButton>
-  //   </Stack>
-  // );
+//   //     <IconButton onClick={handleClickComment}>
+//   //       <Iconify icon="solar:chat-round-dots-bold" />
+//   //     </IconButton>
 
-  return (
-    <>
-      {posts.map((info, i) => (
-        <Card key={i}>
-          {' '}
-          {/* Ensure to provide a unique key for each iteration */}
-          <CardHeader
-            disableTypography
-            avatar={<Avatar src={Doclogo} />}
-            title={
-              <Link color="inherit" variant="subtitle1">
-                DOCTORNA
-              </Link>
-            }
-          />
-          <Typography
-            variant="body2"
-            sx={{
-              p: (theme) => theme.spacing(3, 3, 2, 3),
-            }}
-          >
-            {info.content}
-          </Typography>
-          <Box sx={{ p: 1 }}>
-            <Image alt="img" src={info.img} sx={{ borderRadius: 1.5 }} />
-          </Box>
-        </Card>
-      ))}
-    </>
-  );
-}
+//   //     <IconButton>
+//   //       <Iconify icon="solar:share-bold" />
+//   //     </IconButton>
+//   //   </Stack>
+//   // );
 
-ProfilePostItem.propTypes = {
-  post: PropTypes.object,
-};
+//   return (
+//     <>
+//       {posts.map((info, i) => (
+//         <Card key={i}>
+//           {' '}
+//           {/* Ensure to provide a unique key for each iteration */}
+//           <CardHeader
+//             disableTypography
+//             avatar={<Avatar src={Doclogo} />}
+//             title={
+//               <Link color="inherit" variant="subtitle1">
+//                 DOCTORNA
+//               </Link>
+//             }
+//           />
+//           <Typography
+//             variant="body2"
+//             sx={{
+//               p: (theme) => theme.spacing(3, 3, 2, 3),
+//             }}
+//           >
+//             {info.content}
+//           </Typography>
+//           <Box sx={{ p: 1 }}>
+//             <Image alt="img" src={info.img} sx={{ borderRadius: 1.5 }} />
+//           </Box>
+//         </Card>
+//       ))}
+//     </>
+//   );
+// }
+
+// ProfilePostItem.propTypes = {
+//   post: PropTypes.object,
+// };
