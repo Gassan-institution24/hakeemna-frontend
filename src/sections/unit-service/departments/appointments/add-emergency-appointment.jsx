@@ -119,103 +119,103 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
 
   return (
     <Dialog maxWidth="lg" onClose={onClose} {...other}>
-        <FormProvider methods={methods} onSubmit={onSubmit}>
-          <DialogTitle sx={{ mb: 1 }}>
-            {curLangAr ? 'إنشاء موعد طوارئ جديد' : 'New Emergency Appointment'}
-          </DialogTitle>
+      <FormProvider methods={methods} onSubmit={onSubmit}>
+        <DialogTitle sx={{ mb: 1 }}>
+          {curLangAr ? 'إنشاء موعد طوارئ جديد' : 'New Emergency Appointment'}
+        </DialogTitle>
 
-          <DialogContent sx={{ overflow: 'unset' }}>
-            <Stack spacing={2.5}>
+        <DialogContent sx={{ overflow: 'unset' }}>
+          <Stack spacing={2.5}>
+            <Box
+              rowGap={3}
+              columnGap={2}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                sm: 'repeat(1, 1fr)',
+              }}
+            >
+              <Controller
+                name="start_time"
+                render={({ field, fieldState: { error } }) => (
+                  <MobileDateTimePicker
+                    label={`${t('start date')} *`}
+                    sx={{ width: '30vw', minWidth: '300px' }}
+                    onChange={(newValue) => {
+                      const selectedTime = zonedTimeToUtc(
+                        newValue,
+                        user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                          ?.unit_service?.country?.time_zone
+                      );
+                      setValue('start_time', new Date(selectedTime));
+                    }}
+                    minutesStep="5"
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        margin: 'normal',
+                      },
+                    }}
+                  />
+                )}
+              />
               <Box
                 rowGap={3}
                 columnGap={2}
                 display="grid"
                 gridTemplateColumns={{
                   xs: 'repeat(1, 1fr)',
-                  sm: 'repeat(1, 1fr)',
+                  sm: 'repeat(2, 1fr)',
                 }}
               >
-                <Controller
-                  name="start_time"
-                  render={({ field, fieldState: { error } }) => (
-                    <MobileDateTimePicker
-                      label={`${t('start date')} *`}
-                      sx={{ width: '30vw', minWidth: '300px' }}
-                      onChange={(newValue) => {
-                        const selectedTime = zonedTimeToUtc(
-                          newValue,
-                          user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                            ?.unit_service?.country?.time_zone
-                        );
-                        setValue('start_time', new Date(selectedTime));
-                      }}
-                      minutesStep="5"
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          margin: 'normal',
-                        },
-                      }}
-                    />
-                  )}
-                />
-                <Box
-                  rowGap={3}
-                  columnGap={2}
-                  display="grid"
-                  gridTemplateColumns={{
-                    xs: 'repeat(1, 1fr)',
-                    sm: 'repeat(2, 1fr)',
-                  }}
+                <RHFSelect name="appointment_type" label={`${t('appointment type')} *`}>
+                  {appointmenttypesData.map((option) => (
+                    <MenuItem value={option._id}>
+                      {curLangAr ? option?.name_arabic : option?.name_english}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+                <RHFSelect
+                  name="work_shift"
+                  label={`${t('work shift')} *`}
+                  PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
-                  <RHFSelect name="appointment_type" label={`${t('appointment type')} *`}>
-                    {appointmenttypesData.map((option) => (
-                      <MenuItem value={option._id}>
-                        {curLangAr ? option?.name_arabic : option?.name_english}
-                      </MenuItem>
-                    ))}
-                  </RHFSelect>
-                  <RHFSelect
-                    name="work_shift"
-                    label={`${t('work shift')} *`}
-                    PaperPropsSx={{ textTransform: 'capitalize' }}
-                  >
-                    {workShiftsData &&
-                      workShiftsData.map((option) => (
-                        <MenuItem key={option._id} value={option._id}>
-                          {curLangAr ? option?.name_arabic : option?.name_english}
-                        </MenuItem>
-                      ))}
-                  </RHFSelect>
-                  <RHFSelect name="work_group" label={`${t('work group')} *`}>
-                    {workGroupsData.map((option) => (
+                  {workShiftsData &&
+                    workShiftsData.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
                       </MenuItem>
                     ))}
-                  </RHFSelect>
-                  <RHFMultiSelect
-                    checkbox
-                    name="service_types"
-                    label={t('service types')}
-                    options={serviceTypesData}
-                  />
-                </Box>
+                </RHFSelect>
+                <RHFSelect name="work_group" label={`${t('work group')} *`}>
+                  {workGroupsData.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {curLangAr ? option?.name_arabic : option?.name_english}
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+                <RHFMultiSelect
+                  checkbox
+                  name="service_types"
+                  label={t('service types')}
+                  options={serviceTypesData}
+                />
               </Box>
-            </Stack>
-          </DialogContent>
+            </Box>
+          </Stack>
+        </DialogContent>
 
-          <DialogActions>
-            <Button color="inherit" variant="outlined" onClick={onClose}>
-              {t('cancel')}
-            </Button>
+        <DialogActions>
+          <Button color="inherit" variant="outlined" onClick={onClose}>
+            {t('cancel')}
+          </Button>
 
-            <Button type="submit" variant="contained">
-              {t('add')}
-            </Button>
-          </DialogActions>
-        </FormProvider>
-      </Dialog>
+          <Button type="submit" variant="contained">
+            {t('add')}
+          </Button>
+        </DialogActions>
+      </FormProvider>
+    </Dialog>
   );
 }
 

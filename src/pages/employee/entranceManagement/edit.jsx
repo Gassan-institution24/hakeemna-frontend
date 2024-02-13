@@ -16,11 +16,11 @@ export default function EditPage() {
   const name = data?.name_english;
   return (
     <ACLGuard hasContent category="employee" subcategory="entrance_management" acl="update">
-        <Helmet>
-          <title> Edit {name || ''} Appointment</title>
-        </Helmet>
+      <Helmet>
+        <title> Edit {name || ''} Appointment</title>
+      </Helmet>
 
-        {data && <EntranceManagementEditView appointmentData={data} />}
-      </ACLGuard>
+      {data && <EntranceManagementEditView appointmentData={data} />}
+    </ACLGuard>
   );
 }

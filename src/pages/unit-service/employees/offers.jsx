@@ -18,11 +18,11 @@ export default function EmployeeOffersPage() {
   const name = data?.first_name;
   return (
     <ACLGuard hasContent category="unit_service" subcategory="offers" acl="read">
-        <Helmet>
-          <title> {name || ''} Employee Offers</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && <EmployeeOffersView employeeData={data} />}
-      </ACLGuard>
+      <Helmet>
+        <title> {name || ''} Employee Offers</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <EmployeeOffersView employeeData={data} />}
+    </ACLGuard>
   );
 }

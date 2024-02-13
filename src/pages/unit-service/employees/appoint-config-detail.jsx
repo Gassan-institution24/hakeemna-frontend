@@ -21,18 +21,18 @@ export default function EmployeeAppointconfigPage() {
 
   return (
     <ACLGuard hasContent category="unit_service" subcategory="appointment_configs" acl="update">
-        <Helmet>
-          <title> {name || ''} Employee Appointment Config</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && (
-          <AppointconfigDetailView
-            appointmentConfigData={data || null}
-            employeeData={employeeData}
-            refetch={refetch}
-            loading={loading}
-          />
-        )}
-      </ACLGuard>
+      <Helmet>
+        <title> {name || ''} Employee Appointment Config</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && (
+        <AppointconfigDetailView
+          appointmentConfigData={data || null}
+          employeeData={employeeData}
+          refetch={refetch}
+          loading={loading}
+        />
+      )}
+    </ACLGuard>
   );
 }

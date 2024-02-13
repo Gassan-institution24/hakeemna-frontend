@@ -10,7 +10,6 @@ import { useRouter } from 'src/routes/hooks';
 
 import Iconify from 'src/components/iconify';
 
-
 const stickySidebarStyle = {
   display: 'flex',
   right: 0,

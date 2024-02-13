@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 
 import Table from '@mui/material/Table';

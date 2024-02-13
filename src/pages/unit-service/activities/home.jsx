@@ -9,11 +9,11 @@ import ActivitiesHomeView from 'src/sections/unit-service/activities/view/home';
 export default function ActivitiesHomePage() {
   return (
     <ACLGuard hasContent category="unit_service" subcategory="activities" acl="read">
-        <Helmet>
-          <title>Activities</title>
-        </Helmet>
+      <Helmet>
+        <title>Activities</title>
+      </Helmet>
 
-        <ActivitiesHomeView />
-      </ACLGuard>
+      <ActivitiesHomeView />
+    </ACLGuard>
   );
 }

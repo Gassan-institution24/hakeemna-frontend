@@ -260,9 +260,6 @@ const StakeholdersOffersPage = lazy(() =>
 const StakeholdersViewOfferPage = lazy(() =>
   import('src/pages/super-admin/stakeholders/offers/viewOffer')
 );
-const StakeholdersBookAppointmentPage = lazy(() =>
-  import('src/pages/super-admin/stakeholders/history/bookAppointment')
-);
 const StakeholdersInsurancePage = lazy(() =>
   import('src/pages/super-admin/stakeholders/insurance/insurance')
 );
@@ -495,7 +492,6 @@ export const dashboardRoutes = [
           { path: ':id/history', element: <StakeholdersHistoryPage /> },
           { path: ':id/offers', element: <StakeholdersOffersPage /> },
           { path: ':id/offers/:ofid', element: <StakeholdersViewOfferPage /> },
-          { path: ':id/bookappoint', element: <StakeholdersBookAppointmentPage /> },
           { path: ':id/insurance', element: <StakeholdersInsurancePage /> },
           { path: ':id/communications', element: <StakeholdersCommunicationsPage /> },
           { path: ':id/feedback', element: <StakeholdersFeedbackPage /> },

@@ -31,58 +31,56 @@ export default function MovementTableRow({
 
   return (
     <TableRow hover selected={selected}>
-        <TableCell>{stakeholder?.code}</TableCell>
+      <TableCell>{stakeholder?.code}</TableCell>
 
-        <TableCell align="center">
-          <ListItemText
-            primary={stakeholder?.name_english}
-            secondary={stakeholder?.city}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              mt: 0.5,
-              component: 'span',
-              typography: 'caption',
-            }}
-          />
-        </TableCell>
+      <TableCell align="center">
+        <ListItemText
+          primary={stakeholder?.name_english}
+          secondary={stakeholder?.city}
+          primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+          secondaryTypographyProps={{
+            mt: 0.5,
+            component: 'span',
+            typography: 'caption',
+          }}
+        />
+      </TableCell>
 
-        <TableCell align="center">
-          <ListItemText
-            primary={
-              (isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMM yyyy')) || ''
-            }
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-          />
-        </TableCell>
+      <TableCell align="center">
+        <ListItemText
+          primary={
+            (isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMM yyyy')) || ''
+          }
+          primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+        />
+      </TableCell>
 
-        <TableCell align="center">
-          <ListItemText
-            primary={
-              (isValid(new Date(end_date)) && format(new Date(end_date), 'dd MMM yyyy')) || ''
-            }
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-          />
-        </TableCell>
-        <TableCell align="center">{count}</TableCell>
-        <TableCell align="center">JOD {payments}</TableCell>
-        <TableCell align="center">
-          <Label
-            variant="soft"
-            color={
-              (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
-            }
-          >
-            {status}
-          </Label>
-        </TableCell>
-        <TableCell align="center">{user_no} users</TableCell>
+      <TableCell align="center">
+        <ListItemText
+          primary={(isValid(new Date(end_date)) && format(new Date(end_date), 'dd MMM yyyy')) || ''}
+          primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+        />
+      </TableCell>
+      <TableCell align="center">{count}</TableCell>
+      <TableCell align="center">JOD {payments}</TableCell>
+      <TableCell align="center">
+        <Label
+          variant="soft"
+          color={
+            (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
+          }
+        >
+          {status}
+        </Label>
+      </TableCell>
+      <TableCell align="center">{user_no} users</TableCell>
 
-        <TableCell align="right" sx={{ px: 1 }}>
-          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={onViewRow}>
-            <Iconify icon="mdi:files" />
-          </IconButton>
-        </TableCell>
-      </TableRow>
+      <TableCell align="right" sx={{ px: 1 }}>
+        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={onViewRow}>
+          <Iconify icon="mdi:files" />
+        </IconButton>
+      </TableCell>
+    </TableRow>
   );
 }
 

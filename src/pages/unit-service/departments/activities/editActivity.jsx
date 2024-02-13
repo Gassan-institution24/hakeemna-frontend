@@ -19,13 +19,13 @@ export default function DepartmentActivityEditPage() {
   const name = data?.name_english;
   return (
     <ACLGuard hasContent category="department" subcategory="activities" acl="update">
-        <Helmet>
-          <title> Edit {name || ''} Activity </title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && (
-          <DepartmentActivityEditView activityData={data} departmentData={departmentData} />
-        )}
-      </ACLGuard>
+      <Helmet>
+        <title> Edit {name || ''} Activity </title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && (
+        <DepartmentActivityEditView activityData={data} departmentData={departmentData} />
+      )}
+    </ACLGuard>
   );
 }

@@ -2,51 +2,31 @@ import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceTableToolbar({
+export default function OrderTableToolbar({
   filters,
   onFilters,
-  onAdd,
+  onPrint,
+  onDownload,
   //
-  dateError,
-  serviceOptions,
+  canReset,
+  onResetFilters,
 }) {
   const popover = usePopover();
 
   const handleFilterName = useCallback(
     (event) => {
       onFilters('name', event.target.value);
-    },
-    [onFilters]
-  );
-
-  const handleFilterService = useCallback(
-    (event) => {
-      onFilters('types', event);
-    },
-    [onFilters]
-  );
-
-  const handleFilterStartDate = useCallback(
-    (newValue) => {
-      onFilters('startDate', newValue);
-    },
-    [onFilters]
-  );
-
-  const handleFilterEndDate = useCallback(
-    (newValue) => {
-      onFilters('endDate', newValue);
     },
     [onFilters]
   );
@@ -65,37 +45,12 @@ export default function InvoiceTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-        <DatePicker
-          label="Start date"
-          value={filters.startDate}
-          onChange={handleFilterStartDate}
-          slotProps={{ textField: { fullWidth: true } }}
-          sx={{
-            maxWidth: { md: 180 },
-          }}
-        />
-
-        <DatePicker
-          label="End date"
-          value={filters.endDate}
-          onChange={handleFilterEndDate}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              error: dateError,
-            },
-          }}
-          sx={{
-            maxWidth: { md: 180 },
-          }}
-        />
-
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Search customer or invoice number..."
+            placeholder="Search name or number..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -104,15 +59,22 @@ export default function InvoiceTableToolbar({
               ),
             }}
           />
-          <Stack direction="row">
-            <IconButton onClick={popover.onOpen}>
-              <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
-            <IconButton onClick={onAdd}>
-              <Iconify icon="zondicons:add-outline" />
-            </IconButton>
-          </Stack>
+
+          <IconButton onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
         </Stack>
+
+        {canReset && (
+          <Button
+            color="error"
+            sx={{ flexShrink: 0 }}
+            onClick={onResetFilters}
+            startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
+          >
+            Clear
+          </Button>
+        )}
       </Stack>
 
       <CustomPopover
@@ -123,6 +85,7 @@ export default function InvoiceTableToolbar({
       >
         <MenuItem
           onClick={() => {
+            onPrint();
             popover.onClose();
           }}
         >
@@ -132,21 +95,34 @@ export default function InvoiceTableToolbar({
 
         <MenuItem
           onClick={() => {
+            onDownload();
             popover.onClose();
+          }}
+        >
+          <Iconify icon="solar:import-bold" />
+          Import
+        </MenuItem>
+
+        {/* <MenuItem
+          onClick={() => {
+            onDownload()
+            popover.onClose();
+
           }}
         >
           <Iconify icon="solar:export-bold" />
           Export
-        </MenuItem>
+        </MenuItem> */}
       </CustomPopover>
     </>
   );
 }
 
-InvoiceTableToolbar.propTypes = {
-  dateError: PropTypes.bool,
+OrderTableToolbar.propTypes = {
+  canReset: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,
-  onAdd: PropTypes.func,
-  serviceOptions: PropTypes.array,
+  onResetFilters: PropTypes.func,
+  onPrint: PropTypes.func,
+  onDownload: PropTypes.func,
 };

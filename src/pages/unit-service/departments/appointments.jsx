@@ -19,17 +19,17 @@ export default function DepartmentAppointmentsPage() {
   const name = data?.name_english;
   return (
     <ACLGuard hasContent category="department" subcategory="appointments" acl="read">
-        <Helmet>
-          <title>{name || ''} Department Appointments</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && (
-          <DepartmentAppointmentsView
-            departmentData={data}
-            appointmentsData={appointmentsData}
-            refetch={refetch}
-          />
-        )}
-      </ACLGuard>
+      <Helmet>
+        <title>{name || ''} Department Appointments</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && (
+        <DepartmentAppointmentsView
+          departmentData={data}
+          appointmentsData={appointmentsData}
+          refetch={refetch}
+        />
+      )}
+    </ACLGuard>
   );
 }

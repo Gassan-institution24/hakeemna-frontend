@@ -16,11 +16,11 @@ export default function DepartmentEmployeesPage() {
   const name = data?.first_name;
   return (
     <ACLGuard hasContent category="department" subcategory="employees" acl="read">
-        <Helmet>
-          <title>{name || ''} Department Employees</title>
-        </Helmet>
+      <Helmet>
+        <title>{name || ''} Department Employees</title>
+      </Helmet>
 
-        {data && <DepartmentEmployeesView departmentData={data} />}
-      </ACLGuard>
+      {data && <DepartmentEmployeesView departmentData={data} />}
+    </ACLGuard>
   );
 }

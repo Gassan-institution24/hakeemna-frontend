@@ -19,11 +19,11 @@ export default function DepartmentRoomEditPage() {
   const name = data?.name_english;
   return (
     <ACLGuard hasContent category="department" subcategory="rooms" acl="update">
-        <Helmet>
-          <title> Edit {name || ''} Room </title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {!loading && <DepartmentRoomEditView roomData={data} departmentData={departmentData} />}
-      </ACLGuard>
+      <Helmet>
+        <title> Edit {name || ''} Room </title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {!loading && <DepartmentRoomEditView roomData={data} departmentData={departmentData} />}
+    </ACLGuard>
   );
 }

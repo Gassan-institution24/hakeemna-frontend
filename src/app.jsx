@@ -17,9 +17,6 @@ import Router from 'src/routes/sections';
 
 import ThemeProvider from 'src/theme';
 
-
-
-
 // import { AuthProvider } from 'src/auth/context/auth0';
 // import { AuthProvider } from 'src/auth/context/amplify';
 // import { AuthProvider } from 'src/auth/context/firebase';

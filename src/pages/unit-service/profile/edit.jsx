@@ -9,11 +9,11 @@ import EditProfileView from 'src/sections/unit-service/profile/view/edit';
 export default function EditPage() {
   return (
     <ACLGuard hasContent category="unit_service" subcategory="unit_service_info" acl="update">
-        <Helmet>
-          <title>Edit Profile</title>
-        </Helmet>
+      <Helmet>
+        <title>Edit Profile</title>
+      </Helmet>
 
-        <EditProfileView />
-      </ACLGuard>
+      <EditProfileView />
+    </ACLGuard>
   );
 }

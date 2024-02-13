@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-
 // ----------------------------------------------------------------------
 
 const SPACING = 8;

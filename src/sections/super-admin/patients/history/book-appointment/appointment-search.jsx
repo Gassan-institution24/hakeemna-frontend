@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';

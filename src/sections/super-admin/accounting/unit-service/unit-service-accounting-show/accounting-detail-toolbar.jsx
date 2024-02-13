@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -17,23 +16,23 @@ export default function InvoiceDetailsToolbar({ backLink, editLink, ...other }) 
 
   return (
     <Stack
-        spacing={1.5}
-        direction="row"
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-        {...other}
+      spacing={1.5}
+      direction="row"
+      sx={{
+        mb: { xs: 3, md: 5 },
+      }}
+      {...other}
+    >
+      <Button
+        component={RouterLink}
+        href={backLink}
+        startIcon={<Iconify icon="eva:arrow-ios-back-fill" width={16} />}
       >
-        <Button
-          component={RouterLink}
-          href={backLink}
-          startIcon={<Iconify icon="eva:arrow-ios-back-fill" width={16} />}
-        >
-          Back
-        </Button>
+        Back
+      </Button>
 
-        <Box sx={{ flexGrow: 1 }} />
-      </Stack>
+      <Box sx={{ flexGrow: 1 }} />
+    </Stack>
   );
 }
 

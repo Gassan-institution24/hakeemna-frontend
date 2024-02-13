@@ -11,7 +11,6 @@ import { useCountdownDate } from 'src/hooks/use-countdown';
 
 import { useAuthContext } from 'src/auth/hooks';
 
-
 export default function TimeOutInActive() {
   const { user, logout } = useAuthContext();
 

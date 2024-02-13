@@ -8,11 +8,11 @@ import PaymentControlView from 'src/sections/employee/accounting/payment-control
 export default function PaymentControlPage() {
   return (
     <ACLGuard hasContent category="employee" subcategory="accounting" acl="read">
-        <Helmet>
-          <title>Payment Control</title>
-        </Helmet>
+      <Helmet>
+        <title>Payment Control</title>
+      </Helmet>
 
-        <PaymentControlView />
-      </ACLGuard>
+      <PaymentControlView />
+    </ACLGuard>
   );
 }

@@ -16,13 +16,13 @@ export default function AppointmentsHomePage() {
   // console.log('appointmentsData', appointmentsData);
   return (
     <ACLGuard hasContent category="employee" subcategory="appointments" acl="read">
-        <Helmet>
-          <title>Appointments</title>
-        </Helmet>
-        {loading && <LoadingScreen />}
-        {appointmentsData && (
-          <AppointmentHomeView appointmentsData={appointmentsData} refetch={refetch} />
-        )}
-      </ACLGuard>
+      <Helmet>
+        <title>Appointments</title>
+      </Helmet>
+      {loading && <LoadingScreen />}
+      {appointmentsData && (
+        <AppointmentHomeView appointmentsData={appointmentsData} refetch={refetch} />
+      )}
+    </ACLGuard>
   );
 }

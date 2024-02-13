@@ -9,11 +9,11 @@ import SubscriptionsHomeView from 'src/sections/unit-service/subscriptions/view/
 export default function SubscriptionsHomePage() {
   return (
     <ACLGuard hasContent category="unit_service" subcategory="subscriptions" acl="read">
-        <Helmet>
-          <title>Subscriptions</title>
-        </Helmet>
+      <Helmet>
+        <title>Subscriptions</title>
+      </Helmet>
 
-        <SubscriptionsHomeView />
-      </ACLGuard>
+      <SubscriptionsHomeView />
+    </ACLGuard>
   );
 }

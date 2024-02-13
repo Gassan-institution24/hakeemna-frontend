@@ -9,7 +9,6 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
-
 import { RouterLink } from 'src/routes/components';
 
 import StyledMarkdown from './styles';

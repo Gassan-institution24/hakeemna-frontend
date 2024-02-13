@@ -8,11 +8,11 @@ import Communication from 'src/sections/employee/communication/view/home';
 export default function HomePage() {
   return (
     <ACLGuard hasContent category="employee" subcategory="communication" acl="read">
-        <Helmet>
-          <title>Communication</title>
-        </Helmet>
+      <Helmet>
+        <title>Communication</title>
+      </Helmet>
 
-        <Communication />
-      </ACLGuard>
+      <Communication />
+    </ACLGuard>
   );
 }

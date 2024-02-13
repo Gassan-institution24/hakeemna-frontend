@@ -87,7 +87,9 @@ export default function AppointmentItem({ unitappointment, onBook, onView }) {
                     <Box sx={{ bgcolor: 'rgba(208, 208, 208, 0.566)', width: 350 }}>
                       <Box sx={{ padding: 2 }}>
                         <Typography>{feedback?.patient?.first_name}</Typography>
-                        <Typography sx={{ border: '1px solid white', bgcolor:'white' }}>{feedback?.Body}</Typography>
+                        <Typography sx={{ border: '1px solid white', bgcolor: 'white' }}>
+                          {feedback?.Body}
+                        </Typography>
                       </Box>
                     </Box>
                   </>
