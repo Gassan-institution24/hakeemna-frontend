@@ -162,7 +162,7 @@ export default function CurrencyTableView() {
           heading="Currency" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

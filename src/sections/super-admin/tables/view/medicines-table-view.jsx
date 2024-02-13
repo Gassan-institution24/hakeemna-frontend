@@ -237,7 +237,7 @@ export default function MedicinesTableView() {
           heading="Medicines" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

@@ -220,7 +220,7 @@ export default function AppointmentListView({ patientData }) {
       <CustomBreadcrumbs
         heading="Book Appointment"
         links={[
-          { name: t('dashboard'), href: paths.superadmin.root },
+          { name: 'dashboard', href: paths.superadmin.root },
           {
             name: t('patients'),
             href: paths.superadmin.patients.root,

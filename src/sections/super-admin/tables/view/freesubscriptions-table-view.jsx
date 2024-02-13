@@ -251,7 +251,7 @@ export default function FreeSubscriptionTableView() {
           heading="Free Subscriptions" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

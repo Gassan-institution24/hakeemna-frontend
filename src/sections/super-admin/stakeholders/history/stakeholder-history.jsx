@@ -61,7 +61,7 @@ export default function StakeholderHistoryView({ stakeholderData }) {
         heading={`${stakeholderName} History`}
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin.root,
           },
           {

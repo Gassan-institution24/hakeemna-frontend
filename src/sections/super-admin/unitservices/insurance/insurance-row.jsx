@@ -8,7 +8,6 @@ import { useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-import { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
@@ -21,19 +20,9 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
     webpage,
     phone,
     address,
-    created_at,
-    user_creation,
-    ip_address_user_creation,
-    updated_at,
-    user_modification,
-    ip_address_user_modification,
-    modifications_nums,
   } = row;
 
   const { t } = useTranslate();
-
-  const popover = usePopover();
-  const DDL = usePopover();
 
   const renderPrimary = (
     <TableRow hover>
@@ -52,7 +41,7 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {t(status)}
+          {status}
         </Label>
       </TableCell>
       <TableCell align="center">{webpage}</TableCell>

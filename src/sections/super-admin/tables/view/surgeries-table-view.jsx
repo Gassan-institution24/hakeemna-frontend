@@ -161,7 +161,7 @@ export default function SurgeriesTableView() {
           heading="Surgeries" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

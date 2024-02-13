@@ -165,152 +165,152 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
   );
   const unitserviceName = unitServiceData?.name_english;
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading={`${unitserviceName} accounting`} /// edit
-          links={[
-            {
-              name: t('dashboard'),
-              href: paths.superadmin.root,
-            },
-            {
-              name: t('Unit Services'),
-              href: paths.superadmin.unitservices.root,
-            },
-            { name: t(`${unitserviceName} accounting`) }, /// edit
-          ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.superadmin.unitservices.newAccounting(id)} /// edit
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New License
-            </Button> /// edit
-          }
+    <Container maxWidth="lg">
+      <CustomBreadcrumbs
+        heading={`${unitserviceName} accounting`} /// edit
+        links={[
+          {
+            name: 'dashboard',
+            href: paths.superadmin.root,
+          },
+          {
+            name: 'Unit Services',
+            href: paths.superadmin.unitservices.root,
+          },
+          { name: t(`${unitserviceName} accounting`) }, /// edit
+        ]}
+        action={
+          <Button
+            component={RouterLink}
+            href={paths.superadmin.unitservices.newAccounting(id)} /// edit
+            variant="contained"
+            startIcon={<Iconify icon="mingcute:add-line" />}
+          >
+            New License
+          </Button> /// edit
+        }
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
+
+      <Card>
+        <Tabs
+          value={filters.status}
+          onChange={handleFilterStatus}
           sx={{
-            mb: { xs: 3, md: 5 },
+            px: 2.5,
+            boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
           }}
+        >
+          {STATUS_OPTIONS.map((tab) => (
+            <Tab
+              key={tab.value}
+              iconPosition="end"
+              value={tab.value}
+              label={tab.label}
+              icon={
+                <Label
+                  variant={
+                    ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                  }
+                  color={
+                    (tab.value === 'active' && 'success') ||
+                    (tab.value === 'inactive' && 'error') ||
+                    'default'
+                  }
+                >
+                  {tab.value === 'all' && licenseMovements.length}
+                  {tab.value === 'active' &&
+                    licenseMovements.filter((order) => order.status === 'active').length}
+                  {tab.value === 'inactive' &&
+                    licenseMovements.filter((order) => order.status === 'inactive').length}
+                </Label>
+              }
+            />
+          ))}
+        </Tabs>
+        <TableDetailToolbar
+          onPrint={printHandler}
+          filters={filters}
+          onFilters={handleFilters}
+          onDownload={handleDownload}
+          //
+          canReset={canReset}
+          onResetFilters={handleResetFilters}
         />
 
-        <Card>
-          <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === 'active' && 'success') ||
-                      (tab.value === 'inactive' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {tab.value === 'all' && licenseMovements.length}
-                    {tab.value === 'active' &&
-                      licenseMovements.filter((order) => order.status === 'active').length}
-                    {tab.value === 'inactive' &&
-                      licenseMovements.filter((order) => order.status === 'inactive').length}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
-          <TableDetailToolbar
-            onPrint={printHandler}
+        {canReset && (
+          <TableDetailFiltersResult
             filters={filters}
             onFilters={handleFilters}
-            onDownload={handleDownload}
             //
-            canReset={canReset}
             onResetFilters={handleResetFilters}
+            //
+            results={dataFiltered.length}
+            sx={{ p: 2.5, pt: 0 }}
           />
+        )}
 
-          {canReset && (
-            <TableDetailFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
+        <TableContainer>
+          <Scrollbar>
+            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={dataFiltered.length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     dataFiltered.map((row) => row._id)
+                //   )
+                // }
+              />
 
-          <TableContainer>
-            <Scrollbar>
-              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     dataFiltered.map((row) => row._id)
-                  //   )
-                  // }
+              <TableBody>
+                {dataFiltered
+                  .slice(
+                    table.page * table.rowsPerPage,
+                    table.page * table.rowsPerPage + table.rowsPerPage
+                  )
+                  .map((row) => (
+                    <AccountingRow
+                      key={row._id}
+                      row={row}
+                      filters={filters}
+                      setFilters={setFilters}
+                      // selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                      onEditRow={() => handleEditRow(row._id)}
+                    />
+                  ))}
+
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, licenseMovements.length)}
                 />
 
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row) => (
-                      <AccountingRow
-                        key={row._id}
-                        row={row}
-                        filters={filters}
-                        setFilters={setFilters}
-                        // selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
-                      />
-                    ))}
+                <TableNoData notFound={notFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
 
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, licenseMovements.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
-          />
-        </Card>
-      </Container>
+        <TablePaginationCustom
+          count={dataFiltered.length}
+          page={table.page}
+          rowsPerPage={table.rowsPerPage}
+          onPageChange={table.onChangePage}
+          onRowsPerPageChange={table.onChangeRowsPerPage}
+          //
+          dense={table.dense}
+          onChangeDense={table.onChangeDense}
+        />
+      </Card>
+    </Container>
   );
 }
 

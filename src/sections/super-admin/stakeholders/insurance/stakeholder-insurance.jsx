@@ -209,7 +209,7 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
           heading={`${stakeholderName} Insurance`} /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

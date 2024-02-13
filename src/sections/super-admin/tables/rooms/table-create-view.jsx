@@ -18,7 +18,7 @@ export default function TableCreateView() {
         heading="Create a new Room"
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

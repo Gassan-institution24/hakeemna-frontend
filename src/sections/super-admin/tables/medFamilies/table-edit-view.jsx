@@ -28,7 +28,7 @@ export default function TableEditView() {
         heading="Update Medical Categories"
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

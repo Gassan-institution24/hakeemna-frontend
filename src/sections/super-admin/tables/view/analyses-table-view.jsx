@@ -153,7 +153,7 @@ export default function AnalysesTableView() {
           heading="Analyses" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

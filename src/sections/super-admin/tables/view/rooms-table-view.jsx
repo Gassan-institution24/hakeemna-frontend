@@ -236,7 +236,7 @@ export default function RoomsTableView() {
           heading="Rooms" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {
