@@ -181,7 +181,7 @@ export default function StakeholdersFeedbacks() {
           heading={t('Stakeholders Quality Control')}
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

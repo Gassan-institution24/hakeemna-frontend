@@ -132,7 +132,7 @@ export default function PatientInfoContent({ patientData }) {
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {t(status)}
+          {status}
         </Label>
       </Typography>
 

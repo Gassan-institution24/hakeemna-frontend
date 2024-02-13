@@ -249,7 +249,7 @@ export default function DeductionConfigTableView() {
           heading="Deduction Config" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

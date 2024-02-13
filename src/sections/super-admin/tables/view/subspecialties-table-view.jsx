@@ -245,7 +245,7 @@ export default function SubSpecialtiesTableView() {
           heading="Subspecialties" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

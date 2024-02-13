@@ -242,7 +242,7 @@ export default function MeasurmentTypesTableView() {
           heading="Measurment Types" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

@@ -56,7 +56,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
           variant="soft"
           color={(status === 'read' && 'success') || (status === 'unread' && 'error') || 'default'}
         >
-          {t(status)}
+          {status}
         </Label>
       </TableCell>
       <TableCell align="center">{Body}</TableCell>

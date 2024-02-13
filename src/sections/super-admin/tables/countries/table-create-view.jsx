@@ -21,7 +21,7 @@ export default function CountryCreateView() {
         heading="Create a new Country" /// edit
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

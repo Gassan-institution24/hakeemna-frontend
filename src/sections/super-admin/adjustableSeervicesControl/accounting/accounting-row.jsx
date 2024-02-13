@@ -60,7 +60,7 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {t(status)}
+          {status}
         </Label>
       </TableCell>
       <TableCell align="center">{fDateTime(Start_date)}</TableCell>

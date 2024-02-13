@@ -244,7 +244,7 @@ export default function StakeholderTypesTableView() {
           heading="Stakeholder Types" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

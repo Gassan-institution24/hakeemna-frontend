@@ -128,7 +128,7 @@ export default function MovementInfoContent({ economicMovementData }) {
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {t(status)}
+          {status}
         </Label>
       </Typography>
 

@@ -160,7 +160,7 @@ export default function StakeholderFeedbackView({ stakeholderData }) {
           heading={`${stakeholderName} feedback`} /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {

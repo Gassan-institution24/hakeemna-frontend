@@ -27,7 +27,7 @@ export default function TableEditView() {
         heading="Update Measurment Type"
         links={[
           {
-            name: t('dashboard'),
+            name: 'dashboard',
             href: paths.superadmin,
           },
           {

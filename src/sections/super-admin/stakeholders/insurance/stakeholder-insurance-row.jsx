@@ -52,7 +52,7 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
           }
         >
-          {t(status)}
+          {status}
         </Label>
       </TableCell>
       <TableCell align="center">{webpage}</TableCell>

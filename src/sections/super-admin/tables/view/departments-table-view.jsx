@@ -233,7 +233,7 @@ export default function DepartmentsTableView() {
           heading="departments" /// edit
           links={[
             {
-              name: t('dashboard'),
+              name: 'dashboard',
               href: paths.superadmin.root,
             },
             {
