@@ -175,7 +175,7 @@ const ChatPage = lazy(() => import('src/pages/dashboard/chat'));
 
 export const unitServiceDashboardRoutes = [
   {
-    path: 'dashboard/us',
+    path: 'unit',
     element: (
       <AuthGuard>
         <DashboardLayout>

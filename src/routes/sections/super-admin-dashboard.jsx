@@ -342,7 +342,7 @@ const QualityControlStakeholdersPage = lazy(() =>
 
 export const dashboardRoutes = [
   {
-    path: 'dashboard',
+    path: 'super',
     element: (
       <AuthGuard>
         <DashboardLayout>
