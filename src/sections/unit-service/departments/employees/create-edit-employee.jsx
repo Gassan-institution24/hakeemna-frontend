@@ -1,7 +1,8 @@
+import axios from 'axios';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
@@ -16,20 +17,20 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useGetCountries, useGetEmployeeTypes, useGetSpecialties } from 'src/api';
 import { endpoints } from 'src/utils/axios';
-
-import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-
-import axios from 'axios';
-import { socket } from 'src/socket';
-import Iconify from 'src/components/iconify';
 import axiosHandler from 'src/utils/axios-handler';
+
+import { socket } from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetCountries, useGetSpecialties, useGetEmployeeTypes } from 'src/api';
+
+import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

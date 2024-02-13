@@ -19,6 +19,7 @@ import { useGetTables } from 'src/api';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -26,11 +27,10 @@ import {
   TableNoData,
   getComparator,
   TableEmptyRows,
-  TablePaginationCustom,
   TableHeadCustom,
+  TablePaginationCustom,
 } from 'src/components/table';
 
-import { LoadingScreen } from 'src/components/loading-screen';
 import TablesTableRow from '../tables-table-row';
 import TablesTableToolbar from '../tables-table-toolbar';
 import TablesTableFiltersResult from '../tables-table-filters-result';

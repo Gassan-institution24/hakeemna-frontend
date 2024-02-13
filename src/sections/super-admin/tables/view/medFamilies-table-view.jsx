@@ -1,4 +1,7 @@
-import { useState, useCallback, useRef } from 'react';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { useReactToPrint } from 'react-to-print';
+import { useRef, useState, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -6,19 +9,18 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
-import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
-import { useTranslate } from 'src/locales';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
-import { useReactToPrint } from 'react-to-print';
-import { useSettingsContext } from 'src/components/settings';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import { useTranslate } from 'src/locales';
+import { useGetMedFamilies } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -28,10 +30,7 @@ import {
   TableEmptyRows,
   TableHeadCustom,
   TablePaginationCustom,
-} from 'src/components/table';
-
-import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetMedFamilies } from 'src/api'; /// edit
+} from 'src/components/table'; /// edit
 import TableDetailRow from '../medFamilies/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
@@ -156,8 +155,7 @@ export default function FamiliesTableView() {
   }
 
   return (
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Medicine Family" /// edit
           links={[
@@ -261,7 +259,6 @@ export default function FamiliesTableView() {
           />
         </Card>
       </Container>
-    </>
   );
 }
 

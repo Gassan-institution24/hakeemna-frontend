@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import AccountingInfo from 'src/sections/super-admin/accounting/unit-service/unit-service-accounting-show/accounting-details';
-import { useGetLicenseMovement } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetLicenseMovement } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import AccountingInfo from 'src/sections/super-admin/accounting/unit-service/unit-service-accounting-show/accounting-details';
 
 // ----------------------------------------------------------------------
 

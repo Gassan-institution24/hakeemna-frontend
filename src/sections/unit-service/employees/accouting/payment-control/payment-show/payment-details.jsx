@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -10,7 +9,6 @@ import { styled } from '@mui/material/styles';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
-import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
@@ -19,10 +17,9 @@ import TableContainer from '@mui/material/TableContainer';
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
-import { useSettingsContext } from 'src/components/settings';
-
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
+import { useSettingsContext } from 'src/components/settings';
 
 import InvoiceToolbar from './payment-toolbar';
 

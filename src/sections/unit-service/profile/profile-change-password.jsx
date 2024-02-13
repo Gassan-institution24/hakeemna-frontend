@@ -8,16 +8,18 @@ import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-import { socket } from 'src/socket';
+import { paths } from 'src/routes/paths';
 
+import { useBoolean } from 'src/hooks/use-boolean';
+
+import axios, { endpoints } from 'src/utils/axios';
+
+import { socket } from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import axios, { endpoints } from 'src/utils/axios';
-import { paths } from 'src/routes/paths';
 // ----------------------------------------------------------------------
 
 export default function AccountChangePassword() {

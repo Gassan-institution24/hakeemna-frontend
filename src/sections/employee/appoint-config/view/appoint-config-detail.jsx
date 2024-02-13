@@ -1,34 +1,35 @@
 import * as Yup from 'yup';
-import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import LoadingButton from '@mui/lab/LoadingButton';
 import Container from '@mui/material/Container';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
-import { useRouter, useParams } from 'src/routes/hooks';
-import { useAuthContext } from 'src/auth/hooks';
+import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useSettingsContext } from 'src/components/settings';
 
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
+import axios, { endpoints } from 'src/utils/axios';
 
 import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
-import axios, { endpoints } from 'src/utils/axios';
-import FormProvider from 'src/components/hook-form';
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSnackbar } from 'src/components/snackbar';
+import { useAuthContext } from 'src/auth/hooks';
 
-import NewEditHolidays from '../new-edit-holidays';
-import NewEditLongHolidays from '../new-edit-long-holiday';
-import NewEditDaysDetails from '../new-edit-days-details';
+import FormProvider from 'src/components/hook-form';
+import { useSnackbar } from 'src/components/snackbar';
+import { useSettingsContext } from 'src/components/settings';
+import { ConfirmDialog } from 'src/components/custom-dialog';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
+
 import NewEditDetails from '../new-edit-details';
+import NewEditHolidays from '../new-edit-holidays';
+import NewEditDaysDetails from '../new-edit-days-details';
+import NewEditLongHolidays from '../new-edit-long-holiday';
 
 // ----------------------------------------------------------------------
 

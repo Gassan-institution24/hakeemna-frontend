@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
+
 import HomeView from 'src/sections/home/view/home-view';
 
 // ----------------------------------------------------------------------

@@ -1,10 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 
-import AppointconfigDetailView from 'src/sections/unit-service/employees/view/appoint-config-detail';
-import { useGetEmployeeEngagement, useGetAppointmentConfig } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { useGetAppointmentConfig, useGetEmployeeEngagement } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import AppointconfigDetailView from 'src/sections/unit-service/employees/view/appoint-config-detail';
 
 // ----------------------------------------------------------------------
 
@@ -17,8 +20,7 @@ export default function EmployeeAppointconfigPage() {
   // console.log('employeeData', employeeData);
 
   return (
-    <>
-      <ACLGuard hasContent category="unit_service" subcategory="appointment_configs" acl="update">
+    <ACLGuard hasContent category="unit_service" subcategory="appointment_configs" acl="update">
         <Helmet>
           <title> {name || ''} Employee Appointment Config</title>
         </Helmet>
@@ -32,6 +34,5 @@ export default function EmployeeAppointconfigPage() {
           />
         )}
       </ACLGuard>
-    </>
   );
 }

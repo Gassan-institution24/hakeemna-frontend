@@ -1,3 +1,4 @@
+
 import PropTypes from 'prop-types';
 
 import Stack from '@mui/material/Stack';
@@ -17,13 +18,12 @@ import { useSettingsContext } from 'src/components/settings';
 
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
-import SettingsButton from '../common/settings-button';
 import AccountPopover from '../common/account-popover';
 import ContactsPopover from '../common/contacts-popover';
 import LanguagePopover from '../common/language-popover';
-import NotificationsPopover from '../common/notifications-popover';
 import TimeOutInActive from '../common/time-out-inactive';
 import ServiceUnitPopover from '../common/service-unit-popover';
+import NotificationsPopover from '../common/notifications-popover';
 
 // ----------------------------------------------------------------------
 

@@ -1,23 +1,18 @@
 import PropTypes from 'prop-types';
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 
-import Chip from '@mui/material/Chip';
+import Badge from '@mui/material/Badge';
 import Radio from '@mui/material/Radio';
 import Stack from '@mui/material/Stack';
-import Badge from '@mui/material/Badge';
-import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
-import Checkbox from '@mui/material/Checkbox';
-import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Autocomplete from '@mui/material/Autocomplete';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { RHFSelect } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 

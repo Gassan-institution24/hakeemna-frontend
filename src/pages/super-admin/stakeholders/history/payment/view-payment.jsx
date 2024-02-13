@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
-import PaymentInfo from 'src/sections/super-admin/stakeholders/history/payment-control/payment-show/payment-detail-view';
-import { useGetIncomePayment } from 'src/api';
 import { useParams } from 'src/routes/hooks';
+
+import { useGetIncomePayment } from 'src/api';
+
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import PaymentInfo from 'src/sections/super-admin/stakeholders/history/payment-control/payment-show/payment-detail-view';
 // ----------------------------------------------------------------------
 
 export default function TableCreatePage() {

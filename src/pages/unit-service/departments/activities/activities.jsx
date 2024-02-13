@@ -1,10 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 
-import DepartmentActivitiesView from 'src/sections/unit-service/departments/view/activities';
-import { useGetDepartment } from 'src/api';
 import { useParams } from 'src/routes/hooks';
-import { LoadingScreen } from 'src/components/loading-screen';
+
+import { useGetDepartment } from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
+
+import { LoadingScreen } from 'src/components/loading-screen';
+
+import DepartmentActivitiesView from 'src/sections/unit-service/departments/view/activities';
 
 // ----------------------------------------------------------------------
 
@@ -14,14 +17,12 @@ export default function DepartmentActivitiesPage() {
   const { data, loading } = useGetDepartment(id);
   const name = data?.name_english;
   return (
-    <>
-      <ACLGuard hasContent category="department" subcategory="activities" acl="read">
+    <ACLGuard hasContent category="department" subcategory="activities" acl="read">
         <Helmet>
           <title>{name || ''} Department Activities</title>
         </Helmet>
         {loading && <LoadingScreen />}
         {!loading && <DepartmentActivitiesView departmentData={data} />}
       </ACLGuard>
-    </>
   );
 }

@@ -1,1 +1,0 @@
-(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[1596],{61596:()=>{}}]);

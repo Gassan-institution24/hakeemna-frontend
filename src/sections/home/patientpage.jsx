@@ -1,13 +1,17 @@
-import Container from '@mui/material/Container';
-import { Button, Grid, Paper, Typography } from '@mui/material';
 import * as React from 'react';
-import { paths } from 'src/routes/paths';
-import { styled } from '@mui/material/styles';
 import { m } from 'framer-motion';
-import { varFade, MotionViewport } from 'src/components/animate';
+
 import Stack from '@mui/material/Stack';
-import medical from './images/medical.png';
+import { styled } from '@mui/material/styles';
+import Container from '@mui/material/Container';
+import { Grid, Paper, Button, Typography } from '@mui/material';
+
+import { paths } from 'src/routes/paths';
+
+import { varFade, MotionViewport } from 'src/components/animate';
+
 import circle from './images/circle.png';
+import medical from './images/medical.png';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1d222900' : 'rgba(255, 255, 255, 0)',

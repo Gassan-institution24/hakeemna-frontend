@@ -1,9 +1,11 @@
 import { Box, Divider, Typography } from '@mui/material';
-import { useGetPatientAppointments } from 'src/api';
-import { useTranslate, useLocales } from 'src/locales';
+
 import { useAuthContext } from 'src/auth/hooks';
-import FinishedAppoinment from './apointmentsfinished';
+import { useGetPatientAppointments } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
+
 import Currentappoinment from './apointmentscurrent';
+import FinishedAppoinment from './apointmentsfinished';
 
 export default function AppointmentData() {
   const { user } = useAuthContext();

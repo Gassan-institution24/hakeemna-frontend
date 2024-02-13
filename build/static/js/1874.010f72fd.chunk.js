@@ -1,2 +1,0 @@
-(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[1874],{21874:(e,a,s)=>{"use strict";s.r(a),s.d(a,{default:()=>d});var n=s(6907),t=s(41107),i=s.n(t),l=s(79572),r=s(19208),c=s(80184);function d(){const e=(0,r.UO)(),{id:a}=e,{data:s}=(0,l.Db)(a),t=s.name_english||"Stackeholder";return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(n.ql,{children:(0,c.jsxs)("title",{children:[" stakeholders: ",t," Communication "]})}),s&&(0,c.jsx)(i(),{stakeholderData:s})]})}},41107:()=>{}}]);
-//# sourceMappingURL=1874.010f72fd.chunk.js.map

@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useRef, useState, useCallback } from 'react';
 
 // import Tab from '@mui/material/Tab';
 // import Tabs from '@mui/material/Tabs';
@@ -11,26 +11,28 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 // import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
-import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
-import { useTranslate } from 'src/locales';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
+
+import { useTranslate } from 'src/locales';
 
 // import { useBoolean } from 'src/hooks/use-boolean';
 
-// import { fTimestamp } from 'src/utils/format-time';
-import { useReactToPrint } from 'react-to-print';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+// import { fTimestamp } from 'src/utils/format-time';
+import { useReactToPrint } from 'react-to-print';
 
-import Label from 'src/components/label';
+import { useGetSpecialties } from 'src/api';
+
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 // import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { useSettingsContext } from 'src/components/settings';
-
 import {
   useTable,
   emptyRows,
@@ -40,10 +42,7 @@ import {
   TableHeadCustom,
   // TableSelectedAction,
   TablePaginationCustom,
-} from 'src/components/table';
-
-import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetSpecialties } from 'src/api'; /// edit
+} from 'src/components/table'; /// edit
 // import axiosHandler from 'src/utils/axios-handler';
 import TableDetailRow from '../specialties/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';

@@ -1,12 +1,12 @@
-import parse from 'autosuggest-highlight/parse';
 import match from 'autosuggest-highlight/match';
+import parse from 'autosuggest-highlight/parse';
 import { memo, useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
-import { useTheme } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
+import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Dialog, { dialogClasses } from '@mui/material/Dialog';

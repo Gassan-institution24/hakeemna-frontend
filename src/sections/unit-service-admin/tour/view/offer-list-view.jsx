@@ -6,25 +6,23 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
-import { useTranslate } from 'src/locales';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { countries } from 'src/assets/data';
-import { _tours, _tourGuides, TOUR_SORT_OPTIONS, TOUR_SERVICE_OPTIONS } from 'src/_mock';
+import { useTranslate } from 'src/locales';
+import { useGetOffers } from 'src/api/user';
+import { _tours, _tourGuides, TOUR_SORT_OPTIONS } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import { useGetOffers } from 'src/api/user';
 import TourList from '../offer-list';
 import TourSort from '../offer-sort';
-import TourSearch from '../offer-search';
 import TourFilters from '../offer-filters';
 import TourFiltersResult from '../offer-filters-result';
 

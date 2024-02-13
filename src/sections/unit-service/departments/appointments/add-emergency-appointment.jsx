@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,31 +10,29 @@ import Stack from '@mui/material/Stack';
 import { MenuItem } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import InputAdornment from '@mui/material/InputAdornment';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
-import axios, { endpoints } from 'src/utils/axios';
-import { useSnackbar } from 'src/components/snackbar';
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
-import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
-import {
-  useGetAppointmentTypes,
-  useGetUSServiceTypes,
-  useGetDepartmentWorkGroups,
-  useGetUSWorkShifts,
-} from 'src/api';
-import { useAuthContext } from 'src/auth/hooks';
+
+import axios, { endpoints } from 'src/utils/axios';
 
 import { socket } from 'src/socket';
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import Iconify from 'src/components/iconify';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import {
+  useGetUSWorkShifts,
+  useGetUSServiceTypes,
+  useGetAppointmentTypes,
+  useGetDepartmentWorkGroups,
+} from 'src/api';
+
+import { useSnackbar } from 'src/components/snackbar';
+import { usePopover } from 'src/components/custom-popover';
+import FormProvider, { RHFSelect, RHFMultiSelect } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -120,8 +118,7 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
   });
 
   return (
-    <>
-      <Dialog maxWidth="lg" onClose={onClose} {...other}>
+    <Dialog maxWidth="lg" onClose={onClose} {...other}>
         <FormProvider methods={methods} onSubmit={onSubmit}>
           <DialogTitle sx={{ mb: 1 }}>
             {curLangAr ? 'إنشاء موعد طوارئ جديد' : 'New Emergency Appointment'}
@@ -219,7 +216,6 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
           </DialogActions>
         </FormProvider>
       </Dialog>
-    </>
   );
 }
 

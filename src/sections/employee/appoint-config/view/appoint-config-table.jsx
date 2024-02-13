@@ -1,15 +1,12 @@
 import PropTypes from 'prop-types';
-import sumBy from 'lodash/sumBy';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
-import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
@@ -17,21 +14,25 @@ import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter, useParams } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
+import { useRouter } from 'src/routes/hooks';
 
-import { socket } from 'src/socket';
-import { useAuthContext } from 'src/auth/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { endpoints } from 'src/utils/axios';
 import { fTimestamp } from 'src/utils/format-time';
+import axiosHandler from 'src/utils/axios-handler';
+
+import { socket } from 'src/socket';
+import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
   emptyRows,
@@ -42,11 +43,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import { useTranslate } from 'src/locales';
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
 import AppointConfigRow from '../appoint-config-row';
 import AppointConfigToolbar from '../appointment-toolbar';
 import ConfigFiltersResult from '../appointment-filters-result';

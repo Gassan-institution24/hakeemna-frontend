@@ -1,38 +1,39 @@
-import { useState, useCallback, useRef } from 'react';
-import PropTypes from 'prop-types';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { useReactToPrint } from 'react-to-print';
+import { useRef, useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import Tooltip from '@mui/material/Tooltip';
-import { alpha } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import { alpha } from '@mui/material/styles';
+import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import MenuItem from '@mui/material/MenuItem';
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
 import TableContainer from '@mui/material/TableContainer';
-import { RouterLink } from 'src/routes/components';
 
 import { paths } from 'src/routes/paths';
-import { useRouter, useParams } from 'src/routes/hooks';
-import { useAuthContext } from 'src/auth/hooks';
-import { useBoolean } from 'src/hooks/use-boolean';
+import { RouterLink } from 'src/routes/components';
 
-import { useReactToPrint } from 'react-to-print';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import { endpoints } from 'src/utils/axios';
+import axiosHandler from 'src/utils/axios-handler';
+
+import { socket } from 'src/socket';
+import { useAuthContext } from 'src/auth/hooks';
+import ACLGuard from 'src/auth/guard/acl-guard';
+import { useLocales, useTranslate } from 'src/locales';
+import { StatusOptions } from 'src/assets/data/status-options';
+import { useGetUnitservice, useGetInsuranceCos } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import {
   useTable,
   emptyRows,
@@ -40,22 +41,8 @@ import {
   getComparator,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-
-import { socket } from 'src/socket';
-import { endpoints } from 'src/utils/axios';
-import ACLGuard from 'src/auth/guard/acl-guard';
-import axiosHandler from 'src/utils/axios-handler';
-
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-
-import { StatusOptions } from 'src/assets/data/status-options';
-import { LoadingScreen } from 'src/components/loading-screen';
-import { enqueueSnackbar } from 'notistack';
-import { useGetInsuranceCos, useGetUnitservice } from 'src/api';
-import { useLocales, useTranslate } from 'src/locales';
 
 import InsuranceRow from '../insurance-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';

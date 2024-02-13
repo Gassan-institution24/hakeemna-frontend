@@ -1,11 +1,12 @@
 import React from 'react';
+
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Iconify from 'src/components/iconify';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
+
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+
+import Iconify from 'src/components/iconify';
+
 
 export default function SmallSidebar() {
   const router = useRouter();

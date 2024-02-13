@@ -1,19 +1,22 @@
-import { useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
-
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
-import Container from '@mui/material/Container';
-import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Container from '@mui/material/Container';
+
+import { paths } from 'src/routes/paths';
+
+import { useGetPatient } from 'src/api';
+import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
+
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
-import { useGetPatient } from 'src/api';
-import { paths } from 'src/routes/paths';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import Prescriptions from '../prescriptions';
+
 import Pharmaces from '../pharmacies';
+import Prescriptions from '../prescriptions';
 // ----------------------------------------------------------------------
 
 export default function UserCardList() {

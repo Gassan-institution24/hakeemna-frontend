@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Box, Container, Typography } from '@mui/material';
-import { useSnackbar } from 'src/components/snackbar';
-import { useTranslate, useLocales } from 'src/locales';
 
-import Image from 'src/components/image/image';
+import { Box, Container, Typography } from '@mui/material';
+
+import { useLocales } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
+import Image from 'src/components/image/image';
+import { useSnackbar } from 'src/components/snackbar';
+
 import QR from './imges/QR.jpg';
 
 export default function Share() {

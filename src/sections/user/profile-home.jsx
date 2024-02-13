@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
-import Iconify from 'src/components/iconify';
-import Divider from '@mui/material/Divider';
-import { useTranslate, useLocales } from 'src/locales';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 // ----------------------------------------------------------------------
 

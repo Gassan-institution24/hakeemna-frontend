@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
@@ -10,46 +10,42 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Stepper from '@mui/material/Stepper';
-import {
-  Box,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  MenuItem,
-  Popover,
-  Select,
-  TextField,
-  Tooltip,
-} from '@mui/material';
 import StepLabel from '@mui/material/StepLabel';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import {
+  Box,
+  Dialog,
+  Tooltip,
+  Checkbox,
+  MenuItem,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-import { useLocales, useTranslate } from 'src/locales';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-
-import Iconify from 'src/components/iconify';
-import FormProvider, { RHFTextField, RHFSelect, RHFAutocomplete } from 'src/components/hook-form';
+import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetCities,
-  useGetCountries,
-  useGetEmployeeTypes,
-  useGetSpecialties,
   useGetUSTypes,
+  useGetCountries,
+  useGetSpecialties,
 } from 'src/api';
+
+import Iconify from 'src/components/iconify';
+import { usePopover } from 'src/components/custom-popover';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -246,8 +242,7 @@ export default function JwtRegisterView() {
   );
 
   const renderTerms = (
-    <>
-      <Typography
+    <Typography
         component="div"
         sx={{
           color: 'text.secondary',
@@ -277,7 +272,6 @@ export default function JwtRegisterView() {
           {t('Privacy Policy')}
         </Link>
       </Typography>
-    </>
   );
 
   const renderForm = (
