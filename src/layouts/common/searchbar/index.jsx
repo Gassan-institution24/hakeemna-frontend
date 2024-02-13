@@ -55,17 +55,14 @@ function Searchbar() {
 
   useEventListener('keydown', handleKeyDown);
 
-  const handleClick = useCallback(
-    (path) => {
+  const handleClick = (path) => {
       if (path.includes('http')) {
         window.open(path);
       } else {
         router.push(path);
       }
       handleClose();
-    },
-    [handleClose, router]
-  );
+    }
 
   const handleSearch = useCallback((event) => {
     setSearchQuery(event.target.value);
