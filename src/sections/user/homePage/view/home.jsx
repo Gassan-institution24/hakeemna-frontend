@@ -133,7 +133,7 @@ export default function OverviewAppView() {
               src="https://www.youtube.com/embed/IGsRxmC40Bw?si=gULZ3W4Jy6BPk7p6"
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
+              allowFullScreen
               style={{
                 position: 'absolute',
                 top: 0,

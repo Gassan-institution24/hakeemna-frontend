@@ -67,6 +67,6 @@ export default function HomeView({ divRef, divRef2 }) {
   );
 }
 HomeView.propTypes = {
-  divRef: PropTypes.element,
-  divRef2: PropTypes.element,
+  divRef: PropTypes.object,
+  divRef2: PropTypes.object,
 };

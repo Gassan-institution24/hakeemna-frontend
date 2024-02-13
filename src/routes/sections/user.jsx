@@ -32,7 +32,7 @@ const Oldpatientsdata = lazy(() => import('src/sections/user/oldpatientsdata'));
 
 export const userRoutes = [
   {
-    path: 'dashboard',
+    path: 'user',
     element: (
       <AuthGuard>
         <UserDashboardLayout>
