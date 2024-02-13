@@ -8,7 +8,7 @@
     "start": " set PORT=3006 && react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --quiet",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "fix:import": "eslint-unused-imports-fix --src ./src",
     "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",

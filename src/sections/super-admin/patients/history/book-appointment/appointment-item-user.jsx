@@ -27,9 +27,7 @@ export default function AppointmentItem({ unitappointment, onBook, onView }) {
   return (
     <>
       {unitservicesData.map((info, su) => (
-        <Box
-          sx={{ display: 'flex', border: '1px solid rgba(208, 208, 208, 0.344)', width: '160%' }}
-        >
+        <Box sx={{ display: 'flex', border: '1px solid rgba(208, 208, 208, 0.344)' }}>
           <Box sx={{ width: '55%', margin: 2 }}>
             <Box sx={{ display: 'flex' }}>
               <Image
@@ -63,7 +61,7 @@ export default function AppointmentItem({ unitappointment, onBook, onView }) {
                     </li>
                     <li>
                       <Iconify width={18} sx={{ color: 'success.main' }} icon="mdi:cash-multiple" />{' '}
-                      Fees: 30 JOD (Does not include procedures){' '}
+                      Fees: 30 JOD {' '}
                     </li>
                   </ul>
                 </Box>
@@ -86,10 +84,21 @@ export default function AppointmentItem({ unitappointment, onBook, onView }) {
 
                     <Box sx={{ bgcolor: 'rgba(208, 208, 208, 0.566)', width: 350 }}>
                       <Box sx={{ padding: 2 }}>
-                        <Typography>{feedback?.patient?.first_name}</Typography>
-                        <Typography sx={{ border: '1px solid white', bgcolor: 'white' }}>
-                          {feedback?.Body}
-                        </Typography>
+                        <Box sx={{ display: 'inline-flex' }}>
+                          <Image
+                            sx={{ borderRadius: '100%', width: '35px', height: '35px' }}
+                            src={feedback?.patient?.profile_picture}
+                          />
+                          <Typography>{feedback?.patient?.first_name}</Typography>
+                          <Box>
+                            <Iconify width={16}  icon="emojione:star" />{' '}
+                            <Iconify width={16}  icon="emojione:star" />{' '}
+                            <Iconify width={16}  icon="emojione:star" />{' '}
+                            <Iconify width={16}  icon="emojione:star" />{' '}
+                            <Iconify width={16}  icon="emojione:star" />{' '}
+                          </Box>
+                        </Box>
+                        <Typography>{feedback?.Body}</Typography>
                       </Box>
                     </Box>
                   </>
