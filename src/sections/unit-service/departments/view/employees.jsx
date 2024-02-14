@@ -26,8 +26,8 @@ import axiosHandler from 'src/utils/axios-handler';
 import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useGetDepartmentEmployees } from 'src/api';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
@@ -74,6 +74,8 @@ export default function EmployeesTableView({ departmentData }) {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const checkAcl = useAclGuard();
 
   const { STATUS_OPTIONS } = StatusOptions();
 
@@ -306,7 +308,7 @@ export default function EmployeesTableView({ departmentData }) {
           //   { name: t('department employees') },
           // ]}
           action={
-            ACLGuard({ category: 'department', subcategory: 'employees', acl: 'create' }) && (
+            checkAcl({ category: 'department', subcategory: 'employees', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.departments.employees.new(departmentData._id)} /// edit
@@ -393,7 +395,7 @@ export default function EmployeesTableView({ departmentData }) {
                 )
               }
               action={
-                ACLGuard({ category: 'department', subcategory: 'employees', acl: 'update' }) && (
+                checkAcl({ category: 'department', subcategory: 'employees', acl: 'update' }) && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -414,7 +416,7 @@ export default function EmployeesTableView({ departmentData }) {
                 )
               }
               color={
-                ACLGuard({ category: 'department', subcategory: 'employees', acl: 'update' }) &&
+                checkAcl({ category: 'department', subcategory: 'employees', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((info) => info.status === 'inactive')

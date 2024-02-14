@@ -99,7 +99,7 @@ export default function ServiceUnitPopover() {
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 160 }}>
         {user?.employee?.employee_engagements?.map((option, index) => (
           <MenuItem
-            key={option.unit_service?._id}
+            key={index}
             lang="ar"
             selected={option?.unit_service?._id === selected?.unit_service?._id}
             onClick={() => {
