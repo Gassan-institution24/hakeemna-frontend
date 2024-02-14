@@ -27,9 +27,9 @@ import axiosHandler from 'src/utils/axios-handler';
 
 import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetDepartmentWorkGroups } from 'src/api';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -72,6 +72,8 @@ export default function WorkGroupsTableView({ departmentData }) {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const checkAcl = useAclGuard();
 
   const { user } = useAuthContext();
 
@@ -304,7 +306,7 @@ export default function WorkGroupsTableView({ departmentData }) {
           //   { name: t('department work groups') },
           // ]}
           action={
-            ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'create' }) && (
+            checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.departments.workGroups.new(departmentData._id)}
@@ -392,7 +394,7 @@ export default function WorkGroupsTableView({ departmentData }) {
                 )
               }
               action={
-                ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
+                checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -413,7 +415,7 @@ export default function WorkGroupsTableView({ departmentData }) {
                 )
               }
               color={
-                ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'update' }) &&
+                checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')

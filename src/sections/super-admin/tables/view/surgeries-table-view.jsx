@@ -218,7 +218,6 @@ export default function SurgeriesTableView() {
                 rowCount={dataFiltered.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                onSelectAllRows={false}
               />
 
               <TableBody>

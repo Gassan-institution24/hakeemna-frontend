@@ -9,11 +9,9 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fDateTime } from 'src/utils/format-time';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
@@ -49,10 +47,10 @@ export default function AppointmentsTableRow({
 
   const { t } = useTranslate();
 
+  const checkAcl = useAclGuard();
+
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  const confirm = useBoolean();
 
   const popover = usePopover();
   const DDL = usePopover();
@@ -122,7 +120,7 @@ export default function AppointmentsTableRow({
         sx={{ width: 140 }}
       >
         {status !== 'canceled' &&
-          ACLGuard({ category: 'employee', subcategory: 'appointment_configs', acl: 'delete' }) && (
+          checkAcl({ category: 'employee', subcategory: 'appointment_configs', acl: 'delete' }) && (
             <MenuItem
               onClick={() => {
                 onCancelRow();
@@ -135,7 +133,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status === 'canceled' &&
-          ACLGuard({ category: 'employee', subcategory: 'appointment_configs', acl: 'update' }) && (
+          checkAcl({ category: 'employee', subcategory: 'appointment_configs', acl: 'update' }) && (
             <MenuItem
               onClick={() => {
                 onUnCancelRow();

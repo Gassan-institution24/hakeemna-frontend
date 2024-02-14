@@ -322,11 +322,6 @@ const DoctornaTeamTrainingHomePage = lazy(() =>
   import('src/pages/super-admin/doctornaTeamTraining/home')
 );
 
-// ADJUSTABLE SERVICES CONTROL
-const AdjustableServicesControlHomePage = lazy(() =>
-  import('src/pages/super-admin/adjustableServiceControl/home')
-);
-
 // QUALITY CONTROL
 const QualityControlHomePage = lazy(() =>
   import('src/pages/super-admin/qualityControl/doctornaHome')

@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 
 import { fDateTime } from 'src/utils/format-time';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
@@ -46,6 +46,8 @@ export default function UnitServiceEmployeesRow({
   // console.log('row', row);
 
   const { t } = useTranslate();
+
+  const checkAcl = useAclGuard();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -146,7 +148,7 @@ export default function UnitServiceEmployeesRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? ACLGuard({ category: 'unit_service', subcategory: 'employees', acl: 'delete' }) && (
+          ? checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'delete' }) && (
               <MenuItem
                 onClick={() => {
                   onInactivate();
@@ -158,7 +160,7 @@ export default function UnitServiceEmployeesRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : ACLGuard({ category: 'unit_service', subcategory: 'employees', acl: 'update' }) && (
+          : checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'update' }) && (
               <MenuItem
                 onClick={() => {
                   onActivate();

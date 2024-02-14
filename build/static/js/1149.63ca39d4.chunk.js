@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[1149],{59347:(s,e,i)=>{i.r(e),i.d(e,{default:()=>a});var r=i(6907),l=i(88280),n=i(80184);function a(){return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsx)(r.ql,{children:(0,n.jsx)("title",{children:" New Password"})}),(0,n.jsx)(l.lz,{})]})}}}]);
+//# sourceMappingURL=1149.63ca39d4.chunk.js.map

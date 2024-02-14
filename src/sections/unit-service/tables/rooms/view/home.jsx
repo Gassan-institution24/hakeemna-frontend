@@ -45,7 +45,7 @@ import {
 import axiosHandler from 'src/utils/axios-handler';
 
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 import { StatusOptions } from 'src/assets/data/status-options';
 
@@ -68,6 +68,8 @@ export default function RoomsTableView() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const checkAcl = useAclGuard();
 
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
@@ -294,7 +296,7 @@ export default function RoomsTableView() {
           //   { name: t('department rooms') },
           // ]}
           action={
-            ACLGuard({ category: 'department', subcategory: 'rooms', acl: 'create' }) && (
+            checkAcl({ category: 'department', subcategory: 'rooms', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.tables.rooms.new}
@@ -382,7 +384,7 @@ export default function RoomsTableView() {
                 )
               }
               action={
-                ACLGuard({ category: 'department', subcategory: 'rooms', acl: 'update' }) && (
+                checkAcl({ category: 'department', subcategory: 'rooms', acl: 'update' }) && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -403,7 +405,7 @@ export default function RoomsTableView() {
                 )
               }
               color={
-                ACLGuard({ category: 'department', subcategory: 'rooms', acl: 'update' }) &&
+                checkAcl({ category: 'department', subcategory: 'rooms', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')

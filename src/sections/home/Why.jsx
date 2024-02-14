@@ -24,11 +24,11 @@ export default function Whydoc() {
   const renderContent = (
     <Box sx={{ position: 'relative' }}>
       <div style={{ position: 'relative', paddingBottom: '56%', width: '100%' }}>
-        <iframe
+        {/* <iframe
           src="https://www.youtube.com/embed/4KIk8h9xNL8?si=ng1fBA7_X2uHQ4sF"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
+          allowFullScreen
           style={{
             position: 'absolute',
             top: 0,
@@ -38,7 +38,7 @@ export default function Whydoc() {
             borderRadius: '10px',
             border: 'none',
           }}
-        />
+        /> */}
       </div>
       <Typography variant="h6" sx={{ textAlign: 'center' }}>
         {' '}

@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'src/routes/hooks';
 
 import { useGetDepartment } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -15,6 +15,8 @@ import Iconify from 'src/components/iconify';
 export function useNavData() {
   const params = useParams();
   const router = useRouter();
+
+  const checkAcl = useAclGuard();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -28,13 +30,13 @@ export function useNavData() {
   const data = useMemo(() => {
     const employeeItems = [
       {
-        show: ACLGuard({ category: 'department', subcategory: 'appointments', acl: 'read' }),
+        show: checkAcl({ category: 'department', subcategory: 'appointments', acl: 'read' }),
         title: t('appointments'),
         path: paths.unitservice.departments.appointments(id),
         icon: <Iconify icon="teenyicons:appointments-solid" />,
       },
       {
-        show: ACLGuard({ category: 'department', subcategory: 'accounting', acl: 'read' }),
+        show: checkAcl({ category: 'department', subcategory: 'accounting', acl: 'read' }),
         title: t('accounting'),
         path: paths.unitservice.departments.accounting(id),
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -46,25 +48,25 @@ export function useNavData() {
         icon: <Iconify icon="healthicons:world-care" />,
       },
       {
-        show: ACLGuard({ category: 'department', subcategory: 'activities', acl: 'read' }),
+        show: checkAcl({ category: 'department', subcategory: 'activities', acl: 'read' }),
         title: t('activities'),
         path: paths.unitservice.departments.activities.root(id),
         icon: <Iconify icon="fluent:shifts-activity-24-filled" />,
       },
       {
-        show: ACLGuard({ category: 'department', subcategory: 'employees', acl: 'read' }), //
+        show: checkAcl({ category: 'department', subcategory: 'employees', acl: 'read' }), //
         title: t('employees'),
         path: paths.unitservice.departments.employees.root(id),
         icon: <Iconify icon="ic:round-group" />,
       },
       {
-        show: ACLGuard({ category: 'department', subcategory: 'rooms', acl: 'read' }), //
+        show: checkAcl({ category: 'department', subcategory: 'rooms', acl: 'read' }), //
         title: t('rooms'),
         path: paths.unitservice.departments.rooms.root(id),
         icon: <Iconify icon="ic:sharp-meeting-room" />,
       },
       {
-        show: ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'read' }),
+        show: checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'read' }),
         title: t('work groups'),
         path: paths.unitservice.departments.workGroups.root(id),
         icon: <Iconify icon="fa6-solid:people-group" />,
@@ -94,7 +96,7 @@ export function useNavData() {
       return [...employeeSecDashboard];
     }
     return [...employeeSecDashboard];
-  }, [t, user, router, id, departmentData, curLangAr]);
+  }, [t, user, router, id, departmentData, curLangAr, checkAcl]);
 
   return data;
 }
