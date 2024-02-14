@@ -1,8 +1,5 @@
-import PropTypes from 'prop-types';
-
 import { useState } from 'react';
-
-import { useRouter } from 'src/routes/hooks';
+import PropTypes from 'prop-types';
 
 import { Input, InputAdornment } from '@mui/material';
 
@@ -10,10 +7,9 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function AppointmentSearch({ query, results, onSearch, hrefItem }) {
-  const router = useRouter();
+
 
   const [value, setValue] = useState('');
-  console.log(value);
   return (
     <Input
       sx={{
