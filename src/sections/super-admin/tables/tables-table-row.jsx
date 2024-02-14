@@ -38,9 +38,9 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
           },
         }}
       >
-        {arr?.map((item) =>
+        {arr?.map((item, index) =>
           item === 'active' || item === 'inactive' ? (
-            <Box sx={{ flex: 1 }}>
+            <Box key={index} sx={{ flex: 1 }}>
               <Label
                 variant="soft"
                 color={
@@ -53,7 +53,9 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
               </Label>
             </Box>
           ) : (
-            <Box sx={{ flex: 1 }}>{item}</Box>
+            <Box key={index} sx={{ flex: 1 }}>
+              {item}
+            </Box>
           )
         )}
       </Stack>
