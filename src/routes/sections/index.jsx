@@ -43,7 +43,6 @@ export default function Router() {
 
     // Auth routes
     ...authRoutes,
-    // ...authDemoRoutes,
 
     // Dashboard routes
     ...dashboardRoutes,
@@ -52,13 +51,13 @@ export default function Router() {
     ...unitServiceDashboardRoutes,
 
     // unit service employee dashboard routes
-    ...unitServiceEmployeeDashboardRoutes,
+    // ...unitServiceEmployeeDashboardRoutes,
 
     // Main routes
-    ...mainRoutes,
+    // ...mainRoutes,
 
     // user routes
-    ...userRoutes,
+    // ...userRoutes,
 
     // No match 404
     // { path: '*', element: <Navigate to="/404" replace /> },
