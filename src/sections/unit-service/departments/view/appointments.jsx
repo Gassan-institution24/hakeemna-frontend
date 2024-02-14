@@ -28,8 +28,8 @@ import axiosHandler from 'src/utils/axios-handler';
 import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useGetAppointmentTypes } from 'src/api';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -78,6 +78,8 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
     { id: 'status', label: t('status') },
     { id: '' },
   ];
+
+  const checkAcl = useAclGuard();
 
   const theme = useTheme();
 
@@ -459,7 +461,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
                 )
               }
               action={
-                ACLGuard({
+                checkAcl({
                   category: 'department',
                   subcategory: 'appointments',
                   acl: 'update',

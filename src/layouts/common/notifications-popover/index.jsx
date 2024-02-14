@@ -69,12 +69,12 @@ export default function NotificationsPopover() {
   // }, []);
 
   const { notifications, refetch, loading } = useGetMyNotifications(
-    user._id,
+    user?._id,
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
   );
 
   const { notificationscount, recount } = useGetMyUnreadNotificationCount(
-    user._id,
+    user?._id,
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
   );
 
@@ -117,46 +117,12 @@ export default function NotificationsPopover() {
     </Stack>
   );
 
-  // const renderTabs = (
-  //   <Tabs value={currentTab} onChange={handleChangeTab}>
-  //     {TABS.map((tab) => (
-  //       <Tab
-  //         key={tab.value}
-  //         iconPosition="end"
-  //         value={tab.value}
-  //         label={tab.label}
-  //         icon={
-  //           <Label
-  //             variant={((tab.value === 'all' || tab.value === currentTab) && 'filled') || 'soft'}
-  //             color={
-  //               (tab.value === 'unread' && 'info') ||
-  //               (tab.value === 'archived' && 'success') ||
-  //               'default'
-  //             }
-  //           >
-  //             {tab.count}
-  //           </Label>
-  //         }
-  //         sx={{
-  //           '&:not(:last-of-type)': {
-  //             mr: 3,
-  //           },
-  //         }}
-  //       />
-  //     ))}
-  //   </Tabs>
-  // );
-
   const renderList = (
     <Scrollbar>
       <List disablePadding>
         {!loading &&
-          notifications?.map((notification) => (
-            <NotificationItem
-              handleClick={handleClick}
-              key={notification.id}
-              notification={notification}
-            />
+          notifications?.map((notification, index) => (
+            <NotificationItem handleClick={handleClick} key={index} notification={notification} />
           ))}
       </List>
     </Scrollbar>

@@ -6,12 +6,8 @@ import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
-import { useRouter } from 'src/routes/hooks';
-
 import { useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
 
-import { useSnackbar } from 'src/components/snackbar';
 import {
   useTable,
   TableNoData,
@@ -37,15 +33,11 @@ export default function UploadedOldPatients({ oldPatients }) {
     // { id: '', width: 88 },
   ];
 
-  const router = useRouter();
 
   const table = useTable({ defaultRowsPerPage: 10 });
 
-  const { user } = useAuthContext();
 
   const theme = useTheme();
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const {
     dense,
@@ -55,8 +47,6 @@ export default function UploadedOldPatients({ oldPatients }) {
     rowsPerPage,
     //
     selected,
-    onSelectRow,
-    onSelectAllRows,
     //
     onSort,
     onChangeDense,
@@ -95,9 +85,9 @@ export default function UploadedOldPatients({ oldPatients }) {
         />
 
         <TableBody>
-          {oldPatients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+          {oldPatients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
             <ExistEmployeesRow
-              key={row.id}
+              key={index}
               row={row}
               // onEmploymentRow={() => handleEmployment(row._id)}
             />

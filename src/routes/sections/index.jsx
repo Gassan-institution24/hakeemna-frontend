@@ -57,9 +57,6 @@ export default function Router() {
     // Main routes
     ...mainRoutes,
 
-    // Components routes
-    // ...componentsRoutes,
-
     // user routes
     ...userRoutes,
 

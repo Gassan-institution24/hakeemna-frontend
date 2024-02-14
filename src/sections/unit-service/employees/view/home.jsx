@@ -22,7 +22,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useTranslate } from 'src/locales';
 import { useGetUSEmployees } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
@@ -75,6 +75,8 @@ export default function EmployeesTableView() {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const checkAcl = useAclGuard();
 
   const { STATUS_OPTIONS } = StatusOptions();
   /// edit
@@ -304,7 +306,7 @@ export default function EmployeesTableView() {
             { name: t('employees') }, /// edit
           ]}
           action={
-            ACLGuard({ category: 'unit_service', subcategory: 'employees', acl: 'create' }) && (
+            checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.employees.new} /// edit
