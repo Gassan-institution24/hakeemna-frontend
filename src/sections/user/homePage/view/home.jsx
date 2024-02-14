@@ -147,7 +147,7 @@ export default function OverviewAppView() {
           </Box>
         </Grid>
       </Grid>
-      {user?.patient?.identification_num === oldData && user?.role === 'patient' ? (
+      {user?.patient?.identification_num === oldData &&user?.patient?.is_onboarded === false && user?.role === 'patient' ? (
         <Dialog open={dialog.value} onClose={dialog.onTrue}>
           <DialogTitle>
             {curLangAr

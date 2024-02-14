@@ -2,6 +2,8 @@ import isEqual from 'lodash/isEqual';
 import orderBy from 'lodash/orderBy';
 import { useState, useCallback } from 'react';
 
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 
@@ -11,25 +13,27 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
+import { useTranslate} from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetCities,
   useGetCountries,
-  useGetUnitservices,
   useGetInsuranceCos,
+  useGetUnitservices,
   useGetPaymentMethods,
   useGetAppointmentTypes,
   useGetAvailableAppointments,
 } from 'src/api';
 
+import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 
-import AppointmentList from '../super-admin/patients/history/book-appointment/appointment-list-user';
-import AppointmentSort from '../super-admin/patients/history/book-appointment/appointment-sort-user';
-import AppointmentSearch from '../super-admin/patients/history/book-appointment/appointment-search-user';
-import AppointmentFilters from '../super-admin/patients/history/book-appointment/appointment-filters-user';
-import AppointmentFiltersResult from '../super-admin/patients/history/book-appointment/appointment-filters-result-user';
+import AppointmentSort from './appointments/appointment-sort-user';
+import AppointmentSearch from './appointments/appointment-search-user';
+import AppointmentFilters from './appointments/appointment-filters-user';
+import OnlineAppointmentList from './appointments/goToappointment-online';
+import ClinicAppointmentList from './appointments/goToappointment-clinic';
+import AppointmentFiltersResult from './appointments/appointment-filters-result-user';
 
 // ----------------------------------------------------------------------
 
@@ -47,19 +51,16 @@ const defaultFilters = {
 
 export default function AppointmentBooking() {
   const settings = useSettingsContext();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
   const openFilters = useBoolean();
   const { user } = useAuthContext();
   const [sortBy, setSortBy] = useState('latest');
-  const [Time, setTime] = useState();
   const [search, setSearch] = useState({
     query: '',
     results: [],
   });
 
-  const { appointmentsData, refetch } = useGetAvailableAppointments('65c9b4be0d07c237284b06f4');
+  const { appointmentsData, refetch } = useGetAvailableAppointments();
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
@@ -68,8 +69,7 @@ export default function AppointmentBooking() {
   const { paymentMethodsData } = useGetPaymentMethods();
 
   const [filters, setFilters] = useState(defaultFilters);
-  // console.log(unitservicesData, 'sdsdsdsds');
-  // console.log(appointmentsData, 'dsdsdsds');
+
   const sortOptions = [
     { value: 'latest', label: t('Latest') },
     { value: 'oldest', label: t('Oldest') },
@@ -81,7 +81,6 @@ export default function AppointmentBooking() {
       ? filters.Offer_start_date.getTime() > filters.Offer_end_date.getTime()
       : false;
   const dataFiltered = applyFilter({
-    // inputData: appointmentsData,
     inputData: unitservicesData,
     filters,
     sortBy,
@@ -90,7 +89,6 @@ export default function AppointmentBooking() {
 
   const canReset = !isEqual(defaultFilters, filters);
 
-  const notFound = !dataFiltered.length;
 
   const handleFilters = useCallback((name, value) => {
     setFilters((prevState) => ({
@@ -201,11 +199,23 @@ export default function AppointmentBooking() {
       results={dataFiltered.length}
     />
   );
-  const handleButtonClick = (appointment) => {
-    setTime(appointment);
-  };
 
-  // console.log(Time);
+  const TABS = [
+    {
+      value: 'inclinic',
+      label: t('In clinic'),
+      icon: <Iconify icon="fa6-regular:hospital" width={24} />,
+    },
+    {
+      value: 'online',
+      label: t('Online'),
+      icon: <Iconify icon="streamline:online-medical-call-service" width={24} />,
+    },
+  ];
+  const [currentTab, setCurrentTab] = useState('inclinic');
+  const handleChangeTab = useCallback((event, newValue) => {
+    setCurrentTab(newValue);
+  }, []);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -219,8 +229,26 @@ export default function AppointmentBooking() {
 
         {canReset && renderResults}
       </Stack>
-
-      <AppointmentList patientData={user?.patient?._id} refetch={refetch} Units={dataFiltered} />
+      <Container>
+      <Tabs
+        value={currentTab}
+        onChange={handleChangeTab}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      >
+        {TABS.map((tab) => (
+          <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
+        ))}
+      </Tabs>
+      {currentTab === 'online' && <OnlineAppointmentList patientData={user?.patient?._id} refetch={refetch}/>}
+      {currentTab === 'inclinic' && <ClinicAppointmentList patientData={user?.patient?._id} refetch={refetch}/>}
+    </Container>
+      
+      
+      
+   
+   
     </Container>
   );
 }

@@ -92,7 +92,7 @@ export default function WatingRoom() {
     setSelectedValue(item);
   };
 
-  const { fullWidth } = useState(true);
+  const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
   const onSubmit = async (dataSumbmit) => {
     try {
@@ -141,7 +141,7 @@ export default function WatingRoom() {
               sx={{ width: '60px', height: '60px', border: 1, borderRadius: '50px' }}
             />
             <Typography sx={{ color: 'black' }}>
-              {curLangAr ? `${data?.name_arabic}` : `${data.name_english}`}{' '}
+              {curLangAr ? `${data?.name_arabic}` : `${data?.name_english}`}{' '}
             </Typography>
             <Rating
               size="large"
@@ -171,16 +171,24 @@ export default function WatingRoom() {
                     </div>
                   ))}
                 </div>
-                <FormControl sx={{ my: 3, minWidth: '100%' }}>
+                <FormControl sx={{ my: 5, minWidth: '100%' }}>
                   <InputLabel htmlFor="max-width">Other</InputLabel>
                   <Input id="max-width" {...register('Body')} />
                 </FormControl>
               </Box>
             </DialogContent>
           ) : (
-            <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
-              {t('We hope that everything was to your satisfaction')}
-            </Typography>
+            <DialogContent>
+              <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
+                {t('We hope that everything was to your satisfaction')}
+              </Typography>
+              <Box component="form" noValidate>
+                <FormControl sx={{ my: 3, minWidth: '100%' }}>
+                  <InputLabel htmlFor="max-width">Other</InputLabel>
+                  <Input id="max-width" {...register('Body')} />
+                </FormControl>
+              </Box>
+            </DialogContent>
           )}
 
           <DialogActions>
