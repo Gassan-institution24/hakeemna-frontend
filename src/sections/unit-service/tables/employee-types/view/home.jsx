@@ -22,9 +22,9 @@ import { RouterLink } from 'src/routes/components';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useGetUSEmployeeTypes } from 'src/api';
+import { useAuthContext } from 'src/auth/hooks';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
@@ -71,6 +71,8 @@ export default function EmployeeTypesTable() {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const checkAcl = useAclGuard();
 
   const { STATUS_OPTIONS } = StatusOptions();
 
@@ -283,7 +285,7 @@ export default function EmployeeTypesTable() {
             { name: t('employee types') },
           ]}
           action={
-            ACLGuard({ category: 'unit_service', subcategory: 'employee_type', acl: 'create' }) && (
+            checkAcl({ category: 'unit_service', subcategory: 'employee_type', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.tables.employeetypes.new}

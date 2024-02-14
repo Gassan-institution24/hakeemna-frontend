@@ -28,8 +28,8 @@ import axiosHandler from 'src/utils/axios-handler';
 import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useGetDepartmentActivities } from 'src/api';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -73,6 +73,8 @@ export default function ActivitesTableView({ departmentData }) {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const checkAcl = useAclGuard();
 
   const { user } = useAuthContext();
 
@@ -305,7 +307,7 @@ export default function ActivitesTableView({ departmentData }) {
           //   { name: t('activities') },
           // ]}
           action={
-            ACLGuard({ category: 'department', subcategory: 'activities', acl: 'create' }) && (
+            checkAcl({ category: 'department', subcategory: 'activities', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.departments.activities.new(departmentData._id)}
@@ -393,7 +395,7 @@ export default function ActivitesTableView({ departmentData }) {
                 )
               }
               action={
-                ACLGuard({ category: 'department', subcategory: 'activities', acl: 'update' }) && (
+                checkAcl({ category: 'department', subcategory: 'activities', acl: 'update' }) && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))

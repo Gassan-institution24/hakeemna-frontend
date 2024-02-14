@@ -25,10 +25,10 @@ import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
 import { socket } from 'src/socket';
+import { useTranslate } from 'src/locales';
 import { useGetUSDepartments } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
-import { useLocales, useTranslate } from 'src/locales';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -65,23 +65,16 @@ const defaultFilters = {
 
 export default function UnitServicesTableView() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
   const TABLE_HEAD = [
     /// to edit
     { id: 'code', label: t('code') },
     { id: 'sequence', label: t('sequence') },
     { id: 'name_english', label: t('name') },
     { id: 'status', label: t('status') },
-    // { id: 'Accounting', label: t('accounting') },
-    // // { id: 'Appointment Config', label: t('Appointment Configuration' },
-    // { id: 'Appointments', label: t('appointments') },
-    // { id: 'Activities', label: t('activities') },
-    // { id: 'Employees', label: t('employees') },
-    // { id: 'Quality Control', label: t('quality control') },
-    // { id: 'Rooms', label: t('rooms') },
-    // { id: 'Work Groups', label: t('work groups') },
     { id: '', width: 88 },
   ];
+
+  const checkAcl = useAclGuard();
 
   const { STATUS_OPTIONS } = StatusOptions();
 
@@ -305,7 +298,7 @@ export default function UnitServicesTableView() {
             { name: t('departments') }, /// edit
           ]}
           action={
-            ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'create' }) && (
+            checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.departments.new} /// edit

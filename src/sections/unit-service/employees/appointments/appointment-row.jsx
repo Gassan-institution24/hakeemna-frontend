@@ -17,7 +17,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDateTime } from 'src/utils/format-time';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
@@ -41,21 +41,17 @@ export default function AppointmentsTableRow({
   onDeleteRow,
 }) {
   const {
-    _id,
     code,
     appoint_number,
-    name_english,
+
     unit_service,
     work_group,
     work_shift,
     appointment_type,
-    payment_method,
-    date,
-    price,
-    currency,
+
     patient,
     start_time,
-    end_time,
+
     status,
     created_at,
     user_creation,
@@ -67,6 +63,8 @@ export default function AppointmentsTableRow({
   } = row;
 
   const { t } = useTranslate();
+
+  const checkAcl = useAclGuard();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -161,7 +159,7 @@ export default function AppointmentsTableRow({
         sx={{ width: 155 }}
       >
         {status === 'available' &&
-          ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+          checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
               sx={{ color: 'success.main' }}
               onClick={() => {
@@ -174,7 +172,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status !== 'canceled' &&
-          ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'delete' }) && (
+          checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'delete' }) && (
             <MenuItem
               onClick={() => {
                 onCancelRow();
@@ -187,7 +185,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status === 'canceled' &&
-          ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+          checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
               onClick={() => {
                 onUnCancelRow();
@@ -199,7 +197,7 @@ export default function AppointmentsTableRow({
               {t('uncancel')}
             </MenuItem>
           )}
-        {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+        {checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
           <MenuItem onClick={confirmDelayOne.onTrue}>
             <Iconify icon="mdi:timer-sync" />
             Delay
