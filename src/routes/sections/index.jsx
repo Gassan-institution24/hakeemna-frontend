@@ -7,10 +7,8 @@ import MainLayout from 'src/layouts/main';
 import { authRoutes } from './auth';
 import { userRoutes } from './user';
 import { HomePage, mainRoutes } from './main';
-// import { authDemoRoutes } from './auth-demo';
 import { dashboardRoutes } from './super-admin-dashboard';
 import { unitServiceDashboardRoutes } from './unit-service-dashboard';
-// import { componentsRoutes } from './components';
 import { unitServiceEmployeeDashboardRoutes } from './employee-dashboard';
 
 // ----------------------------------------------------------------------
@@ -51,13 +49,13 @@ export default function Router() {
     ...unitServiceDashboardRoutes,
 
     // unit service employee dashboard routes
-    // ...unitServiceEmployeeDashboardRoutes,
+    ...unitServiceEmployeeDashboardRoutes,
 
     // Main routes
-    // ...mainRoutes,
+    ...mainRoutes,
 
     // user routes
-    // ...userRoutes,
+    ...userRoutes,
 
     // No match 404
     // { path: '*', element: <Navigate to="/404" replace /> },
