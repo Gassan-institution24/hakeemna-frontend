@@ -117,7 +117,7 @@ const PaymentControlNewPage = lazy(() =>
 );
 // RECEIPTS
 const ReceiptsHomePage = lazy(() => import('src/pages/unit-service/accounting/reciepts/home'));
-const ReceiptsInfoPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/info'));
+// const ReceiptsInfoPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/info'));
 const ReceiptsEditPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/edit'));
 const ReceiptsNewPage = lazy(() => import('src/pages/unit-service/accounting/reciepts/new'));
 // INSURANCE
@@ -175,7 +175,7 @@ const ChatPage = lazy(() => import('src/pages/dashboard/chat'));
 
 export const unitServiceDashboardRoutes = [
   {
-    path: 'unit',
+    path: 'dashboard/us',
     element: (
       <AuthGuard>
         <DashboardLayout>

@@ -22,7 +22,7 @@ import axiosHandler from 'src/utils/axios-handler';
 
 import { socket } from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 import { StatusOptions } from 'src/assets/data/status-options';
 import { useGetUnitservice, useGetInsuranceCos } from 'src/api';
@@ -61,6 +61,8 @@ export default function UnitServicesInsuranceView() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const checkAcl = useAclGuard();
 
   const TABLE_HEAD = [
     /// to edit
@@ -227,7 +229,7 @@ export default function UnitServicesInsuranceView() {
             { name: t('insurance') }, /// edit
           ]}
           action={
-            ACLGuard({ category: 'unit_service', subcategory: 'insurance', acl: 'create' }) && (
+            checkAcl({ category: 'unit_service', subcategory: 'insurance', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 onClick={popover.onOpen}

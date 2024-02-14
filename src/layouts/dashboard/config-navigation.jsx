@@ -5,7 +5,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -20,6 +20,7 @@ export function useNavData() {
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslate();
   const { user } = useAuthContext();
+  const checkacl = useAclGuard();
 
   const handleLogout = useCallback(async () => {
     try {
@@ -155,53 +156,53 @@ export function useNavData() {
     ];
     const unitServiceItems = [
       {
-        show: ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'read' }),
+        show: checkacl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }),
         title: t('departments'),
         path: paths.unitservice.departments.root,
         icon: <Iconify icon="uis:web-section-alt" />,
       },
       {
-        show: ACLGuard({ category: 'unit_service', subcategory: 'employees', acl: 'read' }),
+        show: checkacl({ category: 'unit_service', subcategory: 'employees', acl: 'read' }),
         title: t('employees'),
         path: paths.unitservice.employees.root,
         icon: <Iconify icon="fluent:people-20-filled" />,
       },
       // {
-      // show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+      // show: checkacl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
       // title: t('access control'),
       //   path: paths.unitservice.acl,
       //   icon: <Iconify icon="mdi:account-secure" />,
       // },
       {
-        show: ACLGuard({ category: 'unit_service', subcategory: 'activities', acl: 'read' }),
+        show: checkacl({ category: 'unit_service', subcategory: 'activities', acl: 'read' }),
         title: t('activities'),
         path: paths.unitservice.activities.root,
         icon: <Iconify icon="material-symbols:volunteer-activism" />,
       },
       {
-        show: ACLGuard({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
+        show: checkacl({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
         title: t('appointments'),
         path: paths.unitservice.appointments.root,
         icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
       },
       {
-        show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+        show: checkacl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
         title: t('accounting'),
         path: paths.unitservice.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
         children: [
           {
-            show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            show: checkacl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
             title: t('economic movements'),
             path: paths.unitservice.accounting.economicmovements.root,
           },
           {
-            show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            show: checkacl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
             title: t('payment control'),
             path: paths.unitservice.accounting.paymentcontrol.root,
           },
           {
-            show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            show: checkacl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
             title: t('reciepts'),
             path: paths.unitservice.accounting.reciepts.root,
           },
@@ -209,68 +210,68 @@ export function useNavData() {
       },
       {
         show:
-          ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }) ||
-          ACLGuard({ category: 'unit_service', subcategory: 'employee_type', acl: 'read' }),
+          checkacl({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }) ||
+          checkacl({ category: 'unit_service', subcategory: 'employee_type', acl: 'read' }),
         title: t('management tables'),
         path: paths.unitservice.tables.root,
         icon: <Iconify icon="icon-park-twotone:data" />,
         children: [
-          // show: ACLGuard({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }), {
+          // show: checkacl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }), {
           //   title: t('appointment types'), path: paths.unitservice.tables.appointypes.root },
           {
-            show: ACLGuard({ category: 'unit_service', subcategory: 'employee_type', acl: 'read' }),
+            show: checkacl({ category: 'unit_service', subcategory: 'employee_type', acl: 'read' }),
             title: t('employee types'),
             path: paths.unitservice.tables.employeetypes.root,
           },
           {
-            show: ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }),
+            show: checkacl({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }),
             title: t('work shifts'),
             path: paths.unitservice.tables.workshifts.root,
           },
           {
-            show: ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }),
+            show: checkacl({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }),
             title: t('work groups'),
             path: paths.unitservice.tables.workgroups.root,
           },
           {
-            show: ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }),
+            show: checkacl({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }),
             title: t('rooms'),
             path: paths.unitservice.tables.rooms.root,
           },
         ],
       },
       {
-        show: ACLGuard({ category: 'unit_service', subcategory: 'insurance', acl: 'read' }),
+        show: checkacl({ category: 'unit_service', subcategory: 'insurance', acl: 'read' }),
         title: t('insurance'),
         path: paths.unitservice.insurance.root,
         icon: <Iconify icon="ic:baseline-security" />,
       },
       {
-        show: ACLGuard({ category: 'unit_service', subcategory: 'offers', acl: 'read' }),
+        show: checkacl({ category: 'unit_service', subcategory: 'offers', acl: 'read' }),
         title: t('suppliers offers'),
         path: paths.unitservice.offers.root,
         icon: <Iconify icon="eos-icons:activate-subscriptions" />,
       },
       {
-        show: ACLGuard({ category: 'unit_service', subcategory: 'communication', acl: 'read' }),
+        show: checkacl({ category: 'unit_service', subcategory: 'communication', acl: 'read' }),
         title: t('communication'),
         path: paths.unitservice.communication.root,
         icon: <Iconify icon="solar:call-chat-bold" />,
       },
       {
-        show: ACLGuard({ category: 'unit_service', subcategory: 'quality_control', acl: 'read' }),
+        show: checkacl({ category: 'unit_service', subcategory: 'quality_control', acl: 'read' }),
         title: t('quality control'),
         path: paths.unitservice.qualityControl.root,
         icon: <Iconify icon="healthicons:world-care" />,
       },
       {
-        show: ACLGuard({ category: 'unit_service', subcategory: 'subscriptions', acl: 'read' }),
+        show: checkacl({ category: 'unit_service', subcategory: 'subscriptions', acl: 'read' }),
         title: t('subscriptions'),
         path: paths.unitservice.subscriptions.root,
         icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
       },
       {
-        show: ACLGuard({
+        show: checkacl({
           category: 'unit_service',
           subcategory: 'unit_service_info',
           acl: 'update',
@@ -280,7 +281,7 @@ export function useNavData() {
         icon: <Iconify icon="fa-solid:clinic-medical" />,
       },
       {
-        show: ACLGuard({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
+        show: checkacl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
         title: t('old patient data'),
         path: paths.unitservice.oldPatient,
         icon: <Iconify icon="entypo:upload" />,
@@ -294,31 +295,31 @@ export function useNavData() {
     ];
     const employeeItems = [
       {
-        show: ACLGuard({ category: 'employee', subcategory: 'entrance_management', acl: 'read' }),
+        show: checkacl({ category: 'employee', subcategory: 'entrance_management', acl: 'read' }),
         title: t('entrance management'),
         path: paths.employee.entrancemanagement.root,
         icon: <Iconify icon="oi:timer" />,
       },
       {
-        show: ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'read' }),
+        show: checkacl({ category: 'employee', subcategory: 'appointments', acl: 'read' }),
         title: t('appointments'),
         path: paths.employee.appointments.root,
         icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
       },
       {
-        show: ACLGuard({ category: 'employee', subcategory: 'appointment_configs', acl: 'read' }),
+        show: checkacl({ category: 'employee', subcategory: 'appointment_configs', acl: 'read' }),
         title: t('appointment configuration'),
         path: paths.employee.appointmentconfiguration.root,
         icon: <Iconify icon="fluent:content-settings-16-regular" />,
       },
       {
-        show: ACLGuard({ category: 'employee', subcategory: 'accounting', acl: 'read' }),
+        show: checkacl({ category: 'employee', subcategory: 'accounting', acl: 'read' }),
         title: t('accounting'),
         path: paths.employee.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
       },
       {
-        show: ACLGuard({ category: 'employee', subcategory: 'communication', acl: 'read' }),
+        show: checkacl({ category: 'employee', subcategory: 'communication', acl: 'read' }),
         title: t('communication'),
         path: paths.employee.communication.root,
         icon: <Iconify icon="solar:call-chat-bold" />,
@@ -330,7 +331,7 @@ export function useNavData() {
         icon: <Iconify icon="healthicons:world-care" />,
       },
       {
-        show: ACLGuard({ category: 'employee', subcategory: 'info', acl: 'read' }),
+        show: checkacl({ category: 'employee', subcategory: 'info', acl: 'read' }),
         title: t('profile'),
         path: paths.employee.profile.root,
         icon: <Iconify icon="iconamoon:profile-bold" />,
@@ -426,7 +427,7 @@ export function useNavData() {
       return [...unitServicesDashboars, ...employeeDashboard];
     }
     return [...userItems];
-  }, [t, user, handleLogout, router]);
+  }, [t, user, handleLogout, router, checkacl]);
 
   return data;
 }

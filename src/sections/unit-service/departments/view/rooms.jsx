@@ -26,10 +26,10 @@ import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
 import { socket } from 'src/socket';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useGetDepartmentRooms } from 'src/api';
-import { useLocales, useTranslate } from 'src/locales';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -65,8 +65,6 @@ const defaultFilters = {
 
 export default function RoomsTableView({ departmentData }) {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
@@ -75,6 +73,8 @@ export default function RoomsTableView({ departmentData }) {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const checkAcl = useAclGuard();
 
   const { user } = useAuthContext();
 
@@ -291,7 +291,7 @@ export default function RoomsTableView({ departmentData }) {
           //   { name: t('department rooms') },
           // ]}
           action={
-            ACLGuard({ category: 'department', subcategory: 'rooms', acl: 'create' }) && (
+            checkAcl({ category: 'department', subcategory: 'rooms', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.departments.rooms.new(departmentData._id)}
@@ -379,7 +379,7 @@ export default function RoomsTableView({ departmentData }) {
                 )
               }
               action={
-                ACLGuard({ category: 'department', subcategory: 'rooms', acl: 'update' }) && (
+                checkAcl({ category: 'department', subcategory: 'rooms', acl: 'update' }) && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -400,7 +400,7 @@ export default function RoomsTableView({ departmentData }) {
                 )
               }
               color={
-                ACLGuard({ category: 'department', subcategory: 'rooms', acl: 'update' }) &&
+                checkAcl({ category: 'department', subcategory: 'rooms', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')

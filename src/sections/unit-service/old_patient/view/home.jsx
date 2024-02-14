@@ -3,9 +3,9 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeOldPatient } from 'src/api';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -21,6 +21,8 @@ export default function TableCreateView() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
   const { oldPatients, refetch, loading } = useGetEmployeeOldPatient(user?.employee?._id);
+
+  const checkAcl = useAclGuard();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -38,11 +40,11 @@ export default function TableCreateView() {
         }}
       />
       {loading && <LoadingScreen />}
-      {ACLGuard({ category: 'unit_service', subcategory: 'old_patient', acl: 'create' }) && (
+      {checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'create' }) && (
         <UploadOldPatient refetch={refetch} />
       )}
       {!loading &&
-        ACLGuard({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && (
+        checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }) && (
           <UploadedOldPatients oldPatients={oldPatients} />
         )}
     </Container>
