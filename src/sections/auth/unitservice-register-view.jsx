@@ -50,8 +50,6 @@ export default function JwtRegisterView() {
   const curLangAr = currentLang.value === 'ar';
   const steps = [t('service unit'), t('admin'), t('account')];
 
-  const clickPopover = usePopover(true);
-
   const { register } = useAuthContext();
 
   const router = useRouter();
