@@ -202,6 +202,7 @@ export default function NotificationItem({ notification, handleClick }) {
 
   return (
     <ListItemButton
+      key={notification._id}
       disableRipple
       onClick={() => handleClick(notification._id, notification.link)}
       sx={{

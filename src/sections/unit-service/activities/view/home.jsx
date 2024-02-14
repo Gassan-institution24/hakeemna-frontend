@@ -25,7 +25,7 @@ import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useGetUSActivities } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
@@ -72,6 +72,8 @@ export default function ActivitesTableView() {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const checkAcl = useAclGuard();
 
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -291,7 +293,7 @@ export default function ActivitesTableView() {
             { name: t('activities') },
           ]}
           action={
-            ACLGuard({ category: 'unit_service', subcategory: 'activities', acl: 'create' }) && (
+            checkAcl({ category: 'unit_service', subcategory: 'activities', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.activities.new}
@@ -380,7 +382,7 @@ export default function ActivitesTableView() {
                 )
               }
               action={
-                ACLGuard({
+                checkAcl({
                   category: 'unit_service',
                   subcategory: 'activities',
                   acl: 'update',

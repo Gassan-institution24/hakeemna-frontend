@@ -38,9 +38,9 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
           },
         }}
       >
-        {arr?.map((item) =>
+        {arr?.map((item, index) =>
           item === 'active' || item === 'inactive' ? (
-            <Box sx={{ flex: 1 }}>
+            <Box key={index} sx={{ flex: 1 }}>
               <Label
                 variant="soft"
                 color={
@@ -53,7 +53,9 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
               </Label>
             </Box>
           ) : (
-            <Box sx={{ flex: 1 }}>{item}</Box>
+            <Box key={index} sx={{ flex: 1 }}>
+              {item}
+            </Box>
           )
         )}
       </Stack>
@@ -81,7 +83,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
       </TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton
+        {/* <IconButton
           color={collapse.value ? 'inherit' : 'default'}
           onClick={collapse.onToggle}
           sx={{
@@ -91,7 +93,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
           }}
         >
           <Iconify icon="eva:arrow-ios-downward-fill" />
-        </IconButton>
+        </IconButton> */}
 
         <IconButton onClick={onViewRow} color={popover.open ? 'inherit' : 'default'}>
           <Iconify icon="majesticons:open" />
@@ -643,7 +645,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
     <>
       {renderPrimary}
 
-      {renderSecondary}
+      {/* {renderSecondary} */}
     </>
   );
 }

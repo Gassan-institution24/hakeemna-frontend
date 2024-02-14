@@ -24,8 +24,8 @@ import axiosHandler from 'src/utils/axios-handler';
 
 import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -71,6 +71,8 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     { id: '' },
   ];
 
+  const checkAcl = useAclGuard();
+
   const { user } = useAuthContext();
 
   const theme = useTheme();
@@ -81,7 +83,6 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
-  const addModal = useBoolean();
   const confirm = useBoolean();
   const confirmUnCancel = useBoolean();
 
@@ -339,7 +340,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                 )
               }
               action={
-                ACLGuard({
+                checkAcl({
                   category: 'employee',
                   subcategory: 'appointment_configs',
                   acl: 'update',
@@ -364,7 +365,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                 )
               }
               color={
-                ACLGuard({
+                checkAcl({
                   category: 'employee',
                   subcategory: 'appointment_configs',
                   acl: 'update',

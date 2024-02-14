@@ -18,7 +18,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import { fDate } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 
@@ -28,8 +28,7 @@ export default function Prescriptions() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const { user } = useAuthContext();
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+
   function calculateAge(birthDate) {
     const today = new Date();
     const dob = new Date(birthDate);

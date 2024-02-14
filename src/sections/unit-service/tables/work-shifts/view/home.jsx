@@ -25,7 +25,7 @@ import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useGetUSWorkShifts } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
@@ -62,6 +62,7 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function WorkGroupsTableView() {
+  const checkAcl = useAclGuard();
   const { t } = useTranslate();
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
@@ -283,7 +284,7 @@ export default function WorkGroupsTableView() {
             { name: t('work shifts') },
           ]}
           action={
-            ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'create' }) && (
+            checkAcl({ category: 'unit_service', subcategory: 'work_shift', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.tables.workshifts.new}
@@ -371,7 +372,7 @@ export default function WorkGroupsTableView() {
                 )
               }
               action={
-                ACLGuard({
+                checkAcl({
                   category: 'unit_service',
                   subcategory: 'work_shift',
                   acl: 'update',
@@ -396,7 +397,7 @@ export default function WorkGroupsTableView() {
                 )
               }
               color={
-                ACLGuard({ category: 'unit_service', subcategory: 'work_shift', acl: 'update' }) &&
+                checkAcl({ category: 'unit_service', subcategory: 'work_shift', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')

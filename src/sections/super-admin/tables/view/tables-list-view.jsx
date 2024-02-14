@@ -45,7 +45,7 @@ const defaultFilters = {
 };
 
 export default function TablesListView() {
-  const table = useTable({ defaultOrderBy: 'orderNumber' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   const settings = useSettingsContext();
 
@@ -69,41 +69,39 @@ export default function TablesListView() {
       ? filters.startDate.getTime() > filters.endDate.getTime()
       : false;
   const dataFiltered = applyFilter({
-    inputData: tableData.filter((data) =>
-      [
-        'cities', //
-        'surgeries', //
-        'diseases', //
-        'insurance_companies', //
-        'unit_service_types',
-        'activities',
-        'employee_types',
-        'payment_methods',
-        'stakeholder_types',
-        'work_shifts',
-        'service_types',
-        'measurement_types',
-        'hospital_list',
-        'deduction_config',
-        'rooms',
-        'specialities', //
-        'sub_specialities', //
-        'countries', //
-        'added_value_tax_GD',
-        'departments', //
-        'medicines', //
-        'unit_services', //
-        'appointment_types', //
-        'free_subscriptions', //
-        'symptoms', //
-        'patients',
-        'diets', //
-        'currencies', //
-        'analyses', //
-        'medical_categories', //
-        'medicines_families', //
-      ].includes(data.tableName)
-    ),
+    inputData: [
+      { tableName: 'cities', documents: [] }, //
+      { tableName: 'surgeries', documents: [] }, //
+      { tableName: 'diseases', documents: [] }, //
+      { tableName: 'insurance_companies', documents: [] }, //
+      { tableName: 'unit_service_types', documents: [] },
+      { tableName: 'activities', documents: [] },
+      { tableName: 'employee_types', documents: [] },
+      { tableName: 'payment_methods', documents: [] },
+      { tableName: 'stakeholder_types', documents: [] },
+      { tableName: 'work_shifts', documents: [] },
+      { tableName: 'service_types', documents: [] },
+      { tableName: 'measurement_types', documents: [] },
+      { tableName: 'hospital_list', documents: [] },
+      { tableName: 'deduction_config', documents: [] },
+      { tableName: 'rooms', documents: [] },
+      { tableName: 'specialities', documents: [] }, //
+      { tableName: 'sub_specialities', documents: [] }, //
+      { tableName: 'countries', documents: [] }, //
+      { tableName: 'added_value_tax_GD', documents: [] },
+      { tableName: 'departments', documents: [] }, //
+      { tableName: 'medicines', documents: [] }, //
+      { tableName: 'unit_services', documents: [] }, //
+      { tableName: 'appointment_types', documents: [] }, //
+      { tableName: 'free_subscriptions', documents: [] }, //
+      { tableName: 'symptoms', documents: [] }, //
+      { tableName: 'patients', documents: [] },
+      { tableName: 'diets', documents: [] }, //
+      { tableName: 'currencies', documents: [] }, //
+      { tableName: 'analyses', documents: [] }, //
+      { tableName: 'medical_categories', documents: [] }, //
+      { tableName: 'medicines_families', documents: [] }, //
+    ],
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -194,7 +192,6 @@ export default function TablesListView() {
                   rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  onSelectAllRows={false}
                 />
                 <TableBody>
                   {dataFiltered

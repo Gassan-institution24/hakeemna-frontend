@@ -1,5 +1,6 @@
 import { m } from 'framer-motion';
 import PropTypes from 'prop-types';
+import { useCallback } from 'react';
 
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -11,7 +12,18 @@ import { varBounce, MotionContainer } from 'src/components/animate';
 import { useAuthContext } from '../hooks';
 
 // ----------------------------------------------------------------------
-
+export function useAclGuard() {
+  const { user } = useAuthContext();
+  const checkAcl = useCallback(
+    (category, subcategory, acl) => {
+      const currentACL =
+        user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.acl;
+      return typeof acl === 'undefined' || !currentACL?.[category]?.[subcategory]?.includes(acl);
+    },
+    [user]
+  );
+  return checkAcl;
+}
 export default function ACLGuard({ hasContent, category, subcategory, acl, children, sx }) {
   const { user } = useAuthContext();
 

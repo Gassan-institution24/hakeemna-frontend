@@ -7,11 +7,9 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fDateTime } from 'src/utils/format-time';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
@@ -48,10 +46,10 @@ export default function TableDetailsRow({
 
   const { t } = useTranslate();
 
+  const checkAcl = useAclGuard();
+
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  const confirm = useBoolean();
 
   const popover = usePopover();
   const DDL = usePopover();
@@ -118,7 +116,7 @@ export default function TableDetailsRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'delete' }) && (
+          ? checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'delete' }) && (
               <MenuItem
                 onClick={() => {
                   onInactivate();
@@ -130,7 +128,7 @@ export default function TableDetailsRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
+          : checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
               <MenuItem
                 onClick={() => {
                   onActivate();
@@ -143,7 +141,7 @@ export default function TableDetailsRow({
               </MenuItem>
             )}
 
-        {ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
+        {checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
           <MenuItem
             onClick={() => {
               onEditRow();

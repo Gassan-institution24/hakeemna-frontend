@@ -210,7 +210,6 @@ export default function AnalysesTableView() {
                 rowCount={dataFiltered.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                onSelectAllRows={false}
               />
 
               <TableBody>

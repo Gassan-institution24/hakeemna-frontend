@@ -38,7 +38,7 @@ export default function AppFeatured({ list, ...other }) {
     <Card {...other}>
       <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
         {IMGES?.map((app, index) => (
-          <CarouselItem key={app.id} item={app} active={index === carousel.currentIndex} />
+          <CarouselItem key={index} item={app} active={index === carousel.currentIndex} />
         ))}
       </Carousel>
 
@@ -131,5 +131,5 @@ function CarouselItem({ item, active }) {
 
 CarouselItem.propTypes = {
   active: PropTypes.bool,
-  item: PropTypes.object,
+  item: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };

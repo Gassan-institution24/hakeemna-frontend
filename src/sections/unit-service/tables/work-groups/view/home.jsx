@@ -28,7 +28,7 @@ import { socket } from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useGetUSWorkGroups } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -71,6 +71,8 @@ export default function WorkGroupsTableView() {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const checkAcl = useAclGuard();
 
   const { user } = useAuthContext();
 
@@ -285,7 +287,7 @@ export default function WorkGroupsTableView() {
             { name: t('work groups') },
           ]}
           action={
-            ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'create' }) && (
+            checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.tables.workgroups.new}
@@ -373,7 +375,7 @@ export default function WorkGroupsTableView() {
                 )
               }
               action={
-                ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
+                checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -394,7 +396,7 @@ export default function WorkGroupsTableView() {
                 )
               }
               color={
-                ACLGuard({ category: 'department', subcategory: 'work_groups', acl: 'update' }) &&
+                checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')
