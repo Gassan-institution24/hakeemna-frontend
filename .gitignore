@@ -14,7 +14,7 @@ coverage
 _static
 out
 dist
-# build
+build
 
 # environment variables
 .env
