@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState, useEffect, useCallback } from 'react';
+import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { MenuItem, Typography } from '@mui/material';
+import { MenuItem, Tooltip, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import axios, { endpoints } from 'src/utils/axios';
@@ -30,22 +31,18 @@ import FormProvider, {
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral({ employeeData, refetch }) {
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const [cities, setCities] = useState([]);
-  const [companyLogo, setProfilePic] = useState();
+  const [phone, setPhone] = useState();
+  const [alterPhone, setAlterPhone] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const { countriesData } = useGetCountries();
-  const { tableData } = useGetCities();
   const { employeeTypesData } = useGetEmployeeTypes();
   const { specialtiesData } = useGetSpecialties();
 
   const { user } = useAuthContext();
 
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   // console.log('employeeData', employeeData);
 
@@ -72,20 +69,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
     stamp: Yup.mixed().nullable(),
     picture: Yup.mixed().nullable(),
   });
-
-  const handleCountryChange = (event) => {
-    const selectedCountryId = event.target.value;
-    methods.setValue('country', selectedCountryId, { shouldValidate: true });
-    setSelectedCountry(selectedCountryId);
-  };
-
-  useEffect(() => {
-    setCities(
-      selectedCountry
-        ? tableData.filter((data) => data?.country?._id === selectedCountry)
-        : tableData
-    );
-  }, [tableData, selectedCountry]);
 
   const defaultValues = {
     employee_type: employeeData?.employee_type?._id || null,
@@ -128,7 +111,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const handleDrop = useCallback(
     (name, acceptedFiles) => {
       const file = acceptedFiles[0];
-      setProfilePic(file);
       const newFile = Object.assign(file, {
         preview: URL.createObjectURL(file),
       });
@@ -227,13 +209,19 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 name="email"
                 label={`${t('email')} :`}
               />
-              <RHFTextField
-                lang="ar"
-                type="number"
-                variant="filled"
-                name="phone"
-                label={`${t('phone')} :`}
-              />
+              <Tooltip placement="top" title="Phone number of service unit">
+                <MuiTelInput
+                  forceCallingCode
+                  variant="filled"
+                  label={`${t('phone')}* : `}
+                  value={phone}
+                  onChange={(newPhone) => {
+                    matchIsValidTel(newPhone);
+                    setPhone(newPhone);
+                    methods.setValue('phone', newPhone);
+                  }}
+                />
+              </Tooltip>
               <Box
                 rowGap={3}
                 columnGap={2}
@@ -344,12 +332,18 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 ))}
               </RHFSelect>
               <RHFTextField lang="ar" type="number" name="tax_num" label={t('tax number')} />
-              <RHFTextField
-                lang="ar"
-                type="number"
-                name="mobile_num"
-                label={t('alternative mobile number')}
-              />
+              <Tooltip placement="top" title="Phone number of service unit">
+                <MuiTelInput
+                  forceCallingCode
+                  label={t('alternative mobile number')}
+                  value={alterPhone}
+                  onChange={(newPhone) => {
+                    matchIsValidTel(newPhone);
+                    setAlterPhone(newPhone);
+                    methods.setValue('mobile_num', newPhone);
+                  }}
+                />
+              </Tooltip>
               <RHFSelect
                 label={`${t('specialty')} *`}
                 fullWidth

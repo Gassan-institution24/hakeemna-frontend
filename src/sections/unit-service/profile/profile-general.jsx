@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState, useEffect, useCallback } from 'react';
+import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { MenuItem, Typography } from '@mui/material';
+import { MenuItem, Tooltip, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
@@ -36,6 +37,8 @@ export default function AccountGeneral({ unitServiceData }) {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [cities, setCities] = useState([]);
   const [companyLogo, setCompanyLog] = useState();
+  const [phone, setPhone] = useState();
+  const [alterPhone, setAlterPhone] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -62,7 +65,7 @@ export default function AccountGeneral({ unitServiceData }) {
     city: Yup.string().required('City is required.'),
     US_type: Yup.string().required('Unit service type is required.'),
     email: Yup.string().required('Email is required.'),
-    sector_type: Yup.string().required('Sector type is required.'),
+    sector_type: Yup.string(),
     speciality: Yup.string(),
     identification_num: Yup.string().required('ID number is required.'),
     address: Yup.string(),
@@ -112,13 +115,10 @@ export default function AccountGeneral({ unitServiceData }) {
     defaultValues,
   });
   const {
-    getValues,
     setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-
-  const values = getValues();
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -222,34 +222,47 @@ export default function AccountGeneral({ unitServiceData }) {
                 disabled
                 variant="filled"
                 name="identification_num"
-                label={`${t('ID number')} :`}
+                label={`${t('ID number')}* :`}
               />
               <RHFTextField
                 lang="ar"
                 variant="filled"
                 name="name_english"
-                label={`${t('name')} :`}
+                label={`${t('name')}* :`}
               />
               <RHFTextField
                 lang="ar"
                 variant="filled"
                 name="name_arabic"
-                label={`${t('name arabic')} :`}
+                label={`${t('name arabic')}* :`}
               />
               <RHFTextField
                 lang="ar"
                 type="email"
                 variant="filled"
                 name="email"
-                label={`${t('email')} :`}
+                label={`${t('email')}* :`}
               />
-              <RHFTextField
+              <Tooltip placement="top" title="Phone number of service unit">
+                <MuiTelInput
+                  forceCallingCode
+                  variant="filled"
+                  label={`${t('phone')}* : `}
+                  value={phone}
+                  onChange={(newPhone) => {
+                    matchIsValidTel(newPhone);
+                    setPhone(newPhone);
+                    methods.setValue('phone', newPhone);
+                  }}
+                />
+              </Tooltip>
+              {/* <RHFTextField
                 lang="ar"
                 type="number"
                 variant="filled"
                 name="phone"
                 label={`${t('phone')} :`}
-              />
+              /> */}
             </Box>
           </Card>
         </Grid>
@@ -265,7 +278,7 @@ export default function AccountGeneral({ unitServiceData }) {
               }}
             >
               <RHFSelect
-                label={t('country')}
+                label={`${t('country')} *`}
                 fullWidth
                 name="country"
                 InputLabelProps={{ shrink: true }}
@@ -280,7 +293,7 @@ export default function AccountGeneral({ unitServiceData }) {
               </RHFSelect>
 
               <RHFSelect
-                label={t('city')}
+                label={`${t('city')} *`}
                 fullWidth
                 name="city"
                 InputLabelProps={{ shrink: true }}
@@ -294,7 +307,7 @@ export default function AccountGeneral({ unitServiceData }) {
               </RHFSelect>
 
               <RHFSelect
-                label={t('unit service type')}
+                label={`${t('unit service type')} *`}
                 fullWidth
                 name="US_type"
                 InputLabelProps={{ shrink: true }}
@@ -332,12 +345,18 @@ export default function AccountGeneral({ unitServiceData }) {
                 <MenuItem value="charity">{t('Charity')}</MenuItem>
               </RHFSelect>
               <RHFTextField lang="ar" name="web_page" label={t('webpage')} />
-              <RHFTextField
-                lang="ar"
-                type="number"
-                name="mobile_num"
-                label={t('alternative mobile number')}
-              />
+              <Tooltip placement="top" title="Phone number of service unit">
+                <MuiTelInput
+                  forceCallingCode
+                  label={t('alternative mobile number')}
+                  value={alterPhone}
+                  onChange={(newPhone) => {
+                    matchIsValidTel(newPhone);
+                    setAlterPhone(newPhone);
+                    methods.setValue('mobile_num', newPhone);
+                  }}
+                />
+              </Tooltip>
               <RHFTextField lang="ar" name="location_gps" label={t('location GPS')} />
             </Box>
             <RHFTextField

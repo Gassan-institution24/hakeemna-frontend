@@ -74,7 +74,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
             },
           }}
         >
-          {tableName}
+          {tableName.split('_').join(' ')}
         </Box>
       </TableCell>
 
