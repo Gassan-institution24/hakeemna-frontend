@@ -129,7 +129,7 @@ export default function OverviewAppView() {
         <Grid xs={12} md={12} sx={{ height: '400px' }}>
           <Typography variant="h3">{t('How To Use')}</Typography>
           <Box sx={{ position: 'relative', mt: 1 }}>
-            <iframe
+            {/* <iframe
               src="https://www.youtube.com/embed/IGsRxmC40Bw?si=gULZ3W4Jy6BPk7p6"
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -143,7 +143,7 @@ export default function OverviewAppView() {
                 borderRadius: '10px',
                 border: 'none',
               }}
-            />
+            /> */}
           </Box>
         </Grid>
       </Grid>
