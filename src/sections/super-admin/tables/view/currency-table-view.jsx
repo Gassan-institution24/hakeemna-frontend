@@ -219,7 +219,6 @@ export default function CurrencyTableView() {
                 rowCount={dataFiltered.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                onSelectAllRows={false}
               />
 
               <TableBody>

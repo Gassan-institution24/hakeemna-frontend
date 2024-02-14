@@ -194,7 +194,6 @@ export default function TablesListView() {
                   rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  onSelectAllRows={false}
                 />
                 <TableBody>
                   {dataFiltered

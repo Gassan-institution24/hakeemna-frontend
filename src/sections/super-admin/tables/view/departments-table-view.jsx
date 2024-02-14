@@ -364,7 +364,6 @@ export default function DepartmentsTableView() {
                   rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  onSelectAllRows={false}
                 />
 
                 <TableBody>

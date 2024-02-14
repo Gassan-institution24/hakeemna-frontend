@@ -376,7 +376,6 @@ export default function SubSpecialtiesTableView() {
                   rowCount={dataFiltered.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  onSelectAllRows={false}
                 />
 
                 <TableBody>
