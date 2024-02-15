@@ -183,7 +183,7 @@ export default function AccountGeneral({ data, refetch }) {
         window.location.reload();
       }, 2000);
     } catch (error) {
-      enqueueSnackbar('Failed to update profile', { variant: 'error' });
+      enqueueSnackbar(error.message, { variant: 'error' });
     }
   };
 

@@ -22,7 +22,7 @@ import { endpoints } from 'src/utils/axios';
 import { fTimestamp } from 'src/utils/format-time';
 import axiosHandler from 'src/utils/axios-handler';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';

@@ -8,7 +8,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import ListItemText from '@mui/material/ListItemText';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 
 import FormProvider from 'src/components/hook-form';
