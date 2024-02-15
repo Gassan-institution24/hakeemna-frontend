@@ -25,7 +25,7 @@ import FormProvider, { RHFSelect, RHFTextField, RHFUploadAvatar } from 'src/comp
 
 export default function AccountGeneral({ data, refetch }) {
   const [oldpatientsdata, setOldpatientsdata] = useState();
-  const { user } = useAuthContext();
+  const { user} = useAuthContext();
   const [profilePicture, setProfilePicture] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries();
@@ -179,7 +179,9 @@ export default function AccountGeneral({ data, refetch }) {
     try {
       const response = await axios.patch(`${endpoints.tables.user}${user?.patient._id}`, formData);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
-      refetch();
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error) {
       enqueueSnackbar('Failed to update profile', { variant: 'error' });
     }

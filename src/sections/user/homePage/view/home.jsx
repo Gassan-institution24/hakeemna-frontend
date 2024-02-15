@@ -59,7 +59,6 @@ export default function OverviewAppView() {
     }
     router.push(paths.dashboard.user.oldpatientdata);
   };
-  console.log(oldpatientsdata?.unit_service);
   const nofunction = async () => {
     try {
       const response = await axios.patch(`/api/patient/${user?.patient?._id}/updateonboard`, {
@@ -102,7 +101,6 @@ export default function OverviewAppView() {
       setUs(mappedData[0].unit_service);
     }
   }, [oldpatientsdata, Us]);
-  console.log(Us);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid container spacing={3}>

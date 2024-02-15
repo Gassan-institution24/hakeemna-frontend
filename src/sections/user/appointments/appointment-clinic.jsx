@@ -1,39 +1,69 @@
 import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
-import { Button } from '@mui/material';
+import { Avatar, Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
 import { fTime } from 'src/utils/format-time';
 
-// import { useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 import { useGetUSFeedbackes, useGetUSAvailableAppointments } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
-// import EmptyContent from 'src/components/empty-content';
 
-// ----------------------------------------------------------------------
 
-export default function AppointmentClinic({ Units, onBook, onView }) {
-  // const { t } = useTranslate();
+
+const AppointmentOnline = ({ Units, onBook, onView }) => {
+  const { t } = useTranslate();
   const { appointmentsData, refetch } = useGetUSAvailableAppointments(Units._id);
   const { feedbackData } = useGetUSFeedbackes(Units._id);
+  const { user } = useAuthContext();
   const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient._id));
   const numberOfUsers = uniqueUserIds.size;
+
+  const getTodayDate = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  };
+
   const kdk = (id) => {
     onBook(id);
     refetch();
   };
 
-  console.log(feedbackData);
+  const [showAllFeedback, setShowAllFeedback] = useState(false);
 
+  const toggleFeedbackDisplay = () => {
+    setShowAllFeedback(!showAllFeedback);
+  };
+  const displayedFeedback = showAllFeedback ? feedbackData : [feedbackData[0]];
+  const groupedAppointments = appointmentsData.reduce(
+    (acc, appointment) => {
+      const appointmentDate = appointment.start_time.split('T')[0];
+
+      if (appointmentDate === getTodayDate()) {
+        acc.today.push(appointment);
+      } else {
+        if (!acc[appointmentDate]) {
+          acc[appointmentDate] = [];
+        }
+        acc[appointmentDate].push(appointment);
+      }
+
+      return acc;
+    },
+    { today: [] }
+  );
   return (
     <Box sx={{ display: 'flex', border: '1px solid rgba(208, 208, 208, 0.344)', mb: 5 }}>
       <Box sx={{ width: '55%', margin: 2 }}>
         <Box sx={{ display: 'flex' }}>
           <Image
-            src={Units?.company_logo}
+            src={Units.company_logo}
             sx={{ width: '110px', height: '110px', borderRadius: '100%' }}
           />
           <Box sx={{ mt: 1, ml: 2 }}>
@@ -45,14 +75,13 @@ export default function AppointmentClinic({ Units, onBook, onView }) {
               <Iconify icon="emojione:star" />
               &nbsp;
               <Typography sx={{ fontSize: 13, mt: 0.3 }}>{Units?.rate}</Typography>&nbsp;
-              {numberOfUsers === 0 ? (
-                ''
-              ) : (
-                <Typography sx={{ fontSize: 13, mt: 0.3 }}>By {numberOfUsers} Person</Typography>
-              )}
+              <Typography sx={{ fontSize: 13, mt: 0.3 }}>
+                {t('From ')} {numberOfUsers <= 1 ? '' : numberOfUsers}{' '}
+                {numberOfUsers > 1 ? t('Visitors') : t('One Visitor')}{' '}
+              </Typography>
             </Box>
             <Box sx={{ position: 'relative', left: '-10.1%' }}>
-              <ul style={{ listStyle: 'none' }}>
+              <>
                 <li>
                   <Iconify width={18} sx={{ color: 'info.main' }} icon="mdi:location" />{' '}
                   {Units?.country?.name_english} {Units?.city?.name_english}
@@ -63,13 +92,12 @@ export default function AppointmentClinic({ Units, onBook, onView }) {
                 </li>
                 <li>
                   <Iconify width={18} sx={{ color: 'success.main' }} icon="mdi:cash-multiple" />{' '}
-                  Fees: 30 JOD{' '}
+                  {t('Fees: ')} 30 JOD{' '}
                 </li>
-              </ul>
+              </>
             </Box>
-
-            {feedbackData.map((feedback) => (
-              <>
+            {displayedFeedback.map((feedback, index) => (
+              <React.Fragment key={index}>
                 <Iconify
                   sx={{
                     transform: 'rotate(-20deg)',
@@ -83,22 +111,35 @@ export default function AppointmentClinic({ Units, onBook, onView }) {
                   }}
                   icon="material-symbols-light:rate-review-outline"
                 />
-
-                <Box sx={{ bgcolor: 'rgba(208, 208, 208, 0.250)', width: 350 }}>
+                <Box sx={{ bgcolor: 'rgba(208, 208, 208, 0.250)', width: 350, mb:1 }}>
                   <Box sx={{ padding: 2 }}>
                     <Box sx={{ display: 'inline-flex' }}>
-                      <Image
-                        sx={{
-                          borderRadius: '100%',
-                          width: '35px',
-                          height: '35px',
-                          position: 'relative',
-                          top: '-5px',
-                          left: '-5px',
-                          border: '1px solid lightgreen',
-                        }}
-                        src={feedback?.patient?.profile_picture}
-                      />
+                      {feedback?.patient?.profile_picture ? (
+                        <Image
+                          sx={{
+                            borderRadius: '100%',
+                            width: '35px',
+                            height: '35px',
+                            position: 'relative',
+                            top: '-5px',
+                            left: '-5px',
+                            border: '1px solid lightgreen',
+                          }}
+                          src={feedback?.patient?.profile_picture}
+                        />
+                      ) : (
+                        <Avatar
+                          src={user?.photoURL}
+                          alt={user?.userName}
+                          sx={{
+                            width: 36,
+                            height: 36,
+                            border: (theme) => `solid 2px ${theme.palette.background.default}`,
+                          }}
+                        >
+                          {user?.ratemakername?.charAt(0).toUpperCase()}
+                        </Avatar>
+                      )}
                       <Typography sx={{ ml: 1, mt: 0.5 }}>
                         {feedback?.patient?.first_name}
                       </Typography>
@@ -113,69 +154,99 @@ export default function AppointmentClinic({ Units, onBook, onView }) {
                     <Typography sx={{ ml: 5.3 }}>{feedback?.Body}</Typography>
                   </Box>
                 </Box>
-              </>
+              </React.Fragment>
             ))}
+            {feedbackData.length && (
+              <Link onClick={toggleFeedbackDisplay} variant="outlined"> 
+                {showAllFeedback ? 'Hide' : 'Show All'}
+              </Link>
+            )}
           </Box>
         </Box>
       </Box>
-      {/* <Typography sx={{textAlign:'center'}}>Lorem ipsum dolor sit amet.</Typography> */}
-      {appointmentsData.length > 0 ? (
-        <Box
-          sx={{
-            width: '45%',
-            margin: 2,
-            // display: 'grid',
-            // gridTemplateColumns: '1fr 1fr 1fr',
-          }}
-        >
-          <ul style={{ listStyle: 'none' }}>
-            <h4 style={{ fontWeight: 600 }}>Today</h4>
-            {appointmentsData.map((appointments, i) => (
-              <li key={i}>
+      <Box sx={{ width: '45%', margin: 2, display:'inline-flex', }}>
+        {groupedAppointments.today.length > 0 && (
+          <Box sx={{display:'block', width:'50%'}} >
+            <Typography style={{ fontWeight: 600, paddingBottom:15 }}>Today</Typography>
+            {groupedAppointments.today.map((appointment, i) => (
+              <Typography key={i}>
                 <Button
-                  onClick={() => kdk(appointments?._id)}
+                  onClick={() => kdk(appointment?._id)}
                   sx={{
                     bgcolor: 'rgba(208, 208, 208, 0.566)',
                     mb: 1,
-                    width: '18%',
+                    // width: '18%',
                     borderRadius: 0,
                     fontWeight: 100,
                   }}
-                  // onClick={() => handleButtonClick(appointments)}
                 >
-                  {fTime(appointments?.start_time)}
+                  {fTime(appointment?.start_time)}
                 </Button>
-              </li>
+              </Typography>
             ))}
             <Button sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
               Book
             </Button>
-          </ul>
-        </Box>
-      ) : (
-        <ul style={{ listStyle: 'none' }}>
-          <h4 style={{ fontWeight: 600 }}>Today</h4>
-          <li>
-            <Button
-              sx={{
-                bgcolor: 'rgba(208, 208, 208, 0.566)',
-                mb: 1,
-                width: '18%',
-                borderRadius: 0,
-                fontWeight: 100,
-              }}
-            >
-              -- / --
-            </Button>
-          </li>
-        </ul>
-      )}
+          </Box>
+        )}
+
+        {/* Render other dates */}
+        {Object.keys(groupedAppointments).map((date, index) => {
+          if (date !== 'today') {
+            return (
+              <Box sx={{display:'block', width:'50%'}}>
+                <Typography style={{ fontWeight: 600, paddingBottom:15 }}>{date}</Typography>
+                {groupedAppointments[date].map((appointment, i) => (
+                  <Typography key={i}>
+                    <Button
+                      onClick={() => kdk(appointment?._id)}
+                      sx={{
+                        bgcolor: 'rgba(208, 208, 208, 0.566)',
+                        mb: 1,
+                        borderRadius: 0,
+                        fontWeight: 100,
+                      }}
+                    >
+                      {fTime(appointment?.start_time)}
+                    </Button>
+                  </Typography>
+                ))}
+                <Button sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
+                  Book
+                </Button>
+              </Box>
+            );
+          }
+          return null;
+        })}
+
+        {/* Render placeholder if no appointments for today */}
+        {groupedAppointments.today.length === 0 && (
+          <Box sx={{display:'block'}}>
+            <Typography style={{ fontWeight: 600, paddingBottom:15 }}>Today</Typography>
+            <Typography>
+              <Button
+              disabled
+                sx={{
+                  bgcolor: 'rgba(208, 208, 208, 0.566)',
+                  borderRadius: 0,
+                  fontWeight: 100,
+                }}
+              >
+                -- / --
+              </Button>
+            </Typography>
+          </Box>
+        )}
+      </Box>
     </Box>
   );
-}
+};
 
-AppointmentClinic.propTypes = {
+AppointmentOnline.propTypes = {
   Units: PropTypes.object,
   onView: PropTypes.func,
   onBook: PropTypes.func,
 };
+
+export default AppointmentOnline;

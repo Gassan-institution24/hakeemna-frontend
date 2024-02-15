@@ -16,15 +16,10 @@ import ClinicAppointmentList from './appointment-clinic';
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentItem({ patientData, refetch }) {
-  const { unitservicesData, loading } = useGetUnitservices();
-  // const router = useRouter();
-  // const handleView = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.job.details(id));
-  //   },
-  //   [router]
-  // );
+export default function AppointmentItem({ patientData, refetch, dataFiltered }) {
+  const { loading } = useGetUnitservices();
+
+
 
  const handleBook = useCallback(
     async (id) => {
@@ -40,7 +35,7 @@ export default function AppointmentItem({ patientData, refetch }) {
   return (
     <>
       {!loading &&
-        unitservicesData.map((info) => (
+        dataFiltered.map((info) => (
           <ClinicAppointmentList
             key={info.id}
             Units={info}
@@ -55,5 +50,6 @@ export default function AppointmentItem({ patientData, refetch }) {
 
 AppointmentItem.propTypes = {
   patientData: PropTypes.object,
+  dataFiltered: PropTypes.object,
   refetch: PropTypes.func,
 };
