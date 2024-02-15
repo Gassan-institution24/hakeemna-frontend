@@ -29,7 +29,6 @@ export default function ProfileHome() {
     return '';
   }
   const { user } = useAuthContext();
-  console.log(user?.patient.other_medication_notes);
 
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>

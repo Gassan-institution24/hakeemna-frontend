@@ -45,6 +45,7 @@ const defaultFilters = {
   rate: 'all',
   appointtypes: 'all',
   payment_methods: 'all',
+  name: '',
 };
 
 // ----------------------------------------------------------------------
@@ -55,10 +56,7 @@ export default function AppointmentBooking() {
   const openFilters = useBoolean();
   const { user } = useAuthContext();
   const [sortBy, setSortBy] = useState('latest');
-  const [search, setSearch] = useState({
-    query: '',
-    results: [],
-  });
+  const [search, setSearch] = useState();
 
   const { appointmentsData, refetch } = useGetAvailableAppointments();
   const { countriesData } = useGetCountries();
@@ -80,12 +78,17 @@ export default function AppointmentBooking() {
     filters.Offer_start_date && filters.Offer_end_date
       ? filters.Offer_start_date.getTime() > filters.Offer_end_date.getTime()
       : false;
+
+
   const dataFiltered = applyFilter({
     inputData: unitservicesData,
     filters,
+    search,
     sortBy,
     dateError,
   });
+
+
 
   const canReset = !isEqual(defaultFilters, filters);
 
@@ -101,42 +104,35 @@ export default function AppointmentBooking() {
     setSortBy(newValue);
   }, []);
 
-  const handleSearch = useCallback(
-    (inputValue) => {
-      setSearch((prevState) => ({
-        ...prevState,
-        query: inputValue,
-      }));
+      // if (inputValue) {
+      //   const results = appointmentsData.filter(
+      //     (appointment) =>
+      //       (appointment.unit_service &&
+      //         appointment.unit_service?.name_english
+      //           ?.toLowerCase()
+      //           .indexOf(search.query.toLowerCase()) !== -1) ||
+      //       (appointment.unit_service &&
+      //         appointment.unit_service?.name_arabic
+      //           ?.toLowerCase()
+      //           .indexOf(search.query.toLowerCase()) !== -1) ||
+      //       (appointment.work_group &&
+      //         appointment.work_group.employees &&
+      //         appointment.work_group.employees.some(
+      //           (employee) =>
+      //             employee?.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+      //         )) ||
+      //       appointment?._id === search.query.toLowerCase() ||
+      //       JSON.stringify(appointment.code) === search.query.toLowerCase()
+      //   );
 
-      if (inputValue) {
-        const results = appointmentsData.filter(
-          (appointment) =>
-            (appointment.unit_service &&
-              appointment.unit_service?.name_english
-                ?.toLowerCase()
-                .indexOf(search.query.toLowerCase()) !== -1) ||
-            (appointment.unit_service &&
-              appointment.unit_service?.name_arabic
-                ?.toLowerCase()
-                .indexOf(search.query.toLowerCase()) !== -1) ||
-            (appointment.work_group &&
-              appointment.work_group.employees &&
-              appointment.work_group.employees.some(
-                (employee) =>
-                  employee?.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
-              )) ||
-            appointment?._id === search.query.toLowerCase() ||
-            JSON.stringify(appointment.code) === search.query.toLowerCase()
-        );
-
-        setSearch((prevState) => ({
-          ...prevState,
-          results,
-        }));
-      }
-    },
-    [search.query, appointmentsData]
-  );
+        // setSearch((prevState) => ({
+        //   ...prevState,
+        //   results,
+        // }));
+  //     }
+  //   },
+  //   [search.query, appointmentsData]
+  // );
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -150,9 +146,9 @@ export default function AppointmentBooking() {
       direction={{ xs: 'column', sm: 'row' }}
     >
       <AppointmentSearch
-        query={search.query}
-        results={search.results}
-        onSearch={handleSearch}
+        // query={search.query}
+        // results={search.results}
+        onSearch={setSearch}
         hrefItem={(id) => paths.dashboard.job.details(id)}
       />
 
@@ -242,7 +238,7 @@ export default function AppointmentBooking() {
         ))}
       </Tabs>
       {currentTab === 'online' && <OnlineAppointmentList patientData={user?.patient?._id} refetch={refetch}/>}
-      {currentTab === 'inclinic' && <ClinicAppointmentList patientData={user?.patient?._id} refetch={refetch}/>}
+      {currentTab === 'inclinic' && <ClinicAppointmentList patientData={user?.patient?._id} refetch={refetch} dataFiltered={dataFiltered}/>}
     </Container>
       
       
@@ -255,48 +251,47 @@ export default function AppointmentBooking() {
 
 // ----------------------------------------------------------------------
 
-const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
-  const { appointtypes, payment_methods, start_date, end_date, unitServices, countries } = filters;
 
-  // SORT BY
-  if (sortBy === 'latest') {
-    inputData = orderBy(inputData, ['start_time'], ['desc']);
-  }
+function applyFilter({ inputData,search, comparator, filters, sortBy }) {
+  // console.log('search',search)
+  // console.log('inputData',inputData)
 
-  if (sortBy === 'oldest') {
-    inputData = orderBy(inputData, ['start_time'], ['asc']);
-  }
-  if (sortBy === 'rate') {
-    inputData = orderBy(inputData, ['unit_service.rate'], ['desc']);
-  }
 
-  // FILTERS
-
-  if (appointtypes !== 'all') {
-    inputData = inputData.filter(
-      (appointment) => appointment?.appointment_type?._id === appointtypes
-    );
-  }
-  if (payment_methods !== 'all') {
-    inputData = inputData.filter(
-      (appointment) => appointment?.payment_method?._id === payment_methods
-    );
-  }
-  if (!dateError) {
-    if (start_date && end_date) {
-      inputData = inputData.filter(
-        (appointment) =>
-          fTimestamp(appointment.start_time) >= fTimestamp(start_date) &&
-          fTimestamp(appointment.end_time) <= fTimestamp(end_date)
-      );
+    // SORT BY
+    if (sortBy === 'latest') {
+      inputData = orderBy(inputData, ['start_time'], ['desc']);
     }
-  }
-  if (unitServices !== 'all') {
-    inputData = inputData.filter((appointment) => appointment?.unit_service?._id === unitServices);
-  }
-  if (countries !== 'all') {
-    inputData = inputData.filter((appointment) => appointment?.unit_service?.country === countries);
+  
+    if (sortBy === 'oldest') {
+      inputData = orderBy(inputData, ['start_time'], ['asc']);
+    }
+    if (sortBy === 'rate') {
+      inputData = orderBy(inputData, ['unit_service.rate'], ['desc']);
+    }
+
+  if (search) {
+    inputData = inputData.filter(
+      (data) =>
+        (data?.name_english &&
+          data?.name_english?.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
+        (data?.unit_service?.name_english &&
+          data?.unit_service?.name_english?.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
+        (data?.unit_service?.name_arabic &&
+          data?.unit_service?.name_arabic?.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
+        (data?.department?.name_english &&
+          data?.department?.name_english?.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
+        (data?.department?.name_english &&
+          data?.department?.name_arabic?.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
+        data?._id === search ||
+        JSON.stringify(data.code) === search
+    );
   }
 
+  // if (status !== 'all') {
+  //   inputData = inputData.filter((order) => order.status === status);
+  // }
+  // console.log('inputData',inputData)
   return inputData;
-};
+}

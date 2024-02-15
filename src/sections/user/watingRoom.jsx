@@ -44,9 +44,6 @@ export default function WatingRoom() {
   const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
   const { data } = useGetUnitservice(appointmentsData?.unit_service?._id);
 
-  console.log('appointmentsData', appointmentsData);
-  console.log('data', data);
-
   const skipfunction = async () => {
     try {
       await axios.patch(`api/appointments/${appointmentsData._id}`, {
@@ -105,12 +102,11 @@ export default function WatingRoom() {
         department: appointmentsData.department?._id,
         unit_service: data?._id,
       };
-      const response = await axios.post('api/feedback', newData);
+      await axios.post('api/feedback', newData);
       await axios.patch(`api/appointments/${appointmentsData._id}`, {
         hasFeedback: true, // Increment the skip value by 1
       });
       enqueueSnackbar(t('Thanks for your cooperation'), { variant: 'success' });
-      console.log(response);
       setTimeout(() => {
         dialog.onFalse();
         window.location.reload();
