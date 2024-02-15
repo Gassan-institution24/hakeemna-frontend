@@ -52,8 +52,7 @@ export default function ServiceUnitPopover() {
     } catch (e) {
       console.error(e);
       setError(e);
-      enqueueSnackbar('wrong password!', { variant: 'error' });
-      loading.onFalse();
+enqueueSnackbar(error.message, { variant: 'error' });      loading.onFalse();
     }
   };
 
@@ -67,8 +66,7 @@ export default function ServiceUnitPopover() {
     } catch (e) {
       console.error(e);
       loading.onFalse();
-      enqueueSnackbar('wrong password!', { variant: 'error' });
-      popover.onClose();
+enqueueSnackbar(error.message, { variant: 'error' });      popover.onClose();
     }
   };
 

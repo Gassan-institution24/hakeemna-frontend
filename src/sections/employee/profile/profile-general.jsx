@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
+import { useState, useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState, useEffect, useCallback } from 'react';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import Box from '@mui/material/Box';
@@ -10,15 +10,15 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { MenuItem, Tooltip, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Tooltip, MenuItem, Typography } from '@mui/material';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
-import { useGetCities, useGetCountries, useGetSpecialties, useGetEmployeeTypes } from 'src/api';
+import { useGetCountries, useGetSpecialties, useGetEmployeeTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -139,7 +139,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       console.info('DATA', data);
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.href });
-      enqueueSnackbar('Update failed!', { variant: 'error' });
+      enqueueSnackbar(error.message, { variant: 'error' });
       console.error(error);
     }
   });

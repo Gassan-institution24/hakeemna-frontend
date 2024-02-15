@@ -14,7 +14,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -115,7 +115,7 @@ export default function TableNewEditForm() {
       enqueueSnackbar(t('employment successfully!'));
     } catch (e) {
       socket.emit('error', { error: e, user, location: window.location.href });
-      enqueueSnackbar(t('failed to employment!'), { variant: 'error' });
+      enqueueSnackbar(e.message, { variant: 'error' });
     }
   };
 

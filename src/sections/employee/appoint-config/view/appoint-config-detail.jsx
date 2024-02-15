@@ -16,7 +16,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -208,7 +208,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       saving.onFalse();
     } catch (e) {
       socket.emit('error', { error: e, user, location: window.location.href });
-      enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
+      enqueueSnackbar(e.message, { variant: 'error' });
       saving.onFalse();
     }
   };
@@ -233,7 +233,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       // await refetch();
     } catch (e) {
       socket.emit('error', { error: e, user, location: window.location.href });
-      enqueueSnackbar(`Failed to update: ${e.message}`, { variant: 'error' });
+      enqueueSnackbar(e.message, { variant: 'error' });
       confirm.onFalse();
       updating.onFalse();
     }
@@ -277,7 +277,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.href });
-      enqueueSnackbar(`Failed to Add: ${error}`, { variant: 'error' });
+      enqueueSnackbar(error.message, { variant: 'error' });
       console.error(error);
       loadingSend.onFalse();
     }

@@ -14,7 +14,7 @@ import { useParams, useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 

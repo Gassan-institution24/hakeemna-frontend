@@ -1,17 +1,17 @@
-// import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async';
 
-// import MaintenanceView from 'src/sections/maintenance/view';
+import MaintenanceView from 'src/sections/maintenance/view';
 
-// // ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
-// export default function MaintenancePage() {
-//   return (
-//     <>
-//       <Helmet>
-//         <title> Maintenance</title>
-//       </Helmet>
+export default function MaintenancePage() {
+  return (
+    <>
+      <Helmet>
+        <title> Maintenance</title>
+      </Helmet>
 
-//       <MaintenanceView />
-//     </>
-//   );
-// }
+      <MaintenanceView />
+    </>
+  );
+}

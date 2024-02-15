@@ -1,40 +1,17 @@
-// // import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async';
 
-// // import CustomerTraining from 'src/sections/super-admin/customerTraining/home/homepage';
-// // import { useGetUnitservice } from 'src/api';
-// // import { useParams } from 'src/routes/hooks';
+import CustomerTraining from 'src/sections/super-admin/customerTraining/home';
 
-// // // ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
-// // export default function CustomerTrainingPage() {
-// //   const params = useParams();
-// //   const { id } = params;
-// //   const { data } = useGetUnitservice(id);
-// //   const unitServiceName = data?.name_english || 'unit service';
-// //   return (
-// //     <>
-// //       <Helmet>
-// //         <title> {unitServiceName} Accounting</title>
-// //       </Helmet>
+export default function CustomerTrainingPage() {
+  return (
+    <>
+      <Helmet>
+        <title> Customer Training</title>
+      </Helmet>
 
-// //       <CustomerTraining unitServiceData={data} />
-// //     </>
-// //   );
-// // }
-// import { Helmet } from 'react-helmet-async';
-
-// import ComingSoonView from 'src/sections/other/coming-soon/view';
-
-// // ----------------------------------------------------------------------
-
-// export default function ComingSoonPage() {
-//   return (
-//     <>
-//       <Helmet>
-//         <title> Coming Soon</title>
-//       </Helmet>
-
-//       <ComingSoonView />
-//     </>
-//   );
-// }
+      <CustomerTraining />
+    </>
+  );
+}

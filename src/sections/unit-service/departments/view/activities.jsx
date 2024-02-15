@@ -25,7 +25,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetDepartmentActivities } from 'src/api';

@@ -14,7 +14,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 // import { useMockedUser } from 'src/hooks/use-mocked-user';
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -58,7 +58,7 @@ export default function AccountPopover() {
       // router.replace('/');
     } catch (error) {
       console.error(error);
-      enqueueSnackbar('Unable to logout!', { variant: 'error' });
+      enqueueSnackbar(error.message, { variant: 'error' });
     }
   };
 

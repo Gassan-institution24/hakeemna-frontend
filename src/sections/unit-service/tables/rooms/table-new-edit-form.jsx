@@ -18,7 +18,7 @@ import { useRouter } from 'src/routes/hooks';
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useGetUSDepartments } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';

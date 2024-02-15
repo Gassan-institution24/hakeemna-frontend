@@ -18,7 +18,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeEngagement } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
@@ -219,7 +219,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     } catch (e) {
       socket.emit('error', { error: e, user, location: window.location.href });
       saving.onFalse();
-      enqueueSnackbar(t(`failed to update!`), { variant: 'error' });
+      confirm.onFalse();
+      enqueueSnackbar(e.message, { variant: 'error' });
     }
   };
   const handleUpdating = async () => {
@@ -243,7 +244,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       socket.emit('error', { error: e, user, location: window.location.href });
       updating.onFalse();
       confirm.onFalse();
-      enqueueSnackbar(t(`Failed to update!`), { variant: 'error' });
+      enqueueSnackbar(e.message, { variant: 'error' });
     }
   };
 
@@ -293,7 +294,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.href });
-      enqueueSnackbar(t(`failed to add!`), { variant: 'error' });
+      enqueueSnackbar(error.message, { variant: 'error' });
       console.error(error);
       loadingSend.onFalse();
     }

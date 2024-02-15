@@ -39,7 +39,6 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetCities, useGetUSTypes, useGetCountries, useGetSpecialties } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import { usePopover } from 'src/components/custom-popover';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
