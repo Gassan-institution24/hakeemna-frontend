@@ -23,7 +23,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
@@ -164,7 +164,7 @@ export default function TableNewEditForm({ currentTable }) {
       console.info('DATA', data);
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.href });
-      enqueueSnackbar(t('Failed to create!'), { variant: 'error' });
+      enqueueSnackbar(error.message, { variant: 'error' });
       setErrorMsg(error);
       console.error(error);
     }

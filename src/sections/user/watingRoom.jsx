@@ -117,7 +117,7 @@ export default function WatingRoom() {
       }, 2000);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(t('Failed to upload Your answer'), { variant: 'error' });
+      enqueueSnackbar(error.message, { variant: 'error' });
     }
   };
 

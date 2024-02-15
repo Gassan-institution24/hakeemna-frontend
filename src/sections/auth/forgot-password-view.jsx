@@ -56,8 +56,7 @@ export default function ForgotPasswordView() {
       router.push(href);
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(error, { variant: 'error' });
-    }
+enqueueSnackbar(error.message, { variant: 'error' });    }
   });
 
   const renderForm = (

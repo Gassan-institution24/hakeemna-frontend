@@ -45,7 +45,7 @@ import {
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';

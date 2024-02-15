@@ -1,17 +1,17 @@
-// import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async';
 
-// import ComingSoonView from 'src/sections/other/coming-soon/view';
+import StatisticsPage from 'src/sections/super-admin/statistics/home';
 
-// // ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
-// export default function ComingSoonPage() {
-//   return (
-//     <>
-//       <Helmet>
-//         <title> Coming Soon</title>
-//       </Helmet>
+export default function StatisticsHomePage() {
+  return (
+    <>
+      <Helmet>
+        <title>Statistics</title>
+      </Helmet>
 
-//       <ComingSoonView />
-//     </>
-//   );
-// }
+      <StatisticsPage />
+    </>
+  );
+}

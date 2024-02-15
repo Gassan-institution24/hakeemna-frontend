@@ -13,7 +13,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -111,7 +111,7 @@ export default function UploadOldPatient({ refetch }) {
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
-      enqueueSnackbar('Uploaded failed!', { variant: 'error' });
+      enqueueSnackbar(error.message, { variant: 'error' });
     }
   });
 

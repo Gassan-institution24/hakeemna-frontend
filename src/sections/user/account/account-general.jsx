@@ -181,7 +181,7 @@ export default function AccountGeneral({ data, refetch }) {
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
       refetch();
     } catch (error) {
-      enqueueSnackbar('Failed to update profile', { variant: 'error' });
+      enqueueSnackbar(error.message, { variant: 'error' });
     }
   };
 
