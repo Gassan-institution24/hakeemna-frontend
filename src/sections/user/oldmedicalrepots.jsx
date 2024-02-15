@@ -287,8 +287,7 @@ export default function OldMedicalReports() {
       setCheckChange(!checkChange);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar('Failed to upload medical report', { variant: 'error' });
-    }
+enqueueSnackbar(error.message, { variant: 'error' });    }
   };
   return (
     <>

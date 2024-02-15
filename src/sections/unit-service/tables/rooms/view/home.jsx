@@ -23,7 +23,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { endpoints } from 'src/utils/axios';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useGetUSRooms } from 'src/api';
 
 import Label from 'src/components/label';

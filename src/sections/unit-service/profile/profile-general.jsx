@@ -10,14 +10,14 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { MenuItem, Tooltip, Typography } from '@mui/material';
+import { Tooltip, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
 import { fData } from 'src/utils/format-number';
 import axios, { endpoints } from 'src/utils/axios';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
@@ -169,7 +169,7 @@ export default function AccountGeneral({ unitServiceData }) {
       console.info('DATA', dataToSend);
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.href });
-      enqueueSnackbar('Update failed!', { variant: 'error' });
+      enqueueSnackbar(error.message, { variant: 'error' });
       console.error(error);
     }
   });

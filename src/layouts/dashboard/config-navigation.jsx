@@ -29,8 +29,7 @@ export function useNavData() {
       // router, router.replace('/');
     } catch (error) {
       console.error(error);
-      enqueueSnackbar('Unable to logout!', { variant: 'error' });
-    }
+enqueueSnackbar(error.message, { variant: 'error' });    }
   }, [logout, popover, enqueueSnackbar]);
 
   const data = useMemo(() => {

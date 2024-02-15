@@ -12,7 +12,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -80,7 +80,7 @@ export default function AccountChangePassword() {
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.href });
       console.error(error);
-      enqueueSnackbar(t('An error occurred. Please try again.'), { variant: 'error' });
+      enqueueSnackbar(error.message, { variant: 'error' });
     }
   });
 

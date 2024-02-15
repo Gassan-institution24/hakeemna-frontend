@@ -19,7 +19,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { socket } from 'src/socket';
+import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetMyNotifications, useGetMyUnreadNotificationCount } from 'src/api';
 

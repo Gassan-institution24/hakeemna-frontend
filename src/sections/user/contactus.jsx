@@ -71,14 +71,7 @@ export default function ContactUs() {
       }
     } catch (err) {
       setError(err.message);
-      enqueueSnackbar(
-        `${
-          curLangAr
-            ? 'حدث خطأ ما, الرجاء المحاولة لاحقا'
-            : 'Somthing went wront, please try again later'
-        }`,
-        { variant: 'error' }
-      );
+      enqueueSnackbar(err.message, { variant: 'error' });
     }
   });
   return (
