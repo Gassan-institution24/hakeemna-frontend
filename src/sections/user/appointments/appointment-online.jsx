@@ -1,19 +1,10 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
-import Box from '@mui/material/Box';
-import { Avatar, Button } from '@mui/material';
-import Typography from '@mui/material/Typography';
-
-import { fTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetUSFeedbackes, useGetUSAvailableAppointments } from 'src/api';
 
-import Iconify from 'src/components/iconify';
-import Image from 'src/components/image/image';
 
 const AppointmentOnline = ({ Units, onBook, onView }) => {
   const { t } = useTranslate();

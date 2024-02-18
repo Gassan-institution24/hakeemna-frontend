@@ -93,7 +93,7 @@ export default function Emergency() {
               position: 'absolute',
               left: '42%',
               top: '5%',
-              textAlign: 'center',
+              textalign: 'center',
             }}
           >
             <Iconify width="65%" sx={{ mt: '15%', color: '#4E6892' }} icon="carbon:person" />
@@ -108,7 +108,7 @@ export default function Emergency() {
               position: 'absolute',
               left: '51%',
               top: '40%',
-              textAlign: 'center',
+              textalign: 'center',
             }}
           >
             <Iconify width="65%" sx={{ mt: '15%', color: '#4E6892' }} icon="guidance:card" />
@@ -123,7 +123,7 @@ export default function Emergency() {
               position: 'absolute',
               left: '42%',
               top: '80%',
-              textAlign: 'center',
+              textalign: 'center',
             }}
           >
             <Iconify

@@ -1,8 +1,9 @@
-import { lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import CompactLayout from 'src/layouts/compact';
 import AuthClassicLayout from 'src/layouts/auth/classic';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -22,9 +23,11 @@ export const authRoutes = [
   {
     path: 'login',
     element: (
-      <AuthClassicLayout>
-        <JwtLoginPage />
-      </AuthClassicLayout>
+      <Suspense fallback={<LoadingScreen />}>
+        <AuthClassicLayout>
+          <JwtLoginPage />
+        </AuthClassicLayout>
+      </Suspense>
     ),
   },
   {

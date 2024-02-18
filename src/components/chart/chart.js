@@ -40,7 +40,7 @@ const Chart = styled(ApexChart)(({ theme }) => ({
       },
     },
     '& .apexcharts-tooltip-title': {
-      textAlign: 'center',
+      textalign: 'center',
       fontWeight: theme.typography.fontWeightBold,
       backgroundColor: alpha(theme.palette.grey[500], 0.08),
       color: theme.palette.text[theme.palette.mode === 'light' ? 'secondary' : 'primary'],

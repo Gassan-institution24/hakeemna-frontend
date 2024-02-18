@@ -50,7 +50,7 @@ export default function whoAreWe() {
       <Stack
         spacing={3}
         sx={{
-          textAlign: 'center',
+          textalign: 'center',
           mb: { xs: 5, md: 8 },
         }}
       >
@@ -78,7 +78,7 @@ export default function whoAreWe() {
           <m.div variants={varFade().inUp} key={card.title}>
             <Card
               sx={{
-                textAlign: 'center',
+                textalign: 'center',
                 boxShadow: { md: 'none' },
                 bgcolor: 'rgba(102, 255, 102, 0)',
                 p: (theme) => theme.spacing(10, 5),

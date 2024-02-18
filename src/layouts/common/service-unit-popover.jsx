@@ -52,7 +52,8 @@ export default function ServiceUnitPopover() {
     } catch (e) {
       console.error(e);
       setError(e);
-enqueueSnackbar(error.message, { variant: 'error' });      loading.onFalse();
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      loading.onFalse();
     }
   };
 
@@ -66,7 +67,8 @@ enqueueSnackbar(error.message, { variant: 'error' });      loading.onFalse();
     } catch (e) {
       console.error(e);
       loading.onFalse();
-enqueueSnackbar(error.message, { variant: 'error' });      popover.onClose();
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      popover.onClose();
     }
   };
 
@@ -86,7 +88,7 @@ enqueueSnackbar(error.message, { variant: 'error' });      popover.onClose();
           }),
         }}
       >
-        <Typography variant="body1" sx={{ textAlign: 'center' }}>
+        <Typography variant="body1" sx={{ textalign: 'center' }}>
           {selected?.unit_service?.name_english
             ?.split(' ')
             .map((word) => word.charAt(0).toUpperCase())

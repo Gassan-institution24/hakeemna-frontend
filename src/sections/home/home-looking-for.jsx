@@ -36,7 +36,7 @@ export default function HomeLookingFor() {
   const renderDescription = (
     <Stack
       sx={{
-        textAlign: {
+        textalign: {
           xs: 'center',
           md: 'left',
         },
@@ -83,7 +83,7 @@ export default function HomeLookingFor() {
         </Grid>
 
         {!mdUp && (
-          <Grid xs={12} sx={{ textAlign: 'center' }}>
+          <Grid xs={12} sx={{ textalign: 'center' }}>
             {renderBtn}
           </Grid>
         )}

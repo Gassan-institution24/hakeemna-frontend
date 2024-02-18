@@ -78,9 +78,9 @@ export default function AccountChangePassword() {
         enqueueSnackbar(response.data || t('Password update failed!'), { variant: 'error' });
       }
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.href });
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
-      enqueueSnackbar(error.message, { variant: 'error' });
     }
   });
 

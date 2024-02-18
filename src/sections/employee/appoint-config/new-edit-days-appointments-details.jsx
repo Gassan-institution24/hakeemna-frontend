@@ -30,11 +30,11 @@ export default function NewEditDayAppointmentsDetails({
   serviceTypesData,
   setAppointmentsNum,
 }) {
-  const { control, setValue, watch, resetField, getValues } = useFormContext();
-
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const { control, setValue, watch, resetField, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -82,7 +82,7 @@ export default function NewEditDayAppointmentsDetails({
     const results = [];
     return selectedItems
       ?.map(
-        (item) => item.name_english
+        (item) => (curLangAr ? item.name_arabic : item.name_english)
         // price += item.Price_per_unit || 0
       )
       .join(', ');
@@ -100,8 +100,8 @@ export default function NewEditDayAppointmentsDetails({
       <Box sx={{ px: 2, pb: 0 }}>
         {values.days_details[ParentIndex].appointments &&
           values.days_details[ParentIndex].appointments.length > 0 && (
-            <Typography variant="p" sx={{ color: 'text.disabled', mb: 3, fontSize: 14 }}>
-              appointments:
+            <Typography variant="p" lang="ar" sx={{ color: 'text.disabled', mb: 3, fontSize: 14 }}>
+              {t('appointments')}:
             </Typography>
           )}
 
@@ -124,7 +124,7 @@ export default function NewEditDayAppointmentsDetails({
                   size="small"
                   InputLabelProps={{ shrink: true }}
                   name={`days_details[${ParentIndex}].appointments[${index}].appointment_type`}
-                  label={t('appointment type')}
+                  label={`${t('appointment type')} *`}
                 >
                   {appointmenttypesData?.map((option) => (
                     <MenuItem value={option._id}>
@@ -138,6 +138,7 @@ export default function NewEditDayAppointmentsDetails({
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <MobileTimePicker
+                      lang="ar"
                       minutesStep="5"
                       label={t('start time')}
                       value={
@@ -166,7 +167,7 @@ export default function NewEditDayAppointmentsDetails({
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <FormControl error={!!error} size="small" sx={{ width: '100%', shrink: true }}>
-                      <InputLabel> Service Types </InputLabel>
+                      <InputLabel shrink> {t('service types')} </InputLabel>
 
                       <Select
                         {...field}
@@ -196,7 +197,11 @@ export default function NewEditDayAppointmentsDetails({
                   size="small"
                   InputLabelProps={{ shrink: true }}
                   name={`days_details[${ParentIndex}].appointments[${index}].online_available`}
-                  label={<Typography sx={{ fontSize: 12 }}>Online avaliable</Typography>}
+                  label={
+                    <Typography lang="ar" sx={{ fontSize: 12 }}>
+                      {t('online avaliable')}
+                    </Typography>
+                  }
                 />
                 {/* <RHFTextField
               lang="ar"
@@ -246,7 +251,7 @@ export default function NewEditDayAppointmentsDetails({
             onClick={handleAdd}
             // sx={{ flexShrink: 0 }}
           >
-            Add Detailed Appointment
+            {curLangAr ? 'إضافة مواعيد بالتفصيل' : 'Add Detailed Appointment'}
           </Button>
         </Stack>
       </Box>

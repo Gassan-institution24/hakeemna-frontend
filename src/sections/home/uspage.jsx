@@ -15,7 +15,7 @@ const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1d222900' : 'rgba(255, 255, 255, 0)',
   ...theme.typography.body2,
   padding: theme.spacing(5),
-  textAlign: 'center',
+  textalign: 'center',
   color: theme.palette.text.secondary,
 }));
 
@@ -63,7 +63,7 @@ export default function Unitservice() {
         <Grid item xs={12} md={6}>
           <Item
             sx={{
-              textAlign: 'left',
+              textalign: 'left',
               position: 'relative',
               left: { md: '150px', xs: '-15px' },
               top: { md: '120px' },

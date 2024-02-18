@@ -198,9 +198,10 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
           msg: `canceled appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
         });
         enqueueSnackbar('canceled successfully!');
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -222,9 +223,10 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
           msg: `delayed appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
         });
         enqueueSnackbar('delayed successfully!');
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       setMinToDelay(0);
@@ -246,9 +248,10 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
           msg: `uncanceled appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
         });
         enqueueSnackbar('uncanceled successfully!');
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -269,9 +272,10 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
         msg: `canceled many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
       enqueueSnackbar('canceled successfully!');
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -303,9 +307,10 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
         msg: `delayed many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
       enqueueSnackbar('delayed successfully!');
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     setMinToDelay(0);
@@ -339,9 +344,10 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
         msg: `uncanceled many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
       enqueueSnackbar('uncanceled successfully!');
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({

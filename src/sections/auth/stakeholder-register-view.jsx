@@ -156,7 +156,7 @@ export default function JwtRegisterView() {
         color: 'text.secondary',
         mt: 2.5,
         typography: 'caption',
-        textAlign: 'center',
+        textalign: 'center',
       }}
     >
       {'By signing up, I agree to '}

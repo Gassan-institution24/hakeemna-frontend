@@ -81,7 +81,7 @@ export default function NewPasswordView() {
       enqueueSnackbar('Password has changed successfully!');
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(error.message, { variant: 'error' });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   });
 

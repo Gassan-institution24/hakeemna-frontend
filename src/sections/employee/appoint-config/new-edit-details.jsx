@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useParams } from 'react-router';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -17,20 +18,21 @@ import { useGetUSWorkShifts, useGetEmployeeWorkGroups } from 'src/api';
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
-const weekDays = [
-  { value: 'saturday', label: 'Saturday' },
-  { value: 'sunday', label: 'Sunday' },
-  { value: 'Monday', label: 'Monday' },
-  { value: 'tuesday', label: 'Tuesday' },
-  { value: 'wednesday', label: 'Wednesday' },
-  { value: 'thursday', label: 'Thursday' },
-  { value: 'friday', label: 'Friday' },
-];
 
 export default function NewEditDetails({ appointmentConfigData, setAppointTime }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const weekDays = [
+    { value: 'saturday', label: t('Saturday') },
+    { value: 'sunday', label: t('Sunday') },
+    { value: 'Monday', label: t('Monday') },
+    { value: 'tuesday', label: t('Tuesday') },
+    { value: 'wednesday', label: t('Wednesday') },
+    { value: 'thursday', label: t('Thursday') },
+    { value: 'friday', label: t('Friday') },
+  ];
 
   const { control, watch, getValues, setValue } = useFormContext();
 
@@ -39,7 +41,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
   const { user } = useAuthContext();
 
   const { workGroupsData } = useGetEmployeeWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   );
   const { workShiftsData } = useGetUSWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
@@ -65,7 +67,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             control={control}
             render={({ field, fieldState: { error } }) => (
               <DatePicker
-                label={t('start date')}
+                label={`${t('start date')} *`}
                 // sx={{ flex: 1 }}
                 value={new Date(values.start_date || '')}
                 onChange={(newValue) => {
@@ -113,7 +115,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           <RHFSelect
             size="small"
             name="work_shift"
-            label={t('work shift')}
+            label={`${t('work shift')} *`}
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
@@ -127,7 +129,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           <RHFSelect
             size="small"
             name="work_group"
-            label={t('work group')}
+            label={`${t('work group')} *`}
             InputLabelProps={{ shrink: true }}
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
@@ -145,8 +147,9 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             render={({ field, fieldState: { error } }) => (
               <TextField
                 fullWidth
-                label="Appointment Time"
+                label={t('appointment duration time')}
                 type="number"
+                lang="ar"
                 value={field.value === 0 ? '' : field.value}
                 onChange={(event) => {
                   field.onChange(Number(event.target.value));
@@ -154,10 +157,13 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                 }}
                 error={!!error}
                 size="small"
+                InputLabelProps={{ shrink: true }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <Box sx={{ fontSize: '0.8rem' }}>min</Box>
+                      <Box lang="ar" sx={{ fontSize: '0.8rem' }}>
+                        {t('min')}
+                      </Box>
                     </InputAdornment>
                   ),
                 }}
@@ -170,19 +176,19 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Box sx={{ fontSize: '0.8rem' }}>for the next</Box>
+                  <Box sx={{ fontSize: '0.8rem' }}>{curLangAr ? 'لبعد' : 'for the next'}</Box>
                 </InputAdornment>
               ),
               endAdornment: (
                 <InputAdornment position="end">
-                  <Box sx={{ fontSize: '0.8rem' }}>days</Box>
+                  <Box sx={{ fontSize: '0.8rem' }}>{curLangAr ? 'أيام' : 'days'}</Box>
                 </InputAdornment>
               ),
             }}
             name="config_frequency"
-            label="Configuration Frequency"
+            label={t('configuration frequency')}
             type="number"
-            inputProps={{ min: 0, max: 30, textAlign: 'center' }}
+            inputProps={{ min: 0, max: 30, textalign: 'center' }}
             InputLabelProps={{ shrink: true }}
           />
         </Stack>
@@ -190,7 +196,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           variant="p"
           sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
         >
-          Weekly Days Off:
+          {curLangAr ? 'العطل الأسبوعية' : 'Weekly Days Off'}:
         </Typography>
         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ p: 3 }}>
           <RHFMultiCheckbox

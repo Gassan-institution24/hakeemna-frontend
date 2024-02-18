@@ -168,8 +168,8 @@ export default function AccountGeneral({ unitServiceData }) {
       refetch();
       console.info('DATA', dataToSend);
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.href });
-      enqueueSnackbar(error.message, { variant: 'error' });
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
     }
   });
@@ -187,7 +187,7 @@ export default function AccountGeneral({ unitServiceData }) {
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
         <Grid xs={12} md={4}>
-          <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
+          <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textalign: 'center' }}>
             <RHFUploadAvatar
               helperText={
                 <Typography
@@ -196,7 +196,7 @@ export default function AccountGeneral({ unitServiceData }) {
                     mt: 3,
                     mx: 'auto',
                     display: 'block',
-                    textAlign: 'center',
+                    textalign: 'center',
                     color: 'text.disabled',
                   }}
                 >
