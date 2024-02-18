@@ -197,9 +197,10 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           link: paths.unitservice.appointments.root,
           msg: `canceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       enqueueSnackbar('canceled successfully!');
       refetch();
@@ -221,9 +222,10 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           link: paths.unitservice.appointments.root,
           msg: `delayed an appointment <strong>[ ${row.code} ]</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       enqueueSnackbar('delayed successfully!');
       refetch();
@@ -245,9 +247,10 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           link: paths.unitservice.appointments.root,
           msg: `uncanceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       enqueueSnackbar('uncanceled successfully!');
       refetch();
@@ -269,9 +272,10 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           link: paths.unitservice.appointments.root,
           msg: `canceled many appointments`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       enqueueSnackbar('canceled successfully!');
       refetch();
@@ -305,9 +309,10 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
         msg: `dealayed many appointments`,
       });
       enqueueSnackbar('delayed successfully!');
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     setMinToDelay(0);
@@ -341,9 +346,10 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           link: paths.unitservice.appointments.root,
           msg: `uncanceled many appointments`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRows({

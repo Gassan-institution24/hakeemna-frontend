@@ -48,7 +48,7 @@ export default function Footer() {
       component="footer"
       sx={{
         py: 5,
-        textAlign: 'center',
+        textalign: 'center',
         position: 'relative',
         bgcolor: 'background.default',
       }}
@@ -79,7 +79,7 @@ export default function Footer() {
         sx={{
           pt: 10,
           pb: 5,
-          textAlign: { xs: 'center', md: 'unset' },
+          textalign: { xs: 'center', md: 'unset' },
         }}
       >
         <Logo sx={{ mb: 3 }} />

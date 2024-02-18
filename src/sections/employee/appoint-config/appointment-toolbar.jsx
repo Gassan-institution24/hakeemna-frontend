@@ -24,9 +24,8 @@ export default function ConfigTableToolbar({
   dateError,
   serviceOptions,
 }) {
-  const popover = usePopover();
-
   const { t } = useTranslate();
+  const popover = usePopover();
 
   const handleFilterName = useCallback(
     (event) => {
@@ -116,7 +115,7 @@ export default function ConfigTableToolbar({
             {ACLGuard({
               category: 'employee',
               subcategory: 'appointment_configs',
-              acl: 'create',
+              acl: 'update',
             }) && (
               <IconButton onClick={onAdd}>
                 <Iconify icon="zondicons:add-outline" />

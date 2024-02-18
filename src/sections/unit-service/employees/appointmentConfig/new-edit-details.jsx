@@ -147,7 +147,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             render={({ field, fieldState: { error } }) => (
               <TextField
                 fullWidth
-                label={t('appointment time')}
+                label={t('appointment duration time')}
                 type="number"
                 lang="ar"
                 value={field.value === 0 ? '' : field.value}
@@ -188,7 +188,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             name="config_frequency"
             label={t('configuration frequency')}
             type="number"
-            inputProps={{ min: 0, max: 30, textAlign: 'center' }}
+            inputProps={{ min: 0, max: 30, textalign: 'center' }}
             InputLabelProps={{ shrink: true }}
           />
         </Stack>

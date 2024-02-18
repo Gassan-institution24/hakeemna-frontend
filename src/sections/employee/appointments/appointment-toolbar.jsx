@@ -29,11 +29,11 @@ export default function InvoiceTableToolbar({
   dateError,
   options,
 }) {
-  const popover = usePopover();
-
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const popover = usePopover();
 
   const handleFilterName = useCallback(
     (event) => {
@@ -92,7 +92,7 @@ export default function InvoiceTableToolbar({
             multiple
             value={filters.types}
             onChange={handleFilterTypes}
-            input={<OutlinedInput label={t('appointment type')} />}
+            input={<OutlinedInput label={`${t('appointment type')} *`} />}
             renderValue={(selected) =>
               options
                 .filter((value) => selected.includes(value._id))
@@ -148,7 +148,7 @@ export default function InvoiceTableToolbar({
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder={t('Search name or number...')}
+            placeholder="Search customer or invoice number..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

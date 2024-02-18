@@ -18,7 +18,7 @@ export default function AuthModernCompactLayout({ children }) {
           py: 12,
           display: 'flex',
           minHeight: '100vh',
-          textAlign: 'center',
+          textalign: 'center',
           px: { xs: 2, md: 0 },
           position: 'relative',
           alignItems: 'center',

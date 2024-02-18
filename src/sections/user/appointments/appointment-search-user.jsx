@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -11,7 +10,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 export default function AppointmentSearch({   filters,

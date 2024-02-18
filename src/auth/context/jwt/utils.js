@@ -54,14 +54,14 @@ export const tokenExpired = (exp) => {
 
       sessionStorage.removeItem('accessToken');
 
-      window.location.href = paths.auth.login;
+      window.location.pathname = paths.auth.login;
     }, timeLeft);
   } else if (timeLeft < 0) {
     alert('Token expired');
 
     sessionStorage.removeItem('accessToken');
 
-    window.location.href = paths.auth.login;
+    window.location.pathname = paths.auth.login;
   }
 };
 

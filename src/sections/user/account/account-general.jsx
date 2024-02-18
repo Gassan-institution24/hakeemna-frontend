@@ -25,7 +25,7 @@ import FormProvider, { RHFSelect, RHFTextField, RHFUploadAvatar } from 'src/comp
 
 export default function AccountGeneral({ data, refetch }) {
   const [oldpatientsdata, setOldpatientsdata] = useState();
-  const { user} = useAuthContext();
+  const { user } = useAuthContext();
   const [profilePicture, setProfilePicture] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries();
@@ -183,7 +183,7 @@ export default function AccountGeneral({ data, refetch }) {
         window.location.reload();
       }, 2000);
     } catch (error) {
-      enqueueSnackbar(error.message, { variant: 'error' });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
 
@@ -192,7 +192,7 @@ export default function AccountGeneral({ data, refetch }) {
       <Grid container spacing={3}>
         {/* img */}
         <Grid xs={12} md={4}>
-          <Card sx={{ pt: 10, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
+          <Card sx={{ pt: 10, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textalign: 'center' }}>
             <RHFUploadAvatar
               name="profile_picture"
               onDrop={handleDrop}
@@ -203,7 +203,7 @@ export default function AccountGeneral({ data, refetch }) {
                     mt: 6,
                     mx: 'auto',
                     display: 'block',
-                    textAlign: 'center',
+                    textalign: 'center',
                     color: 'text.disabled',
                     fontSize: 17,
                   }}

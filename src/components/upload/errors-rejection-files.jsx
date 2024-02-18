@@ -23,7 +23,7 @@ export default function RejectionFiles({ fileRejections }) {
         py: 1,
         px: 2,
         mt: 3,
-        textAlign: 'left',
+        textalign: 'left',
         borderStyle: 'dashed',
         borderColor: 'error.main',
         bgcolor: (theme) => alpha(theme.palette.error.main, 0.08),

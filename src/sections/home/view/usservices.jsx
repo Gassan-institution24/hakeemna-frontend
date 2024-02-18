@@ -110,7 +110,7 @@ export default function VerticalDividerText() {
           <Box
             sx={{
               listStyle: 'none',
-              textAlign: 'start',
+              textalign: 'start',
               position: 'relative',
               left: { xl: 10, lg: 5, md: 10, xs: 0 },
             }}

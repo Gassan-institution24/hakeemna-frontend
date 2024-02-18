@@ -45,6 +45,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { useSnackbar } from 'notistack';
+
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
@@ -72,6 +74,8 @@ export default function WorkGroupsTableView() {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const { STATUS_OPTIONS } = StatusOptions();
 
@@ -164,14 +168,15 @@ export default function WorkGroupsTableView() {
           link: paths.unitservice.tables.workshifts.root,
           msg: `activated a work shift <strong>${row.name_english}</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -186,14 +191,15 @@ export default function WorkGroupsTableView() {
           link: paths.unitservice.tables.workshifts.root,
           msg: `inactivated a work shift <strong>${row.name_english}</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -208,9 +214,10 @@ export default function WorkGroupsTableView() {
         link: paths.unitservice.tables.workshifts.root,
         msg: `activated many work shifts`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -218,7 +225,15 @@ export default function WorkGroupsTableView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, workShiftsData, refetch, user]);
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    table,
+    workShiftsData,
+    refetch,
+    user,
+    enqueueSnackbar,
+  ]);
 
   const handleInactivateRows = useCallback(async () => {
     try {
@@ -232,9 +247,10 @@ export default function WorkGroupsTableView() {
         link: paths.unitservice.tables.workshifts.root,
         msg: `inactivated many work shifts`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -242,7 +258,15 @@ export default function WorkGroupsTableView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, workShiftsData, refetch, user]);
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    table,
+    workShiftsData,
+    refetch,
+    user,
+    enqueueSnackbar,
+  ]);
 
   const handleEditRow = useCallback(
     (id) => {
