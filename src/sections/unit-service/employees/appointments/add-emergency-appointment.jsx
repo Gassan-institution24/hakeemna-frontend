@@ -110,8 +110,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.href });
-      enqueueSnackbar(error.message, { variant: 'error' });
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
     }
   });

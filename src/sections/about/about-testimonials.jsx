@@ -40,7 +40,7 @@
 //     <Box
 //       sx={{
 //         maxWidth: { md: 360 },
-//         textAlign: { xs: 'center', md: 'unset' },
+//         textalign: { xs: 'center', md: 'unset' },
 //       }}
 //     >
 //       <m.div variants={varFade().inUp}>

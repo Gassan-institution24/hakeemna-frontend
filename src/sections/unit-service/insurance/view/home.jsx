@@ -1,5 +1,6 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { useSnackbar } from 'notistack';
 import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useCallback } from 'react';
 
@@ -75,6 +76,8 @@ export default function UnitServicesInsuranceView() {
     { id: 'address', label: t('address') },
     { id: '', width: 88 },
   ];
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const { STATUS_OPTIONS } = StatusOptions();
 
@@ -160,14 +163,15 @@ export default function UnitServicesInsuranceView() {
           link: paths.unitservice.insurance.root,
           msg: `added an insurance`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage?.length);
     },
-    [dataInPage?.length, table, refetch, data?._id, data?.insurance, user]
+    [dataInPage?.length, table, refetch, data?._id, data?.insurance, user, enqueueSnackbar]
   );
   const handleDeleteRow = useCallback(
     async (id) => {
@@ -183,14 +187,15 @@ export default function UnitServicesInsuranceView() {
           link: paths.unitservice.insurance.root,
           msg: `removed an insurance`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage?.length);
     },
-    [dataInPage?.length, table, refetch, data?._id, data?.insurance, user]
+    [dataInPage?.length, table, refetch, data?._id, data?.insurance, user, enqueueSnackbar]
   );
 
   const handleFilters = useCallback(

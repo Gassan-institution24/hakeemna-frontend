@@ -13,13 +13,13 @@ import TableNewEditForm from '../table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function TableEditView({ WorkGroupData }) {
+export default function TableEditView({ workGroupData }) {
   const settings = useSettingsContext();
   const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t('edit room')}
+        heading={t('edit work group')}
         links={[
           {
             name: t('dashboard'),
@@ -35,10 +35,10 @@ export default function TableEditView({ WorkGroupData }) {
           mb: { xs: 3, md: 5 },
         }}
       />
-      {WorkGroupData && <TableNewEditForm currentTable={WorkGroupData} />}
+      {workGroupData && <TableNewEditForm currentTable={workGroupData} />}
     </Container>
   );
 }
 TableEditView.propTypes = {
-  WorkGroupData: PropTypes.object,
+  workGroupData: PropTypes.object,
 };

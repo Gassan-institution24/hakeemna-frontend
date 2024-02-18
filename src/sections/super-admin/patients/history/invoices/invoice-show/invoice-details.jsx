@@ -27,7 +27,7 @@ import InvoiceToolbar from './invoice-toolbar';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '& td': {
-    textAlign: 'right',
+    textalign: 'right',
     borderBottom: 'none',
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
@@ -99,7 +99,7 @@ export default function InvoiceDetails({ economicMovementData }) {
         </Typography>
       </Grid>
 
-      <Grid xs={12} md={3} sx={{ py: 3, textAlign: 'right' }}>
+      <Grid xs={12} md={3} sx={{ py: 3, textalign: 'right' }}>
         <Typography variant="subtitle2">Have a Question?</Typography>
 
         <Typography variant="body2">support@doctorna.online</Typography>

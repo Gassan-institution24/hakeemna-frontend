@@ -1,11 +1,13 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import Typewriter from 'typewriter-effect';
 import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { Alert, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -17,14 +19,15 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetEmployeeEngagement } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 import { useSettingsContext } from 'src/components/settings';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import NewEditDetails from '../new-edit-details';
 import NewEditHolidays from '../new-edit-holidays';
@@ -37,19 +40,26 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const router = useRouter();
 
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
+
+  const employeeInfo = useGetEmployeeEngagement(
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
+  ).data;
 
   const [appointTime, setAppointTime] = useState(0);
 
   const [dataToUpdate, setDataToUpdate] = useState([]);
+  const [errorMsg, setErrorMsg] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const settings = useSettingsContext();
 
-  const saving = useBoolean();
-  const updating = useBoolean();
+  const saving = useBoolean(false);
+  const updating = useBoolean(false);
 
   const confirm = useBoolean();
 
@@ -74,13 +84,15 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     days_details: Yup.array().of(
       Yup.object().shape({
         day: Yup.string().required('Day is required'),
-        work_start_time: Yup.date(),
-        work_end_time: Yup.date().when(
-          'work_start_time',
-          (work_start_time, schema) =>
-            work_start_time &&
-            schema.min(work_start_time, 'Work End Time must be after Work Start Time')
-        ),
+        work_start_time: Yup.date().required('work start time is required'),
+        work_end_time: Yup.date()
+          .required('work end time is required')
+          .when(
+            'work_start_time',
+            (work_start_time, schema) =>
+              work_start_time &&
+              schema.min(work_start_time, 'Work End Time must be after Work Start Time')
+          ),
         // break_start_time: Yup.date().nullable()
         //   .when(
         //     'work_end_time',
@@ -134,13 +146,16 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       })
     ),
   });
+  // console.log('user', user);
 
   const defaultValues = useMemo(
     () => ({
       unit_service:
-        appointmentConfigData?.unit_service ||
+        appointmentConfigData?.unit_service._id ||
         user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-      department: appointmentConfigData?.department || null,
+      department:
+        employeeInfo?.department?._id ||
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.department?._id,
       start_date: appointmentConfigData?.start_date || null,
       end_date: appointmentConfigData?.end_date || null,
       weekend: appointmentConfigData?.weekend || [],
@@ -161,20 +176,22 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       ],
       work_group: appointmentConfigData?.work_group?._id || null,
       work_shift: appointmentConfigData?.work_shift?._id || null,
-      days_details: appointmentConfigData?.days_details || [
-        {
-          day: '',
-          work_start_time: null,
-          work_end_time: null,
-          break_start_time: null,
-          break_end_time: null,
-          appointments: [],
-          service_types: [],
-          appointment_type: null,
-        },
-      ],
+      days_details:
+        appointmentConfigData?.days_details ||
+        [
+          // {
+          //   day: '',
+          //   // work_start_time: null,
+          //   // work_end_time: null,
+          //   // break_start_time: null,
+          //   // break_end_time: null,
+          //   appointments: [],
+          //   // service_types: [],
+          //   appointment_type: null,
+          // },
+        ],
     }),
-    [appointmentConfigData, user]
+    [appointmentConfigData, user?.employee, employeeInfo?.department]
   );
 
   const methods = useForm({
@@ -183,9 +200,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   });
   const {
     reset,
-
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
 
   const handleSaving = async () => {
@@ -195,21 +211,24 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ...dataToUpdate,
         ImmediateEdit: false,
       });
-      enqueueSnackbar('Updated successfully!');
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.appointmentconfig.root(
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
         ),
         msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
       });
+      enqueueSnackbar(t('updated successfully!'));
+      saving.onFalse();
       confirm.onFalse();
       router.push(paths.employee.appointmentconfiguration.root);
+    } catch (error) {
+      console.error(error);
+      setErrorMsg(typeof error === 'string' ? error : error.message);
+      socket.emit('error', { error, user, location: window.location.pathname });
       saving.onFalse();
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      enqueueSnackbar(e.message, { variant: 'error' });
-      saving.onFalse();
+      confirm.onFalse();
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
   const handleUpdating = async () => {
@@ -221,21 +240,20 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.employees.appointmentconfig.root(
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
-        ),
+        link: paths.employee.appointmentconfiguration.root,
         msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
       });
-      enqueueSnackbar('Updated successfully!');
+      updating.onFalse();
+      confirm.onFalse();
+      enqueueSnackbar(t('Updated successfully!'));
       router.push(paths.employee.appointmentconfiguration.root);
-      confirm.onFalse();
-      updating.onFalse();
       // await refetch();
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      enqueueSnackbar(e.message, { variant: 'error' });
-      confirm.onFalse();
+    } catch (error) {
+      console.error(error);
+      socket.emit('error', { error, user, location: window.location.pathname });
       updating.onFalse();
+      confirm.onFalse();
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
 
@@ -254,34 +272,62 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ) {
           setDataToUpdate(data);
           confirm.onTrue();
+        } else {
+          await axios.patch(
+            `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
+            data
+          );
+          socket.emit('updated', {
+            data,
+            user,
+            link: paths.unitservice.employees.appointmentconfig.root(
+              user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
+            ),
+            msg: `updated an appointment configuration ${appointmentConfigData.code}`,
+          });
+          router.push(paths.employee.appointmentconfiguration.root);
         }
-
-        // await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
-        //   ...data,
-        //   department: id,
-        // });
       } else {
-        const config = await axios.post(endpoints.tables.appointmentconfigs, data);
-        enqueueSnackbar('Added Successfully!');
+        updating.onTrue();
+        await axios.post(endpoints.tables.appointmentconfigs, data);
         socket.emit('created', {
+          data,
           user,
           link: paths.unitservice.employees.appointmentconfig.root(
-            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+            user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
           ),
-          msg: `created an appointment configuration <strong>[ ${config.data?.code} ]</strong>`,
+          msg: `created an appointment config <strong>${data.name_english}</strong>`,
         });
+        updating.onFalse();
         router.push(paths.employee.appointmentconfiguration.root);
+        enqueueSnackbar(t('added successfully!'));
       }
       // reset();
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.href });
-      enqueueSnackbar(error.message, { variant: 'error' });
+      console.log('error', JSON.stringify(error));
+      setErrorMsg(typeof error === 'string' ? error : error.message);
       console.error(error);
+      updating.onFalse();
+      socket.emit('error', { error, user, location: window.location.pathname });
       loadingSend.onFalse();
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   });
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+      // console.log(errors);
+      setErrorMsg(
+        Object.keys(errors)
+          .map((key) => errors?.[key]?.message)
+          .join('<br>')
+      );
+    }
+  }, [errors]);
+
+  console.log('errorMsg', errorMsg);
 
   useEffect(() => {
     if (appointmentConfigData) {
@@ -290,7 +336,9 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           appointmentConfigData?.unit_service ||
           user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
             ._id,
-        department: appointmentConfigData?.department || null,
+        department:
+          employeeInfo?.department?._id ||
+          user?.employee.employee_engagements[user?.employee.selected_engagement]?.department?._id,
         start_date: appointmentConfigData?.start_date || null,
         end_date: appointmentConfigData?.end_date || null,
         weekend: appointmentConfigData?.weekend || [],
@@ -323,23 +371,16 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ],
       });
     }
-  }, [appointmentConfigData, methods, user]);
+  }, [appointmentConfigData, methods, user, employeeInfo?.department]);
 
   return (
     <>
       <Container maxWidth="lg">
         <CustomBreadcrumbs
-          heading="Configuration Detail" /// edit
+          heading={t('appointment configuration')}
           links={[
-            {
-              name: t('dashboard'),
-              href: paths.employee.root,
-            },
-            {
-              name: 'Apointments Configuration',
-              href: paths.employee.appointmentconfiguration.root,
-            },
-            { name: 'Configuration Detail' },
+            { name: t('dashboard'), href: paths.dashboard.root },
+            { name: t('appointment configuration') },
           ]}
           sx={{
             mb: { xs: 3, md: 5 },
@@ -348,6 +389,11 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         <FormProvider methods={methods}>
           {!loading && (
             <Card>
+              {!!errorMsg && (
+                <Alert sx={{ borderRadius: 0 }} severity="error">
+                  <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+                </Alert>
+              )}
               <NewEditDetails
                 setAppointTime={setAppointTime}
                 appointmentConfigData={appointmentConfigData}
@@ -361,40 +407,86 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
             <LoadingButton
               variant="contained"
-              loading={isSubmitting || updating || saving}
+              loading={isSubmitting || saving.value || updating.value}
               onClick={handleSave}
             >
-              Save
+              {t('save')}
             </LoadingButton>
           </Stack>
         </FormProvider>
       </Container>
       <ConfirmDialog
-        open={confirm.value}
+        disabled={updating.value}
+        open={updating.value || confirm.value}
         onClose={confirm.onFalse}
-        title="UnCancel"
+        title={updating.value ? 'Creating appointments...' : 'Save changes'}
         content={
-          <>
-            Do you want to <strong> change your existance appointments</strong> ?
-          </>
+          updating.value ? (
+            <>
+              {/* <Typography variant="body1" component="h6" sx={{ mt: 1 }}>
+                Appointment creating...
+              </Typography> */}
+              <Typewriter
+                options={{
+                  strings: [
+                    'It might take several minutes..',
+                    'We are getting appointments ready..',
+                    'We are almost done..',
+                  ],
+                  autoStart: true,
+                  loop: true,
+                  deleteSpeed: 5,
+                  cursor: '',
+                  delay: 20,
+                }}
+              />
+            </>
+          ) : (
+            <>
+              <Typography variant="body1" component="h6" sx={{ mt: 1 }}>
+                {curLangAr
+                  ? 'هل تريد تغيير المواعيد المنشأة مسبقا؟'
+                  : 'Do you want to change your existance appointments?'}
+              </Typography>
+              {curLangAr ? (
+                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                  اضغط <strong> نعم </strong> لتغيير المواعيد المنشأة
+                </Typography>
+              ) : (
+                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                  press<strong> yes</strong> to change existance appointments
+                </Typography>
+              )}
+              {curLangAr ? (
+                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                  اضغط <strong> لا </strong> لحفظ الاعدادات للبدء من المواعيد التي يراد إنشائها
+                </Typography>
+              ) : (
+                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                  press<strong> No</strong> to start changing when creating new appointments
+                </Typography>
+              )}
+            </>
+          )
         }
         action={
           <>
             <LoadingButton
               variant="contained"
-              loading={updating}
-              color="error"
+              loading={updating.value}
+              color="warning"
               onClick={handleUpdating}
             >
-              Yes, I want to change
+              {t('yes')}
             </LoadingButton>
             <LoadingButton
-              loading={saving}
+              disabled={updating.value}
+              loading={saving.value}
               variant="contained"
               color="success"
               onClick={handleSaving}
             >
-              No, I want to start from uncreated
+              {t('no')}
             </LoadingButton>
           </>
         }

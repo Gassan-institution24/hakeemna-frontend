@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { Typography } from '@mui/material';
+import { Alert, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -49,6 +49,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const employeeInfo = useGetEmployeeEngagement(id).data;
 
   const [appointTime, setAppointTime] = useState(0);
+  const [errorMsg, setErrorMsg] = useState();
 
   const [dataToUpdate, setDataToUpdate] = useState([]);
 
@@ -82,8 +83,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     days_details: Yup.array().of(
       Yup.object().shape({
         day: Yup.string().required('Day is required'),
-        work_start_time: Yup.date(),
-        work_end_time: Yup.date().when(
+        work_start_time: Yup.date().required('work start time is required'),
+        work_end_time: Yup.date().required('work end time is required').when(
           'work_start_time',
           (work_start_time, schema) =>
             work_start_time &&
@@ -197,7 +198,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
 
   const handleSaving = async () => {
@@ -216,11 +217,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       saving.onFalse();
       confirm.onFalse();
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      setErrorMsg(typeof error === 'string' ? error : error.message);
       saving.onFalse();
       confirm.onFalse();
-      enqueueSnackbar(e.message, { variant: 'error' });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
   };
   const handleUpdating = async () => {
@@ -240,11 +243,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       enqueueSnackbar(t('Updated successfully!'));
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
       // await refetch();
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
+    } catch (error) {
+      setErrorMsg(typeof error === 'string' ? error : error.message);
+      socket.emit('error', { error, user, location: window.location.pathname });
       updating.onFalse();
       confirm.onFalse();
-      enqueueSnackbar(e.message, { variant: 'error' });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
   };
 
@@ -293,12 +298,27 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.href });
-      enqueueSnackbar(error.message, { variant: 'error' });
-      console.error(error);
+      setErrorMsg(typeof error === 'string' ? error : error.message);
+      socket.emit('error', { error, user, location: window.location.pathname });
+      updating.onFalse();
       loadingSend.onFalse();
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
   });
+
+   useEffect(() => {
+     if (Object.keys(errors).length) {
+       // console.log(errors);
+       setErrorMsg(
+         Object.keys(errors)
+           .map((key) => errors?.[key]?.message)
+           .join('<br>')
+       );
+     }
+   }, [errors]);
+
+   console.log('errorMsg', errorMsg)
 
   useEffect(() => {
     if (appointmentConfigData) {
@@ -350,6 +370,11 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         <FormProvider methods={methods}>
           {!loading && (
             <Card>
+              {!!errorMsg && (
+                <Alert sx={{borderRadius:0}} severity="error">
+                  <div> {errorMsg} </div>
+                </Alert>
+              )}
               <NewEditDetails
                 setAppointTime={setAppointTime}
                 appointmentConfigData={appointmentConfigData}

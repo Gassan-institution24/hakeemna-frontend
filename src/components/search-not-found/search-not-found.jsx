@@ -10,7 +10,7 @@ export default function SearchNotFound({ query, sx, ...other }) {
     <Paper
       sx={{
         bgcolor: 'unset',
-        textAlign: 'center',
+        textalign: 'center',
         ...sx,
       }}
       {...other}

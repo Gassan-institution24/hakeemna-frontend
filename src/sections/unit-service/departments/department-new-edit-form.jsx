@@ -130,7 +130,8 @@ export default function TableNewEditForm({ currentTable }) {
       router.push(paths.unitservice.departments.root);
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.href });
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
     }
   });

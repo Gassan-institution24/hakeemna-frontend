@@ -20,8 +20,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
@@ -141,17 +140,24 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const address = await axios.get('https://geolocation-db.com/json/');
-      await axiosHandler({
-        method: 'POST',
-        path: endpoints.auth.register,
-        data: {
-          ip_address_user_creation: address.data.IPv4,
-          user_creation: user._id,
-          role: 'employee',
-          userName: `${data.first_name} ${data.family_name}`,
-          ...data,
-        },
+      await axiosInstance.post(endpoints.auth.register, {
+        ip_address_user_creation: address.data.IPv4,
+        user_creation: user._id,
+        role: 'employee',
+        userName: `${data.first_name} ${data.family_name}`,
+        ...data,
       });
+      // await axiosHandler({
+      //   method: 'POST',
+      //   path: endpoints.auth.register,
+      //   data: {
+      //     ip_address_user_creation: address.data.IPv4,
+      //     user_creation: user._id,
+      //     role: 'employee',
+      //     userName: `${data.first_name} ${data.family_name}`,
+      //     ...data,
+      //   },
+      // });
       socket.emit('created', {
         data,
         user,
@@ -159,14 +165,18 @@ export default function TableNewEditForm({ currentTable }) {
         msg: `created an employee <strong>${data.name_english}</strong>`,
       });
       reset();
-      router.push(paths.unitservice.employees.root());
+      router.push(paths.unitservice.employees.root);
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       console.info('DATA', data);
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.href });
-      enqueueSnackbar(error.message, { variant: 'error' });
-      setErrorMsg(error);
       console.error(error);
+      socket.emit('error', {
+        error: typeof error === 'string' ? error : error.message,
+        user,
+        location: window.location.pathname,
+      });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
   // useEffect(() => {

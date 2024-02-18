@@ -130,17 +130,14 @@ export default function NotificationsPopover() {
 
   useEffect(() => {
     socket.on('error', (data) => {
-      console.log('data', data);
       refetch();
       recount();
     });
     socket.on('created', (data) => {
-      console.log('data', data);
       refetch();
       recount();
     });
     socket.on('updated', (data) => {
-      console.log('data', data);
       refetch();
       recount();
     });

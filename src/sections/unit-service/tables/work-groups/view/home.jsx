@@ -47,6 +47,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { useSnackbar } from 'notistack';
+
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import TableDetailRow from '../table-details-row'; /// edit
@@ -71,6 +73,8 @@ export default function WorkGroupsTableView() {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+const { enqueueSnackbar } = useSnackbar();
 
   const checkAcl = useAclGuard();
 
@@ -165,14 +169,15 @@ export default function WorkGroupsTableView() {
           link: paths.unitservice.tables.workgroups.root,
           msg: `activated a work group <strong>${row.name_english}</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -187,14 +192,15 @@ export default function WorkGroupsTableView() {
           link: paths.unitservice.tables.workgroups.root,
           msg: `inactivated a work group <strong>${row.name_english}</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -209,9 +215,10 @@ export default function WorkGroupsTableView() {
         link: paths.unitservice.tables.workgroups.root,
         msg: `activated many work groups`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -219,7 +226,15 @@ export default function WorkGroupsTableView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, workGroupsData, refetch, user]);
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    table,
+    workGroupsData,
+    refetch,
+    user,
+    enqueueSnackbar,
+  ]);
 
   const handleInactivateRows = useCallback(async () => {
     try {
@@ -233,9 +248,10 @@ export default function WorkGroupsTableView() {
         link: paths.unitservice.tables.workgroups.root,
         msg: `inactivated many work groups`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -243,7 +259,15 @@ export default function WorkGroupsTableView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, workGroupsData, refetch, user]);
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    table,
+    workGroupsData,
+    refetch,
+    user,
+    enqueueSnackbar,
+  ]);
 
   const handleEditRow = useCallback(
     (id) => {
