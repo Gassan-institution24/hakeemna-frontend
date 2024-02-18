@@ -33,7 +33,7 @@
 //   }, []);
 
 //   const renderDescription = (
-//     <Stack spacing={3} sx={{ mb: 10, textAlign: 'center' }}>
+//     <Stack spacing={3} sx={{ mb: 10, textalign: 'center' }}>
 //       <m.div variants={varFade().inUp}>
 //         <Typography component="div" variant="overline" sx={{ mb: 2, color: 'text.disabled' }}>
 //           Subscriptions
@@ -106,7 +106,7 @@
 //       <m.div variants={varFade().in}>
 //         <Box
 //           sx={{
-//             textAlign: 'center',
+//             textalign: 'center',
 //             mt: {
 //               xs: 5,
 //               md: 10,

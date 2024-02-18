@@ -37,7 +37,7 @@ export default function FaqsHero() {
           sx={{
             bottom: { md: 80 },
             position: { md: 'absolute' },
-            textAlign: { xs: 'center', md: 'unset' },
+            textalign: { xs: 'center', md: 'unset' },
           }}
         >
           <div>

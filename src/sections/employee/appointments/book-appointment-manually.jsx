@@ -16,7 +16,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
 import { paths } from 'src/routes/paths';
-import { useParams, useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -26,17 +25,13 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetCities, useGetCountries } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import { usePopover } from 'src/components/custom-popover';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function AddEmegencyAppointment({ refetch, appointment, onClose, ...other }) {
-  const router = useRouter();
-  const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
-  const { id } = useParams();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -54,7 +49,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
 
   const NewUserSchema = Yup.object().shape({
     first_name: Yup.string().required('First name is required'),
-    last_name: Yup.string().required('Last name is required'),
+    family_name: Yup.string().required('family name is required'),
     identification_num: Yup.string().required('ID is required'),
     birth_date: Yup.date().nullable(),
     marital_status: Yup.string(),
@@ -70,7 +65,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
   const defaultValues = useMemo(
     () => ({
       first_name: '',
-      last_name: '',
+      family_name: '',
       identification_num: '',
       birth_date: null,
       marital_status: '',
@@ -105,21 +100,25 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
         });
       } else {
         await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment._id), data);
+        socket.emit('register', {
+          user,
+          link: paths.unitservice.appointments.root,
+          msg: `registered an appointment`,
+        });
       }
-      enqueueSnackbar('Create success!');
       socket.emit('updated', {
+        data,
         user,
-        link: paths.unitservice.employees.appointments(
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
-        ),
-        msg: `booked an appointment <strong>[ ${appointment.code} ]</strong>`,
+        link: paths.unitservice.employees.root,
+        msg: `Booked an appointment <strong>${appointment.code}</strong>`,
       });
+      enqueueSnackbar('Create success!');
       refetch();
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.href });
-      enqueueSnackbar(error.message, { variant: 'error' });
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
     }
   });
@@ -168,7 +167,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
     reset({
       _id: info._id || null,
       first_name: info.first_name || '',
-      last_name: info.last_name || '',
+      family_name: info.family_name || '',
       identification_num: info.identification_num || '',
       birth_date: info.birth_date || '',
       marital_status: info.marital_status || '',
@@ -197,7 +196,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
             >
               We found a record with similar information for{' '}
               <strong>
-                {patient.first_name} {patient.last_name}
+                {patient.first_name} {patient.family_name}
               </strong>
               . Is this you?
               <br />
@@ -224,7 +223,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
           <DialogContent sx={{ overflow: 'unset', width: 'auto' }}>
             <Stack spacing={2.5}>
               <Box
-                appointmentGap={3}
+                rowGap={3}
                 columnGap={2}
                 display="grid"
                 width="auto"
@@ -234,7 +233,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
                 }}
               >
                 <RHFTextField lang="ar" name="first_name" label={t('first name')} />
-                <RHFTextField lang="ar" name="last_name" label="Last name" />
+                <RHFTextField lang="ar" name="family_name" label="family name" />
                 <RHFTextField
                   lang="ar"
                   onChange={(e) => {

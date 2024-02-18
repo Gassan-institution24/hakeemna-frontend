@@ -42,6 +42,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { useSnackbar } from 'notistack';
+
 import axiosHandler from 'src/utils/axios-handler';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -68,6 +70,8 @@ export default function RoomsTableView() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const checkAcl = useAclGuard();
 
@@ -170,14 +174,15 @@ export default function RoomsTableView() {
           link: paths.unitservice.tables.rooms.root,
           msg: `activated a room <strong>${row.name_english}</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -192,14 +197,15 @@ export default function RoomsTableView() {
           link: paths.unitservice.tables.rooms.root,
           msg: `inactivated a room <strong>${row.name_english}</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -214,9 +220,10 @@ export default function RoomsTableView() {
         link: paths.unitservice.tables.rooms.root,
         msg: `activated many rooms`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -224,7 +231,7 @@ export default function RoomsTableView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user]);
+  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user, enqueueSnackbar]);
 
   const handleInactivateRows = useCallback(async () => {
     try {
@@ -238,9 +245,10 @@ export default function RoomsTableView() {
         link: paths.unitservice.tables.rooms.root,
         msg: `inactivated many rooms`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -248,7 +256,7 @@ export default function RoomsTableView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user]);
+  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user, enqueueSnackbar]);
 
   const handleEditRow = useCallback(
     (id) => {

@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';
@@ -17,6 +17,8 @@ import { RHFTextField } from 'src/components/hook-form';
 
 export default function NewEditHolidays() {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
@@ -46,7 +48,7 @@ export default function NewEditHolidays() {
           variant="p"
           sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
         >
-          Holidays:
+          {curLangAr ? 'العطل' : 'Holidays'}:
         </Typography>
 
         <Stack
@@ -70,7 +72,7 @@ export default function NewEditHolidays() {
                   lang="ar"
                   size="small"
                   name={`holidays[${index}].description`}
-                  label="Description"
+                  label={t('description')}
                   // sx={{ flex: 2 }}
                 />
                 <Controller
@@ -124,7 +126,7 @@ export default function NewEditHolidays() {
             sx={{ padding: 1 }}
             onClick={handleAdd}
           >
-            Add Holiday
+            {curLangAr ? 'إضافة أيام عطل' : 'add holiday'}
           </Button>
         </Stack>
       </Box>

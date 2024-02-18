@@ -15,7 +15,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { fDateTime } from 'src/utils/format-time';
+
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
@@ -39,21 +41,17 @@ export default function AppointmentsTableRow({
   onDeleteRow,
 }) {
   const {
-    _id,
     code,
     appoint_number,
-    name_english,
+
     unit_service,
     work_group,
     work_shift,
     appointment_type,
-    payment_method,
-    date,
-    price,
-    currency,
+
     patient,
     start_time,
-    end_time,
+
     status,
     created_at,
     user_creation,
@@ -65,6 +63,8 @@ export default function AppointmentsTableRow({
   } = row;
 
   const { t } = useTranslate();
+
+  const checkAcl = useAclGuard();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -99,7 +99,7 @@ export default function AppointmentsTableRow({
           {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
         </TableCell>
         <TableCell lang="ar" align="center">
-          {patient?.first_name} {patient?.last_name}
+          {patient?.first_name} {patient?.family_name}
         </TableCell>
 
         <TableCell lang="ar" align="center">
@@ -127,6 +127,7 @@ export default function AppointmentsTableRow({
 
         <TableCell lang="ar" align="center">
           <Label
+            lang="ar"
             variant="soft"
             color={
               (status === 'available' && 'secondary') ||
@@ -158,7 +159,7 @@ export default function AppointmentsTableRow({
         sx={{ width: 155 }}
       >
         {status === 'available' &&
-          ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
+          checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
               sx={{ color: 'success.main' }}
               onClick={() => {
@@ -171,7 +172,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status !== 'canceled' &&
-          ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'delete' }) && (
+          checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'delete' }) && (
             <MenuItem
               onClick={() => {
                 onCancelRow();
@@ -184,7 +185,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status === 'canceled' &&
-          ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+          checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
               onClick={() => {
                 onUnCancelRow();
@@ -196,7 +197,7 @@ export default function AppointmentsTableRow({
               {t('uncancel')}
             </MenuItem>
           )}
-        {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+        {checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
           <MenuItem onClick={confirmDelayOne.onTrue}>
             <Iconify icon="mdi:timer-sync" />
             Delay
@@ -217,7 +218,7 @@ export default function AppointmentsTableRow({
           fontSize: '14px',
         }}
       >
-        <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
+        <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
           <ListItemText
             primary={format(new Date(created_at), 'dd MMM yyyy')}
@@ -229,30 +230,22 @@ export default function AppointmentsTableRow({
             }}
           />
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-          <ListItemText
-            primary={format(new Date(updated_at), 'dd MMM yyyy')}
-            secondary={format(new Date(updated_at), 'p')}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              component: 'span',
-              typography: 'caption',
-            }}
-          />
-        </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
           {ip_address_user_modification}
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Modifications No: {modifications_nums}</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>
+          {t('modifications no')}: {modifications_nums}
+        </Box>
       </CustomPopover>
       <ConfirmDialog
         open={confirmDelayOne.value}

@@ -16,7 +16,7 @@ export default function EmployeeAppointconfigPage() {
   const params = useParams();
   const { user } = useAuthContext();
   const { appointmentConfigData, loading, refetch } = useGetEmployeeAppointmentConfigs(
-    user?.employee?._id
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   );
 
   return (

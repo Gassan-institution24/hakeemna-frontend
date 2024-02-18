@@ -16,7 +16,6 @@ import DialogContent from '@mui/material/DialogContent';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -31,14 +30,11 @@ import {
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import { usePopover } from 'src/components/custom-popover';
 import FormProvider, { RHFSelect, RHFMultiSelect } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function BookManually({ onClose, refetch, ...other }) {
-  const router = useRouter();
-  const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
 
@@ -48,13 +44,13 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { serviceTypesData } = useGetUSServiceTypes(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
   const { workGroupsData } = useGetEmployeeWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   );
   const { workShiftsData } = useGetUSWorkShifts(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
   // console.log('workGroupsData', workGroupsData);
@@ -90,34 +86,29 @@ export default function BookManually({ onClose, refetch, ...other }) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-  // console.log('methods.getValue', methods.getValues());
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       const appoint = await axios.post(endpoints.tables.appointments, {
         ...data,
-        emergency: true,
-        unit_service:
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-            ._id,
         department: workGroupsData.filter((item) => item._id === data.work_group)?.[0]?.department
-          ._id,
+          ?._id,
+        emergency: true,
       });
       socket.emit('created', {
+        data,
         user,
-        link: paths.unitservice.employees.appointments(
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
-        ),
-        msg: `created an emergency appointment <strong>[ ${appoint.data?.code} ]</strong>`,
+        link: paths.unitservice.employees.root,
+        msg: `creatied emergency appointment <strong>[ ${appoint.data.code} ]</strong>`,
       });
       reset();
-      enqueueSnackbar('Created successfully!');
+      enqueueSnackbar('Create success!');
       refetch();
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.href });
-      enqueueSnackbar(error.message, { variant: 'error' });
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
     }
   });
@@ -125,7 +116,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
   return (
     <Dialog maxWidth="lg" onClose={onClose} {...other}>
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle lang="ar" sx={{ mb: 1 }}>
+        <DialogTitle sx={{ mb: 1 }}>
           {curLangAr ? 'إنشاء موعد طوارئ جديد' : 'New Emergency Appointment'}
         </DialogTitle>
 

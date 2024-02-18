@@ -22,6 +22,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRe
     status,
     error_code,
     error_msg,
+    location,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -40,7 +41,9 @@ export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRe
     <TableRow hover>
       <TableCell align="center">{code}</TableCell>
       <TableCell align="center">{error_code}</TableCell>
-      <TableCell align="center">{error_msg}</TableCell>
+      <TableCell align="center">
+        {error_msg} {location ? 'in' : ''} {location}
+      </TableCell>
       <TableCell align="center">
         <Label
           variant="soft"

@@ -1,2 +1,0 @@
-(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[4834],{54834:(e,i,n)=>{"use strict";n.r(i),n.d(i,{default:()=>l});var s=n(6907),t=n(61153),r=n.n(t),a=n(80184);function l(){return(0,a.jsxs)(a.Fragment,{children:[(0,a.jsx)(s.ql,{children:(0,a.jsx)("title",{children:" Add Patient"})}),(0,a.jsx)(r(),{})]})}},61153:()=>{}}]);
-//# sourceMappingURL=4834.61b845a6.chunk.js.map

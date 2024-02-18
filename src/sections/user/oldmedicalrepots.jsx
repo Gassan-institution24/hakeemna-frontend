@@ -287,7 +287,8 @@ export default function OldMedicalReports() {
       setCheckChange(!checkChange);
     } catch (error) {
       console.error(error.message);
-enqueueSnackbar(error.message, { variant: 'error' });    }
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+    }
   };
   return (
     <>
@@ -379,7 +380,7 @@ enqueueSnackbar(error.message, { variant: 'error' });    }
               mt: { md: -2.5, xs: -2.3 },
               ml: curLangAr ? { md: -31, xs: -5 } : { md: -19.5, xs: 4 },
               typography: 'caption',
-              textAlign: 'center',
+              textalign: 'center',
               fontSize: { md: 12, xs: 10 },
             }}
           >

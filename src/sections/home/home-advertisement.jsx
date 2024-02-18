@@ -21,7 +21,7 @@ export default function HomeAdvertisement() {
   const renderDescription = (
     <Box
       sx={{
-        textAlign: {
+        textalign: {
           xs: 'center',
           md: 'left',
         },

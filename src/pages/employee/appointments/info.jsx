@@ -7,7 +7,7 @@ import ACLGuard from 'src/auth/guard/acl-guard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import ApointmentInfoView from 'src/sections/employee/appointments/view/info';
+// import ApointmentInfoView from 'src/sections/employee/appointments/view/info';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ export default function EditPage() {
         <title> {name || ''} Appointment Accounting</title>
       </Helmet>
       {loading && <LoadingScreen />}
-      {data && <ApointmentInfoView appointmentData={data} />}
+      {/* {data && <ApointmentInfoView appointmentData={data} />} */}
     </ACLGuard>
   );
 }
