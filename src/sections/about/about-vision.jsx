@@ -94,7 +94,7 @@ export default function AboutVision() {
         </Box>
 
         <m.div variants={varFade().inUp}>
-          <Typography variant="h3" sx={{ textAlign: 'center', maxWidth: 800, mx: 'auto' }}>
+          <Typography variant="h3" sx={{ textalign: 'center', maxWidth: 800, mx: 'auto' }}>
             Our vision offering the best product nulla vehicula tortor scelerisque ultrices
             malesuada.
           </Typography>

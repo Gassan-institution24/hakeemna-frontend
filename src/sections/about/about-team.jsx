@@ -40,7 +40,7 @@
 //   });
 
 //   return (
-//     <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 10, md: 15 } }}>
+//     <Container component={MotionViewport} sx={{ textalign: 'center', py: { xs: 10, md: 15 } }}>
 //       <m.div variants={varFade().inDown}>
 //         <Typography variant="overline" sx={{ color: 'text.disabled' }}>
 //           Dream team

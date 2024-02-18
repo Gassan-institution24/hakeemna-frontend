@@ -28,8 +28,8 @@ import axiosHandler from 'src/utils/axios-handler';
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useGetAppointmentTypes } from 'src/api';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -66,7 +66,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsView({ appointmentsData, refetch }) {
+export default function AppointmentsView({ employeeData, appointmentsData, refetch }) {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
@@ -79,6 +79,8 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
     { id: 'status', label: t('status') },
     { id: '' },
   ];
+
+  const checkAcl = useAclGuard();
 
   const theme = useTheme();
 
@@ -191,18 +193,17 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
           method: 'PATCH',
           path: `${endpoints.tables.appointment(row._id)}/cancel`,
         });
-        enqueueSnackbar('canceled successfully!');
         socket.emit('updated', {
           user,
-          link: paths.unitservice.employees.appointments(
-            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
-          ),
+          link: paths.unitservice.appointments.root,
           msg: `canceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
+      enqueueSnackbar('canceled successfully!');
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -217,18 +218,17 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
           path: `${endpoints.tables.appointment(row._id)}/delay`,
           data: { minutes: min },
         });
-        enqueueSnackbar('delayed successfully!');
         socket.emit('updated', {
           user,
-          link: paths.unitservice.employees.appointments(
-            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
-          ),
+          link: paths.unitservice.appointments.root,
           msg: `delayed an appointment <strong>[ ${row.code} ]</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
+      enqueueSnackbar('delayed successfully!');
       refetch();
       setMinToDelay(0);
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -243,18 +243,17 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
           method: 'PATCH',
           path: `${endpoints.tables.appointment(row._id)}/uncancel`,
         });
-        enqueueSnackbar('uncanceled successfully!');
         socket.emit('updated', {
           user,
-          link: paths.unitservice.employees.appointments(
-            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
-          ),
+          link: paths.unitservice.appointments.root,
           msg: `uncanceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
+      enqueueSnackbar('uncanceled successfully!');
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -269,18 +268,17 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
           path: `${endpoints.tables.appointments}/cancel`,
           data: { ids: table.selected },
         });
-        enqueueSnackbar('canceled successfully!');
         socket.emit('updated', {
           user,
-          link: paths.unitservice.employees.appointments(
-            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
-          ),
+          link: paths.unitservice.appointments.root,
           msg: `canceled many appointments`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
+      enqueueSnackbar('canceled successfully!');
       refetch();
       table.onUpdatePageDeleteRows({
         totalRows: appointmentsData.length,
@@ -306,17 +304,16 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
         path: `${endpoints.tables.appointments}/delay`,
         data: { ids: table.selected, minutes: minToDelay },
       });
-      enqueueSnackbar('delayed successfully!');
       socket.emit('updated', {
         user,
-        link: paths.unitservice.employees.appointments(
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
-        ),
-        msg: `delayed many appointments`,
+        link: paths.unitservice.appointments.root,
+        msg: `dealayed many appointments`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+      enqueueSnackbar('delayed successfully!');
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     setMinToDelay(0);
@@ -347,14 +344,13 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
         enqueueSnackbar('uncanceled successfully!');
         socket.emit('updated', {
           user,
-          link: paths.unitservice.employees.appointments(
-            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
-          ),
+          link: paths.unitservice.appointments.root,
           msg: `uncanceled many appointments`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRows({
@@ -369,8 +365,8 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
       dataInPage.length,
       appointmentsData.length,
       table,
-      enqueueSnackbar,
       user,
+      enqueueSnackbar,
     ]
   );
 
@@ -396,12 +392,9 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={t('appointments')} /// edit
+          heading={t('appointments')}
           links={[
-            {
-              name: t('dashboard'),
-              href: paths.unitservice.root,
-            },
+            { name: t('dashboard'), href: paths.dashboard.root },
             { name: t('appointments') },
           ]}
           sx={{
@@ -425,6 +418,7 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
                 iconPosition="end"
                 icon={
                   <Label
+                    lang="ar"
                     variant={
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
@@ -470,7 +464,7 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
                 )
               }
               action={
-                ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+                checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
                   <>
                     <Tooltip title="delay all">
                       <IconButton color="info" onClick={confirmDelay.onTrue}>
@@ -496,7 +490,7 @@ export default function AppointmentsView({ appointmentsData, refetch }) {
                 )
               }
               color={
-                ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'update' }) &&
+                checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'canceled')
@@ -709,6 +703,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   return inputData;
 }
 AppointmentsView.propTypes = {
+  employeeData: PropTypes.object,
   appointmentsData: PropTypes.array,
   refetch: PropTypes.func,
 };

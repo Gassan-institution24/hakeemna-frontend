@@ -16,7 +16,7 @@ socket.on('connect_error', (error) => {
 
   if (window.location.pathname !== '/maintenance') {
     // Redirect to the maintenance page
-    window.location.href = '/maintenance';
+    window.location.pathname = '/maintenance';
   }
 });
 socket.on('connect', () => {
@@ -24,7 +24,7 @@ socket.on('connect', () => {
   // Check if the current URL is not already '/'
   if (window.location.pathname === '/maintenance') {
     // Redirect to the homepage
-    window.location.href = '/';
+    window.location.pathname = '/';
   }
 });
 

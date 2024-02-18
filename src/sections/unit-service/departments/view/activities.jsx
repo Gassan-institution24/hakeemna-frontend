@@ -47,6 +47,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { useSnackbar } from 'notistack';
+
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -73,6 +75,8 @@ export default function ActivitesTableView({ departmentData }) {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const checkAcl = useAclGuard();
 
@@ -165,14 +169,15 @@ export default function ActivitesTableView({ departmentData }) {
           link: paths.unitservice.departments.activities.root(departmentData._id),
           msg: `activated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, departmentData, user]
+    [dataInPage.length, table, refetch, departmentData, user, enqueueSnackbar]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -187,14 +192,15 @@ export default function ActivitesTableView({ departmentData }) {
           link: paths.unitservice.departments.activities.root(departmentData._id),
           msg: `inactivated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, departmentData, user]
+    [dataInPage.length, table, refetch, departmentData, user, enqueueSnackbar]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -209,9 +215,10 @@ export default function ActivitesTableView({ departmentData }) {
         link: paths.unitservice.departments.activities.root(departmentData._id),
         msg: `activated many activities in department <strong>${departmentData.name_english}</strong>`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -227,6 +234,7 @@ export default function ActivitesTableView({ departmentData }) {
     refetch,
     departmentData,
     user,
+    enqueueSnackbar,
   ]);
 
   const handleInactivateRows = useCallback(async () => {
@@ -241,9 +249,10 @@ export default function ActivitesTableView({ departmentData }) {
         link: paths.unitservice.departments.activities.root(departmentData._id),
         msg: `inactivated many activities in department <strong>${departmentData.name_english}</strong>`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -259,6 +268,7 @@ export default function ActivitesTableView({ departmentData }) {
     refetch,
     departmentData,
     user,
+    enqueueSnackbar,
   ]);
 
   const handleEditRow = useCallback(

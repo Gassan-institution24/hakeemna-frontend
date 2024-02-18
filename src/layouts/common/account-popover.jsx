@@ -58,7 +58,7 @@ export default function AccountPopover() {
       // router.replace('/');
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(error.message, { variant: 'error' });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
 

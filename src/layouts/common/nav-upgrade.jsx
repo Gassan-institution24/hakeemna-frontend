@@ -20,7 +20,7 @@ export default function NavUpgrade() {
       sx={{
         px: 2,
         py: 5,
-        textAlign: 'center',
+        textalign: 'center',
       }}
     >
       <Stack alignItems="center">
