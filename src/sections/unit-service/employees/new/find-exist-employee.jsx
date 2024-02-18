@@ -113,9 +113,10 @@ export default function TableNewEditForm() {
         msg: `created an employee <strong>${row.first_name}</strong>`,
       });
       enqueueSnackbar(t('employment successfully!'));
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      enqueueSnackbar(e.message, { variant: 'error' });
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
   };
 

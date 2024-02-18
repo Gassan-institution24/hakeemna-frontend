@@ -113,7 +113,7 @@ export default function WatingRoom() {
       }, 2000);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(error.message, { variant: 'error' });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
 
@@ -126,7 +126,7 @@ export default function WatingRoom() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              textAlign: 'center',
+              textalign: 'center',
               margin: '20px',
               gap: '10px',
             }}

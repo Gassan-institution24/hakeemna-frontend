@@ -19,7 +19,7 @@ export default function CompactLayout({ children }) {
             m: 'auto',
             maxWidth: 400,
             minHeight: '100vh',
-            textAlign: 'center',
+            textalign: 'center',
             justifyContent: 'center',
           }}
         >

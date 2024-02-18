@@ -31,7 +31,7 @@ export default function ACLGuard({ hasContent, category, subcategory, acl, child
 
   if (typeof acl === 'undefined' || !currentACL?.[category]?.[subcategory]?.includes(acl)) {
     return hasContent ? (
-      <Container component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
+      <Container component={MotionContainer} sx={{ textalign: 'center', ...sx }}>
         <m.div variants={varBounce().in}>
           <Typography variant="h3" sx={{ mb: 2 }}>
             Permission Denied

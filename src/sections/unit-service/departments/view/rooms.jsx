@@ -48,6 +48,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { useSnackbar } from 'notistack';
+
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import TableDetailRow from '../rooms/table-details-row'; /// edit
@@ -73,6 +75,8 @@ export default function RoomsTableView({ departmentData }) {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const checkAcl = useAclGuard();
 
@@ -165,14 +169,15 @@ export default function RoomsTableView({ departmentData }) {
           link: paths.unitservice.departments.rooms.root(departmentData._id),
           msg: `activated room <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, departmentData]
+    [dataInPage.length, table, refetch, user, departmentData, enqueueSnackbar]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -187,14 +192,15 @@ export default function RoomsTableView({ departmentData }) {
           link: paths.unitservice.departments.rooms.root(departmentData._id),
           msg: `inactivated room <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, departmentData]
+    [dataInPage.length, table, refetch, user, departmentData, enqueueSnackbar]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -209,9 +215,10 @@ export default function RoomsTableView({ departmentData }) {
         link: paths.unitservice.departments.rooms.root(departmentData._id),
         msg: `activated many rooms in department <strong>${departmentData.name_english}</strong>`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -219,7 +226,16 @@ export default function RoomsTableView({ departmentData }) {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user, departmentData]);
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    table,
+    roomsData,
+    refetch,
+    user,
+    departmentData,
+    enqueueSnackbar,
+  ]);
 
   const handleInactivateRows = useCallback(async () => {
     try {
@@ -233,9 +249,10 @@ export default function RoomsTableView({ departmentData }) {
         link: paths.unitservice.departments.rooms.root(departmentData._id),
         msg: `inactivated many rooms in department <strong>${departmentData.name_english}</strong>`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -243,7 +260,16 @@ export default function RoomsTableView({ departmentData }) {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user, departmentData]);
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    table,
+    roomsData,
+    refetch,
+    user,
+    departmentData,
+    enqueueSnackbar,
+  ]);
 
   const handleEditRow = useCallback(
     (id) => {

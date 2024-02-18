@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
@@ -25,14 +26,14 @@ import axiosHandler from 'src/utils/axios-handler';
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
   emptyRows,
@@ -47,7 +48,7 @@ import {
 import AppointConfigRow from '../appoint-config-row';
 import AppointConfigToolbar from '../appointment-toolbar';
 import ConfigFiltersResult from '../appointment-filters-result';
-// import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
+// import AddEmegencyAppointment from '../add-emergency-appointment';
 
 // ----------------------------------------------------------------------
 
@@ -72,6 +73,10 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     { id: '' },
   ];
 
+  const { enqueueSnackbar } = useSnackbar();
+
+  const checkAcl = useAclGuard();
+
   const { user } = useAuthContext();
 
   const theme = useTheme();
@@ -82,7 +87,6 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   const table = useTable({ defaultOrderBy: 'createDate' });
 
-  const addModal = useBoolean();
   const confirm = useBoolean();
   const confirmUnCancel = useBoolean();
 
@@ -152,18 +156,19 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.appointmentconfig.root(
-            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+            user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
           ),
           msg: `canceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar]
   );
 
   const handleUnCancelRow = useCallback(
@@ -176,18 +181,19 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.appointmentconfig.root(
-            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+            user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
           ),
           msg: `uncanceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar]
   );
 
   const handleCancelRows = useCallback(async () => {
@@ -200,13 +206,14 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.appointmentconfig.root(
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
         ),
         msg: `canceled many appointment configurations`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -214,7 +221,16 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table, user]);
+  }, [
+    refetch,
+    dataFiltered.length,
+    dataInPage.length,
+    appointmentConfigData.length,
+    table,
+    user,
+    enqueueSnackbar,
+  ]);
+
   const handleUnCancelRows = useCallback(async () => {
     try {
       await axiosHandler({
@@ -225,13 +241,14 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.appointmentconfig.root(
-          user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
         ),
-        msg: `uncanceled an appointment configurations`,
+        msg: `uncanceled many appointment configurations`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -239,14 +256,23 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [refetch, dataFiltered.length, dataInPage.length, appointmentConfigData.length, table, user]);
+  }, [
+    refetch,
+    dataFiltered.length,
+    dataInPage.length,
+    appointmentConfigData.length,
+    table,
+    user,
+    enqueueSnackbar,
+  ]);
+
   const handleAdd = useCallback(() => {
     router.push(paths.employee.appointmentconfiguration.new);
   }, [router]);
 
   const handleViewRow = useCallback(
     (_id) => {
-      router.push(paths.employee.appointmentconfiguration.details(_id));
+      router.push(paths.employee.appointmentconfiguration.edit(_id));
     },
     [router]
   );
@@ -266,12 +292,9 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={t('appointment configuration')} /// edit
+          heading={t('appointment configuration')}
           links={[
-            {
-              name: t('dashboard'),
-              href: paths.employee.root,
-            },
+            { name: t('dashboard'), href: paths.dashboard.root },
             { name: t('appointment configuration') },
           ]}
           sx={{
@@ -295,6 +318,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                 iconPosition="end"
                 icon={
                   <Label
+                    lang="ar"
                     variant={
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
@@ -340,7 +364,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                 )
               }
               action={
-                ACLGuard({
+                checkAcl({
                   category: 'employee',
                   subcategory: 'appointment_configs',
                   acl: 'update',
@@ -365,7 +389,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                 )
               }
               color={
-                ACLGuard({
+                checkAcl({
                   category: 'employee',
                   subcategory: 'appointment_configs',
                   acl: 'update',
@@ -407,8 +431,8 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onViewRow={() => handleViewRow(row._id)}
-                        onCancelRow={() => handleCancelRow(row)}
-                        onUnCancelRow={() => handleUnCancelRow(row)}
+                        onCancelRow={() => handleCancelRow(row._id)}
+                        onUnCancelRow={() => handleUnCancelRow(row._id)}
                       />
                     ))}
 

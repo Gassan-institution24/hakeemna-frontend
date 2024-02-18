@@ -46,6 +46,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
+import { useSnackbar } from 'notistack';
+
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -73,6 +75,8 @@ export default function UnitServicesTableView() {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const checkAcl = useAclGuard();
 
@@ -159,14 +163,15 @@ export default function UnitServicesTableView() {
           link: paths.unitservice.departments.info(row._id),
           msg: `activating department <strong>${row.name_english}</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -181,14 +186,15 @@ export default function UnitServicesTableView() {
           link: paths.unitservice.departments.info(row._id),
           msg: `inactivating department <strong>${row.name_english}</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -203,9 +209,10 @@ export default function UnitServicesTableView() {
         link: paths.unitservice.departments.root,
         msg: `activating many departments`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -213,7 +220,15 @@ export default function UnitServicesTableView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, departmentsData, refetch, user]);
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    table,
+    departmentsData,
+    refetch,
+    user,
+    enqueueSnackbar,
+  ]);
 
   const handleInactivateRows = useCallback(async () => {
     try {
@@ -227,9 +242,10 @@ export default function UnitServicesTableView() {
         link: paths.unitservice.departments.root,
         msg: `inactivating many departments`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -237,7 +253,15 @@ export default function UnitServicesTableView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, departmentsData, refetch, user]);
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    table,
+    departmentsData,
+    refetch,
+    user,
+    enqueueSnackbar,
+  ]);
 
   const handleFilters = useCallback(
     (name, value) => {

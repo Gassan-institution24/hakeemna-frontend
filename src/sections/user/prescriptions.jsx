@@ -73,7 +73,7 @@ export default function Prescriptions() {
       fontSize: '15px',
     },
     departmentInfo: {
-      textAlign: 'center',
+      textalign: 'center',
       fontSize: 12,
       position: 'relative',
       top: '-10px',

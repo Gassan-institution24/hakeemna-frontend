@@ -21,7 +21,7 @@ export default function StandardNode({ node, onEdit, onDelete, sx }) {
           p: 2,
           minWidth: 200,
           borderRadius: 1.5,
-          textAlign: 'left',
+          textalign: 'left',
           position: 'relative',
           display: 'inline-flex',
           flexDirection: 'column',

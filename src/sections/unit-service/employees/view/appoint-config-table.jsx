@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
@@ -70,6 +71,8 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     { id: 'status', label: t('status') },
     { id: '' },
   ];
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const checkAcl = useAclGuard();
 
@@ -156,14 +159,15 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
           link: paths.unitservice.employees.appointmentconfig.root(id),
           msg: `canceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, id]
+    [dataInPage.length, table, refetch, user, id, enqueueSnackbar]
   );
 
   const handleUnCancelRow = useCallback(
@@ -178,14 +182,15 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
           link: paths.unitservice.employees.appointmentconfig.root(id),
           msg: `uncanceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
         });
-      } catch (e) {
-        socket.emit('error', { error: e, user, location: window.location.href });
-        console.error(e);
+      } catch (error) {
+        socket.emit('error', { error, user, location: window.location.pathname });
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, id]
+    [dataInPage.length, table, refetch, user, id, enqueueSnackbar]
   );
 
   const handleCancelRows = useCallback(async () => {
@@ -200,9 +205,10 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         link: paths.unitservice.employees.appointmentconfig.root(id),
         msg: `canceled many appointment configurations`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -218,6 +224,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     table,
     user,
     id,
+    enqueueSnackbar,
   ]);
 
   const handleUnCancelRows = useCallback(async () => {
@@ -232,9 +239,10 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         link: paths.unitservice.employees.appointmentconfig.root(id),
         msg: `uncanceled many appointment configurations`,
       });
-    } catch (e) {
-      socket.emit('error', { error: e, user, location: window.location.href });
-      console.error(e);
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
     }
     refetch();
     table.onUpdatePageDeleteRows({
@@ -250,6 +258,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     table,
     user,
     id,
+    enqueueSnackbar,
   ]);
 
   const handleAdd = useCallback(() => {

@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';
@@ -17,6 +17,8 @@ import { RHFTextField } from 'src/components/hook-form';
 
 export default function NewEditLongHolidays() {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
@@ -47,7 +49,7 @@ export default function NewEditLongHolidays() {
           variant="p"
           sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
         >
-          Long Holidays:
+          {curLangAr ? 'عطل طويلة' : 'Long Holidays'}:
         </Typography>
 
         <Stack
@@ -71,7 +73,7 @@ export default function NewEditLongHolidays() {
                   lang="ar"
                   size="small"
                   name={`long_holidays[${index}].description`}
-                  label="Description"
+                  label={t('description')}
                   // sx={{ flex: 2 }}
                 />
                 <Controller
@@ -157,7 +159,7 @@ export default function NewEditLongHolidays() {
             sx={{ padding: 1 }}
             onClick={handleAdd}
           >
-            Add Long Holiday
+            {curLangAr ? 'إضافة عطل طويلة' : 'add long holiday'}
           </Button>
         </Stack>
       </Box>

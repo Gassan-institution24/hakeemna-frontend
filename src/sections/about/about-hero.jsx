@@ -29,7 +29,7 @@ export default function AboutHero() {
           sx={{
             bottom: { md: 80 },
             position: { md: 'absolute' },
-            textAlign: {
+            textalign: {
               xs: 'center',
               md: 'unset',
             },

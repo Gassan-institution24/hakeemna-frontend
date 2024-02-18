@@ -18,13 +18,13 @@ const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  textAlign: 'center',
+  textalign: 'center',
   color: theme.palette.text.secondary,
 }));
 
 export default function Whydoc() {
   const renderDescription = (
-    <Stack spacing={3} sx={{ textAlign: 'center', position: 'relative', top: '-50px' }}>
+    <Stack spacing={3} sx={{ textalign: 'center', position: 'relative', top: '-50px' }}>
       <m.div variants={varFade().inDown}>
         <Typography variant="h2">We Provide you: </Typography>
       </m.div>
@@ -56,7 +56,7 @@ export default function Whydoc() {
               style={{
                 fontWeight: '700',
                 width: '250px',
-                textAlign: 'left',
+                textalign: 'left',
               }}
             >
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br /> Amet cupiditate ipsum
@@ -106,7 +106,7 @@ export default function Whydoc() {
               style={{
                 fontWeight: '700',
                 width: '250px',
-                textAlign: 'left',
+                textalign: 'left',
               }}
             >
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br /> Amet cupiditate ipsum

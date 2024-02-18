@@ -115,7 +115,7 @@ function CardDesktop({ category }) {
         borderRadius: 2,
         bgcolor: 'unset',
         cursor: 'pointer',
-        textAlign: 'center',
+        textalign: 'center',
         '&:hover': {
           bgcolor: 'background.paper',
           boxShadow: (theme) => theme.customShadows.z20,
@@ -152,7 +152,7 @@ function CardMobile({ category }) {
         py: 2,
         maxWidth: 140,
         borderRadius: 1,
-        textAlign: 'center',
+        textalign: 'center',
         alignItems: 'center',
         typography: 'subtitle2',
         flexDirection: 'column',

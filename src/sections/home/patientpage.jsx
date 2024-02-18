@@ -17,7 +17,7 @@ const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1d222900' : 'rgba(255, 255, 255, 0)',
   ...theme.typography.body2,
   padding: theme.spacing(5),
-  textAlign: 'center',
+  textalign: 'center',
   color: theme.palette.text.secondary,
 }));
 
@@ -26,7 +26,7 @@ export default function Patient() {
     <Container component={MotionViewport}>
       <Stack
         spacing={3}
-        sx={{ textAlign: 'center', p: 5, position: { md: 'relative' }, bottom: { md: '-40px' } }}
+        sx={{ textalign: 'center', p: 5, position: { md: 'relative' }, bottom: { md: '-40px' } }}
       >
         <m.div variants={varFade().inDown}>
           <Typography variant="h2">Start Now</Typography>
@@ -40,7 +40,7 @@ export default function Patient() {
         <Grid item xs={12} md={6}>
           <Item
             sx={{
-              textAlign: 'left',
+              textalign: 'left',
               position: 'relative',
               left: { md: '20px', xs: '-15px' },
               top: { md: '120px' },

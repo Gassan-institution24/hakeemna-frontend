@@ -63,7 +63,7 @@ export default function Medicalreports() {
       border: 1,
     },
     text: {
-      textAlign: 'center',
+      textalign: 'center',
       fontSize: 15,
     },
     text2: {
