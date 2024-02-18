@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { useLocales, useTranslate } from 'src/locales';
+import {  useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -32,19 +32,13 @@ export default function AppointmentsFilters({
   canReset,
   onResetFilters,
   //
+  dataFiltered,
   insuranseCosData,
-  paymentMethodsOptions,
-  departmentsData,
-  usrate,
-  rateData,
   countriesOptions,
-  citiesOptions,
-  unitServicesOptions,
   appointmentTypeOptions,
   dateError,
 }) {
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+
   const { t } = useTranslate();
   const handleFilterAppointtypes = useCallback(
     (e) => {
@@ -58,6 +52,7 @@ export default function AppointmentsFilters({
     },
     [onFilters]
   );
+  console.log(dataFiltered,"df");
   const handleFiltedInsurance = useCallback(
     (e) => {
       onFilters('insurance', e.target.value);
@@ -222,15 +217,10 @@ export default function AppointmentsFilters({
 }
 
 AppointmentsFilters.propTypes = {
-  citiesOptions: PropTypes.array,
   appointmentTypeOptions: PropTypes.array,
-  unitServicesOptions: PropTypes.array,
   countriesOptions: PropTypes.array,
-  rateData: PropTypes.array,
-  usrate: PropTypes.array,
-  paymentMethodsOptions: PropTypes.array,
+  dataFiltered: PropTypes.array,
   insuranseCosData: PropTypes.array,
-  departmentsData: PropTypes.array,
   canReset: PropTypes.bool,
   filters: PropTypes.object,
   onClose: PropTypes.func,
