@@ -38,6 +38,7 @@ import AppointmentFiltersResult from './appointments/appointment-filters-result-
 const defaultFilters = {
   unitServices: 'all',
   countries: 'all',
+  insurance: 'all',
   start_date: null,
   end_date: null,
   rate: 'all',
@@ -53,7 +54,7 @@ export default function AppointmentBooking() {
   const { t } = useTranslate();
   const openFilters = useBoolean();
   const { user } = useAuthContext();
-  const [sortBy, setSortBy] = useState('latest');
+  const [sortBy, setSortBy] = useState('rateing');
   const [search, setSearch] = useState();
 
   const { appointmentsData, refetch } = useGetAvailableAppointments();
@@ -66,17 +67,12 @@ export default function AppointmentBooking() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const sortOptions = [
-    { value: 'latest', label: t('Latest') },
-    { value: 'oldest', label: t('Oldest') },
-    { value: 'rate', label: t('Ratings') },
-  ];
+  const sortOptions = [{ value: 'rateing', label: t('Rateing') }];
 
   const dateError =
     filters.Offer_start_date && filters.Offer_end_date
       ? filters.Offer_start_date.getTime() > filters.Offer_end_date.getTime()
       : false;
-
 
   const dataFiltered = applyFilter({
     inputData: unitservicesData,
@@ -86,10 +82,7 @@ export default function AppointmentBooking() {
     dateError,
   });
 
-
-
   const canReset = !isEqual(defaultFilters, filters);
-
 
   const handleFilters = useCallback((name, value) => {
     setFilters((prevState) => ({
@@ -98,39 +91,9 @@ export default function AppointmentBooking() {
     }));
   }, []);
 
-  const handleSortBy = useCallback((newValue) => {
-    setSortBy(newValue);
+  const handleSortBy = useCallback(() => {
+    setSortBy(defaultFilters);
   }, []);
-
-      // if (inputValue) {
-      //   const results = appointmentsData.filter(
-      //     (appointment) =>
-      //       (appointment.unit_service &&
-      //         appointment.unit_service?.name_english
-      //           ?.toLowerCase()
-      //           .indexOf(search.query.toLowerCase()) !== -1) ||
-      //       (appointment.unit_service &&
-      //         appointment.unit_service?.name_arabic
-      //           ?.toLowerCase()
-      //           .indexOf(search.query.toLowerCase()) !== -1) ||
-      //       (appointment.work_group &&
-      //         appointment.work_group.employees &&
-      //         appointment.work_group.employees.some(
-      //           (employee) =>
-      //             employee?.name_arabic?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
-      //         )) ||
-      //       appointment?._id === search.query.toLowerCase() ||
-      //       JSON.stringify(appointment.code) === search.query.toLowerCase()
-      //   );
-
-        // setSearch((prevState) => ({
-        //   ...prevState,
-        //   results,
-        // }));
-  //     }
-  //   },
-  //   [search.query, appointmentsData]
-  // );
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -166,6 +129,7 @@ export default function AppointmentBooking() {
           insuranseCosData={insuranseCosData}
           citiesOptions={tableData}
           unitServicesOptions={unitservicesData}
+          dataFiltered={dataFiltered}
           // usrate={usrate}
           appointmentTypeOptions={appointmenttypesData}
           paymentMethodsOptions={paymentMethodsData}
@@ -224,48 +188,60 @@ export default function AppointmentBooking() {
         {canReset && renderResults}
       </Stack>
       <Container>
-      <Tabs
-        value={currentTab}
-        onChange={handleChangeTab}
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      >
-        {TABS.map((tab) => (
-          <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
-        ))}
-      </Tabs>
-      {currentTab === 'online' && <OnlineAppointmentList patientData={user?.patient?._id} refetch={refetch}/>}
-      {currentTab === 'inclinic' && <ClinicAppointmentList patientData={user?.patient?._id} refetch={refetch} dataFiltered={dataFiltered}/>}
-    </Container>
-      
-      
-      
-   
-   
+        <Tabs
+          value={currentTab}
+          onChange={handleChangeTab}
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
+        >
+          {TABS.map((tab) => (
+            <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
+          ))}
+        </Tabs>
+        {currentTab === 'online' && (
+          <OnlineAppointmentList
+            patientData={user?.patient?._id}
+            refetch={refetch}
+            dataFiltered={dataFiltered}
+          />
+        )}
+        {currentTab === 'inclinic' && (
+          <ClinicAppointmentList
+            patientData={user?.patient?._id}
+            refetch={refetch}
+            dataFiltered={dataFiltered}
+          />
+        )}
+      </Container>
     </Container>
   );
 }
 
 // ----------------------------------------------------------------------
 
+function applyFilter({ inputData, search, comparator, filters, sortBy }) {
+  const {
+    unitServices,
+    countries,
+    insurance,
+    start_date,
+    end_date,
+    rate,
+    appointtypes,
+    payment_methods,
+    name,
+  } = filters;
 
-function applyFilter({ inputData,search, comparator, filters, sortBy }) {
-  // console.log('search',search)
-  // console.log('inputData',inputData)
-
-
-    // SORT BY
-    if (sortBy === 'latest') {
-      inputData = orderBy(inputData, ['start_time'], ['desc']);
-    }
-  
-    if (sortBy === 'oldest') {
-      inputData = orderBy(inputData, ['start_time'], ['asc']);
-    }
-    if (sortBy === 'rate') {
-      inputData = orderBy(inputData, ['unit_service.rate'], ['desc']);
-    }
+  // SORT BY
+  if (sortBy === 'rateing') {
+    inputData = orderBy(inputData, ['rate'], ['desc']);
+  }
+  if (insurance !== 'all') {
+    inputData = inputData.filter(
+      (data) => data?.insurance && data?.insurance?.some((insur)=>insur._id === insurance)
+    );
+  }
 
   if (search) {
     inputData = inputData.filter(

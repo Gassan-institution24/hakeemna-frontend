@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import { Avatar, Button } from '@mui/material';
@@ -14,8 +14,7 @@ import { useGetUSFeedbackes, useGetUSAvailableAppointments } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
-
-
+import { useSnackbar } from 'src/components/snackbar';
 
 const AppointmentOnline = ({ Units, onBook, onView }) => {
   const { t } = useTranslate();
@@ -24,18 +23,24 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
   const { user } = useAuthContext();
   const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient._id));
   const numberOfUsers = uniqueUserIds.size;
+  const [appointmentValue, setAppointmentValue] = useState();
+  const [showAllFeedback, setShowAllFeedback] = useState(false);
 
+  const { enqueueSnackbar } = useSnackbar();
   const getTodayDate = () => {
     const today = new Date();
     return today.toISOString().split('T')[0];
   };
 
-  const kdk = (id) => {
-    onBook(id);
-    refetch();
+  const kdk = () => {
+    if (appointmentValue) {
+      onBook(appointmentValue);
+      enqueueSnackbar(`Appointment booked successfully`, { variant: 'success' });
+      refetch();
+    } else {
+      alert('sdsd');
+    }
   };
-
-  const [showAllFeedback, setShowAllFeedback] = useState(false);
 
   const toggleFeedbackDisplay = () => {
     setShowAllFeedback(!showAllFeedback);
@@ -80,153 +85,99 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
                 {numberOfUsers > 1 ? t('Visitors') : t('One Visitor')}{' '}
               </Typography>
             </Box>
-            <Box sx={{ position: 'relative', left: '-10.1%' }}>
-              <>
-                <li>
-                  <Iconify width={18} sx={{ color: 'info.main' }} icon="mdi:location" />{' '}
-                  {Units?.country?.name_english} {Units?.city?.name_english}
-                </li>
-                <li>
+            <Box sx={{ position: 'relative', left: '-0.1%', mt: 1 }}>
+              <Typography>
+                <Iconify width={18} sx={{ color: 'info.main' }} icon="mdi:location" />{' '}
+                {Units?.country?.name_english} {Units?.city?.name_english}
+              </Typography>
+              {Units?.work_hours && (
+                <Typography>
                   <Iconify width={18} sx={{ color: 'warning.main' }} icon="mingcute:time-line" />{' '}
-                  Open 24h
-                </li>
-                <li>
-                  <Iconify width={18} sx={{ color: 'success.main' }} icon="mdi:cash-multiple" />{' '}
-                  {t('Fees: ')} 30 JOD{' '}
-                </li>
-              </>
+                  Open {Units?.work_hours} h{' '}
+                </Typography>
+              )}
+              <Typography>
+                <Iconify width={18} sx={{ color: 'success.main' }} icon="mdi:cash-multiple" />{' '}
+                {t('Fees: ')} 30 JOD{' '}
+              </Typography>
             </Box>
-            {displayedFeedback.map((feedback, index) => (
-              <React.Fragment key={index}>
-                <Iconify
-                  sx={{
-                    transform: 'rotate(-20deg)',
-                    color: 'success.main',
-                    zIndex: 1,
-                    position: 'relative',
-                    top: 12,
-                    left: -5,
-                    width: 25,
-                    height: 25,
-                  }}
-                  icon="material-symbols-light:rate-review-outline"
-                />
-                <Box sx={{ bgcolor: 'rgba(208, 208, 208, 0.250)', width: 350, mb:1 }}>
-                  <Box sx={{ padding: 2 }}>
-                    <Box sx={{ display: 'inline-flex' }}>
-                      {feedback?.patient?.profile_picture ? (
-                        <Image
-                          sx={{
-                            borderRadius: '100%',
-                            width: '35px',
-                            height: '35px',
-                            position: 'relative',
-                            top: '-5px',
-                            left: '-5px',
-                            border: '1px solid lightgreen',
-                          }}
-                          src={feedback?.patient?.profile_picture}
-                        />
-                      ) : (
-                        <Avatar
-                          src={user?.photoURL}
-                          alt={user?.userName}
-                          sx={{
-                            width: 36,
-                            height: 36,
-                            border: (theme) => `solid 2px ${theme.palette.background.default}`,
-                          }}
-                        >
-                          {user?.ratemakername?.charAt(0).toUpperCase()}
-                        </Avatar>
-                      )}
-                      <Typography sx={{ ml: 1, mt: 0.5 }}>
-                        {feedback?.patient?.first_name}
-                      </Typography>
-                      <Box sx={{ ml: 1, mt: 0.7 }}>
-                        <Iconify width={19} icon="emojione:star" />{' '}
-                        <Iconify width={19} icon="emojione:star" />{' '}
-                        <Iconify width={19} icon="emojione:star" />{' '}
-                        <Iconify width={19} icon="emojione:star" />{' '}
-                        <Iconify width={19} icon="emojione:star" />{' '}
+            {displayedFeedback.length > 0 &&
+              displayedFeedback.map((feedback, index) => (
+                <React.Fragment key={index}>
+                  <Iconify
+                    sx={{
+                      transform: 'rotate(-20deg)',
+                      color: 'success.main',
+                      zIndex: 1,
+                      position: 'relative',
+                      top: 12,
+                      left: -5,
+                      width: 25,
+                      height: 25,
+                    }}
+                    icon="material-symbols-light:rate-review-outline"
+                  />
+                  <Box sx={{ bgcolor: 'rgba(208, 208, 208, 0.250)', width: 350, mb: 1 }}>
+                    <Box sx={{ padding: 2 }}>
+                      <Box sx={{ display: 'inline-flex' }}>
+                        {feedback?.patient?.profile_picture ? (
+                          <Image
+                            sx={{
+                              borderRadius: '100%',
+                              width: '35px',
+                              height: '35px',
+                              position: 'relative',
+                              top: '-5px',
+                              left: '-5px',
+                              border: '1px solid lightgreen',
+                            }}
+                            src={feedback?.patient?.profile_picture}
+                          />
+                        ) : (
+                          <Avatar
+                            src={user?.photoURL}
+                            alt={user?.userName}
+                            sx={{
+                              width: 36,
+                              height: 36,
+                              border: (theme) => `solid 2px ${theme.palette.background.default}`,
+                            }}
+                          >
+                            {user?.ratemakername?.charAt(0).toUpperCase()}
+                          </Avatar>
+                        )}
+                        <Typography sx={{ ml: 1, mt: 0.5 }}>
+                          {feedback?.patient?.first_name}
+                        </Typography>
+                        <Box sx={{ ml: 1, mt: 0.7 }}>
+                          <Iconify width={19} icon="emojione:star" />{' '}
+                          <Iconify width={19} icon="emojione:star" />{' '}
+                          <Iconify width={19} icon="emojione:star" />{' '}
+                          <Iconify width={19} icon="emojione:star" />{' '}
+                          <Iconify width={19} icon="emojione:star" />{' '}
+                        </Box>
                       </Box>
+                      <Typography sx={{ ml: 5.3 }}>{feedback?.Body}</Typography>
                     </Box>
-                    <Typography sx={{ ml: 5.3 }}>{feedback?.Body}</Typography>
                   </Box>
-                </Box>
-              </React.Fragment>
-            ))}
-            {feedbackData.length && (
-              <Link onClick={toggleFeedbackDisplay} variant="outlined"> 
+                </React.Fragment>
+              ))}
+            {feedbackData.length > 1 && (
+              <Link onClick={toggleFeedbackDisplay} variant="outlined">
                 {showAllFeedback ? 'Hide' : 'Show All'}
               </Link>
             )}
           </Box>
         </Box>
       </Box>
-      <Box sx={{ width: '45%', margin: 2, display:'inline-flex', }}>
-        {groupedAppointments.today.length > 0 && (
-          <Box sx={{display:'block', width:'50%'}} >
-            <Typography style={{ fontWeight: 600, paddingBottom:15 }}>Today</Typography>
-            {groupedAppointments.today.map((appointment, i) => (
-              <Typography key={i}>
-                <Button
-                  onClick={() => kdk(appointment?._id)}
-                  sx={{
-                    bgcolor: 'rgba(208, 208, 208, 0.566)',
-                    mb: 1,
-                    // width: '18%',
-                    borderRadius: 0,
-                    fontWeight: 100,
-                  }}
-                >
-                  {fTime(appointment?.start_time)}
-                </Button>
-              </Typography>
-            ))}
-            <Button sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
-              Book
-            </Button>
-          </Box>
-        )}
-
-        {/* Render other dates */}
-        {Object.keys(groupedAppointments).map((date, index) => {
-          if (date !== 'today') {
-            return (
-              <Box sx={{display:'block', width:'50%'}}>
-                <Typography style={{ fontWeight: 600, paddingBottom:15 }}>{date}</Typography>
-                {groupedAppointments[date].map((appointment, i) => (
-                  <Typography key={i}>
-                    <Button
-                      onClick={() => kdk(appointment?._id)}
-                      sx={{
-                        bgcolor: 'rgba(208, 208, 208, 0.566)',
-                        mb: 1,
-                        borderRadius: 0,
-                        fontWeight: 100,
-                      }}
-                    >
-                      {fTime(appointment?.start_time)}
-                    </Button>
-                  </Typography>
-                ))}
-                <Button sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
-                  Book
-                </Button>
-              </Box>
-            );
-          }
-          return null;
-        })}
-
+      <Box sx={{ width: '45%', margin: 2, display: 'inline-flex', gap: 4, p: 1 }}>
         {/* Render placeholder if no appointments for today */}
         {groupedAppointments.today.length === 0 && (
-          <Box sx={{display:'block'}}>
-            <Typography style={{ fontWeight: 600, paddingBottom:15 }}>Today</Typography>
+          <Box sx={{ width: '25%' }}>
+            <Typography style={{ fontWeight: 600, paddingBottom: 15 }}>Today</Typography>
             <Typography>
               <Button
-              disabled
+                disabled
                 sx={{
                   bgcolor: 'rgba(208, 208, 208, 0.566)',
                   borderRadius: 0,
@@ -236,8 +187,105 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
                 -- / --
               </Button>
             </Typography>
+            {groupedAppointments.today.length > 0 ? (
+              <Button disabled sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
+                Book
+              </Button>
+            ) : (
+              ''
+            )}
           </Box>
         )}
+
+        {groupedAppointments.today.length > 0 && (
+          <Box sx={{ width: '25%' }}>
+            <Typography style={{ fontWeight: 600, paddingBottom: 15 }}>Today</Typography>
+            <Box
+              sx={{
+                display: 'block',
+                overflowY: groupedAppointments.today.length > 5 ? 'scroll' : 'auto',
+                overflowX: 'hidden',
+                maxHeight: groupedAppointments.today.length > 5 ? '100px' : 'auto',
+              }}
+            >
+              {groupedAppointments.today.map((appointment, i) => (
+                <Typography key={i}>
+                  <Button
+                    onClick={() => {
+                      setAppointmentValue(appointment?._id);
+                    }}
+                    sx={{
+                      bgcolor: 'rgba(208, 208, 208, 0.566)',
+                      mb: 1,
+                      width: '80px',
+                      borderRadius: 0,
+                      fontWeight: 100,
+                      outline: 'none',
+                      '&:focus': {
+                        border: '1px solid lightgreen',
+                        bgcolor: 'rgba(208, 208, 208, 0.150)',
+                      },
+                    }}
+                  >
+                    {fTime(appointment?.start_time)}
+                  </Button>
+                </Typography>
+              ))}
+            </Box>
+
+            <Button onClick={kdk} sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
+              Book
+            </Button>
+          </Box>
+        )}
+
+        {Object.keys(groupedAppointments).map((date, index) => {
+          if (date !== 'today') {
+            const appointments = groupedAppointments[date];
+
+            return (
+              <Box sx={{ width: '25%' }} key={index}>
+                <Typography style={{ fontWeight: 600, paddingBottom: 15 }}>{date}</Typography>
+                <Box
+                  sx={{
+                    display: 'block',
+                    overflowY: appointments.length > 5 ? 'scroll' : 'auto',
+                    overflowX: 'hidden',
+                    maxHeight: appointments.length > 5 ? '100px' : 'auto',
+                  }}
+                >
+                  {appointments.map((appointment, i) => (
+                    <Typography key={i}>
+                      <Button
+                        onClick={() => {
+                          setAppointmentValue(appointment?._id);
+                        }}
+                        sx={{
+                          bgcolor: 'rgba(208, 208, 208, 0.566)',
+                          mb: 1,
+                          width: '80px',
+                          borderRadius: 0,
+                          fontWeight: 100,
+                          '&:focus': {
+                            border: '1px solid lightgreen',
+                            bgcolor: 'rgba(208, 208, 208, 0.150)',
+                          },
+                        }}
+                      >
+                        {fTime(appointment?.start_time)}
+                      </Button>
+                    </Typography>
+                  ))}
+                </Box>
+
+                <Button onClick={kdk} sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
+                  Book
+                </Button>
+              </Box>
+            );
+          }
+          return null;
+        })}
       </Box>
     </Box>
   );
