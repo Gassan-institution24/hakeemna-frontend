@@ -14,7 +14,7 @@ import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
-export default function AppointmentSearch({   filters,
+export default function   AppointmentSearch({   filters,
   onSearch,
   onPrint,
   onDownload,
