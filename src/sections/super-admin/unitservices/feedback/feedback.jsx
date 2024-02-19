@@ -13,10 +13,7 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
-import { paths } from 'src/routes/paths';
-import { useRouter, useParams } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
+import { useParams } from 'src/routes/hooks';
 
 import { useGetUSFeedbackes } from 'src/api';
 
@@ -24,7 +21,6 @@ import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
   emptyRows,
@@ -78,11 +74,6 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
   const componentRef = useRef();
 
   const settings = useSettingsContext();
-
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
-  const router = useRouter();
 
   const { feedbackData, loading } = useGetUSFeedbackes(id);
 
@@ -159,24 +150,6 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
-        heading={`${unitserviceName} feedback`} /// edit
-        links={[
-          {
-            name: 'dashboard',
-            href: paths.superadmin.root,
-          },
-          {
-            name: 'Unit Services',
-            href: paths.superadmin.unitservices.root,
-          },
-          { name: t(`${unitserviceName} feedback`) }, /// edit
-        ]}
-        sx={{
-          mb: { xs: 3, md: 5 },
-        }}
-      />
-
       <Card>
         <Tabs
           value={filters.status}
