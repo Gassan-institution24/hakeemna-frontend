@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[8172],{88172:(e,s,i)=>{i.r(s),i.d(s,{default:()=>n});var r=i(6907),a=i(85362),l=i(80184);function n(){return(0,l.jsxs)(l.Fragment,{children:[(0,l.jsx)(r.ql,{children:(0,l.jsx)("title",{children:" Dashboard: Service Types Table"})}),(0,l.jsx)(a.U$,{})]})}}}]);
+//# sourceMappingURL=8172.a8c72d05.chunk.js.map
