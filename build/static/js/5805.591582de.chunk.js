@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[5805],{30743:(e,i,s)=>{s.r(i),s.d(i,{default:()=>c});var n=s(6907),r=s(88280),t=s(80184);function c(){return(0,t.jsxs)(t.Fragment,{children:[(0,t.jsx)(n.ql,{children:(0,t.jsx)("title",{children:" Register As Unit Service"})}),(0,t.jsx)(r.ng,{})]})}}}]);
+//# sourceMappingURL=5805.591582de.chunk.js.map

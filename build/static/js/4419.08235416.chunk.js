@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[4419],{14419:(e,s,i)=>{i.r(s),i.d(s,{default:()=>c});var r=i(6907),a=i(85362),n=i(80184);function c(){return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsx)(r.ql,{children:(0,n.jsx)("title",{children:" Dashboard: Unit Services Types Table"})}),(0,n.jsx)(a.Zc,{})]})}}}]);
+//# sourceMappingURL=4419.08235416.chunk.js.map
