@@ -6,7 +6,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useGetOffer } from 'src/api/user';
+import { useGetOffer } from 'src/api';
 
 import { useSettingsContext } from 'src/components/settings';
 

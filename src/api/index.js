@@ -67,3 +67,4 @@ export * from './appointmentConfig';
 export * from './work-groups';
 export * from './old_patients';
 export * from './notifications';
+export * from './user';

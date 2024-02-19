@@ -95,6 +95,9 @@ export const paths = {
     unitservices: {
       root: `${ROOTS.SUPERADMIN}/unitservices`,
       list: `${ROOTS.SUPERADMIN}/unitservices/list`,
+      departments: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/departments`,
+      employees: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/employees`,
+      appointments: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/appointments`,
       accounting: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/accounting`,
       newAccounting: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/accounting/new`,
       editAccounting: (id, ID) => `${ROOTS.SUPERADMIN}/unitservices/${id}/accounting/${ID}/edit`,
@@ -176,6 +179,18 @@ export const paths = {
       root: `${ROOTS.SUPERADMIN}/statistics`,
       new: `${ROOTS.SUPERADMIN}/statistics/new`,
       edit: (id) => `${ROOTS.SUPERADMIN}/statistics/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/statistics/${id}/info`,
+    },
+    users: {
+      root: `${ROOTS.SUPERADMIN}/users`,
+      new: `${ROOTS.SUPERADMIN}/users/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/users/${id}/edit`,
+      info: (id) => `${ROOTS.SUPERADMIN}/statistics/${id}/info`,
+    },
+    employees: {
+      root: `${ROOTS.SUPERADMIN}/employees`,
+      new: `${ROOTS.SUPERADMIN}/employees/new`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/employees/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/statistics/${id}/info`,
     },
     subscriptions: {
@@ -573,8 +588,8 @@ export const paths = {
     appointmentconfiguration: {
       root: `${ROOTS.SUPERADMIN}/appointmentconfig`,
       new: `${ROOTS.SUPERADMIN}/appointmentconfig/new`,
-      edit: (id) => `${ROOTS.SUPERADMIN}/appointmentconfig/${id}/edit`,
-      info: (id) => `${ROOTS.SUPERADMIN}/appointmentconfig/${id}/info`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/appointmentconfig/${id}`,
+      info: (id) => `${ROOTS.SUPERADMIN}/appointmentconfig/${id}`,
     },
     accounting: {
       root: `${ROOTS.SUPERADMIN}/accounting`,
