@@ -1,8 +1,9 @@
-import { Suspense, lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import CompactLayout from 'src/layouts/compact';
 import AuthClassicLayout from 'src/layouts/auth/classic';
+
 import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------

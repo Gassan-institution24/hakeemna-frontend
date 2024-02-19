@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
@@ -26,7 +26,7 @@ import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import NewEditDayAppointmentsDetails from './new-edit-days-appointments-details';
 
 // ----------------------------------------------------------------------
-export default function NewEditDayDetails({ appointTime }) {
+export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -43,6 +43,20 @@ export default function NewEditDayDetails({ appointTime }) {
 
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
+  const [values, setValues] = useState(getValues());
+
+  useEffect(() => {
+    const handleFormValuesChange = () => {
+      const valuesInside = getValues();
+      setValues(valuesInside);
+    };
+
+    watch(handleFormValuesChange);
+    return () => {
+      watch();
+    };
+  }, [watch, getValues]);
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'days_details',
@@ -57,24 +71,40 @@ export default function NewEditDayDetails({ appointTime }) {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
-  const values = getValues();
-
   const handleAdd = () => {
-    const defaultItem = {
-      day: '',
-      work_start_time: null,
-      work_end_time: null,
-      break_start_time: null,
-      break_end_time: null,
-      appointments: [],
-      service_types: [],
-      appointment_type: null,
-    };
-    const existingData = values.days_details
-      ? values.days_details[values.days_details.length - 1]
-      : ''; // Get the current form values
-    const newItem = { ...defaultItem, ...existingData, day: '', appointments: [] };
-    append(newItem);
+    try {
+      const dayToCreate = weekDays.filter(
+        (option) =>
+          !values?.weekend?.includes(option.value) &&
+          !values.days_details.some((detail) => detail.day === option.value)
+      )[0]?.value;
+      if (!dayToCreate) {
+        throw Error('No valid date to create');
+      }
+      const defaultItem = {
+        day: '',
+        work_start_time: null,
+        work_end_time: null,
+        break_start_time: null,
+        break_end_time: null,
+        appointments: [],
+        service_types: [],
+        appointment_type: null,
+      };
+      const existingData = values.days_details
+        ? values.days_details[values.days_details.length - 1]
+        : ''; // Get the current form values
+      const newItem = {
+        ...defaultItem,
+        ...existingData,
+        day: dayToCreate,
+        appointments: [],
+      };
+      append(newItem);
+    } catch (e) {
+      setErrorMsg(e.message);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleRemove = (index) => {
@@ -107,14 +137,14 @@ export default function NewEditDayDetails({ appointTime }) {
 
     const item = values.days_details[index];
 
-    let minDay = calculateMinutesDifference(item.work_start_time, item.work_end_time);
-    let minBeforeBreak = calculateMinutesDifference(item.work_start_time, item.break_start_time);
-    let minAfterBreak = calculateMinutesDifference(item.break_end_time, item.work_end_time);
+    let minDay = calculateMinutesDifference(item?.work_start_time, item?.work_end_time);
+    let minBeforeBreak = calculateMinutesDifference(item?.work_start_time, item?.break_start_time);
+    let minAfterBreak = calculateMinutesDifference(item?.break_end_time, item?.work_end_time);
 
     const createAppointmentsAll = () => {
       if (minDay >= values.appointment_time) {
-        const newStartTime = RemovingMinToDate(item.work_end_time, minDay);
-        const duplicated = item.appointments.filter((appoint) => {
+        const newStartTime = RemovingMinToDate(item?.work_end_time, minDay);
+        const duplicated = item?.appointments.filter((appoint) => {
           const newTime = calculateMins(newStartTime);
           const existingTime = calculateMins(appoint.start_time);
           return newTime === existingTime;
@@ -123,10 +153,11 @@ export default function NewEditDayDetails({ appointTime }) {
           results.push(duplicated);
         } else {
           results.push({
-            appointment_type: item.appointment_type || null,
+            appointment_type: item?.appointment_type || null,
             start_time: newStartTime,
             price: null,
-            service_types: item.service_types || [],
+            online_available: true,
+            service_types: item?.service_types || [],
           });
         }
         minDay -= values.appointment_time;
@@ -142,8 +173,8 @@ export default function NewEditDayDetails({ appointTime }) {
     };
     const createAppointmentsBefore = () => {
       if (minBeforeBreak >= values.appointment_time) {
-        const newStartTime = RemovingMinToDate(item.break_start_time, minBeforeBreak);
-        const duplicated = item.appointments.filter((appoint) => {
+        const newStartTime = RemovingMinToDate(item?.break_start_time, minBeforeBreak);
+        const duplicated = item?.appointments.filter((appoint) => {
           const newTime = calculateMins(newStartTime);
           const existingTime = calculateMins(appoint.start_time);
           return newTime === existingTime;
@@ -152,10 +183,11 @@ export default function NewEditDayDetails({ appointTime }) {
           results.push(duplicated);
         } else {
           results.push({
-            appointment_type: item.appointment_type || null,
+            appointment_type: item?.appointment_type || null,
             start_time: newStartTime,
             price: null,
-            service_types: item.service_types || [],
+            online_available: true,
+            service_types: item?.service_types || [],
           });
         }
         minBeforeBreak -= values.appointment_time;
@@ -171,8 +203,8 @@ export default function NewEditDayDetails({ appointTime }) {
     };
     const createAppointmentsAfter = () => {
       if (minAfterBreak >= values.appointment_time) {
-        const newStartTime = RemovingMinToDate(item.work_end_time, minAfterBreak);
-        const duplicated = item.appointments.filter((appoint) => {
+        const newStartTime = RemovingMinToDate(item?.work_end_time, minAfterBreak);
+        const duplicated = item?.appointments.filter((appoint) => {
           const newTime = calculateMins(newStartTime);
           const existingTime = calculateMins(appoint.start_time);
           return newTime === existingTime;
@@ -181,10 +213,11 @@ export default function NewEditDayDetails({ appointTime }) {
           results.push(duplicated);
         } else {
           results.push({
-            appointment_type: item.appointment_type || null,
+            appointment_type: item?.appointment_type || null,
             start_time: newStartTime,
             price: null,
-            service_types: item.service_types || [],
+            online_available: true,
+            service_types: item?.service_types || [],
           });
         }
         minAfterBreak -= values.appointment_time;
@@ -199,7 +232,7 @@ export default function NewEditDayDetails({ appointTime }) {
       return Promise.resolve(); // Resolve the promise when done
     };
 
-    if (item.break_start_time && item.break_end_time) {
+    if (item?.break_start_time && item?.break_end_time) {
       await createAppointmentsBefore();
       await createAppointmentsAfter();
     } else {
@@ -211,12 +244,12 @@ export default function NewEditDayDetails({ appointTime }) {
   }
 
   const renderValues = (selectedIds) => {
-    const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item._id));
+    const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item?._id));
     const results = [];
     return selectedItems
       ?.map(
-        (item) => item.name_english
-        // price += item.Price_per_unit || 0
+        (item) => item?.name_english
+        // price += item?.Price_per_unit || 0
       )
       .join(', ');
     // setOverAllPrice(price)
@@ -224,23 +257,23 @@ export default function NewEditDayDetails({ appointTime }) {
   };
   function appointEstimatedNum(index) {
     const item = values.days_details[index];
-    if (item.appointments.length) {
-      return item.appointments.length;
+    if (item?.appointments.length) {
+      return item?.appointments.length;
     }
-    if (item.break_start_time && item.break_end_time) {
+    if (item?.break_start_time && item?.break_end_time) {
       const AppointBefore = Math.floor(
-        calculateMinutesDifference(item.work_start_time, item.break_start_time) /
+        calculateMinutesDifference(item?.work_start_time, item?.break_start_time) /
           values.appointment_time
       );
       const AppointAfter = Math.floor(
-        calculateMinutesDifference(item.break_end_time, item.work_end_time) /
+        calculateMinutesDifference(item?.break_end_time, item?.work_end_time) /
           values.appointment_time
       );
       return AppointBefore + AppointAfter || 0;
     }
     return (
       Math.floor(
-        calculateMinutesDifference(item.work_start_time, item.work_end_time) /
+        calculateMinutesDifference(item?.work_start_time, item?.work_end_time) /
           values.appointment_time
       ) || 0
     );
@@ -264,7 +297,7 @@ export default function NewEditDayDetails({ appointTime }) {
         >
           {fields.map((item, index) => (
             <Stack
-              key={item.id}
+              key={item?.id}
               // alignItems="flex-start"
               // flexWrap="wrap"
               spacing={1.5}
@@ -281,6 +314,7 @@ export default function NewEditDayDetails({ appointTime }) {
                   sx={{ width: '100%', mt: 2 }}
                 >
                   <RHFSelect
+                    disabled={!values?.weekend?.includes(values.days_details[index]?.day)}
                     InputLabelProps={{ shrink: true }}
                     size="small"
                     name={`days_details[${index}].day`}
@@ -289,8 +323,8 @@ export default function NewEditDayDetails({ appointTime }) {
                     {weekDays
                       .filter(
                         (option) =>
-                          !values.weekend.includes(option.value) &&
-                          !values.days_details.some(
+                          !values?.weekend?.includes(option.value) &&
+                          !values?.days_details?.some(
                             (detail) =>
                               detail.day === option.value &&
                               values.days_details[index]?.day !== option.value
@@ -324,8 +358,8 @@ export default function NewEditDayDetails({ appointTime }) {
                         minutesStep="5"
                         label={t('work start time')}
                         value={
-                          values.days_details[index].work_start_time
-                            ? new Date(values.days_details[index].work_start_time)
+                          values.days_details[index]?.work_start_time
+                            ? new Date(values.days_details[index]?.work_start_time)
                             : null
                         }
                         onChange={(newValue) => {
@@ -466,7 +500,7 @@ export default function NewEditDayDetails({ appointTime }) {
                           renderValue={renderValues}
                         >
                           {serviceTypesData?.map((option) => {
-                            const selected = field?.value?.includes(option._id);
+                            const selected = field?.value?.includes(option?._id);
 
                             return (
                               <MenuItem key={option._id} value={option._id}>
@@ -544,4 +578,5 @@ export default function NewEditDayDetails({ appointTime }) {
 }
 NewEditDayDetails.propTypes = {
   appointTime: PropTypes.number,
+  setErrorMsg: PropTypes.func,
 };

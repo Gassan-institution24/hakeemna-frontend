@@ -44,11 +44,6 @@ export function useNavData() {
           //   icon: ICONS.dashboard,
           // },
           {
-            title: t('management tables'),
-            path: paths.superadmin.tables.root,
-            icon: <Iconify icon="icon-park-twotone:data" />,
-          },
-          {
             title: t('Unit Services'),
             path: paths.superadmin.unitservices.root,
             icon: <Iconify icon="fa-solid:clinic-medical" />,
@@ -64,14 +59,19 @@ export function useNavData() {
             icon: <Iconify icon="material-symbols:sell-sharp" />,
           },
           {
+            title: t('users'),
+            path: paths.superadmin.users.root,
+            icon: <Iconify icon="mdi:people-group-outline" />,
+          },
+          {
+            title: t('employees'),
+            path: paths.superadmin.employees.root,
+            icon: <Iconify icon="fluent:people-20-filled" />,
+          },
+          {
             title: t('accounting'),
             path: paths.superadmin.accounting.root,
             icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
-          },
-          {
-            title: t('statistics'),
-            path: paths.superadmin.statistics.root,
-            icon: <Iconify icon="akar-icons:statistic-up" />,
           },
           {
             title: t('subscriptions'),
@@ -79,9 +79,29 @@ export function useNavData() {
             icon: <Iconify icon="eos-icons:activate-subscriptions" />,
           },
           {
+            title: t('quality control'),
+            path: paths.superadmin.qualityControl.root,
+            icon: <Iconify icon="healthicons:world-care" />,
+            children: [
+              { title: t('Doctorna online'), path: paths.superadmin.qualityControl.doctorna },
+              { title: t('Unit Services'), path: paths.superadmin.qualityControl.unitservices },
+              { title: t('Stakeholders'), path: paths.superadmin.qualityControl.stakeholders },
+            ],
+          },
+          {
             title: t('communications'),
             path: paths.superadmin.communication.root,
             icon: <Iconify icon="solar:call-chat-bold" />,
+          },
+          {
+            title: t('management tables'),
+            path: paths.superadmin.tables.root,
+            icon: <Iconify icon="icon-park-twotone:data" />,
+          },
+          {
+            title: t('statistics'),
+            path: paths.superadmin.statistics.root,
+            icon: <Iconify icon="akar-icons:statistic-up" />,
           },
           {
             title: t('access control list'),
@@ -102,16 +122,6 @@ export function useNavData() {
             title: t('Adjustable Services Control'),
             path: paths.superadmin.adjustableServices.root,
             icon: <Iconify icon="ic:sharp-published-with-changes" />,
-          },
-          {
-            title: t('quality control'),
-            path: paths.superadmin.qualityControl.root,
-            icon: <Iconify icon="healthicons:world-care" />,
-            children: [
-              { title: t('Doctorna online'), path: paths.superadmin.qualityControl.doctorna },
-              { title: t('Unit Services'), path: paths.superadmin.qualityControl.unitservices },
-              { title: t('Stakeholders'), path: paths.superadmin.qualityControl.stakeholders },
-            ],
           },
           // {
           //   title: t('management tables'),

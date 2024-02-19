@@ -12,8 +12,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
+import { useGetOffers } from 'src/api';
 import { useTranslate } from 'src/locales';
-import { useGetOffers } from 'src/api/user';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';

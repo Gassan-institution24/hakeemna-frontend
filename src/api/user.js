@@ -3,13 +3,35 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetUser() {
-  const URL = `${endpoints.tables.patient('65781d46a0705623e0333d41')}`;
+export function useGetUsers() {
+  const URL = endpoints.tables.users;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      usersData: data || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
+export function useGetUser(id) {
+  const URL = `${endpoints.tables.user(id)}`;
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
   const memoizedValue = useMemo(
     () => ({
-      data: data || [],
+      data,
       Loading: isLoading,
       error,
       validating: isValidating,
@@ -37,25 +59,6 @@ export function useGetpatientAppointment() {
   return memoizedValue;
 }
 
-export function useGetOffers() {
-  const URL = `${endpoints.offers.getoffers}`;
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-
-  const memoizedValue = useMemo(
-    () => ({
-      data: data || [],
-      Loading: isLoading,
-      error,
-      validating: isValidating,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    await mutate(URL);
-  };
-  return { ...memoizedValue, refetch };
-}
-
 export function useGetStackholder() {
   const URL = `${endpoints.stakeholder.getstakeholder}`;
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
@@ -73,22 +76,6 @@ export function useGetStackholder() {
     await mutate(URL);
   };
   return { ...memoizedValue, refetch };
-}
-
-export function useGetOffer(id) {
-  const URL = endpoints.offers.getoffer(id);
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-
-  const memoizedValue = useMemo(
-    () => ({
-      data: data || [],
-      Loading: isLoading,
-      error,
-      validating: isValidating,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  return memoizedValue;
 }
 
 export function useGetPaymentmethods() {

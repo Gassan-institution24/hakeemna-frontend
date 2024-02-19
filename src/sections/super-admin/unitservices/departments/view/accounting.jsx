@@ -1,0 +1,79 @@
+import PropTypes from 'prop-types';
+import { useState, useCallback } from 'react';
+
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import Container from '@mui/material/Container';
+import { useTheme } from '@mui/material/styles';
+
+import { useTranslate } from 'src/locales';
+
+import { useSettingsContext } from 'src/components/settings';
+
+import EconomicMovementsView from '../accounting/invoices/invoices-view';
+import PaymentControlView from '../accounting/payment-control/payment-control';
+
+// ----------------------------------------------------------------------
+
+export default function PatientHistoryView({ departmentData }) {
+  const theme = useTheme();
+
+  const { t } = useTranslate();
+
+  const settings = useSettingsContext();
+
+  const [currentTab, setCurrentTab] = useState('Invoices');
+
+  const handleChangeTab = useCallback((event, newValue) => {
+    setCurrentTab(newValue);
+  }, []);
+
+  const HistoryTabsList = ['Invoices', 'Payment Control']; // Invoices === economicMovement
+
+  const renderTabs = (
+    <Tabs
+      value={currentTab}
+      onChange={handleChangeTab}
+      sx={{
+        mb: { xs: 3, md: 5 },
+      }}
+    >
+      {HistoryTabsList.map((tab, idx) => (
+        <Tab key={idx} iconPosition="end" value={tab} label={tab} />
+      ))}
+    </Tabs>
+  );
+
+  return (
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      {/* <CustomBreadcrumbs
+        heading={`${departmentData.name_english || 'Deaprtment'} History`}
+        links={[
+          {
+            name: t('dashboard'),
+            href: paths.unitservice.root,
+          },
+          {
+            name: t('departments'),
+            href: paths.unitservice.departments.root,
+          },
+          {
+            name: `${departmentData.name_english || 'Deaprtment'} History`,
+          },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      /> */}
+
+      {renderTabs}
+
+      {currentTab === 'Invoices' && <EconomicMovementsView departmentData={departmentData} />}
+      {currentTab === 'Payment Control' && <PaymentControlView departmentData={departmentData} />}
+    </Container>
+  );
+}
+
+PatientHistoryView.propTypes = {
+  departmentData: PropTypes.object,
+};
