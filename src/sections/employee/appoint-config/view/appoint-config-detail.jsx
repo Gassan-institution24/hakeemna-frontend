@@ -7,8 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { Alert, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
+import { Alert, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
@@ -225,6 +225,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     } catch (error) {
       console.error(error);
       setErrorMsg(typeof error === 'string' ? error : error.message);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       socket.emit('error', { error, user, location: window.location.pathname });
       saving.onFalse();
       confirm.onFalse();
@@ -250,6 +251,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       // await refetch();
     } catch (error) {
       console.error(error);
+      setErrorMsg(typeof error === 'string' ? error : error.message);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       socket.emit('error', { error, user, location: window.location.pathname });
       updating.onFalse();
       confirm.onFalse();
@@ -308,6 +311,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     } catch (error) {
       console.log('error', JSON.stringify(error));
       setErrorMsg(typeof error === 'string' ? error : error.message);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       console.error(error);
       updating.onFalse();
       socket.emit('error', { error, user, location: window.location.pathname });
@@ -325,6 +329,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           .join('<br>')
       );
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [errors]);
 
   console.log('errorMsg', errorMsg);
@@ -398,7 +403,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
                 setAppointTime={setAppointTime}
                 appointmentConfigData={appointmentConfigData}
               />
-              <NewEditDaysDetails appointTime={appointTime} />
+              <NewEditDaysDetails setErrorMsg={setErrorMsg} appointTime={appointTime} />
               <NewEditHolidays />
               <NewEditLongHolidays />
             </Card>

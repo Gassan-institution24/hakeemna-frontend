@@ -176,18 +176,18 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={`${unitserviceName} accounting`} /// edit
-        links={[
-          {
-            name: 'dashboard',
-            href: paths.superadmin.root,
-          },
-          {
-            name: 'Unit Services',
-            href: paths.superadmin.unitservices.root,
-          },
-          { name: t(`${unitserviceName} accounting`) }, /// edit
-        ]}
+        // heading={`${unitserviceName} accounting`} /// edit
+        // links={[
+        //   {
+        //     name: 'dashboard',
+        //     href: paths.superadmin.root,
+        //   },
+        //   {
+        //     name: 'Unit Services',
+        //     href: paths.superadmin.unitservices.root,
+        //   },
+        //   { name: t(`${unitserviceName} accounting`) }, /// edit
+        // ]}
         action={
           <Button
             component={RouterLink}

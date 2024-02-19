@@ -7,8 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { Alert, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
+import { Alert, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
@@ -84,12 +84,14 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       Yup.object().shape({
         day: Yup.string().required('Day is required'),
         work_start_time: Yup.date().required('work start time is required'),
-        work_end_time: Yup.date().required('work end time is required').when(
-          'work_start_time',
-          (work_start_time, schema) =>
-            work_start_time &&
-            schema.min(work_start_time, 'Work End Time must be after Work Start Time')
-        ),
+        work_end_time: Yup.date()
+          .required('work end time is required')
+          .when(
+            'work_start_time',
+            (work_start_time, schema) =>
+              work_start_time &&
+              schema.min(work_start_time, 'Work End Time must be after Work Start Time')
+          ),
         // break_start_time: Yup.date().nullable()
         //   .when(
         //     'work_end_time',
@@ -220,6 +222,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       setErrorMsg(typeof error === 'string' ? error : error.message);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       saving.onFalse();
       confirm.onFalse();
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -245,6 +248,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       // await refetch();
     } catch (error) {
       setErrorMsg(typeof error === 'string' ? error : error.message);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       socket.emit('error', { error, user, location: window.location.pathname });
       updating.onFalse();
       confirm.onFalse();
@@ -299,6 +303,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
       setErrorMsg(typeof error === 'string' ? error : error.message);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       socket.emit('error', { error, user, location: window.location.pathname });
       updating.onFalse();
       loadingSend.onFalse();
@@ -307,18 +312,19 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     }
   });
 
-   useEffect(() => {
-     if (Object.keys(errors).length) {
-       // console.log(errors);
-       setErrorMsg(
-         Object.keys(errors)
-           .map((key) => errors?.[key]?.message)
-           .join('<br>')
-       );
-     }
-   }, [errors]);
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+      // console.log(errors);
+      setErrorMsg(
+        Object.keys(errors)
+          .map((key) => errors?.[key]?.message)
+          .join('<br>')
+      );
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [errors]);
 
-   console.log('errorMsg', errorMsg)
+  console.log('errorMsg', errorMsg);
 
   useEffect(() => {
     if (appointmentConfigData) {
@@ -371,7 +377,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           {!loading && (
             <Card>
               {!!errorMsg && (
-                <Alert sx={{borderRadius:0}} severity="error">
+                <Alert sx={{ borderRadius: 0 }} severity="error">
                   <div> {errorMsg} </div>
                 </Alert>
               )}
@@ -379,7 +385,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
                 setAppointTime={setAppointTime}
                 appointmentConfigData={appointmentConfigData}
               />
-              <NewEditDaysDetails appointTime={appointTime} />
+              <NewEditDaysDetails setErrorMsg={setErrorMsg} appointTime={appointTime} />
               <NewEditHolidays />
               <NewEditLongHolidays />
             </Card>

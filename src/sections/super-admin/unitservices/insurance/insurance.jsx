@@ -16,7 +16,6 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
-import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { endpoints } from 'src/utils/axios';
@@ -206,18 +205,18 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={`${unitserviceName} Insurance`} /// edit
-          links={[
-            {
-              name: 'dashboard',
-              href: paths.superadmin.root,
-            },
-            {
-              name: 'Unit Services',
-              href: paths.superadmin.unitservices.root,
-            },
-            { name: t(`${unitserviceName} Insurance`) }, /// edit
-          ]}
+          // heading={`${unitserviceName} Insurance`} /// edit
+          // links={[
+          //   {
+          //     name: 'dashboard',
+          //     href: paths.superadmin.root,
+          //   },
+          //   {
+          //     name: 'Unit Services',
+          //     href: paths.superadmin.unitservices.root,
+          //   },
+          //   { name: t(`${unitserviceName} Insurance`) }, /// edit
+          // ]}
           action={
             <Button
               component={RouterLink}
