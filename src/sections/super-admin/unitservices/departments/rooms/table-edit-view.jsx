@@ -20,15 +20,15 @@ export default function TableEditView({ roomData, departmentData }) {
         links={[
           {
             name: t('dashboard'),
-            href: paths.unitservice.root,
+            href: paths.superadmin.unitservices.root,
           },
           {
             name: t('departments'),
-            href: paths.unitservice.departments.root,
+            href: paths.superadmin.unitservices.departments.root(id),
           },
           {
             name: `${departmentData.name_english || 'Department'} Rooms`,
-            href: paths.unitservice.departments.rooms.root(departmentData._id),
+            href: paths.superadmin.unitservices.departments.rooms.root(departmentData._id),
           },
           { name: 'Edit Room' },
         ]}

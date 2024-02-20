@@ -36,7 +36,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
   const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
-  const { id } = useParams();
+  const { id,depid } = useParams();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -105,14 +105,14 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
         });
         socket.emit('updated', {
           user,
-          link: paths.unitservice.departments.appointments(appointment.department._id),
+          link: paths.superadmin.unitservices.departments.appointments(id,appointment.department._id),
           msg: `booked an appointment ${appointment.code} in department <strong>${appointment.department.name_english}</strong>`,
         });
       } else {
         await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment._id), data);
         socket.emit('updated', {
           user,
-          link: paths.unitservice.departments.appointments(appointment.department._id),
+          link: paths.superadmin.unitservices.departments.appointments(id,appointment.department._id),
           msg: `booked an appointment ${appointment.code} in department <strong>${appointment.department.name_english}</strong>`,
         });
         socket.emit('register', data);
@@ -122,7 +122,6 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
     }

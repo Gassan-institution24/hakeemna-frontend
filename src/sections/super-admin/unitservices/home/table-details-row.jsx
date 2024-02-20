@@ -7,8 +7,6 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fDateTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
@@ -26,38 +24,17 @@ export default function CountriesTableRow({
   onSelectRow,
   onActivate,
   onInactivate,
-  setFilters,
-  filters,
-  showAccounting,
-  showCommunications,
-  showFeedback,
-  showInsurance,
   showGeneralInfo,
 }) {
   const {
     code,
     name_english,
-    country,
-    city,
-    identification_num,
     email,
     US_type,
     sector_type,
     status,
-    speciality,
-    subscription_period_months,
-    tax,
-    address,
-    web_page,
     phone,
-    mobile_num,
-    ip_address,
-    introduction_letter,
-    other_information,
-    users_num,
-    subscriptions,
-    insurance,
-    last_internet_connection,
+
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -71,17 +48,67 @@ export default function CountriesTableRow({
 
   const popover = usePopover();
   const DDL = usePopover();
-  const details = usePopover();
-  const collapse = useBoolean();
-  const modal = useBoolean();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell align="center">{code}</TableCell>
-      <TableCell align="center">{name_english}</TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+        }}
+        onClick={showGeneralInfo}
+        align="center"
+      >
+        {code}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={showGeneralInfo}
+        align="center"
+      >
+        {name_english}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+        }}
+        onClick={showGeneralInfo}
+        align="center"
+      >
+        {US_type}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+        }}
+        onClick={showGeneralInfo}
+        align="center"
+      >
+        {sector_type}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+        }}
+        onClick={showGeneralInfo}
+        align="center"
+      >
+        {email}
+      </TableCell>
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+        }}
+        onClick={showGeneralInfo}
+        align="center"
+      >
+        {phone}
+      </TableCell>
       <TableCell align="center">
         <Label
           variant="soft"
@@ -91,71 +118,6 @@ export default function CountriesTableRow({
         >
           {status}
         </Label>
-      </TableCell>
-      {/* <TableCell align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-         // textDecoration: 'underline',
-        }}
-        onClick={showGeneralInfo}
-      >
-        General Info
-      </TableCell> */}
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showGeneralInfo}
-      >
-        General Info
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showAccounting}
-      >
-        Accounting
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showCommunications}
-      >
-        Communications
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showFeedback}
-      >
-        Feedback
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={showInsurance}
-      >
-        Insurance
       </TableCell>
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -199,6 +161,10 @@ export default function CountriesTableRow({
             activate
           </MenuItem>
         )}
+        <MenuItem onClick={showGeneralInfo}>
+          <Iconify icon="solar:eye-bold" />
+          view
+        </MenuItem>
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
@@ -237,16 +203,10 @@ export default function CountriesTableRow({
 
 CountriesTableRow.propTypes = {
   onSelectRow: PropTypes.func,
-  setFilters: PropTypes.func,
   onActivate: PropTypes.func,
   onInactivate: PropTypes.func,
   onEditRow: PropTypes.func,
-  showAccounting: PropTypes.func,
-  showCommunications: PropTypes.func,
-  showFeedback: PropTypes.func,
-  showInsurance: PropTypes.func,
   showGeneralInfo: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
-  filters: PropTypes.object,
 };

@@ -42,6 +42,7 @@ export default function UnitServiceEmployeesRow({
     user_modification,
     ip_address_user_modification,
     modifications_nums,
+    online,
   } = row;
   // console.log('row', row);
 
@@ -69,15 +70,15 @@ export default function UnitServiceEmployeesRow({
         onClick={onViewRow}
         align="center"
       >
-        <div style={{ display: 'flex', gap: 3 }}>
-          <Iconify
-            icon={employee.online ? 'noto:green-circle' : 'noto:red-circle'}
-            style={{ width: '10px' }}
-          />
-          {code}
-        </div>
+        {sequence_number}
       </TableCell>
-      <TableCell
+      <TableCell lang="ar" align="center">
+        <Iconify
+          icon={online ? 'noto:green-circle' : 'noto:red-circle'}
+          style={{ width: '10px' }}
+        />
+      </TableCell>
+      {/* <TableCell
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
@@ -87,7 +88,7 @@ export default function UnitServiceEmployeesRow({
         align="center"
       >
         {sequence_number}
-      </TableCell>
+      </TableCell> */}
       <TableCell
         sx={{
           cursor: 'pointer',
@@ -108,7 +109,7 @@ export default function UnitServiceEmployeesRow({
       <TableCell lang="ar" align="center">
         {curLangAr ? employee.nationality?.name_arabic : employee.nationality?.name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      {/* <TableCell lang="ar" align="center">
         <Iconify
           icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'}
           width={16}
@@ -116,7 +117,7 @@ export default function UnitServiceEmployeesRow({
       </TableCell>
       <TableCell lang="ar" align="center">
         <Iconify icon={Adjust_schedule ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
-      </TableCell>
+      </TableCell> */}
       <TableCell lang="ar" align="center">
         <Label
           lang="ar"
