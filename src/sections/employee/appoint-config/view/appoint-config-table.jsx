@@ -64,7 +64,7 @@ const defaultFilters = {
 export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const { t } = useTranslate();
   const TABLE_HEAD = [
-    { id: 'code', label: t('code') },
+    { id: 'sequence_number', label: t('number') },
     { id: 'start_date', label: t('start date') },
     { id: 'end_date', label: t('end date') },
     { id: 'work_shift', label: t('work shift') },

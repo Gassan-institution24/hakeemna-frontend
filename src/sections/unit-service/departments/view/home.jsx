@@ -69,8 +69,8 @@ export default function UnitServicesTableView() {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     /// to edit
-    { id: 'code', label: t('code') },
-    { id: 'sequence', label: t('sequence') },
+    // { id: 'code', label: t('code') },
+    { id: 'sequence_number', label: t('number') },
     { id: 'name_english', label: t('name') },
     { id: 'status', label: t('status') },
     { id: '', width: 88 },

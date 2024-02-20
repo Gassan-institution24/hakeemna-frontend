@@ -66,14 +66,15 @@ export default function EmployeesTableView() {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     /// to edit
-    { id: 'code', label: t('code') },
-    { id: 'sequence', label: t('sequence') },
+    { id: 'sequence_number', label: t('number') },
+    { id: 'online', label: t('online') },
+    // { id: 'sequence', label: t('sequence') },
     { id: 'name_english', label: t('name') },
     { id: 'employee_type', label: t('employee type') },
     { id: 'email', label: t('email') },
     { id: 'nationality', label: t('nationality') },
-    { id: 'validatd_identity', label: t('validated identity') },
-    { id: 'Adjust_schedule', label: t('adjust schedule') },
+    // { id: 'validatd_identity', label: t('validated identity') },
+    // { id: 'Adjust_schedule', label: t('adjust schedule') },
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];

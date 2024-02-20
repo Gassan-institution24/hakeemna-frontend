@@ -67,6 +67,7 @@ export default function EmployeesTableView() {
   const TABLE_HEAD = [
     /// to edit
     { id: 'code', label: t('code') },
+    { id: 'online', label: t('online') },
     { id: 'sequence', label: t('sequence') },
     { id: 'name_english', label: t('name') },
     { id: 'employee_type', label: t('employee type') },

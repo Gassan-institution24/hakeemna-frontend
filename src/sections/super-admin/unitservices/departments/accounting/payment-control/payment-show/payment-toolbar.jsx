@@ -27,7 +27,7 @@ export default function InvoiceToolbar({
   onChangeStatus,
 }) {
   const params = useParams();
-  const { id } = params;
+  const { depid } = params;
 
   const router = useRouter();
 
