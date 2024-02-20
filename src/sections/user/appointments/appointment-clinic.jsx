@@ -38,7 +38,7 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
       enqueueSnackbar(`Appointment booked successfully`, { variant: 'success' });
       refetch();
     } else {
-      alert('sdsd');
+      alert('Please select the time first');
     }
   };
 
@@ -102,25 +102,25 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
               </Typography>
             </Box>
             {displayedFeedback.length > 0 &&
-              displayedFeedback.map((feedback, index) => (
-                <React.Fragment key={index}>
-                  <Iconify
-                    sx={{
-                      transform: 'rotate(-20deg)',
-                      color: 'success.main',
-                      zIndex: 1,
-                      position: 'relative',
-                      top: 12,
-                      left: -5,
-                      width: 25,
-                      height: 25,
-                    }}
-                    icon="material-symbols-light:rate-review-outline"
-                  />
-                  <Box sx={{ bgcolor: 'rgba(208, 208, 208, 0.250)', width: 350, mb: 1 }}>
-                    <Box sx={{ padding: 2 }}>
-                      <Box sx={{ display: 'inline-flex' }}>
-                        {feedback?.patient?.profile_picture ? (
+              displayedFeedback.map((feedback, index) =>
+                feedback?.Body.length > 0 ? (
+                  <React.Fragment key={index}>
+                    <Iconify
+                      sx={{
+                        transform: 'rotate(-20deg)',
+                        color: 'success.main',
+                        zIndex: 1,
+                        position: 'relative',
+                        top: 12,
+                        left: -5,
+                        width: 25,
+                        height: 25,
+                      }}
+                      icon="material-symbols-light:rate-review-outline"
+                    />
+                    <Box sx={{ bgcolor: 'rgba(208, 208, 208, 0.250)', width: 350, mb: 1 }}>
+                      <Box sx={{ padding: 2 }}>
+                        <Box sx={{ display: 'inline-flex' }}>
                           <Image
                             sx={{
                               borderRadius: '100%',
@@ -133,47 +133,41 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
                             }}
                             src={feedback?.patient?.profile_picture}
                           />
-                        ) : (
-                          <Avatar
-                            src={user?.photoURL}
-                            alt={user?.userName}
-                            sx={{
-                              width: 36,
-                              height: 36,
-                              border: (theme) => `solid 2px ${theme.palette.background.default}`,
-                            }}
-                          >
-                            {user?.ratemakername?.charAt(0).toUpperCase()}
-                          </Avatar>
-                        )}
-                        <Typography sx={{ ml: 1, mt: 0.5 }}>
-                          {feedback?.patient?.first_name}
-                        </Typography>
-                        <Box sx={{ ml: 1, mt: 0.7 }}>
-                          <Iconify width={19} icon="emojione:star" />{' '}
-                          <Iconify width={19} icon="emojione:star" />{' '}
-                          <Iconify width={19} icon="emojione:star" />{' '}
-                          <Iconify width={19} icon="emojione:star" />{' '}
-                          <Iconify width={19} icon="emojione:star" />{' '}
+                          <Typography sx={{ ml: 1, mt: 0.5 }}>
+                            {feedback?.patient?.first_name}
+                          </Typography>
+                          <Box sx={{ ml: 1, mt: 0.7 }}>
+                            <Iconify width={19} icon="emojione:star" />{' '}
+                            <Iconify width={19} icon="emojione:star" />{' '}
+                            <Iconify width={19} icon="emojione:star" />{' '}
+                            <Iconify width={19} icon="emojione:star" />{' '}
+                            <Iconify width={19} icon="emojione:star" />{' '}
+                          </Box>
                         </Box>
+                        <Typography sx={{ ml: 5.3 }}>{feedback?.Body}</Typography>
                       </Box>
-                      <Typography sx={{ ml: 5.3 }}>{feedback?.Body}</Typography>
                     </Box>
-                  </Box>
-                </React.Fragment>
-              ))}
-            {feedbackData.length > 1 && (
-              <Link onClick={toggleFeedbackDisplay} variant="outlined">
-                {showAllFeedback ? 'Hide' : 'Show All'}
-              </Link>
-            )}
+                  </React.Fragment>
+                ) : (
+                  ''
+                )
+              )}
           </Box>
         </Box>
       </Box>
-      <Box sx={{ width: '45%', margin: 2, display: 'inline-flex', gap: 4, p: 1 }}>
-        {/* Render placeholder if no appointments for today */}
+
+      <Box
+        sx={{
+          width: '50%',
+          margin: 2,
+          display: 'inline-flex',
+          gap: 8,
+          p: 1,
+          overflowX: groupedAppointments.length > 3 ? 'scroll' : 'auto',
+        }}
+      >
         {groupedAppointments.today.length === 0 && (
-          <Box sx={{ width: '25%' }}>
+          <Box>
             <Typography style={{ fontWeight: 600, paddingBottom: 15 }}>Today</Typography>
             <Typography>
               <Button
@@ -187,25 +181,18 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
                 -- / --
               </Button>
             </Typography>
-            {groupedAppointments.today.length > 0 ? (
-              <Button disabled sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
-                Book
-              </Button>
-            ) : (
-              ''
-            )}
           </Box>
         )}
 
         {groupedAppointments.today.length > 0 && (
-          <Box sx={{ width: '25%' }}>
+          <Box>
             <Typography style={{ fontWeight: 600, paddingBottom: 15 }}>Today</Typography>
             <Box
               sx={{
                 display: 'block',
                 overflowY: groupedAppointments.today.length > 5 ? 'scroll' : 'auto',
                 overflowX: 'hidden',
-                maxHeight: groupedAppointments.today.length > 5 ? '100px' : 'auto',
+                maxHeight: groupedAppointments.today.length > 5 ? '200px' : 'auto',
               }}
             >
               {groupedAppointments.today.map((appointment, i) => (
@@ -217,6 +204,7 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
                     sx={{
                       bgcolor: 'rgba(208, 208, 208, 0.566)',
                       mb: 1,
+                      mr: 2,
                       width: '80px',
                       borderRadius: 0,
                       fontWeight: 100,
@@ -233,7 +221,11 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
               ))}
             </Box>
 
-            <Button onClick={kdk} sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
+            <Button
+              onClick={kdk}
+              sx={{ mt: 1, mb: 1, bgcolor: 'success.main' }}
+              variant="contained"
+            >
               Book
             </Button>
           </Box>
@@ -244,8 +236,10 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
             const appointments = groupedAppointments[date];
 
             return (
-              <Box sx={{ width: '25%' }} key={index}>
-                <Typography style={{ fontWeight: 600, paddingBottom: 15 }}>{date}</Typography>
+              <Box key={index}>
+                <Typography style={{ fontWeight: 600, paddingBottom: 15, width: '100px' }}>
+                  {date}
+                </Typography>
                 <Box
                   sx={{
                     display: 'block',
@@ -263,6 +257,7 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
                         sx={{
                           bgcolor: 'rgba(208, 208, 208, 0.566)',
                           mb: 1,
+                          mr: 2,
                           width: '80px',
                           borderRadius: 0,
                           fontWeight: 100,
@@ -278,7 +273,11 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
                   ))}
                 </Box>
 
-                <Button onClick={kdk} sx={{ mt: 1, bgcolor: 'success.main' }} variant="contained">
+                <Button
+                  onClick={kdk}
+                  sx={{ mt: 1, mb: 1, bgcolor: 'success.main' }}
+                  variant="contained"
+                >
                   Book
                 </Button>
               </Box>
