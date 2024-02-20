@@ -11,17 +11,17 @@ import Specialities from '../specialities';
 
 // ----------------------------------------------------------------------
 
-export default function UserAppointmentsBook() {
+export default function Specialitiess() {
   const settings = useSettingsContext();
   const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t('Book appointment')}
+        heading={t('specialities')}
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('user'), href: paths.dashboard.user.root },
-          { name: t('book appointment') },
+          { name: t('specialities') },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />

@@ -26,12 +26,12 @@ import {
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 
-import AppointmentSort from './appointments/appointment-sort-user';
-import AppointmentSearch from './appointments/appointment-search-user';
-import AppointmentFilters from './appointments/appointment-filters-user';
-import OnlineAppointmentList from './appointments/goToappointment-online';
-import ClinicAppointmentList from './appointments/goToappointment-clinic';
-import AppointmentFiltersResult from './appointments/appointment-filters-result-user';
+import AppointmentSort from './appointment-sort-user';
+import AppointmentSearch from './appointment-search-user';
+import AppointmentFilters from './appointment-filters-user';
+import OnlineAppointmentList from './goToappointment-online';
+import ClinicAppointmentList from './goToappointment-clinic';
+import AppointmentFiltersResult from './appointment-filters-result-user';
 
 // ----------------------------------------------------------------------
 
