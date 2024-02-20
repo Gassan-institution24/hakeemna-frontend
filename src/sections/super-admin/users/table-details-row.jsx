@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
+import { format, isValid } from 'date-fns';
 
 import Box from '@mui/material/Box';
+import { ListItemText } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
@@ -29,6 +31,8 @@ export default function CountriesTableRow({
     email,
     role,
     status,
+    online,
+    last_online,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -54,6 +58,24 @@ export default function CountriesTableRow({
       <TableCell align="center">{userName}</TableCell>
       <TableCell align="center">{email}</TableCell>
       <TableCell align="center">{role}</TableCell>
+      <TableCell align="center">
+        <Iconify
+          icon={online ? 'noto:green-circle' : 'noto:red-circle'}
+          style={{ width: '10px' }}
+        />
+      </TableCell>
+      <TableCell align="center">
+        <ListItemText
+          primary={isValid(new Date(last_online)) && format(new Date(last_online), 'dd MMM yyyy')}
+          secondary={isValid(new Date(last_online)) && format(new Date(last_online), 'p')}
+          primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+          secondaryTypographyProps={{
+            mt: 0.5,
+            component: 'span',
+            typography: 'caption',
+          }}
+        />
+      </TableCell>
 
       <TableCell align="center">
         <Label

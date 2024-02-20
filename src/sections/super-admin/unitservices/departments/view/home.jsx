@@ -69,8 +69,8 @@ export default function UnitServicesTableView() {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     /// to edit
-    { id: 'code', label: t('code') },
-    { id: 'sequence', label: t('sequence') },
+    // { id: 'code', label: t('code') },
+    { id: 'sequence_number', label: t('number') },
     { id: 'name_english', label: t('name') },
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
@@ -160,7 +160,7 @@ export default function UnitServicesTableView() {
         });
         socket.emit('updated', {
           user,
-          link: paths.unitservice.departments.info(row._id),
+          link: paths.superadmin.unitservices.departments.info(id, row._id),
           msg: `activating department <strong>${row.name_english}</strong>`,
         });
       } catch (error) {
@@ -171,7 +171,7 @@ export default function UnitServicesTableView() {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, id, enqueueSnackbar]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -183,7 +183,7 @@ export default function UnitServicesTableView() {
         });
         socket.emit('updated', {
           user,
-          link: paths.unitservice.departments.info(row._id),
+          link: paths.superadmin.unitservices.departments.info(id, row._id),
           msg: `inactivating department <strong>${row.name_english}</strong>`,
         });
       } catch (error) {
@@ -194,7 +194,7 @@ export default function UnitServicesTableView() {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, id, enqueueSnackbar]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -206,7 +206,7 @@ export default function UnitServicesTableView() {
       });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.departments.root,
+        link: paths.superadmin.unitservices.departments.root(id),
         msg: `activating many departments`,
       });
     } catch (error) {
@@ -228,6 +228,7 @@ export default function UnitServicesTableView() {
     refetch,
     user,
     enqueueSnackbar,
+    id,
   ]);
 
   const handleInactivateRows = useCallback(async () => {
@@ -239,7 +240,7 @@ export default function UnitServicesTableView() {
       });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.departments.root,
+        link: paths.superadmin.unitservices.departments.root(id),
         msg: `inactivating many departments`,
       });
     } catch (error) {
@@ -261,6 +262,7 @@ export default function UnitServicesTableView() {
     refetch,
     user,
     enqueueSnackbar,
+    id,
   ]);
 
   const handleFilters = useCallback(
@@ -276,16 +278,16 @@ export default function UnitServicesTableView() {
 
   const handleEditRow = useCallback(
     (_id) => {
-      router.push(paths.unitservice.departments.edit(_id)); /// edit
+      router.push(paths.superadmin.unitservices.departments.edit(id,_id)); /// edit
     },
-    [router]
+    [router,id]
   );
 
   const handleShowRow = useCallback(
     (_id) => {
-      router.push(paths.unitservice.departments.info(_id)); /// edit
+      router.push(paths.superadmin.unitservices.departments.info(id,_id)); /// edit
     },
-    [router]
+    [router,id]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -313,17 +315,25 @@ export default function UnitServicesTableView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
+          heading={t('departments')} /// edit
+          links={[
+            {
+              name: t('dashboard'),
+              href: paths.superadmin.unitservices.root,
+            },
+            { name: t('departments') }, /// edit
+          ]}
           action={
-            // checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'create' }) && (
+            checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'create' }) && (
               <Button
                 component={RouterLink}
-                href={paths.unitservice.departments.new} /// edit
+                href={paths.superadmin.unitservices.departments.new(id)} /// edit
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >
                 {t('new department')}
               </Button>
-            // ) /// edit
+            ) /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },

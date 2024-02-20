@@ -35,7 +35,6 @@ export default function CountriesTableRow({
   showWorkGroups,
 }) {
   const {
-    code,
     sequence_number,
     name_english,
     name_arabic,
@@ -68,18 +67,6 @@ export default function CountriesTableRow({
     <TableRow hover selected={selected}>
       <TableCell lang="ar" padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onShow}
-        lang="ar"
-        align="center"
-      >
-        {code}
       </TableCell>
       <TableCell
         sx={{
