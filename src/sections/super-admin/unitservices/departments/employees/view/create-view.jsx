@@ -6,6 +6,7 @@ import { Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -26,6 +27,8 @@ export default function TableCreateView({ departmentData }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
+  const { id, depid } = useParams();
+
   const [selectedPage, setSelectedPage] = useState();
   const select = useBoolean(true);
   return (
@@ -36,15 +39,15 @@ export default function TableCreateView({ departmentData }) {
           links={[
             {
               name: t('dashboard'),
-              href: paths.unitservice.root,
+              href: paths.superadmin.unitservices.root,
             },
             {
               name: t('departments'),
-              href: paths.unitservice.departments.root,
+              href: paths.superadmin.unitservices.departments.root(id),
             },
             {
               name: `${departmentData.name_english || t('Department')} ${t('employees')}`,
-              href: paths.unitservice.departments.employees.root,
+              href: paths.superadmin.unitservices.departments.employees.root(id, depid),
             },
             { name: t('new') },
           ]}

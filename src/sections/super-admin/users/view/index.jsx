@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { useReactToPrint } from 'react-to-print';
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -21,6 +21,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import socket from 'src/socket';
 import { useGetUsers } from 'src/api';
 
 import Label from 'src/components/label';
@@ -57,11 +58,13 @@ const STATUS_OPTIONS = [
 
 const TABLE_HEAD = [
   /// to edit
-  { id: 'code', label: 'Code' },
+  { id: 'code', label: 'code' },
   { id: 'name', label: 'username' },
   { id: 'email', label: 'email' },
   { id: 'role', label: 'role' },
-  { id: 'status', label: 'Status' },
+  { id: 'online', label: 'online' },
+  { id: 'last_online', label: 'last view' },
+  { id: 'status', label: 'status' },
   { id: '', width: 88 },
 ];
 
@@ -227,6 +230,15 @@ export default function UsersTableView() {
     },
     [handleFilters]
   );
+
+  /* eslint-disable */
+  useEffect(() => {
+    socket.on('employeeStatusUpdated', () => {
+      console.log('employee status updated');
+      refetch();
+    });
+  }, []);
+  /* eslint-enable */
 
   if (loading) {
     return <LoadingScreen />;

@@ -17,8 +17,8 @@ import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -75,6 +75,8 @@ export default function ActivitesTableView({ departmentData }) {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const { id } = useParams();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -166,7 +168,7 @@ export default function ActivitesTableView({ departmentData }) {
         });
         socket.emit('updated', {
           user,
-          link: paths.unitservice.departments.activities.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
           msg: `activated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
@@ -177,7 +179,7 @@ export default function ActivitesTableView({ departmentData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, departmentData, user, enqueueSnackbar]
+    [dataInPage.length, table, refetch, departmentData, user, enqueueSnackbar, id]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -189,7 +191,7 @@ export default function ActivitesTableView({ departmentData }) {
         });
         socket.emit('updated', {
           user,
-          link: paths.unitservice.departments.activities.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
           msg: `inactivated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
@@ -200,7 +202,7 @@ export default function ActivitesTableView({ departmentData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, departmentData, user, enqueueSnackbar]
+    [dataInPage.length, table, refetch, departmentData, user, enqueueSnackbar, id]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -212,7 +214,7 @@ export default function ActivitesTableView({ departmentData }) {
       });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.departments.activities.root(departmentData._id),
+        link: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
         msg: `activated many activities in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
@@ -235,6 +237,7 @@ export default function ActivitesTableView({ departmentData }) {
     departmentData,
     user,
     enqueueSnackbar,
+    id,
   ]);
 
   const handleInactivateRows = useCallback(async () => {
@@ -246,7 +249,7 @@ export default function ActivitesTableView({ departmentData }) {
       });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.departments.activities.root(departmentData._id),
+        link: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
         msg: `inactivated many activities in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
@@ -269,13 +272,16 @@ export default function ActivitesTableView({ departmentData }) {
     departmentData,
     user,
     enqueueSnackbar,
+    id,
   ]);
 
   const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.departments.activities.edit(departmentData._id, id));
+    (_id) => {
+      router.push(
+        paths.superadmin.unitservices.departments.activities.edit(id, departmentData._id, _id)
+      );
     },
-    [router, departmentData]
+    [router, departmentData, id]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -308,11 +314,11 @@ export default function ActivitesTableView({ departmentData }) {
           // links={[
           //   {
           //     name: t('dashboard'),
-          //     href: paths.unitservice.root,
+          //     href: paths.superadmin.unitservices.root,
           //   },
           //   {
           //     name: t('departments'),
-          //     href: paths.unitservice.departments.root,
+          //     href: paths.superadmin.unitservices.departments.root(id),
           //   },
           //   { name: t('activities') },
           // ]}
@@ -320,7 +326,10 @@ export default function ActivitesTableView({ departmentData }) {
             checkAcl({ category: 'department', subcategory: 'activities', acl: 'create' }) && (
               <Button
                 component={RouterLink}
-                href={paths.unitservice.departments.activities.new(departmentData._id)}
+                href={paths.superadmin.unitservices.departments.activities.new(
+                  id,
+                  departmentData._id
+                )}
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >

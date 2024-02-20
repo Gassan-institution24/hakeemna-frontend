@@ -69,7 +69,7 @@ export default function DepartmentFeedbackView({ departmentData }) {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const params = useParams();
-  const { id } = params;
+  const { depid } = params;
 
   const componentRef = useRef();
 
@@ -80,7 +80,7 @@ export default function DepartmentFeedbackView({ departmentData }) {
 
   const router = useRouter();
 
-  const { feedbackData, loading } = useGetDepartmentFeedbackes(id);
+  const { feedbackData, loading } = useGetDepartmentFeedbackes(depid);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -157,11 +157,11 @@ export default function DepartmentFeedbackView({ departmentData }) {
           links={[
             {
               name: t('dashboard'),
-              href: paths.unitservice.root,
+              href: paths.superadmin.unitservices.root,
             },
             {
               name: t('departments'),
-              href: paths.unitservice.departments.root,
+              href: paths.superadmin.unitservices.departments.root(id),
             },
             { name: t('department feedbacks') }, /// edit
           ]}

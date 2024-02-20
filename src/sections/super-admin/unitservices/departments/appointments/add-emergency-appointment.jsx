@@ -36,25 +36,21 @@ import FormProvider, { RHFSelect, RHFMultiSelect } from 'src/components/hook-for
 
 // ----------------------------------------------------------------------
 
-export default function BookManually({ departmentData, onClose, refetch, ...other }) {
+export default function BookManually({ unitServiceData, departmentData, onClose, refetch, ...other }) {
   const router = useRouter();
   const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
-  const { id } = useParams();
+  const { id, depid } = useParams();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSServiceTypes(
-    id
-  );
-  const { workGroupsData } = useGetDepartmentWorkGroups(id);
-  const { workShiftsData } = useGetUSWorkShifts(
-    id
-  );
+  const { serviceTypesData } = useGetUSServiceTypes(id);
+  const { workGroupsData } = useGetDepartmentWorkGroups(depid);
+  const { workShiftsData } = useGetUSWorkShifts(id);
 
   // console.log('workGroupsData', workGroupsData);
 
@@ -93,14 +89,14 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
       const appoint = await axios.post(endpoints.tables.appointments, {
         ...data,
         emergency: true,
-        unit_service:id,
+        unit_service: id,
         department: departmentData._id,
       });
       console.log('appoint', appoint);
       socket.emit('created', {
         data,
         user,
-        link: paths.unitservice.departments.appointments(departmentData._id),
+        link: paths.superadmin.unitservices.departments.appointments(id,departmentData._id),
         msg: `created an emergency appointment <strong>${appoint?.data?.code}</strong> into <strong>${departmentData.name_english}</strong> department`,
       });
       reset();
@@ -109,7 +105,6 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
       console.info('DATA', data);
       onClose();
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -142,8 +137,7 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
                     onChange={(newValue) => {
                       const selectedTime = zonedTimeToUtc(
                         newValue,
-                        user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                          ?.unit_service?.country?.time_zone
+                        unitServiceData?.country?.time_zone
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}
@@ -221,4 +215,5 @@ BookManually.propTypes = {
   onClose: PropTypes.func,
   refetch: PropTypes.func,
   departmentData: PropTypes.object,
+  unitServiceData: PropTypes.object,
 };

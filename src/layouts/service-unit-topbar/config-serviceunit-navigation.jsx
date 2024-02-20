@@ -29,7 +29,7 @@ export function useNavData() {
       },
       {
         title: t('departments'),
-        path: paths.superadmin.unitservices.departments(id),
+        path: paths.superadmin.unitservices.departments.root(id),
         icon: <Iconify icon="fluent:content-settings-16-regular" />,
       },
       {
