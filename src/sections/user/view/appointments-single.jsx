@@ -7,7 +7,7 @@ import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import Specialities from '../specialities';
+import PatientsAppointment from '../appointments/availableappointments';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ export default function UserAppointmentsBook() {
         sx={{ mb: { xs: 3, md: 5 } }}
       />
 
-      <Specialities />
+      <PatientsAppointment />
     </Container>
   );
 }
