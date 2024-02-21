@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
-import { Avatar, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
 import { fTime } from 'src/utils/format-time';

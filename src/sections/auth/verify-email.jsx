@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -9,17 +10,17 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
+import { useRouter, useSearchParams } from 'src/routes/hooks';
+
+import { useCountdownSeconds } from 'src/hooks/use-countdown';
+
+import axios, { endpoints } from 'src/utils/axios';
 
 import { EmailInboxIcon } from 'src/assets/icons';
 
-import { useSnackbar } from 'src/components/snackbar';
-
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFCode, RHFTextField } from 'src/components/hook-form';
-import { useRouter, useSearchParams } from 'src/routes/hooks';
-import axios, { endpoints } from 'src/utils/axios';
-import { useCountdownSeconds } from 'src/hooks/use-countdown';
-import { useCallback } from 'react';
+import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, { RHFCode } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
