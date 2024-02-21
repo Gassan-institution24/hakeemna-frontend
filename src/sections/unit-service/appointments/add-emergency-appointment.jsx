@@ -99,7 +99,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
       reset();
       enqueueSnackbar('Create success!');
       refetch();
-      console.info('DATA', data);
+
       onClose();
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });

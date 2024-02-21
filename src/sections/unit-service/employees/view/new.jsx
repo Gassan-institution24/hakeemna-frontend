@@ -25,7 +25,7 @@ export default function TableCreateView({ employeeData }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const [selectedPage, setSelectedPage] = useState();
+  const [selectedPage, setSelectedPage] = useState(1);
   const select = useBoolean(true);
 
   return (
@@ -56,6 +56,7 @@ export default function TableCreateView({ employeeData }) {
       <ConfirmDialog
         open={select.value}
         onClose={select.onFalse}
+        withoutCancel
         title={curLangAr ? 'هل لدى الموظف حساب لدينا؟' : 'Does the employee have an account?'}
         content={
           <>

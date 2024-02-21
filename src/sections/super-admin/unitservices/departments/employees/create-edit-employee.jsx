@@ -75,8 +75,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     () => ({
       // unit_service: currentTable?.unit_service || '',
       // department: currentTable?.department || '',
-      unit_service:
-        id || departmentData.unit_service._id,
+      unit_service: id || departmentData.unit_service._id,
       department: departmentData._id,
       employee_type: currentTable?.employee_type || '',
       email: currentTable?.email || '',
@@ -144,7 +143,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
         socket.emit('created', {
           data,
           user,
-          link: paths.superadmin.unitservices.departments.employees.root(id,departmentData._id),
+          link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
           msg: `creating an employee <strong>${data.first_name}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       } else {
@@ -162,14 +161,13 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
         socket.emit('updated', {
           data,
           user,
-          link: paths.superadmin.unitservices.departments.employees.root(id,departmentData._id),
+          link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
           msg: `updating an employee <strong>${data.first_name}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      router.push(paths.superadmin.unitservices.departments.employees.root(id,departmentData._id));
-      console.info('DATA', data);
+      router.push(paths.superadmin.unitservices.departments.employees.root(id, departmentData._id));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

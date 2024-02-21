@@ -31,7 +31,7 @@ export default function ACLGuard({ hasContent, category, subcategory, acl, child
 
   if (
     typeof acl === 'undefined' ||
-    (!currentACL?.[category]?.[subcategory]?.includes(acl) && user.role !== 'superadmin')
+    (!currentACL?.[category]?.[subcategory]?.includes(acl) && user?.role !== 'superadmin')
   ) {
     return hasContent ? (
       <Container component={MotionContainer} sx={{ textalign: 'center', ...sx }}>

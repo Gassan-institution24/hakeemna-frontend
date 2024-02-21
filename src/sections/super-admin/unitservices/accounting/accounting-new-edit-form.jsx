@@ -106,7 +106,6 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
       reset();
       enqueueSnackbar(licenseMovementData ? 'Update success!' : 'Create success!');
       router.push(paths.superadmin.unitservices.accounting(unitServiceData._id));
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }

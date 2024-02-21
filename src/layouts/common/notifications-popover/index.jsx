@@ -1,10 +1,11 @@
 import { m } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
+import { LoadingButton } from '@mui/lab';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -31,29 +32,7 @@ import NotificationItem from './notification-item';
 
 // ----------------------------------------------------------------------
 
-// const TABS = [
-//   {
-//     value: 'all',
-//     label: 'All',
-//     count: 22,
-//   },
-//   {
-//     value: 'unread',
-//     label: 'Unread',
-//     count: 12,
-//   },
-//   {
-//     value: 'archived',
-//     label: 'Archived',
-//     count: 10,
-//   },
-// ];
-
-// ----------------------------------------------------------------------
-
 export default function NotificationsPopover() {
-  // console.log('socket',socket)
-
   const router = useRouter();
 
   const drawer = useBoolean();
@@ -62,16 +41,39 @@ export default function NotificationsPopover() {
 
   const smUp = useResponsive('up', 'sm');
 
-  // const [currentTab, setCurrentTab] = useState('all');
+  const [notifications, setNotifications] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
-  // const handleChangeTab = useCallback((event, newValue) => {
-  //   setCurrentTab(newValue);
-  // }, []);
+  /* eslint-disable */
+  const fetchData = async () => {
+    if (loading || !hasMore) return;
 
-  const { notifications, refetch, loading } = useGetMyNotifications(
-    user?._id,
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
-  );
+    setLoading(true);
+    try {
+      // Update the URL to match your API endpoint structure
+      const response = await axios.get(
+        `${endpoints.tables.myNotifications(
+          user?._id,
+          user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
+        )}?page=${page}`
+      );
+      const { notifications: newNotifications, hasMore: hasMoreData } = response.data;
+      setNotifications((prev) => [...prev, ...newNotifications]);
+      setPage((prevPage) => prevPage + 1);
+      setHasMore(hasMoreData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  /* eslint-enable */
 
   const { notificationscount, recount } = useGetMyUnreadNotificationCount(
     user?._id,
@@ -82,66 +84,30 @@ export default function NotificationsPopover() {
     drawer.onFalse();
     router.push(link);
     await axios.patch(endpoints.tables.readNotification(id));
-    refetch();
+    fetchData();
     recount();
   };
-  // const [notifications, setNotifications] = useState(_notifications);
-
-  // const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
 
   const handleMarkAllAsRead = async () => {
     await axios.patch(`${endpoints.tables.notifications}/read`, { ids: notificationscount });
     recount();
-    refetch();
+    fetchData();
   };
-
-  const renderHead = (
-    <Stack direction="row" alignItems="center" sx={{ py: 2, pl: 2.5, pr: 1, minHeight: 68 }}>
-      <Typography variant="h6" sx={{ flexGrow: 1 }}>
-        Notifications
-      </Typography>
-
-      {!!notificationscount.length && (
-        <Tooltip title="Mark all as read">
-          <IconButton color="primary" onClick={handleMarkAllAsRead}>
-            <Iconify icon="eva:done-all-fill" />
-          </IconButton>
-        </Tooltip>
-      )}
-
-      {!smUp && (
-        <IconButton onClick={drawer.onFalse}>
-          <Iconify icon="mingcute:close-line" />
-        </IconButton>
-      )}
-    </Stack>
-  );
-
-  const renderList = (
-    <Scrollbar>
-      <List disablePadding>
-        {!loading &&
-          notifications?.map((notification, index) => (
-            <NotificationItem handleClick={handleClick} key={index} notification={notification} />
-          ))}
-      </List>
-    </Scrollbar>
-  );
 
   useEffect(() => {
     socket.on('error', (data) => {
-      refetch();
+      fetchData();
       recount();
     });
     socket.on('created', (data) => {
-      refetch();
+      fetchData();
       recount();
     });
     socket.on('updated', (data) => {
-      refetch();
+      fetchData();
       recount();
     });
-  }, [refetch, recount]);
+  }, [fetchData, recount]);
 
   return (
     <>
@@ -169,31 +135,50 @@ export default function NotificationsPopover() {
           sx: { width: 1, maxWidth: 420 },
         }}
       >
-        {renderHead}
+        <Stack direction="row" alignItems="center" sx={{ py: 2, pl: 2.5, pr: 1, minHeight: 68 }}>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Notifications
+          </Typography>
 
-        {/* <Divider />
+          {!!notificationscount.length && (
+            <Tooltip title="Mark all as read">
+              <IconButton color="primary" onClick={handleMarkAllAsRead}>
+                <Iconify icon="eva:done-all-fill" />
+              </IconButton>
+            </Tooltip>
+          )}
 
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{ pl: 2.5, pr: 1 }}
-        >
-          {renderTabs}
-          <IconButton onClick={handleMarkAllAsRead}>
-            <Iconify icon="solar:settings-bold-duotone" />
-          </IconButton>
-        </Stack> */}
+          {!smUp && (
+            <IconButton onClick={drawer.onFalse}>
+              <Iconify icon="mingcute:close-line" />
+            </IconButton>
+          )}
+        </Stack>
 
         <Divider />
 
-        {renderList}
-
-        <Box sx={{ p: 1 }}>
-          <Button fullWidth size="large">
-            View All
-          </Button>
-        </Box>
+        <Scrollbar>
+          <List disablePadding>
+            {/* {!loading && */}
+            {notifications?.map((notification, index) => (
+              <NotificationItem handleClick={handleClick} key={index} notification={notification} />
+            ))}
+          </List>
+          <Box sx={{ p: 1 }}>
+            <LoadingButton
+              fullWidth
+              loading={loading}
+              disabled={!hasMore}
+              onClick={(e) => {
+                e.preventDefault();
+                fetchData();
+              }}
+              size="large"
+            >
+              {hasMore ? 'see more' : 'notifications end'}
+            </LoadingButton>
+          </Box>
+        </Scrollbar>
       </Drawer>
     </>
   );

@@ -104,7 +104,6 @@ export default function CitiesNewEditForm({ currentCity }) {
       reset();
       enqueueSnackbar(currentCity ? 'Update success!' : 'Create success!');
       router.push(paths.superadmin.tables.cities.root);
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }

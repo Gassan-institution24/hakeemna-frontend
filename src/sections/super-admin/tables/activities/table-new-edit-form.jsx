@@ -113,7 +113,6 @@ export default function TableNewEditForm({ currentTable }) {
       // }else{enqueueSnackbar('Please try again later!', {
       // variant: 'error',
       // })}
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }

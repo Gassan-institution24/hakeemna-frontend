@@ -121,7 +121,6 @@ export default function TableNewEditForm({ currentTable }) {
       //   });
       // }
       router.push(paths.superadmin.tables.hospitallist.root);
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }

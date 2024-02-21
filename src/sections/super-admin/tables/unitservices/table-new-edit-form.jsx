@@ -122,7 +122,6 @@ export default function CountriesNewEditForm({ currentSelected }) {
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
       router.push(paths.superadmin.tables.medicines.root); /// edit
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
