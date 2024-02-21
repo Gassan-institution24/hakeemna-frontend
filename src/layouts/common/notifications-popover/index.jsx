@@ -1,5 +1,5 @@
 import { m } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -7,7 +7,6 @@ import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
 import { LoadingButton } from '@mui/lab';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
@@ -22,7 +21,7 @@ import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetMyNotifications, useGetMyUnreadNotificationCount } from 'src/api';
+import { useGetMyUnreadNotificationCount } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';

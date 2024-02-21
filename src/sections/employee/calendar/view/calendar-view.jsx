@@ -20,10 +20,10 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { updateEvent, useGetEvents } from 'src/api/calendar';
-import { CALENDAR_COLOR_OPTIONS } from 'src/assets/data/calender-colors';
+import { updateEvent } from 'src/api/calendar';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeCalender } from 'src/api';
+import { CALENDAR_COLOR_OPTIONS } from 'src/assets/data/calender-colors';
 
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
