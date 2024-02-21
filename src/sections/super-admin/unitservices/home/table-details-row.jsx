@@ -80,7 +80,7 @@ export default function CountriesTableRow({
         onClick={showGeneralInfo}
         align="center"
       >
-        {US_type}
+        {US_type?.name_english}
       </TableCell>
       <TableCell
         sx={{

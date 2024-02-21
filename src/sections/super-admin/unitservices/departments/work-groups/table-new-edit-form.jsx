@@ -56,8 +56,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const defaultValues = useMemo(
     () => ({
-      unit_service:
-        id || departmentData.unit_service._id,
+      unit_service: id || departmentData.unit_service._id,
       department: departmentData._id,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
@@ -111,7 +110,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
         socket.emit('updated', {
           data,
           user,
-          link: paths.superadmin.unitservices.departments.workGroups.root(id,departmentData._id),
+          link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
           msg: `updated work group <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       } else {
@@ -127,14 +126,15 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
         socket.emit('created', {
           data,
           user,
-          link: paths.superadmin.unitservices.departments.workGroups.root(id,departmentData._id),
+          link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
           msg: `created work group <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      router.push(paths.superadmin.unitservices.departments.workGroups.root(id,departmentData._id));
-      console.info('DATA', data);
+      router.push(
+        paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id)
+      );
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

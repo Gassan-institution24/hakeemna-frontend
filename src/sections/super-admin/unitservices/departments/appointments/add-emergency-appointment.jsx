@@ -36,7 +36,13 @@ import FormProvider, { RHFSelect, RHFMultiSelect } from 'src/components/hook-for
 
 // ----------------------------------------------------------------------
 
-export default function BookManually({ unitServiceData, departmentData, onClose, refetch, ...other }) {
+export default function BookManually({
+  unitServiceData,
+  departmentData,
+  onClose,
+  refetch,
+  ...other
+}) {
   const router = useRouter();
   const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
@@ -96,13 +102,13 @@ export default function BookManually({ unitServiceData, departmentData, onClose,
       socket.emit('created', {
         data,
         user,
-        link: paths.superadmin.unitservices.departments.appointments(id,departmentData._id),
+        link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
         msg: `created an emergency appointment <strong>${appoint?.data?.code}</strong> into <strong>${departmentData.name_english}</strong> department`,
       });
       reset();
       enqueueSnackbar('Create success!');
       refetch();
-      console.info('DATA', data);
+
       onClose();
     } catch (error) {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -10,79 +9,74 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-import { useRouter, useSearchParams } from 'src/routes/hooks';
 
-import { useCountdownSeconds } from 'src/hooks/use-countdown';
-
-import { useAuthContext } from 'src/auth/hooks';
 import { EmailInboxIcon } from 'src/assets/icons';
+
+import { useSnackbar } from 'src/components/snackbar';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFCode, RHFTextField } from 'src/components/hook-form';
+import { useRouter, useSearchParams } from 'src/routes/hooks';
+import axios, { endpoints } from 'src/utils/axios';
+import { useCountdownSeconds } from 'src/hooks/use-countdown';
+import { useCallback } from 'react';
 
 // ----------------------------------------------------------------------
 
-export default function VerifyView() {
-  const router = useRouter();
-
+export default function ClassicVerifyView() {
   const searchParams = useSearchParams();
-
   const email = searchParams.get('email');
+  const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const { confirmRegister, resendCodeRegister } = useAuthContext();
-
-  const { countdown, counting, startCountdown } = useCountdownSeconds(60);
-
-  const VerifySchemaSchema = Yup.object().shape({
+  const VerifySchema = Yup.object().shape({
     code: Yup.string().min(6, 'Code must be at least 6 characters').required('Code is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
   });
 
   const defaultValues = {
     code: '',
-    email: email || '',
   };
+
+  const { countdown, counting, startCountdown } = useCountdownSeconds(60);
 
   const methods = useForm({
     mode: 'onChange',
-    resolver: yupResolver(VerifySchemaSchema),
+    resolver: yupResolver(VerifySchema),
     defaultValues,
   });
 
   const {
-    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
-
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await confirmRegister?.(data.email, data.code);
-      router.push(paths.auth.amplify.login);
+      await axios.post(endpoints.auth.activate, { email, code: data.code });
+      router.push(paths.dashboard.root);
     } catch (error) {
       console.error(error);
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   });
-
   const handleResendCode = useCallback(async () => {
     try {
       startCountdown();
-      await resendCodeRegister?.(values.email);
+      await axios.post(endpoints.auth.resendActivation, { email });
     } catch (error) {
       console.error(error);
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
-  }, [resendCodeRegister, startCountdown, values.email]);
+  }, [startCountdown, email, enqueueSnackbar]);
 
   const renderForm = (
     <Stack spacing={3} alignItems="center">
-      <RHFTextField
+      {/* <RHFTextField
         name="email"
         label="Email"
         placeholder="example@gmail.com"
         InputLabelProps={{ shrink: true }}
-      />
+      /> */}
 
       <RHFCode name="code" />
 
@@ -99,8 +93,8 @@ export default function VerifyView() {
       <Typography variant="body2">
         {`Don’t have a code? `}
         <Link
-          variant="subtitle2"
           onClick={handleResendCode}
+          variant="subtitle2"
           sx={{
             cursor: 'pointer',
             ...(counting && {
@@ -115,7 +109,7 @@ export default function VerifyView() {
 
       <Link
         component={RouterLink}
-        href={paths.auth.amplify.login}
+        href={paths.auth.login}
         color="inherit"
         variant="subtitle2"
         sx={{

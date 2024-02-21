@@ -19,7 +19,7 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useGetCities, useGetUSTypes, useGetCountries, useGetSpecialties } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -121,7 +121,7 @@ export default function JwtRegisterView() {
       // console.log(data);
       await register?.({ role: 'admin', userName: data.name_english, ...data });
 
-      router.push(returnTo || PATH_AFTER_LOGIN);
+      router.push(paths.auth.verify(data.email)||returnTo || PATH_AFTER_SIGNUP);
     } catch (error) {
       console.error(error);
       reset();

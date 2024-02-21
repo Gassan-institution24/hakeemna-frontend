@@ -108,7 +108,6 @@ export default function TableNewEditForm({ licenseMovementData, stakeholderData 
       router.push(paths.superadmin.accounting.stakeholder.root(stakeholderData._id));
       // console.log('after router');
       enqueueSnackbar(licenseMovementData ? 'Update success!' : 'Create success!');
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
