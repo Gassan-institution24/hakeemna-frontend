@@ -11,13 +11,13 @@ import Specialities from '../specialities';
 
 // ----------------------------------------------------------------------
 
-export default function Specialitiess() {
+export default function SpecialitiesView() {
   const settings = useSettingsContext();
   const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t('specialities')}
+        heading={t('Specialities')}
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('user'), href: paths.dashboard.user.root },

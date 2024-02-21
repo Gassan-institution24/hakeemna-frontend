@@ -13,7 +13,6 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import AppointmentData from '../appointments/appointmentsforpatient';
 import PatientsAppointment from '../appointments/availableappointments';
-import Specialities from '../specialities';
 // ----------------------------------------------------------------------
 
 export default function UserAppointmentsPage() {

@@ -19,6 +19,7 @@ const UserAppointmentsPage = lazy(() => import('src/pages/dashboard/user/appoint
 const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
 const Share = lazy(() => import('src/pages/dashboard/user/share'));
 const FinancilMovment = lazy(() => import('src/pages/dashboard/user/FinancilMovment'));
+const Specialities = lazy(() => import('src/pages/dashboard/user/specialities'));
 const PatientPrescriptions = lazy(() => import('src/pages/dashboard/user/prescriptions'));
 const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserEditPage = lazy(() => import('src/pages/dashboard/user/edit'));
@@ -26,7 +27,6 @@ const Medicalreports = lazy(() => import('src/pages/dashboard/user/Medicalreport
 const Emergency = lazy(() => import('src/pages/dashboard/user/emergency'));
 const Watingroom = lazy(() => import('src/pages/dashboard/user/watingroom'));
 const BMI = lazy(() => import('src/sections/user/bmi'));
-const Specialities = lazy(() => import('src/sections/user/specialities'));
 const Oldpatientsdata = lazy(() => import('src/sections/user/oldpatientsdata'));
 
 // ----------------------------------------------------------------------
@@ -55,10 +55,10 @@ export const userRoutes = [
           { path: 'watingroom', element: <Watingroom /> },
           { path: 'prescriptions', element: <PatientPrescriptions /> },
           { path: 'bmi', element: <BMI /> },
-          { path: 'specialities', element: <Specialities /> },
           { path: 'oldpatientdata', element: <Oldpatientsdata /> },
           { path: 'appointments', element: <UserAppointmentsPage /> },
-          { path: 'bookappointment', element: <Booking /> },
+          { path: 'bookappointment/:id', element: <Booking /> },
+          { path: 'specialities', element: <Specialities /> },
           // { path: 'new', element: <UserCreatePage /> },
           { path: ':id/edit', element: <UserEditPage /> },
           { path: 'account', element: <UserAccountPage /> },
