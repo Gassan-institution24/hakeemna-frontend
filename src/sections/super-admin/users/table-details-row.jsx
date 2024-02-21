@@ -117,7 +117,7 @@ export default function CountriesTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'active' ? (
+        {/* {status === 'active' ? (
           <MenuItem
             onClick={() => {
               onInactivate();
@@ -139,7 +139,7 @@ export default function CountriesTableRow({
             <Iconify icon="bi:play-fill" />
             activate
           </MenuItem>
-        )}
+        )} */}
 
         <MenuItem
           onClick={() => {

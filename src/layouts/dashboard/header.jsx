@@ -53,7 +53,7 @@ export default function Header({ onOpenNav }) {
 
       <Searchbar />
 
-      <TimeOutInActive />
+      {/* <TimeOutInActive /> */}
       <Stack
         flexGrow={1}
         direction="row"

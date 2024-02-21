@@ -32,6 +32,7 @@ export const MAPBOX_API = process.env.REACT_APP_MAPBOX_API;
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL
 export const PATH_AFTER_LOGIN = paths.dashboard.root;
+export const PATH_AFTER_SIGNUP = paths.auth.verify;
 export const PATH_BEFORE_LOGIN = paths.between.root;
 export const PATH_FOR_PATIENT_SERVICES = paths.pages.patients;
 export const PATH_FOR_US_SERVICES = paths.pages.unit;

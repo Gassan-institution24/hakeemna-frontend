@@ -31,6 +31,7 @@ export default function JwtLoginView() {
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
+  const [email, setEmail] = useState('');
 
   const searchParams = useSearchParams();
 
@@ -68,6 +69,11 @@ export default function JwtLoginView() {
       console.error(error);
       // reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
+      console.log(error);
+      console.log(error === 'Your account is inactive!');
+      if (error === 'Your account is inactive!') {
+        setEmail(data.email);
+      }
     }
   });
 
@@ -87,7 +93,16 @@ export default function JwtLoginView() {
 
   const renderForm = (
     <Stack spacing={2.5}>
-      {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+      {!!errorMsg && (
+        <Alert severity="error">
+          {errorMsg}{' '}
+          {email && (
+            <Link component={RouterLink} href={paths.auth.verify(email)} variant="subtitle2">
+              verify your account
+            </Link>
+          )}
+        </Alert>
+      )}
 
       <RHFTextField name="email" label="Email address" />
 
