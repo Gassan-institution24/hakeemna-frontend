@@ -17,6 +17,7 @@ export default function ConfirmDialog({
   open,
   onClose,
   disabled,
+  withoutCancel,
   ...other
 }) {
   const { t } = useTranslate();
@@ -31,9 +32,11 @@ export default function ConfirmDialog({
       <DialogActions>
         {action}
 
-        <Button variant="outlined" color="inherit" onClick={onClose} disabled={disabled}>
-          {t('cancel')}
-        </Button>
+        {!withoutCancel && (
+          <Button variant="outlined" color="inherit" onClick={onClose} disabled={disabled}>
+            {t('cancel')}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );
@@ -45,5 +48,6 @@ ConfirmDialog.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,
   disabled: PropTypes.bool,
+  withoutCancel: PropTypes.bool,
   title: PropTypes.string,
 };

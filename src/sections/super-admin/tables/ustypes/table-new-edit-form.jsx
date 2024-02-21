@@ -98,7 +98,6 @@ export default function TableNewEditForm({ currentSelected }) {
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
       router.push(paths.superadmin.tables.unitservicetypes.root);
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }

@@ -67,6 +67,9 @@ const NewAppointmentConfigPage = lazy(() =>
   import('src/pages/employee/appoint-config/new-appoint-config')
 );
 
+// CALENDER
+const CalenderPage = lazy(() => import('src/pages/employee/calender/calender'));
+
 // ----------------------------------------------------------------------
 
 export const unitServiceEmployeeDashboardRoutes = [
@@ -154,6 +157,10 @@ export const unitServiceEmployeeDashboardRoutes = [
           { element: <ProfileHomePage />, index: true },
           { path: 'edit', element: <ProfileEditPage /> },
         ],
+      },
+      {
+        path: 'calender',
+        element: <CalenderPage />,
       },
     ],
   },

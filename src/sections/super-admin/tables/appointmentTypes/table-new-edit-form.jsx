@@ -105,7 +105,6 @@ export default function TableNewEditForm({ currentTable }) {
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
       router.push(paths.superadmin.tables.appointypes.root);
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
