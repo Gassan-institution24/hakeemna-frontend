@@ -85,7 +85,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   const router = useRouter();
 
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   const confirm = useBoolean();
   const confirmUnCancel = useBoolean();
