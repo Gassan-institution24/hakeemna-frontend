@@ -1,31 +1,29 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { useParams } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
-import { fTime } from 'src/utils/format-time';
-
 import { useTranslate } from 'src/locales';
-import {
-  useGetUSFeedbackes,
-  useGetUSAvailableAppointments,
-  useGetEmployeeBySpecialty,
-} from 'src/api';
+import { useGetUSFeedbackes, useGetEmployeeBySpecialty } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
-import { useSnackbar } from 'src/components/snackbar';
-import { width } from '@mui/system';
 
-const AppointmentOnline = ({ Units, onBook, onView }) => {
+  export default function AppointmetClinic({ Units, onBook, onView }) {
   const { t } = useTranslate();
   const { feedbackData } = useGetUSFeedbackes(Units._id);
   const params = useParams();
+
   const { id } = params;
   const { data } = useGetEmployeeBySpecialty(id);
+  const router = useRouter();
+  console.log(data);
+  const handleViewRow = (ids) => {
+    router.push(paths.dashboard.user.doctorpage(ids));
+  };
 
   const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient._id));
   const numberOfUsers = uniqueUserIds.size;
@@ -46,7 +44,7 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
             src={info?.employee?.picture}
             sx={{ width: '110px', height: '100%', borderRight: '2px lightgray dashed' }}
           />
-          <Box sx={{ ml: -8 }}>
+          <Box sx={{ ml: -6 }}>
             <Box sx={{ mt: 1, ml: 2 }}>
               <Box sx={{ display: 'inline-flex' }}>
                 <Typography sx={{ fontSize: 13 }}>{info?.employee?.first_name}</Typography>&nbsp;
@@ -89,9 +87,10 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
           </Box>
 
           <Button
-            sx={{ width: '150px', height: '45px', position: 'relative', left: 20, top: 138 }}
+            sx={{ width: '150px', height: '45px', position: 'relative', left: 1, top: 138 }}
             variant="contained"
             color="success"
+            onClick={() => handleViewRow(info?._id)}
           >
             Book appointment
           </Button>
@@ -101,13 +100,12 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
   );
 };
 
-AppointmentOnline.propTypes = {
+AppointmetClinic.propTypes = {
   Units: PropTypes.object,
   onView: PropTypes.func,
   onBook: PropTypes.func,
 };
 
-export default AppointmentOnline;
 
 // const getTodayDate = () => {
 //   const today = new Date();

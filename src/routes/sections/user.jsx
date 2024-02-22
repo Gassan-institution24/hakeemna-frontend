@@ -17,6 +17,7 @@ const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
 const UserAppointmentsPage = lazy(() => import('src/pages/dashboard/user/appointments'));
 const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
+const Doctorpage = lazy(() => import('src/pages/dashboard/user/doctorpage'));
 const Share = lazy(() => import('src/pages/dashboard/user/share'));
 const FinancilMovment = lazy(() => import('src/pages/dashboard/user/FinancilMovment'));
 const Specialities = lazy(() => import('src/pages/dashboard/user/specialities'));
@@ -58,6 +59,7 @@ export const userRoutes = [
           { path: 'oldpatientdata', element: <Oldpatientsdata /> },
           { path: 'appointments', element: <UserAppointmentsPage /> },
           { path: 'bookappointment/:id', element: <Booking /> },
+          { path: 'doctorpage/:id', element: <Doctorpage /> },
           { path: 'specialities', element: <Specialities /> },
           // { path: 'new', element: <UserCreatePage /> },
           { path: ':id/edit', element: <UserEditPage /> },

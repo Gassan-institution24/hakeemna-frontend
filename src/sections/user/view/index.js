@@ -1,4 +1,5 @@
 export { default as Share } from './share-view';
+export { default as Doctorpage } from './doctorpage';
 export { default as Pharmaces } from '../pharmacies';
 export { default as specialities } from './specialities';
 export { default as UserEditView } from './contactUs-view';
