@@ -138,16 +138,16 @@ export function useGetEmployee(id) {
 export function useGetEmployeeEngagement(id) {
   const URL = endpoints.tables.employeeEngagement(id);
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const { dataa, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      data,
+      dataa,
       loading: isLoading,
       error,
       validating: isValidating,
-      empty: !isLoading && !data?.length,
+      empty: !isLoading && !dataa?.length,
     }),
-    [data, error, isLoading, isValidating]
+    [dataa, error, isLoading, isValidating]
   );
   const refetch = async () => {
     // Use the mutate function to re-fetch the data for the specified key (URL)
