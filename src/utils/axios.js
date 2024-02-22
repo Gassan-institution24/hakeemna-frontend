@@ -178,12 +178,21 @@ export const endpoints = {
     availableAppointments: '/api/appointments/available',
     appointment: (id) => `/api/appointments/${id}`,
     createPatientAndBookAppoint: (id) => `/api/appointments/${id}/newpatient`,
-    usAppointments: (id) => `/api/appointments/unitservice/${id}`,
     usAppointmentsavilable: (id) => `/api/appointments/available/${id}`,
     usAppointmentsCount: (id) => `/api/appointments/unitservice/${id}/count`,
     departmentAppointments: (id) => `/api/appointments/department/${id}`,
     departmentAppointmentsCount: (id) => `/api/appointments/department/${id}/count`,
-    employeeAppointments: (id) => `/api/appointments/employee/${id}`,
+    usAppointments: ({ id, page = 0, sortBy = 'code', rowsPerPage = 5, order = 'asc', filters }) =>
+      `/api/appointments/unitservice/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
+    employeeAppointments: ({
+      id,
+      page = 0,
+      sortBy = 'code',
+      rowsPerPage = 5,
+      order = 'asc',
+      filters,
+    }) =>
+      `/api/appointments/employee/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
     patientAppointments: (id) => `/api/appointments/patient/${id}`,
     patientoneAppointments: (id) => `/api/appointments/onepatient/${id}`,
     economecMovements: '/api/economicmovements',

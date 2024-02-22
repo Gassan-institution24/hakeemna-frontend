@@ -18,10 +18,12 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useGetEmployeeWorkGroups, useGetUSWorkShifts } from 'src/api';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceTableToolbar({
+export default function AppointmentToolbar({
   filters,
   onFilters,
   onAdd,
@@ -29,11 +31,19 @@ export default function InvoiceTableToolbar({
   dateError,
   options,
 }) {
-  const popover = usePopover();
-
   const { t } = useTranslate();
+  const { user } = useAuthContext();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const { workGroupsData } = useGetEmployeeWorkGroups(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+  );
+  const { workShiftsData } = useGetUSWorkShifts(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+  );
+
+  const popover = usePopover();
 
   const handleFilterName = useCallback(
     (event) => {
@@ -44,10 +54,19 @@ export default function InvoiceTableToolbar({
 
   const handleFilterTypes = useCallback(
     (event) => {
-      onFilters(
-        'types',
-        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
-      );
+      onFilters('types', event.target.value);
+    },
+    [onFilters]
+  );
+  const handleFilterWorkShift = useCallback(
+    (event) => {
+      onFilters('shift', event.target.value);
+    },
+    [onFilters]
+  );
+  const handleFilterWorkGroup = useCallback(
+    (event) => {
+      onFilters('group', event.target.value);
     },
     [onFilters]
   );
@@ -82,23 +101,18 @@ export default function InvoiceTableToolbar({
       >
         <FormControl
           sx={{
-            flexShrink: 0,
             width: { xs: 1, md: 200 },
           }}
         >
-          <InputLabel>{`${t('appointment type')} *`}</InputLabel>
+          <InputLabel>{`${t('appointment type')}`}</InputLabel>
 
           <Select
-            multiple
             value={filters.types}
             onChange={handleFilterTypes}
             input={<OutlinedInput label={t('appointment type')} />}
-            renderValue={(selected) =>
-              options
-                .filter((value) => selected.includes(value._id))
-                .map((value) => (curLangAr ? value?.name_arabic : value?.name_english))
-                .join(', ')
-            }
+            // renderValue={(selected) =>
+            //   options.filter((value) => selected.includes(value._id))[0].name_english
+            // }
             MenuProps={{
               PaperProps: {
                 sx: { maxHeight: 240 },
@@ -107,11 +121,60 @@ export default function InvoiceTableToolbar({
           >
             {options.map((option) => (
               <MenuItem key={option._id} value={option._id}>
-                <Checkbox
-                  disableRipple
-                  size="small"
-                  checked={filters.types?.includes(option._id)}
-                />
+                {curLangAr ? option?.name_arabic : option?.name_english}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl
+          sx={{
+            width: { xs: 1, md: 200 },
+          }}
+        >
+          <InputLabel>{`${t('work group')}`}</InputLabel>
+
+          <Select
+            value={filters.group}
+            onChange={handleFilterWorkGroup}
+            input={<OutlinedInput label={t('work group')} />}
+            // renderValue={(selected) =>
+            //   selected
+            // }
+            MenuProps={{
+              PaperProps: {
+                sx: { maxHeight: 240 },
+              },
+            }}
+          >
+            {workGroupsData.map((option) => (
+              <MenuItem key={option._id} value={option._id}>
+                {curLangAr ? option?.name_arabic : option?.name_english}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl
+          sx={{
+            width: { xs: 1, md: 200 },
+          }}
+        >
+          <InputLabel>{`${t('work shift')}`}</InputLabel>
+
+          <Select
+            value={filters.shift}
+            onChange={handleFilterWorkShift}
+            input={<OutlinedInput label={t('work shift')} />}
+            // renderValue={(selected) =>
+            //   workShiftsData.filter((value) => selected.includes(value._id))[0].name_english
+            // }
+            MenuProps={{
+              PaperProps: {
+                sx: { maxHeight: 240 },
+              },
+            }}
+          >
+            {workShiftsData.map((option) => (
+              <MenuItem key={option._id} value={option._id}>
                 {curLangAr ? option?.name_arabic : option?.name_english}
               </MenuItem>
             ))}
@@ -124,7 +187,7 @@ export default function InvoiceTableToolbar({
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
           sx={{
-            maxWidth: { md: 180 },
+            width: { xs: 1, md: 200 },
           }}
         />
 
@@ -139,16 +202,16 @@ export default function InvoiceTableToolbar({
             },
           }}
           sx={{
-            maxWidth: { md: 180 },
+            width: { xs: 1, md: 200 },
           }}
         />
 
-        <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
+        {/* <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder={t('Search name or number...')}
+            placeholder="Search customer or invoice number..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -156,19 +219,19 @@ export default function InvoiceTableToolbar({
                 </InputAdornment>
               ),
             }}
-          />
-          <Stack direction="row">
-            <IconButton onClick={popover.onOpen}>
-              <Iconify icon="eva:more-vertical-fill" />
+          /> */}
+        <Stack direction="row">
+          <IconButton onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+          {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
+            <IconButton color="error" onClick={onAdd}>
+              <Iconify icon="zondicons:add-outline" />
             </IconButton>
-            {ACLGuard({ category: 'unit_service', subcategory: 'appointments', acl: 'create' }) && (
-              <IconButton color="error" onClick={onAdd}>
-                <Iconify icon="zondicons:add-outline" />
-              </IconButton>
-            )}
-          </Stack>
+          )}
         </Stack>
       </Stack>
+      {/* </Stack> */}
 
       <CustomPopover
         open={popover.open}
@@ -198,7 +261,7 @@ export default function InvoiceTableToolbar({
   );
 }
 
-InvoiceTableToolbar.propTypes = {
+AppointmentToolbar.propTypes = {
   dateError: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,
