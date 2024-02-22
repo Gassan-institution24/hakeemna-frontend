@@ -60,7 +60,7 @@ export default function LicenseMovementsView() {
 
   const router = useRouter();
 
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   const { licenseMovements, loading, refetch } = useGetStakeholderLicenseMovements();
 

@@ -90,13 +90,28 @@ export function useGetPatientOneAppointments(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetUSAppointments(id) {
-  const URL = endpoints.tables.usAppointments(id);
+export function useGetUSAppointments({ id, page, sortBy, rowsPerPage, order, filters }) {
+  const URL = endpoints.tables.usAppointments({
+    id,
+    page,
+    sortBy,
+    rowsPerPage,
+    order,
+    filters,
+  });
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      appointmentsData: data || [],
+      appointmentsData: data?.appointments || [],
+      appointmentsLength: data?.length || 0,
+      all: data?.all || 0,
+      notBooked: data?.notBooked || 0,
+      available: data?.available || 0,
+      finished: data?.finished || 0,
+      processing: data?.processing || 0,
+      pending: data?.pending || 0,
+      canceled: data?.canceled || 0,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -198,18 +213,28 @@ export function useGetDepartmentAppointmentsCount(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetEmployeeAppointments(id) {
-  const URL = endpoints.tables.employeeAppointments(id);
-  // console.log('URL', URL);
+export function useGetEmployeeAppointments({ id, page, sortBy, rowsPerPage, order, filters }) {
+  const URL = endpoints.tables.employeeAppointments({
+    id,
+    page,
+    sortBy,
+    rowsPerPage,
+    order,
+    filters,
+  });
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  // console.log('data', data);
-  // console.log('isLoading', isLoading);
-  // console.log('isValidating', isValidating);
-  // console.log('error', error);
   const memoizedValue = useMemo(
     () => ({
-      appointmentsData: data,
+      appointmentsData: data?.appointments || [],
+      appointmentsLength: data?.length || 0,
+      all: data?.all || 0,
+      notBooked: data?.notBooked || 0,
+      available: data?.available || 0,
+      finished: data?.finished || 0,
+      processing: data?.processing || 0,
+      pending: data?.pending || 0,
+      canceled: data?.canceled || 0,
       loading: isLoading,
       error,
       validating: isValidating,

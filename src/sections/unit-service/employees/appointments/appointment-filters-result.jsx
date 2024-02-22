@@ -27,13 +27,17 @@ export default function InvoiceTableFiltersResult({
   const { t } = useTranslate();
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
-  const handleRemoveService = (inputValue) => {
-    const newValue = filters.types.filter((item) => item !== inputValue);
-    onFilters('types', newValue);
-  };
-
   const handleRemoveStatus = () => {
     onFilters('status', 'all');
+  };
+  const handleRemoveGroup = () => {
+    onFilters('group', '');
+  };
+  const handleRemoveShift = () => {
+    onFilters('shift', '');
+  };
+  const handleRemovetype = () => {
+    onFilters('types', '');
   };
 
   const handleRemoveDate = () => {
@@ -55,6 +59,21 @@ export default function InvoiceTableFiltersResult({
           <Block label={t('status:')}>
             <Chip size="small" label={t(filters.status)} onDelete={handleRemoveStatus} />
           </Block>
+        )}
+        {filters.types !== '' && (
+          // <Block>
+          <Chip size="small" label={t('appointment type')} onDelete={handleRemovetype} />
+          // </Block>
+        )}
+        {filters.group !== '' && (
+          // <Block>
+          <Chip size="small" label={t('work group')} onDelete={handleRemoveGroup} />
+          // </Block>
+        )}
+        {filters.shift !== '' && (
+          // <Block>
+          <Chip size="small" label={t('work shift')} onDelete={handleRemoveShift} />
+          // </Block>
         )}
 
         {filters.startDate && !filters.endDate && (

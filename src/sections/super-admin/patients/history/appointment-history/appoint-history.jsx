@@ -77,7 +77,7 @@ export default function AppointHistoryView({ patientData }) {
 
   const router = useRouter();
 
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   const confirm = useBoolean();
 

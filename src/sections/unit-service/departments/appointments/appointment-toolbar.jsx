@@ -92,7 +92,7 @@ export default function AppointmentsTableToolbar({
             multiple
             value={filters.types}
             onChange={handleFilterTypes}
-            input={<OutlinedInput label={`${t('appointment type')} *`} />}
+            input={<OutlinedInput label={t('appointment type')} />}
             renderValue={(selected) =>
               options
                 .filter((value) => selected.includes(value._id))
