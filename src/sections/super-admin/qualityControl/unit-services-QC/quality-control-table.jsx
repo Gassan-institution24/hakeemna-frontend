@@ -60,7 +60,7 @@ export default function USsFeedbacks() {
 
   const router = useRouter();
 
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   const { feedbackData, loading, refetch } = useGetUSsFeedbackes();
 

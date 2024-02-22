@@ -89,7 +89,7 @@ export default function AppointmentsView({ departmentData, appointmentsData, ref
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   const { user } = useAuthContext();
 

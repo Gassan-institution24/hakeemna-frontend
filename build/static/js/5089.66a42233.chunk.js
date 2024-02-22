@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[5089],{15089:(e,s,a)=>{a.r(s),a.d(s,{default:()=>t});var i=a(6907),n=a(85362),r=a(80184);function t(){return(0,r.jsxs)(r.Fragment,{children:[(0,r.jsx)(i.ql,{children:(0,r.jsx)("title",{children:" Dashboard: Payment Methods Table"})}),(0,r.jsx)(n.df,{})]})}}}]);
-//# sourceMappingURL=5089.66a42233.chunk.js.map

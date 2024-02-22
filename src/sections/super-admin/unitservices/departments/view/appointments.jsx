@@ -65,7 +65,12 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsView({ unitServiceData,departmentData, appointmentsData, refetch }) {
+export default function AppointmentsView({
+  unitServiceData,
+  departmentData,
+  appointmentsData,
+  refetch,
+}) {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     { id: 'sequence_number', label: t('sequence') },
@@ -91,7 +96,7 @@ export default function AppointmentsView({ unitServiceData,departmentData, appoi
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   const { user } = useAuthContext();
 
@@ -196,7 +201,7 @@ export default function AppointmentsView({ unitServiceData,departmentData, appoi
         });
         socket.emit('updated', {
           user,
-          link: paths.superadmin.unitservices.departments.appointments(id,departmentData._id),
+          link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
           msg: `canceled appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
         });
         enqueueSnackbar('canceled successfully!');
@@ -208,7 +213,7 @@ export default function AppointmentsView({ unitServiceData,departmentData, appoi
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user, departmentData,id]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user, departmentData, id]
   );
 
   const handleDelayRow = useCallback(
@@ -221,7 +226,7 @@ export default function AppointmentsView({ unitServiceData,departmentData, appoi
         });
         socket.emit('updated', {
           user,
-          link: paths.superadmin.unitservices.departments.appointments(id,departmentData._id),
+          link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
           msg: `delayed appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
         });
         enqueueSnackbar('delayed successfully!');
@@ -234,7 +239,7 @@ export default function AppointmentsView({ unitServiceData,departmentData, appoi
       setMinToDelay(0);
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user, departmentData,id]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user, departmentData, id]
   );
 
   const handleUnCancelRow = useCallback(
@@ -270,7 +275,7 @@ export default function AppointmentsView({ unitServiceData,departmentData, appoi
       });
       socket.emit('updated', {
         user,
-        link: paths.superadmin.unitservices.departments.appointments(id,departmentData._id),
+        link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
         msg: `canceled many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
       enqueueSnackbar('canceled successfully!');
@@ -294,7 +299,7 @@ export default function AppointmentsView({ unitServiceData,departmentData, appoi
     enqueueSnackbar,
     departmentData,
     user,
-    id
+    id,
   ]);
 
   const handleDelayRows = useCallback(async () => {
@@ -306,7 +311,7 @@ export default function AppointmentsView({ unitServiceData,departmentData, appoi
       });
       socket.emit('updated', {
         user,
-        link: paths.superadmin.unitservices.departments.appointments(id,departmentData._id),
+        link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
         msg: `delayed many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
       enqueueSnackbar('delayed successfully!');
@@ -332,7 +337,7 @@ export default function AppointmentsView({ unitServiceData,departmentData, appoi
     enqueueSnackbar,
     departmentData,
     user,
-    id
+    id,
   ]);
 
   const handleUnCancelRows = useCallback(async () => {
@@ -344,7 +349,7 @@ export default function AppointmentsView({ unitServiceData,departmentData, appoi
       });
       socket.emit('updated', {
         user,
-        link: paths.superadmin.unitservices.departments.appointments(id,departmentData._id),
+        link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
         msg: `uncanceled many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
       enqueueSnackbar('uncanceled successfully!');
@@ -368,7 +373,7 @@ export default function AppointmentsView({ unitServiceData,departmentData, appoi
     enqueueSnackbar,
     departmentData,
     user,
-    id
+    id,
   ]);
 
   const handleViewRow = useCallback(

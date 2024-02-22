@@ -60,7 +60,7 @@ export default function StakeholdersFeedbacks() {
 
   const router = useRouter();
 
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   const { feedbackData, loading, refetch } = useGetStakeholdersFeedbackes();
 
