@@ -111,6 +111,7 @@ export default function AccountGeneral({ unitServiceData }) {
   };
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });
@@ -379,7 +380,7 @@ export default function AccountGeneral({ unitServiceData }) {
             />
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+              <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
                 {t('save changes')}
               </LoadingButton>
             </Stack>

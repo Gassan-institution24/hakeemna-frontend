@@ -41,6 +41,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
   });
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(EventSchema),
     defaultValues: currentEvent,
   });
@@ -187,6 +188,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
         <LoadingButton
           type="submit"
+          tabIndex={-1}
           variant="contained"
           loading={isSubmitting}
           disabled={dateError}

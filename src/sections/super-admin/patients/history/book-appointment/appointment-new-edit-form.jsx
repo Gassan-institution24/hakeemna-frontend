@@ -86,6 +86,7 @@
 //   );
 
 //   const methods = useForm({
+    mode: 'onTouched',
 //     resolver: yupResolver(NewJobSchema),
 //     defaultValues,
 //   });

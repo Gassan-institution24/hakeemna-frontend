@@ -31,12 +31,9 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 
 // ----------------------------------------------------------------------
 
-export default function AddEmegencyAppointment({ refetch, appointment, onClose, ...other }) {
-  const router = useRouter();
-  const popover = usePopover();
+export default function BookAppointmentManually({ refetch, appointment, onClose, ...other }) {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
-  const { id } = useParams();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -86,6 +83,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
   );
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -192,7 +190,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
           <DialogTitle sx={{ mb: 1 }}> Book Manually </DialogTitle>
           {existPatients?.map((patient, index) => (
             <Alert
-              key={patient._id}
+              key={index}
               severity="info"
               onClose={() => {
                 setExistPatients(existPatients.filter((info) => info !== patient));
@@ -298,8 +296,8 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
                   label={t('nationality')}
                   InputLabelProps={{ shrink: true }}
                 >
-                  {countriesData.map((option) => (
-                    <MenuItem value={option._id}>
+                  {countriesData.map((option, index) => (
+                    <MenuItem key={index} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -311,8 +309,8 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
                   label="Country"
                   InputLabelProps={{ shrink: true }}
                 >
-                  {countriesData.map((option) => (
-                    <MenuItem value={option._id}>
+                  {countriesData.map((option, index) => (
+                    <MenuItem key={index} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -324,8 +322,8 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                   InputLabelProps={{ shrink: true }}
                 >
-                  {cities.map((option) => (
-                    <MenuItem key={option._id} value={option._id}>
+                  {cities.map((option, index) => (
+                    <MenuItem key={index} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -355,7 +353,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
               {t('cancel')}
             </Button>
 
-            <Button type="submit" variant="contained">
+            <Button type="submit" tabIndex={-1} variant="contained">
               {t('add')}
             </Button>
           </DialogActions>
@@ -367,7 +365,7 @@ export default function AddEmegencyAppointment({ refetch, appointment, onClose, 
   );
 }
 
-AddEmegencyAppointment.propTypes = {
+BookAppointmentManually.propTypes = {
   onClose: PropTypes.func,
   refetch: PropTypes.func,
   appointment: PropTypes.string,

@@ -106,7 +106,6 @@ export default function AppointmentsView({ employeeData }) {
   const { appointmenttypesData } = useGetAppointmentTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
-  console.log('filters', filters);
   const [minToDelay, setMinToDelay] = useState(0);
 
   const {
@@ -120,7 +119,7 @@ export default function AppointmentsView({ employeeData }) {
     canceled,
     finished,
     pending,
-    loading
+    loading,
   } = useGetEmployeeAppointments({
     id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
     page: table.page || 0,
@@ -129,6 +128,8 @@ export default function AppointmentsView({ employeeData }) {
     order: table.order || 'asc',
     filters: filters || null,
   });
+
+  console.log('appointmentsData', appointmentsData);
 
   const dateError =
     filters.startDate && filters.endDate

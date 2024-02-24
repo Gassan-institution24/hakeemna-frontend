@@ -135,6 +135,7 @@ export default function JwtRegisterView() {
   };
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(RegisterSchema),
     defaultValues,
   });
@@ -182,7 +183,7 @@ export default function JwtRegisterView() {
         ...data,
       });
 
-      router.push(paths.auth.verify(data.email)||returnTo || PATH_AFTER_SIGNUP);
+      router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
     } catch (error) {
       console.error(error);
       // reset();

@@ -69,6 +69,7 @@ export default function UploadOldPatient({ refetch }) {
   );
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
