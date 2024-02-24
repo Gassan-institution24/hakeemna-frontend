@@ -121,6 +121,7 @@ export default function TableNewEditForm({ acl }) {
   );
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(accessControlList),
     defaultValues,
   });
@@ -158,7 +159,7 @@ export default function TableNewEditForm({ acl }) {
     <FormProvider methods={methods} onSubmit={onSubmit}>
       {ACLGuard({ category: 'employee', subcategory: 'acl', acl: 'update' }) && (
         <Stack alignItems="flex-end" sx={{ mb: 3, mr: 3 }}>
-          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+          <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
             Save Changes
           </LoadingButton>
         </Stack>

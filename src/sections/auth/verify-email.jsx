@@ -41,7 +41,7 @@ export default function ClassicVerifyView() {
   const { countdown, counting, startCountdown } = useCountdownSeconds(60);
 
   const methods = useForm({
-    mode: 'onChange',
+    mode: 'onTouched',
     resolver: yupResolver(VerifySchema),
     defaultValues,
   });

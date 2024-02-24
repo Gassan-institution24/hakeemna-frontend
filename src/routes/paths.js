@@ -652,6 +652,7 @@ export const paths = {
   // unit service
   employee: {
     root: ROOTS.SUPERADMIN,
+    workGroups: `${ROOTS.SUPERADMIN}/wgroups`,
     entrancemanagement: {
       root: `${ROOTS.SUPERADMIN}/entrancemanagement`,
       new: `${ROOTS.SUPERADMIN}/entrancemanagement/new`,

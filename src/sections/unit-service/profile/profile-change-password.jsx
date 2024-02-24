@@ -51,6 +51,7 @@ export default function AccountChangePassword() {
   };
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(ChangePassWordSchema),
     defaultValues,
   });
@@ -147,7 +148,14 @@ export default function AccountChangePassword() {
           }}
         />
 
-        <LoadingButton type="submit" variant="contained" loading={isSubmitting} sx={{ ml: 'auto' }}>
+        <LoadingButton
+          type="submit"
+          tabIndex={-1}
+          tabIndex={-1}
+          variant="contained"
+          loading={isSubmitting}
+          sx={{ ml: 'auto' }}
+        >
           Save Changes
         </LoadingButton>
       </Stack>

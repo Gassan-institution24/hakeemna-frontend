@@ -58,6 +58,7 @@ export default function TableNewEditForm({ currentTable }) {
   );
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -164,7 +165,7 @@ export default function TableNewEditForm({ currentTable }) {
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+              <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
                 {!currentTable ? 'Create' : 'Save Changes'}
               </LoadingButton>
             </Stack>

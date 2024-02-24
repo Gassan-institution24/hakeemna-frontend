@@ -181,8 +181,16 @@ export const endpoints = {
     createPatientAndBookAppoint: (id) => `/api/appointments/${id}/newpatient`,
     usAppointmentsavilable: (id) => `/api/appointments/available/${id}`,
     usAppointmentsCount: (id) => `/api/appointments/unitservice/${id}/count`,
-    departmentAppointments: (id) => `/api/appointments/department/${id}`,
     departmentAppointmentsCount: (id) => `/api/appointments/department/${id}/count`,
+    departmentAppointments: ({
+      id,
+      page = 0,
+      sortBy = 'code',
+      rowsPerPage = 5,
+      order = 'asc',
+      filters,
+    }) =>
+      `/api/appointments/department/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
     usAppointments: ({ id, page = 0, sortBy = 'code', rowsPerPage = 5, order = 'asc', filters }) =>
       `/api/appointments/unitservice/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
     employeeAppointments: ({

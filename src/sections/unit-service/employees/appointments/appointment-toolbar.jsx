@@ -20,6 +20,7 @@ import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { useGetEmployeeWorkGroups, useGetUSWorkShifts } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useParams } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -33,12 +34,11 @@ export default function AppointmentToolbar({
 }) {
   const { t } = useTranslate();
   const { user } = useAuthContext();
+  const { id } = useParams();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { workGroupsData } = useGetEmployeeWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
-  );
+  const { workGroupsData } = useGetEmployeeWorkGroups(id);
   const { workShiftsData } = useGetUSWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
