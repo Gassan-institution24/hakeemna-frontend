@@ -54,6 +54,7 @@ export default function NavList({ data }) {
         title={data.title}
         path={data.path}
         //
+        onClick = {() => document.getElementById(data.sectionId).scrollIntoView({behavior:'smooth', block:'start'})}
         hasChild={!!data.children}
         externalLink={data.path.includes('http')}
         //
@@ -96,6 +97,7 @@ NavList.propTypes = {
   data: PropTypes.shape({
     path: PropTypes.string,
     title: PropTypes.string,
+    sectionId: PropTypes.string,
     children: PropTypes.array,
   }),
 };

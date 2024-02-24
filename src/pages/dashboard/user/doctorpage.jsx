@@ -2,20 +2,20 @@ import { Helmet } from 'react-helmet-async';
 
 import { useTranslate } from 'src/locales';
 
-import { UserAppointmentsPage } from 'src/sections/user/view';
+import { Doctorpage } from 'src/sections/user/view';
 
 // ----------------------------------------------------------------------
 
-export default function Book() {
+export default function Doctorpageinfo() {
   const { t } = useTranslate();
 
   return (
     <>
       <Helmet>
-        <title>{t('Appointments')} </title>
+        <title> {t('Doctorpage')} </title>
       </Helmet>
 
-      <UserAppointmentsPage />
+      <Doctorpage />
     </>
   );
 }

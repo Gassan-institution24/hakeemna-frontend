@@ -171,6 +171,8 @@ export default function HomeHero() {
           md: `-${HEADER.H_DESKTOP + percent * 2.5}px`,
         },
       }}
+
+
     >
       <m.div variants={varFade().in}>
         <Typography
@@ -178,6 +180,7 @@ export default function HomeHero() {
           sx={{
             textalign: 'center',
           }}
+          id="home"
         >
           Keep in <br />
           Health with

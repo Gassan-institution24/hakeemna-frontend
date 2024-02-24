@@ -106,6 +106,7 @@ export const endpoints = {
     findEmployee: `/api/employees/find`,
     employeeEngagements: `/api/employees/engagement`,
     employeeEngagement: (id) => `/api/employees/engagement/${id}`,
+    employeeSpecialty: (id) => `/api/employees/engagement/specialty/${id}`,
     usEmployees: (id) => `/api/employees/engagement/unitservice/${id}`,
     usEmployeesCount: (id) => `/api/employees/engagement/unitservice/${id}/count`,
     departmentEmployees: (id) => `/api/employees/engagement/department/${id}`,

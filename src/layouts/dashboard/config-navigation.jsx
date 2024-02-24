@@ -388,7 +388,7 @@ export function useNavData() {
           },
           {
             title: t('book appointment'),
-            path: paths.dashboard.user.bookappointment,
+            path: paths.dashboard.user.specialities,
             icon: <Iconify icon="icon-park-outline:medicine-chest" />,
           },
           {
