@@ -90,6 +90,8 @@ export default function NotificationsPopover() {
   const handleMarkAllAsRead = async () => {
     await axios.patch(`${endpoints.tables.notifications}/read`, { ids: notificationscount });
     recount();
+    setNotifications([]);
+    setPage(1);
     fetchData();
   };
 

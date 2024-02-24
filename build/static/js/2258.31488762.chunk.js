@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[2258],{52258:(e,n,s)=>{s.r(n),s.d(n,{default:()=>l});var i=s(6907),r=s(76932),t=s(69392),c=s(80184);function l(){const{t:e}=(0,r.qM)();return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(i.ql,{children:(0,c.jsx)("title",{children:e("Emergency")})}),(0,c.jsx)(t.vJ,{})]})}}}]);
-//# sourceMappingURL=2258.31488762.chunk.js.map

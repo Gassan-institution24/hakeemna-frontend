@@ -51,6 +51,7 @@ export default function AccountNotifications() {
   const { user } = useAuthContext();
 
   const methods = useForm({
+    mode: 'onTouched',
     defaultValues: {
       selected: ['activity_comments', 'application_product'],
     },
@@ -128,7 +129,14 @@ export default function AccountNotifications() {
           </Grid>
         ))}
 
-        <LoadingButton type="submit" variant="contained" loading={isSubmitting} sx={{ ml: 'auto' }}>
+        <LoadingButton
+          type="submit"
+          tabIndex={-1}
+          tabIndex={-1}
+          variant="contained"
+          loading={isSubmitting}
+          sx={{ ml: 'auto' }}
+        >
           Save Changes
         </LoadingButton>
       </Stack>

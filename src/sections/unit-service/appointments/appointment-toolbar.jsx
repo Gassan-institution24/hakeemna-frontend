@@ -18,7 +18,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useGetEmployeeWorkGroups, useGetUSWorkShifts } from 'src/api';
+import { useGetUSWorkGroups, useGetUSWorkShifts } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
@@ -36,8 +36,8 @@ export default function AppointmentToolbar({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { workGroupsData } = useGetEmployeeWorkGroups(
-    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+  const { workGroupsData } = useGetUSWorkGroups(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
   const { workShiftsData } = useGetUSWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id

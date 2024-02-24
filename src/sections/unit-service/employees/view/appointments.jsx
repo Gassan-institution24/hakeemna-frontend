@@ -18,7 +18,7 @@ import TableContainer from '@mui/material/TableContainer';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -31,6 +31,7 @@ import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetAppointmentTypes, useGetEmployeeAppointments } from 'src/api';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -82,6 +83,8 @@ export default function AppointmentsView({ employeeData }) {
     { id: '' },
   ];
 
+  const { id } = useParams();
+
   const checkAcl = useAclGuard();
 
   const theme = useTheme();
@@ -119,13 +122,15 @@ export default function AppointmentsView({ employeeData }) {
     pending,
     loading,
   } = useGetEmployeeAppointments({
-    id: employeeData._id,
+    id,
     page: table.page || 0,
     sortBy: table.orderBy || 'code',
     rowsPerPage: table.rowsPerPage || 5,
     order: table.order || 'asc',
     filters: filters || null,
   });
+
+  console.log('appointmentsData', appointmentsData);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -273,42 +278,39 @@ export default function AppointmentsView({ employeeData }) {
     [dataInPage.length, table, refetch, enqueueSnackbar, user]
   );
 
-  const handleCancelRows = useCallback(
-    async (id) => {
-      try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointments}/cancel`,
-          data: { ids: table.selected },
-        });
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.appointments.root,
-          msg: `canceled many appointments`,
-        });
-      } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
-        console.error(error);
-      }
-      enqueueSnackbar('canceled successfully!');
-      refetch();
-      table.onUpdatePageDeleteRows({
-        totalRows: appointmentsLength,
-        totalRowsInPage: dataInPage.length,
-        totalRowsFiltered: dataFiltered.length,
+  const handleCancelRows = useCallback(async () => {
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointments}/cancel`,
+        data: { ids: table.selected },
       });
-    },
-    [
-      refetch,
-      dataFiltered.length,
-      dataInPage.length,
-      appointmentsLength,
-      table,
-      enqueueSnackbar,
-      user,
-    ]
-  );
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.appointments.root,
+        msg: `canceled many appointments`,
+      });
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
+    }
+    enqueueSnackbar('canceled successfully!');
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: appointmentsLength,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [
+    refetch,
+    dataFiltered.length,
+    dataInPage.length,
+    appointmentsLength,
+    table,
+    enqueueSnackbar,
+    user,
+  ]);
 
   const handleDelayRows = useCallback(async () => {
     try {
@@ -346,46 +348,43 @@ export default function AppointmentsView({ employeeData }) {
     user,
   ]);
 
-  const handleUnCancelRows = useCallback(
-    async (id) => {
-      try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointments}/uncancel`,
-          data: { ids: table.selected },
-        });
-        enqueueSnackbar('uncanceled successfully!');
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.appointments.root,
-          msg: `uncanceled many appointments`,
-        });
-      } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
-        console.error(error);
-      }
-      refetch();
-      table.onUpdatePageDeleteRows({
-        totalRows: appointmentsLength,
-        totalRowsInPage: dataInPage.length,
-        totalRowsFiltered: dataFiltered.length,
+  const handleUnCancelRows = useCallback(async () => {
+    try {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointments}/uncancel`,
+        data: { ids: table.selected },
       });
-    },
-    [
-      refetch,
-      dataFiltered.length,
-      dataInPage.length,
-      appointmentsLength,
-      table,
-      user,
-      enqueueSnackbar,
-    ]
-  );
+      enqueueSnackbar('uncanceled successfully!');
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.appointments.root,
+        msg: `uncanceled many appointments`,
+      });
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
+    }
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: appointmentsLength,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: dataFiltered.length,
+    });
+  }, [
+    refetch,
+    dataFiltered.length,
+    dataInPage.length,
+    appointmentsLength,
+    table,
+    user,
+    enqueueSnackbar,
+  ]);
 
   const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.invoice.details(id));
+    (_id) => {
+      router.push(paths.dashboard.invoice.details(_id));
     },
     [router]
   );
@@ -401,6 +400,9 @@ export default function AppointmentsView({ employeeData }) {
     setFilters(defaultFilters);
   }, []);
 
+  if (loading) {
+    return <LoadingScreen />;
+  }
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -519,24 +521,19 @@ export default function AppointmentsView({ employeeData }) {
                 />
 
                 <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    ?.map((row) => (
-                      <AppointmentsRow
-                        refetch={refetch}
-                        key={row._id}
-                        row={row}
-                        selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        onViewRow={() => handleViewRow(row._id)}
-                        onDelayRow={handleDelayRow}
-                        onCancelRow={() => handleCancelRow(row)}
-                        onUnCancelRow={() => handleUnCancelRow(row)}
-                      />
-                    ))}
+                  {dataFiltered?.map((row) => (
+                    <AppointmentsRow
+                      refetch={refetch}
+                      key={row._id}
+                      row={row}
+                      selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                      onViewRow={() => handleViewRow(row._id)}
+                      onDelayRow={handleDelayRow}
+                      onCancelRow={() => handleCancelRow(row)}
+                      onUnCancelRow={() => handleUnCancelRow(row)}
+                    />
+                  ))}
 
                   <TableEmptyRows
                     height={denseHeight}

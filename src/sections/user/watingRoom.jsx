@@ -64,6 +64,7 @@ export default function WatingRoom() {
   };
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });

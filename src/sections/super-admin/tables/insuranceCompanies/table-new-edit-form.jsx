@@ -40,12 +40,12 @@ export default function TableNewEditForm({ currentTable }) {
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
-    country: Yup.string(),
-    city: Yup.string().nullable(),
+    country: Yup.string().required('Country is required'),
+    city: Yup.string().required('city is required'),
     type: Yup.string().nullable(),
-    webpage: Yup.string(),
-    phone: Yup.string(),
-    address: Yup.string(),
+    webpage: Yup.string().required('webpage is requires'),
+    phone: Yup.string().required('phone number is required'),
+    address: Yup.string().required('address is required'),
   });
 
   const defaultValues = useMemo(
@@ -63,6 +63,7 @@ export default function TableNewEditForm({ currentTable }) {
   );
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -121,6 +122,7 @@ export default function TableNewEditForm({ currentTable }) {
       // }
       router.push(paths.superadmin.tables.insurancecomapnies.root);
     } catch (error) {
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
     }
   });
@@ -179,7 +181,7 @@ export default function TableNewEditForm({ currentTable }) {
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+              <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
                 {!currentTable ? 'Create' : 'Save Changes'}
               </LoadingButton>
             </Stack>
