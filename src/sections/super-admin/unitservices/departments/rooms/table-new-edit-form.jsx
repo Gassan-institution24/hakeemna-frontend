@@ -29,7 +29,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 export default function TableNewEditForm({ departmentData, currentTable }) {
   const router = useRouter();
 
-  const {id} = useParams()
+  const { id } = useParams();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -48,14 +48,13 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const defaultValues = useMemo(
     () => ({
-      unit_service:
-        id,
+      unit_service: id,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
       department: departmentData._id,
       general_info: currentTable?.general_info || '',
     }),
-    [currentTable, departmentData,id]
+    [currentTable, departmentData, id]
   );
 
   const methods = useForm({
@@ -104,7 +103,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
         socket.emit('updated', {
           data,
           user,
-          link: paths.unitservice.departments.rooms.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.rooms.root(id, departmentData._id),
           msg: `updated room <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       } else {
@@ -121,14 +120,13 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
         socket.emit('created', {
           data,
           user,
-          link: paths.unitservice.departments.rooms.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.rooms.root(id, departmentData._id),
           msg: `created room <strong>${data.name_english}</strong> into <strong>${departmentData.name_english}</strong> department`,
         });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      router.push(paths.unitservice.departments.rooms.root(departmentData._id));
-      console.info('DATA', data);
+      router.push(paths.superadmin.unitservices.departments.rooms.root(id, departmentData._id));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

@@ -20,7 +20,6 @@ import { NAV, HEADER } from '../config-layout';
 import AccountPopover from '../common/account-popover';
 import ContactsPopover from '../common/contacts-popover';
 import LanguagePopover from '../common/language-popover';
-import TimeOutInActive from '../common/time-out-inactive';
 import ServiceUnitPopover from '../common/service-unit-popover';
 import NotificationsPopover from '../common/notifications-popover';
 
@@ -53,7 +52,7 @@ export default function Header({ onOpenNav }) {
 
       <Searchbar />
 
-      <TimeOutInActive />
+      {/* <TimeOutInActive /> */}
       <Stack
         flexGrow={1}
         direction="row"

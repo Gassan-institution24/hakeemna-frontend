@@ -15,8 +15,8 @@ import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -76,6 +76,8 @@ export default function EmployeesTableView({ departmentData }) {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const { id } = useParams();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -157,7 +159,7 @@ export default function EmployeesTableView({ departmentData }) {
         });
         socket.emit('updated', {
           user,
-          link: paths.unitservice.departments.employees.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
           msg: `activated an employee <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
@@ -168,7 +170,7 @@ export default function EmployeesTableView({ departmentData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, departmentData, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, departmentData, enqueueSnackbar, id]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -180,7 +182,7 @@ export default function EmployeesTableView({ departmentData }) {
         });
         socket.emit('updated', {
           user,
-          link: paths.unitservice.departments.employees.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
           msg: `inactivated an employee <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
@@ -191,7 +193,7 @@ export default function EmployeesTableView({ departmentData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, departmentData, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, departmentData, enqueueSnackbar, id]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -203,7 +205,7 @@ export default function EmployeesTableView({ departmentData }) {
       });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.departments.employees.root(departmentData._id),
+        link: paths.superadmin.unitservices.departments.employees.root(id,departmentData._id),
         msg: `activated many employees in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
@@ -226,6 +228,7 @@ export default function EmployeesTableView({ departmentData }) {
     departmentData,
     user,
     enqueueSnackbar,
+    id,
   ]);
 
   const handleInactivateRows = useCallback(async () => {
@@ -237,7 +240,7 @@ export default function EmployeesTableView({ departmentData }) {
       });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.departments.employees.root(departmentData._id),
+        link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
         msg: `inactivated many employees in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
@@ -260,6 +263,7 @@ export default function EmployeesTableView({ departmentData }) {
     departmentData,
     user,
     enqueueSnackbar,
+    id,
   ]);
 
   const handleFilters = useCallback(
@@ -274,15 +278,15 @@ export default function EmployeesTableView({ departmentData }) {
   );
 
   const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.employees.edit(id)); /// edit
+    (_id) => {
+      router.push(paths.superadmin.unitservices.employees.edit(_id)); /// edit
     },
     [router]
   );
 
   const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.employees.info(id)); /// edit
+    (_id) => {
+      router.push(paths.superadmin.unitservices.employees.info(_id)); /// edit
     },
     [router]
   );
@@ -325,11 +329,11 @@ export default function EmployeesTableView({ departmentData }) {
           // links={[
           //   {
           //     name: t('dashboard'),
-          //     href: paths.unitservice.root,
+          //     href: paths.superadmin.unitservices.root,
           //   },
           //   {
           //     name: t('departments'),
-          //     href: paths.unitservice.departments.root,
+          //     href: paths.superadmin.unitservices.departments.root(id),
           //   },
           //   { name: t('department employees') },
           // ]}
@@ -337,7 +341,7 @@ export default function EmployeesTableView({ departmentData }) {
             checkAcl({ category: 'department', subcategory: 'employees', acl: 'create' }) && (
               <Button
                 component={RouterLink}
-                href={paths.unitservice.departments.employees.new(departmentData._id)} /// edit
+                href={paths.superadmin.unitservices.departments.employees.new(id,departmentData._id)} /// edit
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >

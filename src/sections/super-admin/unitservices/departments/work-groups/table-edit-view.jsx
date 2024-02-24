@@ -22,11 +22,11 @@ export default function TableEditView({ WorkGroupData, departmentData }) {
         links={[
           {
             name: t('dashboard'),
-            href: paths.unitservice.root,
+            href: paths.superadmin.unitservices.root,
           },
           {
             name: t('departments'),
-            href: paths.unitservice.departments.root,
+            href: paths.superadmin.unitservices.departments.root(id),
           },
           {
             name: `${
@@ -34,7 +34,7 @@ export default function TableEditView({ WorkGroupData, departmentData }) {
                 ? departmentData.name_arabic
                 : departmentData.name_english || t('department')
             } ${t('work groups')}`,
-            href: paths.unitservice.departments.workGroups.root(departmentData._id),
+            href: paths.superadmin.unitservices.departments.workGroups.root(departmentData._id),
           },
           { name: t('edit') },
         ]}

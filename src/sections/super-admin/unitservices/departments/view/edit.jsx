@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
 
@@ -16,6 +17,8 @@ import TableNewEditForm from '../department-new-edit-form';
 export default function TableEditView({ departmentData }) {
   const settings = useSettingsContext();
   const { t } = useTranslate();
+
+  const { id } = useParams();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -23,11 +26,11 @@ export default function TableEditView({ departmentData }) {
         links={[
           {
             name: t('dashboard'),
-            href: paths.unitservice,
+            href: paths.superadmin.unitservices,
           },
           {
             name: t('departments'),
-            href: paths.unitservice.departments.root,
+            href: paths.superadmin.unitservices.departments.root(id),
           },
           { name: t('update department') },
         ]}

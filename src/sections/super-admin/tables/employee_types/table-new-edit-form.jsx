@@ -108,7 +108,6 @@ export default function TableNewEditForm({ currentTable }) {
       //   });
       // }
       router.push(paths.superadmin.tables.employeetypes.root);
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }

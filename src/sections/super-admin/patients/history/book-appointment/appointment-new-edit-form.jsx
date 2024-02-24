@@ -109,7 +109,7 @@
 //       reset();
 //       enqueueSnackbar(currentJob ? 'Update success!' : 'Create success!');
 //       router.push(paths.dashboard.job.root);
-//       console.info('DATA', data);
+//
 //     } catch (error) {
 //       console.error(error);
 //     }

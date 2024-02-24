@@ -147,7 +147,6 @@ export default function TableNewEditForm({ acl }) {
       });
       enqueueSnackbar('Update success!');
       // router.push(paths.superadmin.subscriptions.root);
-      console.info('DATA', data);
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

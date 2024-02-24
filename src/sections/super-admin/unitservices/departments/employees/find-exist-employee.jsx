@@ -11,7 +11,7 @@ import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -38,6 +38,8 @@ export default function TableNewEditForm({ departmentData }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const { id } = useParams();
 
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
@@ -102,14 +104,13 @@ export default function TableNewEditForm({ departmentData }) {
   const handleEmployment = async (row) => {
     try {
       await axios.post(endpoints.tables.employeeEngagements, {
-        unit_service:
-          user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+        unit_service:id,
         department: departmentData._id,
         employee: row._id,
       });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.departments.employees.root(departmentData._id),
+        link: paths.superadmin.unitservices.departments.employees.root(id,departmentData._id),
         msg: `employed an employee <strong>[ ${row.first_name} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
       });
       enqueueSnackbar(t('employment successfully!'));
@@ -125,15 +126,14 @@ export default function TableNewEditForm({ departmentData }) {
       if (Object.keys(filters).length) {
         const { data } = await axios.post(endpoints.tables.findEmployee, {
           unit_service:
-            user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service
-              ._id,
+           id,
           filters,
         });
         setResults(data);
       }
     }
     getExistEmployees();
-  }, [filters, user?.employee]);
+  }, [filters, id]);
   // console.log('results', results);
   return (
     <Box>

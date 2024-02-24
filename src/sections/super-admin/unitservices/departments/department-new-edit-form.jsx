@@ -2,7 +2,6 @@ import axios from 'axios';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -13,7 +12,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
@@ -30,7 +29,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const {id} = useParams()
+  const { id } = useParams();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -96,14 +95,14 @@ export default function TableNewEditForm({ currentTable }) {
             modifications_nums: (currentTable.modifications_nums || 0) + 1,
             ip_address_user_modification: address.data.IPv4,
             user_modification: user._id,
-            unit_service:id,
+            unit_service: id,
             ...data,
           },
         });
         socket.emit('updated', {
           data,
           user,
-          link: paths.unitservice.departments.info(currentTable._id),
+          link: paths.superadmin.unitservices.departments.info(id, currentTable._id),
           msg: `updating department <strong>${data.name_english}</strong>`,
         });
       } else {
@@ -114,20 +113,19 @@ export default function TableNewEditForm({ currentTable }) {
             ip_address_user_creation: address.data.IPv4,
             user_creation: user._id,
             ...data,
-            unit_service:id,
+            unit_service: id,
           },
         });
         socket.emit('created', {
           data,
           user,
-          link: paths.unitservice.departments.info(newDepartment._id),
+          link: paths.superadmin.unitservices.departments.info(id, newDepartment._id),
           msg: `creating department <strong>${data.name_english}</strong>`,
         });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      router.push(paths.unitservice.departments.root);
-      console.info('DATA', data);
+      router.push(paths.superadmin.unitservices.departments.root(id));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

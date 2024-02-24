@@ -346,6 +346,12 @@ export function useNavData() {
         path: paths.employee.profile.root,
         icon: <Iconify icon="iconamoon:profile-bold" />,
       },
+      {
+        show: true,
+        title: t('calender'),
+        path: paths.employee.calender,
+        icon: <Iconify icon="simple-line-icons:calender" />,
+      },
     ];
     const employeeDashboard = [
       {
@@ -424,17 +430,17 @@ export function useNavData() {
       },
     ];
 
-    if (!user || !user.role) {
+    if (!user || !user?.role) {
       router.replace('/');
     }
     if (user?.role === 'superadmin') {
       return superAdminItems;
     }
     if (user?.role === 'admin') {
-      return [...unitServicesDashboars, ...employeeDashboard];
+      return [...employeeDashboard, ...unitServicesDashboars];
     }
     if (user?.role === 'employee') {
-      return [...unitServicesDashboars, ...employeeDashboard];
+      return [...employeeDashboard, ...unitServicesDashboars];
     }
     return [...userItems];
   }, [t, user, handleLogout, router, checkacl]);

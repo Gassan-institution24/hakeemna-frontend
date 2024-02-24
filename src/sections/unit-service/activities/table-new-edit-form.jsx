@@ -133,8 +133,6 @@ export default function TableNewEditForm({ currentTable }) {
       reset();
       router.push(paths.unitservice.activities.root);
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-
-      console.info('DATA', data);
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

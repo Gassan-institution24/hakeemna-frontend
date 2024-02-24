@@ -21,7 +21,7 @@ export default function USAccountingCreateView({ unitServiceData }) {
 
   const unitServiceName = unitServiceData?.name_english || 'Unit Service';
   const params = useParams();
-  const { id } = params;
+  const { id,depid } = params;
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -29,11 +29,11 @@ export default function USAccountingCreateView({ unitServiceData }) {
         links={[
           {
             name: t('dashboard'),
-            href: paths.unitservice.root,
+            href: paths.superadmin.unitservices.root,
           },
           {
             name: t('departments'),
-            href: paths.unitservice.departments.root,
+            href: paths.superadmin.unitservices.departments.root(id),
           },
           { name: t('new') },
         ]}

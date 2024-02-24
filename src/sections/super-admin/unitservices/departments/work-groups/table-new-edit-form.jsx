@@ -2,7 +2,6 @@ import axios from 'axios';
 import * as Yup from 'yup';
 import { isEqual } from 'lodash';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,7 +14,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
@@ -33,11 +32,11 @@ import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook
 export default function TableNewEditForm({ departmentData, currentTable }) {
   const router = useRouter();
 
-  const { id } = useParams();
-
   const { t } = useTranslate();
-  // const { currentLang } = useLocales();
-  // const curLangAr = currentLang.value === 'ar';
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
+  const { id } = useParams();
 
   const { user } = useAuthContext();
 
@@ -111,7 +110,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
         socket.emit('updated', {
           data,
           user,
-          link: paths.unitservice.departments.workGroups.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
           msg: `updated work group <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       } else {
@@ -127,14 +126,15 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
         socket.emit('created', {
           data,
           user,
-          link: paths.unitservice.departments.workGroups.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
           msg: `created work group <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      router.push(paths.unitservice.departments.workGroups.root(departmentData._id));
-      console.info('DATA', data);
+      router.push(
+        paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id)
+      );
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

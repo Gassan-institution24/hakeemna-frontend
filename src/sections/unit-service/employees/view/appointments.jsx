@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
@@ -28,7 +29,7 @@ import axiosHandler from 'src/utils/axios-handler';
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetAppointmentTypes } from 'src/api';
+import { useGetAppointmentTypes, useGetEmployeeAppointments } from 'src/api';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
@@ -58,18 +59,20 @@ import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 const defaultFilters = {
   name: '',
   status: 'all',
-  types: [],
+  types: '',
+  shift: '',
+  group: '',
   startDate: null,
   endDate: null,
 };
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsView({ employeeData, appointmentsData, refetch }) {
+export default function AppointmentsView({ employeeData }) {
   const { t } = useTranslate();
   const TABLE_HEAD = [
-    { id: 'code', label: t('code') },
-    { id: 'sequence', label: t('sequence') },
+    { id: 'sequence_number', label: t('sequence') },
+    { id: 'appoint_number', label: t('number') },
     { id: 'appointment_type', label: t('appointment type') },
     { id: 'work_group', label: t('work group') },
     { id: 'work_shift', label: t('work shift') },
@@ -89,7 +92,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   const { user } = useAuthContext();
 
@@ -103,17 +106,33 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
   const [filters, setFilters] = useState(defaultFilters);
   const [minToDelay, setMinToDelay] = useState(0);
 
+  const {
+    appointmentsData,
+    appointmentsLength,
+    refetch,
+    all,
+    available,
+    notBooked,
+    processing,
+    canceled,
+    finished,
+    pending,
+    loading,
+  } = useGetEmployeeAppointments({
+    id: employeeData._id,
+    page: table.page || 0,
+    sortBy: table.orderBy || 'code',
+    rowsPerPage: table.rowsPerPage || 5,
+    order: table.order || 'asc',
+    filters: filters || null,
+  });
+
   const dateError =
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()
       : false;
 
-  const dataFiltered = applyFilter({
-    inputData: appointmentsData,
-    comparator: getComparator(table.order, table.orderBy),
-    filters,
-    dateError,
-  });
+  const dataFiltered = appointmentsData;
 
   const dataInPage = dataFiltered.slice(
     table.page * table.rowsPerPage,
@@ -122,12 +141,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
 
   const denseHeight = table.dense ? 56 : 76;
 
-  const canReset =
-    !!filters.name ||
-    filters.status !== 'all' ||
-    !!filters.startDate ||
-    !!filters.endDate ||
-    filters.types.length > 0;
+  const canReset = !isEqual(filters, defaultFilters);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -135,42 +149,42 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
     appointmentsData.filter((item) => item.status === status).length;
 
   const TABS = [
-    { value: 'all', label: t('all'), color: 'default', count: appointmentsData.length },
+    { value: 'all', label: t('all'), color: 'default', count: all },
     {
       value: 'available',
       label: t('available'),
       color: 'secondary',
-      count: getAppointLength('available'),
+      count: available,
     },
     {
       value: 'pending',
       label: t('pending'),
       color: 'warning',
-      count: getAppointLength('pending'),
+      count: pending,
     },
     {
       value: 'processing',
       label: t('processing'),
       color: 'info',
-      count: getAppointLength('processing'),
+      count: processing,
     },
     {
       value: 'finished',
       label: t('finished'),
       color: 'success',
-      count: getAppointLength('finished'),
+      count: finished,
     },
     {
       value: 'canceled',
       label: t('canceled'),
       color: 'error',
-      count: getAppointLength('canceled'),
+      count: canceled,
     },
     {
       value: 'not booked',
       label: t('not booked'),
       color: 'secondary',
-      count: getAppointLength('not booked'),
+      count: notBooked,
     },
   ];
 
@@ -280,7 +294,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
       enqueueSnackbar('canceled successfully!');
       refetch();
       table.onUpdatePageDeleteRows({
-        totalRows: appointmentsData.length,
+        totalRows: appointmentsLength,
         totalRowsInPage: dataInPage.length,
         totalRowsFiltered: dataFiltered.length,
       });
@@ -289,7 +303,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
       refetch,
       dataFiltered.length,
       dataInPage.length,
-      appointmentsData.length,
+      appointmentsLength,
       table,
       enqueueSnackbar,
       user,
@@ -317,7 +331,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
     refetch();
     setMinToDelay(0);
     table.onUpdatePageDeleteRows({
-      totalRows: appointmentsData.length,
+      totalRows: appointmentsLength,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
@@ -325,7 +339,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
     refetch,
     dataFiltered.length,
     dataInPage.length,
-    appointmentsData.length,
+    appointmentsLength,
     table,
     minToDelay,
     enqueueSnackbar,
@@ -353,7 +367,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
       }
       refetch();
       table.onUpdatePageDeleteRows({
-        totalRows: appointmentsData.length,
+        totalRows: appointmentsLength,
         totalRowsInPage: dataInPage.length,
         totalRowsFiltered: dataFiltered.length,
       });
@@ -362,7 +376,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
       refetch,
       dataFiltered.length,
       dataInPage.length,
-      appointmentsData.length,
+      appointmentsLength,
       table,
       user,
       enqueueSnackbar,
@@ -493,7 +507,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={appointmentsData.length}
+                  rowCount={appointmentsLength}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
@@ -526,7 +540,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsLength)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -536,7 +550,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered.length}
+            count={appointmentsLength}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
@@ -635,64 +649,62 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, types, startDate, endDate } = filters;
+// function applyFilter({ inputData, comparator, filters, dateError }) {
+//   const { name, status, types, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+//   const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
+//   stabilizedThis.sort((a, b) => {
+//     const order = comparator(a[0], b[0]);
+//     if (order !== 0) return order;
+//     return a[1] - b[1];
+//   });
 
-  inputData = stabilizedThis?.map((el) => el[0]);
+//   inputData = stabilizedThis?.map((el) => el[0]);
 
-  if (name) {
-    inputData = inputData.filter(
-      (appointment) =>
-        (appointment?.work_shift?.name_english &&
-          appointment?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (appointment?.work_shift?.name_arabic &&
-          appointment?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (appointment?.work_group?.name_english &&
-          appointment?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (appointment?.work_group?.name_arabic &&
-          appointment?.work_group?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        appointment?._id === name ||
-        JSON.stringify(appointment.code) === name
-    );
-  }
+//   if (name) {
+//     inputData = inputData.filter(
+//       (appointment) =>
+//         (appointment?.work_shift?.name_english &&
+//           appointment?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+//         (appointment?.work_shift?.name_arabic &&
+//           appointment?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+//         (appointment?.work_group?.name_english &&
+//           appointment?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+//         (appointment?.work_group?.name_arabic &&
+//           appointment?.work_group?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+//         appointment?._id === name ||
+//         JSON.stringify(appointment.code) === name
+//     );
+//   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((appointment) => appointment.status === status);
-  }
+//   if (status !== 'all') {
+//     inputData = inputData.filter((appointment) => appointment.status === status);
+//   }
 
-  if (!dateError) {
-    if (startDate && endDate) {
-      inputData = inputData.filter(
-        (appointment) =>
-          fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
-          fTimestamp(appointment.start_time) <= fTimestamp(endDate)
-      );
-    } else if (startDate) {
-      const endOfDay = new Date(startDate);
-      endOfDay.setDate(endOfDay.getDate() + 1);
-      inputData = inputData.filter(
-        (appointment) =>
-          fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
-          fTimestamp(appointment.start_time) < fTimestamp(endOfDay)
-      );
-    }
-  }
-  if (types.length > 0) {
-    inputData = inputData.filter((appoint) => types?.includes(appoint.appointment_type._id));
-  }
+//   if (!dateError) {
+//     if (startDate && endDate) {
+//       inputData = inputData.filter(
+//         (appointment) =>
+//           fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
+//           fTimestamp(appointment.start_time) <= fTimestamp(endDate)
+//       );
+//     } else if (startDate) {
+//       const endOfDay = new Date(startDate);
+//       endOfDay.setDate(endOfDay.getDate() + 1);
+//       inputData = inputData.filter(
+//         (appointment) =>
+//           fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
+//           fTimestamp(appointment.start_time) < fTimestamp(endOfDay)
+//       );
+//     }
+//   }
+//   if (types.length > 0) {
+//     inputData = inputData.filter((appoint) => types?.includes(appoint.appointment_type._id));
+//   }
 
-  return inputData;
-}
+//   return inputData;
+// }
 AppointmentsView.propTypes = {
   employeeData: PropTypes.object,
-  appointmentsData: PropTypes.array,
-  refetch: PropTypes.func,
 };

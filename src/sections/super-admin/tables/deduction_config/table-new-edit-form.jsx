@@ -124,7 +124,6 @@ export default function TableNewEditForm({ currentTable }) {
       //   });
       // }
       router.push(paths.superadmin.tables.deductionconfig.root);
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }

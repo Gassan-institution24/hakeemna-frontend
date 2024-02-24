@@ -29,7 +29,10 @@ export default function ACLGuard({ hasContent, category, subcategory, acl, child
 
   const currentACL = user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.acl;
 
-  if (typeof acl === 'undefined' || !currentACL?.[category]?.[subcategory]?.includes(acl)) {
+  if (
+    typeof acl === 'undefined' ||
+    (!currentACL?.[category]?.[subcategory]?.includes(acl) && user?.role !== 'superadmin')
+  ) {
     return hasContent ? (
       <Container component={MotionContainer} sx={{ textalign: 'center', ...sx }}>
         <m.div variants={varBounce().in}>

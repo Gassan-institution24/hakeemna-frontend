@@ -68,3 +68,4 @@ export * from './work-groups';
 export * from './old_patients';
 export * from './notifications';
 export * from './user';
+export * from './calender';

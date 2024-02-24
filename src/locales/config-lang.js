@@ -17,7 +17,7 @@ export const allLangs = [
     value: 'en',
     systemValue: merge(enUSDate, enUSDataGrid, enUSCore),
     adapterLocale: enUSAdapter,
-    icon: 'flagpack:gb-nir',
+    icon: 'icon-park-solid:english',
   },
   // {
   //   label: 'French',
@@ -45,7 +45,7 @@ export const allLangs = [
     value: 'ar',
     systemValue: merge(arSDDataGrid, arSACore),
     adapterLocale: arSAAdapter,
-    icon: 'flagpack:sa',
+    icon: 'mdi:abjad-arabic',
   },
 ];
 

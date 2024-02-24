@@ -41,21 +41,14 @@ export default function AppointmentsTableRow({
   onDeleteRow,
 }) {
   const {
-    _id,
-    code,
+    sequence_number,
     appoint_number,
-    name_english,
     unit_service,
     work_group,
     work_shift,
     appointment_type,
-    payment_method,
-    date,
-    price,
-    currency,
     patient,
     start_time,
-    end_time,
     status,
     created_at,
     user_creation,
@@ -86,7 +79,7 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell lang="ar" align="center">
-          {code}
+          {sequence_number}
         </TableCell>
         <TableCell lang="ar" align="center">
           {appoint_number}

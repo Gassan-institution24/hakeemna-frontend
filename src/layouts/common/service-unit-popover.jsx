@@ -52,7 +52,7 @@ export default function ServiceUnitPopover() {
     } catch (e) {
       console.error(e);
       setError(e);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(typeof e === 'string' ? e : e.message, { variant: 'error' });
       loading.onFalse();
     }
   };
@@ -67,7 +67,7 @@ export default function ServiceUnitPopover() {
     } catch (e) {
       console.error(e);
       loading.onFalse();
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(typeof e === 'string' ? e : e.message, { variant: 'error' });
       popover.onClose();
     }
   };

@@ -103,7 +103,7 @@ export default function UsersNewEditForm({ currentSelected }) {
           },
         }); /// edit
       } else {
-        await axiosInstance.post(endpoints.auth.register, {
+        await axiosInstance.post(endpoints.auth.users, {
           ip_address_user_creation: address.data.IPv4,
           user_creation: user._id,
           ...data,
@@ -113,7 +113,6 @@ export default function UsersNewEditForm({ currentSelected }) {
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
       router.push(paths.superadmin.users.root);
-      console.info('DATA', data);
     } catch (error) {
       setErrorMsg(typeof error === 'string' ? error : error.message);
       console.error(error);

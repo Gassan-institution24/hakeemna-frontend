@@ -1,7 +1,6 @@
 import axios from 'axios';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,7 +16,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -144,7 +143,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
         socket.emit('created', {
           data,
           user,
-          link: paths.unitservice.departments.employees.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
           msg: `creating an employee <strong>${data.first_name}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       } else {
@@ -162,14 +161,13 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
         socket.emit('updated', {
           data,
           user,
-          link: paths.unitservice.departments.employees.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
           msg: `updating an employee <strong>${data.first_name}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      router.push(paths.unitservice.departments.employees.root(departmentData._id));
-      console.info('DATA', data);
+      router.push(paths.superadmin.unitservices.departments.employees.root(id, departmentData._id));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
