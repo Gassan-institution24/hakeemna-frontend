@@ -52,7 +52,6 @@ export default function AppointmentsFilters({
     },
     [onFilters]
   );
-  console.log(dataFiltered,"df");
   const handleFiltedInsurance = useCallback(
     (e) => {
       onFilters('insurance', e.target.value);
