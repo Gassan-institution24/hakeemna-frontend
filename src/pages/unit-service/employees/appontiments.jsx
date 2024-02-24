@@ -5,8 +5,9 @@ import { useParams } from 'src/routes/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { useGetEmployeeEngagement } from 'src/api';
 
-import EmployeeAppointmentsView from 'src/sections/unit-service/employees/view/appointments';
 import { LoadingScreen } from 'src/components/loading-screen';
+
+import EmployeeAppointmentsView from 'src/sections/unit-service/employees/view/appointments';
 
 // ----------------------------------------------------------------------
 
