@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[1440],{31440:(s,a,e)=>{e.r(a),e.d(a,{default:()=>n});var i=e(6907),l=e(85362),r=e(80184);function n(){return(0,r.jsxs)(r.Fragment,{children:[(0,r.jsx)(i.ql,{children:(0,r.jsx)("title",{children:" Dashboard: Hospitals Table"})}),(0,r.jsx)(l.q8,{})]})}}}]);
+//# sourceMappingURL=1440.90166e43.chunk.js.map

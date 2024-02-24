@@ -23,14 +23,13 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { endpoints } from 'src/utils/axios';
-import { fTimestamp } from 'src/utils/format-time';
 import axiosHandler from 'src/utils/axios-handler';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetAppointmentTypes, useGetDepartmentAppointments } from 'src/api';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
+import { useGetAppointmentTypes, useGetDepartmentAppointments } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -43,7 +42,6 @@ import {
   useTable,
   emptyRows,
   TableNoData,
-  getComparator,
   TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
