@@ -11,9 +11,8 @@ import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import AppointmentData from '../appointmentsforpatient';
-import PatientsAppointment from '../availableappointments';
-
+import AppointmentData from '../appointments/appointmentsforpatient';
+import PatientsAppointment from '../appointments/availableappointments';
 // ----------------------------------------------------------------------
 
 export default function UserAppointmentsPage() {

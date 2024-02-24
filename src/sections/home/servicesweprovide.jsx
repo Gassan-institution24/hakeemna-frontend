@@ -24,9 +24,15 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Whydoc() {
   const renderDescription = (
-    <Stack spacing={3} sx={{ textalign: 'center', position: 'relative', top: '-50px' }}>
+    <Stack
+      spacing={3}
+      sx={{ textalign: 'center', position: 'relative', top: '-50px' }}
+      // id="services"
+    >
       <m.div variants={varFade().inDown}>
-        <Typography variant="h2">We Provide you: </Typography>
+        <Typography id="services" variant="h2">
+          We Provide you:{' '}
+        </Typography>
       </m.div>
     </Stack>
   );

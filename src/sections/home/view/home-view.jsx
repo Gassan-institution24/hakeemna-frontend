@@ -20,7 +20,7 @@ export default function HomeView({ divRef, divRef2 }) {
     <>
       <ScrollProgress scrollYProgress={scrollYProgress} />
 
-      <HomeHero ref={divRef2} />
+      <HomeHero ref={divRef2}  />
 
       <Box
         sx={{
@@ -48,6 +48,7 @@ export default function HomeView({ divRef, divRef2 }) {
           background: 'linear-gradient(rgba(173, 216, 230, 0.115), #fdfdc644)',
           boxShadow: '0px -5px 10px rgba(173, 216, 230, 0.1)',
         }}
+        id="services"
       >
         <Servicesweprovide />
       </Box>

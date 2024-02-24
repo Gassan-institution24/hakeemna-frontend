@@ -17,8 +17,10 @@ const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
 const UserAppointmentsPage = lazy(() => import('src/pages/dashboard/user/appointments'));
 const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
+const Doctorpage = lazy(() => import('src/pages/dashboard/user/doctorpage'));
 const Share = lazy(() => import('src/pages/dashboard/user/share'));
 const FinancilMovment = lazy(() => import('src/pages/dashboard/user/FinancilMovment'));
+const Specialities = lazy(() => import('src/pages/dashboard/user/specialities'));
 const PatientPrescriptions = lazy(() => import('src/pages/dashboard/user/prescriptions'));
 const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserEditPage = lazy(() => import('src/pages/dashboard/user/edit'));
@@ -56,7 +58,9 @@ export const userRoutes = [
           { path: 'bmi', element: <BMI /> },
           { path: 'oldpatientdata', element: <Oldpatientsdata /> },
           { path: 'appointments', element: <UserAppointmentsPage /> },
-          { path: 'bookappointment', element: <Booking /> },
+          { path: 'bookappointment/:id', element: <Booking /> },
+          { path: 'doctorpage/:id', element: <Doctorpage /> },
+          { path: 'specialities', element: <Specialities /> },
           // { path: 'new', element: <UserCreatePage /> },
           { path: ':id/edit', element: <UserEditPage /> },
           { path: 'account', element: <UserAccountPage /> },

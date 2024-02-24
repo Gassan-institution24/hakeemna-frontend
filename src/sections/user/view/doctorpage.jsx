@@ -7,26 +7,26 @@ import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import PatientsAppointment from '../appointments/availableappointments';
+import Doctorpage from '../appointments/doctorpage';
 
 // ----------------------------------------------------------------------
 
-export default function UserAppointmentsBook() {
+export default function Doctorpageinfo() {
   const settings = useSettingsContext();
   const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t('Book appointment')}
+        heading={t('Doctorpage')}
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('user'), href: paths.dashboard.user.root },
-          { name: t('book appointment') },
+          { name: t('doctorpage') },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
       />
 
-      <PatientsAppointment />
+      <Doctorpage />
     </Container>
   );
 }
