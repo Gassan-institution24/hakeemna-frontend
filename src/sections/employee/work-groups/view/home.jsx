@@ -24,10 +24,9 @@ import { paths } from 'src/routes/paths';
 // import { endpoints } from 'src/utils/axios';
 // import axiosHandler from 'src/utils/axios-handler';
 
-import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
-import { useGetEmployeeWorkGroups } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetEmployeeWorkGroups } from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 // import Label from 'src/components/label';

@@ -16,7 +16,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
 import { paths } from 'src/routes/paths';
-import { useParams, useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -26,7 +25,6 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetCities, useGetCountries } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import { usePopover } from 'src/components/custom-popover';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------

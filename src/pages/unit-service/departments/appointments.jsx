@@ -2,10 +2,8 @@ import { Helmet } from 'react-helmet-async';
 
 import { useParams } from 'src/routes/hooks';
 
+import { useGetDepartment } from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
-import { useGetDepartment, useGetDepartmentAppointments } from 'src/api';
-
-import { LoadingScreen } from 'src/components/loading-screen';
 
 import DepartmentAppointmentsView from 'src/sections/unit-service/departments/view/appointments';
 

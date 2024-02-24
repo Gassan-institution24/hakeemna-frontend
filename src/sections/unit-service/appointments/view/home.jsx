@@ -23,15 +23,13 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { endpoints } from 'src/utils/axios';
-import { fTimestamp } from 'src/utils/format-time';
 import axiosHandler from 'src/utils/axios-handler';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
-import { LoadingScreen } from 'src/components/loading-screen';
-import { useGetAppointmentTypes, useGetUSAppointments } from 'src/api';
+import { useGetUSAppointments, useGetAppointmentTypes } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -39,12 +37,12 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
   emptyRows,
   TableNoData,
-  getComparator,
   TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
