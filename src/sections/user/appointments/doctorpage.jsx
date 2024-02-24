@@ -1,3 +1,6 @@
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
@@ -6,48 +9,54 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
+// import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 
 import { useParams } from 'src/routes/hooks';
 
 import { fNumber } from 'src/utils/format-number';
 
-import { useGetEmployee, useGetEmployeeAppointments } from 'src/api';
+import { useGetEmployeeEngagement, useGetEmployeeAppointments } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 
+// import Calendar from 'react-calendar';
+// import 'react-calendar/dist/Calendar.css';
+
 // ----------------------------------------------------------------------
 
-export default function Doctorpage() {
+export default function Doctorpage({ onBook }) {
   const params = useParams();
   const { id } = params;
+
   const { appointmentsData } = useGetEmployeeAppointments(id);
+  const { data } = useGetEmployeeEngagement(id);
 
-  const { data } = useGetEmployee(id);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+  console.log(selectedDate);
 
-  console.log(appointmentsData);
+
 
   const renderHead = (
-    appointmentsData?.map((employee,index)=>(
-      employee?.work_group?.employees?.map((sd)=>(
-        <CardHeader
-        key={index}
+    <CardHeader
       disableTypography
-      avatar={<Avatar src={data?.picture} alt="sdf" />}
+      avatar={<Avatar src={data?.employee?.picture} alt="data" />}
       title={
         <Link color="inherit" variant="subtitle1">
-          {sd?.code} {data?.middle_name} {data?.family_name}
+          {data?.employee?.first_name} {data?.employee?.middle_name} {data?.employee?.family_name}
         </Link>
       }
       subheader={
         <Box sx={{ color: 'text.disabled', typography: 'caption', mt: 0.5 }}>
-          {data?.speciality?.name_english}
+          {data?.employee?.speciality?.name_english}
         </Box>
       }
     />
-      ))
-    ))
-  
   );
+
   const renderFollows = (
     <Card sx={{ py: 3, textAlign: 'center', typography: 'h4' }}>
       <Stack
@@ -65,38 +74,44 @@ export default function Doctorpage() {
     <Card>
       <CardHeader title="About" />
 
-      <Stack spacing={2} sx={{ p: 3 }}>
-        <Box sx={{ typography: 'body2' }}>dfgdfg</Box>
-
-        <Stack direction="row" spacing={2}>
-          <Iconify icon="mingcute:location-fill" width={24} />
-
-          <Box sx={{ typography: 'body2' }}>
-            {`Live at `}
-            <Link variant="subtitle2" color="inherit">
-              country
-            </Link>
-          </Box>
-        </Stack>
-
-        <Stack direction="row" sx={{ typography: 'body2' }}>
-          <Iconify icon="fluent:mail-24-filled" width={24} sx={{ mr: 2 }} />
-          dfdfghh
-        </Stack>
+      <Stack spacing={3} sx={{ p: 3 }}>
+        <Box sx={{ typography: 'body2' }}>{data?.employee?.description}</Box>
 
         <Stack direction="row" spacing={2}>
           <Iconify icon="ic:round-business-center" width={24} />
 
           <Box sx={{ typography: 'body2' }}>
-            dfgfdgddfg
+            {`Work at: `}
             <Link variant="subtitle2" color="inherit">
-              dgdfg
+              {data?.unit_service?.name_english}
+            </Link>
+          </Box>
+        </Stack>
+        <Stack direction="row" spacing={2}>
+          <Iconify icon="mdi:location" width={24} />
+
+          <Box sx={{ typography: 'body2' }}>
+            {`Location: `}
+            <Link variant="subtitle2" color="inherit">
+              {data?.unit_service?.city?.name_english} {` - `}{' '}
+              {data?.unit_service?.country?.name_english}
             </Link>
           </Box>
         </Stack>
 
         <Stack direction="row" spacing={2}>
-          {data?.online === false ? (
+          <Iconify icon="typcn:phone" width={24} />
+
+          <Box sx={{ typography: 'body2' }}>
+            {`For booking: `}
+            <Link variant="subtitle2" color="inherit">
+              {data?.unit_service?.phone}
+            </Link>
+          </Box>
+        </Stack>
+
+        <Stack direction="row" spacing={2}>
+          {data?.employee?.online === false ? (
             <Iconify icon="fxemoji:noentrysign" width={24} />
           ) : (
             <Iconify icon="icon-park:correct" width={24} />
@@ -108,7 +123,14 @@ export default function Doctorpage() {
     </Card>
   );
 
-  const renderPostInput = <Card sx={{ p: 3 }}>kmkdfk</Card>;
+  const renderPostInput = (
+    <Card sx={{ p: 3 }}>
+    {/* <Calendar
+      value={selectedDate}
+      onChange={handleDateChange}
+    /> */}
+  </Card>
+  );
 
   const renderSocials = (
     <Card>
@@ -140,3 +162,7 @@ export default function Doctorpage() {
     </Grid>
   );
 }
+
+Doctorpage.propTypes = {
+  onBook: PropTypes.func,
+};

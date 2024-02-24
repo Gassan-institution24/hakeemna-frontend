@@ -2,7 +2,6 @@ import { Helmet } from 'react-helmet-async';
 
 import { useTranslate } from 'src/locales';
 
-
 import { Doctorpage } from 'src/sections/user/view';
 
 // ----------------------------------------------------------------------

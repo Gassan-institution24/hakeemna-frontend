@@ -4,7 +4,6 @@ import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetUser } from 'src/api';
-import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
