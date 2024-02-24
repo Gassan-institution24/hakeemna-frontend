@@ -61,6 +61,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
   );
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(NewSchema),
     defaultValues,
   });
@@ -177,7 +178,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+              <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
                 {!currentSelected ? 'Create One' : 'Save Changes'}
               </LoadingButton>
             </Stack>

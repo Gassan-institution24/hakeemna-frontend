@@ -88,6 +88,7 @@ export default function TourNewEditForm({ currentTour }) {
   );
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(NewTourSchema),
     defaultValues,
   });
@@ -273,6 +274,7 @@ export default function TourNewEditForm({ currentTour }) {
 
         <LoadingButton
           type="submit"
+          tabIndex={-1}
           variant="contained"
           size="large"
           loading={isSubmitting}

@@ -20,7 +20,7 @@ import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetDepartmentEmployees } from 'src/api';
 
@@ -66,6 +66,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   );
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -206,7 +207,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           </Box>
 
           <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-            <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+            <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
               {!currentTable ? t('create') : t('save changes')}
             </LoadingButton>
           </Stack>

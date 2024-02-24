@@ -46,6 +46,7 @@ export default function MedicalReport() {
   const { enqueueSnackbar } = useSnackbar();
 
   const methods = useForm({
+    mode: 'onTouched',
     defaultValues: {
       selected: ['activity_comments', 'application_product'],
     },
@@ -121,7 +122,14 @@ export default function MedicalReport() {
           </Grid>
         ))}
 
-        <LoadingButton type="submit" variant="contained" loading={isSubmitting} sx={{ ml: 'auto' }}>
+        <LoadingButton
+          type="submit"
+          tabIndex={-1}
+          tabIndex={-1}
+          variant="contained"
+          loading={isSubmitting}
+          sx={{ ml: 'auto' }}
+        >
           Save Changes
         </LoadingButton>
       </Stack>

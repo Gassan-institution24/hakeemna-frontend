@@ -37,6 +37,7 @@ export default function ContactUs() {
   };
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(contactUsSchema),
     defaultValues,
   });

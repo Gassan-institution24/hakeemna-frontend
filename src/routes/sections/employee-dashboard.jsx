@@ -49,6 +49,8 @@ const RecieptsEditPage = lazy(() => import('src/pages/employee/accounting/reciep
 const RecieptsNewPage = lazy(() => import('src/pages/employee/accounting/reciepts/new'));
 // COMMUNICATION
 const CommunicationHomePage = lazy(() => import('src/pages/employee/communication/home'));
+// WORK GROUPS
+const WorkGroupsHomePage = lazy(() => import('src/pages/employee/wgroups/home'));
 // QUALITY CONTROL
 const QCHomePage = lazy(() => import('src/pages/employee/qualitycontrol/home'));
 
@@ -146,6 +148,10 @@ export const unitServiceEmployeeDashboardRoutes = [
       {
         path: 'communication',
         children: [{ element: <CommunicationHomePage />, index: true }],
+      },
+      {
+        path: 'wgroups',
+        children: [{ element: <WorkGroupsHomePage />, index: true }],
       },
       {
         path: 'qc',

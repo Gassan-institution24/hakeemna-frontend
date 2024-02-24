@@ -41,26 +41,14 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     { value: 'friday', label: t('Friday') },
   ];
 
-  const { control, setValue, watch, resetField, getValues } = useFormContext();
-
-  const [values, setValues] = useState(getValues());
+  const { control, setValue, watch, resetField, getValues, setError } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'days_details',
   });
 
-  useEffect(() => {
-    const handleFormValuesChange = () => {
-      const valuesInside = getValues();
-      setValues(valuesInside);
-    };
-
-    watch(handleFormValuesChange);
-    return () => {
-      watch();
-    };
-  }, [watch, getValues, append]);
+  const values = watch();
 
   const { user } = useAuthContext();
 
@@ -70,8 +58,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const { serviceTypesData } = useGetUSServiceTypes(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
-
-  // const values = getValues();
 
   const handleAdd = () => {
     try {
@@ -95,7 +81,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       };
       const existingData = values.days_details
         ? values.days_details[values.days_details.length - 1]
-        : ''; // Get the current form values
+        : [];
       const newItem = {
         ...defaultItem,
         ...existingData,
@@ -112,137 +98,60 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const handleRemove = (index) => {
     remove(index);
   };
-  function calculateMinutesDifference(date1, date2) {
-    const first = new Date(date1);
-    const second = new Date(date2);
-    const diffInMilliseconds = Math.abs(second - first);
-    const minutesDifference = Math.floor(diffInMilliseconds / (1000 * 60));
-    return minutesDifference;
-  }
 
   async function processDayDetails(index) {
-    const results = [];
+    try {
+      if (!values.appointment_time) {
+        setError(
+          'appointment_time',
+          'you have to add Appointment duration time to generate details'
+        );
+        throw Error('you have to add Appointment duration time to generate details');
+      }
+      const results = [];
+      const appointment_time = values.appointment_time * 60 * 1000;
+      const currentDay = values.days_details[index];
+      const work_start = new Date(currentDay.work_start_time).getTime();
+      let work_end = new Date(currentDay.work_end_time).getTime();
+      let break_start = new Date(currentDay.break_start_time).getTime();
+      let break_end = new Date(currentDay.break_end_time).getTime();
 
-    const appointment_time = appointTime || values.appointment_time;
-    if (!appointment_time) {
-      // console.log('no_appointment_time');
-      return;
+      if (work_start > work_end) {
+        work_end += 24 * 60 * 60 * 1000;
+      }
+      if (work_start > break_start) {
+        break_start += 24 * 60 * 60 * 1000;
+      }
+      if (work_start > break_end) {
+        break_end += 24 * 60 * 60 * 1000;
+      }
+      let curr_start = work_start;
+      while (curr_start + appointment_time <= work_end) {
+        console.log(curr_start + appointment_time);
+        console.log('appointment_time', appointment_time);
+        console.log(work_end);
+        if (
+          (curr_start <= break_end && curr_start < break_start) ||
+          (curr_start + appointment_time > break_end &&
+            curr_start + appointment_time >= break_start)
+        ) {
+          results.push({
+            appointment_type: currentDay.appointment_type,
+            start_time: curr_start,
+            online_available: true,
+            service_types: currentDay.service_types,
+          });
+          curr_start += appointment_time;
+        } else {
+          curr_start += appointment_time;
+        }
+      }
+      console.log(results);
+      setValue(`days_details[${index}].appointments`, results);
+    } catch (e) {
+      setErrorMsg(e.message);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    const calculateMins = (date) => {
-      const formatedDate = new Date(date);
-      return formatedDate.getHours() * 60 + formatedDate.getMinutes();
-    };
-    const RemovingMinToDate = (date, mins) => {
-      const formatedDate = new Date(date);
-      return new Date(formatedDate.getTime() - mins * 60000);
-    };
-
-    const item = values.days_details[index];
-
-    let minDay = calculateMinutesDifference(item?.work_start_time, item?.work_end_time);
-    let minBeforeBreak = calculateMinutesDifference(item?.work_start_time, item?.break_start_time);
-    let minAfterBreak = calculateMinutesDifference(item?.break_end_time, item?.work_end_time);
-
-    const createAppointmentsAll = () => {
-      if (minDay >= values.appointment_time) {
-        const newStartTime = RemovingMinToDate(item?.work_end_time, minDay);
-        const duplicated = item?.appointments.filter((appoint) => {
-          const newTime = calculateMins(newStartTime);
-          const existingTime = calculateMins(appoint.start_time);
-          return newTime === existingTime;
-        })[0];
-        if (duplicated) {
-          results.push(duplicated);
-        } else {
-          results.push({
-            appointment_type: item?.appointment_type || null,
-            start_time: newStartTime,
-            price: null,
-            online_available: true,
-            service_types: item?.service_types || [],
-          });
-        }
-        minDay -= values.appointment_time;
-
-        // Return a promise to control the flow
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(createAppointmentsAll(item, index, minDay));
-          }, 0);
-        });
-      }
-      return Promise.resolve(); // Resolve the promise when done
-    };
-    const createAppointmentsBefore = () => {
-      if (minBeforeBreak >= values.appointment_time) {
-        const newStartTime = RemovingMinToDate(item?.break_start_time, minBeforeBreak);
-        const duplicated = item?.appointments.filter((appoint) => {
-          const newTime = calculateMins(newStartTime);
-          const existingTime = calculateMins(appoint.start_time);
-          return newTime === existingTime;
-        })[0];
-        if (duplicated) {
-          results.push(duplicated);
-        } else {
-          results.push({
-            appointment_type: item?.appointment_type || null,
-            start_time: newStartTime,
-            price: null,
-            online_available: true,
-            service_types: item?.service_types || [],
-          });
-        }
-        minBeforeBreak -= values.appointment_time;
-
-        // Return a promise to control the flow
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(createAppointmentsBefore(item, index, minBeforeBreak));
-          }, 0);
-        });
-      }
-      return Promise.resolve(); // Resolve the promise when done
-    };
-    const createAppointmentsAfter = () => {
-      if (minAfterBreak >= values.appointment_time) {
-        const newStartTime = RemovingMinToDate(item?.work_end_time, minAfterBreak);
-        const duplicated = item?.appointments.filter((appoint) => {
-          const newTime = calculateMins(newStartTime);
-          const existingTime = calculateMins(appoint.start_time);
-          return newTime === existingTime;
-        })[0];
-        if (duplicated) {
-          results.push(duplicated);
-        } else {
-          results.push({
-            appointment_type: item?.appointment_type || null,
-            start_time: newStartTime,
-            price: null,
-            online_available: true,
-            service_types: item?.service_types || [],
-          });
-        }
-        minAfterBreak -= values.appointment_time;
-
-        // Return a promise to control the flow
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(createAppointmentsAfter(item, index, minAfterBreak));
-          }, 0);
-        });
-      }
-      return Promise.resolve(); // Resolve the promise when done
-    };
-
-    if (item?.break_start_time && item?.break_end_time) {
-      await createAppointmentsBefore();
-      await createAppointmentsAfter();
-    } else {
-      await createAppointmentsAll();
-    }
-
-    setAppointmentsNum({ ...appointmentsNum, [index]: results.length });
-    setValue(`days_details[${index}].appointments`, results);
   }
 
   const renderValues = (selectedIds) => {
@@ -258,27 +167,43 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     // return results.join(', ')
   };
   function appointEstimatedNum(index) {
-    const item = values.days_details[index];
-    if (item?.appointments.length) {
-      return item?.appointments.length;
+    const currentDay = values.days_details[index];
+    if (currentDay?.appointments.length) {
+      return currentDay?.appointments.length;
     }
-    if (item?.break_start_time && item?.break_end_time) {
-      const AppointBefore = Math.floor(
-        calculateMinutesDifference(item?.work_start_time, item?.break_start_time) /
-          values.appointment_time
-      );
-      const AppointAfter = Math.floor(
-        calculateMinutesDifference(item?.break_end_time, item?.work_end_time) /
-          values.appointment_time
-      );
-      return AppointBefore + AppointAfter || 0;
+    const appointment_time = values.appointment_time * 60 * 1000;
+    const work_start = new Date(currentDay.work_start_time).getTime();
+    let work_end = new Date(currentDay.work_end_time).getTime();
+    let break_start = new Date(currentDay.break_start_time).getTime();
+    let break_end = new Date(currentDay.break_end_time).getTime();
+    if (work_start > work_end) {
+      work_end += 24 * 60 * 60 * 1000;
     }
-    return (
-      Math.floor(
-        calculateMinutesDifference(item?.work_start_time, item?.work_end_time) /
-          values.appointment_time
-      ) || 0
-    );
+    if (work_start > break_start) {
+      break_start += 24 * 60 * 60 * 1000;
+    }
+    if (work_start > break_end) {
+      break_end += 24 * 60 * 60 * 1000;
+    }
+    if (
+      work_start < break_end &&
+      work_start <= break_start &&
+      work_end >= break_end &&
+      work_end > break_start
+    ) {
+      return (
+        Math.floor((work_end - work_start - (break_end - break_start)) / appointment_time) || 0
+      );
+    }
+    if (
+      work_start < break_end &&
+      work_start <= break_start &&
+      work_end <= break_end &&
+      work_end > break_start
+    ) {
+      return Math.floor((work_end - work_start - (work_end - break_start)) / appointment_time) || 0;
+    }
+    return Math.floor((work_end - work_start) / appointment_time) || 0;
   }
 
   return (
@@ -316,7 +241,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                   sx={{ width: '100%', mt: 2 }}
                 >
                   <RHFSelect
-                    disabled={values.days_details[index]?.day}
+                    disabled={!values?.weekend?.includes(values.days_details[index]?.day)}
                     InputLabelProps={{ shrink: true }}
                     size="small"
                     name={`days_details[${index}].day`}
@@ -366,6 +291,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         }
                         onChange={(newValue) => {
                           field.onChange(newValue);
+                          processDayDetails(index);
                         }}
                         slotProps={{
                           textField: {
@@ -393,6 +319,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         }
                         onChange={(newValue) => {
                           field.onChange(newValue);
+                          processDayDetails(index);
                         }}
                         slotProps={{
                           textField: {
@@ -426,6 +353,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         }
                         onChange={(newValue) => {
                           field.onChange(newValue);
+                          processDayDetails(index);
                         }}
                         slotProps={{
                           textField: {
@@ -453,6 +381,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         }
                         onChange={(newValue) => {
                           field.onChange(newValue);
+                          processDayDetails(index);
                         }}
                         slotProps={{
                           textField: {
@@ -475,6 +404,10 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     size="small"
                     InputLabelProps={{ shrink: true }}
                     name={`days_details[${index}].appointment_type`}
+                    onChange={(e) => {
+                      setValue(`days_details[${index}].appointment_type`, e.target.value);
+                      processDayDetails(index);
+                    }}
                     label={`${t('appointment type')} *`}
                   >
                     {appointmenttypesData?.map((option) => (
@@ -499,6 +432,10 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                           multiple
                           id={`multiple-days_details[${index}].service_types`}
                           label={t('service types')}
+                          onChange={(e) => {
+                            setValue(`days_details[${index}].service_types`, e.target.value);
+                            processDayDetails(index);
+                          }}
                           renderValue={renderValues}
                         >
                           {serviceTypesData?.map((option) => {

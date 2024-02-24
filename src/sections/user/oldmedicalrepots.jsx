@@ -221,6 +221,7 @@ export default function OldMedicalReports() {
     }),
   };
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(oldMedicalReportsSchema),
     defaultValues,
   });

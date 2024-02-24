@@ -84,8 +84,9 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     days_details: Yup.array().of(
       Yup.object().shape({
         day: Yup.string().required('Day is required'),
-        work_start_time: Yup.date().required('work start time is required'),
+        work_start_time: Yup.date().nullable().required('work start time is required'),
         work_end_time: Yup.date()
+          .nullable()
           .required('work end time is required')
           .when(
             'work_start_time',
@@ -176,25 +177,24 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       ],
       work_group: appointmentConfigData?.work_group?._id || null,
       work_shift: appointmentConfigData?.work_shift?._id || null,
-      days_details:
-        appointmentConfigData?.days_details ||
-        [
-          // {
-          //   day: '',
-          //   // work_start_time: null,
-          //   // work_end_time: null,
-          //   // break_start_time: null,
-          //   // break_end_time: null,
-          //   appointments: [],
-          //   // service_types: [],
-          //   appointment_type: null,
-          // },
-        ],
+      days_details: appointmentConfigData?.days_details || [
+        {
+          day: 'saturday',
+          work_start_time: null,
+          work_end_time: null,
+          break_start_time: null,
+          break_end_time: null,
+          appointments: [],
+          service_types: [],
+          appointment_type: null,
+        },
+      ],
     }),
     [appointmentConfigData, user?.employee, employeeInfo?.department]
   );
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(NewConfigSchema),
     defaultValues,
   });

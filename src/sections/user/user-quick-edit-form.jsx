@@ -56,6 +56,7 @@
 //   );
 
 //   const methods = useForm({
+    mode: 'onTouched',
 //     resolver: yupResolver(NewUserSchema),
 //     defaultValues,
 //   });
@@ -178,7 +179,7 @@
 //             Cancel
 //           </Button>
 
-//           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+//           <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
 //             Update
 //           </LoadingButton>
 //         </DialogActions>

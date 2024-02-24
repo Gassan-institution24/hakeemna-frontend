@@ -323,6 +323,12 @@ export function useNavData() {
         icon: <Iconify icon="fluent:content-settings-16-regular" />,
       },
       {
+        show: true,
+        title: t('work groups'),
+        path: paths.employee.workGroups,
+        icon: <Iconify icon="heroicons:user-group-solid" />,
+      },
+      {
         show: checkacl({ category: 'employee', subcategory: 'accounting', acl: 'read' }),
         title: t('accounting'),
         path: paths.employee.accounting.root,

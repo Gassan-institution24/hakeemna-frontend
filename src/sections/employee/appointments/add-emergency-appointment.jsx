@@ -77,6 +77,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
   );
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -165,8 +166,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
                 }}
               >
                 <RHFSelect name="appointment_type" label={`${t('appointment type')} *`}>
-                  {appointmenttypesData.map((option) => (
-                    <MenuItem value={option._id}>
+                  {appointmenttypesData.map((option, index) => (
+                    <MenuItem key={index} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -177,15 +178,15 @@ export default function BookManually({ onClose, refetch, ...other }) {
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
                   {workShiftsData &&
-                    workShiftsData.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
+                    workShiftsData.map((option, index) => (
+                      <MenuItem key={index} value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
                       </MenuItem>
                     ))}
                 </RHFSelect>
                 <RHFSelect name="work_group" label={`${t('work group')} *`}>
-                  {workGroupsData.map((option) => (
-                    <MenuItem key={option._id} value={option._id}>
+                  {workGroupsData.map((option, index) => (
+                    <MenuItem key={index} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}

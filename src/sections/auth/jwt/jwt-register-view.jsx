@@ -53,6 +53,7 @@ export default function JwtRegisterView() {
   };
 
   const methods = useForm({
+    mode: 'onTouched',
     resolver: yupResolver(RegisterSchema),
     defaultValues,
   });

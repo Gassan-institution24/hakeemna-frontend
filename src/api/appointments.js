@@ -170,13 +170,28 @@ export function useGetUSAppointmentsCount(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetDepartmentAppointments(id) {
-  const URL = endpoints.tables.departmentAppointments(id);
+export function useGetDepartmentAppointments({ id, page, sortBy, rowsPerPage, order, filters }) {
+  const URL = endpoints.tables.departmentAppointments({
+    id,
+    page,
+    sortBy,
+    rowsPerPage,
+    order,
+    filters,
+  });
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      appointmentsData: data || [],
+      appointmentsData: data?.appointments || [],
+      appointmentsLength: data?.length || 0,
+      all: data?.all || 0,
+      notBooked: data?.notBooked || 0,
+      available: data?.available || 0,
+      finished: data?.finished || 0,
+      processing: data?.processing || 0,
+      pending: data?.pending || 0,
+      canceled: data?.canceled || 0,
       loading: isLoading,
       error,
       validating: isValidating,
