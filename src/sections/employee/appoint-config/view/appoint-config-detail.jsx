@@ -8,8 +8,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-import { Alert, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Box, Alert, Typography, CircularProgress } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -424,7 +424,11 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         disabled={updating.value}
         open={updating.value || confirm.value}
         onClose={confirm.onFalse}
-        title={updating.value ? 'Creating appointments...' : 'Save changes'}
+        title={
+          updating.value
+            ? 'Creating appointments...'
+            : 'Do you want to change your existance appointments?'
+        }
         content={
           updating.value ? (
             <>
@@ -448,11 +452,11 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             </>
           ) : (
             <>
-              <Typography variant="body1" component="h6" sx={{ mt: 1 }}>
+              {/* <Typography variant="body1" component="h6" sx={{ mt: 1 }}>
                 {curLangAr
                   ? 'هل تريد تغيير المواعيد المنشأة مسبقا؟'
                   : 'Do you want to change your existance appointments?'}
-              </Typography>
+              </Typography> */}
               {curLangAr ? (
                 <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
                   اضغط <strong> نعم </strong> لتغيير المواعيد المنشأة
@@ -474,25 +478,38 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             </>
           )
         }
+        withoutCancel={updating.value}
         action={
           <>
-            <LoadingButton
-              variant="contained"
-              loading={updating.value}
-              color="warning"
-              onClick={handleUpdating}
-            >
-              {t('yes')}
-            </LoadingButton>
-            <LoadingButton
-              disabled={updating.value}
-              loading={saving.value}
-              variant="contained"
-              color="success"
-              onClick={handleSaving}
-            >
-              {t('no')}
-            </LoadingButton>
+            {updating.value && (
+              <Box
+                height="40"
+                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+              >
+                <CircularProgress size={24} color="primary" />
+              </Box>
+            )}
+            {!updating.value && (
+              <LoadingButton
+                variant="contained"
+                loading={updating.value}
+                color="warning"
+                onClick={handleUpdating}
+              >
+                {t('yes')}
+              </LoadingButton>
+            )}
+            {!updating.value && (
+              <LoadingButton
+                disabled={updating.value}
+                loading={saving.value}
+                variant="contained"
+                color="success"
+                onClick={handleSaving}
+              >
+                {t('no')}
+              </LoadingButton>
+            )}
           </>
         }
       />

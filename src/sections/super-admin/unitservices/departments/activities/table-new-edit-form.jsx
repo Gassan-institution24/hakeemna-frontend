@@ -12,7 +12,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
@@ -33,6 +33,8 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const { id } = useParams();
 
   const { user } = useAuthContext();
 
@@ -104,7 +106,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
         });
         socket.emit('updated', {
           user,
-          link: paths.unitservice.departments.activities.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
           msg: `editted an activity <strong>[ ${data.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } else {
@@ -119,15 +121,15 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
         });
         socket.emit('created', {
           user,
-          link: paths.unitservice.departments.activities.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
           msg: `created an activity <strong>[ ${data.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       }
       reset();
-      router.push(paths.unitservice.departments.activities.root(departmentData._id));
+      router.push(
+        paths.superadmin.unitservices.departments.activities.root(id, departmentData._id)
+      );
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-
-      console.info('DATA', data);
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

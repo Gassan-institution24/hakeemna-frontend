@@ -133,7 +133,6 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.unitservice.departments.workGroups.root(departmentData._id));
-      console.info('DATA', data);
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

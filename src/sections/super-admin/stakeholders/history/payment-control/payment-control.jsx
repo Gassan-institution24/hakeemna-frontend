@@ -71,7 +71,7 @@ export default function IncomePaymentControlView({ stakeholderData }) {
 
   const router = useRouter();
 
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   // const confirm = useBoolean();
 

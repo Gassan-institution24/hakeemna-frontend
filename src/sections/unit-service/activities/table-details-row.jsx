@@ -32,6 +32,7 @@ export default function TableDetailsRow({
     code,
     name_english,
     name_arabic,
+    sequence_number,
     department,
     details,
     details_arabic,
@@ -60,7 +61,7 @@ export default function TableDetailsRow({
       </TableCell>
 
       <TableCell lang="ar" align="center">
-        <Box>{code}</Box>
+        <Box>{sequence_number}</Box>
       </TableCell>
 
       <TableCell lang="ar" align="center">

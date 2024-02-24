@@ -107,7 +107,6 @@ export default function UploadOldPatient({ refetch }) {
       reset();
       enqueueSnackbar('Uploaded success!');
       // router.push(paths.unitservice.tables.employeetypes.root);
-      console.info('DATA', data);
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

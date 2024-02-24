@@ -136,7 +136,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
       await axios.patch(endpoints.tables.employee(employeeData._id), formData);
       enqueueSnackbar('Update success!');
       refetch();
-      console.info('DATA', data);
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

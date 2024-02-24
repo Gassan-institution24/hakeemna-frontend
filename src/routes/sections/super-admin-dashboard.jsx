@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 import { AuthGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
 import UnitServiceNav from 'src/layouts/service-unit-topbar';
+import UnitServiceDepartmentNavLayout from 'src/layouts/unitService-department-topbar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -225,7 +226,61 @@ const UnitServiceInfoPage = lazy(() => import('src/pages/super-admin/unitservice
 
 // UNITSERVICE DEPARTMENTS
 const UnitServiceDepartmentsPage = lazy(() =>
-  import('src/pages/super-admin/unitservices/departments/index')
+  import('src/pages/super-admin/unitservices/departments/home')
+);
+const UnitServiceDepartmentsNewPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/new')
+);
+const UnitServiceDepartmentsInfoPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/info')
+);
+const UnitServiceDepartmentsEmployeesPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/employees/home')
+);
+const UnitServiceDepartmentsEmployeesNewPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/employees/new')
+);
+const UnitServiceDepartmentsAccountingPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/accounting')
+);
+const UnitServiceDepartmentsActivitiesPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/activities/activities')
+);
+const UnitServiceDepartmentsNewActivitiesPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/activities/addActivitty')
+);
+const UnitServiceDepartmentsEditActivitiesPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/activities/editActivity')
+);
+const UnitServiceDepartmentsAppointmentsPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/appointments')
+);
+const UnitServiceDepartmentsAppointmentConfigPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/appointmentconfiguration')
+);
+const UnitServiceDepartmentsQualityControlPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/qualitycontrole')
+);
+const UnitServiceDepartmentsRoomsPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/rooms/rooms')
+);
+const UnitServiceDepartmentsNewRoomsPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/rooms/add')
+);
+const UnitServiceDepartmentsEditRoomsPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/rooms/edit')
+);
+const UnitServiceDepartmentsWorkGroupsPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/work-groups/home')
+);
+const UnitServiceDepartmentsNewWorkGroupsPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/work-groups/add')
+);
+const UnitServiceDepartmentsEditWorkGroupsPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/work-groups/edit')
+);
+const UnitServiceDepartmentsEditPage = lazy(() =>
+  import('src/pages/super-admin/unitservices/departments/edit')
 );
 
 // UNITSERVICE APPOINTMENTS
@@ -402,7 +457,69 @@ export const dashboardRoutes = [
                 ],
               },
               { path: 'appointments', element: <UnitServiceAppointmentsPage /> },
-              { path: 'departments', element: <UnitServiceDepartmentsPage /> },
+              {
+                path: 'departments',
+                children: [
+                  { element: <UnitServiceDepartmentsPage />, index: true },
+                  { path: 'new', element: <UnitServiceDepartmentsNewPage /> },
+                  { path: ':depid/edit', element: <UnitServiceDepartmentsEditPage /> },
+                  {
+                    path: ':depid',
+                    element: (
+                      <UnitServiceDepartmentNavLayout>
+                        <Outlet />
+                      </UnitServiceDepartmentNavLayout>
+                    ),
+                    children: [
+                      { path: 'info', element: <UnitServiceDepartmentsInfoPage /> },
+                      {
+                        path: 'employees',
+                        children: [
+                          { element: <UnitServiceDepartmentsEmployeesPage />, index: true },
+                          { path: 'new', element: <UnitServiceDepartmentsEmployeesNewPage /> },
+                        ],
+                      },
+                      { path: 'accounting', element: <UnitServiceDepartmentsAccountingPage /> },
+                      {
+                        path: 'activities',
+                        children: [
+                          { element: <UnitServiceDepartmentsActivitiesPage />, index: true },
+                          { path: 'new', element: <UnitServiceDepartmentsNewActivitiesPage /> },
+                          {
+                            path: ':acid/edit',
+                            element: <UnitServiceDepartmentsEditActivitiesPage />,
+                          },
+                        ],
+                      },
+                      {
+                        path: 'rooms',
+                        children: [
+                          { element: <UnitServiceDepartmentsRoomsPage />, index: true },
+                          { path: 'new', element: <UnitServiceDepartmentsNewRoomsPage /> },
+                          { path: ':acid/edit', element: <UnitServiceDepartmentsEditRoomsPage /> },
+                        ],
+                      },
+                      {
+                        path: 'wgroups',
+                        children: [
+                          { element: <UnitServiceDepartmentsWorkGroupsPage />, index: true },
+                          { path: 'new', element: <UnitServiceDepartmentsNewWorkGroupsPage /> },
+                          {
+                            path: ':acid/edit',
+                            element: <UnitServiceDepartmentsEditWorkGroupsPage />,
+                          },
+                        ],
+                      },
+                      { path: 'appointments', element: <UnitServiceDepartmentsAppointmentsPage /> },
+                      {
+                        path: 'appointmentconfiguration',
+                        element: <UnitServiceDepartmentsAppointmentConfigPage />,
+                      },
+                      { path: 'qc', element: <UnitServiceDepartmentsQualityControlPage /> },
+                    ],
+                  },
+                ],
+              },
               { path: 'employees', element: <UnitServiceEmployeesPage /> },
               { path: 'info', element: <UnitServiceInfoPage /> },
               { path: 'insurance', element: <UnitserviceInsurancePage /> },

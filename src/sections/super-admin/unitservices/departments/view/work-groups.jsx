@@ -17,8 +17,8 @@ import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -74,6 +74,8 @@ export default function WorkGroupsTableView({ departmentData }) {
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
+
+  const { id } = useParams();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -165,7 +167,7 @@ export default function WorkGroupsTableView({ departmentData }) {
         });
         socket.emit('updated', {
           user,
-          link: paths.unitservice.departments.workGroups.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
           msg: `activated work group <strong>${row.name_english}</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
@@ -176,7 +178,7 @@ export default function WorkGroupsTableView({ departmentData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, departmentData, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, id, departmentData, enqueueSnackbar]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -188,7 +190,7 @@ export default function WorkGroupsTableView({ departmentData }) {
         });
         socket.emit('updated', {
           user,
-          link: paths.unitservice.departments.workGroups.root(departmentData._id),
+          link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
           msg: `inactivated work group <strong>${row.name_english}</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
@@ -199,7 +201,7 @@ export default function WorkGroupsTableView({ departmentData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, departmentData, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, id, departmentData, enqueueSnackbar]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -211,7 +213,7 @@ export default function WorkGroupsTableView({ departmentData }) {
       });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.departments.workGroups.root(departmentData._id),
+        link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
         msg: `activated many work group in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
@@ -234,6 +236,7 @@ export default function WorkGroupsTableView({ departmentData }) {
     user,
     departmentData,
     enqueueSnackbar,
+    id,
   ]);
 
   const handleInactivateRows = useCallback(async () => {
@@ -245,7 +248,7 @@ export default function WorkGroupsTableView({ departmentData }) {
       });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.departments.workGroups.root(departmentData._id),
+        link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
         msg: `inactivated many work group in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
@@ -268,13 +271,16 @@ export default function WorkGroupsTableView({ departmentData }) {
     departmentData,
     user,
     enqueueSnackbar,
+    id,
   ]);
 
   const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.unitservice.departments.workGroups.edit(departmentData._id, id));
+    (_id) => {
+      router.push(
+        paths.superadmin.unitservices.departments.workGroups.edit(id, departmentData._id, _id)
+      );
     },
-    [router, departmentData]
+    [router, id, departmentData]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -307,11 +313,11 @@ export default function WorkGroupsTableView({ departmentData }) {
           // links={[
           //   {
           //     name: t('dashboard'),
-          //     href: paths.unitservice.root,
+          //     href: paths.superadmin.unitservices.root,
           //   },
           //   {
           //     name: t('departments'),
-          //     href: paths.unitservice.departments.root,
+          //     href: paths.superadmin.unitservices.departments.root(id),
           //   },
           //   { name: t('department work groups') },
           // ]}
@@ -319,7 +325,7 @@ export default function WorkGroupsTableView({ departmentData }) {
             checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'create' }) && (
               <Button
                 component={RouterLink}
-                href={paths.unitservice.departments.workGroups.new(departmentData._id)}
+                href={paths.superadmin.unitservices.departments.workGroups.new(id,departmentData._id)}
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >

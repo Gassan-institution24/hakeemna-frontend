@@ -130,70 +130,25 @@ export function AuthProvider({ children }) {
   );
 
   // REGISTER
-  const register = useCallback(
-    async (data) => {
-      const response = await axios.post(endpoints.auth.register, {
-        ...data,
-        email: data.email.toLowerCase(),
-      });
+  const register = useCallback(async (data) => {
+    await axios.post(endpoints.auth.register, {
+      ...data,
+      email: data.email.toLowerCase(),
+    });
 
-      const { accessToken, user } = response.data;
+    // const { accessToken, user } = response.data;
 
-      setSession(accessToken);
+    // setSession(accessToken);
 
-      dispatch({
-        type: 'REGISTER',
-        payload: {
-          user: {
-            ...user,
-            accessToken,
-          },
-        },
-      });
-      initialize();
-    },
-    [initialize]
-  );
-  // const registerAsUS = useCallback(async (info) => {
-  //   const data = {
-  //     email:info.email,
-  //     password:info.password,
-  //     confirmPassword:info.confirmPassword,
-  //     first_name: info.firstName,
-  //     last_name: info.lastName,
-  //     userName: `${info.firstName} ${info.lastName}`,
-  //     identification_num:info.identification_num,
-  //     gender:info.gender,
-  //     country:info.country,
-  //     city:info.city
-  //   };
-  //   // console.log('user dataaaaa', data);
-
-  //   const response = await axios.post(endpoints.auth.register, data);
-
-  //   const { accessToken, user } = response.data;
-
-  //   sessionStorage.setItem(STORAGE_KEY, accessToken);
-
-  //   dispatch({
-  //     type: 'REGISTER',
-  //     payload: {
-  //       user: {
-  //         ...user,
-  //         accessToken,
-  //       },
-  //     },
-  //   });
-  // }, []);
-
-  // CONFIRM REGISTER
-  const confirmRegister = useCallback(async (email, code) => {
-    // await Auth.confirmSignUp(email, code);
-  }, []);
-
-  // RESEND CODE REGISTER
-  const resendCodeRegister = useCallback(async (email) => {
-    // await Auth.resendSignUp(email);
+    // dispatch({
+    //   type: 'REGISTER',
+    //   payload: {
+    //     user: {
+    //       ...user,
+    //       accessToken,
+    //     },
+    //   },
+    // });
   }, []);
 
   // FORGOT PASSWORD
@@ -236,26 +191,11 @@ export function AuthProvider({ children }) {
       login,
       register,
       initialize,
-      // registerAsUS,
-      confirmRegister,
-      resendCodeRegister,
       forgotPassword,
       newPassword,
       logout,
     }),
-    [
-      login,
-      logout,
-      register,
-      initialize,
-      // registerAsUS,
-      confirmRegister,
-      resendCodeRegister,
-      forgotPassword,
-      newPassword,
-      state.user,
-      status,
-    ]
+    [login, logout, register, initialize, forgotPassword, newPassword, state.user, status]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

@@ -73,7 +73,7 @@ export default function EconomicMovementsView({ employeeData }) {
 
   const router = useRouter();
 
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   // const confirm = useBoolean();
 

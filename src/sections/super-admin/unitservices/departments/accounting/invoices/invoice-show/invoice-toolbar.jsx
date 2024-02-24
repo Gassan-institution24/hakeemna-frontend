@@ -22,7 +22,7 @@ import InvoicePDF from './invoice-pdf';
 
 export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, onChangeStatus }) {
   const params = useParams();
-  const { id } = params;
+  const { depid } = params;
 
   const router = useRouter();
 

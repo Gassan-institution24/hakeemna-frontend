@@ -67,7 +67,7 @@ export default function ActivitesTableView() {
   const { STATUS_OPTIONS } = StatusOptions();
   const { t } = useTranslate();
   const TABLE_HEAD = [
-    { id: 'code', label: t('code') },
+    { id: 'sequence_number', label: t('number') },
     { id: 'name', label: t('name') },
     { id: 'department', label: t('department') },
     { id: 'details', label: t('details') },

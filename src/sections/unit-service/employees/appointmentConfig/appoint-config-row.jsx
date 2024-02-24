@@ -31,6 +31,7 @@ export default function AppointmentsTableRow({
 }) {
   const {
     code,
+    sequence_number,
     start_date,
     end_date,
     work_shift,
@@ -71,7 +72,7 @@ export default function AppointmentsTableRow({
           onClick={onViewRow}
           align="center"
         >
-          {code}
+          {sequence_number}
         </TableCell>
 
         <TableCell lang="ar" onClick={onViewRow} align="center">

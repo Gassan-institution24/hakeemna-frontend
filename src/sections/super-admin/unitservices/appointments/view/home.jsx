@@ -68,8 +68,8 @@ const defaultFilters = {
 export default function AppointmentsView({ employeeData, appointmentsData, refetch }) {
   const { t } = useTranslate();
   const TABLE_HEAD = [
-    { id: 'code', label: t('code') },
-    { id: 'sequence', label: t('sequence') },
+    { id: 'sequence_number', label: t('sequence') },
+    { id: 'appoint_number', label: t('number') },
     { id: 'appointment_type', label: t('appointment type') },
     { id: 'work_group', label: t('work group') },
     { id: 'work_shift', label: t('work shift') },
@@ -87,7 +87,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const table = useTable({ defaultOrderBy: 'createDate' });
+  const table = useTable({ defaultOrderBy: 'code' });
 
   const { user } = useAuthContext();
 

@@ -34,7 +34,7 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetCities, useGetUSTypes, useGetCountries, useGetSpecialties } from 'src/api';
 
@@ -182,7 +182,7 @@ export default function JwtRegisterView() {
         ...data,
       });
 
-      router.push(returnTo || PATH_AFTER_LOGIN);
+      router.push(paths.auth.verify(data.email)||returnTo || PATH_AFTER_SIGNUP);
     } catch (error) {
       console.error(error);
       // reset();

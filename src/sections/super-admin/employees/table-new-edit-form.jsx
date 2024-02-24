@@ -113,7 +113,6 @@ export default function UsersNewEditForm({ currentSelected }) {
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
       router.push(paths.superadmin.users.root);
-      console.info('DATA', data);
     } catch (error) {
       setErrorMsg(typeof error === 'string' ? error : error.message);
       console.error(error);

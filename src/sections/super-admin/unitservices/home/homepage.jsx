@@ -51,14 +51,14 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const TABLE_HEAD = [
   /// to edit
-  { id: 'code', label: 'Code' },
+  { id: 'code', label: 'code' },
   { id: 'name_english', label: 'Name' },
-  { id: 'status', label: 'Status' },
-  { id: 'General-info', label: 'General Info' },
-  { id: 'Accounting', label: 'Accounting' },
-  { id: 'Communications', label: 'Communications' },
-  { id: 'Feedback', label: 'Feedback' },
-  { id: 'Insurance', label: 'Insurance' },
+  { id: 'US_type', label: 'service unit type' },
+  { id: 'sector_type', label: 'sector type' },
+  { id: 'email', label: 'email' },
+  { id: 'phone', label: 'phone number' },
+  { id: 'status', label: 'status' },
+  // { id: 'Insurance', label: 'Insurance' },
   { id: '', width: 88 },
 ];
 

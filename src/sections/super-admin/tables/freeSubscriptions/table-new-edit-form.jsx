@@ -122,7 +122,6 @@ export default function TableNewEditForm({ currentTable }) {
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
       router.push(paths.superadmin.tables.freesub.root);
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }

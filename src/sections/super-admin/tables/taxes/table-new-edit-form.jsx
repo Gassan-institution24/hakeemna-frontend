@@ -104,7 +104,6 @@ export default function CitiesNewEditForm({ currentTable }) {
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
       router.push(paths.superadmin.tables.taxes.root);
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }

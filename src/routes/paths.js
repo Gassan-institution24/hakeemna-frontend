@@ -37,7 +37,7 @@ export const paths = {
     login: `/login`,
     register: `/register`,
     registersu: `/register/serviceunit`,
-    verify: `/verify`,
+    verify: (email) => `/verify?email=${email}`,
     newPassword: `/new-password`,
     forgotPassword: `/forgot-password`,
   },
@@ -97,7 +97,81 @@ export const paths = {
     unitservices: {
       root: `${ROOTS.SUPERADMIN}/unitservices`,
       list: `${ROOTS.SUPERADMIN}/unitservices/list`,
-      departments: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/departments`,
+      departments: {
+        root: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/departments`,
+        new: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/new`,
+        info: (id, depid) => `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/info`,
+        employees: {
+          root: (id, depid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees`,
+          new: (id, depid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/new`,
+          edit: (id, depid, emid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/edit`,
+          info: (id, depid, emid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/info`,
+          appointments: (id, depid, emid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/appointments`,
+          appointmentconfig: {
+            root: (id, depid, emid) =>
+              `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/appointmentconfig`,
+            details: (id, depid, emid, coid) =>
+              `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/appointmentconfig/${coid}`,
+            new: (id, depid, emid) =>
+              `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/appointmentconfig/new`,
+          },
+          accounting: (id, depid, emid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/accounting`,
+          feedback: (id, depid, emid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/feedback`,
+          attendence: (id, depid, emid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/attendence`,
+          offers: (id, depid, emid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/offers`,
+          activities: {
+            root: (id, depid, emid) =>
+              `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/activities`,
+            new: (id, depid, emid) =>
+              `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/activities/new`,
+            edit: (id, depid, emid) =>
+              `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/activities`,
+          },
+          acl: (id, depid, emid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/employees/${emid}/acl`,
+        },
+        accounting: (id, depid) =>
+          `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/accounting`,
+        activities: {
+          root: (id, depid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/activities`,
+          new: (id, depid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/activities/new`,
+          edit: (id, depid, acid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/activities/${acid}/edit`,
+        },
+        rooms: {
+          root: (id, depid) => `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/rooms`,
+          new: (id, depid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/rooms/new`,
+          edit: (id, depid, acid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/rooms/${acid}/edit`,
+        },
+        workGroups: {
+          root: (id, depid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/wgroups`,
+          new: (id, depid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/wgroups/new`,
+          edit: (id, depid, acid) =>
+            `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/wgroups/${acid}/edit`,
+        },
+        appointments: (id, depid) =>
+          `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/appointments`,
+        appointmentconfiguration: (id, depid) =>
+          `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/appointmentconfiguration`,
+        qualityControl: (id, depid) =>
+          `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/qc`,
+        edit: (id, depid) => `${ROOTS.SUPERADMIN}/unitservices/${id}/departments/${depid}/edit`,
+      },
       employees: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/employees`,
       appointments: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/appointments`,
       accounting: (id) => `${ROOTS.SUPERADMIN}/unitservices/${id}/accounting`,
@@ -620,6 +694,7 @@ export const paths = {
     qualityControl: {
       root: `${ROOTS.SUPERADMIN}/qc`,
     },
+    calender: `${ROOTS.SUPERADMIN}/calender`,
     profile: {
       root: `${ROOTS.SUPERADMIN}/profile`,
       edit: `${ROOTS.SUPERADMIN}/edit`,
