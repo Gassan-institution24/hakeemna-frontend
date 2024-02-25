@@ -12,6 +12,9 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';
+import { zonedTimeToUtc } from 'date-fns-tz';
+import { useAuthContext } from 'src/auth/hooks';
+import { useUnitTime } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +22,10 @@ export default function NewEditLongHolidays() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const { myunitTime } = useUnitTime();
+
+  const { user } = useAuthContext();
 
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
@@ -83,15 +90,14 @@ export default function NewEditLongHolidays() {
                     <DatePicker
                       label={t('start date')}
                       // sx={{ flex: 1 }}
-                      value={
-                        new Date(
-                          values.long_holidays[index].start_date
-                            ? values.long_holidays[index].start_date
-                            : ''
-                        )
-                      }
+                      value={myunitTime(values.long_holidays[index].start_date)}
                       onChange={(newValue) => {
-                        field.onChange(newValue);
+                        const selectedTime = zonedTimeToUtc(
+                          newValue,
+                          user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                            ?.unit_service?.country?.time_zone
+                        );
+                        field.onChange(selectedTime);
                       }}
                       slotProps={{
                         textField: {
@@ -111,15 +117,14 @@ export default function NewEditLongHolidays() {
                     <DatePicker
                       label={t('end date')}
                       // sx={{ flex: 1 }}
-                      value={
-                        new Date(
-                          values.long_holidays[index].end_date
-                            ? values.long_holidays[index].end_date
-                            : ''
-                        )
-                      }
+                      value={myunitTime(values.long_holidays[index].end_date)}
                       onChange={(newValue) => {
-                        field.onChange(newValue);
+                        const selectedTime = zonedTimeToUtc(
+                          newValue,
+                          user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                            ?.unit_service?.country?.time_zone
+                        );
+                        field.onChange(selectedTime);
                       }}
                       slotProps={{
                         textField: {
