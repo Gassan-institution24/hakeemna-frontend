@@ -15,6 +15,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetUSWorkShifts, useGetEmployeeWorkGroups } from 'src/api';
 
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
+import { zonedTimeToUtc } from 'date-fns-tz';
+import { useUnitTime } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -33,9 +35,11 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
     { value: 'friday', label: t('Friday') },
   ];
 
-  const { control, watch, getValues, setValue } = useFormContext();
+  const { control, watch, getValues, setValue, trigger } = useFormContext();
 
   const values = getValues();
+
+  const { myunitTime } = useUnitTime();
 
   const { user } = useAuthContext();
 
@@ -68,9 +72,14 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
               <DatePicker
                 label={`${t('start date')} *`}
                 // sx={{ flex: 1 }}
-                value={new Date(values.start_date || '')}
+                value={myunitTime(values.start_date)}
                 onChange={(newValue) => {
-                  field.onChange(newValue);
+                  const selectedTime = zonedTimeToUtc(
+                    newValue,
+                    user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                      ?.unit_service?.country?.time_zone
+                  );
+                  field.onChange(selectedTime);
                 }}
                 slotProps={{
                   textField: {
@@ -90,9 +99,14 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
               <DatePicker
                 label={t('end date')}
                 // sx={{ flex: 1 }}
-                value={new Date(values.end_date || '')}
+                value={myunitTime(values.end_date)}
                 onChange={(newValue) => {
-                  field.onChange(newValue);
+                  const selectedTime = zonedTimeToUtc(
+                    newValue,
+                    user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                      ?.unit_service?.country?.time_zone
+                  );
+                  field.onChange(selectedTime);
                 }}
                 slotProps={{
                   textField: {
@@ -140,34 +154,28 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                 </MenuItem>
               ))}
           </RHFSelect>
-          <Controller
+          <RHFTextField
+            fullWidth
+            step="5"
             name="appointment_time"
-            control={control}
-            render={({ field, fieldState: { error } }) => (
-              <TextField
-                fullWidth
-                label={t('appointment duration time')}
-                type="number"
-                lang="ar"
-                value={field.value === 0 ? '' : field.value}
-                onChange={(event) => {
-                  field.onChange(Number(event.target.value));
-                  setAppointTime(event.target.value);
-                }}
-                error={!!error}
-                size="small"
-                InputLabelProps={{ shrink: true }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Box lang="ar" sx={{ fontSize: '0.8rem' }}>
-                        {t('min')}
-                      </Box>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            )}
+            label={t('appointment duration time')}
+            type="number"
+            lang="ar"
+            onBlur={(event) => {
+              setAppointTime(event.target.value);
+              trigger('appointment_time');
+            }}
+            size="small"
+            InputLabelProps={{ shrink: true }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Box lang="ar" sx={{ fontSize: '0.8rem' }}>
+                    {t('min')}
+                  </Box>
+                </InputAdornment>
+              ),
+            }}
           />
           <RHFTextField
             lang="ar"

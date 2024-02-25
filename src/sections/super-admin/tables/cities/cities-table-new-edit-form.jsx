@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as Yup from 'yup';
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -22,7 +22,7 @@ import { useGetCountries } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFUploadBox } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -35,10 +35,13 @@ export default function CitiesNewEditForm({ currentCity }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
+  const [excel, setExcel] = useState();
+
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
     country: Yup.string().required('Country is required'),
+    excel: Yup.mixed(),
   });
 
   const defaultValues = useMemo(
@@ -46,6 +49,7 @@ export default function CitiesNewEditForm({ currentCity }) {
       name_arabic: currentCity?.name_arabic || '',
       name_english: currentCity?.name_english || '',
       country: currentCity?.country?._id || '',
+      excel: '',
     }),
     [currentCity]
   );
@@ -77,6 +81,8 @@ export default function CitiesNewEditForm({ currentCity }) {
 
   const {
     reset,
+    setValue,
+    getValues,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -109,6 +115,30 @@ export default function CitiesNewEditForm({ currentCity }) {
       console.error(error);
     }
   });
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+    formData.append('excel', excel);
+    try {
+      await axios.post(endpoints.tables.manyCities, formData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleDrop = useCallback(
+    (name, acceptedFiles) => {
+      const file = acceptedFiles[0];
+      const newFile = Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      });
+
+      if (file) {
+        setExcel(newFile);
+      }
+    },
+    [setExcel]
+  );
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -144,9 +174,20 @@ export default function CitiesNewEditForm({ currentCity }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
+              <RHFUploadBox
+                sx={{
+                  mx: 'auto',
+                }}
+                name="excel"
+                label="upload excel"
+                onDrop={(acceptedFiles) => handleDrop('excel', acceptedFiles)}
+              />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+              <LoadingButton tabIndex={-1} variant="contained" onClick={handleUpload}>
+                Upload file and create many
+              </LoadingButton>
               <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
                 {!currentCity ? 'Create' : 'Save Changes'}
               </LoadingButton>
