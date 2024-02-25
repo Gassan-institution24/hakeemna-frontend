@@ -54,7 +54,7 @@ export default function Currentappoinment({ pendingAppointments }) {
         />
 
         <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-          {fDate(info?.created_at)}
+          {fDate(info?.start_time)}
         </Stack>
         <Stack
           spacing={0.5}
