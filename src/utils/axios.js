@@ -202,6 +202,9 @@ export const endpoints = {
       filters,
     }) =>
       `/api/appointments/employee/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
+
+    employeeselect: ({ id, startDate }) =>
+      `/api/appointments/employeeselect/${id}?startDate=${startDate}`,
     patientAppointments: (id) => `/api/appointments/patient/${id}`,
     patientoneAppointments: (id) => `/api/appointments/onepatient/${id}`,
     economecMovements: '/api/economicmovements',

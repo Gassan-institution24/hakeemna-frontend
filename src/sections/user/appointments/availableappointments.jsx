@@ -222,15 +222,7 @@ export default function AppointmentBooking() {
 
 function applyFilter({ inputData, search, comparator, filters, sortBy }) {
   const {
-    unitServices,
-    countries,
     insurance,
-    start_date,
-    end_date,
-    rate,
-    appointtypes,
-    payment_methods,
-    name,
   } = filters;
 
   // SORT BY
