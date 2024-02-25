@@ -84,70 +84,14 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     days_details: Yup.array().of(
       Yup.object().shape({
         day: Yup.string().required('Day is required'),
-        work_start_time: Yup.date().nullable().required('work start time is required'),
-        work_end_time: Yup.date()
-          .nullable()
-          .required('work end time is required')
-          .when(
-            'work_start_time',
-            (work_start_time, schema) =>
-              work_start_time &&
-              schema.min(work_start_time, 'Work End Time must be after Work Start Time')
-          ),
-        // break_start_time: Yup.date().nullable()
-        //   .when(
-        //     'work_end_time',
-        //     (work_end_time, schema) =>
-        //       schema.isType(null)||(work_end_time &&
-        //       schema.max(
-        //         work_end_time,
-        //         'Break Time must be between Work Start Time and Work End Time'
-        //       ))
-        //   ),
-        //   .when(
-        //     'work_start_time',
-        //     (work_start_time, schema) =>
-        //       work_start_time &&
-        //       schema.min(
-        //         work_start_time,
-        //         'Break Time must be between Work Start Time and Work End Time'
-        //       )
-        //   ),
-        // break_end_time: Yup.date().nullable()
-        //   .when(
-        //     'work_start_time',
-        //     (work_start_time, schema) =>
-        //       work_start_time &&
-        //       schema.min(
-        //         work_start_time,
-        //         'Break Time must be between Work Start Time and Work End Time'
-        //       )
-        //   )
-        //   .when(
-        //     'work_end_time',
-        //     (work_end_time, schema) =>
-        //       work_end_time &&
-        //       schema.max(
-        //         work_end_time,
-        //         'Break Time must be between Work Start Time and Work End Time'
-        //       )
-        //   )
-        //   .when(
-        //     'break_start_time',
-        //     (break_start_time, schema) =>
-        //       break_start_time &&
-        //       schema.min(
-        //         break_start_time,
-        //         'Break Time must be between Work Start Time and Work End Time'
-        //       )
-        //   ),
+        work_start_time: Yup.mixed().nullable().required('work start time is required'),
+        work_end_time: Yup.mixed().nullable().required('work end time is required'),
         appointments: Yup.array(),
         service_types: Yup.array(),
         appointment_type: Yup.string().nullable(),
       })
     ),
   });
-  // console.log('user', user);
 
   const defaultValues = useMemo(
     () => ({

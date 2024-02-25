@@ -20,6 +20,9 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFCheckbox } from 'src/components/hook-form';
+import { zonedTimeToUtc } from 'date-fns-tz';
+import { useAuthContext } from 'src/auth/hooks';
+import { useUnitTime } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +36,10 @@ export default function NewEditDayAppointmentsDetails({
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const { myunitTime } = useUnitTime();
+
+  const { user } = useAuthContext();
 
   const { control, setValue, watch, resetField, getValues } = useFormContext();
 
@@ -57,7 +64,7 @@ export default function NewEditDayAppointmentsDetails({
         ]
       : null;
     const start_time = new Date(
-      existingData ? existingData.start_time : values.days_details[ParentIndex].work_start_time
+      existingData ? existingData?.start_time : values.days_details[ParentIndex].work_start_time
     );
     if (existingData) {
       start_time.setMinutes(start_time.getMinutes() + values.appointment_time);
@@ -141,15 +148,16 @@ export default function NewEditDayAppointmentsDetails({
                       lang="ar"
                       minutesStep="5"
                       label={t('start time')}
-                      value={
-                        values.days_details[ParentIndex].appointments[index].start_time
-                          ? new Date(
-                              values.days_details[ParentIndex].appointments[index].start_time
-                            )
-                          : new Date()
-                      }
+                      value={myunitTime(
+                        values.days_details[ParentIndex].appointments[index]?.start_time
+                      )}
                       onChange={(newValue) => {
-                        field.onChange(newValue);
+                        const selectedTime = zonedTimeToUtc(
+                          newValue,
+                          user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                            ?.unit_service?.country?.time_zone
+                        );
+                        field.onChange(selectedTime);
                       }}
                       slotProps={{
                         textField: {

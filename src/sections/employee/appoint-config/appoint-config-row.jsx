@@ -76,13 +76,21 @@ export default function AppointmentsTableRow({
 
         <TableCell lang="ar" onClick={onViewRow} align="center">
           <ListItemText
-            primary={isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMM yyyy')}
+            primary={
+              start_date
+                ? isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMM yyyy')
+                : null
+            }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
         <TableCell lang="ar" onClick={onViewRow} align="center">
           <ListItemText
-            primary={isValid(new Date(end_date)) && format(new Date(end_date), 'dd MMM yyyy')}
+            primary={
+              end_date
+                ? isValid(new Date(end_date)) && format(new Date(end_date), 'dd MMM yyyy')
+                : null
+            }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
