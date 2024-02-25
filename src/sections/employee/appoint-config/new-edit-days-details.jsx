@@ -1,5 +1,6 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -14,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
+import { useUnitTime } from 'src/utils/format-time';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -30,6 +32,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const { myunitTime } = useUnitTime();
 
   const weekDays = [
     { value: 'saturday', label: t('Saturday') },
@@ -86,7 +89,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
         ...defaultItem,
         ...existingData,
         day: dayToCreate,
-        appointments: [],
       };
       append(newItem);
     } catch (e) {
@@ -102,11 +104,8 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   async function processDayDetails(index) {
     try {
       if (!values.appointment_time) {
-        setError(
-          'appointment_time',
-          'you have to add Appointment duration time to generate details'
-        );
-        throw Error('you have to add Appointment duration time to generate details');
+        setError('appointment_time');
+        return;
       }
       const results = [];
       const appointment_time = values.appointment_time * 60 * 1000;
@@ -148,6 +147,10 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       }
       console.log(results);
       setValue(`days_details[${index}].appointments`, results);
+      setShowAppointments({
+        ...showAppointments,
+        [index]: true,
+      });
     } catch (e) {
       setErrorMsg(e.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -206,6 +209,15 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     return Math.floor((work_end - work_start) / appointment_time) || 0;
   }
 
+  /* eslint-disable */
+  useEffect(() => {
+    if (appointTime) {
+      for (let index = 0; index < values.days_details.length; index++) {
+        processDayDetails(index);
+      }
+    }
+  }, [appointTime]);
+  /* eslint-enable */
   return (
     <>
       <Divider flexItem sx={{ borderStyle: 'solid' }} />
@@ -284,13 +296,14 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         lang="ar"
                         minutesStep="5"
                         label={t('work start time')}
-                        value={
-                          values.days_details[index]?.work_start_time
-                            ? new Date(values.days_details[index]?.work_start_time)
-                            : null
-                        }
+                        value={myunitTime(values.days_details[index]?.work_start_time)}
                         onChange={(newValue) => {
-                          field.onChange(newValue);
+                          const selectedTime = zonedTimeToUtc(
+                            newValue,
+                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                              ?.unit_service?.country?.time_zone
+                          );
+                          field.onChange(selectedTime);
                           processDayDetails(index);
                         }}
                         slotProps={{
@@ -312,13 +325,14 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         lang="ar"
                         minutesStep="5"
                         label={t('break start time')}
-                        value={
-                          values.days_details[index]?.break_start_time
-                            ? new Date(values.days_details[index]?.break_start_time)
-                            : null
-                        }
+                        value={myunitTime(values.days_details[index]?.break_start_time)}
                         onChange={(newValue) => {
-                          field.onChange(newValue);
+                          const selectedTime = zonedTimeToUtc(
+                            newValue,
+                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                              ?.unit_service?.country?.time_zone
+                          );
+                          field.onChange(selectedTime);
                           processDayDetails(index);
                         }}
                         slotProps={{
@@ -346,13 +360,14 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         lang="ar"
                         minutesStep="5"
                         label={t('work end time')}
-                        value={
-                          values.days_details[index]?.work_end_time
-                            ? new Date(values.days_details[index]?.work_end_time)
-                            : null
-                        }
+                        value={myunitTime(values.days_details[index]?.work_end_time)}
                         onChange={(newValue) => {
-                          field.onChange(newValue);
+                          const selectedTime = zonedTimeToUtc(
+                            newValue,
+                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                              ?.unit_service?.country?.time_zone
+                          );
+                          field.onChange(selectedTime);
                           processDayDetails(index);
                         }}
                         slotProps={{
@@ -374,13 +389,14 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         lang="ar"
                         minutesStep="5"
                         label={t('break end time')}
-                        value={
-                          values.days_details[index]?.break_end_time
-                            ? new Date(values.days_details[index]?.break_end_time)
-                            : null
-                        }
+                        value={myunitTime(values.days_details[index]?.break_end_time)}
                         onChange={(newValue) => {
-                          field.onChange(newValue);
+                          const selectedTime = zonedTimeToUtc(
+                            newValue,
+                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                              ?.unit_service?.country?.time_zone
+                          );
+                          field.onChange(selectedTime);
                           processDayDetails(index);
                         }}
                         slotProps={{
@@ -478,7 +494,13 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                       })
                     }
                   >
-                    <Iconify icon="tabler:list-details" />
+                    <Iconify
+                      icon={
+                        showAppointments[index]
+                          ? 'eva:arrow-ios-upward-fill'
+                          : 'eva:arrow-ios-downward-fill'
+                      }
+                    />
                   </IconButton>
                 </Stack>
               </Stack>

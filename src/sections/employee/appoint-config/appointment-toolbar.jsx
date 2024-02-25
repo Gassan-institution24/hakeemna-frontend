@@ -13,6 +13,9 @@ import ACLGuard from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useAuthContext } from 'src/auth/hooks';
+import { zonedTimeToUtc } from 'date-fns-tz';
+import { useUnitTime } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +29,10 @@ export default function ConfigTableToolbar({
 }) {
   const { t } = useTranslate();
   const popover = usePopover();
+
+  const { myunitTime } = useUnitTime();
+
+  const { user } = useAuthContext();
 
   const handleFilterName = useCallback(
     (event) => {
@@ -43,16 +50,26 @@ export default function ConfigTableToolbar({
 
   const handleFilterStartDate = useCallback(
     (newValue) => {
-      onFilters('startDate', newValue);
+      const selectedTime = zonedTimeToUtc(
+        newValue,
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+          ?.country?.time_zone
+      );
+      onFilters('startDate', selectedTime);
     },
-    [onFilters]
+    [onFilters, user]
   );
 
   const handleFilterEndDate = useCallback(
     (newValue) => {
-      onFilters('endDate', newValue);
+      const selectedTime = zonedTimeToUtc(
+        newValue,
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+          ?.country?.time_zone
+      );
+      onFilters('endDate', selectedTime);
     },
-    [onFilters]
+    [onFilters, user]
   );
 
   return (
@@ -71,7 +88,7 @@ export default function ConfigTableToolbar({
       >
         <DatePicker
           label={t('date')}
-          value={filters.startDate}
+          value={myunitTime(filters.startDate)}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
           sx={{
@@ -81,7 +98,7 @@ export default function ConfigTableToolbar({
 
         <DatePicker
           label={t('end date')}
-          value={filters.endDate}
+          value={myunitTime(filters.endDate)}
           onChange={handleFilterEndDate}
           slotProps={{
             textField: {

@@ -1,7 +1,25 @@
 import { format, getTime, formatDistanceToNow } from 'date-fns';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
+export const useUnitTime = () => {
+  const { user } = useAuthContext();
+  function myunitTime(date) {
+    const formattedDate = date ? new Date(date) : null;
+    const timeZone =
+      user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+        ?.country?.time_zone;
+
+    const value = formattedDate
+      ? new Date(formattedDate.toLocaleDateString('en-US', { timeZone }))
+      : null;
+    return value;
+  }
+  return {
+    myunitTime,
+  };
+};
 export function fDate(date, newFormat) {
   const fm = newFormat || 'dd MMM yyyy';
 

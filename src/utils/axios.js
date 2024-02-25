@@ -33,6 +33,7 @@ export const endpoints = {
     countries: `/api/countries`,
     country: (id) => `/api/countries/${id}`,
     cities: '/api/cities',
+    manyCities: '/api/cities/many',
     city: (id) => `/api/cities/${id}`,
     surgeries: '/api/surgeries',
     surgery: (id) => `/api/surgeries/${id}`,
