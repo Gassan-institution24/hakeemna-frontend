@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -9,36 +8,51 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
-// import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import { Button, Typography } from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { useParams } from 'src/routes/hooks';
 
+import { endpoints } from 'src/utils/axios';
+import { fTime } from 'src/utils/format-time';
 import { fNumber } from 'src/utils/format-number';
+import axiosHandler from 'src/utils/axios-handler';
 
-import { useGetEmployeeEngagement, useGetEmployeeAppointments } from 'src/api';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetEmployeeEngagement, useGetEmployeeSelectedAppointments } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-
-// import Calendar from 'react-calendar';
-// import 'react-calendar/dist/Calendar.css';
-
+import EmptyContent from 'src/components/empty-content';
 // ----------------------------------------------------------------------
 
-export default function Doctorpage({ onBook }) {
+export default function Doctorpage() {
   const params = useParams();
   const { id } = params;
+  const { user } = useAuthContext();
 
-  const { appointmentsData } = useGetEmployeeAppointments(id);
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  const [TimeData, setTimeData] = useState();
+  const patientData = user?.patient?._id;
+  const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
+    id,
+    startDate: currentDateTime,
+  });
+  const handleBook = useCallback(
+    async (pateinidd) => {
+      await axiosHandler({
+        method: 'PATCH',
+        path: `${endpoints.tables.appointment(pateinidd)}/book`,
+        data: { patient: patientData },
+      });
+      refetch();
+    },
+    [patientData, refetch]
+  );
   const { data } = useGetEmployeeEngagement(id);
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-  console.log(selectedDate);
-
-
+  console.log(TimeData);
 
   const renderHead = (
     <CardHeader
@@ -122,14 +136,45 @@ export default function Doctorpage({ onBook }) {
       </Stack>
     </Card>
   );
-
   const renderPostInput = (
     <Card sx={{ p: 3 }}>
-    {/* <Calendar
-      value={selectedDate}
-      onChange={handleDateChange}
-    /> */}
-  </Card>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <StaticDatePicker
+          orientation="landscape"
+          disablePast
+          componentsProps={{ actionBar: { actions: ['clear', 'today'] } }}
+          // value={currentDateTime}
+          onChange={(e) => setCurrentDateTime(e.$d)}
+        />
+      </LocalizationProvider>
+      {appointmentsData.length > 0 ? (
+        <Box>
+          <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 'bold' }}>
+            SELECT TIME
+          </Typography>
+
+          {appointmentsData.map((time, index) => (
+            <Box key={index} sx={{ display: 'flex' }}>
+              <Box sx={{ width: '35%' }}>
+                <Button onClick={() => setTimeData(time?._id)}> {fTime(time?.start_time)} </Button>
+              </Box>
+
+              {/* <Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} /> */}
+              {/* <Box> */}
+                {/* <Button> {fTime(time?.start_time)} </Button> */}
+                {/* data */}
+              {/* </Box> */}
+            </Box>
+          ))}
+          <Button variant="contained" onClick={() => handleBook(TimeData)}>
+            {' '}
+            Book
+          </Button>
+        </Box>
+      ) : (
+        <EmptyContent filled title="No Available Appointments" sx={{ py: 10 }} />
+      )}
+    </Card>
   );
 
   const renderSocials = (
@@ -145,7 +190,7 @@ export default function Doctorpage({ onBook }) {
   );
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={2}>
       <Grid xs={12} md={4}>
         <Stack spacing={3}>
           {renderHead}
@@ -162,7 +207,3 @@ export default function Doctorpage({ onBook }) {
     </Grid>
   );
 }
-
-Doctorpage.propTypes = {
-  onBook: PropTypes.func,
-};

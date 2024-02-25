@@ -15,7 +15,7 @@ import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 import { LoadingScreen } from 'src/components/loading-screen';
 
-  export default function AppointmetClinic({ Units, onBook, onView }) {
+  export default function AppointmetClinic({  onBook, onView }) {
   const { t } = useTranslate();
   // const { feedbackData } = useGetUSFeedbackes(Units._id);
   const params = useParams();
@@ -78,12 +78,12 @@ import { LoadingScreen } from 'src/components/loading-screen';
                   <Iconify width={18} sx={{ color: 'info.main' }} icon="mdi:location" />{' '}
                   {info?.unit_service?.address}
                 </Typography>
-                {Units?.work_hours && (
+                {/* {Units?.work_hours && (
                   <Typography>
                     <Iconify width={18} sx={{ color: 'warning.main' }} icon="mingcute:time-line" />{' '}
                     Open {Units?.work_hours} h{' '}
                   </Typography>
-                )}
+                )} */}
                 <Typography>
                   <Iconify width={18} sx={{ color: 'success.main' }} icon="mdi:cash-multiple" />{' '}
                   {t('Fees: ')} 30 JOD{' '}
@@ -107,7 +107,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 };
 
 AppointmetClinic.propTypes = {
-  Units: PropTypes.object,
+
   onView: PropTypes.func,
   onBook: PropTypes.func,
 };
