@@ -124,13 +124,10 @@ export default function AccountGeneral({ data, refetch }) {
     defaultValues,
   });
   const {
-    getValues,
     setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-
-  const values = getValues();
 
   const fuser = (fuserSize) => {
     const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif'];
@@ -178,7 +175,7 @@ export default function AccountGeneral({ data, refetch }) {
     }
 
     try {
-      await axios.patch(`${endpoints.tables.patient}${user?.patient._id}`, formData);
+      await axios.patch(`${endpoints.tables.patient(user?.patient._id)}`, formData);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
       setTimeout(() => {
         window.location.reload();
