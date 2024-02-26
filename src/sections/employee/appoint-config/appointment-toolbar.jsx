@@ -53,7 +53,7 @@ export default function ConfigTableToolbar({
       const selectedTime = zonedTimeToUtc(
         newValue,
         user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-          ?.country?.time_zone
+          ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
       );
       onFilters('startDate', selectedTime);
     },
@@ -65,7 +65,7 @@ export default function ConfigTableToolbar({
       const selectedTime = zonedTimeToUtc(
         newValue,
         user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-          ?.country?.time_zone
+          ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
       );
       onFilters('endDate', selectedTime);
     },

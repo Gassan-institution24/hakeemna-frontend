@@ -144,7 +144,8 @@ export default function BookManually({
                     onChange={(newValue) => {
                       const selectedTime = zonedTimeToUtc(
                         newValue,
-                        unitServiceData?.country?.time_zone
+                        unitServiceData?.country?.time_zone ||
+                          Intl.DateTimeFormat().resolvedOptions().timeZone
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}

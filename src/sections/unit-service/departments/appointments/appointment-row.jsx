@@ -108,7 +108,9 @@ export default function AppointmentsTableRow({
             secondary={
               isValid(new Date(start_time)) &&
               new Date(start_time).toLocaleDateString('en-US', {
-                timeZone: unit_service?.country?.time_zone,
+                timeZone:
+                  unit_service?.country?.time_zone ||
+                  Intl.DateTimeFormat().resolvedOptions().timeZone,
               })
             }
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
