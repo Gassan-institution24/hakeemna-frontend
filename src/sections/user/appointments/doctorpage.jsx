@@ -1,57 +1,82 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
+import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
 import { Button, Typography } from '@mui/material';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { useParams } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import { fTime } from 'src/utils/format-time';
+import { useBoolean } from 'src/hooks/use-boolean';
+
 import { fNumber } from 'src/utils/format-number';
-import axiosHandler from 'src/utils/axios-handler';
+import axios, { endpoints } from 'src/utils/axios';
+import { fDate, fTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetEmployeeEngagement, useGetEmployeeSelectedAppointments } from 'src/api';
+import {
+  useGetAppointment,
+  useGetEmployeeEngagement,
+  useGetEmployeeSelectedAppointments,
+} from 'src/api';
 
+import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content';
+import FormProvider from 'src/components/hook-form/form-provider';
+
 // ----------------------------------------------------------------------
 
 export default function Doctorpage() {
   const params = useParams();
   const { id } = params;
   const { user } = useAuthContext();
-
-  const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [TimeData, setTimeData] = useState();
+  const datacheeck = useGetAppointment(TimeData).data;
+
+  const { fullWidth } = useState(false);
+  const { maxWidth } = useState('xs');
+  const dialog = useBoolean(false);
+  const { enqueueSnackbar } = useSnackbar();
+  // enqueueSnackbar("Thanks for your cooperation", { variant: 'success' });
+
+  const [currentDateTime, setCurrentDateTime] = useState();
   const patientData = user?.patient?._id;
+  // const patientEmail = user?.email;
   const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
     id,
     startDate: currentDateTime,
   });
-  const handleBook = useCallback(
-    async (pateinidd) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointment(pateinidd)}/book`,
+  const handleBook = async (pateinidd) => {
+    try {
+      await axios.patch(`${endpoints.tables.appointment(pateinidd)}/book`, {
         data: { patient: patientData },
       });
       refetch();
-    },
-    [patientData, refetch]
-  );
+      dialog.onFalse();
+      enqueueSnackbar('Appointment booked successfully', { variant: 'success' });
+    } catch (error) {
+      console.error(error.message);
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+    }
+  };
+
   const { data } = useGetEmployeeEngagement(id);
 
+  console.log(datacheeck);
   console.log(TimeData);
 
   const renderHead = (
@@ -138,38 +163,159 @@ export default function Doctorpage() {
   );
   const renderPostInput = (
     <Card sx={{ p: 3 }}>
+      <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
+        <FormProvider>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textalign: 'center',
+              margin: '20px',
+              gap: '10px',
+            }}
+          >
+            <DialogTitle>Are you sure</DialogTitle>
+            <Image
+              src={datacheeck?.unit_service?.company_logo}
+              sx={{
+                width: '60px',
+                height: '60px',
+                border: '1px solid lightgreen',
+                borderRadius: '50px',
+              }}
+            />
+            <Typography sx={{ color: 'black' }}>{datacheeck?.unit_service?.name_english}</Typography>
+          </div>
+          <DialogContent>
+            <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
+            please confirm your appointment
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={dialog.onFalse} variant="outlined" color="inherit">
+              Cancel
+            </Button>
+            <Button onClick={() => handleBook(TimeData)} variant="contained">
+              Book
+            </Button>
+          </DialogActions>
+        </FormProvider>
+      </Dialog>
+
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <StaticDatePicker
           orientation="landscape"
           disablePast
           componentsProps={{ actionBar: { actions: ['clear', 'today'] } }}
           // value={currentDateTime}
-          onChange={(e) => setCurrentDateTime(e.$d)}
+          onChange={(e) => setCurrentDateTime(e?.$d)}
         />
       </LocalizationProvider>
+    </Card>
+  );
+  const renderList = (
+    <Card sx={{ p: 3 }}>
       {appointmentsData.length > 0 ? (
         <Box>
           <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 'bold' }}>
             SELECT TIME
           </Typography>
 
-          {appointmentsData.map((time, index) => (
-            <Box key={index} sx={{ display: 'flex' }}>
-              <Box sx={{ width: '35%' }}>
-                <Button onClick={() => setTimeData(time?._id)}> {fTime(time?.start_time)} </Button>
+          <Box sx={{ display: 'flex', mt: 2 }}>
+            <Box
+              sx={{
+                width: '50%',
+                height: '50%',
+                display: 'grid',
+                gridTemplateColumns: '1fr',
+                mr: 2,
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr 1fr',
+                  mr: 2,
+                }}
+              >
+                {appointmentsData?.map((time, index) => (
+                  <Button
+                    key={index}
+                    onClick={() => setTimeData(time?._id)}
+                    sx={{ border: '1px solid lightgreen', mb: 1, ml: 0.5 }}
+                  >
+                    {fTime(time?.start_time)}{' '}
+                  </Button>
+                ))}
               </Box>
 
-              {/* <Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} /> */}
-              {/* <Box> */}
-                {/* <Button> {fTime(time?.start_time)} </Button> */}
-                {/* data */}
-              {/* </Box> */}
+              <Box>
+                {TimeData !== undefined ? (
+                  <Button variant="contained" onClick={dialog.onTrue}>
+                    Book
+                  </Button>
+                ) : (
+                  <Button disabled variant="contained" onClick={dialog.onTrue}>
+                    Book
+                  </Button>
+                )}
+              </Box>
             </Box>
-          ))}
-          <Button variant="contained" onClick={() => handleBook(TimeData)}>
-            {' '}
-            Book
-          </Button>
+            <Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />
+            <Box sx={{ ml: 2 }}>
+              {datacheeck?.price && (
+                <Typography>
+                  {' '}
+                  <Iconify width={18} icon="ion:person-sharp" />
+                  &nbsp; Doctor: {data?.employee?.first_name} {data?.employee?.family_name}
+                </Typography>
+              )}
+              {datacheeck?.appointment_type?.name_english && (
+                <Typography>
+                  {' '}
+                  <Iconify
+                    width={18}
+                    sx={{ color: 'rgb(20, 161, 255)' }}
+                    icon="streamline:online-medical-service-monitor"
+                  />
+                  &nbsp; Appointment type: {datacheeck?.appointment_type?.name_english}{' '}
+                </Typography>
+              )}
+              {datacheeck?.department?.name_english && (
+                <Typography>
+                  {' '}
+                  <Iconify width={18} icon="fxemoji:departmentstore" /> &nbsp;Department:
+                  {datacheeck?.department?.name_english}{' '}
+                </Typography>
+              )}
+              {datacheeck?.price && (
+                <Typography>
+                  {' '}
+                  <Iconify width={18} sx={{ color: 'success.main' }} icon="mdi:cash-multiple" />
+                  &nbsp; Fees: {datacheeck?.price}{' '}
+                </Typography>
+              )}
+              {datacheeck?.start_time && (
+                <Typography>
+                  {' '}
+                  <Iconify
+                    width={18}
+                    sx={{ color: 'palevioletred' }}
+                    icon="lets-icons:date-range-fill"
+                  />
+                  &nbsp; Date: {fDate(datacheeck?.start_time)}{' '}
+                </Typography>
+              )}
+              {datacheeck?.start_time && (
+                <Typography>
+                  {' '}
+                  <Iconify width={18} sx={{ color: 'warning.main' }} icon="mingcute:time-line" />
+                  &nbsp; Date: {fTime(datacheeck?.start_time)}{' '}
+                </Typography>
+              )}
+            </Box>
+          </Box>
         </Box>
       ) : (
         <EmptyContent filled title="No Available Appointments" sx={{ py: 10 }} />
@@ -202,7 +348,10 @@ export default function Doctorpage() {
       </Grid>
 
       <Grid xs={12} md={8}>
-        <Stack spacing={3}>{renderPostInput}</Stack>
+        <Stack spacing={3} mb={1}>
+          {renderPostInput}
+        </Stack>
+        <Stack spacing={3}>{renderList}</Stack>
       </Grid>
     </Grid>
   );
