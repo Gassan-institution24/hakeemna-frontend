@@ -25,7 +25,7 @@ export const navConfig = [
   {
     title: 'R&D',
     icon: <Iconify icon="solar:notebook-bold-duotone" />,
-    path: '#',
+    path: 'https://front-pi-eight.vercel.app',
     sectionId: "home"
   },
 ];
