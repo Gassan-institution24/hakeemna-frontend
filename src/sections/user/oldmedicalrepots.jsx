@@ -153,9 +153,7 @@ export default function OldMedicalReports() {
     specialty: '',
   };
 
-  const MedicalreportsnPDF = (
-    { info } // Destructure info from props
-  ) => (
+  const MedicalreportsnPDF = ( { info } ) => (
     <Document>
       <Page size="A4" style={styles.page}>
         <View>

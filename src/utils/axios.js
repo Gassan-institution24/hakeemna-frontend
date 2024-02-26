@@ -261,7 +261,7 @@ export const endpoints = {
   },
 
   // patients:{
-  //   onepatients: '/api/patient/656af6ccac70bc1aa4120dad',
+  //   onepatients: '/api/patient/',
   // },
   offers: {
     getoffers: '/api/suppliersoffers',
