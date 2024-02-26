@@ -9,7 +9,7 @@ import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import TableNewEditForm from './cities-table-new-edit-form';
+import TableNewEditForm from './cities-create-edit-one';
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +43,7 @@ export default function TableEditView() {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
+        
       />
       {data && <TableNewEditForm currentCity={data} />}
     </Container>
