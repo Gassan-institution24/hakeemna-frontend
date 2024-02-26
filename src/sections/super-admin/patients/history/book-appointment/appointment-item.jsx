@@ -97,7 +97,8 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
                 timeZone: unit_service?.country?.time_zone,
               })}
               secondary={new Date(start_time).toLocaleDateString('en-US', {
-                timeZone: unit_service?.country?.time_zone,
+                timeZone: unit_service?.country?.time_zone ||
+                  Intl.DateTimeFormat().resolvedOptions().timeZone
               })}
               primaryTypographyProps={{ typography: 'body2', noWrap: true }}
               secondaryTypographyProps={{

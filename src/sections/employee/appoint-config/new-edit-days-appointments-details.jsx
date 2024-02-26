@@ -155,7 +155,8 @@ export default function NewEditDayAppointmentsDetails({
                         const selectedTime = zonedTimeToUtc(
                           newValue,
                           user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                            ?.unit_service?.country?.time_zone
+                            ?.unit_service?.country?.time_zone ||
+                            Intl.DateTimeFormat().resolvedOptions().timeZone
                         );
                         field.onChange(selectedTime);
                       }}

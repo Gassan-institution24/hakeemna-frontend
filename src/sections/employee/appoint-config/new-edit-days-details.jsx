@@ -115,7 +115,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       let break_start = new Date(currentDay.break_start_time).getTime();
       let break_end = new Date(currentDay.break_end_time).getTime();
 
-      if (work_start > work_end) {
+      if (work_start >= work_end) {
         work_end += 24 * 60 * 60 * 1000;
       }
       if (work_start > break_start) {
@@ -243,12 +243,12 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
               sx={{ width: '100%' }}
             >
               <Stack
-                direction={{ xs: 'column', md: 'row' }}
+                direction={{ xs: 'column', md: 'column' }}
                 spacing={2}
                 sx={{ width: '100%', mt: 2 }}
               >
                 <Stack
-                  direction={{ xs: 'column', md: 'column' }}
+                  direction={{ xs: 'column', md: 'row' }}
                   spacing={2}
                   sx={{ width: '100%', mt: 2 }}
                 >
@@ -273,149 +273,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         <MenuItem value={option.value}>{option.label}</MenuItem>
                       ))}
                   </RHFSelect>
-                  <RHFTextField
-                    lang="ar"
-                    disabled
-                    size="small"
-                    name={`days_details[${index}].appointment_number`}
-                    label={t('appointments number')}
-                    InputLabelProps={{ shrink: true }}
-                    value={appointmentsNum[index] || appointEstimatedNum(index)}
-                  />
-                </Stack>
-                <Stack
-                  direction={{ xs: 'column', md: 'column' }}
-                  spacing={2}
-                  sx={{ width: '100%', mt: 2 }}
-                >
-                  <Controller
-                    name={`days_details[${index}].work_start_time`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <MobileTimePicker
-                        lang="ar"
-                        minutesStep="5"
-                        label={t('work start time')}
-                        value={myunitTime(values.days_details[index]?.work_start_time)}
-                        onChange={(newValue) => {
-                          const selectedTime = zonedTimeToUtc(
-                            newValue,
-                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                              ?.unit_service?.country?.time_zone
-                          );
-                          field.onChange(selectedTime);
-                          processDayDetails(index);
-                        }}
-                        slotProps={{
-                          textField: {
-                            size: 'small',
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                  <Controller
-                    name={`days_details[${index}].break_start_time`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <MobileTimePicker
-                        lang="ar"
-                        minutesStep="5"
-                        label={t('break start time')}
-                        value={myunitTime(values.days_details[index]?.break_start_time)}
-                        onChange={(newValue) => {
-                          const selectedTime = zonedTimeToUtc(
-                            newValue,
-                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                              ?.unit_service?.country?.time_zone
-                          );
-                          field.onChange(selectedTime);
-                          processDayDetails(index);
-                        }}
-                        slotProps={{
-                          textField: {
-                            size: 'small',
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                </Stack>
-                <Stack
-                  direction={{ xs: 'column', md: 'column' }}
-                  spacing={2}
-                  sx={{ width: '100%', mt: 2 }}
-                >
-                  <Controller
-                    name={`days_details[${index}].work_end_time`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <MobileTimePicker
-                        lang="ar"
-                        minutesStep="5"
-                        label={t('work end time')}
-                        value={myunitTime(values.days_details[index]?.work_end_time)}
-                        onChange={(newValue) => {
-                          const selectedTime = zonedTimeToUtc(
-                            newValue,
-                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                              ?.unit_service?.country?.time_zone
-                          );
-                          field.onChange(selectedTime);
-                          processDayDetails(index);
-                        }}
-                        slotProps={{
-                          textField: {
-                            size: 'small',
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                  <Controller
-                    name={`days_details[${index}].break_end_time`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <MobileTimePicker
-                        lang="ar"
-                        minutesStep="5"
-                        label={t('break end time')}
-                        value={myunitTime(values.days_details[index]?.break_end_time)}
-                        onChange={(newValue) => {
-                          const selectedTime = zonedTimeToUtc(
-                            newValue,
-                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                              ?.unit_service?.country?.time_zone
-                          );
-                          field.onChange(selectedTime);
-                          processDayDetails(index);
-                        }}
-                        slotProps={{
-                          textField: {
-                            size: 'small',
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                </Stack>
-                <Stack
-                  direction={{ xs: 'column', md: 'column' }}
-                  spacing={2}
-                  sx={{ width: '100%', mt: 2 }}
-                >
                   <RHFSelect
                     size="small"
                     InputLabelProps={{ shrink: true }}
@@ -473,9 +330,144 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                       </FormControl>
                     )}
                   />
+                  <RHFTextField
+                    lang="ar"
+                    disabled
+                    size="small"
+                    name={`days_details[${index}].appointment_number`}
+                    label={t('appointments number')}
+                    InputLabelProps={{ shrink: true }}
+                    value={appointmentsNum[index] || appointEstimatedNum(index)}
+                  />
                 </Stack>
                 <Stack
-                  direction={{ xs: 'column', md: 'column' }}
+                  direction={{ xs: 'column', md: 'row' }}
+                  spacing={2}
+                  sx={{ width: '100%', mt: 2 }}
+                >
+                  <Controller
+                    name={`days_details[${index}].work_start_time`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <MobileTimePicker
+                        lang="ar"
+                        minutesStep="5"
+                        label={t('work start time')}
+                        value={myunitTime(values.days_details[index]?.work_start_time)}
+                        onChange={(newValue) => {
+                          const selectedTime = zonedTimeToUtc(
+                            newValue,
+                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                              ?.unit_service?.country?.time_zone ||
+                              Intl.DateTimeFormat().resolvedOptions().timeZone
+                          );
+                          field.onChange(selectedTime);
+                          processDayDetails(index);
+                        }}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`days_details[${index}].work_end_time`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <MobileTimePicker
+                        lang="ar"
+                        minutesStep="5"
+                        label={t('work end time')}
+                        value={myunitTime(values.days_details[index]?.work_end_time)}
+                        onChange={(newValue) => {
+                          const selectedTime = zonedTimeToUtc(
+                            newValue,
+                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                              ?.unit_service?.country?.time_zone ||
+                              Intl.DateTimeFormat().resolvedOptions().timeZone
+                          );
+                          field.onChange(selectedTime);
+                          processDayDetails(index);
+                        }}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`days_details[${index}].break_start_time`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <MobileTimePicker
+                        lang="ar"
+                        minutesStep="5"
+                        label={t('break start time')}
+                        value={myunitTime(values.days_details[index]?.break_start_time)}
+                        onChange={(newValue) => {
+                          const selectedTime = zonedTimeToUtc(
+                            newValue,
+                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                              ?.unit_service?.country?.time_zone ||
+                              Intl.DateTimeFormat().resolvedOptions().timeZone
+                          );
+                          field.onChange(selectedTime);
+                          processDayDetails(index);
+                        }}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`days_details[${index}].break_end_time`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <MobileTimePicker
+                        lang="ar"
+                        minutesStep="5"
+                        label={t('break end time')}
+                        value={myunitTime(values.days_details[index]?.break_end_time)}
+                        onChange={(newValue) => {
+                          const selectedTime = zonedTimeToUtc(
+                            newValue,
+                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                              ?.unit_service?.country?.time_zone ||
+                              Intl.DateTimeFormat().resolvedOptions().timeZone
+                          );
+                          field.onChange(selectedTime);
+                          processDayDetails(index);
+                        }}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </Stack>
+                <Stack
+                  direction={{ xs: 'column', md: 'row' }}
                   spacing={0.2}
                   sx={{ justifySelf: { xs: 'flex-end' }, alignSelf: { xs: 'flex-end' } }}
                 >
