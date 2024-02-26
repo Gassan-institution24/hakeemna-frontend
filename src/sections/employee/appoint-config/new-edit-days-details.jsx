@@ -121,7 +121,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       if (work_start > break_start) {
         break_start += 24 * 60 * 60 * 1000;
       }
-      if (work_start > break_end) {
+      if (break_start > break_end) {
         break_end += 24 * 60 * 60 * 1000;
       }
       let curr_start = work_start;
@@ -362,6 +362,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                               Intl.DateTimeFormat().resolvedOptions().timeZone
                           );
                           field.onChange(selectedTime);
+                          setValue(`days_details[${index}].work_end_time`, null);
                           processDayDetails(index);
                         }}
                         slotProps={{
@@ -421,6 +422,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                               ?.unit_service?.country?.time_zone ||
                               Intl.DateTimeFormat().resolvedOptions().timeZone
                           );
+                          setValue(`days_details[${index}].break_end_time`, null);
                           field.onChange(selectedTime);
                           processDayDetails(index);
                         }}
