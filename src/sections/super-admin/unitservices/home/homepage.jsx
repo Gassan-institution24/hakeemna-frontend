@@ -20,7 +20,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate } from 'src/locales';
+// import { useTranslate } from 'src/locales';
 import { useGetUnitservices } from 'src/api';
 
 import Label from 'src/components/label';
@@ -81,7 +81,7 @@ export default function UnitServicesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
 
   const componentRef = useRef();
 

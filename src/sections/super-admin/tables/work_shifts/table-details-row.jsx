@@ -7,11 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fTime, fDateTime } from 'src/utils/format-time';
-
-import { useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -45,13 +41,8 @@ export default function TableDetailsRow({
     modifications_nums,
   } = row;
 
-  const { t } = useTranslate();
-
-  const confirm = useBoolean();
-
   const popover = usePopover();
   const DDL = usePopover();
-  const details = usePopover();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>

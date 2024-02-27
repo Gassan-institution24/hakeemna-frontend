@@ -44,8 +44,6 @@ import {
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
-import { useTranslate } from 'src/locales';
-
 import OfferTableRow from './offer-row'; /// edit
 import FeedbackToolbar from './offers-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
@@ -117,8 +115,6 @@ export default function StakeholderOffersView({ stakeholderData }) {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
-  const { t } = useTranslate();
 
   const denseHeight = table.dense ? 52 : 72;
 

@@ -13,7 +13,7 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 
@@ -27,8 +27,6 @@ export default function TablesTableToolbar({
   onResetFilters,
 }) {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   const handleFilterName = useCallback(
     (event) => {

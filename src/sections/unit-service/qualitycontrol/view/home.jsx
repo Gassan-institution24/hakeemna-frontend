@@ -13,9 +13,6 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useGetUSFeedbackes } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
@@ -75,11 +72,6 @@ export default function UnitServicesFeedbackView() {
   const componentRef = useRef();
 
   const settings = useSettingsContext();
-
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
-  const router = useRouter();
 
   const { feedbackData, loading } = useGetUSFeedbackes(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id

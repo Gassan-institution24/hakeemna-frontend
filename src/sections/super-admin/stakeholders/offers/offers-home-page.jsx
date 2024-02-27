@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
+// import { useState, useCallback } from 'react';
 
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
+// import Tab from '@mui/material/Tab';
+// import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
 
@@ -13,38 +13,36 @@ import { useTranslate } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import OffersView from './offers-table';
+// import OffersView from './offers-table';
 
 // ----------------------------------------------------------------------
 
 export default function StakeholderOffersView({ stakeholderData }) {
-  const theme = useTheme();
-
   const { t } = useTranslate();
 
   const settings = useSettingsContext();
 
-  const [currentTab, setCurrentTab] = useState('Offers');
+  // const [currentTab, setCurrentTab] = useState('Offers');
 
-  const handleChangeTab = useCallback((event, newValue) => {
-    setCurrentTab(newValue);
-  }, []);
+  // const handleChangeTab = useCallback((event, newValue) => {
+  //   setCurrentTab(newValue);
+  // }, []);
 
-  const OffersTabsList = ['Offers', 'Taken Offers'];
+  // const OffersTabsList = ['Offers', 'Taken Offers'];
 
-  const renderTabs = (
-    <Tabs
-      value={currentTab}
-      onChange={handleChangeTab}
-      sx={{
-        mb: { xs: 3, md: 5 },
-      }}
-    >
-      {OffersTabsList.map((tab, idx) => (
-        <Tab key={idx} iconPosition="end" value={tab} label={tab} />
-      ))}
-    </Tabs>
-  );
+  // const renderTabs = (
+  //   <Tabs
+  //     value={currentTab}
+  //     onChange={handleChangeTab}
+  //     sx={{
+  //       mb: { xs: 3, md: 5 },
+  //     }}
+  //   >
+  //     {OffersTabsList.map((tab, idx) => (
+  //       <Tab key={idx} iconPosition="end" value={tab} label={tab} />
+  //     ))}
+  //   </Tabs>
+  // );
   const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -70,7 +68,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
 
       {/* {renderTabs} */}
 
-      {currentTab === 'Offers' && <OffersView stakeholderData={stakeholderData} />}
+      {/* {currentTab === 'Offers' && <OffersView stakeholderData={stakeholderData} />} */}
       {/* {currentTab === 'Invoices' && <EconomicMovementsView stakeholderData={stakeholderData} />}
       {currentTab === 'Payment Control' && <PaymentControlView stakeholderData={stakeholderData} />} */}
 

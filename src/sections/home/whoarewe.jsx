@@ -56,13 +56,17 @@ export default function whoAreWe() {
         }}
       >
         <m.div variants={varFade().inUp}>
-          <Typography component="div" variant="overline" sx={{ color: 'text.disabled',  textalign: 'center', }} >
+          <Typography
+            component="div"
+            variant="overline"
+            sx={{ color: 'text.disabled', textalign: 'center' }}
+          >
             Doctona Online
           </Typography>
         </m.div>
 
         <m.div variants={varFade().inDown}>
-          <Typography  variant="h2">Who are we ?</Typography>
+          <Typography variant="h2">Who are we ?</Typography>
         </m.div>
       </Stack>
 
@@ -76,7 +80,7 @@ export default function whoAreWe() {
         }}
       >
         {CARDS.map((card, index) => (
-          <m.div variants={varFade().inUp} key={card.title} >
+          <m.div variants={varFade().inUp} key={card.title}>
             <Card
               sx={{
                 textalign: 'center',

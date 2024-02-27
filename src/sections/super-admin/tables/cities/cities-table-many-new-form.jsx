@@ -1,23 +1,23 @@
 import * as XLSX from 'xlsx';
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import {
-  Checkbox,
-  MenuItem,
-  Select,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
+import {
+  Table,
+  Select,
+  Checkbox,
+  MenuItem,
+  TableRow,
+  TableBody,
+  TableCell,
+  TextField,
+  Typography,
+  TableContainer,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -26,11 +26,10 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetCountries } from 'src/api';
 
-import { useSnackbar } from 'src/components/snackbar';
-
-import { TableHeadCustom, TableSelectedAction, useTable } from 'src/components/table';
-import Scrollbar from 'src/components/scrollbar';
 import { Upload } from 'src/components/upload';
+import Scrollbar from 'src/components/scrollbar';
+import { useSnackbar } from 'src/components/snackbar';
+import { useTable, TableHeadCustom, TableSelectedAction } from 'src/components/table';
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
@@ -94,19 +93,17 @@ export default function CitiesNewEditForm() {
 
   const handleDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
-    console.log('file', file);
 
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const data = e.target.result;
         const workbook = XLSX.read(data, { type: 'binary' });
-        console.log('workbook', workbook);
+
         const workSheets = workbook.Sheets[workbook.SheetNames[0]];
-        console.log('workSheets', workSheets);
+
         const jsonData = XLSX.utils.sheet_to_json(workSheets);
         setCities(jsonData);
-        console.log('jsonData', jsonData);
       };
       reader.readAsBinaryString(file);
     }
@@ -155,7 +152,7 @@ export default function CitiesNewEditForm() {
                     <Typography sx={{ fontSize: 14, fontWeight: 600, pr: 1 }}>Country:</Typography>
                     <Select
                       variant="filled"
-                      sx={{ width: '20%' }}
+                      sx={{ width: '20%', border: '1px solid gray' }}
                       size="small"
                       name="country"
                       label="country"

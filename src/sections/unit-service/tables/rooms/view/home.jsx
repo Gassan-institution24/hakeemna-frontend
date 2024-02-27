@@ -46,9 +46,9 @@ import { useSnackbar } from 'notistack';
 
 import axiosHandler from 'src/utils/axios-handler';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
-import { useLocales, useTranslate } from 'src/locales';
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -68,8 +68,8 @@ const defaultFilters = {
 
 export default function RoomsTableView() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
 
   const { enqueueSnackbar } = useSnackbar();
 

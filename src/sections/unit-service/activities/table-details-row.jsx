@@ -29,7 +29,6 @@ export default function TableDetailsRow({
   setFilters,
 }) {
   const {
-    code,
     name_english,
     name_arabic,
     sequence_number,

@@ -3,36 +3,19 @@ import { saveAs } from 'file-saver';
 import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useCallback } from 'react';
 
-// import Tab from '@mui/material/Tab';
-// import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-// import Button from '@mui/material/Button';
-// import Tooltip from '@mui/material/Tooltip';
-// import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-// import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-// import { useRouter } from 'src/routes/hooks';
-// import { RouterLink } from 'src/routes/components';
-
-// import { useBoolean } from 'src/hooks/use-boolean';
-
-// import { endpoints } from 'src/utils/axios';
-// import axiosHandler from 'src/utils/axios-handler';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeWorkGroups } from 'src/api';
-// import { useAclGuard } from 'src/auth/guard/acl-guard';
 
-// import Label from 'src/components/label';
-// import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-// import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -43,12 +26,8 @@ import {
   getComparator,
   TableEmptyRows,
   TableHeadCustom,
-  //   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-// import { useSnackbar } from 'notistack';
-
-import { StatusOptions } from 'src/assets/data/status-options';
 
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -79,8 +58,6 @@ export default function WorkGroupsTableView() {
 
   const { user } = useAuthContext();
 
-  const { STATUS_OPTIONS } = StatusOptions();
-
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -92,7 +69,7 @@ export default function WorkGroupsTableView() {
   //   const confirmActivate = useBoolean();
   //   const confirmInactivate = useBoolean();
 
-  const { workGroupsData, loading, refetch } = useGetEmployeeWorkGroups(
+  const { workGroupsData, loading } = useGetEmployeeWorkGroups(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
   );
 
@@ -155,371 +132,103 @@ export default function WorkGroupsTableView() {
     [table]
   );
 
-  //   const handleActivate = useCallback(
-  //     async (row) => {
-  //       try {
-  //         await axiosHandler({
-  //           method: 'PATCH',
-  //           path: `${endpoints.tables.workgroup(row._id)}/updatestatus`, /// edit
-  //           data: { status: 'active' },
-  //         });
-  //         socket.emit('updated', {
-  //           user,
-  //           link: paths.unitservice.tables.workgroups.root,
-  //           msg: `activated a work group <strong>${row.name_english}</strong>`,
-  //         });
-  //       } catch (error) {
-  //         socket.emit('error', { error, user, location: window.location.pathname });
-  //         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
-  //         console.error(error);
-  //       }
-  //       refetch();
-  //       table.onUpdatePageDeleteRow(dataInPage.length);
-  //     },
-  //     [dataInPage.length, table, refetch, user, enqueueSnackbar]
-  //   );
-  //   const handleInactivate = useCallback(
-  //     async (row) => {
-  //       try {
-  //         await axiosHandler({
-  //           method: 'PATCH',
-  //           path: `${endpoints.tables.workgroup(row._id)}/updatestatus`, /// edit
-  //           data: { status: 'inactive' },
-  //         });
-  //         socket.emit('updated', {
-  //           user,
-  //           link: paths.unitservice.tables.workgroups.root,
-  //           msg: `inactivated a work group <strong>${row.name_english}</strong>`,
-  //         });
-  //       } catch (error) {
-  //         socket.emit('error', { error, user, location: window.location.pathname });
-  //         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
-  //         console.error(error);
-  //       }
-  //       refetch();
-  //       table.onUpdatePageDeleteRow(dataInPage.length);
-  //     },
-  //     [dataInPage.length, table, refetch, user, enqueueSnackbar]
-  //   );
-
-  //   const handleActivateRows = useCallback(async () => {
-  //     try {
-  //       await axiosHandler({
-  //         method: 'PATCH',
-  //         path: `${endpoints.tables.workgroups}/updatestatus`, /// edit
-  //         data: { status: 'active', ids: table.selected },
-  //       });
-  //       socket.emit('updated', {
-  //         user,
-  //         link: paths.unitservice.tables.workgroups.root,
-  //         msg: `activated many work groups`,
-  //       });
-  //     } catch (error) {
-  //       socket.emit('error', { error, user, location: window.location.pathname });
-  //       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
-  //       console.error(error);
-  //     }
-  //     refetch();
-  //     table.onUpdatePageDeleteRows({
-  //       totalRows: workGroupsData.length,
-  //       totalRowsInPage: dataInPage.length,
-  //       totalRowsFiltered: dataFiltered.length,
-  //     });
-  //   }, [
-  //     dataFiltered.length,
-  //     dataInPage.length,
-  //     table,
-  //     workGroupsData,
-  //     refetch,
-  //     user,
-  //     enqueueSnackbar,
-  //   ]);
-
-  //   const handleInactivateRows = useCallback(async () => {
-  //     try {
-  //       await axiosHandler({
-  //         method: 'PATCH',
-  //         path: `${endpoints.tables.workgroups}/updatestatus`, /// edit
-  //         data: { status: 'inactive', ids: table.selected },
-  //       });
-  //       socket.emit('updated', {
-  //         user,
-  //         link: paths.unitservice.tables.workgroups.root,
-  //         msg: `inactivated many work groups`,
-  //       });
-  //     } catch (error) {
-  //       socket.emit('error', { error, user, location: window.location.pathname });
-  //       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
-  //       console.error(error);
-  //     }
-  //     refetch();
-  //     table.onUpdatePageDeleteRows({
-  //       totalRows: workGroupsData.length,
-  //       totalRowsInPage: dataInPage.length,
-  //       totalRowsFiltered: dataFiltered.length,
-  //     });
-  //   }, [
-  //     dataFiltered.length,
-  //     dataInPage.length,
-  //     table,
-  //     workGroupsData,
-  //     refetch,
-  //     user,
-  //     enqueueSnackbar,
-  //   ]);
-
-  //   const handleEditRow = useCallback(
-  //     (id) => {
-  //       router.push(paths.unitservice.tables.workgroups.edit(id));
-  //     },
-  //     [router]
-  //   );
-
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
-
-  // const handleViewRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.order.details(id));
-  //   },
-  //   [router]
-  // );
-
-  //   const handleFilterStatus = useCallback(
-  //     (event, newValue) => {
-  //       handleFilters('status', newValue);
-  //     },
-  //     [handleFilters]
-  //   );
 
   if (loading) {
     return <LoadingScreen />;
   }
 
   return (
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading={t('work groups')} /// edit
-          links={[
-            {
-              name: t('dashboard'),
-              href: paths.unitservice.root,
-            },
-            { name: t('work groups') },
-          ]}
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <CustomBreadcrumbs
+        heading={t('work groups')} /// edit
+        links={[
+          {
+            name: t('dashboard'),
+            href: paths.unitservice.root,
+          },
+          { name: t('work groups') },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
+
+      <Card>
+        <TableDetailToolbar
+          onPrint={printHandler}
+          filters={filters}
+          onFilters={handleFilters}
+          onDownload={handleDownload}
+          //
+          canReset={canReset}
+          onResetFilters={handleResetFilters}
         />
 
-        <Card>
-          {/* <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    lang="ar"
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === 'active' && 'success') ||
-                      (tab.value === 'inactive' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {tab.value === 'all' && workGroupsData.length}
-                    {tab.value === 'active' &&
-                      workGroupsData.filter((order) => order.status === 'active').length}
-                    {tab.value === 'inactive' &&
-                      workGroupsData.filter((order) => order.status === 'inactive').length}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs> */}
-
-          <TableDetailToolbar
-            onPrint={printHandler}
+        {canReset && (
+          <TableDetailFiltersResult
             filters={filters}
             onFilters={handleFilters}
-            onDownload={handleDownload}
             //
-            canReset={canReset}
             onResetFilters={handleResetFilters}
+            //
+            results={dataFiltered.length}
+            sx={{ p: 2.5, pt: 0 }}
           />
+        )}
 
-          {canReset && (
-            <TableDetailFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
+        <TableContainer>
+          <Scrollbar>
+            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={dataFiltered.length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+              />
 
-          <TableContainer>
-            {/* <TableSelectedAction
-              // dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={dataFiltered.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  dataFiltered.map((row) => row._id)
-                )
-              }
-              action={
-                checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
-                  <>
-                    {dataFiltered
-                      .filter((row) => table.selected.includes(row._id))
-                      .some((data) => data.status === 'inactive') ? (
-                      <Tooltip title="Activate all">
-                        <IconButton color="primary" onClick={confirmActivate.onTrue}>
-                          <Iconify icon="codicon:run-all" />
-                        </IconButton>
-                      </Tooltip>
-                    ) : (
-                      <Tooltip title="Inactivate all">
-                        <IconButton color="error" onClick={confirmInactivate.onTrue}>
-                          <Iconify icon="iconoir:pause-solid" />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  </>
-                )
-              }
-              color={
-                checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'inactive')
-                  ? 'primary'
-                  : 'error'
-              }
-            /> */}
+              <TableBody>
+                {dataFiltered
+                  .slice(
+                    table.page * table.rowsPerPage,
+                    table.page * table.rowsPerPage + table.rowsPerPage
+                  )
+                  .map((row) => (
+                    <TableDetailRow
+                      key={row._id}
+                      row={row}
+                      selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                    />
+                  ))}
 
-            <Scrollbar>
-              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  //   onSelectAllRows={(checked) =>
-                  //     table.onSelectAllRows(
-                  //       checked,
-                  //       dataFiltered.map((row) => row._id)
-                  //     )
-                  //   }
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, workGroupsData.length)}
                 />
 
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row) => (
-                      <TableDetailRow
-                        key={row._id}
-                        row={row}
-                        selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        // onActivate={() => handleActivate(row)}
-                        // onInactivate={() => handleInactivate(row)}
-                        // onEditRow={() => handleEditRow(row._id)}
-                      />
-                    ))}
+                <TableNoData notFound={notFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
 
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, workGroupsData.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
-          />
-        </Card>
-      </Container>
-
-      {/* <ConfirmDialog
-        open={confirmInactivate.value}
-        onClose={confirmInactivate.onFalse}
-        title="Inactivate"
-        content={
-          <>
-            Are you sure want to Inactivate <strong> {table.selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleInactivateRows();
-              confirmInactivate.onFalse();
-            }}
-          >
-            Inactivate
-          </Button>
-        }
-      />
-      <ConfirmDialog
-        open={confirmActivate.value}
-        onClose={confirmActivate.onFalse}
-        title="Activate"
-        content={
-          <>
-            Are you sure want to Activate <strong> {table.selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              handleActivateRows();
-              confirmActivate.onFalse();
-            }}
-          >
-            Activate
-          </Button>
-        }
-      /> */}
-    </>
+        <TablePaginationCustom
+          count={dataFiltered.length}
+          page={table.page}
+          rowsPerPage={table.rowsPerPage}
+          onPageChange={table.onChangePage}
+          onRowsPerPageChange={table.onChangeRowsPerPage}
+          //
+          dense={table.dense}
+          onChangeDense={table.onChangeDense}
+        />
+      </Card>
+    </Container>
   );
 }
 
@@ -560,10 +269,6 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
             (employee) =>
               employee.employee.family_name.toLowerCase().indexOf(name.toLowerCase()) !== -1
           )) ||
-        // (data?.employees &&
-        //   data?.employees?.some((employee) =>
-        //     employee.employee.name_arabic.toLowerCase().indexOf(name.toLowerCase())
-        //    !== -1))||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

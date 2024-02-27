@@ -16,8 +16,6 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useTranslate } from 'src/locales';
-
 // import { useBoolean } from 'src/hooks/use-boolean';
 
 import * as XLSX from 'xlsx';
@@ -50,11 +48,11 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'all' },
-  { value: 'active', label: 'active' },
-  { value: 'inactive', label: 'inactive' },
-];
+// const STATUS_OPTIONS = [
+//   { value: 'all', label: 'all' },
+//   { value: 'active', label: 'active' },
+//   { value: 'inactive', label: 'inactive' },
+// ];
 
 const TABLE_HEAD = [
   /// edit
@@ -80,8 +78,6 @@ const defaultFilters = {
 
 export default function SpecialtiesTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
-
-  const { t } = useTranslate();
 
   const componentRef = useRef();
 

@@ -21,8 +21,6 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useTranslate } from 'src/locales';
-
 //
 
 import { useGetSubSpecialties } from 'src/api';
@@ -51,11 +49,11 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'all' },
-  { value: 'active', label: 'active' },
-  { value: 'inactive', label: 'inactive' },
-];
+// const STATUS_OPTIONS = [
+//   { value: 'all', label: 'all' },
+//   { value: 'active', label: 'active' },
+//   { value: 'inactive', label: 'inactive' },
+// ];
 
 const TABLE_HEAD = [
   /// edit
@@ -83,8 +81,6 @@ const defaultFilters = {
 export default function SubSpecialtiesTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { t } = useTranslate();
-
   const componentRef = useRef();
 
   const settings = useSettingsContext();
@@ -110,10 +106,6 @@ export default function SubSpecialtiesTableView() {
     dateError,
   });
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 

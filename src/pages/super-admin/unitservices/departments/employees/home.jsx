@@ -11,7 +11,7 @@ import DepartmentEmployeesView from 'src/sections/super-admin/unitservices/depar
 
 export default function DepartmentEmployeesPage() {
   const params = useParams();
-  const {depid} = params;
+  const { depid } = params;
   const { data } = useGetDepartment(depid);
   const name = data?.first_name;
   return (

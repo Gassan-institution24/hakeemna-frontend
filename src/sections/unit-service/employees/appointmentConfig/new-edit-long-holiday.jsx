@@ -20,7 +20,7 @@ export default function NewEditLongHolidays() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { control, setValue, watch, resetField, getValues } = useFormContext();
+  const { control, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -59,7 +59,7 @@ export default function NewEditLongHolidays() {
         >
           {fields.map((item, index) => (
             <Stack
-              key={item.id}
+              key={index}
               alignItems="flex-start"
               spacing={1.5}
               sx={{ width: { xs: '100%', md: 'auto' } }}

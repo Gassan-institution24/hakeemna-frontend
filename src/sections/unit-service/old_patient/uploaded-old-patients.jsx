@@ -33,9 +33,7 @@ export default function UploadedOldPatients({ oldPatients }) {
     // { id: '', width: 88 },
   ];
 
-
   const table = useTable({ defaultRowsPerPage: 10 });
-
 
   const theme = useTheme();
 
@@ -85,13 +83,15 @@ export default function UploadedOldPatients({ oldPatients }) {
         />
 
         <TableBody>
-          {oldPatients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row,index) => (
-            <ExistEmployeesRow
-              key={index}
-              row={row}
-              // onEmploymentRow={() => handleEmployment(row._id)}
-            />
-          ))}
+          {oldPatients
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row, index) => (
+              <ExistEmployeesRow
+                key={index}
+                row={row}
+                // onEmploymentRow={() => handleEmployment(row._id)}
+              />
+            ))}
 
           <TableNoData
             notFound={oldPatients.length === 0}

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
+import { zonedTimeToUtc } from 'date-fns-tz';
 
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,14 +9,14 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { useUnitTime } from 'src/utils/format-time';
+
 import { useTranslate } from 'src/locales';
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useAuthContext } from 'src/auth/hooks';
-import { zonedTimeToUtc } from 'date-fns-tz';
-import { useUnitTime } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +26,6 @@ export default function ConfigTableToolbar({
   onAdd,
   //
   dateError,
-  serviceOptions,
 }) {
   const { t } = useTranslate();
   const popover = usePopover();
@@ -37,13 +37,6 @@ export default function ConfigTableToolbar({
   const handleFilterName = useCallback(
     (event) => {
       onFilters('name', event.target.value);
-    },
-    [onFilters]
-  );
-
-  const handleFilterService = useCallback(
-    (event) => {
-      onFilters('types', event);
     },
     [onFilters]
   );
@@ -175,5 +168,4 @@ ConfigTableToolbar.propTypes = {
   filters: PropTypes.object,
   onFilters: PropTypes.func,
   onAdd: PropTypes.func,
-  serviceOptions: PropTypes.array,
 };

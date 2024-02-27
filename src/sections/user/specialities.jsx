@@ -19,22 +19,25 @@ export default function Specialities() {
 
   return (
     <>
-    <Typography variant='h3'  mb={10} sx={{
-       ml: {
-        xs: 0,
-        sm: 6,
-        md: 14,
-      },
-       width: {
-        xs: 400,
-        sm: 700,
-        md: 700,
-      },
- 
-    }}>
-    What medical specialty are you looking for?
-    {/* ما هو التخصص الطبي الذي تبحث عنه */}
-    </Typography>
+      <Typography
+        variant="h3"
+        mb={10}
+        sx={{
+          ml: {
+            xs: 0,
+            sm: 6,
+            md: 14,
+          },
+          width: {
+            xs: 400,
+            sm: 700,
+            md: 700,
+          },
+        }}
+      >
+        What medical specialty are you looking for?
+        {/* ما هو التخصص الطبي الذي تبحث عنه */}
+      </Typography>
       <Box
         gap={{
           xs: 0,

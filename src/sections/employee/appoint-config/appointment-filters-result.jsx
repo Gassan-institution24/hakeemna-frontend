@@ -27,11 +27,6 @@ export default function InvoiceTableFiltersResult({
   const { t } = useTranslate();
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
-  const handleRemoveService = (inputValue) => {
-    const newValue = filters.types.filter((item) => item !== inputValue);
-    onFilters('types', newValue);
-  };
-
   const handleRemoveStatus = () => {
     onFilters('status', 'all');
   };

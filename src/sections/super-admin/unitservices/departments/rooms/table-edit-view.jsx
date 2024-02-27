@@ -2,8 +2,6 @@ import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';
 
-import { useTranslate } from 'src/locales';
-
 import { useSettingsContext } from 'src/components/settings';
 
 import TableNewEditForm from './table-new-edit-form';
@@ -12,7 +10,6 @@ import TableNewEditForm from './table-new-edit-form';
 
 export default function TableEditView({ roomData, departmentData }) {
   const settings = useSettingsContext();
-  const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       {/* <CustomBreadcrumbs

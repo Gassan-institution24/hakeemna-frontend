@@ -1,6 +1,6 @@
 import { format, getTime, formatDistanceToNow } from 'date-fns';
+
 import { useAuthContext } from 'src/auth/hooks';
-import { formatInTimeZone } from 'date-fns-tz';
 
 // ----------------------------------------------------------------------
 

@@ -81,12 +81,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const {
-    reset,
-    setValue,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+  const { reset, setValue, handleSubmit } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {

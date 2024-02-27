@@ -153,7 +153,7 @@ export default function OldMedicalReports() {
     specialty: '',
   };
 
-  const MedicalreportsnPDF = ( { info } ) => (
+  const MedicalreportsnPDF = ({ info }) => (
     <Document>
       <Page size="A4" style={styles.page}>
         <View>

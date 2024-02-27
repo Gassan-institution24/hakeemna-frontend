@@ -22,7 +22,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useTranslate } from 'src/locales';
 import { useGetUSEmployees } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
@@ -82,8 +81,6 @@ export default function EmployeesTableView() {
   const { id } = useParams();
 
   const { enqueueSnackbar } = useSnackbar();
-
-  const checkAcl = useAclGuard();
 
   const { STATUS_OPTIONS } = StatusOptions();
   /// edit

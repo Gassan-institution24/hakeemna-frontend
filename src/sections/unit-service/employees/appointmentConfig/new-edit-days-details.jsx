@@ -41,7 +41,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     { value: 'friday', label: t('Friday') },
   ];
 
-  const { control, setValue, watch, resetField, getValues } = useFormContext();
+  const { control, setValue, watch, getValues } = useFormContext();
 
   const [values, setValues] = useState(getValues());
 
@@ -245,7 +245,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   const renderValues = (selectedIds) => {
     const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item?._id));
-    const results = [];
     return selectedItems
       ?.map(
         (item) => item?.name_english

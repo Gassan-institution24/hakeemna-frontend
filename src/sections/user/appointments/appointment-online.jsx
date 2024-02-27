@@ -5,7 +5,6 @@ import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetUSFeedbackes, useGetUSAvailableAppointments } from 'src/api';
 
-
 const AppointmentOnline = ({ Units, onBook, onView }) => {
   const { t } = useTranslate();
   const { appointmentsData, refetch } = useGetUSAvailableAppointments(Units._id);
@@ -146,7 +145,7 @@ const AppointmentOnline = ({ Units, onBook, onView }) => {
   //             </React.Fragment>
   //           ))}
   //           {feedbackData.length && (
-  //             <Link onClick={toggleFeedbackDisplay} variant="outlined"> 
+  //             <Link onClick={toggleFeedbackDisplay} variant="outlined">
   //               {showAllFeedback ? 'Hide' : 'Show All'}
   //             </Link>
   //           )}

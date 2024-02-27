@@ -30,10 +30,8 @@ export default function UnitServiceEmployeesRow({
   onViewRow,
 }) {
   const {
-    code,
     sequence_number,
     employee,
-    Adjust_schedule,
     status,
     created_at,
     user_creation,

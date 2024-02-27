@@ -18,10 +18,8 @@ export default function USAccountingCreateView({ unitServiceData }) {
   const settings = useSettingsContext();
 
   const { t } = useTranslate();
-
-  const unitServiceName = unitServiceData?.name_english || 'Unit Service';
   const params = useParams();
-  const { id,depid } = params;
+  const { id } = params;
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

@@ -54,7 +54,11 @@ export default function NavList({ data }) {
         title={data.title}
         path={data.path}
         //
-        onClick = {() => document.getElementById(data.sectionId).scrollIntoView({behavior:'smooth', block:'start'})}
+        onClick={() =>
+          document
+            .getElementById(data.sectionId)
+            .scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
         hasChild={!!data.children}
         externalLink={data.path.includes('http')}
         //
@@ -136,12 +140,12 @@ function NavSubList({ data, subheader, sx, ...other }) {
         {subheader}
       </ListSubheader>
 
-      {data.map((item) =>
+      {data.map((item, index) =>
         dashboard ? (
-          <NavItemDashboard key={item.title} path={item.path} />
+          <NavItemDashboard key={index} path={item.path} />
         ) : (
           <NavItem
-            key={item.title}
+            key={index}
             title={item.title}
             path={item.path}
             active={pathname === item.path || pathname === `${item.path}/`}

@@ -16,7 +16,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
 import { paths } from 'src/routes/paths';
-import { useParams, useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -26,17 +25,13 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetCities, useGetCountries } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import { usePopover } from 'src/components/custom-popover';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function BookAppointmentManually({ refetch, appointment, onClose, ...other }) {
-  const router = useRouter();
-  const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
-  const { id } = useParams();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -90,13 +85,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const {
-    reset,
-    setValue,
-    getValues,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+  const { reset, setValue, handleSubmit } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {

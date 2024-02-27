@@ -46,9 +46,9 @@ export default function CalendarFiltersResult({
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
         {!!filters.colors.length && (
           <Block label="Colors:">
-            {filters.colors.map((item) => (
+            {filters.colors.map((item, index) => (
               <Chip
-                key={item}
+                key={index}
                 size="small"
                 label={
                   <Box

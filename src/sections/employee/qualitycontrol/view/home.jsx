@@ -13,9 +13,6 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeFeedbackes } from 'src/api';
@@ -75,11 +72,6 @@ export default function DepartmentFeedbackView() {
   // console.log('user', user);
 
   const settings = useSettingsContext();
-
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
-  const router = useRouter();
 
   const { feedbackData, loading } = useGetEmployeeFeedbackes(user?.employee?._id);
 

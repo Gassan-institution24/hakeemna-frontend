@@ -46,11 +46,6 @@ export default function TourListView() {
 
   const [sortBy, setSortBy] = useState('latest');
 
-  const [search, setSearch] = useState({
-    query: '',
-    results: [],
-  });
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =

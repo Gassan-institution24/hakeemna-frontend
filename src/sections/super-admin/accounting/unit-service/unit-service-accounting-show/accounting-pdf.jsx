@@ -88,37 +88,16 @@ export default function InvoicePDF({ invoice, currentStatus }) {
   const {
     code,
     unit_service,
-    employee,
-    appointment,
+
     patient,
-    work_shift,
-    insurance,
-    type,
-    details,
     Total_Amount,
     Total_tax_Amount,
     Total_deduction_amount,
     Balance,
-    Currency,
-    stakeholder,
-    Concept,
-    Payment_Method,
-    bank,
-    Provided_services,
-    user_creation,
-    created_at,
 
-    items,
-    taxes,
-    dueDate,
-    discount,
-    shipping,
-    invoiceTo,
-    createDate,
-    totalAmount,
-    invoiceFrom,
-    invoiceNumber,
-    subTotal,
+    Provided_services,
+
+    created_at,
   } = invoice;
 
   const styles = useStyles();
@@ -201,7 +180,7 @@ export default function InvoicePDF({ invoice, currentStatus }) {
 
           <View>
             {Provided_services.map((item, index) => (
-              <View style={styles.tableRow} key={item.code}>
+              <View style={styles.tableRow} key={index}>
                 <View style={styles.tableCell_1}>
                   <Text>{index + 1}</Text>
                 </View>

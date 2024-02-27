@@ -8,8 +8,6 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fDateTime } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
@@ -18,17 +16,9 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function MovementTableRow({
-  row,
-  selected,
-  onSelectRow,
-  onViewRow,
-  onEditRow,
-  onDeleteRow,
-}) {
+export default function MovementTableRow({ row, selected, onEditRow }) {
   const {
     code,
-    unit_service,
     free_subscription,
     subscription,
     Start_date,
@@ -36,8 +26,6 @@ export default function MovementTableRow({
     Users_num,
     price,
     currency,
-    Payment_method,
-    Payment_frequency,
     note,
     status,
 
@@ -49,8 +37,6 @@ export default function MovementTableRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
-
-  const confirm = useBoolean();
 
   const DDL = usePopover();
   const popover = usePopover();
@@ -210,10 +196,7 @@ export default function MovementTableRow({
 }
 
 MovementTableRow.propTypes = {
-  onDeleteRow: PropTypes.func,
   onEditRow: PropTypes.func,
-  onSelectRow: PropTypes.func,
-  onViewRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
 };

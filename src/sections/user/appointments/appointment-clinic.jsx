@@ -28,6 +28,9 @@ export default function AppointmetClinic({ onBook, onView }) {
     router.push(paths.dashboard.user.doctorpage(ids));
   };
 
+  // const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient._id));
+  // const numberOfUsers = uniqueUserIds.size;
+
   if (loading) {
     return <LoadingScreen />;
   }

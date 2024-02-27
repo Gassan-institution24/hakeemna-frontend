@@ -13,7 +13,7 @@ import DepartmentRoomNewView from 'src/sections/super-admin/unitservices/departm
 
 export default function DepartmentRoomNewPage() {
   const params = useParams();
-  const {depid} = params;
+  const { depid } = params;
   const { data, loading } = useGetDepartment(depid);
   return (
     <ACLGuard hasContent category="department" subcategory="rooms" acl="create">

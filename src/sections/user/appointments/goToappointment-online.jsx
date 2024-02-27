@@ -26,7 +26,7 @@ export default function AppointmentItem({ patientData, refetch }) {
   //   [router]
   // );
 
- const handleBook = useCallback(
+  const handleBook = useCallback(
     async (id) => {
       await axiosHandler({
         method: 'PATCH',

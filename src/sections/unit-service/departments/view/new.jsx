@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router';
 
 import Container from '@mui/material/Container';
 
@@ -18,10 +17,6 @@ export default function USAccountingCreateView({ unitServiceData }) {
   const settings = useSettingsContext();
 
   const { t } = useTranslate();
-
-  const unitServiceName = unitServiceData?.name_english || 'Unit Service';
-  const params = useParams();
-  const { id } = params;
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

@@ -56,7 +56,7 @@
 //   );
 
 //   const methods = useForm({
-    // mode: 'onTouched',
+// mode: 'onTouched',
 //     resolver: yupResolver(NewUserSchema),
 //     defaultValues,
 //   });

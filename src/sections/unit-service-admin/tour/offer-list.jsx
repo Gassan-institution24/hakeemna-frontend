@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 
@@ -14,8 +14,6 @@ import TourItem from './offer-item';
 
 export default function TourList({ offers, refetch }) {
   const router = useRouter();
-  const [status, setStatus] = useState();
-  // offers.map((info)=> setStatus(info.status))
 
   const handleView = useCallback(
     (id) => {

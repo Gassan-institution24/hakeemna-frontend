@@ -44,7 +44,6 @@ export default function TableDetailsRow({
 
   const popover = usePopover();
   const DDL = usePopover();
-  const details = usePopover();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>

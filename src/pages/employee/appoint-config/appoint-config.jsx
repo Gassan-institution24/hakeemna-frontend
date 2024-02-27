@@ -1,7 +1,5 @@
 import { Helmet } from 'react-helmet-async';
 
-import { useParams } from 'src/routes/hooks';
-
 import { useAuthContext } from 'src/auth/hooks';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { useGetEmployeeAppointmentConfigs } from 'src/api';
@@ -13,7 +11,6 @@ import EmployeeAppointconfigView from 'src/sections/employee/appoint-config/view
 // ----------------------------------------------------------------------
 
 export default function EmployeeAppointconfigPage() {
-  const params = useParams();
   const { user } = useAuthContext();
   const { appointmentConfigData, loading, refetch } = useGetEmployeeAppointmentConfigs(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
