@@ -12,16 +12,7 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) {
-  const {
-    code,
-    name_english,
-    name_arabic,
-    type,
-    status,
-    webpage,
-    phone,
-    address,
-  } = row;
+  const { code, name_english, name_arabic, type, status, webpage, phone, address } = row;
 
   const { t } = useTranslate();
 
@@ -70,11 +61,7 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
     </TableRow>
   );
 
-  return (
-    <>
-      {renderPrimary}
-    </>
-  );
+  return <>{renderPrimary}</>;
 }
 
 InsuranceRow.propTypes = {

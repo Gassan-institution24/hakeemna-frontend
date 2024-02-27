@@ -11,7 +11,7 @@ import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate} from 'src/locales';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetCities,
@@ -221,9 +221,7 @@ export default function AppointmentBooking() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, search, comparator, filters, sortBy }) {
-  const {
-    insurance,
-  } = filters;
+  const { insurance } = filters;
 
   // SORT BY
   if (sortBy === 'rateing') {
@@ -231,7 +229,7 @@ function applyFilter({ inputData, search, comparator, filters, sortBy }) {
   }
   if (insurance !== 'all') {
     inputData = inputData.filter(
-      (data) => data?.insurance && data?.insurance?.some((insur)=>insur._id === insurance)
+      (data) => data?.insurance && data?.insurance?.some((insur) => insur._id === insurance)
     );
   }
 

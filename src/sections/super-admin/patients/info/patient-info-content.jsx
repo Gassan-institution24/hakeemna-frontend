@@ -45,7 +45,6 @@ export default function PatientInfoContent({ patientData }) {
     status,
   } = patientData;
 
-
   // const MDData = (
   //   <div>
   //     <h6>drug_allergies</h6>

@@ -16,11 +16,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function MovementTableRow({
-  row,
-  selected,
-  onEditRow,
-}) {
+export default function MovementTableRow({ row, selected, onEditRow }) {
   const {
     code,
     free_subscription,

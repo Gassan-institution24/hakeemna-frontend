@@ -201,10 +201,10 @@ export default function JobFilters({
         insurance
       </Typography>
       <select onChange={handleFiltedInsurance} name="insurance" label="insurance">
-        {insuranseCosData?.map((info) => (
+        {insuranseCosData?.map((info, index) => (
           <>
             <option />
-            <option key={info._id} value={info._id}>
+            <option key={index} value={info._id}>
               {info?.name_english}
             </option>
           </>

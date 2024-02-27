@@ -13,7 +13,7 @@ import DepartmentActivityNewView from 'src/sections/super-admin/unitservices/dep
 
 export default function DepartmentActivityNewPage() {
   const params = useParams();
-  const {depid} = params;
+  const { depid } = params;
   const { data, loading } = useGetDepartment(depid);
   return (
     <ACLGuard hasContent category="department" subcategory="activities" acl="create">

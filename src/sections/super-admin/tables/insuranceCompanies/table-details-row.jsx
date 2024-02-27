@@ -44,7 +44,6 @@ export default function TableDetailsRow({
     modifications_nums,
   } = row;
 
-
   const DDL = usePopover();
   const popover = usePopover();
 

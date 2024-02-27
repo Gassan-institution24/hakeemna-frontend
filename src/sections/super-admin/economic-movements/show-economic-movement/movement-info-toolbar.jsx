@@ -13,7 +13,6 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function MovementToolbar({ backLink, editLink, ...other }) {
-
   return (
     <Stack
       spacing={1.5}

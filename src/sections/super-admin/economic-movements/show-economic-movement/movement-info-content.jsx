@@ -308,10 +308,10 @@ export default function MovementInfoContent({ economicMovementData }) {
           value: mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
-      ].map((item) => (
+      ].map((item, index) => (
         <>
           {item.value && (
-            <Stack key={item.label} spacing={1.5}>
+            <Stack key={index} spacing={1.5}>
               {/* {item.icon} */}
               <ListItemText
                 primary={item.label}

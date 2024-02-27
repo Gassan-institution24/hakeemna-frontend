@@ -15,7 +15,6 @@ import SearchNotFound from 'src/components/search-not-found';
 // ----------------------------------------------------------------------
 
 export default function AppointmentSearch({ query, results, onSearch, hrefItem }) {
-
   // const handleKeyUp = (event) => {
   //   if (query) {
   //     if (event.key === 'Enter') {

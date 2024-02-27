@@ -49,7 +49,6 @@ export default function CountriesTableRow({
     modifications_nums,
   } = row;
 
-
   const popover = usePopover();
   const DDL = usePopover();
   const details = usePopover();

@@ -42,7 +42,7 @@ export default function AppointmentToolbar({
   );
 
   const popover = usePopover();
-  
+
   const handleFilterTypes = useCallback(
     (event) => {
       onFilters('types', event.target.value);

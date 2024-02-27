@@ -257,14 +257,7 @@ export default function AppointmentListView({ patientData }) {
 // ----------------------------------------------------------------------
 
 const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
-  const {
-    appointtypes,
-    payment_methods,
-    start_date,
-    end_date,
-    unitServices,
-    countries,
-  } = filters;
+  const { appointtypes, payment_methods, start_date, end_date, unitServices, countries } = filters;
 
   // SORT BY
   if (sortBy === 'latest') {

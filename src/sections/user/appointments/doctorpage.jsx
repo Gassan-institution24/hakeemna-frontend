@@ -185,11 +185,13 @@ export default function Doctorpage() {
                 borderRadius: '50px',
               }}
             />
-            <Typography sx={{ color: 'black' }}>{datacheeck?.unit_service?.name_english}</Typography>
+            <Typography sx={{ color: 'black' }}>
+              {datacheeck?.unit_service?.name_english}
+            </Typography>
           </div>
           <DialogContent>
             <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
-            please confirm your appointment
+              please confirm your appointment
             </Typography>
           </DialogContent>
           <DialogActions>

@@ -41,7 +41,6 @@ export default function CitiesTableRow({
     modifications_nums,
   } = row;
 
-
   const confirm = useBoolean();
 
   const popover = usePopover();

@@ -11,7 +11,7 @@ import DepartmentEmployeeNewView from 'src/sections/super-admin/unitservices/dep
 
 export default function DepartmentEmployeeNewPage() {
   const params = useParams();
-  const {depid} = params;
+  const { depid } = params;
   const { data } = useGetDepartment(depid);
   return (
     <ACLGuard hasContent category="department" subcategory="employees" acl="create">

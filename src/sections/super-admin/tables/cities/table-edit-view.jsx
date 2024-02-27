@@ -40,7 +40,6 @@ export default function TableEditView() {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
-        
       />
       {data && <TableNewEditForm currentCity={data} />}
     </Container>

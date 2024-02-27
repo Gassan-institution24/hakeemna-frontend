@@ -13,7 +13,6 @@ import PaymentControlView from '../accouting/payment-control/payment-control';
 // ----------------------------------------------------------------------
 
 export default function EmployeeAccountingView({ employeeData }) {
-
   const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('Invoices');

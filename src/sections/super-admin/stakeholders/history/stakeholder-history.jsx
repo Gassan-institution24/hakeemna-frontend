@@ -20,7 +20,6 @@ import PaymentControlView from './payment-control/payment-control';
 // ----------------------------------------------------------------------
 
 export default function StakeholderHistoryView({ stakeholderData }) {
-
   const { t } = useTranslate();
 
   const settings = useSettingsContext();

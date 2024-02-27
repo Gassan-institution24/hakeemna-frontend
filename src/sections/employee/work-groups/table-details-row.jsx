@@ -8,24 +8,14 @@ import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
-export default function TableDetailsRow({
-  row,
-  selected,
-}) {
-  const {
-    code,
-    name_english,
-    name_arabic,
-    employees,
-
-  } = row;
+export default function TableDetailsRow({ row, selected }) {
+  const { code, name_english, name_arabic, employees } = row;
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-
       <TableCell lang="ar" align="center">
         <Box>{code}</Box>
       </TableCell>
@@ -38,15 +28,11 @@ export default function TableDetailsRow({
           .map((employee) => `${employee.employee.first_name} ${employee.employee.family_name}`)
           .join(', ')}
       </TableCell>
-      <TableCell lang="ar" align="center"/>
+      <TableCell lang="ar" align="center" />
     </TableRow>
   );
 
-  return (
-    <>
-      {renderPrimary}
-    </>
-  );
+  return <>{renderPrimary}</>;
 }
 
 TableDetailsRow.propTypes = {

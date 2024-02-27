@@ -326,7 +326,7 @@ export default function RoomsTableView({ departmentData }) {
             checkAcl({ category: 'department', subcategory: 'rooms', acl: 'create' }) && (
               <Button
                 component={RouterLink}
-                href={paths.superadmin.unitservices.departments.rooms.new(id,departmentData._id)}
+                href={paths.superadmin.unitservices.departments.rooms.new(id, departmentData._id)}
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >

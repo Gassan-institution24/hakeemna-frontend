@@ -85,11 +85,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const {
-    reset,
-    setValue,
-    handleSubmit,
-  } = methods;
+  const { reset, setValue, handleSubmit } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {

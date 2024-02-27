@@ -16,7 +16,6 @@ export default function AppointmentData() {
 
   // const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending');
 
-
   return (
     <>
       {/* {pendingAppointments.lenght > 0 ? ( */}

@@ -93,19 +93,17 @@ export default function CitiesNewEditForm() {
 
   const handleDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
-    console.log('file', file);
 
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const data = e.target.result;
         const workbook = XLSX.read(data, { type: 'binary' });
-        console.log('workbook', workbook);
+
         const workSheets = workbook.Sheets[workbook.SheetNames[0]];
-        console.log('workSheets', workSheets);
+
         const jsonData = XLSX.utils.sheet_to_json(workSheets);
         setCities(jsonData);
-        console.log('jsonData', jsonData);
       };
       reader.readAsBinaryString(file);
     }
