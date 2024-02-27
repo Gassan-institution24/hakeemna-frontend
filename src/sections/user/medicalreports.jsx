@@ -20,8 +20,8 @@ import ListItemText from '@mui/material/ListItemText';
 
 import { fDate } from 'src/utils/format-time';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content/empty-content';
@@ -30,8 +30,8 @@ import Doclogo from '../../components/logo/doc.png';
 
 export default function Medicalreports() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const styles = StyleSheet.create({
     icon: {
