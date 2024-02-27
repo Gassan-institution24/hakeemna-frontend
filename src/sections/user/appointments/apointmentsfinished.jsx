@@ -6,7 +6,7 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
@@ -19,7 +19,7 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function FinishedAppoinment() {
-  const theme = useTheme();
+  // const theme = useTheme();
   const { user } = useAuthContext();
   const { appointmentsData } = useGetPatientAppointments(user?.patient?._id);
 

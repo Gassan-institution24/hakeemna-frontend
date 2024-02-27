@@ -62,7 +62,7 @@ function CarouselItem({ item, active }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const { coverUrl, title, description } = item;
+  const {  title } = item;
 
   const IMGES = [
     'https://pbs.twimg.com/media/ETOK9wUUcAQTLWn.png',

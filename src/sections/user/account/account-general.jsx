@@ -24,7 +24,7 @@ import FormProvider, { RHFSelect, RHFTextField, RHFUploadAvatar } from 'src/comp
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral({ data, refetch }) {
-  const [oldpatientsdata, setOldpatientsdata] = useState();
+  // const [oldpatientsdata, setOldpatientsdata] = useState();
   const { user } = useAuthContext();
   const [profilePicture, setProfilePicture] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
@@ -52,20 +52,20 @@ export default function AccountGeneral({ data, refetch }) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
     }
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.post('/api/oldpatientsdata/details', {
-          identification_num: user?.patient?.identification_num,
-        });
-        setOldpatientsdata(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.post('/api/oldpatientsdata/details', {
+  //         identification_num: user?.patient?.identification_num,
+  //       });
+  //       setOldpatientsdata(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
 
-    fetchData();
-  }, [user.patient.identification_num]);
+  //   fetchData();
+  // }, [user.patient.identification_num]);
   const UpdateUserSchema = Yup.object().shape({
     first_name: Yup.string(),
     middle_name: Yup.string(),

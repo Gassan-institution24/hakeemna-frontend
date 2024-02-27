@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { m } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,7 +21,7 @@ import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function ContactUs() {
   const { enqueueSnackbar } = useSnackbar();
-  const [error, setError] = useState();
+  // const [error, setError] = useState();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -47,7 +47,7 @@ export default function ContactUs() {
   const onSubmit = handleSubmit(async (info) => {
     try {
       const response = await axiosHandler({
-        setError,
+        // setError,
         method: 'POST',
         path: `/api/contactus`,
         data: info,
@@ -71,7 +71,7 @@ export default function ContactUs() {
         );
       }
     } catch (err) {
-      setError(err.message);
+      // setError(err.message);
       enqueueSnackbar(err.message, { variant: 'error' });
     }
   });
