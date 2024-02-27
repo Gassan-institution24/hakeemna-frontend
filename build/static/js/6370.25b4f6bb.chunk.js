@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[6370],{66370:(e,s,a)=>{a.r(s),a.d(s,{default:()=>n});var r=a(6907),i=a(85362),l=a(80184);function n(){return(0,l.jsxs)(l.Fragment,{children:[(0,l.jsx)(r.ql,{children:(0,l.jsx)("title",{children:" Dashboard: Stakeholder Types Table"})}),(0,l.jsx)(i.WX,{})]})}}}]);
+//# sourceMappingURL=6370.25b4f6bb.chunk.js.map
