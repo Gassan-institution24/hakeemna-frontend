@@ -46,24 +46,25 @@ export default function Doctorpage() {
   const { user } = useAuthContext();
   const [TimeData, setTimeData] = useState();
   const datacheeck = useGetAppointment(TimeData).data;
-
   const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
   const dialog = useBoolean(false);
   const { enqueueSnackbar } = useSnackbar();
-  // enqueueSnackbar("Thanks for your cooperation", { variant: 'success' });
+  const { data } = useGetEmployeeEngagement(id);
 
   const [currentDateTime, setCurrentDateTime] = useState();
   const patientData = user?.patient?._id;
-  // const patientEmail = user?.email;
+  const patientEmail = user?.email;
+
   const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
     id,
     startDate: currentDateTime,
   });
-  const handleBook = async (pateinidd) => {
+  const handleBook = async (Data) => {
     try {
-      await axios.patch(`${endpoints.tables.appointment(pateinidd)}/book`, {
-        data: { patient: patientData },
+      await axios.patch(`${endpoints.tables.appointment(Data)}/book`, {
+        patient: patientData,
+        email: patientEmail,
       });
       refetch();
       dialog.onFalse();
@@ -74,10 +75,7 @@ export default function Doctorpage() {
     }
   };
 
-  const { data } = useGetEmployeeEngagement(id);
-
-  console.log(datacheeck);
-  console.log(TimeData);
+  console.log(data);
 
   const renderHead = (
     <CardHeader
@@ -97,7 +95,7 @@ export default function Doctorpage() {
   );
 
   const renderFollows = (
-    <Card sx={{ py: 3, textAlign: 'center', typography: 'h4' }}>
+    <Card sx={{ py: 3, textAlign: 'center', typography: 'h4',  }}>
       <Stack
         direction="row"
         divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
@@ -185,18 +183,20 @@ export default function Doctorpage() {
                 borderRadius: '50px',
               }}
             />
-            <Typography sx={{ color: 'black' }}>{datacheeck?.unit_service?.name_english}</Typography>
+            <Typography sx={{ color: 'black' }}>
+              {datacheeck?.unit_service?.name_english}
+            </Typography>
           </div>
           <DialogContent>
             <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
-            please confirm your appointment
+              please confirm your appointment
             </Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={dialog.onFalse} variant="outlined" color="inherit">
               Cancel
             </Button>
-            <Button onClick={() => handleBook(TimeData)} variant="contained">
+            <Button variant="contained" onClick={() => handleBook(TimeData)}>
               Book
             </Button>
           </DialogActions>
@@ -256,7 +256,7 @@ export default function Doctorpage() {
                     Book
                   </Button>
                 ) : (
-                  <Button disabled variant="contained" onClick={dialog.onTrue}>
+                  <Button disabled variant="contained" onClick={dialog.onFalse}>
                     Book
                   </Button>
                 )}
