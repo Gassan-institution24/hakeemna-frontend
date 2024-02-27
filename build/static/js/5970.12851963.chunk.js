@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[5970],{862:(e,s,i)=>{i.r(s),i.d(s,{default:()=>n});var r=i(6907),t=i(99423),l=i(80184);function n(){return(0,l.jsxs)(l.Fragment,{children:[(0,l.jsx)(r.ql,{children:(0,l.jsx)("title",{children:" Register As Stakeholder"})}),(0,l.jsx)(t.TY,{})]})}}}]);
+//# sourceMappingURL=5970.12851963.chunk.js.map
