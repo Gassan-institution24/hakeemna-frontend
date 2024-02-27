@@ -14,7 +14,7 @@ export default function AppointmentData() {
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
 
-  // const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending');
+  const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending');
 
 
   return (
@@ -32,7 +32,7 @@ export default function AppointmentData() {
             mb: 2,
           }}
         >
-          <Currentappoinment pendingAppointments={appointmentsData} />
+          <Currentappoinment pendingAppointments={pendingAppointments} />
         </Box>
       </>
       {/* ) : ( */}
