@@ -7,11 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fDateTime } from 'src/utils/format-time';
-
-import { useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -48,13 +44,8 @@ export default function CountriesTableRow({
     modifications_nums,
   } = row;
 
-  const { t } = useTranslate();
-
   const popover = usePopover();
   const DDL = usePopover();
-  const details = usePopover();
-  const collapse = useBoolean();
-  const modal = useBoolean();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>

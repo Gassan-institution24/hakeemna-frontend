@@ -75,7 +75,7 @@ export default function EconomicMovementsView({ patientData }) {
 
   // const confirm = useBoolean();
 
-  const { economecMovementsData, loading, refetch } = useGetPatientEconomicMovements(
+  const { economecMovementsData, loading } = useGetPatientEconomicMovements(
     patientData._id
   );
 
@@ -455,7 +455,7 @@ export default function EconomicMovementsView({ patientData }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, service, startDate, endDate } = filters;
+  const { name, status, startDate, endDate } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 

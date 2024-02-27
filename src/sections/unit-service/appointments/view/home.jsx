@@ -143,9 +143,6 @@ export default function AppointmentsView({ employeeData }) {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const getAppointLength = (status) =>
-    appointmentsData.filter((item) => item.status === status).length;
-
   const TABS = [
     { value: 'all', label: t('all'), color: 'default', count: all },
     {

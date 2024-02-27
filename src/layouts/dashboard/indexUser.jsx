@@ -1,5 +1,5 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 
@@ -33,28 +33,6 @@ export default function UserDashboardLayout({ children }) {
 
   const renderNavVertical = <NavVertical openNav={nav.value} onCloseNav={nav.onFalse} />;
 
-  const [screenSize, setScreenSize] = useState('');
-
-  useEffect(() => {
-    // Update screen size on mount and on window resize
-    const updateScreenSize = () => {
-      if (window.innerWidth < 600) {
-        setScreenSize('xs');
-      } else if (window.innerWidth >= 600 && window.innerWidth < 1024) {
-        setScreenSize('md');
-      } else {
-        setScreenSize('lg');
-      }
-    };
-
-    updateScreenSize(); // Initial call
-    window.addEventListener('resize', updateScreenSize);
-
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener('resize', updateScreenSize);
-    };
-  }, []);
   if (isHorizontal) {
     return (
       <>

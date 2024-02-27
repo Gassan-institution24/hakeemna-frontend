@@ -53,7 +53,8 @@ export const endpoints = {
     readNotification: (id) => `/api/notifications/${id}/read`,
     readNotifications: '/api/notifications/read',
     unreadNotificationsCount: '/api/notifications/unreadcount',
-    myNotifications: (id, emid) => `/api/notifications/user/${id}/employee/${emid}`,
+    myNotifications: (id, emid, page) =>
+      `/api/notifications/user/${id}/employee/${emid}?page=${page}`,
     myUnreadNotifications: (id, emid) => `/api/notifications/user/${id}/employee/${emid}/count`,
     diets: '/api/diets',
     diet: (id) => `/api/diets/${id}`,

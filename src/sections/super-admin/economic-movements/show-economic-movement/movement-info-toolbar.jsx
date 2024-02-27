@@ -9,12 +9,10 @@ import IconButton from '@mui/material/IconButton';
 import { RouterLink } from 'src/routes/components';
 
 import Iconify from 'src/components/iconify';
-import { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
 export default function MovementToolbar({ backLink, editLink, ...other }) {
-  const popover = usePopover();
 
   return (
     <Stack

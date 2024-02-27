@@ -25,7 +25,6 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
-import { useSettingsContext } from 'src/components/settings';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -55,8 +54,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const [errorMsg, setErrorMsg] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
-
-  const settings = useSettingsContext();
 
   const saving = useBoolean(false);
   const updating = useBoolean(false);
@@ -143,7 +140,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     defaultValues,
   });
   const {
-    reset,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
@@ -340,7 +336,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             <Card>
               {!!errorMsg && (
                 <Alert sx={{ borderRadius: 0 }} severity="error">
-                  <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+                  <div> {errorMsg} </div>
                 </Alert>
               )}
               <NewEditDetails

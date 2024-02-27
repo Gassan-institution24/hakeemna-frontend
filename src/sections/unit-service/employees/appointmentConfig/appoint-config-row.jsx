@@ -30,7 +30,6 @@ export default function AppointmentsTableRow({
   onDeleteRow,
 }) {
   const {
-    code,
     sequence_number,
     start_date,
     end_date,

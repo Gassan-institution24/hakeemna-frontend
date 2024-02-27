@@ -88,9 +88,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
   const {
     reset,
     setValue,
-    getValues,
     handleSubmit,
-    formState: { isSubmitting },
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {

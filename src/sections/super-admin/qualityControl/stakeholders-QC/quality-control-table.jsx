@@ -4,7 +4,6 @@ import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import { useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -52,7 +51,6 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function StakeholdersFeedbacks() {
-  const theme = useTheme();
 
   const { t } = useTranslate();
 
@@ -62,7 +60,7 @@ export default function StakeholdersFeedbacks() {
 
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { feedbackData, loading, refetch } = useGetStakeholdersFeedbackes();
+  const { feedbackData, loading } = useGetStakeholdersFeedbackes();
 
   const separateEachStakeholderFeedbacks = useCallback(() => {
     const results = {};
@@ -109,38 +107,21 @@ export default function StakeholdersFeedbacks() {
   const canReset = !!filters.name || filters.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-  const now = new Date();
 
-  const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
+  // const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
 
-  const getInvoiceLengthForTabs = (status) => {
-    const filterdData = applyFilter({
-      inputData: separateEachStakeholderFeedbacks(),
-      comparator: getComparator(table.order, table.orderBy),
-      filters: { ...filters, status: 'all' },
-      // dateError,
-    });
-    if (!status) {
-      return filterdData.length;
-    }
-    return filterdData.filter((item) => item.status === status).length;
-  };
-
-  const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
-    {
-      value: 'active',
-      label: 'Active',
-      color: 'success',
-      count: getInvoiceLength('active'),
-    },
-    {
-      value: 'inactive',
-      label: 'Inactive',
-      color: 'error',
-      count: getInvoiceLength('inactive'),
-    },
-  ];
+  // const getInvoiceLengthForTabs = (status) => {
+  //   const filterdData = applyFilter({
+  //     inputData: separateEachStakeholderFeedbacks(),
+  //     comparator: getComparator(table.order, table.orderBy),
+  //     filters: { ...filters, status: 'all' },
+  //     // dateError,
+  //   });
+  //   if (!status) {
+  //     return filterdData.length;
+  //   }
+  //   return filterdData.filter((item) => item.status === status).length;
+  // };
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -158,13 +139,6 @@ export default function StakeholdersFeedbacks() {
       router.push(paths.superadmin.stakeholders.feedback(id));
     },
     [router]
-  );
-
-  const handleFilterStatus = useCallback(
-    (event, newValue) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
   );
 
   const handleResetFilters = useCallback(() => {

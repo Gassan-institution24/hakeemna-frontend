@@ -20,7 +20,7 @@ export default function NewEditLongHolidays() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { control, setValue, watch, resetField, getValues } = useFormContext();
+  const { control, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,

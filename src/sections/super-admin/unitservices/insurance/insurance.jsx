@@ -21,7 +21,7 @@ import { RouterLink } from 'src/routes/components';
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
-import { useTranslate } from 'src/locales';
+// import { useTranslate } from 'src/locales';
 import { useGetInsuranceCos } from 'src/api';
 
 import Label from 'src/components/label';
@@ -104,8 +104,7 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
     dateError,
   });
 
-  // console.log('dataata', unitServiceData);
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
 
   const dataInPage = dataFiltered?.slice(
     table.page * table.rowsPerPage,
@@ -195,8 +194,6 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
     },
     [handleFilters]
   );
-  const unitserviceName = unitServiceData?.name_english;
-
   if (loading) {
     return <LoadingScreen />;
   }

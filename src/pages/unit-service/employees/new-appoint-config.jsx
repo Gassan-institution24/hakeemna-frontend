@@ -11,7 +11,7 @@ import AppointconfigDetailView from 'src/sections/unit-service/employees/view/ap
 
 export default function NewEmployeeAppointconfigPage() {
   const params = useParams();
-  const { id, coid } = params;
+  const { id } = params;
   const employeeData = useGetEmployee(id).data;
   const name = employeeData?.first_name;
 

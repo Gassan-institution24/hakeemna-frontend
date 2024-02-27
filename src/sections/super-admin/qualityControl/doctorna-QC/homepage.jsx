@@ -3,11 +3,8 @@ import { useState, useCallback } from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
-import { useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
-
-import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
@@ -18,9 +15,6 @@ import SystemError from './system-errors/system-errors-table';
 // ----------------------------------------------------------------------
 
 export default function DoctornaQCPage() {
-  const theme = useTheme();
-
-  const { t } = useTranslate();
 
   const settings = useSettingsContext();
 

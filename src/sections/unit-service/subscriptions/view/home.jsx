@@ -15,8 +15,6 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetUSLicenseMovement } from 'src/api';
 import { StatusOptions } from 'src/assets/data/status-options';
@@ -80,12 +78,9 @@ export default function UnitServicesAccountingView() {
 
   const settings = useSettingsContext();
 
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
   const router = useRouter();
 
-  const { licenseMovements, loading, refetch } = useGetUSLicenseMovement(
+  const { licenseMovements, loading } = useGetUSLicenseMovement(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 

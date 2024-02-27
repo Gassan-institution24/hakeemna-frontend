@@ -18,8 +18,6 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 import { useRouter, useParams } from 'src/routes/hooks';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { useGetUSLicenseMovement } from 'src/api';
 
 import Label from 'src/components/label';
@@ -37,7 +35,6 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { useTranslate } from 'src/locales';
 
 import AccountingRow from './accounting-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -88,12 +85,9 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
 
   const settings = useSettingsContext();
 
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
   const router = useRouter();
 
-  const { licenseMovements, loading, refetch } = useGetUSLicenseMovement(id);
+  const { licenseMovements, loading } = useGetUSLicenseMovement(id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -108,8 +102,6 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
     filters,
     dateError,
   });
-
-  const { t } = useTranslate();
 
   const denseHeight = table.dense ? 52 : 72;
 
@@ -167,8 +159,6 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
     },
     [handleFilters]
   );
-  const unitserviceName = unitServiceData?.name_english;
-
   if (loading) {
     return <LoadingScreen />;
   }

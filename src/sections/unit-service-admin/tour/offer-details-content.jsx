@@ -97,50 +97,50 @@ export default function TourDetailsContent({ tour }) {
     </Box>
   );
 
-  const renderContent = (
-    // <>
-    //   {/* <Markdown children={content} /> */}
+  // const renderContent = (
+  // <>
+  //   {/* <Markdown children={content} /> */}
 
-    //   <Stack spacing={2}>
-    //     <Typography variant="h6"> Services</Typography>
+  //   <Stack spacing={2}>
+  //     <Typography variant="h6"> Services</Typography>
 
-    //     <Box
-    //       rowGap={2}
-    //       display="grid"
-    //       gridTemplateColumns={{
-    //         xs: 'repeat(1, 1fr)',
-    //         md: 'repeat(2, 1fr)',
-    //       }}
-    //     >
-    //       {/* {TOUR_SERVICE_OPTIONS.map((service) => (
-    //         <Stack
-    //           key={service.label}
-    //           spacing={1}
-    //           direction="row"
-    //           alignItems="center"
-    //           sx={{
-    //             ...(services.includes(service.label) && {
-    //               color: 'text.disabled',
-    //             }),
-    //           }}
-    //         >
-    //           <Iconify
-    //             icon="eva:checkmark-circle-2-outline"
-    //             sx={{
-    //               color: 'primary.main',
-    //               ...(services.includes(service.label) && {
-    //                 color: 'text.disabled',
-    //               }),
-    //             }}
-    //           />
-    //           {service.label}
-    //         </Stack>
-    //       ))} */}
-    //     </Box>
-    //   </Stack>
-    // </>
-    <></>
-  );
+  //     <Box
+  //       rowGap={2}
+  //       display="grid"
+  //       gridTemplateColumns={{
+  //         xs: 'repeat(1, 1fr)',
+  //         md: 'repeat(2, 1fr)',
+  //       }}
+  //     >
+  //       {/* {TOUR_SERVICE_OPTIONS.map((service) => (
+  //         <Stack
+  //           key={service.label}
+  //           spacing={1}
+  //           direction="row"
+  //           alignItems="center"
+  //           sx={{
+  //             ...(services.includes(service.label) && {
+  //               color: 'text.disabled',
+  //             }),
+  //           }}
+  //         >
+  //           <Iconify
+  //             icon="eva:checkmark-circle-2-outline"
+  //             sx={{
+  //               color: 'primary.main',
+  //               ...(services.includes(service.label) && {
+  //                 color: 'text.disabled',
+  //               }),
+  //             }}
+  //           />
+  //           {service.label}
+  //         </Stack>
+  //       ))} */}
+  //     </Box>
+  //   </Stack>
+  // </>
+  // <></>
+  // );
 
   return (
     <>
@@ -155,7 +155,7 @@ export default function TourDetailsContent({ tour }) {
 
         <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
 
-        {renderContent}
+        {/* {renderContent} */}
       </Stack>
     </>
   );

@@ -10,8 +10,6 @@ import IconButton from '@mui/material/IconButton';
 import DialogActions from '@mui/material/DialogActions';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { useParams, useRouter } from 'src/routes/hooks';
-
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import Iconify from 'src/components/iconify';
@@ -26,16 +24,9 @@ export default function InvoiceToolbar({
   statusOptions,
   onChangeStatus,
 }) {
-  const params = useParams();
-  const { id } = params;
-
-  const router = useRouter();
 
   const view = useBoolean();
 
-  // const handleEdit = useCallback(() => {
-  //   router.push(paths.superadmin.patients.history.invoices.edit(id,invoice._id));
-  // }, [invoice._id,id,router]);
 
   return (
     <>

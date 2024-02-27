@@ -4,7 +4,6 @@ import { useState, useCallback } from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
-import { useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
 
@@ -21,7 +20,6 @@ import PaymentControlView from './payment-control/payment-control';
 // ----------------------------------------------------------------------
 
 export default function StakeholderHistoryView({ stakeholderData }) {
-  const theme = useTheme();
 
   const { t } = useTranslate();
 

@@ -8,7 +8,6 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-import { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
@@ -22,22 +21,12 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
     webpage,
     phone,
     address,
-    created_at,
-    user_creation,
-    ip_address_user_creation,
-    updated_at,
-    user_modification,
-    ip_address_user_modification,
-    modifications_nums,
   } = row;
 
   const { t } = useTranslate();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  const popover = usePopover();
-  const DDL = usePopover();
 
   const renderPrimary = (
     <TableRow hover>
@@ -84,48 +73,6 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
   return (
     <>
       {renderPrimary}
-      {/* <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-        <MenuItem onClick={DDL.onOpen}>
-          <Iconify icon="carbon:data-quality-definition" />
-          {t('DDL')}
-        </MenuItem>
-        <MenuItem onClick={onDeleteRow} sx={{ color: 'error.main' }}>
-          <Iconify icon="mi:delete" />
-          Delete
-        </MenuItem>
-      </CustomPopover> */}
-
-      {/* <CustomPopover
-        open={DDL.open}
-        onClose={DDL.onClose}
-        arrow="right-top"
-        sx={{
-          padding: 2,
-          fontSize: '14px',
-        }}
-      >
-        <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
-
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray', fontWeight: '400' }}>
-          {ip_address_user_modification}
-        </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('modifications no')}: {modifications_nums}</Box>
-      </CustomPopover> */}
     </>
   );
 }

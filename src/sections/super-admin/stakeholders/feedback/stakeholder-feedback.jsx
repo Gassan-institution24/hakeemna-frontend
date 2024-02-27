@@ -14,9 +14,7 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter, useParams } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
+import { useParams } from 'src/routes/hooks';
 
 import { useGetStakeholderFeedbacks } from 'src/api';
 
@@ -75,11 +73,6 @@ export default function StakeholderFeedbackView({ stakeholderData }) {
   const componentRef = useRef();
 
   const settings = useSettingsContext();
-
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
-  const router = useRouter();
 
   const { feedbackData, loading } = useGetStakeholderFeedbacks(id);
 

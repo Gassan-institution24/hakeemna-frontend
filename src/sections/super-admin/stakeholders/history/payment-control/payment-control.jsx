@@ -75,7 +75,7 @@ export default function IncomePaymentControlView({ stakeholderData }) {
 
   // const confirm = useBoolean();
 
-  const { incomePaymentData, loading, refetch } = useGetStackholderIncomePaymentControl(
+  const { incomePaymentData, loading } = useGetStackholderIncomePaymentControl(
     stakeholderData._id
   );
 

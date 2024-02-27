@@ -67,14 +67,16 @@ export function useGetNotifications() {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetMyNotifications(id, emid) {
+export function useGetMyNotifications(id, emid, page) {
   // console.log(id, emid);
-  const URL = endpoints.tables.myNotifications(id, emid);
+  const URL = endpoints.tables.myNotifications(id, emid, page);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      notifications: data,
+      notifications: data?.notifications || [],
+      hasMore: data?.hasMore || false,
+      unread: data?.unread || 0,
       loading: isLoading,
       error,
       validating: isValidating,

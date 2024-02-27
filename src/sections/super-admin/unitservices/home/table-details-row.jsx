@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 
 import { fDateTime } from 'src/utils/format-time';
 
-import { useTranslate } from 'src/locales';
+// import { useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -44,7 +44,7 @@ export default function CountriesTableRow({
     modifications_nums,
   } = row;
 
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
 
   const popover = usePopover();
   const DDL = usePopover();

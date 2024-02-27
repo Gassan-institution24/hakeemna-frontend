@@ -1,22 +1,22 @@
 import PropTypes from 'prop-types';
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+import { useUnitTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetUSWorkShifts, useGetEmployeeWorkGroups } from 'src/api';
 
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
-import { zonedTimeToUtc } from 'date-fns-tz';
-import { useUnitTime } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
     { value: 'friday', label: t('Friday') },
   ];
 
-  const { control, watch, getValues, setValue, trigger } = useFormContext();
+  const { control, getValues, trigger } = useFormContext();
 
   const values = getValues();
 

@@ -4,7 +4,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import { useTranslate } from 'src/locales';
+// import { useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -14,7 +14,7 @@ import Iconify from 'src/components/iconify';
 export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) {
   const { code, name_english, type, status, webpage, phone, address } = row;
 
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
 
   const renderPrimary = (
     <TableRow hover>
