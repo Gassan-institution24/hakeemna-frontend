@@ -1,16 +1,15 @@
+import { useState, useCallback } from 'react';
+
+import { Tab, Tabs } from '@mui/material';
 import Container from '@mui/material/Container';
-import { useCallback, useState } from 'react';
 
 import { paths } from 'src/routes/paths';
-
-import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import { Tab, Tabs } from '@mui/material';
-import TableNewEditForm from './cities-table-many-new-form';
 import TableNewEditOneForm from './cities-create-edit-one';
+import TableNewEditForm from './cities-table-many-new-form';
 
 // ----------------------------------------------------------------------
 
@@ -24,16 +23,13 @@ export default function TableCreateView() {
     {
       value: 'many',
       label: 'Add many',
-      // icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
     },
     {
       value: 'one',
       label: 'Add one',
-      // icon: <Iconify icon="solar:user-id-bold" width={24} />,
     },
   ];
 
-  const { t } = useTranslate();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

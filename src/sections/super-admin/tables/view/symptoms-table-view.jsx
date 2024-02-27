@@ -14,10 +14,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { useGetSymptoms } from 'src/api';
-import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -38,12 +35,6 @@ import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'all' },
-  { value: 'active', label: 'active' },
-  { value: 'inactive', label: 'inactive' },
-];
 
 const TABLE_HEAD = [
   /// to edit
@@ -71,18 +62,13 @@ export default function SymptomsTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { t } = useTranslate();
-
   const componentRef = useRef();
 
   const settings = useSettingsContext();
 
   const router = useRouter();
 
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
-  const { tableData, loading, refetch } = useGetSymptoms();
+  const { tableData, loading } = useGetSymptoms();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -98,10 +84,6 @@ export default function SymptomsTableView() {
     dateError,
   });
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 

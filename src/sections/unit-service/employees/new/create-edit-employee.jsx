@@ -111,14 +111,14 @@ export default function TableNewEditForm({ currentTable }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+  // const handleArabicInputChange = (event) => {
+  //   // Validate the input based on Arabic language rules
+  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
 
-    if (arabicRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-    }
-  };
+  //   if (arabicRegex.test(event.target.value)) {
+  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+  //   }
+  // };
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
@@ -132,11 +132,8 @@ export default function TableNewEditForm({ currentTable }) {
   const {
     reset,
     handleSubmit,
-    trigger,
     formState: { isSubmitting },
   } = methods;
-
-  const values = methods.getValues();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -190,7 +187,7 @@ export default function TableNewEditForm({ currentTable }) {
           <Card sx={{ p: 3 }}>
             {!!errorMsg && (
               <Alert sx={{ mb: 3 }} severity="error">
-                <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+                <div> {errorMsg} </div>
               </Alert>
             )}
             <Box

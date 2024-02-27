@@ -106,17 +106,6 @@ export default function OrderTableToolbar({
           <Iconify icon="solar:import-bold" />
           Import
         </MenuItem>
-
-        {/* <MenuItem
-          onClick={() => {
-            onDownload()
-            popover.onClose();
-
-          }}
-        >
-          <Iconify icon="solar:export-bold" />
-          {t('export')}
-        </MenuItem> */}
       </CustomPopover>
     </>
   );

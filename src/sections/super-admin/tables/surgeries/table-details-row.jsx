@@ -35,7 +35,6 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
 
   const popover = usePopover();
   const DDL = usePopover();
-  const details = usePopover();
   const collapse = useBoolean();
 
   const renderPrimary = (

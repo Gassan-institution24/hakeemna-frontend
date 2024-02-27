@@ -205,7 +205,7 @@ export default function EmployeesTableView({ departmentData }) {
       });
       socket.emit('updated', {
         user,
-        link: paths.superadmin.unitservices.departments.employees.root(id,departmentData._id),
+        link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
         msg: `activated many employees in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
@@ -341,7 +341,10 @@ export default function EmployeesTableView({ departmentData }) {
             checkAcl({ category: 'department', subcategory: 'employees', acl: 'create' }) && (
               <Button
                 component={RouterLink}
-                href={paths.superadmin.unitservices.departments.employees.new(id,departmentData._id)} /// edit
+                href={paths.superadmin.unitservices.departments.employees.new(
+                  id,
+                  departmentData._id
+                )} /// edit
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >

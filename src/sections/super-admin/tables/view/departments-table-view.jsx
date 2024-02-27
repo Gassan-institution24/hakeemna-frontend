@@ -14,8 +14,6 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { useTranslate } from 'src/locales';
 import { useGetDepartments } from 'src/api';
 
@@ -39,11 +37,11 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'all' },
-  { value: 'active', label: 'active' },
-  { value: 'inactive', label: 'inactive' },
-];
+// const STATUS_OPTIONS = [
+//   { value: 'all', label: 'all' },
+//   { value: 'active', label: 'active' },
+//   { value: 'inactive', label: 'inactive' },
+// ];
 
 const TABLE_HEAD = [
   /// edit
@@ -79,10 +77,7 @@ export default function DepartmentsTableView() {
 
   const router = useRouter();
 
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
-  const { departmentsData, loading, refetch } = useGetDepartments();
+  const { departmentsData, loading } = useGetDepartments();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -98,10 +93,10 @@ export default function DepartmentsTableView() {
     dateError,
   });
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
+  // const dataInPage = dataFiltered.slice(
+  //   table.page * table.rowsPerPage,
+  //   table.page * table.rowsPerPage + table.rowsPerPage
+  // );
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
@@ -215,12 +210,12 @@ export default function DepartmentsTableView() {
   //   [router]
   // );
 
-  const handleFilterStatus = useCallback(
-    (event, newValue) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
-  );
+  // const handleFilterStatus = useCallback(
+  //   (event, newValue) => {
+  //     handleFilters('status', newValue);
+  //   },
+  //   [handleFilters]
+  // );
 
   if (loading) {
     return <LoadingScreen />;

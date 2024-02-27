@@ -16,7 +16,6 @@ import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -79,8 +78,6 @@ export default function UsersTableView() {
   const componentRef = useRef();
 
   const settings = useSettingsContext();
-
-  const router = useRouter();
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();

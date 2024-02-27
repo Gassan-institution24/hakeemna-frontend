@@ -6,8 +6,6 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import Iconify from 'src/components/iconify';
 import { usePopover } from 'src/components/custom-popover';
 
@@ -23,9 +21,6 @@ export default function QCTableRow({
 }) {
   const { unit_service, rate, count, read, notRead } = row;
 
-  const confirm = useBoolean();
-
-  const DDL = usePopover();
   const popover = usePopover();
 
   const overAllRate = rate / count;

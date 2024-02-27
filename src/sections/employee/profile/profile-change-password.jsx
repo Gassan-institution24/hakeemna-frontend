@@ -13,8 +13,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -27,8 +27,6 @@ export default function AccountChangePassword() {
   const { user } = useAuthContext();
 
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   const showpasswordCurrent = useBoolean();
   const showpassword = useBoolean();
@@ -148,7 +146,6 @@ export default function AccountChangePassword() {
 
         <LoadingButton
           type="submit"
-          tabIndex={-1}
           tabIndex={-1}
           variant="contained"
           loading={isSubmitting}

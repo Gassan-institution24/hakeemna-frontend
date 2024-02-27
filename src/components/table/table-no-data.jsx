@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import EmptyContent from '../empty-content';
 
@@ -11,8 +11,8 @@ import EmptyContent from '../empty-content';
 
 export default function TableNoData({ notFound, sx }) {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
   return (
     <TableRow>
       {notFound ? (

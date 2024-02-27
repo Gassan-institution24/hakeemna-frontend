@@ -5,8 +5,6 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useTranslate } from 'src/locales';
-
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -16,8 +14,6 @@ import TableNewEditForm from './accounting-new-edit-form';
 
 export default function USAppointmentEditView({ unitServiceData, licenseMovementData }) {
   const settings = useSettingsContext();
-
-  const { t } = useTranslate();
 
   const unitServiceName = unitServiceData?.name_english || 'Unit Service';
   const params = useParams();

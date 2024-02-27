@@ -21,7 +21,7 @@ import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetMyUnreadNotificationCount } from 'src/api';
+import { useGetMyNotifications } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -40,75 +40,46 @@ export default function NotificationsPopover() {
 
   const smUp = useResponsive('up', 'sm');
 
-  const [notifications, setNotifications] = useState([]);
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const [allNotifications, setAllNotifications] = useState([]);
 
-  /* eslint-disable */
-  const fetchData = async () => {
-    if (loading || !hasMore) return;
-
-    setLoading(true);
-    try {
-      // Update the URL to match your API endpoint structure
-      const response = await axios.get(
-        `${endpoints.tables.myNotifications(
-          user?._id,
-          user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
-        )}?page=${page}`
-      );
-      const { notifications: newNotifications, hasMore: hasMoreData } = response.data;
-      setNotifications((prev) => [...prev, ...newNotifications]);
-      setPage((prevPage) => prevPage + 1);
-      setHasMore(hasMoreData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  /* eslint-enable */
-
-  const { notificationscount, recount } = useGetMyUnreadNotificationCount(
+  const { notifications, hasMore, unread, refetch, loading } = useGetMyNotifications(
     user?._id,
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id,
+    page
   );
 
   const handleClick = async (id, link) => {
     drawer.onFalse();
     router.push(link);
     await axios.patch(endpoints.tables.readNotification(id));
-    fetchData();
-    recount();
+    refetch();
   };
 
   const handleMarkAllAsRead = async () => {
-    await axios.patch(`${endpoints.tables.notifications}/read`, { ids: notificationscount });
-    recount();
-    setNotifications([]);
+    await axios.patch(`${endpoints.tables.notifications}/read`, { ids: unread });
     setPage(1);
-    fetchData();
+    refetch();
   };
 
   useEffect(() => {
-    socket.on('error', (data) => {
-      fetchData();
-      recount();
+    socket.on('error', () => {
+      setPage(1);
+      refetch();
     });
-    socket.on('created', (data) => {
-      fetchData();
-      recount();
+    socket.on('created', () => {
+      setPage(1);
+      refetch();
     });
-    socket.on('updated', (data) => {
-      fetchData();
-      recount();
+    socket.on('updated', () => {
+      setPage(1);
+      refetch();
     });
-  }, [fetchData, recount]);
+  }, [refetch, setPage]);
+
+  useEffect(() => {
+    setAllNotifications((prevNotifications) => [...prevNotifications, ...notifications]);
+  }, [notifications]);
 
   return (
     <>
@@ -120,7 +91,7 @@ export default function NotificationsPopover() {
         color={drawer.value ? 'primary' : 'default'}
         onClick={drawer.onTrue}
       >
-        <Badge badgeContent={notificationscount.length} color="error">
+        <Badge badgeContent={unread.length} color="error">
           <Iconify icon="solar:bell-bing-bold-duotone" width={24} />
         </Badge>
       </IconButton>
@@ -141,7 +112,7 @@ export default function NotificationsPopover() {
             Notifications
           </Typography>
 
-          {!!notificationscount.length && (
+          {!!unread.length && (
             <Tooltip title="Mark all as read">
               <IconButton color="primary" onClick={handleMarkAllAsRead}>
                 <Iconify icon="eva:done-all-fill" />
@@ -161,24 +132,25 @@ export default function NotificationsPopover() {
         <Scrollbar>
           <List disablePadding>
             {/* {!loading && */}
-            {notifications?.map((notification, index) => (
+            {allNotifications?.map((notification, index) => (
               <NotificationItem handleClick={handleClick} key={index} notification={notification} />
             ))}
           </List>
-          <Box sx={{ p: 1 }}>
-            <LoadingButton
-              fullWidth
-              loading={loading}
-              disabled={!hasMore}
-              onClick={(e) => {
-                e.preventDefault();
-                fetchData();
-              }}
-              size="large"
-            >
-              {hasMore ? 'see more' : 'notifications end'}
-            </LoadingButton>
-          </Box>
+          {hasMore && (
+            <Box sx={{ p: 1 }}>
+              <LoadingButton
+                fullWidth
+                loading={loading}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage((prev) => prev + 1);
+                }}
+                size="large"
+              >
+                see more
+              </LoadingButton>
+            </Box>
+          )}
         </Scrollbar>
       </Drawer>
     </>

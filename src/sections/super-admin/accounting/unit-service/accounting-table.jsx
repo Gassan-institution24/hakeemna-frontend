@@ -1,4 +1,3 @@
-import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
@@ -78,7 +77,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
 
   // const confirm = useBoolean();
 
-  const { licenseMovements, loading, refetch } = useGetUSLicenseMovement(unitServiceData?._id);
+  const { licenseMovements, loading } = useGetUSLicenseMovement(unitServiceData?._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -109,7 +108,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
+  // const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
 
   const getInvoiceLengthForTabs = (status) => {
     const filterdData = applyFilter({
@@ -124,13 +123,13 @@ export default function USlicenseMovementView({ unitServiceData }) {
     return filterdData.filter((item) => item.status === status).length;
   };
 
-  const getTotalAmount = (status) =>
-    sumBy(
-      dataFiltered.filter((item) => item.status === status),
-      'Balance'
-    );
+  // const getTotalAmount = (status) =>
+  //   sumBy(
+  //     dataFiltered.filter((item) => item.status === status),
+  //     'Balance'
+  //   );
 
-  const getPercentByStatus = (status) => (getInvoiceLength(status) / dataFiltered.length) * 100;
+  // const getPercentByStatus = (status) => (getInvoiceLength(status) / dataFiltered.length) * 100;
 
   const TABS = [
     { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
@@ -433,7 +432,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, service, startDate, endDate } = filters;
+  const { name, status, startDate, endDate } = filters;
 
   const stabilizedThis = inputData?.map((el, index) => [el, index]);
 

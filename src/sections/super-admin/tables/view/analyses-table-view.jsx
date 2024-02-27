@@ -15,7 +15,6 @@ import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useGetAnalyses } from 'src/api';
-import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -56,8 +55,6 @@ export default function AnalysesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { t } = useTranslate();
-
   const componentRef = useRef();
 
   const settings = useSettingsContext();
@@ -80,10 +77,6 @@ export default function AnalysesTableView() {
     dateError,
   });
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 

@@ -15,8 +15,9 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import { useUnitTime } from 'src/utils/format-time';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+
+import { useUnitTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -44,7 +45,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     { value: 'friday', label: t('Friday') },
   ];
 
-  const { control, setValue, watch, resetField, getValues, setError } = useFormContext();
+  const { control, setValue, watch, setError } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -107,6 +108,12 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
         setError('appointment_time');
         return;
       }
+      if (!values.days_details[index].work_start_time) {
+        return;
+      }
+      if (!values.days_details[index].work_end_time) {
+        return;
+      }
       const results = [];
       const appointment_time = values.appointment_time * 60 * 1000;
       const currentDay = values.days_details[index];
@@ -159,7 +166,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   const renderValues = (selectedIds) => {
     const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item?._id));
-    const results = [];
     return selectedItems
       ?.map(
         (item) => item?.name_english

@@ -21,7 +21,6 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate } from 'src/locales';
 import { useGetPaymentMethods } from 'src/api';
 
 import Label from 'src/components/label';
@@ -79,8 +78,6 @@ const defaultFilters = {
 
 export default function PaymentMethodsTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
-
-  const { t } = useTranslate();
 
   const componentRef = useRef();
 

@@ -73,7 +73,7 @@ export default function EconomicMovementsView() {
 
   // const confirm = useBoolean();
 
-  const { economecMovementsData, loading, refetch } = useGetEconomicMovements();
+  const { economecMovementsData, loading } = useGetEconomicMovements();
 
   const [filters, setFilters] = useState(defaultFilters);
 

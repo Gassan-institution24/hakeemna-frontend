@@ -12,7 +12,7 @@ export default function AppointmentsHomePage() {
       <Helmet>
         <title>Appointments</title>
       </Helmet>
-       <AppointmentsHomeView />
+      <AppointmentsHomeView />
     </ACLGuard>
   );
 }

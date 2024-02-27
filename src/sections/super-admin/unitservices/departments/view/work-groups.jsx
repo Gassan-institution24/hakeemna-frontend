@@ -325,7 +325,10 @@ export default function WorkGroupsTableView({ departmentData }) {
             checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'create' }) && (
               <Button
                 component={RouterLink}
-                href={paths.superadmin.unitservices.departments.workGroups.new(id,departmentData._id)}
+                href={paths.superadmin.unitservices.departments.workGroups.new(
+                  id,
+                  departmentData._id
+                )}
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >

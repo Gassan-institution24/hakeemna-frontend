@@ -148,9 +148,6 @@ export default function AppointmentsView({ employeeData }) {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const getAppointLength = (status) =>
-    appointmentsData.filter((item) => item.status === status).length;
-
   const TABS = [
     { value: 'all', label: t('all'), color: 'default', count: all },
     {
@@ -642,64 +639,6 @@ export default function AppointmentsView({ employeeData }) {
   );
 }
 
-// ----------------------------------------------------------------------
-
-// function applyFilter({ inputData, comparator, filters, dateError }) {
-//   const { name, status, types, startDate, endDate } = filters;
-
-//   const stabilizedThis = inputData?.map((el, index) => [el, index]);
-
-//   stabilizedThis.sort((a, b) => {
-//     const order = comparator(a[0], b[0]);
-//     if (order !== 0) return order;
-//     return a[1] - b[1];
-//   });
-
-//   inputData = stabilizedThis?.map((el) => el[0]);
-
-//   if (name) {
-//     inputData = inputData.filter(
-//       (appointment) =>
-//         (appointment?.work_shift?.name_english &&
-//           appointment?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-//         (appointment?.work_shift?.name_arabic &&
-//           appointment?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-//         (appointment?.work_group?.name_english &&
-//           appointment?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-//         (appointment?.work_group?.name_arabic &&
-//           appointment?.work_group?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-//         appointment?._id === name ||
-//         JSON.stringify(appointment.code) === name
-//     );
-//   }
-
-//   if (status !== 'all') {
-//     inputData = inputData.filter((appointment) => appointment.status === status);
-//   }
-
-//   if (!dateError) {
-//     if (startDate && endDate) {
-//       inputData = inputData.filter(
-//         (appointment) =>
-//           fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
-//           fTimestamp(appointment.start_time) <= fTimestamp(endDate)
-//       );
-//     } else if (startDate) {
-//       const endOfDay = new Date(startDate);
-//       endOfDay.setDate(endOfDay.getDate() + 1);
-//       inputData = inputData.filter(
-//         (appointment) =>
-//           fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
-//           fTimestamp(appointment.start_time) < fTimestamp(endOfDay)
-//       );
-//     }
-//   }
-//   if (types.length > 0) {
-//     inputData = inputData.filter((appoint) => types?.includes(appoint.appointment_type._id));
-//   }
-
-//   return inputData;
-// }
 AppointmentsView.propTypes = {
   employeeData: PropTypes.object,
 };

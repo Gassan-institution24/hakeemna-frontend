@@ -74,7 +74,7 @@ export default function WorkGroupsTableView() {
     { id: '', width: 88 },
   ];
 
-const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const checkAcl = useAclGuard();
 

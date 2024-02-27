@@ -151,7 +151,6 @@ export default function AccountChangePassword() {
         <LoadingButton
           type="submit"
           tabIndex={-1}
-          tabIndex={-1}
           variant="contained"
           loading={isSubmitting}
           sx={{ ml: 'auto' }}

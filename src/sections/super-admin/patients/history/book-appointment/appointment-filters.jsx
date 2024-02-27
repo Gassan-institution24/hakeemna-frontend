@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import Radio from '@mui/material/Radio';
 import Stack from '@mui/material/Stack';
@@ -38,11 +38,6 @@ export default function JobFilters({
   appointmentTypeOptions,
   dateError,
 }) {
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const [selectedInsurance, setSelectedInsurance] = useState('');
-
-  const [cities, setCities] = useState([]);
-
   const handleFilterAppointtypes = useCallback(
     (newValue) => {
       onFilters('appointtypes', newValue);
@@ -57,7 +52,7 @@ export default function JobFilters({
   );
   const handleFilterCountries = useCallback(
     (newValue) => {
-      setSelectedCountry(newValue);
+      // setSelectedCountry(newValue);
       onFilters('countries', newValue);
     },
     [onFilters]
@@ -206,10 +201,10 @@ export default function JobFilters({
         insurance
       </Typography>
       <select onChange={handleFiltedInsurance} name="insurance" label="insurance">
-        {insuranseCosData?.map((info) => (
+        {insuranseCosData?.map((info, index) => (
           <>
             <option />
-            <option key={info._id} value={info._id}>
+            <option key={index} value={info._id}>
               {info?.name_english}
             </option>
           </>

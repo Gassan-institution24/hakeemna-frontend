@@ -25,7 +25,6 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
-import { useSettingsContext } from 'src/components/settings';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 
 import NewEditDetails from '../appointmentConfig/new-edit-details';
@@ -54,8 +53,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const [dataToUpdate, setDataToUpdate] = useState([]);
 
   const { enqueueSnackbar } = useSnackbar();
-
-  const settings = useSettingsContext();
 
   const saving = useBoolean(false);
   const updating = useBoolean(false);
@@ -199,7 +196,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     defaultValues,
   });
   const {
-    reset,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;

@@ -18,9 +18,8 @@ import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
 import socket from 'src/socket';
-import { useGetUnitservices } from 'src/api';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -31,14 +30,10 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const router = useRouter();
 
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   const { id } = useParams();
 
   const { user } = useAuthContext();
-
-  const { unitservicesData } = useGetUnitservices();
 
   const { enqueueSnackbar } = useSnackbar();
 

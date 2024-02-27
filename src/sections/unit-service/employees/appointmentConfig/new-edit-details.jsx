@@ -34,7 +34,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
     { value: 'friday', label: t('Friday') },
   ];
 
-  const { control, watch, getValues, setValue } = useFormContext();
+  const { control, getValues } = useFormContext();
 
   const values = getValues();
 

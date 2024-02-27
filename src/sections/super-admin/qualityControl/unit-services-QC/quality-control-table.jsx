@@ -4,13 +4,11 @@ import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import { useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useTranslate } from 'src/locales';
 import { useGetUSsFeedbackes } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
@@ -52,17 +50,13 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function USsFeedbacks() {
-  const theme = useTheme();
-
-  const { t } = useTranslate();
-
   const settings = useSettingsContext();
 
   const router = useRouter();
 
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { feedbackData, loading, refetch } = useGetUSsFeedbackes();
+  const { feedbackData, loading } = useGetUSsFeedbackes();
 
   const separateEachunitServiceFeedbacks = useCallback(() => {
     const results = {};
@@ -109,22 +103,6 @@ export default function USsFeedbacks() {
   const canReset = !!filters.name || filters.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-  const now = new Date();
-
-  const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
-
-  const getInvoiceLengthForTabs = (status) => {
-    const filterdData = applyFilter({
-      inputData: separateEachunitServiceFeedbacks(),
-      comparator: getComparator(table.order, table.orderBy),
-      filters: { ...filters, status: 'all' },
-      // dateError,
-    });
-    if (!status) {
-      return filterdData.length;
-    }
-    return filterdData.filter((item) => item.status === status).length;
-  };
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -142,13 +120,6 @@ export default function USsFeedbacks() {
       router.push(paths.superadmin.unitservices.feedback(id));
     },
     [router]
-  );
-
-  const handleFilterStatus = useCallback(
-    (event, newValue) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
   );
 
   const handleResetFilters = useCallback(() => {

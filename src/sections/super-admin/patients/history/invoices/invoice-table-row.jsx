@@ -8,8 +8,6 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fDateTime } from 'src/utils/format-time';
 
 import Label from 'src/components/label';
@@ -32,8 +30,6 @@ export default function MovementTableRow({
     employee,
     appointment,
     stakeholder,
-    type,
-    hospital,
     Balance,
     Currency,
     Provided_services,
@@ -47,8 +43,6 @@ export default function MovementTableRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
-
-  const confirm = useBoolean();
 
   const DDL = usePopover();
   const popover = usePopover();

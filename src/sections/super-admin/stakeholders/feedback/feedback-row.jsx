@@ -8,8 +8,6 @@ import IconButton from '@mui/material/IconButton';
 
 import { fDateTime } from 'src/utils/format-time';
 
-import { useTranslate } from 'src/locales';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -17,20 +15,8 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
-  const {
-    code,
-    appointment,
-    employee,
-    status,
-    title,
-    Body,
-    Rate,
-    created_at,
-    user_creation,
-    ip_address_user_creation,
-  } = row;
-
-  const { t } = useTranslate();
+  const { code, status, title, Body, Rate, created_at, user_creation, ip_address_user_creation } =
+    row;
 
   const popover = usePopover();
   const DDL = usePopover();

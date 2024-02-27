@@ -6,41 +6,28 @@ import { useMemo, useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import { useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 
-import { useTable } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
-import { useSettingsContext } from 'src/components/settings';
 import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function UploadOldPatient({ refetch }) {
-  const router = useRouter();
-
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-
-  const table = useTable({ defaultRowsPerPage: 10 });
-
-  const settings = useSettingsContext();
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
 
-  const [results, setResults] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
-
-  const theme = useTheme();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -73,13 +60,7 @@ export default function UploadOldPatient({ refetch }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const {
-    reset,
-    handleSubmit,
-    getValues,
-    setValue,
-    formState: { isSubmitting },
-  } = methods;
+  const { reset, handleSubmit, getValues, setValue } = methods;
 
   const values = getValues();
   // console.log('getValues', getValues());
@@ -115,14 +96,14 @@ export default function UploadOldPatient({ refetch }) {
     }
   });
 
-  const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+  // const handleArabicInputChange = (event) => {
+  //   // Validate the input based on Arabic language rules
+  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
 
-    if (arabicRegex.test(event.target.value)) {
-      setValue(event.target.name, event.target.value);
-    }
-  };
+  //   if (arabicRegex.test(event.target.value)) {
+  //     setValue(event.target.name, event.target.value);
+  //   }
+  // };
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules

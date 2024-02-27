@@ -14,12 +14,9 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { useGetTables } from 'src/api';
-
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -53,7 +50,7 @@ export default function TablesListView() {
 
   const confirm = useBoolean();
 
-  const { tableData, loading } = useGetTables();
+  // const { tableData, loading } = useGetTables();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -84,7 +81,7 @@ export default function TablesListView() {
       { tableName: 'measurement_types', documents: [] },
       { tableName: 'hospital_list', documents: [] },
       { tableName: 'deduction_config', documents: [] },
-      { tableName: 'rooms', documents: [] },
+      // { tableName: 'rooms', documents: [] },
       { tableName: 'specialities', documents: [] }, //
       { tableName: 'sub_specialities', documents: [] }, //
       { tableName: 'countries', documents: [] }, //
@@ -136,9 +133,9 @@ export default function TablesListView() {
     [router]
   );
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  // if (loading) {
+  //   return <LoadingScreen />;
+  // }
 
   return (
     <>

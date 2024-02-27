@@ -1,4 +1,3 @@
-import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
@@ -78,9 +77,7 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
 
   // const confirm = useBoolean();
 
-  const { licenseMovements, loading, refetch } = useGetStakeholderLicenseMovement(
-    stakeholderData._id
-  );
+  const { licenseMovements, loading } = useGetStakeholderLicenseMovement(stakeholderData._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -111,7 +108,7 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
+  // const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
 
   const getInvoiceLengthForTabs = (status) => {
     const filterdData = applyFilter({
@@ -126,13 +123,13 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
     return filterdData.filter((item) => item.status === status).length;
   };
 
-  const getTotalAmount = (status) =>
-    sumBy(
-      dataFiltered.filter((item) => item.status === status),
-      'Balance'
-    );
+  // const getTotalAmount = (status) =>
+  //   sumBy(
+  //     dataFiltered.filter((item) => item.status === status),
+  //     'Balance'
+  //   );
 
-  const getPercentByStatus = (status) => (getInvoiceLength(status) / dataFiltered.length) * 100;
+  // const getPercentByStatus = (status) => (getInvoiceLength(status) / dataFiltered.length) * 100;
 
   const TABS = [
     { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
@@ -433,7 +430,7 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, service, startDate, endDate } = filters;
+  const { name, status, startDate, endDate } = filters;
 
   const stabilizedThis = inputData?.map((el, index) => [el, index]);
 

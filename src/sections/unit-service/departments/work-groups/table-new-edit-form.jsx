@@ -20,9 +20,9 @@ import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
 
 import socket from 'src/socket';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetDepartmentEmployees } from 'src/api';
-import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
@@ -33,16 +33,14 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const router = useRouter();
 
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
 
   const { employeesData } = useGetDepartmentEmployees(departmentData._id);
 
   const [selectedEmployees, setSelectedEmployees] = useState([]);
-
-  // console.log('employeesData', employeesData);
 
   const { enqueueSnackbar } = useSnackbar();
 

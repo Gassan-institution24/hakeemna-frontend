@@ -19,7 +19,6 @@ import { fCurrency } from 'src/utils/format-number';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
 
 import InvoiceToolbar from './invoice-toolbar';
 
@@ -41,8 +40,6 @@ const STATUS_OPTIONS = [
 ];
 
 export default function InvoiceDetails({ economicMovementData }) {
-  const settings = useSettingsContext();
-
   const renderTotal = (
     <>
       <StyledTableRow>

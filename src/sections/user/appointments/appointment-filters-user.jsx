@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import {  useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -38,7 +38,6 @@ export default function AppointmentsFilters({
   appointmentTypeOptions,
   dateError,
 }) {
-
   const { t } = useTranslate();
   const handleFilterAppointtypes = useCallback(
     (e) => {

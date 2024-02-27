@@ -25,28 +25,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
   const popover = usePopover();
   const [insuranceNames, setInsuranceNames] = useState();
 
-  const {
-    _id,
-    code,
-    unit_service,
-    department,
-    work_group,
-    work_shift,
-    appointment_type,
-    patient,
-    payment_method,
-    start_time,
-    end_time,
-    name_english,
-    name_arabic,
-    description,
-    description_arabic,
-    activities,
-    result,
-    drug_prescription,
-    price_in_JOD,
-    status,
-  } = appointment;
+  const { _id, code, unit_service, appointment_type, payment_method, start_time } = appointment;
   useEffect(() => {
     if (unit_service?.insurance) {
       const names = unit_service.insurance.map((test) => test.name_english);
@@ -97,8 +76,9 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
                 timeZone: unit_service?.country?.time_zone,
               })}
               secondary={new Date(start_time).toLocaleDateString('en-US', {
-                timeZone: unit_service?.country?.time_zone ||
-                  Intl.DateTimeFormat().resolvedOptions().timeZone
+                timeZone:
+                  unit_service?.country?.time_zone ||
+                  Intl.DateTimeFormat().resolvedOptions().timeZone,
               })}
               primaryTypographyProps={{ typography: 'body2', noWrap: true }}
               secondaryTypographyProps={{
@@ -148,9 +128,9 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
                 <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
               ),
             },
-          ].map((item) => (
+          ].map((item, index) => (
             <Stack
-              key={item.label}
+              key={index}
               spacing={0.5}
               flexShrink={0}
               direction="row"

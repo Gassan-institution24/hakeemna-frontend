@@ -278,16 +278,16 @@ export default function UnitServicesTableView() {
 
   const handleEditRow = useCallback(
     (_id) => {
-      router.push(paths.superadmin.unitservices.departments.edit(id,_id)); /// edit
+      router.push(paths.superadmin.unitservices.departments.edit(id, _id)); /// edit
     },
-    [router,id]
+    [router, id]
   );
 
   const handleShowRow = useCallback(
     (_id) => {
-      router.push(paths.superadmin.unitservices.departments.info(id,_id)); /// edit
+      router.push(paths.superadmin.unitservices.departments.info(id, _id)); /// edit
     },
-    [router,id]
+    [router, id]
   );
 
   const handleResetFilters = useCallback(() => {

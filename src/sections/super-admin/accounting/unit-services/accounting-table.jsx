@@ -62,7 +62,7 @@ export default function LicenseMovementsView() {
 
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { licenseMovements, loading, refetch } = useGetUSLicenseMovements();
+  const { licenseMovements, loading } = useGetUSLicenseMovements();
 
   const separateEachUsMovement = useCallback(() => {
     const results = {};
@@ -127,7 +127,6 @@ export default function LicenseMovementsView() {
   const canReset = !!filters.name || filters.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-  const now = new Date();
 
   const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
 

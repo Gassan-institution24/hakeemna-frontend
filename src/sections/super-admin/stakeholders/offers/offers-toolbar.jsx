@@ -29,15 +29,6 @@ export default function TablesTableToolbar({
     },
     [onFilters]
   );
-  const handleFilterRate = useCallback(
-    (event) => {
-      onFilters(
-        'rate',
-        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
-      );
-    },
-    [onFilters]
-  );
 
   const handleFilterStartDate = useCallback(
     (newValue) => {
@@ -52,8 +43,6 @@ export default function TablesTableToolbar({
     },
     [onFilters]
   );
-
-  const rateOptions = [1, 2, 3, 4, 5];
 
   return (
     <Stack

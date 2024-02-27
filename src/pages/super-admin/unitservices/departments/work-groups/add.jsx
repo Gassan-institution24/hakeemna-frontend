@@ -13,7 +13,7 @@ import DepartmentWorkGroupNewView from 'src/sections/super-admin/unitservices/de
 
 export default function DepartmentWorkGroupNewPage() {
   const params = useParams();
-  const {depid} = params;
+  const { depid } = params;
   const { data, loading } = useGetDepartment(depid);
   return (
     <ACLGuard hasContent category="department" subcategory="work_groups" acl="create">

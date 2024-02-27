@@ -8,7 +8,7 @@ import { alpha } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useLocales } from 'src/locales';
 import { UploadIllustration } from 'src/assets/illustrations';
 
 import Iconify from '../iconify';
@@ -41,7 +41,7 @@ export default function Upload({
     ...other,
   });
 
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 

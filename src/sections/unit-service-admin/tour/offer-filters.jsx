@@ -74,13 +74,6 @@ export default function TourFilters({
     [onFilters]
   );
 
-  const handleFilterTourGuide = useCallback(
-    (newValue) => {
-      onFilters('tourGuides', newValue);
-    },
-    [onFilters]
-  );
-
   const renderHead = (
     <Stack
       direction="row"
@@ -153,48 +146,48 @@ export default function TourFilters({
     </Stack>
   );
 
-  const renderTourGuide = (
-    // <Stack>
-    //   <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-    //     Tour Guide
-    //   </Typography>
+  // const renderTourGuide = (
+  //   // <Stack>
+  //   //   <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
+  //   //     Tour Guide
+  //   //   </Typography>
 
-    //   <Autocomplete
-    //     multiple
-    //     disableCloseOnSelect
-    //     options={tourGuideOptions}
-    //     value={filters.tourGuides}
-    //     onChange={(event, newValue) => handleFilterTourGuide(newValue)}
-    //     getOptionLabel={(option) => option.name}
-    //     renderInput={(params) => <TextField placeholder="Select Tour Guides" {...params} />}
-    //     renderOption={(props, tourGuide) => (
-    //       <li {...props} key={tourGuide.id}>
-    //         <Avatar
-    //           key={tourGuide.id}
-    //           alt={tourGuide.avatarUrl}
-    //           src={tourGuide.avatarUrl}
-    //           sx={{ width: 24, height: 24, flexShrink: 0, mr: 1 }}
-    //         />
+  //   //   <Autocomplete
+  //   //     multiple
+  //   //     disableCloseOnSelect
+  //   //     options={tourGuideOptions}
+  //   //     value={filters.tourGuides}
+  //   //     onChange={(event, newValue) => handleFilterTourGuide(newValue)}
+  //   //     getOptionLabel={(option) => option.name}
+  //   //     renderInput={(params) => <TextField placeholder="Select Tour Guides" {...params} />}
+  //   //     renderOption={(props, tourGuide) => (
+  //   //       <li {...props} key={tourGuide.id}>
+  //   //         <Avatar
+  //   //           key={tourGuide.id}
+  //   //           alt={tourGuide.avatarUrl}
+  //   //           src={tourGuide.avatarUrl}
+  //   //           sx={{ width: 24, height: 24, flexShrink: 0, mr: 1 }}
+  //   //         />
 
-    //         {tourGuide.name}
-    //       </li>
-    //     )}
-    //     renderTags={(selected, getTagProps) =>
-    //       selected.map((tourGuide, index) => (
-    //         <Chip
-    //           {...getTagProps({ index })}
-    //           key={tourGuide.id}
-    //           size="small"
-    //           variant="soft"
-    //           label={tourGuide.name}
-    //           avatar={<Avatar alt={tourGuide.name} src={tourGuide.avatarUrl} />}
-    //         />
-    //       ))
-    //     }
-    //   />
-    // </Stack>
-    <></>
-  );
+  //   //         {tourGuide.name}
+  //   //       </li>
+  //   //     )}
+  //   //     renderTags={(selected, getTagProps) =>
+  //   //       selected.map((tourGuide, index) => (
+  //   //         <Chip
+  //   //           {...getTagProps({ index })}
+  //   //           key={tourGuide.id}
+  //   //           size="small"
+  //   //           variant="soft"
+  //   //           label={tourGuide.name}
+  //   //           avatar={<Avatar alt={tourGuide.name} src={tourGuide.avatarUrl} />}
+  //   //         />
+  //   //       ))
+  //   //     }
+  //   //   />
+  //   // </Stack>
+  //   <></>
+  // );
 
   const renderServices = (
     <Stack>
