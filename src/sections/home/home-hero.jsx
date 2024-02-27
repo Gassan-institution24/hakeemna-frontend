@@ -171,8 +171,6 @@ export default function HomeHero() {
           md: `-${HEADER.H_DESKTOP + percent * 2.5}px`,
         },
       }}
-
-
     >
       <m.div variants={varFade().in}>
         <Typography

@@ -96,9 +96,9 @@ export function RHFMultiSelect({
     if (chip) {
       return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-          {selectedItems.map((item) => (
+          {selectedItems.map((item, index) => (
             <Chip
-              key={item._id}
+              key={index}
               size="small"
               label={curLangAr ? item.name_arabic : item.name_english}
             />

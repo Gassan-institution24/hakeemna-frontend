@@ -24,9 +24,7 @@ export default function InvoiceToolbar({
   statusOptions,
   onChangeStatus,
 }) {
-
   const view = useBoolean();
-
 
   return (
     <>

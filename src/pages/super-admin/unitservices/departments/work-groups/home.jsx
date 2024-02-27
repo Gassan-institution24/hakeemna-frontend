@@ -13,7 +13,7 @@ import DepartmentWorkGroupsView from 'src/sections/super-admin/unitservices/depa
 
 export default function DepartmentWorkGroupsPage() {
   const params = useParams();
-  const {depid} = params;
+  const { depid } = params;
   const { data, loading } = useGetDepartment(depid);
   const name = data?.name_english;
   return (

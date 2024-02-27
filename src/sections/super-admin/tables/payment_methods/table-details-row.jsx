@@ -38,8 +38,6 @@ export default function TableDetailsRow({
     modifications_nums,
   } = row;
 
-
-
   const popover = usePopover();
   const DDL = usePopover();
 

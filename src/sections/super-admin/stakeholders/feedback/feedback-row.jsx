@@ -15,17 +15,8 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 export default function FeedbackRow({ row, onEditRow, setFilters, filters }) {
-  const {
-    code,
-    status,
-    title,
-    Body,
-    Rate,
-    created_at,
-    user_creation,
-    ip_address_user_creation,
-  } = row;
-
+  const { code, status, title, Body, Rate, created_at, user_creation, ip_address_user_creation } =
+    row;
 
   const popover = usePopover();
   const DDL = usePopover();

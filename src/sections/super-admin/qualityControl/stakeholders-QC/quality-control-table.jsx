@@ -51,7 +51,6 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function StakeholdersFeedbacks() {
-
   const { t } = useTranslate();
 
   const settings = useSettingsContext();

@@ -46,8 +46,8 @@ export default function UserTableFiltersResult({
 
         {!!filters.role.length && (
           <Block label="Role:">
-            {filters.role.map((item) => (
-              <Chip key={item} label={item} size="small" onDelete={() => handleRemoveRole(item)} />
+            {filters.role.map((item, index) => (
+              <Chip key={index} label={item} size="small" onDelete={() => handleRemoveRole(item)} />
             ))}
           </Block>
         )}

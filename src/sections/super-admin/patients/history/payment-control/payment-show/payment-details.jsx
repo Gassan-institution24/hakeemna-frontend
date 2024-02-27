@@ -40,7 +40,6 @@ const STATUS_OPTIONS = [
 ];
 
 export default function InvoiceDetails({ paymentData }) {
-
   const renderTotal = (
     <>
       <StyledTableRow>

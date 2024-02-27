@@ -15,7 +15,6 @@ import TableNewEditForm from './table-new-edit-form';
 export default function TableEditView() {
   const settings = useSettingsContext();
 
-
   const params = useParams();
   const { id } = params;
   const { data } = useGetCategory(id);

@@ -13,7 +13,7 @@ import DepartmentRoomsView from 'src/sections/super-admin/unitservices/departmen
 
 export default function DepartmentRoomsPage() {
   const params = useParams();
-  const {depid} = params;
+  const { depid } = params;
   const { data, loading } = useGetDepartment(depid);
   const name = data?.name_english;
   return (

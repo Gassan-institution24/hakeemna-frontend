@@ -49,7 +49,6 @@ export default function TableDetailsRow({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-
   const popover = usePopover();
   const DDL = usePopover();
 

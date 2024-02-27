@@ -23,12 +23,10 @@ export default function TableCreateView() {
     {
       value: 'many',
       label: 'Add many',
-      // icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
     },
     {
       value: 'one',
       label: 'Add one',
-      // icon: <Iconify icon="solar:user-id-bold" width={24} />,
     },
   ];
 

@@ -13,7 +13,7 @@ import DepartmentAppointmentConfigView from 'src/sections/super-admin/unitservic
 
 export default function DepartmentAppointmentConfigPage() {
   const params = useParams();
-  const {depid} = params;
+  const { depid } = params;
   const { data, loading } = useGetDepartment(depid);
   const name = data?.name_english;
   return (

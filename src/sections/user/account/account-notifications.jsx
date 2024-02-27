@@ -96,9 +96,9 @@ export default function AccountNotifications() {
                   control={control}
                   render={({ field }) => (
                     <>
-                      {notification.items.map((item) => (
+                      {notification.items.map((item, index) => (
                         <FormControlLabel
-                          key={item.id}
+                          key={index}
                           label={item.label}
                           labelPlacement="start"
                           control={
@@ -124,7 +124,6 @@ export default function AccountNotifications() {
 
         <LoadingButton
           type="submit"
-          tabIndex={-1}
           tabIndex={-1}
           variant="contained"
           loading={isSubmitting}

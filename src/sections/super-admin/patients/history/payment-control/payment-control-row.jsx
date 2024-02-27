@@ -46,7 +46,6 @@ export default function MovementTableRow({
     modifications_nums,
   } = row;
 
-
   const DDL = usePopover();
   const popover = usePopover();
 

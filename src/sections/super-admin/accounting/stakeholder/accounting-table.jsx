@@ -77,9 +77,7 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
 
   // const confirm = useBoolean();
 
-  const { licenseMovements, loading } = useGetStakeholderLicenseMovement(
-    stakeholderData._id
-  );
+  const { licenseMovements, loading } = useGetStakeholderLicenseMovement(stakeholderData._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 

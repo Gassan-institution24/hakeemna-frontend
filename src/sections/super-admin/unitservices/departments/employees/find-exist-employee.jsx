@@ -95,13 +95,13 @@ export default function TableNewEditForm({ departmentData }) {
   const handleEmployment = async (row) => {
     try {
       await axios.post(endpoints.tables.employeeEngagements, {
-        unit_service:id,
+        unit_service: id,
         department: departmentData._id,
         employee: row._id,
       });
       socket.emit('updated', {
         user,
-        link: paths.superadmin.unitservices.departments.employees.root(id,departmentData._id),
+        link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
         msg: `employed an employee <strong>[ ${row.first_name} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
       });
       enqueueSnackbar(t('employment successfully!'));
@@ -116,8 +116,7 @@ export default function TableNewEditForm({ departmentData }) {
     async function getExistEmployees() {
       if (Object.keys(filters).length) {
         const { data } = await axios.post(endpoints.tables.findEmployee, {
-          unit_service:
-           id,
+          unit_service: id,
           filters,
         });
         setResults(data);

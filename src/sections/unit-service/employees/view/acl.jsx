@@ -31,7 +31,6 @@ const options = [
 ];
 
 export default function TableNewEditForm({ acl }) {
-
   const employeeId = useParams().id;
 
   const { user } = useAuthContext();

@@ -44,7 +44,6 @@ export default function TableDetailsRow({
     modifications_nums,
   } = row;
 
-
   const confirm = useBoolean();
 
   const popover = usePopover();

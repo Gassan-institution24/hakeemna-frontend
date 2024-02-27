@@ -7,25 +7,24 @@ export const navConfig = [
     title: 'Home',
     icon: <Iconify icon="solar:home-2-bold-duotone" />,
     path: '/',
-    sectionId: "home"
+    sectionId: 'home',
   },
   {
     title: 'About',
     icon: <Iconify icon="solar:notebook-bold-duotone" />,
     path: '#',
-    sectionId: "About"
-
+    sectionId: 'About',
   },
   {
     title: 'Services',
     icon: <Iconify icon="solar:notebook-bold-duotone" />,
     path: '#',
-    sectionId: "services"
+    sectionId: 'services',
   },
   {
     title: 'R&D',
     icon: <Iconify icon="solar:notebook-bold-duotone" />,
     path: 'https://front-pi-eight.vercel.app',
-    sectionId: "home"
+    sectionId: 'home',
   },
 ];

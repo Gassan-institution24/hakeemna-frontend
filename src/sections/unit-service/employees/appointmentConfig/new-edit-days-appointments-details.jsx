@@ -112,7 +112,7 @@ export default function NewEditDayAppointmentsDetails({
         >
           {fields.map((item, index) => (
             <Stack
-              key={item.id}
+              key={index}
               alignItems="center"
               flexWrap="wrap"
               spacing={1.5}

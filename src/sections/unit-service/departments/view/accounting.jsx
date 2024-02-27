@@ -13,7 +13,6 @@ import PaymentControlView from '../accounting/payment-control/payment-control';
 // ----------------------------------------------------------------------
 
 export default function PatientHistoryView({ departmentData }) {
-
   const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('Invoices');

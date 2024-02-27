@@ -21,7 +21,6 @@ import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form'
 // ----------------------------------------------------------------------
 
 export default function UploadOldPatient({ refetch }) {
-
   const { t } = useTranslate();
   // const { currentLang } = useLocales();
   // const curLangAr = currentLang.value === 'ar';
@@ -61,12 +60,7 @@ export default function UploadOldPatient({ refetch }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const {
-    reset,
-    handleSubmit,
-    getValues,
-    setValue,
-  } = methods;
+  const { reset, handleSubmit, getValues, setValue } = methods;
 
   const values = getValues();
   // console.log('getValues', getValues());

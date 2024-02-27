@@ -42,7 +42,6 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const [selectedEmployees, setSelectedEmployees] = useState([]);
 
-
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({

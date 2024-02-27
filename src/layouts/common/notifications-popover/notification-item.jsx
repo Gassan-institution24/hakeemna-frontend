@@ -9,7 +9,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 
 import { fToNow } from 'src/utils/format-time';
 
-
 // ----------------------------------------------------------------------
 
 export default function NotificationItem({ notification, handleClick }) {

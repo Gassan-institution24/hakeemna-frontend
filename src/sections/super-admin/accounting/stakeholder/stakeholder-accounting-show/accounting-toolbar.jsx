@@ -19,7 +19,6 @@ import InvoicePDF from './accounting-pdf';
 // ----------------------------------------------------------------------
 
 export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, onChangeStatus }) {
-
   const view = useBoolean();
 
   // const handleEdit = useCallback(() => {

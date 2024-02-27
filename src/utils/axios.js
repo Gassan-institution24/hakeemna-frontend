@@ -29,11 +29,55 @@ export const fetcher = async (args) => {
 
 export const endpoints = {
   allTables: '/tables',
+  countries: {
+    getAllcountries: '/api/countries/',
+    many: '/api/countries/many',
+  },
+  currency: {
+    many: '/api/currency/many',
+  },
+  diets: {
+    many: '/api/diets/many',
+  },
+  diseases: {
+    many: '/api/diseases/many',
+  },
+  hospitals: {
+    many: '/api/hospital/many',
+  },
+  insuranceCos: {
+    many: '/api/insurance/companies/many',
+  },
+  measurmenttypes: {
+    many: '/api/measurmenttypes/many',
+  },
+  medCategories: {
+    many: '/api/medCategories/many',
+  },
+  medfamilies: {
+    many: '/api/drugfamilies/many',
+  },
+  medicines: {
+    many: '/api/medicines/many',
+  },
+  specialities: {
+    many: '/api/specialities/many',
+  },
+  subspecialities: {
+    many: '/api/subspecialities/many',
+  },
+  surgeries: {
+    many: '/api/surgeries/many',
+  },
+  symptoms: {
+    many: '/api/symptoms/many',
+  },
   tables: {
     countries: `/api/countries`,
     country: (id) => `/api/countries/${id}`,
     cities: '/api/cities',
     manyCities: '/api/cities/many',
+    manyAnalyses: '/api/analysis/many',
     city: (id) => `/api/cities/${id}`,
     surgeries: '/api/surgeries',
     surgery: (id) => `/api/surgeries/${id}`,
@@ -72,7 +116,7 @@ export const endpoints = {
     department: (id) => `/api/departments/${id}`,
     specialities: '/api/specialities',
     speciality: (id) => `/api/specialities/${id}`,
-    subspecialties: '/api/subspecialities',
+    subspecialities: '/api/subspecialities',
     subspeciality: (id) => `/api/subspecialities/${id}`,
     appointmenttypes: '/api/appointments/types',
     appointmenttype: (id) => `/api/appointments/types/${id}`,
@@ -273,9 +317,6 @@ export const endpoints = {
   },
   posts: {
     getAll: '/api/post',
-  },
-  countries: {
-    getAllcountries: '/api/countries/',
   },
   payment: {
     getAllpaymentmethods: '/api/paymentmethods',

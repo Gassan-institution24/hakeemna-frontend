@@ -50,7 +50,6 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function USsFeedbacks() {
-
   const settings = useSettingsContext();
 
   const router = useRouter();

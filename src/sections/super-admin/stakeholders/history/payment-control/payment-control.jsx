@@ -75,9 +75,7 @@ export default function IncomePaymentControlView({ stakeholderData }) {
 
   // const confirm = useBoolean();
 
-  const { incomePaymentData, loading } = useGetStackholderIncomePaymentControl(
-    stakeholderData._id
-  );
+  const { incomePaymentData, loading } = useGetStackholderIncomePaymentControl(stakeholderData._id);
 
   const unitServiceOptions = incomePaymentData.reduce((arr, data) => {
     // Check if the name_english is not already in the array

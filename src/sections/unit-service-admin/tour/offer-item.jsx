@@ -24,12 +24,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 export default function TourItem({ tour, onView, onEdit, onStatusChange }) {
   const popover = usePopover();
   const ref = useRef();
-  const {
-    Offer_name,
-    Offer_price,
-    created_at,
-    Offer_img,
-  } = tour;
+  const { Offer_name, Offer_price, created_at, Offer_img } = tour;
 
   // const shortLabel = shortDateLabel(available.startDate, available.endDate);
 

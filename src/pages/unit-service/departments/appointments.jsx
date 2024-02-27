@@ -19,9 +19,7 @@ export default function DepartmentAppointmentsPage() {
       <Helmet>
         <title>{name || ''} Department Appointments</title>
       </Helmet>
-        <DepartmentAppointmentsView
-          departmentData={data}
-        />
+      <DepartmentAppointmentsView departmentData={data} />
     </ACLGuard>
   );
 }

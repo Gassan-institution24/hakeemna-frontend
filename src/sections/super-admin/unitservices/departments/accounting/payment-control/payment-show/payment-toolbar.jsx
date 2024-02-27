@@ -24,7 +24,6 @@ export default function InvoiceToolbar({
   statusOptions,
   onChangeStatus,
 }) {
-
   const view = useBoolean();
 
   // const handleEdit = useCallback(() => {

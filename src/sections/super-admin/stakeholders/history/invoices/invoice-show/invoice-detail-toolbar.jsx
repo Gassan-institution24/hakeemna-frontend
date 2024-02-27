@@ -10,7 +10,6 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function InvoiceDetailsToolbar({ backLink, editLink, ...other }) {
-
   return (
     <Stack
       spacing={1.5}

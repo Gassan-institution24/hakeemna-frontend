@@ -62,17 +62,17 @@ export default function InvoiceTableFiltersResult({
         )}
         {filters.types !== '' && (
           // <Block>
-            <Chip size="small" label={t('appointment type')} onDelete={handleRemovetype} />
+          <Chip size="small" label={t('appointment type')} onDelete={handleRemovetype} />
           // </Block>
         )}
         {filters.group !== '' && (
           // <Block>
-            <Chip size="small" label={t('work group')} onDelete={handleRemoveGroup} />
+          <Chip size="small" label={t('work group')} onDelete={handleRemoveGroup} />
           // </Block>
         )}
         {filters.shift !== '' && (
           // <Block>
-            <Chip size="small" label={t('work shift')} onDelete={handleRemoveShift} />
+          <Chip size="small" label={t('work shift')} onDelete={handleRemoveShift} />
           // </Block>
         )}
 

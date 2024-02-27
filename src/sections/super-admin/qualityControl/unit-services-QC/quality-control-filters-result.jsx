@@ -45,7 +45,7 @@ export default function InvoiceTableFiltersResult({
           <Block label="Service:">
             {filters.service.map((item) => (
               <Chip
-                key={item}
+                key={index}
                 label={item}
                 size="small"
                 onDelete={() => handleRemoveService(item)}

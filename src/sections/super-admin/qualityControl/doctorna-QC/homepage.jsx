@@ -15,7 +15,6 @@ import SystemError from './system-errors/system-errors-table';
 // ----------------------------------------------------------------------
 
 export default function DoctornaQCPage() {
-
   const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('Feedback');

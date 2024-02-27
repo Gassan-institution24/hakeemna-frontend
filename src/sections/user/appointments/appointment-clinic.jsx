@@ -15,13 +15,13 @@ import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 import { LoadingScreen } from 'src/components/loading-screen';
 
-  export default function AppointmetClinic({  onBook, onView }) {
+export default function AppointmetClinic({ onBook, onView }) {
   const { t } = useTranslate();
   // const { feedbackData } = useGetUSFeedbackes(Units._id);
   const params = useParams();
 
   const { id } = params;
-  const { data,loading } = useGetEmployeeBySpecialty(id);
+  const { data, loading } = useGetEmployeeBySpecialty(id);
   const router = useRouter();
   console.log(data);
   const handleViewRow = (ids) => {
@@ -31,8 +31,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
   // const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient._id));
   // const numberOfUsers = uniqueUserIds.size;
 
-  if(loading){
-    return <LoadingScreen/>
+  if (loading) {
+    return <LoadingScreen />;
   }
   return (
     <Box sx={{ display: 'flex' }}>
@@ -104,11 +104,9 @@ import { LoadingScreen } from 'src/components/loading-screen';
       ))}
     </Box>
   );
-};
+}
 
 AppointmetClinic.propTypes = {
-
   onView: PropTypes.func,
   onBook: PropTypes.func,
 };
-

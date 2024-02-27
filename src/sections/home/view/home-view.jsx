@@ -20,7 +20,7 @@ export default function HomeView({ divRef, divRef2 }) {
     <>
       <ScrollProgress scrollYProgress={scrollYProgress} />
 
-      <HomeHero ref={divRef2}  />
+      <HomeHero ref={divRef2} />
 
       <Box
         sx={{

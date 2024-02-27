@@ -18,7 +18,6 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 // ----------------------------------------------------------------------
 
 export default function StakeholderOffersView({ stakeholderData }) {
-
   const { t } = useTranslate();
 
   const settings = useSettingsContext();

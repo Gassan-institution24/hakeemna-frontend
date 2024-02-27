@@ -53,7 +53,6 @@ export default function MovementTableRow({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-
   const DDL = usePopover();
   const popover = usePopover();
 
