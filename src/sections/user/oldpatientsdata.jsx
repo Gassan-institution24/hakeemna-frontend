@@ -52,8 +52,8 @@ export default function Oldpatientsdata() {
 
   const yesFunction = async () => {
     try {
-      const existingDataResponse = await axios.get(endpoints.tables.patient(user.patient._id));
-      const existingData = existingDataResponse.data;
+      // const existingDataResponse = await axios.get(endpoints.tables.patient(user.patient._id));
+      // const existingData = existingDataResponse.data;
 
       const newData = { ...oldpatientsdata[0] };
 
@@ -63,7 +63,7 @@ export default function Oldpatientsdata() {
         }
       });
 
-      const response = await axios.patch(endpoints.tables.patient(user.patient._id), newData);
+     await axios.patch(endpoints.tables.patient(user.patient._id), newData);
 
       enqueueSnackbar(t('Thanks for your cooperation, data saved to profile successfully'), {
         variant: 'success',
@@ -80,7 +80,7 @@ export default function Oldpatientsdata() {
 
   const noFunction = async () => {
     try {
-      const response = await axios.patch(`/api/oldpatientsdata/${oldDataId}/updateonboard`, {
+      await axios.patch(`/api/oldpatientsdata/${oldDataId}/updateonboard`, {
         is_onboarded: false,
       });
       enqueueSnackbar(t(`Thanks for your cooperation`), { variant: 'success' });

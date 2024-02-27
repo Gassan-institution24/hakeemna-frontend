@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Page,
   Text,
@@ -24,8 +24,6 @@ import ListItemText from '@mui/material/ListItemText';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { Button, MenuItem, Typography } from '@mui/material';
-
-import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -129,7 +127,7 @@ export default function OldMedicalReports() {
       padding: '10px',
     },
   });
-  const router = useRouter();
+  // const router = useRouter();
   const oldMedicalReportsSchema = Yup.object().shape({
     type: Yup.string().required(),
     date: Yup.date().required('Date is required'),
@@ -153,7 +151,7 @@ export default function OldMedicalReports() {
     specialty: '',
   };
 
-  const MedicalreportsnPDF = ({ info }) => (
+  const MedicalreportsnPDF = useCallback(({ info }) => (
     <Document>
       <Page size="A4" style={styles.page}>
         <View>
@@ -205,7 +203,7 @@ export default function OldMedicalReports() {
         </View>
       </Page>
     </Document>
-  );
+  ),[styles]);
 
   MedicalreportsnPDF.propTypes = {
     info: PropTypes.shape({

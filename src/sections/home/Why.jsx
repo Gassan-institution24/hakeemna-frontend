@@ -5,11 +5,11 @@ import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function Whydoc() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const renderDescription = (
     <Stack spacing={3} sx={{ textalign: 'center', mb: 10 }}>

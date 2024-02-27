@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 
-import { useTranslate } from 'src/locales';
+// import { useTranslate } from 'src/locales';
 import { useGetEmployeeBySpecialty } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -16,7 +16,7 @@ import Image from 'src/components/image/image';
 import { LoadingScreen } from 'src/components/loading-screen';
 
 export default function AppointmetClinic({ onBook, onView }) {
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
   // const { feedbackData } = useGetUSFeedbackes(Units._id);
   const params = useParams();
 

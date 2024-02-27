@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Page,
   Text,
@@ -128,7 +128,7 @@ export default function Prescriptions() {
     },
   });
 
-  const PrescriptionPDF = () => (
+  const PrescriptionPDF = useCallback(() => (
     <Document>
       <Page size="A4" style={styles.page}>
         {user?.patient.medicines.map((med, i) => (
@@ -186,7 +186,7 @@ export default function Prescriptions() {
         ))}
       </Page>
     </Document>
-  );
+  ),[styles,currentDate,user]);
 
   return (
     <div>

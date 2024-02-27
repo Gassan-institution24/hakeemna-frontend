@@ -57,12 +57,7 @@ export default function AppointmentsFilters({
     },
     [onFilters]
   );
-  const handleFilterUnitServices = useCallback(
-    (e) => {
-      onFilters('feedback', e.target.value);
-    },
-    [onFilters]
-  );
+ 
 
   const handleFilterStartDate = useCallback(
     (e) => {
