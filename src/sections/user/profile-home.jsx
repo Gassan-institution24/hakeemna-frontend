@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -14,7 +14,6 @@ import Image from 'src/components/image/image';
 // ----------------------------------------------------------------------
 
 export default function ProfileHome() {
-  const [currentDate, setCurrentDate] = useState(new Date());
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';

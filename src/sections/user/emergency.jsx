@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, Button, Container, Typography } from '@mui/material';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useLocales } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
@@ -10,7 +10,7 @@ import Image from 'src/components/image/image';
 import Emergencypic from '../../components/logo/doc.png';
 
 export default function Emergency() {
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const test = () => {

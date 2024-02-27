@@ -20,7 +20,6 @@ import {
   useGetUnitservices,
   useGetPaymentMethods,
   useGetAppointmentTypes,
-  useGetAvailableAppointments,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -57,8 +56,8 @@ export default function AppointmentBooking() {
   const [sortBy, setSortBy] = useState('rateing');
   const [search, setSearch] = useState();
 
-  const { appointmentsData, refetch } = useGetAvailableAppointments();
-  const { countriesData } = useGetCountries();
+  // const { appointmentsData, refetch } = useGetAvailableAppointments();
+  const { countriesData,refetch } = useGetCountries();
   const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
   const { unitservicesData } = useGetUnitservices();

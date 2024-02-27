@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import { varFade, MotionViewport } from 'src/components/animate';
 
@@ -15,8 +15,8 @@ export default function Bmi() {
   const [weight, setWeight] = useState(null);
   const [result, setResult] = useState(null);
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
   const handleHeightChange = useCallback((e) => {
     setHeight(e.target.value);
   }, []);
