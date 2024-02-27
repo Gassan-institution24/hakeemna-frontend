@@ -74,7 +74,7 @@ export default function IncomePaymentControlView({ departmentData }) {
 
   // const confirm = useBoolean();
 
-  const { incomePaymentData, refetch } = useGetDepartmentPaymentControl(departmentData._id);
+  const { incomePaymentData } = useGetDepartmentPaymentControl(departmentData._id);
 
   const unitServiceOptions = incomePaymentData.reduce((arr, data) => {
     // Check if the name_english is not already in the array

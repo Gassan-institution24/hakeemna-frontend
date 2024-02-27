@@ -41,7 +41,6 @@ export default function TableDetailsRow({
   } = row;
 
   const DDL = usePopover();
-  const details = usePopover();
   const popover = usePopover();
 
   const renderPrimary = (

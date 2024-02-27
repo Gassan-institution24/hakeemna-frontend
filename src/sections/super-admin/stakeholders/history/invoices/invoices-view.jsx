@@ -75,7 +75,7 @@ export default function EconomicMovementsView({ stakeholderData }) {
 
   // const confirm = useBoolean();
 
-  const { economecMovementsData, loading, refetch } = useGetStackeholderEconomicMovements(
+  const { economecMovementsData, loading } = useGetStackeholderEconomicMovements(
     stakeholderData._id
   );
 
@@ -456,7 +456,7 @@ export default function EconomicMovementsView({ stakeholderData }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, service, startDate, endDate } = filters;
+  const { name, status, startDate, endDate } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 

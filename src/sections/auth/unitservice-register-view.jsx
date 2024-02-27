@@ -141,13 +141,9 @@ export default function JwtRegisterView() {
   });
 
   const {
-    reset,
-    trigger,
     handleSubmit,
-    formState: { isSubmitting, isValid, errors },
+    formState: { isSubmitting, errors },
   } = methods;
-
-  const values = methods.getValues();
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
@@ -271,7 +267,7 @@ export default function JwtRegisterView() {
     <Stack spacing={2}>
       {!!errorMsg && (
         <Alert severity="error">
-          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+          <div> {errorMsg} </div>
         </Alert>
       )}
       {/* <Alert severity="info">Service unit information</Alert> */}
@@ -399,7 +395,7 @@ export default function JwtRegisterView() {
     <Stack spacing={2}>
       {!!errorMsg && (
         <Alert severity="error">
-          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+          <div> {errorMsg} </div>
         </Alert>
       )}
       {/* <Alert severity="info">Employee information</Alert> */}
@@ -527,7 +523,7 @@ export default function JwtRegisterView() {
     <Stack spacing={2}>
       {!!errorMsg && (
         <Alert severity="error">
-          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+          <div> {errorMsg} </div>
         </Alert>
       )}
       {/* <Alert severity="info">Sign in information</Alert> */}

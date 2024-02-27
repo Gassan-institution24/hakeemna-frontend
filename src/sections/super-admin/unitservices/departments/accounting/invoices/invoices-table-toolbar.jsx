@@ -32,16 +32,6 @@ export default function InvoiceTableToolbar({
     [onFilters]
   );
 
-  const handleFilterService = useCallback(
-    (event) => {
-      onFilters(
-        'service',
-        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
-      );
-    },
-    [onFilters]
-  );
-
   const handleFilterStartDate = useCallback(
     (newValue) => {
       onFilters('startDate', newValue);

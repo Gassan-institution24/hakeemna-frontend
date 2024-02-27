@@ -132,7 +132,6 @@ export default function AccountNotifications() {
         <LoadingButton
           type="submit"
           tabIndex={-1}
-          tabIndex={-1}
           variant="contained"
           loading={isSubmitting}
           sx={{ ml: 'auto' }}

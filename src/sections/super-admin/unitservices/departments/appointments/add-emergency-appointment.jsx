@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 import { paths } from 'src/routes/paths';
-import { useParams, useRouter } from 'src/routes/hooks';
+import { useParams } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -31,7 +31,6 @@ import {
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import { usePopover } from 'src/components/custom-popover';
 import FormProvider, { RHFSelect, RHFMultiSelect } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -43,8 +42,6 @@ export default function BookManually({
   refetch,
   ...other
 }) {
-  const router = useRouter();
-  const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
   const { id, depid } = useParams();
@@ -88,7 +85,6 @@ export default function BookManually({
     reset,
     setValue,
     handleSubmit,
-    formState: { isSubmitting },
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {

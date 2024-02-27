@@ -15,7 +15,6 @@ import Label from 'src/components/label/label';
 
 export default function MovementInfoContent({ economicMovementData }) {
   const {
-    code,
     first_name,
     last_name,
     nationality,
@@ -41,10 +40,7 @@ export default function MovementInfoContent({ economicMovementData }) {
     alcohol_consumption,
     smoking,
     other_medication_notes,
-    upload_historical_reports,
     insurance,
-    files,
-    profile_picture,
     patient_father,
     status,
   } = economicMovementData;

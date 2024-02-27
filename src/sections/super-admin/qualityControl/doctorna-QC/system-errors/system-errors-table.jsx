@@ -12,10 +12,6 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
-import { useRouter } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { useGetSystemErrors } from 'src/api';
 
 import Label from 'src/components/label';
@@ -69,11 +65,6 @@ export default function DoctornaSystemErrorsView() {
   const componentRef = useRef();
 
   const settings = useSettingsContext();
-
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
-  const router = useRouter();
 
   const { systemErrorsData, loading, refetch } = useGetSystemErrors();
 

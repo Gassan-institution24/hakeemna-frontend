@@ -6,8 +6,6 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { usePopover } from 'src/components/custom-popover';
@@ -23,10 +21,6 @@ export default function MovementTableRow({
   onDeleteRow,
 }) {
   const { stakeholder, start_date, end_date, count, payments, user_no, status } = row;
-
-  const confirm = useBoolean();
-
-  const DDL = usePopover();
   const popover = usePopover();
 
   return (

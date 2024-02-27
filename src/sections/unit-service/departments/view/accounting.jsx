@@ -4,9 +4,6 @@ import { useState, useCallback } from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
-import { useTheme } from '@mui/material/styles';
-
-import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 
@@ -16,9 +13,6 @@ import PaymentControlView from '../accounting/payment-control/payment-control';
 // ----------------------------------------------------------------------
 
 export default function PatientHistoryView({ departmentData }) {
-  const theme = useTheme();
-
-  const { t } = useTranslate();
 
   const settings = useSettingsContext();
 

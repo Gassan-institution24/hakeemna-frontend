@@ -12,7 +12,6 @@ import Iconify from 'src/components/iconify';
 export default function StakeholderInfoContent({ stakeholderData }) {
   // console.log('stakeholderData', stakeholderData);
   const {
-    code,
     name_english,
     identification_num,
     stakeholder_type,
@@ -22,15 +21,11 @@ export default function StakeholderInfoContent({ stakeholderData }) {
     tax_num,
     address,
     web_page,
-    company_logo,
     phone,
     mobile_num,
     specialty,
-    bank_acc,
-    city,
     email,
     insurance,
-    status,
   } = stakeholderData;
 
   const renderOverview = (

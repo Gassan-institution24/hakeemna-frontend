@@ -144,14 +144,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
     }
   });
 
-  const handleEnglishInputChange = (event) => {
-    // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
+  // const handleEnglishInputChange = (event) => {
+  //   // Validate the input based on English language rules
+  //   const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
 
-    if (englishRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-    }
-  };
+  //   if (englishRegex.test(event.target.value)) {
+  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+  //   }
+  // };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

@@ -8,8 +8,6 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fDateTime } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
@@ -39,12 +37,6 @@ export default function MovementTableRow({
     due_date,
     amount,
     recieved_real_date,
-    appointment,
-    work_shift,
-    type,
-    hospital,
-    Balance,
-    Currency,
     status,
 
     created_at,
@@ -61,7 +53,6 @@ export default function MovementTableRow({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const confirm = useBoolean();
 
   const DDL = usePopover();
   const popover = usePopover();

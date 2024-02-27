@@ -4,7 +4,6 @@ import { useState, useCallback } from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
-import { useTheme } from '@mui/material/styles';
 
 import { useSettingsContext } from 'src/components/settings';
 
@@ -14,7 +13,6 @@ import PaymentControlView from '../accouting/payment-control/payment-control';
 // ----------------------------------------------------------------------
 
 export default function EmployeeAccountingView({ employeeData }) {
-  const theme = useTheme();
 
   const settings = useSettingsContext();
 

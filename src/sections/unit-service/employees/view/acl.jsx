@@ -10,7 +10,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Paper, TableRow, TableCell, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-import { useParams, useRouter } from 'src/routes/hooks';
+import { useParams } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -31,7 +31,6 @@ const options = [
 ];
 
 export default function TableNewEditForm({ acl }) {
-  const router = useRouter();
 
   const employeeId = useParams().id;
 
@@ -127,7 +126,6 @@ export default function TableNewEditForm({ acl }) {
   });
 
   const {
-    reset,
     getValues,
     handleSubmit,
     formState: { isSubmitting },

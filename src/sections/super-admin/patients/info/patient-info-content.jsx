@@ -8,8 +8,6 @@ import ListItemText from '@mui/material/ListItemText';
 
 import { fDate } from 'src/utils/format-time';
 
-import { useTranslate } from 'src/locales';
-
 import Iconify from 'src/components/iconify';
 import Label from 'src/components/label/label';
 
@@ -17,7 +15,6 @@ import Label from 'src/components/label/label';
 
 export default function PatientInfoContent({ patientData }) {
   const {
-    code,
     first_name,
     last_name,
     nationality,
@@ -43,15 +40,11 @@ export default function PatientInfoContent({ patientData }) {
     alcohol_consumption,
     smoking,
     other_medication_notes,
-    upload_historical_reports,
     insurance,
-    files,
-    profile_picture,
     patient_father,
     status,
   } = patientData;
 
-  const { t } = useTranslate();
 
   // const MDData = (
   //   <div>

@@ -55,13 +55,6 @@ export default function CountriesTableRow({
 
   const popover = usePopover();
   const DDL = usePopover();
-  // const { appointmentConfigCount } = useGetDepartmentAppointmentConfigsCount(row._id);
-  // const { activitiesCount } = useGetDepartmentActivitiesCount(row._id);
-  // const { appointmentsCount } = useGetDepartmentAppointmentsCount(row._id);
-  // const { economecMovementsCount } = useGetDepartmentEconomicMovementsCount(row._id);
-  // const { employeesCount } = useGetDepartmentEmployeesCount(row._id);
-  // const { feedbackCount } = useGetDepartmentFeedbackesCount(row._id);
-  // const { roomsCount } = useGetDepartmentRoomsCount(row._id);
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -72,7 +65,6 @@ export default function CountriesTableRow({
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
-          // textDecoration: 'underline',
         }}
         onClick={onShow}
         lang="ar"
@@ -84,7 +76,6 @@ export default function CountriesTableRow({
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
-          // textDecoration: 'underline',
         }}
         onClick={onShow}
         lang="ar"
@@ -103,87 +94,6 @@ export default function CountriesTableRow({
           {t(status)}
         </Label>
       </TableCell>
-      {/* <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onShow}
-      >
-        {economecMovementsCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showAppointmentConfig}
-      >
-        {appointmentConfigCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showAppointments}
-      >
-        {appointmentsCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showActivities}
-      >
-        {activitiesCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showEmployees}
-      >
-        {employeesCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showQualityControl}
-      >
-        {feedbackCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showRooms}
-      >
-        {roomsCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showWorkGroups}
-      >
-        {roomsCount}
-      </TableCell> */}
       <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />

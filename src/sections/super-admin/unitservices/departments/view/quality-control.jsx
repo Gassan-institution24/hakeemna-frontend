@@ -13,9 +13,7 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
-import { useRouter, useParams } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
+import { useParams } from 'src/routes/hooks';
 
 import { useGetDepartmentFeedbackes } from 'src/api';
 import { StatusOptions } from 'src/assets/data/status-options';
@@ -74,11 +72,6 @@ export default function DepartmentFeedbackView({ departmentData }) {
   const componentRef = useRef();
 
   const settings = useSettingsContext();
-
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
-  const router = useRouter();
 
   const { feedbackData, loading } = useGetDepartmentFeedbackes(depid);
 

@@ -29,23 +29,9 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
     _id,
     code,
     unit_service,
-    department,
-    work_group,
-    work_shift,
     appointment_type,
-    patient,
     payment_method,
     start_time,
-    end_time,
-    name_english,
-    name_arabic,
-    description,
-    description_arabic,
-    activities,
-    result,
-    drug_prescription,
-    price_in_JOD,
-    status,
   } = appointment;
   useEffect(() => {
     if (unit_service?.insurance) {

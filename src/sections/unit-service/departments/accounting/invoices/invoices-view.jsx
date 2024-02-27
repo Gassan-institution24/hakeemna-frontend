@@ -74,7 +74,7 @@ export default function EconomicMovementsView({ departmentData }) {
 
   // const confirm = useBoolean();
 
-  const { economecMovementsData, refetch } = useGetDepartmentEconomicMovements(departmentData._id);
+  const { economecMovementsData } = useGetDepartmentEconomicMovements(departmentData._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -428,7 +428,7 @@ export default function EconomicMovementsView({ departmentData }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, service, startDate, endDate } = filters;
+  const { name, status, startDate, endDate } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 

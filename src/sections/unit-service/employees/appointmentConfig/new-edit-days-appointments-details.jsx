@@ -34,7 +34,7 @@ export default function NewEditDayAppointmentsDetails({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { control, setValue, watch, resetField, getValues } = useFormContext();
+  const { control, getValues } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -79,7 +79,6 @@ export default function NewEditDayAppointmentsDetails({
 
   const renderValues = (selectedIds) => {
     const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item._id));
-    const results = [];
     return selectedItems
       ?.map(
         (item) => (curLangAr ? item.name_arabic : item.name_english)

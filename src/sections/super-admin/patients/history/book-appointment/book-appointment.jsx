@@ -260,12 +260,10 @@ const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
   const {
     appointtypes,
     payment_methods,
-    date,
     start_date,
     end_date,
     unitServices,
     countries,
-    cities,
   } = filters;
 
   // SORT BY

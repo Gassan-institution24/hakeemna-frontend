@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
-import match from 'autosuggest-highlight/match';
-import parse from 'autosuggest-highlight/parse';
+// import match from 'autosuggest-highlight/match';
+// import parse from 'autosuggest-highlight/parse';
 
-import Box from '@mui/material/Box';
+// import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { useRouter } from 'src/routes/hooks';
+// import { useRouter } from 'src/routes/hooks';
 
 import Iconify from 'src/components/iconify';
 import SearchNotFound from 'src/components/search-not-found';
@@ -15,23 +15,18 @@ import SearchNotFound from 'src/components/search-not-found';
 // ----------------------------------------------------------------------
 
 export default function AppointmentSearch({ query, results, onSearch, hrefItem }) {
-  const router = useRouter();
 
-  // const handleClick = (id) => {
-  //   router.push(hrefItem(id));
+  // const handleKeyUp = (event) => {
+  //   if (query) {
+  //     if (event.key === 'Enter') {
+  //       const selectProduct = results.filter(
+  //         (appointment) => appointment.name_english === query
+  //       )[0];
+
+  //       // handleClick(selectProduct._id);
+  //     }
+  //   }
   // };
-
-  const handleKeyUp = (event) => {
-    if (query) {
-      if (event.key === 'Enter') {
-        const selectProduct = results.filter(
-          (appointment) => appointment.name_english === query
-        )[0];
-
-        // handleClick(selectProduct._id);
-      }
-    }
-  };
 
   return (
     <Autocomplete
@@ -47,7 +42,7 @@ export default function AppointmentSearch({ query, results, onSearch, hrefItem }
         <TextField
           {...params}
           placeholder="Search..."
-          onKeyUp={handleKeyUp}
+          // onKeyUp={handleKeyUp}
           InputProps={{
             ...params.InputProps,
             startAdornment: (
@@ -58,35 +53,34 @@ export default function AppointmentSearch({ query, results, onSearch, hrefItem }
           }}
         />
       )}
-      renderOption={(props, appointment, { inputValue }) => {
-        const matches = match(appointment._id, inputValue);
-        const parts = parse(appointment._id, matches);
-
-        return (
-          <Box
-            component="li"
-            {...props}
-            // onClick={() => handleClick(appointment._id)}
-            key={appointment._id}
-          >
-            {/* <div>
-              {parts.map((part, index) => (
-                <Typography
-                  key={index}
-                  component="span"
-                  color={part.highlight ? 'primary' : 'textPrimary'}
-                  sx={{
-                    typography: 'body2',
-                    fontWeight: part.highlight ? 'fontWeightSemiBold' : 'fontWeightMedium',
-                  }}
-                >
-                  {part.text}
-                </Typography>
-              ))}
-            </div> */}
-          </Box>
-        );
-      }}
+      // renderOption={(props, appointment, { inputValue }) => {
+      //   const matches = match(appointment._id, inputValue);
+      //   const parts = parse(appointment._id, matches);
+      //   return (
+      //     <Box
+      //       component="li"
+      //       {...props}
+      //       // onClick={() => handleClick(appointment._id)}
+      //       key={appointment._id}
+      //     >
+      //       {/* <div>
+      //         {parts.map((part, index) => (
+      //           <Typography
+      //             key={index}
+      //             component="span"
+      //             color={part.highlight ? 'primary' : 'textPrimary'}
+      //             sx={{
+      //               typography: 'body2',
+      //               fontWeight: part.highlight ? 'fontWeightSemiBold' : 'fontWeightMedium',
+      //             }}
+      //           >
+      //             {part.text}
+      //           </Typography>
+      //         ))}
+      //       </div> */}
+      //     </Box>
+      //   );
+      // }}
     />
   );
 }

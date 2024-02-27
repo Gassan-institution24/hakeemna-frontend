@@ -15,7 +15,6 @@ export default function OldPatientsRow({ row, selected, onEmploymentRow }) {
     identification_num,
     email,
     phone,
-    birth_date,
     files,
   } = row;
 

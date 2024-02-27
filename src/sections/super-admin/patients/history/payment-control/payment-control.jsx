@@ -75,7 +75,7 @@ export default function IncomePaymentControlView({ patientData }) {
 
   // const confirm = useBoolean();
 
-  const { incomePaymentData, loading, refetch } = useGetPatientIncomePaymentControl(
+  const { incomePaymentData, loading } = useGetPatientIncomePaymentControl(
     patientData._id
   );
 

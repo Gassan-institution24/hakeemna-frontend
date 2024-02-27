@@ -85,7 +85,6 @@ export default function BookManually({ onClose, refetch, ...other }) {
     reset,
     setValue,
     handleSubmit,
-    formState: { isSubmitting },
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {

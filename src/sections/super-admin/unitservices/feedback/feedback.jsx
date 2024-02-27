@@ -30,7 +30,7 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { useTranslate } from 'src/locales';
+// import { useTranslate } from 'src/locales';
 
 import FeedbackRow from './feedback-row'; /// edit
 import FeedbackToolbar from './feedback-toolbar';
@@ -91,7 +91,7 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
     dateError,
   });
 
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
 
   const denseHeight = table.dense ? 52 : 72;
 
@@ -142,8 +142,6 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
     },
     [handleFilters]
   );
-  const unitserviceName = unitServiceData?.name_english;
-
   if (loading) {
     return <LoadingScreen />;
   }

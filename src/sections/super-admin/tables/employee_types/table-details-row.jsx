@@ -9,8 +9,6 @@ import IconButton from '@mui/material/IconButton';
 
 import { fDateTime } from 'src/utils/format-time';
 
-import { useTranslate } from 'src/locales';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -41,10 +39,8 @@ export default function TableDetailsRow({
     modifications_nums,
   } = row;
 
-  const { t } = useTranslate();
 
   const DDL = usePopover();
-  const details = usePopover();
   const popover = usePopover();
 
   const renderPrimary = (

@@ -3,7 +3,6 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
-import { useTranslate } from 'src/locales';
 import { useGetServiceType } from 'src/api';
 
 import { useSettingsContext } from 'src/components/settings';
@@ -16,7 +15,6 @@ import TableNewEditForm from './table-new-edit-form';
 export default function TableEditView() {
   const settings = useSettingsContext();
 
-  const { t } = useTranslate();
 
   const params = useParams();
   const { id } = params;

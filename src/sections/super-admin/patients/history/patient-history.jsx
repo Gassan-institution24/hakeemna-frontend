@@ -1,19 +1,15 @@
-import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
-import { useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
-import { useGetPatientAppointments } from 'src/api';
 
 import { useSettingsContext } from 'src/components/settings';
-import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import EconomicMovementsView from './invoices/invoices-view';
@@ -23,11 +19,8 @@ import PaymentControlView from './payment-control/payment-control';
 // ----------------------------------------------------------------------
 
 export default function PatientHistoryView({ patientData }) {
-  const theme = useTheme();
 
   const { t } = useTranslate();
-
-  const { appointmentsData, loading } = useGetPatientAppointments(patientData._id);
 
   const settings = useSettingsContext();
 
@@ -36,17 +29,6 @@ export default function PatientHistoryView({ patientData }) {
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
-
-  const getAppointLength = (status) =>
-    appointmentsData?.filter((item) => item.status === status).length;
-
-  const getTotalAmount = (status) =>
-    sumBy(
-      appointmentsData.filter((item) => item.status === status),
-      'totalAmount'
-    );
-
-  const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsData.length) * 100;
 
   const HistoryTabsList = [
     'Appointment',
@@ -88,10 +70,6 @@ export default function PatientHistoryView({ patientData }) {
     (patientData?.first_name && patientData?.first_name) ||
     (patientData?.last_name && patientData?.last_name) ||
     'Patient';
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>

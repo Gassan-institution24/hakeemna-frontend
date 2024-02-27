@@ -13,10 +13,6 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
-import { useRouter } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { useGetDoctornaFeedbackes } from 'src/api';
 
 import Label from 'src/components/label';
@@ -34,8 +30,6 @@ import {
 } from 'src/components/table'; /// edit
 import { endpoints } from 'src/utils/axios';
 import axiosHandler from 'src/utils/axios-handler';
-
-import { useTranslate } from 'src/locales';
 
 import FeedbackRow from './feedback-row'; /// edit
 import FeedbackToolbar from './feedback-toolbar';
@@ -74,11 +68,6 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
 
   const settings = useSettingsContext();
 
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
-  const router = useRouter();
-
   const { feedbackData, loading, refetch } = useGetDoctornaFeedbackes();
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -99,8 +88,6 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-
-  const { t } = useTranslate();
 
   const denseHeight = table.dense ? 52 : 72;
 

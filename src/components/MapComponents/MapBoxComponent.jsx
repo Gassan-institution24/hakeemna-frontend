@@ -47,11 +47,11 @@ function MapBoxComponent() {
       map.current.resize();
       geolocate.trigger();
     });
-    const popup = new mapboxgl.Popup().setText('Pharmacy').addTo(map.current);
-    const marker1 = new mapboxgl.Marker()
-      .setLngLat([35.88532536800162, 32.01232757863414])
-      .addTo(map.current)
-      .setPopup(popup);
+    // const popup = new mapboxgl.Popup().setText('Pharmacy').addTo(map.current);
+    // const marker1 = new mapboxgl.Marker()
+    //   .setLngLat([35.88532536800162, 32.01232757863414])
+    //   .addTo(map.current)
+    //   .setPopup(popup);
     // Clean up on unmount
     return () => map.current.remove();
   }, [lat, lng, zoom]);

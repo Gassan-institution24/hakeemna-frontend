@@ -7,8 +7,6 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { fDateTime } from 'src/utils/format-time';
 
 import ACLGuard from 'src/auth/guard/acl-guard';
@@ -50,8 +48,6 @@ export default function TableDetailsRow({
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  const confirm = useBoolean();
 
   const popover = usePopover();
 

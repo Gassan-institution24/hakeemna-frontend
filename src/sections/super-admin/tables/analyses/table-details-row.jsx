@@ -29,8 +29,7 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
 
   const popover = usePopover();
   const DDL = usePopover();
-  const details = usePopover();
-
+  
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell align="center">

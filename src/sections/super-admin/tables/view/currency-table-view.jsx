@@ -14,7 +14,6 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useTranslate } from 'src/locales';
 import { useGetCurrencies } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -64,8 +63,6 @@ export default function CurrencyTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { t } = useTranslate();
-
   const componentRef = useRef();
 
   const settings = useSettingsContext();
@@ -88,10 +85,10 @@ export default function CurrencyTableView() {
     dateError,
   });
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
+  // const dataInPage = dataFiltered.slice(
+  //   table.page * table.rowsPerPage,
+  //   table.page * table.rowsPerPage + table.rowsPerPage
+  // );
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 

@@ -27,7 +27,6 @@ export default function AppointmentsTableRow({
   onViewRow,
   onCancelRow,
   onUnCancelRow,
-  onDeleteRow,
 }) {
   const {
     sequence_number,
@@ -206,7 +205,6 @@ export default function AppointmentsTableRow({
 }
 
 AppointmentsTableRow.propTypes = {
-  onDeleteRow: PropTypes.func,
   onCancelRow: PropTypes.func,
   onUnCancelRow: PropTypes.func,
   onSelectRow: PropTypes.func,
