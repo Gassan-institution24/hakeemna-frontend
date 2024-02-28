@@ -29,6 +29,7 @@ export default function TableDetailsRow({
     code,
     symbol,
     name_english,
+    name_arabic,
     status,
     created_at,
     user_creation,
@@ -54,6 +55,7 @@ export default function TableDetailsRow({
 
       <TableCell align="center">{symbol}</TableCell>
       <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{name_arabic}</TableCell>
       <TableCell align="center">
         <Label
           variant="soft"

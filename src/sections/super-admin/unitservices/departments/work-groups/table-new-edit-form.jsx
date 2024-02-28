@@ -112,7 +112,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
-          msg: `updated work group <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
+          msg: `updated work group <strong>${data.name_english || ''}</strong> in <strong>${
+            departmentData.name_english
+          }</strong> department`,
         });
       } else {
         await axiosHandler({
@@ -128,7 +130,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
-          msg: `created work group <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
+          msg: `created work group <strong>${data.name_english || ''}</strong> in <strong>${
+            departmentData.name_english
+          }</strong> department`,
         });
       }
       reset();

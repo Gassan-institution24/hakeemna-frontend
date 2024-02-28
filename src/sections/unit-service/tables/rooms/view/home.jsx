@@ -172,7 +172,7 @@ export default function RoomsTableView() {
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.rooms.root,
-          msg: `activated a room <strong>${row.name_english}</strong>`,
+          msg: `activated a room <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -195,7 +195,7 @@ export default function RoomsTableView() {
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.rooms.root,
-          msg: `inactivated a room <strong>${row.name_english}</strong>`,
+          msg: `inactivated a room <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });

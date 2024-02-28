@@ -28,7 +28,7 @@ export default function TableEditView() {
         links={[
           {
             name: 'dashboard',
-            href: paths.superadmin,
+            href: paths.superadmin.root,
           },
           {
             name: 'tables',

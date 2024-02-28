@@ -166,7 +166,7 @@ export default function WorkGroupsTableView() {
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.workshifts.root,
-          msg: `activated a work shift <strong>${row.name_english}</strong>`,
+          msg: `activated a work shift <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -189,7 +189,7 @@ export default function WorkGroupsTableView() {
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.workshifts.root,
-          msg: `inactivated a work shift <strong>${row.name_english}</strong>`,
+          msg: `inactivated a work shift <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });

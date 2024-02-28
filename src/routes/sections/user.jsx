@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { AuthGuard } from 'src/auth/guard';
+import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import UserDashboardLayout from 'src/layouts/dashboard/indexUser';
 
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -37,11 +37,13 @@ export const userRoutes = [
     path: 'dashboard',
     element: (
       <AuthGuard>
-        <UserDashboardLayout>
-          <Suspense fallback={<LoadingScreen />}>
-            <Outlet />
-          </Suspense>
-        </UserDashboardLayout>
+        <RoleBasedGuard hasContent roles={['patient']}>
+          <UserDashboardLayout>
+            <Suspense fallback={<LoadingScreen />}>
+              <Outlet />
+            </Suspense>
+          </UserDashboardLayout>
+        </RoleBasedGuard>
       </AuthGuard>
     ),
     children: [

@@ -33,9 +33,10 @@ import { useTable, TableHeadCustom, TableSelectedAction } from 'src/components/t
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { id: 'code', label: 'country', width: 'calc(100%/3)' },
-  { id: 'name', label: 'name english', width: 'calc(100%/3)' },
-  { id: 'identification_num', label: 'name arabic', width: 'calc(100%/3)' },
+  { label: 'country', width: 'calc(100%/4)' },
+  { label: 'name english', width: 'calc(100%/4)' },
+  { label: 'name arabic', width: 'calc(100%/4)' },
+  { label: 'state', width: 'calc(100%/4)' },
   // { id: '', width: 88 },
 ];
 export default function CitiesNewEditForm() {
@@ -230,6 +231,16 @@ export default function CitiesNewEditForm() {
                             onChange={(e) => handleArabicInputChange(index, e)}
                             value={city.name_arabic}
                             name="name_arabic"
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            lang="ar"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={city.state}
+                            name="state"
                           />
                         </TableCell>
                       </TableRow>

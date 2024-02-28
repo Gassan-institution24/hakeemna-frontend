@@ -39,7 +39,8 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name' },
+  { id: 'name_english', label: 'name' },
+{ id: 'name_arabic', label: 'arabic name' },
   { id: 'category', label: 'Category' },
   { id: 'symptoms', label: 'Symptoms' },
   { id: 'description', label: 'Description' },

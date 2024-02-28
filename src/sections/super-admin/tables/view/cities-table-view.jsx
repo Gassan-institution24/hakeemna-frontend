@@ -57,17 +57,13 @@ const STATUS_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'name', label: 'name' },
-  { id: 'country', label: 'Country' },
-  { id: 'status', label: 'Status' },
-  // { id: 'created_at', label: 'Date Of Creation' },
-  // { id: 'user_creation', label: 'Creater' },
-  // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
-  // { id: 'updated_at', label: 'Date Of Updating' },
-  // { id: 'user_modification', label: 'Last Modifier' },
-  // { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
-  // { id: 'modifications_nums', label: 'No Of Modifications' },
+  { id: 'code', label: 'code' },
+  { id: 'sequence_number', label: 'sequence' },
+  { id: 'name_english', label: 'name' },
+  { id: 'name_arabic', label: 'name arabic' },
+  { id: 'state', label: 'state' },
+  { id: 'country', label: 'country' },
+  { id: 'status', label: 'status' },
   { id: '', width: 88 },
 ];
 

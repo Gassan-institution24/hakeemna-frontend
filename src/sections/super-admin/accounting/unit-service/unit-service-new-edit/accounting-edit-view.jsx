@@ -29,7 +29,7 @@ export default function USAppointmentEditView({ unitServiceData, licenseMovement
         links={[
           {
             name: 'dashboard',
-            href: paths.superadmin,
+            href: paths.superadmin.root,
           },
           {
             name: t('accounting'),

@@ -26,7 +26,7 @@ export default function CountryEditView() {
         links={[
           {
             name: 'dashboard',
-            href: paths.superadmin,
+            href: paths.superadmin.root,
           },
           {
             name: 'users',
