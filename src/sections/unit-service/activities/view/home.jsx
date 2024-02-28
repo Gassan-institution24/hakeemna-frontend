@@ -166,7 +166,7 @@ export default function ActivitesTableView() {
         socket.emit('updated', {
           user,
           link: paths.unitservice.activities.root,
-          msg: `activated an activity <strong>${row.name_english}</strong>`,
+          msg: `activated an activity <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -189,7 +189,7 @@ export default function ActivitesTableView() {
         socket.emit('updated', {
           user,
           link: paths.unitservice.activities.root,
-          msg: `inactivated an activity <strong>${row.name_english}</strong>`,
+          msg: `inactivated an activity <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });

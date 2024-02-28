@@ -58,7 +58,8 @@ const STATUS_OPTIONS = [
 const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
-  { id: 'name', label: 'name' },
+  { id: 'name_english', label: 'name' },
+  { id: 'name_arabic', label: 'arabic name' },
   { id: 'time_zone', label: 'Time zone' },
   { id: 'status', label: 'Status' },
   // { id: 'created_at', label: 'Date Of Creation' },

@@ -210,7 +210,9 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.appointmentconfig.root(id),
-        msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
+        msg: `updated an appointment configuration <strong>[ ${
+          appointmentConfigData.code || ''
+        } ]</strong>`,
       });
       enqueueSnackbar(t('updated successfully!'));
       saving.onFalse();
@@ -236,7 +238,9 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.appointmentconfig.root(id),
-        msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
+        msg: `updated an appointment configuration <strong>[ ${
+          appointmentConfigData.code || ''
+        } ]</strong>`,
       });
       updating.onFalse();
       confirm.onFalse();
@@ -278,7 +282,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             data,
             user,
             link: paths.unitservice.employees.appointmentconfig.root(id),
-            msg: `updated an appointment configuration ${appointmentConfigData.code}`,
+            msg: `updated an appointment configuration ${appointmentConfigData.code || ''}`,
           });
           router.push(paths.unitservice.employees.appointmentconfig.root(id));
         }
@@ -289,7 +293,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           data,
           user,
           link: paths.unitservice.employees.appointmentconfig.root(id),
-          msg: `created an appointment config <strong>${data.name_english}</strong>`,
+          msg: `created an appointment config <strong>${data.name_english || ''}</strong>`,
         });
         updating.onFalse();
         enqueueSnackbar(t('added successfully!'));

@@ -57,7 +57,8 @@ const STATUS_OPTIONS = [
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'name', label: 'Name' },
+  { id: 'name_english', label: 'name' },
+  { id: 'name_arabic', label: 'arabic name' },
   { id: 'department', label: 'Department' },
   { id: 'general_info', label: 'General Info' },
   { id: 'status', label: 'Status' },

@@ -105,7 +105,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.superadmin.unitservices.departments.rooms.root(id, departmentData._id),
-          msg: `updated room <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
+          msg: `updated room <strong>${data.name_english || ''}</strong> in <strong>${
+            departmentData.name_english
+          }</strong> department`,
         });
       } else {
         await axiosHandler({
@@ -122,7 +124,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.superadmin.unitservices.departments.rooms.root(id, departmentData._id),
-          msg: `created room <strong>${data.name_english}</strong> into <strong>${departmentData.name_english}</strong> department`,
+          msg: `created room <strong>${data.name_english || ''}</strong> into <strong>${
+            departmentData.name_english
+          }</strong> department`,
         });
       }
       reset();

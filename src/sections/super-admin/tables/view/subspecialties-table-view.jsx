@@ -58,7 +58,8 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 const TABLE_HEAD = [
   /// edit
   { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name' },
+  { id: 'name_english', label: 'name' },
+{ id: 'name_arabic', label: 'arabic name' },
   { id: 'specialty', label: 'Specialty' },
   { id: 'description', label: 'Description' },
   // { id: 'created_at', label: 'Date Of Creation' },

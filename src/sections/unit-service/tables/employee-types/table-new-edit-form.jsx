@@ -99,7 +99,7 @@ export default function TableNewEditForm({ currentTable }) {
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.employeetypes.root,
-          msg: `updated an employee type <strong>${data.name_english}</strong>`,
+          msg: `updated an employee type <strong>${data.name_english || ''}</strong>`,
         });
       } else {
         await axiosHandler({
@@ -114,7 +114,7 @@ export default function TableNewEditForm({ currentTable }) {
         socket.emit('created', {
           user,
           link: paths.unitservice.tables.employeetypes.root,
-          msg: `created an employee type <strong>${data.name_english}</strong>`,
+          msg: `created an employee type <strong>${data.name_english || ''}</strong>`,
         });
       }
       reset();

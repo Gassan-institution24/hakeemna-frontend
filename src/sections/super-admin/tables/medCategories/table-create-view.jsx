@@ -15,20 +15,20 @@ import TableManyNewForm from './table-many-new-form';
 
 export default function TableCreateView() {
   const settings = useSettingsContext();
-const [currentTab, setCurrentTab] = useState('many');
-const handleChangeTab = useCallback((event, newValue) => {
-  setCurrentTab(newValue);
-}, []);
-const TABS = [
-  {
-    value: 'many',
-    label: 'Add many',
-  },
-  {
-    value: 'one',
-    label: 'Add one',
-  },
-];
+  const [currentTab, setCurrentTab] = useState('many');
+  const handleChangeTab = useCallback((event, newValue) => {
+    setCurrentTab(newValue);
+  }, []);
+  const TABS = [
+    {
+      value: 'many',
+      label: 'Add many',
+    },
+    {
+      value: 'one',
+      label: 'Add one',
+    },
+  ];
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -36,7 +36,7 @@ const TABS = [
         links={[
           {
             name: 'dashboard',
-            href: paths.superadmin,
+            href: paths.superadmin.root,
           },
           {
             name: 'tables',

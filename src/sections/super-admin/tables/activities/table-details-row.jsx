@@ -32,6 +32,7 @@ export default function TableDetailsRow({
   const {
     code,
     name_english,
+    name_arabic,
     unit_service,
     department,
     status,
@@ -61,6 +62,7 @@ export default function TableDetailsRow({
       </TableCell>
 
       <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{name_arabic}</TableCell>
 
       <TableCell
         align="center"

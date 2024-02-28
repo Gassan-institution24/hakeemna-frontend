@@ -36,7 +36,7 @@ export default function TableCreateView() {
         links={[
           {
             name: 'dashboard',
-            href: paths.superadmin,
+            href: paths.superadmin.root,
           },
           {
             name: 'Tables',
