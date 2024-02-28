@@ -33,6 +33,7 @@ export default function NavList({ data }) {
         title={data.title}
         path={data.path}
         icon={data.icon}
+        button={data.button}
         //
         hasChild={!!data.children}
         externalLink={data.path.includes('http')}
@@ -76,6 +77,7 @@ export default function NavList({ data }) {
 NavList.propTypes = {
   data: PropTypes.shape({
     title: PropTypes.string,
+    button: PropTypes.string,
     path: PropTypes.string,
     icon: PropTypes.element,
     children: PropTypes.array,

@@ -1,5 +1,8 @@
-import Iconify from 'src/components/iconify';
+import { paths } from 'src/routes/paths';
 
+import { PATH_AFTER_LOGIN } from 'src/config-global';
+
+import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export const navConfig = [
@@ -11,13 +14,13 @@ export const navConfig = [
   },
   {
     title: 'About',
-    icon: <Iconify icon="solar:notebook-bold-duotone" />,
+    icon: <Iconify icon="mdi:about" />,
     path: '#',
     sectionId: 'About',
   },
   {
     title: 'Services',
-    icon: <Iconify icon="solar:notebook-bold-duotone" />,
+    icon: <Iconify icon="medical-icon:social-services" />,
     path: '#',
     sectionId: 'services',
   },
@@ -27,4 +30,15 @@ export const navConfig = [
     path: 'https://front-pi-eight.vercel.app',
     sectionId: 'home',
   },
+  {
+    button: 'Login',
+    icon: <Iconify icon="material-symbols:login" />,
+    path: PATH_AFTER_LOGIN,
+  },
+  {
+    button: 'Signup',
+    icon: <Iconify icon="mdi:register" />,
+    path: paths?.auth.register,
+  },
+
 ];
