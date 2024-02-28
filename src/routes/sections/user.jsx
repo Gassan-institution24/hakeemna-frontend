@@ -62,6 +62,7 @@ export const userRoutes = [
           { path: 'appointments', element: <UserAppointmentsPage /> },
           { path: 'bookappointment/:id', element: <Booking /> },
           { path: 'doctorpage/:id', element: <Doctorpage /> },
+          // { path: 'doctorpage/:id/date', element: <Doctorpage /> },
           { path: 'specialities', element: <Specialities /> },
           // { path: 'new', element: <UserCreatePage /> },
           { path: ':id/edit', element: <UserEditPage /> },
