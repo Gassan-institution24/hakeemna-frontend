@@ -44,6 +44,11 @@ export function fTime(date, newFormat) {
 
   return date ? format(new Date(date), fm) : '';
 }
+export function fDm(date, newFormat) {
+  const fm = newFormat || 'dd MMM';
+
+  return date ? format(new Date(date), fm) : '';
+}
 
 export function fTimestamp(date) {
   return date ? getTime(new Date(date)) : '';

@@ -75,8 +75,6 @@ export default function Doctorpage() {
     }
   };
 
-  console.log(data);
-
   const renderHead = (
     <CardHeader
       disableTypography
@@ -95,7 +93,7 @@ export default function Doctorpage() {
   );
 
   const renderFollows = (
-    <Card sx={{ py: 3, textAlign: 'center', typography: 'h4',  }}>
+    <Card sx={{ py: 3, textAlign: 'center', typography: 'h4' }}>
       <Stack
         direction="row"
         divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
@@ -205,10 +203,8 @@ export default function Doctorpage() {
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <StaticDatePicker
-          orientation="landscape"
           disablePast
           componentsProps={{ actionBar: { actions: ['clear', 'today'] } }}
-          // value={currentDateTime}
           onChange={(e) => setCurrentDateTime(e?.$d)}
         />
       </LocalizationProvider>
@@ -222,7 +218,7 @@ export default function Doctorpage() {
             SELECT TIME
           </Typography>
 
-          <Box sx={{ display: 'flex', mt: 2 }}>
+          <Box sx={{ display: { md: 'flex', xs: 'block' }, mt: 2 }}>
             <Box
               sx={{
                 width: '50%',
@@ -230,6 +226,7 @@ export default function Doctorpage() {
                 display: 'grid',
                 gridTemplateColumns: '1fr',
                 mr: 2,
+                mb: { md: 0, xs: 5 },
               }}
             >
               <Box
@@ -250,7 +247,7 @@ export default function Doctorpage() {
                 ))}
               </Box>
 
-              <Box>
+              <Box sx={{ visibility: { md: 'visible', xs: 'hidden' } }}>
                 {TimeData !== undefined ? (
                   <Button variant="contained" onClick={dialog.onTrue}>
                     Book
@@ -262,8 +259,12 @@ export default function Doctorpage() {
                 )}
               </Box>
             </Box>
-            <Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />
-            <Box sx={{ ml: 2 }}>
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ borderStyle: 'dashed', display: { md: 'block', xs: 'none' } }}
+            />
+            <Box sx={{ ml: 2, mb: 2 }}>
               {datacheeck?.price && (
                 <Typography>
                   {' '}
@@ -315,6 +316,18 @@ export default function Doctorpage() {
                 </Typography>
               )}
             </Box>
+
+            <Box sx={{ visibility: { md: 'hidden', xs: 'visible' }, ml: 2 }}>
+              {TimeData !== undefined ? (
+                <Button variant="contained" onClick={dialog.onTrue}>
+                  Book
+                </Button>
+              ) : (
+                <Button disabled variant="contained" onClick={dialog.onFalse}>
+                  Book
+                </Button>
+              )}
+            </Box>
           </Box>
         </Box>
       ) : (
@@ -351,7 +364,7 @@ export default function Doctorpage() {
         <Stack spacing={3} mb={1}>
           {renderPostInput}
         </Stack>
-        <Stack spacing={3}>{renderList}</Stack>
+        <Stack>{renderList}</Stack>
       </Grid>
     </Grid>
   );
