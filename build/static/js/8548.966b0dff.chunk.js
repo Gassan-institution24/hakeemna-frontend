@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[8548],{38548:(s,i,e)=>{e.r(i),e.d(i,{default:()=>l});var n=e(6907),r=e(76932),t=e(95980),c=e(80184);function l(){const{t:s}=(0,r.qM)();return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(n.ql,{children:(0,c.jsxs)("title",{children:[" ",s("My Prescriptions")," "]})}),(0,c.jsx)(t.Qu,{})]})}}}]);
+//# sourceMappingURL=8548.966b0dff.chunk.js.map

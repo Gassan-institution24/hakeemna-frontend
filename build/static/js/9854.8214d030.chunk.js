@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[9854],{29854:(e,i,n)=>{n.r(i),n.d(i,{default:()=>r});var s=n(6907),a=n(85362),l=n(80184);function r(){return(0,l.jsxs)(l.Fragment,{children:[(0,l.jsx)(s.ql,{children:(0,l.jsx)("title",{children:" Dashboard: Deduction Config Table"})}),(0,l.jsx)(a.Wl,{})]})}}}]);
+//# sourceMappingURL=9854.8214d030.chunk.js.map
