@@ -160,7 +160,7 @@ export default function TableNewEditForm({ currentTable }) {
         data,
         user,
         link: paths.unitservice.employees.root,
-        msg: `created an employee <strong>${data.name_english}</strong>`,
+        msg: `created an employee <strong>${data.name_english || ''}</strong>`,
       });
       reset();
       router.push(paths.unitservice.employees.root);

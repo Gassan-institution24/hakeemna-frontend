@@ -58,7 +58,8 @@ const STATUS_OPTIONS = [
 const TABLE_HEAD = [
   /// edit
   { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name' },
+  { id: 'name_english', label: 'name' },
+{ id: 'name_arabic', label: 'arabic name' },
   { id: 'country', label: 'Country' },
   { id: 'city', label: 'City' },
   { id: 'US_type', label: 'Unit Service Type' },

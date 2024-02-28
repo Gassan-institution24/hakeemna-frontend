@@ -105,7 +105,7 @@ export default function TableNewEditForm({ currentTable }) {
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.workshifts.root,
-          msg: `updated a work shift <strong>${data.name_english}</strong>`,
+          msg: `updated a work shift <strong>${data.name_english || ''}</strong>`,
         });
       } else {
         await axiosHandler({
@@ -120,7 +120,7 @@ export default function TableNewEditForm({ currentTable }) {
         socket.emit('created', {
           user,
           link: paths.unitservice.tables.workshifts.root,
-          msg: `created a work shift <strong>${data.name_english}</strong>`,
+          msg: `created a work shift <strong>${data.name_english || ''}</strong>`,
         });
       }
       reset();

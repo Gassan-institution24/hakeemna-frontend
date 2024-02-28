@@ -167,7 +167,7 @@ export default function WorkGroupsTableView() {
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.workgroups.root,
-          msg: `activated a work group <strong>${row.name_english}</strong>`,
+          msg: `activated a work group <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -190,7 +190,7 @@ export default function WorkGroupsTableView() {
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.workgroups.root,
-          msg: `inactivated a work group <strong>${row.name_english}</strong>`,
+          msg: `inactivated a work group <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });

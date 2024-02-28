@@ -74,28 +74,29 @@ export default function ServiceUnitPopover() {
 
   return (
     <>
-      <IconButton
-        component={m.button}
-        whileTap="tap"
-        whileHover="hover"
-        variants={varHover(1.05)}
-        onClick={popover.onOpen}
-        sx={{
-          width: 40,
-          height: 40,
-          ...(popover.open && {
-            bgcolor: 'action.selected',
-          }),
-        }}
-      >
-        <Typography variant="body1" sx={{ textalign: 'center' }}>
-          {selected?.unit_service?.name_english
-            ?.split(' ')
-            .map((word) => word.charAt(0).toUpperCase())
-            .join('')}
-        </Typography>
-      </IconButton>
-
+      {user?.employee?.employee_engagements?.length > 1 && (
+        <IconButton
+          component={m.button}
+          whileTap="tap"
+          whileHover="hover"
+          variants={varHover(1.05)}
+          onClick={popover.onOpen}
+          sx={{
+            width: 40,
+            height: 40,
+            ...(popover.open && {
+              bgcolor: 'action.selected',
+            }),
+          }}
+        >
+          <Typography variant="body1" sx={{ textalign: 'center' }}>
+            {selected?.unit_service?.name_english
+              ?.split(' ')
+              .map((word) => word.charAt(0).toUpperCase())
+              .join('')}
+          </Typography>
+        </IconButton>
+      )}
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 160 }}>
         {user?.employee?.employee_engagements?.map((option, index) => (
           <MenuItem
@@ -111,7 +112,6 @@ export default function ServiceUnitPopover() {
           </MenuItem>
         ))}
       </CustomPopover>
-
       <ConfirmDialog
         lang="ar"
         open={confirm.value || loading.value}

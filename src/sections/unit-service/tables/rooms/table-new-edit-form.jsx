@@ -107,7 +107,7 @@ export default function TableNewEditForm({ currentTable }) {
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.rooms.root,
-          msg: `updated a room <strong>${data.name_english}</strong>`,
+          msg: `updated a room <strong>${data.name_english || ''}</strong>`,
         });
       } else {
         await axiosHandler({
@@ -122,7 +122,7 @@ export default function TableNewEditForm({ currentTable }) {
         socket.emit('created', {
           user,
           link: paths.unitservice.tables.rooms.root,
-          msg: `created a room <strong>${data.name_english}</strong>`,
+          msg: `created a room <strong>${data.name_english || ''}</strong>`,
         });
       }
       reset();

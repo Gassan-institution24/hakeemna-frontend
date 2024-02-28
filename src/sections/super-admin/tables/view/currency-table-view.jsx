@@ -41,6 +41,7 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'symbol', label: 'symbol' },
   { id: 'name_english', label: 'name' },
+  { id: 'name_arabic', label: 'arabic name' },
   { id: 'relation_to_dollar', label: 'one dollar equals' },
   // { id: 'created_at', label: 'Date Of Creation' },
   // { id: 'user_creation', label: 'Creater' },

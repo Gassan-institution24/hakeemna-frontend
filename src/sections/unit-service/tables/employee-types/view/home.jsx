@@ -167,7 +167,7 @@ export default function EmployeeTypesTable() {
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.employeetypes.root,
-          msg: `activated an employee type <strong>${row.name_english}</strong>`,
+          msg: `activated an employee type <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -190,7 +190,7 @@ export default function EmployeeTypesTable() {
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.employeetypes.root,
-          msg: `inactivated an employee type <strong>${row.name_english}</strong>`,
+          msg: `inactivated an employee type <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });

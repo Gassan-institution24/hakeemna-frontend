@@ -18,6 +18,7 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
     code,
     symbol,
     name_english,
+    name_arabic,
     relation_to_dollar,
     created_at,
     user_creation,
@@ -40,6 +41,7 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
       <TableCell align="center">{symbol}</TableCell>
 
       <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{name_arabic}</TableCell>
       <TableCell align="center">{relation_to_dollar}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>

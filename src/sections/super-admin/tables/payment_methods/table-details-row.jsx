@@ -28,6 +28,7 @@ export default function TableDetailsRow({
   const {
     code,
     name_english,
+    name_arabic,
     status,
     created_at,
     user_creation,
@@ -51,6 +52,7 @@ export default function TableDetailsRow({
         <Box>{code}</Box>
       </TableCell>
       <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{name_arabic}</TableCell>
 
       <TableCell align="center">
         <Label
