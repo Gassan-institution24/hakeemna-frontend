@@ -26,6 +26,7 @@ export default function CountriesTableRow({
   const {
     code,
     name_english,
+    name_arabic,
     status,
     created_at,
     time_zone,
@@ -51,6 +52,7 @@ export default function CountriesTableRow({
       </TableCell>
 
       <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{name_arabic}</TableCell>
       <TableCell align="center">{time_zone}</TableCell>
 
       <TableCell align="center">

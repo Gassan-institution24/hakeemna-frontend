@@ -29,7 +29,10 @@ export default function CitiesTableRow({
 }) {
   const {
     code,
+    sequence_number,
     name_english,
+    name_arabic,
+    state,
     country,
     status,
     created_at,
@@ -56,9 +59,14 @@ export default function CitiesTableRow({
       <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
+      <TableCell align="center">
+        <Box>{sequence_number}</Box>
+      </TableCell>
 
       <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{name_arabic}</TableCell>
 
+      <TableCell align="center">{state}</TableCell>
       <TableCell align="center">{country?.name_english}</TableCell>
       <TableCell align="center">
         <Label

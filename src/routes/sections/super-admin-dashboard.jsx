@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { AuthGuard } from 'src/auth/guard';
+import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
 import UnitServiceNav from 'src/layouts/service-unit-topbar';
 import UnitServiceDepartmentNavLayout from 'src/layouts/unitService-department-topbar';
@@ -426,11 +426,13 @@ export const dashboardRoutes = [
     path: 'dashboard',
     element: (
       <AuthGuard>
-        <DashboardLayout>
-          <Suspense fallback={<LoadingScreen />}>
-            <Outlet />
-          </Suspense>
-        </DashboardLayout>
+        <RoleBasedGuard hasContent roles={['superadmin']}>
+          <DashboardLayout>
+            <Suspense fallback={<LoadingScreen />}>
+              <Outlet />
+            </Suspense>
+          </DashboardLayout>
+        </RoleBasedGuard>
       </AuthGuard>
     ),
     children: [

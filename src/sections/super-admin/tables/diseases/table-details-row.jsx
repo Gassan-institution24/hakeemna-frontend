@@ -22,6 +22,7 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
   const {
     code,
     name_english,
+name_arabic,
     symptoms,
     category,
     description,
@@ -44,7 +45,7 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
       </TableCell>
 
       <TableCell align="center">{name_english}</TableCell>
-
+      <TableCell align="center">{name_arabic}</TableCell>
       <TableCell align="center">{category?.name_english}</TableCell>
       <TableCell align="center">
         symptoms

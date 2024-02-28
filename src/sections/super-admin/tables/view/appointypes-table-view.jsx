@@ -58,6 +58,7 @@ const TABLE_HEAD = [
   /// edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'name' },
+  { id: 'name_arabic', label: 'arabic name' },
   { id: 'description', label: 'description' },
   // { id: 'created_at', label: 'Date Of Creation' },
   // { id: 'user_creation', label: 'Creater' },

@@ -30,7 +30,7 @@ export default function USAccountingCreateView({ unitServiceData }) {
         links={[
           {
             name: 'dashboard',
-            href: paths.superadmin,
+            href: paths.superadmin.root,
           },
           {
             name: t('accounting'),

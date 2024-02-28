@@ -39,6 +39,7 @@ export default function CitiesNewEditForm({ currentCity }) {
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
     country: Yup.string().required('Country is required'),
+    state: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -46,6 +47,7 @@ export default function CitiesNewEditForm({ currentCity }) {
       name_arabic: currentCity?.name_arabic || '',
       name_english: currentCity?.name_english || '',
       country: currentCity?.country?._id || '',
+      state: currentCity?.state || '',
     }),
     [currentCity]
   );
@@ -135,6 +137,12 @@ export default function CitiesNewEditForm({ currentCity }) {
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label="name arabic"
+              />
+              <RHFTextField
+                lang="ar"
+                onChange={handleArabicInputChange}
+                name="state"
+                label="state"
               />
 
               <RHFSelect name="country" label="Country">

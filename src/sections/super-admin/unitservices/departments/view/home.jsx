@@ -161,7 +161,7 @@ export default function UnitServicesTableView() {
         socket.emit('updated', {
           user,
           link: paths.superadmin.unitservices.departments.info(id, row._id),
-          msg: `activating department <strong>${row.name_english}</strong>`,
+          msg: `activating department <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -184,7 +184,7 @@ export default function UnitServicesTableView() {
         socket.emit('updated', {
           user,
           link: paths.superadmin.unitservices.departments.info(id, row._id),
-          msg: `inactivating department <strong>${row.name_english}</strong>`,
+          msg: `inactivating department <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });

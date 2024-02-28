@@ -28,6 +28,7 @@ export default function CountriesTableRow({
   const {
     code,
     name_english,
+    name_arabic,
     country,
     city,
     identification_num,
@@ -67,6 +68,7 @@ export default function CountriesTableRow({
       </TableCell>
       <TableCell align="center">{code}</TableCell>
       <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{name_arabic}</TableCell>
       <TableCell align="center">
         <Label
           variant="soft"

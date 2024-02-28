@@ -166,7 +166,9 @@ export default function WorkGroupsTableView({ departmentData }) {
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.workGroups.root(departmentData._id),
-          msg: `activated work group <strong>${row.name_english}</strong> in department <strong>${departmentData.name_english}</strong>`,
+          msg: `activated work group <strong>${
+            row.name_english || ''
+          }</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -189,7 +191,9 @@ export default function WorkGroupsTableView({ departmentData }) {
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.workGroups.root(departmentData._id),
-          msg: `inactivated work group <strong>${row.name_english}</strong> in department <strong>${departmentData.name_english}</strong>`,
+          msg: `inactivated work group <strong>${
+            row.name_english || ''
+          }</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });

@@ -40,6 +40,7 @@ const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'name' },
+{ id: 'name_arabic', label: 'arabic name' },
   { id: 'description', label: 'description' },
   { id: '', width: 88 },
 ];
