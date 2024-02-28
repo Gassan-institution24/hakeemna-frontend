@@ -13,7 +13,7 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export const NavItem = forwardRef(
-  ({ title, path, icon, open, active, hasChild, externalLink, ...other }, ref) => {
+  ({ title, path, icon, open, button, active, hasChild, externalLink, ...other }, ref) => {
     const renderContent = (
       <StyledNavItem ref={ref} open={open} active={active} {...other}>
         <Box component="span" sx={{ mr: 2, display: 'inline-flex' }}>
@@ -22,6 +22,7 @@ export const NavItem = forwardRef(
 
         <Box component="span" sx={{ flexGrow: 1 }}>
           {title}
+          {button}
         </Box>
 
         {hasChild && (
@@ -54,6 +55,7 @@ export const NavItem = forwardRef(
 
 NavItem.propTypes = {
   title: PropTypes.string,
+  button: PropTypes.string,
   path: PropTypes.string,
   icon: PropTypes.element,
   open: PropTypes.bool,

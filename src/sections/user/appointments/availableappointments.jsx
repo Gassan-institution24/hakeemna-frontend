@@ -57,7 +57,7 @@ export default function AppointmentBooking() {
   const [search, setSearch] = useState();
 
   // const { appointmentsData, refetch } = useGetAvailableAppointments();
-  const { countriesData,refetch } = useGetCountries();
+  const { countriesData, refetch } = useGetCountries();
   const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
   const { unitservicesData } = useGetUnitservices();
@@ -205,13 +205,7 @@ export default function AppointmentBooking() {
             dataFiltered={dataFiltered}
           />
         )}
-        {currentTab === 'inclinic' && (
-          <ClinicAppointmentList
-            patientData={user?.patient?._id}
-            refetch={refetch}
-            dataFiltered={dataFiltered}
-          />
-        )}
+        {currentTab === 'inclinic' && <ClinicAppointmentList />}
       </Container>
     </Container>
   );
