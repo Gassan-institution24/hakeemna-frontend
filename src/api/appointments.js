@@ -352,3 +352,20 @@ export function useGetAppointment(id) {
 
   return memoizedValue;
 }
+export function useGetNearstAppointment(id) {
+  const URL = endpoints.tables.nearstAppointment(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      nearstappointment:data,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}

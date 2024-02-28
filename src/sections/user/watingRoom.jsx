@@ -43,7 +43,7 @@ export default function WatingRoom() {
   const { user } = useAuthContext();
   const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
   const { data } = useGetUnitservice(appointmentsData?.unit_service?._id);
-
+console.log(appointmentsData);
   const skipfunction = async () => {
     try {
       await axios.patch(`api/appointments/${appointmentsData._id}`, {
@@ -117,95 +117,97 @@ export default function WatingRoom() {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
+return(
+  <>gf</>
+)
+  // return appointmentsData?.hasFeedback === false ? (
+  //   <span>
+  //     <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
+  //       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+  //         <div
+  //           style={{
+  //             display: 'flex',
+  //             flexDirection: 'column',
+  //             alignItems: 'center',
+  //             textalign: 'center',
+  //             margin: '20px',
+  //             gap: '10px',
+  //           }}
+  //         >
+  //           <DialogTitle>{t('Rate your appointment')}</DialogTitle>
+  //           <Image
+  //             src="https://cdn.altibbi.com/cdn/large/0/10/logo_1296490409_651.gif"
+  //             sx={{ width: '60px', height: '60px', border: 1, borderRadius: '50px' }}
+  //           />
+  //           <Typography sx={{ color: 'black' }}>
+  //             {curLangAr ? `${data?.name_arabic}` : `${data?.name_english}`}{' '}
+  //           </Typography>
+  //           <Rating
+  //             size="large"
+  //             precision={1}
+  //             max={5}
+  //             name="Rate"
+  //             value={rating}
+  //             onChange={handleRatingClick}
+  //           />
+  //         </div>
 
-  return appointmentsData?.hasFeedback === false ? (
-    <span>
-      <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
-        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              textalign: 'center',
-              margin: '20px',
-              gap: '10px',
-            }}
-          >
-            <DialogTitle>{t('Rate your appointment')}</DialogTitle>
-            <Image
-              src="https://cdn.altibbi.com/cdn/large/0/10/logo_1296490409_651.gif"
-              sx={{ width: '60px', height: '60px', border: 1, borderRadius: '50px' }}
-            />
-            <Typography sx={{ color: 'black' }}>
-              {curLangAr ? `${data?.name_arabic}` : `${data?.name_english}`}{' '}
-            </Typography>
-            <Rating
-              size="large"
-              precision={1}
-              max={5}
-              name="Rate"
-              value={rating}
-              onChange={handleRatingClick}
-            />
-          </div>
+  //         {rating < 5 ? (
+  //           <DialogContent>
+  //             <Box component="form" noValidate>
+  //               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+  //                 {RATEELEMENTS?.map((infotwo, indextwo) => (
+  //                   <div key={indextwo}>
+  //                     <Box
+  //                       sx={{
+  //                         fontSize: { md: '15px', xs: '9px' },
+  //                         fontWeight: { md: '400', xs: 'bolder' },
+  //                       }}
+  //                     >
+  //                       <Radio {...controlProps(infotwo)} name="Selection" />
+  //                       {infotwo}
+  //                     </Box>
+  //                   </div>
+  //                 ))}
+  //               </div>
+  //               <FormControl sx={{ my: 5, minWidth: '100%' }}>
+  //                 <InputLabel htmlFor="max-width">Other</InputLabel>
+  //                 <Input id="max-width" {...register('Body')} />
+  //               </FormControl>
+  //             </Box>
+  //           </DialogContent>
+  //         ) : (
+  //           <DialogContent>
+  //             <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
+  //               {t('We hope that everything was to your satisfaction')}
+  //             </Typography>
+  //             <Box component="form" noValidate>
+  //               <FormControl sx={{ my: 3, minWidth: '100%' }}>
+  //                 <InputLabel htmlFor="max-width">Other</InputLabel>
+  //                 <Input id="max-width" {...register('Body')} />
+  //               </FormControl>
+  //             </Box>
+  //           </DialogContent>
+  //         )}
 
-          {rating < 5 ? (
-            <DialogContent>
-              <Box component="form" noValidate>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-                  {RATEELEMENTS?.map((infotwo, indextwo) => (
-                    <div key={indextwo}>
-                      <Box
-                        sx={{
-                          fontSize: { md: '15px', xs: '9px' },
-                          fontWeight: { md: '400', xs: 'bolder' },
-                        }}
-                      >
-                        <Radio {...controlProps(infotwo)} name="Selection" />
-                        {infotwo}
-                      </Box>
-                    </div>
-                  ))}
-                </div>
-                <FormControl sx={{ my: 5, minWidth: '100%' }}>
-                  <InputLabel htmlFor="max-width">Other</InputLabel>
-                  <Input id="max-width" {...register('Body')} />
-                </FormControl>
-              </Box>
-            </DialogContent>
-          ) : (
-            <DialogContent>
-              <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
-                {t('We hope that everything was to your satisfaction')}
-              </Typography>
-              <Box component="form" noValidate>
-                <FormControl sx={{ my: 3, minWidth: '100%' }}>
-                  <InputLabel htmlFor="max-width">Other</InputLabel>
-                  <Input id="max-width" {...register('Body')} />
-                </FormControl>
-              </Box>
-            </DialogContent>
-          )}
-
-          <DialogActions>
-            <Button
-              onClick={skipfunction}
-              loading={isSubmitting}
-              variant="outlined"
-              color="inherit"
-              type="submit"
-            >
-              {t('Skip')}
-            </Button>
-            <Button type="submit" variant="contained">
-              {t('Submit')}
-            </Button>
-          </DialogActions>
-        </FormProvider>
-      </Dialog>
-    </span>
-  ) : (
-    <EmptyContent filled title={t('No Data')} sx={{ py: 10 }} />
-  );
+  //         <DialogActions>
+  //           <Button
+  //             onClick={skipfunction}
+  //             loading={isSubmitting}
+  //             variant="outlined"
+  //             color="inherit"
+  //             type="submit"
+  //           >
+  //             {t('Skip')}
+  //           </Button>
+  //           <Button type="submit" variant="contained">
+  //             {t('Submit')}
+  //           </Button>
+  //         </DialogActions>
+  //       </FormProvider>
+  //     </Dialog>
+  //   </span>
+  // ) : (
+  //   <EmptyContent filled title={t('No Data')} sx={{ py: 10 }} />
+  // );
 }
