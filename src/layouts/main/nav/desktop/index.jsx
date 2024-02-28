@@ -8,7 +8,7 @@ import NavList from './nav-list';
 
 export default function NavDesktop({ data, scrollToDiv2 }) {
   return (
-    <Stack component="nav" direction="row" spacing={5} sx={{ mr: 2.5, height: 1 }}>
+    <Stack component="nav" direction="row" spacing={4} sx={{  height: 1, mr:-5 }}>
       {data.map((list) => (
         <NavList key={list.title} data={list} />
       ))}
