@@ -9,6 +9,7 @@ export default function CommunicationPage() {
     <>
       <Helmet>
         <title> Communications</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <Communication />

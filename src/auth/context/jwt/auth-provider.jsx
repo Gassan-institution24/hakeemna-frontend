@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { useMemo, useEffect, useReducer, useCallback } from 'react';
 
+import { paths } from 'src/routes/paths';
+
 import axios, { endpoints } from 'src/utils/axios';
 
 import { AuthContext } from './auth-context';
@@ -13,7 +15,6 @@ import { setSession, isValidToken } from './utils';
 // Customer will need to do some extra handling yourself if you want to extend the logic and other features...
 
 // ----------------------------------------------------------------------
-
 const initialState = {
   user: null,
   loading: true,
@@ -168,10 +169,11 @@ export function AuthProvider({ children }) {
 
   // LOGOUT
   const logout = useCallback(async () => {
-    setSession(null);
+    window.location.assign(paths.auth.login);
     dispatch({
       type: 'LOGOUT',
     });
+    setSession(null);
   }, []);
 
   // ----------------------------------------------------------------------

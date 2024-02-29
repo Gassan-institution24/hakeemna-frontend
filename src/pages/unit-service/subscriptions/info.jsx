@@ -20,6 +20,7 @@ export default function SubscriptionsInfoPage() {
     <ACLGuard hasContent category="unit_service" subcategory="subscriptions" acl="read">
       <Helmet>
         <title>{name || ''} Subscription Info</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <SubscriptionsInfoView subscriptionData={data} />}

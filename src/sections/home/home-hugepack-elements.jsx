@@ -83,7 +83,7 @@
 //   const renderDescription = (
 //     <Stack
 //       sx={{
-//         textalign: { xs: 'center', md: 'unset' },
+//         textAlign: { xs: 'center', md: 'unset' },
 //         pl: { md: 5 },
 //         pt: { md: 15 },
 //       }}
@@ -461,7 +461,7 @@
 //         </Grid>
 
 //         {!mdUp && (
-//           <Grid xs={12} sx={{ textalign: 'center' }}>
+//           <Grid xs={12} sx={{ textAlign: 'center' }}>
 //             {viewAllBtn}
 //           </Grid>
 //         )}

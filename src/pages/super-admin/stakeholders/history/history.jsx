@@ -18,6 +18,7 @@ export default function StakeholderHistoryPage() {
     <>
       <Helmet>
         <title> stakeholders: {stakeholderName} History </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <PatientHistory stakeholderData={data} />}

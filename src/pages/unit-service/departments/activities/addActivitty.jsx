@@ -19,6 +19,7 @@ export default function DepartmentActivityNewPage() {
     <ACLGuard hasContent category="department" subcategory="activities" acl="create">
       <Helmet>
         <title> Add Activity </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentActivityNewView departmentData={data} />}

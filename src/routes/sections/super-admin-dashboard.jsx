@@ -1,8 +1,8 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
+import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import UnitServiceNav from 'src/layouts/service-unit-topbar';
 import UnitServiceDepartmentNavLayout from 'src/layouts/unitService-department-topbar';
 
@@ -11,7 +11,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------
 
 // OVERVIEW
-const IndexPage = lazy(() => import('src/pages/dashboard/app'));
+// const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 // const OverviewEcommercePage = lazy(() => import('src/pages/dashboard/ecommerce'));
 // const OverviewAnalyticsPage = lazy(() => import('src/pages/dashboard/analytics'));
 // const OverviewBankingPage = lazy(() => import('src/pages/dashboard/banking'));

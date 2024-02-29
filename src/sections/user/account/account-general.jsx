@@ -190,7 +190,7 @@ export default function AccountGeneral({ data, refetch }) {
       <Grid container spacing={3}>
         {/* img */}
         <Grid xs={12} md={4}>
-          <Card sx={{ pt: 10, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textalign: 'center' }}>
+          <Card sx={{ pt: 10, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
             <RHFUploadAvatar
               name="profile_picture"
               onDrop={handleDrop}
@@ -201,7 +201,7 @@ export default function AccountGeneral({ data, refetch }) {
                     mt: 6,
                     mx: 'auto',
                     display: 'block',
-                    textalign: 'center',
+                    textAlign: 'center',
                     color: 'text.disabled',
                     fontSize: 17,
                   }}

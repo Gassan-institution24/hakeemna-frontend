@@ -21,8 +21,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetCities } from 'src/api';
 
@@ -150,11 +149,7 @@ export default function CitiesTableView() {
 
   const handleActivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.city(id)}/updatestatus`,
-        data: { status: 'active' },
-      });
+      await axiosInstance.patch(`${endpoints.tables.city(id)}/updatestatus`, { status: 'active' });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -162,10 +157,8 @@ export default function CitiesTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.city(id)}/updatestatus`,
-        data: { status: 'inactive' },
+      await axiosInstance.patch(`${endpoints.tables.city(id)}/updatestatus`, {
+        status: 'inactive',
       });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -174,10 +167,9 @@ export default function CitiesTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.cities}/updatemanystatus`,
-      data: { status: 'active', ids: table.selected },
+    axiosInstance.patch(`${endpoints.tables.cities}/updatemanystatus`, {
+      status: 'active',
+      ids: table.selected,
     });
     refetch();
     table.onUpdatePageDeleteRows({
@@ -188,10 +180,9 @@ export default function CitiesTableView() {
   }, [dataFiltered.length, dataInPage.length, table, tableData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.cities}/updatemanystatus`,
-      data: { status: 'inactive', ids: table.selected },
+    axiosInstance.patch(`${endpoints.tables.cities}/updatemanystatus`, {
+      status: 'inactive',
+      ids: table.selected,
     });
     refetch();
     table.onUpdatePageDeleteRows({

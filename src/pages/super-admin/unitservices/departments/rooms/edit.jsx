@@ -21,6 +21,7 @@ export default function DepartmentRoomEditPage() {
     <ACLGuard hasContent category="department" subcategory="rooms" acl="update">
       <Helmet>
         <title> Edit {name || ''} Room </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentRoomEditView roomData={data} departmentData={departmentData} />}

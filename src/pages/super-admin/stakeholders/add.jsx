@@ -9,6 +9,7 @@ export default function StakeholderAddPage() {
     <>
       <Helmet>
         <title> Add Patient</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <AddPatient />

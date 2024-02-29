@@ -10,6 +10,7 @@ export default function PaymentControlPage() {
     <ACLGuard hasContent category="employee" subcategory="accounting" acl="read">
       <Helmet>
         <title>Payment Control</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <PaymentControlView />

@@ -20,6 +20,7 @@ export default function EmployeeAttendencePage() {
     <ACLGuard hasContent category="unit_service" subcategory="attendence" acl="read">
       <Helmet>
         <title>{name || ''} Employee Attendence</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EmployeeAttendenceView employeeData={data} />}

@@ -20,6 +20,7 @@ export default function AccountingEditPage() {
     <>
       <Helmet>
         <title> {t(unitServiceName)} Accounting</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <EditUnitServiceAccounting unitServiceData={data} licenseMovementData={licenseMovementData} />

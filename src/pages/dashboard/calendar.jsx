@@ -9,7 +9,8 @@
 //     <>
 //       <Helmet>
 //         <title> Dashboard: Calendar</title>
-//       </Helmet>
+//       <meta name="description" content='meta' />
+// </Helmet>
 
 //       <CalendarView />
 //     </>

@@ -60,7 +60,7 @@ export default function Share() {
             }}
           />
         </div>
-        <Typography variant="h6" sx={{ textalign: 'center' }}>
+        <Typography variant="h6" sx={{ textAlign: 'center' }}>
           {curLangAr ? 'قم بمشاركة الرابط' : 'Or copy this link'}
         </Typography>
         <div style={{ position: 'relative', width: '100%' }}>

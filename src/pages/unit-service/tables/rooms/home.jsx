@@ -9,6 +9,7 @@ export default function RoomHomePage() {
     <>
       <Helmet>
         <title> Rooms</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <RoomHomeView />

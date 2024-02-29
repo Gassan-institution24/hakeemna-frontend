@@ -18,7 +18,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance from 'src/utils/axios';
 
 import { useGetCities } from 'src/api';
 import { useGetStackholder } from 'src/api/user';
@@ -32,18 +32,10 @@ export default function TourNewEditForm({ currentTour }) {
   const mdUp = useResponsive('up', 'md');
   const { enqueueSnackbar } = useSnackbar();
   const editfunc = (data) => {
-    axiosHandler({
-      method: 'PATCH',
-      path: `/api/suppliersoffers/${currentTour._id}`,
-      data,
-    });
+    axiosInstance.patch(`/api/suppliersoffers/${currentTour._id}`, data);
   };
   const addfunc = (data) => {
-    axiosHandler({
-      method: 'POST',
-      path: '/api/suppliersoffers/',
-      data,
-    });
+    axiosInstance.post('/api/suppliersoffers/', data);
   };
 
   const { tableData } = useGetCities();

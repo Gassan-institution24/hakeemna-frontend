@@ -9,7 +9,8 @@
 //     <>
 //       <Helmet>
 //         <title> Dashboard: Mail</title>
-//       </Helmet>
+//       <meta name="description" content='meta' />
+// </Helmet>
 
 //       <MailView />
 //     </>

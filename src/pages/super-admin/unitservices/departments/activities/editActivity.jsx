@@ -21,6 +21,7 @@ export default function DepartmentActivityEditPage() {
     <ACLGuard hasContent category="department" subcategory="activities" acl="update">
       <Helmet>
         <title> Edit {name || ''} Activity </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && (

@@ -9,6 +9,7 @@ export default function AdjustableServicePage() {
     <>
       <Helmet>
         <title> Adjustable service</title>
+        <meta name="description" content="meta" />
       </Helmet>
       <AdjustableService />
     </>

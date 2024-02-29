@@ -11,6 +11,7 @@ export default function EditPage() {
     <ACLGuard hasContent category="employee" subcategory="info" acl="update">
       <Helmet>
         <title>Edit Profile</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <EmployeeEditProfileView />

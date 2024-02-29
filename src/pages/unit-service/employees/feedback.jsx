@@ -19,6 +19,7 @@ export default function EmployeeFeedbackPage() {
     <>
       <Helmet>
         <title> {name || ''} Employee Feedback</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EmployeeFeedbackView employeeData={data} />}

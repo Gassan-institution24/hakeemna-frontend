@@ -10,6 +10,7 @@ export default function QualityControlPage() {
     <ACLGuard hasContent category="unit_service" subcategory="quality_control" acl="read">
       <Helmet>
         <title>Quality Control</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <QualityControlView />

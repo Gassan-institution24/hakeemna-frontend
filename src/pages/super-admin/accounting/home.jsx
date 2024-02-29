@@ -9,6 +9,7 @@ export default function AccountingHomePage() {
     <>
       <Helmet>
         <title>Accounting</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <AccountingHome />

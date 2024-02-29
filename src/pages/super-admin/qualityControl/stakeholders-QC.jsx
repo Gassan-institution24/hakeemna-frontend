@@ -9,6 +9,7 @@ export default function QualityControlPage() {
     <>
       <Helmet>
         <title> Stakeholders Quality Control</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <QualityControl />

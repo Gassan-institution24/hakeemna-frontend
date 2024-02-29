@@ -40,8 +40,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import TableDetailRow from '../payment_methods/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -152,11 +151,10 @@ export default function PaymentMethodsTableView() {
 
   const handleActivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.paymentmethod(id)}/updatestatus`, /// edit
-        data: { status: 'active' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.paymentmethod(id)}/updatestatus`, /// edit
+        { status: 'active' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -164,11 +162,10 @@ export default function PaymentMethodsTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.paymentmethod(id)}/updatestatus`, /// edit
-        data: { status: 'inactive' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.paymentmethod(id)}/updatestatus`, /// edit
+        { status: 'inactive' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -176,11 +173,10 @@ export default function PaymentMethodsTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.paymentmethods}/updatestatus`, /// edit
-      data: { status: 'active', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.tables.paymentmethods}/updatestatus`, /// edit
+      { status: 'active', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: paymentMethodsData.length,
@@ -190,11 +186,10 @@ export default function PaymentMethodsTableView() {
   }, [dataFiltered.length, dataInPage.length, table, paymentMethodsData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.paymentmethods}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.tables.paymentmethods}/updatestatus`, /// edit
+      { status: 'inactive', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: paymentMethodsData.length,

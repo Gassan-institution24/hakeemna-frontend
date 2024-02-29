@@ -9,7 +9,8 @@
 //     <>
 //       <Helmet>
 //         <title> Dashboard: File Manager</title>
-//       </Helmet>
+//       <meta name="description" content='meta' />
+// </Helmet>
 
 //       <FileManagerView />
 //     </>

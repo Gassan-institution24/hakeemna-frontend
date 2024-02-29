@@ -9,6 +9,7 @@ export default function ActivationPage() {
     <>
       <Helmet>
         <title> Activation</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <JwtActivationView />

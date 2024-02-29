@@ -10,6 +10,7 @@ export default function RecieptsInfoPage() {
     <ACLGuard hasContent category="employee" subcategory="accounting" acl="read">
       <Helmet>
         <title>Reciept Info</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <RecieptsInfoView />

@@ -9,6 +9,7 @@ export default function LoginPage() {
     <>
       <Helmet>
         <title> Jwt: Login</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <JwtLoginView />

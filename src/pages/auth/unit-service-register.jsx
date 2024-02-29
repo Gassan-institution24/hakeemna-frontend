@@ -9,6 +9,7 @@ export default function RegisterPage() {
     <>
       <Helmet>
         <title> Register As Unit Service</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <JwtUSRegisterView />

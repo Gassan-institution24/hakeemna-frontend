@@ -20,6 +20,7 @@ export default function DepartmentActivitiesPage() {
     <ACLGuard hasContent category="department" subcategory="activities" acl="read">
       <Helmet>
         <title>{name || ''} Department Activities</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentActivitiesView departmentData={data} />}

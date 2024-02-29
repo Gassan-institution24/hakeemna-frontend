@@ -9,6 +9,7 @@ export default function TableDetailsPage() {
     <>
       <Helmet>
         <title> Dashboard: Cities Table</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <TablesDetailsView />

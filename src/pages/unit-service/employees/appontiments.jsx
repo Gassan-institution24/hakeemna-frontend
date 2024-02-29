@@ -20,6 +20,7 @@ export default function EmployeeAppointmentsPage() {
     <ACLGuard hasContent category="unit_service" subcategory="appointments" acl="read">
       <Helmet>
         <title>{name || ''} Employee Appointments</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EmployeeAppointmentsView employeeData={data} />}

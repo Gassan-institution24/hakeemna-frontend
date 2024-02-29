@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[949],{70949:(n,s,e)=>{e.r(s),e.d(s,{default:()=>l});var i=e(6907),t=e(76932),a=e(95980),c=e(80184);function l(){const{t:n}=(0,t.qM)();return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(i.ql,{children:(0,c.jsxs)("title",{children:[" ",n("Financial movements")," "]})}),(0,c.jsx)(a.pA,{})]})}}}]);
-//# sourceMappingURL=949.7f7d0ad0.chunk.js.map

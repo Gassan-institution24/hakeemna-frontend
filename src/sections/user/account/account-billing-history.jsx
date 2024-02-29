@@ -43,7 +43,7 @@ export default function AccountBillingHistory() {
               }}
             />
 
-            <Typography variant="body2" sx={{ textalign: 'right', mr: 5 }}>
+            <Typography variant="body2" sx={{ textAlign: 'right', mr: 5 }}>
               {fCurrency(invoice.price)}
             </Typography>
 

@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[5467],{15467:(e,i,s)=>{s.r(i),s.d(i,{default:()=>n});var a=s(6907),r=s(85362),l=s(80184);function n(){return(0,l.jsxs)(l.Fragment,{children:[(0,l.jsx)(a.ql,{children:(0,l.jsx)("title",{children:" Dashboard: Cities Table"})}),(0,l.jsx)(r.HS,{})]})}}}]);
-//# sourceMappingURL=5467.4e9bcc1d.chunk.js.map

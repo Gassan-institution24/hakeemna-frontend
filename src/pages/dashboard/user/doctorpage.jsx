@@ -13,6 +13,7 @@ export default function Doctorpageinfo() {
     <>
       <Helmet>
         <title> {t('Doctorpage')} </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <Doctorpage />

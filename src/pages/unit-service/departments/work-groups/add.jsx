@@ -19,6 +19,7 @@ export default function DepartmentWorkGroupNewPage() {
     <ACLGuard hasContent category="department" subcategory="work_groups" acl="create">
       <Helmet>
         <title> New Work Group </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentWorkGroupNewView departmentData={data} />}

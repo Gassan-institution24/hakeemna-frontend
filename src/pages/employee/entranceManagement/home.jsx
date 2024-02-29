@@ -10,6 +10,7 @@ export default function EntranceManagementHomePage() {
     <ACLGuard hasContent category="employee" subcategory="entrance_management" acl="read">
       <Helmet>
         <title>Entrance Management</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <EntranceManagement />

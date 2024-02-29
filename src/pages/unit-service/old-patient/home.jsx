@@ -11,6 +11,7 @@ export default function OldPatientPage() {
     <ACLGuard hasContent category="unit_service" subcategory="old_patient" acl="create">
       <Helmet>
         <title>Old patient</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <OldPatientView />

@@ -10,6 +10,7 @@ export default function EconomicMovementEditPage() {
     <ACLGuard hasContent category="employee" subcategory="accounting" acl="update">
       <Helmet>
         <title>Edit Economic Movement</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <EconomicMovementEditView />

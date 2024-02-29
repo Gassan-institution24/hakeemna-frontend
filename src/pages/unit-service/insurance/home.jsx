@@ -11,6 +11,7 @@ export default function InsuranceHomePage() {
     <ACLGuard hasContent category="unit_service" subcategory="insurance" acl="read">
       <Helmet>
         <title>Insurances</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <InsuranceHomeView />

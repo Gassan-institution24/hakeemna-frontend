@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[4232],{74232:(s,e,i)=>{i.r(e),i.d(e,{default:()=>l});var r=i(6907),t=i(76932),n=i(95980),c=i(80184);function l(){const{t:s}=(0,t.qM)();return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(r.ql,{children:(0,c.jsxs)("title",{children:[" ",s("Medical Reports")," "]})}),(0,c.jsx)(n.Xr,{})]})}}}]);
-//# sourceMappingURL=4232.aef95bf1.chunk.js.map

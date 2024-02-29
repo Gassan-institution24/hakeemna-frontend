@@ -11,6 +11,7 @@ export default function EmployeeProfilePage() {
     <ACLGuard hasContent category="employee" subcategory="info" acl="read">
       <Helmet>
         <title>My Profile</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <EmployeeProfileView />

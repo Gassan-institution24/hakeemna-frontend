@@ -20,6 +20,7 @@ export default function EmployeeAccountingPage() {
     <ACLGuard hasContent category="employee" subcategory="accounting" acl="read">
       <Helmet>
         <title> {name || ''} Employee Accounting</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EmployeeAccountingView employeeData={data} />}

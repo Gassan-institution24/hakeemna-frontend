@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -46,12 +46,9 @@ export default function ContactUs() {
 
   const onSubmit = handleSubmit(async (info) => {
     try {
-      const response = await axiosHandler({
-        // setError,
-        method: 'POST',
-        path: `/api/contactus`,
-        data: info,
-      });
+      const response = await axiosInstance.patch(`/api/contactus`,
+        info,
+      );
       if (response) {
         enqueueSnackbar(
           `${curLangAr ? 'تم ارسال الرسالة بنجاح' : 'Your message sent successfully'}`,

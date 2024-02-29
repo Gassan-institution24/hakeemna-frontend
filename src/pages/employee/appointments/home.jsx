@@ -10,6 +10,7 @@ export default function AppointmentsHomePage() {
     <ACLGuard hasContent category="employee" subcategory="appointments" acl="read">
       <Helmet>
         <title>Appointments</title>
+        <meta name="description" content="meta" />
       </Helmet>
       <AppointmentHomeView />
     </ACLGuard>

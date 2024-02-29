@@ -9,6 +9,7 @@ export default function RegisterPage() {
     <>
       <Helmet>
         <title> Register As Stakeholder</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <JwtStakeholderRegisterView />

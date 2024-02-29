@@ -20,6 +20,7 @@ export default function WorkShiftEditPage() {
     <ACLGuard hasContent category="unit_service" subcategory="work_shift" acl="update">
       <Helmet>
         <title>Edit {name || ''} Work Shift</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <WorkShiftEditView workShiftData={data} />}

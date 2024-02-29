@@ -9,6 +9,7 @@ export default function TableEditPage() {
     <>
       <Helmet>
         <title> super: Edit Free Subscription</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <TableEditView />

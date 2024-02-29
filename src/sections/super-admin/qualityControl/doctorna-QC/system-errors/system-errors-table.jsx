@@ -27,8 +27,7 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import ErrosRow from './errors-row'; /// edit
 import FeedbackToolbar from './errors-toolbar';
@@ -140,11 +139,10 @@ export default function DoctornaSystemErrorsView() {
 
   const handleRead = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.systemError(id)}/updatestatus`, /// edit
-        data: { status: 'read' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.systemError(id)}/updatestatus`, /// edit
+        { status: 'read' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -153,11 +151,10 @@ export default function DoctornaSystemErrorsView() {
 
   const handleUnread = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.systemError(id)}/updatestatus`, /// edit
-        data: { status: 'not read' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.systemError(id)}/updatestatus`, /// edit
+        { status: 'not read' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },

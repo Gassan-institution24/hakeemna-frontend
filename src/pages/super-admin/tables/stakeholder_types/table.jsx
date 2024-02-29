@@ -9,6 +9,7 @@ export default function TableDetailsPage() {
     <>
       <Helmet>
         <title> Dashboard: Stakeholder Types Table</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <StackholderTypesTableView />

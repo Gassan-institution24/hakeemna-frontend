@@ -9,6 +9,7 @@ export default function NewPasswordPage() {
     <>
       <Helmet>
         <title> New Password</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <JwtNewPasswordView />
