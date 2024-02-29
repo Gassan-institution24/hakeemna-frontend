@@ -37,19 +37,24 @@ export const userRoutes = [
     path: 'dashboard',
     element: (
       <AuthGuard>
-        <RoleBasedGuard hasContent roles={['patient']}>
-          <UserDashboardLayout>
-            <Suspense fallback={<LoadingScreen />}>
-              <Outlet />
-            </Suspense>
-          </UserDashboardLayout>
-        </RoleBasedGuard>
+        <UserDashboardLayout>
+          <Suspense fallback={<LoadingScreen />}>
+            <Outlet />
+          </Suspense>
+        </UserDashboardLayout>
       </AuthGuard>
     ),
     children: [
       { element: <IndexPage />, index: true },
       {
         path: 'user',
+        element: (
+          <RoleBasedGuard hasContent roles={['patient']}>
+            <Suspense fallback={<LoadingScreen />}>
+              <Outlet />
+            </Suspense>
+          </RoleBasedGuard>
+        ),
         children: [
           { element: <UserProfilePage />, index: true },
           { path: 'profile', element: <UserProfilePage /> },
