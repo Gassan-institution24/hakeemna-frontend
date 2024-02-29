@@ -20,6 +20,7 @@ export default function DepartmentAppointmentConfigPage() {
     <ACLGuard hasContent category="department" subcategory="appointment_configs" acl="read">
       <Helmet>
         <title>{name || ''} Department Appointment Configuration</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentAppointmentConfigView departmentData={data} />}

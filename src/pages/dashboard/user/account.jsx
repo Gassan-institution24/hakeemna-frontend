@@ -13,6 +13,7 @@ export default function AccountPage() {
     <>
       <Helmet>
         <title> {t('Account Settings')} </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <AccountView />

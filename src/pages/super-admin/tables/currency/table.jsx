@@ -9,6 +9,7 @@ export default function TableDetailsPage() {
     <>
       <Helmet>
         <title> Dashboard: Currency Table</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <CurrencyTableView />

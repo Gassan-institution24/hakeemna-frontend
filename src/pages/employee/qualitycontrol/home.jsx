@@ -8,6 +8,7 @@ export default function QualityControlPage() {
     <>
       <Helmet>
         <title>Quality Control</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <QualityControlView />

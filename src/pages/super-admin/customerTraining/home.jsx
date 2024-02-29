@@ -9,6 +9,7 @@ export default function CustomerTrainingPage() {
     <>
       <Helmet>
         <title> Customer Training</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <CustomerTraining />

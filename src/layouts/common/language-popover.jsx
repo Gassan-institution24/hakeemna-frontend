@@ -1,15 +1,15 @@
 import { m } from 'framer-motion';
-import { useCallback, useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ export default function LanguagePopover() {
 
   return (
     <>
-      {!user?.role === 'superadmin' && (
+      {user?.role !== 'superadmin' && (
         <IconButton
           component={m.button}
           whileTap="tap"

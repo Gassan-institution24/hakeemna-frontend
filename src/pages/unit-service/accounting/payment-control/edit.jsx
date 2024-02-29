@@ -10,6 +10,7 @@ export default function PaymentControlEditPage() {
     <ACLGuard hasContent category="unit_service" subcategory="accounting" acl="update">
       <Helmet>
         <title>Edit Payment Control</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <PaymentControlEditView />

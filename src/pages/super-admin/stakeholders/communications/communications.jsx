@@ -16,6 +16,7 @@ export default function StakeholderCommunicationPage() {
     <>
       <Helmet>
         <title> stakeholders: {stakeholderName} Communication </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       {data && <PatientCommunication stakeholderData={data} />}

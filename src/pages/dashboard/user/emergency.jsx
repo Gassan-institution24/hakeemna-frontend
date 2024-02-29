@@ -13,6 +13,7 @@ export default function EmergencyStatus() {
     <>
       <Helmet>
         <title>{t('Emergency')}</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <Emergency />

@@ -13,6 +13,7 @@ export default function SubscriptionEditPage() {
     <>
       <Helmet>
         <title> Edit Subscription </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <SubscriptionEditView />

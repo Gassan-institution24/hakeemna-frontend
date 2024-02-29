@@ -17,6 +17,7 @@ export default function DepartmentEmployeeNewPage() {
     <ACLGuard hasContent category="department" subcategory="employees" acl="create">
       <Helmet>
         <title> Add Employee </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       {data && <DepartmentEmployeeNewView departmentData={data} />}

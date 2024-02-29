@@ -55,7 +55,7 @@ const StyledTextGradient = styled(m.h1)(({ theme }) => ({
   fontWeight: 900,
   marginBottom: 24,
   letterSpacing: 8,
-  textalign: 'center',
+  textAlign: 'center',
   backgroundSize: '400%',
   fontSize: `${64 / 16}rem`,
   fontFamily: theme.typography.fontSecondaryFamily,
@@ -176,7 +176,7 @@ export default function HomeHero() {
         <Typography
           variant="h2"
           sx={{
-            textalign: 'center',
+            textAlign: 'center',
           }}
           id="home"
         >
@@ -200,7 +200,7 @@ export default function HomeHero() {
       </m.div>
 
       <m.div variants={varFade().in}>
-        <Typography variant="body2" sx={{ textalign: 'center' }}>
+        <Typography variant="body2" sx={{ textAlign: 'center' }}>
           The most extensive assembly of healthcare providers and recipients.
         </Typography>
       </m.div>
@@ -222,7 +222,7 @@ export default function HomeHero() {
         </Stack>
       </m.div>
 
-      <Stack spacing={3} sx={{ textalign: 'center' }}>
+      <Stack spacing={3} sx={{ textAlign: 'center' }}>
         <m.div variants={varFade().in}>
           <Iconify icon="noto:hospital" width={30} sx={{ m: 0.5 }} />
           <Iconify icon="solar:health-broken" color="green" width={30} sx={{ m: 0.5 }} />

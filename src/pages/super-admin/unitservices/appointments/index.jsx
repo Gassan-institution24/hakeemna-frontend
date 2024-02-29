@@ -19,6 +19,7 @@ export default function ServiceUnitAppointmentsPage() {
     <>
       <Helmet>
         <title> {unitServiceName} appointments </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && (

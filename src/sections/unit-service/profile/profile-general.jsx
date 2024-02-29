@@ -188,7 +188,7 @@ export default function AccountGeneral({ unitServiceData }) {
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
         <Grid xs={12} md={4}>
-          <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textalign: 'center' }}>
+          <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
             <RHFUploadAvatar
               helperText={
                 <Typography
@@ -197,7 +197,7 @@ export default function AccountGeneral({ unitServiceData }) {
                     mt: 3,
                     mx: 'auto',
                     display: 'block',
-                    textalign: 'center',
+                    textAlign: 'center',
                     color: 'text.disabled',
                   }}
                 >

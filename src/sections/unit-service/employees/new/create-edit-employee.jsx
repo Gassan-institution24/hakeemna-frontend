@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
@@ -137,25 +136,12 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       await axiosInstance.post(endpoints.auth.register, {
-        ip_address_user_creation: address.data.IPv4,
-        user_creation: user._id,
         role: 'employee',
         userName: `${data.first_name} ${data.family_name}`,
         ...data,
       });
-      // await axiosHandler({
-      //   method: 'POST',
-      //   path: endpoints.auth.register,
-      //   data: {
-      //     ip_address_user_creation: address.data.IPv4,
-      //     user_creation: user._id,
-      //     role: 'employee',
-      //     userName: `${data.first_name} ${data.family_name}`,
-      //     ...data,
-      //   },
-      // });
+
       socket.emit('created', {
         data,
         user,

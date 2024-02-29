@@ -18,6 +18,7 @@ export default function OffersInfoPage() {
     <ACLGuard hasContent category="unit_service" subcategory="offers" acl="read">
       <Helmet>
         <title>{name || ''} Offer Info</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       {data && <OffersInfoView offerData={data} />}

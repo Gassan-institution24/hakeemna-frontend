@@ -9,7 +9,8 @@
 //     <>
 //       <Helmet>
 //         <title> Contact us</title>
-//       </Helmet>
+//       <meta name="description" content='meta' />
+// </Helmet>
 
 //       <ContactView />
 //     </>

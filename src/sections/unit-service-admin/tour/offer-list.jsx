@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance from 'src/utils/axios';
 
 import TourItem from './offer-item';
 
@@ -31,11 +31,7 @@ export default function TourList({ offers, refetch }) {
 
   const handleStatusChange = useCallback(
     (id, newStatus) => {
-      axiosHandler({
-        method: 'PATCH',
-        path: `/api/suppliersoffers/${id}`,
-        data: { status: newStatus },
-      });
+      axiosInstance.patch(`/api/suppliersoffers/${id}`, { status: newStatus });
       refetch();
     },
     [refetch]

@@ -18,6 +18,7 @@ export default function DepartmentEmployeesPage() {
     <ACLGuard hasContent category="department" subcategory="employees" acl="read">
       <Helmet>
         <title>{name || ''} Department Employees</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       {data && <DepartmentEmployeesView departmentData={data} />}

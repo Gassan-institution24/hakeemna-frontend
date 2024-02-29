@@ -10,6 +10,7 @@ export default function RecieptsEditPage() {
     <ACLGuard hasContent category="employee" subcategory="accounting" acl="update">
       <Helmet>
         <title>Edit Reciept</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <RecieptsEditView />

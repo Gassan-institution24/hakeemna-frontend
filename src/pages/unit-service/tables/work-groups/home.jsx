@@ -9,6 +9,7 @@ export default function WorkGroupHomePage() {
     <>
       <Helmet>
         <title>Work Groups</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <WorkGroupHomeView />

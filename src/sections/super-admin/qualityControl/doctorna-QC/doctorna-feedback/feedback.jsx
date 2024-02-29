@@ -28,8 +28,7 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import FeedbackRow from './feedback-row'; /// edit
 import FeedbackToolbar from './feedback-toolbar';
@@ -141,11 +140,10 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
 
   const handleRead = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.feedback(id)}/updatestatus`, /// edit
-        data: { status: 'read' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.feedback(id)}/updatestatus`, /// edit
+        { status: 'read' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -154,11 +152,10 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
 
   const handleUnread = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.feedback(id)}/updatestatus`, /// edit
-        data: { status: 'not read' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.feedback(id)}/updatestatus`, /// edit
+        { status: 'not read' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },

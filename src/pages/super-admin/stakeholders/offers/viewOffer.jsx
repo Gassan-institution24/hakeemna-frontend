@@ -19,6 +19,7 @@ export default function StackholderFeedbackPage() {
     <>
       <Helmet>
         <title> stakeholders: {stakeholderName} Feedback </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <StakeholderOfferView stakeholderData={data} offerData={offerData} />}

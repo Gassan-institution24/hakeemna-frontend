@@ -21,7 +21,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useGetUSRooms } from 'src/api';
@@ -43,8 +43,6 @@ import {
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
 import { useSnackbar } from 'notistack';
-
-import axiosHandler from 'src/utils/axios-handler';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -164,11 +162,9 @@ export default function RoomsTableView() {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
-          data: { status: 'active' },
-        });
+        await axiosInstance.patch( `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
+          { status: 'active' },
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.rooms.root,
@@ -187,11 +183,9 @@ export default function RoomsTableView() {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
-          data: { status: 'inactive' },
-        });
+        await axiosInstance.patch( `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
+          { status: 'inactive' },
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.rooms.root,
@@ -210,11 +204,9 @@ export default function RoomsTableView() {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.rooms}/updatestatus`, /// edit
-        data: { status: 'active', ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.tables.rooms}/updatestatus`, /// edit
+        { status: 'active', ids: table.selected },
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.tables.rooms.root,
@@ -235,11 +227,9 @@ export default function RoomsTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.rooms}/updatestatus`, /// edit
-        data: { status: 'inactive', ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.tables.rooms}/updatestatus`, /// edit
+        { status: 'inactive', ids: table.selected },
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.tables.rooms.root,

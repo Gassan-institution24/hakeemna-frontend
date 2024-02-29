@@ -11,6 +11,7 @@ export default function OffersHomePage() {
     <ACLGuard hasContent category="unit_service" subcategory="offers" acl="read">
       <Helmet>
         <title>Offers</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <OffersHomeView />

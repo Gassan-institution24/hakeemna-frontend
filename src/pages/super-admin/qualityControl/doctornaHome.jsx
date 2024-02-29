@@ -9,6 +9,7 @@ export default function QualityControlPage() {
     <>
       <Helmet>
         <title> Doctorna Quality Control</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <QualityControl />

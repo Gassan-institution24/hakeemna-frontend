@@ -9,6 +9,7 @@ export default function StakeholderHomePage() {
     <>
       <Helmet>
         <title> stakeholders</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <StakeholdersView />

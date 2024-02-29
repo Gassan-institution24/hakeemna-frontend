@@ -10,6 +10,7 @@ export default function HomePage({ divRef, divRef2 }) {
     <>
       <Helmet>
         <title>Doctorna</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <HomeView divRef={divRef} divRef2={divRef2} />

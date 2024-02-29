@@ -51,7 +51,7 @@ export default function whoAreWe() {
       <Stack
         spacing={3}
         sx={{
-          textalign: 'center',
+          textAlign: 'center',
           mb: { xs: 5, md: 8 },
         }}
       >
@@ -59,7 +59,7 @@ export default function whoAreWe() {
           <Typography
             component="div"
             variant="overline"
-            sx={{ color: 'text.disabled', textalign: 'center' }}
+            sx={{ color: 'text.disabled', textAlign: 'center' }}
           >
             Doctona Online
           </Typography>
@@ -83,7 +83,7 @@ export default function whoAreWe() {
           <m.div variants={varFade().inUp} key={card.title}>
             <Card
               sx={{
-                textalign: 'center',
+                textAlign: 'center',
                 boxShadow: { md: 'none' },
                 bgcolor: 'rgba(102, 255, 102, 0)',
                 p: (theme) => theme.spacing(10, 5),

@@ -20,6 +20,7 @@ export default function TableCreatePage() {
     <>
       <Helmet>
         <title> Patients: {patientName} Communication </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       {data && <PatientCommunication patientData={data} />}

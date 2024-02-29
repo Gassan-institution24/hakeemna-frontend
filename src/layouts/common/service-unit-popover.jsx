@@ -89,7 +89,7 @@ export default function ServiceUnitPopover() {
             }),
           }}
         >
-          <Typography variant="body1" sx={{ textalign: 'center' }}>
+          <Typography variant="body1" sx={{ textAlign: 'center' }}>
             {selected?.unit_service?.name_english
               ?.split(' ')
               .map((word) => word.charAt(0).toUpperCase())

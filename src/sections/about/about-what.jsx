@@ -43,7 +43,7 @@ export default function AboutWhat() {
       component={MotionViewport}
       sx={{
         py: { xs: 10, md: 15 },
-        textalign: { xs: 'center', md: 'unset' },
+        textAlign: { xs: 'center', md: 'unset' },
       }}
     >
       <Grid container columnSpacing={{ md: 3 }} alignItems="flex-start">
@@ -97,7 +97,7 @@ export default function AboutWhat() {
             {SKILLS.map((progress, index) => (
               <Box component={m.div} key={progress.label} variants={varFade().inRight}>
                 <Stack direction="row" alignItems="center" sx={{ mb: 1 }}>
-                  <Typography variant="subtitle2" sx={{ flexGrow: 1, textalign: 'left' }}>
+                  <Typography variant="subtitle2" sx={{ flexGrow: 1, textAlign: 'left' }}>
                     {progress.label}
                   </Typography>
 

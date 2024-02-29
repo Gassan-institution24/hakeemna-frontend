@@ -21,6 +21,7 @@ export default function AccountingAddPage() {
     <>
       <Helmet>
         <title> {t(unitServiceName)} Accounting</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <AddUnitServiceAccounting unitServiceData={data} />}

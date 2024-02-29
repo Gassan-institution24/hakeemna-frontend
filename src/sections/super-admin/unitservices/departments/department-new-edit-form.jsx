@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
@@ -14,8 +13,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance,{ endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
@@ -87,19 +85,14 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
+      
       if (currentTable) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.department(currentTable._id),
-          data: {
-            modifications_nums: (currentTable.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
+        await axiosInstance.patch( endpoints.tables.department(currentTable._id),
+          {
             unit_service: id,
             ...data,
           },
-        });
+        );
         socket.emit('updated', {
           data,
           user,
@@ -107,16 +100,12 @@ export default function TableNewEditForm({ currentTable }) {
           msg: `updating department <strong>${data.name_english || ''}</strong>`,
         });
       } else {
-        const newDepartment = await axiosHandler({
-          method: 'POST',
-          path: endpoints.tables.departments,
-          data: {
-            ip_address_user_creation: address.data.IPv4,
-            user_creation: user._id,
+        const newDepartment = await axiosInstance.post( endpoints.tables.departments,
+          {
             ...data,
             unit_service: id,
           },
-        });
+        );
         socket.emit('created', {
           data,
           user,

@@ -197,7 +197,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             name="config_frequency"
             label={t('configuration frequency')}
             type="number"
-            inputProps={{ min: 0, max: 30, textalign: 'center' }}
+            inputProps={{ min: 0, max: 30, textAlign: 'center' }}
             InputLabelProps={{ shrink: true }}
           />
         </Stack>

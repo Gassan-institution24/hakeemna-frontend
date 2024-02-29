@@ -10,6 +10,7 @@ export default function RecieptsNewPage() {
     <ACLGuard hasContent category="unit_service" subcategory="accounting" acl="create">
       <Helmet>
         <title>New Reciept</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <RecieptsNewView />

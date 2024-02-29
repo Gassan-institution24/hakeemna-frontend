@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
@@ -20,8 +19,7 @@ import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
@@ -128,18 +126,11 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       // console.log('data', data);
-      const address = await axios.get('https://geolocation-db.com/json/');
+
       if (currentTable) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.hospital(currentTable._id),
-          data: {
-            role: 'employee',
-            modifications_nums: (currentTable.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
+        await axiosInstance.patch(endpoints.tables.hospital(currentTable._id), {
+          role: 'employee',
+          ...data,
         });
         socket.emit('created', {
           data,
@@ -148,16 +139,10 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
           msg: `creating an employee <strong>${data.first_name}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.auth.register,
-          data: {
-            ip_address_user_creation: address.data.IPv4,
-            user_creation: user._id,
-            role: 'employee',
-            userName: `${data.first_name} ${data.family_name}`,
-            ...data,
-          },
+        await axiosInstance.post(endpoints.auth.register, {
+          role: 'employee',
+          userName: `${data.first_name} ${data.family_name}`,
+          ...data,
         });
         socket.emit('updated', {
           data,

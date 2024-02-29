@@ -46,8 +46,7 @@ import {
 } from 'src/components/table'; /// edit
 import { useSnackbar } from 'notistack';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance,{ endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 
@@ -159,11 +158,9 @@ export default function EmployeeTypesTable() {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.employeetype(row._id)}/updatestatus`, /// edit
-          data: { status: 'active' },
-        });
+        await axiosInstance.patch( `${endpoints.tables.employeetype(row._id)}/updatestatus`, /// edit
+          { status: 'active' },
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.employeetypes.root,
@@ -182,11 +179,9 @@ export default function EmployeeTypesTable() {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.employeetype(row._id)}/updatestatus`, /// edit
-          data: { status: 'inactive' },
-        });
+        await axiosInstance.patch( `${endpoints.tables.employeetype(row._id)}/updatestatus`, /// edit
+          { status: 'inactive' },
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.employeetypes.root,
@@ -205,11 +200,9 @@ export default function EmployeeTypesTable() {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employeetypes}/updatestatus`, /// edit
-        data: { status: 'active', ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.tables.employeetypes}/updatestatus`, /// edit
+        { status: 'active', ids: table.selected },
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.tables.employeetypes.root,
@@ -238,11 +231,9 @@ export default function EmployeeTypesTable() {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employeetypes}/updatestatus`, /// edit
-        data: { status: 'inactive', ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.tables.employeetypes}/updatestatus`, /// edit
+        { status: 'inactive', ids: table.selected },
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.tables.employeetypes.root,

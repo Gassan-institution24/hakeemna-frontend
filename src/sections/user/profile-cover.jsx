@@ -49,7 +49,7 @@ export default function ProfileCover({ name, avatarUrl, role, coverUrl }) {
           sx={{
             mt: 3,
             ml: { md: 3 },
-            textalign: { xs: 'center', md: 'unset' },
+            textAlign: { xs: 'center', md: 'unset' },
           }}
           primary={name}
           secondary={role}

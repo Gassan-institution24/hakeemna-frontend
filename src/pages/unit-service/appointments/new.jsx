@@ -11,6 +11,7 @@ export default function AppointmentsNewPage() {
     <ACLGuard hasContent category="unit_service" subcategory="appointments" acl="create">
       <Helmet>
         <title>New Appointments</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <NewAppointmentsView />
