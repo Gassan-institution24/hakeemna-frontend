@@ -11,6 +11,7 @@ export default function OfferNewPage() {
     <ACLGuard hasContent category="unit_service" subcategory="offers" acl="create">
       <Helmet>
         <title>New Offer</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <OfferNewView />

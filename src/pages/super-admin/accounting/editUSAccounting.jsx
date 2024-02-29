@@ -22,6 +22,7 @@ export default function AccountingEditPage() {
     <>
       <Helmet>
         <title> {t(unitServiceName)} Accounting</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && (

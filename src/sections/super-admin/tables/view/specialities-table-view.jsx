@@ -41,7 +41,7 @@ import {
   // TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-// import axiosHandler from 'src/utils/axios-handler';
+
 import TableDetailRow from '../specialties/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
@@ -58,7 +58,7 @@ const TABLE_HEAD = [
   /// edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'name' },
-{ id: 'name_arabic', label: 'arabic name' },
+  { id: 'name_arabic', label: 'arabic name' },
   { id: 'description', label: 'description' },
   // { id: 'created_at', label: 'Date Of Creation' },
   // { id: 'user_creation', label: 'Creater' },
@@ -151,59 +151,6 @@ export default function SpecialtiesTableView() {
     [table]
   );
 
-  // const handleActivate = useCallback(
-  //   async (id) => {
-  //     await axiosHandler({
-  //       method: 'PATCH',
-  //       path: `insurance/companies/${id}/updatestatus`, /// edit
-  //       data: { status: 'active' },
-  //     });
-  //     refetch();
-  //     table.onUpdatePageDeleteRow(dataInPage.length);
-  //   },
-  //   [dataInPage.length, table, refetch]
-  // );
-  // const handleInactivate = useCallback(
-  //   async (id) => {
-  //     await axiosHandler({
-  //       method: 'PATCH',
-  //       path: `insurance/companies/${id}/updatestatus`, /// edit
-  //       data: { status: 'inactive' },
-  //     });
-  //     refetch();
-  //     table.onUpdatePageDeleteRow(dataInPage.length);
-  //   },
-  //   [dataInPage.length, table, refetch]
-  // );
-
-  // const handleActivateRows = useCallback(async () => {
-  //   await axiosHandler({
-  //     method: 'PATCH',
-  //     path: `insurance/companies/updatestatus`, /// edit
-  //     data: { status: 'active', ids: table.selected },
-  //   });
-  //   refetch();
-  //   table.onUpdatePageDeleteRows({
-  //     totalRows: specialtiesData.length,
-  //     totalRowsInPage: dataInPage.length,
-  //     totalRowsFiltered: dataFiltered.length,
-  //   });
-  // }, [dataFiltered.length, dataInPage.length, table, specialtiesData, refetch]);
-
-  // const handleInactivateRows = useCallback(async () => {
-  //   await axiosHandler({
-  //     method: 'PATCH',
-  //     path: `insurance/companies/updatestatus`, /// edit
-  //     data: { status: 'inactive', ids: table.selected },
-  //   });
-  //   refetch();
-  //   table.onUpdatePageDeleteRows({
-  //     totalRows: specialtiesData.length,
-  //     totalRowsInPage: dataInPage.length,
-  //     totalRowsFiltered: dataFiltered.length,
-  //   });
-  // }, [dataFiltered.length, dataInPage.length, table, specialtiesData, refetch]);
-
   const handleEditRow = useCallback(
     (id) => {
       router.push(paths.superadmin.tables.specialities.edit(id));
@@ -214,20 +161,6 @@ export default function SpecialtiesTableView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
-
-  // const handleViewRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.order.details(id));
-  //   },
-  //   [router]
-  // );
-
-  // const handleFilterStatus = useCallback(
-  //   (event, newValue) => {
-  //     handleFilters('status', newValue);
-  //   },
-  //   [handleFilters]
-  // );
 
   if (loading) {
     return <LoadingScreen />;

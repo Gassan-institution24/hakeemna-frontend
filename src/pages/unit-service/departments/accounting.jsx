@@ -20,6 +20,7 @@ export default function DepartmentAccountingPage() {
     <ACLGuard hasContent category="department" subcategory="accounting" acl="read">
       <Helmet>
         <title>{name || ''} Department Accounting</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentAccountingView departmentData={data} />}

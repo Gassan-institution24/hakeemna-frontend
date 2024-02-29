@@ -8,6 +8,7 @@ export default function patients() {
     <>
       <Helmet>
         <title>Patientservices</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <Patientservices />

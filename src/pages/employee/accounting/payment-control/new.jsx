@@ -10,6 +10,7 @@ export default function PaymentControlNewPage() {
     <ACLGuard hasContent category="employee" subcategory="accounting" acl="create">
       <Helmet>
         <title>New Payment Control</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <PaymentControlNewView />

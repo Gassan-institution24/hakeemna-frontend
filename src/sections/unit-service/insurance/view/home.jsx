@@ -18,8 +18,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance,{ endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
@@ -153,11 +152,9 @@ export default function UnitServicesInsuranceView() {
     async (id) => {
       try {
         const info = [...data.insurance, id];
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.unitservice(data?._id), /// to edit
-          data: { insurance: info },
-        });
+        await axiosInstance.patch( endpoints.tables.unitservice(data?._id), /// to edit
+          { insurance: info },
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.insurance.root,
@@ -177,11 +174,9 @@ export default function UnitServicesInsuranceView() {
     async (id) => {
       try {
         const info = data?.insurance?.filter((company) => company?._id !== id);
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.unitservice(data?._id), /// to edit
-          data: { insurance: info },
-        });
+        await axiosInstance.patch( endpoints.tables.unitservice(data?._id), /// to edit
+          { insurance: info },
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.insurance.root,

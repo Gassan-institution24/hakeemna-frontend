@@ -47,8 +47,7 @@ import {
 } from 'src/components/table'; /// edit
 import { useSnackbar } from 'notistack';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance,{ endpoints } from 'src/utils/axios';
 
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -158,11 +157,9 @@ export default function ActivitesTableView() {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.activity(row._id)}/updatestatus`, /// edit
-          data: { status: 'active' },
-        });
+        await axiosInstance.patch( `${endpoints.tables.activity(row._id)}/updatestatus`, /// edit
+          { status: 'active' },
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.activities.root,
@@ -181,11 +178,9 @@ export default function ActivitesTableView() {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.activity(row._id)}/updatestatus`, /// edit
-          data: { status: 'inactive' },
-        });
+        await axiosInstance.patch( `${endpoints.tables.activity(row._id)}/updatestatus`, /// edit
+          { status: 'inactive' },
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.activities.root,
@@ -204,11 +199,9 @@ export default function ActivitesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.activities}/updatestatus`, /// edit
-        data: { status: 'active', ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.tables.activities}/updatestatus`, /// edit
+        { status: 'active', ids: table.selected },
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.activities.root,
@@ -237,11 +230,9 @@ export default function ActivitesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.activities}/updatestatus`, /// edit
-        data: { status: 'inactive', ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.tables.activities}/updatestatus`, /// edit
+        { status: 'inactive', ids: table.selected },
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.activities.root,

@@ -20,6 +20,7 @@ export default function EmployeeTypeEditPage() {
     <ACLGuard hasContent category="unit_service" subcategory="employee_type" acl="update">
       <Helmet>
         <title>Edit {name || ''} Employee Type</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EmployeeTypeEditView employeeTypeData={data} />}

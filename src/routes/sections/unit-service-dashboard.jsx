@@ -1,8 +1,8 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
+import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import SecondaryNavLayout from 'src/layouts/employee-topbar';
 import DepartmentNavLayout from 'src/layouts/department-topbar';
 import RecieptsInfoPage from 'src/pages/employee/accounting/reciepts/info';

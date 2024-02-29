@@ -9,6 +9,7 @@ export default function RoomNewPage() {
     <>
       <Helmet>
         <title>New Room</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <RoomNewView />

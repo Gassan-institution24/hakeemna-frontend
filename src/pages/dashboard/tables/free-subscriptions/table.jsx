@@ -9,6 +9,7 @@ export default function TableDetailsPage() {
     <>
       <Helmet>
         <title> Dashboard: Free Subscriptions Table</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <FreeSubscriptionTableView />

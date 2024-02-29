@@ -9,6 +9,7 @@ export default function TableDetailsPage() {
     <>
       <Helmet>
         <title> Unit Services</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <UnitServicesTableView />

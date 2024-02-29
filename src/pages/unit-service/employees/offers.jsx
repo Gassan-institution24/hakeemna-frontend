@@ -20,6 +20,7 @@ export default function EmployeeOffersPage() {
     <ACLGuard hasContent category="unit_service" subcategory="offers" acl="read">
       <Helmet>
         <title> {name || ''} Employee Offers</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EmployeeOffersView employeeData={data} />}

@@ -11,6 +11,7 @@ export default function WorkShiftHomePage() {
     <ACLGuard hasContent category="unit_service" subcategory="work_shift" acl="read">
       <Helmet>
         <title>Work Shifts</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <WorkShiftHomeView />

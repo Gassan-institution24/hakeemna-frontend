@@ -20,6 +20,7 @@ export default function DepartmentInfoPage() {
     <ACLGuard hasContent category="department" subcategory="department_info" acl="read">
       <Helmet>
         <title>{name || ''} Department Info</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentInfoView departmentData={data} />}

@@ -9,6 +9,7 @@ export default function Page500() {
     <>
       <Helmet>
         <title> 500 Internal Server Error</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <View500 />

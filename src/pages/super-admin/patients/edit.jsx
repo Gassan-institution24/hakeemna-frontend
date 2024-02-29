@@ -22,6 +22,7 @@ export default function TableCreatePage() {
     <>
       <Helmet>
         <title> Patients: Edit {patientName} </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EditPatient patientData={data} />}

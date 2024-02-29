@@ -17,6 +17,7 @@ export default function EmployeeACLPage() {
     <ACLGuard hasContent category="employee" subcategory="acl" acl="update">
       <Helmet>
         <title>Access control list</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EmployeeACLView acl={data.acl} />}

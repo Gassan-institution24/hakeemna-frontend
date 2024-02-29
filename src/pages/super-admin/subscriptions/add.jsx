@@ -9,6 +9,7 @@ export default function SubscriptionNewPage() {
     <>
       <Helmet>
         <title> New Subscription </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <SubscriptionNewView />

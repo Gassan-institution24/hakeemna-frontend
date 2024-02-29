@@ -19,8 +19,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance,{ endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useGetInsuranceCos } from 'src/api';
@@ -152,11 +151,9 @@ export default function PatientInsuranceView({ patientData, refetch }) {
       }
       const info = [...patientData.insurance, id];
 
-      await axiosHandler({
-        method: 'PATCH',
-        path: endpoints.tables.patient(patientData?._id), /// to edit
-        data: { insurance: info },
-      });
+      await axiosInstance.patch(endpoints.tables.patient(patientData?._id), /// to edit
+        { insurance: info },
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage?.length);
     },
@@ -165,11 +162,9 @@ export default function PatientInsuranceView({ patientData, refetch }) {
   const handleDeleteRow = useCallback(
     async (id) => {
       const info = patientData?.insurance?.filter((company) => company?._id !== id);
-      await axiosHandler({
-        method: 'PATCH',
-        path: endpoints.tables.patient(patientData?._id), /// to edit
-        data: { insurance: info },
-      });
+      await axiosInstance.patch(endpoints.tables.patient(patientData?._id), /// to edit
+        { insurance: info },
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage?.length);
     },

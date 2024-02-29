@@ -40,8 +40,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import TableDetailRow from './table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -146,10 +145,8 @@ export default function UnitServicesTableView() {
   };
   const handleActivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.unitservice(id)}/updatestatus`,
-        data: { status: 'active' },
+      await axiosInstance.patch(`${endpoints.tables.unitservice(id)}/updatestatus`, {
+        status: 'active',
       });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -158,10 +155,8 @@ export default function UnitServicesTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.unitservice(id)}/updatestatus`,
-        data: { status: 'inactive' },
+      await axiosInstance.patch(`${endpoints.tables.unitservice(id)}/updatestatus`, {
+        status: 'inactive',
       });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -170,10 +165,9 @@ export default function UnitServicesTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.unitservices}`,
-      data: { status: 'active', ids: table.selected },
+    axiosInstance.patch(`${endpoints.tables.unitservices}`, {
+      status: 'active',
+      ids: table.selected,
     });
     refetch();
     table.onUpdatePageDeleteRows({
@@ -184,10 +178,9 @@ export default function UnitServicesTableView() {
   }, [dataFiltered.length, dataInPage.length, table, unitservicesData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.unitservices}`,
-      data: { status: 'inactive', ids: table.selected },
+    axiosInstance.patch(`${endpoints.tables.unitservices}`, {
+      status: 'inactive',
+      ids: table.selected,
     });
     refetch();
     table.onUpdatePageDeleteRows({

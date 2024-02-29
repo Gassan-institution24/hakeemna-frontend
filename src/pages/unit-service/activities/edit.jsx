@@ -20,6 +20,7 @@ export default function ActivityEditPage() {
     <ACLGuard hasContent category="unit_service" subcategory="activities" acl="update">
       <Helmet>
         <title>Edit {name || ''} Activity</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EditActivityView activityData={data} />}

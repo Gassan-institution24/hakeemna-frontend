@@ -18,6 +18,7 @@ export default function ServiceUnitEmployeesPage() {
     <>
       <Helmet>
         <title> {unitServiceName} employees </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <UnitServiceEmployees unitServiceData={data} />}

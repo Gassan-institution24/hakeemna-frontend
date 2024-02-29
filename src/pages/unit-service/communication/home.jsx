@@ -10,6 +10,7 @@ export default function HomePage() {
     <ACLGuard hasContent category="unit_service" subcategory="communication" acl="read">
       <Helmet>
         <title>Communication</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <Communication />

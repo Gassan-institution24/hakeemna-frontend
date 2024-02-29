@@ -17,6 +17,7 @@ export default function TableCreatePage() {
     <>
       <Helmet>
         <title> Patients: Payment Control </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <PaymentInfo paymentData={data} />}

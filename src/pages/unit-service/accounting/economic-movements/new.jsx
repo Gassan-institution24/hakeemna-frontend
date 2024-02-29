@@ -10,6 +10,7 @@ export default function EconomicMovementNewPage() {
     <ACLGuard hasContent category="unit_service" subcategory="accounting" acl="create">
       <Helmet>
         <title>New Economic Movement</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <EconomicMovementNewView />

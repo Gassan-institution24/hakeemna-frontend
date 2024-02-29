@@ -12,6 +12,7 @@ export default function Watingroomstatus() {
     <>
       <Helmet>
         <title>{t('watingroom')}</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <WatingRoom />

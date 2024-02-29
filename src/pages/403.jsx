@@ -9,7 +9,8 @@ export default function Page403() {
     <>
       <Helmet>
         <title> 403 Forbidden</title>
-      </Helmet>
+      <meta name="description" content='meta' />
+</Helmet>
 
       <View403 />
     </>

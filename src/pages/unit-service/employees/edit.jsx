@@ -20,6 +20,7 @@ export default function EmployeeEditPage() {
     <ACLGuard hasContent category="unit_service" subcategory="employees" acl="update">
       <Helmet>
         <title>Edit {name || ''} Employee</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EmployeeEditView employeeData={data} />}

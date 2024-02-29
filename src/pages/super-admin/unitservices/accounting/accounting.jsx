@@ -19,6 +19,7 @@ export default function UnitServiceAccountingPage() {
     <>
       <Helmet>
         <title> {unitServiceName} Accounting</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <UnitServiceAccounting unitServiceData={data} />}

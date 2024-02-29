@@ -36,14 +36,14 @@ export default function EmptyContent({ title, imgUrl, action, filled, descriptio
         <Typography
           variant="h6"
           component="span"
-          sx={{ mt: 1, color: 'text.disabled', textalign: 'center' }}
+          sx={{ mt: 1, color: 'text.disabled', textAlign: 'center' }}
         >
           {title}
         </Typography>
       )}
 
       {description && (
-        <Typography variant="caption" sx={{ mt: 1, color: 'text.disabled', textalign: 'center' }}>
+        <Typography variant="caption" sx={{ mt: 1, color: 'text.disabled', textAlign: 'center' }}>
           {description}
         </Typography>
       )}

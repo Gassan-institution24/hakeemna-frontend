@@ -41,8 +41,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import OfferTableRow from './offer-row'; /// edit
 import FeedbackToolbar from './offers-toolbar';
@@ -179,11 +178,10 @@ export default function StakeholderOffersView({ stakeholderData }) {
 
   const handleActivate = useCallback(
     async (ID) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.offer(ID)}/updatestatus`, /// edit
-        data: { status: 'active' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.offer(ID)}/updatestatus`, /// edit
+        { status: 'active' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -191,11 +189,10 @@ export default function StakeholderOffersView({ stakeholderData }) {
   );
   const handleInactivate = useCallback(
     async (ID) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.offer(ID)}/updatestatus`, /// edit
-        data: { status: 'inactive' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.offer(ID)}/updatestatus`, /// edit
+        { status: 'inactive' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -203,11 +200,10 @@ export default function StakeholderOffersView({ stakeholderData }) {
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.offers}/updatestatus`, /// edit
-      data: { status: 'active', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.tables.offers}/updatestatus`, /// edit
+      { status: 'active', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: offersData.length,
@@ -217,11 +213,10 @@ export default function StakeholderOffersView({ stakeholderData }) {
   }, [dataFiltered.length, dataInPage.length, table, offersData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.offers}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.tables.offers}/updatestatus`, /// edit
+      { status: 'inactive', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: offersData.length,

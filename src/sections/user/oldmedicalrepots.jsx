@@ -151,59 +151,62 @@ export default function OldMedicalReports() {
     specialty: '',
   };
 
-  const MedicalreportsnPDF = useCallback(({ info }) => (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <View>
-          <View style={styles.gridContainer}>
-            <Text style={styles.text}>
-              <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                Test Type:
-              </Text>{' '}
-              {info.type}
-            </Text>
-            <Text style={styles.text}>
-              <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                Test Date:
-              </Text>{' '}
-              {fDate(info.date)}
-            </Text>
-            <Text style={styles.text}>
-              <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                Date:
-              </Text>{' '}
-              {fDate(info.created_at)}
-            </Text>
-          </View>
-          <View style={styles.gridContainer2}>
-            <Text style={styles.text}>
-              <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                Test name:
-              </Text>{' '}
-              {info.name}
-            </Text>
-            <Text style={styles.text}>
-              <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                Specialty:
-              </Text>{' '}
-              {info.specialty}
-            </Text>
-          </View>
+  const MedicalreportsnPDF = useCallback(
+    ({ info }) => (
+      <Document>
+        <Page size="A4" style={styles.page}>
           <View>
-            <PdfImage src={info?.file} style={styles.image} />
+            <View style={styles.gridContainer}>
+              <Text style={styles.text}>
+                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
+                  Test Type:
+                </Text>{' '}
+                {info.type}
+              </Text>
+              <Text style={styles.text}>
+                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
+                  Test Date:
+                </Text>{' '}
+                {fDate(info.date)}
+              </Text>
+              <Text style={styles.text}>
+                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
+                  Date:
+                </Text>{' '}
+                {fDate(info.created_at)}
+              </Text>
+            </View>
+            <View style={styles.gridContainer2}>
+              <Text style={styles.text}>
+                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
+                  Test name:
+                </Text>{' '}
+                {info.name}
+              </Text>
+              <Text style={styles.text}>
+                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
+                  Specialty:
+                </Text>{' '}
+                {info.specialty}
+              </Text>
+            </View>
+            <View>
+              <PdfImage src={info?.file} style={styles.image} />
+            </View>
+            <View style={styles.gridFooter}>
+              <Text style={styles.text}>
+                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
+                  Note:
+                </Text>{' '}
+                {info.note}
+              </Text>
+            </View>
           </View>
-          <View style={styles.gridFooter}>
-            <Text style={styles.text}>
-              <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                Note:
-              </Text>{' '}
-              {info.note}
-            </Text>
-          </View>
-        </View>
-      </Page>
-    </Document>
-  ),[styles]);
+        </Page>
+      </Document>
+    ),
+    [styles]
+  );
 
   MedicalreportsnPDF.propTypes = {
     info: PropTypes.shape({
@@ -377,7 +380,7 @@ export default function OldMedicalReports() {
               mt: { md: -2.5, xs: -2.3 },
               ml: curLangAr ? { md: -31, xs: -5 } : { md: -19.5, xs: 4 },
               typography: 'caption',
-              textalign: 'center',
+              textAlign: 'center',
               fontSize: { md: 12, xs: 10 },
             }}
           >

@@ -43,8 +43,7 @@ import {
 } from 'src/components/table'; /// edit
 import { useSnackbar } from 'notistack';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance,{ endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 
@@ -150,11 +149,9 @@ export default function EmployeesTableView() {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.employeeEngagement(row._id)}/updatestatus`,
-          data: { status: 'active' },
-        });
+        await axiosInstance.patch( `${endpoints.tables.employeeEngagement(row._id)}/updatestatus`,
+          { status: 'active' },
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.root,
@@ -173,11 +170,9 @@ export default function EmployeesTableView() {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.employeeEngagement(row._id)}/updatestatus`,
-          data: { status: 'inactive' },
-        });
+        await axiosInstance.patch( `${endpoints.tables.employeeEngagement(row._id)}/updatestatus`,
+          { status: 'inactive' },
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.root,
@@ -196,11 +191,9 @@ export default function EmployeesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employeeEngagements}/updatestatus`,
-        data: { status: 'active', ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.tables.employeeEngagements}/updatestatus`,
+        { status: 'active', ids: table.selected },
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.root,
@@ -229,11 +222,9 @@ export default function EmployeesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employeeEngagements}/updatestatus`,
-        data: { status: 'inactive', ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.tables.employeeEngagements}/updatestatus`,
+        { status: 'inactive', ids: table.selected },
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.root,

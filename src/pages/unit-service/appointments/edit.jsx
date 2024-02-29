@@ -20,6 +20,7 @@ export default function AppointmentEditPage() {
     <ACLGuard hasContent category="unit_service" subcategory="appointments" acl="update">
       <Helmet>
         <title>Edit {name || ''} Appointment</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EditAppointmentView appointmentData={data} />}

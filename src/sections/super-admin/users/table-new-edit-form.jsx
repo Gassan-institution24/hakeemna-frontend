@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
@@ -17,10 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axiosHandler from 'src/utils/axios-handler';
 import axiosInstance, { endpoints } from 'src/utils/axios';
-
-import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -33,7 +29,6 @@ export default function UsersNewEditForm({ currentSelected }) {
 
   const password = useBoolean();
 
-  const { user } = useAuthContext();
 
   const [errorMsg, setErrorMsg] = useState();
 
@@ -91,22 +86,10 @@ export default function UsersNewEditForm({ currentSelected }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentSelected) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.user(currentSelected._id),
-          data: {
-            modifications_nums: (currentSelected.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        }); /// edit
+        await axiosInstance.patch(endpoints.tables.user(currentSelected._id), data); /// edit
       } else {
         await axiosInstance.post(endpoints.auth.users, {
-          ip_address_user_creation: address.data.IPv4,
-          user_creation: user._id,
           ...data,
           email: data.email.toLowerCase(),
         }); /// edit

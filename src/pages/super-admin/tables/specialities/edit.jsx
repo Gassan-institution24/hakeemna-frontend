@@ -9,6 +9,7 @@ export default function TableEditPage() {
     <>
       <Helmet>
         <title> super: Edit Specialty</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <TableEditView />

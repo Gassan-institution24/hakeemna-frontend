@@ -237,7 +237,7 @@ export default function JwtRegisterView() {
         color: 'text.secondary',
         mt: 2,
         typography: 'caption',
-        // textalign: 'center',
+        // textAlign: 'center',
       }}
       lang="ar"
     >

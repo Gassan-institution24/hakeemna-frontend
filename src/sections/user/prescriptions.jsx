@@ -73,7 +73,7 @@ export default function Prescriptions() {
       fontSize: '15px',
     },
     departmentInfo: {
-      textalign: 'center',
+      textAlign: 'center',
       fontSize: 12,
       position: 'relative',
       top: '-10px',
@@ -128,65 +128,68 @@ export default function Prescriptions() {
     },
   });
 
-  const PrescriptionPDF = useCallback(() => (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        {user?.patient.medicines.map((med, i) => (
-          <View key={med.id}>
-            <View style={styles.imgItem}>
-              <PdfImage src={Doclogo} style={styles.image} />
-              <Text>DOCTORNA HOSPITAL</Text>
-              <PdfImage src={Doclogo} style={styles.image} />
-            </View>
-            <View style={styles.departmentInfo}>
-              <Text>DR: Doctor Name</Text>
-              <Text>Al Waha_cercle at0349</Text>
-              <Text>+962776088372</Text>
-            </View>
-            <View style={styles.gridContainer}>
-              <Text>Name: {user.userName}</Text>
-              <Text>Age: {calculateAge(user?.patient.birth_date)}</Text>
-              <Text>Date: {fDate(currentDate)}</Text>
-            </View>
-            <View style={styles.gridBody}>
-              <View style={styles.table}>
-                <View style={styles.tableRow}>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>Name</Text>
+  const PrescriptionPDF = useCallback(
+    () => (
+      <Document>
+        <Page size="A4" style={styles.page}>
+          {user?.patient.medicines.map((med, i) => (
+            <View key={med.id}>
+              <View style={styles.imgItem}>
+                <PdfImage src={Doclogo} style={styles.image} />
+                <Text>DOCTORNA HOSPITAL</Text>
+                <PdfImage src={Doclogo} style={styles.image} />
+              </View>
+              <View style={styles.departmentInfo}>
+                <Text>DR: Doctor Name</Text>
+                <Text>Al Waha_cercle at0349</Text>
+                <Text>+962776088372</Text>
+              </View>
+              <View style={styles.gridContainer}>
+                <Text>Name: {user.userName}</Text>
+                <Text>Age: {calculateAge(user?.patient.birth_date)}</Text>
+                <Text>Date: {fDate(currentDate)}</Text>
+              </View>
+              <View style={styles.gridBody}>
+                <View style={styles.table}>
+                  <View style={styles.tableRow}>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>Name</Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>Dose</Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>Frequently</Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>Duration</Text>
+                    </View>
                   </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>Dose</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>Frequently</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>Duration</Text>
-                  </View>
-                </View>
-                <View style={styles.tableRow}>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>{med.medicine.trade_name}</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>{med.dose}</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>{med.frequently}</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>
-                      {calculateDuration(med.startdate, med.enddate)} Days
-                    </Text>
+                  <View style={styles.tableRow}>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>{med.medicine.trade_name}</Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>{med.dose}</Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>{med.frequently}</Text>
+                    </View>
+                    <View style={styles.tableCol}>
+                      <Text style={styles.tableCell}>
+                        {calculateDuration(med.startdate, med.enddate)} Days
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
             </View>
-          </View>
-        ))}
-      </Page>
-    </Document>
-  ),[styles,currentDate,user]);
+          ))}
+        </Page>
+      </Document>
+    ),
+    [styles, currentDate, user]
+  );
 
   return (
     <div>

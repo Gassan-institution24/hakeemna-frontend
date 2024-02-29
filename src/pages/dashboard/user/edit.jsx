@@ -18,6 +18,7 @@ export default function UserEditPage() {
     <>
       <Helmet>
         <title> {t('contact us')} </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <UserEditView id={`${id}`} />

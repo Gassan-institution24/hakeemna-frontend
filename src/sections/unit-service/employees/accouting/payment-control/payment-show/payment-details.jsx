@@ -26,7 +26,7 @@ import InvoiceToolbar from './payment-toolbar';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '& td': {
-    textalign: 'right',
+    textAlign: 'right',
     borderBottom: 'none',
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
@@ -104,7 +104,7 @@ export default function InvoiceDetails({ paymentData }) {
         </Typography>
       </Grid>
 
-      <Grid xs={12} md={3} sx={{ py: 3, textalign: 'right' }}>
+      <Grid xs={12} md={3} sx={{ py: 3, textAlign: 'right' }}>
         <Typography variant="subtitle2">Have a Question?</Typography>
 
         <Typography variant="body2">support@doctorna.online</Typography>

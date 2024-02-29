@@ -140,59 +140,6 @@ export default function DepartmentsTableView() {
     [table]
   );
 
-  // const handleActivate = useCallback(
-  //   async (id) => {
-  //     await axiosHandler({
-  //       method: 'PATCH',
-  //       path: `insurance/companies/${id}/updatestatus`, /// edit
-  //       data: { status: 'active' },
-  //     });
-  //     refetch();
-  //     table.onUpdatePageDeleteRow(dataInPage.length);
-  //   },
-  //   [dataInPage.length, table, refetch]
-  // );
-  // const handleInactivate = useCallback(
-  //   async (id) => {
-  //     await axiosHandler({
-  //       method: 'PATCH',
-  //       path: `insurance/companies/${id}/updatestatus`, /// edit
-  //       data: { status: 'inactive' },
-  //     });
-  //     refetch();
-  //     table.onUpdatePageDeleteRow(dataInPage.length);
-  //   },
-  //   [dataInPage.length, table, refetch]
-  // );
-
-  // const handleActivateRows = useCallback(async () => {
-  //   await axiosHandler({
-  //     method: 'PATCH',
-  //     path: `insurance/companies/updatestatus`, /// edit
-  //     data: { status: 'active', ids: table.selected },
-  //   });
-  //   refetch();
-  //   table.onUpdatePageDeleteRows({
-  //     totalRows: departmentsData.length,
-  //     totalRowsInPage: dataInPage.length,
-  //     totalRowsFiltered: dataFiltered.length,
-  //   });
-  // }, [dataFiltered.length, dataInPage.length, table, departmentsData, refetch]);
-
-  // const handleInactivateRows = useCallback(async () => {
-  //   await axiosHandler({
-  //     method: 'PATCH',
-  //     path: `insurance/companies/updatestatus`, /// edit
-  //     data: { status: 'inactive', ids: table.selected },
-  //   });
-  //   refetch();
-  //   table.onUpdatePageDeleteRows({
-  //     totalRows: departmentsData.length,
-  //     totalRowsInPage: dataInPage.length,
-  //     totalRowsFiltered: dataFiltered.length,
-  //   });
-  // }, [dataFiltered.length, dataInPage.length, table, departmentsData, refetch]);
-
   const handleEditRow = useCallback(
     (id) => {
       router.push(paths.superadmin.tables.departments.edit(id));
@@ -204,19 +151,6 @@ export default function DepartmentsTableView() {
     setFilters(defaultFilters);
   }, []);
 
-  // const handleViewRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.order.details(id));
-  //   },
-  //   [router]
-  // );
-
-  // const handleFilterStatus = useCallback(
-  //   (event, newValue) => {
-  //     handleFilters('status', newValue);
-  //   },
-  //   [handleFilters]
-  // );
 
   if (loading) {
     return <LoadingScreen />;

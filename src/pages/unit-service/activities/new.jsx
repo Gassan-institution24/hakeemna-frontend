@@ -11,6 +11,7 @@ export default function ActivityNewPage() {
     <ACLGuard hasContent category="unit_service" subcategory="activities" acl="create">
       <Helmet>
         <title>New Activity</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <ActivityNewView />

@@ -21,9 +21,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
 import { fTimestamp } from 'src/utils/format-time';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
@@ -186,10 +185,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
   const handleCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/cancel`,
-        });
+        await axiosInstance.patch(`${endpoints.tables.appointment(row._id)}/cancel`);
         enqueueSnackbar('canceled successfully!');
         socket.emit('updated', {
           user,
@@ -210,10 +206,8 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
   const handleDelayRow = useCallback(
     async (row, min) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/delay`,
-          data: { minutes: min },
+        await axiosInstance.patch(`${endpoints.tables.appointment(row._id)}/delay`, {
+          minutes: min,
         });
         enqueueSnackbar('delayed successfully!');
         socket.emit('updated', {
@@ -236,10 +230,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
   const handleUnCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/uncancel`,
-        });
+        await axiosInstance.patch(`${endpoints.tables.appointment(row._id)}/uncancel`);
         enqueueSnackbar('uncanceled successfully!');
         socket.emit('updated', {
           user,
@@ -260,10 +251,8 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
   const handleCancelRows = useCallback(
     async (id) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointments}/cancel`,
-          data: { ids: table.selected },
+        await axiosInstance.patch(`${endpoints.tables.appointments}/cancel`, {
+          ids: table.selected,
         });
         enqueueSnackbar('canceled successfully!');
         socket.emit('updated', {
@@ -296,10 +285,9 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
 
   const handleDelayRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/delay`,
-        data: { ids: table.selected, minutes: minToDelay },
+      await axiosInstance.patch(`${endpoints.tables.appointments}/delay`, {
+        ids: table.selected,
+        minutes: minToDelay,
       });
       enqueueSnackbar('delayed successfully!');
       socket.emit('updated', {
@@ -333,10 +321,8 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
   const handleUnCancelRows = useCallback(
     async (id) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointments}/uncancel`,
-          data: { ids: table.selected },
+        await axiosInstance.patch(`${endpoints.tables.appointments}/uncancel`, {
+          ids: table.selected,
         });
         enqueueSnackbar('uncanceled successfully!');
         socket.emit('updated', {

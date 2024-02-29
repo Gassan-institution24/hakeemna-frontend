@@ -9,6 +9,7 @@ export default function StatisticsHomePage() {
     <>
       <Helmet>
         <title>Statistics</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <StatisticsPage />

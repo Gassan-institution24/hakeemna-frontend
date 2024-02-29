@@ -22,6 +22,7 @@ export default function TableCreatePage() {
     <>
       <Helmet>
         <title> Patients: {patientName} Feedback </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <PatientFeedback patientData={data} />}

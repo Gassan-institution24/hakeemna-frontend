@@ -18,6 +18,7 @@ export default function EditPage() {
     <ACLGuard hasContent category="employee" subcategory="entrance_management" acl="update">
       <Helmet>
         <title> Edit {name || ''} Appointment</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       {data && <EntranceManagementEditView appointmentData={data} />}

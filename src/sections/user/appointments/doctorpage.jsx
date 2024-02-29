@@ -166,7 +166,7 @@ export default function Doctorpage() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              textalign: 'center',
+              textAlign: 'center',
               margin: '20px',
               gap: '10px',
             }}

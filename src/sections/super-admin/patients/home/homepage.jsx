@@ -35,8 +35,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import TableDetailRow from './table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -140,11 +139,9 @@ export default function PatientTableView() {
   // };
   const handleActivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.patient(id)}/updatestatus`,
-        data: { status: 'active' },
-      });
+      await axiosInstance.patch(`${endpoints.tables.patient(id)}/updatestatus`,
+        { status: 'active' },
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -152,11 +149,9 @@ export default function PatientTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.patient(id)}/updatestatus`,
-        data: { status: 'inactive' },
-      });
+      await axiosInstance.patch(`${endpoints.tables.patient(id)}/updatestatus`,
+        { status: 'inactive' },
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -164,11 +159,9 @@ export default function PatientTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.patients}/updatestatus`,
-      data: { status: 'active', ids: table.selected },
-    });
+    axiosInstance.patch( `${endpoints.tables.patients}/updatestatus`,
+      { status: 'active', ids: table.selected },
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: patientsData.length,
@@ -178,11 +171,9 @@ export default function PatientTableView() {
   }, [dataFiltered.length, dataInPage.length, table, patientsData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.patients}/updatestatus`,
-      data: { status: 'inactive', ids: table.selected },
-    });
+    axiosInstance.patch( `${endpoints.tables.patients}/updatestatus`,
+      { status: 'inactive', ids: table.selected },
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: patientsData.length,
