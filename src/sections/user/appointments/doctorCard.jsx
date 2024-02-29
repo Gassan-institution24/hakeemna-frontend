@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
@@ -17,7 +16,7 @@ import Image from 'src/components/image/image';
 
 export default function DoctorCard({ info }) {
   const { nearstappointment } = useGetNearstAppointment(info._id);
-  console.log(nearstappointment);
+
   const router = useRouter();
   const handleViewRow = (ids) => {
     router.push(paths.dashboard.user.doctorpage(ids));
@@ -58,11 +57,11 @@ export default function DoctorCard({ info }) {
           {info?.employee?.speciality?.name_english}
         </Typography>
         <Box sx={{ position: 'relative', left: '-0.1%', mt: 1 }}>
-          <Typography sx={{fontSize:14}}>
+          <Typography sx={{ fontSize: 14 }}>
             <Iconify width={18} sx={{ color: 'info.main' }} icon="openmoji:hospital" />{' '}
             {info?.unit_service?.name_english}
           </Typography>
-          <Typography sx={{fontSize:14}}>
+          <Typography sx={{ fontSize: 14 }}>
             <Iconify width={18} sx={{ color: 'info.main' }} icon="mdi:location" />{' '}
             {info?.unit_service?.address}
           </Typography>
@@ -70,18 +69,23 @@ export default function DoctorCard({ info }) {
       </Box>
 
       <Box>
-        <Typography sx={{ fontSize: 14, mb:1 }}>Nearst appointments: </Typography>
+        <Typography sx={{ fontSize: 14, mb: 1 }}>Nearst appointments: </Typography>
         {nearstappointment ? (
-          <Button sx={{bgcolor:'rgb(231, 231, 231)', borderRadius:0}}  onClick={() => handleViewRow(info?._id)}>
+          <Button
+            sx={{ bgcolor: 'rgb(231, 231, 231)', borderRadius: 0 }}
+            onClick={() => handleViewRow(info?._id)}
+          >
             {`${fDm(nearstappointment?.start_time)} - ${fTime(nearstappointment?.start_time)}`}
           </Button>
         ) : (
-          <Button disabled sx={{ fontSize: 13 }}>-- / --</Button>
+          <Button disabled sx={{ fontSize: 13 }}>
+            -- / --
+          </Button>
         )}
 
         <Button
           // sx={{ fontSize: 13 }}
-          sx={{ mt: 3, display:'block' }}
+          sx={{ mt: 3, display: 'block' }}
           variant="contained"
           color="success"
           onClick={() => handleViewRow(info?._id)}

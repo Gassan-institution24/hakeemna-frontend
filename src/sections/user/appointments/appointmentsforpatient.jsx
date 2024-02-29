@@ -21,7 +21,7 @@ export default function AppointmentData() {
       {/* {pendingAppointments.lenght > 0 ? ( */}
       <>
         <Typography variant="h4" sx={{ mb: 2 }}>
-          {curLangAr ? 'مواعيد لليوم' : 'Appointment for today'}
+          {curLangAr ? 'مواعيدي' : 'My Appointments'}
         </Typography>
         <Box
           sx={{
