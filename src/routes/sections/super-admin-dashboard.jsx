@@ -436,7 +436,7 @@ export const dashboardRoutes = [
       </AuthGuard>
     ),
     children: [
-      { element: <IndexPage />, index: true },
+      // { element: <IndexPage />, index: true },
       // { path: '', element: < /> },
       {
         path: 'unitservices',
