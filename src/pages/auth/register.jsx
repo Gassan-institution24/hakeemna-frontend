@@ -9,6 +9,7 @@ export default function RegisterPage() {
     <>
       <Helmet>
         <title> Jwt: Register</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <JwtRegisterView />

@@ -18,9 +18,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
 import { fTimestamp } from 'src/utils/format-time';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetAppointmentTypes, useGetPatientAppointments } from 'src/api';
 
@@ -163,7 +162,7 @@ export default function AppointHistoryView({ patientData }) {
 
   const handleCancelRow = useCallback(
     async (id) => {
-      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/cancel` });
+      await axiosInstance.patch(`${endpoints.tables.appointment(id)}/cancel`);
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -171,16 +170,12 @@ export default function AppointHistoryView({ patientData }) {
   );
   const handleCancelRows = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
-      });
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.tables.appointments}/cancel`,
+        { ids: table.selected },
+      );
+      await axiosInstance.patch(`${endpoints.tables.appointments}/cancel`,
+        { ids: table.selected },
+      );
       refetch();
       table.onUpdatePageDeleteRows({
         totalRows: appointmentsData.length,

@@ -40,8 +40,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import TableDetailRow from '../service_types/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -156,11 +155,10 @@ export default function ServiceTypesTableView() {
 
   const handleActivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.servicetype(id)}/updatestatus`, /// edit
-        data: { status: 'active' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.servicetype(id)}/updatestatus`, /// edit
+        { status: 'active' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -168,11 +166,10 @@ export default function ServiceTypesTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.servicetype(id)}/updatestatus`, /// edit
-        data: { status: 'inactive' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.servicetype(id)}/updatestatus`, /// edit
+        { status: 'inactive' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -180,11 +177,10 @@ export default function ServiceTypesTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.servicetypes}/updatestatus`, /// edit
-      data: { status: 'active', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.tables.servicetypes}/updatestatus`, /// edit
+      { status: 'active', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: serviceTypesData.length,
@@ -194,11 +190,10 @@ export default function ServiceTypesTableView() {
   }, [dataFiltered.length, dataInPage.length, table, serviceTypesData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.servicetypes}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.tables.servicetypes}/updatestatus`, /// edit
+      { status: 'inactive', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: serviceTypesData.length,

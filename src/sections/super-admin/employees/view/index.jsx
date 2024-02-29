@@ -38,8 +38,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -147,11 +146,10 @@ export default function UsersTableView() {
 
   const handleActivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employee(id)}/updatestatus`, /// to edit
-        data: { status: 'active' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.employee(id)}/updatestatus`, /// to edit
+        { status: 'active' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -160,11 +158,10 @@ export default function UsersTableView() {
 
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employee(id)}/updatestatus`, /// to edit
-        data: { status: 'inactive' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.employee(id)}/updatestatus`, /// to edit
+        { status: 'inactive' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -172,11 +169,10 @@ export default function UsersTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.employees}/updatestatus`, /// to edit
-      data: { status: 'active', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.tables.employees}/updatestatus`, /// to edit
+      { status: 'active', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: employeesData.length,
@@ -186,11 +182,10 @@ export default function UsersTableView() {
   }, [dataFiltered.length, dataInPage.length, table, employeesData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.employees}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.tables.employees}/updatestatus`, /// edit
+      { status: 'inactive', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: employeesData.length,

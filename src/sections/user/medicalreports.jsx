@@ -63,7 +63,7 @@ export default function Medicalreports() {
       border: 1,
     },
     text: {
-      textalign: 'center',
+      textAlign: 'center',
       fontSize: 15,
     },
     text2: {
@@ -113,7 +113,7 @@ export default function Medicalreports() {
     },
   });
 
-  const PrescriptionPDF = () => (
+  const PrescriptionPDF = (
     <Document>
       <Page size="A4" style={styles.page}>
         {user?.patient.Mediacalreports.map((info) => (

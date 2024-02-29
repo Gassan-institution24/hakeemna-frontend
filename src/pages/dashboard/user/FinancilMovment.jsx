@@ -13,6 +13,7 @@ export default function FinancilMovmentdoctorna() {
     <>
       <Helmet>
         <title> {t('Financial movements')} </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <FinancilMovment />

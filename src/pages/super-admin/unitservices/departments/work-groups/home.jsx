@@ -20,6 +20,7 @@ export default function DepartmentWorkGroupsPage() {
     <ACLGuard hasContent category="department" subcategory="work_groups" acl="read">
       <Helmet>
         <title>{name || ''} Department Work Groups</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentWorkGroupsView departmentData={data} />}

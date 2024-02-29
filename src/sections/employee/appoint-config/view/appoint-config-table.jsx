@@ -19,9 +19,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
 import { fTimestamp } from 'src/utils/format-time';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
@@ -149,10 +148,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const handleCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/cancel`,
-        });
+        await axiosInstance.patch(`${endpoints.tables.appointment(row._id)}/cancel`);
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.appointmentconfig.root(
@@ -174,10 +170,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const handleUnCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/uncancel`,
-        });
+        await axiosInstance.patch(`${endpoints.tables.appointment(row._id)}/uncancel`);
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.appointmentconfig.root(
@@ -198,11 +191,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   const handleCancelRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.tables.appointments}/cancel`, { ids: table.selected });
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.appointmentconfig.root(
@@ -233,10 +222,8 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   const handleUnCancelRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/uncancel`,
-        data: { ids: table.selected },
+      await axiosInstance.patch(`${endpoints.tables.appointments}/uncancel`, {
+        ids: table.selected,
       });
       socket.emit('updated', {
         user,

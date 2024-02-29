@@ -9,7 +9,8 @@
 //     <>
 //       <Helmet>
 //         <title> Pricing</title>
-//       </Helmet>
+//       <meta name="description" content='meta' />
+// </Helmet>
 
 //       <PricingView />
 //     </>

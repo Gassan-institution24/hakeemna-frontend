@@ -11,6 +11,7 @@ export default function EmployeeHomePage() {
     <ACLGuard hasContent category="unit_service" subcategory="employees" acl="read">
       <Helmet>
         <title>Employees</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <EmployeeHomeView />

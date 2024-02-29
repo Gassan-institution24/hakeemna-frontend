@@ -9,6 +9,7 @@ export default function TableCreatePage() {
     <>
       <Helmet>
         <title> super: Create a new Currency</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <TableCreateView />

@@ -40,8 +40,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import TableDetailRow from '../insuranceCompanies/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -59,7 +58,7 @@ const TABLE_HEAD = [
   /// edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'name' },
-{ id: 'name_arabic', label: 'arabic name' },
+  { id: 'name_arabic', label: 'arabic name' },
   { id: 'country', label: 'Country' },
   { id: 'city', label: 'City' },
   { id: 'type', label: 'Type' },
@@ -160,11 +159,10 @@ export default function InsuranceCompaniesTableView() {
 
   const handleActivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.insuranceCo(id)}/updatestatus`, /// edit
-        data: { status: 'active' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.insuranceCo(id)}/updatestatus`, /// edit
+        { status: 'active' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -172,11 +170,10 @@ export default function InsuranceCompaniesTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.insuranceCo(id)}/updatestatus`, /// edit
-        data: { status: 'inactive' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.tables.insuranceCo(id)}/updatestatus`, /// edit
+        { status: 'inactive' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -184,11 +181,10 @@ export default function InsuranceCompaniesTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.insuranceCos}/updatestatus`, /// edit
-      data: { status: 'active', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.tables.insuranceCos}/updatestatus`, /// edit
+      { status: 'active', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: insuranseCosData.length,
@@ -198,11 +194,10 @@ export default function InsuranceCompaniesTableView() {
   }, [dataFiltered.length, dataInPage.length, table, insuranseCosData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.insuranceCos}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.tables.insuranceCos}/updatestatus`, /// edit
+      { status: 'inactive', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: insuranseCosData.length,

@@ -9,6 +9,7 @@ export default function EditEmployeeViewPage() {
     <>
       <Helmet>
         <title>edit employee</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <EditUserPage />

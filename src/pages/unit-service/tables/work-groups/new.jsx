@@ -9,6 +9,7 @@ export default function WorkGroupNewPage() {
     <>
       <Helmet>
         <title>New Work Group</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <WorkGroupNewView />

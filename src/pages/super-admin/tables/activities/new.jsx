@@ -9,6 +9,7 @@ export default function TableCreatePage() {
     <>
       <Helmet>
         <title> super: Create a new Activity</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <TableCreateView />

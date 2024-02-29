@@ -7,8 +7,7 @@ import { useCallback } from 'react';
 // import { paths } from 'src/routes/paths';
 // import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance,{ endpoints } from 'src/utils/axios';
 
 import { useGetUnitservices } from 'src/api';
 
@@ -28,11 +27,9 @@ export default function AppointmentItem({ patientData, refetch }) {
 
   const handleBook = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointment(id)}/book`,
-        data: { patient: patientData },
-      });
+      await axiosInstance.patch(`${endpoints.tables.appointment(id)}/book`,
+        { patient: patientData },
+      );
       refetch();
     },
     [patientData, refetch]

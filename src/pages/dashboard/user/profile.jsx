@@ -13,6 +13,7 @@ export default function UserProfilePage() {
     <>
       <Helmet>
         <title> {t('Profile')} </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <UserProfileView />

@@ -20,6 +20,7 @@ export default function DepartmentRoomsPage() {
     <ACLGuard hasContent category="department" subcategory="rooms" acl="read">
       <Helmet>
         <title>{name || ''} Department Rooms</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentRoomsView departmentData={data} />}

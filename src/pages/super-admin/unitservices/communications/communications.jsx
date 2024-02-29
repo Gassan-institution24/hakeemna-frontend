@@ -17,6 +17,7 @@ export default function TableCreatePage() {
     <>
       <Helmet>
         <title> {unitServiceName} Communications </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <CommunicationListView unitServiceData={data} />

@@ -13,6 +13,7 @@ export default function Sharedoctorna() {
     <>
       <Helmet>
         <title> {t('Book appointment')} </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <UserAppointmentsBook />

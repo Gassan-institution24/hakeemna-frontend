@@ -18,6 +18,7 @@ export default function StakeholderInsuranceView() {
     <>
       <Helmet>
         <title> stakeholders: {stakeholderName} Insurance </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <StakeholderInsurance stakeholderData={data} refetch={refetch} />}

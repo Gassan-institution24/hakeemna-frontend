@@ -20,6 +20,7 @@ export default function DepartmentEditPage() {
     <ACLGuard hasContent category="department" subcategory="department_info" acl="update">
       <Helmet>
         <title> Edit {name || ''} Department </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentEditView departmentData={data} />}

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
@@ -14,11 +13,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetDiseases } from 'src/api';
-import { useAuthContext } from 'src/auth/hooks';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFMultiSelect } from 'src/components/hook-form';
@@ -28,7 +25,6 @@ import FormProvider, { RHFTextField, RHFMultiSelect } from 'src/components/hook-
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
 
-  const { user } = useAuthContext();
 
   const { tableData } = useGetDiseases();
 
@@ -92,24 +88,10 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentSelected) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.surgery(currentSelected._id),
-          data: {
-            modifications_nums: (currentSelected.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        }); /// edit
+        await axiosInstance.patch(endpoints.tables.surgery(currentSelected._id), data); /// edit
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.tables.surgeries,
-          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
-        }); /// edit
+        await axiosInstance.post(endpoints.tables.surgeries, data); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

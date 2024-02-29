@@ -3,18 +3,6 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import Box from '@mui/material/Box';
-import Radio from '@mui/material/Radio';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import { Input, Rating } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
-import Typography from '@mui/material/Typography';
-import FormControl from '@mui/material/FormControl';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios from 'src/utils/axios';
@@ -23,10 +11,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetUnitservice, useGetPatientOneAppointments } from 'src/api';
 
-import Image from 'src/components/image';
 import { useSnackbar } from 'src/components/snackbar';
-import EmptyContent from 'src/components/empty-content';
-import FormProvider from 'src/components/hook-form/form-provider';
 // ----------------------------------------------------------------------
 
 export default function WatingRoom() {
@@ -43,7 +28,7 @@ export default function WatingRoom() {
   const { user } = useAuthContext();
   const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
   const { data } = useGetUnitservice(appointmentsData?.unit_service?._id);
-console.log(appointmentsData);
+  console.log(appointmentsData);
   const skipfunction = async () => {
     try {
       await axios.patch(`api/appointments/${appointmentsData._id}`, {
@@ -117,9 +102,7 @@ console.log(appointmentsData);
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
-return(
-  <>gf</>
-)
+  return <>gf</>;
   // return appointmentsData?.hasFeedback === false ? (
   //   <span>
   //     <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
@@ -129,7 +112,7 @@ return(
   //             display: 'flex',
   //             flexDirection: 'column',
   //             alignItems: 'center',
-  //             textalign: 'center',
+  //             textAlign: 'center',
   //             margin: '20px',
   //             gap: '10px',
   //           }}

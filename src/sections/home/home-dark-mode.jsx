@@ -63,7 +63,7 @@ export default function HomeDarkMode() {
   return (
     <Box
       sx={{
-        textalign: 'center',
+        textAlign: 'center',
         bgcolor: 'grey.900',
         pt: { xs: 10, md: 15 },
         pb: { xs: 10, md: 20 },

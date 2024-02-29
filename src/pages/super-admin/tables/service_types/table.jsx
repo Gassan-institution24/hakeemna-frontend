@@ -9,6 +9,7 @@ export default function TableDetailsPage() {
     <>
       <Helmet>
         <title> Dashboard: Service Types Table</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <ServiceTypesTableView />

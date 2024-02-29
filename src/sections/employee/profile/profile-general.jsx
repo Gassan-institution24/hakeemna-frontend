@@ -158,7 +158,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       <Grid container spacing={3}>
         {/* img */}
         <Grid xs={12} md={4}>
-          <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textalign: 'center' }}>
+          <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
             <RHFUploadAvatar
               // helperText={
               //   <Typography
@@ -167,7 +167,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               //       mt: 3,
               //       mx: 'auto',
               //       display: 'block',
-              //       textalign: 'center',
+              //       textAlign: 'center',
               //       color: 'text.disabled',
               //     }}
               //   >
@@ -237,7 +237,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       mx: 'auto',
                     }}
                     name="scanned_identity"
-                    label={t('scanned ID')}
+                    label="scanned ID"
                     onDrop={(acceptedFiles) => handleDrop('scanned_identity', acceptedFiles)}
                   />
                   <Typography
@@ -246,11 +246,11 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       mx: 'auto',
                       mb: 1,
                       display: 'block',
-                      textalign: 'center',
+                      textAlign: 'center',
                       color: 'text.disabled',
                     }}
                   >
-                    {t('scanned ID')}
+                    scanned ID
                   </Typography>
                   {values.scanned_identity && <Iconify icon="flat-color-icons:ok" />}
                 </Box>
@@ -269,7 +269,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       mx: 'auto',
                       mb: 1,
                       display: 'block',
-                      textalign: 'center',
+                      textAlign: 'center',
                       color: 'text.disabled',
                     }}
                   >
@@ -292,7 +292,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       mx: 'auto',
                       mb: 1,
                       display: 'block',
-                      textalign: 'center',
+                      textAlign: 'center',
                       color: 'text.disabled',
                     }}
                   >

@@ -9,7 +9,8 @@
 //     <>
 //       <Helmet>
 //         <title> Payment</title>
-//       </Helmet>
+//       <meta name="description" content='meta' />
+// </Helmet>
 
 //       <PaymentView />
 //     </>

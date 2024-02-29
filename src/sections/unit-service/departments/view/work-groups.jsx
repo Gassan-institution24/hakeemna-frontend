@@ -22,8 +22,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance,{ endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
@@ -158,11 +157,9 @@ export default function WorkGroupsTableView({ departmentData }) {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.workgroup(row._id)}/updatestatus`, /// edit
-          data: { status: 'active' },
-        });
+        await axiosInstance.patch( `${endpoints.tables.workgroup(row._id)}/updatestatus`, /// edit
+          { status: 'active' },
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.workGroups.root(departmentData._id),
@@ -183,11 +180,9 @@ export default function WorkGroupsTableView({ departmentData }) {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.workgroup(row._id)}/updatestatus`, /// edit
-          data: { status: 'inactive' },
-        });
+        await axiosInstance.patch( `${endpoints.tables.workgroup(row._id)}/updatestatus`, /// edit
+          { status: 'inactive' },
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.workGroups.root(departmentData._id),
@@ -208,11 +203,9 @@ export default function WorkGroupsTableView({ departmentData }) {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.workgroups}/updatestatus`, /// edit
-        data: { status: 'active', ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.tables.workgroups}/updatestatus`, /// edit
+        { status: 'active', ids: table.selected },
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.departments.workGroups.root(departmentData._id),
@@ -242,11 +235,9 @@ export default function WorkGroupsTableView({ departmentData }) {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.workgroups}/updatestatus`, /// edit
-        data: { status: 'inactive', ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.tables.workgroups}/updatestatus`, /// edit
+        { status: 'inactive', ids: table.selected },
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.departments.workGroups.root(departmentData._id),

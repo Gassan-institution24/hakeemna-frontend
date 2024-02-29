@@ -8,6 +8,7 @@ export default function HomePage() {
     <>
       <Helmet>
         <title>Unitservices</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <Unitservices />

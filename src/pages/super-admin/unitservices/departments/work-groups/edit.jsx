@@ -21,6 +21,7 @@ export default function DepartmentWorkGroupEditPage() {
     <ACLGuard hasContent category="department" subcategory="work_groups" acl="update">
       <Helmet>
         <title> Edit {name || ''} Work Group </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && (

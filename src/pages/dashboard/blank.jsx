@@ -9,7 +9,8 @@
 //     <>
 //       <Helmet>
 //         <title> Dashboard: Blank</title>
-//       </Helmet>
+//       <meta name="description" content='meta' />
+// </Helmet>
 
 //       <BlankView />
 //     </>

@@ -19,6 +19,7 @@ export default function DepartmentRoomNewPage() {
     <ACLGuard hasContent category="department" subcategory="rooms" acl="create">
       <Helmet>
         <title> Add Room </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentRoomNewView departmentData={data} />}

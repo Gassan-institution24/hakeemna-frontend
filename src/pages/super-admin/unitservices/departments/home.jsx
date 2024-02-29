@@ -11,6 +11,7 @@ export default function DepartmentsHomePage() {
     <ACLGuard hasContent category="unit_service" subcategory="departments" acl="read">
       <Helmet>
         <title> Departments </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <DepartmentsHomeView />

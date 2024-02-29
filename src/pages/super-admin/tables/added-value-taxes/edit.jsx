@@ -9,6 +9,7 @@ export default function TableEditPage() {
     <>
       <Helmet>
         <title> super: Edit Tax</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <TableEditView />

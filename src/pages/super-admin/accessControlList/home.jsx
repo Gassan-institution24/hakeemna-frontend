@@ -9,6 +9,7 @@ export default function AccessControlListPage() {
     <>
       <Helmet>
         <title> Access control list </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <AccessControlList />

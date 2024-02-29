@@ -17,6 +17,7 @@ export default function StakeholderAddInvoicePage() {
     <>
       <Helmet>
         <title> Economic Movement </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <InvoiceInfo economicMovementData={data} />}

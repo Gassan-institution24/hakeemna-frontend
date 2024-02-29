@@ -9,6 +9,7 @@ export default function TableEditPage() {
     <>
       <Helmet>
         <title> super: Create a new Country</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <TableEditView />

@@ -19,6 +19,7 @@ export default function EmployeeInfoPage() {
     <>
       <Helmet>
         <title>{name || ''} Employee Info</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EmployeeInfoView employeeData={data} />}

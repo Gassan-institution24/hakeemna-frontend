@@ -9,7 +9,8 @@
 //     <>
 //       <Helmet>
 //         <title> Coming Soon</title>
-//       </Helmet>
+//       <meta name="description" content='meta' />
+// </Helmet>
 
 //       <ComingSoonView />
 //     </>

@@ -18,6 +18,7 @@ export default function DepartmentAppointmentsPage() {
     <ACLGuard hasContent category="department" subcategory="appointments" acl="read">
       <Helmet>
         <title>{name || ''} Department Appointments</title>
+        <meta name="description" content="meta" />
       </Helmet>
       <DepartmentAppointmentsView departmentData={data} />
     </ACLGuard>

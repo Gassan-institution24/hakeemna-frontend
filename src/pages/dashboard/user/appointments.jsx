@@ -13,6 +13,7 @@ export default function Book() {
     <>
       <Helmet>
         <title>{t('Appointments')} </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <UserAppointmentsPage />

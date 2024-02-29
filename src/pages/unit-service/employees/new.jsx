@@ -11,6 +11,7 @@ export default function EmployeeNewPage() {
     <ACLGuard hasContent category="unit_service" subcategory="employees" acl="create">
       <Helmet>
         <title>New Employee</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <EmployeeNewView />
