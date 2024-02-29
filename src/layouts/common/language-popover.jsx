@@ -31,7 +31,7 @@ export default function LanguagePopover() {
   );
 
   useEffect(() => {
-    if (user.role === 'superadmin' && currentLang.value !== 'en') {
+    if (user?.role === 'superadmin' && currentLang.value !== 'en') {
       onChangeLang('en');
     }
   }, [user, onChangeLang, currentLang]);
