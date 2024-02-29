@@ -29,6 +29,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetAppointment,
   useGetEmployeeEngagement,
+  useGetEmployeeFeedbackes,
   useGetEmployeeSelectedAppointments,
 } from 'src/api';
 
@@ -51,20 +52,33 @@ export default function Doctorpage() {
   const dialog = useBoolean(false);
   const { enqueueSnackbar } = useSnackbar();
   const { data } = useGetEmployeeEngagement(id);
+  const { feedbackData } = useGetEmployeeFeedbackes(data?.employee?._id);
 
   const [currentDateTime, setCurrentDateTime] = useState();
   const patientData = user?.patient?._id;
+  const patientinfo = user?.patient;
   const patientEmail = user?.email;
 
   const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
     id,
     startDate: currentDateTime,
   });
+  const [selectedTime, setSelectedTime] = useState(null);
+
+  const handleTimeClick = (timeId) => {
+    setTimeData(timeId);
+    setSelectedTime(timeId);
+  };
+  const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient._id));
+  const numberOfUsers = uniqueUserIds.size;
+
   const handleBook = async (Data) => {
     try {
       await axios.patch(`${endpoints.tables.appointment(Data)}/book`, {
         patient: patientData,
         email: patientEmail,
+        pInfo: patientinfo,
+        appointmentinfo: datacheeck,
       });
       refetch();
       dialog.onFalse();
@@ -74,7 +88,6 @@ export default function Doctorpage() {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
-
   const renderHead = (
     <CardHeader
       disableTypography
@@ -93,15 +106,12 @@ export default function Doctorpage() {
   );
 
   const renderFollows = (
-    <Card sx={{ py: 3, textAlign: 'center', typography: 'h4' }}>
-      <Stack
-        direction="row"
-        divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
-      >
-        <Stack width={1}>{fNumber('sdsdds')}</Stack>
-
-        <Stack width={1}>{fNumber('info.totalFollowing')}</Stack>
-      </Stack>
+    <Card sx={{ py: 3, textAlign: 'center' }}>
+      <Typography typography="h6">
+        ( {fNumber(data?.employee?.rate)}{' '}
+        <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />){' '}
+        {numberOfUsers > 1 ? `From ${numberOfUsers} visitors` : `From one visitor`}
+      </Typography>
     </Card>
   );
 
@@ -110,26 +120,37 @@ export default function Doctorpage() {
       <CardHeader title="About" />
 
       <Stack spacing={3} sx={{ p: 3 }}>
-        <Box sx={{ typography: 'body2' }}>{data?.employee?.description}</Box>
+        {data?.employee?.description ? (
+          <Box sx={{ typography: 'body2' }}>{data?.employee?.description}</Box>
+        ) : (
+          ''
+        )}
+        {data?.unit_service?.name_english ? (
+          <Stack direction="row" spacing={2}>
+            <Iconify icon="ic:round-business-center" width={24} />
 
-        <Stack direction="row" spacing={2}>
-          <Iconify icon="ic:round-business-center" width={24} />
+            <Box sx={{ typography: 'body2' }}>
+              {`Work at: `}
+              <Link variant="subtitle2" color="inherit">
+                {data?.unit_service?.name_english}
+              </Link>
+            </Box>
+          </Stack>
+        ) : (
+          ''
+        )}
 
-          <Box sx={{ typography: 'body2' }}>
-            {`Work at: `}
-            <Link variant="subtitle2" color="inherit">
-              {data?.unit_service?.name_english}
-            </Link>
-          </Box>
-        </Stack>
         <Stack direction="row" spacing={2}>
           <Iconify icon="mdi:location" width={24} />
 
           <Box sx={{ typography: 'body2' }}>
             {`Location: `}
             <Link variant="subtitle2" color="inherit">
-              {data?.unit_service?.city?.name_english} {` - `}{' '}
-              {data?.unit_service?.country?.name_english}
+              {data?.unit_service?.city?.name_english ? data?.unit_service?.city?.name_english : ''}{' '}
+              {` - `}{' '}
+              {data?.unit_service?.country?.name_english
+                ? data?.unit_service?.country?.name_english
+                : ''}
             </Link>
           </Box>
         </Stack>
@@ -239,8 +260,13 @@ export default function Doctorpage() {
                 {appointmentsData?.map((time, index) => (
                   <Button
                     key={index}
-                    onClick={() => setTimeData(time?._id)}
-                    sx={{ border: '1px solid lightgreen', mb: 1, ml: 0.5 }}
+                    onClick={() => handleTimeClick(time?._id)}
+                    sx={{
+                      border:
+                        time?._id === selectedTime ? '1px solid lightgreen' : '1px solid gray',
+                      mb: 1,
+                      ml: 0.5,
+                    }}
                   >
                     {fTime(time?.start_time)}{' '}
                   </Button>
@@ -249,7 +275,11 @@ export default function Doctorpage() {
 
               <Box sx={{ visibility: { md: 'visible', xs: 'hidden' } }}>
                 {TimeData !== undefined ? (
-                  <Button variant="contained" onClick={dialog.onTrue}>
+                  <Button
+                    variant="contained"
+                    sx={{ bgcolor: 'success.main' }}
+                    onClick={dialog.onTrue}
+                  >
                     Book
                   </Button>
                 ) : (
@@ -355,7 +385,13 @@ export default function Doctorpage() {
           {renderHead}
           {renderFollows}
 
-          {renderAbout}
+          {data?.unit_service?.country?.name_english ||
+          data?.unit_service?.city?.name_english ||
+          data?.unit_service?.name_english ||
+          data?.employee?.description
+            ? renderAbout
+            : ''}
+
           {data?.web_page?.length > 1 ? renderSocials : ''}
         </Stack>
       </Grid>
