@@ -15,10 +15,15 @@ import { useAuthContext } from '../hooks';
 export default function RoleBasedGuard({ hasContent, roles, children, sx }) {
   // Logic here to get current user role
   const { user } = useAuthContext();
+  console.log('user', user);
+  console.log('roles', roles);
 
   // const currentRole = 'user';
   const currentRole = user?.role; // admin;
 
+  console.log('currentRole', currentRole);
+  console.log('!roles.includes(currentRole)', !roles.includes(currentRole));
+  console.log('roles', typeof roles !== 'undefined' && !roles.includes(currentRole));
   if (typeof roles !== 'undefined' && !roles.includes(currentRole)) {
     return hasContent ? (
       <Container component={MotionContainer} sx={{ textalign: 'center', ...sx }}>
