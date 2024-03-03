@@ -45,13 +45,14 @@ export default function TableNewEditForm() {
     { id: 'birth_date', label: t('birth date') },
     { id: '', width: 88 },
   ];
+  
+  const { user } = useAuthContext();
 
   const table = useTable({ defaultRowsPerPage: 10 });
 
   const unitServiceID =
     user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service._id;
 
-  const { user } = useAuthContext();
 
   const [results, setResults] = useState([]);
   const [filters, setFilters] = useState({});
