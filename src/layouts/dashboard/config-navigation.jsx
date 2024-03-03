@@ -412,6 +412,11 @@ export function useNavData() {
             icon: <Iconify icon="material-symbols-light:prescriptions-outline" />,
           },
           {
+            title: t('family'),
+            path: paths.dashboard.user.family,
+            icon: <Iconify icon="icon-park-twotone:family" />,
+          },
+          {
             title: t('Financial movements'),
             path: paths.dashboard.user.financilmovment,
             icon: <Iconify icon="arcticons:gnucash" />,

@@ -50,7 +50,7 @@ export default function Emergency() {
         </Typography>
       </Box>
       <Typography variant="h3" sx={{ position: 'relative', top: '-20px' }}>
-        {curLangAr ? 'احجز موعد طارئ' : 'The types of emergency of we provide'}
+        {curLangAr ? 'احجز موعد طارئ' : 'The types of emergency we provide'}
       </Typography>
       <Box
         sx={{
@@ -91,7 +91,7 @@ export default function Emergency() {
               height: '13%',
               backgroundColor: 'white',
               position: 'absolute',
-              left: '42%',
+              left: curLangAr ? '51%' : '42%',
               top: '5%',
               textAlign: 'center',
             }}
@@ -99,14 +99,15 @@ export default function Emergency() {
             <Iconify width="65%" sx={{ mt: '15%', color: '#4E6892' }} icon="carbon:person" />
           </Box>
           <Box
-            style={{
+         
+            sx={{
               border: '3px solid #4E6892',
               borderRadius: '100%',
               width: '7%',
               height: '13%',
               backgroundColor: 'white',
               position: 'absolute',
-              left: '51%',
+              left: curLangAr ? '51%' : '51%',
               top: '40%',
               textAlign: 'center',
             }}
@@ -121,7 +122,7 @@ export default function Emergency() {
               height: '13%',
               backgroundColor: 'white',
               position: 'absolute',
-              left: '42%',
+              left: curLangAr ? '50.5%' : '42%',
               top: '80%',
               textAlign: 'center',
             }}
