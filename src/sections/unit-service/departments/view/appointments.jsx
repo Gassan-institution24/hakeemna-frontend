@@ -32,6 +32,8 @@ import { useGetAppointmentTypes, useGetDepartmentAppointments } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { RouterLink } from 'src/routes/components';
 import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -381,23 +383,29 @@ export default function AppointmentsView({ departmentData }) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        {/* <CustomBreadcrumbs
-          heading={t('appointments')} /// edit
-          links={[
-            {
-              name: t('dashboard'),
-              href: paths.unitservice.root,
-            },
-            {
-              name: t('departments'),
-              href: paths.unitservice.departments.root,
-            },
-            { name: t('appointments') },
-          ]}
+        <CustomBreadcrumbs
+          action={
+            checkAcl({ category: 'department', subcategory: 'appointments', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                onClick={() => addModal.onTrue()}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+                sx={{
+                  bgcolor: 'error.dark',
+                  '&:hover': {
+                    bgcolor: 'error.main',
+                  },
+                }}
+              >
+                {t('new emergency appointment')}
+              </Button>
+            )
+          }
           sx={{
-            mb: { xs: 3, md: 5 },
+            mb: { xs: 3, md: 3 },
           }}
-        /> */}
+        />
         <Card>
           <Tabs
             value={filters.status}

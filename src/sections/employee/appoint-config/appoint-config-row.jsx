@@ -126,7 +126,7 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status !== 'canceled' &&
+        {status === 'available' &&
           checkAcl({ category: 'employee', subcategory: 'appointment_configs', acl: 'delete' }) && (
             <MenuItem
               onClick={() => {

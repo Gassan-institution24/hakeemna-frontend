@@ -38,6 +38,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
+import { RouterLink } from 'src/routes/components';
 import {
   useTable,
   emptyRows,
@@ -125,8 +126,6 @@ export default function AppointmentsView({ employeeData }) {
     order: table.order || 'asc',
     filters: filters || null,
   });
-
-  console.log('appointmentsData', appointmentsData);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -406,6 +405,24 @@ export default function AppointmentsView({ employeeData }) {
             { name: t('dashboard'), href: paths.dashboard.root },
             { name: t('appointments') },
           ]}
+          action={
+            checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                onClick={() => addModal.onTrue()}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+                sx={{
+                  bgcolor: 'error.dark',
+                  '&:hover': {
+                    bgcolor: 'error.main',
+                  },
+                }}
+              >
+                {t('new emergency appointment')}
+              </Button>
+            )
+          }
           sx={{
             mb: { xs: 3, md: 5 },
           }}

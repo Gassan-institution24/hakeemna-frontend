@@ -112,14 +112,14 @@ export default function JwtRegisterView() {
   const defaultValues = {
     us_name_arabic: '',
     us_name_english: '',
-    us_email: '',
+    // us_email: '',
     us_identification_num: '',
     us_country: null,
     us_city: null,
     US_type: null,
     us_speciality: null,
     us_sector_type: '',
-    us_phone: '',
+    // us_phone: '',
     em_first_name: '',
     em_middle_name: '',
     em_family_name: '',
@@ -290,7 +290,7 @@ export default function JwtRegisterView() {
       <Tooltip placement="top" title="Identification number of service unit">
         <RHFTextField lang="ar" name="us_identification_num" label={`${t('ID number')} *`} />
       </Tooltip>
-      <Tooltip placement="top" title="Phone number of service unit">
+      {/* <Tooltip placement="top" title="Phone number of service unit">
         <MuiTelInput
           forceCallingCode
           label={`${t('phone')} *`}
@@ -301,13 +301,13 @@ export default function JwtRegisterView() {
             methods.setValue('us_phone', newPhone);
           }}
         />
-      </Tooltip>
+      </Tooltip> */}
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+      {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <Tooltip placement="top" title="email address of service unit">
           <RHFTextField lang="ar" name="us_email" label={`${t('email')} *`} />
         </Tooltip>
-      </Stack>
+      </Stack> */}
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <Tooltip placement="top" title="country which service unit placed">
           <RHFSelect

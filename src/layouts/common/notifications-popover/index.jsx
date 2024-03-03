@@ -58,24 +58,29 @@ export default function NotificationsPopover() {
 
   const handleMarkAllAsRead = async () => {
     await axios.patch(`${endpoints.tables.notifications}/read`, { ids: unread });
+    setAllNotifications([]);
     setPage(1);
     refetch();
   };
-
+  /* eslint-disable */
   useEffect(() => {
     socket.on('error', () => {
+      setAllNotifications([]);
       setPage(1);
       refetch();
     });
     socket.on('created', () => {
+      setAllNotifications([]);
       setPage(1);
       refetch();
     });
     socket.on('updated', () => {
+      setAllNotifications([]);
       setPage(1);
       refetch();
     });
-  }, [refetch, setPage]);
+  }, []);
+  /* eslint-enable */
 
   useEffect(() => {
     setAllNotifications((prevNotifications) => [...prevNotifications, ...notifications]);

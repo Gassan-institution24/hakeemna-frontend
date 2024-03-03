@@ -29,6 +29,8 @@ import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { RouterLink } from 'src/routes/components';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
@@ -273,6 +275,27 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+        <CustomBreadcrumbs
+          action={
+            checkAcl({
+              category: 'employee',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            }) && (
+              <Button
+                component={RouterLink}
+                href={paths.unitservice.employees.appointmentconfig.new(id)}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                {t('new configuration')}
+              </Button>
+            )
+          }
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
+        />
         <Card>
           <Tabs
             value={filters.status}

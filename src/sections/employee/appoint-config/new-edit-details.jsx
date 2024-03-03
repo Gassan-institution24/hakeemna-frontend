@@ -28,16 +28,16 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
   const weekDays = [
     { value: 'saturday', label: t('Saturday') },
     { value: 'sunday', label: t('Sunday') },
-    { value: 'Monday', label: t('Monday') },
+    { value: 'monday', label: t('Monday') },
     { value: 'tuesday', label: t('Tuesday') },
     { value: 'wednesday', label: t('Wednesday') },
     { value: 'thursday', label: t('Thursday') },
     { value: 'friday', label: t('Friday') },
   ];
 
-  const { control, getValues, trigger } = useFormContext();
+  const { control, watch, trigger } = useFormContext();
 
-  const values = getValues();
+  const values = watch();
 
   const { myunitTime } = useUnitTime();
 
