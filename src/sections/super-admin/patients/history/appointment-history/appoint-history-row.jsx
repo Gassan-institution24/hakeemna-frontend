@@ -114,7 +114,7 @@ export default function InvoiceTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status !== 'canceled' && (
+        {status === 'available' && (
           <MenuItem
             onClick={() => {
               onCancelRow();

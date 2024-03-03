@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -16,6 +17,9 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
+import { useUnitTime } from 'src/utils/format-time';
+
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -34,14 +38,18 @@ export default function NewEditDayAppointmentsDetails({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { control, getValues } = useFormContext();
+  const { myunitTime } = useUnitTime();
+
+  const { user } = useAuthContext();
+
+  const { control, watch } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: `days_details[${ParentIndex}].appointments`,
   });
 
-  const values = getValues();
+  const values = watch();
 
   const handleAdd = () => {
     const defaultItem = {
@@ -57,7 +65,7 @@ export default function NewEditDayAppointmentsDetails({
         ]
       : null;
     const start_time = new Date(
-      existingData ? existingData.start_time : values.days_details[ParentIndex].work_start_time
+      existingData ? existingData?.start_time : values.days_details[ParentIndex].work_start_time
     );
     if (existingData) {
       start_time.setMinutes(start_time.getMinutes() + values.appointment_time);
@@ -140,15 +148,17 @@ export default function NewEditDayAppointmentsDetails({
                       lang="ar"
                       minutesStep="5"
                       label={t('start time')}
-                      value={
-                        values.days_details[ParentIndex].appointments[index].start_time
-                          ? new Date(
-                              values.days_details[ParentIndex].appointments[index].start_time
-                            )
-                          : new Date()
-                      }
+                      value={myunitTime(
+                        values.days_details[ParentIndex].appointments[index]?.start_time
+                      )}
                       onChange={(newValue) => {
-                        field.onChange(newValue);
+                        const selectedTime = zonedTimeToUtc(
+                          newValue,
+                          user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                            ?.unit_service?.country?.time_zone ||
+                            Intl.DateTimeFormat().resolvedOptions().timeZone
+                        );
+                        field.onChange(selectedTime);
                       }}
                       slotProps={{
                         textField: {

@@ -75,7 +75,19 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       .min(1, 'must be at least 1')
       .max(360, 'must be at most 360'),
     holidays: Yup.array(),
-    long_holidays: Yup.array(),
+    long_holidays: Yup.array().of(
+      Yup.object().shape({
+        start_date: Yup.date().nullable(),
+        end_date: Yup.date()
+          .nullable()
+          .when(
+            'start_date',
+            (startDate, schema) =>
+              startDate && schema.min(startDate, 'End date must be after start date')
+          ),
+        description: Yup.string().nullable(),
+      })
+    ),
     work_group: Yup.string().required('Work Group is required'),
     work_shift: Yup.string().required('Work Shift is required'),
     days_details: Yup.array().of(
@@ -273,7 +285,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           .join('<br>')
       );
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [errors]);
 
   console.log('errorMsg', errorMsg);

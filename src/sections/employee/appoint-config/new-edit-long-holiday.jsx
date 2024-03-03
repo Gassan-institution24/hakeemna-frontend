@@ -28,14 +28,14 @@ export default function NewEditLongHolidays() {
 
   const { user } = useAuthContext();
 
-  const { control, getValues } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'long_holidays',
   });
 
-  const values = getValues();
+  const values = watch();
 
   const handleAdd = () => {
     append({
@@ -99,6 +99,7 @@ export default function NewEditLongHolidays() {
                             ?.unit_service?.country?.time_zone ||
                             Intl.DateTimeFormat().resolvedOptions().timeZone
                         );
+                        setValue(`long_holidays[${index}].end_date`, selectedTime);
                         field.onChange(selectedTime);
                       }}
                       slotProps={{

@@ -170,7 +170,7 @@ export default function AppointmentsTableRow({
               Book Manually
             </MenuItem>
           )}
-        {status !== 'canceled' &&
+        {status === 'available' &&
           checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'delete' }) && (
             <MenuItem
               onClick={() => {

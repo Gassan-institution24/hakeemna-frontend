@@ -74,68 +74,26 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       .min(1, 'must be at least 1')
       .max(360, 'must be at most 360'),
     holidays: Yup.array(),
-    long_holidays: Yup.array(),
+    long_holidays: Yup.array().of(
+      Yup.object().shape({
+        start_date: Yup.date().nullable(),
+        end_date: Yup.date()
+          .nullable()
+          .when(
+            'start_date',
+            (startDate, schema) =>
+              startDate && schema.min(startDate, 'End date must be after start date')
+          ),
+        description: Yup.string().nullable(),
+      })
+    ),
     work_group: Yup.string().required('Work Group is required'),
     work_shift: Yup.string().required('Work Shift is required'),
     days_details: Yup.array().of(
       Yup.object().shape({
         day: Yup.string().required('Day is required'),
-        work_start_time: Yup.date().required('work start time is required'),
-        work_end_time: Yup.date()
-          .required('work end time is required')
-          .when(
-            'work_start_time',
-            (work_start_time, schema) =>
-              work_start_time &&
-              schema.min(work_start_time, 'Work End Time must be after Work Start Time')
-          ),
-        // break_start_time: Yup.date().nullable()
-        //   .when(
-        //     'work_end_time',
-        //     (work_end_time, schema) =>
-        //       schema.isType(null)||(work_end_time &&
-        //       schema.max(
-        //         work_end_time,
-        //         'Break Time must be between Work Start Time and Work End Time'
-        //       ))
-        //   ),
-        //   .when(
-        //     'work_start_time',
-        //     (work_start_time, schema) =>
-        //       work_start_time &&
-        //       schema.min(
-        //         work_start_time,
-        //         'Break Time must be between Work Start Time and Work End Time'
-        //       )
-        //   ),
-        // break_end_time: Yup.date().nullable()
-        //   .when(
-        //     'work_start_time',
-        //     (work_start_time, schema) =>
-        //       work_start_time &&
-        //       schema.min(
-        //         work_start_time,
-        //         'Break Time must be between Work Start Time and Work End Time'
-        //       )
-        //   )
-        //   .when(
-        //     'work_end_time',
-        //     (work_end_time, schema) =>
-        //       work_end_time &&
-        //       schema.max(
-        //         work_end_time,
-        //         'Break Time must be between Work Start Time and Work End Time'
-        //       )
-        //   )
-        //   .when(
-        //     'break_start_time',
-        //     (break_start_time, schema) =>
-        //       break_start_time &&
-        //       schema.min(
-        //         break_start_time,
-        //         'Break Time must be between Work Start Time and Work End Time'
-        //       )
-        //   ),
+        work_start_time: Yup.mixed().nullable().required('work start time is required'),
+        work_end_time: Yup.mixed().nullable().required('work end time is required'),
         appointments: Yup.array(),
         service_types: Yup.array(),
         appointment_type: Yup.string().nullable(),
@@ -172,20 +130,18 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       ],
       work_group: appointmentConfigData?.work_group?._id || null,
       work_shift: appointmentConfigData?.work_shift?._id || null,
-      days_details:
-        appointmentConfigData?.days_details ||
-        [
-          // {
-          //   day: '',
-          //   // work_start_time: null,
-          //   // work_end_time: null,
-          //   // break_start_time: null,
-          //   // break_end_time: null,
-          //   appointments: [],
-          //   // service_types: [],
-          //   appointment_type: null,
-          // },
-        ],
+      days_details: appointmentConfigData?.days_details || [
+        {
+          day: 'saturday',
+          work_start_time: null,
+          work_end_time: null,
+          break_start_time: null,
+          break_end_time: null,
+          appointments: [],
+          service_types: [],
+          appointment_type: null,
+        },
+      ],
     }),
     [appointmentConfigData, user?.employee, employeeInfo?.department]
   );
@@ -321,7 +277,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           .map((key) => errors?.[key]?.message)
           .join('<br>')
       );
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [errors]);
 

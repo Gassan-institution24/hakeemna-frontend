@@ -125,12 +125,12 @@ export default function TableNewEditForm({ acl }) {
   });
 
   const {
-    getValues,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const values = getValues();
+  const values = watch();
 
   // console.log('values', values);
 

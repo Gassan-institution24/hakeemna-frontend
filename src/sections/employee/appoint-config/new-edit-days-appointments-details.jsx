@@ -42,14 +42,14 @@ export default function NewEditDayAppointmentsDetails({
 
   const { user } = useAuthContext();
 
-  const { control, getValues } = useFormContext();
+  const { control, watch } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: `days_details[${ParentIndex}].appointments`,
   });
 
-  const values = getValues();
+  const values = watch();
 
   const handleAdd = () => {
     const defaultItem = {
