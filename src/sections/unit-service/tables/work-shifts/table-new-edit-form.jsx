@@ -78,12 +78,12 @@ export default function TableNewEditForm({ currentTable }) {
 
   const {
     reset,
-    getValues,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const values = getValues();
+  const values = watch();
 
   const onSubmit = handleSubmit(async (data) => {
     try {

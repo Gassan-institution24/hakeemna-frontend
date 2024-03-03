@@ -28,14 +28,14 @@ export default function NewEditHolidays() {
 
   const { user } = useAuthContext();
 
-  const { control, getValues } = useFormContext();
+  const { control, watch } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'holidays',
   });
 
-  const values = getValues();
+  const values = watch();
 
   const handleAdd = () => {
     append({

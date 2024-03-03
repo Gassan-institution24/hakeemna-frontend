@@ -32,6 +32,7 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import { RouterLink } from 'src/routes/components';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -253,10 +254,6 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     enqueueSnackbar,
   ]);
 
-  const handleAdd = useCallback(() => {
-    router.push(paths.employee.appointmentconfiguration.new);
-  }, [router]);
-
   const handleViewRow = useCallback(
     (_id) => {
       router.push(paths.employee.appointmentconfiguration.edit(_id));
@@ -284,6 +281,22 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
             { name: t('dashboard'), href: paths.dashboard.root },
             { name: t('appointment configuration') },
           ]}
+          action={
+            checkAcl({
+              category: 'employee',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            }) && (
+              <Button
+                component={RouterLink}
+                href={paths.employee.appointmentconfiguration.new}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                {t('new configuration')}
+              </Button>
+            )
+          }
           sx={{
             mb: { xs: 3, md: 5 },
           }}
@@ -321,7 +334,6 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
           <AppointConfigToolbar
             filters={filters}
             onFilters={handleFilters}
-            onAdd={handleAdd}
             //
             dateError={dateError}
             // serviceOptions={appointmenttypesData.map((option) => option)}

@@ -36,6 +36,8 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { RouterLink } from 'src/routes/components';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
@@ -385,6 +387,29 @@ export default function AppointmentsView({ employeeData }) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+        <CustomBreadcrumbs
+          action={
+            checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                onClick={() => addModal.onTrue()}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+                sx={{
+                  bgcolor: 'error.dark',
+                  '&:hover': {
+                    bgcolor: 'error.main',
+                  },
+                }}
+              >
+                {t('new emergency appointment')}
+              </Button>
+            )
+          }
+          sx={{
+            mb: { xs: 3, md: 3 },
+          }}
+        />
         <Card>
           <Tabs
             value={filters.status}
