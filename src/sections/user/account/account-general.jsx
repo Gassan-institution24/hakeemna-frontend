@@ -52,20 +52,7 @@ export default function AccountGeneral({ data, refetch }) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
     }
   };
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.post('/api/oldpatientsdata/details', {
-  //         identification_num: user?.patient?.identification_num,
-  //       });
-  //       setOldpatientsdata(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
 
-  //   fetchData();
-  // }, [user.patient.identification_num]);
   const UpdateUserSchema = Yup.object().shape({
     first_name: Yup.string(),
     middle_name: Yup.string(),
@@ -179,7 +166,7 @@ export default function AccountGeneral({ data, refetch }) {
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
       setTimeout(() => {
         window.location.reload();
-      }, 2000);
+      }, 1000);
     } catch (error) {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }

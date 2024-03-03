@@ -50,6 +50,7 @@ export default function TableNewEditForm({ currentTable }) {
   const { employeeTypesData } = useGetUSEmployeeTypes(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
+  
   const { specialtiesData } = useGetSpecialties();
   const { departmentsData } = useGetUSDepartments(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
