@@ -2,11 +2,10 @@ import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
-// import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
@@ -19,34 +18,38 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function FinishedAppoinment() {
-  // const theme = useTheme();
   const { user } = useAuthContext();
   const { appointmentsData } = useGetPatientAppointments(user?.patient?._id);
 
   const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');
 
   return finishedAppointments.map((info, index) => (
-    <Card>
+    <Card key={index}>
       <Stack sx={{ p: 3, pb: 2 }}>
         <Avatar
           alt={info?.name_english}
-          src={info?.company_log}
+          src={info?.unit_service?.company_logo}
           variant="rounded"
           sx={{ width: 48, height: 48, mb: 2 }}
         />
-
-        <ListItemText
-          secondary={<Link color="inherit">{info?.name_english}</Link>}
-          primaryTypographyProps={{
-            typography: 'subtitle1',
-          }}
-          secondaryTypographyProps={{
-            mt: 1,
-            component: 'span',
-            typography: 'caption',
-            color: 'text.disabled',
-          }}
-        />
+        {info?.work_group?.employees?.map((doctor, name) => (
+          <ListItemText
+            key={name}
+            primary={<span style={{ color: 'inherit' }}> Dr. {doctor?.employee?.first_name}</span>}
+            secondary={
+              <span style={{ color: 'inherit' }}> {info?.unit_service?.name_english}</span>
+            }
+            primaryTypographyProps={{
+              typography: 'subtitle1',
+            }}
+            secondaryTypographyProps={{
+              mt: 1,
+              component: 'span',
+              typography: 'caption',
+              color: 'text.disabled',
+            }}
+          />
+        ))}
 
         <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
           {fDate(info?.created_at)}
@@ -72,7 +75,7 @@ export default function FinishedAppoinment() {
       >
         {[
           {
-            label: `${fTime(info.start_time)} ${fTime(info.end_time)}`,
+            label: `${fTime(info.start_time)}`,
             icon: <Iconify width={16} icon="icon-park-solid:time" sx={{ flexShrink: 0 }} />,
           },
           {
@@ -84,12 +87,12 @@ export default function FinishedAppoinment() {
             icon: <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }} />,
           },
           {
-            label: info?.name_english,
+            label: info?.price,
             icon: <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />,
           },
-        ].map((item) => (
+        ].map((item, key) => (
           <Stack
-            key={item.label}
+            key={key}
             spacing={0.5}
             flexShrink={0}
             direction="row"

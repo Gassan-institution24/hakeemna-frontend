@@ -4,13 +4,12 @@ import { useCallback } from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import { usePopover } from 'src/components/custom-popover';
+// import { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 export default function AppointmentSearch({
@@ -22,7 +21,6 @@ export default function AppointmentSearch({
   canReset,
   onResetFilters,
 }) {
-  const popover = usePopover();
 
   const { t } = useTranslate();
   const handleFilterName = useCallback(
@@ -79,10 +77,10 @@ export default function AppointmentSearch({
             ),
           }}
         />
-
+{/* 
         <IconButton onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
+        </IconButton> */}
       </Stack>
 
       {canReset && (
