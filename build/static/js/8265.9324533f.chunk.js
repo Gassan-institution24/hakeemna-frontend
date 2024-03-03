@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[8265],{79355:(s,e,t)=>{t.r(e),t.d(e,{default:()=>a});var n=t(6907),i=t(99423),r=t(80184);function a(){return(0,r.jsxs)(r.Fragment,{children:[(0,r.jsxs)(n.ql,{children:[(0,r.jsx)("title",{children:" Forgot Password"}),(0,r.jsx)("meta",{name:"description",content:"meta"})]}),(0,r.jsx)(i.s3,{})]})}}}]);
+//# sourceMappingURL=8265.9324533f.chunk.js.map
