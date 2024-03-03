@@ -60,10 +60,10 @@ export default function UploadOldPatient({ refetch }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const { reset, handleSubmit, getValues, setValue } = methods;
+  const { reset, handleSubmit, watch, setValue } = methods;
 
-  const values = getValues();
-  // console.log('getValues', getValues());
+  const values = watch();
+  // console.log('watch', watch());
 
   const onSubmit = handleSubmit(async (data) => {
     try {

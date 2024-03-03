@@ -27,9 +27,10 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
+import ACLGuard, { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useGetUSAppointments, useGetAppointmentTypes } from 'src/api';
 
+import { RouterLink } from 'src/routes/components';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -92,6 +93,8 @@ export default function AppointmentsView({ employeeData }) {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const { user } = useAuthContext();
+
+  const checkAcl = useAclGuard();
 
   const addModal = useBoolean();
   const confirm = useBoolean();
@@ -397,6 +400,24 @@ export default function AppointmentsView({ employeeData }) {
             },
             { name: t('appointments') },
           ]}
+          action={
+            checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                onClick={() => addModal.onTrue()}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+                sx={{
+                  bgcolor: 'error.dark',
+                  '&:hover': {
+                    bgcolor: 'error.main',
+                  },
+                }}
+              >
+                {t('new emergency appointment')}
+              </Button>
+            )
+          }
           sx={{
             mb: { xs: 3, md: 5 },
           }}
@@ -464,7 +485,7 @@ export default function AppointmentsView({ employeeData }) {
                 )
               }
               action={
-                ACLGuard({
+                checkAcl({
                   category: 'unit_service',
                   subcategory: 'appointments',
                   acl: 'update',

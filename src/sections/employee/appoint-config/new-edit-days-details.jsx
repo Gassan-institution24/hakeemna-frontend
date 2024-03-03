@@ -38,14 +38,14 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const weekDays = [
     { value: 'saturday', label: t('Saturday') },
     { value: 'sunday', label: t('Sunday') },
-    { value: 'Monday', label: t('Monday') },
+    { value: 'monday', label: t('Monday') },
     { value: 'tuesday', label: t('Tuesday') },
     { value: 'wednesday', label: t('Wednesday') },
     { value: 'thursday', label: t('Thursday') },
     { value: 'friday', label: t('Friday') },
   ];
 
-  const { control, setValue, watch, setError } = useFormContext();
+  const { control, setValue, watch, setError, clearErrors } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -93,6 +93,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       };
       append(newItem);
     } catch (e) {
+      console.error(e);
       setErrorMsg(e.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -104,14 +105,20 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   async function processDayDetails(index) {
     try {
+      clearErrors();
       if (!values.appointment_time) {
+        setValue(`days_details[${index}].appointments`, []);
         setError('appointment_time');
         return;
       }
       if (!values.days_details[index].work_start_time) {
+        setValue(`days_details[${index}].appointments`, []);
+        setError(`days_details[${index}].work_start_time`);
         return;
       }
       if (!values.days_details[index].work_end_time) {
+        setValue(`days_details[${index}].appointments`, []);
+        setError(`days_details[${index}].work_end_time`);
         return;
       }
       const results = [];
@@ -119,27 +126,29 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       const currentDay = values.days_details[index];
       const work_start = new Date(currentDay.work_start_time).getTime();
       let work_end = new Date(currentDay.work_end_time).getTime();
-      let break_start = new Date(currentDay.break_start_time).getTime();
-      let break_end = new Date(currentDay.break_end_time).getTime();
+      let break_start = currentDay.break_start_time
+        ? new Date(currentDay.break_start_time).getTime()
+        : null;
+      let break_end = currentDay.break_end_time
+        ? new Date(currentDay.break_end_time).getTime()
+        : null;
 
       if (work_start >= work_end) {
         work_end += 24 * 60 * 60 * 1000;
       }
-      if (work_start > break_start) {
+      if (break_start && work_start > break_start) {
         break_start += 24 * 60 * 60 * 1000;
       }
-      if (break_start > break_end) {
+      if (break_start && break_end && break_start > break_end) {
         break_end += 24 * 60 * 60 * 1000;
       }
       let curr_start = work_start;
       while (curr_start + appointment_time <= work_end) {
-        console.log(curr_start + appointment_time);
-        console.log('appointment_time', appointment_time);
-        console.log(work_end);
         if (
-          (curr_start <= break_end && curr_start < break_start) ||
-          (curr_start + appointment_time > break_end &&
-            curr_start + appointment_time >= break_start)
+          !break_start ||
+          !break_end ||
+          curr_start + appointment_time <= break_start ||
+          curr_start >= break_end
         ) {
           results.push({
             appointment_type: currentDay.appointment_type,
@@ -152,13 +161,13 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
           curr_start += appointment_time;
         }
       }
-      console.log(results);
       setValue(`days_details[${index}].appointments`, results);
       setShowAppointments({
         ...showAppointments,
         [index]: true,
       });
     } catch (e) {
+      console.error(e);
       setErrorMsg(e.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }

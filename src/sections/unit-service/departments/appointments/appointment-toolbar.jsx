@@ -11,7 +11,6 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetUSWorkShifts, useGetDepartmentWorkGroups } from 'src/api';
@@ -214,11 +213,6 @@ export default function AppointmentToolbar({
           <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-          {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
-            <IconButton color="error" onClick={onAdd}>
-              <Iconify icon="zondicons:add-outline" />
-            </IconButton>
-          )}
         </Stack>
       </Stack>
       {/* </Stack> */}

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -16,6 +17,8 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
+import { useUnitTime } from 'src/utils/format-time';
+
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetUSServiceTypes, useGetAppointmentTypes } from 'src/api';
@@ -30,37 +33,26 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  const { myunitTime } = useUnitTime();
 
   const weekDays = [
     { value: 'saturday', label: t('Saturday') },
     { value: 'sunday', label: t('Sunday') },
-    { value: 'Monday', label: t('Monday') },
+    { value: 'monday', label: t('Monday') },
     { value: 'tuesday', label: t('Tuesday') },
     { value: 'wednesday', label: t('Wednesday') },
     { value: 'thursday', label: t('Thursday') },
     { value: 'friday', label: t('Friday') },
   ];
 
-  const { control, setValue, watch, getValues } = useFormContext();
-
-  const [values, setValues] = useState(getValues());
-
-  useEffect(() => {
-    const handleFormValuesChange = () => {
-      const valuesInside = getValues();
-      setValues(valuesInside);
-    };
-
-    watch(handleFormValuesChange);
-    return () => {
-      watch();
-    };
-  }, [watch, getValues]);
+  const { control, setValue, watch, setError, clearErrors } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'days_details',
   });
+
+  const values = watch();
 
   const { user } = useAuthContext();
 
@@ -75,7 +67,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     try {
       const dayToCreate = weekDays.filter(
         (option) =>
-          !values?.weekend?.includes(option.value) &&
+          !values.weekend.includes(option.value) &&
           !values.days_details.some((detail) => detail.day === option.value)
       )[0]?.value;
       if (!dayToCreate) {
@@ -93,15 +85,15 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       };
       const existingData = values.days_details
         ? values.days_details[values.days_details.length - 1]
-        : ''; // Get the current form values
+        : [];
       const newItem = {
         ...defaultItem,
         ...existingData,
         day: dayToCreate,
-        appointments: [],
       };
       append(newItem);
     } catch (e) {
+      console.error(e);
       setErrorMsg(e.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -110,137 +102,75 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const handleRemove = (index) => {
     remove(index);
   };
-  function calculateMinutesDifference(date1, date2) {
-    const first = new Date(date1);
-    const second = new Date(date2);
-    const diffInMilliseconds = Math.abs(second - first);
-    const minutesDifference = Math.floor(diffInMilliseconds / (1000 * 60));
-    return minutesDifference;
-  }
 
   async function processDayDetails(index) {
-    const results = [];
+    try {
+      clearErrors();
+      if (!values.appointment_time) {
+        setValue(`days_details[${index}].appointments`, []);
+        setError('appointment_time');
+        return;
+      }
+      if (!values.days_details[index].work_start_time) {
+        setValue(`days_details[${index}].appointments`, []);
+        setError(`days_details[${index}].work_start_time`);
+        return;
+      }
+      if (!values.days_details[index].work_end_time) {
+        setValue(`days_details[${index}].appointments`, []);
+        setError(`days_details[${index}].work_end_time`);
+        return;
+      }
+      const results = [];
+      const appointment_time = values.appointment_time * 60 * 1000;
+      const currentDay = values.days_details[index];
+      const work_start = new Date(currentDay.work_start_time).getTime();
+      let work_end = new Date(currentDay.work_end_time).getTime();
+      let break_start = currentDay.break_start_time
+        ? new Date(currentDay.break_start_time).getTime()
+        : null;
+      let break_end = currentDay.break_end_time
+        ? new Date(currentDay.break_end_time).getTime()
+        : null;
 
-    const appointment_time = appointTime || values.appointment_time;
-    if (!appointment_time) {
-      // console.log('no_appointment_time');
-      return;
+      if (work_start >= work_end) {
+        work_end += 24 * 60 * 60 * 1000;
+      }
+      if (break_start && work_start > break_start) {
+        break_start += 24 * 60 * 60 * 1000;
+      }
+      if (break_start && break_end && break_start > break_end) {
+        break_end += 24 * 60 * 60 * 1000;
+      }
+      let curr_start = work_start;
+      while (curr_start + appointment_time <= work_end) {
+        if (
+          !break_start ||
+          !break_end ||
+          curr_start + appointment_time <= break_start ||
+          curr_start >= break_end
+        ) {
+          results.push({
+            appointment_type: currentDay.appointment_type,
+            start_time: curr_start,
+            online_available: true,
+            service_types: currentDay.service_types,
+          });
+          curr_start += appointment_time;
+        } else {
+          curr_start += appointment_time;
+        }
+      }
+      setValue(`days_details[${index}].appointments`, results);
+      setShowAppointments({
+        ...showAppointments,
+        [index]: true,
+      });
+    } catch (e) {
+      console.error(e);
+      setErrorMsg(e.message);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    const calculateMins = (date) => {
-      const formatedDate = new Date(date);
-      return formatedDate.getHours() * 60 + formatedDate.getMinutes();
-    };
-    const RemovingMinToDate = (date, mins) => {
-      const formatedDate = new Date(date);
-      return new Date(formatedDate.getTime() - mins * 60000);
-    };
-
-    const item = values.days_details[index];
-
-    let minDay = calculateMinutesDifference(item?.work_start_time, item?.work_end_time);
-    let minBeforeBreak = calculateMinutesDifference(item?.work_start_time, item?.break_start_time);
-    let minAfterBreak = calculateMinutesDifference(item?.break_end_time, item?.work_end_time);
-
-    const createAppointmentsAll = () => {
-      if (minDay >= values.appointment_time) {
-        const newStartTime = RemovingMinToDate(item?.work_end_time, minDay);
-        const duplicated = item?.appointments.filter((appoint) => {
-          const newTime = calculateMins(newStartTime);
-          const existingTime = calculateMins(appoint.start_time);
-          return newTime === existingTime;
-        })[0];
-        if (duplicated) {
-          results.push(duplicated);
-        } else {
-          results.push({
-            appointment_type: item?.appointment_type || null,
-            start_time: newStartTime,
-            price: null,
-            online_available: true,
-            service_types: item?.service_types || [],
-          });
-        }
-        minDay -= values.appointment_time;
-
-        // Return a promise to control the flow
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(createAppointmentsAll(item, index, minDay));
-          }, 0);
-        });
-      }
-      return Promise.resolve(); // Resolve the promise when done
-    };
-    const createAppointmentsBefore = () => {
-      if (minBeforeBreak >= values.appointment_time) {
-        const newStartTime = RemovingMinToDate(item?.break_start_time, minBeforeBreak);
-        const duplicated = item?.appointments.filter((appoint) => {
-          const newTime = calculateMins(newStartTime);
-          const existingTime = calculateMins(appoint.start_time);
-          return newTime === existingTime;
-        })[0];
-        if (duplicated) {
-          results.push(duplicated);
-        } else {
-          results.push({
-            appointment_type: item?.appointment_type || null,
-            start_time: newStartTime,
-            price: null,
-            online_available: true,
-            service_types: item?.service_types || [],
-          });
-        }
-        minBeforeBreak -= values.appointment_time;
-
-        // Return a promise to control the flow
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(createAppointmentsBefore(item, index, minBeforeBreak));
-          }, 0);
-        });
-      }
-      return Promise.resolve(); // Resolve the promise when done
-    };
-    const createAppointmentsAfter = () => {
-      if (minAfterBreak >= values.appointment_time) {
-        const newStartTime = RemovingMinToDate(item?.work_end_time, minAfterBreak);
-        const duplicated = item?.appointments.filter((appoint) => {
-          const newTime = calculateMins(newStartTime);
-          const existingTime = calculateMins(appoint.start_time);
-          return newTime === existingTime;
-        })[0];
-        if (duplicated) {
-          results.push(duplicated);
-        } else {
-          results.push({
-            appointment_type: item?.appointment_type || null,
-            start_time: newStartTime,
-            price: null,
-            online_available: true,
-            service_types: item?.service_types || [],
-          });
-        }
-        minAfterBreak -= values.appointment_time;
-
-        // Return a promise to control the flow
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(createAppointmentsAfter(item, index, minAfterBreak));
-          }, 0);
-        });
-      }
-      return Promise.resolve(); // Resolve the promise when done
-    };
-
-    if (item?.break_start_time && item?.break_end_time) {
-      await createAppointmentsBefore();
-      await createAppointmentsAfter();
-    } else {
-      await createAppointmentsAll();
-    }
-
-    setAppointmentsNum({ ...appointmentsNum, [index]: results.length });
-    setValue(`days_details[${index}].appointments`, results);
   }
 
   const renderValues = (selectedIds) => {
@@ -255,29 +185,54 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     // return results.join(', ')
   };
   function appointEstimatedNum(index) {
-    const item = values.days_details[index];
-    if (item?.appointments.length) {
-      return item?.appointments.length;
+    const currentDay = values.days_details[index];
+    if (currentDay?.appointments.length) {
+      return currentDay?.appointments.length;
     }
-    if (item?.break_start_time && item?.break_end_time) {
-      const AppointBefore = Math.floor(
-        calculateMinutesDifference(item?.work_start_time, item?.break_start_time) /
-          values.appointment_time
-      );
-      const AppointAfter = Math.floor(
-        calculateMinutesDifference(item?.break_end_time, item?.work_end_time) /
-          values.appointment_time
-      );
-      return AppointBefore + AppointAfter || 0;
+    const appointment_time = values.appointment_time * 60 * 1000;
+    const work_start = new Date(currentDay.work_start_time).getTime();
+    let work_end = new Date(currentDay.work_end_time).getTime();
+    let break_start = new Date(currentDay.break_start_time).getTime();
+    let break_end = new Date(currentDay.break_end_time).getTime();
+    if (work_start > work_end) {
+      work_end += 24 * 60 * 60 * 1000;
     }
-    return (
-      Math.floor(
-        calculateMinutesDifference(item?.work_start_time, item?.work_end_time) /
-          values.appointment_time
-      ) || 0
-    );
+    if (work_start > break_start) {
+      break_start += 24 * 60 * 60 * 1000;
+    }
+    if (work_start > break_end) {
+      break_end += 24 * 60 * 60 * 1000;
+    }
+    if (
+      work_start < break_end &&
+      work_start <= break_start &&
+      work_end >= break_end &&
+      work_end > break_start
+    ) {
+      return (
+        Math.floor((work_end - work_start - (break_end - break_start)) / appointment_time) || 0
+      );
+    }
+    if (
+      work_start < break_end &&
+      work_start <= break_start &&
+      work_end <= break_end &&
+      work_end > break_start
+    ) {
+      return Math.floor((work_end - work_start - (work_end - break_start)) / appointment_time) || 0;
+    }
+    return Math.floor((work_end - work_start) / appointment_time) || 0;
   }
 
+  /* eslint-disable */
+  useEffect(() => {
+    if (appointTime) {
+      for (let index = 0; index < values.days_details.length; index++) {
+        processDayDetails(index);
+      }
+    }
+  }, [appointTime]);
+  /* eslint-enable */
   return (
     <>
       <Divider flexItem sx={{ borderStyle: 'solid' }} />
@@ -303,12 +258,12 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
               sx={{ width: '100%' }}
             >
               <Stack
-                direction={{ xs: 'column', md: 'row' }}
+                direction={{ xs: 'column', md: 'column' }}
                 spacing={2}
                 sx={{ width: '100%', mt: 2 }}
               >
                 <Stack
-                  direction={{ xs: 'column', md: 'column' }}
+                  direction={{ xs: 'column', md: 'row' }}
                   spacing={2}
                   sx={{ width: '100%', mt: 2 }}
                 >
@@ -322,8 +277,8 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     {weekDays
                       .filter(
                         (option) =>
-                          !values?.weekend?.includes(option.value) &&
-                          !values?.days_details?.some(
+                          !values.weekend.includes(option.value) &&
+                          !values.days_details.some(
                             (detail) =>
                               detail.day === option.value &&
                               values.days_details[index]?.day !== option.value
@@ -333,145 +288,14 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         <MenuItem value={option.value}>{option.label}</MenuItem>
                       ))}
                   </RHFSelect>
-                  <RHFTextField
-                    lang="ar"
-                    disabled
-                    size="small"
-                    name={`days_details[${index}].appointment_number`}
-                    label={t('appointments number')}
-                    InputLabelProps={{ shrink: true }}
-                    value={appointmentsNum[index] || appointEstimatedNum(index)}
-                  />
-                </Stack>
-                <Stack
-                  direction={{ xs: 'column', md: 'column' }}
-                  spacing={2}
-                  sx={{ width: '100%', mt: 2 }}
-                >
-                  <Controller
-                    name={`days_details[${index}].work_start_time`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <MobileTimePicker
-                        lang="ar"
-                        minutesStep="5"
-                        label={t('work start time')}
-                        value={
-                          values.days_details[index]?.work_start_time
-                            ? new Date(values.days_details[index]?.work_start_time)
-                            : null
-                        }
-                        onChange={(newValue) => {
-                          field.onChange(newValue);
-                        }}
-                        slotProps={{
-                          textField: {
-                            size: 'small',
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                  <Controller
-                    name={`days_details[${index}].break_start_time`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <MobileTimePicker
-                        lang="ar"
-                        minutesStep="5"
-                        label={t('break start time')}
-                        value={
-                          values.days_details[index].break_start_time
-                            ? new Date(values.days_details[index].break_start_time)
-                            : null
-                        }
-                        onChange={(newValue) => {
-                          field.onChange(newValue);
-                        }}
-                        slotProps={{
-                          textField: {
-                            size: 'small',
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                </Stack>
-                <Stack
-                  direction={{ xs: 'column', md: 'column' }}
-                  spacing={2}
-                  sx={{ width: '100%', mt: 2 }}
-                >
-                  <Controller
-                    name={`days_details[${index}].work_end_time`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <MobileTimePicker
-                        lang="ar"
-                        minutesStep="5"
-                        label={t('work end time')}
-                        value={
-                          values.days_details[index].work_end_time
-                            ? new Date(values.days_details[index].work_end_time)
-                            : null
-                        }
-                        onChange={(newValue) => {
-                          field.onChange(newValue);
-                        }}
-                        slotProps={{
-                          textField: {
-                            size: 'small',
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                  <Controller
-                    name={`days_details[${index}].break_end_time`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <MobileTimePicker
-                        lang="ar"
-                        minutesStep="5"
-                        label={t('break end time')}
-                        value={
-                          values.days_details[index].break_end_time
-                            ? new Date(values.days_details[index].break_end_time)
-                            : null
-                        }
-                        onChange={(newValue) => {
-                          field.onChange(newValue);
-                        }}
-                        slotProps={{
-                          textField: {
-                            size: 'small',
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                </Stack>
-                <Stack
-                  direction={{ xs: 'column', md: 'column' }}
-                  spacing={2}
-                  sx={{ width: '100%', mt: 2 }}
-                >
                   <RHFSelect
                     size="small"
                     InputLabelProps={{ shrink: true }}
                     name={`days_details[${index}].appointment_type`}
+                    onChange={(e) => {
+                      setValue(`days_details[${index}].appointment_type`, e.target.value);
+                      processDayDetails(index);
+                    }}
                     label={`${t('appointment type')} *`}
                   >
                     {appointmenttypesData?.map((option) => (
@@ -496,10 +320,14 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                           multiple
                           id={`multiple-days_details[${index}].service_types`}
                           label={t('service types')}
+                          onChange={(e) => {
+                            setValue(`days_details[${index}].service_types`, e.target.value);
+                            processDayDetails(index);
+                          }}
                           renderValue={renderValues}
                         >
                           {serviceTypesData?.map((option) => {
-                            const selected = field?.value?.includes(option?._id);
+                            const selected = field?.value?.includes(option._id);
 
                             return (
                               <MenuItem key={option._id} value={option._id}>
@@ -517,9 +345,146 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                       </FormControl>
                     )}
                   />
+                  <RHFTextField
+                    lang="ar"
+                    disabled
+                    size="small"
+                    name={`days_details[${index}].appointment_number`}
+                    label={t('appointments number')}
+                    InputLabelProps={{ shrink: true }}
+                    value={appointmentsNum[index] || appointEstimatedNum(index)}
+                  />
                 </Stack>
                 <Stack
-                  direction={{ xs: 'column', md: 'column' }}
+                  direction={{ xs: 'column', md: 'row' }}
+                  spacing={2}
+                  sx={{ width: '100%', mt: 2 }}
+                >
+                  <Controller
+                    name={`days_details[${index}].work_start_time`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <MobileTimePicker
+                        lang="ar"
+                        minutesStep="5"
+                        label={t('work start time')}
+                        value={myunitTime(values.days_details[index]?.work_start_time)}
+                        onChange={(newValue) => {
+                          const selectedTime = zonedTimeToUtc(
+                            newValue,
+                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                              ?.unit_service?.country?.time_zone ||
+                              Intl.DateTimeFormat().resolvedOptions().timeZone
+                          );
+                          field.onChange(selectedTime);
+                          setValue(`days_details[${index}].work_end_time`, null);
+                          processDayDetails(index);
+                        }}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`days_details[${index}].work_end_time`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <MobileTimePicker
+                        lang="ar"
+                        minutesStep="5"
+                        label={t('work end time')}
+                        value={myunitTime(values.days_details[index]?.work_end_time)}
+                        onChange={(newValue) => {
+                          const selectedTime = zonedTimeToUtc(
+                            newValue,
+                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                              ?.unit_service?.country?.time_zone ||
+                              Intl.DateTimeFormat().resolvedOptions().timeZone
+                          );
+                          field.onChange(selectedTime);
+                          processDayDetails(index);
+                        }}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`days_details[${index}].break_start_time`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <MobileTimePicker
+                        lang="ar"
+                        minutesStep="5"
+                        label={t('break start time')}
+                        value={myunitTime(values.days_details[index]?.break_start_time)}
+                        onChange={(newValue) => {
+                          const selectedTime = zonedTimeToUtc(
+                            newValue,
+                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                              ?.unit_service?.country?.time_zone ||
+                              Intl.DateTimeFormat().resolvedOptions().timeZone
+                          );
+                          setValue(`days_details[${index}].break_end_time`, null);
+                          field.onChange(selectedTime);
+                          processDayDetails(index);
+                        }}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`days_details[${index}].break_end_time`}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <MobileTimePicker
+                        lang="ar"
+                        minutesStep="5"
+                        label={t('break end time')}
+                        value={myunitTime(values.days_details[index]?.break_end_time)}
+                        onChange={(newValue) => {
+                          const selectedTime = zonedTimeToUtc(
+                            newValue,
+                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                              ?.unit_service?.country?.time_zone ||
+                              Intl.DateTimeFormat().resolvedOptions().timeZone
+                          );
+                          field.onChange(selectedTime);
+                          processDayDetails(index);
+                        }}
+                        slotProps={{
+                          textField: {
+                            size: 'small',
+                            fullWidth: true,
+                            error: !!error,
+                            helperText: error?.message,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </Stack>
+                <Stack
+                  direction={{ xs: 'column', md: 'row' }}
                   spacing={0.2}
                   sx={{ justifySelf: { xs: 'flex-end' }, alignSelf: { xs: 'flex-end' } }}
                 >
@@ -538,7 +503,13 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                       })
                     }
                   >
-                    <Iconify icon="tabler:list-details" />
+                    <Iconify
+                      icon={
+                        showAppointments[index]
+                          ? 'eva:arrow-ios-upward-fill'
+                          : 'eva:arrow-ios-downward-fill'
+                      }
+                    />
                   </IconButton>
                 </Stack>
               </Stack>

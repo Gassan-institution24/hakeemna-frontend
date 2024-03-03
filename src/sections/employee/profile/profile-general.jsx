@@ -100,14 +100,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
     defaultValues,
   });
   const {
-    getValues,
+    watch,
     setValue,
     handleSubmit,
     control,
     formState: { isSubmitting },
   } = methods;
 
-  const values = getValues();
+  const values = watch();
 
   const handleDrop = useCallback(
     (name, acceptedFiles) => {

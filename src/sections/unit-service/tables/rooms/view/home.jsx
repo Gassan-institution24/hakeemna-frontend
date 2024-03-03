@@ -99,6 +99,7 @@ export default function RoomsTableView() {
   const { roomsData, loading, refetch } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
+  console.log('roomsData', roomsData);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -162,8 +163,9 @@ export default function RoomsTableView() {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch( `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
-          { status: 'active' },
+        await axiosInstance.patch(
+          `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
+          { status: 'active' }
         );
         socket.emit('updated', {
           user,
@@ -183,8 +185,9 @@ export default function RoomsTableView() {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch( `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
-          { status: 'inactive' },
+        await axiosInstance.patch(
+          `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
+          { status: 'inactive' }
         );
         socket.emit('updated', {
           user,
@@ -204,8 +207,9 @@ export default function RoomsTableView() {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.rooms}/updatestatus`, /// edit
-        { status: 'active', ids: table.selected },
+      await axiosInstance.patch(
+        `${endpoints.tables.rooms}/updatestatus`, /// edit
+        { status: 'active', ids: table.selected }
       );
       socket.emit('updated', {
         user,
@@ -227,8 +231,9 @@ export default function RoomsTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.rooms}/updatestatus`, /// edit
-        { status: 'inactive', ids: table.selected },
+      await axiosInstance.patch(
+        `${endpoints.tables.rooms}/updatestatus`, /// edit
+        { status: 'inactive', ids: table.selected }
       );
       socket.emit('updated', {
         user,

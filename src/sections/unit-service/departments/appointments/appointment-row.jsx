@@ -168,7 +168,7 @@ export default function AppointmentsTableRow({
               Book Manually
             </MenuItem>
           )}
-        {status !== 'canceled' &&
+        {status === 'available' &&
           ACLGuard({ category: 'department', subcategory: 'appointments', acl: 'delete' }) && (
             <MenuItem
               onClick={() => {

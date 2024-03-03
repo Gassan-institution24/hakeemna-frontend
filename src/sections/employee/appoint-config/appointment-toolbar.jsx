@@ -12,7 +12,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useUnitTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
@@ -122,7 +121,7 @@ export default function ConfigTableToolbar({
             <IconButton onClick={popover.onOpen}>
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton>
-            {ACLGuard({
+            {/* {ACLGuard({
               category: 'employee',
               subcategory: 'appointment_configs',
               acl: 'update',
@@ -130,7 +129,7 @@ export default function ConfigTableToolbar({
               <IconButton onClick={onAdd}>
                 <Iconify icon="zondicons:add-outline" />
               </IconButton>
-            )}
+            )} */}
           </Stack>
         </Stack>
       </Stack>
