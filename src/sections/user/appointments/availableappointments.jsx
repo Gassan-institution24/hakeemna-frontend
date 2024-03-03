@@ -2,34 +2,37 @@ import isEqual from 'lodash/isEqual';
 import orderBy from 'lodash/orderBy';
 import { useState, useCallback } from 'react';
 
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
+// import Tab from '@mui/material/Tab';
+// import Tabs from '@mui/material/Tabs';
+// import { useParams } from 'react-router';
+
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetCities,
   useGetCountries,
   useGetInsuranceCos,
   useGetUnitservices,
-  useGetPaymentMethods,
   useGetAppointmentTypes,
+  useGetEmployeeBySpecialty,
 } from 'src/api';
 
-import Iconify from 'src/components/iconify';
+// import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 
 import AppointmentSort from './appointment-sort-user';
 import ClinicAppointmentList from './appointment-clinic';
 import AppointmentSearch from './appointment-search-user';
 import AppointmentFilters from './appointment-filters-user';
-import OnlineAppointmentList from './goToappointment-online';
+// import OnlineAppointmentList from './goToappointment-online';
 import AppointmentFiltersResult from './appointment-filters-result-user';
 
 // ----------------------------------------------------------------------
@@ -51,18 +54,18 @@ const defaultFilters = {
 export default function AppointmentBooking() {
   const settings = useSettingsContext();
   const { t } = useTranslate();
+  const { id } = useParams();
   const openFilters = useBoolean();
-  const { user } = useAuthContext();
   const [sortBy, setSortBy] = useState('rateing');
   const [search, setSearch] = useState();
-
-  // const { appointmentsData, refetch } = useGetAvailableAppointments();
-  const { countriesData, refetch } = useGetCountries();
+  // console.log(id);
+  const { data } = useGetEmployeeBySpecialty(id);
+  // console.log(data);
+  const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
   const { unitservicesData } = useGetUnitservices();
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { paymentMethodsData } = useGetPaymentMethods();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -74,7 +77,7 @@ export default function AppointmentBooking() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: unitservicesData,
+    inputData: data,
     filters,
     search,
     sortBy,
@@ -109,12 +112,12 @@ export default function AppointmentBooking() {
         // query={search.query}
         // results={search.results}
         onSearch={setSearch}
-        hrefItem={(id) => paths.dashboard.job.details(id)}
+        hrefItem={(idd) => paths.dashboard.job.details(idd)}
       />
 
       <Stack direction="row" spacing={1} flexShrink={0}>
         <AppointmentFilters
-          open={openFilters.value}
+          open={openFilters.value} 
           onOpen={openFilters.onTrue}
           onClose={openFilters.onFalse}
           //
@@ -131,7 +134,6 @@ export default function AppointmentBooking() {
           dataFiltered={dataFiltered}
           // usrate={usrate}
           appointmentTypeOptions={appointmenttypesData}
-          paymentMethodsOptions={paymentMethodsData}
           dateError={dateError}
         />
 
@@ -146,7 +148,7 @@ export default function AppointmentBooking() {
       citiesOptions={tableData}
       unitServicesOptions={unitservicesData}
       appointmentTypeOptions={appointmenttypesData}
-      paymentMethodsOptions={paymentMethodsData}
+      data={data}
       filters={filters}
       onResetFilters={handleResetFilters}
       //
@@ -157,22 +159,22 @@ export default function AppointmentBooking() {
     />
   );
 
-  const TABS = [
-    {
-      value: 'inclinic',
-      label: t('In clinic'),
-      icon: <Iconify icon="fa6-regular:hospital" width={24} />,
-    },
-    {
-      value: 'online',
-      label: t('Online'),
-      icon: <Iconify icon="streamline:online-medical-call-service" width={24} />,
-    },
-  ];
-  const [currentTab, setCurrentTab] = useState('inclinic');
-  const handleChangeTab = useCallback((event, newValue) => {
-    setCurrentTab(newValue);
-  }, []);
+  // const TABS = [
+  //   {
+  //     value: 'inclinic',
+  //     label: t('In clinic'),
+  //     icon: <Iconify icon="fa6-regular:hospital" width={24} />,
+  //   },
+  //   // {
+  //   //   value: 'online',
+  //   //   label: t('Online'),
+  //   //   icon: <Iconify icon="streamline:online-medical-call-service" width={24} />,
+  //   // },
+  // ];
+  // const [currentTab, setCurrentTab] = useState('inclinic');
+  // const handleChangeTab = useCallback((event, newValue) => {
+  // setCurrentTab(newValue);
+  // }, []);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -187,7 +189,7 @@ export default function AppointmentBooking() {
         {canReset && renderResults}
       </Stack>
       <Container>
-        <Tabs
+        {/* <Tabs
           value={currentTab}
           onChange={handleChangeTab}
           sx={{
@@ -198,14 +200,15 @@ export default function AppointmentBooking() {
             <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
           ))}
         </Tabs>
-        {currentTab === 'online' && (
+        {/* {currentTab === 'online' && (
           <OnlineAppointmentList
             patientData={user?.patient?._id}
             refetch={refetch}
             dataFiltered={dataFiltered}
           />
-        )}
-        {currentTab === 'inclinic' && <ClinicAppointmentList />}
+        // )} */}
+        {/* {currentTab === 'inclinic' && <ClinicAppointmentList />} */}
+        <ClinicAppointmentList />
       </Container>
     </Container>
   );
@@ -215,7 +218,8 @@ export default function AppointmentBooking() {
 
 function applyFilter({ inputData, search, comparator, filters, sortBy }) {
   const { insurance } = filters;
-
+  console.log(inputData, 'inputData')
+ 
   // SORT BY
   if (sortBy === 'rateing') {
     inputData = orderBy(inputData, ['rate'], ['desc']);
@@ -229,26 +233,16 @@ function applyFilter({ inputData, search, comparator, filters, sortBy }) {
   if (search) {
     inputData = inputData.filter(
       (data) =>
-        (data?.name_english &&
-          data?.name_english?.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
-        (data?.name_arabic &&
-          data?.name_arabic?.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
-        (data?.unit_service?.name_english &&
-          data?.unit_service?.name_english?.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
-        (data?.unit_service?.name_arabic &&
-          data?.unit_service?.name_arabic?.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
-        (data?.department?.name_english &&
-          data?.department?.name_english?.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
-        (data?.department?.name_english &&
-          data?.department?.name_arabic?.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
+        (data?.employee?.first_name &&
+          data?.employee?.first_name
+            // ?.toLowerCase()
+            ?.indexOf(search.toLowerCase()) !== -1) ||
         data?._id === search ||
         JSON.stringify(data.code) === search
     );
   }
 
-  // if (status !== 'all') {
-  //   inputData = inputData.filter((order) => order.status === status);
-  // }
+
   // console.log('inputData',inputData)
   return inputData;
 }

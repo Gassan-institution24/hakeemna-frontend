@@ -18,9 +18,9 @@ export default function AppointmentData() {
 
   return (
     <>
-      {/* {pendingAppointments.lenght > 0 ? ( */}
+
       <>
-        <Typography variant="h4" sx={{ mb: 2 }}>
+        <Typography variant="h4" sx={{ mb: 5 }}>
           {curLangAr ? 'مواعيدي' : 'My Appointments'}
         </Typography>
         <Box
@@ -34,13 +34,6 @@ export default function AppointmentData() {
           <Currentappoinment pendingAppointments={pendingAppointments} />
         </Box>
       </>
-      {/* ) : ( */}
-      {/* <Typography variant="h4" sx={{ mb: 2 }}>
-          {curLangAr ? 'لا يوجد لديك مواعيد اليوم' : ' No appointment for today'}
-        </Typography> */}
-      {/* )} */}
-
-      {/* {finishedAppointments ? ( */}
       <>
         <Divider sx={{ mb: 2 }} />
         <Typography variant="h4" sx={{ mb: 2 }}>
@@ -57,9 +50,7 @@ export default function AppointmentData() {
           <FinishedAppoinment />
         </Box>
       </>
-      {/* ) : ( */}
-      {/* '' */}
-      {/* )} */}
+
     </>
   );
 }
