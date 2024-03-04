@@ -45,14 +45,13 @@ export default function TableNewEditForm() {
     { id: 'birth_date', label: t('birth date') },
     { id: '', width: 88 },
   ];
-  
+
   const { user } = useAuthContext();
 
   const table = useTable({ defaultRowsPerPage: 10 });
 
   const unitServiceID =
     user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service._id;
-
 
   const [results, setResults] = useState([]);
   const [filters, setFilters] = useState({});
@@ -96,7 +95,7 @@ export default function TableNewEditForm() {
 
   const handleEmployment = async (row) => {
     try {
-      await axios.post(endpoints.tables.employeeEngagements, {
+      await axios.post(endpoints.employee_engagements.ones, {
         unit_service: unitServiceID,
         employee: row._id,
       });
@@ -116,7 +115,7 @@ export default function TableNewEditForm() {
   useEffect(() => {
     async function getExistEmployees() {
       if (Object.keys(filters).length) {
-        const { data } = await axios.post(endpoints.tables.findEmployee, {
+        const { data } = await axios.post(endpoints.employees.find, {
           unit_service:
             user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service
               ._id,

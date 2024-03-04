@@ -22,9 +22,8 @@ import FormProvider, { RHFTextField, RHFMultiSelect } from 'src/components/hook-
 
 // ----------------------------------------------------------------------
 
-export default function CountriesNewEditForm({ currentSelected }) {
+export default function SurgeriesNewEditForm({ currentSelected }) {
   const router = useRouter();
-
 
   const { tableData } = useGetDiseases();
 
@@ -89,9 +88,9 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentSelected) {
-        await axiosInstance.patch(endpoints.tables.surgery(currentSelected._id), data); /// edit
+        await axiosInstance.patch(endpoints.surgeries.one(currentSelected._id), data); /// edit
       } else {
-        await axiosInstance.post(endpoints.tables.surgeries, data); /// edit
+        await axiosInstance.post(endpoints.surgeries.all, data); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
@@ -171,6 +170,6 @@ export default function CountriesNewEditForm({ currentSelected }) {
   );
 }
 
-CountriesNewEditForm.propTypes = {
+SurgeriesNewEditForm.propTypes = {
   currentSelected: PropTypes.object,
 };

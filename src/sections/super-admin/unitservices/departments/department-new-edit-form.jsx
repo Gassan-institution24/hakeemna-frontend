@@ -13,7 +13,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 
-import axiosInstance,{ endpoints } from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
@@ -85,14 +85,11 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      
       if (currentTable) {
-        await axiosInstance.patch( endpoints.tables.department(currentTable._id),
-          {
-            unit_service: id,
-            ...data,
-          },
-        );
+        await axiosInstance.patch(endpoints.departments.one(currentTable._id), {
+          unit_service: id,
+          ...data,
+        });
         socket.emit('updated', {
           data,
           user,
@@ -100,12 +97,10 @@ export default function TableNewEditForm({ currentTable }) {
           msg: `updating department <strong>${data.name_english || ''}</strong>`,
         });
       } else {
-        const newDepartment = await axiosInstance.post( endpoints.tables.departments,
-          {
-            ...data,
-            unit_service: id,
-          },
-        );
+        const newDepartment = await axiosInstance.post(endpoints.departments.all, {
+          ...data,
+          unit_service: id,
+        });
         socket.emit('created', {
           data,
           user,

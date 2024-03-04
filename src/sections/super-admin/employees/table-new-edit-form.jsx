@@ -87,7 +87,7 @@ export default function UsersNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentSelected) {
-        await axiosInstance.patch(endpoints.tables.user(currentSelected._id), data); /// edit
+        await axiosInstance.patch(endpoints.auth.user(currentSelected._id), data); /// edit
       } else {
         await axiosInstance.post(endpoints.auth.register, {
           ...data,

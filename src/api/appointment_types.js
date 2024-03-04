@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetAppointmentTypes() {
-  const URL = endpoints.tables.appointmenttypes;
+  const URL = endpoints.appointment_types.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -25,7 +25,7 @@ export function useGetAppointmentTypes() {
   return { ...memoizedValue, refetch };
 }
 export function useGetAppointmentType(id) {
-  const URL = endpoints.tables.appointmenttype(id);
+  const URL = endpoints.appointment_types.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

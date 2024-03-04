@@ -162,7 +162,7 @@ export default function FreeSubscriptionTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.freesubscription(id)}/updatestatus`, /// edit
+        `${endpoints.free_subscriptions.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -173,7 +173,7 @@ export default function FreeSubscriptionTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.freesubscription(id)}/updatestatus`, /// edit
+        `${endpoints.free_subscriptions.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -184,7 +184,7 @@ export default function FreeSubscriptionTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.freesubscriptions}/updatestatus`, /// edit
+      `${endpoints.free_subscriptions.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -197,7 +197,7 @@ export default function FreeSubscriptionTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.freesubscriptions}/updatestatus`, /// edit
+      `${endpoints.free_subscriptions.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

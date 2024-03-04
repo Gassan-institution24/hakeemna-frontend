@@ -153,7 +153,7 @@ export default function MeasurmentTypesTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.measurmenttype(id)}/updatestatus`, /// edit
+        `${endpoints.measurment_types.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -164,7 +164,7 @@ export default function MeasurmentTypesTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.measurmenttype(id)}/updatestatus`, /// edit
+        `${endpoints.measurment_types.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -175,7 +175,7 @@ export default function MeasurmentTypesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.measurmenttypes}/updatestatus`, /// edit
+      `${endpoints.measurment_types.ones}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -188,7 +188,7 @@ export default function MeasurmentTypesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.measurmenttypes}/updatestatus`, /// edit
+      `${endpoints.measurment_types.ones}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

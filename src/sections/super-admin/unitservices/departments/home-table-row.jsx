@@ -55,13 +55,6 @@ export default function CountriesTableRow({
 
   const popover = usePopover();
   const DDL = usePopover();
-  // const { appointmentConfigCount } = useGetDepartmentAppointmentConfigsCount(row._id);
-  // const { activitiesCount } = useGetDepartmentActivitiesCount(row._id);
-  // const { appointmentsCount } = useGetDepartmentAppointmentsCount(row._id);
-  // const { economecMovementsCount } = useGetDepartmentEconomicMovementsCount(row._id);
-  // const { employeesCount } = useGetDepartmentEmployeesCount(row._id);
-  // const { feedbackCount } = useGetDepartmentFeedbackesCount(row._id);
-  // const { roomsCount } = useGetDepartmentRoomsCount(row._id);
 
   const renderPrimary = (
     <TableRow hover selected={selected}>

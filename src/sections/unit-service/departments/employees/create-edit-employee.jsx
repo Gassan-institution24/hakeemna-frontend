@@ -24,7 +24,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetCountries, useGetSpecialties, useGetEmployeeTypes } from 'src/api';
+import { useGetCountries, useGetSpecialties, useGetUSActiveEmployeeTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -42,7 +42,9 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
   const { user } = useAuthContext();
 
   const { countriesData } = useGetCountries();
-  const { employeeTypesData } = useGetEmployeeTypes();
+  const { employeeTypesData } = useGetUSActiveEmployeeTypes(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
   const { specialtiesData } = useGetSpecialties();
 
   const [phone, setPhone] = useState();
@@ -128,7 +130,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       // console.log('data', data);
 
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.hospital(currentTable._id), {
+        await axiosInstance.patch(endpoints.hospitals.one(currentTable._id), {
           role: 'employee',
           ...data,
         });

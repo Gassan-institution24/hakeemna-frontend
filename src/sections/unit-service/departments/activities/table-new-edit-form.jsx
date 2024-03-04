@@ -87,14 +87,14 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(`${endpoints.tables.activity(currentTable._id)}`, data);
+        await axiosInstance.patch(`${endpoints.activities.one(currentTable._id)}`, data);
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.activities.root(departmentData._id),
           msg: `editted an activity <strong>[ ${data.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } else {
-        await axiosInstance.post(`${endpoints.tables.activities}`, data);
+        await axiosInstance.post(`${endpoints.activities.all}`, data);
         socket.emit('created', {
           user,
           link: paths.unitservice.departments.activities.root(departmentData._id),

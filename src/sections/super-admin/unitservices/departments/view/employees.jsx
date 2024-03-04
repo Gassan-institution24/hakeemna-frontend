@@ -20,12 +20,12 @@ import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axiosInstance,{ endpoints } from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetDepartmentEmployees } from 'src/api';
+import { useGetDepartmentEmployeeEngs } from 'src/api';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
@@ -98,7 +98,7 @@ export default function EmployeesTableView({ departmentData }) {
 
   const router = useRouter();
 
-  const { employeesData, loading, refetch } = useGetDepartmentEmployees(departmentData._id);
+  const { employeesData, loading, refetch } = useGetDepartmentEmployeeEngs(departmentData._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -151,9 +151,9 @@ export default function EmployeesTableView({ departmentData }) {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch( `${endpoints.tables.employee(row._id)}/updatestatus`,
-          { status: 'active' },
-        );
+        await axiosInstance.patch(`${endpoints.employees.one(row._id)}/updatestatus`, {
+          status: 'active',
+        });
         socket.emit('updated', {
           user,
           link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
@@ -172,9 +172,9 @@ export default function EmployeesTableView({ departmentData }) {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch( `${endpoints.tables.employee(row._id)}/updatestatus`,
-          { status: 'inactive' },
-        );
+        await axiosInstance.patch(`${endpoints.employees.one(row._id)}/updatestatus`, {
+          status: 'inactive',
+        });
         socket.emit('updated', {
           user,
           link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
@@ -193,9 +193,10 @@ export default function EmployeesTableView({ departmentData }) {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.employees}/updatestatus`,
-        { status: 'active', ids: table.selected },
-      );
+      await axiosInstance.patch(`${endpoints.employees.all}/updatestatus`, {
+        status: 'active',
+        ids: table.selected,
+      });
       socket.emit('updated', {
         user,
         link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
@@ -226,9 +227,10 @@ export default function EmployeesTableView({ departmentData }) {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.employees}/updatestatus`,
-        { status: 'inactive', ids: table.selected },
-      );
+      await axiosInstance.patch(`${endpoints.employees.all}/updatestatus`, {
+        status: 'inactive',
+        ids: table.selected,
+      });
       socket.emit('updated', {
         user,
         link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),

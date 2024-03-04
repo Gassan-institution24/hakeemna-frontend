@@ -17,7 +17,11 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetSubscriptions, useGetPaymentMethods, useGetFreeSubscriptions } from 'src/api';
+import {
+  useGetFreeSubscriptions,
+  useGetActiveSubscriptions,
+  useGetActivePaymentMethods,
+} from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -27,10 +31,9 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function TableNewEditForm({ licenseMovementData, unitServiceData }) {
   const router = useRouter();
 
-
   const { freeSubscriptionsData } = useGetFreeSubscriptions();
-  const { subscriptionsData } = useGetSubscriptions();
-  const { paymentMethodsData } = useGetPaymentMethods();
+  const { subscriptionsData } = useGetActiveSubscriptions();
+  const { paymentMethodsData } = useGetActivePaymentMethods();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -77,11 +80,9 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (licenseMovementData) {
-        await axiosInstance.patch(endpoints.tables.licenseMovement(licenseMovementData._id), data
-        );
+        await axiosInstance.patch(endpoints.license_movements.one(licenseMovementData._id), data);
       } else {
-        await axiosInstance.post(endpoints.tables.licenseMovements, data
-        ); 
+        await axiosInstance.post(endpoints.license_movements.all, data);
       }
       reset();
       enqueueSnackbar(licenseMovementData ? 'Update success!' : 'Create success!');

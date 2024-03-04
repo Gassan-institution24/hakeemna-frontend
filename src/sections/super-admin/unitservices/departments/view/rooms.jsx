@@ -22,7 +22,7 @@ import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axiosInstance,{ endpoints } from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
@@ -160,8 +160,9 @@ export default function RoomsTableView({ departmentData }) {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch( `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
-          { status: 'active' },
+        await axiosInstance.patch(
+          `${endpoints.rooms.one(row._id)}/updatestatus`, /// edit
+          { status: 'active' }
         );
         socket.emit('updated', {
           user,
@@ -181,8 +182,9 @@ export default function RoomsTableView({ departmentData }) {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch( `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
-          { status: 'inactive' },
+        await axiosInstance.patch(
+          `${endpoints.rooms.one(row._id)}/updatestatus`, /// edit
+          { status: 'inactive' }
         );
         socket.emit('updated', {
           user,
@@ -202,8 +204,9 @@ export default function RoomsTableView({ departmentData }) {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.rooms}/updatestatus`, /// edit
-        { status: 'active', ids: table.selected },
+      await axiosInstance.patch(
+        `${endpoints.rooms.all}/updatestatus`, /// edit
+        { status: 'active', ids: table.selected }
       );
       socket.emit('updated', {
         user,
@@ -235,8 +238,9 @@ export default function RoomsTableView({ departmentData }) {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.rooms}/updatestatus`, /// edit
-        { status: 'inactive', ids: table.selected },
+      await axiosInstance.patch(
+        `${endpoints.rooms.all}/updatestatus`, /// edit
+        { status: 'inactive', ids: table.selected }
       );
       socket.emit('updated', {
         user,

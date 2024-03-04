@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetCountries() {
-  const URL = endpoints.tables.countries;
+  const URL = endpoints.countries.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -25,7 +25,7 @@ export function useGetCountries() {
   return { ...memoizedValue, refetch };
 }
 export function useGetCountry(id) {
-  const URL = endpoints.tables.country(id);
+  const URL = endpoints.countries.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

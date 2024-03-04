@@ -52,12 +52,12 @@ export default function NotificationsPopover() {
   const handleClick = async (id, link) => {
     drawer.onFalse();
     router.push(link);
-    await axios.patch(endpoints.tables.readNotification(id));
+    await axios.patch(endpoints.notifications.readOne(id));
     refetch();
   };
 
   const handleMarkAllAsRead = async () => {
-    await axios.patch(`${endpoints.tables.notifications}/read`, { ids: unread });
+    await axios.patch(`${endpoints.notifications.all}/read`, { ids: unread });
     setAllNotifications([]);
     setPage(1);
     refetch();

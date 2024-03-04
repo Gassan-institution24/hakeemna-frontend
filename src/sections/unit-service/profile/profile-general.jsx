@@ -22,10 +22,10 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetCities,
-  useGetUSTypes,
   useGetCountries,
   useGetUnitservice,
   useGetSpecialties,
+  useGetActiveUSTypes,
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -49,7 +49,7 @@ export default function AccountGeneral({ unitServiceData }) {
   );
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
-  const { unitserviceTypesData } = useGetUSTypes();
+  const { unitserviceTypesData } = useGetActiveUSTypes();
   const { specialtiesData } = useGetSpecialties();
 
   const { t } = useTranslate();
@@ -142,7 +142,7 @@ export default function AccountGeneral({ unitServiceData }) {
       if (companyLogo) {
         formData.append('company_logo_pic', companyLogo);
         await axios.patch(
-          `${endpoints.tables.unitservice(
+          `${endpoints.unit_services.one(
             user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
               ._id
           )}/updatelogo`,
@@ -155,7 +155,7 @@ export default function AccountGeneral({ unitServiceData }) {
         });
       }
       await axios.patch(
-        endpoints.tables.unitservice(
+        endpoints.unit_services.one(
           user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
         ),
         dataToSend
@@ -342,7 +342,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 <MenuItem value="public">{t('Public')}</MenuItem>
-                <MenuItem value="privet">{t('Privet')}</MenuItem>
+                <MenuItem value="private">{t('private')}</MenuItem>
                 <MenuItem value="charity">{t('Charity')}</MenuItem>
               </RHFSelect>
               <RHFTextField lang="ar" name="web_page" label={t('webpage')} />

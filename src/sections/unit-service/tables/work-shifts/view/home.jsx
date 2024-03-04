@@ -47,7 +47,7 @@ import {
 } from 'src/components/table'; /// edit
 import { useSnackbar } from 'notistack';
 
-import axiosInstance,{ endpoints } from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -157,8 +157,9 @@ export default function WorkGroupsTableView() {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch( `${endpoints.tables.workshift(row._id)}/updatestatus`, /// edit
-          { status: 'active' },
+        await axiosInstance.patch(
+          `${endpoints.work_shifts.one(row._id)}/updatestatus`, /// edit
+          { status: 'active' }
         );
         socket.emit('updated', {
           user,
@@ -178,8 +179,9 @@ export default function WorkGroupsTableView() {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch( `${endpoints.tables.workshift(row._id)}/updatestatus`, /// edit
-          { status: 'inactive' },
+        await axiosInstance.patch(
+          `${endpoints.work_shifts.one(row._id)}/updatestatus`, /// edit
+          { status: 'inactive' }
         );
         socket.emit('updated', {
           user,
@@ -199,8 +201,9 @@ export default function WorkGroupsTableView() {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.workshifts}/updatestatus`, /// edit
-        { status: 'active', ids: table.selected },
+      await axiosInstance.patch(
+        `${endpoints.work_shifts.all}/updatestatus`, /// edit
+        { status: 'active', ids: table.selected }
       );
       socket.emit('updated', {
         user,
@@ -230,8 +233,9 @@ export default function WorkGroupsTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.workshifts}/updatestatus`, /// edit
-        { status: 'inactive', ids: table.selected },
+      await axiosInstance.patch(
+        `${endpoints.work_shifts.all}/updatestatus`, /// edit
+        { status: 'inactive', ids: table.selected }
       );
       socket.emit('updated', {
         user,

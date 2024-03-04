@@ -26,7 +26,6 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function CitiesNewEditForm({ currentCity }) {
   const router = useRouter();
 
-
   const { countriesData } = useGetCountries();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -82,9 +81,9 @@ export default function CitiesNewEditForm({ currentCity }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentCity) {
-        await axiosInstance.patch(endpoints.tables.city(currentCity._id), data);
+        await axiosInstance.patch(endpoints.cities.one(currentCity._id), data);
       } else {
-        await axiosInstance.post(endpoints.tables.cities, data);
+        await axiosInstance.post(endpoints.cities.all, data);
       }
       reset();
       enqueueSnackbar(currentCity ? 'Update success!' : 'Create success!');

@@ -52,7 +52,7 @@ export default function Oldpatientsdata() {
 
   const yesFunction = async () => {
     try {
-      // const existingDataResponse = await axios.get(endpoints.tables.patient(user.patient._id));
+      // const existingDataResponse = await axios.get(endpoints.patients.one(user.patient._id));
       // const existingData = existingDataResponse.data;
 
       const newData = { ...oldpatientsdata[0] };
@@ -63,7 +63,7 @@ export default function Oldpatientsdata() {
         }
       });
 
-     await axios.patch(endpoints.tables.patient(user.patient._id), newData);
+      await axios.patch(endpoints.patients.one(user.patient._id), newData);
 
       enqueueSnackbar(t('Thanks for your cooperation, data saved to profile successfully'), {
         variant: 'success',

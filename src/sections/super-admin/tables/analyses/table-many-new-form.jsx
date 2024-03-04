@@ -119,7 +119,7 @@ export default function NewEditManyForm() {
       return;
     }
     try {
-      await axiosInstance.post(endpoints.tables.manyAnalyses, data);
+      await axiosInstance.post(endpoints.analyses.many, data);
       router.push(paths.superadmin.tables.analysis.root); /// edit
     } catch (e) {
       console.log(e);

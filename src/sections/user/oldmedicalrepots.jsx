@@ -251,19 +251,19 @@ export default function OldMedicalReports() {
       validateSize: isValidSize,
     };
   };
-  const handleDrop = (acceptedFiles) => {
-    const file = acceptedFiles[0];
-    const fileValidator = fuser(file.size);
-    if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
-      setFiles(file); // Save the file in state
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-      setValue('file', newFile);
-    } else {
-      enqueueSnackbar('Invalid file type or size', { variant: 'error' });
-    }
-  };
+  // const handleDrop = (acceptedFiles) => {
+  //   const file = acceptedFiles[0];
+  //   const fileValidator = fuser(file.size);
+  //   if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
+  //     setFiles(file); // Save the file in state
+  //     const newFile = Object.assign(file, {
+  //       preview: URL.createObjectURL(file),
+  //     });
+  //     setValue('file', newFile);
+  //   } else {
+  //     enqueueSnackbar('Invalid file type or size', { variant: 'error' });
+  //   }
+  // };
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
       const filee = values.file || uploadedFiles;

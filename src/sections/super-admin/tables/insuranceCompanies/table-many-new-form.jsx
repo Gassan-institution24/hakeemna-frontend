@@ -125,7 +125,7 @@ export default function NewEditManyForm() {
       return;
     }
     try {
-      await axiosInstance.post(endpoints.insuranceCos.many, data);
+      await axiosInstance.post(endpoints.insurance_companies.many, data);
       router.push(paths.superadmin.tables.insurancecomapnies.root); /// edit
     } catch (e) {
       console.log(e);

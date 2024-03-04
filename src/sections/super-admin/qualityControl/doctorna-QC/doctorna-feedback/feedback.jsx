@@ -141,7 +141,7 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
   const handleRead = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.feedback(id)}/updatestatus`, /// edit
+        `${endpoints.feedbacks.one(id)}/updatestatus`, /// edit
         { status: 'read' }
       );
       refetch();
@@ -153,7 +153,7 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
   const handleUnread = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.feedback(id)}/updatestatus`, /// edit
+        `${endpoints.feedbacks.one(id)}/updatestatus`, /// edit
         { status: 'not read' }
       );
       refetch();

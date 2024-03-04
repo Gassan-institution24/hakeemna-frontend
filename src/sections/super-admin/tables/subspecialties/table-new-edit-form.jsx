@@ -26,7 +26,6 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-
   const { specialtiesData } = useGetSpecialties();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -82,9 +81,9 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.subspeciality(currentTable._id), data);
+        await axiosInstance.patch(endpoints.subspecialities.one(currentTable._id), data);
       } else {
-        await axiosInstance.post(endpoints.tables.subspecialties, data);
+        await axiosInstance.post(endpoints.subspecialities.all, data);
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');

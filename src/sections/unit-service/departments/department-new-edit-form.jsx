@@ -84,7 +84,7 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.department(currentTable._id), {
+        await axiosInstance.patch(endpoints.departments.one(currentTable._id), {
           unit_service:
             user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
               ._id,
@@ -97,7 +97,7 @@ export default function TableNewEditForm({ currentTable }) {
           msg: `updating department <strong>${data.name_english || ''}</strong>`,
         });
       } else {
-        const newDepartment = await axiosInstance.post(endpoints.tables.departments, {
+        const newDepartment = await axiosInstance.post(endpoints.departments.all, {
           ...data,
           unit_service:
             user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
