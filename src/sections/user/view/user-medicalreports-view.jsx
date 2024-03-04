@@ -82,7 +82,9 @@ export default function UserCardList() {
           <Medicalreports user={user?.patient._id} />
         </Box>
       )}
+
       {currentTab === 'oldmedicaloeports' && <OldMedicalReports user={user?.patient._id} />}
+
       {currentTab === 'bmi' && <Bmi />}
     </Container>
   );
