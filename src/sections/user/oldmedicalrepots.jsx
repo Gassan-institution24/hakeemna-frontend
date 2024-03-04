@@ -30,6 +30,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axios from 'src/utils/axios';
 import { fDate } from 'src/utils/format-time';
 
+import { useGetSpecialties } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -48,13 +49,12 @@ export default function OldMedicalReports() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [files, setFiles] = useState(null);
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-
   const [filesPdf, setfilesPdf] = useState([]);
   const [filesPdftodelete, setfilesPdftodelete] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
+  const { specialtiesData } = useGetSpecialties();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,7 +84,7 @@ export default function OldMedicalReports() {
       });
     }
   };
-
+// console.log(specialty);
   const styles = StyleSheet.create({
     icon: {
       color: 'blue',
@@ -133,7 +133,7 @@ export default function OldMedicalReports() {
   const oldMedicalReportsSchema = Yup.object().shape({
     type: Yup.string().required(),
     date: Yup.date().required('Date is required'),
-    file: Yup.array().required(),
+    file: Yup.string().required(),
     name: Yup.string().required('File name is required'),
     note: Yup.string(),
     agree: Yup.boolean().required(),
@@ -141,7 +141,6 @@ export default function OldMedicalReports() {
   });
 
   const TYPE = ['Blod Test', 'X-ray Test', 'Health Check Test', 'Heart examination Test'];
-  const SPECIALTY = ['Bones', 'Heart'];
 
   const defaultValues = {
     type: '',
@@ -209,7 +208,7 @@ export default function OldMedicalReports() {
     ),
     [styles]
   );
-
+  // console.log(info,"dfdfdf")
   MedicalreportsnPDF.propTypes = {
     info: PropTypes.shape({
       type: PropTypes.string.isRequired,
@@ -228,13 +227,11 @@ export default function OldMedicalReports() {
   });
   const {
     setValue,
-    getValues,
     control,
     reset,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-  const values = getValues();
 
   const fuser = (fuserSize) => {
     const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif', '.pdf'];
@@ -251,42 +248,31 @@ export default function OldMedicalReports() {
       validateSize: isValidSize,
     };
   };
-  // const handleDrop = (acceptedFiles) => {
-  //   const file = acceptedFiles[0];
-  //   const fileValidator = fuser(file.size);
-  //   if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
-  //     setFiles(file); // Save the file in state
-  //     const newFile = Object.assign(file, {
-  //       preview: URL.createObjectURL(file),
-  //     });
-  //     setValue('file', newFile);
-  //   } else {
-  //     enqueueSnackbar('Invalid file type or size', { variant: 'error' });
-  //   }
-  // };
-  const handleDropMultiFile = useCallback(
-    (acceptedFiles) => {
-      const filee = values.file || uploadedFiles;
-      // const newFiles = acceptedFiles.map((file) =>
-        // Object.assign(file, {
-        //   preview: URL.createObjectURL(file),
-        // })
-      // );
-      const updatedFiles = [...filee, ...acceptedFiles];
-      setUploadedFiles(updatedFiles);
-      setValue('file', updatedFiles, {
-        shouldValidate: true,
+  // Inside the AccountGeneral component
+  const handleDrop = (acceptedFiles) => {
+    const file = acceptedFiles[0];
+
+    // Validate file before setting the profile picture
+    const fileValidator = fuser(file.size);
+
+    if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
+      setFiles(file); // Save the file in state
+      const newFile = Object.assign(file, {
+        preview: URL.createObjectURL(file),
       });
-    },
-    [setValue, values.file, uploadedFiles]
-  );
+      setValue('file', newFile);
+    } else {
+      // Handle invalid file type or size
+      enqueueSnackbar('Invalid file type or size', { variant: 'error' });
+    }
+  };
 
   const onSubmit = async (data) => {
     const formData = new FormData();
-    // const filesPath = files ? files.path.replace(/\\/g, '//') : '';
-    // Object.keys(data).forEach((key) => {
-    //   formData.append(key, key === 'file' ? filesPath : data[key]);
-    // });
+    const filesPath = files ? files.path.replace(/\\/g, '//') : '';
+    Object.keys(data).forEach((key) => {
+      formData.append(key, key === 'file' ? filesPath : data[key]);
+    });
 
     if (files) {
       formData.append('medicalreports', files);
@@ -305,8 +291,6 @@ export default function OldMedicalReports() {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
-
- 
   return (
     <>
       <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ gap: 1, mb: 5 }}>
@@ -347,9 +331,9 @@ export default function OldMedicalReports() {
               PaperPropsSx={{ textTransform: 'capitalize' }}
               sx={{ mb: 1 }}
             >
-              {SPECIALTY.map((test) => (
-                <MenuItem value={test} key={test._id} sx={{ mb: 1 }}>
-                  {test}
+              {specialtiesData.map((test) => (
+                <MenuItem value={test?._id} key={test._id} sx={{ mb: 1 }}>
+                  {test?.name_english}
                 </MenuItem>
               ))}
             </RHFSelect>
@@ -373,25 +357,12 @@ export default function OldMedicalReports() {
             />
             <RHFUpload
               autoFocus
-              multiple
               fullWidth
-              maxSize={3145728}
-              onDrop={handleDropMultiFile}
               name="file"
               margin="dense"
               sx={{ mb: 1 }}
               variant="outlined"
-              // onDrop={handleDrop}
-              onRemove={(inputFile) => {
-                setValue('file', values.file && values.file?.filter((file) => file !== inputFile), {
-                  shouldValidate: true,
-                });
-                setUploadedFiles(uploadedFiles.filter((file) => file !== inputFile));
-              }}
-              onRemoveAll={() => {
-                setValue('file', [], { shouldValidate: true });
-                setUploadedFiles([]);
-              }}
+              onDrop={handleDrop}
             />
             <RHFTextField lang="en" name="note" label={t('More information')} />
           </DialogContent>

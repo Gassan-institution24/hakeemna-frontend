@@ -69,7 +69,10 @@ export default function AppointmentBooking() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const sortOptions = [{ value: 'rateing', label: t('Rateing') }];
+  const sortOptions = [
+    { value: 'rateing', label: t('Rateing') },
+    // { value: 'rateing', label: t('Nearst') }
+  ];
 
   const dateError =
     filters.Offer_start_date && filters.Offer_end_date
@@ -208,7 +211,7 @@ export default function AppointmentBooking() {
           />
         // )} */}
         {/* {currentTab === 'inclinic' && <ClinicAppointmentList />} */}
-        <ClinicAppointmentList />
+        <ClinicAppointmentList doc={dataFiltered} />
       </Container>
     </Container>
   );
@@ -218,29 +221,43 @@ export default function AppointmentBooking() {
 
 function applyFilter({ inputData, search, comparator, filters, sortBy }) {
   const { insurance } = filters;
-  console.log(inputData, 'inputData');
+  const { countries } = filters;
+  // console.log(inputData, 'inputData1');
 
   // SORT BY
   if (sortBy === 'rateing') {
-    inputData = orderBy(inputData, ['rate'], ['desc']);
+    inputData = orderBy(inputData, ['employee.rate'], ['desc']);
   }
   if (insurance !== 'all') {
     inputData = inputData.filter(
-      (data) => data?.insurance && data?.insurance?.some((insur) => insur._id === insurance)
+      (data) =>
+        data?.unit_service?.insurance &&
+        data?.unit_service?.insurance?.some((insur) => insur._id === insurance)
+    );
+  }
+  if (countries !== 'all') {
+    inputData = inputData.filter(
+      (data) => data?.unit_service && data?.unit_service?.country?._id === countries
     );
   }
 
   if (search) {
     inputData = inputData.filter(
       (data) =>
-        (data?.employee?.first_name &&
-          data?.employee?.first_name
-            // ?.toLowerCase()
+        (data?.employee &&
+          data?.employee?.first_name.toLowerCase()
+            ?.indexOf(search.toLowerCase()) !== -1) ||
+        (data?.unit_service &&
+          data?.unit_service?.name_arabic
+            ?.indexOf(search.toLowerCase()) !== -1) ||
+        (data?.unit_service &&
+          data?.unit_service?.name_english.toLowerCase()
             ?.indexOf(search.toLowerCase()) !== -1) ||
         data?._id === search ||
         JSON.stringify(data.code) === search
     );
   }
+
 
   // console.log('inputData',inputData)
   return inputData;
