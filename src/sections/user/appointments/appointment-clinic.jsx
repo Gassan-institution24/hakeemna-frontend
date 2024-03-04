@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 
@@ -10,20 +11,23 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 import DoctorCard from './doctorCard';
 
-export default function AppointmetClinic() {
+export default function AppointmetClinic({doc}) {
   const params = useParams();
 
   const { id } = params;
-  const { data, loading } = useGetEmployeeBySpecialty(id);
+  const {  loading } = useGetEmployeeBySpecialty(id);
 
   if (loading) {
     return <LoadingScreen />;
   }
   return (
-    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
-      {data?.map((info, forkey) => (
-        <DoctorCard key={forkey} info={info} />
+    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'column', md: '1fr 1fr' } }}>
+      {doc?.map((info, forkey) => (
+        <DoctorCard  key={forkey} info={info} />
       ))}
     </Box>
   );
 }
+AppointmetClinic.propTypes = {
+  doc: PropTypes.object,
+};
