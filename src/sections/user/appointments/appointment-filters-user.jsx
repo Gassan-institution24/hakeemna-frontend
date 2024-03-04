@@ -59,19 +59,6 @@ export default function AppointmentsFilters({
   );
  
 
-  // const handleFilterStartDate = useCallback(
-  //   (e) => {
-  //     onFilters('start_date', e.target.value);
-  //   },
-  //   [onFilters]
-  // );
-  // const handleFilterEndDate = useCallback(
-  //   (e) => {
-  //     onFilters('end_date', e.target.value);
-  //   },
-  //   [onFilters]
-  // );
-
   const renderHead = (
     <Stack
       direction="row"
@@ -97,28 +84,7 @@ export default function AppointmentsFilters({
     </Stack>
   );
 
-  // const renderDate = (
-  //   <Stack>
-  //     <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-  //       {t('Time')}
-  //     </Typography>
-  //     <Stack spacing={2.5}>
-  //       <DatePicker label={t('From')} value={filters.start_date} onChange={handleFilterStartDate} />
-
-  //       <DatePicker
-  //         label={t('To')}
-  //         value={filters.end_date}
-  //         onChange={handleFilterEndDate}
-  //         slotProps={{
-  //           textField: {
-  //             error: dateError,
-  //             helperText: dateError && 'To time must be later than start date',
-  //           },
-  //         }}
-  //       />
-  //     </Stack>
-  //   </Stack>
-  // );
+ 
 
   const renderappointtypes = (
     <FormControl>
