@@ -16,6 +16,7 @@ import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
 export default function DoctorCard({ info }) {
+  console.log(info);
   const { nearstappointment } = useGetNearstAppointment(info._id);
 
   const router = useRouter();
@@ -28,10 +29,8 @@ export default function DoctorCard({ info }) {
       sx={{
         margin: 5,
         padding: 2,
-        width: { md: '50%', xs: '100%' },
         borderRadius: 2,
         display: 'flex',
-        flexDirection: { md: 'row', xs: 'row' },
         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
         gap: 1,
       }}
@@ -54,17 +53,25 @@ export default function DoctorCard({ info }) {
           <Typography sx={{ fontSize: 13 }}>{info?.employee?.first_name}</Typography>&nbsp;
           <Typography sx={{ fontSize: 13 }}>{info?.employee?.family_name}</Typography>
         </Box>
-        <Typography sx={{ fontSize: 13, color: 'grey' }}>
+        <Typography sx={{ fontSize: 12, color: 'grey' }}>
           {info?.employee?.speciality?.name_english}
         </Typography>
         <Box sx={{ position: 'relative', left: '-0.1%', mt: 1 }}>
-          <Typography sx={{ fontSize: 14 }}>
-            <Iconify width={18} sx={{ color: 'info.main' }} icon="openmoji:hospital" />{' '}
-            {info?.unit_service?.name_english}
+          <Typography sx={{ fontSize: 13 }}>
+            <Iconify width={18} icon="openmoji:hospital" />{' '}
+            <span style={{ position: 'relative', top: -3 }}>
+              {info?.unit_service?.name_english}
+            </span>
           </Typography>
-          <Typography sx={{ fontSize: 14 }}>
+          <Typography sx={{ fontSize: 13 }}>
             <Iconify width={18} sx={{ color: 'info.main' }} icon="mdi:location" />{' '}
-            {info?.unit_service?.address}
+            <span style={{ position: 'relative', top: -3 }}>
+              {info?.unit_service?.city?.name_english} - {info?.unit_service?.country?.name_english}
+            </span>
+          </Typography>
+          <Typography sx={{ fontSize: 13 }}>
+            <Iconify width={18} icon="flat-color-icons:cell-phone" />{' '}
+            <span style={{ position: 'relative', top: -3 }}>{info?.unit_service?.phone}</span>
           </Typography>
         </Box>
       </Box>
@@ -76,7 +83,9 @@ export default function DoctorCard({ info }) {
             sx={{ bgcolor: 'rgb(231, 231, 231)', borderRadius: 0 }}
             onClick={() => handleViewRow(info?._id)}
           >
-            {`${fDm(nearstappointment?.start_time)} - ${fTime(nearstappointment?.start_time)}`}
+            <Typography sx={{ fontSize: 14 }}>{`${fDm(nearstappointment?.start_time)} - ${fTime(
+              nearstappointment?.start_time
+            )}`}</Typography>
           </Button>
         ) : (
           <Button disabled sx={{ fontSize: 13 }}>
