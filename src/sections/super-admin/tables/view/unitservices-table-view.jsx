@@ -83,7 +83,7 @@ const STATUS_OPTIONS = [
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
   // { value: 'public', label: 'public' },
-  // { value: 'privet', label: 'privet' },
+  // { value: 'private', label: 'private' },
   // { value: 'charity', label: 'charity' },
 ];
 
@@ -151,7 +151,7 @@ export default function UnitServicesTableView() {
   };
   const handleActivate = useCallback(
     async (id) => {
-      await axiosInstance.patch(`${endpoints.tables.unitservice(id)}/updatestatus`, {
+      await axiosInstance.patch(`${endpoints.unit_services.one(id)}/updatestatus`, {
         status: 'active',
       });
       refetch();
@@ -161,7 +161,7 @@ export default function UnitServicesTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosInstance.patch(`${endpoints.tables.unitservice(id)}/updatestatus`, {
+      await axiosInstance.patch(`${endpoints.unit_services.one(id)}/updatestatus`, {
         status: 'inactive',
       });
       refetch();
@@ -171,7 +171,7 @@ export default function UnitServicesTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    axiosInstance.patch(`${endpoints.tables.unitservices}`, {
+    axiosInstance.patch(`${endpoints.unit_services.all}`, {
       status: 'active',
       ids: table.selected,
     });
@@ -184,7 +184,7 @@ export default function UnitServicesTableView() {
   }, [dataFiltered.length, dataInPage.length, table, unitservicesData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    axiosInstance.patch(`${endpoints.tables.unitservices}`, {
+    axiosInstance.patch(`${endpoints.unit_services.all}`, {
       status: 'inactive',
       ids: table.selected,
     });
@@ -290,7 +290,7 @@ export default function UnitServicesTableView() {
                       (tab.value === 'active' && 'success') ||
                       (tab.value === 'inactive' && 'error') ||
                       // (tab.value === 'public' && 'success') ||
-                      // (tab.value === 'privet' && 'error') ||
+                      // (tab.value === 'private' && 'error') ||
                       // (tab.value === 'charity' && 'success') ||
                       'default'
                     }
@@ -302,8 +302,8 @@ export default function UnitServicesTableView() {
                       unitservicesData.filter((order) => order.status === 'inactive').length}
                     {/* {tab.value === 'public' &&
                       unitservicesData.filter((order) => order.sector_type === 'public').length}
-                    {tab.value === 'privet' &&
-                      unitservicesData.filter((order) => order.sector_type === 'privet').length}
+                    {tab.value === 'private' &&
+                      unitservicesData.filter((order) => order.sector_type === 'private').length}
                     {tab.value === 'charity' &&
                       unitservicesData.filter((order) => order.sector_type === 'charity').length} */}
                   </Label>

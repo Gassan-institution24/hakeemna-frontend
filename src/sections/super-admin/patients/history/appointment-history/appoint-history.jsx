@@ -162,7 +162,7 @@ export default function AppointHistoryView({ patientData }) {
 
   const handleCancelRow = useCallback(
     async (id) => {
-      await axiosInstance.patch(`${endpoints.tables.appointment(id)}/cancel`);
+      await axiosInstance.patch(`${endpoints.appointments.one(id)}/cancel`);
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -170,12 +170,8 @@ export default function AppointHistoryView({ patientData }) {
   );
   const handleCancelRows = useCallback(
     async (id) => {
-      await axiosInstance.patch(`${endpoints.tables.appointments}/cancel`,
-        { ids: table.selected },
-      );
-      await axiosInstance.patch(`${endpoints.tables.appointments}/cancel`,
-        { ids: table.selected },
-      );
+      await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, { ids: table.selected });
+      await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, { ids: table.selected });
       refetch();
       table.onUpdatePageDeleteRows({
         totalRows: appointmentsData.length,

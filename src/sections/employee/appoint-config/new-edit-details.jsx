@@ -14,7 +14,7 @@ import { useUnitTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSWorkShifts, useGetEmployeeWorkGroups } from 'src/api';
+import { useGetUSActiveWorkShifts, useGetEmployeeActiveWorkGroups } from 'src/api';
 
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
 
@@ -43,10 +43,10 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
 
   const { user } = useAuthContext();
 
-  const { workGroupsData } = useGetEmployeeWorkGroups(
+  const { workGroupsData } = useGetEmployeeActiveWorkGroups(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   );
-  const { workShiftsData } = useGetUSWorkShifts(
+  const { workShiftsData } = useGetUSActiveWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 

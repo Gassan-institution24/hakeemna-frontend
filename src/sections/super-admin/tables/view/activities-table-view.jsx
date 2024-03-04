@@ -154,7 +154,7 @@ export default function ActivitesTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.activity(id)}/updatestatus`, /// edit
+        `${endpoints.activities.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -165,7 +165,7 @@ export default function ActivitesTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.activity(id)}/updatestatus`, /// edit
+        `${endpoints.activities.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -176,7 +176,7 @@ export default function ActivitesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.activities}/updatestatus`, /// edit
+      `${endpoints.activities.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -189,7 +189,7 @@ export default function ActivitesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.activities}/updatestatus`, /// edit
+      `${endpoints.activities.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

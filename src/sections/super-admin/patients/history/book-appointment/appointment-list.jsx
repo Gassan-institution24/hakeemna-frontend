@@ -7,7 +7,7 @@ import Pagination, { paginationClasses } from '@mui/material/Pagination';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import axiosInstance,{ endpoints } from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import AppointmentItem from './appointment-item';
 
@@ -24,9 +24,9 @@ export default function AppointmentList({ patientData, appointments, refetch }) 
   );
   const handleBook = useCallback(
     async (id) => {
-      await axiosInstance.patch(`${endpoints.tables.appointment(id)}/book`,
-        { patient: patientData._id },
-      );
+      await axiosInstance.patch(`${endpoints.appointments.one(id)}/book`, {
+        patient: patientData._id,
+      });
       refetch();
     },
     [patientData._id, refetch]

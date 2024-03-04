@@ -18,10 +18,10 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { RouterLink } from 'src/routes/components';
 
-import axiosInstance,{ endpoints } from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // import { useTranslate } from 'src/locales';
-import { useGetInsuranceCos } from 'src/api';
+import { useGetActiveInsuranceCos } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -69,7 +69,7 @@ const STATUS_OPTIONS = [
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
   // { value: 'public', label: 'public' },
-  // { value: 'privet', label: 'privet' },
+  // { value: 'private', label: 'private' },
   // { value: 'charity', label: 'charity' },
 ];
 
@@ -85,11 +85,11 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { insuranseCosData, loading } = useGetInsuranceCos();
+  const { insuranseCosData, loading } = useGetActiveInsuranceCos();
 
-  const filteredInsuranceCos = insuranseCosData
-    .filter((company) => !unitServiceData?.insurance?.some((data) => data._id === company._id))
-    .filter((data) => data.status === 'active');
+  const filteredInsuranceCos = insuranseCosData.filter(
+    (company) => !unitServiceData?.insurance?.some((data) => data._id === company._id)
+  );
 
   const dateError =
     filters.startDate && filters.endDate
@@ -149,8 +149,9 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
       }
       const info = [...unitServiceData.insurance, id];
 
-      await axiosInstance.patch(endpoints.tables.unitservice(unitServiceData?._id), /// to edit
-        { insurance: info },
+      await axiosInstance.patch(
+        endpoints.unit_services.one(unitServiceData?._id), /// to edit
+        { insurance: info }
       );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage?.length);
@@ -160,8 +161,9 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
   const handleDeleteRow = useCallback(
     async (id) => {
       const info = unitServiceData?.insurance?.filter((company) => company?._id !== id);
-      await axiosInstance.patch(endpoints.tables.unitservice(unitServiceData?._id), /// to edit
-        { insurance: info },
+      await axiosInstance.patch(
+        endpoints.unit_services.one(unitServiceData?._id), /// to edit
+        { insurance: info }
       );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage?.length);

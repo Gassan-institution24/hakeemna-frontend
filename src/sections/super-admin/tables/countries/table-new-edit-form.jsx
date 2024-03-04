@@ -15,7 +15,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import axiosInstance,{ endpoints } from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
@@ -24,7 +24,6 @@ import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook
 
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
-
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -76,15 +75,10 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      
       if (currentSelected) {
-        await axiosInstance.patch( endpoints.tables.country(currentSelected._id),
-          data
-        ); /// edit
+        await axiosInstance.patch(endpoints.countries.one(currentSelected._id), data); /// edit
       } else {
-        await axiosInstance.post( endpoints.tables.countries,
-          data,
-        ); /// edit
+        await axiosInstance.post(endpoints.countries.all, data); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

@@ -137,7 +137,7 @@ export default function TableNewEditForm({ acl }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       // console.log('data', data);
-      axios.patch(endpoints.tables.employeeEngagement(employeeId), { acl: data });
+      axios.patch(endpoints.employee_engagements.one(employeeId), { acl: data });
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.acl(employeeId),

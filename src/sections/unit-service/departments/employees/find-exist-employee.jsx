@@ -93,7 +93,7 @@ export default function TableNewEditForm({ departmentData }) {
 
   const handleEmployment = async (row) => {
     try {
-      await axios.post(endpoints.tables.employeeEngagements, {
+      await axios.post(endpoints.employee_engagements.ones, {
         unit_service:
           user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
         department: departmentData._id,
@@ -115,7 +115,7 @@ export default function TableNewEditForm({ departmentData }) {
   useEffect(() => {
     async function getExistEmployees() {
       if (Object.keys(filters).length) {
-        const { data } = await axios.post(endpoints.tables.findEmployee, {
+        const { data } = await axios.post(endpoints.employees.find, {
           unit_service:
             user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service
               ._id,

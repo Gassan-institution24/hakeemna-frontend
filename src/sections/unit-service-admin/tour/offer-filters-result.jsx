@@ -6,8 +6,8 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
-import { useGetCities } from 'src/api';
-import { useGetStackholder } from 'src/api/user';
+import { useGetCities, useGetStakeholders } from 'src/api';
+// import { useGetStakeholders } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
@@ -26,7 +26,7 @@ export default function TourFiltersResult({
 }) {
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
-  const { stakeholder } = useGetStackholder();
+  const { stakeholder } = useGetStakeholders();
   const handleRemoveServices = (inputValue) => {
     const newValue = filters.stakeholder.filter((item) => item._id !== inputValue._id);
     onFilters('stakeholder', newValue);

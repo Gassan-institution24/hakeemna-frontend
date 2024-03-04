@@ -20,9 +20,9 @@ import {
   useGetCities,
   useGetCountries,
   useGetInsuranceCos,
-  useGetUnitservices,
   useGetAppointmentTypes,
-  useGetEmployeeBySpecialty,
+  useGetActiveUnitservices,
+  useGetEmployeeEngsBySpecialty,
 } from 'src/api';
 
 // import Iconify from 'src/components/iconify';
@@ -59,12 +59,12 @@ export default function AppointmentBooking() {
   const [sortBy, setSortBy] = useState('rateing');
   const [search, setSearch] = useState();
   // console.log(id);
-  const { data } = useGetEmployeeBySpecialty(id);
+  const { data } = useGetEmployeeEngsBySpecialty(id);
   // console.log(data);
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
-  const { unitservicesData } = useGetUnitservices();
+  const { unitservicesData } = useGetActiveUnitservices();
   const { appointmenttypesData } = useGetAppointmentTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -258,6 +258,7 @@ function applyFilter({ inputData, search, comparator, filters, sortBy }) {
     );
   }
 
-  // console.log('inputData2', inputData);
+
+  // console.log('inputData',inputData)
   return inputData;
 }

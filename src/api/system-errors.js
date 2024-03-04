@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetSystemErrors() {
-  const URL = endpoints.tables.systemErrors;
+  const URL = endpoints.systemErrors.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -25,7 +25,7 @@ export function useGetSystemErrors() {
   return { ...memoizedValue, refetch };
 }
 export function useGetSystemError(id) {
-  const URL = endpoints.tables.systemError(id);
+  const URL = endpoints.systemErrors.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

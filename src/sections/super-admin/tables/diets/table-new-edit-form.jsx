@@ -76,9 +76,9 @@ export default function TableNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentSelected) {
-        await axiosInstance.patch(endpoints.tables.diet(currentSelected._id), data); /// edit
+        await axiosInstance.patch(endpoints.diets.one(currentSelected._id), data); /// edit
       } else {
-        await axiosInstance.post(endpoints.tables.diets, data); /// edit
+        await axiosInstance.post(endpoints.diets.ones, data); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

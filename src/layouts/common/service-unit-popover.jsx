@@ -59,7 +59,7 @@ export default function ServiceUnitPopover() {
 
   const handleChangeUS = async () => {
     try {
-      await axios.patch(endpoints.tables.employee(user?.employee?._id), {
+      await axios.patch(endpoints.employees.one(user?.employee?._id), {
         selected_engagement: selectedIndex,
       });
       window.location.reload();

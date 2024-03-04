@@ -79,9 +79,9 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.room(currentTable._id), data);
+        await axiosInstance.patch(endpoints.rooms.one(currentTable._id), data);
       } else {
-        await axiosInstance.post(endpoints.tables.rooms, data);
+        await axiosInstance.post(endpoints.rooms.all, data);
       }
       reset();
       // if (response.status.includes(200, 304)) {

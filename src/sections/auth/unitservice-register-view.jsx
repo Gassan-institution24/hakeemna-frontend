@@ -36,7 +36,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetCities, useGetUSTypes, useGetCountries, useGetSpecialties } from 'src/api';
+import { useGetCities, useGetCountries, useGetSpecialties, useGetActiveUSTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -57,14 +57,13 @@ export default function JwtRegisterView() {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [page, setPage] = useState(0);
   const [cities, setCities] = useState([]);
-  const [us_phone, setUSphone] = useState();
+  // const [us_phone, setUSphone] = useState();
   const [em_phone, setEMphone] = useState();
 
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
-  const { unitserviceTypesData } = useGetUSTypes();
+  const { unitserviceTypesData } = useGetActiveUSTypes();
   const { specialtiesData } = useGetSpecialties();
-  // const { employeeTypesData } = useGetEmployeeTypes();
 
   const searchParams = useSearchParams();
 
@@ -358,7 +357,7 @@ export default function JwtRegisterView() {
         <Tooltip placement="top" title="service unit sector type">
           <RHFSelect lang="ar" name="us_sector_type" label={t('sector type')}>
             <MenuItem value="public">{t('Public')}</MenuItem>
-            <MenuItem value="privet">{t('Privet')}</MenuItem>
+            <MenuItem value="private">{t('private')}</MenuItem>
             <MenuItem value="non profit organization">{t('non profit organization')}</MenuItem>
           </RHFSelect>
         </Tooltip>

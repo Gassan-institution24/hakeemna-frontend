@@ -140,7 +140,7 @@ export default function DoctornaSystemErrorsView() {
   const handleRead = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.systemError(id)}/updatestatus`, /// edit
+        `${endpoints.systemErrors.one(id)}/updatestatus`, /// edit
         { status: 'read' }
       );
       refetch();
@@ -152,7 +152,7 @@ export default function DoctornaSystemErrorsView() {
   const handleUnread = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.systemError(id)}/updatestatus`, /// edit
+        `${endpoints.systemErrors.one(id)}/updatestatus`, /// edit
         { status: 'not read' }
       );
       refetch();

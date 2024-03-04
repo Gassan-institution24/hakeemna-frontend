@@ -71,9 +71,9 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.paymentmethod(currentTable._id), data);
+        await axiosInstance.patch(endpoints.payment_methods.one(currentTable._id), data);
       } else {
-        await axiosInstance.post(endpoints.tables.paymentmethods, data);
+        await axiosInstance.post(endpoints.payment_methods.all, data);
       }
       reset();
       // if (response.status.includes(200, 304)) {

@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[49],{25282:(e,t,n)=>{n.r(t),n.d(t,{default:()=>r});var i=n(6907),s=n(27031),a=n(45220),c=n(80184);function r(){return(0,c.jsxs)(s.Z,{hasContent:!0,category:"employee",subcategory:"appointment_configs",acl:"create",children:[(0,c.jsxs)(i.ql,{children:[(0,c.jsx)("title",{children:" New Appointment Config"}),(0,c.jsx)("meta",{name:"description",content:"meta"})]}),(0,c.jsx)(a.Z,{})]})}}}]);
-//# sourceMappingURL=49.f202b314.chunk.js.map

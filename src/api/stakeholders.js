@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetStakeholders() {
-  const URL = endpoints.tables.stakeholders;
+  const URL = endpoints.stakeholders.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -26,7 +26,7 @@ export function useGetStakeholders() {
 }
 
 export function useGetStakeholder(id) {
-  const URL = endpoints.tables.stakeholder(id);
+  const URL = endpoints.stakeholders.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

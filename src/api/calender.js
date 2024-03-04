@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetEmployeeCalender(id) {
-  const URL = endpoints.tables.employeeCalender(id);
+  const URL = endpoints.calender.employee.all(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -26,7 +26,7 @@ export function useGetEmployeeCalender(id) {
 }
 
 export function useGetPatientCalender(id) {
-  const URL = endpoints.tables.patientCalender(id);
+  const URL = endpoints.calender.patient.all(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

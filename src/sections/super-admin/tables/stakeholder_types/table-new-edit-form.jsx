@@ -16,7 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetUnitservices, useGetServiceTypes } from 'src/api';
+import { useGetActiveUnitservices, useGetActiveServiceTypes } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -26,9 +26,8 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-
-  const { unitservicesData } = useGetUnitservices();
-  const { serviceTypesData } = useGetServiceTypes();
+  const { unitservicesData } = useGetActiveUnitservices();
+  const { serviceTypesData } = useGetActiveServiceTypes();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -85,9 +84,9 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.stakeholdertype(currentTable._id), data);
+        await axiosInstance.patch(endpoints.stakeholder_types.one(currentTable._id), data);
       } else {
-        await axiosInstance.post(endpoints.tables.stakeholdertypes, data);
+        await axiosInstance.post(endpoints.stakeholder_types.all, data);
       }
       reset();
       // if (response.status.includes(200, 304)) {

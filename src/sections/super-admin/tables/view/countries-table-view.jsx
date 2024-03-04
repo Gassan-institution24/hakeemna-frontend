@@ -156,7 +156,7 @@ export default function CountriesTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.country(id)}/updatestatus`, /// to edit
+        `${endpoints.countries.one(id)}/updatestatus`, /// to edit
         { status: 'active' }
       );
       refetch();
@@ -168,7 +168,7 @@ export default function CountriesTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.country(id)}/updatestatus`, /// to edit
+        `${endpoints.countries.one(id)}/updatestatus`, /// to edit
         { status: 'inactive' }
       );
       refetch();
@@ -179,7 +179,7 @@ export default function CountriesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.countries}/updatestatus`, /// to edit
+      `${endpoints.countries.all}/updatestatus`, /// to edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -192,7 +192,7 @@ export default function CountriesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.countries}/updatestatus`, /// edit
+      `${endpoints.countries.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

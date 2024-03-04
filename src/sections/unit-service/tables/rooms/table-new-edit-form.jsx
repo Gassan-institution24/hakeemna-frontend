@@ -17,8 +17,8 @@ import { useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useGetUSDepartments } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetUSActiveDepartments } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -34,7 +34,7 @@ export default function TableNewEditForm({ currentTable }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
-  const { departmentsData } = useGetUSDepartments(
+  const { departmentsData } = useGetUSActiveDepartments(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
 
@@ -92,7 +92,7 @@ export default function TableNewEditForm({ currentTable }) {
     try {
       //
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.room(currentTable._id), {
+        await axiosInstance.patch(endpoints.rooms.one(currentTable._id), {
           // modifications_nums: (currentTable.modifications_nums || 0) + 1,
           // ip_address_user_modification: address.data.IPv4,
           // user_modification: user._id,
@@ -104,7 +104,7 @@ export default function TableNewEditForm({ currentTable }) {
           msg: `updated a room <strong>${data.name_english || ''}</strong>`,
         });
       } else {
-        await axiosInstance.post(endpoints.tables.rooms, {
+        await axiosInstance.post(endpoints.rooms.all, {
           // ip_address_user_creation: address.data.IPv4,
           // user_creation: user._id,
           ...data,

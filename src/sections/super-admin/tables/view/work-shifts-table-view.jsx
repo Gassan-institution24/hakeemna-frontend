@@ -155,7 +155,7 @@ export default function WorkShiftsTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.workshift(id)}/updatestatus`, /// edit
+        `${endpoints.work_shifts.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -166,7 +166,7 @@ export default function WorkShiftsTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.workshift(id)}/updatestatus`, /// edit
+        `${endpoints.work_shifts.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -177,7 +177,7 @@ export default function WorkShiftsTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.workshifts}/updatestatus`, /// edit
+      `${endpoints.work_shifts.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -190,7 +190,7 @@ export default function WorkShiftsTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.workshifts}/updatestatus`, /// edit
+      `${endpoints.work_shifts.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

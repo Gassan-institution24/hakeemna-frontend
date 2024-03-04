@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetDiets() {
-  const URL = endpoints.tables.diets;
+  const URL = endpoints.diets.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -25,7 +25,7 @@ export function useGetDiets() {
   return { ...memoizedValue, refetch };
 }
 export function useGetDiet(id) {
-  const URL = endpoints.tables.diet(id);
+  const URL = endpoints.diets.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

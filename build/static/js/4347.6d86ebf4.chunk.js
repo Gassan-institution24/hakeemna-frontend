@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[4347],{24149:(e,t,s)=>{s.r(t),s.d(t,{default:()=>a});var i=s(6907),n=s(99423),r=s(80184);function a(){return(0,r.jsxs)(r.Fragment,{children:[(0,r.jsxs)(i.ql,{children:[(0,r.jsx)("title",{children:" Jwt: Register"}),(0,r.jsx)("meta",{name:"description",content:"meta"})]}),(0,r.jsx)(n.$y,{})]})}}}]);
-//# sourceMappingURL=4347.6d86ebf4.chunk.js.map
