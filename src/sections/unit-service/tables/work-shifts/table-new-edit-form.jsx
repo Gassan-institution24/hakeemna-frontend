@@ -90,14 +90,14 @@ export default function TableNewEditForm({ currentTable }) {
       // console.log('data', data);
 
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.workshift(currentTable._id), data);
+        await axiosInstance.patch(endpoints.work_shifts.one(currentTable._id), data);
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.workshifts.root,
           msg: `updated a work shift <strong>${data.name_english || ''}</strong>`,
         });
       } else {
-        await axiosInstance.post(endpoints.tables.workshifts, data);
+        await axiosInstance.post(endpoints.work_shifts.all, data);
         socket.emit('created', {
           user,
           link: paths.unitservice.tables.workshifts.root,

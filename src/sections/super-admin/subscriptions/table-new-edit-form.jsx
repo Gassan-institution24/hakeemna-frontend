@@ -17,7 +17,7 @@ import { useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
-import { useGetCities, useGetUSTypes, useGetCountries, useGetSpecialties } from 'src/api';
+import { useGetCities, useGetCountries, useGetSpecialties, useGetActiveUSTypes } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -29,9 +29,8 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { t } = useTranslate();
 
-
   const { countriesData } = useGetCountries();
-  const { unitserviceTypesData } = useGetUSTypes();
+  const { unitserviceTypesData } = useGetActiveUSTypes();
   const { tableData } = useGetCities();
   const { specialtiesData } = useGetSpecialties();
 
@@ -117,9 +116,9 @@ export default function TableNewEditForm({ currentTable }) {
       // };
       // // console.log("modifiedData",data)
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.subscription(currentTable._id), data);
+        await axiosInstance.patch(endpoints.subscriptions.one(currentTable._id), data);
       } else {
-        await axiosInstance.post(endpoints.tables.subscriptions, data);
+        await axiosInstance.post(endpoints.subscriptions.all, data);
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');

@@ -157,7 +157,7 @@ export default function SubscriptionTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.subscription(id)}/updatestatus`, /// edit
+        `${endpoints.subscriptions.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -168,7 +168,7 @@ export default function SubscriptionTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.subscription(id)}/updatestatus`, /// edit
+        `${endpoints.subscriptions.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -179,7 +179,7 @@ export default function SubscriptionTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.subscriptions}/updatestatus`, /// edit
+      `${endpoints.subscriptions.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -192,7 +192,7 @@ export default function SubscriptionTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.subscriptions}/updatestatus`, /// edit
+      `${endpoints.subscriptions.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

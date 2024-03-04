@@ -18,7 +18,7 @@ import axios, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetCountries, useGetSpecialties, useGetEmployeeTypes } from 'src/api';
+import { useGetCountries, useGetSpecialties, useGetUSActiveEmployeeTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -36,12 +36,13 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { countriesData } = useGetCountries();
-  const { employeeTypesData } = useGetEmployeeTypes();
-  const { specialtiesData } = useGetSpecialties();
-
   const { user } = useAuthContext();
 
+  const { countriesData } = useGetCountries();
+  const { specialtiesData } = useGetSpecialties();
+  const { employeeTypesData } = useGetUSActiveEmployeeTypes(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
   const { t } = useTranslate();
 
   // console.log('employeeData', employeeData);
@@ -134,7 +135,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       });
 
       // console.log('formData', formData);
-      await axios.patch(endpoints.tables.employee(employeeData._id), formData);
+      await axios.patch(endpoints.employees.one(employeeData._id), formData);
       enqueueSnackbar('Update success!');
       refetch();
     } catch (error) {

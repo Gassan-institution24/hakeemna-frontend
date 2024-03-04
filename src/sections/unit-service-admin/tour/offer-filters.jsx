@@ -13,8 +13,8 @@ import Typography from '@mui/material/Typography';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { useGetCities } from 'src/api';
-import { useGetStackholder } from 'src/api/user';
+import { useGetCities, useGetStakeholder } from 'src/api';
+// import { useGetStakeholder } from 'src/api/user';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -39,7 +39,7 @@ export default function TourFilters({
   dateError,
 }) {
   const { tableData } = useGetCities();
-  const { stakeholder } = useGetStackholder();
+  const { stakeholder } = useGetStakeholder();
   // console.log(stakeholder);
   const handleFilterStack = useCallback(
     (newValue) => {

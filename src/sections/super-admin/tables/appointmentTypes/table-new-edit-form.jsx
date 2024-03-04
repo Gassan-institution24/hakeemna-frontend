@@ -13,8 +13,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-// import { useGetUnitservices } from 'src/api';
-
+// import { useGetActiveUnitservices } from 'src/api';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -26,8 +25,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-
-  // const {unitservicesData}=useGetUnitservices()
+  // const {unitservicesData}=useGetActiveUnitservices()
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -79,15 +77,10 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      
       if (currentTable) {
-        await axiosInstance.patch( endpoints.tables.appointmenttype(currentTable._id),
-          data
-        );
+        await axiosInstance.patch(endpoints.appointment_types.one(currentTable._id), data);
       } else {
-        await axiosInstance.post( endpoints.tables.appointmenttypes,
-          data,
-        );
+        await axiosInstance.post(endpoints.appointment_types.all, data);
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');

@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetFreeSubscriptions() {
-  const URL = endpoints.tables.freesubscriptions;
+  const URL = endpoints.free_subscriptions.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -25,7 +25,7 @@ export function useGetFreeSubscriptions() {
   return { ...memoizedValue, refetch };
 }
 export function useGetFreeSubscription(id) {
-  const URL = endpoints.tables.freesubscription(id);
+  const URL = endpoints.free_subscriptions.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

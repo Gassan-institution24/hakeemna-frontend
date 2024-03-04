@@ -160,7 +160,7 @@ export default function InsuranceCompaniesTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.insuranceCo(id)}/updatestatus`, /// edit
+        `${endpoints.insurance_companies.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -171,7 +171,7 @@ export default function InsuranceCompaniesTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.insuranceCo(id)}/updatestatus`, /// edit
+        `${endpoints.insurance_companies.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -182,7 +182,7 @@ export default function InsuranceCompaniesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.insuranceCos}/updatestatus`, /// edit
+      `${endpoints.insurance_companies.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -195,7 +195,7 @@ export default function InsuranceCompaniesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.insuranceCos}/updatestatus`, /// edit
+      `${endpoints.insurance_companies.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

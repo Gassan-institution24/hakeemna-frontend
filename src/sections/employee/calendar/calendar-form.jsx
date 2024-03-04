@@ -73,10 +73,10 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
     try {
       if (!dateError) {
         if (currentEvent?._id) {
-          await axiosInstance.patch(`${endpoints.tables.calender}/${currentEvent?._id}`, eventData);
+          await axiosInstance.patch(`${endpoints.calender.all}/${currentEvent?._id}`, eventData);
           enqueueSnackbar('Update success!');
         } else {
-          await axiosInstance.post(endpoints.tables.calender, eventData);
+          await axiosInstance.post(endpoints.calender.all, eventData);
           enqueueSnackbar('Create success!');
         }
         refetch();
@@ -91,7 +91,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
   const onDelete = useCallback(async () => {
     try {
-      await axiosInstance.delete(`${endpoints.tables.calender}/${currentEvent?._id}`);
+      await axiosInstance.delete(`${endpoints.calender.all}/${currentEvent?._id}`);
       enqueueSnackbar('Delete success!');
       refetch();
       onClose();

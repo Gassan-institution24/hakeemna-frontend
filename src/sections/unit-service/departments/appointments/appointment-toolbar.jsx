@@ -13,7 +13,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSWorkShifts, useGetDepartmentWorkGroups } from 'src/api';
+import { useGetUSActiveWorkShifts, useGetDepartmentActiveWorkGroups } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -34,8 +34,8 @@ export default function AppointmentToolbar({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { workGroupsData } = useGetDepartmentWorkGroups(id);
-  const { workShiftsData } = useGetUSWorkShifts(
+  const { workGroupsData } = useGetDepartmentActiveWorkGroups(id);
+  const { workShiftsData } = useGetUSActiveWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
 

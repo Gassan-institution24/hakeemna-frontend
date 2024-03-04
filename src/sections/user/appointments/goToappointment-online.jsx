@@ -7,16 +7,16 @@ import { useCallback } from 'react';
 // import { paths } from 'src/routes/paths';
 // import { useRouter } from 'src/routes/hooks';
 
-import axiosInstance,{ endpoints } from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetUnitservices } from 'src/api';
+import { useGetActiveUnitservices } from 'src/api';
 
 import OnlineAppointmentList from './appointment-online';
 
 // ----------------------------------------------------------------------
 
 export default function AppointmentItem({ patientData, refetch }) {
-  const { unitservicesData, loading } = useGetUnitservices();
+  const { unitservicesData, loading } = useGetActiveUnitservices();
   // const router = useRouter();
   // const handleView = useCallback(
   //   (id) => {
@@ -27,9 +27,7 @@ export default function AppointmentItem({ patientData, refetch }) {
 
   const handleBook = useCallback(
     async (id) => {
-      await axiosInstance.patch(`${endpoints.tables.appointment(id)}/book`,
-        { patient: patientData },
-      );
+      await axiosInstance.patch(`${endpoints.appointments.one(id)}/book`, { patient: patientData });
       refetch();
     },
     [patientData, refetch]

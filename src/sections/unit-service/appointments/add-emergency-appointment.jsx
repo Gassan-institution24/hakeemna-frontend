@@ -23,10 +23,10 @@ import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
-  useGetUSWorkGroups,
-  useGetUSWorkShifts,
-  useGetUSServiceTypes,
   useGetAppointmentTypes,
+  useGetUSActiveWorkGroups,
+  useGetUSActiveWorkShifts,
+  useGetUSActiveServiceTypes,
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -43,13 +43,13 @@ export default function BookManually({ onClose, refetch, ...other }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSServiceTypes(
+  const { serviceTypesData } = useGetUSActiveServiceTypes(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
-  const { workGroupsData } = useGetUSWorkGroups(
+  const { workGroupsData } = useGetUSActiveWorkGroups(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
-  const { workShiftsData } = useGetUSWorkShifts(
+  const { workShiftsData } = useGetUSActiveWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
@@ -83,7 +83,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const appoint = await axios.post(endpoints.tables.appointments, {
+      const appoint = await axios.post(endpoints.appointments.all, {
         ...data,
         emergency: true,
         unit_service:

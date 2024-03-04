@@ -16,7 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetWorkShifts, useGetUnitservices, useGetMeasurmentTypes } from 'src/api';
+import { useGetWorkShifts, useGetActiveUnitservices, useGetActiveMeasurmentTypes } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -27,8 +27,8 @@ export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
   // console.log('currentt', currentTable);
-  const { unitservicesData } = useGetUnitservices();
-  const { measurmentTypesData } = useGetMeasurmentTypes();
+  const { unitservicesData } = useGetActiveUnitservices();
+  const { measurmentTypesData } = useGetActiveMeasurmentTypes();
   const { workShiftsData } = useGetWorkShifts();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -88,9 +88,9 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.servicetype(currentTable._id), data);
+        await axiosInstance.patch(endpoints.service_types.one(currentTable._id), data);
       } else {
-        await axiosInstance.post(endpoints.tables.servicetypes, data);
+        await axiosInstance.post(endpoints.service_types.all, data);
       }
       reset();
       // if (response.status.includes(200, 304)) {

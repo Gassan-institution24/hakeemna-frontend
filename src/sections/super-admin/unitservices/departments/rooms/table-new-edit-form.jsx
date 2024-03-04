@@ -87,7 +87,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.room(currentTable._id), {
+        await axiosInstance.patch(endpoints.rooms.one(currentTable._id), {
           department: departmentData._id,
           ...data,
         });
@@ -100,7 +100,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           }</strong> department`,
         });
       } else {
-        await axiosInstance.post(endpoints.tables.rooms, {
+        await axiosInstance.post(endpoints.rooms.all, {
           department: departmentData._id,
           ...data,
         });

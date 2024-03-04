@@ -147,7 +147,7 @@ export default function RoomsTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.room(id)}/updatestatus`, /// edit
+        `${endpoints.rooms.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -158,7 +158,7 @@ export default function RoomsTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.room(id)}/updatestatus`, /// edit
+        `${endpoints.rooms.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -169,7 +169,7 @@ export default function RoomsTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.rooms}/updatestatus`, /// edit
+      `${endpoints.rooms.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -182,7 +182,7 @@ export default function RoomsTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.rooms}/updatestatus`, /// edit
+      `${endpoints.rooms.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

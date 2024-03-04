@@ -21,7 +21,7 @@ import { useUnitTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSServiceTypes, useGetAppointmentTypes } from 'src/api';
+import { useGetAppointmentTypes, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -59,7 +59,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const [showAppointments, setShowAppointments] = useState({});
   const [appointmentsNum, setAppointmentsNum] = useState({});
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSServiceTypes(
+  const { serviceTypesData } = useGetUSActiveServiceTypes(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 

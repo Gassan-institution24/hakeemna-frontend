@@ -26,7 +26,6 @@ import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/compo
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
 
-
   const { categories } = useGetCategories();
 
   const { tableData } = useGetSymptoms();
@@ -96,9 +95,9 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentSelected) {
-        await axiosInstance.patch(endpoints.tables.disease(currentSelected._id), data); /// edit
+        await axiosInstance.patch(endpoints.diseases.one(currentSelected._id), data); /// edit
       } else {
-        await axiosInstance.post(endpoints.tables.diseases, data); /// edit
+        await axiosInstance.post(endpoints.diseases.all, data); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

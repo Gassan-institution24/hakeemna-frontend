@@ -154,7 +154,7 @@ export default function HospitalsTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.hospital(id)}/updatestatus`, /// edit
+        `${endpoints.hospitals.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -165,7 +165,7 @@ export default function HospitalsTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.hospital(id)}/updatestatus`, /// edit
+        `${endpoints.hospitals.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -176,7 +176,7 @@ export default function HospitalsTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.hospitals}/updatestatus`, /// edit
+      `${endpoints.hospitals.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -189,7 +189,7 @@ export default function HospitalsTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.hospitals}/updatestatus`, /// edit
+      `${endpoints.hospitals.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

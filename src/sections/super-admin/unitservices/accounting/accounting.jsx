@@ -70,7 +70,7 @@ const STATUS_OPTIONS = [
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
   // { value: 'public', label: 'public' },
-  // { value: 'privet', label: 'privet' },
+  // { value: 'private', label: 'private' },
   // { value: 'charity', label: 'charity' },
 ];
 

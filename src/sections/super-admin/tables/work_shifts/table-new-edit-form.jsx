@@ -17,7 +17,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetUnitservices } from 'src/api';
+import { useGetActiveUnitservices } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -27,7 +27,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const { unitservicesData } = useGetUnitservices();
+  const { unitservicesData } = useGetActiveUnitservices();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -82,9 +82,9 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(`${endpoints.tables.workshift(currentTable._id)}`, data);
+        await axiosInstance.patch(`${endpoints.work_shifts.one(currentTable._id)}`, data);
       } else {
-        await axiosInstance.post(`${endpoints.tables.workshifts}`, data);
+        await axiosInstance.post(`${endpoints.work_shifts.all}`, data);
       }
       reset();
       // if (response.status.includes(200, 304)) {

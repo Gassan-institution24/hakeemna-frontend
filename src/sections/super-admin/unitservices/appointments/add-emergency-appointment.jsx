@@ -24,10 +24,10 @@ import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
-  useGetUSWorkGroups,
-  useGetUSWorkShifts,
-  useGetUSServiceTypes,
   useGetAppointmentTypes,
+  useGetUSActiveWorkGroups,
+  useGetUSActiveWorkShifts,
+  useGetUSActiveServiceTypes,
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -46,9 +46,9 @@ export default function BookManually({ onClose, refetch, ...other }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSServiceTypes(id);
-  const { workGroupsData } = useGetUSWorkGroups(id);
-  const { workShiftsData } = useGetUSWorkShifts(id);
+  const { serviceTypesData } = useGetUSActiveServiceTypes(id);
+  const { workGroupsData } = useGetUSActiveWorkGroups(id);
+  const { workShiftsData } = useGetUSActiveWorkShifts(id);
 
   // console.log('workGroupsData', workGroupsData);
 
@@ -80,7 +80,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const appoint = await axios.post(endpoints.tables.appointments, {
+      const appoint = await axios.post(endpoints.appointments.all, {
         ...data,
         emergency: true,
         unit_service: id,
