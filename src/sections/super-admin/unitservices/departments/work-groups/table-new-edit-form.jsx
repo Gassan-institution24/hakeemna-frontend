@@ -20,7 +20,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetDepartmentEmployees } from 'src/api';
+import { useGetDepartmentActiveEmployeeEngs } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
@@ -38,7 +38,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const { user } = useAuthContext();
 
-  const { employeesData } = useGetDepartmentEmployees(departmentData._id);
+  const { employeesData } = useGetDepartmentActiveEmployeeEngs(departmentData._id);
 
   const [selectedEmployees, setSelectedEmployees] = useState([]);
 
@@ -95,7 +95,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.workgroup(currentTable._id), data);
+        await axiosInstance.patch(endpoints.work_groups.one(currentTable._id), data);
         socket.emit('updated', {
           data,
           user,
@@ -105,7 +105,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           }</strong> department`,
         });
       } else {
-        await axiosInstance.post(endpoints.tables.workgroups, data);
+        await axiosInstance.post(endpoints.work_groups.all, data);
         socket.emit('created', {
           data,
           user,

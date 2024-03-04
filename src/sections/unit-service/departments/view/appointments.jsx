@@ -19,6 +19,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -32,13 +33,12 @@ import { useGetAppointmentTypes, useGetDepartmentAppointments } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { RouterLink } from 'src/routes/components';
 import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
   emptyRows,
@@ -196,7 +196,7 @@ export default function AppointmentsView({ departmentData }) {
   const handleCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch(`${endpoints.tables.appointment(row._id)}/cancel`);
+        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/cancel`);
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.appointments(departmentData._id),
@@ -217,7 +217,7 @@ export default function AppointmentsView({ departmentData }) {
   const handleDelayRow = useCallback(
     async (row, min) => {
       try {
-        await axiosInstance.patch(`${endpoints.tables.appointment(row._id)}/delay`, {
+        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/delay`, {
           minutes: min,
         });
         socket.emit('updated', {
@@ -241,7 +241,7 @@ export default function AppointmentsView({ departmentData }) {
   const handleUnCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch(`${endpoints.tables.appointment(row._id)}/uncancel`);
+        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/uncancel`);
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.appointments(departmentData._id),
@@ -261,7 +261,7 @@ export default function AppointmentsView({ departmentData }) {
 
   const handleCancelRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.appointments}/cancel`, { ids: table.selected });
+      await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, { ids: table.selected });
       socket.emit('updated', {
         user,
         link: paths.unitservice.departments.appointments(departmentData._id),
@@ -292,7 +292,7 @@ export default function AppointmentsView({ departmentData }) {
 
   const handleDelayRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.appointments}/delay`, {
+      await axiosInstance.patch(`${endpoints.appointments.all}/delay`, {
         ids: table.selected,
         minutes: minToDelay,
       });
@@ -328,7 +328,7 @@ export default function AppointmentsView({ departmentData }) {
 
   const handleUnCancelRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.appointments}/uncancel`, {
+      await axiosInstance.patch(`${endpoints.appointments.all}/uncancel`, {
         ids: table.selected,
       });
       socket.emit('updated', {

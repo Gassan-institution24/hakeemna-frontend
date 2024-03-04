@@ -27,8 +27,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetCountries,
   useGetSpecialties,
-  useGetUSDepartments,
-  useGetUSEmployeeTypes,
+  useGetUSActiveDepartments,
+  useGetUSActiveEmployeeTypes,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -47,12 +47,12 @@ export default function TableNewEditForm({ currentTable }) {
   const { user } = useAuthContext();
 
   const { countriesData } = useGetCountries();
-  const { employeeTypesData } = useGetUSEmployeeTypes(
+  const { employeeTypesData } = useGetUSActiveEmployeeTypes(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
   
   const { specialtiesData } = useGetSpecialties();
-  const { departmentsData } = useGetUSDepartments(
+  const { departmentsData } = useGetUSActiveDepartments(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
 

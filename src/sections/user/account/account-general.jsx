@@ -162,7 +162,7 @@ export default function AccountGeneral({ data, refetch }) {
     }
 
     try {
-      await axios.patch(`${endpoints.tables.patient(user?.patient._id)}`, formData);
+      await axios.patch(`${endpoints.patients.one(user?.patient._id)}`, formData);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
       setTimeout(() => {
         window.location.reload();

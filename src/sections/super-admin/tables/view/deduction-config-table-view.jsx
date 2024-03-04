@@ -160,7 +160,7 @@ export default function DeductionConfigTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.deduction(id)}/updatestatus`, /// edit
+        `${endpoints.deductions.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -171,7 +171,7 @@ export default function DeductionConfigTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.deduction(id)}/updatestatus`, /// edit
+        `${endpoints.deductions.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -182,7 +182,7 @@ export default function DeductionConfigTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.deductions}/updatestatus`, /// edit
+      `${endpoints.deductions.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -195,7 +195,7 @@ export default function DeductionConfigTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.deductions}/updatestatus`, /// edit
+      `${endpoints.deductions.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

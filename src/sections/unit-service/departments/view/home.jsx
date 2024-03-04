@@ -21,7 +21,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axiosInstance,{ endpoints } from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
@@ -152,9 +152,9 @@ export default function UnitServicesTableView() {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch( `${endpoints.tables.department(row._id)}/updatestatus`,
-          { status: 'active' },
-        );
+        await axiosInstance.patch(`${endpoints.departments.one(row._id)}/updatestatus`, {
+          status: 'active',
+        });
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.info(row._id),
@@ -173,9 +173,9 @@ export default function UnitServicesTableView() {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch( `${endpoints.tables.department(row._id)}/updatestatus`,
-          { status: 'inactive' },
-        );
+        await axiosInstance.patch(`${endpoints.departments.one(row._id)}/updatestatus`, {
+          status: 'inactive',
+        });
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.info(row._id),
@@ -194,9 +194,10 @@ export default function UnitServicesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.departments}/updatestatus`,
-        { status: 'active', ids: table.selected },
-      );
+      await axiosInstance.patch(`${endpoints.departments.all}/updatestatus`, {
+        status: 'active',
+        ids: table.selected,
+      });
       socket.emit('updated', {
         user,
         link: paths.unitservice.departments.root,
@@ -225,9 +226,10 @@ export default function UnitServicesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.departments}/updatestatus`,
-        { status: 'inactive', ids: table.selected },
-      );
+      await axiosInstance.patch(`${endpoints.departments.all}/updatestatus`, {
+        status: 'inactive',
+        ids: table.selected,
+      });
       socket.emit('updated', {
         user,
         link: paths.unitservice.departments.root,
@@ -354,7 +356,7 @@ export default function UnitServicesTableView() {
                       (tab.value === 'active' && 'success') ||
                       (tab.value === 'inactive' && 'error') ||
                       // (tab.value === 'public' && 'success') ||
-                      // (tab.value === 'privet' && 'error') ||
+                      // (tab.value === 'private' && 'error') ||
                       // (tab.value === 'charity' && 'success') ||
                       'default'
                     }

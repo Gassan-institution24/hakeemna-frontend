@@ -17,7 +17,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetCities, useGetUSTypes, useGetCountries, useGetSpecialties } from 'src/api';
+import { useGetCities, useGetCountries, useGetSpecialties, useGetActiveUSTypes } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -28,7 +28,7 @@ export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
   const { countriesData } = useGetCountries();
-  const { unitserviceTypesData } = useGetUSTypes();
+  const { unitserviceTypesData } = useGetActiveUSTypes();
   const { tableData } = useGetCities();
   const { specialtiesData } = useGetSpecialties();
 
@@ -97,9 +97,9 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.freesubscription(currentTable._id), data);
+        await axiosInstance.patch(endpoints.free_subscriptions.one(currentTable._id), data);
       } else {
-        await axiosInstance.post(endpoints.tables.freesubscriptions, data);
+        await axiosInstance.post(endpoints.free_subscriptions.all, data);
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');

@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetAppointments() {
-  const URL = endpoints.tables.appointments;
+  const URL = endpoints.appointments.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -26,7 +26,7 @@ export function useGetAppointments() {
 }
 
 export function useGetAvailableAppointments() {
-  const URL = endpoints.tables.availableAppointments;
+  const URL = endpoints.appointments.available;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -48,7 +48,7 @@ export function useGetAvailableAppointments() {
 }
 
 export function useGetPatientAppointments(id) {
-  const URL = endpoints.tables.patientAppointments(id);
+  const URL = endpoints.appointments.patient.many(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -69,7 +69,7 @@ export function useGetPatientAppointments(id) {
   return { ...memoizedValue, refetch };
 }
 export function useGetPatientOneAppointments(id) {
-  const URL = endpoints.tables.patientoneAppointments(id);
+  const URL = endpoints.appointments.patient.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -91,7 +91,7 @@ export function useGetPatientOneAppointments(id) {
 }
 
 export function useGetUSAppointments({ id, page, sortBy, rowsPerPage, order, filters }) {
-  const URL = endpoints.tables.usAppointments({
+  const URL = endpoints.appointments.unit_service.one({
     id,
     page,
     sortBy,
@@ -128,7 +128,7 @@ export function useGetUSAppointments({ id, page, sortBy, rowsPerPage, order, fil
 }
 
 export function useGetUSAvailableAppointments(id) {
-  const URL = endpoints.tables.usAppointmentsavilable(id);
+  const URL = endpoints.appointments.unit_service.available(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -148,30 +148,9 @@ export function useGetUSAvailableAppointments(id) {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetUSAppointmentsCount(id) {
-  const URL = endpoints.tables.usAppointmentsCount(id);
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      appointmentsCount: data,
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
-    await mutate(URL);
-  };
-
-  return { ...memoizedValue, refetch };
-}
 
 export function useGetDepartmentAppointments({ id, page, sortBy, rowsPerPage, order, filters }) {
-  const URL = endpoints.tables.departmentAppointments({
+  const URL = endpoints.appointments.department.one({
     id,
     page,
     sortBy,
@@ -206,30 +185,9 @@ export function useGetDepartmentAppointments({ id, page, sortBy, rowsPerPage, or
 
   return { ...memoizedValue, refetch };
 }
-export function useGetDepartmentAppointmentsCount(id) {
-  const URL = endpoints.tables.departmentAppointmentsCount(id);
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      appointmentsCount: data,
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
-    await mutate(URL);
-  };
-
-  return { ...memoizedValue, refetch };
-}
 
 export function useGetEmployeeAppointments({ id, page, sortBy, rowsPerPage, order, filters }) {
-  const URL = endpoints.tables.employeeAppointments({
+  const URL = endpoints.appointments.employee.one({
     id,
     page,
     sortBy,
@@ -266,7 +224,7 @@ export function useGetEmployeeAppointments({ id, page, sortBy, rowsPerPage, orde
 }
 
 export function useGetEmployeeSelectedAppointments({ id, startDate }) {
-  const URL = endpoints.tables.employeeselect({
+  const URL = endpoints.appointments.employee.select({
     id,
     startDate,
   });
@@ -289,8 +247,8 @@ export function useGetEmployeeSelectedAppointments({ id, startDate }) {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetNearstppointments({ id}) {
-  const URL = endpoints.tables.employeeselect(id);
+export function useGetNearstppointments({ id }) {
+  const URL = endpoints.appointments.employee.nearst(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -311,32 +269,8 @@ export function useGetNearstppointments({ id}) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetUSEmployeeAppointments(id, emid) {
-  const URL = endpoints.tables.usEmployeeAppointments(id, emid);
-
-  // console.log('URL', URL);
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      appointmentsData: data || [],
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
-    await mutate(URL);
-  };
-
-  return { ...memoizedValue, refetch };
-}
-
 export function useGetAppointment(id) {
-  const URL = endpoints.tables.appointment(id);
+  const URL = endpoints.appointments.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -353,12 +287,12 @@ export function useGetAppointment(id) {
   return memoizedValue;
 }
 export function useGetNearstAppointment(id) {
-  const URL = endpoints.tables.nearstAppointment(id);
+  const URL = endpoints.appointments.employee.nearst(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      nearstappointment:data,
+      nearstappointment: data,
       loading: isLoading,
       error,
       validating: isValidating,

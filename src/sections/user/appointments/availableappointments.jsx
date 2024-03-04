@@ -20,9 +20,9 @@ import {
   useGetCities,
   useGetCountries,
   useGetInsuranceCos,
-  useGetUnitservices,
   useGetAppointmentTypes,
-  useGetEmployeeBySpecialty,
+  useGetActiveUnitservices,
+  useGetEmployeeEngsBySpecialty,
 } from 'src/api';
 
 // import Iconify from 'src/components/iconify';
@@ -59,12 +59,12 @@ export default function AppointmentBooking() {
   const [sortBy, setSortBy] = useState('rateing');
   const [search, setSearch] = useState();
   // console.log(id);
-  const { data } = useGetEmployeeBySpecialty(id);
+  const { data } = useGetEmployeeEngsBySpecialty(id);
   // console.log(data);
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
-  const { unitservicesData } = useGetUnitservices();
+  const { unitservicesData } = useGetActiveUnitservices();
   const { appointmenttypesData } = useGetAppointmentTypes();
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -117,7 +117,7 @@ export default function AppointmentBooking() {
 
       <Stack direction="row" spacing={1} flexShrink={0}>
         <AppointmentFilters
-          open={openFilters.value} 
+          open={openFilters.value}
           onOpen={openFilters.onTrue}
           onClose={openFilters.onFalse}
           //
@@ -218,8 +218,8 @@ export default function AppointmentBooking() {
 
 function applyFilter({ inputData, search, comparator, filters, sortBy }) {
   const { insurance } = filters;
-  console.log(inputData, 'inputData')
- 
+  console.log(inputData, 'inputData');
+
   // SORT BY
   if (sortBy === 'rateing') {
     inputData = orderBy(inputData, ['rate'], ['desc']);
@@ -241,7 +241,6 @@ function applyFilter({ inputData, search, comparator, filters, sortBy }) {
         JSON.stringify(data.code) === search
     );
   }
-
 
   // console.log('inputData',inputData)
   return inputData;

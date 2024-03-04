@@ -149,7 +149,7 @@ export default function CitiesTableView() {
 
   const handleActivate = useCallback(
     async (id) => {
-      await axiosInstance.patch(`${endpoints.tables.city(id)}/updatestatus`, { status: 'active' });
+      await axiosInstance.patch(`${endpoints.cities.one(id)}/updatestatus`, { status: 'active' });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -157,7 +157,7 @@ export default function CitiesTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosInstance.patch(`${endpoints.tables.city(id)}/updatestatus`, {
+      await axiosInstance.patch(`${endpoints.cities.one(id)}/updatestatus`, {
         status: 'inactive',
       });
       refetch();
@@ -167,7 +167,7 @@ export default function CitiesTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    axiosInstance.patch(`${endpoints.tables.cities}/updatemanystatus`, {
+    axiosInstance.patch(`${endpoints.cities.all}/updatemanystatus`, {
       status: 'active',
       ids: table.selected,
     });
@@ -180,7 +180,7 @@ export default function CitiesTableView() {
   }, [dataFiltered.length, dataInPage.length, table, tableData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    axiosInstance.patch(`${endpoints.tables.cities}/updatemanystatus`, {
+    axiosInstance.patch(`${endpoints.cities.all}/updatemanystatus`, {
       status: 'inactive',
       ids: table.selected,
     });

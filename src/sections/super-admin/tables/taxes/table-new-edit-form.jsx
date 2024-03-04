@@ -16,7 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetUnitservices } from 'src/api';
+import { useGetActiveUnitservices } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -26,8 +26,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function CitiesNewEditForm({ currentTable }) {
   const router = useRouter();
 
-
-  const { unitservicesData } = useGetUnitservices();
+  const { unitservicesData } = useGetActiveUnitservices();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -80,9 +79,9 @@ export default function CitiesNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.tax(currentTable._id), data);
+        await axiosInstance.patch(endpoints.taxes.one(currentTable._id), data);
       } else {
-        await axiosInstance.post(endpoints.tables.taxes, data);
+        await axiosInstance.post(endpoints.taxes.all, data);
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');

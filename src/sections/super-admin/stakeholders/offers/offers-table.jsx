@@ -179,7 +179,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
   const handleActivate = useCallback(
     async (ID) => {
       await axiosInstance.patch(
-        `${endpoints.tables.offer(ID)}/updatestatus`, /// edit
+        `${endpoints.offers.one(ID)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -190,7 +190,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
   const handleInactivate = useCallback(
     async (ID) => {
       await axiosInstance.patch(
-        `${endpoints.tables.offer(ID)}/updatestatus`, /// edit
+        `${endpoints.offers.one(ID)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -201,7 +201,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.offers}/updatestatus`, /// edit
+      `${endpoints.offers.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -214,7 +214,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.offers}/updatestatus`, /// edit
+      `${endpoints.offers.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

@@ -90,11 +90,14 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (data._id) {
-        await axios.patch(endpoints.tables.appointment(appointment._id), {
+        await axios.patch(endpoints.appointments.one(appointment._id), {
           patient: data._id,
         });
       } else {
-        await axios.patch(endpoints.tables.createPatientAndBookAppoint(appointment._id), data);
+        await axios.patch(
+          endpoints.appointments.patient.createPatientAndBookAppoint(appointment._id),
+          data
+        );
         socket.emit('register', {
           user,
           link: paths.unitservice.appointments.root,
@@ -136,19 +139,19 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
     async function getExistPatients() {
       const results = [];
       if (email) {
-        const { data } = await axios.post(endpoints.tables.findPatients, { email });
+        const { data } = await axios.post(endpoints.patients.find, { email });
         if (data && data.length) {
           results.push(...data);
         }
       }
       if (identification_num) {
-        const { data } = await axios.post(endpoints.tables.findPatients, { identification_num });
+        const { data } = await axios.post(endpoints.patients.find, { identification_num });
         if (data && data.length) {
           results.push(...data);
         }
       }
       if (mobile_num1) {
-        const { data } = await axios.post(endpoints.tables.findPatients, { mobile_num1 });
+        const { data } = await axios.post(endpoints.patients.find, { mobile_num1 });
         if (data && data.length) {
           results.push(...data);
         }

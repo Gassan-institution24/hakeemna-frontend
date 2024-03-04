@@ -153,7 +153,7 @@ export default function EmployeeTypesTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.employeetype(id)}/updatestatus`, /// edit
+        `${endpoints.employee_types.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -164,7 +164,7 @@ export default function EmployeeTypesTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.employeetype(id)}/updatestatus`, /// edit
+        `${endpoints.employee_types.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -175,7 +175,7 @@ export default function EmployeeTypesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.employeetypes}/updatestatus`, /// edit
+      `${endpoints.employee_types.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -188,7 +188,7 @@ export default function EmployeeTypesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.employeetypes}/updatestatus`, /// edit
+      `${endpoints.employee_types.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

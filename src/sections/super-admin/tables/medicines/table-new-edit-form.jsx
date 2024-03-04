@@ -34,7 +34,6 @@ const DefaultDoses = ['5 mg', '10 mg', '50 mg'];
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
 
-
   const { tableData } = useGetSymptoms();
   const { countriesData } = useGetCountries();
   const { families } = useGetMedFamilies();
@@ -98,9 +97,9 @@ export default function CountriesNewEditForm({ currentSelected }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentSelected) {
-        await axiosInstance.patch(endpoints.tables.medicine(currentSelected._id), data); /// edit
+        await axiosInstance.patch(endpoints.medicines.one(currentSelected._id), data); /// edit
       } else {
-        await axiosInstance.post(endpoints.tables.medicines, data); /// edit
+        await axiosInstance.post(endpoints.medicines.all, data); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');

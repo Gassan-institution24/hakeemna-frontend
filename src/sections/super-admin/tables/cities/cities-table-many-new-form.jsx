@@ -112,7 +112,7 @@ export default function CitiesNewEditForm() {
 
   const handleCreate = async () => {
     try {
-      await axiosInstance.post(endpoints.tables.manyCities, cities);
+      await axiosInstance.post(endpoints.cities.many, cities);
       router.push(paths.superadmin.tables.cities.root);
     } catch (e) {
       console.log(e);

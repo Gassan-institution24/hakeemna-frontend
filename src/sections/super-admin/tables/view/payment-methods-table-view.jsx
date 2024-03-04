@@ -152,7 +152,7 @@ export default function PaymentMethodsTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.paymentmethod(id)}/updatestatus`, /// edit
+        `${endpoints.payment_methods.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -163,7 +163,7 @@ export default function PaymentMethodsTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.paymentmethod(id)}/updatestatus`, /// edit
+        `${endpoints.payment_methods.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -174,7 +174,7 @@ export default function PaymentMethodsTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.paymentmethods}/updatestatus`, /// edit
+      `${endpoints.payment_methods.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -187,7 +187,7 @@ export default function PaymentMethodsTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.paymentmethods}/updatestatus`, /// edit
+      `${endpoints.payment_methods.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

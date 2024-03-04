@@ -156,7 +156,7 @@ export default function ServiceTypesTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.servicetype(id)}/updatestatus`, /// edit
+        `${endpoints.service_types.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -167,7 +167,7 @@ export default function ServiceTypesTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.servicetype(id)}/updatestatus`, /// edit
+        `${endpoints.service_types.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -178,7 +178,7 @@ export default function ServiceTypesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.servicetypes}/updatestatus`, /// edit
+      `${endpoints.service_types.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -191,7 +191,7 @@ export default function ServiceTypesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.servicetypes}/updatestatus`, /// edit
+      `${endpoints.service_types.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

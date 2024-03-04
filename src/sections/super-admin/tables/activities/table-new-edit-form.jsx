@@ -16,7 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetDepartments, useGetUnitservices } from 'src/api';
+import { useGetActiveUnitservices, useGetUSActiveDepartments } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -26,9 +26,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-
-  const { unitservicesData } = useGetUnitservices();
-  const { departmentsData } = useGetDepartments();
+  const { unitservicesData } = useGetActiveUnitservices();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -78,16 +76,21 @@ export default function TableNewEditForm({ currentTable }) {
 
   const {
     reset,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
+  const values = watch();
+
+  const { departmentsData } = useGetUSActiveDepartments(values.unit_service);
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(`${endpoints.tables.activity(currentTable._id)}`, data);
+        await axiosInstance.patch(`${endpoints.activities.one(currentTable._id)}`, data);
       } else {
-        await axiosInstance.post(`${endpoints.tables.activities}`, data);
+        await axiosInstance.post(`${endpoints.activities.all}`, data);
       }
       reset();
       router.push(paths.superadmin.tables.activities.root);

@@ -3,13 +3,13 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetLicenseMovements() {
-  const URL = endpoints.license_movements.all;
+export function useGetUSEmployeeEngs(id) {
+  const URL = endpoints.employee_engagements.service_unit.all(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      licenseMovements: data || [],
+      employeesData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -25,13 +25,13 @@ export function useGetLicenseMovements() {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetUSLicenseMovement(id) {
-  const URL = endpoints.license_movements.unit_service.one(id);
+export function useGetUSActiveEmployeeEngs(id) {
+  const URL = endpoints.employee_engagements.service_unit.active(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      licenseMovements: data || [],
+      employeesData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -47,13 +47,13 @@ export function useGetUSLicenseMovement(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetUSLicenseMovements() {
-  const URL = endpoints.license_movements.unit_service.all;
+export function useGetDepartmentEmployeeEngs(id) {
+  const URL = endpoints.employee_engagements.department.all(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      licenseMovements: data || [],
+      employeesData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -69,13 +69,13 @@ export function useGetUSLicenseMovements() {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetStakeholderLicenseMovement(id) {
-  const URL = endpoints.license_movements.stakeholder.one(id);
+export function useGetDepartmentActiveEmployeeEngs(id) {
+  const URL = endpoints.employee_engagements.department.active(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      licenseMovements: data || [],
+      employeesData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
@@ -91,13 +91,13 @@ export function useGetStakeholderLicenseMovement(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetStakeholderLicenseMovements() {
-  const URL = endpoints.license_movements.stakeholder.all;
+export function useGetEmployeeEngagement(id) {
+  const URL = endpoints.employee_engagements.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      licenseMovements: data || [],
+      data,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -112,14 +112,13 @@ export function useGetStakeholderLicenseMovements() {
 
   return { ...memoizedValue, refetch };
 }
-
-export function useGetLicenseMovement(id) {
-  const URL = endpoints.license_movements.one(id);
+export function useGetEmployeeEngsBySpecialty(id) {
+  const URL = endpoints.employee_engagements.speciality(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      licenseMovementData: data,
+      data,
       loading: isLoading,
       error,
       validating: isValidating,

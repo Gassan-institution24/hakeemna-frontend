@@ -20,8 +20,8 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import axiosInstance from 'src/utils/axios';
 
-import { useGetCities } from 'src/api';
-import { useGetStackholder } from 'src/api/user';
+import { useGetCities, useGetStakeholder } from 'src/api';
+// import { useGetStakeholder } from 'src/api/user';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -39,7 +39,7 @@ export default function TourNewEditForm({ currentTour }) {
   };
 
   const { tableData } = useGetCities();
-  const { stakeholder } = useGetStackholder();
+  const { stakeholder } = useGetStakeholder();
 
   const NewTourSchema = Yup.object().shape({
     Offer_name: Yup.string().required('Name is required'),

@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetPatients() {
-  const URL = endpoints.tables.patients;
+  const URL = endpoints.patients.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -26,7 +26,7 @@ export function useGetPatients() {
 }
 
 export function useGetOldPatients() {
-  const URL = endpoints.tables.oldpatient;
+  const URL = endpoints.oldpatient.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -48,7 +48,7 @@ export function useGetOldPatients() {
 }
 
 export function useGetPatient(id) {
-  const URL = endpoints.tables.patient(id);
+  const URL = endpoints.patients.one(id);
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
@@ -69,7 +69,7 @@ export function useGetPatient(id) {
 }
 
 export function useGetFindPatient(obj) {
-  const URL = endpoints.tables.findPatients;
+  const URL = endpoints.patients.find;
   // console.log('url', URL);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, axiosInstance.get(URL, obj));

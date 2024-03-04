@@ -19,6 +19,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -27,10 +28,9 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard, { useAclGuard } from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useGetUSAppointments, useGetAppointmentTypes } from 'src/api';
 
-import { RouterLink } from 'src/routes/components';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -199,7 +199,7 @@ export default function AppointmentsView({ employeeData }) {
   const handleCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch(`${endpoints.tables.appointment(row._id)}/cancel`);
+        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/cancel`);
         enqueueSnackbar('canceled successfully!');
         socket.emit('updated', {
           user,
@@ -220,7 +220,7 @@ export default function AppointmentsView({ employeeData }) {
   const handleDelayRow = useCallback(
     async (row, min) => {
       try {
-        await axiosInstance.patch(`${endpoints.tables.appointment(row._id)}/delay`, {
+        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/delay`, {
           minutes: min,
         });
         enqueueSnackbar('delayed successfully!');
@@ -244,7 +244,7 @@ export default function AppointmentsView({ employeeData }) {
   const handleUnCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch(`${endpoints.tables.appointment(row._id)}/uncancel`);
+        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/uncancel`);
         enqueueSnackbar('uncanceled successfully!');
         socket.emit('updated', {
           user,
@@ -265,7 +265,7 @@ export default function AppointmentsView({ employeeData }) {
   const handleCancelRows = useCallback(
     async (id) => {
       try {
-        await axiosInstance.patch(`${endpoints.tables.appointments}/cancel`, {
+        await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, {
           ids: table.selected,
         });
         enqueueSnackbar('canceled successfully!');
@@ -299,7 +299,7 @@ export default function AppointmentsView({ employeeData }) {
 
   const handleDelayRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.tables.appointments}/delay`, {
+      await axiosInstance.patch(`${endpoints.appointments.all}/delay`, {
         ids: table.selected,
         minutes: minToDelay,
       });
@@ -335,7 +335,7 @@ export default function AppointmentsView({ employeeData }) {
   const handleUnCancelRows = useCallback(
     async (id) => {
       try {
-        await axiosInstance.patch(`${endpoints.tables.appointments}/uncancel`, {
+        await axiosInstance.patch(`${endpoints.appointments.all}/uncancel`, {
           ids: table.selected,
         });
         enqueueSnackbar('uncanceled successfully!');

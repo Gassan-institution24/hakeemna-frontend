@@ -79,7 +79,7 @@ export default function UploadOldPatient({ refetch }) {
       });
       // console.log('data', data);
       // console.log('formData', formData);
-      await axios.post(endpoints.tables.newOldPatient, formData);
+      await axios.post(endpoints.oldpatient.all, formData);
       socket.emit('updated', {
         user,
         link: paths.unitservice.oldPatient,

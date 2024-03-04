@@ -68,7 +68,7 @@ const STATUS_OPTIONS = [
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
   // { value: 'public', label: 'public' },
-  // { value: 'privet', label: 'privet' },
+  // { value: 'private', label: 'private' },
   // { value: 'charity', label: 'charity' },
 ];
 
@@ -139,9 +139,9 @@ export default function PatientTableView() {
   // };
   const handleActivate = useCallback(
     async (id) => {
-      await axiosInstance.patch(`${endpoints.tables.patient(id)}/updatestatus`,
-        { status: 'active' },
-      );
+      await axiosInstance.patch(`${endpoints.patients.one(id)}/updatestatus`, {
+        status: 'active',
+      });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -149,9 +149,9 @@ export default function PatientTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosInstance.patch(`${endpoints.tables.patient(id)}/updatestatus`,
-        { status: 'inactive' },
-      );
+      await axiosInstance.patch(`${endpoints.patients.one(id)}/updatestatus`, {
+        status: 'inactive',
+      });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -159,9 +159,10 @@ export default function PatientTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    axiosInstance.patch( `${endpoints.tables.patients}/updatestatus`,
-      { status: 'active', ids: table.selected },
-    );
+    axiosInstance.patch(`${endpoints.patients.all}/updatestatus`, {
+      status: 'active',
+      ids: table.selected,
+    });
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: patientsData.length,
@@ -171,9 +172,10 @@ export default function PatientTableView() {
   }, [dataFiltered.length, dataInPage.length, table, patientsData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    axiosInstance.patch( `${endpoints.tables.patients}/updatestatus`,
-      { status: 'inactive', ids: table.selected },
-    );
+    axiosInstance.patch(`${endpoints.patients.all}/updatestatus`, {
+      status: 'inactive',
+      ids: table.selected,
+    });
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: patientsData.length,
@@ -303,7 +305,7 @@ export default function PatientTableView() {
                       (tab.value === 'active' && 'success') ||
                       (tab.value === 'inactive' && 'error') ||
                       // (tab.value === 'public' && 'success') ||
-                      // (tab.value === 'privet' && 'error') ||
+                      // (tab.value === 'private' && 'error') ||
                       // (tab.value === 'charity' && 'success') ||
                       'default'
                     }
@@ -315,8 +317,8 @@ export default function PatientTableView() {
                       patientsData.filter((order) => order.status === 'inactive').length}
                     {/* {tab.value === 'public' &&
                       patientsData.filter((order) => order.sector_type === 'public').length}
-                    {tab.value === 'privet' &&
-                      patientsData.filter((order) => order.sector_type === 'privet').length}
+                    {tab.value === 'private' &&
+                      patientsData.filter((order) => order.sector_type === 'private').length}
                     {tab.value === 'charity' &&
                       patientsData.filter((order) => order.sector_type === 'charity').length} */}
                   </Label>

@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetInsuranceTypes() {
-  const URL = endpoints.tables.insuranceTypes;
+  const URL = endpoints.insurance_types.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -25,7 +25,7 @@ export function useGetInsuranceTypes() {
   return { ...memoizedValue, refetch };
 }
 export function useGetInsuranceType(id) {
-  const URL = endpoints.tables.insuranceType(id);
+  const URL = endpoints.insurance_types.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

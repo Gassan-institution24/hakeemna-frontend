@@ -82,14 +82,14 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.tables.employeetype(currentTable._id), data);
+        await axiosInstance.patch(endpoints.employee_types.one(currentTable._id), data);
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.employeetypes.root,
           msg: `updated an employee type <strong>${data.name_english || ''}</strong>`,
         });
       } else {
-        await axiosInstance.post(endpoints.tables.employeetypes, data);
+        await axiosInstance.post(endpoints.employee_types.all, data);
         socket.emit('created', {
           user,
           link: paths.unitservice.tables.employeetypes.root,

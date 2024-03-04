@@ -155,7 +155,7 @@ export default function StakeholderTypesTableView() {
   const handleActivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.stakeholdertype(id)}/updatestatus`, /// edit
+        `${endpoints.stakeholder_types.one(id)}/updatestatus`, /// edit
         { status: 'active' }
       );
       refetch();
@@ -166,7 +166,7 @@ export default function StakeholderTypesTableView() {
   const handleInactivate = useCallback(
     async (id) => {
       await axiosInstance.patch(
-        `${endpoints.tables.stakeholdertype(id)}/updatestatus`, /// edit
+        `${endpoints.stakeholder_types.one(id)}/updatestatus`, /// edit
         { status: 'inactive' }
       );
       refetch();
@@ -177,7 +177,7 @@ export default function StakeholderTypesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.stakeholdertypes}/updatestatus`, /// edit
+      `${endpoints.stakeholder_types.all}/updatestatus`, /// edit
       { status: 'active', ids: table.selected }
     );
     refetch();
@@ -190,7 +190,7 @@ export default function StakeholderTypesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(
-      `${endpoints.tables.stakeholdertypes}/updatestatus`, /// edit
+      `${endpoints.stakeholder_types.all}/updatestatus`, /// edit
       { status: 'inactive', ids: table.selected }
     );
     refetch();

@@ -20,7 +20,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
-import { useGetCities, useGetUSTypes, useGetCountries, useGetSpecialties } from 'src/api';
+import { useGetCities, useGetCountries, useGetSpecialties, useGetActiveUSTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -42,7 +42,7 @@ export default function JwtRegisterView() {
 
   const { tableData } = useGetCities();
 
-  const { unitserviceTypesData } = useGetUSTypes();
+  const { unitserviceTypesData } = useGetActiveUSTypes();
 
   const { specialtiesData } = useGetSpecialties();
 
@@ -229,7 +229,7 @@ export default function JwtRegisterView() {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect name="sector_type" label="Sector type">
             <MenuItem value="public">Public</MenuItem>
-            <MenuItem value="privet">Privet</MenuItem>
+            <MenuItem value="private">private</MenuItem>
             <MenuItem value="charity">Charity</MenuItem>
           </RHFSelect>
         </Stack>

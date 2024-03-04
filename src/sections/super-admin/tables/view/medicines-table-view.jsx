@@ -136,7 +136,7 @@ export default function MedicinesTableView() {
   };
   const handleActivate = useCallback(
     async (id) => {
-      await axiosInstance.patch(`${endpoints.tables.medicine(id)}/updatestatus`, {
+      await axiosInstance.patch(`${endpoints.medicines.one(id)}/updatestatus`, {
         status: 'active',
       });
       refetch();
@@ -146,7 +146,7 @@ export default function MedicinesTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosInstance.patch(`${endpoints.tables.medicine(id)}/updatestatus`, {
+      await axiosInstance.patch(`${endpoints.medicines.one(id)}/updatestatus`, {
         status: 'inactive',
       });
       refetch();
@@ -156,7 +156,7 @@ export default function MedicinesTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    axiosInstance.patch(`${endpoints.tables.medicines}/updatestatus`, {
+    axiosInstance.patch(`${endpoints.medicines.all}/updatestatus`, {
       status: 'active',
       ids: table.selected,
     });
@@ -169,7 +169,7 @@ export default function MedicinesTableView() {
   }, [dataFiltered.length, dataInPage.length, table, medicines, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    axiosInstance.patch(`${endpoints.tables.medicines}/updatestatus`, {
+    axiosInstance.patch(`${endpoints.medicines.all}/updatestatus`, {
       status: 'inactive',
       ids: table.selected,
     });

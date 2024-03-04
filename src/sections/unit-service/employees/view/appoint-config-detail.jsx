@@ -159,7 +159,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const handleSaving = async () => {
     saving.onTrue();
     try {
-      await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
+      await axios.patch(`${endpoints.appointment_configs.all}/${appointmentConfigData?._id}`, {
         ...dataToUpdate,
         ImmediateEdit: false,
       });
@@ -187,7 +187,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const handleUpdating = async () => {
     updating.onTrue();
     try {
-      await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
+      await axios.patch(`${endpoints.appointment_configs.all}/${appointmentConfigData?._id}`, {
         ...dataToUpdate,
         ImmediateEdit: true,
       });
@@ -231,7 +231,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           confirm.onTrue();
         } else {
           await axios.patch(
-            `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
+            `${endpoints.appointment_configs.all}/${appointmentConfigData?._id}`,
             data
           );
           socket.emit('updated', {
@@ -244,7 +244,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         }
       } else {
         updating.onTrue();
-        await axios.post(endpoints.tables.appointmentconfigs, data);
+        await axios.post(endpoints.appointment_configs.all, data);
         socket.emit('created', {
           data,
           user,

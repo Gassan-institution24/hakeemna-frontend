@@ -17,8 +17,8 @@ import { useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useGetUSDepartments } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetUSActiveDepartments } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -34,7 +34,7 @@ export default function TableNewEditForm({ currentTable }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
-  const { departmentsData } = useGetUSDepartments(
+  const { departmentsData } = useGetUSActiveDepartments(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
@@ -95,7 +95,7 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(`${endpoints.tables.activity(currentTable._id)}`, data);
+        await axiosInstance.patch(`${endpoints.activities.one(currentTable._id)}`, data);
         socket.emit('updated', {
           data,
           user,
@@ -103,7 +103,7 @@ export default function TableNewEditForm({ currentTable }) {
           msg: `updated an activity <strong>${data.name_english || ''}</strong>`,
         });
       } else {
-        await axiosInstance.post(`${endpoints.tables.activities}`, data);
+        await axiosInstance.post(`${endpoints.activities.all}`, data);
         socket.emit('created', {
           data,
           user,

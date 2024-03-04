@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 
 import { useParams } from 'src/routes/hooks';
 
-import { useGetEmployeeBySpecialty } from 'src/api';
+import { useGetEmployeeEngsBySpecialty } from 'src/api';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -14,7 +14,7 @@ export default function AppointmetClinic() {
   const params = useParams();
 
   const { id } = params;
-  const { data, loading } = useGetEmployeeBySpecialty(id);
+  const { data, loading } = useGetEmployeeEngsBySpecialty(id);
 
   if (loading) {
     return <LoadingScreen />;

@@ -23,7 +23,6 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 export default function TableNewEditForm({ currentSelected }) {
   const router = useRouter();
 
-
   const { enqueueSnackbar } = useSnackbar();
 
   const NewSchema = Yup.object().shape({
@@ -76,15 +75,10 @@ export default function TableNewEditForm({ currentSelected }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      
       if (currentSelected) {
-        await axiosInstance.patch( endpoints.tables.analysis(currentSelected._id),
-          data
-        ); /// edit
+        await axiosInstance.patch(endpoints.analyses.one(currentSelected._id), data); /// edit
       } else {
-        await axiosInstance.post( endpoints.tables.analyses,
-          data,
-        ); /// edit
+        await axiosInstance.post(endpoints.analyses.all, data); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
