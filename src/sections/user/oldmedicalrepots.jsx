@@ -42,7 +42,7 @@ import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components
 
 import File from './imges/File.jpg';
 
-export default function OldMedicalReports({specialty}) {
+export default function OldMedicalReports() {
   const popover = usePopover();
   const dialog = useBoolean();
   const { t } = useTranslate();
@@ -208,7 +208,7 @@ export default function OldMedicalReports({specialty}) {
     ),
     [styles]
   );
-
+  // console.log(info,"dfdfdf")
   MedicalreportsnPDF.propTypes = {
     info: PropTypes.shape({
       type: PropTypes.string.isRequired,
@@ -484,6 +484,3 @@ export default function OldMedicalReports({specialty}) {
     </>
   );
 }
-OldMedicalReports.propTypes = {
-  specialty: PropTypes.object,
-};

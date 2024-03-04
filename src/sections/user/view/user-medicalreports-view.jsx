@@ -7,7 +7,6 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useGetSpecialties } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -28,7 +27,6 @@ export default function UserCardList() {
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
-  const { specialtiesData } = useGetSpecialties();
 
   const TABS = [
     {
@@ -85,10 +83,7 @@ export default function UserCardList() {
         </Box>
       )}
 
-      {currentTab === 'oldmedicaloeports' &&
-        specialtiesData.map((specialty) => (
-          <OldMedicalReports key={specialty.id} user={user?.patient._id} specialty={specialty} />
-        ))}
+      {currentTab === 'oldmedicaloeports' && <OldMedicalReports user={user?.patient._id} />}
 
       {currentTab === 'bmi' && <Bmi />}
     </Container>
