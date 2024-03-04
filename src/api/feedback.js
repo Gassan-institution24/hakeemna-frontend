@@ -48,7 +48,7 @@ export function useGetDepartmentFeedbackes(id) {
 }
 
 export function useGetEmployeeFeedbackes(id) {
-  const URL = endpoints.employees.onefeedbacks(id);
+  const URL = endpoints.feedbacks.employee.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

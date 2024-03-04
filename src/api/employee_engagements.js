@@ -113,7 +113,7 @@ export function useGetEmployeeEngagement(id) {
   return { ...memoizedValue, refetch };
 }
 export function useGetEmployeeEngsBySpecialty(id) {
-  const URL = endpoints.employee_engagements.speciality(id);
+  const URL = endpoints.employee_engagements.speciality.all(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
