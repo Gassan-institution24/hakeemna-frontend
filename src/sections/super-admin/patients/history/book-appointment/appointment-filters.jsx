@@ -186,7 +186,7 @@ export default function JobFilters({
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Countries
       </Typography>
-      <select onChange={handleFilterCountries} name="country" label="Country">
+      <select onChange={handleFilterCountries} name="country" label='country'>
         {countriesOptions?.map((country) => (
           <option key={country._id} value={country._id}>
             {country?.name_english}

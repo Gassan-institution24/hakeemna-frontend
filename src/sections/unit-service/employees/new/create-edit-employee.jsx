@@ -50,7 +50,7 @@ export default function TableNewEditForm({ currentTable }) {
   const { employeeTypesData } = useGetUSActiveEmployeeTypes(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  
+
   const { specialtiesData } = useGetSpecialties();
   const { departmentsData } = useGetUSActiveDepartments(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
@@ -250,8 +250,8 @@ export default function TableNewEditForm({ currentTable }) {
                 ))}
               </RHFSelect>
               <RHFSelect name="gender" label={`${t('gender')} *`}>
-                <MenuItem value="male">Male</MenuItem>
-                <MenuItem value="female">Female</MenuItem>
+                <MenuItem value="male">{t('male')}</MenuItem>
+                <MenuItem value="female">{t('female')}</MenuItem>
               </RHFSelect>
             </Box>
             <Box

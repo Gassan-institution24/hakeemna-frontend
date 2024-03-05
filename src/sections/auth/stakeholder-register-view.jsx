@@ -29,6 +29,7 @@ import {
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +37,8 @@ export default function JwtRegisterView() {
   const { register } = useAuthContext();
 
   const router = useRouter();
+
+  const { t } = useTranslate();
 
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -202,7 +205,7 @@ export default function JwtRegisterView() {
         <RHFTextField name="email" label="Email address" />
         <RHFTextField name="identification_num" label="Identification number" />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFSelect onChange={handleCountryChange} name="country" label="Country">
+          <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
             {countriesData.map((country) => (
               <MenuItem key={country._id} value={country._id}>
                 {country.name_english}
