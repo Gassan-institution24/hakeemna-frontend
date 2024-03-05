@@ -46,15 +46,15 @@ export default function Doctorpage() {
   const { id } = params;
   const { user } = useAuthContext();
   const [TimeData, setTimeData] = useState();
-  const datacheeck = useGetAppointment(TimeData).data;
   const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
   const dialog = useBoolean(false);
   const { enqueueSnackbar } = useSnackbar();
   const { data } = useGetEmployeeEngagement(id);
+  const datacheeck = useGetAppointment(TimeData).data;
   const { feedbackData } = useGetEmployeeFeedbackes(data?.employee?._id);
-
   const [currentDateTime, setCurrentDateTime] = useState();
+  const [patientNote, setPatientNote] = useState();
   const patientData = user?.patient?._id;
   const patientinfo = user?.patient;
   const patientEmail = user?.email;
@@ -63,6 +63,7 @@ export default function Doctorpage() {
     id,
     startDate: currentDateTime,
   });
+
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
@@ -79,6 +80,7 @@ export default function Doctorpage() {
         email: patientEmail,
         pInfo: patientinfo,
         appointmentinfo: datacheeck,
+        note: patientNote
       });
       refetch();
       dialog.onFalse();
@@ -88,6 +90,7 @@ export default function Doctorpage() {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
+  
   const renderHead = (
     <CardHeader
       disableTypography
@@ -254,7 +257,6 @@ export default function Doctorpage() {
                 sx={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr 1fr',
-                  mr: 2,
                 }}
               >
                 {appointmentsData?.map((time, index) => (
@@ -295,7 +297,7 @@ export default function Doctorpage() {
               sx={{ borderStyle: 'dashed', display: { md: 'block', xs: 'none' } }}
             />
             <Box sx={{ ml: 2, mb: 2 }}>
-              {datacheeck?.price && (
+              {datacheeck?.appointment_type && (
                 <Typography>
                   {' '}
                   <Iconify width={18} icon="ion:person-sharp" />
@@ -320,7 +322,7 @@ export default function Doctorpage() {
                   {datacheeck?.department?.name_english}{' '}
                 </Typography>
               )}
-              {datacheeck?.price && (
+              {datacheeck?.price !== undefined && (
                 <Typography>
                   {' '}
                   <Iconify width={18} sx={{ color: 'success.main' }} icon="mdi:cash-multiple" />
@@ -344,6 +346,12 @@ export default function Doctorpage() {
                   <Iconify width={18} sx={{ color: 'warning.main' }} icon="mingcute:time-line" />
                   &nbsp; Date: {fTime(datacheeck?.start_time)}{' '}
                 </Typography>
+              )}
+              {datacheeck && (
+                <Box sx={{mt:1, }}>
+                  <Typography sx={{mb:1}}>Let us know if you have any notes <bt/> to follow for your appointment</Typography>
+                  <input placeholder="Ex: I have..." style={{borderRadius:4, border:'1px solid lightgray',padding:5, }} onChange={(e)=>(setPatientNote(e?.target?.value))} />
+                </Box>
               )}
             </Box>
 
