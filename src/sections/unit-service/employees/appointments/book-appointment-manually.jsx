@@ -22,7 +22,7 @@ import axios, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetCities, useGetCountries } from 'src/api';
+import { useGetCountryCities, useGetCountries } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -40,12 +40,11 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
   const [email, setEmail] = useState();
   const [identification_num, setID] = useState();
   const [mobile_num1, setPhoneNumber] = useState();
-  const [cities, setCities] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState('');
+  // const [cities, setCities] = useState([]);
+  // const [selectedCountry, setSelectedCountry] = useState('');
   const [existPatients, setExistPatients] = useState([]);
 
   const { countriesData } = useGetCountries();
-  const { tableData } = useGetCities();
 
   const NewUserSchema = Yup.object().shape({
     first_name: Yup.string().required('First name is required'),
@@ -85,7 +84,9 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const { reset, setValue, handleSubmit } = methods;
+  const { reset, setValue, watch, handleSubmit } = methods;
+
+  const { tableData } = useGetCountryCities(watch().country);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -121,20 +122,20 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
     }
   });
 
-  const handleCountryChange = (event) => {
-    const selectedCountryId = event.target.value;
-    methods.setValue('country', selectedCountryId, { shouldValidate: true });
-    setSelectedCountry(selectedCountryId);
-    // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
-  };
+  // const handleCountryChange = (event) => {
+  //   const selectedCountryId = event.target.value;
+  //   methods.setValue('country', selectedCountryId, { shouldValidate: true });
+  //   setSelectedCountry(selectedCountryId);
+  //   // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
+  // };
 
-  useEffect(() => {
-    setCities(
-      selectedCountry
-        ? tableData.filter((data) => data?.country?._id === selectedCountry)
-        : tableData
-    );
-  }, [tableData, selectedCountry]);
+  // useEffect(() => {
+  //   setCities(
+  //     selectedCountry
+  //       ? tableData.filter((data) => data?.country?._id === selectedCountry)
+  //       : tableData
+  //   );
+  // }, [tableData, selectedCountry]);
   useEffect(() => {
     async function getExistPatients() {
       const results = [];
@@ -182,7 +183,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
     <>
       <Dialog maxWidth="lg" onClose={onClose} sx={{ width: 'auto' }} {...other}>
         <FormProvider methods={methods} onSubmit={onSubmit}>
-          <DialogTitle sx={{ mb: 1 }}> Book Manually </DialogTitle>
+          <DialogTitle sx={{ mb: 1 }}> {t('book manually')} </DialogTitle>
           {existPatients?.map((patient, index) => (
             <Alert
               key={index}
@@ -192,11 +193,11 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
               }}
               sx={{ width: 1, marginBottom: 2 }}
             >
-              We found a record with similar information for{' '}
+              {t('We found a record with similar information for ')}{' '}
               <strong>
                 {patient.first_name} {patient.family_name}
               </strong>
-              . Is this you?
+              . {t('Is this you?')}
               <br />
               <button
                 type="button"
@@ -213,7 +214,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   setExistPatients([]);
                 }}
               >
-                Click here to fill your data
+                {t('Click here to fill your data')}
               </button>
             </Alert>
           ))}
@@ -231,7 +232,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                 }}
               >
                 <RHFTextField lang="ar" name="first_name" label={t('first name')} />
-                <RHFTextField lang="ar" name="family_name" label="family name" />
+                <RHFTextField lang="ar" name="family_name" label={t('family name')} />
                 <RHFTextField
                   lang="ar"
                   onChange={(e) => {
@@ -258,20 +259,20 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                     setPhoneNumber(e.target.value);
                   }}
                   name="mobile_num1"
-                  label="Mobile number"
+                  label={t('mobile number')}
                 />
                 <RHFTextField
                   lang="ar"
                   type="number"
                   name="mobile_num2"
-                  label="Additional mobile number"
+                  label={t('alternative mobile number')}
                 />
                 <Controller
                   name="birth_date"
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
-                      InputLabelProps={{ shrink: true }}
-                      label="Birth date"
+                      // InputLabelProps={{ shrink: true }}
+                      label={t('birth date')}
                       // sx={{ width: '30vw', minWidth: '300px' }}
                       onChange={(newValue) => {
                         setValue('birth_date', newValue);
@@ -286,10 +287,9 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   )}
                 />
                 <RHFSelect
-                  native
                   name="nationality"
                   label={t('nationality')}
-                  InputLabelProps={{ shrink: true }}
+                  // InputLabelProps={{ shrink: true }}
                 >
                   {countriesData.map((option, index) => (
                     <MenuItem key={index} value={option._id}>
@@ -298,11 +298,10 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   ))}
                 </RHFSelect>
                 <RHFSelect
-                  native
-                  onChange={handleCountryChange}
+                  // onChange={handleCountryChange}
                   name="country"
-                  label="Country"
-                  InputLabelProps={{ shrink: true }}
+                  label={t('country')}
+                  // InputLabelProps={{ shrink: true }}
                 >
                   {countriesData.map((option, index) => (
                     <MenuItem key={index} value={option._id}>
@@ -311,33 +310,35 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   ))}
                 </RHFSelect>
                 <RHFSelect
-                  native
                   name="city"
                   label="City"
                   PaperPropsSx={{ textTransform: 'capitalize' }}
-                  InputLabelProps={{ shrink: true }}
+                  // InputLabelProps={{ shrink: true }}
                 >
-                  {cities.map((option, index) => (
+                  {tableData.map((option, index) => (
                     <MenuItem key={index} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
                 </RHFSelect>
                 <RHFSelect
-                  native
                   name="marital_status"
-                  label="Marital status"
-                  InputLabelProps={{ shrink: true }}
+                  label={t('marital status')}
+                  // InputLabelProps={{ shrink: true }}
                 >
-                  <MenuItem value="single">Single</MenuItem>
-                  <MenuItem value="married">Married</MenuItem>
-                  <MenuItem value="widowed">Widowed</MenuItem>
-                  <MenuItem value="separated">Separated</MenuItem>
-                  <MenuItem value="divorced">Divorced </MenuItem>
+                  <MenuItem value="single">{t('single')}</MenuItem>
+                  <MenuItem value="married">{t('married')}</MenuItem>
+                  <MenuItem value="widowed">{t('widowed')}</MenuItem>
+                  <MenuItem value="separated">{t('separated')}</MenuItem>
+                  <MenuItem value="divorced">{t('divorced')} </MenuItem>
                 </RHFSelect>
-                <RHFSelect name="gender" label={t('gender')} InputLabelProps={{ shrink: true }}>
-                  <MenuItem value="male">Male</MenuItem>
-                  <MenuItem value="female">Female</MenuItem>
+                <RHFSelect
+                  name="gender"
+                  label={t('gender')}
+                  // InputLabelProps={{ shrink: true }}
+                >
+                  <MenuItem value="male">{t('male')}</MenuItem>
+                  <MenuItem value="female">{t('female')}</MenuItem>
                 </RHFSelect>
               </Box>
             </Stack>

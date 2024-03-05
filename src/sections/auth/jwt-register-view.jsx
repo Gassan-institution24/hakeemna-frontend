@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Link from '@mui/material/Link';
@@ -24,11 +24,14 @@ import { useGetCountryCities, useGetCountries } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function JwtRegisterView() {
   const { register } = useAuthContext();
+
+  const { t } = useTranslate();
 
   const router = useRouter();
 
@@ -40,21 +43,20 @@ export default function JwtRegisterView() {
 
   const { countriesData } = useGetCountries();
 
-  
   const searchParams = useSearchParams();
-  
+
   const returnTo = searchParams.get('returnTo');
-  
+
   const password = useBoolean();
-  
+
   const RegisterSchema = Yup.object().shape({
     first_name: Yup.string().required('First name required'),
     last_name: Yup.string().required('Last name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .min(8, 'Confirm password must be at least 8 characters'),
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .min(8, 'Confirm password must be at least 8 characters'),
     identification_num: Yup.string().required('Identification number is required'),
     mobile_num1: Yup.string().required('Mobile number is required'),
     gender: Yup.string().required('Gender is required'),
@@ -88,8 +90,8 @@ export default function JwtRegisterView() {
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch()
-  
+  const values = watch();
+
   const { tableData } = useGetCountryCities(values.country);
 
   const handleCountryChange = (event) => {
@@ -173,9 +175,9 @@ export default function JwtRegisterView() {
 
         <RHFTextField name="email" label="Email address" />
         <RHFTextField name="identification_num" label="Identification number" />
-        <RHFTextField name="mobile_num1" label="Mobile number" />
+        <RHFTextField name="mobile_num1" label={t('mobile number')} />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFSelect onChange={handleCountryChange} name="country" label="Country">
+          <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
             {countriesData?.map((country) => (
               <MenuItem key={country?._id} value={country?._id}>
                 {country?.name_english}
@@ -190,8 +192,8 @@ export default function JwtRegisterView() {
             ))}
           </RHFSelect>
           <RHFSelect name="gender" label="Gender">
-            <MenuItem value="male">Male</MenuItem>
-            <MenuItem value="female">Female</MenuItem>
+            <MenuItem value="male">male</MenuItem>
+            <MenuItem value="female">female</MenuItem>
           </RHFSelect>
         </Stack>
         <RHFTextField

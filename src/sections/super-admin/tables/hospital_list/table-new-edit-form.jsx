@@ -16,7 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetCities, useGetCountries } from 'src/api';
+import { useGetCountryCities, useGetCountries } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -28,7 +28,6 @@ export default function TableNewEditForm({ currentTable }) {
 
   // console.log('currr', currentTable);
   const { countriesData } = useGetCountries();
-  const { tableData } = useGetCities();
   const [selectedCountry, setSelectedCountry] = useState(currentTable?.country?._id || null);
   const [cities, setCities] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
@@ -76,9 +75,11 @@ export default function TableNewEditForm({ currentTable }) {
 
   const {
     reset,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+  const { tableData } = useGetCountryCities(watch().country);
 
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
@@ -141,7 +142,7 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect onChange={handleCountryChange} name="country" label="Country">
+              <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
                 {countriesData.map((country) => (
                   <MenuItem key={country._id} value={country._id}>
                     {country.name_english}

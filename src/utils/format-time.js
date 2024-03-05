@@ -1,10 +1,12 @@
 import { format, getTime, formatDistanceToNow } from 'date-fns';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export const useUnitTime = () => {
+  const { t } = useTranslate();
   const { user } = useAuthContext();
   function myunitTime(date) {
     const formattedDate = date ? new Date(date) : null;
@@ -13,7 +15,7 @@ export const useUnitTime = () => {
         ?.country?.time_zone;
 
     const value = formattedDate
-      ? new Date(formattedDate.toLocaleString('en-US', { timeZone }))
+      ? new Date(formattedDate.toLocaleString(t('en-US'), { timeZone }))
       : null;
 
     return value;
