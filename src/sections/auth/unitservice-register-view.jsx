@@ -36,7 +36,12 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetCities, useGetCountries, useGetSpecialties, useGetActiveUSTypes } from 'src/api';
+import {
+  useGetCountryCities,
+  useGetCountries,
+  useGetSpecialties,
+  useGetActiveUSTypes,
+} from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -54,14 +59,13 @@ export default function JwtRegisterView() {
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('');
+  // const [selectedCountry, setSelectedCountry] = useState('');
   const [page, setPage] = useState(0);
-  const [cities, setCities] = useState([]);
+  // const [cities, setCities] = useState([]);
   // const [us_phone, setUSphone] = useState();
   const [em_phone, setEMphone] = useState();
 
   const { countriesData } = useGetCountries();
-  const { tableData } = useGetCities();
   const { unitserviceTypesData } = useGetActiveUSTypes();
   const { specialtiesData } = useGetSpecialties();
 
@@ -141,8 +145,12 @@ export default function JwtRegisterView() {
 
   const {
     handleSubmit,
+    watch,
     formState: { isSubmitting, errors },
   } = methods;
+  const values = watch();
+
+  const { tableData } = useGetCountryCities(values.us_country);
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
@@ -164,7 +172,7 @@ export default function JwtRegisterView() {
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
     methods.setValue('us_country', selectedCountryId, { shouldValidate: true });
-    setSelectedCountry(selectedCountryId);
+    // setSelectedCountry(selectedCountryId);
     // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
   };
 
@@ -185,13 +193,13 @@ export default function JwtRegisterView() {
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
-  useEffect(() => {
-    setCities(
-      selectedCountry
-        ? tableData.filter((data) => data?.country?._id === selectedCountry)
-        : tableData
-    );
-  }, [tableData, selectedCountry]);
+  // useEffect(() => {
+  //   setCities(
+  //     selectedCountry
+  //       ? tableData.filter((data) => data?.country?._id === selectedCountry)
+  //       : tableData
+  //   );
+  // }, [tableData, selectedCountry]);
   useEffect(() => {
     if (Object.keys(errors).length) {
       // console.log(errors);
@@ -324,7 +332,7 @@ export default function JwtRegisterView() {
         </Tooltip>
         <Tooltip placement="top" title="city which service unit placed">
           <RHFSelect lang="ar" name="us_city" label={`${t('city')} *`}>
-            {cities.map((city) => (
+            {tableData.map((city) => (
               <MenuItem key={city._id} value={city._id}>
                 {curLangAr ? city.name_arabic : city.name_english}
               </MenuItem>

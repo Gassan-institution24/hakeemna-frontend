@@ -78,13 +78,14 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     long_holidays: Yup.array().of(
       Yup.object().shape({
         start_date: Yup.date().nullable(),
-        end_date: Yup.date()
-          .nullable()
-          .when(
-            'start_date',
-            (startDate, schema) =>
-              startDate && schema.min(startDate, 'End date must be after start date')
-          ),
+        end_date: Yup.date().nullable(),
+        // .when(
+        //   'start_date',
+        //   (startDate, schema) =>
+        //     startDate
+        //       ? schema.min(startDate, 'End date must be after start date')
+        //       : schema // If start_date doesn't exist, leave end_date validation as is
+        // ),
         description: Yup.string().nullable(),
       })
     ),
@@ -93,8 +94,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     days_details: Yup.array().of(
       Yup.object().shape({
         day: Yup.string().required('Day is required'),
-        work_start_time: Yup.mixed().nullable().required('work start time is required'),
-        work_end_time: Yup.mixed().nullable().required('work end time is required'),
+        work_start_time: Yup.date().nullable().required('work start time is required'),
+        work_end_time: Yup.date().nullable().required('work end time is required'),
         appointments: Yup.array(),
         service_types: Yup.array(),
         appointment_type: Yup.string().nullable(),

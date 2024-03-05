@@ -96,16 +96,16 @@ export default function UnitServiceEmployeesRow({
         onClick={onViewRow}
         align="center"
       >
-        {employee.first_name} {employee.family_name}
+        {employee?.first_name} {employee?.family_name}
       </TableCell>
       <TableCell lang="ar" align="center">
-        {curLangAr ? employee.employee_type?.name_arabic : employee.employee_type?.name_english}
+        {curLangAr ? employee?.employee_type?.name_arabic : employee?.employee_type?.name_english}
       </TableCell>
       <TableCell lang="ar" align="center">
-        {employee.email}
+        {employee?.email}
       </TableCell>
       <TableCell lang="ar" align="center">
-        {curLangAr ? employee.nationality?.name_arabic : employee.nationality?.name_english}
+        {curLangAr ? employee?.nationality?.name_arabic : employee?.nationality?.name_english}
       </TableCell>
       {/* <TableCell lang="ar" align="center">
         <Iconify
