@@ -168,6 +168,10 @@ const WorkGroupsEditPage = lazy(() => import('src/pages/unit-service/tables/work
 const RoomsHomePage = lazy(() => import('src/pages/unit-service/tables/rooms/home'));
 const RoomsNewPage = lazy(() => import('src/pages/unit-service/tables/rooms/new'));
 const RoomsEditPage = lazy(() => import('src/pages/unit-service/tables/rooms/edit'));
+// Services
+const ServicesHomePage = lazy(() => import('src/pages/unit-service/tables/services/home'));
+const ServicesNewPage = lazy(() => import('src/pages/unit-service/tables/services/new'));
+const ServicesEditPage = lazy(() => import('src/pages/unit-service/tables/services/edit'));
 // OLD PATIENT
 const OldPatientPage = lazy(() => import('src/pages/unit-service/old-patient/home'));
 const ChatPage = lazy(() => import('src/pages/dashboard/chat'));
@@ -409,6 +413,14 @@ export const unitServiceDashboardRoutes = [
               { element: <RoomsHomePage />, index: true },
               { path: 'new', element: <RoomsNewPage /> },
               { path: ':id/edit', element: <RoomsEditPage /> },
+            ],
+          },
+          {
+            path: 'services',
+            children: [
+              { element: <ServicesHomePage />, index: true },
+              { path: 'new', element: <ServicesNewPage /> },
+              { path: ':id/edit', element: <ServicesEditPage /> },
             ],
           },
         ],
