@@ -245,19 +245,15 @@ function applyFilter({ inputData, search, comparator, filters, sortBy }) {
     inputData = inputData.filter(
       (data) =>
         (data?.employee &&
-          data?.employee?.first_name.toLowerCase()
-            ?.indexOf(search.toLowerCase()) !== -1) ||
+          data?.employee?.first_name.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
         (data?.unit_service &&
-          data?.unit_service?.name_arabic
-            ?.indexOf(search.toLowerCase()) !== -1) ||
+          data?.unit_service?.name_arabic?.indexOf(search.toLowerCase()) !== -1) ||
         (data?.unit_service &&
-          data?.unit_service?.name_english.toLowerCase()
-            ?.indexOf(search.toLowerCase()) !== -1) ||
+          data?.unit_service?.name_english.toLowerCase()?.indexOf(search.toLowerCase()) !== -1) ||
         data?._id === search ||
         JSON.stringify(data.code) === search
     );
   }
-
 
   // console.log('inputData',inputData)
   return inputData;

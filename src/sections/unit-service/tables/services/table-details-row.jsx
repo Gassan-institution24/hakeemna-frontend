@@ -18,20 +18,24 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function UnitServiceEmployeesRow({
+export default function TableDetailsRow({
   row,
   selected,
   onEditRow,
   onSelectRow,
-  onActivate,
   onInactivate,
-  setFilters,
+  onActivate,
   filters,
-  onViewRow,
+  setFilters,
 }) {
   const {
-    sequence_number,
-    employee,
+    code,
+    name_english,
+    name_arabic,
+    work_shift,
+    Price_per_unit,
+    currency,
+    Measurement_type,
     status,
     created_at,
     user_creation,
@@ -40,9 +44,7 @@ export default function UnitServiceEmployeesRow({
     user_modification,
     ip_address_user_modification,
     modifications_nums,
-    online,
   } = row;
-  // console.log('row', row);
 
   const { t } = useTranslate();
 
@@ -59,63 +61,23 @@ export default function UnitServiceEmployeesRow({
       <TableCell lang="ar" padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onViewRow}
-        align="center"
-      >
-        {sequence_number}
+
+      <TableCell lang="ar" align="center">
+        <Box>{code}</Box>
+      </TableCell>
+
+      <TableCell lang="ar" align="center">
+        {curLangAr ? name_arabic : name_english}
       </TableCell>
       <TableCell lang="ar" align="center">
-        <Iconify
-          icon={online ? 'noto:green-circle' : 'noto:red-circle'}
-          style={{ width: '10px' }}
-        />
-      </TableCell>
-      {/* <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onViewRow}
-        align="center"
-      >
-        {sequence_number}
-      </TableCell> */}
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onViewRow}
-        align="center"
-      >
-        {employee?.first_name} {employee?.family_name}
+        {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
       </TableCell>
       <TableCell lang="ar" align="center">
-        {curLangAr ? employee?.employee_type?.name_arabic : employee?.employee_type?.name_english}
+        {curLangAr ? Measurement_type?.name_arabic : Measurement_type?.name_english}
       </TableCell>
       <TableCell lang="ar" align="center">
-        {employee?.email}
+        {Price_per_unit} {currency?.symbol}
       </TableCell>
-      <TableCell lang="ar" align="center">
-        {curLangAr ? employee?.nationality?.name_arabic : employee?.nationality?.name_english}
-      </TableCell>
-      {/* <TableCell lang="ar" align="center">
-        <Iconify
-          icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'}
-          width={16}
-        />
-      </TableCell>
-      <TableCell lang="ar" align="center">
-        <Iconify icon={Adjust_schedule ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
-      </TableCell> */}
       <TableCell lang="ar" align="center">
         <Label
           lang="ar"
@@ -129,6 +91,18 @@ export default function UnitServiceEmployeesRow({
       </TableCell>
 
       <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        {/* <IconButton
+          color={collapse.value ? 'inherit' : 'default'}
+          onClick={collapse.onToggle}
+          sx={{
+            ...(collapse.value && {
+              bgcolor: 'action.hover',
+            }),
+          }}
+        >
+          <Iconify icon="eva:arrow-ios-downward-fill" />
+        </IconButton> */}
+
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -147,7 +121,7 @@ export default function UnitServiceEmployeesRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'delete' }) && (
+          ? checkAcl({ category: 'department', subcategory: 'rooms', acl: 'delete' }) && (
               <MenuItem
                 onClick={() => {
                   onInactivate();
@@ -159,7 +133,7 @@ export default function UnitServiceEmployeesRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'update' }) && (
+          : checkAcl({ category: 'department', subcategory: 'rooms', acl: 'update' }) && (
               <MenuItem
                 onClick={() => {
                   onActivate();
@@ -171,10 +145,18 @@ export default function UnitServiceEmployeesRow({
                 {t('activate')}
               </MenuItem>
             )}
-        <MenuItem onClick={onViewRow}>
-          <Iconify icon="solar:eye-bold" />
-          {t('view')}
-        </MenuItem>
+
+        {checkAcl({ category: 'department', subcategory: 'rooms', acl: 'update' }) && (
+          <MenuItem
+            onClick={() => {
+              onEditRow();
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="fluent:edit-32-filled" />
+            {t('edit')}
+          </MenuItem>
+        )}
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
@@ -213,14 +195,13 @@ export default function UnitServiceEmployeesRow({
   );
 }
 
-UnitServiceEmployeesRow.propTypes = {
+TableDetailsRow.propTypes = {
+  onInactivate: PropTypes.func,
+  onActivate: PropTypes.func,
   onSelectRow: PropTypes.func,
   setFilters: PropTypes.func,
-  onActivate: PropTypes.func,
-  onInactivate: PropTypes.func,
   onEditRow: PropTypes.func,
-  onViewRow: PropTypes.func,
   row: PropTypes.object,
-  selected: PropTypes.bool,
   filters: PropTypes.object,
+  selected: PropTypes.bool,
 };

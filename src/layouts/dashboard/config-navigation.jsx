@@ -248,6 +248,11 @@ export function useNavData() {
             title: t('rooms'),
             path: paths.unitservice.tables.rooms.root,
           },
+          {
+            show: checkacl({ category: 'unit_service', subcategory: 'work_shift', acl: 'read' }),
+            title: t('services'),
+            path: paths.unitservice.tables.services.root,
+          },
         ],
       },
       {
