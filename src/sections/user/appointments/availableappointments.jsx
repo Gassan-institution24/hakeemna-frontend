@@ -86,6 +86,7 @@ export default function AppointmentBooking() {
     sortBy,
     dateError,
   });
+  console.log(dataFiltered,"dataFiltered");
 
   const canReset = !isEqual(defaultFilters, filters);
 
@@ -216,7 +217,6 @@ export default function AppointmentBooking() {
     </Container>
   );
 }
-
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, search, comparator, filters, sortBy }) {

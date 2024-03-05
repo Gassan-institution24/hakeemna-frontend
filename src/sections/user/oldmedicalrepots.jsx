@@ -15,7 +15,10 @@ import {
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
+import Grow from '@mui/material/Grow';
+import Alert from '@mui/material/Alert';
 import Dialog from '@mui/material/Dialog';
+import { alpha } from '@mui/material/styles';
 import Checkbox from '@mui/material/Checkbox';
 import { DatePicker } from '@mui/x-date-pickers';
 import IconButton from '@mui/material/IconButton';
@@ -52,6 +55,7 @@ export default function OldMedicalReports() {
   const [filesPdf, setfilesPdf] = useState([]);
   const [filesPdftodelete, setfilesPdftodelete] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
   const { specialtiesData } = useGetSpecialties();
@@ -68,10 +72,11 @@ export default function OldMedicalReports() {
 
     fetchData();
   }, []);
-
   const delteeFile = async () => {
     try {
-      await axios.delete(`/api/oldmedicalreports/${filesPdftodelete._id}`);
+      await axios.patch(`/api/oldmedicalreports/${filesPdftodelete._id}`, {
+        Activation: 'Inactive',
+      });
       enqueueSnackbar(
         `${curLangAr ? 'تم حذف التقرير بنجاح' : 'Medical report deleted successfully'}`,
         { variant: 'success' }
@@ -84,7 +89,6 @@ export default function OldMedicalReports() {
       });
     }
   };
-  // console.log(specialty);
   const styles = StyleSheet.create({
     icon: {
       color: 'blue',
@@ -232,7 +236,6 @@ export default function OldMedicalReports() {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
- 
 
   const fuser = (fuserSize) => {
     const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif', '.pdf'];
@@ -251,12 +254,12 @@ export default function OldMedicalReports() {
   };
   const handleDrop = (acceptedFiles) => {
     const fileValidator = fuser(acceptedFiles.reduce((acc, file) => acc + file.size, 0));
-  
+
     const isValidFiles = acceptedFiles.every((file) => {
       const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
       return fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size);
     });
-  
+
     if (isValidFiles) {
       setFiles(acceptedFiles); // Save the files in state
       const newFiles = acceptedFiles.map((file) => ({
@@ -269,66 +272,82 @@ export default function OldMedicalReports() {
       enqueueSnackbar('Invalid file type or size', { variant: 'error' });
     }
   };
-  
-  
 
   const onSubmit = async (data) => {
-    const formData = new FormData();
-    if (files) {
-      const filesPath = files.path ? files.path.replace(/\\/g, '//') : '';
+    try {
+      const formData = new FormData();
       Object.keys(data).forEach((key) => {
-        formData.append(key, key === 'file' ? filesPath : data[key]);
+        if (key === 'file') {
+          data[key].forEach((file, index) => {
+            formData.append(`file[${index}]`, file);
+          });
+        } else {
+          formData.append(key, data[key]);
+        }
       });
-  
-      formData.append('medicalreports', files);
-  
-      try {
-        await axios.post('/api/oldmedicalreports', formData);
-        enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
-        dialog.onFalse();
-        const response = await axios.get('/api/oldmedicalreports');
-        setfilesPdf(response.data);
-        reset();
-        setCheckChange(!checkChange);
-      } catch (error) {
-        console.error(error.message);
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
-      }
-    } else {
-      // Handle the case where files is undefined (optional, depending on your logic)
-      console.error('Files are undefined');
+      console.log('data', data);
+      console.log('formData', formData);
+      await axios.post('/api/oldmedicalreports', formData);
+      enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
+      dialog.onFalse();
+      const response = await axios.get('/api/oldmedicalreports');
+      setfilesPdf(response.data);
+      reset();
+      setCheckChange(!checkChange);
+    } catch (error) {
+      console.error(error.message);
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
 
-  
-  // const onSubmit = async (data) => {
-  //   const formData = new FormData();
-  
-  //   if (files) {
-    
-  //     formData.append('medicalreports', files);
-  
-  //     try {
-  //       await axios.post('/api/oldmedicalreports', formData);
-  //       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
-  //       dialog.onFalse();
-  //       const response = await axios.get('/api/oldmedicalreports');
-  //       setfilesPdf(response.data);
-  //       reset();
-  //       setCheckChange(!checkChange);
-  //     } catch (error) {
-  //       console.error(error.message);
-  //       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
-  //     }
-  //   } else {
-  //     console.error('Files are undefined');
-  //   }
-  // };
-  
-  
-  
+  const handleAlertClose = () => {
+    setShowAlert(false);
+  };
+
   return (
     <>
+      {showAlert && (
+          <Grow in={showAlert} timeout={600}>
+        <Alert
+          severity="info"
+          variant="filled"
+          sx={{ width: "50%", mb:2 }}
+          action={
+            <>
+              <Button
+                color="inherit"
+                size="small"
+                variant="outlined"
+                sx={{
+                  mr: 1,
+                  border: (theme) => `1px solid ${alpha(theme.palette.common.white, 0.48)}`,
+                }}
+                onClick={handleAlertClose}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                size="small"
+                color="info"
+                variant="contained"
+                sx={{
+                  bgcolor: 'info.dark',
+                }}
+                onClick={() => {
+                  setShowAlert(false);
+                  delteeFile();
+                }}
+              >
+                Confirm
+              </Button>
+            </>
+          }
+        >
+          Please confirm the delettion
+        </Alert>
+        </Grow>
+      )}
       <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ gap: 1, mb: 5 }}>
         {t('Upload Your Perscription')}
         <Iconify icon="mingcute:add-line" />
@@ -399,7 +418,7 @@ export default function OldMedicalReports() {
               sx={{ mb: 1 }}
               variant="outlined"
               onDrop={handleDrop}
-              multiple 
+              multiple
             />
 
             <RHFTextField lang="en" name="note" label={t('More information')} />
@@ -506,7 +525,7 @@ export default function OldMedicalReports() {
               </PDFDownloadLink>
               <MenuItem
                 onClick={() => {
-                  delteeFile();
+                  setShowAlert(true);
                   popover.onClose();
                 }}
                 onClose={popover.onClose}
