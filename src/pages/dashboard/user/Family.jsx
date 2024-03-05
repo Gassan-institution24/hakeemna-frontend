@@ -12,7 +12,7 @@ export default function Fam() {
   return (
     <>
       <Helmet>
-        <title> {t('Financial movements')} </title>
+        <title> {t('Family members')} </title>
         <meta name="description" content="meta" />
       </Helmet>
 
@@ -20,3 +20,4 @@ export default function Fam() {
     </>
   );
 }
+

@@ -13,7 +13,6 @@ import DoctorCard from './doctorCard';
 
 export default function AppointmetClinic({doc}) {
   const params = useParams();
-console.log(doc,"doc");
   const { id } = params;
   const { loading } = useGetEmployeeEngsBySpecialty(id);
 

@@ -86,7 +86,6 @@ export default function AppointmentBooking() {
     sortBy,
     dateError,
   });
-  console.log(dataFiltered,"dataFiltered");
 
   const canReset = !isEqual(defaultFilters, filters);
 
