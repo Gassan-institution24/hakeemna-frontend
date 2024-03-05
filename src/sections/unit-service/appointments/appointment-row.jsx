@@ -101,13 +101,15 @@ export default function AppointmentsTableRow({
           <ListItemText
             primary={
               isValid(new Date(start_time)) &&
-              new Date(start_time).toLocaleTimeString('en-US', {
+              new Date(start_time).toLocaleTimeString(t('en-US'), {
                 timeZone: unit_service?.country?.time_zone,
+                hour: '2-digit',
+                minute: '2-digit',
               })
             }
             secondary={
               isValid(new Date(start_time)) &&
-              new Date(start_time).toLocaleDateString('en-US', {
+              new Date(start_time).toLocaleDateString(t('en-US'), {
                 timeZone:
                   unit_service?.country?.time_zone ||
                   Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -165,7 +167,7 @@ export default function AppointmentsTableRow({
               }}
             >
               <Iconify icon="mdi:register" />
-              Book Manually
+              {t('book manually')}
             </MenuItem>
           )}
         {status === 'available' &&
@@ -197,7 +199,7 @@ export default function AppointmentsTableRow({
         {ACLGuard({ category: 'unit_service', subcategory: 'appointments', acl: 'update' }) && (
           <MenuItem onClick={confirmDelayOne.onTrue}>
             <Iconify icon="mdi:timer-sync" />
-            Delay
+            {t('delay')}
           </MenuItem>
         )}
         <MenuItem onClick={DDL.onOpen}>
@@ -233,7 +235,17 @@ export default function AppointmentsTableRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            secondary={format(new Date(updated_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
@@ -250,12 +262,12 @@ export default function AppointmentsTableRow({
         title={t('delay')}
         content={
           <>
-            How many minutes do you want to delay?
+            {t('How many minutes do you want to delay?')}
             <TextField
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <Box sx={{ fontSize: '0.8rem' }}>min</Box>
+                    <Box sx={{ fontSize: '0.8rem' }}>{t('min')}</Box>
                   </InputAdornment>
                 ),
               }}

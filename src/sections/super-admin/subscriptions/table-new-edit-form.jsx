@@ -17,7 +17,12 @@ import { useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
-import { useGetCities, useGetCountries, useGetSpecialties, useGetActiveUSTypes } from 'src/api';
+import {
+  useGetCountryCities,
+  useGetCountries,
+  useGetSpecialties,
+  useGetActiveUSTypes,
+} from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -31,7 +36,6 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { countriesData } = useGetCountries();
   const { unitserviceTypesData } = useGetActiveUSTypes();
-  const { tableData } = useGetCities();
   const { specialtiesData } = useGetSpecialties();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -78,6 +82,9 @@ export default function TableNewEditForm({ currentTable }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
+
+  const { tableData } = useGetCountryCities(methods.watch().country);
+
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
@@ -155,7 +162,7 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect name="country" label="Country">
+              <RHFSelect name="country" label={t('country')}>
                 {countriesData.map((country) => (
                   <MenuItem key={country._id} value={country._id}>
                     {country.name_english}

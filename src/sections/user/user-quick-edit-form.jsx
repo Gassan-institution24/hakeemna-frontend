@@ -139,7 +139,7 @@
 
 //             <RHFAutocomplete
 //               name="country"
-//               label="Country"
+//               label={t("country")}
 //               options={countries.map((country) => country.label)}
 //               getOptionLabel={(option) => option}
 //               renderOption={(props, option) => {

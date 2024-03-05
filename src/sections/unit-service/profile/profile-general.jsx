@@ -21,7 +21,7 @@ import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
-  useGetCities,
+  useGetCountryCities,
   useGetCountries,
   useGetUnitservice,
   useGetSpecialties,
@@ -34,8 +34,8 @@ import FormProvider, { RHFSelect, RHFTextField, RHFUploadAvatar } from 'src/comp
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral({ unitServiceData }) {
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const [cities, setCities] = useState([]);
+  // const [selectedCountry, setSelectedCountry] = useState('');
+  // const [cities, setCities] = useState([]);
   const [companyLogo, setCompanyLog] = useState();
   const [phone, setPhone] = useState();
   const [alterPhone, setAlterPhone] = useState();
@@ -48,7 +48,6 @@ export default function AccountGeneral({ unitServiceData }) {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
   const { countriesData } = useGetCountries();
-  const { tableData } = useGetCities();
   const { unitserviceTypesData } = useGetActiveUSTypes();
   const { specialtiesData } = useGetSpecialties();
 
@@ -77,19 +76,19 @@ export default function AccountGeneral({ unitServiceData }) {
     company_logo: Yup.mixed(),
   });
 
-  const handleCountryChange = (event) => {
-    const selectedCountryId = event.target.value;
-    methods.setValue('country', selectedCountryId, { shouldValidate: true });
-    setSelectedCountry(selectedCountryId);
-  };
+  // const handleCountryChange = (event) => {
+  //   const selectedCountryId = event.target.value;
+  //   methods.setValue('country', selectedCountryId, { shouldValidate: true });
+  //   setSelectedCountry(selectedCountryId);
+  // };
 
-  useEffect(() => {
-    setCities(
-      selectedCountry
-        ? tableData.filter((info) => info?.country?._id === selectedCountry)
-        : tableData
-    );
-  }, [tableData, selectedCountry]);
+  // useEffect(() => {
+  //   setCities(
+  //     selectedCountry
+  //       ? tableData.filter((info) => info?.country?._id === selectedCountry)
+  //       : tableData
+  //   );
+  // }, [tableData, selectedCountry]);
 
   const defaultValues = {
     name_english: data?.name_english || '',
@@ -117,9 +116,12 @@ export default function AccountGeneral({ unitServiceData }) {
   });
   const {
     setValue,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const { tableData } = useGetCountryCities(watch().country);
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -280,11 +282,12 @@ export default function AccountGeneral({ unitServiceData }) {
             >
               <RHFSelect
                 label={`${t('country')} *`}
+                disabled
                 fullWidth
                 name="country"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                onChange={handleCountryChange}
+                // onChange={handleCountryChange}
               >
                 {countriesData.map((country) => (
                   <MenuItem key={country._id} value={country._id}>
@@ -295,12 +298,13 @@ export default function AccountGeneral({ unitServiceData }) {
 
               <RHFSelect
                 label={`${t('city')} *`}
+                disabled
                 fullWidth
                 name="city"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {cities.map((city) => (
+                {tableData.map((city) => (
                   <MenuItem key={city._id} value={city._id}>
                     {curLangAr ? city.name_arabic : city.name_english}
                   </MenuItem>

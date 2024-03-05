@@ -16,7 +16,7 @@ import axios, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetCities, useGetCountries } from 'src/api';
+import { useGetCountryCities, useGetCountries } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFUploadAvatar } from 'src/components/hook-form';
@@ -29,9 +29,8 @@ export default function AccountGeneral({ data, refetch }) {
   const [profilePicture, setProfilePicture] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries();
-  const [cities, setCities] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const { tableData } = useGetCities();
+  // const [cities, setCities] = useState([]);
+  // const [selectedCountry, setSelectedCountry] = useState('');
   const { t } = useTranslate();
   const [em_phone, setEMphone] = useState(data.mobile_num1);
   const [em_phone2, setEMphone2] = useState(data.mobile_num2);
@@ -73,19 +72,19 @@ export default function AccountGeneral({ data, refetch }) {
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
 
-  const handleCountryChange = (event) => {
-    const selectedCountryId = event.target.value;
-    methods.setValue('country', selectedCountryId, { shouldValidate: true });
-    setSelectedCountry(selectedCountryId);
-  };
+  // const handleCountryChange = (event) => {
+  //   const selectedCountryId = event.target.value;
+  //   methods.setValue('country', selectedCountryId, { shouldValidate: true });
+  //   setSelectedCountry(selectedCountryId);
+  // };
 
-  useEffect(() => {
-    setCities(
-      selectedCountry
-        ? tableData.filter((countryData) => countryData?.country?._id === selectedCountry)
-        : tableData
-    );
-  }, [tableData, selectedCountry]);
+  // useEffect(() => {
+  //   setCities(
+  //     selectedCountry
+  //       ? tableData.filter((countryData) => countryData?.country?._id === selectedCountry)
+  //       : tableData
+  //   );
+  // }, [tableData, selectedCountry]);
 
   const defaultValues = {
     first_name: data?.first_name || '',
@@ -112,9 +111,12 @@ export default function AccountGeneral({ data, refetch }) {
   });
   const {
     setValue,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const { tableData } = useGetCountryCities(watch().country);
 
   const fuser = (fuserSize) => {
     const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif'];
@@ -279,7 +281,7 @@ export default function AccountGeneral({ data, refetch }) {
                 name="country"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                onChange={handleCountryChange}
+                // onChange={handleCountryChange}
               >
                 {countriesData.map((country) => (
                   <MenuItem key={country._id} value={country._id}>
@@ -295,7 +297,7 @@ export default function AccountGeneral({ data, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {cities.map((city) => (
+                {tableData.map((city) => (
                   <MenuItem key={city._id} value={city._id}>
                     {city.name_english}
                   </MenuItem>

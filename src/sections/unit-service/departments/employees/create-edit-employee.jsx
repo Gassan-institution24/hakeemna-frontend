@@ -233,8 +233,8 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 ))}
               </RHFSelect>
               <RHFSelect name="gender" label={`${t('gender')} *`}>
-                <MenuItem value="male">{curLangAr ? 'ذكر' : 'Male'}</MenuItem>
-                <MenuItem value="female">{curLangAr ? 'انثى' : 'Female'}</MenuItem>
+                <MenuItem value="male">{t('male')}</MenuItem>
+                <MenuItem value="female">{t('female')}</MenuItem>
               </RHFSelect>
             </Box>
             <Box
