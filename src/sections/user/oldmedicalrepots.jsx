@@ -48,7 +48,7 @@ export default function OldMedicalReports() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const [files, setFiles] = useState(null);
+  const [files, setFiles] = useState([]);
   const [filesPdf, setfilesPdf] = useState([]);
   const [filesPdftodelete, setfilesPdftodelete] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
@@ -84,7 +84,7 @@ export default function OldMedicalReports() {
       });
     }
   };
-// console.log(specialty);
+  // console.log(specialty);
   const styles = StyleSheet.create({
     icon: {
       color: 'blue',
@@ -133,7 +133,7 @@ export default function OldMedicalReports() {
   const oldMedicalReportsSchema = Yup.object().shape({
     type: Yup.string().required(),
     date: Yup.date().required('Date is required'),
-    file: Yup.string().required(),
+    file: Yup.array().required(),
     name: Yup.string().required('File name is required'),
     note: Yup.string(),
     agree: Yup.boolean().required(),
@@ -145,7 +145,7 @@ export default function OldMedicalReports() {
   const defaultValues = {
     type: '',
     date: '',
-    file: '',
+    file: [],
     name: '',
     note: '',
     agree: !checkChange,
@@ -213,7 +213,7 @@ export default function OldMedicalReports() {
     info: PropTypes.shape({
       type: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
-      file: PropTypes.string,
+      file: PropTypes.array,
       name: PropTypes.string,
       note: PropTypes.string,
       specialty: PropTypes.string,
@@ -232,6 +232,7 @@ export default function OldMedicalReports() {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+ 
 
   const fuser = (fuserSize) => {
     const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif', '.pdf'];
@@ -248,49 +249,84 @@ export default function OldMedicalReports() {
       validateSize: isValidSize,
     };
   };
-  // Inside the AccountGeneral component
   const handleDrop = (acceptedFiles) => {
-    const file = acceptedFiles[0];
-
-    // Validate file before setting the profile picture
-    const fileValidator = fuser(file.size);
-
-    if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
-      setFiles(file); // Save the file in state
-      const newFile = Object.assign(file, {
+    const fileValidator = fuser(acceptedFiles.reduce((acc, file) => acc + file.size, 0));
+  
+    const isValidFiles = acceptedFiles.every((file) => {
+      const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
+      return fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size);
+    });
+  
+    if (isValidFiles) {
+      setFiles(acceptedFiles); // Save the files in state
+      const newFiles = acceptedFiles.map((file) => ({
+        ...file,
         preview: URL.createObjectURL(file),
-      });
-      setValue('file', newFile);
+      }));
+      setValue('file', newFiles);
     } else {
       // Handle invalid file type or size
       enqueueSnackbar('Invalid file type or size', { variant: 'error' });
     }
   };
+  
+  
 
   const onSubmit = async (data) => {
     const formData = new FormData();
-    const filesPath = files ? files.path.replace(/\\/g, '//') : '';
-    Object.keys(data).forEach((key) => {
-      formData.append(key, key === 'file' ? filesPath : data[key]);
-    });
-
     if (files) {
+      const filesPath = files.path ? files.path.replace(/\\/g, '//') : '';
+      Object.keys(data).forEach((key) => {
+        formData.append(key, key === 'file' ? filesPath : data[key]);
+      });
+  
       formData.append('medicalreports', files);
-    }
-
-    try {
-      await axios.post('/api/oldmedicalreports', formData);
-      enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
-      dialog.onFalse();
-      const response = await axios.get('/api/oldmedicalreports');
-      setfilesPdf(response.data);
-      reset();
-      setCheckChange(!checkChange);
-    } catch (error) {
-      console.error(error.message);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+  
+      try {
+        await axios.post('/api/oldmedicalreports', formData);
+        enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
+        dialog.onFalse();
+        const response = await axios.get('/api/oldmedicalreports');
+        setfilesPdf(response.data);
+        reset();
+        setCheckChange(!checkChange);
+      } catch (error) {
+        console.error(error.message);
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      }
+    } else {
+      // Handle the case where files is undefined (optional, depending on your logic)
+      console.error('Files are undefined');
     }
   };
+
+  
+  // const onSubmit = async (data) => {
+  //   const formData = new FormData();
+  
+  //   if (files) {
+    
+  //     formData.append('medicalreports', files);
+  
+  //     try {
+  //       await axios.post('/api/oldmedicalreports', formData);
+  //       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
+  //       dialog.onFalse();
+  //       const response = await axios.get('/api/oldmedicalreports');
+  //       setfilesPdf(response.data);
+  //       reset();
+  //       setCheckChange(!checkChange);
+  //     } catch (error) {
+  //       console.error(error.message);
+  //       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+  //     }
+  //   } else {
+  //     console.error('Files are undefined');
+  //   }
+  // };
+  
+  
+  
   return (
     <>
       <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ gap: 1, mb: 5 }}>
@@ -363,7 +399,9 @@ export default function OldMedicalReports() {
               sx={{ mb: 1 }}
               variant="outlined"
               onDrop={handleDrop}
+              multiple 
             />
+
             <RHFTextField lang="en" name="note" label={t('More information')} />
           </DialogContent>
           <Checkbox
