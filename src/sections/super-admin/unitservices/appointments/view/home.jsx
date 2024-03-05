@@ -604,7 +604,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <Box sx={{ fontSize: '0.8rem' }}>min</Box>
+                    <Box sx={{ fontSize: '0.8rem' }}>{t('min')}</Box>
                   </InputAdornment>
                 ),
               }}

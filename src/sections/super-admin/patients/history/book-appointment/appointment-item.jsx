@@ -74,6 +74,8 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
             <ListItemText
               primary={new Date(start_time).toLocaleTimeString('en-US', {
                 timeZone: unit_service?.country?.time_zone,
+                hour: '2-digit',
+                minute: '2-digit',
               })}
               secondary={new Date(start_time).toLocaleDateString('en-US', {
                 timeZone:
