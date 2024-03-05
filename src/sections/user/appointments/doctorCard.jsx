@@ -16,8 +16,8 @@ import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
 export default function DoctorCard({ info }) {
-  console.log(info);
-  const { nearstappointment } = useGetNearstAppointment(info._id);
+  console.log(info,"info");
+  const { nearstappointment } = useGetNearstAppointment(info?.employee?._id);
 
   const router = useRouter();
   const handleViewRow = (ids) => {
