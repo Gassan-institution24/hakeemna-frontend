@@ -46,17 +46,17 @@ export default function Specialities() {
         }}
         display="grid"
         gridTemplateColumns={{
-          xs: 'repeat(2, 2fr)',
+          xs: 'repeat(1, 1fr)',
           sm: 'repeat(3, 3fr)',
           md: 'repeat(4, 1fr)',
         }}
         sx={{
           ml: {
-            xs: 0.5,
+            xs: 6.5,
             sm: 7,
             md: 2,
             lg: 6,
-            xl: 15,
+            xl: 8,
           },
         }}
       >
@@ -66,7 +66,7 @@ export default function Specialities() {
               display: 'block',
               bgcolor: 'inherit',
               color: 'black',
-              width: '200px',
+              width: '300px',
               height: '200px',
               mb: {
                 xs: 2,
