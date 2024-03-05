@@ -22,7 +22,7 @@ import axios, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetCities, useGetCountries } from 'src/api';
+import { useGetCountryCities, useGetCountries } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -40,12 +40,11 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
   const [email, setEmail] = useState();
   const [identification_num, setID] = useState();
   const [mobile_num1, setPhoneNumber] = useState();
-  const [cities, setCities] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState('');
+  // const [cities, setCities] = useState([]);
+  // const [selectedCountry, setSelectedCountry] = useState('');
   const [existPatients, setExistPatients] = useState([]);
 
   const { countriesData } = useGetCountries();
-  const { tableData } = useGetCities();
 
   const NewUserSchema = Yup.object().shape({
     first_name: Yup.string().required('First name is required'),
@@ -85,7 +84,9 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const { reset, setValue, handleSubmit } = methods;
+  const { reset, setValue, watch, handleSubmit } = methods;
+
+  const { tableData } = useGetCountryCities(watch().country);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -94,7 +95,10 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
           patient: data._id,
         });
       } else {
-        await axios.patch(endpoints.appointments.patient.createPatientAndBookAppoint(appointment._id), data);
+        await axios.patch(
+          endpoints.appointments.patient.createPatientAndBookAppoint(appointment._id),
+          data
+        );
         socket.emit('register', {
           user,
           link: paths.unitservice.appointments.root,
@@ -118,20 +122,20 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
     }
   });
 
-  const handleCountryChange = (event) => {
-    const selectedCountryId = event.target.value;
-    methods.setValue('country', selectedCountryId, { shouldValidate: true });
-    setSelectedCountry(selectedCountryId);
-    // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
-  };
+  // const handleCountryChange = (event) => {
+  //   const selectedCountryId = event.target.value;
+  //   methods.setValue('country', selectedCountryId, { shouldValidate: true });
+  //   // setSelectedCountry(selectedCountryId);
+  //   // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
+  // };
 
-  useEffect(() => {
-    setCities(
-      selectedCountry
-        ? tableData.filter((data) => data?.country?._id === selectedCountry)
-        : tableData
-    );
-  }, [tableData, selectedCountry]);
+  // useEffect(() => {
+  //   setCities(
+  //     selectedCountry
+  //       ? tableData.filter((data) => data?.country?._id === selectedCountry)
+  //       : tableData
+  //   );
+  // }, [tableData, selectedCountry]);
   useEffect(() => {
     async function getExistPatients() {
       const results = [];
@@ -296,7 +300,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                 </RHFSelect>
                 <RHFSelect
                   native
-                  onChange={handleCountryChange}
+                  // onChange={handleCountryChange}
                   name="country"
                   label="Country"
                   InputLabelProps={{ shrink: true }}
@@ -314,7 +318,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                   InputLabelProps={{ shrink: true }}
                 >
-                  {cities.map((option, index) => (
+                  {tableData.map((option, index) => (
                     <MenuItem key={index} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>

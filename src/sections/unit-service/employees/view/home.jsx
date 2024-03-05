@@ -158,7 +158,7 @@ export default function EmployeesTableView() {
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.root,
-          msg: `activated an employee <strong>${row.employee?.first_name}</strong>`,
+          msg: `activated an employee <strong>${row?.employee?.first_name}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -179,7 +179,7 @@ export default function EmployeesTableView() {
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.root,
-          msg: `inactivated an employee <strong>${row.employee?.first_name}</strong>`,
+          msg: `inactivated an employee <strong>${row?.employee?.first_name}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
