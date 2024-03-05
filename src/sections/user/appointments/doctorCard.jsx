@@ -14,16 +14,17 @@ import { useGetNearstAppointment } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 export default function DoctorCard({ info }) {
-  console.log(info,"info");
-  const { nearstappointment } = useGetNearstAppointment(info?.employee?._id);
-
+  const { nearstappointment, loading } = useGetNearstAppointment(info?.employee?._id);
   const router = useRouter();
   const handleViewRow = (ids) => {
     router.push(paths.dashboard.user.doctorpage(ids));
   };
-
+  if (loading) {
+    return <LoadingScreen />;
+  }
   return (
     <Box
       sx={{

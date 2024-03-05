@@ -113,7 +113,7 @@ export default function Doctorpage() {
       <Typography typography="h6">
         ( {fNumber(data?.employee?.rate)}{' '}
         <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />){' '}
-        {numberOfUsers > 1 ? `From ${numberOfUsers} visitors` : `From one visitor`}
+        {numberOfUsers > 1 ? `From ${numberOfUsers} visitors` : `No rate yet`}
       </Typography>
     </Card>
   );
