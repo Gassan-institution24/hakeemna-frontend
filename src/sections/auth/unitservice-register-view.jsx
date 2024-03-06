@@ -37,9 +37,9 @@ import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useLocales, useTranslate } from 'src/locales';
 import {
-  useGetCountryCities,
   useGetCountries,
   useGetSpecialties,
+  useGetCountryCities,
   useGetActiveUSTypes,
 } from 'src/api';
 

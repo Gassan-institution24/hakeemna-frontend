@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Link from '@mui/material/Link';
@@ -18,18 +18,18 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import {
-  useGetCountryCities,
   useGetCountries,
   useGetSpecialties,
+  useGetCountryCities,
   useGetActiveUSTypes,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
