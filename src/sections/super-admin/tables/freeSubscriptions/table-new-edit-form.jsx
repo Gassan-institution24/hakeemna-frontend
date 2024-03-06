@@ -18,9 +18,9 @@ import { useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import {
-  useGetCountryCities,
   useGetCountries,
   useGetSpecialties,
+  useGetCountryCities,
   useGetActiveUSTypes,
 } from 'src/api';
 
@@ -143,7 +143,7 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect name="country" label={t('country')}>
+              <RHFSelect name="country" label="country">
                 {countriesData.map((country) => (
                   <MenuItem key={country._id} value={country._id}>
                     {country.name_english}
