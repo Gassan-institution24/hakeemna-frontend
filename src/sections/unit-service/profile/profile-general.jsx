@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { useState, useCallback } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState, useEffect, useCallback } from 'react';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import Box from '@mui/material/Box';
@@ -21,10 +21,10 @@ import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
-  useGetCountryCities,
   useGetCountries,
   useGetUnitservice,
   useGetSpecialties,
+  useGetCountryCities,
   useGetActiveUSTypes,
 } from 'src/api';
 

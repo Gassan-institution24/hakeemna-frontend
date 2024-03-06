@@ -18,9 +18,9 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import {
-  useGetCountryCities,
   useGetCountries,
   useGetSpecialties,
+  useGetCountryCities,
   useGetActiveUSTypes,
 } from 'src/api';
 
