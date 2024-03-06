@@ -1,7 +1,7 @@
 import { format, getTime, formatDistanceToNow } from 'date-fns';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { useTranslate } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 

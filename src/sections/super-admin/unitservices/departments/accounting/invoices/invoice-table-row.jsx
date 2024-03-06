@@ -8,8 +8,6 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDateTime } from 'src/utils/format-time';
-
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
