@@ -9,7 +9,7 @@ import FinishedAppoinment from './apointmentsfinished';
 
 export default function AppointmentData() {
   const { user } = useAuthContext();
-  const { appointmentsData } = useGetPatientAppointments(user?.patient?._id);
+  const { appointmentsData,  refetch } = useGetPatientAppointments(user?.patient?._id);
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
@@ -31,7 +31,7 @@ export default function AppointmentData() {
             mb: 2,
           }}
         >
-          <Currentappoinment pendingAppointments={pendingAppointments} />
+          <Currentappoinment pendingAppointments={pendingAppointments}  refetch={refetch}/>
         </Box>
       </>
       <>

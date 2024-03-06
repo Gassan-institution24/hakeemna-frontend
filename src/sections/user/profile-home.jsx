@@ -28,7 +28,7 @@ export default function ProfileHome() {
     return '';
   }
   const { user } = useAuthContext();
-
+console.log(user.patient);
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
       {user?.patient?.drug_allergies?.length > 0 && (
@@ -117,7 +117,7 @@ export default function ProfileHome() {
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.insurance?.length > 0 && (
+      {user?.patient?.insurances?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -128,7 +128,7 @@ export default function ProfileHome() {
             {t('Insurance')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.insurance?.map((company) => (
+            {user?.patient?.insurances?.map((company) => (
               <li
                 style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                 key={company._id}
@@ -424,3 +424,12 @@ export default function ProfileHome() {
     </Grid>
   );
 }
+
+
+
+
+
+// insurance
+// insurance_client_num
+// insurance_expiry_time
+// insurance_type
