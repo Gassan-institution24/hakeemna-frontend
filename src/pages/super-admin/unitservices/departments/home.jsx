@@ -8,7 +8,7 @@ import DepartmentsHomeView from 'src/sections/super-admin/unitservices/departmen
 
 export default function DepartmentsHomePage() {
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="departments" acl="read">
+    <ACLGuard category="unit_service" subcategory="departments" acl="read">
       <Helmet>
         <title> Departments </title>
         <meta name="description" content="meta" />

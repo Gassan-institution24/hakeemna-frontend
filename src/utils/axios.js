@@ -138,6 +138,10 @@ export const endpoints = {
       all: (id) => `/api/employees/engagement/department/${id}`,
       active: (id) => `/api/employees/engagement/department/${id}/active`,
     },
+    work_group: {
+      all: (id) => `/api/employees/engagement/workgroup/${id}`,
+      active: (id) => `/api/employees/engagement/workgroup/${id}/active`,
+    },
     speciality: {
       all: (id) => `/api/employees/engagement/specialty/${id}`,
       active: (id) => `/api/employees/engagement/specialty/${id}/active`,
@@ -232,6 +236,8 @@ export const endpoints = {
     employee: {
       all: (id) => `/api/wgroups/employee/${id}`,
       active: (id) => `/api/wgroups/employee/${id}/active`,
+      acl: (id) => `/api/wgroups/employee/${id}/acl`,
+      engagement: (id) => `/api/wgroups/employee/engagement/${id}`,
     },
   },
   notifications: {
@@ -350,15 +356,15 @@ export const endpoints = {
         `/api/appointments/employee/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
       nearst: (id) => `/api/appointments/nearst/${id}`,
       select: ({ id, startDate }) =>
-      `/api/appointments/employeeselect/${id}?startDate=${startDate}`,
+        `/api/appointments/employeeselect/${id}?startDate=${startDate}`,
     },
     department: {
       one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 5, order = 'asc', filters }) =>
-      `/api/appointments/department/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
+        `/api/appointments/department/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
     },
     unit_service: {
       one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 5, order = 'asc', filters }) =>
-      `/api/appointments/unitservice/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
+        `/api/appointments/unitservice/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
       available: (id) => `/api/appointments/available/${id}`,
     },
     patient: {

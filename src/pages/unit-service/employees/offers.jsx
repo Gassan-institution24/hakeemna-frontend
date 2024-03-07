@@ -17,7 +17,7 @@ export default function EmployeeOffersPage() {
   const { data, loading } = useGetEmployee(id);
   const name = data?.first_name;
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="offers" acl="read">
+    <ACLGuard category="unit_service" subcategory="offers" acl="read">
       <Helmet>
         <title> {name || ''} Employee Offers</title>
         <meta name="description" content="meta" />

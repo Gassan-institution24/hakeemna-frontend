@@ -19,7 +19,7 @@ export default function DepartmentAppointmentsPage() {
   const { appointmentsData, refetch, loading } = useGetDepartmentAppointments(depid);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="department" subcategory="appointments" acl="read">
+    <ACLGuard category="department" subcategory="appointments" acl="read">
       <Helmet>
         <title>{name || ''} Department Appointments</title>
         <meta name="description" content="meta" />

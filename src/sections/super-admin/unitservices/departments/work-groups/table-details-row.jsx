@@ -69,7 +69,10 @@ export default function TableDetailsRow({
       </TableCell>
       <TableCell lang="ar" align="center">
         {employees
-          .map((employee) => `${employee.employee.first_name} ${employee.employee.family_name}`)
+          .map(
+            (employee) =>
+              `${employee.employee?.employee?.first_name} ${employee.employee?.employee?.family_name}`
+          )
           .join(', ')}
       </TableCell>
       <TableCell lang="ar" align="center">
@@ -115,7 +118,11 @@ export default function TableDetailsRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'delete' }) && (
+          ? checkAcl({
+              category: 'department',
+              subcategory: 'management_tables',
+              acl: 'delete',
+            }) && (
               <MenuItem
                 onClick={() => {
                   onInactivate();
@@ -127,7 +134,11 @@ export default function TableDetailsRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
+          : checkAcl({
+              category: 'department',
+              subcategory: 'management_tables',
+              acl: 'update',
+            }) && (
               <MenuItem
                 onClick={() => {
                   onActivate();
@@ -140,7 +151,7 @@ export default function TableDetailsRow({
               </MenuItem>
             )}
 
-        {checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
+        {checkAcl({ category: 'department', subcategory: 'management_tables', acl: 'update' }) && (
           <MenuItem
             onClick={() => {
               onEditRow();

@@ -7,7 +7,7 @@ import Communication from 'src/sections/unit-service/communication/view/home';
 
 export default function HomePage() {
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="communication" acl="read">
+    <ACLGuard category="unit_service" subcategory="communication" acl="read">
       <Helmet>
         <title>Communication</title>
         <meta name="description" content="meta" />

@@ -8,7 +8,7 @@ import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
-export default function TableDetailsRow({ row, selected }) {
+export default function TableDetailsRow({ row, selected, onView }) {
   const { code, name_english, name_arabic, employees } = row;
 
   const { currentLang } = useLocales();
@@ -16,16 +16,35 @@ export default function TableDetailsRow({ row, selected }) {
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell lang="ar" align="center">
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={onView}
+        lang="ar"
+        align="center"
+      >
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell lang="ar" align="center">
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={onView}
+        lang="ar"
+        align="center"
+      >
         {curLangAr ? name_arabic : name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell onClick={onView} lang="ar" align="center">
         {employees
-          .map((employee) => `${employee.employee.first_name} ${employee.employee.family_name}`)
+          .map(
+            (employee) =>
+              `${employee.employee?.employee?.first_name} ${employee.employee?.employee?.family_name}`
+          )
           .join(', ')}
       </TableCell>
       <TableCell lang="ar" align="center" />
@@ -38,4 +57,5 @@ export default function TableDetailsRow({ row, selected }) {
 TableDetailsRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
+  onView: PropTypes.func,
 };

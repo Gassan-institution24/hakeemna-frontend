@@ -10,6 +10,7 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -57,6 +58,8 @@ export default function WorkGroupsTableView() {
   //   const checkAcl = useAclGuard();
 
   const { user } = useAuthContext();
+
+  const router = useRouter();
 
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -136,6 +139,13 @@ export default function WorkGroupsTableView() {
     setFilters(defaultFilters);
   }, []);
 
+  const handleViewRow = useCallback(
+    (id) => {
+      router.push(paths.employee.workGroups.permissions.root(id));
+    },
+    [router]
+  );
+
   if (loading) {
     return <LoadingScreen />;
   }
@@ -201,6 +211,7 @@ export default function WorkGroupsTableView() {
                     <TableDetailRow
                       key={row._id}
                       row={row}
+                      onView={() => handleViewRow(row._id)}
                       selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}
                     />

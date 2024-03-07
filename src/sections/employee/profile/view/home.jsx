@@ -9,7 +9,7 @@ import { paths } from 'src/routes/paths';
 import { useGetEmployee } from 'src/api';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
+// import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
@@ -32,6 +32,8 @@ export default function AccountView() {
   const [currentTab, setCurrentTab] = useState('general');
 
   const { user } = useAuthContext();
+
+  // const checkAcl = useAclGuard();
 
   const { data, loading, refetch } = useGetEmployee(user?.employee?._id);
 
@@ -81,12 +83,7 @@ export default function AccountView() {
           <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
       </Tabs>
-      {currentTab === 'general' &&
-        data &&
-        ACLGuard({ category: 'employee', subcategory: 'info', acl: 'update' }) && (
-          <AccountGeneral employeeData={data} refetch={refetch} />
-        )}
-      {/* {currentTab === 'notifications' && <AccountNotifications />} */}
+      {currentTab === 'general' && data && <AccountGeneral employeeData={data} refetch={refetch} />}
       {currentTab === 'security' && <AccountChangePassword />}
     </Container>
   );

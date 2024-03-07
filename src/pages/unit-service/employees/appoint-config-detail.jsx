@@ -20,7 +20,7 @@ export default function EmployeeAppointconfigPage() {
   // console.log('employeeData', employeeData);
 
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="appointment_configs" acl="update">
+    <ACLGuard category="unit_service" subcategory="appointment_configs" acl="update">
       <Helmet>
         <title> {name || ''} Employee Appointment Config</title>
         <meta name="description" content="meta" />

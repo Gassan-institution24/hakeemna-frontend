@@ -1,121 +1,77 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Paper, TableRow, TableCell, Typography } from '@mui/material';
+import { Grid, Card, Container, Typography, CardHeader } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
+import { useResponsive } from 'src/hooks/use-responsive';
+
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetEmployeeEngagement } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFMultiCheckbox } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-const options = [
-  { label: 'read', value: 'read' },
-  { label: 'create', value: 'create' },
-  { label: 'edit', value: 'update' },
-  { label: 'delete', value: 'delete' },
-];
+export default function TableNewEditForm() {
+  const { t } = useTranslate();
 
-export default function TableNewEditForm({ acl }) {
-  const employeeId = useParams().id;
+  const options = [
+    { label: t('read'), value: 'read' },
+    { label: t('create'), value: 'create' },
+    { label: t('edit'), value: 'update' },
+    { label: t('delete'), value: 'delete' },
+  ];
+
+  const { id } = useParams();
 
   const { user } = useAuthContext();
 
-  // console.log('acl', acl);
+  const { data } = useGetEmployeeEngagement(id);
+
+  const mdUp = useResponsive('up', 'md');
 
   const { enqueueSnackbar } = useSnackbar();
 
   const accessControlList = Yup.object().shape({
-    unit_service: Yup.object().shape({
-      departments: Yup.array(),
-      employees: Yup.array(),
-      activities: Yup.array(),
-      appointments: Yup.array(),
-      appointment_configs: Yup.array(),
-      accounting: Yup.array(),
-      employee_type: Yup.array(),
-      work_shift: Yup.array(),
-      insurance: Yup.array(),
-      offers: Yup.array(),
-      quality_control: Yup.array(),
-      subscriptions: Yup.array(),
-      unit_service_info: Yup.array(),
-      old_patient: Yup.array(),
-    }),
-    department: Yup.object().shape({
-      employees: Yup.array(),
-      activities: Yup.array(),
-      appointments: Yup.array(),
-      appointment_configs: Yup.array(),
-      accounting: Yup.array(),
-      rooms: Yup.array(),
-      quality_control: Yup.array(),
-      work_groups: Yup.array(),
-    }),
-    employee: Yup.object().shape({
-      entrance_management: Yup.array(),
-      appointments: Yup.array(),
-      appointment_configs: Yup.array(),
-      accounting: Yup.array(),
-    }),
+    departments: Yup.array(),
+    employees: Yup.array(),
+    management_tables: Yup.array(),
+    appointments: Yup.array(),
+    appointment_configs: Yup.array(),
+    accounting: Yup.array(),
+    offers: Yup.array(),
+    quality_control: Yup.array(),
+    unit_service_info: Yup.array(),
+    old_patient: Yup.array(),
   });
 
   const defaultValues = useMemo(
     () => ({
-      employee: acl?.employee || {
-        entrance_management: [],
-        appointments: [],
-        appointment_configs: [],
-        accounting: [],
-        offers: [],
-        acl: [],
-        communication: [],
-        info: [],
-      },
-      department: acl?.department || {
-        employees: [],
-        activities: [],
-        appointments: [],
-        appointment_configs: [],
-        accounting: [],
-        rooms: [],
-        quality_control: [],
-        work_groups: [],
-        department_info: [],
-      },
-      unit_service: acl?.unit_service || {
-        departments: [],
-        employees: [],
-        activities: [],
-        appointments: [],
-        appointment_configs: [],
-        accounting: [],
-        employee_type: [],
-        work_shift: [],
-        insurance: [],
-        offers: [],
-        quality_control: [],
-        subscriptions: [],
-        unit_service_info: [],
-        old_patient: [],
-        communication: [],
-      },
+      departments: data?.acl?.unit_service?.departments || [],
+      employees: data?.acl?.unit_service?.employees || [],
+      management_tables: data?.acl?.unit_service?.management_tables || [],
+      appointments: data?.acl?.unit_service?.appointments || [],
+      appointment_configs: data?.acl?.unit_service?.appointment_configs || [],
+      accounting: data?.acl?.unit_service?.accounting || [],
+      offers: data?.acl?.unit_service?.offers || [],
+      quality_control: data?.acl?.unit_service?.quality_control || [],
+      unit_service_info: data?.acl?.unit_service?.unit_service_info || [],
+      old_patient: data?.acl?.unit_service?.old_patient || [],
+      permissions: data?.acl?.unit_service?.old_patient || [],
     }),
-    [acl]
+    [data]
   );
 
   const methods = useForm({
@@ -125,23 +81,38 @@ export default function TableNewEditForm({ acl }) {
   });
 
   const {
-    watch,
+    reset,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
+  /* eslint-disable */
+  useEffect(() => {
+    reset({
+      departments: data?.acl?.unit_service?.departments || [],
+      employees: data?.acl?.unit_service?.employees || [],
+      management_tables: data?.acl?.unit_service?.management_tables || [],
+      appointments: data?.acl?.unit_service?.appointments || [],
+      appointment_configs: data?.acl?.unit_service?.appointment_configs || [],
+      accounting: data?.acl?.unit_service?.accounting || [],
+      offers: data?.acl?.unit_service?.offers || [],
+      quality_control: data?.acl?.unit_service?.quality_control || [],
+      unit_service_info: data?.acl?.unit_service?.unit_service_info || [],
+      old_patient: data?.acl?.unit_service?.old_patient || [],
+      permissions: data?.acl?.unit_service?.old_patient || [],
+    });
+  }, [id, data]);
+  /* eslint-enable */
 
-  // console.log('values', values);
-
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (submittedData) => {
     try {
-      // console.log('data', data);
-      axios.patch(endpoints.employee_engagements.one(employeeId), { acl: data });
+      const newAcl = data.acl;
+      newAcl.unit_service = submittedData;
+      axios.patch(endpoints.employee_engagements.one(id), { acl: newAcl });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.employees.acl(employeeId),
-        msg: `updated an employee permissions`,
+        link: paths.unitservice.employees.acl(id),
+        msg: `updated a service unit employee permissions`,
       });
       enqueueSnackbar('Update success!');
       // router.push(paths.superadmin.subscriptions.root);
@@ -152,59 +123,123 @@ export default function TableNewEditForm({ acl }) {
     }
   });
 
-  return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
-      {ACLGuard({ category: 'employee', subcategory: 'acl', acl: 'update' }) && (
-        <Stack alignItems="flex-end" sx={{ mb: 3, mr: 3 }}>
-          <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
-            Save Changes
-          </LoadingButton>
-        </Stack>
+  const renderProperties = (
+    <>
+      {mdUp && (
+        <Grid md={4}>
+          <Typography variant="h6" sx={{ mb: 0.5 }}>
+            Permissions
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            giving or withdrowing permissions refered to all
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            service unit and all its departments
+          </Typography>
+        </Grid>
       )}
-      <Box
-        gap={{ xs: 3, lg: 10 }}
-        height="1500px"
-        display={{ md: 'flex', xs: 'block' }}
-        alignItems="center"
-        flexDirection="column"
-        flexWrap="wrap"
-      >
-        {Object.keys(values)?.map((name) => (
-          <Paper
-            variant="outlined"
-            sx={{
-              bgcolor: 'background.neutral',
-              py: 2,
-              borderRadius: 1.5,
-            }}
-          >
-            <Typography variant="h6" sx={{ m: 2, mt: 0 }}>
-              {name}
-            </Typography>
-            {Object.keys(values[name]).map((subCategory) => (
-              <TableRow key={subCategory}>
-                <TableCell lang="ar" component="th" scope="row">
-                  {subCategory}
-                </TableCell>
-                <TableCell lang="ar" align="center">
-                  <RHFMultiCheckbox
-                    name={`${name}.${subCategory}`}
-                    options={options}
-                    sx={{
-                      ml: 4,
-                      display: 'grid',
-                      gridTemplateColumns: { xs: 'repeat(1, 1fr)', md: 'repeat(4, 1fr)' },
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </Paper>
-        ))}
-      </Box>
-    </FormProvider>
+
+      <Grid xs={12} md={8}>
+        <Card>
+          {!mdUp && <CardHeader title="Permissions" />}
+
+          <Stack spacing={3} sx={{ p: 3 }}>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('departments')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="departments" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('employees')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="employees" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('management tables')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="management_tables" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('appointments')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="appointments" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('appointment configuration')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="appointment_configs" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('accounting')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="accounting" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('offers')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="offers" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('quality control')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="quality_control" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('old patient data')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="old_patient" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('service unit info')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="unit_service_info" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('permissions')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="permissions" options={options} />
+            </Stack>
+          </Stack>
+        </Card>
+      </Grid>
+    </>
+  );
+  const renderActions = (
+    <>
+      {mdUp && <Grid md={4} />}
+      <Grid xs={12} md={8} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <LoadingButton
+          type="submit"
+          variant="contained"
+          // size="large"
+          loading={isSubmitting}
+          sx={{ m: 2 }}
+        >
+          save changes
+        </LoadingButton>
+      </Grid>
+    </>
+  );
+  return (
+    <Container maxWidth="lg">
+      <FormProvider methods={methods} onSubmit={onSubmit}>
+        <Grid container spacing={3}>
+          {renderProperties}
+
+          {renderActions}
+        </Grid>
+      </FormProvider>
+    </Container>
   );
 }
-TableNewEditForm.propTypes = {
-  acl: PropTypes.array,
-};

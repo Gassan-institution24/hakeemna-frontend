@@ -406,7 +406,7 @@ export default function AppointmentsView({ employeeData }) {
             { name: t('appointments') },
           ]}
           action={
-            checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
+            checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'create' }) && (
               <Button
                 component={RouterLink}
                 onClick={() => addModal.onTrue()}
@@ -491,7 +491,7 @@ export default function AppointmentsView({ employeeData }) {
               }
               action={
                 checkAcl({
-                  category: 'employee',
+                  category: 'work_group',
                   subcategory: 'appointments',
                   acl: 'update',
                 }) && (
@@ -520,7 +520,7 @@ export default function AppointmentsView({ employeeData }) {
                 )
               }
               color={
-                checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) &&
+                checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'canceled')

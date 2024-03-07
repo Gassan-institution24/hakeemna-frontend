@@ -58,7 +58,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       department: departmentData._id,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      employees: currentTable?.employees || [],
+      employees: currentTable?.employees.map((info) => info.employee) || [],
     }),
     [currentTable, departmentData, id]
   );

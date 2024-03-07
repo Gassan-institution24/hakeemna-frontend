@@ -17,7 +17,7 @@ export default function DepartmentQCPage() {
   const { data, loading } = useGetDepartment(depid);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="department" subcategory="quality_control" acl="read">
+    <ACLGuard category="department" subcategory="quality_control" acl="read">
       <Helmet>
         <title>{name || ''} Department Quality Control</title>
         <meta name="description" content="meta" />
