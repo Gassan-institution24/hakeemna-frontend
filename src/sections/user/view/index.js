@@ -1,4 +1,5 @@
 export { default as Share } from './share-view';
+export { default as Insurance } from './insurance';
 export { default as Doctorpage } from './doctorpage';
 export { default as Pharmaces } from '../pharmacies';
 export { default as Family } from './user-family-view';
