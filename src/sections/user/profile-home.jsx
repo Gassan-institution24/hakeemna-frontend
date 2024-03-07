@@ -11,6 +11,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
+import { Box } from '@mui/system';
 // ----------------------------------------------------------------------
 
 export default function ProfileHome() {
@@ -28,7 +29,7 @@ export default function ProfileHome() {
     return '';
   }
   const { user } = useAuthContext();
-
+  console.log(user.patient);
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
       {user?.patient?.drug_allergies?.length > 0 && (
@@ -117,7 +118,7 @@ export default function ProfileHome() {
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.insurance?.length > 0 && (
+      {user?.patient?.insurances?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -128,7 +129,7 @@ export default function ProfileHome() {
             {t('Insurance')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.insurance?.map((company) => (
+            {user?.patient?.insurances?.map((company) => (
               <li
                 style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
                 key={company._id}
@@ -411,11 +412,33 @@ export default function ProfileHome() {
       ))}
     </Stack>
   );
+  const renderCard = (
+    <>
+      <Box sx={{ bgcolor: 'orange',borderRadius:'100%', zIndex:1, position:'relative', top:45,right:-230 , width:40, height:40 }}> 
+      <Typography sx={{position:'relative', left:20, top:5}} variant='body2'>Hakeemna</Typography>
+      <Typography sx={{position:'relative', left:20}} variant='body2'>card</Typography>
+      </Box>
+      <Divider sx={{ borderWidth: 25, borderColor: '##EBE7E7', borderStyle: 'solid' }} />
+      <Stack component={Card} spacing={1} sx={{ p: 3, bgcolor: '#00F67F', borderRadius: 0 }}>
+        <Typography variant="h4" sx={{ textAlign: 'center', color: '#fff' }}>
+          {user?.patient?.first_name} {user?.patient?.middle_name} {user?.patient?.family_name}
+        </Typography>
+        <Typography variant="h5" sx={{ textAlign: 'center', color: '#fff' }}>
+          dfgdfg
+        </Typography>
+        <Typography variant="h3" sx={{ textAlign: 'left' }}>
+          A+
+        </Typography>
+      </Stack>
+    </>
+  );
+
   return (
     <Grid container spacing={3}>
       <Grid xs={12} md={4}>
         {renderOverview}
         {user?.patient.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
+        {renderCard}
       </Grid>
 
       <Grid xs={12} md={7}>
@@ -424,3 +447,8 @@ export default function ProfileHome() {
     </Grid>
   );
 }
+
+// insurance
+// insurance_client_num
+// insurance_expiry_time
+// insurance_type

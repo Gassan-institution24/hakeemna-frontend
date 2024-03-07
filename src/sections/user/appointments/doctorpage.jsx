@@ -17,7 +17,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-import { useParams } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -43,6 +44,8 @@ import FormProvider from 'src/components/hook-form/form-provider';
 
 export default function Doctorpage() {
   const params = useParams();
+  const router = useRouter();
+
   const { id } = params;
   const { user } = useAuthContext();
   const [TimeData, setTimeData] = useState();
@@ -80,17 +83,20 @@ export default function Doctorpage() {
         email: patientEmail,
         pInfo: patientinfo,
         appointmentinfo: datacheeck,
-        note: patientNote
+        note: patientNote,
       });
+
       refetch();
       dialog.onFalse();
       enqueueSnackbar('Appointment booked successfully', { variant: 'success' });
+      setTimeout(() => {
+        router.push(paths.dashboard.user.patientsappointments);
+      }, 1000);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
-  
   const renderHead = (
     <CardHeader
       disableTypography
@@ -113,7 +119,7 @@ export default function Doctorpage() {
       <Typography typography="h6">
         ( {fNumber(data?.employee?.rate)}{' '}
         <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />){' '}
-        {numberOfUsers > 1 ? `From ${numberOfUsers} visitors` : `From one visitor`}
+        {numberOfUsers > 1 ? `From ${numberOfUsers} visitors` : `No rate yet`}
       </Typography>
     </Card>
   );
@@ -348,9 +354,20 @@ export default function Doctorpage() {
                 </Typography>
               )}
               {datacheeck && (
-                <Box sx={{mt:1, }}>
-                  <Typography sx={{mb:1}}>Let us know if you have any notes <bt/> to follow for your appointment</Typography>
-                  <input placeholder="Ex: I have..." style={{borderRadius:4, border:'1px solid lightgray',padding:5, }} onChange={(e)=>(setPatientNote(e?.target?.value))} />
+                <Box sx={{ mt: 1 }}>
+                  <Typography sx={{ mb: 1 }}>
+                    Let us know if you have any notes <bt /> to follow for your appointment
+                  </Typography>
+                  <textarea
+                    placeholder="Ex: I have..."
+                    style={{
+                      borderRadius: 4,
+                      border: '2px solid lightgray',
+                      padding: 10,
+                      overflow: 'hidden',
+                    }}
+                    onChange={(e) => setPatientNote(e?.target?.value)}
+                  />
                 </Box>
               )}
             </Box>
