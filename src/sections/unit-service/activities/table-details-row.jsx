@@ -9,7 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
@@ -48,6 +48,8 @@ export default function TableDetailsRow({
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const checkAcl = useAclGuard();
 
   const popover = usePopover();
 
@@ -104,7 +106,11 @@ export default function TableDetailsRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? ACLGuard({ category: 'unit_service', subcategory: 'activities', acl: 'delete' }) && (
+          ? checkAcl({
+              category: 'unit_service',
+              subcategory: 'management_tables',
+              acl: 'delete',
+            }) && (
               <MenuItem
                 onClick={() => {
                   onInactivate();
@@ -116,7 +122,11 @@ export default function TableDetailsRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : ACLGuard({ category: 'unit_service', subcategory: 'activities', acl: 'update' }) && (
+          : checkAcl({
+              category: 'unit_service',
+              subcategory: 'management_tables',
+              acl: 'update',
+            }) && (
               <MenuItem
                 onClick={() => {
                   onActivate();
@@ -129,7 +139,11 @@ export default function TableDetailsRow({
               </MenuItem>
             )}
 
-        {ACLGuard({ category: 'unit_service', subcategory: 'activities', acl: 'update' }) && (
+        {checkAcl({
+          category: 'unit_service',
+          subcategory: 'management_tables',
+          acl: 'update',
+        }) && (
           <MenuItem
             onClick={() => {
               onEditRow();

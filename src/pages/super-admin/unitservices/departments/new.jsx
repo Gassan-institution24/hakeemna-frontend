@@ -8,7 +8,7 @@ import DepartmentsNewView from 'src/sections/super-admin/unitservices/department
 
 export default function DepartmentsNewPage() {
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="departments" acl="create">
+    <ACLGuard category="unit_service" subcategory="departments" acl="create">
       <Helmet>
         <title>New Department </title>
         <meta name="description" content="meta" />

@@ -7,7 +7,7 @@ import EconomicMovementNewView from 'src/sections/unit-service/accounting/econom
 
 export default function EconomicMovementNewPage() {
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="accounting" acl="create">
+    <ACLGuard category="unit_service" subcategory="accounting" acl="create">
       <Helmet>
         <title>New Economic Movement</title>
         <meta name="description" content="meta" />

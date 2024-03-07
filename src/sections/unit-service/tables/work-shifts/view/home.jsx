@@ -303,7 +303,11 @@ export default function WorkGroupsTableView() {
             { name: t('work shifts') },
           ]}
           action={
-            checkAcl({ category: 'unit_service', subcategory: 'work_shift', acl: 'create' }) && (
+            checkAcl({
+              category: 'unit_service',
+              subcategory: 'management_tables',
+              acl: 'create',
+            }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.tables.workshifts.new}
@@ -393,7 +397,7 @@ export default function WorkGroupsTableView() {
               action={
                 checkAcl({
                   category: 'unit_service',
-                  subcategory: 'work_shift',
+                  subcategory: 'management_tables',
                   acl: 'update',
                 }) && (
                   <>
@@ -416,7 +420,11 @@ export default function WorkGroupsTableView() {
                 )
               }
               color={
-                checkAcl({ category: 'unit_service', subcategory: 'work_shift', acl: 'update' }) &&
+                checkAcl({
+                  category: 'unit_service',
+                  subcategory: 'management_tables',
+                  acl: 'update',
+                }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')

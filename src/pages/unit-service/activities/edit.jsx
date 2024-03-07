@@ -17,7 +17,7 @@ export default function ActivityEditPage() {
   const { data, loading } = useGetActivity(id);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="activities" acl="update">
+    <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
       <Helmet>
         <title>Edit {name || ''} Activity</title>
         <meta name="description" content="meta" />

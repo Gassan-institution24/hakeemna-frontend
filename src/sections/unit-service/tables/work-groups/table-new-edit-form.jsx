@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
+import { useMemo } from 'react';
 import { isEqual } from 'lodash';
 import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -45,8 +45,6 @@ export default function TableNewEditForm({ currentTable }) {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
 
-  const [selectedEmployees, setSelectedEmployees] = useState([]);
-
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
@@ -59,14 +57,16 @@ export default function TableNewEditForm({ currentTable }) {
   const defaultValues = useMemo(
     () => ({
       unit_service:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
       department: currentTable?.department?._id || null,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      employees: currentTable?.employees || [],
+      employees: currentTable?.employees.map((info) => info.employee) || [],
     }),
     [currentTable, user?.employee]
   );
+  console.log('currentTable', currentTable);
+  console.log('defaultValues', defaultValues);
 
   const methods = useForm({
     mode: 'onTouched',
@@ -93,9 +93,12 @@ export default function TableNewEditForm({ currentTable }) {
 
   const {
     reset,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const values = watch();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -165,7 +168,7 @@ export default function TableNewEditForm({ currentTable }) {
               multiple
               disableCloseOnSelect
               options={employeesData.filter(
-                (option) => !selectedEmployees.some((item) => isEqual(option, item))
+                (option) => !values.employees.some((item) => isEqual(option, item))
               )}
               getOptionLabel={(option) => option._id}
               renderOption={(props, option) => (
@@ -175,7 +178,7 @@ export default function TableNewEditForm({ currentTable }) {
                 </li>
               )}
               onChange={(event, newValue) => {
-                setSelectedEmployees(newValue);
+                // setSelectedEmployees(newValue);
                 methods.setValue('employees', newValue, { shouldValidate: true });
               }}
               renderTags={(selected, getTagProps) =>

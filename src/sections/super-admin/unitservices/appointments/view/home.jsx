@@ -27,8 +27,8 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useGetAppointmentTypes } from 'src/api';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -79,6 +79,8 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
   ];
 
   const theme = useTheme();
+
+  const checkAcl = useAclGuard();
 
   const settings = useSettingsContext();
 
@@ -450,7 +452,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
                 )
               }
               action={
-                ACLGuard({
+                checkAcl({
                   category: 'unit_service',
                   subcategory: 'appointments',
                   acl: 'update',

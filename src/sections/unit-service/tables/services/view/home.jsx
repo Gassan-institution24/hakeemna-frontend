@@ -314,7 +314,11 @@ export default function ServicesTableView() {
             { name: t('services') },
           ]}
           action={
-            checkAcl({ category: 'department', subcategory: 'rooms', acl: 'create' }) && (
+            checkAcl({
+              category: 'department',
+              subcategory: 'management_tables',
+              acl: 'create',
+            }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.tables.services.new}
@@ -402,7 +406,11 @@ export default function ServicesTableView() {
                 )
               }
               action={
-                checkAcl({ category: 'department', subcategory: 'rooms', acl: 'update' }) && (
+                checkAcl({
+                  category: 'department',
+                  subcategory: 'management_tables',
+                  acl: 'update',
+                }) && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -423,7 +431,11 @@ export default function ServicesTableView() {
                 )
               }
               color={
-                checkAcl({ category: 'department', subcategory: 'rooms', acl: 'update' }) &&
+                checkAcl({
+                  category: 'department',
+                  subcategory: 'management_tables',
+                  acl: 'update',
+                }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')

@@ -18,7 +18,7 @@ export default function DepartmentActivitiesPage() {
   const name = data?.name_english;
   console.log('data', data);
   return (
-    <ACLGuard hasContent category="department" subcategory="activities" acl="read">
+    <ACLGuard category="department" subcategory="activities" acl="read">
       <Helmet>
         <title>{name || ''} Department Activities</title>
         <meta name="description" content="meta" />

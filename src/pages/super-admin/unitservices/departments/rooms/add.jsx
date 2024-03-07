@@ -16,7 +16,7 @@ export default function DepartmentRoomNewPage() {
   const { depid } = params;
   const { data, loading } = useGetDepartment(depid);
   return (
-    <ACLGuard hasContent category="department" subcategory="rooms" acl="create">
+    <ACLGuard category="department" subcategory="rooms" acl="create">
       <Helmet>
         <title> Add Room </title>
         <meta name="description" content="meta" />

@@ -531,6 +531,15 @@ export const paths = {
         root: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups`,
         new: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups/new`,
         edit: (id, acid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups/${acid}/edit`,
+        permissions: {
+          root: (id, wgid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups/${wgid}`,
+          employee: (id, wgid, emid) =>
+            `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups/${wgid}/employee/${emid}`,
+        },
+      },
+      permissions: {
+        root: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/acl`,
+        employee: (id, emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/acl/${emid}`,
       },
       appointments: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/appointments`,
       appointmentconfiguration: (id) =>
@@ -642,6 +651,11 @@ export const paths = {
         root: `${ROOTS.SUPERADMIN}/us/tables/work_groups`,
         new: `${ROOTS.SUPERADMIN}/us/tables/work_groups/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/us/tables/work_groups/${id}/edit`,
+        permissions: {
+          root: (wgid) => `${ROOTS.SUPERADMIN}/us/tables/work_groups/${wgid}`,
+          employee: (wgid, emid) =>
+            `${ROOTS.SUPERADMIN}/us/tables/work_groups/${wgid}/employee/${emid}`,
+        },
       },
       rooms: {
         root: `${ROOTS.SUPERADMIN}/us/tables/rooms`,
@@ -656,10 +670,15 @@ export const paths = {
     },
   },
 
-  // unit service
   employee: {
     root: ROOTS.SUPERADMIN,
-    workGroups: `${ROOTS.SUPERADMIN}/wgroups`,
+    workGroups: {
+      root: `${ROOTS.SUPERADMIN}/wgroups`,
+      permissions: {
+        root: (wgid) => `${ROOTS.SUPERADMIN}/wgroups/${wgid}`,
+        employee: (wgid, emid) => `${ROOTS.SUPERADMIN}/wgroups/${wgid}/employee/${emid}`,
+      },
+    },
     entrancemanagement: {
       root: `${ROOTS.SUPERADMIN}/entrancemanagement`,
       new: `${ROOTS.SUPERADMIN}/entrancemanagement/new`,

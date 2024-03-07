@@ -29,7 +29,7 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -64,16 +64,14 @@ const defaultFilters = {
 export default function EmployeesTableView() {
   const { t } = useTranslate();
   const TABLE_HEAD = [
-    /// to edit
     { id: 'sequence_number', label: t('number') },
     { id: 'online', label: t('online') },
-    // { id: 'sequence', label: t('sequence') },
     { id: 'name_english', label: t('name') },
     { id: 'employee_type', label: t('employee type') },
     { id: 'email', label: t('email') },
-    { id: 'nationality', label: t('nationality') },
-    // { id: 'validatd_identity', label: t('validated identity') },
-    // { id: 'Adjust_schedule', label: t('adjust schedule') },
+    { id: 'visibility_online_appointment', label: t('visibility online appointment') },
+    { id: 'visibility_US_page', label: t('visibility page') },
+    { id: 'adjust_schedual', label: t('adjust schedual') },
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
@@ -90,7 +88,7 @@ export default function EmployeesTableView() {
 
   const { user } = useAuthContext();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
@@ -285,12 +283,27 @@ export default function EmployeesTableView() {
     setFilters(defaultFilters);
   }, []);
 
-  // const handleViewRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.order.details(id));
-  //   },
-  //   [router]
-  // );
+  const handleChangeVisPage = useCallback(
+    async (id) => {
+      await axiosInstance.patch(endpoints.employee_engagements.one(id), {
+        visibility_US_page: !employeesData.find((employee) => employee._id === id)
+          .visibility_US_page,
+      });
+      refetch();
+    },
+    [employeesData, refetch]
+  );
+  const handleChangeVisOnlineApp = useCallback(
+    async (id) => {
+      await axiosInstance.patch(endpoints.employee_engagements.one(id), {
+        visibility_online_appointment: !employeesData.find((employee) => employee._id === id)
+          .visibility_online_appointment,
+      });
+      refetch();
+    },
+    [employeesData, refetch]
+  );
+
   const handleFilterStatus = useCallback(
     (event, newValue) => {
       handleFilters('status', newValue);
@@ -313,7 +326,7 @@ export default function EmployeesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('employees')} /// edit
           links={[
@@ -474,6 +487,8 @@ export default function EmployeesTableView() {
                         onViewRow={() => handleViewRow(row._id)}
                         onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
+                        onChangeVisPage={() => handleChangeVisPage(row._id)}
+                        onChangeVisOnlineApp={() => handleChangeVisOnlineApp(row._id)}
                       />
                     ))}
 
