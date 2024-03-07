@@ -14,7 +14,7 @@ export default function DepartmentEmployeeNewPage() {
   const { depid } = params;
   const { data } = useGetDepartment(depid);
   return (
-    <ACLGuard hasContent category="department" subcategory="employees" acl="create">
+    <ACLGuard category="department" subcategory="employees" acl="create">
       <Helmet>
         <title> Add Employee </title>
         <meta name="description" content="meta" />

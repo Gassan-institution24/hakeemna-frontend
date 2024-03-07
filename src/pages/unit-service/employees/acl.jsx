@@ -1,26 +1,19 @@
-import { useParams } from 'react-router';
 import { Helmet } from 'react-helmet-async';
 
 import ACLGuard from 'src/auth/guard/acl-guard';
-import { useGetEmployeeEngagement } from 'src/api';
-
-import { LoadingScreen } from 'src/components/loading-screen';
 
 import EmployeeACLView from 'src/sections/unit-service/employees/view/acl';
 
 // ----------------------------------------------------------------------
 
 export default function EmployeeACLPage() {
-  const { id } = useParams();
-  const { data, loading } = useGetEmployeeEngagement(id);
   return (
-    <ACLGuard hasContent category="employee" subcategory="acl" acl="update">
+    <ACLGuard category="unit_service" subcategory="permissions" acl="update">
       <Helmet>
         <title>Access control list</title>
         <meta name="description" content="meta" />
       </Helmet>
-      {loading && <LoadingScreen />}
-      {!loading && <EmployeeACLView acl={data.acl} />}
+      <EmployeeACLView />
     </ACLGuard>
   );
 }

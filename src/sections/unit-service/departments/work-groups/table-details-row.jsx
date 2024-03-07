@@ -25,6 +25,7 @@ export default function TableDetailsRow({
   onSelectRow,
   onInactivate,
   onActivate,
+  onViewRow,
   filters,
   setFilters,
 }) {
@@ -60,16 +61,35 @@ export default function TableDetailsRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell lang="ar" align="center">
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={onViewRow}
+        lang="ar"
+        align="center"
+      >
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell lang="ar" align="center">
+      <TableCell
+        sx={{
+          cursor: 'pointer',
+          color: '#3F54EB',
+        }}
+        onClick={onViewRow}
+        lang="ar"
+        align="center"
+      >
         {curLangAr ? name_arabic : name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell onClick={onViewRow} lang="ar" align="center">
         {employees
-          .map((employee) => `${employee.employee.first_name} ${employee.employee.family_name}`)
+          .map(
+            (employee) =>
+              `${employee.employee?.employee?.first_name} ${employee.employee?.employee?.family_name}`
+          )
           .join(', ')}
       </TableCell>
       <TableCell lang="ar" align="center">
@@ -115,7 +135,11 @@ export default function TableDetailsRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'delete' }) && (
+          ? checkAcl({
+              category: 'department',
+              subcategory: 'management_tables',
+              acl: 'delete',
+            }) && (
               <MenuItem
                 onClick={() => {
                   onInactivate();
@@ -127,7 +151,11 @@ export default function TableDetailsRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
+          : checkAcl({
+              category: 'department',
+              subcategory: 'management_tables',
+              acl: 'update',
+            }) && (
               <MenuItem
                 onClick={() => {
                   onActivate();
@@ -140,7 +168,7 @@ export default function TableDetailsRow({
               </MenuItem>
             )}
 
-        {checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
+        {checkAcl({ category: 'department', subcategory: 'management_tables', acl: 'update' }) && (
           <MenuItem
             onClick={() => {
               onEditRow();
@@ -215,6 +243,7 @@ TableDetailsRow.propTypes = {
   onSelectRow: PropTypes.func,
   setFilters: PropTypes.func,
   onEditRow: PropTypes.func,
+  onViewRow: PropTypes.func,
   row: PropTypes.object,
   filters: PropTypes.object,
   selected: PropTypes.bool,

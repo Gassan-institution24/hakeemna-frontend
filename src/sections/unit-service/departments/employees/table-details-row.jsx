@@ -9,7 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
@@ -44,6 +44,8 @@ export default function CountriesTableRow({
   } = row;
 
   const { t } = useTranslate();
+
+  const checkAcl = useAclGuard();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -133,7 +135,7 @@ export default function CountriesTableRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? ACLGuard({ category: 'department', subcategory: 'employees', acl: 'delete' }) && (
+          ? checkAcl({ category: 'department', subcategory: 'employees', acl: 'delete' }) && (
               <MenuItem
                 onClick={() => {
                   onInactivate();
@@ -145,7 +147,7 @@ export default function CountriesTableRow({
                 {t('inactivate')}
               </MenuItem>
             )
-          : ACLGuard({ category: 'department', subcategory: 'employees', acl: 'update' }) && (
+          : checkAcl({ category: 'department', subcategory: 'employees', acl: 'update' }) && (
               <MenuItem
                 onClick={() => {
                   onActivate();

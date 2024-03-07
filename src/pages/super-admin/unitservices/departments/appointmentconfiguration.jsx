@@ -17,7 +17,7 @@ export default function DepartmentAppointmentConfigPage() {
   const { data, loading } = useGetDepartment(depid);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="department" subcategory="appointment_configs" acl="read">
+    <ACLGuard category="department" subcategory="appointment_configs" acl="read">
       <Helmet>
         <title>{name || ''} Department Appointment Configuration</title>
         <meta name="description" content="meta" />

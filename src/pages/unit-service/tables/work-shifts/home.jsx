@@ -8,7 +8,7 @@ import WorkShiftHomeView from 'src/sections/unit-service/tables/work-shifts/view
 
 export default function WorkShiftHomePage() {
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="work_shift" acl="read">
+    <ACLGuard category="unit_service" subcategory="management_tables" acl="read">
       <Helmet>
         <title>Work Shifts</title>
         <meta name="description" content="meta" />

@@ -312,7 +312,11 @@ export default function ActivitesTableView() {
             { name: t('activities') },
           ]}
           action={
-            checkAcl({ category: 'unit_service', subcategory: 'activities', acl: 'create' }) && (
+            checkAcl({
+              category: 'unit_service',
+              subcategory: 'management_tables',
+              acl: 'create',
+            }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.activities.new}
@@ -403,7 +407,7 @@ export default function ActivitesTableView() {
               action={
                 checkAcl({
                   category: 'unit_service',
-                  subcategory: 'activities',
+                  subcategory: 'management_tables',
                   acl: 'update',
                 }) && (
                   <>

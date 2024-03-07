@@ -275,6 +275,14 @@ export default function WorkGroupsTableView({ departmentData }) {
     },
     [router, departmentData]
   );
+  const handleViewRow = useCallback(
+    (id) => {
+      router.push(
+        paths.unitservice.departments.workGroups.permissions.root(departmentData._id, id)
+      );
+    },
+    [router, departmentData]
+  );
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -315,7 +323,11 @@ export default function WorkGroupsTableView({ departmentData }) {
           //   { name: t('department work groups') },
           // ]}
           action={
-            checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'create' }) && (
+            checkAcl({
+              category: 'department',
+              subcategory: 'management_tables',
+              acl: 'create',
+            }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.departments.workGroups.new(departmentData._id)}
@@ -403,7 +415,11 @@ export default function WorkGroupsTableView({ departmentData }) {
                 )
               }
               action={
-                checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
+                checkAcl({
+                  category: 'department',
+                  subcategory: 'management_tables',
+                  acl: 'update',
+                }) && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -424,7 +440,11 @@ export default function WorkGroupsTableView({ departmentData }) {
                 )
               }
               color={
-                checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) &&
+                checkAcl({
+                  category: 'department',
+                  subcategory: 'management_tables',
+                  acl: 'update',
+                }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')
@@ -465,6 +485,7 @@ export default function WorkGroupsTableView({ departmentData }) {
                         onActivate={() => handleActivate(row)}
                         onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
+                        onViewRow={() => handleViewRow(row._id)}
                       />
                     ))}
 

@@ -7,7 +7,7 @@ import NewEntranceManagementView from 'src/sections/employee/entranceManagement/
 
 export default function EntranceManagementNewPage() {
   return (
-    <ACLGuard hasContent category="employee" subcategory="entrance_management" acl="create">
+    <ACLGuard category="work_group" subcategory="entrance_management" acl="create">
       <Helmet>
         <title>New Entrance Management</title>
         <meta name="description" content="meta" />

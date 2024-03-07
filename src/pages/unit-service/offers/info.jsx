@@ -15,7 +15,7 @@ export default function OffersInfoPage() {
   const { data } = useGetOffer(id);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="offers" acl="read">
+    <ACLGuard category="unit_service" subcategory="offers" acl="read">
       <Helmet>
         <title>{name || ''} Offer Info</title>
         <meta name="description" content="meta" />
