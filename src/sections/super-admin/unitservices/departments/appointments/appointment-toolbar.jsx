@@ -13,7 +13,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -30,6 +30,8 @@ export default function AppointmentsTableToolbar({
   options,
 }) {
   const { t } = useTranslate();
+
+  const checkAcl = useAclGuard();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -161,7 +163,7 @@ export default function AppointmentsTableToolbar({
             <IconButton onClick={popover.onOpen}>
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton>
-            {ACLGuard({ category: 'department', subcategory: 'appointments', acl: 'create' }) && (
+            {checkAcl({ category: 'department', subcategory: 'appointments', acl: 'create' }) && (
               <IconButton color="error" onClick={onAdd}>
                 <Iconify icon="zondicons:add-outline" />
               </IconButton>

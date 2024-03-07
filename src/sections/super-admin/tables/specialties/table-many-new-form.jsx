@@ -129,14 +129,14 @@ export default function NewEditManyForm() {
   }, []);
 
   const handleCreate = async () => {
-    const isFormValid = data.every((one) => one.name_english && one.name_arabic);
+    try {
+      const isFormValid = data.every((one) => one.name_english && one.name_arabic);
 
-    if (!isFormValid) {
-      alert('Please fill in all required fields.');
-      return;
-    }
-    const formDataArray = data.map((obj) => {
-      if (obj.specialitiesimge) {
+      if (!isFormValid) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      const formDataArray = data.map((obj) => {
         const formData = new FormData();
         Object.keys(obj).forEach((key) => {
           console.log('key', key);
@@ -144,12 +144,7 @@ export default function NewEditManyForm() {
           formData.set(key, obj[key]);
         });
         return formData;
-      }
-      return obj;
-    });
-
-    console.log('formDataArray', formDataArray);
-    try {
+      });
       await axiosInstance.post(endpoints.specialities.many, formDataArray);
       router.push(paths.superadmin.tables.specialities.root); /// edit
     } catch (e) {

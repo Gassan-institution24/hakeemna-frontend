@@ -15,7 +15,7 @@ export default function DepartmentEmployeesPage() {
   const { data } = useGetDepartment(depid);
   const name = data?.first_name;
   return (
-    <ACLGuard hasContent category="department" subcategory="employees" acl="read">
+    <ACLGuard category="department" subcategory="employees" acl="read">
       <Helmet>
         <title>{name || ''} Department Employees</title>
         <meta name="description" content="meta" />

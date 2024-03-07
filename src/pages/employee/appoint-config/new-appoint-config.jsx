@@ -8,7 +8,7 @@ import AppointconfigDetailView from 'src/sections/employee/appoint-config/view/a
 
 export default function NewEmployeeAppointconfigPage() {
   return (
-    <ACLGuard hasContent category="employee" subcategory="appointment_configs" acl="create">
+    <ACLGuard category="work_group" subcategory="appointment_configs" acl="create">
       <Helmet>
         <title> New Appointment Config</title>
         <meta name="description" content="meta" />

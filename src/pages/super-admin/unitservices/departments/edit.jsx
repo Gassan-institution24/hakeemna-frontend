@@ -17,7 +17,7 @@ export default function DepartmentEditPage() {
   const { data, loading } = useGetDepartment(depid);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="department" subcategory="department_info" acl="update">
+    <ACLGuard category="department" subcategory="department_info" acl="update">
       <Helmet>
         <title> Edit {name || ''} Department </title>
         <meta name="description" content="meta" />

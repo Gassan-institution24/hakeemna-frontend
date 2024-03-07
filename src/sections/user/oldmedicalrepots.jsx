@@ -51,7 +51,7 @@ export default function OldMedicalReports() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const [files, setFiles] = useState([]);
+  // const [files, setFiles] = useState([]);
   const [filesPdf, setfilesPdf] = useState([]);
   const [filesPdftodelete, setfilesPdftodelete] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
@@ -255,13 +255,14 @@ export default function OldMedicalReports() {
   const handleDrop = (acceptedFiles) => {
     const fileValidator = fuser(acceptedFiles.reduce((acc, file) => acc + file.size, 0));
 
-    const isValidFiles = acceptedFiles.every((file) => {
-      const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
-      return fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size);
-    });
+    const isValidFiles = acceptedFiles.every(
+      (file) =>
+        // const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
+        fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)
+    );
 
     if (isValidFiles) {
-      setFiles(acceptedFiles); // Save the files in state
+      // setFiles(acceptedFiles); // Save the files in state
       const newFiles = acceptedFiles.map((file) => ({
         ...file,
         preview: URL.createObjectURL(file),
@@ -307,45 +308,45 @@ export default function OldMedicalReports() {
   return (
     <>
       {showAlert && (
-          <Grow in={showAlert} timeout={600}>
-        <Alert
-          severity="info"
-          variant="filled"
-          sx={{ width: "50%", mb:2 }}
-          action={
-            <>
-              <Button
-                color="inherit"
-                size="small"
-                variant="outlined"
-                sx={{
-                  mr: 1,
-                  border: (theme) => `1px solid ${alpha(theme.palette.common.white, 0.48)}`,
-                }}
-                onClick={handleAlertClose}
-              >
-                Cancel
-              </Button>
+        <Grow in={showAlert} timeout={600}>
+          <Alert
+            severity="info"
+            variant="filled"
+            sx={{ width: '50%', mb: 2 }}
+            action={
+              <>
+                <Button
+                  color="inherit"
+                  size="small"
+                  variant="outlined"
+                  sx={{
+                    mr: 1,
+                    border: (theme) => `1px solid ${alpha(theme.palette.common.white, 0.48)}`,
+                  }}
+                  onClick={handleAlertClose}
+                >
+                  Cancel
+                </Button>
 
-              <Button
-                size="small"
-                color="info"
-                variant="contained"
-                sx={{
-                  bgcolor: 'info.dark',
-                }}
-                onClick={() => {
-                  setShowAlert(false);
-                  delteeFile();
-                }}
-              >
-                Confirm
-              </Button>
-            </>
-          }
-        >
-          Please confirm the delettion
-        </Alert>
+                <Button
+                  size="small"
+                  color="info"
+                  variant="contained"
+                  sx={{
+                    bgcolor: 'info.dark',
+                  }}
+                  onClick={() => {
+                    setShowAlert(false);
+                    delteeFile();
+                  }}
+                >
+                  Confirm
+                </Button>
+              </>
+            }
+          >
+            Please confirm the delettion
+          </Alert>
         </Grow>
       )}
       <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ gap: 1, mb: 5 }}>

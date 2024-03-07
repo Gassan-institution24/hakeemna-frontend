@@ -283,7 +283,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
           ]}
           action={
             checkAcl({
-              category: 'employee',
+              category: 'work_group',
               subcategory: 'appointment_configs',
               acl: 'update',
             }) && (
@@ -364,7 +364,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
               }
               action={
                 checkAcl({
-                  category: 'employee',
+                  category: 'work_group',
                   subcategory: 'appointment_configs',
                   acl: 'update',
                 }) && (
@@ -389,7 +389,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
               }
               color={
                 checkAcl({
-                  category: 'employee',
+                  category: 'work_group',
                   subcategory: 'appointment_configs',
                   acl: 'update',
                 }) &&

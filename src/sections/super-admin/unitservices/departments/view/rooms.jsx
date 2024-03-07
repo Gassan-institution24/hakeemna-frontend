@@ -318,7 +318,11 @@ export default function RoomsTableView({ departmentData }) {
           //   { name: t('department rooms') },
           // ]}
           action={
-            checkAcl({ category: 'department', subcategory: 'rooms', acl: 'create' }) && (
+            checkAcl({
+              category: 'department',
+              subcategory: 'management_tables',
+              acl: 'create',
+            }) && (
               <Button
                 component={RouterLink}
                 href={paths.superadmin.unitservices.departments.rooms.new(id, departmentData._id)}
@@ -406,7 +410,11 @@ export default function RoomsTableView({ departmentData }) {
                 )
               }
               action={
-                checkAcl({ category: 'department', subcategory: 'rooms', acl: 'update' }) && (
+                checkAcl({
+                  category: 'department',
+                  subcategory: 'management_tables',
+                  acl: 'update',
+                }) && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -427,7 +435,11 @@ export default function RoomsTableView({ departmentData }) {
                 )
               }
               color={
-                checkAcl({ category: 'department', subcategory: 'rooms', acl: 'update' }) &&
+                checkAcl({
+                  category: 'department',
+                  subcategory: 'management_tables',
+                  acl: 'update',
+                }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')

@@ -16,7 +16,7 @@ export default function DepartmentActivityNewPage() {
   const { depid } = params;
   const { data, loading } = useGetDepartment(depid);
   return (
-    <ACLGuard hasContent category="department" subcategory="activities" acl="create">
+    <ACLGuard category="department" subcategory="activities" acl="create">
       <Helmet>
         <title> Add Activity </title>
         <meta name="description" content="meta" />

@@ -28,10 +28,15 @@ export default function UnitServiceEmployeesRow({
   setFilters,
   filters,
   onViewRow,
+  onChangeVisPage,
+  onChangeVisOnlineApp,
 }) {
   const {
     sequence_number,
     employee,
+    visibility_online_appointment,
+    visibility_US_page,
+    adjust_schedual,
     status,
     created_at,
     user_creation,
@@ -63,7 +68,6 @@ export default function UnitServiceEmployeesRow({
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
-          // textDecoration: 'underline',
         }}
         onClick={onViewRow}
         align="center"
@@ -76,22 +80,10 @@ export default function UnitServiceEmployeesRow({
           style={{ width: '10px' }}
         />
       </TableCell>
-      {/* <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onViewRow}
-        align="center"
-      >
-        {sequence_number}
-      </TableCell> */}
       <TableCell
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
-          // textDecoration: 'underline',
         }}
         onClick={onViewRow}
         align="center"
@@ -105,17 +97,20 @@ export default function UnitServiceEmployeesRow({
         {employee?.email}
       </TableCell>
       <TableCell lang="ar" align="center">
-        {curLangAr ? employee?.nationality?.name_arabic : employee?.nationality?.name_english}
+        <Checkbox checked={visibility_online_appointment} onClick={onChangeVisOnlineApp} />
+      </TableCell>
+      <TableCell lang="ar" align="center">
+        <Checkbox checked={visibility_US_page} onClick={onChangeVisPage} />
       </TableCell>
       {/* <TableCell lang="ar" align="center">
         <Iconify
           icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'}
           width={16}
         />
-      </TableCell>
-      <TableCell lang="ar" align="center">
-        <Iconify icon={Adjust_schedule ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
       </TableCell> */}
+      <TableCell lang="ar" align="center">
+        <Iconify icon={adjust_schedual ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
+      </TableCell>
       <TableCell lang="ar" align="center">
         <Label
           lang="ar"
@@ -240,6 +235,8 @@ UnitServiceEmployeesRow.propTypes = {
   onInactivate: PropTypes.func,
   onEditRow: PropTypes.func,
   onViewRow: PropTypes.func,
+  onChangeVisPage: PropTypes.func,
+  onChangeVisOnlineApp: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
   filters: PropTypes.object,

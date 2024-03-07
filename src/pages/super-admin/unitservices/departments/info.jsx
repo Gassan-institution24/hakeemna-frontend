@@ -17,7 +17,7 @@ export default function DepartmentInfoPage() {
   const { data, loading } = useGetDepartment(depid);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="department" subcategory="department_info" acl="read">
+    <ACLGuard category="department" subcategory="department_info" acl="read">
       <Helmet>
         <title>{name || ''} Department Info</title>
         <meta name="description" content="meta" />

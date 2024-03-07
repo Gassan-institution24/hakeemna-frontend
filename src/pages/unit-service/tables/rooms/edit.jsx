@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetRoom } from 'src/api';
+import ACLGuard from 'src/auth/guard/acl-guard';
 
 import RoomEditView from 'src/sections/unit-service/tables/rooms/view/edit';
 
@@ -14,13 +15,13 @@ export default function RoomEditPage() {
   const { data } = useGetRoom(id);
   const name = data?.name_english;
   return (
-    <>
+    <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
       <Helmet>
         <title>Edit {name || ''} Room</title>
         <meta name="description" content="meta" />
       </Helmet>
 
       {data && <RoomEditView roomData={data} />}
-    </>
+    </ACLGuard>
   );
 }

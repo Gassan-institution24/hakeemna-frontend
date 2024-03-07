@@ -158,7 +158,7 @@ export default function AppointmentsTableRow({
         sx={{ width: 155 }}
       >
         {status === 'available' &&
-          checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
               sx={{ color: 'success.main' }}
               onClick={() => {
@@ -171,7 +171,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status === 'available' &&
-          checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'delete' }) && (
+          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'delete' }) && (
             <MenuItem
               onClick={() => {
                 onCancelRow();
@@ -184,7 +184,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {status === 'canceled' &&
-          checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
               onClick={() => {
                 onUnCancelRow();
@@ -196,7 +196,7 @@ export default function AppointmentsTableRow({
               {t('uncancel')}
             </MenuItem>
           )}
-        {checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) && (
+        {checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
           <MenuItem onClick={confirmDelayOne.onTrue}>
             <Iconify icon="mdi:timer-sync" />
             {t('delay')}

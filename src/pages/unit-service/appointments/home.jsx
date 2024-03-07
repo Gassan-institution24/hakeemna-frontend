@@ -8,7 +8,7 @@ import AppointmentsHomeView from 'src/sections/unit-service/appointments/view/ho
 
 export default function AppointmentsHomePage() {
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="appointments" acl="read">
+    <ACLGuard category="unit_service" subcategory="appointments" acl="read">
       <Helmet>
         <title>Appointments</title>
         <meta name="description" content="meta" />
