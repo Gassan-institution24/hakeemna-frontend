@@ -285,8 +285,8 @@ export default function OldMedicalReports() {
           formData.append(key, data[key]);
         }
       });
-      console.log('data', data);
-      console.log('formData', formData);
+      // console.log('data', data);
+      // console.log('formData', formData);
       await axios.post('/api/oldmedicalreports', formData);
       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
       dialog.onFalse();
