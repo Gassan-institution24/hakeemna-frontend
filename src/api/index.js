@@ -37,6 +37,7 @@ export * from './free_subscriptions';
 export * from './hospital_list';
 export * from './insurance_companies';
 export * from './insurance_types';
+export * from './insurance_data'; 
 export * from './measurement_types';
 export * from './medical_categories';
 export * from './medicines';

@@ -75,6 +75,7 @@ export const paths = {
       new: `${ROOTS.DASHBOARD}/user/new`,
       prescriptions: `${ROOTS.DASHBOARD}/user/prescriptions`,
       family: `${ROOTS.DASHBOARD}/user/family`,
+      insurance: `${ROOTS.DASHBOARD}/user/insurance`,
       medicalreports: `${ROOTS.DASHBOARD}/user/medicalreports`,
       cards: `${ROOTS.DASHBOARD}/user/appointments`,
       profile: `${ROOTS.DASHBOARD}/user/profile`,

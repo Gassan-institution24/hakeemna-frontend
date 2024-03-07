@@ -417,6 +417,11 @@ export function useNavData() {
             icon: <Iconify icon="icon-park-twotone:family" />,
           },
           {
+            title: t('insurance'),
+            path: paths.dashboard.user.insurance,
+            icon: <Iconify icon="streamline:insurance-hand" />,
+          },
+          {
             title: t('Financial movements'),
             path: paths.dashboard.user.financilmovment,
             icon: <Iconify icon="arcticons:gnucash" />,
