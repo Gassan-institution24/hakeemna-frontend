@@ -22,13 +22,13 @@ export function useAclGuard() {
     ({ category, subcategory, acl }) => {
       const currentACL =
         user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.acl;
-      console.log('currentACL', currentACL);
-      console.log('category', category);
-      console.log('subcategory', subcategory);
-      console.log('allow', currentACL?.[category]?.[subcategory]?.includes(acl));
-      console.log('cat', currentACL?.[category]);
-      console.log('sub', currentACL?.[category]?.[subcategory]);
-      console.log('acl', acl);
+      // console.log('currentACL', currentACL);
+      // console.log('category', category);
+      // console.log('subcategory', subcategory);
+      // console.log('allow', currentACL?.[category]?.[subcategory]?.includes(acl));
+      // console.log('cat', currentACL?.[category]);
+      // console.log('sub', currentACL?.[category]?.[subcategory]);
+      // console.log('acl', acl);
       if (category === 'work_group') {
         return (
           !data?.some((eng) => eng?.acl?.[subcategory]?.includes(acl)) ||
