@@ -5,11 +5,14 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
 import { useLocales } from 'src/locales';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 // ----------------------------------------------------------------------
 
 export default function TableDetailsRow({ row, selected, onView }) {
   const { code, name_english, name_arabic, employees } = row;
+
+  const checkAcl = useAclGuard();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -17,11 +20,25 @@ export default function TableDetailsRow({ row, selected, onView }) {
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={onView}
+        sx={
+          checkAcl({
+            category: 'work_group',
+            subcategory: 'permissions',
+            acl: 'update',
+          }) && {
+            cursor: 'pointer',
+            color: '#3F54EB',
+          }
+        }
+        onClick={
+          checkAcl({
+            category: 'work_group',
+            subcategory: 'permissions',
+            acl: 'update',
+          })
+            ? onView
+            : null
+        }
         lang="ar"
         align="center"
       >
@@ -29,17 +46,43 @@ export default function TableDetailsRow({ row, selected, onView }) {
       </TableCell>
 
       <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={onView}
+        sx={
+          checkAcl({
+            category: 'work_group',
+            subcategory: 'permissions',
+            acl: 'update',
+          }) && {
+            cursor: 'pointer',
+            color: '#3F54EB',
+          }
+        }
+        onClick={
+          checkAcl({
+            category: 'work_group',
+            subcategory: 'permissions',
+            acl: 'update',
+          })
+            ? onView
+            : null
+        }
         lang="ar"
         align="center"
       >
         {curLangAr ? name_arabic : name_english}
       </TableCell>
-      <TableCell onClick={onView} lang="ar" align="center">
+      <TableCell
+        onClick={
+          checkAcl({
+            category: 'work_group',
+            subcategory: 'permissions',
+            acl: 'update',
+          })
+            ? onView
+            : null
+        }
+        lang="ar"
+        align="center"
+      >
         {employees
           .map(
             (employee) =>
