@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ReactCardFlip from 'react-card-flip';
 
 import { Box } from '@mui/system';
 import Card from '@mui/material/Card';
@@ -8,6 +9,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetPatientInsurance } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -15,7 +17,9 @@ import Image from 'src/components/image/image';
 // ----------------------------------------------------------------------
 
 export default function ProfileHome() {
+  const { user } = useAuthContext();
   const { t } = useTranslate();
+  const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   function calculateAge(birthDate) {
@@ -28,8 +32,10 @@ export default function ProfileHome() {
     }
     return '';
   }
-  const { user } = useAuthContext();
-  console.log(user.patient);
+  const [qr, setQr] = useState(false);
+  const flipCard = () => {
+    setQr(!qr);
+  };
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
       {user?.patient?.drug_allergies?.length > 0 && (
@@ -43,8 +49,8 @@ export default function ProfileHome() {
             {t(' Drug Allergies')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.drug_allergies?.map((drug) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={drug?._id}>
+            {user?.patient?.drug_allergies?.map((drug,drugkey) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={drugkey}>
                 -&nbsp; {drug?.trade_name}
               </li>
             ))}
@@ -63,10 +69,10 @@ export default function ProfileHome() {
             {t('Diseases')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.diseases?.map((disease) => (
+            {user?.patient?.diseases?.map((disease,diseasekey) => (
               <li
                 style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
-                key={disease?._id}
+                key={diseasekey}
               >
                 -&nbsp; {disease?.name_english}
               </li>
@@ -86,10 +92,10 @@ export default function ProfileHome() {
             {t('Surgeries')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.surgeries?.map((surgery) => (
+            {user?.patient?.surgeries?.map((surgery,surgerykey) => (
               <li
                 style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
-                key={surgery._id}
+                key={surgerykey}
               >
                 -&nbsp; {surgery.name}
               </li>
@@ -109,8 +115,8 @@ export default function ProfileHome() {
             {t('Medicines')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.medicines?.map((data) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={data._id}>
+            {user?.patient?.medicines?.map((data,datakey) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={datakey}>
                 -&nbsp; {data?.medicine?.trade_name}
               </li>
             ))}
@@ -118,7 +124,7 @@ export default function ProfileHome() {
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.insurances?.length > 0 && (
+      {patientInsuranseData?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -128,13 +134,13 @@ export default function ProfileHome() {
             &nbsp;
             {t('Insurance')}
           </Typography>
-          <Stack spacing={1}>
-            {user?.patient?.insurances?.map((company) => (
+          <Stack spacing={1} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
+            {patientInsuranseData?.map((company,companykey) => (
               <li
                 style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
-                key={company._id}
+                key={companykey}
               >
-                -&nbsp; {company?.name_english}
+                -&nbsp; {company?.insurance?.name_english}
               </li>
             ))}
           </Stack>
@@ -215,8 +221,8 @@ export default function ProfileHome() {
             &nbsp;
             {t('Notes')}
           </Typography>
-          {user?.patient?.other_medication_notes.map((info) => (
-            <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>-&nbsp; {info}</li>
+          {user?.patient?.other_medication_notes.map((info,infokey) => (
+            <li key={infokey} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>-&nbsp; {info}</li>
           ))}
         </Stack>
       ) : (
@@ -277,10 +283,10 @@ export default function ProfileHome() {
           value: user?.patient?.weight,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
-      ].map((item) => (
+      ].map((item,i) => (
         <>
           {item.value && (
-            <Stack key={item.label}>
+            <Stack key={i}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span
@@ -331,10 +337,10 @@ export default function ProfileHome() {
           value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
-      ].map((item) => (
+      ].map((item,ii) => (
         <>
           {item.value && (
-            <Stack key={item.label}>
+            <Stack key={ii}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span
@@ -391,10 +397,10 @@ export default function ProfileHome() {
           value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
-      ].map((item) => (
+      ].map((item,iii) => (
         <>
           {item.value && (
-            <Stack key={item.label} spacing={2}>
+            <Stack key={iii} spacing={2}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span
@@ -413,42 +419,116 @@ export default function ProfileHome() {
     </Stack>
   );
   const renderCard = (
-    <>
-      <Box sx={{ bgcolor: 'orange',borderRadius:'100%', zIndex:1, position:'relative', top:45,right:-230 , width:40, height:40 }}> 
-      <Typography sx={{position:'relative', left:20, top:5}} variant='body2'>Hakeemna</Typography>
-      <Typography sx={{position:'relative', left:20}} variant='body2'>card</Typography>
-      </Box>
-      <Divider sx={{ borderWidth: 25, borderColor: '##EBE7E7', borderStyle: 'solid' }} />
-      <Stack component={Card} spacing={1} sx={{ p: 3, bgcolor: '#00F67F', borderRadius: 0 }}>
-        <Typography variant="h4" sx={{ textAlign: 'center', color: '#fff' }}>
-          {user?.patient?.first_name} {user?.patient?.middle_name} {user?.patient?.family_name}
-        </Typography>
-        <Typography variant="h5" sx={{ textAlign: 'center', color: '#fff' }}>
-          dfgdfg
-        </Typography>
-        <Typography variant="h3" sx={{ textAlign: 'left' }}>
-          A+
-        </Typography>
-      </Stack>
-    </>
+    <ReactCardFlip flipDirection="horizontal" isFlipped={qr}>
+      <>
+        <Box
+          sx={{
+            bgcolor: 'orange',
+            borderRadius: '100%',
+            zIndex: 1,
+            position: 'relative',
+            top: 45,
+            right: { lg: -190, xl: -230, md: -175, sm: -500, xs: -230 },
+            width: 40,
+            height: 40,
+          }}
+        >
+          <Typography sx={{ position: 'relative', left: 20, top: 5 }} variant="body2">
+            Hakeemna
+          </Typography>
+          <Typography sx={{ position: 'relative', left: 20 }} variant="body2">
+            card
+          </Typography>
+          <Iconify
+            onClick={flipCard}
+            width={30}
+            sx={{
+              position: 'relative',
+              left: { lg: -180, xl: -210, md: -160, sm: -490, xs: -200 },
+              top: -35,
+              '&:hover': {
+                color: 'success.main',
+              },
+            }}
+            icon="bx:qr"
+          />
+        </Box>
+
+        <Divider sx={{ borderWidth: 25, borderColor: '##EBE7E7', borderStyle: 'solid' }} />
+        <Stack component={Card} spacing={1} sx={{ p: 3, bgcolor: '#00F67F', borderRadius: 0 }}>
+          <Typography variant="h4" sx={{ textAlign: 'center', color: '#fff' }}>
+            {user?.patient?.first_name} {user?.patient?.middle_name} {user?.patient?.family_name}
+          </Typography>
+          <Typography variant="h5" sx={{ textAlign: 'center', color: '#fff' }}>
+          {user?.patient?.identification_num}
+          </Typography>
+          <Typography variant="h3" sx={{ textAlign: 'left' }}>
+          {user?.patient?.blood_type}
+          </Typography>
+        </Stack>
+      </>
+
+      <>
+        <Box
+          sx={{
+            bgcolor: 'orange',
+            borderRadius: '100%',
+            zIndex: 1,
+            position: 'relative',
+            top: 45,
+            right: { lg: -190, xl: -230, md: -175, sm: -500, xs: -230 },
+            width: 40,
+            height: 40,
+          }}
+        >
+          <Typography sx={{ position: 'relative', left: 20, top: 5 }} variant="body2">
+            Hakeemna
+          </Typography>
+          <Typography sx={{ position: 'relative', left: 20 }} variant="body2">
+            card
+          </Typography>
+          <Iconify
+            onClick={flipCard}
+            width={30}
+            sx={{
+              position: 'relative',
+              left: { lg: -180, xl: -210, md: -160, sm: -490, xs: -200 },
+              top: -35,
+              '&:hover': {
+                color: 'success.main',
+              },
+            }}
+            icon="mdi:smart-card-outline"
+          />
+        </Box>
+
+        <Divider sx={{ borderWidth: 25, borderColor: '##EBE7E7', borderStyle: 'solid' }} />
+        <Stack component={Card} spacing={1} sx={{ p: 3, bgcolor: '#00F67F', borderRadius: 0 }}>
+          <Typography sx={{ textAlign: 'center' }}>
+            <Iconify width={100} icon="bi:qr-code" />
+          </Typography>
+        </Stack>
+      </>
+    </ReactCardFlip>
   );
+  // const renderQrCard = (
+  //   <>
+
+  //   </>
+  // );
 
   return (
     <Grid container spacing={3}>
       <Grid xs={12} md={4}>
         {renderOverview}
         {user?.patient.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
-        {renderCard}
+        <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box>
       </Grid>
 
       <Grid xs={12} md={7}>
         {renderContent}
+        <Box sx={{ display: { md: 'none', xs: 'block' } }}>{renderCard}</Box>
       </Grid>
     </Grid>
   );
 }
-
-// insurance
-// insurance_client_num
-// insurance_expiry_time
-// insurance_type

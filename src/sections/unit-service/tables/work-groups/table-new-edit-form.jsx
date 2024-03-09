@@ -174,8 +174,8 @@ export default function TableNewEditForm({ currentTable }) {
               getOptionLabel={(option) => option._id}
               renderOption={(props, option) => (
                 <li {...props} key={option._id} value={option._id}>
-                  {option.employee.first_name} {option.employee.middle_name}{' '}
-                  {option.employee.family_name}
+                  {option.employee?.first_name} {option.employee?.middle_name}{' '}
+                  {option.employee?.family_name}
                 </li>
               )}
               onChange={(event, newValue) => {
