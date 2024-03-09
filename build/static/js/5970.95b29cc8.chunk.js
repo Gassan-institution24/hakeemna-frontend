@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[5970],{862:(e,s,t)=>{t.r(s),t.d(s,{default:()=>a});var i=t(6907),n=t(99423),r=t(80184);function a(){return(0,r.jsxs)(r.Fragment,{children:[(0,r.jsxs)(i.ql,{children:[(0,r.jsx)("title",{children:" Register As Stakeholder"}),(0,r.jsx)("meta",{name:"description",content:"meta"})]}),(0,r.jsx)(n.TY,{})]})}}}]);
+//# sourceMappingURL=5970.95b29cc8.chunk.js.map
