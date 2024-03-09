@@ -62,6 +62,7 @@
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-calendar": "^4.8.0",
+    "react-card-flip": "^1.2.2",
     "react-data-export": "^0.6.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",

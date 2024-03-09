@@ -30,6 +30,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
   const dialog = useBoolean(false);
   const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
+  console.log(pendingAppointments);
   const cancelBook = async () => {
     try {
       await axios.patch(`${endpoints.appointments.one(theId)}/cancel`);
