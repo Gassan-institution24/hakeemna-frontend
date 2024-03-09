@@ -17,6 +17,7 @@ import Image from 'src/components/image/image';
 
 
 export default function DoctorCard({ info }) {
+  console.log(info)
   const { nearstappointment } = useGetNearstAppointment(info?._id);
   const router = useRouter();
   const handleViewRow = (ids) => {
