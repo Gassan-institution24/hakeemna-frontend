@@ -149,7 +149,8 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const handleCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/cancel`);
+        await axiosInstance.patch(`${endpoints.appointment_configs.one(row._id)}/cancel`);
+        refetch();
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.appointmentconfig.root(
@@ -162,7 +163,6 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
         console.error(error);
       }
-      refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
     [dataInPage.length, table, refetch, user, enqueueSnackbar]
@@ -171,7 +171,8 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const handleUnCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/uncancel`);
+        await axiosInstance.patch(`${endpoints.appointment_configs.one(row._id)}/uncancel`);
+        refetch();
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.appointmentconfig.root(
@@ -184,7 +185,6 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
         console.error(error);
       }
-      refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
     [dataInPage.length, table, refetch, user, enqueueSnackbar]
@@ -192,7 +192,10 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   const handleCancelRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, { ids: table.selected });
+      await axiosInstance.patch(`${endpoints.appointment_configs.all}/cancel`, {
+        ids: table.selected,
+      });
+      refetch();
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.appointmentconfig.root(
@@ -205,7 +208,6 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
     }
-    refetch();
     table.onUpdatePageDeleteRows({
       totalRows: appointmentConfigData.length,
       totalRowsInPage: dataInPage.length,
@@ -223,9 +225,10 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   const handleUnCancelRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.appointments.all}/uncancel`, {
+      await axiosInstance.patch(`${endpoints.appointment_configs.all}/uncancel`, {
         ids: table.selected,
       });
+      refetch();
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.appointmentconfig.root(
@@ -238,7 +241,6 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
     }
-    refetch();
     table.onUpdatePageDeleteRows({
       totalRows: appointmentConfigData.length,
       totalRowsInPage: dataInPage.length,
@@ -285,7 +287,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
             checkAcl({
               category: 'work_group',
               subcategory: 'appointment_configs',
-              acl: 'update',
+              acl: 'create',
             }) && (
               <Button
                 component={RouterLink}
@@ -430,8 +432,8 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onViewRow={() => handleViewRow(row._id)}
-                        onCancelRow={() => handleCancelRow(row._id)}
-                        onUnCancelRow={() => handleUnCancelRow(row._id)}
+                        onCancelRow={() => handleCancelRow(row)}
+                        onUnCancelRow={() => handleUnCancelRow(row)}
                       />
                     ))}
 

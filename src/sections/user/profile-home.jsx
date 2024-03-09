@@ -14,7 +14,6 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
-
 // ----------------------------------------------------------------------
 
 export default function ProfileHome() {

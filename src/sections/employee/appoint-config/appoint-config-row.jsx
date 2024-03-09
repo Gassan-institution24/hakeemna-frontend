@@ -60,18 +60,44 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell
-          sx={{
-            cursor: 'pointer',
-            color: '#3F54EB',
-            // textDecoration: 'underline',
-          }}
-          onClick={onViewRow}
+          sx={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            }) && {
+              cursor: 'pointer',
+              color: '#3F54EB',
+              // textDecoration: 'underline',
+            }
+          }
+          onClick={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            })
+              ? onViewRow
+              : null
+          }
           align="center"
         >
           {sequence_number}
         </TableCell>
 
-        <TableCell lang="ar" onClick={onViewRow} align="center">
+        <TableCell
+          lang="ar"
+          onClick={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            })
+              ? onViewRow
+              : null
+          }
+          align="center"
+        >
           <ListItemText
             primary={
               start_date
@@ -81,7 +107,19 @@ export default function AppointmentsTableRow({
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
-        <TableCell lang="ar" onClick={onViewRow} align="center">
+        <TableCell
+          lang="ar"
+          onClick={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            })
+              ? onViewRow
+              : null
+          }
+          align="center"
+        >
           <ListItemText
             primary={
               end_date
@@ -92,10 +130,34 @@ export default function AppointmentsTableRow({
           />
         </TableCell>
 
-        <TableCell lang="ar" onClick={onViewRow} align="center">
+        <TableCell
+          lang="ar"
+          onClick={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            })
+              ? onViewRow
+              : null
+          }
+          align="center"
+        >
           {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
         </TableCell>
-        <TableCell lang="ar" onClick={onViewRow} align="center">
+        <TableCell
+          lang="ar"
+          onClick={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            })
+              ? onViewRow
+              : null
+          }
+          align="center"
+        >
           {curLangAr ? work_group?.name_arabic : work_group?.name_english}
         </TableCell>
 
@@ -124,7 +186,7 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'available' &&
+        {/* {status === 'active' &&
           checkAcl({
             category: 'work_group',
             subcategory: 'appointment_configs',
@@ -137,11 +199,11 @@ export default function AppointmentsTableRow({
               }}
               sx={{ color: 'error.main' }}
             >
-              <Iconify icon="mdi:bell-cancel" />
-              {t('cancel')}
+              <Iconify icon="material-symbols:delete" />
+              {t('delete')}
             </MenuItem>
           )}
-        {status === 'canceled' &&
+        {status === 'deleted' &&
           checkAcl({
             category: 'work_group',
             subcategory: 'appointment_configs',
@@ -157,11 +219,17 @@ export default function AppointmentsTableRow({
               <Iconify icon="material-symbols-light:notifications-active-rounded" />
               {t('uncancel')}
             </MenuItem>
-          )}
-        <MenuItem onClick={onViewRow}>
-          <Iconify icon="solar:eye-bold" />
-          {t('view')}
-        </MenuItem>
+          )} */}
+        {checkAcl({
+          category: 'work_group',
+          subcategory: 'appointment_configs',
+          acl: 'update',
+        }) && (
+          <MenuItem onClick={onViewRow}>
+            <Iconify icon="solar:eye-bold" />
+            {t('view')}
+          </MenuItem>
+        )}
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
