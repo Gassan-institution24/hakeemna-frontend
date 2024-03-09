@@ -101,7 +101,7 @@ export default function AppointmentsTableRow({
           <ListItemText
             primary={
               isValid(new Date(start_time)) &&
-              new Date(start_time).toLocaleTimeString(t(t('en-US')), {
+              new Date(start_time).toLocaleTimeString(t('en-US'), {
                 timeZone: unit_service?.country?.time_zone,
                 hour: '2-digit',
                 minute: '2-digit',

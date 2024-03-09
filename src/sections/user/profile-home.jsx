@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Box } from '@mui/system';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
@@ -11,7 +12,6 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
-import { Box } from '@mui/system';
 // ----------------------------------------------------------------------
 
 export default function ProfileHome() {
