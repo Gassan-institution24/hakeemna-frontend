@@ -66,7 +66,7 @@ export default function Doctorpage() {
     id,
     startDate: currentDateTime,
   });
-
+console.log(data);
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
@@ -119,7 +119,7 @@ export default function Doctorpage() {
       <Typography typography="h6">
         ( {fNumber(data?.employee?.rate)}{' '}
         <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />){' '}
-        {numberOfUsers > 1 ? `From ${numberOfUsers} visitors` : `No rate yet`}
+        {numberOfUsers > 0 ? `From ${numberOfUsers} visitors` : `No rate yet`}
       </Typography>
     </Card>
   );

@@ -77,10 +77,9 @@ export default function Insuranceinfo() {
     formState: { isSubmitting },
   } = methods;
 
-  
   const onSubmit = async (data) => {
     try {
-      await axios.post('/api/insurance/data',data);
+      await axios.post('/api/insurance/data', data);
       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
       dialog.onFalse();
       reset();
@@ -90,7 +89,7 @@ export default function Insuranceinfo() {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
-  
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -195,7 +194,7 @@ export default function Insuranceinfo() {
             sx={{
               color: 'text.secondary',
               mt: { md: -2.5, xs: -2.3 },
-              ml: curLangAr ? { md: -31, xs: -5 } : { md: -13, xs: 4 },
+              ml: curLangAr ? { md: -31, xs: -5 } : { md: -17, xs: 4 },
               typography: 'caption',
               textAlign: 'center',
               fontSize: { md: 12, xs: 10 },
@@ -227,7 +226,7 @@ export default function Insuranceinfo() {
           </DialogActions>
         </FormProvider>
       </Dialog>{' '}
-      <InsurancePage userId = { user?.patient?._id} />
+      <InsurancePage userId={user?.patient?._id} />
     </Container>
   );
 }
