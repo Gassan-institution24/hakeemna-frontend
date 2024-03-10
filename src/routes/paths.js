@@ -72,6 +72,7 @@ export const paths = {
     },
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
+      qr: `${ROOTS.DASHBOARD}/myprofile/`,
       new: `${ROOTS.DASHBOARD}/user/new`,
       prescriptions: `${ROOTS.DASHBOARD}/user/prescriptions`,
       family: `${ROOTS.DASHBOARD}/user/family`,
@@ -85,7 +86,6 @@ export const paths = {
       patientsappointments: `${ROOTS.DASHBOARD}/user/appointments`,
       bookappointment: (id) => `${ROOTS.DASHBOARD}/user/bookappointment/${id}`,
       doctorpage: (id, date) => `${ROOTS.DASHBOARD}/user/doctorpage/${id}`,
-      // doctorpage: (id,date) => `${ROOTS.DASHBOARD}/user/doctorpage/${id}/${date}`,
       specialities: `${ROOTS.DASHBOARD}/user/specialities`,
       watingroom: `${ROOTS.DASHBOARD}/user/watingroom`,
       bmi: `${ROOTS.DASHBOARD}/user/bmi`,
