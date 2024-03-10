@@ -10,17 +10,11 @@ import ListItemText from '@mui/material/ListItemText';
 
 import { fTime, fDate } from 'src/utils/format-time';
 
-import { useAuthContext } from 'src/auth/hooks';
-import { useGetPatientAppointments } from 'src/api';
-
 import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
-export default function FinishedAppoinment() {
-  const { user } = useAuthContext();
-  const { appointmentsData } = useGetPatientAppointments(user?.patient?._id);
+export default function FinishedAppoinment({finishedAppointments}) {
 
-  const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');
 
   return finishedAppointments.map((info, index) => (
     <Box
@@ -129,5 +123,5 @@ export default function FinishedAppoinment() {
 }
 
 FinishedAppoinment.propTypes = {
-  user: PropTypes.object,
+  finishedAppointments: PropTypes.array,
 };
