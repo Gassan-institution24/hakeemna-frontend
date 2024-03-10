@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import { useState, useCallback } from 'react';
 
@@ -27,6 +26,7 @@ import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
+import { useGetEmployeeAppointmentConfigs } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -34,7 +34,6 @@ import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { useGetEmployeeAppointmentConfigs } from 'src/api';
 import {
   useTable,
   emptyRows,

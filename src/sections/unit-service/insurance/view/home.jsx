@@ -4,12 +4,9 @@ import { useSnackbar } from 'notistack';
 import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useCallback } from 'react';
 
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import { alpha } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
@@ -24,10 +21,9 @@ import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
-import { StatusOptions } from 'src/assets/data/status-options';
+// import { StatusOptions } from 'src/assets/data/status-options';
 import { useGetUnitservice, useGetInsuranceCos } from 'src/api';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -78,7 +74,7 @@ export default function UnitServicesInsuranceView() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { STATUS_OPTIONS } = StatusOptions();
+  // const { STATUS_OPTIONS } = StatusOptions();
 
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
@@ -211,12 +207,12 @@ export default function UnitServicesInsuranceView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
-  const handleFilterStatus = useCallback(
-    (event, newValue) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
-  );
+  // const handleFilterStatus = useCallback(
+  //   (event, newValue) => {
+  //     handleFilters('status', newValue);
+  //   },
+  //   [handleFilters]
+  // );
   if (loading) {
     return <LoadingScreen />;
   }
