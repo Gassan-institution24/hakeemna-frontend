@@ -21,10 +21,11 @@ export default function ProfileHome() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
-  const tokenPlaceholder = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjhlZDQxNTJhYWQ5MjY2NGMxN2ZkNyIsImlhdCI6MTcxMDA0ODQzNCwiZXhwIjoxNzE3ODI0NDM0fQ.pI645Yv07aWxMh6k1gz6ogt30aSRhQ_y1dUQX0PgHrY';
+  const tokenPlaceholder =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjhlZDQxNTJhYWQ5MjY2NGMxN2ZkNyIsImlhdCI6MTcxMDA0ODQzNCwiZXhwIjoxNzE3ODI0NDM0fQ.pI645Yv07aWxMh6k1gz6ogt30aSRhQ_y1dUQX0PgHrY';
 
-// Replace the placeholder with the actual token (you need to get or generate the token)
-const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patient?._id}?token=${tokenPlaceholder}`;
+  // Replace the placeholder with the actual token (you need to get or generate the token)
+  const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patient?._id}?token=${tokenPlaceholder}`;
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   function calculateAge(birthDate) {
@@ -217,9 +218,10 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
             &nbsp;
             {t('Notes')}
           </Typography>
-          {user?.patient?.other_medication_notes.map((info, infokey) => (
+
+          {user.patient.other_medication_notes[0].split(',').map((info, infokey) => (
             <li key={infokey} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-              -&nbsp; {info}
+              -&nbsp; {info.trim()} {/* trim to remove extra whitespaces */}
             </li>
           ))}
         </Stack>
@@ -502,10 +504,7 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
 
         <Divider sx={{ borderWidth: 25, borderColor: '#EBE7E7', borderStyle: 'solid' }} />
         <Stack component={Card} spacing={1} sx={{ p: 3, bgcolor: '#00F67F', borderRadius: 0 }}>
-          <QRCodeSVG
-            value={qrCodeLink}
-            bgColor="none"
-          />
+          <QRCodeSVG value={qrCodeLink} bgColor="none" />
         </Stack>
       </>
     </ReactCardFlip>

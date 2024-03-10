@@ -25,6 +25,7 @@ export default function AppointmentData() {
   }, []);
 
   const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending');
+  const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');
   const TABS = [
     {
       value: 'upcoming',
@@ -55,7 +56,7 @@ export default function AppointmentData() {
         <Currentappoinment pendingAppointments={pendingAppointments} refetch={refetch} />
       )}
 
-      {currentTab === 'Finished' && <FinishedAppoinment />}
+      {currentTab === 'Finished' && <FinishedAppoinment finishedAppointments={finishedAppointments} />}
     </Container>
 
   
