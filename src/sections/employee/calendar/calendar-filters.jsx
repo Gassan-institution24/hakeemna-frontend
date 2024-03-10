@@ -16,10 +16,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { fDateTime } from 'src/utils/format-time';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ColorPicker } from 'src/components/color-utils';
-import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
