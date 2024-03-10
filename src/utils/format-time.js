@@ -1,4 +1,5 @@
 import { format, getTime, formatDistanceToNow } from 'date-fns';
+import ar from 'date-fns/locale/ar-SA';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -24,15 +25,15 @@ export const useUnitTime = () => {
     myunitTime,
   };
 };
-export function fDate(date, newFormat) {
+export function fDate(date, newFormat, arabic) {
   const fm = newFormat || 'dd MMM yyyy';
 
-  return date ? format(new Date(date), fm) : '';
+  return date ? format(new Date(date), fm, arabic ? { locale: ar } : null) : '';
 }
-export function fMonth(date, newFormat) {
+export function fMonth(date, newFormat, arabic) {
   const fm = newFormat || 'MMM yyyy';
 
-  return date ? format(new Date(date), fm) : '';
+  return date ? format(new Date(date), fm, arabic ? { locale: ar } : null) : '';
 }
 
 export function fDateTime(date, newFormat) {

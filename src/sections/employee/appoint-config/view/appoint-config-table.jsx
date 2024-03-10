@@ -34,6 +34,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { useGetEmployeeAppointmentConfigs } from 'src/api';
 import {
   useTable,
   emptyRows,
@@ -54,14 +55,14 @@ import ConfigFiltersResult from '../appointment-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
   startDate: null,
   endDate: null,
 };
 
 // ----------------------------------------------------------------------
 
-export default function AppointConfigView({ appointmentConfigData, refetch }) {
+export default function AppointConfigView() {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     { id: 'sequence_number', label: t('number') },
@@ -78,6 +79,10 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const checkAcl = useAclGuard();
 
   const { user } = useAuthContext();
+
+  const { appointmentConfigData, refetch } = useGetEmployeeAppointmentConfigs(
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
+  );
 
   const theme = useTheme();
 
@@ -112,7 +117,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const denseHeight = table.dense ? 56 : 76;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || !!filters.startDate || !!filters.endDate;
+    !!filters.name || filters.status !== 'active' || !!filters.startDate || !!filters.endDate;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -120,7 +125,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     appointmentConfigData.filter((item) => item.status === status).length;
 
   const TABS = [
-    { value: 'all', label: t('all'), color: 'default', count: appointmentConfigData.length },
+    // { value: 'all', label: t('all'), color: 'default', count: appointmentConfigData.length },
     {
       value: 'active',
       label: t('active'),
@@ -149,15 +154,16 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const handleCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch(`${endpoints.appointment_configs.one(row._id)}/cancel`);
+        await axiosInstance.delete(endpoints.appointment_configs.one(row._id));
         refetch();
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.appointmentconfig.root(
             user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
           ),
-          msg: `canceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
+          msg: `deleted an appointment configuration <strong>[ ${row.code} ]</strong>`,
         });
+        refetch();
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -180,6 +186,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
           ),
           msg: `uncanceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
         });
+        refetch();
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -203,6 +210,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         ),
         msg: `canceled many appointment configurations`,
       });
+      refetch();
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -236,6 +244,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         ),
         msg: `uncanceled many appointment configurations`,
       });
+      refetch();
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -570,7 +579,3 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
 
   return inputData;
 }
-AppointConfigView.propTypes = {
-  appointmentConfigData: PropTypes.array,
-  refetch: PropTypes.func,
-};

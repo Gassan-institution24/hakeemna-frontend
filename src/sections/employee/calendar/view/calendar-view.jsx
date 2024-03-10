@@ -5,6 +5,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import timelinePlugin from '@fullcalendar/timeline';
 import { useState, useEffect, useCallback } from 'react';
 import interactionPlugin from '@fullcalendar/interaction';
+import arLocale from '@fullcalendar/core/locales/ar';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -20,6 +21,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { fTimestamp } from 'src/utils/format-time';
 
+import { useLocales, useTranslate } from 'src/locales';
 import { updateEvent } from 'src/api/calendar';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeCalender } from 'src/api';
@@ -49,6 +51,10 @@ export default function CalendarView() {
   const theme = useTheme();
 
   const { user } = useAuthContext();
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const settings = useSettingsContext();
 
@@ -142,13 +148,13 @@ export default function CalendarView() {
             mb: { xs: 3, md: 5 },
           }}
         >
-          <Typography variant="h4">Calendar</Typography>
+          <Typography variant="h4">{t('calendar')}</Typography>
           <Button
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
             onClick={onOpenForm}
           >
-            New Event
+            {t('new event')}
           </Button>
         </Stack>
 
@@ -198,6 +204,7 @@ export default function CalendarView() {
                 timeGridPlugin,
                 interactionPlugin,
               ]}
+              locale={curLangAr ? arLocale : null}
             />
           </StyledCalendar>
         </Card>
@@ -213,8 +220,8 @@ export default function CalendarView() {
           exit: theme.transitions.duration.shortest - 80,
         }}
       >
-        <DialogTitle sx={{ minHeight: 76 }}>
-          {openForm && <> {currentEvent?._id ? 'Edit Event' : 'Add Event'}</>}
+        <DialogTitle lang="ar" sx={{ minHeight: 76 }}>
+          {openForm && <> {currentEvent?._id ? t('Edit Event') : t('Add Event')}</>}
         </DialogTitle>
 
         <CalendarForm

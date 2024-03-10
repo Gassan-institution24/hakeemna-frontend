@@ -54,7 +54,7 @@ import ConfigFiltersResult from '../appointmentConfig/appointment-filters-result
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
   startDate: null,
   endDate: null,
 };
@@ -114,7 +114,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const denseHeight = table.dense ? 56 : 76;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || !!filters.startDate || !!filters.endDate;
+    !!filters.name || filters.status !== 'active' || !!filters.startDate || !!filters.endDate;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -122,7 +122,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     appointmentConfigData.filter((item) => item.status === status).length;
 
   const TABS = [
-    { value: 'all', label: t('all'), color: 'default', count: appointmentConfigData.length },
+    // { value: 'all', label: t('all'), color: 'default', count: appointmentConfigData.length },
     {
       value: 'active',
       label: t('active'),
@@ -151,11 +151,11 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const handleCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/cancel`);
+        await axiosInstance.delete(`${endpoints.appointment_configs.one(row._id)}`);
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.appointmentconfig.root(id),
-          msg: `canceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
+          msg: `deleted an appointment configuration <strong>[ ${row.code} ]</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -171,7 +171,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const handleUnCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/uncancel`);
+        await axiosInstance.patch(`${endpoints.appointment_configs.one(row._id)}/uncancel`);
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.appointmentconfig.root(id),
@@ -190,7 +190,9 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   const handleCancelRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, { ids: table.selected });
+      await axiosInstance.patch(`${endpoints.appointment_configs.all}/cancel`, {
+        ids: table.selected,
+      });
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.appointmentconfig.root(id),
@@ -220,7 +222,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   const handleUnCancelRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.appointments.all}/uncancel`, {
+      await axiosInstance.patch(`${endpoints.appointment_configs.all}/uncancel`, {
         ids: table.selected,
       });
       socket.emit('updated', {

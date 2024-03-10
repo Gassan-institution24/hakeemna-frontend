@@ -66,6 +66,9 @@ export default function TableDetailsRow({
         <Box>{code}</Box>
       </TableCell>
       <TableCell lang="ar" align="center">
+        {curLangAr ? name_arabic : name_english}
+      </TableCell>
+      <TableCell lang="ar" align="center">
         <ListItemText
           primary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
           // secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMM yyyy')}
@@ -90,9 +93,6 @@ export default function TableDetailsRow({
         />
       </TableCell>
 
-      <TableCell lang="ar" align="center">
-        {curLangAr ? name_arabic : name_english}
-      </TableCell>
       <TableCell lang="ar" align="center">
         <Label
           lang="ar"
@@ -149,7 +149,7 @@ export default function TableDetailsRow({
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon="ic:baseline-pause" />
-                {t('inactivate')}
+                {t('delete')}
               </MenuItem>
             )
           : checkAcl({

@@ -56,7 +56,7 @@ import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'available',
   types: [],
   startDate: null,
   endDate: null,
@@ -130,7 +130,7 @@ export default function AppointmentsView({
 
   const canReset =
     !!filters.name ||
-    filters.status !== 'all' ||
+    filters.status !== 'available' ||
     !!filters.startDate ||
     !!filters.endDate ||
     filters.types.length > 0;
@@ -141,7 +141,7 @@ export default function AppointmentsView({
     appointmentsData.filter((item) => item.status === status).length;
 
   const TABS = [
-    { value: 'all', label: t('all'), color: 'default', count: appointmentsData.length },
+    // { value: 'all', label: t('all'), color: 'default', count: appointmentsData.length },
     {
       value: 'available',
       label: t('available'),

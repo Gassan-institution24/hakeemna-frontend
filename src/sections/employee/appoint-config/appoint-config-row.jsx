@@ -186,7 +186,7 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {/* {status === 'active' &&
+        {status === 'active' &&
           checkAcl({
             category: 'work_group',
             subcategory: 'appointment_configs',
@@ -203,7 +203,7 @@ export default function AppointmentsTableRow({
               {t('delete')}
             </MenuItem>
           )}
-        {status === 'deleted' &&
+        {status === 'inactive' &&
           checkAcl({
             category: 'work_group',
             subcategory: 'appointment_configs',
@@ -219,7 +219,7 @@ export default function AppointmentsTableRow({
               <Iconify icon="material-symbols-light:notifications-active-rounded" />
               {t('uncancel')}
             </MenuItem>
-          )} */}
+          )}
         {checkAcl({
           category: 'work_group',
           subcategory: 'appointment_configs',

@@ -57,7 +57,7 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   service: [],
-  status: 'all',
+  status: 'active',
   startDate: null,
   endDate: null,
 };
@@ -110,7 +110,7 @@ export default function IncomePaymentControlView({ patientData }) {
   const canReset =
     !!filters.name ||
     !!filters.service.length ||
-    filters.status !== 'all' ||
+    filters.status !== 'active' ||
     (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
@@ -145,7 +145,7 @@ export default function IncomePaymentControlView({ patientData }) {
   const getPercentByStatus = (status) => (getInvoiceLength(status) / dataFiltered.length) * 100;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
+    // { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
     {
       value: 'paid',
       label: 'Paid',

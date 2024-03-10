@@ -41,7 +41,7 @@ import TableDetailFiltersResult from '../quality-control/feedback-filters-result
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
   rate: [],
 };
 
@@ -91,7 +91,7 @@ export default function DepartmentFeedbackView({ departmentData }) {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all' || filters.rate.length > 0;
+  const canReset = !!filters?.name || filters.status !== 'active' || filters.rate.length > 0;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 

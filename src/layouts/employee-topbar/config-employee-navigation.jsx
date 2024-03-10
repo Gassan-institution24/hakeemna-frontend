@@ -55,7 +55,7 @@ export function useNavData() {
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
-        title: t('attendece'),
+        title: t('attendance'),
         path: paths.unitservice.employees.attendence(id),
         icon: <Iconify icon="fluent-mdl2:time-entry" />,
       },

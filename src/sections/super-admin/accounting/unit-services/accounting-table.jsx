@@ -48,7 +48,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -124,7 +124,7 @@ export default function LicenseMovementsView() {
 
   const denseHeight = table.dense ? 56 : 76;
 
-  const canReset = !!filters.name || filters.status !== 'all';
+  const canReset = !!filters.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -144,7 +144,7 @@ export default function LicenseMovementsView() {
   };
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
+    // { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
     {
       value: 'active',
       label: 'Active',

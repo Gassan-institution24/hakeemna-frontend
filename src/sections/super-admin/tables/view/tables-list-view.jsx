@@ -36,7 +36,7 @@ import TablesTableFiltersResult from '../tables-table-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
   startDate: null,
   endDate: null,
 };
@@ -107,7 +107,7 @@ export default function TablesListView() {
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
+    !!filters.name || filters.status !== 'active' || (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
