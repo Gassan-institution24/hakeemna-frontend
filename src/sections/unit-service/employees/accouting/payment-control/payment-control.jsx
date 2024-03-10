@@ -56,7 +56,7 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   service: [],
-  status: 'all',
+  status: 'active',
   startDate: null,
   endDate: null,
 };
@@ -104,7 +104,7 @@ export default function IncomePaymentControlView({ employeeData }) {
   const canReset =
     !!filters.name ||
     !!filters.service.length ||
-    filters.status !== 'all' ||
+    filters.status !== 'active' ||
     (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;

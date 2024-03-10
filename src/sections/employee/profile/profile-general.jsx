@@ -16,7 +16,7 @@ import { Tooltip, MenuItem, Typography } from '@mui/material';
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetCountries, useGetSpecialties, useGetUSActiveEmployeeTypes } from 'src/api';
 
@@ -44,6 +44,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   // console.log('employeeData', employeeData);
 
@@ -238,7 +240,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       mx: 'auto',
                     }}
                     name="scanned_identity"
-                    label="scanned ID"
+                    label={t('scanned ID')}
                     onDrop={(acceptedFiles) => handleDrop('scanned_identity', acceptedFiles)}
                   />
                   <Typography
@@ -251,7 +253,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       color: 'text.disabled',
                     }}
                   >
-                    scanned ID
+                    {t('scanned ID')}
                   </Typography>
                   {values.scanned_identity && <Iconify icon="flat-color-icons:ok" />}
                 </Box>
@@ -328,7 +330,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               >
                 {countriesData.map((country) => (
                   <MenuItem key={country._id} value={country._id}>
-                    {country.name_english}
+                    {curLangAr ? country.name_arabic : country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
@@ -354,7 +356,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               >
                 {specialtiesData.map((specialty) => (
                   <MenuItem value={specialty._id} key={specialty._id}>
-                    {specialty.name_english}
+                    {curLangAr ? specialty.name_arabic : specialty.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
@@ -365,8 +367,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                <MenuItem value="male">male</MenuItem>
-                <MenuItem value="female">female</MenuItem>
+                <MenuItem value="male">{t('male')}</MenuItem>
+                <MenuItem value="female">{t('female')}</MenuItem>
               </RHFSelect>
               <RHFSelect
                 label={`${t('employee type')} *`}
@@ -377,7 +379,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               >
                 {employeeTypesData.map((type) => (
                   <MenuItem value={type._id} key={type._id}>
-                    {type.name_english}
+                    {curLangAr ? type.name_arabic : type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>

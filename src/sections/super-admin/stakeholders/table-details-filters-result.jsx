@@ -41,7 +41,7 @@ export default function OrderTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {filters.status !== 'all' && (
+        {filters.status !== 'active' && (
           <Block label="Status:">
             <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
           </Block>

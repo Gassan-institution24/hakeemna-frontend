@@ -158,7 +158,7 @@ export default function UnitServiceEmployeesRow({
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon="ic:baseline-pause" />
-                {t('inactivate')}
+                {t('delete')}
               </MenuItem>
             )
           : checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'update' }) && (

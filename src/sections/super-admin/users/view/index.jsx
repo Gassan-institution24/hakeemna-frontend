@@ -50,7 +50,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [
-  { value: 'all', label: 'all' },
+  // { value: 'all', label: 'all' },
   { value: 'active', label: 'active' },
   { value: 'inactive', label: 'inactive' },
 ];
@@ -70,7 +70,7 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   role: 'all',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -111,7 +111,7 @@ export default function UsersTableView() {
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.role !== 'all' || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.role !== 'all' || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 

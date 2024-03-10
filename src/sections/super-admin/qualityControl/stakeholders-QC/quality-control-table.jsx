@@ -45,7 +45,7 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   rate: [],
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -103,7 +103,7 @@ export default function StakeholdersFeedbacks() {
 
   const denseHeight = table.dense ? 56 : 76;
 
-  const canReset = !!filters.name || filters.status !== 'all';
+  const canReset = !!filters.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 

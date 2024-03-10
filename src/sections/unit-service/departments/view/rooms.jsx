@@ -59,7 +59,7 @@ import TableDetailFiltersResult from '../rooms/table-details-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -116,7 +116,7 @@ export default function RoomsTableView({ departmentData }) {
   );
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 

@@ -19,17 +19,12 @@ export default function EmployeeAppointconfigPage() {
   return (
     <ACLGuard category="work_group" subcategory="appointment_configs" acl="read">
       <Helmet>
-        <title> Appointment Config</title>
+        <title> Appointment Config </title>
         <meta name="description" content="meta" />
       </Helmet>
-      {loading && <LoadingScreen />}
-      {!loading && (
         <EmployeeAppointconfigView
-          appointmentConfigData={appointmentConfigData}
-          refetch={refetch}
-          loading={loading}
         />
-      )}
+      )
     </ACLGuard>
   );
 }
