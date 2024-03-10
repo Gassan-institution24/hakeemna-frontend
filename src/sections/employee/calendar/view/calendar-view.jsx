@@ -3,9 +3,9 @@ import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import timelinePlugin from '@fullcalendar/timeline';
+import arLocale from '@fullcalendar/core/locales/ar';
 import { useState, useEffect, useCallback } from 'react';
 import interactionPlugin from '@fullcalendar/interaction';
-import arLocale from '@fullcalendar/core/locales/ar';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -21,10 +21,10 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { updateEvent } from 'src/api/calendar';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeCalender } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 import { CALENDAR_COLOR_OPTIONS } from 'src/assets/data/calender-colors';
 
 import Iconify from 'src/components/iconify';

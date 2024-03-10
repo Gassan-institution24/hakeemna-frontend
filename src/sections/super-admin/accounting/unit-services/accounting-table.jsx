@@ -130,18 +130,18 @@ export default function LicenseMovementsView() {
 
   const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
 
-  const getInvoiceLengthForTabs = (status) => {
-    const filterdData = applyFilter({
-      inputData: separateEachUsMovement(),
-      comparator: getComparator(table.order, table.orderBy),
-      filters: { ...filters, status: 'all' },
-      dateError,
-    });
-    if (!status) {
-      return filterdData.length;
-    }
-    return filterdData.filter((item) => item.status === status).length;
-  };
+  // const getInvoiceLengthForTabs = (status) => {
+  //   const filterdData = applyFilter({
+  //     inputData: separateEachUsMovement(),
+  //     comparator: getComparator(table.order, table.orderBy),
+  //     filters: { ...filters, status: 'all' },
+  //     dateError,
+  //   });
+  //   if (!status) {
+  //     return filterdData.length;
+  //   }
+  //   return filterdData.filter((item) => item.status === status).length;
+  // };
 
   const TABS = [
     // { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },

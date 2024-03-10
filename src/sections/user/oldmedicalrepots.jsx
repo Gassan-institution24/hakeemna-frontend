@@ -231,7 +231,7 @@ export default function OldMedicalReports() {
     defaultValues,
   });
   const {
-    setValue,
+    // setValue,
     control,
     reset,
     handleSubmit,
