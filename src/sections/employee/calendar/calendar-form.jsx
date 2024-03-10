@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { t } from 'i18next';
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -22,7 +23,6 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import { ColorPicker } from 'src/components/color-utils';
 import FormProvider, { RHFSwitch, RHFTextField } from 'src/components/hook-form';
-import { t } from 'i18next';
 
 // ----------------------------------------------------------------------
 
