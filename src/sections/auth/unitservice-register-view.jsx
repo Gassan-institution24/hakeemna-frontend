@@ -82,16 +82,16 @@ export default function JwtRegisterView() {
   const RegisterSchema = Yup.object().shape({
     us_name_arabic: Yup.string().required('Service unit name is required'),
     us_name_english: Yup.string().required('Service unit name is required'),
-    us_email: Yup.string()
-      .required('Service unit email is required')
-      .email('Service unit email must be a valid email address'),
+    // us_email: Yup.string()
+    //   .required('Service unit email is required')
+    //   .email('Service unit email must be a valid email address'),
     us_identification_num: Yup.string().required('Service unit ID number is required'),
     us_country: Yup.string().required('Service unit country is required'),
     us_city: Yup.string().required('Service unit city is required'),
     US_type: Yup.string().required('Service unit type is required'),
     us_speciality: Yup.string().nullable(),
     us_sector_type: Yup.string().required('Service unit sector is required'),
-    us_phone: Yup.string().required('Service unit phone is required'),
+    // us_phone: Yup.string().required('Service unit phone is required'),
 
     em_first_name: Yup.string().required('Employee first name is required'),
     em_middle_name: Yup.string().required('Employee middle name is required'),
