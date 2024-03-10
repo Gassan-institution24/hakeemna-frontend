@@ -53,13 +53,13 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'unread',
   rate: [],
 };
 
 // ----------------------------------------------------------------------
 const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
+  // { value: 'all', label: 'All' },
   { value: 'read', label: 'Read' },
   { value: 'unread', label: 'Unread' },
 ];
@@ -95,7 +95,7 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all' || filters.rate.length > 0;
+  const canReset = !!filters?.name || filters.status !== 'unread' || filters.rate.length > 0;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 

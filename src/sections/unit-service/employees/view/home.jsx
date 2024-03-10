@@ -56,7 +56,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -120,7 +120,7 @@ export default function EmployeesTableView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -285,23 +285,33 @@ export default function EmployeesTableView() {
 
   const handleChangeVisPage = useCallback(
     async (id) => {
-      await axiosInstance.patch(endpoints.employee_engagements.one(id), {
-        visibility_US_page: !employeesData.find((employee) => employee._id === id)
-          .visibility_US_page,
-      });
-      refetch();
+      try {
+        await axiosInstance.patch(endpoints.employee_engagements.one(id), {
+          visibility_US_page: !employeesData.find((employee) => employee._id === id)
+            .visibility_US_page,
+        });
+        refetch();
+        enqueueSnackbar('edited successfuly!');
+      } catch (error) {
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      }
     },
-    [employeesData, refetch]
+    [employeesData, refetch, enqueueSnackbar]
   );
   const handleChangeVisOnlineApp = useCallback(
     async (id) => {
-      await axiosInstance.patch(endpoints.employee_engagements.one(id), {
-        visibility_online_appointment: !employeesData.find((employee) => employee._id === id)
-          .visibility_online_appointment,
-      });
-      refetch();
+      try {
+        await axiosInstance.patch(endpoints.employee_engagements.one(id), {
+          visibility_online_appointment: !employeesData.find((employee) => employee._id === id)
+            .visibility_online_appointment,
+        });
+        refetch();
+        enqueueSnackbar('edited successfuly!');
+      } catch (error) {
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      }
     },
-    [employeesData, refetch]
+    [employeesData, refetch, enqueueSnackbar]
   );
 
   const handleFilterStatus = useCallback(

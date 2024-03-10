@@ -46,13 +46,13 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'not read',
   errorCodes: [],
 };
 
 // ----------------------------------------------------------------------
 const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
+  // { value: 'all', label: 'All' },
   { value: 'read', label: 'Read' },
   { value: 'not read', label: 'not read' },
 ];
@@ -90,7 +90,8 @@ export default function DoctornaSystemErrorsView() {
 
   const codeOptions = Array.from(new Set(systemErrorsData.map((data) => data.error_code)));
 
-  const canReset = !!filters?.name || filters.status !== 'all' || filters.errorCodes.length > 0;
+  const canReset =
+    !!filters?.name || filters.status !== 'not read' || filters.errorCodes.length > 0;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 

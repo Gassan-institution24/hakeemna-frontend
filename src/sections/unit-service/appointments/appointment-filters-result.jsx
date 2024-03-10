@@ -55,7 +55,7 @@ export default function InvoiceTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {filters.status !== 'all' && (
+        {filters.status !== 'active' && (
           <Block label={t('status:')}>
             <Chip size="small" label={t(filters.status)} onDelete={handleRemoveStatus} />
           </Block>

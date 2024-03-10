@@ -96,7 +96,7 @@ export default function PatientFeedbackView({ patientData }) {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all' || filters.rate.length > 0;
+  const canReset = !!filters?.name || filters.status !== 'active' || filters.rate.length > 0;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 

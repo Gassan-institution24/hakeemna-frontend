@@ -55,7 +55,7 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   service: [],
-  status: 'all',
+  status: 'active',
   startDate: null,
   endDate: null,
 };
@@ -99,7 +99,7 @@ export default function EconomicMovementsView() {
   const canReset =
     !!filters.name ||
     !!filters.service.length ||
-    filters.status !== 'all' ||
+    filters.status !== 'active' ||
     (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
@@ -117,7 +117,7 @@ export default function EconomicMovementsView() {
     (getInvoiceLength(status) / economecMovementsData.length) * 100;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: economecMovementsData.length },
+    // { value: 'all', label: 'All', color: 'default', count: economecMovementsData.length },
     {
       value: 'paid',
       label: 'Paid',

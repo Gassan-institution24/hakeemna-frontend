@@ -58,7 +58,7 @@ import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'available',
   types: '',
   shift: '',
   group: '',
@@ -112,7 +112,7 @@ export default function AppointmentsView({ employeeData }) {
     appointmentsData,
     appointmentsLength,
     refetch,
-    all,
+    // all,
     available,
     notBooked,
     processing,
@@ -150,7 +150,7 @@ export default function AppointmentsView({ employeeData }) {
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
   const TABS = [
-    { value: 'all', label: t('all'), color: 'default', count: all },
+    // { value: 'all', label: t('all'), color: 'default', count: all },
     {
       value: 'available',
       label: t('available'),

@@ -13,6 +13,7 @@ import { fDate } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,10 @@ export default function CalendarToolbar({
 }) {
   const smUp = useResponsive('up', 'sm');
 
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const popover = usePopover();
 
   const selectedItem = VIEW_OPTIONS.filter((item) => item.value === view)[0];
@@ -59,13 +64,14 @@ export default function CalendarToolbar({
       >
         {smUp && (
           <Button
+            lang="ar"
             size="small"
             color="inherit"
             onClick={popover.onOpen}
             startIcon={<Iconify icon={selectedItem.icon} />}
             endIcon={<Iconify icon="eva:arrow-ios-downward-fill" sx={{ ml: -0.5 }} />}
           >
-            {selectedItem.label}
+            {t(selectedItem.label)}
           </Button>
         )}
 
@@ -74,7 +80,7 @@ export default function CalendarToolbar({
             <Iconify icon="eva:arrow-ios-back-fill" />
           </IconButton>
 
-          <Typography variant="h6">{fDate(date)}</Typography>
+          <Typography variant="h6">{fDate(date, 'dd MMM yyyy', curLangAr)}</Typography>
 
           <IconButton onClick={onNextDate}>
             <Iconify icon="eva:arrow-ios-forward-fill" />
@@ -83,7 +89,7 @@ export default function CalendarToolbar({
 
         <Stack direction="row" alignItems="center" spacing={1}>
           <Button size="small" color="error" variant="contained" onClick={onToday}>
-            Today
+            {t('Today')}
           </Button>
 
           <IconButton onClick={onOpenFilters}>
@@ -115,13 +121,14 @@ export default function CalendarToolbar({
           <MenuItem
             key={viewOption.value}
             selected={viewOption.value === view}
+            lang="ar"
             onClick={() => {
               popover.onClose();
               onChangeView(viewOption.value);
             }}
           >
             <Iconify icon={viewOption.icon} />
-            {viewOption.label}
+            {t(viewOption.label)}
           </MenuItem>
         ))}
       </CustomPopover>
