@@ -1,18 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { Box } from '@mui/system';
 import { Card, Typography } from '@mui/material';
 
 import { fMonth } from 'src/utils/format-time';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useGetPatientInsurance } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
-export default function InsurancePage({ userId }) {
-  const { patientInsuranseData } = useGetPatientInsurance(userId);
+export default function InsurancePage() {
+  const { user } = useAuthContext();
+
+  const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
 
   return (
     <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
@@ -74,6 +76,3 @@ export default function InsurancePage({ userId }) {
     </Box>
   );
 }
-InsurancePage.propTypes = {
-  userId: PropTypes.object,
-};
