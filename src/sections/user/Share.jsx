@@ -12,7 +12,7 @@ import QR from './imges/QR.jpg';
 
 export default function Share() {
   const [link, setLink] = useState(
-    'لقد أعجبني تطبيق Doctorna.Online وأريد مشاركته معك https://doctorna-frontend.vercel.app/'
+    'لقد أعجبني تطبيق Doctorna.Online وأريد مشاركته معك https://doctorna.online'
   );
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';

@@ -30,7 +30,6 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
   const dialog = useBoolean(false);
   const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
-  console.log(pendingAppointments);
   const cancelBook = async () => {
     try {
       await axios.patch(`${endpoints.appointments.one(theId)}/cancel`);
@@ -82,106 +81,121 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Card key={index}>
-        <IconButton
-          onClick={() => savedId(info?._id)}
-          sx={{ position: 'absolute', top: 8, right: 8, '&:hover': { color: 'red' } }}
-          title="Delete"
-        >
-          <Iconify icon="mdi:cancel-bold" />
-        </IconButton>
-        <Stack sx={{ p: 3, pb: 2 }}>
-          <Avatar
-            alt={info?.name_english}
-            src={info?.unit_service?.company_logo}
-            variant="rounded"
-            sx={{ width: 48, height: 48, mb: 2 }}
-          />
-
-          {info?.work_group?.employees?.map((doctor, name) => (
-            <ListItemText
-              key={name}
-              primary={
-                <span style={{ color: 'inherit' }}> Dr. {doctor?.employee?.first_name}</span>
-              }
-              secondary={
-                <span style={{ color: 'inherit' }}> {info?.unit_service?.name_english}</span>
-              }
-              primaryTypographyProps={{
-                typography: 'subtitle1',
-              }}
-              secondaryTypographyProps={{
-                mt: 1,
-                component: 'span',
-                typography: 'caption',
-                color: 'text.disabled',
-              }}
-            />
-          ))}
-
-          <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-            {fDate(info?.start_time)}
-          </Stack>
-          <Stack
-            spacing={0.5}
-            direction="row"
-            alignItems="center"
-            sx={{ color: 'primary.main', typography: 'caption' }}
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { md: '1fr 1fr 1fr', xs: '1fr' },
+          gap: 5,
+          mb: 2,
+        }}
+      >
+        <Card key={index}>
+          <IconButton
+            onClick={() => savedId(info?._id)}
+            sx={{ position: 'absolute', top: 8, right: 8, '&:hover': { color: 'red' } }}
+            title="Delete"
           >
-            <Iconify width={16} icon="ic:baseline-tag" />
-            {info.code}
-          </Stack>
-        </Stack>
+            <Iconify icon="mdi:cancel-bold" />
+          </IconButton>
+          <Stack sx={{ p: 3, pb: 2 }}>
+            <Avatar
+              alt={info?.name_english}
+              src={info?.unit_service?.company_logo}
+              variant="rounded"
+              sx={{ width: 48, height: 48, mb: 2 }}
+            />
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+            {info?.work_group?.employees?.map((doctor, name) => (
+              <ListItemText
+                key={name}
+                primary={
+                  doctor?.employee?.visibility_online_appointment === true ? (
+                    <span style={{ color: 'inherit' }}>
+                      {' '}
+                      Dr. {doctor?.employee?.employee?.first_name}
+                    </span>
+                  ) : null
+                }
+                secondary={
+                  <span style={{ color: 'inherit' }}> {info?.unit_service?.name_english}</span>
+                }
+                primaryTypographyProps={{
+                  typography: 'subtitle1',
+                }}
+                secondaryTypographyProps={{
+                  mt: 1,
+                  component: 'span',
+                  typography: 'caption',
+                  color: 'text.disabled',
+                }}
+              />
+            ))}
 
-        <Box
-          rowGap={1.5}
-          display="grid"
-          gridTemplateColumns="repeat(2, 1fr)"
-          sx={{ p: 3, justifyContent: 'space-between' }}
-        >
-          {[
-            {
-              label: `${fTime(info.start_time)} ${fTime(info.end_time)}`,
-              icon: <Iconify width={16} icon="icon-park-solid:time" sx={{ flexShrink: 0 }} />,
-            },
-            // {
-            //   label: info?.department?.name_english,
-            //   icon: <Iconify width={16} icon="medical-icon:health-services" sx={{ flexShrink: 0 }} />,
-            // },
-            {
-              label: info?.status,
-              icon: <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }} />,
-            },
-            {
-              label: (
-                <Typography sx={{ color: 'success.main', fontSize: 13, ml: 0.1 }}>
-                  {info?.price}
-                </Typography>
-              ),
-              icon: (
-                <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
-              ),
-            },
-          ].map((item) => (
+            <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
+              {fDate(info?.start_time)}
+            </Stack>
             <Stack
-              key={item.label}
               spacing={0.5}
-              flexShrink={0}
               direction="row"
               alignItems="center"
-              sx={{ color: 'text.disabled', minWidth: 0 }}
+              sx={{ color: 'primary.main', typography: 'caption', mt: 1 }}
             >
-              {item?.icon}
-              <Typography variant="caption" noWrap>
-                {item?.label}
-              </Typography>
+              <Iconify width={16} icon="emojione-v1:note-page" />
+              {info.note}
             </Stack>
-          ))}
-        </Box>
-      </Card>
+          </Stack>
+
+          <Divider sx={{ borderStyle: 'dashed' }} />
+
+          <Box
+            rowGap={2}
+            display="grid"
+            gridTemplateColumns="repeat(2, 1fr)"
+            sx={{ p: 3, justifyContent: 'space-between' }}
+          >
+            {[
+              {
+                label: `${fTime(info.start_time)}`,
+                icon: <Iconify width={16} icon="icon-park-solid:time" sx={{ flexShrink: 0 }} />,
+              },
+              // {
+              //   label: info?.department?.name_english,
+              //   icon: <Iconify width={16} icon="medical-icon:health-services" sx={{ flexShrink: 0 }} />,
+              // },
+              {
+                label: info?.status,
+                icon: (
+                  <Iconify width={16} icon="fa-solid:file-medical-alt" sx={{ flexShrink: 0 }} />
+                ),
+              },
+              {
+                label: (
+                  <Typography sx={{ color: 'success.main', fontSize: 13, ml: 0.1 }}>
+                    {info?.price}
+                  </Typography>
+                ),
+                icon: (
+                  <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
+                ),
+              },
+            ].map((item) => (
+              <Stack
+                key={item.label}
+                spacing={0.5}
+                flexShrink={0}
+                direction="row"
+                alignItems="center"
+                sx={{ color: 'text.disabled', minWidth: 0 }}
+              >
+                {item?.icon}
+                <Typography variant="caption" noWrap>
+                  {item?.label}
+                </Typography>
+              </Stack>
+            ))}
+          </Box>
+        </Card>
+      </Box>
     </>
   ));
 }
