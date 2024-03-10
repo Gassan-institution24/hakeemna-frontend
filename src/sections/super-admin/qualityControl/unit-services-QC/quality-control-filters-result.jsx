@@ -54,7 +54,7 @@ export default function InvoiceTableFiltersResult({
           </Block>
         )} */}
 
-        {filters.status !== 'all' && (
+        {filters.status !== 'active' && (
           <Block label="Status:">
             <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
           </Block>

@@ -22,6 +22,7 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import { ColorPicker } from 'src/components/color-utils';
 import FormProvider, { RHFSwitch, RHFTextField } from 'src/components/hook-form';
+import { t } from 'i18next';
 
 // ----------------------------------------------------------------------
 
@@ -104,14 +105,15 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={3} sx={{ px: 3 }}>
-        <RHFTextField name="title" label="Title" />
+        <RHFTextField lang="ar" name="title" label={t('title')} />
 
-        <RHFTextField name="description" label="Description" multiline rows={3} />
+        <RHFTextField lang="ar" name="description" label={t('description')} multiline rows={3} />
 
-        <RHFSwitch name="allDay" label="All day" />
+        <RHFSwitch lang="ar" name="allDay" label={t('all day')} />
 
         <Controller
           name="start"
+          lang="ar"
           control={control}
           render={({ field }) => (
             <MobileDateTimePicker
@@ -122,7 +124,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
                   field.onChange(fTimestamp(newValue));
                 }
               }}
-              label="Start date"
+              label={t('start date')}
               format="dd/MM/yyyy hh:mm a"
               slotProps={{
                 textField: {
@@ -135,6 +137,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
         <Controller
           name="end"
+          lang="ar"
           control={control}
           render={({ field }) => (
             <MobileDateTimePicker
@@ -145,7 +148,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
                   field.onChange(fTimestamp(newValue));
                 }
               }}
-              label="End date"
+              label={t('end date')}
               format="dd/MM/yyyy hh:mm a"
               slotProps={{
                 textField: {
@@ -173,7 +176,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
       <DialogActions>
         {!!currentEvent?.id && (
-          <Tooltip title="Delete Event">
+          <Tooltip lang="ar" title={t('delete event')}>
             <IconButton onClick={onDelete}>
               <Iconify icon="solar:trash-bin-trash-bold" />
             </IconButton>
@@ -182,18 +185,19 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
         <Box sx={{ flexGrow: 1 }} />
 
-        <Button variant="outlined" color="inherit" onClick={onClose}>
-          Cancel
+        <Button lang="ar" variant="outlined" color="inherit" onClick={onClose}>
+          {t('cancel')}
         </Button>
 
         <LoadingButton
+          lang="ar"
           type="submit"
           tabIndex={-1}
           variant="contained"
           loading={isSubmitting}
           disabled={dateError}
         >
-          Save Changes
+          {t('save changes')}
         </LoadingButton>
       </DialogActions>
     </FormProvider>

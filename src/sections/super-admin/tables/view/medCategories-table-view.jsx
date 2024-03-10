@@ -40,14 +40,14 @@ const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'name' },
-{ id: 'name_arabic', label: 'arabic name' },
+  { id: 'name_arabic', label: 'arabic name' },
   { id: 'description', label: 'description' },
   { id: '', width: 88 },
 ];
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -81,7 +81,7 @@ export default function CategoriesTableView() {
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 

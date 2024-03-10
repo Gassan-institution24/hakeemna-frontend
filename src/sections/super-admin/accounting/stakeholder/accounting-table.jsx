@@ -57,7 +57,7 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   service: [],
-  status: 'all',
+  status: 'available',
   startDate: null,
   endDate: null,
 };
@@ -103,7 +103,7 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
   const canReset =
     !!filters.name ||
     !!filters.service.length ||
-    filters.status !== 'all' ||
+    filters.status !== 'available' ||
     (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
@@ -132,7 +132,7 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
   // const getPercentByStatus = (status) => (getInvoiceLength(status) / dataFiltered.length) * 100;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
+    // { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
     {
       value: 'active',
       label: 'active',

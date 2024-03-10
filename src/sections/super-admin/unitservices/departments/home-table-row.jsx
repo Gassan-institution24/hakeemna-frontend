@@ -207,7 +207,7 @@ export default function CountriesTableRow({
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon="ic:baseline-pause" />
-                {t('inactivate')}
+                {t('delete')}
               </MenuItem>
             )
           : checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (

@@ -52,7 +52,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -99,8 +99,10 @@ export default function UnitServicesInsuranceView() {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
   const filteredInsuranceCos = insuranseCosData
-    .filter((company) => !data?.insurance?.some((info) => info._id === company._id))
-    .filter((info) => info.status === 'active');
+    .filter(
+      (company) =>
+        !data?.insurance?.some((info) => info._id === company._id && info.status === 'active')
+    )
 
   const dateError =
     filters.startDate && filters.endDate
@@ -121,7 +123,7 @@ export default function UnitServicesInsuranceView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
@@ -252,7 +254,7 @@ export default function UnitServicesInsuranceView() {
         />
 
         <Card>
-          <Tabs
+          {/* <Tabs
             value={filters.status}
             onChange={handleFilterStatus}
             sx={{
@@ -287,7 +289,7 @@ export default function UnitServicesInsuranceView() {
                 }
               />
             ))}
-          </Tabs>
+          </Tabs> */}
           <TableDetailToolbar
             onPrint={printHandler}
             filters={filters}
@@ -406,7 +408,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   inputData = stabilizedThis?.map((el) => el[0]);
 
   if (name) {
-    inputData = inputData.filter(
+    inputData = inputData?.filter(
       (data) =>
         (data?.name_english &&
           data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
@@ -422,7 +424,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
+    inputData = inputData?.filter((order) => order.status === status);
   }
 
   return inputData;

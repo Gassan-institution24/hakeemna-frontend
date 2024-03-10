@@ -65,7 +65,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
   start_date: null,
   end_date: null,
   rate: [],
@@ -73,7 +73,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
+  // { value: 'all', label: 'All' },
   { value: 'active', label: 'active' },
   { value: 'inactive', label: 'inactive' },
 ];
@@ -119,7 +119,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
 
   const canReset =
     !!filters?.name ||
-    filters.status !== 'all' ||
+    filters.status !== 'active' ||
     filters.rate.length > 0 ||
     (!!filters.start_date && !!filters.end_date);
 

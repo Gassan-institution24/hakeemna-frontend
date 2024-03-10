@@ -62,7 +62,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'pending',
   startDate: null,
   endDate: null,
 };
@@ -106,7 +106,7 @@ export default function AppointHistoryView({ patientData }) {
   const denseHeight = table.dense ? 56 : 76;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
+    !!filters.name || filters.status !== 'pending' || (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -122,7 +122,7 @@ export default function AppointHistoryView({ patientData }) {
   // const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsData.length) * 100;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
+    // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
     {
       value: 'pending',
       label: 'Pending',

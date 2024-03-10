@@ -127,85 +127,85 @@ export default function TableNewEditForm() {
     <>
       {mdUp && (
         <Grid md={4}>
-          <Typography variant="h6" sx={{ mb: 0.5 }}>
-            Permissions
+          <Typography lang="ar" variant="h6" sx={{ mb: 0.5 }}>
+            {t('permissions')}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            giving or withdrowing permissions refered to all
+          <Typography lang="ar" variant="body2" sx={{ color: 'text.secondary' }}>
+            {t('giving or withdrowing permissions refered to all')}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            service unit and all its departments
+          <Typography lang="ar" variant="body2" sx={{ color: 'text.secondary' }}>
+            {t('service unit and all its departments')}
           </Typography>
         </Grid>
       )}
 
       <Grid xs={12} md={8}>
         <Card>
-          {!mdUp && <CardHeader title="Permissions" />}
+          {!mdUp && <CardHeader lang="ar" title={t('permissions')} />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
+              <Typography title="Permissions" textTransform="capitalize" variant="subtitle2">
                 {t('departments')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="departments" options={options} />
             </Stack>
             <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
+              <Typography lang="ar" textTransform="capitalize" variant="subtitle2">
                 {t('employees')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="employees" options={options} />
             </Stack>
             <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
+              <Typography lang="ar" textTransform="capitalize" variant="subtitle2">
                 {t('management tables')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="management_tables" options={options} />
             </Stack>
             <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
+              <Typography lang="ar" textTransform="capitalize" variant="subtitle2">
                 {t('appointments')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="appointments" options={options} />
             </Stack>
             <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
+              <Typography lang="ar" textTransform="capitalize" variant="subtitle2">
                 {t('appointment configuration')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="appointment_configs" options={options} />
             </Stack>
             <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
+              <Typography lang="ar" textTransform="capitalize" variant="subtitle2">
                 {t('accounting')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="accounting" options={options} />
             </Stack>
             <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
+              <Typography lang="ar" textTransform="capitalize" variant="subtitle2">
                 {t('offers')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="offers" options={options} />
             </Stack>
             <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
+              <Typography lang="ar" textTransform="capitalize" variant="subtitle2">
                 {t('quality control')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="quality_control" options={options} />
             </Stack>
             <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
+              <Typography lang="ar" textTransform="capitalize" variant="subtitle2">
                 {t('old patient data')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="old_patient" options={options} />
             </Stack>
             <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
+              <Typography lang="ar" textTransform="capitalize" variant="subtitle2">
                 {t('service unit info')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="unit_service_info" options={options} />
             </Stack>
             <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
+              <Typography lang="ar" textTransform="capitalize" variant="subtitle2">
                 {t('permissions')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="permissions" options={options} />
@@ -226,7 +226,7 @@ export default function TableNewEditForm() {
           loading={isSubmitting}
           sx={{ m: 2 }}
         >
-          save changes
+          {t('save changes')}
         </LoadingButton>
       </Grid>
     </>

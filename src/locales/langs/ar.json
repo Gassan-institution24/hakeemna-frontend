@@ -160,6 +160,7 @@
   "male": "ذكر",
   "save": "حفظ",
   "appointment time": "وقت الموعد",
+  "appointment duration time": "مدة الموعد",
   "configuration frequency": "تكرار انشاء المواعيد",
   "min": "دقيقة",
   "Saturday": "السبت",
@@ -221,6 +222,32 @@
   "Drop files here or click": "اسحب الملفات من كمبيوترك او اضغط",
   "browse": "تصفح",
   "thorough your machine": "للاختيار من جهازك",
+  "new configuration": "إعدادات مواعيد جديدة",
+  "delete": "حذف",
+  "deleted": "محذوف",
+  "Today": "اليوم",
+  "Month": "شهر",
+  "Week": "اسبوع",
+  "Day": "يوم",
+  "Agenda": "قائمة المواعيد",
+  "new event": "موعد جديد",
+  "Edit Event": "تعديل موعد",
+  "delete event": "حذف موعد",
+  "Add Event": "إضافة موعد",
+  "all day": "كل اليوم",
+  "events": "مواعيد",
+  "colors": "ألوان",
+  "range": "الفترة",
+  "Reset": "إعادة تهيئة",
+  "Select One Employee to start": "اختر موظف لتعديل الصلاحيات",
+  "department and all its work groups": "القسم وجميع مجموعات عمله",
+  "giving or withdrowing permissions refered to all": "إعطاء او سحب صلاحيات لجميع",
+  "adjust schedual": "منشأ إعدادات المواعيد",
+  "visibility page": "الظهور على صفحة وحدة الخدمة",
+  "visibility online appointment": "الظهور في المواعيد",
+  "attendance": "الدوام",
+  "service unit and all its departments": "وحدة الخدمة وأقسامها",
+  "permissions": "الصلاحيات",
 
   "Good Morning ☀️": "صباح الخير ☀️",
   "Good Evening 🌑 ": "مساء الخير 🌑",
@@ -245,7 +272,7 @@
   "My appointments": "مواعيدي",
   "Finished appoinment": "ألمواعيد ألمنتهية",
   "Appointments": "ألمواعيد",
-  "Filters": "غربلة",
+  "Filters": "تخصيص",
   "Time": "ألتاريخ",
   "From": "من",
   "To": "الى",
