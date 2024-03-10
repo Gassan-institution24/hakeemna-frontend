@@ -1,8 +1,3 @@
-import React, { useState } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
-import ReactCardFlip from 'react-card-flip';
-
-import { Box } from '@mui/system';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
@@ -17,14 +12,10 @@ import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 // ----------------------------------------------------------------------
 
-export default function ProfileHome() {
+export default function ProfileQr() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
-  const tokenPlaceholder = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjhlZDQxNTJhYWQ5MjY2NGMxN2ZkNyIsImlhdCI6MTcxMDA0ODQzNCwiZXhwIjoxNzE3ODI0NDM0fQ.pI645Yv07aWxMh6k1gz6ogt30aSRhQ_y1dUQX0PgHrY';
-
-// Replace the placeholder with the actual token (you need to get or generate the token)
-const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patient?._id}?token=${tokenPlaceholder}`;
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   function calculateAge(birthDate) {
@@ -37,10 +28,8 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
     }
     return '';
   }
-  const [qr, setQr] = useState(false);
-  const flipCard = () => {
-    setQr(!qr);
-  };
+
+
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
       {user?.patient?.drug_allergies?.length > 0 && (
@@ -416,112 +405,16 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
       ))}
     </Stack>
   );
-  const renderCard = (
-    <ReactCardFlip flipDirection="horizontal" isFlipped={qr}>
-      <>
-        <Box
-          sx={{
-            bgcolor: 'orange',
-            borderRadius: '100%',
-            zIndex: 1,
-            position: 'relative',
-            top: 45,
-            right: { lg: -190, xl: -230, md: -175, sm: -500, xs: -230 },
-            width: 40,
-            height: 40,
-          }}
-        >
-          <Typography sx={{ position: 'relative', left: 20, top: 5 }} variant="body2">
-            Hakeemna
-          </Typography>
-          <Typography sx={{ position: 'relative', left: 20 }} variant="body2">
-            card
-          </Typography>
-          <Iconify
-            onClick={flipCard}
-            width={30}
-            sx={{
-              position: 'relative',
-              left: { lg: -180, xl: -210, md: -160, sm: -490, xs: -200 },
-              top: -35,
-              '&:hover': {
-                color: 'success.main',
-              },
-            }}
-            icon="bx:qr"
-          />
-        </Box>
-
-        <Divider sx={{ borderWidth: 25, borderColor: '##EBE7E7', borderStyle: 'solid' }} />
-        <Stack component={Card} spacing={1} sx={{ p: 3, bgcolor: '#00F67F', borderRadius: 0 }}>
-          <Typography variant="h4" sx={{ textAlign: 'center', color: '#fff' }}>
-            {user?.patient?.first_name} {user?.patient?.middle_name} {user?.patient?.family_name}
-          </Typography>
-          <Typography variant="h5" sx={{ textAlign: 'center', color: '#fff' }}>
-            {user?.patient?.identification_num}
-          </Typography>
-          <Typography variant="h3" sx={{ textAlign: 'left' }}>
-            {user?.patient?.blood_type}
-          </Typography>
-        </Stack>
-      </>
-
-      <>
-        <Box
-          sx={{
-            bgcolor: 'orange',
-            borderRadius: '100%',
-            zIndex: 1,
-            position: 'relative',
-            top: 45,
-            right: { lg: -190, xl: -230, md: -175, sm: -500, xs: -230 },
-            width: 40,
-            height: 40,
-          }}
-        >
-          <Typography sx={{ position: 'relative', left: 20, top: 5 }} variant="body2">
-            Hakeemna
-          </Typography>
-          <Typography sx={{ position: 'relative', left: 20 }} variant="body2">
-            card
-          </Typography>
-          <Iconify
-            onClick={flipCard}
-            width={30}
-            sx={{
-              position: 'relative',
-              left: { lg: -180, xl: -210, md: -160, sm: -490, xs: -200 },
-              top: -35,
-              '&:hover': {
-                color: 'success.main',
-              },
-            }}
-            icon="mdi:smart-card-outline"
-          />
-        </Box>
-
-        <Divider sx={{ borderWidth: 25, borderColor: '#EBE7E7', borderStyle: 'solid' }} />
-        <Stack component={Card} spacing={1} sx={{ p: 3, bgcolor: '#00F67F', borderRadius: 0 }}>
-          <QRCodeSVG
-            value={qrCodeLink}
-            bgColor="none"
-          />
-        </Stack>
-      </>
-    </ReactCardFlip>
-  );
 
   return (
     <Grid container spacing={3}>
       <Grid xs={12} md={4}>
         {renderOverview}
         {user?.patient.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
-        <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box>
       </Grid>
 
       <Grid xs={12} md={7}>
         {renderContent}
-        <Box sx={{ display: { md: 'none', xs: 'block' } }}>{renderCard}</Box>
       </Grid>
     </Grid>
   );

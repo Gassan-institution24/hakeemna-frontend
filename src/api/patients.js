@@ -68,6 +68,7 @@ export function useGetPatient(id) {
   return { ...memoizedValue, refetch };
 }
 
+
 export function useGetFindPatient(obj) {
   const URL = endpoints.patients.find;
   // console.log('url', URL);

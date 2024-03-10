@@ -175,7 +175,7 @@ export default function Emergency() {
               }}
               icon="carbon:person"
             />
-            {curLangAr ? 'استشارة مدفوة من المستخدم' : 'Private consultation covered by patient'}
+            {curLangAr ? 'استشارة مدفوعة من المستخدم' : 'Private consultation covered by patient'}
           </Button>
           <Button
             onClick={test}
