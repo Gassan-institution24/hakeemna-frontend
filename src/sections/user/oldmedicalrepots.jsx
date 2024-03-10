@@ -51,8 +51,9 @@ export default function OldMedicalReports() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  // const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState([]);
   const [filesPdf, setfilesPdf] = useState([]);
+  console.log(filesPdf);
   const [filesPdftodelete, setfilesPdftodelete] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -267,7 +268,7 @@ export default function OldMedicalReports() {
         ...file,
         preview: URL.createObjectURL(file),
       }));
-      setValue('file', newFiles);
+      setFiles('file', newFiles);
     } else {
       // Handle invalid file type or size
       enqueueSnackbar('Invalid file type or size', { variant: 'error' });
@@ -275,19 +276,15 @@ export default function OldMedicalReports() {
   };
 
   const onSubmit = async (data) => {
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
+    });
+
+    if (files) {
+      formData.append('medicalreports', files);
+    }
     try {
-      const formData = new FormData();
-      Object.keys(data).forEach((key) => {
-        if (key === 'file') {
-          data[key].forEach((file, index) => {
-            formData.append(`file[${index}]`, file);
-          });
-        } else {
-          formData.append(key, data[key]);
-        }
-      });
-      // console.log('data', data);
-      // console.log('formData', formData);
       await axios.post('/api/oldmedicalreports', formData);
       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
       dialog.onFalse();
@@ -295,6 +292,9 @@ export default function OldMedicalReports() {
       setfilesPdf(response.data);
       reset();
       setCheckChange(!checkChange);
+
+      // console.log('data', data);
+      // console.log('formData', formData);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -510,7 +510,7 @@ export default function OldMedicalReports() {
             >
               <PDFDownloadLink
                 key={i}
-                document={<MedicalreportsnPDF info={info} />}
+                document={<MedicalreportsnPDF info={filesPdf} />}
                 fileName={`${user?.patient.first_name} ${info.type} MediacalReport.pdf`}
                 style={styles.line}
               >

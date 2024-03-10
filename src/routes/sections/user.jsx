@@ -31,6 +31,7 @@ const Emergency = lazy(() => import('src/pages/dashboard/user/emergency'));
 const Watingroom = lazy(() => import('src/pages/dashboard/user/watingroom'));
 const BMI = lazy(() => import('src/sections/user/bmi'));
 const Oldpatientsdata = lazy(() => import('src/sections/user/oldpatientsdata'));
+const ProfileQr =  lazy(() => import('src/sections/user/profile-qr'));
 
 // ----------------------------------------------------------------------
 
@@ -60,6 +61,7 @@ export const userRoutes = [
         children: [
           { element: <UserProfilePage />, index: true },
           { path: 'profile', element: <UserProfilePage /> },
+          { path: 'myprofile/:id', element: <ProfileQr /> },
           { path: 'medicalreports', element: <Medicalreports /> },
           { path: 'emergency', element: <Emergency /> },
           { path: 'watingroom', element: <Watingroom /> },
