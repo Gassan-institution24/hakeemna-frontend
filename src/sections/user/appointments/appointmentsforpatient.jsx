@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 
-import { Container } from '@mui/system';
 import { Tab, Tabs } from '@mui/material';
+import { Box, Container } from '@mui/system';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -25,6 +25,7 @@ export default function AppointmentData() {
   }, []);
 
   const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending');
+  const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');
   const TABS = [
     {
       value: 'upcoming',
@@ -52,10 +53,30 @@ export default function AppointmentData() {
         ))}
       </Tabs>
       {currentTab === 'upcoming' && (
-        <Currentappoinment pendingAppointments={pendingAppointments} refetch={refetch} />
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { md: '1fr 1fr 1fr', xs: '1fr' },
+            gap: 5,
+            mb: 2,
+          }}
+        >
+          <Currentappoinment pendingAppointments={pendingAppointments} refetch={refetch} />
+        </Box>
       )}
 
-      {currentTab === 'Finished' && <FinishedAppoinment />}
+      {currentTab === 'Finished' && (
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { md: '1fr 1fr 1fr', xs: '1fr' },
+            gap: 5,
+            mb: 2,
+          }}
+        >
+          <FinishedAppoinment finishedAppointments={finishedAppointments} />
+        </Box>
+      )}
     </Container>
   );
 }

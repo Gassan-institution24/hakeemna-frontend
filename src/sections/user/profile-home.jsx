@@ -218,9 +218,10 @@ export default function ProfileHome() {
             &nbsp;
             {t('Notes')}
           </Typography>
-          {user?.patient?.other_medication_notes.map((info, infokey, idx) => (
-            <li key={idx} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-              -&nbsp; {info}
+
+          {user.patient.other_medication_notes[0].split(',').map((info, infokey) => (
+            <li key={infokey} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
+              -&nbsp; {info.trim()} {/* trim to remove extra whitespaces */}
             </li>
           ))}
         </Stack>
