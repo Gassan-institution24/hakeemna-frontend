@@ -13,18 +13,9 @@ import { fTime, fDate } from 'src/utils/format-time';
 import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
-export default function FinishedAppoinment({finishedAppointments}) {
-
-
+export default function FinishedAppoinment({ finishedAppointments }) {
   return finishedAppointments.map((info, index) => (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: { md: '1fr 1fr 1fr', xs: '1fr' },
-        gap: 5,
-        mb: 2,
-      }}
-    >
+    <Box>
       <Card key={index}>
         <Stack sx={{ p: 3, pb: 2 }}>
           <Avatar

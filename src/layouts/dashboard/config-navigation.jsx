@@ -458,11 +458,11 @@ export function useNavData() {
             path: paths.dashboard.user.financilmovment,
             icon: <Iconify icon="arcticons:gnucash" />,
           },
-          // {
-          //   title: t('contact us'),
-          //   path: paths.dashboard.user.demo.edit,
-          //   icon: <Iconify icon="ic:round-contact-support" />,
-          // },
+          {
+            title: t('contact us'),
+            path: paths.dashboard.user.edit,
+            icon: <Iconify icon="ic:round-contact-support" />,
+          },
           {
             title: t('share doctorna'),
             path: paths.dashboard.user.share,

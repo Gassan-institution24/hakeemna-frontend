@@ -80,6 +80,8 @@ export const paths = {
       medicalreports: `${ROOTS.DASHBOARD}/user/medicalreports`,
       cards: `${ROOTS.DASHBOARD}/user/appointments`,
       profile: `${ROOTS.DASHBOARD}/user/profile`,
+      // profile: `${ROOTS.DASHBOARD}/user/create`,
+      // profile: `${ROOTS.DASHBOARD}/user/add`,
       account: `${ROOTS.DASHBOARD}/user/account`,
       share: `${ROOTS.DASHBOARD}/user/share`,
       financilmovment: `${ROOTS.DASHBOARD}/user/financilmovment`,
@@ -91,7 +93,7 @@ export const paths = {
       bmi: `${ROOTS.DASHBOARD}/user/bmi`,
       oldpatientdata: `${ROOTS.DASHBOARD}/user/oldpatientdata`,
       emergency: `${ROOTS.DASHBOARD}/user/emergency`,
-      edit: (id) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
+      edit: `${ROOTS.DASHBOARD}/user/contactus`,
     },
   },
   // super adnim
