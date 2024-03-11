@@ -83,10 +83,10 @@ export default function Family() {
       <Dialog open={dialog.value} onClose={dialog.onTrue}>
         <DialogTitle>Does the user have an account?</DialogTitle>
         <DialogActions>
-          <Button href={paths.dashboard.user.profile} variant="outlined" color="success" type="submit">
+          <Button href={paths.dashboard.user.exist} variant="outlined" color="success" type="submit">
             {t('Yes')}
           </Button>
-          <Button type="submit" variant="contained" color="inherit" href={paths.dashboard.user.profile}>
+          <Button type="submit" variant="contained" color="inherit" href={paths.dashboard.user.create}>
             {t('No')}
           </Button>
         </DialogActions>
