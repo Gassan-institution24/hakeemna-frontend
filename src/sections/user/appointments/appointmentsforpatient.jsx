@@ -1,4 +1,4 @@
-import {  useState,useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 import { Container } from '@mui/system';
 import { Tab, Tabs } from '@mui/material';
@@ -47,17 +47,15 @@ export default function AppointmentData() {
           mb: { xs: 3, md: 5 },
         }}
       >
-        {TABS.map((tab) => (
-          <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
+        {TABS.map((tab, idx) => (
+          <Tab key={idx} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
       </Tabs>
-      {currentTab === 'upcoming'  && (
+      {currentTab === 'upcoming' && (
         <Currentappoinment pendingAppointments={pendingAppointments} refetch={refetch} />
       )}
 
       {currentTab === 'Finished' && <FinishedAppoinment />}
     </Container>
-
-  
   );
 }

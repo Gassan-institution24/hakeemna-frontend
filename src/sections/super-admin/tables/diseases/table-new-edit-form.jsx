@@ -57,7 +57,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
       description: currentSelected?.description || '',
       description_arabic: currentSelected?.description_arabic || '',
       category: currentSelected?.category?._id || '',
-      symptoms: currentSelected?.symptoms?.map((disease) => disease._id) || [],
+      symptoms: currentSelected?.symptoms?.map((disease, idx) => disease._id) || [],
     }),
     [currentSelected]
   );
@@ -166,8 +166,8 @@ export default function CountriesNewEditForm({ currentSelected }) {
               />
 
               <RHFSelect name="category" label="category">
-                {categories.map((category) => (
-                  <MenuItem key={category._id} value={category._id}>
+                {categories.map((category, idx) => (
+                  <MenuItem key={idx} value={category._id}>
                     {category.name_english}
                   </MenuItem>
                 ))}

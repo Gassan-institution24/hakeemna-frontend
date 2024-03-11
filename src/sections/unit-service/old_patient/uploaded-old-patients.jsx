@@ -85,9 +85,9 @@ export default function UploadedOldPatients({ oldPatients }) {
         <TableBody>
           {oldPatients
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => (
+            .map((row, index, idx) => (
               <ExistEmployeesRow
-                key={index}
+                key={idx}
                 row={row}
                 // onEmploymentRow={() => handleEmployment(row._id)}
               />

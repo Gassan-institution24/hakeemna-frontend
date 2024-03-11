@@ -97,7 +97,7 @@ export default function LicenseMovementsView() {
         results[movement?.unit_service?._id].user_no = movement?.Users_num;
       }
     });
-    const resultsArr = Object.keys(results).map((key) => ({
+    const resultsArr = Object.keys(results).map((key, idx) => ({
       id: key,
       ...results[key],
       status:
@@ -203,9 +203,9 @@ export default function LicenseMovementsView() {
             boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
           }}
         >
-          {TABS.map((tab) => (
+          {TABS.map((tab, idx) => (
             <Tab
-              key={tab.value}
+              key={idx}
               value={tab.value}
               label={tab.label}
               iconPosition="end"
@@ -228,7 +228,7 @@ export default function LicenseMovementsView() {
           onFilters={handleFilters}
           //
           dateError={dateError}
-          // serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
+          // serviceOptions={INVOICE_SERVICE_OPTIONS.map((option, idx)  => option.name)}
         />
 
         {canReset && (
@@ -261,9 +261,9 @@ export default function LicenseMovementsView() {
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
-                  .map((row) => (
+                  .map((row, idx) => (
                     <AccountingTableRow
-                      key={row.id}
+                      key={idx}
                       row={row}
                       onViewRow={() => handleViewRow(row.id)}
                     />
@@ -304,7 +304,7 @@ export default function LicenseMovementsView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { name, status } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -312,7 +312,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

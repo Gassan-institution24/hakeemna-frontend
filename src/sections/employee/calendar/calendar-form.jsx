@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { t } from 'i18next';
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -17,6 +16,7 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import { fTimestamp } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
@@ -30,6 +30,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
   const { enqueueSnackbar } = useSnackbar();
 
   const { user } = useAuthContext();
+  const { t } = useTranslate();
 
   const EventSchema = Yup.object().shape({
     title: Yup.string().max(255).required('Title is required'),
@@ -75,10 +76,10 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
       if (!dateError) {
         if (currentEvent?._id) {
           await axiosInstance.patch(`${endpoints.calender.all}/${currentEvent?._id}`, eventData);
-          enqueueSnackbar('Update success!');
+          enqueueSnackbar(t('updated successfully!'));
         } else {
           await axiosInstance.post(endpoints.calender.all, eventData);
-          enqueueSnackbar('Create success!');
+          enqueueSnackbar(t('created successfully!'));
         }
         refetch();
         onClose();
@@ -93,14 +94,14 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
   const onDelete = useCallback(async () => {
     try {
       await axiosInstance.delete(`${endpoints.calender.all}/${currentEvent?._id}`);
-      enqueueSnackbar('Delete success!');
+      enqueueSnackbar(t('deleted successfully!'));
       refetch();
       onClose();
     } catch (error) {
       console.error(error);
       enqueueSnackbar(error, { variant: 'error' });
     }
-  }, [currentEvent, enqueueSnackbar, onClose, refetch]);
+  }, [currentEvent, enqueueSnackbar, t, onClose, refetch]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

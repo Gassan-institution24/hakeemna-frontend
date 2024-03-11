@@ -127,7 +127,7 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
         code: info?.code,
         name: info?.name_english,
         category: info.category?.name_english,
-        symptoms: info.symptoms?.map((symptom) => symptom?.name_english),
+        symptoms: info.symptoms?.map((symptom, idx) => symptom?.name_english),
       });
       return acc;
     }, []);
@@ -144,7 +144,7 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
   const handleAddRow = useCallback(
     async (id) => {
       if (stakeholderData.insurance.some((company) => company._id === id)) {
-        enqueueSnackbar('this company already exist', {
+        enqueueSnackbar(t('this company already exist'), {
           variant: 'error',
         });
         return;
@@ -158,7 +158,7 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage?.length);
     },
-    [dataInPage?.length, table, refetch, stakeholderData?._id, stakeholderData?.insurance]
+    [dataInPage?.length, table, refetch, stakeholderData?._id, t, stakeholderData?.insurance]
   );
   const handleDeleteRow = useCallback(
     async (id) => {
@@ -239,9 +239,9 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -303,7 +303,7 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
                   // onSelectAllRows={(checked) =>
                   //   table.onSelectAllRows(
                   //     checked,
-                  //     dataFiltered?.map((row) => row._id)
+                  //     dataFiltered?.map((row, idx)  => row._id)
                   //   )
                   // }
                 />
@@ -314,9 +314,9 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    ?.map((row) => (
+                    ?.map((row, idx) => (
                       <InsuranceRow
-                        key={row?._id}
+                        key={idx}
                         row={row}
                         filters={filters}
                         setFilters={setFilters}
@@ -362,7 +362,7 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
             scrollbarColor: 'darkgray lightgray',
           }}
         >
-          {filteredInsuranceCos?.map((company) => (
+          {filteredInsuranceCos?.map((company, idx) => (
             <MenuItem onClick={() => handleAddRow(company._id)}>
               {/* <Iconify icon="ic:baseline-add" /> */}
               {company?.name_english}
@@ -379,7 +379,7 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -387,7 +387,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis?.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData?.filter(

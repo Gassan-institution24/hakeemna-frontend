@@ -272,11 +272,11 @@ export default function CountriesTableRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>Users no:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{users_num}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>subscriptions:</Box>
-        {subscriptions.map((one) => (
+        {subscriptions.map((one, idx) => (
           <Box sx={{ pb: 1 }}>{one?.name_english}</Box>
         ))}
         <Box sx={{ pt: 1, fontWeight: 600 }}>Insurance:</Box>
-        {insurance.map((one) => (
+        {insurance.map((one, idx) => (
           <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{one?.name_english}</Box>
         ))}
 

@@ -86,8 +86,8 @@ export default function NavList({ data }) {
                 boxShadow: theme.customShadows.dropdown,
               }}
             >
-              {data.children.map((list) => (
-                <NavSubList key={list.subheader} subheader={list.subheader} data={list.items} />
+              {data.children.map((list, idx) => (
+                <NavSubList key={idx} subheader={list.subheader} data={list.items} />
               ))}
             </Paper>
           </Fade>
@@ -140,12 +140,12 @@ function NavSubList({ data, subheader, sx, ...other }) {
         {subheader}
       </ListSubheader>
 
-      {data.map((item, index) =>
+      {data.map((item, idx) =>
         dashboard ? (
-          <NavItemDashboard key={index} path={item.path} />
+          <NavItemDashboard key={idx} path={item.path} />
         ) : (
           <NavItem
-            key={index}
+            key={idx}
             title={item.title}
             path={item.path}
             active={pathname === item.path || pathname === `${item.path}/`}

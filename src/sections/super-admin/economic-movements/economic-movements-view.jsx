@@ -267,9 +267,9 @@ export default function EconomicMovementsView() {
               boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {TABS.map((tab) => (
+            {TABS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 value={tab.value}
                 label={tab.label}
                 iconPosition="end"
@@ -292,7 +292,7 @@ export default function EconomicMovementsView() {
             onFilters={handleFilters}
             //
             dateError={dateError}
-            // serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
+            // serviceOptions={INVOICE_SERVICE_OPTIONS.map((option, idx)  => option.name)}
           />
 
           {canReset && (
@@ -315,7 +315,7 @@ export default function EconomicMovementsView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  economecMovementsData.map((row) => row.id)
+                  economecMovementsData.map((row, idx)  => row.id)
                 )
               }
               action={
@@ -359,7 +359,7 @@ export default function EconomicMovementsView() {
                   // onSelectAllRows={(checked) =>
                   //   table.onSelectAllRows(
                   //     checked,
-                  //     economecMovementsData.map((row) => row.id)
+                  //     economecMovementsData.map((row, idx)  => row.id)
                   //   )
                   // }
                 />
@@ -370,9 +370,9 @@ export default function EconomicMovementsView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <MovementRow
-                        key={row.id}
+                        key={idx}
                         row={row}
                         selected={table.selected.includes(row.id)}
                         onSelectRow={() => table.onSelectRow(row.id)}
@@ -441,7 +441,7 @@ export default function EconomicMovementsView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { name, status, service, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -449,7 +449,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

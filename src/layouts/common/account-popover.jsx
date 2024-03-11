@@ -119,8 +119,8 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Stack sx={{ p: 1 }}>
-          {OPTIONS.map((option) => (
-            <MenuItem lang="ar" key={option.label} onClick={() => handleClickItem(option.linkTo)}>
+          {OPTIONS.map((option, idx) => (
+            <MenuItem lang="ar" key={idx} onClick={() => handleClickItem(option.linkTo)}>
               {option.label}
             </MenuItem>
           ))}

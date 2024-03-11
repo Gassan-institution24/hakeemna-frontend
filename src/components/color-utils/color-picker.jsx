@@ -45,12 +45,12 @@ const ColorPicker = forwardRef(
         }}
         {...other}
       >
-        {colors.map((color) => {
+        {colors.map((color, idx) => {
           const hasSelected = singleSelect ? selected === color : selected.includes(color);
 
           return (
             <ButtonBase
-              key={color}
+              key={idx}
               sx={{
                 width: 36,
                 height: 36,

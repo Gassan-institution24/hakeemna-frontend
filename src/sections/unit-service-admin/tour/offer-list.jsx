@@ -48,9 +48,9 @@ export default function TourList({ offers, refetch }) {
           md: 'repeat(3, 1fr)',
         }}
       >
-        {offers.map((tour) => (
+        {offers.map((tour, idx) => (
           <TourItem
-            key={tour.id}
+            key={idx}
             tour={tour}
             onView={() => handleView(tour._id)}
             onEdit={() => handleEdit(tour._id)}

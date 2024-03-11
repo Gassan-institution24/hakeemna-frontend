@@ -90,14 +90,14 @@ export default function OverviewAppView() {
 
   useEffect(() => {
     if (oldpatientsdata.length > 0) {
-      const mappedData = oldpatientsdata.map((Data) => Data);
+      const mappedData = oldpatientsdata.map((Data, idx) => Data);
       setOlddata(mappedData[0].identification_num);
     }
   }, [oldpatientsdata, oldData]);
 
   useEffect(() => {
     if (oldpatientsdata.length > 0) {
-      const mappedData = oldpatientsdata.map((Data) => Data);
+      const mappedData = oldpatientsdata.map((Data, idx) => Data);
       setUs(mappedData[0].unit_service);
     }
   }, [oldpatientsdata, Us]);

@@ -121,8 +121,8 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect name="specialty" label="specialty">
-                {specialtiesData.map((specialty) => (
-                  <MenuItem key={specialty._id} value={specialty._id}>
+                {specialtiesData.map((specialty, idx) => (
+                  <MenuItem key={idx} value={specialty._id}>
                     {specialty.name_english}
                   </MenuItem>
                 ))}

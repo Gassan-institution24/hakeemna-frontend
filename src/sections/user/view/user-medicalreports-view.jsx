@@ -64,8 +64,8 @@ export default function UserCardList() {
           mb: { xs: 3, md: 5 },
         }}
       >
-        {TABS.map((tab) => (
-          <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
+        {TABS.map((tab, idx) => (
+          <Tab key={idx} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
       </Tabs>
       {currentTab === 'Medicalreports' && (

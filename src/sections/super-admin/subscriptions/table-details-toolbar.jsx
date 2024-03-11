@@ -78,15 +78,15 @@ export default function OrderTableToolbar({
             value={filters.fees}
             onChange={handleFilterFees}
             input={<OutlinedInput label="Fees" />}
-            renderValue={(selected) => selected.map((value) => value).join(', ')}
+            renderValue={(selected) => selected.map((value, idx) => value).join(', ')}
             MenuProps={{
               PaperProps: {
                 sx: { maxHeight: 240 },
               },
             }}
           >
-            {FeesOptions.map((option) => (
-              <MenuItem key={option} value={option}>
+            {FeesOptions.map((option, idx) => (
+              <MenuItem key={idx} value={option}>
                 <Checkbox disableRipple size="small" checked={filters.fees.includes(option)} />
                 {option}
               </MenuItem>

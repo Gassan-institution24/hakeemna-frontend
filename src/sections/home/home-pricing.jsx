@@ -61,9 +61,9 @@ export default function HomePricing() {
             border: (theme) => `dashed 1px ${theme.palette.divider}`,
           }}
         >
-          {/* {_homePlans.map((plan) => (
-            <m.div key={plan.license} variants={varFade().in}>
-              <PlanCard key={plan.license} plan={plan} />
+          {/* {_homePlans.map((plan, idx)  => (
+            <m.div key={idx} variants={varFade().in}>
+              <PlanCard key={idx} plan={plan} />
             </m.div>
           ))} */}
         </Box>
@@ -71,8 +71,8 @@ export default function HomePricing() {
         <>
           <Stack alignItems="center" sx={{ mb: 5 }}>
             {/* <Tabs value={currentTab} onChange={handleChangeTab}>
-              {_homePlans.map((tab) => (
-                <Tab key={tab.license} value={tab.license} label={tab.license} />
+              {_homePlans.map((tab, idx)  => (
+                <Tab key={idx} value={tab.license} label={tab.license} />
               ))}
             </Tabs> */}
           </Stack>
@@ -87,7 +87,7 @@ export default function HomePricing() {
               (tab) =>
                 tab.license === currentTab && (
                   <PlanCard
-                    key={tab.license}
+                    key={idx}
                     plan={tab}
                     sx={{
                       borderLeft: (theme) => `dashed 1px ${theme.palette.divider}`,
@@ -201,15 +201,15 @@ function PlanCard({ plan, sx, ...other }) {
         <Box component="img" alt={icons[1]} src={icons[1]} sx={{ width: 20, height: 20 }} />
       ) : (
         <Stack direction="row" spacing={2}>
-          {icons.map((icon) => (
-            <Box component="img" key={icon} alt={icon} src={icon} sx={{ width: 20, height: 20 }} />
+          {icons.map((icon, idx)  => (
+            <Box component="img" key={idx} alt={icon} src={icon} sx={{ width: 20, height: 20 }} />
           ))}
         </Stack>
       )} */}
 
       <Stack spacing={2.5}>
-        {commons.map((option) => (
-          <Stack key={option} spacing={1} direction="row" alignItems="center">
+        {commons.map((option, idx) => (
+          <Stack key={idx} spacing={1} direction="row" alignItems="center">
             <Iconify icon="eva:checkmark-fill" width={16} />
             <Typography variant="body2">{option}</Typography>
           </Stack>
@@ -217,7 +217,7 @@ function PlanCard({ plan, sx, ...other }) {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        {options.map((option, optionIndex) => {
+        {options.map((option, optionIndex, idx) => {
           const disabled =
             (standardLicense && optionIndex === 1) ||
             (standardLicense && optionIndex === 2) ||
@@ -232,7 +232,7 @@ function PlanCard({ plan, sx, ...other }) {
               sx={{
                 ...(disabled && { color: 'text.disabled' }),
               }}
-              key={option}
+              key={idx}
             >
               <Iconify icon={disabled ? 'mingcute:close-line' : 'eva:checkmark-fill'} width={16} />
               <Typography variant="body2">{option}</Typography>

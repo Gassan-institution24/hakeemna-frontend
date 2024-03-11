@@ -110,12 +110,12 @@ export default function LayoutOptions({ options, value, onChange }) {
 
   return (
     <Stack direction="row" spacing={2}>
-      {options.map((option) => {
+      {options.map((option, idx) => {
         const selected = value === option;
 
         return (
           <ButtonBase
-            key={option}
+            key={idx}
             onClick={() => onChange(option)}
             sx={{
               p: 0,

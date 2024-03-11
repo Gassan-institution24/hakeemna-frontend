@@ -56,7 +56,7 @@ import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 const defaultFilters = {
   name: '',
-  status: 'available',
+  status: 'pending',
   types: [],
   startDate: null,
   endDate: null,
@@ -130,7 +130,7 @@ export default function AppointmentsView({
 
   const canReset =
     !!filters.name ||
-    filters.status !== 'available' ||
+    filters.status !== 'pending' ||
     !!filters.startDate ||
     !!filters.endDate ||
     filters.types.length > 0;
@@ -142,12 +142,6 @@ export default function AppointmentsView({
 
   const TABS = [
     // { value: 'all', label: t('all'), color: 'default', count: appointmentsData.length },
-    {
-      value: 'available',
-      label: t('available'),
-      color: 'secondary',
-      count: getAppointLength('available'),
-    },
     {
       value: 'pending',
       label: t('pending'),
@@ -171,6 +165,12 @@ export default function AppointmentsView({
       label: t('canceled'),
       color: 'error',
       count: getAppointLength('canceled'),
+    },
+    {
+      value: 'available',
+      label: t('available'),
+      color: 'secondary',
+      count: getAppointLength('available'),
     },
     {
       value: 'not booked',
@@ -200,7 +200,7 @@ export default function AppointmentsView({
           link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
           msg: `canceled appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
         });
-        enqueueSnackbar('canceled successfully!');
+        enqueueSnackbar(t('canceled successfully!'));
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -209,7 +209,7 @@ export default function AppointmentsView({
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user, departmentData, id]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user, t, departmentData, id]
   );
 
   const handleDelayRow = useCallback(
@@ -223,7 +223,7 @@ export default function AppointmentsView({
           link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
           msg: `delayed appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
         });
-        enqueueSnackbar('delayed successfully!');
+        enqueueSnackbar(t('delayed successfully!'));
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -233,7 +233,7 @@ export default function AppointmentsView({
       setMinToDelay(0);
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user, departmentData, id]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user, t, departmentData, id]
   );
 
   const handleUnCancelRow = useCallback(
@@ -245,7 +245,7 @@ export default function AppointmentsView({
           link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
           msg: `uncanceled appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
         });
-        enqueueSnackbar('uncanceled successfully!');
+        enqueueSnackbar(t('uncanceled successfully!'));
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -254,7 +254,7 @@ export default function AppointmentsView({
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user, departmentData, id]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user, t, departmentData, id]
   );
 
   const handleCancelRows = useCallback(async () => {
@@ -265,7 +265,7 @@ export default function AppointmentsView({
         link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
         msg: `canceled many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
-      enqueueSnackbar('canceled successfully!');
+      enqueueSnackbar(t('canceled successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -287,6 +287,7 @@ export default function AppointmentsView({
     departmentData,
     user,
     id,
+    t,
   ]);
 
   const handleDelayRows = useCallback(async () => {
@@ -300,7 +301,7 @@ export default function AppointmentsView({
         link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
         msg: `delayed many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
-      enqueueSnackbar('delayed successfully!');
+      enqueueSnackbar(t('delayed successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -324,6 +325,7 @@ export default function AppointmentsView({
     departmentData,
     user,
     id,
+    t,
   ]);
 
   const handleUnCancelRows = useCallback(async () => {
@@ -336,7 +338,7 @@ export default function AppointmentsView({
         link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
         msg: `uncanceled many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
-      enqueueSnackbar('uncanceled successfully!');
+      enqueueSnackbar(t('uncanceled successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -358,6 +360,7 @@ export default function AppointmentsView({
     departmentData,
     user,
     id,
+    t,
   ]);
 
   const handleViewRow = useCallback(
@@ -407,9 +410,9 @@ export default function AppointmentsView({
               boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {TABS.map((tab) => (
+            {TABS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 value={tab.value}
                 label={tab.label}
                 iconPosition="end"
@@ -457,7 +460,7 @@ export default function AppointmentsView({
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered?.map((row) => row._id)
+                  dataFiltered?.map((row, idx) => row._id)
                 )
               }
               action={
@@ -472,7 +475,7 @@ export default function AppointmentsView({
                         <Iconify icon="mdi:timer-sync" />
                       </IconButton>
                     </Tooltip>
-                    {dataFiltered
+                    {/* {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
                       .some((data) => data.status === 'canceled') ? (
                       <Tooltip title="uncancel all">
@@ -486,7 +489,7 @@ export default function AppointmentsView({
                           <Iconify icon="mdi:bell-cancel" />
                         </IconButton>
                       </Tooltip>
-                    )}
+                    )} */}
                   </>
                 )
               }
@@ -510,7 +513,7 @@ export default function AppointmentsView({
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered?.map((row) => row._id)
+                      dataFiltered?.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -521,10 +524,10 @@ export default function AppointmentsView({
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    ?.map((row) => (
+                    ?.map((row, idx) => (
                       <AppointmentsRow
                         refetch={refetch}
-                        key={row._id}
+                        key={idx}
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
@@ -655,7 +658,7 @@ export default function AppointmentsView({
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { name, status, types, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -663,7 +666,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis?.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

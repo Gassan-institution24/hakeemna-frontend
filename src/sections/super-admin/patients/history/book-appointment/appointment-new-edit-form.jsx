@@ -187,10 +187,10 @@
 //               <RHFAutocomplete
 //                 name="role"
 //                 autoHighlight
-//                 options={_roles.map((option) => option)}
+//                 options={_roles.map((option, idx)  => option)}
 //                 getOptionLabel={(option) => option}
 //                 renderOption={(props, option) => (
-//                   <li {...props} key={option}>
+//                   <li {...props} key={idx}>
 //                     {option}
 //                   </li>
 //                 )}
@@ -204,18 +204,18 @@
 //                 placeholder="+ Skills"
 //                 multiple
 //                 disableCloseOnSelect
-//                 options={JOB_SKILL_OPTIONS.map((option) => option)}
+//                 options={JOB_SKILL_OPTIONS.map((option, idx)  => option)}
 //                 getOptionLabel={(option) => option}
 //                 renderOption={(props, option) => (
-//                   <li {...props} key={option}>
+//                   <li {...props} key={idx}>
 //                     {option}
 //                   </li>
 //                 )}
 //                 renderTags={(selected, getTagProps) =>
-//                   selected.map((option, index) => (
+//                   selected.map((option, index, idx)  => (
 //                     <Chip
 //                       {...getTagProps({ index })}
-//                       key={option}
+//                       key={idx}
 //                       label={option}
 //                       size="small"
 //                       color="info"
@@ -233,18 +233,18 @@
 //                 placeholder="+ Schedule"
 //                 multiple
 //                 disableCloseOnSelect
-//                 options={JOB_WORKING_SCHEDULE_OPTIONS.map((option) => option)}
+//                 options={JOB_WORKING_SCHEDULE_OPTIONS.map((option, idx)  => option)}
 //                 getOptionLabel={(option) => option}
 //                 renderOption={(props, option) => (
-//                   <li {...props} key={option}>
+//                   <li {...props} key={idx}>
 //                     {option}
 //                   </li>
 //                 )}
 //                 renderTags={(selected, getTagProps) =>
-//                   selected.map((option, index) => (
+//                   selected.map((option, index, idx)  => (
 //                     <Chip
 //                       {...getTagProps({ index })}
-//                       key={option}
+//                       key={idx}
 //                       label={option}
 //                       size="small"
 //                       color="info"
@@ -262,7 +262,7 @@
 //                 placeholder="+ Locations"
 //                 multiple
 //                 disableCloseOnSelect
-//                 options={countries.map((option) => option.label)}
+//                 options={countries.map((option, idx)  => option.label)}
 //                 getOptionLabel={(option) => option}
 //                 renderOption={(props, option) => {
 //                   const { code, label, phone } = countries.filter(
@@ -274,9 +274,9 @@
 //                   }
 
 //                   return (
-//                     <li {...props} key={label}>
+//                     <li {...props} key={idx}>
 //                       <Iconify
-//                         key={label}
+//                         key={idx}
 //                         icon={`circle-flags:${code.toLowerCase()}`}
 //                         width={28}
 //                         sx={{ mr: 1 }}
@@ -286,10 +286,10 @@
 //                   );
 //                 }}
 //                 renderTags={(selected, getTagProps) =>
-//                   selected.map((option, index) => (
+//                   selected.map((option, index, idx)  => (
 //                     <Chip
 //                       {...getTagProps({ index })}
-//                       key={option}
+//                       key={idx}
 //                       label={option}
 //                       size="small"
 //                       color="info"
@@ -338,11 +338,11 @@
 //                         label: 'Custom',
 //                         icon: <Iconify icon="solar:wad-of-money-bold" width={32} sx={{ mb: 2 }} />,
 //                       },
-//                     ].map((item) => (
+//                     ].map((item, idx)  => (
 //                       <Paper
 //                         component={ButtonBase}
 //                         variant="outlined"
-//                         key={item.label}
+//                         key={idx}
 //                         onClick={() => field.onChange(item.label)}
 //                         sx={{
 //                           p: 2.5,

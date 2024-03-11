@@ -68,7 +68,7 @@ export default function TableDetailsRow({
       <TableCell lang="ar" align="center">
         {curLangAr ? name_arabic : name_english}
       </TableCell>
-      {/* <TableCell lang="ar" align="center">{employees.map((employee)=>`${employee.employee.first_name} ${employee.employee.family_name}`).join(', ')}</TableCell> */}
+      {/* <TableCell lang="ar" align="center">{employees.map((employee, idx) =>`${employee.employee.first_name} ${employee.employee.family_name}`).join(', ')}</TableCell> */}
       <TableCell lang="ar" align="center">
         <Label
           lang="ar"

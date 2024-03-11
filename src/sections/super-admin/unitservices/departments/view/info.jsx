@@ -52,10 +52,10 @@ export default function DepartmentInfoContent({ departmentData }) {
             value: curLangAr ? unit_service?.name_arabic : unit_service?.name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
-        ].map((item) => (
+        ].map((item, idx) => (
           <>
             {item.value && (
-              <Stack key={item.label} spacing={1.5}>
+              <Stack key={idx} spacing={1.5}>
                 {/* {item.icon} */}
                 <ListItemText
                   primary={item.label}

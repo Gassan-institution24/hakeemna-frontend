@@ -26,7 +26,7 @@ export function useNavData() {
     if (loading || !employeesData) {
       return [];
     }
-    return employeesData.map((info) => {
+    return employeesData.map((info, idx) => {
       const currpath = location.pathname.split('/');
       currpath[4] = info._id;
       const path = currpath.join('/');

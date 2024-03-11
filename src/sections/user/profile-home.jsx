@@ -21,10 +21,11 @@ export default function ProfileHome() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
-  const tokenPlaceholder = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjhlZDQxNTJhYWQ5MjY2NGMxN2ZkNyIsImlhdCI6MTcxMDA0ODQzNCwiZXhwIjoxNzE3ODI0NDM0fQ.pI645Yv07aWxMh6k1gz6ogt30aSRhQ_y1dUQX0PgHrY';
+  const tokenPlaceholder =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjhlZDQxNTJhYWQ5MjY2NGMxN2ZkNyIsImlhdCI6MTcxMDA0ODQzNCwiZXhwIjoxNzE3ODI0NDM0fQ.pI645Yv07aWxMh6k1gz6ogt30aSRhQ_y1dUQX0PgHrY';
 
-// Replace the placeholder with the actual token (you need to get or generate the token)
-const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patient?._id}?token=${tokenPlaceholder}`;
+  // Replace the placeholder with the actual token (you need to get or generate the token)
+  const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patient?._id}?token=${tokenPlaceholder}`;
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   function calculateAge(birthDate) {
@@ -54,8 +55,8 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
             {t(' Drug Allergies')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.drug_allergies?.map((drug, drugkey) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={drugkey}>
+            {user?.patient?.drug_allergies?.map((drug, drugkey, idx) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
                 -&nbsp; {drug?.trade_name}
               </li>
             ))}
@@ -74,8 +75,8 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
             {t('Diseases')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.diseases?.map((disease, diseasekey) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={diseasekey}>
+            {user?.patient?.diseases?.map((disease, diseasekey, idx) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
                 -&nbsp; {disease?.name_english}
               </li>
             ))}
@@ -94,8 +95,8 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
             {t('Surgeries')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.surgeries?.map((surgery, surgerykey) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={surgerykey}>
+            {user?.patient?.surgeries?.map((surgery, surgerykey, idx) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
                 -&nbsp; {surgery.name}
               </li>
             ))}
@@ -114,8 +115,8 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
             {t('Medicines')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.medicines?.map((data, datakey) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={datakey}>
+            {user?.patient?.medicines?.map((data, datakey, idx) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
                 -&nbsp; {data?.medicine?.trade_name}
               </li>
             ))}
@@ -134,8 +135,8 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
             {t('Insurance')}
           </Typography>
           <Stack spacing={1} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
-            {patientInsuranseData?.map((company, companykey) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={companykey}>
+            {patientInsuranseData?.map((company, companykey, idx) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
                 -&nbsp; {company?.insurance?.name_english}
               </li>
             ))}
@@ -217,8 +218,8 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
             &nbsp;
             {t('Notes')}
           </Typography>
-          {user?.patient?.other_medication_notes.map((info, infokey) => (
-            <li key={infokey} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
+          {user?.patient?.other_medication_notes.map((info, infokey, idx) => (
+            <li key={idx} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
               -&nbsp; {info}
             </li>
           ))}
@@ -281,10 +282,10 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
           value: user?.patient?.weight,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
-      ].map((item, i) => (
+      ].map((item, i, idx) => (
         <>
           {item.value && (
-            <Stack key={i}>
+            <Stack key={idx}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span
@@ -335,10 +336,10 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
           value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
-      ].map((item, ii) => (
+      ].map((item, ii, idx) => (
         <>
           {item.value && (
-            <Stack key={ii}>
+            <Stack key={idx}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span
@@ -395,10 +396,10 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
           value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
-      ].map((item, iii) => (
+      ].map((item, iii, idx) => (
         <>
           {item.value && (
-            <Stack key={iii} spacing={2}>
+            <Stack key={idx} spacing={2}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span
@@ -502,10 +503,7 @@ const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patie
 
         <Divider sx={{ borderWidth: 25, borderColor: '#EBE7E7', borderStyle: 'solid' }} />
         <Stack component={Card} spacing={1} sx={{ p: 3, bgcolor: '#00F67F', borderRadius: 0 }}>
-          <QRCodeSVG
-            value={qrCodeLink}
-            bgColor="none"
-          />
+          <QRCodeSVG value={qrCodeLink} bgColor="none" />
         </Stack>
       </>
     </ReactCardFlip>

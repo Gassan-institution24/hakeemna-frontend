@@ -58,7 +58,7 @@ import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 const defaultFilters = {
   name: '',
-  status: 'available',
+  status: 'pending',
   types: '',
   shift: '',
   group: '',
@@ -152,12 +152,6 @@ export default function AppointmentsView({ employeeData }) {
   const TABS = [
     // { value: 'all', label: t('all'), color: 'default', count: all },
     {
-      value: 'available',
-      label: t('available'),
-      color: 'secondary',
-      count: available,
-    },
-    {
       value: 'pending',
       label: t('pending'),
       color: 'warning',
@@ -180,6 +174,12 @@ export default function AppointmentsView({ employeeData }) {
       label: t('canceled'),
       color: 'error',
       count: canceled,
+    },
+    {
+      value: 'available',
+      label: t('available'),
+      color: 'secondary',
+      count: available,
     },
     {
       value: 'not booked',
@@ -214,11 +214,11 @@ export default function AppointmentsView({ employeeData }) {
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
         console.error(error);
       }
-      enqueueSnackbar('canceled successfully!');
+      enqueueSnackbar(t('canceled successfully!'));
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user]
+    [dataInPage.length, table, refetch, enqueueSnackbar, t, user]
   );
 
   const handleDelayRow = useCallback(
@@ -237,12 +237,12 @@ export default function AppointmentsView({ employeeData }) {
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
         console.error(error);
       }
-      enqueueSnackbar('delayed successfully!');
+      enqueueSnackbar(t('delayed successfully!'));
       refetch();
       setMinToDelay(0);
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user]
+    [dataInPage.length, table, refetch, enqueueSnackbar, t, user]
   );
 
   const handleUnCancelRow = useCallback(
@@ -259,11 +259,11 @@ export default function AppointmentsView({ employeeData }) {
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
         console.error(error);
       }
-      enqueueSnackbar('uncanceled successfully!');
+      enqueueSnackbar(t('uncanceled successfully!'));
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user]
+    [dataInPage.length, table, refetch, enqueueSnackbar, t, user]
   );
 
   const handleCancelRows = useCallback(async () => {
@@ -279,7 +279,7 @@ export default function AppointmentsView({ employeeData }) {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
     }
-    enqueueSnackbar('canceled successfully!');
+    enqueueSnackbar(t('canceled successfully!'));
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: appointmentsLength,
@@ -294,6 +294,7 @@ export default function AppointmentsView({ employeeData }) {
     table,
     enqueueSnackbar,
     user,
+    t,
   ]);
 
   const handleDelayRows = useCallback(async () => {
@@ -307,7 +308,7 @@ export default function AppointmentsView({ employeeData }) {
         link: paths.unitservice.appointments.root,
         msg: `dealayed many appointments`,
       });
-      enqueueSnackbar('delayed successfully!');
+      enqueueSnackbar(t('delayed successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -329,6 +330,7 @@ export default function AppointmentsView({ employeeData }) {
     minToDelay,
     enqueueSnackbar,
     user,
+    t,
   ]);
 
   const handleUnCancelRows = useCallback(async () => {
@@ -336,7 +338,7 @@ export default function AppointmentsView({ employeeData }) {
       await axiosInstance.patch(`${endpoints.appointments.all}/uncancel`, {
         ids: table.selected,
       });
-      enqueueSnackbar('uncanceled successfully!');
+      enqueueSnackbar(t('uncanceled successfully!'));
       socket.emit('updated', {
         user,
         link: paths.unitservice.appointments.root,
@@ -361,6 +363,7 @@ export default function AppointmentsView({ employeeData }) {
     table,
     user,
     enqueueSnackbar,
+    t,
   ]);
 
   const handleViewRow = useCallback(
@@ -419,9 +422,9 @@ export default function AppointmentsView({ employeeData }) {
               boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {TABS.map((tab) => (
+            {TABS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 value={tab.value}
                 label={tab.label}
                 iconPosition="end"
@@ -469,7 +472,7 @@ export default function AppointmentsView({ employeeData }) {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered?.map((row) => row._id)
+                  dataFiltered?.map((row, idx) => row._id)
                 )
               }
               action={
@@ -480,7 +483,7 @@ export default function AppointmentsView({ employeeData }) {
                         <Iconify icon="mdi:timer-sync" />
                       </IconButton>
                     </Tooltip>
-                    {dataFiltered
+                    {/* {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
                       .some((data) => data.status === 'canceled') ? (
                       <Tooltip title="uncancel all">
@@ -494,7 +497,7 @@ export default function AppointmentsView({ employeeData }) {
                           <Iconify icon="mdi:bell-cancel" />
                         </IconButton>
                       </Tooltip>
-                    )}
+                    )} */}
                   </>
                 )
               }
@@ -519,16 +522,16 @@ export default function AppointmentsView({ employeeData }) {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered?.map((row) => row._id)
+                      dataFiltered?.map((row, idx) => row._id)
                     )
                   }
                 />
 
                 <TableBody>
-                  {dataFiltered?.map((row) => (
+                  {dataFiltered?.map((row, idx) => (
                     <AppointmentsRow
                       refetch={refetch}
-                      key={row._id}
+                      key={idx}
                       row={row}
                       selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}

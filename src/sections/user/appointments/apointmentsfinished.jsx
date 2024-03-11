@@ -40,9 +40,9 @@ export default function FinishedAppoinment() {
             sx={{ width: 48, height: 48, mb: 2 }}
           />
 
-          {info?.work_group?.employees?.map((doctor, name) => (
+          {info?.work_group?.employees?.map((doctor, name, idx) => (
             <ListItemText
-              key={name}
+              key={idx}
               primary={
                 doctor?.employee?.visibility_online_appointment === true ? (
                   <span style={{ color: 'inherit' }}>
@@ -107,9 +107,9 @@ export default function FinishedAppoinment() {
                 <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
               ),
             },
-          ].map((item) => (
+          ].map((item, idx) => (
             <Stack
-              key={item.label}
+              key={idx}
               spacing={0.5}
               flexShrink={0}
               direction="row"

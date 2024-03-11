@@ -70,15 +70,15 @@ export default function TablesTableToolbar({
           value={filters.errorCodes}
           onChange={handleFilterErrorCode}
           input={<OutlinedInput label="Error Code" />}
-          renderValue={(selected) => selected.map((value) => value).join(', ')}
+          renderValue={(selected) => selected.map((value, idx) => value).join(', ')}
           MenuProps={{
             PaperProps: {
               sx: { maxHeight: 240 },
             },
           }}
         >
-          {codeOptions.map((option) => (
-            <MenuItem key={option} value={option}>
+          {codeOptions.map((option, idx) => (
+            <MenuItem key={idx} value={option}>
               <Checkbox disableRipple size="small" checked={filters.errorCodes.includes(option)} />
               {option}
             </MenuItem>

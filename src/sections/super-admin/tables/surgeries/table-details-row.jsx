@@ -95,9 +95,9 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
               <Box sx={{ flex: 1 }}>name</Box>
               <Box sx={{ flex: 1 }}>Category</Box>
             </Stack>
-            {diseases.map((item) => (
+            {diseases.map((item, idx) => (
               <Stack
-                key={item._id}
+                key={idx}
                 direction="row"
                 alignItems="center"
                 sx={{

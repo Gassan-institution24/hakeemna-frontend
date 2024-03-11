@@ -36,9 +36,9 @@ import TablesTableFiltersResult from '../tables-table-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'active',
-  startDate: null,
-  endDate: null,
+  // status: 'all',
+  // startDate: null,
+  // endDate: null,
 };
 
 export default function TablesListView() {
@@ -107,7 +107,7 @@ export default function TablesListView() {
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset =
-    !!filters.name || filters.status !== 'active' || (!!filters.startDate && !!filters.endDate);
+    !!filters.name ;
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
@@ -259,7 +259,7 @@ export default function TablesListView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -267,7 +267,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis?.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

@@ -78,7 +78,7 @@ export default function USsFeedbacks() {
       }
     });
 
-    const resultsArr = Object.keys(results).map((key) => ({ id: key, ...results[key] }));
+    const resultsArr = Object.keys(results).map((key, idx) => ({ id: key, ...results[key] }));
     return resultsArr;
   }, [feedbackData]);
 
@@ -180,8 +180,8 @@ export default function USsFeedbacks() {
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
-                  .map((row) => (
-                    <QCTableRow key={row.id} row={row} onViewRow={() => handleViewRow(row.id)} />
+                  .map((row, idx) => (
+                    <QCTableRow key={idx} row={row} onViewRow={() => handleViewRow(row.id)} />
                   ))}
 
                 <TableEmptyRows
@@ -219,7 +219,7 @@ export default function USsFeedbacks() {
 function applyFilter({ inputData, comparator, filters }) {
   const { name, status, rate } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -227,7 +227,7 @@ function applyFilter({ inputData, comparator, filters }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

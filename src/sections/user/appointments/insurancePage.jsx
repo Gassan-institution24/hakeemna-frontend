@@ -18,8 +18,8 @@ export default function InsurancePage() {
 
   return (
     <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-      {patientInsuranseData?.map((info, key) => (
-        <Card key={key} sx={{ borderRadius: 1, width: '75%', mb: 5, bgcolor: '#64a3aa' }}>
+      {patientInsuranseData?.map((info, key, idx) => (
+        <Card key={idx} sx={{ borderRadius: 1, width: '75%', mb: 5, bgcolor: '#64a3aa' }}>
           <Box
             sx={{
               bgcolor: '#ddf0ee',

@@ -70,12 +70,14 @@ export default function UnitServiceInfoContent({ unitServiceData }) {
         },
         {
           label: 'insurance',
-          value: insurance?.map((company) => company.name_english).join(', '),
+          value: insurance?.map((company, idx) => company.name_english).join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Subscriptions',
-          value: subscriptions?.map((subscription) => `${subscription?.name_english}`).join(', '),
+          value: subscriptions
+            ?.map((subscription, idx) => `${subscription?.name_english}`)
+            .join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
@@ -113,10 +115,10 @@ export default function UnitServiceInfoContent({ unitServiceData }) {
           value: speciality?.name_english,
           icon: <Iconify icon="solar:wad-of-money-bold" />,
         },
-      ].map((item) => (
+      ].map((item, idx) => (
         <>
           {item.value && (
-            <Stack key={item.label} spacing={1.5}>
+            <Stack key={idx} spacing={1.5}>
               {/* {item.icon} */}
               <ListItemText
                 primary={item.label}

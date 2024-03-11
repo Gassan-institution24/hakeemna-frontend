@@ -32,9 +32,9 @@ export default function ResultItem({ title, path, groupLabel, onClickItem }) {
           sx: { textTransform: 'capitalize' },
         }}
         secondaryTypographyProps={{ typography: 'caption' }}
-        primary={title.map((part, index) => (
+        primary={title.map((part, index, idx) => (
           <Box
-            key={index}
+            key={idx}
             component="span"
             sx={{
               color: part.highlight ? 'primary.main' : 'text.primary',
@@ -43,9 +43,9 @@ export default function ResultItem({ title, path, groupLabel, onClickItem }) {
             {part.text}
           </Box>
         ))}
-        secondary={path.map((part, index) => (
+        secondary={path.map((part, index, idx) => (
           <Box
-            key={index}
+            key={idx}
             component="span"
             sx={{
               color: part.highlight ? 'primary.main' : 'text.secondary',

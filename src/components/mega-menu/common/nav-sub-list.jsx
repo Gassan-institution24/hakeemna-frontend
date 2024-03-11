@@ -15,20 +15,20 @@ export default function NavSubList({ data, slotProps, ...other }) {
   return (
     <>
       {data.map((list, index) => (
-        <Stack key={list.subheader + index} spacing={1} {...other}>
+        <Stack key={index} spacing={1} {...other}>
           {list.subheader && (
             <Typography variant="subtitle2" noWrap sx={slotProps?.subheader}>
               {list.subheader}
             </Typography>
           )}
 
-          {list.items.map((link) => {
+          {list.items.map((link, idx) => {
             const active = pathname === link.path || pathname === `${link.path}/`;
 
             return (
               <Link
                 noWrap
-                key={link.title}
+                key={idx}
                 component={RouterLink}
                 href={link.path}
                 className={active ? 'active' : ''}

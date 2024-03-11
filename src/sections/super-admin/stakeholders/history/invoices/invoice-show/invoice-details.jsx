@@ -123,8 +123,8 @@ export default function InvoiceDetails({ economicMovementData }) {
           </TableHead>
 
           <TableBody>
-            {economicMovementData.Provided_services?.map((row, index) => (
-              <TableRow key={index}>
+            {economicMovementData.Provided_services?.map((row, idx) => (
+              <TableRow key={idx}>
                 <TableCell align="center">{row.index + 1}</TableCell>
 
                 <TableCell align="center">

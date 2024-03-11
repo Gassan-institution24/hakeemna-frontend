@@ -75,7 +75,7 @@ export default function VerticalDividerText() {
             }}
           >
             <ul style={{ margin: 10 }}>
-              {DATA.map((data) => (
+              {DATA.map((data, idx) => (
                 <li style={{ margin: 5 }}>{data.headline}</li>
               ))}
             </ul>
@@ -121,7 +121,7 @@ export default function VerticalDividerText() {
             }}
           >
             <ul style={{ margin: 10 }}>
-              {DATA.map((data) => (
+              {DATA.map((data, idx) => (
                 <li style={{ margin: 5 }}>{data.headline}</li>
               ))}
             </ul>

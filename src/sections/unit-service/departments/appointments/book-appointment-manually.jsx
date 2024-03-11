@@ -91,7 +91,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (data._id) {
-        await axios.patch(endpoints.appointments.one(appointment._id), {
+        await axios.patch(endpoints.appointments.book(appointment._id), {
           patient: data._id,
         });
         socket.emit('updated', {
@@ -111,7 +111,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
         });
         socket.emit('register', data);
       }
-      enqueueSnackbar('Create success!');
+      enqueueSnackbar(t('created successfully!'));
       refetch();
 
       onClose();
@@ -184,9 +184,9 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
       <Dialog maxWidth="lg" onClose={onClose} sx={{ width: 'auto' }} {...other}>
         <FormProvider methods={methods} onSubmit={onSubmit}>
           <DialogTitle sx={{ mb: 1 }}> {t('book manually')} </DialogTitle>
-          {existPatients?.map((patient, index) => (
+          {existPatients?.map((patient, index, idx) => (
             <Alert
-              key={index}
+              key={idx}
               severity="info"
               onClose={() => {
                 setExistPatients(existPatients.filter((info) => info !== patient));
@@ -291,8 +291,8 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   label={t('nationality')}
                   // InputLabelProps={{ shrink: true }}
                 >
-                  {countriesData.map((option, index) => (
-                    <MenuItem key={index} value={option._id}>
+                  {countriesData.map((option, index, idx) => (
+                    <MenuItem key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -303,8 +303,8 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   label={t('country')}
                   // InputLabelProps={{ shrink: true }}
                 >
-                  {countriesData.map((option, index) => (
-                    <MenuItem key={index} value={option._id}>
+                  {countriesData.map((option, index, idx) => (
+                    <MenuItem key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -315,8 +315,8 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                   // InputLabelProps={{ shrink: true }}
                 >
-                  {tableData.map((option, index) => (
-                    <MenuItem key={index} value={option._id}>
+                  {tableData.map((option, index, idx) => (
+                    <MenuItem key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -332,10 +332,10 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   <MenuItem value="separated">{t('separated')}</MenuItem>
                   <MenuItem value="divorced">{t('divorced')} </MenuItem>
                 </RHFSelect>
-                <RHFSelect 
-                name="gender" 
-                label={t('gender')} 
-                // InputLabelProps={{ shrink: true }}
+                <RHFSelect
+                  name="gender"
+                  label={t('gender')}
+                  // InputLabelProps={{ shrink: true }}
                 >
                   <MenuItem value="male">{t('male')}</MenuItem>
                   <MenuItem value="female">{t('female')}</MenuItem>

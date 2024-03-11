@@ -10,7 +10,7 @@
 //   const { appointmentsData, refetch } = useGetUSAvailableAppointments(Units._id);
 //   const { feedbackData } = useGetUSFeedbackes(Units._id);
 //   // const { user } = useAuthContext();
-//   // const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient._id));
+//   // const uniqueUserIds = new Set(feedbackData.map((feedback, idx)  => feedback?.patient._id));
 //   // const numberOfUsers = uniqueUserIds.size;
 
 //   const getTodayDate = () => {
@@ -84,8 +84,8 @@
 //   //               </li>
 //   //             </ul>
 //   //           </Box>
-//   //           {displayedFeedback.map((feedback, index) => (
-//   //             <React.Fragment key={index}>
+//   //           {displayedFeedback.map((feedback, index, idx)  => (
+//   //             <React.Fragment key={idx}>
 //   //               <Iconify
 //   //                 sx={{
 //   //                   transform: 'rotate(-20deg)',
@@ -156,8 +156,8 @@
 //   //       {groupedAppointments.today.length > 0 && (
 //   //         <ul style={{ listStyle: 'none' }}>
 //   //           <h4 style={{ fontWeight: 600 }}>Today</h4>
-//   //           {groupedAppointments.today.map((appointment, i) => (
-//   //             <li key={i}>
+//   //           {groupedAppointments.today.map((appointment, i, idx)  => (
+//   //             <li key={idx}>
 //   //               <Button
 //   //                 onClick={(e) => kdk(e.target.value)}
 //   //                 sx={{
@@ -179,13 +179,13 @@
 //   //       )}
 
 //   //       {/* Render other dates */}
-//   //       {Object.keys(groupedAppointments).map((date, index) => {
+//   //       {Object.keys(groupedAppointments).map((date, index, idx)  => {
 //   //         if (date !== 'today') {
 //   //           return (
-//   //             <ul key={index} style={{ listStyle: 'none' }}>
+//   //             <ul key={idx} style={{ listStyle: 'none' }}>
 //   //               <h4 style={{ fontWeight: 600 }}>{date}</h4>
-//   //               {groupedAppointments[date].map((appointment, i) => (
-//   //                 <li key={i}>
+//   //               {groupedAppointments[date].map((appointment, i, idx)  => (
+//   //                 <li key={idx}>
 //   //                   <Button
 //   //                     onClick={() => kdk(appointment?._id)}
 //   //                     sx={{
