@@ -17,6 +17,8 @@ const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
 const UserAppointmentsPage = lazy(() => import('src/pages/dashboard/user/appointments'));
 const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
+// const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
+// const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
 const Doctorpage = lazy(() => import('src/pages/dashboard/user/doctorpage'));
 const Insurance = lazy(() => import('src/pages/dashboard/user/insurance'));
 const Share = lazy(() => import('src/pages/dashboard/user/share'));
@@ -25,7 +27,7 @@ const Family = lazy(() => import('src/pages/dashboard/user/Family'));
 const Specialities = lazy(() => import('src/pages/dashboard/user/specialities'));
 const PatientPrescriptions = lazy(() => import('src/pages/dashboard/user/prescriptions'));
 const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
-const UserEditPage = lazy(() => import('src/pages/dashboard/user/edit'));
+const ContactUS = lazy(() => import('src/pages/dashboard/user/contaactus'));
 const Medicalreports = lazy(() => import('src/pages/dashboard/user/Medicalreports'));
 const Emergency = lazy(() => import('src/pages/dashboard/user/emergency'));
 const Watingroom = lazy(() => import('src/pages/dashboard/user/watingroom'));
@@ -73,8 +75,9 @@ export const userRoutes = [
           { path: 'doctorpage/:id', element: <Doctorpage /> },
           { path: 'insurance', element: <Insurance /> },
           { path: 'specialities', element: <Specialities /> },
+          // { path: 'create', element: <UserCreatePage /> },
           // { path: 'new', element: <UserCreatePage /> },
-          { path: ':id/edit', element: <UserEditPage /> },
+          { path: 'contactus', element: <ContactUS /> },
           { path: 'account', element: <UserAccountPage /> },
           { path: 'share', element: <Share /> },
           { path: 'financilmovment', element: <FinancilMovment /> },
