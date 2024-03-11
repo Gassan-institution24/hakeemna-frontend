@@ -84,6 +84,9 @@ export default function Insuranceinfo() {
       dialog.onFalse();
       reset();
       setCheckChange(!checkChange);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -194,7 +197,7 @@ export default function Insuranceinfo() {
             sx={{
               color: 'text.secondary',
               mt: { md: -2.5, xs: -2.3 },
-              ml: curLangAr ? { md: -31, xs: -5 } : { md: -17, xs: 4 },
+              ml: curLangAr ? { md: -31, xs: -5 } : { md: -21, xs: 4 },
               typography: 'caption',
               textAlign: 'center',
               fontSize: { md: 12, xs: 10 },

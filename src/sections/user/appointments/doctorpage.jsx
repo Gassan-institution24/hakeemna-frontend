@@ -78,7 +78,7 @@ export default function Doctorpage() {
 
   const handleBook = async (Data) => {
     try {
-      await axios.patch(`${endpoints.appointments.one(Data)}/book`, {
+      await axios.patch(`${endpoints.appointments.one(Data)}/bookappointment`, {
         patient: patientData,
         email: patientEmail,
         pInfo: patientinfo,

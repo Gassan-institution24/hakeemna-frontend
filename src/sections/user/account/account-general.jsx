@@ -34,6 +34,7 @@ export default function AccountGeneral({ data, refetch }) {
   const { t } = useTranslate();
   const [em_phone, setEMphone] = useState(data.mobile_num1);
   const [em_phone2, setEMphone2] = useState(data.mobile_num2);
+  console.log(user?.patient?.other_medication_notes);
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
@@ -72,20 +73,6 @@ export default function AccountGeneral({ data, refetch }) {
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
 
-  // const handleCountryChange = (event) => {
-  //   const selectedCountryId = event.target.value;
-  //   methods.setValue('country', selectedCountryId, { shouldValidate: true });
-  //   setSelectedCountry(selectedCountryId);
-  // };
-
-  // useEffect(() => {
-  //   setCities(
-  //     selectedCountry
-  //       ? tableData.filter((countryData) => countryData?.country?._id === selectedCountry)
-  //       : tableData
-  //   );
-  // }, [tableData, selectedCountry]);
-
   const defaultValues = {
     first_name: data?.first_name || '',
     middle_name: data?.middle_name || '',
@@ -100,7 +87,7 @@ export default function AccountGeneral({ data, refetch }) {
     address: data?.address || '',
     sport_exercises: data?.sport_exercises || '',
     smoking: data?.smoking || '',
-    other_medication_notes: '',
+    other_medication_notes: [],
     profile_picture: data?.profile_picture?.replace(/\\/g, '//') || '',
   };
 
@@ -151,6 +138,18 @@ export default function AccountGeneral({ data, refetch }) {
   };
 
   const onSubmit = async (profileData) => {
+    if (data.other_medication_notes && data.other_medication_notes.length > 0) {
+      // Concatenate the new value to the old array
+      profileData.other_medication_notes = [
+        ...data.other_medication_notes,
+        profileData.other_medication_notes
+      ];
+    } else {
+      // If there is no old value, create a new array with the new value
+      profileData.other_medication_notes = [profileData.other_medication_notes];
+    }
+    
+
     // Create a new FormData object
     const formData = new FormData();
 

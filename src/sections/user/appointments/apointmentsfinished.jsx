@@ -10,27 +10,12 @@ import ListItemText from '@mui/material/ListItemText';
 
 import { fTime, fDate } from 'src/utils/format-time';
 
-import { useAuthContext } from 'src/auth/hooks';
-import { useGetPatientAppointments } from 'src/api';
-
 import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
-export default function FinishedAppoinment() {
-  const { user } = useAuthContext();
-  const { appointmentsData } = useGetPatientAppointments(user?.patient?._id);
-
-  const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');
-
+export default function FinishedAppoinment({ finishedAppointments }) {
   return finishedAppointments.map((info, index) => (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: { md: '1fr 1fr 1fr', xs: '1fr' },
-        gap: 5,
-        mb: 2,
-      }}
-    >
+    <Box>
       <Card key={index}>
         <Stack sx={{ p: 3, pb: 2 }}>
           <Avatar
@@ -129,5 +114,5 @@ export default function FinishedAppoinment() {
 }
 
 FinishedAppoinment.propTypes = {
-  user: PropTypes.object,
+  finishedAppointments: PropTypes.array,
 };
