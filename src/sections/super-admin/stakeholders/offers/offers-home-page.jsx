@@ -38,7 +38,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
   //       mb: { xs: 3, md: 5 },
   //     }}
   //   >
-  //     {OffersTabsList.map((tab, idx) => (
+  //     {OffersTabsList.map((tab, idx)  => (
   //       <Tab key={idx} iconPosition="end" value={tab} label={tab} />
   //     ))}
   //   </Tabs>

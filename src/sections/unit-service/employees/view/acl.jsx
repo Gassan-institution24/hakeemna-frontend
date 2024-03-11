@@ -114,7 +114,7 @@ export default function TableNewEditForm() {
         link: paths.unitservice.employees.acl(id),
         msg: `updated a service unit employee permissions`,
       });
-      enqueueSnackbar('Update success!');
+      enqueueSnackbar(t('updated successfully!'));
       // router.push(paths.superadmin.subscriptions.root);
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });

@@ -76,10 +76,10 @@ export function RHFMultiCheckbox({ row, name, label, options, spacing, helperTex
               ...sx,
             }}
           >
-            {options.map((option) => (
+            {options.map((option, idx) => (
               <FormControlLabel
                 lang="ar"
-                key={option.value}
+                key={idx}
                 control={
                   <Checkbox
                     checked={field.value.includes(option.value)}

@@ -57,7 +57,6 @@ export default function AppointmentsFilters({
     },
     [onFilters]
   );
- 
 
   const renderHead = (
     <Stack
@@ -84,16 +83,14 @@ export default function AppointmentsFilters({
     </Stack>
   );
 
- 
-
   const renderappointtypes = (
     <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         {t('Appointment Types')}
       </Typography>
       <Select onChange={handleFilterAppointtypes} name="appointment_type">
-        {appointmentTypeOptions.map((option) => (
-          <MenuItem key={option._id} value={option._id}>
+        {appointmentTypeOptions.map((option, idx) => (
+          <MenuItem key={idx} value={option._id}>
             {option?.name_english}
           </MenuItem>
         ))}
@@ -106,8 +103,8 @@ export default function AppointmentsFilters({
         {t('Countries')}
       </Typography>
       <Select onChange={handleFilterCountries} name="country">
-        {countriesOptions.map((option) => (
-          <MenuItem key={option._id} value={option._id}>
+        {countriesOptions.map((option, idx) => (
+          <MenuItem key={idx} value={option._id}>
             {option?.name_english}
           </MenuItem>
         ))}
@@ -121,8 +118,8 @@ export default function AppointmentsFilters({
         {t('insurance')}
       </Typography>
       <Select onChange={handleFiltedInsurance} name="insurance">
-        {insuranseCosData.map((option) => (
-          <MenuItem key={option._id} value={option._id}>
+        {insuranseCosData.map((option, idx) => (
+          <MenuItem key={idx} value={option._id}>
             {option?.name_english}
           </MenuItem>
         ))}

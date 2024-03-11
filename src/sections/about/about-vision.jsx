@@ -39,10 +39,10 @@ export default function AboutVision() {
         py: { xs: 1.5, md: 2.5 },
       }}
     >
-      {['ibm', 'lya', 'spotify', 'netflix', 'hbo', 'amazon'].map((logo) => (
+      {['ibm', 'lya', 'spotify', 'netflix', 'hbo', 'amazon'].map((logo, idx) => (
         <Box
           component={m.img}
-          key={logo}
+          key={idx}
           variants={varFade().in}
           alt={logo}
           src={`/assets/icons/brands/ic_brand_${logo}.svg`}

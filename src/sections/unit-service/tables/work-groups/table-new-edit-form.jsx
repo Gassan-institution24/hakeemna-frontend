@@ -61,7 +61,7 @@ export default function TableNewEditForm({ currentTable }) {
       department: currentTable?.department?._id || null,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      employees: currentTable?.employees.map((info) => info.employee) || [],
+      employees: currentTable?.employees.map((info, idx) => info.employee) || [],
     }),
     [currentTable, user?.employee]
   );
@@ -155,8 +155,8 @@ export default function TableNewEditForm({ currentTable }) {
               label={`${t('name arabic')} *`}
             />
             <RHFSelect name="department" label={t('department')}>
-              {departmentsData.map((department) => (
-                <MenuItem key={department._id} value={department._id}>
+              {departmentsData.map((department, idx) => (
+                <MenuItem key={idx} value={department._id}>
                   {curLangAr ? department.name_arabic : department.name_english}
                 </MenuItem>
               ))}
@@ -172,8 +172,8 @@ export default function TableNewEditForm({ currentTable }) {
                 (option) => !values.employees.some((item) => isEqual(option, item))
               )}
               getOptionLabel={(option) => option._id}
-              renderOption={(props, option) => (
-                <li {...props} key={option._id} value={option._id}>
+              renderOption={(props, option,idx) => (
+                <li {...props} key={idx} value={option._id}>
                   {option.employee?.first_name} {option.employee?.middle_name}{' '}
                   {option.employee?.family_name}
                 </li>
@@ -183,10 +183,10 @@ export default function TableNewEditForm({ currentTable }) {
                 methods.setValue('employees', newValue, { shouldValidate: true });
               }}
               renderTags={(selected, getTagProps) =>
-                selected.map((option, index) => (
+                selected.map((option, index, idx) => (
                   <Chip
                     {...getTagProps({ index })}
-                    key={option._id}
+                    key={idx}
                     label={option.employee.first_name}
                     size="small"
                     color="info"

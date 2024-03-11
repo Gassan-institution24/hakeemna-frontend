@@ -130,15 +130,15 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect name="unit_service" label="unit_service">
-                {unitservicesData.map((unit_service) => (
-                  <MenuItem key={unit_service._id} value={unit_service._id}>
+                {unitservicesData.map((unit_service, idx) => (
+                  <MenuItem key={idx} value={unit_service._id}>
                     {unit_service.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="service" label="service">
-                {serviceTypesData.map((service) => (
-                  <MenuItem key={service._id} value={service._id}>
+                {serviceTypesData.map((service, idx) => (
+                  <MenuItem key={idx} value={service._id}>
                     {service.name_english}
                   </MenuItem>
                 ))}

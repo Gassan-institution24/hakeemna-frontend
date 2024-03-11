@@ -93,7 +93,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
         msg: `created an emergency appointment <strong>[ ${appoint?.data?.code} ]</strong>`,
       });
       reset();
-      enqueueSnackbar('Create success!');
+      enqueueSnackbar(t('created successfully!'));
       refetch();
 
       onClose();
@@ -157,8 +157,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
                 }}
               >
                 <RHFSelect name="appointment_type" label={`${t('appointment type')} *`}>
-                  {appointmenttypesData.map((option, index) => (
-                    <MenuItem key={index} value={option._id}>
+                  {appointmenttypesData.map((option, index, idx) => (
+                    <MenuItem key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -169,15 +169,15 @@ export default function BookManually({ onClose, refetch, ...other }) {
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
                   {workShiftsData &&
-                    workShiftsData.map((option, index) => (
-                      <MenuItem key={index} value={option._id}>
+                    workShiftsData.map((option, index, idx) => (
+                      <MenuItem key={idx} value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
                       </MenuItem>
                     ))}
                 </RHFSelect>
                 <RHFSelect name="work_group" label={`${t('work group')} *`}>
-                  {workGroupsData.map((option, index) => (
-                    <MenuItem key={index} value={option._id}>
+                  {workGroupsData.map((option, index, idx) => (
+                    <MenuItem key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}

@@ -87,7 +87,7 @@ export default function UploadOldPatient({ refetch }) {
       });
       refetch();
       reset();
-      enqueueSnackbar('Uploaded success!');
+      enqueueSnackbar(t('uploaded successfully!'));
       // router.push(paths.unitservice.tables.employeetypes.root);
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
@@ -120,7 +120,7 @@ export default function UploadOldPatient({ refetch }) {
       const files = values.files || uploadedFiles;
       // console.log('files', files);
 
-      const newFiles = acceptedFiles.map((file) =>
+      const newFiles = acceptedFiles.map((file, idx) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
         })

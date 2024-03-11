@@ -138,7 +138,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
       // console.log('formData', formData);
       await axios.patch(endpoints.employees.one(employeeData._id), formData);
-      enqueueSnackbar('Update success!');
+      enqueueSnackbar(t('updated successfully!'));
       refetch();
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
@@ -214,6 +214,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               />
               <Tooltip placement="top" title="Phone number of service unit">
                 <MuiTelInput
+                  defaultCountry="JO"
                   forceCallingCode
                   variant="filled"
                   label={`${t('phone')}* : `}
@@ -328,8 +329,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {countriesData.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
+                {countriesData.map((country, idx) => (
+                  <MenuItem key={idx} value={country._id}>
                     {curLangAr ? country.name_arabic : country.name_english}
                   </MenuItem>
                 ))}
@@ -338,6 +339,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               <Tooltip placement="top" title="Phone number of service unit">
                 <MuiTelInput
                   forceCallingCode
+                  defaultCountry="JO"
                   label={t('alternative mobile number')}
                   value={alterPhone}
                   onChange={(newPhone) => {
@@ -354,8 +356,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {specialtiesData.map((specialty) => (
-                  <MenuItem value={specialty._id} key={specialty._id}>
+                {specialtiesData.map((specialty, idx) => (
+                  <MenuItem value={specialty._id} key={idx}>
                     {curLangAr ? specialty.name_arabic : specialty.name_english}
                   </MenuItem>
                 ))}
@@ -377,8 +379,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {employeeTypesData.map((type) => (
-                  <MenuItem value={type._id} key={type._id}>
+                {employeeTypesData.map((type, idx) => (
+                  <MenuItem value={type._id} key={idx}>
                     {curLangAr ? type.name_arabic : type.name_english}
                   </MenuItem>
                 ))}

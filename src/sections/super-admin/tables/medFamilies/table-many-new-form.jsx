@@ -152,7 +152,7 @@ export default function NewEditManyForm() {
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    data.map((row, index) => index)
+                    data.map((row, index, idx) => index)
                   )
                 }
                 // action={
@@ -166,8 +166,8 @@ export default function NewEditManyForm() {
                 //       label="country"
                 //       onChange={handleSelectMany}
                 //     >
-                //       {countriesData.map((country) => (
-                //         <MenuItem key={country._id} value={country._id}>
+                //       {countriesData.map((country, idx)  => (
+                //         <MenuItem key={idx} value={country._id}>
                 //           {country.name_english}
                 //         </MenuItem>
                 //       ))}
@@ -186,14 +186,14 @@ export default function NewEditManyForm() {
                     onSelectAllRows={(checked) =>
                       table.onSelectAllRows(
                         checked,
-                        data.map((row, index) => index)
+                        data.map((row, index, idx) => index)
                       )
                     }
                   />
 
                   <TableBody>
-                    {data.map((one, index) => (
-                      <TableRow key={index} hover selected={table.selected.includes(index)}>
+                    {data.map((one, index, idx) => (
+                      <TableRow key={idx} hover selected={table.selected.includes(index)}>
                         <TableCell padding="checkbox">
                           <Checkbox
                             checked={table.selected.includes(index)}
@@ -211,8 +211,8 @@ export default function NewEditManyForm() {
                             size="small"
                             name="country"
                           >
-                            {countriesData.map((country) => (
-                              <MenuItem key={country._id} value={country._id}>
+                            {countriesData.map((country, idx)  => (
+                              <MenuItem key={idx} value={country._id}>
                                 {country.name_english}
                               </MenuItem>
                             ))}

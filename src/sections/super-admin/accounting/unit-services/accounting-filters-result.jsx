@@ -43,9 +43,9 @@ export default function InvoiceTableFiltersResult({
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
         {/* {!!filters.service.length && (
           <Block label="Service:">
-            {filters.service.map((item) => (
+            {filters.service.map((item, idx)  => (
               <Chip
-                key={index}
+                key={idx}
                 label={item}
                 size="small"
                 onDelete={() => handleRemoveService(item)}

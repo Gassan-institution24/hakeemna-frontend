@@ -159,9 +159,9 @@ export default function TourItem({ tour, onView, onEdit, onStatusChange }) {
           label: `${differenceBetweenDates(tour.Offer_start_date, tour.Offer_end_date)} Days`,
           icon: <Iconify icon="solar:clock-circle-bold" sx={{ color: 'info.main' }} />,
         },
-      ].map((item) => (
+      ].map((item, idx) => (
         <Stack
-          key={item.label}
+          key={idx}
           spacing={1}
           direction="row"
           alignItems="center"

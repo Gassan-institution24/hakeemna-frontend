@@ -176,10 +176,10 @@ export default function InvoicePDF({ invoice, currentStatus }) {
           </View>
 
           <View>
-            {Provided_services.map((item, index) => (
-              <View style={styles.tableRow} key={item.code}>
+            {Provided_services.map((item, idx) => (
+              <View style={styles.tableRow} key={idx}>
                 <View style={styles.tableCell_1}>
-                  <Text>{index + 1}</Text>
+                  <Text>{idx + 1}</Text>
                 </View>
 
                 <View style={styles.tableCell_2}>

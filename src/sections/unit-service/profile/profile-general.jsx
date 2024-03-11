@@ -162,7 +162,7 @@ export default function AccountGeneral({ unitServiceData }) {
         ),
         dataToSend
       );
-      enqueueSnackbar('Update success!');
+      enqueueSnackbar(t('updated successfully!'));
       socket.emit('updated', {
         user,
         link: paths.unitservice.profile.root,
@@ -249,6 +249,7 @@ export default function AccountGeneral({ unitServiceData }) {
               <Tooltip placement="top" title="Phone number of service unit">
                 <MuiTelInput
                   forceCallingCode
+                  defaultCountry="JO"
                   variant="filled"
                   label={`${t('phone')}* : `}
                   value={phone}
@@ -289,8 +290,8 @@ export default function AccountGeneral({ unitServiceData }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
                 // onChange={handleCountryChange}
               >
-                {countriesData.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
+                {countriesData.map((country, idx) => (
+                  <MenuItem key={idx} value={country._id}>
                     {curLangAr ? country.name_arabic : country.name_english}
                   </MenuItem>
                 ))}
@@ -304,8 +305,8 @@ export default function AccountGeneral({ unitServiceData }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {tableData.map((city) => (
-                  <MenuItem key={city._id} value={city._id}>
+                {tableData.map((city, idx) => (
+                  <MenuItem key={idx} value={city._id}>
                     {curLangAr ? city.name_arabic : city.name_english}
                   </MenuItem>
                 ))}
@@ -318,8 +319,8 @@ export default function AccountGeneral({ unitServiceData }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {unitserviceTypesData.map((type) => (
-                  <MenuItem value={type._id} key={type._id}>
+                {unitserviceTypesData.map((type, idx) => (
+                  <MenuItem value={type._id} key={idx}>
                     {curLangAr ? type.name_arabic : type.name_english}
                   </MenuItem>
                 ))}
@@ -332,8 +333,8 @@ export default function AccountGeneral({ unitServiceData }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {specialtiesData.map((specialty) => (
-                  <MenuItem value={specialty._id} key={specialty._id}>
+                {specialtiesData.map((specialty, idx) => (
+                  <MenuItem value={specialty._id} key={idx}>
                     {curLangAr ? specialty.name_arabic : specialty.name_english}
                   </MenuItem>
                 ))}
@@ -353,6 +354,7 @@ export default function AccountGeneral({ unitServiceData }) {
               <Tooltip placement="top" title="Phone number of service unit">
                 <MuiTelInput
                   forceCallingCode
+                  defaultCountry="JO"
                   label={t('alternative mobile number')}
                   value={alterPhone}
                   onChange={(newPhone) => {

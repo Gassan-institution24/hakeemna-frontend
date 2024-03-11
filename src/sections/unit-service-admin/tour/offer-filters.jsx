@@ -131,9 +131,9 @@ export default function TourFilters({
       <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
         cities
       </Typography>
-      {tableData.map((option) => (
+      {tableData.map((option, idx) => (
         <FormControlLabel
-          key={option?.key}
+          key={idx}
           control={
             <Checkbox
               checked={filters.cities.includes(option._id)}
@@ -161,9 +161,9 @@ export default function TourFilters({
   //   //     getOptionLabel={(option) => option.name}
   //   //     renderInput={(params) => <TextField placeholder="Select Tour Guides" {...params} />}
   //   //     renderOption={(props, tourGuide) => (
-  //   //       <li {...props} key={tourGuide.id}>
+  //   //       <li {...props} key={idx}>
   //   //         <Avatar
-  //   //           key={tourGuide.id}
+  //   //           key={idx}
   //   //           alt={tourGuide.avatarUrl}
   //   //           src={tourGuide.avatarUrl}
   //   //           sx={{ width: 24, height: 24, flexShrink: 0, mr: 1 }}
@@ -173,10 +173,10 @@ export default function TourFilters({
   //   //       </li>
   //   //     )}
   //   //     renderTags={(selected, getTagProps) =>
-  //   //       selected.map((tourGuide, index) => (
+  //   //       selected.map((tourGuide, index, idx)  => (
   //   //         <Chip
   //   //           {...getTagProps({ index })}
-  //   //           key={tourGuide.id}
+  //   //           key={idx}
   //   //           size="small"
   //   //           variant="soft"
   //   //           label={tourGuide.name}
@@ -194,9 +194,9 @@ export default function TourFilters({
       <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
         stakeholder
       </Typography>
-      {stakeholder.map((option) => (
+      {stakeholder.map((option, idx) => (
         <FormControlLabel
-          key={option?.key}
+          key={idx}
           control={
             <Checkbox
               checked={filters.stakeholder.includes(option._id)}

@@ -144,29 +144,29 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect name="country" label="country">
-                {countriesData.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
+                {countriesData.map((country, idx) => (
+                  <MenuItem key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="city" label="city">
-                {tableData.map((city) => (
-                  <MenuItem key={city._id} value={city._id}>
+                {tableData.map((city, idx) => (
+                  <MenuItem key={idx} value={city._id}>
                     {city.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="US_type" label="US_type">
-                {unitserviceTypesData.map((type) => (
-                  <MenuItem key={type._id} value={type._id}>
+                {unitserviceTypesData.map((type, idx) => (
+                  <MenuItem key={idx} value={type._id}>
                     {type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="speciality" label="speciality">
-                {specialtiesData.map((speciality) => (
-                  <MenuItem key={speciality._id} value={speciality._id}>
+                {specialtiesData.map((speciality, idx) => (
+                  <MenuItem key={idx} value={speciality._id}>
                     {speciality.name_english}
                   </MenuItem>
                 ))}

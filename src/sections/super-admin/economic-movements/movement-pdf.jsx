@@ -168,8 +168,8 @@ export default function InvoicePDF({ invoice, currentStatus }) {
           </View>
 
           <View>
-            {items.map((item, index) => (
-              <View style={styles.tableRow} key={index}>
+            {items.map((item, index, idx) => (
+              <View style={styles.tableRow} key={idx}>
                 <View style={styles.tableCell_1}>
                   <Text>{index + 1}</Text>
                 </View>

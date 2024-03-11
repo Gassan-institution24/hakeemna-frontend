@@ -251,7 +251,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
         >
           {fields.map((item, index) => (
             <Stack
-              key={item?.id}
+              key={index}
               // alignItems="flex-start"
               // flexWrap="wrap"
               spacing={1.5}
@@ -284,8 +284,8 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                               values.days_details[index]?.day !== option.value
                           )
                       )
-                      .map((option) => (
-                        <MenuItem value={option.value}>{option.label}</MenuItem>
+                      .map((option, idx) => (
+                        <MenuItem key={idx} value={option.value}>{option.label}</MenuItem>
                       ))}
                   </RHFSelect>
                   <RHFSelect
@@ -298,7 +298,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     }}
                     label={`${t('appointment type')} *`}
                   >
-                    {appointmenttypesData?.map((option) => (
+                    {appointmenttypesData?.map((option, idx) => (
                       <MenuItem value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
                       </MenuItem>
@@ -326,11 +326,11 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                           }}
                           renderValue={renderValues}
                         >
-                          {serviceTypesData?.map((option) => {
+                          {serviceTypesData?.map((option, idx) => {
                             const selected = field?.value?.includes(option._id);
 
                             return (
-                              <MenuItem key={option._id} value={option._id}>
+                              <MenuItem key={idx} value={option._id}>
                                 <Checkbox size="small" disableRipple checked={selected} />
 
                                 {curLangAr ? option?.name_arabic : option?.name_english}

@@ -107,22 +107,22 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
               }} /// edit
             >
               <RHFSelect name="free_subscription" label="Free Subscription">
-                {freeSubscriptionsData.map((subscription) => (
-                  <MenuItem key={subscription._id} value={subscription._id}>
+                {freeSubscriptionsData.map((subscription, idx) => (
+                  <MenuItem key={idx} value={subscription._id}>
                     {subscription.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="subscription" label="subscription">
-                {subscriptionsData.map((backage) => (
-                  <MenuItem key={backage._id} value={backage._id}>
+                {subscriptionsData.map((backage, idx) => (
+                  <MenuItem key={idx} value={backage._id}>
                     {backage.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="Payment_method" label="Payment method">
-                {paymentMethodsData.map((method) => (
-                  <MenuItem key={method._id} value={method._id}>
+                {paymentMethodsData.map((method, idx) => (
+                  <MenuItem key={idx} value={method._id}>
                     {method.name_english}
                   </MenuItem>
                 ))}

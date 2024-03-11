@@ -136,16 +136,16 @@ export default function NewEditManyForm() {
         alert('Please fill in all required fields.');
         return;
       }
-      const formDataArray = data.map((obj) => {
-        const formData = new FormData();
-        Object.keys(obj).forEach((key) => {
-          console.log('key', key);
-          console.log('obj[key]', obj[key]);
-          formData.set(key, obj[key]);
-        });
-        return formData;
-      });
-      await axiosInstance.post(endpoints.specialities.many, formDataArray);
+      // const formDataArray = data.map((obj, idx) => {
+      //   const formData = new FormData();
+      //   Object.keys(obj).forEach((key) => {
+      //     console.log('key', key);
+      //     console.log('obj[key]', obj[key]);
+      //     formData.set(key, obj[key]);
+      //   });
+      //   return formData;
+      // });
+      await axiosInstance.post(endpoints.specialities.many, data);
       router.push(paths.superadmin.tables.specialities.root); /// edit
     } catch (e) {
       console.log(e);
@@ -179,7 +179,7 @@ export default function NewEditManyForm() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      data.map((row, index) => index)
+                      data.map((row, index, idx) => index)
                     )
                   }
                   // action={
@@ -193,8 +193,8 @@ export default function NewEditManyForm() {
                   //       label="country"
                   //       onChange={handleSelectMany}
                   //     >
-                  //       {countriesData.map((country) => (
-                  //         <MenuItem key={country._id} value={country._id}>
+                  //       {countriesData.map((country, idx)  => (
+                  //         <MenuItem key={idx} value={country._id}>
                   //           {country.name_english}
                   //         </MenuItem>
                   //       ))}
@@ -213,14 +213,14 @@ export default function NewEditManyForm() {
                       onSelectAllRows={(checked) =>
                         table.onSelectAllRows(
                           checked,
-                          data.map((row, index) => index)
+                          data.map((row, index, idx) => index)
                         )
                       }
                     />
 
                     <TableBody>
-                      {data.map((one, index) => (
-                        <TableRow key={index} hover selected={table.selected.includes(index)}>
+                      {data.map((one, index, idx) => (
+                        <TableRow key={idx} hover selected={table.selected.includes(index)}>
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={table.selected.includes(index)}
@@ -238,8 +238,8 @@ export default function NewEditManyForm() {
                             size="small"
                             name="country"
                           >
-                            {countriesData.map((country) => (
-                              <MenuItem key={country._id} value={country._id}>
+                            {countriesData.map((country, idx)  => (
+                              <MenuItem key={idx} value={country._id}>
                                 {country.name_english}
                               </MenuItem>
                             ))}

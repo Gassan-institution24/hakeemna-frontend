@@ -218,12 +218,8 @@ export default function TableNewEditForm({ departmentData }) {
         />
 
         <TableBody>
-          {results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-            <ExistEmployeesRow
-              key={row.id}
-              row={row}
-              onEmploymentRow={() => handleEmployment(row)}
-            />
+          {results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => (
+            <ExistEmployeesRow key={idx} row={row} onEmploymentRow={() => handleEmployment(row)} />
           ))}
 
           <TableNoData

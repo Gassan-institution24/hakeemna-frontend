@@ -151,8 +151,8 @@ export default function WatingRoomDialog({ employeesData }) {
           <DialogContent>
             <Box component="form" noValidate>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-                {RATEELEMENTS?.map((infotwo, indextwo) => (
-                  <div key={indextwo}>
+                {RATEELEMENTS?.map((infotwo, indextwo, idx) => (
+                  <div key={idx}>
                     <Box
                       sx={{
                         fontSize: { md: '15px', xs: '9px' },

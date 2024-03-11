@@ -118,9 +118,9 @@ export default function CalendarToolbar({
         arrow="top-left"
         sx={{ width: 160 }}
       >
-        {VIEW_OPTIONS.map((viewOption) => (
+        {VIEW_OPTIONS.map((viewOption, idx) => (
           <MenuItem
-            key={viewOption.value}
+            key={idx}
             selected={viewOption.value === view}
             lang="ar"
             onClick={() => {

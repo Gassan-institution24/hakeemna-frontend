@@ -17,7 +17,7 @@ export function alert(theme) {
 
     const outlinedVariant = ownerState.variant === 'outlined';
 
-    const colorStyle = COLORS.map((color) => ({
+    const colorStyle = COLORS.map((color, idx) => ({
       ...(ownerState.severity === color && {
         // STANDARD
         ...(standardVariant && {

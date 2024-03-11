@@ -65,8 +65,8 @@
 
 //   // const renderCommentList = (
 //   //   <Stack spacing={1.5} sx={{ px: 3, pb: 2 }}>
-//   //     {post.comments.map((comment) => (
-//   //       <Stack key={comment.id} direction="row" spacing={2}>
+//   //     {post.comments.map((comment, idx)  => (
+//   //       <Stack key={idx} direction="row" spacing={2}>
 //   //         <Avatar alt={comment.author.name} src={comment.author.avatarUrl} />
 
 //   //         <Paper
@@ -166,8 +166,8 @@
 //   //           },
 //   //         }}
 //   //       >
-//   //         {post.personLikes.map((person) => (
-//   //           <Avatar key={person.name} alt={person.name} src={person.avatarUrl} />
+//   //         {post.personLikes.map((person, idx)  => (
+//   //           <Avatar key={idx} alt={person.name} src={person.avatarUrl} />
 //   //         ))}
 //   //       </AvatarGroup>
 //   //     )}
@@ -186,8 +186,8 @@
 
 //   return (
 //     <>
-//       {posts.map((info, i) => (
-//         <Card key={i}>
+//       {posts.map((info, i, idx)  => (
+//         <Card key={idx}>
 //           {' '}
 //           {/* Ensure to provide a unique key for each iteration */}
 //           <CardHeader

@@ -17,6 +17,7 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useCountdownSeconds } from 'src/hooks/use-countdown';
 
+import { useTranslate } from 'src/locales';
 import { SentIcon } from 'src/assets/icons';
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -30,6 +31,8 @@ export default function NewPasswordView() {
   const { newPassword, forgotPassword } = useAuthContext();
 
   const router = useRouter();
+
+  const {t} = useTranslate()
 
   const searchParams = useSearchParams();
 
@@ -78,7 +81,7 @@ export default function NewPasswordView() {
       await newPassword?.(data.email, data.code, data.password, data.confirmPassword);
 
       router.push(paths.auth.login);
-      enqueueSnackbar('Password has changed successfully!');
+      enqueueSnackbar(t('Password has changed successfully!'));
     } catch (error) {
       console.error(error);
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });

@@ -133,7 +133,7 @@ export default function AccountGeneral({ data, refetch }) {
       });
       setValue('profile_picture', newFile);
     } else {
-      enqueueSnackbar('Invalid file type or size', { variant: 'error' });
+      enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
     }
   };
 
@@ -236,6 +236,7 @@ export default function AccountGeneral({ data, refetch }) {
               <MuiTelInput
                 label={`${t('Mobile Number')} *`}
                 forceCallingCode
+                defaultCountry="JO"
                 value={em_phone}
                 onChange={(newPhone) => {
                   matchIsValidTel(newPhone);
@@ -246,6 +247,7 @@ export default function AccountGeneral({ data, refetch }) {
               <MuiTelInput
                 label={`${t('Alternative Mobile Number')} *`}
                 forceCallingCode
+                defaultCountry="JO"
                 value={em_phone2}
                 onChange={(newPhone2) => {
                   matchIsValidTel(newPhone2);
@@ -267,8 +269,8 @@ export default function AccountGeneral({ data, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {countriesData.map((nationality) => (
-                  <MenuItem key={nationality._id} value={nationality._id}>
+                {countriesData.map((nationality, idx) => (
+                  <MenuItem key={idx} value={nationality._id}>
                     {nationality.name_english}
                   </MenuItem>
                 ))}
@@ -282,8 +284,8 @@ export default function AccountGeneral({ data, refetch }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
                 // onChange={handleCountryChange}
               >
-                {countriesData.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
+                {countriesData.map((country, idx) => (
+                  <MenuItem key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
@@ -296,8 +298,8 @@ export default function AccountGeneral({ data, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {tableData.map((city) => (
-                  <MenuItem key={city._id} value={city._id}>
+                {tableData.map((city, idx) => (
+                  <MenuItem key={idx} value={city._id}>
                     {city.name_english}
                   </MenuItem>
                 ))}
@@ -310,8 +312,8 @@ export default function AccountGeneral({ data, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {SECDATAFORMAP.map((test) => (
-                  <MenuItem value={test} key={test}>
+                {SECDATAFORMAP.map((test, idx) => (
+                  <MenuItem value={test} key={idx}>
                     {test}
                   </MenuItem>
                 ))}
@@ -324,8 +326,8 @@ export default function AccountGeneral({ data, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {DATAFORMAP.map((test) => (
-                  <MenuItem value={test} key={test._id}>
+                {DATAFORMAP.map((test, idx) => (
+                  <MenuItem value={test} key={idx}>
                     {test}
                   </MenuItem>
                 ))}

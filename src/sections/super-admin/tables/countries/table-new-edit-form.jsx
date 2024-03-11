@@ -120,16 +120,16 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 // disableCloseOnSelect
                 options={timezones.map((option) => option.tzCode)}
                 getOptionLabel={(option) => option}
-                renderOption={(props, option) => (
-                  <li {...props} key={option} value={option}>
+                renderOption={(props, option,idx) => (
+                  <li {...props} key={idx} value={option}>
                     {option}
                   </li>
                 )}
                 renderTags={(selected, getTagProps) =>
-                  selected.map((option, index) => (
+                  selected.map((option, index, idx) => (
                     <Chip
                       {...getTagProps({ index })}
-                      key={option}
+                      key={idx}
                       label={option}
                       size="small"
                       color="info"

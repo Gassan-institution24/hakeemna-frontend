@@ -59,9 +59,9 @@ export default function LanguagePopover() {
       )}
 
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 160 }}>
-        {allLangs.map((option) => (
+        {allLangs.map((option, idx) => (
           <MenuItem
-            key={option.value}
+            key={idx}
             selected={option.value === currentLang.value}
             onClick={() => handleChangeLang(option.value)}
             lang="ar"

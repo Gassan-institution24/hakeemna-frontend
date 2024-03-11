@@ -136,9 +136,9 @@ export default function JobFilters({
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Payment Methods
       </Typography>
-      {paymentMethodsOptions.map((option) => (
+      {paymentMethodsOptions.map((option, idx) => (
         <FormControlLabel
-          key={option._id}
+          key={idx}
           control={
             <Radio
               checked={option._id === filters.payment_methods}
@@ -161,9 +161,9 @@ export default function JobFilters({
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Appointment Types
       </Typography>
-      {appointmentTypeOptions.map((option) => (
+      {appointmentTypeOptions.map((option, idx) => (
         <FormControlLabel
-          key={option._id}
+          key={idx}
           control={
             <Radio
               checked={option._id === filters.appointtypes}
@@ -186,9 +186,9 @@ export default function JobFilters({
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Countries
       </Typography>
-      <select onChange={handleFilterCountries} name="country" label='country'>
-        {countriesOptions?.map((country) => (
-          <option key={country._id} value={country._id}>
+      <select onChange={handleFilterCountries} name="country" label="country">
+        {countriesOptions?.map((country, idx) => (
+          <option key={idx} value={country._id}>
             {country?.name_english}
           </option>
         ))}
@@ -201,10 +201,10 @@ export default function JobFilters({
         insurance
       </Typography>
       <select onChange={handleFiltedInsurance} name="insurance" label="insurance">
-        {insuranseCosData?.map((info, index) => (
+        {insuranseCosData?.map((info, index, idx) => (
           <>
             <option />
-            <option key={index} value={info._id}>
+            <option key={idx} value={info._id}>
               {info?.name_english}
             </option>
           </>
@@ -218,9 +218,9 @@ export default function JobFilters({
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Unit services
       </Typography>
-      {unitServicesOptions.map((option) => (
+      {unitServicesOptions.map((option, idx) => (
         <FormControlLabel
-          key={option._id}
+          key={idx}
           control={
             <Radio
               checked={option._id === filters.unitServices}

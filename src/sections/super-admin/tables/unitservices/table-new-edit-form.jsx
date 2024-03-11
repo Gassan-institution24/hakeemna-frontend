@@ -76,7 +76,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
       packaging: currentSelected?.packaging || '',
       scientific_name: currentSelected?.scientific_name || '',
       barcode: currentSelected?.barcode || '',
-      side_effects: currentSelected?.side_effects?.map((disease) => disease._id) || [],
+      side_effects: currentSelected?.side_effects?.map((disease, idx) => disease._id) || [],
       family: currentSelected?.family?._id || '',
     }),
     [currentSelected]
@@ -143,18 +143,18 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 placeholder="+ concentration"
                 multiple
                 freeSolo
-                options={DefaultDoses.map((option) => option)}
+                options={DefaultDoses.map((option, idx) => option)}
                 getOptionLabel={(option) => option}
-                renderOption={(props, option) => (
-                  <li {...props} key={option}>
+                renderOption={(props, option, idx) => (
+                  <li {...props} key={idx}>
                     {option}
                   </li>
                 )}
                 renderTags={(selected, getTagProps) =>
-                  selected.map((option, index) => (
+                  selected.map((option, index, idx) => (
                     <Chip
                       {...getTagProps({ index })}
-                      key={option}
+                      key={idx}
                       label={option}
                       size="small"
                       color="info"
@@ -192,16 +192,16 @@ export default function CountriesNewEditForm({ currentSelected }) {
               }}
             >
               <RHFSelect name="country" label="country">
-                {countriesData.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
+                {countriesData.map((country, idx) => (
+                  <MenuItem key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
 
               <RHFSelect name="family" label="family">
-                {families.map((family) => (
-                  <MenuItem key={family._id} value={family._id}>
+                {families.map((family, idx) => (
+                  <MenuItem key={idx} value={family._id}>
                     {family.name_english}
                   </MenuItem>
                 ))}

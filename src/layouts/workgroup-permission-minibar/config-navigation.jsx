@@ -27,7 +27,7 @@ export function useNavData() {
     if (loading || !data) {
       return [];
     }
-    return data.employees.map((info) => ({
+    return data.employees.map((info, idx) => ({
       title: curLangAr
         ? info.employee.employee?.family_name
         : `${info.employee.employee?.first_name} ${info.employee.employee?.family_name}`,

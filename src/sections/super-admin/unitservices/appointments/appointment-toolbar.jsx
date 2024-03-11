@@ -98,7 +98,7 @@ export default function InvoiceTableToolbar({
             renderValue={(selected) =>
               options
                 .filter((value) => selected.includes(value._id))
-                .map((value) => (curLangAr ? value?.name_arabic : value?.name_english))
+                .map((value, idx) => (curLangAr ? value?.name_arabic : value?.name_english))
                 .join(', ')
             }
             MenuProps={{
@@ -107,8 +107,8 @@ export default function InvoiceTableToolbar({
               },
             }}
           >
-            {options.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
+            {options.map((option, idx) => (
+              <MenuItem key={idx} value={option._id}>
                 <Checkbox
                   disableRipple
                   size="small"

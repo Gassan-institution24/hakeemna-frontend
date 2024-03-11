@@ -79,8 +79,8 @@ export default function whoAreWe() {
           md: 'repeat(4, 1fr)',
         }}
       >
-        {CARDS.map((card, index) => (
-          <m.div variants={varFade().inUp} key={card.title}>
+        {CARDS.map((card, index, idx) => (
+          <m.div variants={varFade().inUp} key={idx}>
             <Card
               sx={{
                 textAlign: 'center',

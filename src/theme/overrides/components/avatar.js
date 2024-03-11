@@ -22,7 +22,7 @@ const colorByName = (name) => {
 export function avatar(theme) {
   return {
     MuiAvatar: {
-      variants: COLORS.map((color) =>
+      variants: COLORS.map((color, idx) =>
         color === 'default'
           ? {
               props: { color: 'default' },

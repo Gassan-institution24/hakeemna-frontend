@@ -45,7 +45,7 @@ export default function Oldpatientsdata() {
 
   useEffect(() => {
     if (oldpatientsdata?.length > 0) {
-      const mapdData = oldpatientsdata?.map((Data) => Data);
+      const mapdData = oldpatientsdata?.map((Data, idx) => Data);
       setOlddataID(mapdData[0]._id);
     }
   }, [oldpatientsdata, oldDataId]);
@@ -199,10 +199,10 @@ export default function Oldpatientsdata() {
                           {t('Drug Allergies')}
                         </Typography>
                         <Stack spacing={1}>
-                          {item?.drug_allergies?.map((drug) => (
+                          {item?.drug_allergies?.map((drug, idx) => (
                             <li
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
-                              key={drug?._id}
+                              key={idx}
                             >
                               -&nbsp; {drug?.trade_name}
                             </li>
@@ -231,10 +231,10 @@ export default function Oldpatientsdata() {
                           {t('Diseases')}
                         </Typography>
                         <Stack spacing={1}>
-                          {item?.diseases?.map((disease) => (
+                          {item?.diseases?.map((disease, idx) => (
                             <li
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
-                              key={disease._id}
+                              key={idx}
                             >
                               -&nbsp; {disease.name_english}
                             </li>
@@ -264,10 +264,10 @@ export default function Oldpatientsdata() {
                           {t('Surgeries')}
                         </Typography>
                         <Stack spacing={1}>
-                          {item?.surgeries?.map((surgery) => (
+                          {item?.surgeries?.map((surgery, idx) => (
                             <li
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
-                              key={surgery._id}
+                              key={idx}
                             >
                               -&nbsp; {surgery.name}
                             </li>
@@ -296,10 +296,10 @@ export default function Oldpatientsdata() {
                           {t('Medicines')}
                         </Typography>
                         <Stack spacing={1}>
-                          {item?.medicines?.map((data) => (
+                          {item?.medicines?.map((data, idx) => (
                             <li
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
-                              key={data._id}
+                              key={idx}
                             >
                               -&nbsp; {data?.frequently}
                             </li>
@@ -329,10 +329,10 @@ export default function Oldpatientsdata() {
                           {t('Insurance')}
                         </Typography>
                         <Stack spacing={1}>
-                          {item?.insurance?.map((company) => (
+                          {item?.insurance?.map((company, idx) => (
                             <li
                               style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}
-                              key={company?._id}
+                              key={idx}
                             >
                               -&nbsp; {company?.name_english}
                             </li>
@@ -465,9 +465,9 @@ export default function Oldpatientsdata() {
                         />
                         {t('Notes')}
                       </Typography>
-                      {item?.other_medication_notes?.map((note, indexnumtwo) => (
+                      {item?.other_medication_notes?.map((note, indexnumtwo, idx) => (
                         <li
-                          key={indexnumtwo}
+                          key={idx}
                           style={{
                             fontWeight: 500,
                             fontSize: '17px',

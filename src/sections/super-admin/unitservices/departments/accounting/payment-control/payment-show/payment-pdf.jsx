@@ -187,7 +187,7 @@ export default function InvoicePDF({ paymentData, currentStatus }) {
           </View>
 
           <View>
-            <View style={styles.tableRow} key={code}>
+            <View style={styles.tableRow}>
               <View style={styles.tableCell_1}>
                 <Text>{code}</Text>
               </View>

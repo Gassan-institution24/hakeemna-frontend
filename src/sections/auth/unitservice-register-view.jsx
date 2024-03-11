@@ -205,7 +205,7 @@ export default function JwtRegisterView() {
       // console.log(errors);
       setErrorMsg(
         Object.keys(errors)
-          .map((key) => errors?.[key]?.message)
+          .map((key, idx) => errors?.[key]?.message)
           .join('<br>')
       );
     }
@@ -224,11 +224,11 @@ export default function JwtRegisterView() {
         </Link>
       </Stack>
       <Stepper activeStep={page}>
-        {steps.map((label, index) => {
+        {steps.map((label, index, idx) => {
           const stepProps = {};
           const labelProps = { lang: 'ar' };
           return (
-            <Step key={label} {...stepProps}>
+            <Step key={idx} {...stepProps}>
               <StepLabel {...labelProps}>{label}</StepLabel>
             </Step>
           );
@@ -323,8 +323,8 @@ export default function JwtRegisterView() {
             name="us_country"
             label={`${t('country')} *`}
           >
-            {countriesData.map((country) => (
-              <MenuItem key={country._id} value={country._id}>
+            {countriesData.map((country, idx) => (
+              <MenuItem key={idx} value={country._id}>
                 {curLangAr ? country.name_arabic : country.name_english}
               </MenuItem>
             ))}
@@ -332,8 +332,8 @@ export default function JwtRegisterView() {
         </Tooltip>
         <Tooltip placement="top" title="city which service unit placed">
           <RHFSelect lang="ar" name="us_city" label={`${t('city')} *`}>
-            {tableData.map((city) => (
-              <MenuItem key={city._id} value={city._id}>
+            {tableData.map((city, idx) => (
+              <MenuItem key={idx} value={city._id}>
                 {curLangAr ? city.name_arabic : city.name_english}
               </MenuItem>
             ))}
@@ -344,8 +344,8 @@ export default function JwtRegisterView() {
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <Tooltip placement="top" title="type of the service unit">
           <RHFSelect lang="ar" name="US_type" label={`${t('service unit type')} *`}>
-            {unitserviceTypesData.map((type) => (
-              <MenuItem key={type._id} value={type._id}>
+            {unitserviceTypesData.map((type, idx) => (
+              <MenuItem key={idx} value={type._id}>
                 {curLangAr ? type.name_arabic : type.name_english}
               </MenuItem>
             ))}
@@ -353,8 +353,8 @@ export default function JwtRegisterView() {
         </Tooltip>
         <Tooltip placement="top" title="unit service speciality">
           <RHFSelect lang="ar" name="us_speciality" label={`${t('speciality')} *`}>
-            {specialtiesData.map((specialty) => (
-              <MenuItem key={specialty._id} value={specialty._id}>
+            {specialtiesData.map((specialty, idx) => (
+              <MenuItem key={idx} value={specialty._id}>
                 {curLangAr ? specialty.name_arabic : specialty.name_english}
               </MenuItem>
             ))}
@@ -442,16 +442,16 @@ export default function JwtRegisterView() {
         </Tooltip>
         <Tooltip placement="top" title="speciality of admin">
           <RHFSelect lang="ar" name="em_speciality" label={t('speciality')}>
-            {specialtiesData.map((specialty) => (
-              <MenuItem key={specialty._id} value={specialty._id}>
+            {specialtiesData.map((specialty, idx) => (
+              <MenuItem key={idx} value={specialty._id}>
                 {curLangAr ? specialty.name_arabic : specialty.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
         </Tooltip>
         {/* <RHFSelect name="em_type" label="Employee type">
-          {employeeTypesData.map((type) => (
-            <MenuItem key={type._id} value={type._id}>
+          {employeeTypesData.map((type, idx)  => (
+            <MenuItem key={idx} value={type._id}>
               {type.name_english}
             </MenuItem>
           ))}
@@ -468,8 +468,8 @@ export default function JwtRegisterView() {
       >
         <Tooltip placement="top" title="admin nationality">
           <RHFSelect lang="ar" name="em_nationality" label={`${t('nationality')} *`}>
-            {countriesData.map((country) => (
-              <MenuItem key={country._id} value={country._id}>
+            {countriesData.map((country, idx) => (
+              <MenuItem key={idx} value={country._id}>
                 {curLangAr ? country.name_arabic : country.name_english}
               </MenuItem>
             ))}
@@ -489,6 +489,7 @@ export default function JwtRegisterView() {
           <MuiTelInput
             label={`${t('phone')} *`}
             forceCallingCode
+            defaultCountry='JO'
             value={em_phone}
             onChange={(newPhone) => {
               matchIsValidTel(newPhone);

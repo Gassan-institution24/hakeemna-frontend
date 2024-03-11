@@ -18,7 +18,7 @@ export default function TourDetailsContent({ tour }) {
   const renderGallery = (
     <Box gap={1} display="grid">
       <m.div
-        key={tour.Offer_img}
+        key={tour._id}
         whileHover="hover"
         variants={{
           hover: { opacity: 0.8 },
@@ -75,8 +75,8 @@ export default function TourDetailsContent({ tour }) {
           value: tour.Offer_price,
           icon: <Iconify icon="tdesign:money" />,
         },
-      ].map((item) => (
-        <Stack key={item.label} spacing={1.5} direction="row">
+      ].map((item, idx) => (
+        <Stack key={idx} spacing={1.5} direction="row">
           {item.icon}
           <ListItemText
             primary={item.label}
@@ -112,9 +112,9 @@ export default function TourDetailsContent({ tour }) {
   //         md: 'repeat(2, 1fr)',
   //       }}
   //     >
-  //       {/* {TOUR_SERVICE_OPTIONS.map((service) => (
+  //       {/* {TOUR_SERVICE_OPTIONS.map((service, idx)  => (
   //         <Stack
-  //           key={service.label}
+  //           key={idx}
   //           spacing={1}
   //           direction="row"
   //           alignItems="center"

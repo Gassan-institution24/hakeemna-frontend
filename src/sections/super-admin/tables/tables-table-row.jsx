@@ -38,9 +38,9 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         },
   //       }}
   //     >
-  //       {arr?.map((item, index) =>
+  //       {arr?.map((item, index, idx)  =>
   //         item === 'active' || item === 'inactive' ? (
-  //           <Box key={index} sx={{ flex: 1 }}>
+  //           <Box key={idx} sx={{ flex: 1 }}>
   //             <Label
   //               variant="soft"
   //               color={
@@ -53,7 +53,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //             </Label>
   //           </Box>
   //         ) : (
-  //           <Box key={index} sx={{ flex: 1 }}>
+  //           <Box key={idx} sx={{ flex: 1 }}>
   //             {item}
   //           </Box>
   //         )
@@ -114,7 +114,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'countries' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Status', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -133,7 +133,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //             {stackComponent({
   //               arr: ['Code', 'Name', 'Country', 'Status', 'Created At', 'Updated At'],
   //             })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -151,7 +151,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'surgeries' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -167,7 +167,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'diseases' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Category', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -184,7 +184,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'specialities' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -200,7 +200,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'sub_specialities' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Specialty', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -219,7 +219,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //             {stackComponent({
   //               arr: ['Code', 'Name', 'Country', 'Status', 'Created At', 'Updated At'],
   //             })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -237,7 +237,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'added_value_tax_GD' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -255,7 +255,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //             {stackComponent({
   //               arr: ['Code', 'Name', 'Unit Service', 'Created At', 'Updated At'],
   //             })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -274,7 +274,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //             {stackComponent({
   //               arr: ['Code', 'Name', 'City', 'Status', 'Created At', 'Updated At'],
   //             })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -294,7 +294,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //             {stackComponent({
   //               arr: ['Code', 'Name', 'Country', 'Status', 'Created At', 'Updated At'],
   //             })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -312,7 +312,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'appointment_types' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Status', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -331,7 +331,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //             {stackComponent({
   //               arr: ['Code', 'Name', 'General', 'Status', 'Created At', 'Updated At'],
   //             })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -349,7 +349,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'symptoms' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -365,7 +365,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'patients' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Status', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -382,7 +382,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'diets' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -398,7 +398,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'currencies' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Symbol', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -415,7 +415,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'analyses' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -431,7 +431,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'medical_categories' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -447,7 +447,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'medicines_families' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -463,7 +463,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'unit_service_types' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -479,7 +479,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'activities' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -495,7 +495,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'employee_types' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -511,7 +511,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'payment_methods' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -527,7 +527,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'stakeholder_types' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -543,7 +543,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'work_shifts' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -559,7 +559,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'service_types' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -575,7 +575,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'measurement_types' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -591,7 +591,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'hospital_list' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -607,7 +607,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'deduction_config' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [
@@ -623,7 +623,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'rooms' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({ arr: ['Code', 'Name', 'Created At', 'Updated At'] })}
-  //             {documents.map((item, idx) =>
+  //             {documents.map((item, idx)  =>
   //               stackComponent({
   //                 idx: { idx },
   //                 arr: [

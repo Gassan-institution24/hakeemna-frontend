@@ -59,7 +59,7 @@ export function chip(theme) {
       }),
     };
 
-    const colorStyle = COLORS.map((color) => ({
+    const colorStyle = COLORS.map((color, idx) => ({
       ...(ownerState.color === color && {
         [`& .${chipClasses.avatar}`]: {
           color: theme.palette[color].lighter,

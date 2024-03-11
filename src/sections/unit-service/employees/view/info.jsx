@@ -164,10 +164,10 @@ export default function EmployeeInfoContent({ employeeData }) {
             value: University_graduation_Specialty,
             icon: <Iconify icon="solar:wad-of-money-bold" />,
           },
-        ].map((item) => (
+        ].map((item, idx) => (
           <>
             {item.value && (
-              <Stack key={item.label} spacing={1.5}>
+              <Stack key={idx} spacing={1.5}>
                 {/* {item.icon} */}
                 <ListItemText
                   primary={item.label}

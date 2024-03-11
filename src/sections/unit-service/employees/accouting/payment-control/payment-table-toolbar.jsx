@@ -87,7 +87,7 @@ export default function PaymentTableToolbar({
             value={filters.service}
             onChange={handleFilterService}
             input={<OutlinedInput label="Unit Services" />}
-            renderValue={(selected) => selected.map((value) => value).join(', ')}
+            renderValue={(selected) => selected.map((value, idx) => value).join(', ')}
             sx={{ textTransform: 'capitalize' }}
             // MenuProps={{
             //   PaperProps: {
@@ -97,8 +97,8 @@ export default function PaymentTableToolbar({
             //   },
             // }}
           >
-            {serviceOptions.map((option) => (
-              <MenuItem key={option} value={option}>
+            {serviceOptions.map((option, idx) => (
+              <MenuItem key={idx} value={option}>
                 <Checkbox disableRipple size="small" checked={filters.service.includes(option)} />
                 {option}
               </MenuItem>

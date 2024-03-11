@@ -127,8 +127,8 @@ export default function CitiesNewEditForm({ currentCity }) {
               />
 
               <RHFSelect name="country" label="country">
-                {countriesData.map((category) => (
-                  <MenuItem key={category._id} value={category._id}>
+                {countriesData.map((category, idx) => (
+                  <MenuItem key={idx} value={category._id}>
                     {category.name_english}
                   </MenuItem>
                 ))}

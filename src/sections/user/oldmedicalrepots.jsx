@@ -264,14 +264,14 @@ export default function OldMedicalReports() {
 
     if (isValidFiles) {
       // setFiles(acceptedFiles); // Save the files in state
-      const newFiles = acceptedFiles.map((file) => ({
+      const newFiles = acceptedFiles.map((file, idx) => ({
         ...file,
         preview: URL.createObjectURL(file),
       }));
       setFiles('file', newFiles);
     } else {
       // Handle invalid file type or size
-      enqueueSnackbar('Invalid file type or size', { variant: 'error' });
+      enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
     }
   };
 
@@ -373,8 +373,8 @@ export default function OldMedicalReports() {
               PaperPropsSx={{ textTransform: 'capitalize' }}
               sx={{ mb: 1.5 }}
             >
-              {TYPE.map((test) => (
-                <MenuItem value={test} key={test._id} sx={{ mb: 1 }}>
+              {TYPE.map((test, idx) => (
+                <MenuItem value={test} key={idx} sx={{ mb: 1 }}>
                   {test}
                 </MenuItem>
               ))}
@@ -387,8 +387,8 @@ export default function OldMedicalReports() {
               PaperPropsSx={{ textTransform: 'capitalize' }}
               sx={{ mb: 1 }}
             >
-              {specialtiesData.map((test) => (
-                <MenuItem value={test?._id} key={test._id} sx={{ mb: 1 }}>
+              {specialtiesData.map((test, idx) => (
+                <MenuItem value={test?._id} key={idx} sx={{ mb: 1 }}>
                   {test?.name_english}
                 </MenuItem>
               ))}
@@ -476,7 +476,7 @@ export default function OldMedicalReports() {
           gap: 4,
         }}
       >
-        {filesPdf.map((info, i) => (
+        {filesPdf.map((info, i, idx) => (
           <Box>
             <Box>
               <Image
@@ -509,7 +509,7 @@ export default function OldMedicalReports() {
               sx={{ boxShadow: 'none', width: 'auto' }}
             >
               <PDFDownloadLink
-                key={i}
+                key={idx}
                 document={<MedicalreportsnPDF info={filesPdf} />}
                 fileName={`${user?.patient.first_name} ${info.type} MediacalReport.pdf`}
                 style={styles.line}

@@ -14,13 +14,8 @@ function NavSectionVertical({ data, slotProps, ...other }) {
     <Stack component="nav" id="nav-section-vertical" {...other}>
       {data
         .filter((item) => item.items.length)
-        .map((group, index) => (
-          <Group
-            key={group.subheader || index}
-            subheader={group.subheader}
-            items={group.items}
-            slotProps={slotProps}
-          />
+        .map((group, idx) => (
+          <Group key={idx} subheader={group.subheader} items={group.items} slotProps={slotProps} />
         ))}
     </Stack>
   );
@@ -41,8 +36,8 @@ function Group({ subheader, items, slotProps }) {
   const handleToggle = useCallback(() => {
     setOpen((prev) => !prev);
   }, []);
-  const renderContent = items.map((list) => (
-    <NavList key={list.title} data={list} depth={1} slotProps={slotProps} />
+  const renderContent = items.map((list, idx) => (
+    <NavList key={idx} data={list} depth={1} slotProps={slotProps} />
   ));
 
   return (

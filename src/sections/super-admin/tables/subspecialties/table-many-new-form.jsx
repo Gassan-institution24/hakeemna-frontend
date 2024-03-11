@@ -153,7 +153,7 @@ export default function NewEditManyForm() {
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    data.map((row, index) => index)
+                    data.map((row, index, idx) => index)
                   )
                 }
                 action={
@@ -169,8 +169,8 @@ export default function NewEditManyForm() {
                       // label="specialty"
                       onChange={handleSelectMany}
                     >
-                      {specialtiesData.map((specialty) => (
-                        <MenuItem key={specialty._id} value={specialty._id}>
+                      {specialtiesData.map((specialty, idx) => (
+                        <MenuItem key={idx} value={specialty._id}>
                           {specialty.name_english}
                         </MenuItem>
                       ))}
@@ -214,8 +214,8 @@ export default function NewEditManyForm() {
                             size="small"
                             name="specialty"
                           >
-                            {specialtiesData.map((specialty) => (
-                              <MenuItem key={specialty._id} value={specialty._id}>
+                            {specialtiesData.map((specialty, idx) => (
+                              <MenuItem key={idx} value={specialty._id}>
                                 {specialty.name_english}
                               </MenuItem>
                             ))}

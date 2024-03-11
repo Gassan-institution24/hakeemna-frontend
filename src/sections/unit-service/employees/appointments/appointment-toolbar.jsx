@@ -109,8 +109,8 @@ export default function AppointmentToolbar({
               },
             }}
           >
-            {options.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
+            {options.map((option, idx) => (
+              <MenuItem key={idx} value={option._id}>
                 {curLangAr ? option?.name_arabic : option?.name_english}
               </MenuItem>
             ))}
@@ -136,8 +136,8 @@ export default function AppointmentToolbar({
               },
             }}
           >
-            {workGroupsData.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
+            {workGroupsData.map((option, idx) => (
+              <MenuItem key={idx} value={option._id}>
                 {curLangAr ? option?.name_arabic : option?.name_english}
               </MenuItem>
             ))}
@@ -163,8 +163,8 @@ export default function AppointmentToolbar({
               },
             }}
           >
-            {workShiftsData.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
+            {workShiftsData.map((option, idx) => (
+              <MenuItem key={idx} value={option._id}>
                 {curLangAr ? option?.name_arabic : option?.name_english}
               </MenuItem>
             ))}

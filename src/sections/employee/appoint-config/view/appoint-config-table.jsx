@@ -6,10 +6,8 @@ import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
@@ -320,9 +318,9 @@ export default function AppointConfigView() {
               boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {TABS.map((tab) => (
+            {TABS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 value={tab.value}
                 label={tab.label}
                 iconPosition="end"
@@ -346,7 +344,7 @@ export default function AppointConfigView() {
             onFilters={handleFilters}
             //
             dateError={dateError}
-            // serviceOptions={appointmenttypesData.map((option) => option)}
+            // serviceOptions={appointmenttypesData.map((option, idx)  => option)}
           />
 
           {canReset && (
@@ -369,7 +367,7 @@ export default function AppointConfigView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               action={
@@ -379,7 +377,7 @@ export default function AppointConfigView() {
                   acl: 'update',
                 }) && (
                   <>
-                    {dataFiltered
+                    {/* {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
                       .some((data) => data.status === 'canceled') ? (
                       <Tooltip title="uncancel all">
@@ -393,7 +391,7 @@ export default function AppointConfigView() {
                           <Iconify icon="mdi:bell-cancel" />
                         </IconButton>
                       </Tooltip>
-                    )}
+                    )} */}
                   </>
                 )
               }
@@ -422,7 +420,7 @@ export default function AppointConfigView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -433,9 +431,9 @@ export default function AppointConfigView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <AppointConfigRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
@@ -473,7 +471,6 @@ export default function AppointConfigView() {
         </Card>
       </Container>
 
-      {/* <AddEmegencyAppointment open={addModal.value} onClose={addModal.onFalse} /> */}
 
       <ConfirmDialog
         open={confirm.value}
@@ -528,7 +525,7 @@ export default function AppointConfigView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { name, status, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -536,7 +533,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
