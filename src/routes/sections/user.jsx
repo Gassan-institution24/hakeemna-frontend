@@ -17,8 +17,8 @@ const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
 const UserAppointmentsPage = lazy(() => import('src/pages/dashboard/user/appointments'));
 const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
-// const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
-// const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
+const Exist = lazy(() => import('src/pages/dashboard/user/existmember'));
+const Create = lazy(() => import('src/pages/dashboard/user/newmember'));
 const Doctorpage = lazy(() => import('src/pages/dashboard/user/doctorpage'));
 const Insurance = lazy(() => import('src/pages/dashboard/user/insurance'));
 const Share = lazy(() => import('src/pages/dashboard/user/share'));
@@ -75,8 +75,8 @@ export const userRoutes = [
           { path: 'doctorpage/:id', element: <Doctorpage /> },
           { path: 'insurance', element: <Insurance /> },
           { path: 'specialities', element: <Specialities /> },
-          // { path: 'create', element: <UserCreatePage /> },
-          // { path: 'new', element: <UserCreatePage /> },
+          { path: 'exist', element: <Exist /> },
+          { path: 'create', element: <Create /> },
           { path: 'contactus', element: <ContactUS /> },
           { path: 'account', element: <UserAccountPage /> },
           { path: 'share', element: <Share /> },
