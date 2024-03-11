@@ -81,14 +81,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
           </Button>
         </DialogActions>
       </Dialog>
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: { md: '1fr 1fr 1fr', xs: '1fr' },
-          gap: 5,
-          mb: 2,
-        }}
-      >
+      <Box>
         <Card key={index}>
           <IconButton
             onClick={() => savedId(info?._id)}

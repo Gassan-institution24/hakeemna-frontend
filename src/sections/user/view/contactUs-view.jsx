@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
@@ -13,7 +11,7 @@ import Contact from '../contactus';
 
 // ----------------------------------------------------------------------
 
-export default function ContactUsView({ id }) {
+export default function ContactUsView() {
   const settings = useSettingsContext();
   const { t } = useTranslate();
 
@@ -42,6 +40,3 @@ export default function ContactUsView({ id }) {
   );
 }
 
-ContactUsView.propTypes = {
-  id: PropTypes.string,
-};
