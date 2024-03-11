@@ -96,19 +96,15 @@ export function RHFMultiSelect({
     if (chip) {
       return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-          {selectedItems.map((item, index) => (
-            <Chip
-              key={index}
-              size="small"
-              label={curLangAr ? item.name_arabic : item.name_english}
-            />
+          {selectedItems.map((item, index, idx) => (
+            <Chip key={idx} size="small" label={curLangAr ? item.name_arabic : item.name_english} />
           ))}
         </Box>
       );
     }
 
     return selectedItems
-      .map((item) => (curLangAr ? item.name_arabic : item.name_english))
+      .map((item, idx) => (curLangAr ? item.name_arabic : item.name_english))
       .join(', ');
   };
 
@@ -129,11 +125,11 @@ export function RHFMultiSelect({
             label={label}
             renderValue={renderValues}
           >
-            {options.map((option) => {
+            {options.map((option, idx) => {
               const selected = field?.value?.includes(option._id);
 
               return (
-                <MenuItem key={option._id} value={option._id}>
+                <MenuItem key={idx} value={option._id}>
                   {checkbox && <Checkbox size="small" disableRipple checked={selected} />}
 
                   {curLangAr ? option.name_arabic : option.name_english}

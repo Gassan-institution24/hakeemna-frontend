@@ -50,7 +50,7 @@ export default function SurgeriesNewEditForm({ currentSelected }) {
       name_arabic: currentSelected?.name_arabic || '',
       name_english: currentSelected?.name_english || '',
       description: currentSelected?.description || '',
-      diseases: currentSelected?.diseases?.map((disease) => disease._id) || [],
+      diseases: currentSelected?.diseases?.map((disease, idx) => disease._id) || [],
     }),
     [currentSelected]
   );

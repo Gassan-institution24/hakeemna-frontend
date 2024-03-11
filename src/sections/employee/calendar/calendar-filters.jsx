@@ -134,9 +134,9 @@ export default function CalendarFilters({
       </Typography>
 
       <Scrollbar sx={{ height: 1 }}>
-        {orderBy(events, ['end'], ['desc']).map((event) => (
+        {orderBy(events, ['end'], ['desc']).map((event, idx) => (
           <ListItemButton
-            key={event.id}
+            key={idx}
             onClick={() => onClickEvent(`${event.id}`)}
             sx={{
               py: 1.5,

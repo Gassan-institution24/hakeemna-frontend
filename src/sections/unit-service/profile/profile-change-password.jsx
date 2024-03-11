@@ -15,6 +15,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
@@ -26,6 +27,8 @@ export default function AccountChangePassword() {
   const { enqueueSnackbar } = useSnackbar();
 
   const { user } = useAuthContext();
+
+  const { t } = useTranslate();
 
   const showpasswordCurrent = useBoolean();
   const showpassword = useBoolean();
@@ -76,7 +79,7 @@ export default function AccountChangePassword() {
       // console.log(response);
       if (response.status === 201) {
         reset();
-        enqueueSnackbar('Password updated successfully!', { variant: 'success' });
+        enqueueSnackbar(t('updated successfully!'), { variant: 'success' });
       } else {
         enqueueSnackbar(response.data || 'Password update failed!', { variant: 'error' });
       }

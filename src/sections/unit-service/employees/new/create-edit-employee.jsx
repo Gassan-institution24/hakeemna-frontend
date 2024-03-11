@@ -212,6 +212,7 @@ export default function TableNewEditForm({ currentTable }) {
               />
               <MuiTelInput
                 forceCallingCode
+                defaultCountry="JO"
                 value={phone}
                 label={`${t('phone')} *`}
                 onChange={(newPhone) => {
@@ -222,29 +223,29 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect name="nationality" label={`${t('nationality')} *`}>
-                {countriesData.map((nationality) => (
-                  <MenuItem key={nationality._id} value={nationality._id}>
+                {countriesData.map((nationality, idx) => (
+                  <MenuItem key={idx} value={nationality._id}>
                     {curLangAr ? nationality.name_arabic : nationality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="department" label={t('department')}>
-                {departmentsData.map((department) => (
-                  <MenuItem key={department._id} value={department._id}>
+                {departmentsData.map((department, idx) => (
+                  <MenuItem key={idx} value={department._id}>
                     {curLangAr ? department.name_arabic : department.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="employee_type" label={`${t('employee type')} *`}>
-                {employeeTypesData.map((employee_type) => (
-                  <MenuItem key={employee_type._id} value={employee_type._id}>
+                {employeeTypesData.map((employee_type, idx) => (
+                  <MenuItem key={idx} value={employee_type._id}>
                     {curLangAr ? employee_type.name_arabic : employee_type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="speciality" label={`${t('specialty')} *`}>
-                {specialtiesData.map((speciality) => (
-                  <MenuItem key={speciality._id} value={speciality._id}>
+                {specialtiesData.map((speciality, idx) => (
+                  <MenuItem key={idx} value={speciality._id}>
                     {curLangAr ? speciality.name_arabic : speciality.name_english}
                   </MenuItem>
                 ))}

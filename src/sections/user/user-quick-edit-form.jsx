@@ -89,7 +89,7 @@
 //       await new Promise((resolve) => setTimeout(resolve, 500));
 //       reset();
 //       onClose();
-//       enqueueSnackbar('Update success!');
+//       enqueueSnackbar(t('updated successfully!'));
 //
 //     } catch (error) {
 //       console.error(error);
@@ -124,8 +124,8 @@
 //             }}
 //           >
 //             <RHFSelect name="status" label="Status">
-//               {USER_STATUS_OPTIONS.map((status) => (
-//                 <MenuItem key={status.value} value={status.value}>
+//               {USER_STATUS_OPTIONS.map((status, idx)  => (
+//                 <MenuItem key={idx} value={status.value}>
 //                   {status.label}
 //                 </MenuItem>
 //               ))}
@@ -140,7 +140,7 @@
 //             <RHFAutocomplete
 //               name="country"
 //               label={t("country")}
-//               options={countries.map((country) => country.label)}
+//               options={countries.map((country, idx)  => country.label)}
 //               getOptionLabel={(option) => option}
 //               renderOption={(props, option) => {
 //                 const { code, label, phone } = countries.filter(
@@ -152,9 +152,9 @@
 //                 }
 
 //                 return (
-//                   <li {...props} key={label}>
+//                   <li {...props} key={idx}>
 //                     <Iconify
-//                       key={label}
+//                       key={idx}
 //                       icon={`circle-flags:${code.toLowerCase()}`}
 //                       width={28}
 //                       sx={{ mr: 1 }}

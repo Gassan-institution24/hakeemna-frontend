@@ -28,7 +28,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
   const { _id, code, unit_service, appointment_type, payment_method, start_time } = appointment;
   useEffect(() => {
     if (unit_service?.insurance) {
-      const names = unit_service.insurance.map((test) => test.name_english);
+      const names = unit_service.insurance.map((test, idx) => test.name_english);
       setInsuranceNames(names);
     }
   }, [unit_service]);
@@ -130,9 +130,9 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
                 <Iconify width={16} icon="streamline:payment-10-solid" sx={{ flexShrink: 0 }} />
               ),
             },
-          ].map((item, index) => (
+          ].map((item, index, idx) => (
             <Stack
-              key={index}
+              key={idx}
               spacing={0.5}
               flexShrink={0}
               direction="row"

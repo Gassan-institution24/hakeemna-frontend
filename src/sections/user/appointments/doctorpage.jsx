@@ -66,14 +66,14 @@ export default function Doctorpage() {
     id,
     startDate: currentDateTime,
   });
-console.log(data);
+  console.log(data);
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
     setTimeData(timeId);
     setSelectedTime(timeId);
   };
-  const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient._id));
+  const uniqueUserIds = new Set(feedbackData.map((feedback, idx) => feedback?.patient._id));
   const numberOfUsers = uniqueUserIds.size;
 
   const handleBook = async (Data) => {
@@ -265,9 +265,9 @@ console.log(data);
                   gridTemplateColumns: '1fr 1fr 1fr',
                 }}
               >
-                {appointmentsData?.map((time, index) => (
+                {appointmentsData?.map((time, index, idx) => (
                   <Button
-                    key={index}
+                    key={idx}
                     onClick={() => handleTimeClick(time?._id)}
                     sx={{
                       border:

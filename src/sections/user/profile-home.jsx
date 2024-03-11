@@ -55,8 +55,8 @@ export default function ProfileHome() {
             {t(' Drug Allergies')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.drug_allergies?.map((drug, drugkey) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={drugkey}>
+            {user?.patient?.drug_allergies?.map((drug, drugkey, idx) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
                 -&nbsp; {drug?.trade_name}
               </li>
             ))}
@@ -75,8 +75,8 @@ export default function ProfileHome() {
             {t('Diseases')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.diseases?.map((disease, diseasekey) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={diseasekey}>
+            {user?.patient?.diseases?.map((disease, diseasekey, idx) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
                 -&nbsp; {disease?.name_english}
               </li>
             ))}
@@ -95,8 +95,8 @@ export default function ProfileHome() {
             {t('Surgeries')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.surgeries?.map((surgery, surgerykey) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={surgerykey}>
+            {user?.patient?.surgeries?.map((surgery, surgerykey, idx) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
                 -&nbsp; {surgery.name}
               </li>
             ))}
@@ -115,8 +115,8 @@ export default function ProfileHome() {
             {t('Medicines')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.medicines?.map((data, datakey) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={datakey}>
+            {user?.patient?.medicines?.map((data, datakey, idx) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
                 -&nbsp; {data?.medicine?.trade_name}
               </li>
             ))}
@@ -135,8 +135,8 @@ export default function ProfileHome() {
             {t('Insurance')}
           </Typography>
           <Stack spacing={1} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
-            {patientInsuranseData?.map((company, companykey) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={companykey}>
+            {patientInsuranseData?.map((company, companykey, idx) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
                 -&nbsp; {company?.insurance?.name_english}
               </li>
             ))}
@@ -283,10 +283,10 @@ export default function ProfileHome() {
           value: user?.patient?.weight,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
-      ].map((item, i) => (
+      ].map((item, i, idx) => (
         <>
           {item.value && (
-            <Stack key={i}>
+            <Stack key={idx}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span
@@ -337,10 +337,10 @@ export default function ProfileHome() {
           value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
-      ].map((item, ii) => (
+      ].map((item, ii, idx) => (
         <>
           {item.value && (
-            <Stack key={ii}>
+            <Stack key={idx}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span
@@ -397,10 +397,10 @@ export default function ProfileHome() {
           value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
-      ].map((item, iii) => (
+      ].map((item, iii, idx) => (
         <>
           {item.value && (
-            <Stack key={iii} spacing={2}>
+            <Stack key={idx} spacing={2}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span

@@ -145,7 +145,7 @@ export default function CitiesNewEditForm() {
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    cities.map((row, index) => index)
+                    cities.map((row, index, idx) => index)
                   )
                 }
                 action={
@@ -159,8 +159,8 @@ export default function CitiesNewEditForm() {
                       label="country"
                       onChange={handleSelectMany}
                     >
-                      {countriesData.map((country) => (
-                        <MenuItem key={country._id} value={country._id}>
+                      {countriesData.map((country, idx) => (
+                        <MenuItem key={idx} value={country._id}>
                           {country.name_english}
                         </MenuItem>
                       ))}
@@ -204,8 +204,8 @@ export default function CitiesNewEditForm() {
                             size="small"
                             name="country"
                           >
-                            {countriesData.map((country) => (
-                              <MenuItem key={country._id} value={country._id}>
+                            {countriesData.map((country, idx) => (
+                              <MenuItem key={idx} value={country._id}>
                                 {country.name_english}
                               </MenuItem>
                             ))}

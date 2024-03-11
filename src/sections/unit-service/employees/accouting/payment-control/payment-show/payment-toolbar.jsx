@@ -94,8 +94,8 @@ export default function InvoiceToolbar({
             maxWidth: 160,
           }}
         >
-          {statusOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
+          {statusOptions.map((option, idx)  => (
+            <MenuItem key={idx} value={option.value}>
               {option.label}
             </MenuItem>
           ))}

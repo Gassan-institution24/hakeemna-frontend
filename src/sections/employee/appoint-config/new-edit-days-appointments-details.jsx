@@ -133,8 +133,8 @@ export default function NewEditDayAppointmentsDetails({
                   name={`days_details[${ParentIndex}].appointments[${index}].appointment_type`}
                   label={`${t('appointment type')} *`}
                 >
-                  {appointmenttypesData?.map((option) => (
-                    <MenuItem value={option._id}>
+                  {appointmenttypesData?.map((option, idx) => (
+                    <MenuItem key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -185,11 +185,11 @@ export default function NewEditDayAppointmentsDetails({
                         label={t('service types')}
                         renderValue={renderValues}
                       >
-                        {serviceTypesData?.map((option) => {
+                        {serviceTypesData?.map((option, idx) => {
                           const selected = field?.value?.includes(option._id);
 
                           return (
-                            <MenuItem key={option._id} value={option._id}>
+                            <MenuItem key={idx} value={option._id}>
                               <Checkbox size="small" disableRipple checked={selected} />
 
                               {curLangAr ? option?.name_arabic : option?.name_english}

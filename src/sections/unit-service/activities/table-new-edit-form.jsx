@@ -148,8 +148,8 @@ export default function TableNewEditForm({ currentTable }) {
                 label={`${t('name arabic')} *`}
               />
               <RHFSelect lang="ar" name="department" label={t('department')}>
-                {departmentsData.map((department) => (
-                  <MenuItem key={department._id} value={department._id}>
+                {departmentsData.map((department, idx) => (
+                  <MenuItem key={idx} value={department._id}>
                     {curLangAr ? department.name_arabic : department.name_english}
                   </MenuItem>
                 ))}

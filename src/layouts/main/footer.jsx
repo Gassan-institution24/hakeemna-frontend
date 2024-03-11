@@ -110,9 +110,9 @@ export default function Footer() {
                 mb: { xs: 5, md: 0 },
               }}
             >
-              {_socials.map((social) => (
+              {_socials.map((social, idx)  => (
                 <IconButton
-                  key={social.name}
+                  key={idx}
                   sx={{
                     '&:hover': {
                       bgcolor: alpha(social.color, 0.08),
@@ -127,9 +127,9 @@ export default function Footer() {
 
           <Grid xs={12} md={6}>
             <Stack spacing={5} direction={{ xs: 'column', md: 'row' }}>
-              {LINKS.map((list) => (
+              {LINKS.map((list, index) => (
                 <Stack
-                  key={list.headline}
+                  key={index}
                   spacing={2}
                   alignItems={{ xs: 'center', md: 'flex-start' }}
                   sx={{ width: 1 }}
@@ -138,9 +138,9 @@ export default function Footer() {
                     {list.headline}
                   </Typography>
 
-                  {list.children.map((link) => (
+                  {list.children.map((link, idx) => (
                     <Link
-                      key={link.name}
+                      key={idx}
                       component={RouterLink}
                       href={link.href}
                       color="inherit"

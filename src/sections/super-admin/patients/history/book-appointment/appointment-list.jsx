@@ -54,9 +54,9 @@ export default function AppointmentList({ patientData, appointments, refetch }) 
           md: 'repeat(3, 1fr)',
         }}
       >
-        {appointments.map((appointment) => (
+        {appointments.map((appointment, idx) => (
           <AppointmentItem
-            key={appointment.id}
+            key={idx}
             appointment={appointment}
             onBook={() => handleBook(appointment._id)}
             onView={() => handleView(appointment._id)}

@@ -35,9 +35,9 @@ export default function AppointmentItem({ patientData, refetch }) {
   return (
     <>
       {!loading &&
-        unitservicesData.map((info) => (
+        unitservicesData.map((info, idx) => (
           <OnlineAppointmentList
-            key={info.id}
+            key={idx}
             Units={info}
             patientData={patientData}
             onBook={handleBook}

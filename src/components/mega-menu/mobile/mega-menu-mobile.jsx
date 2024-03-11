@@ -9,8 +9,8 @@ import NavList from './nav-list';
 export default function MegaMenuMobile({ data, slotProps, ...other }) {
   return (
     <Stack component="nav" id="mega-menu-mobile" {...other}>
-      {data.map((list) => (
-        <NavList key={list.title} data={list} slotProps={slotProps} />
+      {data.map((list, idx) => (
+        <NavList key={idx} data={list} slotProps={slotProps} />
       ))}
     </Stack>
   );

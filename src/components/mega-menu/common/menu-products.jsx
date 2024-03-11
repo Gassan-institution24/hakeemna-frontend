@@ -39,9 +39,9 @@ export default function MenuProducts({ products, displayProduct = 8, sx }) {
         }}
       >
         <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
-          {products.map((product) => (
+          {products.map((product, idx) => (
             <Link
-              key={product.name}
+              key={idx}
               component={RouterLink}
               href={product.path}
               color="inherit"

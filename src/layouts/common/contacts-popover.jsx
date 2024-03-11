@@ -35,8 +35,8 @@ export default function ContactsPopover() {
         </Typography> */}
 
         {/* <Scrollbar sx={{ height: 320 }}>
-          {_contacts.map((contact) => (
-            <MenuItem key={contact.id} sx={{ p: 1 }}>
+          {_contacts.map((contact, idx)  => (
+            <MenuItem key={idx} sx={{ p: 1 }}>
               <Badge
                 variant={contact.status}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}

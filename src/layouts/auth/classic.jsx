@@ -77,8 +77,8 @@ export default function AuthClassicLayout({ children, image, title }) {
       />
 
       {/* <Stack direction="row" spacing={2}>
-        {METHODS.map((option) => (
-          <Tooltip key={option.label} title={option.label}>
+        {METHODS.map((option, idx)  => (
+          <Tooltip key={idx} title={option.label}>
             <Link component={RouterLink} href={option.path}>
               <Box
                 component="img"

@@ -53,11 +53,11 @@ export default function AccountBillingAddress({ addressBook }) {
         /> */}
 
         {/* <Stack spacing={2.5} sx={{ p: 3 }}>
-          {DATA.map((address) => (
+          {DATA.map((address, idx)  => (
             <>
               <AddressItem
                 variant="outlined"
-                // key={address.id}
+                // key={idx}
                 address={address}
                 // action={
                 //   <IconButton

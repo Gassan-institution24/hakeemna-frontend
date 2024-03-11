@@ -132,8 +132,8 @@ export default function Prescriptions() {
     () => (
       <Document>
         <Page size="A4" style={styles.page}>
-          {user?.patient.medicines.map((med, i) => (
-            <View key={med.id}>
+          {user?.patient.medicines.map((med, idx) => (
+            <View key={idx}>
               <View style={styles.imgItem}>
                 <PdfImage src={Doclogo} style={styles.image} />
                 <Text>DOCTORNA HOSPITAL</Text>
@@ -193,8 +193,8 @@ export default function Prescriptions() {
 
   return (
     <div>
-      {user?.patient.medicines.map((med) => (
-        <List key={med.id} sx={{ bgcolor: 'aliceblue' }}>
+      {user?.patient.medicines.map((med, idx) => (
+        <List key={idx} sx={{ bgcolor: 'aliceblue' }}>
           <ListItem sx={{ mb: 1 }}>
             <ListItemAvatar sx={{ display: { xs: 'none', md: 'inline' } }}>
               <Avatar>

@@ -257,9 +257,9 @@ export default function CalendarView() {
 function applyFilter({ inputData, filters, dateError }) {
   const { colors, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (colors.length) {
     inputData = inputData.filter((event) => colors.includes(event.color));

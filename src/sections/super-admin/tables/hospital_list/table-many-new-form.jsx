@@ -157,7 +157,7 @@ export default function NewEditManyForm() {
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    data.map((row, index) => index)
+                    data.map((row, index, idx) => index)
                   )
                 }
                 action={
@@ -171,8 +171,8 @@ export default function NewEditManyForm() {
                       label="country"
                       onChange={handleSelectMany}
                     >
-                      {countriesData.map((country) => (
-                        <MenuItem key={country._id} value={country._id}>
+                      {countriesData.map((country, idx) => (
+                        <MenuItem key={idx} value={country._id}>
                           {country.name_english}
                         </MenuItem>
                       ))}
@@ -186,8 +186,8 @@ export default function NewEditManyForm() {
                       label="city"
                       onChange={handleSelectMany}
                     >
-                      {tableData.map((city) => (
-                        <MenuItem key={city._id} value={city._id}>
+                      {tableData.map((city, idx) => (
+                        <MenuItem key={idx} value={city._id}>
                           {city.name_english}
                         </MenuItem>
                       ))}
@@ -206,7 +206,7 @@ export default function NewEditManyForm() {
                     onSelectAllRows={(checked) =>
                       table.onSelectAllRows(
                         checked,
-                        data.map((row, index) => index)
+                        data.map((row, index, idx) => index)
                       )
                     }
                   />
@@ -231,8 +231,8 @@ export default function NewEditManyForm() {
                             size="small"
                             name="country"
                           >
-                            {countriesData.map((country) => (
-                              <MenuItem key={country._id} value={country._id}>
+                            {countriesData.map((country, idx) => (
+                              <MenuItem key={idx} value={country._id}>
                                 {country.name_english}
                               </MenuItem>
                             ))}
@@ -249,8 +249,8 @@ export default function NewEditManyForm() {
                             size="small"
                             name="city"
                           >
-                            {tableData.map((city) => (
-                              <MenuItem key={city._id} value={city._id}>
+                            {tableData.map((city, idx) => (
+                              <MenuItem key={idx} value={city._id}>
                                 {city.name_english}
                               </MenuItem>
                             ))}

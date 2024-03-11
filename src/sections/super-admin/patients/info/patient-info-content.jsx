@@ -50,7 +50,7 @@ export default function PatientInfoContent({ patientData }) {
   //     <h6>drug_allergies</h6>
   //     <ul>
   //       $
-  //       {drug_allergies.map((drug) => (
+  //       {drug_allergies.map((drug, idx)  => (
   //         <li>{drug?.trade_name}</li>
   //       ))}
   //     </ul>
@@ -59,7 +59,7 @@ export default function PatientInfoContent({ patientData }) {
   //     <h6>diseases</h6>
   //     <ul>
   //       $
-  //       {diseases.map((disease) => (
+  //       {diseases.map((disease, idx)  => (
   //         <li>{disease?.name_english}</li>
   //       ))}
   //     </ul>
@@ -68,7 +68,7 @@ export default function PatientInfoContent({ patientData }) {
   //     <h6>surgeries</h6>
   //     <ul>
   //       $
-  //       {surgeries.map((surgery) => (
+  //       {surgeries.map((surgery, idx)  => (
   //         <li>{surgery?.name_english}</li>
   //       ))}
   //     </ul>
@@ -84,7 +84,7 @@ export default function PatientInfoContent({ patientData }) {
   //         <th>End Date</th>
   //       </tr>
   //       $
-  //       {medicines.map((data) => (
+  //       {medicines.map((data, idx)  => (
   //         <tr>
   //           <td>{data?.medicine?.trade_name}</td>;<td>{data?.medicine?.trade_name}</td>;
   //           <td>{data?.dose}</td>;<td>{data?.frequently}</td>;<td>{data?.startdate}</td>;
@@ -97,7 +97,7 @@ export default function PatientInfoContent({ patientData }) {
   //     <h6>insurance</h6>
   //     <ul>
   //       $
-  //       {insurance.map((company) => (
+  //       {insurance.map((company, idx)  => (
   //         <li>{company?.name_english}</li>
   //       ))}
   //     </ul>
@@ -134,8 +134,8 @@ export default function PatientInfoContent({ patientData }) {
             Drug Allergies
           </Typography>
           <Stack spacing={1}>
-            {drug_allergies?.map((drug) => (
-              <li key={drug._id}>{drug.scientific_name}</li>
+            {drug_allergies?.map((drug, idx) => (
+              <li key={idx}>{drug.scientific_name}</li>
             ))}
           </Stack>
         </Stack>
@@ -146,8 +146,8 @@ export default function PatientInfoContent({ patientData }) {
             Diseases
           </Typography>
           <Stack spacing={1}>
-            {diseases?.map((disease) => (
-              <li key={disease._id}>{disease.name_english}</li>
+            {diseases?.map((disease, idx) => (
+              <li key={idx}>{disease.name_english}</li>
             ))}
           </Stack>
         </Stack>
@@ -158,8 +158,8 @@ export default function PatientInfoContent({ patientData }) {
             Surgeries
           </Typography>
           <Stack spacing={1}>
-            {surgeries?.map((surgery) => (
-              <li key={surgery._id}>{surgery.name_english}</li>
+            {surgeries?.map((surgery, idx) => (
+              <li key={idx}>{surgery.name_english}</li>
             ))}
           </Stack>
         </Stack>
@@ -170,8 +170,8 @@ export default function PatientInfoContent({ patientData }) {
             Medicines
           </Typography>
           <Stack spacing={1}>
-            {medicines?.map((data) => (
-              <li key={data?.medicine._id}>{data?.medicine.trade_name}</li>
+            {medicines?.map((data, idx) => (
+              <li key={idx}>{data?.medicine.trade_name}</li>
             ))}
           </Stack>
         </Stack>
@@ -182,8 +182,8 @@ export default function PatientInfoContent({ patientData }) {
             Insurance
           </Typography>
           <Stack spacing={1}>
-            {insurance?.map((company) => (
-              <li key={company._id}>{company?.name_english}</li>
+            {insurance?.map((company, idx) => (
+              <li key={idx}>{company?.name_english}</li>
             ))}
           </Stack>
         </Stack>
@@ -308,10 +308,10 @@ export default function PatientInfoContent({ patientData }) {
           value: mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
-      ].map((item) => (
+      ].map((item, idx) => (
         <>
           {item.value && (
-            <Stack key={item.label} spacing={1.5}>
+            <Stack key={idx} spacing={1.5}>
               {/* {item.icon} */}
               <ListItemText
                 primary={item.label}

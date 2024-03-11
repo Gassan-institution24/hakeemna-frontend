@@ -153,8 +153,8 @@ export default function Insuranceinfo() {
               PaperPropsSx={{ textTransform: 'capitalize' }}
               sx={{ mb: 1.5 }}
             >
-              {insuranseCosData.map((test) => (
-                <MenuItem value={test?._id} key={test._id} sx={{ mb: 1 }}>
+              {insuranseCosData.map((test, idx) => (
+                <MenuItem value={test?._id} key={idx} sx={{ mb: 1 }}>
                   {test?.name_english}
                 </MenuItem>
               ))}
@@ -166,8 +166,8 @@ export default function Insuranceinfo() {
               PaperPropsSx={{ textTransform: 'capitalize' }}
               sx={{ mb: 1.5 }}
             >
-              {insuranseTypesData.map((test) => (
-                <MenuItem value={test?._id} key={test._id} sx={{ mb: 1 }}>
+              {insuranseTypesData.map((test, idx) => (
+                <MenuItem value={test?._id} key={idx} sx={{ mb: 1 }}>
                   {test?.Coverage_name}
                 </MenuItem>
               ))}

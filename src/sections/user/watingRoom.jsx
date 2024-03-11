@@ -15,7 +15,7 @@ export default function WatingRoom() {
   console.log(today, 'today');
 
   return appointmentsData?.hasFeedback === false && today > appointmentsData?.start_time ? (
-    employeesData?.map((info, index) => <WatingRoomDialog employeesData={info} key={index} />)
+    employeesData?.map((info, index, idx) => <WatingRoomDialog employeesData={info} key={idx} />)
   ) : (
     <>
       <Typography>Are you coming?</Typography>

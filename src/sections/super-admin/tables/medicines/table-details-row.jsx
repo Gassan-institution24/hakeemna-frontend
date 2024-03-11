@@ -234,12 +234,12 @@ export default function CountriesTableRow({
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{barcode}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Concentrations:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
-          {concentrations.map((one) => (
+          {concentrations.map((one, idx) => (
             <>{one} / </>
           ))}
         </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Side Effects:</Box>
-        {side_effects.map((one) => (
+        {side_effects.map((one, idx) => (
           <Box sx={{ pb: 1 }}>{one?.name_english}</Box>
         ))}
       </CustomPopover>

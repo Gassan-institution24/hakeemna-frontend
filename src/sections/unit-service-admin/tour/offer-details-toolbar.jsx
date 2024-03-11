@@ -80,9 +80,9 @@ export default function TourDetailsToolbar({
         arrow="top-right"
         sx={{ width: 140 }}
       >
-        {publishOptions.map((option) => (
+        {publishOptions.map((option, idx) => (
           <MenuItem
-            key={option.value}
+            key={idx}
             selected={option.value === publish}
             onClick={() => {
               popover.onClose();

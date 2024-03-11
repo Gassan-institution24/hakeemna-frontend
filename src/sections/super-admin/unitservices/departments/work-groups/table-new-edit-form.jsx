@@ -58,7 +58,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       department: departmentData._id,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      employees: currentTable?.employees.map((info) => info.employee) || [],
+      employees: currentTable?.employees.map((info, idx) => info.employee) || [],
     }),
     [currentTable, departmentData, id]
   );
@@ -164,8 +164,8 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
                 (option) => !selectedEmployees.some((item) => isEqual(option, item))
               )}
               getOptionLabel={(option) => option._id}
-              renderOption={(props, option) => (
-                <li {...props} key={option._id} value={option._id}>
+              renderOption={(props, option, idx) => (
+                <li {...props} key={idx} value={option._id}>
                   {option.employee.first_name} {option.employee.middle_name}{' '}
                   {option.employee.family_name}
                 </li>
@@ -175,10 +175,10 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
                 methods.setValue('employees', newValue, { shouldValidate: true });
               }}
               renderTags={(selected, getTagProps) =>
-                selected.map((option, index) => (
+                selected.map((option, index, idx) => (
                   <Chip
                     {...getTagProps({ index })}
-                    key={option._id}
+                    key={idx}
                     label={option.employee.first_name}
                     size="small"
                     color="info"

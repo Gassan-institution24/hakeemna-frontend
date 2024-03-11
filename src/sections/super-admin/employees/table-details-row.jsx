@@ -60,8 +60,8 @@ export default function CountriesTableRow({
       </TableCell>
       <TableCell align="center">{email}</TableCell>
       <TableCell align="center">
-        {employee_engagements.map((engagement, index) => (
-          <React.Fragment key={index}>
+        {employee_engagements.map((engagement, index, idx) => (
+          <React.Fragment key={idx}>
             {engagement?.unit_service?.name_english}
             {index < employee_engagements.length - 1 && <br />}
           </React.Fragment>

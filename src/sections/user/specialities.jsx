@@ -60,7 +60,7 @@ export default function Specialities() {
           },
         }}
       >
-        {specialtiesData.map((data) => (
+        {specialtiesData.map((data, idx) => (
           <Button
             sx={{
               display: 'block',

@@ -71,8 +71,8 @@ export default function HomeMinimalpatient() {
           md: 'repeat(3, 1fr)',
         }}
       >
-        {CARDS.map((card, index) => (
-          <m.div variants={varFade().inUp} key={card.title}>
+        {CARDS.map((card, index, idx) => (
+          <m.div variants={varFade().inUp} key={idx}>
             <Card
               sx={{
                 textAlign: 'center',

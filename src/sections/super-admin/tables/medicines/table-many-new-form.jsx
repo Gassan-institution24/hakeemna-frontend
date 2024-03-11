@@ -168,7 +168,7 @@ export default function NewEditManyForm() {
             onSelectAllRows={(checked) =>
               table.onSelectAllRows(
                 checked,
-                data.map((row, index) => index)
+                data.map((row, index, idx) => index)
               )
             }
             action={
@@ -217,7 +217,7 @@ export default function NewEditManyForm() {
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    data.map((row, index) => index)
+                    data.map((row, index, idx) => index)
                   )
                 }
               />
@@ -292,7 +292,7 @@ export default function NewEditManyForm() {
                       <Autocomplete
                         freeSolo
                         multiple
-                        options={DefaultDoses.map((option) => option)}
+                        options={DefaultDoses.map((option, idx) => option)}
                         value={one.concentrations || []}
                         onChange={(e, newValue) => handleSelectConcentrations(index, newValue)}
                         renderInput={(params) => (

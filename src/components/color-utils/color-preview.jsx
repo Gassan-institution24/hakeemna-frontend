@@ -13,9 +13,9 @@ export default function ColorPreview({ colors, limit = 3, sx }) {
 
   return (
     <Stack component="span" direction="row" alignItems="center" justifyContent="flex-end" sx={sx}>
-      {renderColors.map((color, index) => (
+      {renderColors.map((color, index, idx) => (
         <Box
-          key={color + index}
+          key={idx}
           sx={{
             ml: -0.75,
             width: 16,
