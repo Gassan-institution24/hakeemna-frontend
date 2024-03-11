@@ -45,7 +45,7 @@ export function pagination(theme) {
       },
     };
 
-    const colorStyle = COLORS.map((color) => ({
+    const colorStyle = COLORS.map((color, idx) => ({
       ...(ownerState.color === color && {
         [`& .${paginationItemClasses.root}`]: {
           [`&.${paginationItemClasses.selected}`]: {

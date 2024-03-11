@@ -203,7 +203,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       });
       updating.onFalse();
       confirm.onFalse();
-      enqueueSnackbar(t('Updated successfully!'));
+      enqueueSnackbar(t('updated successfully!'));
       router.push(paths.employee.appointmentconfiguration.root);
       // await refetch();
     } catch (error) {
@@ -282,7 +282,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       // console.log(errors);
       setErrorMsg(
         Object.keys(errors)
-          .map((key) => errors?.[key]?.message)
+          .map((key, idx) => errors?.[key]?.message)
           .join('<br>')
       );
     }

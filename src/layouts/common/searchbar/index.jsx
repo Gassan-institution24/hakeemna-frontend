@@ -83,9 +83,9 @@ function Searchbar() {
 
     return Object.keys(data)
       .sort((a, b) => -b.localeCompare(a))
-      .map((group, index) => (
+      .map((group, index) => ( 
         <List key={group || index} disablePadding>
-          {data[group].map((item) => {
+          {data[group].map((item, idx) => {
             const { title, path } = item;
 
             const partsTitle = parse(title, match(title, searchQuery));
@@ -96,7 +96,7 @@ function Searchbar() {
               <ResultItem
                 path={partsPath}
                 title={partsTitle}
-                key={`${title}${path}`}
+                key={idx}
                 groupLabel={searchQuery && group}
                 onClickItem={() => handleClick(path)}
               />

@@ -82,7 +82,7 @@ export function fab(theme) {
       }),
     };
 
-    const colorStyle = COLORS.map((color) => ({
+    const colorStyle = COLORS.map((color, idx) => ({
       ...(ownerState.color === color && {
         // FILLED
         ...((circularVariant || extendedVariant) && {

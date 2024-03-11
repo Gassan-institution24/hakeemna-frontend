@@ -34,8 +34,8 @@ export default function OrganizationalChart({ data, variant = 'simple', sx, ...o
       }
       {...other}
     >
-      {data.children.map((list) => (
-        <List key={list.name} depth={1} data={list} variant={variant} sx={sx} />
+      {data.children.map((list, idx) => (
+        <List key={idx} depth={1} data={list} variant={variant} sx={sx} />
       ))}
     </Tree>
   );
@@ -91,8 +91,8 @@ List.propTypes = {
 function SubList({ data, depth, variant, sx }) {
   return (
     <>
-      {data.map((list) => (
-        <List key={list.name} data={list} depth={depth + 1} variant={variant} sx={sx} />
+      {data.map((list, idx) => (
+        <List key={idx} data={list} depth={depth + 1} variant={variant} sx={sx} />
       ))}
     </>
   );

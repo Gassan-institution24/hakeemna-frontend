@@ -127,7 +127,7 @@ function NavSubList({ data, slotProps, title, onCloseMenu }) {
 
       <Scrollbar>
         {data.map((list, index) => (
-          <List key={list.subheader + index} disablePadding>
+          <List key={index} disablePadding>
             {list.subheader && (
               <Typography
                 noWrap
@@ -146,12 +146,12 @@ function NavSubList({ data, slotProps, title, onCloseMenu }) {
               </Typography>
             )}
 
-            {list.items.map((link) => {
+            {list.items.map((link, idx) => {
               const active = pathname === link.path || pathname === `${link.path}/`;
 
               return (
                 <ListItemButton
-                  key={link.title}
+                  key={idx}
                   component={RouterLink}
                   href={link.path}
                   className={active ? 'active' : ''}

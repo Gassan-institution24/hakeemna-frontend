@@ -37,7 +37,7 @@ export default function ServiceUnitPopover() {
 
   const [password, setPassword] = useState();
   const [selectedIndex, setSelectedIndex] = useState();
-  const [error, setError] = useState();
+  const [errorMsg, setErrorMsg] = useState();
 
   const selected = user?.employee?.employee_engagements?.[user?.employee?.selected_engagement];
 
@@ -49,10 +49,10 @@ export default function ServiceUnitPopover() {
       });
       popover.onClose();
       handleChangeUS();
-    } catch (e) {
-      console.error(e);
-      setError(e);
-      enqueueSnackbar(typeof e === 'string' ? e : e.message, { variant: 'error' });
+    } catch (error) {
+      console.error(error);
+      setErrorMsg(error);
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       loading.onFalse();
     }
   };
@@ -64,10 +64,10 @@ export default function ServiceUnitPopover() {
       });
       window.location.reload();
       loading.onFalse();
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error(error);
       loading.onFalse();
-      enqueueSnackbar(typeof e === 'string' ? e : e.message, { variant: 'error' });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       popover.onClose();
     }
   };
@@ -92,15 +92,15 @@ export default function ServiceUnitPopover() {
           <Typography variant="body1" sx={{ textAlign: 'center' }}>
             {selected?.unit_service?.name_english
               ?.split(' ')
-              .map((word) => word.charAt(0).toUpperCase())
+              .map((word, idx) => word.charAt(0).toUpperCase())
               .join('')}
           </Typography>
         </IconButton>
       )}
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 160 }}>
-        {user?.employee?.employee_engagements?.map((option, index) => (
+        {user?.employee?.employee_engagements?.map((option, index, idx) => (
           <MenuItem
-            key={index}
+            key={idx}
             lang="ar"
             selected={option?.unit_service?._id === selected?.unit_service?._id}
             onClick={() => {
@@ -126,7 +126,7 @@ export default function ServiceUnitPopover() {
               name="password"
               type={showPassword.value ? 'text' : 'password'}
               sx={{ width: '100%', pt: 4 }}
-              error={error}
+              error={errorMsg}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">

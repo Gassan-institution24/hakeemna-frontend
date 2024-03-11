@@ -11,12 +11,12 @@ import { presetOptions } from 'src/theme/options/presets';
 export default function PresetsOptions({ value, onChange }) {
   return (
     <Box columnGap={2} rowGap={1.5} display="grid" gridTemplateColumns="repeat(3, 1fr)">
-      {presetOptions.map((option) => {
+      {presetOptions.map((option, idx) => {
         const selected = value === option.name;
 
         return (
           <ButtonBase
-            key={option.name}
+            key={idx}
             onClick={() => onChange(option.name)}
             sx={{
               height: 56,

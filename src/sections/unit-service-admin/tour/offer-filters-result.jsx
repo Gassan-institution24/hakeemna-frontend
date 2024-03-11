@@ -63,9 +63,9 @@ export default function TourFiltersResult({
           <Block label="Destination:">
             {tableData
               .filter((data) => filters.cities.includes(data._id))
-              .map((item) => (
+              .map((item, idx) => (
                 <Chip
-                  key={item._id}
+                  key={idx}
                   label={item.name_english}
                   size="small"
                   onDelete={() => handleRemoveDestination(item.name_english)}
@@ -78,9 +78,9 @@ export default function TourFiltersResult({
           <Block label="stakeholder:">
             {stakeholder
               .filter((data) => filters.stakeholder.includes(data._id))
-              .map((item) => (
+              .map((item, idx) => (
                 <Chip
-                  key={item._id}
+                  key={idx}
                   label={item.stakeholder_name}
                   size="small"
                   onDelete={() => handleRemoveServices(item.stakeholder_name)}

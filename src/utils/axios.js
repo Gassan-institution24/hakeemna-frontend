@@ -350,6 +350,7 @@ export const endpoints = {
   appointments: {
     all: '/api/appointments',
     one: (id) => `/api/appointments/${id}`,
+    book: (id) => `/api/appointments/${id}/book`,
     available: '/api/appointments/available',
     employee: {
       one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 5, order = 'asc', filters }) =>

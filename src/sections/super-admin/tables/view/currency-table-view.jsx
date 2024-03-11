@@ -55,7 +55,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'active',
+  status: 'all',
 };
 
 // ----------------------------------------------------------------------
@@ -93,7 +93,7 @@ export default function CurrencyTableView() {
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'active';
+  const canReset = !!filters?.name || filters.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -225,9 +225,9 @@ export default function CurrencyTableView() {
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
-                  .map((row) => (
+                  .map((row, idx) => (
                     <TableDetailRow
-                      key={row._id}
+                      key={idx}
                       row={row}
                       selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}

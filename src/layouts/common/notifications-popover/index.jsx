@@ -137,8 +137,8 @@ export default function NotificationsPopover() {
         <Scrollbar>
           <List disablePadding>
             {/* {!loading && */}
-            {allNotifications?.map((notification, index) => (
-              <NotificationItem handleClick={handleClick} key={index} notification={notification} />
+            {allNotifications?.map((notification, idx) => (
+              <NotificationItem handleClick={handleClick} key={idx} notification={notification} />
             ))}
           </List>
           {hasMore && (

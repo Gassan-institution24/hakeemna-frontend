@@ -13,7 +13,7 @@ export default function EmployeeAppointconfigPage() {
         <title> Appointment Config </title>
         <meta name="description" content="meta" />
       </Helmet>
-      <EmployeeAppointconfigView />)
+      <EmployeeAppointconfigView />
     </ACLGuard>
   );
 }

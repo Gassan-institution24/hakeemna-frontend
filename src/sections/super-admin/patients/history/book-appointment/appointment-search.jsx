@@ -32,7 +32,7 @@ export default function AppointmentSearch({ query, results, onSearch, hrefItem }
       sx={{ width: { xs: 1, sm: 260 } }}
       autoHighlight
       popupIcon={null}
-      options={results.map((result) => result)}
+      options={results.map((result, idx) => result)}
       onInputChange={(event, newValue) => onSearch(newValue)}
       getOptionLabel={(option) => option._id}
       noOptionsText={<SearchNotFound query={query} sx={{ bgcolor: 'unset' }} />}
@@ -60,12 +60,12 @@ export default function AppointmentSearch({ query, results, onSearch, hrefItem }
       //       component="li"
       //       {...props}
       //       // onClick={() => handleClick(appointment._id)}
-      //       key={appointment._id}
+      //       key={idx}
       //     >
       //       {/* <div>
-      //         {parts.map((part, index) => (
+      //         {parts.map((part, index, idx)  => (
       //           <Typography
-      //             key={index}
+      //             key={idx}
       //             component="span"
       //             color={part.highlight ? 'primary' : 'textPrimary'}
       //             sx={{

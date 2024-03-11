@@ -17,7 +17,7 @@ export function useGetEvents() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, options);
 
   const memoizedValue = useMemo(() => {
-    const events = data?.events.map((event) => ({
+    const events = data?.events.map((event, idx) => ({
       ...event,
       textColor: event.color,
     }));
@@ -75,7 +75,7 @@ export async function updateEvent(eventData) {
   mutate(
     URL,
     (currentData) => {
-      const events = currentData.events.map((event) =>
+      const events = currentData.events.map((event, idx) =>
         event.id === eventData.id ? { ...event, ...eventData } : event
       );
 

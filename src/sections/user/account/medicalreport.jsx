@@ -8,6 +8,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import ListItemText from '@mui/material/ListItemText';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
+import { useTranslate } from 'src/locales';
+
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 
@@ -45,6 +47,8 @@ const NOTIFICATIONS = [
 export default function MedicalReport() {
   const { enqueueSnackbar } = useSnackbar();
 
+  const { t } = useTranslate();
+
   const methods = useForm({
     mode: 'onTouched',
     defaultValues: {
@@ -64,7 +68,7 @@ export default function MedicalReport() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      enqueueSnackbar('Update success!');
+      enqueueSnackbar(t('updated successfully!'));
     } catch (error) {
       console.error(error);
     }
@@ -78,8 +82,8 @@ export default function MedicalReport() {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack component={Card} spacing={3} sx={{ p: 3 }}>
-        {NOTIFICATIONS.map((notification) => (
-          <Grid key={notification.subheader} container spacing={3}>
+        {NOTIFICATIONS.map((notification, idx) => (
+          <Grid key={idx} container spacing={3}>
             <Grid xs={12} md={4}>
               <ListItemText
                 primary={notification.subheader}

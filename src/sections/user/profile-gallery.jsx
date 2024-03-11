@@ -18,7 +18,7 @@ import Lightbox, { useLightBox } from 'src/components/lightbox';
 export default function ProfileGallery({ gallery }) {
   const theme = useTheme();
 
-  const slides = gallery.map((slide) => ({
+  const slides = gallery.map((slide, idx) => ({
     src: slide.imageUrl,
   }));
 
@@ -39,8 +39,8 @@ export default function ProfileGallery({ gallery }) {
           md: 'repeat(3, 1fr)',
         }}
       >
-        {gallery.map((image) => (
-          <Card key={image.id} sx={{ cursor: 'pointer', color: 'common.white' }}>
+        {gallery.map((image, idx) => (
+          <Card key={idx} sx={{ cursor: 'pointer', color: 'common.white' }}>
             <IconButton color="inherit" sx={{ position: 'absolute', top: 8, right: 8, zIndex: 9 }}>
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton>

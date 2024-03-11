@@ -38,9 +38,9 @@ export default function TourDetailsView({ id }) {
         mb: { xs: 3, md: 5 },
       }}
     >
-      {/* {TOUR_DETAILS_TABS.map((tab) => (
+      {/* {TOUR_DETAILS_TABS.map((tab, idx)  => (
         <Tab
-          key={tab.value}
+          key={idx}
           iconPosition="end"
           value={tab.value}
           label={tab.label}

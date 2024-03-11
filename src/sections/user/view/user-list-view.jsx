@@ -177,9 +177,9 @@
 //               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
 //             }}
 //           >
-//             {STATUS_OPTIONS.map((tab) => (
+//             {STATUS_OPTIONS.map((tab, idx)  => (
 //               <Tab
-//                 key={tab.value}
+//                 key={idx}
 //                 iconPosition="end"
 //                 value={tab.value}
 //                 label={tab.label}
@@ -238,7 +238,7 @@
 //               onSelectAllRows={(checked) =>
 //                 table.onSelectAllRows(
 //                   checked,
-//                   tableData.map((row) => row.id)
+//                   tableData.map((row, idx)  => row.id)
 //                 )
 //               }
 //               action={
@@ -262,7 +262,7 @@
 //                   onSelectAllRows={(checked) =>
 //                     table.onSelectAllRows(
 //                       checked,
-//                       tableData.map((row) => row.id)
+//                       tableData.map((row, idx)  => row.id)
 //                     )
 //                   }
 //                 />
@@ -273,9 +273,9 @@
 //                       table.page * table.rowsPerPage,
 //                       table.page * table.rowsPerPage + table.rowsPerPage
 //                     )
-//                     .map((row) => (
+//                     .map((row, idx)  => (
 //                       <UserTableRow
-//                         key={row.id}
+//                         key={idx}
 //                         row={row}
 //                         selected={table.selected.includes(row.id)}
 //                         onSelectRow={() => table.onSelectRow(row.id)}
@@ -339,7 +339,7 @@
 // function applyFilter({ inputData, comparator, filters }) {
 //   const { name, status, role } = filters;
 
-//   const stabilizedThis = inputData.map((el, index) => [el, index]);
+//   const stabilizedThis = inputData.map((el, index, idx)  => [el, index]);
 
 //   stabilizedThis.sort((a, b) => {
 //     const order = comparator(a[0], b[0]);
@@ -347,7 +347,7 @@
 //     return a[1] - b[1];
 //   });
 
-//   inputData = stabilizedThis.map((el) => el[0]);
+//   inputData = stabilizedThis.map((el, idx)  => el[0]);
 
 //   if (name) {
 //     inputData = inputData.filter(

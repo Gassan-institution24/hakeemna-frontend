@@ -406,6 +406,20 @@
   "Is this you?": "هل هذا انت؟",
   "We found a record with similar information for ": "لقد وجدنا حساب بنفس المعلومات المدخلة",
 
+
+  "uncanceled successfully!":"تم التفعيل بنجاح",
+  "delayed successfully!":"تم التأخير بنجاح",
+  "Password has changed successfully!":"تم تغيير كلمة السر بنجاح",
+  "canceled successfully!":"تم الإلغاء بنجاح",
+  "added successfully!":"تمت الإضافة بنجاح",
+  "created successfully!":"تم الإنشاء بنجاح",
+  "updated successfully!":"تم التعديل بنجاح",
+  "deleted successfully!":"تم الحذف بنجاح",
+  "this company already exist":"هذه الشركة موجودة مسبقا",
+  "uploaded successfully!":"تم الرفع بنجاح",
+  "booked successfully!":"تم الحجز بنجاح",
+  "Invalid file type or size":"نوع الملف غير صالح",
+
   "list": "قائمة",
   "edit": "تعديل",
   "shop": "متجر",

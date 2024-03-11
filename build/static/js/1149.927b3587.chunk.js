@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[1149],{59347:(e,s,n)=>{n.r(s),n.d(s,{default:()=>r});var t=n(6907),i=n(99423),a=n(80184);function r(){return(0,a.jsxs)(a.Fragment,{children:[(0,a.jsxs)(t.ql,{children:[(0,a.jsx)("title",{children:" New Password"}),(0,a.jsx)("meta",{name:"description",content:"meta"})]}),(0,a.jsx)(i.lz,{})]})}}}]);
-//# sourceMappingURL=1149.927b3587.chunk.js.map

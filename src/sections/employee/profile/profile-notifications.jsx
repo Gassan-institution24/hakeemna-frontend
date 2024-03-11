@@ -9,6 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 import socket from 'src/socket';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import FormProvider from 'src/components/hook-form';
@@ -48,6 +49,8 @@ const NOTIFICATIONS = [
 export default function AccountNotifications() {
   const { enqueueSnackbar } = useSnackbar();
 
+  const { t } = useTranslate();
+
   const { user } = useAuthContext();
 
   const methods = useForm({
@@ -69,7 +72,7 @@ export default function AccountNotifications() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      enqueueSnackbar('Update success!');
+      enqueueSnackbar(t('updated successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -85,8 +88,8 @@ export default function AccountNotifications() {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack component={Card} spacing={3} sx={{ p: 3 }}>
-        {NOTIFICATIONS.map((notification) => (
-          <Grid key={notification.subheader} container spacing={3}>
+        {NOTIFICATIONS.map((notification, idx) => (
+          <Grid key={idx} container spacing={3}>
             <Grid xs={12} md={4}>
               <ListItemText
                 primary={notification.subheader}

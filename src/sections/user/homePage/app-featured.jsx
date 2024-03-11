@@ -37,8 +37,8 @@ export default function AppFeatured({ list, ...other }) {
   return (
     <Card {...other}>
       <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
-        {IMGES?.map((app, index) => (
-          <CarouselItem key={index} item={app} active={index === carousel.currentIndex} />
+        {IMGES?.map((app, index, idx) => (
+          <CarouselItem key={idx} item={app} active={index === carousel.currentIndex} />
         ))}
       </Carousel>
 

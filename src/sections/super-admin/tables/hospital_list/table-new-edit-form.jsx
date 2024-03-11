@@ -143,15 +143,15 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect onChange={handleCountryChange} name="country" label="country">
-                {countriesData.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
+                {countriesData.map((country, idx) => (
+                  <MenuItem key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="city" label="City">
-                {cities.map((city) => (
-                  <MenuItem key={city._id} value={city._id}>
+                {cities.map((city, idx) => (
+                  <MenuItem key={idx} value={city._id}>
                     {city.name_english}
                   </MenuItem>
                 ))}
