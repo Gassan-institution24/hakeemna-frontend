@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[2086],{62086:(e,s,a)=>{a.r(s),a.d(s,{default:()=>r});var n=a(6907),t=a(85362),i=a(80184);function r(){return(0,i.jsxs)(i.Fragment,{children:[(0,i.jsxs)(n.ql,{children:[(0,i.jsx)("title",{children:" Dashboard: Measurment Types Table"}),(0,i.jsx)("meta",{name:"description",content:"meta"})]}),(0,i.jsx)(t.Jb,{})]})}}}]);
+//# sourceMappingURL=2086.69ec50b1.chunk.js.map
