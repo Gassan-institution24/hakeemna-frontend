@@ -21,13 +21,12 @@ import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fTimestamp } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetAppointmentTypes } from 'src/api';
+import { useGetAppointmentTypes, useGetDepartmentAppointments } from 'src/api';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
@@ -40,7 +39,6 @@ import {
   useTable,
   emptyRows,
   TableNoData,
-  getComparator,
   TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
@@ -64,12 +62,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsView({
-  unitServiceData,
-  departmentData,
-  appointmentsData,
-  refetch,
-}) {
+export default function AppointmentsView({ unitServiceData, departmentData }) {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     { id: 'sequence_number', label: t('sequence') },
@@ -109,19 +102,33 @@ export default function AppointmentsView({
   const [filters, setFilters] = useState(defaultFilters);
   const [minToDelay, setMinToDelay] = useState(0);
 
+  const {
+    appointmentsData,
+    appointmentsLength,
+    refetch,
+    // all,
+    available,
+    notBooked,
+    processing,
+    canceled,
+    finished,
+    pending,
+    // loading,
+  } = useGetDepartmentAppointments({
+    id: departmentData?._id,
+    page: table.page || 0,
+    sortBy: table.orderBy || 'code',
+    rowsPerPage: table.rowsPerPage || 5,
+    order: table.order || 'asc',
+    filters: filters || null,
+  });
+
   const dateError =
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()
       : false;
 
-  const dataFiltered = applyFilter({
-    inputData: appointmentsData,
-    comparator: getComparator(table.order, table.orderBy),
-    filters,
-    dateError,
-  });
-
-  const dataInPage = dataFiltered.slice(
+  const dataInPage = appointmentsData.slice(
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
@@ -135,48 +142,48 @@ export default function AppointmentsView({
     !!filters.endDate ||
     filters.types.length > 0;
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+  const notFound = (!appointmentsData.length && canReset) || !appointmentsData.length;
 
   const getAppointLength = (status) =>
     appointmentsData.filter((item) => item.status === status).length;
 
   const TABS = [
-    // { value: 'all', label: t('all'), color: 'default', count: appointmentsData.length },
+    // { value: 'all', label: t('all'), color: 'default', count: appointmentsLength },
     {
       value: 'pending',
       label: t('pending'),
       color: 'warning',
-      count: getAppointLength('pending'),
+      count: pending,
     },
     {
       value: 'processing',
       label: t('processing'),
       color: 'info',
-      count: getAppointLength('processing'),
+      count: processing,
     },
     {
       value: 'finished',
       label: t('finished'),
       color: 'success',
-      count: getAppointLength('finished'),
+      count: finished,
     },
     {
       value: 'canceled',
       label: t('canceled'),
       color: 'error',
-      count: getAppointLength('canceled'),
+      count: canceled,
     },
     {
       value: 'available',
       label: t('available'),
       color: 'secondary',
-      count: getAppointLength('available'),
+      count: available,
     },
     {
       value: 'not booked',
       label: t('not booked'),
       color: 'secondary',
-      count: getAppointLength('not booked'),
+      count: notBooked,
     },
   ];
 
@@ -273,15 +280,15 @@ export default function AppointmentsView({
     }
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: appointmentsData.length,
+      totalRows: appointmentsLength,
       totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
+      totalRowsFiltered: appointmentsData.length,
     });
   }, [
     refetch,
-    dataFiltered.length,
-    dataInPage.length,
     appointmentsData.length,
+    dataInPage.length,
+    appointmentsLength,
     table,
     enqueueSnackbar,
     departmentData,
@@ -310,15 +317,15 @@ export default function AppointmentsView({
     refetch();
     setMinToDelay(0);
     table.onUpdatePageDeleteRows({
-      totalRows: appointmentsData.length,
+      totalRows: appointmentsLength,
       totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
+      totalRowsFiltered: appointmentsData.length,
     });
   }, [
     refetch,
-    dataFiltered.length,
-    dataInPage.length,
     appointmentsData.length,
+    dataInPage.length,
+    appointmentsLength,
     table,
     minToDelay,
     enqueueSnackbar,
@@ -346,15 +353,15 @@ export default function AppointmentsView({
     }
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: appointmentsData.length,
+      totalRows: appointmentsLength,
       totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
+      totalRowsFiltered: appointmentsData.length,
     });
   }, [
     refetch,
-    dataFiltered.length,
-    dataInPage.length,
     appointmentsData.length,
+    dataInPage.length,
+    appointmentsLength,
     table,
     enqueueSnackbar,
     departmentData,
@@ -447,7 +454,7 @@ export default function AppointmentsView({
               //
               onResetFilters={handleResetFilters}
               //
-              results={dataFiltered.length}
+              results={appointmentsData.length}
               sx={{ p: 2.5, pt: 0 }}
             />
           )}
@@ -456,11 +463,11 @@ export default function AppointmentsView({
             <TableSelectedAction
               // dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={dataFiltered.length}
+              rowCount={appointmentsData.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered?.map((row, idx) => row._id)
+                  appointmentsData?.map((row, idx) => row._id)
                 )
               }
               action={
@@ -475,7 +482,7 @@ export default function AppointmentsView({
                         <Iconify icon="mdi:timer-sync" />
                       </IconButton>
                     </Tooltip>
-                    {/* {dataFiltered
+                    {/* {appointmentsData
                       .filter((row) => table.selected.includes(row._id))
                       .some((data) => data.status === 'canceled') ? (
                       <Tooltip title="uncancel all">
@@ -494,7 +501,7 @@ export default function AppointmentsView({
                 )
               }
               color={
-                dataFiltered
+                appointmentsData
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'canceled')
                   ? 'primary'
@@ -507,19 +514,19 @@ export default function AppointmentsView({
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={appointmentsData.length}
+                  rowCount={appointmentsLength}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered?.map((row, idx) => row._id)
+                      appointmentsData?.map((row, idx) => row._id)
                     )
                   }
                 />
 
                 <TableBody>
-                  {dataFiltered
+                  {appointmentsData
                     .slice(
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
@@ -540,7 +547,7 @@ export default function AppointmentsView({
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsLength)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -550,7 +557,7 @@ export default function AppointmentsView({
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered.length}
+            count={appointmentsData.length}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
@@ -655,65 +662,7 @@ export default function AppointmentsView({
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, types, startDate, endDate } = filters;
-
-  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-
-  inputData = stabilizedThis?.map((el, idx) => el[0]);
-
-  if (name) {
-    inputData = inputData.filter(
-      (appointment) =>
-        (appointment?.work_shift?.name_english &&
-          appointment?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (appointment?.work_shift?.name_arabic &&
-          appointment?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (appointment?.work_group?.name_english &&
-          appointment?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (appointment?.work_group?.name_arabic &&
-          appointment?.work_group?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        appointment?._id === name ||
-        JSON.stringify(appointment.code) === name
-    );
-  }
-
-  if (status !== 'all') {
-    inputData = inputData.filter((appointment) => appointment.status === status);
-  }
-
-  if (!dateError) {
-    if (startDate && endDate) {
-      inputData = inputData.filter(
-        (appointment) =>
-          fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
-          fTimestamp(appointment.start_time) <= fTimestamp(endDate)
-      );
-    } else if (startDate) {
-      const endOfDay = new Date(startDate);
-      endOfDay.setDate(endOfDay.getDate() + 1);
-      inputData = inputData.filter(
-        (appointment) =>
-          fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
-          fTimestamp(appointment.start_time) < fTimestamp(endOfDay)
-      );
-    }
-  }
-  if (types.length > 0) {
-    inputData = inputData.filter((appoint) => types?.includes(appoint.appointment_type._id));
-  }
-
-  return inputData;
-}
 AppointmentsView.propTypes = {
   departmentData: PropTypes.object,
   unitServiceData: PropTypes.object,
-  appointmentsData: PropTypes.array,
-  refetch: PropTypes.func,
 };

@@ -151,10 +151,10 @@ export default function CountriesNewEditForm({ currentSelected }) {
                   </li>
                 )}
                 renderTags={(selected, getTagProps) =>
-                  selected.map((option, index, idx) => (
+                  selected.map((option, index) => (
                     <Chip
                       {...getTagProps({ index })}
-                      key={idx}
+                      key={index}
                       label={option}
                       size="small"
                       color="info"
