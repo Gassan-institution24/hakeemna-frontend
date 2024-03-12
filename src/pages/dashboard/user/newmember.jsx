@@ -1,7 +1,9 @@
 import * as Yup from 'yup';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { MenuItem } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
@@ -25,12 +27,13 @@ export default function Create() {
   const { register } = useAuthContext();
   const { t } = useTranslate();
   const router = useRouter();
-
+  const [errorMsg, setErrorMsg] = useState('');
+  const { user } = useAuthContext();
   const password = useBoolean();
 
   const RegisterSchema = Yup.object().shape({
     first_name: Yup.string().required('First name required'),
-    last_name: Yup.string().required('Last name required'),
+    family_name: Yup.string().required('Last name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string()
@@ -45,8 +48,9 @@ export default function Create() {
 
   const defaultValues = {
     first_name: '',
-    last_name: '',
+    family_name: '',
     email: '',
+    part_of_family: user?.patient?._id,
     password: '',
     confirmPassword: '',
     mobile_num1: '',
@@ -76,30 +80,26 @@ export default function Create() {
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
     methods.setValue('country', selectedCountryId, { shouldValidate: true });
-    // setSelectedCountry(selectedCountryId);
-    // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
   };
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      // console.log(data);
-      await register?.({ userName: `${data.first_name} ${data.last_name}`, ...data });
-
-      router.push(paths.dashboard.user.family);
+      await register?.({ userName: `${data.first_name} ${data.family_name}`, ...data });
+      router.push(paths.auth.verify(data.email));
     } catch (error) {
       console.error(error);
       reset();
-      // setErrorMsg(typeof error === 'string' ? error : error.message);
+      setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={2.5}>
-        {/* {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>} */}
+        {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFTextField name="first_name" label="First name" />
-          <RHFTextField name="last_name" label="Last name" />
+          <RHFTextField name="family_name" label="Last name" />
         </Stack>
 
         <RHFTextField name="email" label="Email address" />
