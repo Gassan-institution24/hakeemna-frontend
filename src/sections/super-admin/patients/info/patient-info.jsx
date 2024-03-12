@@ -6,27 +6,27 @@ import { paths } from 'src/routes/paths';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import JobDetailsContent from './patient-info-content';
-import JobDetailsToolbar from './patient-info-toolbar';
+import PatientInfoContent from './patient-info-content';
+import PatientInfoToolbar from './patient-info-toolbar';
 
 // ----------------------------------------------------------------------
 
-export default function JobDetailsView({ patientData }) {
+export default function PatientsInfoView({ patientData }) {
   const settings = useSettingsContext();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <JobDetailsToolbar
+      <PatientInfoToolbar
         backLink={paths.superadmin.patients.root}
         // editLink={paths.superadmin.patients.edit(`${patientData?._id}`)}
         // liveLink="#"
       />
 
-      <JobDetailsContent patientData={patientData} />
+      <PatientInfoContent patientData={patientData} />
     </Container>
   );
 }
 
-JobDetailsView.propTypes = {
+PatientsInfoView.propTypes = {
   patientData: PropTypes.object,
 };

@@ -90,16 +90,16 @@ export default function CalendarFilters({
     </Stack>
   );
 
-  const renderColors = (
-    <Stack spacing={1} sx={{ my: 3, px: 2.5 }}>
-      <Typography variant="subtitle2">{t('colors')}</Typography>
-      <ColorPicker
-        colors={colorOptions}
-        selected={filters.colors}
-        onSelectColor={handleFilterColors}
-      />
-    </Stack>
-  );
+  // const renderColors = (
+  //   <Stack spacing={1} sx={{ my: 3, px: 2.5 }}>
+  //     <Typography variant="subtitle2">{t('colors')}</Typography>
+  //     <ColorPicker
+  //       colors={colorOptions}
+  //       selected={filters.colors}
+  //       onSelectColor={handleFilterColors}
+  //     />
+  //   </Stack>
+  // );
 
   const renderDateRange = (
     <Stack spacing={1.5} sx={{ mb: 3, px: 2.5 }}>
@@ -205,7 +205,7 @@ export default function CalendarFilters({
 
       <Divider sx={{ borderStyle: 'dashed' }} />
 
-      {renderColors}
+      {/* {renderColors} */}
 
       {renderDateRange}
 

@@ -21,7 +21,7 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import { ColorPicker } from 'src/components/color-utils';
+// import { ColorPicker } from 'src/components/color-utils';
 import FormProvider, { RHFSwitch, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
     title: Yup.string().max(255).required('Title is required'),
     description: Yup.string().max(5000, 'Description must be at most 5000 characters'),
     // not required
-    color: Yup.string(),
+    // color: Yup.string(),
     allDay: Yup.boolean(),
     start: Yup.mixed(),
     end: Yup.mixed(),
@@ -162,7 +162,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
           )}
         />
 
-        <Controller
+        {/* <Controller
           name="color"
           control={control}
           render={({ field }) => (
@@ -172,7 +172,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
               colors={colorOptions}
             />
           )}
-        />
+        /> */}
       </Stack>
 
       <DialogActions>
