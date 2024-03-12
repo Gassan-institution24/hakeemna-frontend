@@ -95,7 +95,7 @@ export default function TableNewEditForm() {
 
   const handleEmployment = async (row) => {
     try {
-      await axios.post(endpoints.employee_engagements.ones, {
+      await axios.post(endpoints.employee_engagements.all, {
         unit_service: unitServiceID,
         employee: row._id,
       });
