@@ -53,7 +53,7 @@ export default function OldMedicalReports() {
   const curLangAr = currentLang.value === 'ar';
   const [files, setFiles] = useState([]);
   const [filesPdf, setfilesPdf] = useState([]);
-  console.log(filesPdf);
+
   const [filesPdftodelete, setfilesPdftodelete] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
