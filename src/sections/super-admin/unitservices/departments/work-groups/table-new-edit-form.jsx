@@ -175,10 +175,10 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
                 methods.setValue('employees', newValue, { shouldValidate: true });
               }}
               renderTags={(selected, getTagProps) =>
-                selected.map((option, index, idx) => (
+                selected.map((option, index) => (
                   <Chip
                     {...getTagProps({ index })}
-                    key={idx}
+                    key={index}
                     label={option.employee.first_name}
                     size="small"
                     color="info"

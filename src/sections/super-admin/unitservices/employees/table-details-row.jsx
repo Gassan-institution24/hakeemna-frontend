@@ -61,43 +61,15 @@ export default function UnitServiceEmployeesRow({
       <TableCell lang="ar" padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onViewRow}
-        align="center"
-      >
-        {code}
-      </TableCell>
+      <TableCell align="center">{code}</TableCell>
       <TableCell align="center">
         <Iconify
           icon={online ? 'noto:green-circle' : 'noto:red-circle'}
           style={{ width: '10px' }}
         />
       </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onViewRow}
-        align="center"
-      >
-        {sequence_number}
-      </TableCell>
-      <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onViewRow}
-        align="center"
-      >
+      <TableCell align="center">{sequence_number}</TableCell>
+      <TableCell align="center">
         {employee.first_name} {employee.family_name}
       </TableCell>
       <TableCell lang="ar" align="center">
