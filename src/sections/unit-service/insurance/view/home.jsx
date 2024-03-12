@@ -375,7 +375,7 @@ export default function UnitServicesInsuranceView() {
             scrollbarColor: 'darkgray lightgray',
           }}
         >
-          {filteredInsuranceCos?.map((company, idx) => (
+          {filteredInsuranceCos?.map((company) => (
             <MenuItem onClick={() => handleAddRow(company._id)}>
               {/* <Iconify icon="ic:baseline-add" /> */}
               {curLangAr ? company?.name_arabic : company?.name_english}

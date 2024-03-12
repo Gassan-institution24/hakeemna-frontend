@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetDepartment } from 'src/api';
-import ACLGuard from 'src/auth/guard/acl-guard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -16,13 +15,13 @@ export default function DepartmentActivityNewPage() {
   const { depid } = params;
   const { data, loading } = useGetDepartment(depid);
   return (
-    <ACLGuard category="department" subcategory="activities" acl="create">
+    <>
       <Helmet>
         <title> Add Activity </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentActivityNewView departmentData={data} />}
-    </ACLGuard>
+    </>
   );
 }
