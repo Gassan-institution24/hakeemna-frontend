@@ -54,7 +54,11 @@ export default function NavList({ data }) {
         title={data.title}
         path={data.path}
         //
-        onClick = {() => document.getElementById(data.sectionId).scrollIntoView({behavior:'smooth', block:'start'})}
+        onClick={() =>
+          document
+            .getElementById(data.sectionId)
+            .scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
         hasChild={!!data.children}
         externalLink={data.path.includes('http')}
         //
@@ -82,8 +86,8 @@ export default function NavList({ data }) {
                 boxShadow: theme.customShadows.dropdown,
               }}
             >
-              {data.children.map((list) => (
-                <NavSubList key={list.subheader} subheader={list.subheader} data={list.items} />
+              {data.children.map((list, idx) => (
+                <NavSubList key={idx} subheader={list.subheader} data={list.items} />
               ))}
             </Paper>
           </Fade>
@@ -136,12 +140,12 @@ function NavSubList({ data, subheader, sx, ...other }) {
         {subheader}
       </ListSubheader>
 
-      {data.map((item) =>
+      {data.map((item, idx) =>
         dashboard ? (
-          <NavItemDashboard key={item.title} path={item.path} />
+          <NavItemDashboard key={idx} path={item.path} />
         ) : (
           <NavItem
-            key={item.title}
+            key={idx}
             title={item.title}
             path={item.path}
             active={pathname === item.path || pathname === `${item.path}/`}

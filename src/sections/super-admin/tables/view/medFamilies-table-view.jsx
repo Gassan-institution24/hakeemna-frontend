@@ -14,7 +14,6 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useTranslate } from 'src/locales';
 import { useGetMedFamilies } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -41,6 +40,7 @@ const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'name' },
+  { id: 'name_arabic', label: 'arabic name' },
   { id: 'description', label: 'description' },
   // { id: 'created_at', label: 'Date Of Creation' },
   // { id: 'user_creation', label: 'Creater' },
@@ -54,7 +54,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -62,8 +62,6 @@ const defaultFilters = {
 export default function FamiliesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
-
-  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -87,14 +85,10 @@ export default function FamiliesTableView() {
     dateError,
   });
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -225,9 +219,9 @@ export default function FamiliesTableView() {
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
-                  .map((row) => (
+                  .map((row, idx) => (
                     <TableDetailRow
-                      key={row._id}
+                      key={idx}
                       row={row}
                       selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}
@@ -266,7 +260,7 @@ export default function FamiliesTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -274,7 +268,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

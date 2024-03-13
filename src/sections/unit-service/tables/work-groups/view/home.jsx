@@ -21,8 +21,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
@@ -59,7 +58,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -74,7 +73,7 @@ export default function WorkGroupsTableView() {
     { id: '', width: 88 },
   ];
 
-const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const checkAcl = useAclGuard();
 
@@ -117,7 +116,7 @@ const { enqueueSnackbar } = useSnackbar();
   );
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -159,15 +158,14 @@ const { enqueueSnackbar } = useSnackbar();
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.workgroup(row._id)}/updatestatus`, /// edit
-          data: { status: 'active' },
-        });
+        await axiosInstance.patch(
+          `${endpoints.work_groups.one(row._id)}/updatestatus`, /// edit
+          { status: 'active' }
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.workgroups.root,
-          msg: `activated a work group <strong>${row.name_english}</strong>`,
+          msg: `activated a work group <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -182,15 +180,14 @@ const { enqueueSnackbar } = useSnackbar();
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.workgroup(row._id)}/updatestatus`, /// edit
-          data: { status: 'inactive' },
-        });
+        await axiosInstance.patch(
+          `${endpoints.work_groups.one(row._id)}/updatestatus`, /// edit
+          { status: 'inactive' }
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.workgroups.root,
-          msg: `inactivated a work group <strong>${row.name_english}</strong>`,
+          msg: `inactivated a work group <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -205,11 +202,10 @@ const { enqueueSnackbar } = useSnackbar();
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.workgroups}/updatestatus`, /// edit
-        data: { status: 'active', ids: table.selected },
-      });
+      await axiosInstance.patch(
+        `${endpoints.work_groups.all}/updatestatus`, /// edit
+        { status: 'active', ids: table.selected }
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.tables.workgroups.root,
@@ -238,11 +234,10 @@ const { enqueueSnackbar } = useSnackbar();
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.workgroups}/updatestatus`, /// edit
-        data: { status: 'inactive', ids: table.selected },
-      });
+      await axiosInstance.patch(
+        `${endpoints.work_groups.all}/updatestatus`, /// edit
+        { status: 'inactive', ids: table.selected }
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.tables.workgroups.root,
@@ -280,12 +275,12 @@ const { enqueueSnackbar } = useSnackbar();
     setFilters(defaultFilters);
   }, []);
 
-  // const handleViewRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.order.details(id));
-  //   },
-  //   [router]
-  // );
+  const handleViewRow = useCallback(
+    (id) => {
+      router.push(paths.unitservice.tables.workgroups.permissions.root(id));
+    },
+    [router]
+  );
 
   const handleFilterStatus = useCallback(
     (event, newValue) => {
@@ -311,7 +306,11 @@ const { enqueueSnackbar } = useSnackbar();
             { name: t('work groups') },
           ]}
           action={
-            checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'create' }) && (
+            checkAcl({
+              category: 'department',
+              subcategory: 'management_tables',
+              acl: 'create',
+            }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.tables.workgroups.new}
@@ -336,9 +335,9 @@ const { enqueueSnackbar } = useSnackbar();
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -395,11 +394,15 @@ const { enqueueSnackbar } = useSnackbar();
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               action={
-                checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) && (
+                checkAcl({
+                  category: 'department',
+                  subcategory: 'management_tables',
+                  acl: 'update',
+                }) && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -420,7 +423,11 @@ const { enqueueSnackbar } = useSnackbar();
                 )
               }
               color={
-                checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'update' }) &&
+                checkAcl({
+                  category: 'department',
+                  subcategory: 'management_tables',
+                  acl: 'update',
+                }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')
@@ -441,7 +448,7 @@ const { enqueueSnackbar } = useSnackbar();
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -452,15 +459,16 @@ const { enqueueSnackbar } = useSnackbar();
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <TableDetailRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onActivate={() => handleActivate(row)}
                         onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
+                        onView={() => handleViewRow(row._id)}
                       />
                     ))}
 
@@ -541,7 +549,7 @@ const { enqueueSnackbar } = useSnackbar();
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -549,7 +557,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

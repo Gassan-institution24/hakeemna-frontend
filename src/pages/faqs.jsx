@@ -9,6 +9,7 @@ export default function FaqsPage() {
     <>
       <Helmet>
         <title> Faqs</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <FaqsView />

@@ -1,16 +1,16 @@
+import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
+import { ListItemText } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import { fDateTime } from 'src/utils/format-time';
-
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -50,18 +50,13 @@ export default function CountriesTableRow({
 
   const { t } = useTranslate();
 
+  const checkAcl = useAclGuard();
+
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const popover = usePopover();
   const DDL = usePopover();
-  // const { appointmentConfigCount } = useGetDepartmentAppointmentConfigsCount(row._id);
-  // const { activitiesCount } = useGetDepartmentActivitiesCount(row._id);
-  // const { appointmentsCount } = useGetDepartmentAppointmentsCount(row._id);
-  // const { economecMovementsCount } = useGetDepartmentEconomicMovementsCount(row._id);
-  // const { employeesCount } = useGetDepartmentEmployeesCount(row._id);
-  // const { feedbackCount } = useGetDepartmentFeedbackesCount(row._id);
-  // const { roomsCount } = useGetDepartmentRoomsCount(row._id);
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -72,7 +67,6 @@ export default function CountriesTableRow({
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
-          // textDecoration: 'underline',
         }}
         onClick={onShow}
         lang="ar"
@@ -84,7 +78,6 @@ export default function CountriesTableRow({
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
-          // textDecoration: 'underline',
         }}
         onClick={onShow}
         lang="ar"
@@ -103,87 +96,6 @@ export default function CountriesTableRow({
           {t(status)}
         </Label>
       </TableCell>
-      {/* <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onShow}
-      >
-        {economecMovementsCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showAppointmentConfig}
-      >
-        {appointmentConfigCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showAppointments}
-      >
-        {appointmentsCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showActivities}
-      >
-        {activitiesCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showEmployees}
-      >
-        {employeesCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showQualityControl}
-      >
-        {feedbackCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showRooms}
-      >
-        {roomsCount}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-        }}
-        onClick={showWorkGroups}
-      >
-        {roomsCount}
-      </TableCell> */}
       <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
@@ -203,7 +115,7 @@ export default function CountriesTableRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'delete' }) && (
+          ? checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'delete' }) && (
               <MenuItem
                 onClick={() => {
                   onInactivate();
@@ -212,10 +124,10 @@ export default function CountriesTableRow({
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon="ic:baseline-pause" />
-                {t('inactivate')}
+                {t('delete')}
               </MenuItem>
             )
-          : ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
+          : checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
               <MenuItem
                 onClick={() => {
                   onActivate();
@@ -227,7 +139,7 @@ export default function CountriesTableRow({
                 {t('activate')}
               </MenuItem>
             )}
-        {ACLGuard({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
+        {checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
           <MenuItem
             onClick={() => {
               onEditRow();
@@ -254,14 +166,34 @@ export default function CountriesTableRow({
         }}
       >
         <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={format(new Date(created_at), 'dd MMM yyyy')}
+            secondary={format(new Date(created_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            secondary={format(new Date(updated_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>

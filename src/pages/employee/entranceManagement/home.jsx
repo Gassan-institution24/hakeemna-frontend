@@ -7,9 +7,10 @@ import EntranceManagement from 'src/sections/employee/entranceManagement/view/ho
 
 export default function EntranceManagementHomePage() {
   return (
-    <ACLGuard hasContent category="employee" subcategory="entrance_management" acl="read">
+    <ACLGuard category="work_group" subcategory="entrance_management" acl="read">
       <Helmet>
         <title>Entrance Management</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <EntranceManagement />

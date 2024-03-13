@@ -6,14 +6,14 @@ export const StatusOptions = () => {
 
   return {
     STATUS_OPTIONS: [
-      { value: 'all', label: t('all') },
+      // { value: 'all', label: t('all') },
       { value: 'active', label: t('active') },
-      { value: 'inactive', label: t('inactive') },
+      { value: 'inactive', label: t('deleted') },
     ],
     QC_STATUS_OPTIONS: [
-      { value: 'all', label: t('all') },
-      { value: 'read', label: t('read') },
+      // { value: 'all', label: t('all') },
       { value: 'unread', label: t('unread') },
+      { value: 'read', label: t('read') },
     ],
   };
 };

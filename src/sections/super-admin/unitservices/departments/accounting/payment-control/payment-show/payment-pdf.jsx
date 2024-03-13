@@ -30,7 +30,7 @@ const useStyles = () =>
         body2: { fontSize: 9 },
         subtitle1: { fontSize: 10, fontWeight: 700 },
         subtitle2: { fontSize: 9, fontWeight: 700 },
-        alignRight: { textalign: 'right' },
+        alignRight: { textAlign: 'right' },
         page: {
           fontSize: 9,
           lineHeight: 1.6,
@@ -90,42 +90,14 @@ export default function InvoicePDF({ paymentData, currentStatus }) {
   const {
     code,
     unit_service,
-    employee,
-    appointment,
     patient,
     amount,
     deduction_amount,
     sales_tax_amount,
     total_amount,
-    work_shift,
-    insurance,
-    type,
-    details,
-    Total_Amount,
-    Total_tax_Amount,
-    Total_deduction_amount,
-    Balance,
     invoice,
-    Currency,
-    stakeholder,
-    Concept,
-    Payment_Method,
-    bank,
-    Provided_services,
-    user_creation,
     created_at,
     due_date,
-
-    items,
-    taxes,
-    discount,
-    shipping,
-    invoiceTo,
-    createDate,
-    totalAmount,
-    invoiceFrom,
-    invoiceNumber,
-    subTotal,
   } = paymentData;
 
   const styles = useStyles();
@@ -215,7 +187,7 @@ export default function InvoicePDF({ paymentData, currentStatus }) {
           </View>
 
           <View>
-            <View style={styles.tableRow} key={code}>
+            <View style={styles.tableRow}>
               <View style={styles.tableCell_1}>
                 <Text>{code}</Text>
               </View>

@@ -4,12 +4,9 @@ import { useSnackbar } from 'notistack';
 import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useCallback } from 'react';
 
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import { alpha } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
@@ -18,17 +15,15 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
-import { StatusOptions } from 'src/assets/data/status-options';
+// import { StatusOptions } from 'src/assets/data/status-options';
 import { useGetUnitservice, useGetInsuranceCos } from 'src/api';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -53,7 +48,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -79,7 +74,7 @@ export default function UnitServicesInsuranceView() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { STATUS_OPTIONS } = StatusOptions();
+  // const { STATUS_OPTIONS } = StatusOptions();
 
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
@@ -99,9 +94,10 @@ export default function UnitServicesInsuranceView() {
   const { data, refetch } = useGetUnitservice(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
-  const filteredInsuranceCos = insuranseCosData
-    .filter((company) => !data?.insurance?.some((info) => info._id === company._id))
-    .filter((info) => info.status === 'active');
+  const filteredInsuranceCos = insuranseCosData.filter(
+    (company) =>
+      !data?.insurance?.some((info) => info._id === company._id && info.status === 'active')
+  );
 
   const dateError =
     filters.startDate && filters.endDate
@@ -122,7 +118,7 @@ export default function UnitServicesInsuranceView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
@@ -135,7 +131,7 @@ export default function UnitServicesInsuranceView() {
         code: info.code,
         name: info.name_english,
         category: info.category?.name_english,
-        symptoms: info.symptoms?.map((symptom) => symptom?.name_english),
+        symptoms: info.symptoms?.map((symptom, idx) => symptom?.name_english),
       });
       return acc;
     }, []);
@@ -153,11 +149,10 @@ export default function UnitServicesInsuranceView() {
     async (id) => {
       try {
         const info = [...data.insurance, id];
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.unitservice(data?._id), /// to edit
-          data: { insurance: info },
-        });
+        await axiosInstance.patch(
+          endpoints.unit_services.one(data?._id), /// to edit
+          { insurance: info }
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.insurance.root,
@@ -177,11 +172,10 @@ export default function UnitServicesInsuranceView() {
     async (id) => {
       try {
         const info = data?.insurance?.filter((company) => company?._id !== id);
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.unitservice(data?._id), /// to edit
-          data: { insurance: info },
-        });
+        await axiosInstance.patch(
+          endpoints.unit_services.one(data?._id), /// to edit
+          { insurance: info }
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.insurance.root,
@@ -212,12 +206,12 @@ export default function UnitServicesInsuranceView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
-  const handleFilterStatus = useCallback(
-    (event, newValue) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
-  );
+  // const handleFilterStatus = useCallback(
+  //   (event, newValue) => {
+  //     handleFilters('status', newValue);
+  //   },
+  //   [handleFilters]
+  // );
   if (loading) {
     return <LoadingScreen />;
   }
@@ -234,7 +228,11 @@ export default function UnitServicesInsuranceView() {
             { name: t('insurance') }, /// edit
           ]}
           action={
-            checkAcl({ category: 'unit_service', subcategory: 'insurance', acl: 'create' }) && (
+            checkAcl({
+              category: 'unit_service',
+              subcategory: 'unit_service_info',
+              acl: 'create',
+            }) && (
               <Button
                 component={RouterLink}
                 onClick={popover.onOpen}
@@ -251,7 +249,7 @@ export default function UnitServicesInsuranceView() {
         />
 
         <Card>
-          <Tabs
+          {/* <Tabs
             value={filters.status}
             onChange={handleFilterStatus}
             sx={{
@@ -259,9 +257,9 @@ export default function UnitServicesInsuranceView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx)  => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -286,7 +284,7 @@ export default function UnitServicesInsuranceView() {
                 }
               />
             ))}
-          </Tabs>
+          </Tabs> */}
           <TableDetailToolbar
             onPrint={printHandler}
             filters={filters}
@@ -322,7 +320,7 @@ export default function UnitServicesInsuranceView() {
                   // onSelectAllRows={(checked) =>
                   //   table.onSelectAllRows(
                   //     checked,
-                  //     dataFiltered?.map((row) => row._id)
+                  //     dataFiltered?.map((row, idx)  => row._id)
                   //   )
                   // }
                 />
@@ -333,9 +331,9 @@ export default function UnitServicesInsuranceView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    ?.map((row) => (
+                    ?.map((row, idx) => (
                       <InsuranceRow
-                        key={row?._id}
+                        key={idx}
                         row={row}
                         filters={filters}
                         setFilters={setFilters}
@@ -394,7 +392,7 @@ export default function UnitServicesInsuranceView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -402,10 +400,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis?.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el, idx) => el[0]);
 
   if (name) {
-    inputData = inputData.filter(
+    inputData = inputData?.filter(
       (data) =>
         (data?.name_english &&
           data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
@@ -421,7 +419,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
+    inputData = inputData?.filter((order) => order.status === status);
   }
 
   return inputData;

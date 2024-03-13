@@ -53,8 +53,8 @@ export default function NavMobile({ data }) {
         <Scrollbar>
           <Logo sx={{ mx: 2.5, my: 3 }} />
 
-          {data.map((list) => (
-            <NavList key={list.title} data={list} />
+          {data.map((list, idx) => (
+            <NavList key={idx} data={list} />
           ))}
         </Scrollbar>
       </Drawer>

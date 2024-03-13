@@ -11,14 +11,15 @@ import AppointconfigDetailView from 'src/sections/unit-service/employees/view/ap
 
 export default function NewEmployeeAppointconfigPage() {
   const params = useParams();
-  const { id, coid } = params;
+  const { id } = params;
   const employeeData = useGetEmployee(id).data;
   const name = employeeData?.first_name;
 
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="appointment_configs" acl="create">
+    <ACLGuard category="unit_service" subcategory="appointment_configs" acl="create">
       <Helmet>
         <title> {name || ''} Employee Appointment Config</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <AppointconfigDetailView />

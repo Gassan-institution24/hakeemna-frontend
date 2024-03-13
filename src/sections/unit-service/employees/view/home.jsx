@@ -20,7 +20,7 @@ import { RouterLink } from 'src/routes/components';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useTranslate } from 'src/locales';
-import { useGetUSEmployees } from 'src/api';
+import { useGetUSEmployeeEngs } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
@@ -29,7 +29,7 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -44,8 +44,7 @@ import {
 } from 'src/components/table'; /// edit
 import { useSnackbar } from 'notistack';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 
@@ -57,7 +56,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -65,16 +64,14 @@ const defaultFilters = {
 export default function EmployeesTableView() {
   const { t } = useTranslate();
   const TABLE_HEAD = [
-    /// to edit
     { id: 'sequence_number', label: t('number') },
     { id: 'online', label: t('online') },
-    // { id: 'sequence', label: t('sequence') },
     { id: 'name_english', label: t('name') },
     { id: 'employee_type', label: t('employee type') },
     { id: 'email', label: t('email') },
-    { id: 'nationality', label: t('nationality') },
-    // { id: 'validatd_identity', label: t('validated identity') },
-    // { id: 'Adjust_schedule', label: t('adjust schedule') },
+    { id: 'visibility_online_appointment', label: t('visibility online appointment') },
+    { id: 'visibility_US_page', label: t('visibility page') },
+    { id: 'adjust_schedual', label: t('adjust schedual') },
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
@@ -91,14 +88,14 @@ export default function EmployeesTableView() {
 
   const { user } = useAuthContext();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
   const router = useRouter();
 
-  const { employeesData, loading, refetch } = useGetUSEmployees(
+  const { employeesData, loading, refetch } = useGetUSEmployeeEngs(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
@@ -123,7 +120,7 @@ export default function EmployeesTableView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -137,7 +134,7 @@ export default function EmployeesTableView() {
   //       code: data.code,
   //       name: data.name_english,
   //       category: data.category?.name_english,
-  //       symptoms: data.symptoms?.map((symptom) => symptom?.name_english),
+  //       symptoms: data.symptoms?.map((symptom, idx)  => symptom?.name_english),
   //     });
   //     return acc;
   //   }, []);
@@ -153,15 +150,13 @@ export default function EmployeesTableView() {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.employeeEngagement(row._id)}/updatestatus`,
-          data: { status: 'active' },
+        await axiosInstance.patch(`${endpoints.employee_engagements.one(row._id)}/updatestatus`, {
+          status: 'active',
         });
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.root,
-          msg: `activated an employee <strong>${row.employee?.first_name}</strong>`,
+          msg: `activated an employee <strong>${row?.employee?.first_name}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -176,15 +171,13 @@ export default function EmployeesTableView() {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.employeeEngagement(row._id)}/updatestatus`,
-          data: { status: 'inactive' },
+        await axiosInstance.patch(`${endpoints.employee_engagements.one(row._id)}/updatestatus`, {
+          status: 'inactive',
         });
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.root,
-          msg: `inactivated an employee <strong>${row.employee?.first_name}</strong>`,
+          msg: `inactivated an employee <strong>${row?.employee?.first_name}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -199,10 +192,9 @@ export default function EmployeesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employeeEngagements}/updatestatus`,
-        data: { status: 'active', ids: table.selected },
+      await axiosInstance.patch(`${endpoints.employee_engagements.ones}/updatestatus`, {
+        status: 'active',
+        ids: table.selected,
       });
       socket.emit('updated', {
         user,
@@ -232,10 +224,9 @@ export default function EmployeesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employeeEngagements}/updatestatus`,
-        data: { status: 'inactive', ids: table.selected },
+      await axiosInstance.patch(`${endpoints.employee_engagements.ones}/updatestatus`, {
+        status: 'inactive',
+        ids: table.selected,
       });
       socket.emit('updated', {
         user,
@@ -292,12 +283,37 @@ export default function EmployeesTableView() {
     setFilters(defaultFilters);
   }, []);
 
-  // const handleViewRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.order.details(id));
-  //   },
-  //   [router]
-  // );
+  const handleChangeVisPage = useCallback(
+    async (id) => {
+      try {
+        await axiosInstance.patch(endpoints.employee_engagements.one(id), {
+          visibility_US_page: !employeesData.find((employee) => employee._id === id)
+            .visibility_US_page,
+        });
+        refetch();
+        enqueueSnackbar(t('updated successfully!'));
+      } catch (error) {
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      }
+    },
+    [employeesData, refetch, t, enqueueSnackbar]
+  );
+  const handleChangeVisOnlineApp = useCallback(
+    async (id) => {
+      try {
+        await axiosInstance.patch(endpoints.employee_engagements.one(id), {
+          visibility_online_appointment: !employeesData.find((employee) => employee._id === id)
+            .visibility_online_appointment,
+        });
+        refetch();
+        enqueueSnackbar(t('updated successfully!'));
+      } catch (error) {
+        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      }
+    },
+    [employeesData, refetch, t, enqueueSnackbar]
+  );
+
   const handleFilterStatus = useCallback(
     (event, newValue) => {
       handleFilters('status', newValue);
@@ -320,7 +336,7 @@ export default function EmployeesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('employees')} /// edit
           links={[
@@ -357,9 +373,9 @@ export default function EmployeesTableView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -415,7 +431,7 @@ export default function EmployeesTableView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               action={
@@ -458,7 +474,7 @@ export default function EmployeesTableView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -469,9 +485,9 @@ export default function EmployeesTableView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <TableDetailRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         filters={filters}
                         setFilters={setFilters}
@@ -481,6 +497,8 @@ export default function EmployeesTableView() {
                         onViewRow={() => handleViewRow(row._id)}
                         onInactivate={() => handleInactivate(row)}
                         onEditRow={() => handleEditRow(row._id)}
+                        onChangeVisPage={() => handleChangeVisPage(row._id)}
+                        onChangeVisOnlineApp={() => handleChangeVisOnlineApp(row._id)}
                       />
                     ))}
 
@@ -561,7 +579,7 @@ export default function EmployeesTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -569,7 +587,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
   // console.log('inputData', inputData);
   if (name) {
     inputData = inputData.filter(

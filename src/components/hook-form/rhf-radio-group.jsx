@@ -36,9 +36,9 @@ export default function RHFRadioGroup({
           )}
 
           <RadioGroup {...field} aria-labelledby={labelledby} row={row} {...other}>
-            {options.map((option) => (
+            {options.map((option, idx) => (
               <FormControlLabel
-                key={option.value}
+                key={idx}
                 value={option.value}
                 control={<Radio />}
                 label={option.label}

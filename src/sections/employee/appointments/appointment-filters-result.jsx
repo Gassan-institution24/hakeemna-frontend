@@ -55,24 +55,24 @@ export default function InvoiceTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {filters.status !== 'all' && (
+        {filters.status !== 'active' && (
           <Block label={t('status:')}>
             <Chip size="small" label={t(filters.status)} onDelete={handleRemoveStatus} />
           </Block>
         )}
         {filters.types !== '' && (
           // <Block>
-            <Chip size="small" label={t('appointment type')} onDelete={handleRemovetype} />
+          <Chip size="small" label={t('appointment type')} onDelete={handleRemovetype} />
           // </Block>
         )}
         {filters.group !== '' && (
           // <Block>
-            <Chip size="small" label={t('work group')} onDelete={handleRemoveGroup} />
+          <Chip size="small" label={t('work group')} onDelete={handleRemoveGroup} />
           // </Block>
         )}
         {filters.shift !== '' && (
           // <Block>
-            <Chip size="small" label={t('work shift')} onDelete={handleRemoveShift} />
+          <Chip size="small" label={t('work shift')} onDelete={handleRemoveShift} />
           // </Block>
         )}
 

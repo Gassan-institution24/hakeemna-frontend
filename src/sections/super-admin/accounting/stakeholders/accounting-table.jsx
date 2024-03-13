@@ -48,7 +48,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'available',
 };
 
 // ----------------------------------------------------------------------
@@ -62,7 +62,7 @@ export default function LicenseMovementsView() {
 
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { licenseMovements, loading, refetch } = useGetStakeholderLicenseMovements();
+  const { licenseMovements, loading } = useGetStakeholderLicenseMovements();
 
   const separateEachUsMovement = useCallback(() => {
     const results = {};
@@ -97,7 +97,7 @@ export default function LicenseMovementsView() {
         results[movement.stakeholder._id].user_no = movement.Users_num;
       }
     });
-    const resultsArr = Object.keys(results).map((key) => ({
+    const resultsArr = Object.keys(results).map((key, idx) => ({
       id: key,
       ...results[key],
       status:
@@ -124,28 +124,27 @@ export default function LicenseMovementsView() {
 
   const denseHeight = table.dense ? 56 : 76;
 
-  const canReset = !!filters.name || filters.status !== 'all';
+  const canReset = !!filters.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-  const now = new Date();
 
   const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
 
-  const getInvoiceLengthForTabs = (status) => {
-    const filterdData = applyFilter({
-      inputData: separateEachUsMovement(),
-      comparator: getComparator(table.order, table.orderBy),
-      filters: { ...filters, status: 'all' },
-      dateError,
-    });
-    if (!status) {
-      return filterdData.length;
-    }
-    return filterdData.filter((item) => item.status === status).length;
-  };
+  // const getInvoiceLengthForTabs = (status) => {
+  //   const filterdData = applyFilter({
+  //     inputData: separateEachUsMovement(),
+  //     comparator: getComparator(table.order, table.orderBy),
+  //     filters: { ...filters, status: 'all' },
+  //     dateError,
+  //   });
+  //   if (!status) {
+  //     return filterdData.length;
+  //   }
+  //   return filterdData.filter((item) => item.status === status).length;
+  // };
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
+    // { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
     {
       value: 'active',
       label: 'Active',
@@ -204,9 +203,9 @@ export default function LicenseMovementsView() {
             boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
           }}
         >
-          {TABS.map((tab) => (
+          {TABS.map((tab, idx) => (
             <Tab
-              key={tab.value}
+              key={idx}
               value={tab.value}
               label={tab.label}
               iconPosition="end"
@@ -262,9 +261,9 @@ export default function LicenseMovementsView() {
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
-                  .map((row) => (
+                  .map((row, idx) => (
                     <AccountingTableRow
-                      key={row.id}
+                      key={idx}
                       row={row}
                       onViewRow={() => handleViewRow(row.id)}
                     />
@@ -305,7 +304,7 @@ export default function LicenseMovementsView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { name, status } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -313,7 +312,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

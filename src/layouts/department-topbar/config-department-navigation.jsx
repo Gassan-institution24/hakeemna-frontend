@@ -48,7 +48,7 @@ export function useNavData() {
         icon: <Iconify icon="healthicons:world-care" />,
       },
       {
-        show: checkAcl({ category: 'department', subcategory: 'activities', acl: 'read' }),
+        show: checkAcl({ category: 'department', subcategory: 'management_tables', acl: 'read' }),
         title: t('activities'),
         path: paths.unitservice.departments.activities.root(id),
         icon: <Iconify icon="fluent:shifts-activity-24-filled" />,
@@ -60,16 +60,22 @@ export function useNavData() {
         icon: <Iconify icon="ic:round-group" />,
       },
       {
-        show: checkAcl({ category: 'department', subcategory: 'rooms', acl: 'read' }), //
+        show: checkAcl({ category: 'department', subcategory: 'management_tables', acl: 'read' }), //
         title: t('rooms'),
         path: paths.unitservice.departments.rooms.root(id),
         icon: <Iconify icon="ic:sharp-meeting-room" />,
       },
       {
-        show: checkAcl({ category: 'department', subcategory: 'work_groups', acl: 'read' }),
+        show: checkAcl({ category: 'department', subcategory: 'management_tables', acl: 'read' }),
         title: t('work groups'),
         path: paths.unitservice.departments.workGroups.root(id),
         icon: <Iconify icon="fa6-solid:people-group" />,
+      },
+      {
+        show: checkAcl({ category: 'department', subcategory: 'permissions', acl: 'read' }),
+        title: t('permissions'),
+        path: paths.unitservice.departments.permissions.root(id),
+        icon: <Iconify icon="mdi:account-secure" />,
       },
     ];
     const employeeSecDashboard = [

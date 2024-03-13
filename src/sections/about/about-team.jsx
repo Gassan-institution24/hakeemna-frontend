@@ -40,7 +40,7 @@
 //   });
 
 //   return (
-//     <Container component={MotionViewport} sx={{ textalign: 'center', py: { xs: 10, md: 15 } }}>
+//     <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 10, md: 15 } }}>
 //       <m.div variants={varFade().inDown}>
 //         <Typography variant="overline" sx={{ color: 'text.disabled' }}>
 //           Dream team
@@ -86,9 +86,9 @@
 //           }}
 //         >
 //           <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
-//             {_carouselsMembers.map((member) => (
+//             {_carouselsMembers.map((member, idx)  => (
 //               <Box
-//                 key={member.id}
+//                 key={idx}
 //                 component={m.div}
 //                 variants={varFade().in}
 //                 sx={{
@@ -121,7 +121,7 @@
 // function MemberCard({ member }) {
 //   const { name, role, avatarUrl } = member;
 //   return (
-//     <Card key={name}>
+//     <Card key={idx}>
 //       <Typography variant="subtitle1" sx={{ mt: 2.5, mb: 0.5 }}>
 //         {name}
 //       </Typography>
@@ -135,9 +135,9 @@
 //       </Box>
 
 //       <Stack direction="row" alignItems="center" justifyContent="center" sx={{ p: 2 }}>
-//         {_socials.map((social) => (
+//         {_socials.map((social, idx)  => (
 //           <IconButton
-//             key={social.name}
+//             key={idx}
 //             sx={{
 //               color: social.color,
 //               '&:hover': {

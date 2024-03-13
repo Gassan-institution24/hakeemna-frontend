@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useRef, useMemo, useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -18,45 +18,28 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance from 'src/utils/axios';
 
-import { useGetCities } from 'src/api';
-import { useGetStackholder } from 'src/api/user';
+import { useGetCities, useGetStakeholder } from 'src/api';
+// import { useGetStakeholder } from 'src/api/user';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function TourNewEditForm({ currentTour }) {
-  const ref = useRef();
-  const [error, setError] = useState();
-  const [city, setCity] = useState();
   const router = useRouter();
   const mdUp = useResponsive('up', 'md');
   const { enqueueSnackbar } = useSnackbar();
   const editfunc = (data) => {
-    axiosHandler({
-      setError,
-      method: 'PATCH',
-      path: `/api/suppliersoffers/${currentTour._id}`,
-      data,
-    });
+    axiosInstance.patch(`/api/suppliersoffers/${currentTour._id}`, data);
   };
   const addfunc = (data) => {
-    axiosHandler({
-      setError,
-      method: 'POST',
-      path: '/api/suppliersoffers/',
-      data,
-    });
+    axiosInstance.post('/api/suppliersoffers/', data);
   };
 
   const { tableData } = useGetCities();
-  const { stakeholder } = useGetStackholder();
-  const stakeholdersMultiSelectOptions = stakeholder?.reduce((acc, data) => {
-    acc.push({ value: data._id, label: data.stakeholder_name });
-    return acc;
-  }, []);
+  const { stakeholder } = useGetStakeholder();
 
   const NewTourSchema = Yup.object().shape({
     Offer_name: Yup.string().required('Name is required'),
@@ -94,15 +77,10 @@ export default function TourNewEditForm({ currentTour }) {
   });
 
   const {
-    watch,
     reset,
-    control,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-
-  const values = watch();
 
   useEffect(() => {
     if (currentTour) {
@@ -233,8 +211,8 @@ export default function TourNewEditForm({ currentTour }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {tableData.map((option) => (
-                  <MenuItem key={option._id} value={option._id}>
+                {tableData.map((option, idx) => (
+                  <MenuItem key={idx} value={option._id}>
                     {option.name_english}
                   </MenuItem>
                 ))}
@@ -249,8 +227,8 @@ export default function TourNewEditForm({ currentTour }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {stakeholder.map((option) => (
-                  <MenuItem key={option._id} value={option._id}>
+                {stakeholder.map((option, idx) => (
+                  <MenuItem key={idx} value={option._id}>
                     {option.stakeholder_name}
                   </MenuItem>
                 ))}

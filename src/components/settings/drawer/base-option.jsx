@@ -11,12 +11,12 @@ import SvgColor from '../../svg-color';
 export default function BaseOptions({ icons, options, value, onChange }) {
   return (
     <Stack direction="row" spacing={2}>
-      {options.map((option, index) => {
+      {options.map((option, idx) => {
         const selected = value === option;
 
         return (
           <ButtonBase
-            key={option}
+            key={idx}
             onClick={() => onChange(option)}
             sx={{
               width: 1,
@@ -43,7 +43,7 @@ export default function BaseOptions({ icons, options, value, onChange }) {
               },
             }}
           >
-            <SvgColor src={`/assets/icons/setting/ic_${index === 0 ? icons[0] : icons[1]}.svg`} />
+            <SvgColor src={`/assets/icons/setting/ic_${idx === 0 ? icons[0] : icons[1]}.svg`} />
           </ButtonBase>
         );
       })}

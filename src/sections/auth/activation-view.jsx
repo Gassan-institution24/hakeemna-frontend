@@ -3,9 +3,7 @@ import { useState, useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { useRouter, useParams } from 'src/routes/hooks';
-
-import { useCountdownSeconds } from 'src/hooks/use-countdown';
+import { useParams } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -14,11 +12,7 @@ import { EmailInboxIcon } from 'src/assets/icons';
 // ----------------------------------------------------------------------
 
 export default function ActivationView() {
-  const router = useRouter();
-
   const { token } = useParams();
-
-  const { countdown, counting, startCountdown } = useCountdownSeconds(60);
 
   const [error, setError] = useState();
 

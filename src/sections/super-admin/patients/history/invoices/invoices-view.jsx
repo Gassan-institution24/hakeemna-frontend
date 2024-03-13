@@ -57,7 +57,7 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   service: [],
-  status: 'all',
+  status: 'active',
   startDate: null,
   endDate: null,
 };
@@ -75,9 +75,7 @@ export default function EconomicMovementsView({ patientData }) {
 
   // const confirm = useBoolean();
 
-  const { economecMovementsData, loading, refetch } = useGetPatientEconomicMovements(
-    patientData._id
-  );
+  const { economecMovementsData, loading } = useGetPatientEconomicMovements(patientData._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -105,7 +103,7 @@ export default function EconomicMovementsView({ patientData }) {
   const canReset =
     !!filters.name ||
     !!filters.service.length ||
-    filters.status !== 'all' ||
+    filters.status !== 'active' ||
     (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
@@ -134,7 +132,7 @@ export default function EconomicMovementsView({ patientData }) {
   const getPercentByStatus = (status) => (getInvoiceLength(status) / dataFiltered.length) * 100;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
+    // { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
     {
       value: 'paid',
       label: 'Paid',
@@ -284,9 +282,9 @@ export default function EconomicMovementsView({ patientData }) {
               boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {TABS.map((tab) => (
+            {TABS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 value={tab.value}
                 label={tab.label}
                 iconPosition="end"
@@ -331,7 +329,7 @@ export default function EconomicMovementsView({ patientData }) {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  economecMovementsData.map((row) => row.id)
+                  economecMovementsData.map((row, idx)  => row.id)
                 )
               }
               action={
@@ -375,7 +373,7 @@ export default function EconomicMovementsView({ patientData }) {
                   // onSelectAllRows={(checked) =>
                   //   table.onSelectAllRows(
                   //     checked,
-                  //     economecMovementsData.map((row) => row.id)
+                  //     economecMovementsData.map((row, idx)  => row.id)
                   //   )
                   // }
                 />
@@ -386,9 +384,9 @@ export default function EconomicMovementsView({ patientData }) {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <MovementRow
-                        key={row.id}
+                        key={idx}
                         row={row}
                         // selected={table.selected.includes(row.id)}
                         // onSelectRow={() => table.onSelectRow(row.id)}
@@ -455,9 +453,9 @@ export default function EconomicMovementsView({ patientData }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, service, startDate, endDate } = filters;
+  const { name, status, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -465,7 +463,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

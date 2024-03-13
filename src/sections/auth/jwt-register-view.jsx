@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Link from '@mui/material/Link';
@@ -18,9 +18,10 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
-import { useGetCities, useGetCountries } from 'src/api';
+import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -30,17 +31,17 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function JwtRegisterView() {
   const { register } = useAuthContext();
 
+  const { t } = useTranslate();
+
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
 
-  const [selectedCountry, setSelectedCountry] = useState('');
+  // const [selectedCountry, setSelectedCountry] = useState('');
 
-  const [cities, setCities] = useState([]);
+  // const [cities, setCities] = useState([]);
 
   const { countriesData } = useGetCountries();
-
-  const { tableData } = useGetCities();
 
   const searchParams = useSearchParams();
 
@@ -84,14 +85,19 @@ export default function JwtRegisterView() {
 
   const {
     reset,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
+  const values = watch();
+
+  const { tableData } = useGetCountryCities(values.country);
+
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
     methods.setValue('country', selectedCountryId, { shouldValidate: true });
-    setSelectedCountry(selectedCountryId);
+    // setSelectedCountry(selectedCountryId);
     // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
   };
 
@@ -107,13 +113,13 @@ export default function JwtRegisterView() {
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
-  useEffect(() => {
-    setCities(
-      selectedCountry
-        ? tableData.filter((data) => data?.country?._id === selectedCountry)
-        : tableData
-    );
-  }, [tableData, selectedCountry]);
+  // useEffect(() => {
+  //   setCities(
+  //     selectedCountry
+  //       ? tableData.filter((data) => data?.country?._id === selectedCountry)
+  //       : tableData
+  //   );
+  // }, [tableData, selectedCountry]);
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
       <Typography variant="h4">Get started absolutely free</Typography>
@@ -142,7 +148,7 @@ export default function JwtRegisterView() {
         color: 'text.secondary',
         mt: 2.5,
         typography: 'caption',
-        textalign: 'center',
+        textAlign: 'center',
       }}
     >
       {'By signing up, I agree to '}
@@ -169,25 +175,25 @@ export default function JwtRegisterView() {
 
         <RHFTextField name="email" label="Email address" />
         <RHFTextField name="identification_num" label="Identification number" />
-        <RHFTextField name="mobile_num1" label="Mobile number" />
+        <RHFTextField name="mobile_num1" label={t('mobile number')} />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFSelect onChange={handleCountryChange} name="country" label="Country">
-            {countriesData?.map((country) => (
-              <MenuItem key={country?._id} value={country?._id}>
+          <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
+            {countriesData?.map((country, idx) => (
+              <MenuItem key={idx} value={country?._id}>
                 {country?.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect name="city" label="City">
-            {cities?.map((city) => (
-              <MenuItem key={city?._id} value={city?._id}>
+            {tableData?.map((city, idx) => (
+              <MenuItem key={idx} value={city?._id}>
                 {city?.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect name="gender" label="Gender">
-            <MenuItem value="male">Male</MenuItem>
-            <MenuItem value="female">Female</MenuItem>
+            <MenuItem value="male">male</MenuItem>
+            <MenuItem value="female">female</MenuItem>
           </RHFSelect>
         </Stack>
         <RHFTextField

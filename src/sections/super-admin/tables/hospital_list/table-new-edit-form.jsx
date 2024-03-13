@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
@@ -15,11 +14,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useAuthContext } from 'src/auth/hooks';
-import { useGetCities, useGetCountries } from 'src/api';
+import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -29,11 +26,8 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const { user } = useAuthContext();
-
   // console.log('currr', currentTable);
   const { countriesData } = useGetCountries();
-  const { tableData } = useGetCities();
   const [selectedCountry, setSelectedCountry] = useState(currentTable?.country?._id || null);
   const [cities, setCities] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
@@ -81,9 +75,11 @@ export default function TableNewEditForm({ currentTable }) {
 
   const {
     reset,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+  const { tableData } = useGetCountryCities(watch().country);
 
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
@@ -94,24 +90,10 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.hospital(currentTable._id),
-          data: {
-            modifications_nums: (currentTable.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        });
+        await axiosInstance.patch(endpoints.hospitals.one(currentTable._id), data);
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.tables.hospitals,
-          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
-        });
+        await axiosInstance.post(endpoints.hospitals.all, data);
       }
       reset();
       // if (response.status.includes(200, 304)) {
@@ -160,16 +142,16 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect onChange={handleCountryChange} name="country" label="Country">
-                {countriesData.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
+              <RHFSelect onChange={handleCountryChange} name="country" label="country">
+                {countriesData.map((country, idx) => (
+                  <MenuItem key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="city" label="City">
-                {cities.map((city) => (
-                  <MenuItem key={city._id} value={city._id}>
+                {cities.map((city, idx) => (
+                  <MenuItem key={idx} value={city._id}>
                     {city.name_english}
                   </MenuItem>
                 ))}

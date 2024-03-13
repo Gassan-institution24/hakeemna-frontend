@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetDepartment } from 'src/api';
-import ACLGuard from 'src/auth/guard/acl-guard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -17,12 +16,15 @@ export default function DepartmentQCPage() {
   const { data, loading } = useGetDepartment(id);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="department" subcategory="quality_control" acl="read">
+    // <ACLGuard category="department" subcategory="quality_control" acl="read">
+    <>
       <Helmet>
         <title>{name || ''} Department Quality Control</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentQCView departmentData={data} />}
-    </ACLGuard>
+    </>
+    // </ACLGuard>
   );
 }

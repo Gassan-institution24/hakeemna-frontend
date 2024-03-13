@@ -9,8 +9,6 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDateTime } from 'src/utils/format-time';
-
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -68,6 +66,9 @@ export default function TableDetailsRow({
         <Box>{code}</Box>
       </TableCell>
       <TableCell lang="ar" align="center">
+        {curLangAr ? name_arabic : name_english}
+      </TableCell>
+      <TableCell lang="ar" align="center">
         <ListItemText
           primary={isValid(new Date(start_time)) && format(new Date(start_time), 'p')}
           // secondary={isValid(new Date(start_time)) && format(new Date(start_time), 'dd MMM yyyy')}
@@ -92,9 +93,6 @@ export default function TableDetailsRow({
         />
       </TableCell>
 
-      <TableCell lang="ar" align="center">
-        {curLangAr ? name_arabic : name_english}
-      </TableCell>
       <TableCell lang="ar" align="center">
         <Label
           lang="ar"
@@ -138,7 +136,11 @@ export default function TableDetailsRow({
         sx={{ width: 140 }}
       >
         {status === 'active'
-          ? checkAcl({ category: 'unit_service', subcategory: 'work_shift', acl: 'delete' }) && (
+          ? checkAcl({
+              category: 'unit_service',
+              subcategory: 'management_tables',
+              acl: 'delete',
+            }) && (
               <MenuItem
                 onClick={() => {
                   onInactivate();
@@ -147,10 +149,14 @@ export default function TableDetailsRow({
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon="ic:baseline-pause" />
-                {t('inactivate')}
+                {t('delete')}
               </MenuItem>
             )
-          : checkAcl({ category: 'unit_service', subcategory: 'work_shift', acl: 'update' }) && (
+          : checkAcl({
+              category: 'unit_service',
+              subcategory: 'management_tables',
+              acl: 'update',
+            }) && (
               <MenuItem
                 onClick={() => {
                   onActivate();
@@ -163,7 +169,11 @@ export default function TableDetailsRow({
               </MenuItem>
             )}
 
-        {checkAcl({ category: 'unit_service', subcategory: 'work_shift', acl: 'update' }) && (
+        {checkAcl({
+          category: 'unit_service',
+          subcategory: 'management_tables',
+          acl: 'update',
+        }) && (
           <MenuItem
             onClick={() => {
               onEditRow();
@@ -190,14 +200,34 @@ export default function TableDetailsRow({
         }}
       >
         <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={format(new Date(created_at), 'dd MMM yyyy')}
+            secondary={format(new Date(created_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            secondary={format(new Date(updated_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>

@@ -20,9 +20,8 @@ import { useParams, useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useTranslate } from 'src/locales';
-import { useGetUSEmployees } from 'src/api';
+import { useGetUSEmployeeEngs } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
@@ -44,8 +43,7 @@ import {
 } from 'src/components/table'; /// edit
 import { useSnackbar } from 'notistack';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 
@@ -57,7 +55,7 @@ import TableDetailFiltersResult from '../../table-details-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -83,8 +81,6 @@ export default function EmployeesTableView() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const checkAcl = useAclGuard();
-
   const { STATUS_OPTIONS } = StatusOptions();
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
@@ -100,7 +96,7 @@ export default function EmployeesTableView() {
 
   const router = useRouter();
 
-  const { employeesData, loading, refetch } = useGetUSEmployees(id);
+  const { employeesData, loading, refetch } = useGetUSEmployeeEngs(id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -123,7 +119,7 @@ export default function EmployeesTableView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -137,7 +133,7 @@ export default function EmployeesTableView() {
   //       code: data.code,
   //       name: data.name_english,
   //       category: data.category?.name_english,
-  //       symptoms: data.symptoms?.map((symptom) => symptom?.name_english),
+  //       symptoms: data.symptoms?.map((symptom, idx)  => symptom?.name_english),
   //     });
   //     return acc;
   //   }, []);
@@ -153,10 +149,8 @@ export default function EmployeesTableView() {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.employeeEngagement(row._id)}/updatestatus`,
-          data: { status: 'active' },
+        await axiosInstance.patch(`${endpoints.employee_engagements.one(row._id)}/updatestatus`, {
+          status: 'active',
         });
         socket.emit('updated', {
           user,
@@ -176,10 +170,8 @@ export default function EmployeesTableView() {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.employeeEngagement(row._id)}/updatestatus`,
-          data: { status: 'inactive' },
+        await axiosInstance.patch(`${endpoints.employee_engagements.one(row._id)}/updatestatus`, {
+          status: 'inactive',
         });
         socket.emit('updated', {
           user,
@@ -199,10 +191,9 @@ export default function EmployeesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employeeEngagements}/updatestatus`,
-        data: { status: 'active', ids: table.selected },
+      await axiosInstance.patch(`${endpoints.employee_engagements.ones}/updatestatus`, {
+        status: 'active',
+        ids: table.selected,
       });
       socket.emit('updated', {
         user,
@@ -232,10 +223,9 @@ export default function EmployeesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employeeEngagements}/updatestatus`,
-        data: { status: 'inactive', ids: table.selected },
+      await axiosInstance.patch(`${endpoints.employee_engagements.ones}/updatestatus`, {
+        status: 'inactive',
+        ids: table.selected,
       });
       socket.emit('updated', {
         user,
@@ -348,9 +338,9 @@ export default function EmployeesTableView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -406,7 +396,7 @@ export default function EmployeesTableView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               action={
@@ -449,7 +439,7 @@ export default function EmployeesTableView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -460,9 +450,9 @@ export default function EmployeesTableView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <TableDetailRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         filters={filters}
                         setFilters={setFilters}
@@ -552,7 +542,7 @@ export default function EmployeesTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -560,7 +550,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
   // console.log('inputData', inputData);
   if (name) {
     inputData = inputData.filter(

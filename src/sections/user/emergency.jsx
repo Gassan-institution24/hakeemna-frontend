@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, Button, Container, Typography } from '@mui/material';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useLocales } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
@@ -10,7 +10,7 @@ import Image from 'src/components/image/image';
 import Emergencypic from '../../components/logo/doc.png';
 
 export default function Emergency() {
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const test = () => {
@@ -50,7 +50,7 @@ export default function Emergency() {
         </Typography>
       </Box>
       <Typography variant="h3" sx={{ position: 'relative', top: '-20px' }}>
-        {curLangAr ? 'احجز موعد طارئ' : 'The types of emergency of we provide'}
+        {curLangAr ? 'احجز موعد طارئ' : 'The types of emergency we provide'}
       </Typography>
       <Box
         sx={{
@@ -91,24 +91,25 @@ export default function Emergency() {
               height: '13%',
               backgroundColor: 'white',
               position: 'absolute',
-              left: '42%',
+              left: curLangAr ? '51%' : '42%',
               top: '5%',
-              textalign: 'center',
+              textAlign: 'center',
             }}
           >
             <Iconify width="65%" sx={{ mt: '15%', color: '#4E6892' }} icon="carbon:person" />
           </Box>
           <Box
-            style={{
+         
+            sx={{
               border: '3px solid #4E6892',
               borderRadius: '100%',
               width: '7%',
               height: '13%',
               backgroundColor: 'white',
               position: 'absolute',
-              left: '51%',
+              left: curLangAr ? '51%' : '51%',
               top: '40%',
-              textalign: 'center',
+              textAlign: 'center',
             }}
           >
             <Iconify width="65%" sx={{ mt: '15%', color: '#4E6892' }} icon="guidance:card" />
@@ -121,9 +122,9 @@ export default function Emergency() {
               height: '13%',
               backgroundColor: 'white',
               position: 'absolute',
-              left: '42%',
+              left: curLangAr ? '50.5%' : '42%',
               top: '80%',
-              textalign: 'center',
+              textAlign: 'center',
             }}
           >
             <Iconify
@@ -174,7 +175,7 @@ export default function Emergency() {
               }}
               icon="carbon:person"
             />
-            {curLangAr ? 'استشارة مدفوة من المستخدم' : 'Private consultation covered by patient'}
+            {curLangAr ? 'استشارة مدفوعة من المستخدم' : 'Private consultation covered by patient'}
           </Button>
           <Button
             onClick={test}

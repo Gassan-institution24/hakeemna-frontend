@@ -17,9 +17,10 @@ export default function SubscriptionsInfoPage() {
   const { data, loading } = useGetSubscription(id);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="subscriptions" acl="read">
+    <ACLGuard category="unit_service" subcategory="unit_service_info" acl="read">
       <Helmet>
         <title>{name || ''} Subscription Info</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <SubscriptionsInfoView subscriptionData={data} />}

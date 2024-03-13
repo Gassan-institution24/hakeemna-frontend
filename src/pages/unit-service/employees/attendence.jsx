@@ -17,9 +17,10 @@ export default function EmployeeAttendencePage() {
   const { data, loading } = useGetEmployee(id);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="attendence" acl="read">
+    <ACLGuard category="unit_service" subcategory="employees" acl="read">
       <Helmet>
         <title>{name || ''} Employee Attendence</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EmployeeAttendenceView employeeData={data} />}

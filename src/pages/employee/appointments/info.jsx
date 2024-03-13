@@ -17,9 +17,10 @@ export default function EditPage() {
   const { data, loading } = useGetAppointment(id);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="employee" subcategory="appointments" acl="read">
+    <ACLGuard category="work_group" subcategory="appointments" acl="read">
       <Helmet>
         <title> {name || ''} Appointment Accounting</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {/* {data && <ApointmentInfoView appointmentData={data} />} */}

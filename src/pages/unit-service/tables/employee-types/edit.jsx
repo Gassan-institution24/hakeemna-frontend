@@ -17,9 +17,10 @@ export default function EmployeeTypeEditPage() {
   const { data, loading } = useGetEmployeeType(id);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="employee_type" acl="update">
+    <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
       <Helmet>
         <title>Edit {name || ''} Employee Type</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <EmployeeTypeEditView employeeTypeData={data} />}

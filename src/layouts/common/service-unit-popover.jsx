@@ -37,7 +37,7 @@ export default function ServiceUnitPopover() {
 
   const [password, setPassword] = useState();
   const [selectedIndex, setSelectedIndex] = useState();
-  const [error, setError] = useState();
+  const [errorMsg, setErrorMsg] = useState();
 
   const selected = user?.employee?.employee_engagements?.[user?.employee?.selected_engagement];
 
@@ -49,57 +49,58 @@ export default function ServiceUnitPopover() {
       });
       popover.onClose();
       handleChangeUS();
-    } catch (e) {
-      console.error(e);
-      setError(e);
-      enqueueSnackbar(typeof e === 'string' ? e : e.message, { variant: 'error' });
+    } catch (error) {
+      console.error(error);
+      setErrorMsg(error);
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       loading.onFalse();
     }
   };
 
   const handleChangeUS = async () => {
     try {
-      await axios.patch(endpoints.tables.employee(user?.employee?._id), {
+      await axios.patch(endpoints.employees.one(user?.employee?._id), {
         selected_engagement: selectedIndex,
       });
       window.location.reload();
       loading.onFalse();
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error(error);
       loading.onFalse();
-      enqueueSnackbar(typeof e === 'string' ? e : e.message, { variant: 'error' });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       popover.onClose();
     }
   };
 
   return (
     <>
-      <IconButton
-        component={m.button}
-        whileTap="tap"
-        whileHover="hover"
-        variants={varHover(1.05)}
-        onClick={popover.onOpen}
-        sx={{
-          width: 40,
-          height: 40,
-          ...(popover.open && {
-            bgcolor: 'action.selected',
-          }),
-        }}
-      >
-        <Typography variant="body1" sx={{ textalign: 'center' }}>
-          {selected?.unit_service?.name_english
-            ?.split(' ')
-            .map((word) => word.charAt(0).toUpperCase())
-            .join('')}
-        </Typography>
-      </IconButton>
-
+      {user?.employee?.employee_engagements?.length > 1 && (
+        <IconButton
+          component={m.button}
+          whileTap="tap"
+          whileHover="hover"
+          variants={varHover(1.05)}
+          onClick={popover.onOpen}
+          sx={{
+            width: 40,
+            height: 40,
+            ...(popover.open && {
+              bgcolor: 'action.selected',
+            }),
+          }}
+        >
+          <Typography variant="body1" sx={{ textAlign: 'center' }}>
+            {selected?.unit_service?.name_english
+              ?.split(' ')
+              .map((word, idx) => word.charAt(0).toUpperCase())
+              .join('')}
+          </Typography>
+        </IconButton>
+      )}
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 160 }}>
-        {user?.employee?.employee_engagements?.map((option, index) => (
+        {user?.employee?.employee_engagements?.map((option, index, idx) => (
           <MenuItem
-            key={index}
+            key={idx}
             lang="ar"
             selected={option?.unit_service?._id === selected?.unit_service?._id}
             onClick={() => {
@@ -111,7 +112,6 @@ export default function ServiceUnitPopover() {
           </MenuItem>
         ))}
       </CustomPopover>
-
       <ConfirmDialog
         lang="ar"
         open={confirm.value || loading.value}
@@ -126,7 +126,7 @@ export default function ServiceUnitPopover() {
               name="password"
               type={showPassword.value ? 'text' : 'password'}
               sx={{ width: '100%', pt: 4 }}
-              error={error}
+              error={errorMsg}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">

@@ -17,9 +17,10 @@ export default function DepartmentActivitiesPage() {
   const { data, loading } = useGetDepartment(id);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="department" subcategory="activities" acl="read">
+    <ACLGuard category="department" subcategory="management_tables" acl="read">
       <Helmet>
         <title>{name || ''} Department Activities</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentActivitiesView departmentData={data} />}

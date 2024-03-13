@@ -29,15 +29,6 @@ export default function TablesTableToolbar({
     },
     [onFilters]
   );
-  const handleFilterRate = useCallback(
-    (event) => {
-      onFilters(
-        'rate',
-        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
-      );
-    },
-    [onFilters]
-  );
 
   const handleFilterStartDate = useCallback(
     (newValue) => {
@@ -52,8 +43,6 @@ export default function TablesTableToolbar({
     },
     [onFilters]
   );
-
-  const rateOptions = [1, 2, 3, 4, 5];
 
   return (
     <Stack
@@ -105,15 +94,15 @@ export default function TablesTableToolbar({
           value={filters.rate}
           onChange={handleFilterRate}
           input={<OutlinedInput label="Rate" />}
-          renderValue={(selected) => selected.map((value) => value).join(', ')}
+          renderValue={(selected) => selected.map((value, idx)  => value).join(', ')}
           MenuProps={{
             PaperProps: {
               sx: { maxHeight: 240 },
             },
           }}
         >
-          {rateOptions.map((option) => (
-            <MenuItem key={option} value={option}>
+          {rateOptions.map((option, idx)  => (
+            <MenuItem key={idx} value={option}>
               <Checkbox disableRipple size="small" checked={filters.rate.includes(option)} />
               <Rating size="small" readOnly value={option} precision={0.1} max={5} />
             </MenuItem>

@@ -16,9 +16,9 @@ import { useTranslate } from 'src/locales';
 import {
   useGetCities,
   useGetCountries,
-  useGetUnitservices,
-  useGetPaymentMethods,
   useGetAppointmentTypes,
+  useGetActiveUnitservices,
+  useGetActivePaymentMethods,
   useGetAvailableAppointments,
 } from 'src/api';
 
@@ -64,9 +64,9 @@ export default function AppointmentListView({ patientData }) {
   // console.log('dataaaaaaaapp', appointmentsData);
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
-  const { unitservicesData } = useGetUnitservices();
+  const { unitservicesData } = useGetActiveUnitservices();
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { paymentMethodsData } = useGetPaymentMethods();
+  const { paymentMethodsData } = useGetActivePaymentMethods();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -257,16 +257,7 @@ export default function AppointmentListView({ patientData }) {
 // ----------------------------------------------------------------------
 
 const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
-  const {
-    appointtypes,
-    payment_methods,
-    date,
-    start_date,
-    end_date,
-    unitServices,
-    countries,
-    cities,
-  } = filters;
+  const { appointtypes, payment_methods, start_date, end_date, unitServices, countries } = filters;
 
   // SORT BY
   if (sortBy === 'latest') {

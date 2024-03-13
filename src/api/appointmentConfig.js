@@ -4,29 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetAppointmentConfigs() {
-  const URL = endpoints.tables.appointmentconfigs;
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      appointmentConfigData: data || [],
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
-    await mutate(URL);
-  };
-
-  return { ...memoizedValue, refetch };
-}
-
-export function useGetUSEmployeeAppointmentConfigs(id, emid) {
-  const URL = endpoints.tables.usEmployeeAppointmentconfig(id, emid);
+  const URL = endpoints.appointment_configs.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -48,34 +26,12 @@ export function useGetUSEmployeeAppointmentConfigs(id, emid) {
 }
 
 export function useGetEmployeeAppointmentConfigs(id) {
-  const URL = endpoints.tables.employeeAppointmentconfig(id);
+  const URL = endpoints.appointment_configs.employee.all(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
       appointmentConfigData: data || [],
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
-    await mutate(URL);
-  };
-
-  return { ...memoizedValue, refetch };
-}
-
-export function useGetDepartmentEmployeeAppointmentConfigs(id, emid) {
-  const URL = endpoints.tables.departmentEmployeeAppointmentconfig(id, emid);
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      appointmentConfigData: data,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -92,33 +48,12 @@ export function useGetDepartmentEmployeeAppointmentConfigs(id, emid) {
 }
 
 export function useGetUSAppointmentConfigs(id) {
-  const URL = endpoints.tables.usappointmentconfig(id);
+  const URL = endpoints.appointment_configs.unit_service.all(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
       appointmentConfigData: data || [],
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
-    await mutate(URL);
-  };
-
-  return { ...memoizedValue, refetch };
-}
-export function useGetUSAppointmentConfigsCount(id) {
-  const URL = endpoints.tables.usappointmentconfigcount(id);
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      appointmentConfigCount: data,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -135,7 +70,7 @@ export function useGetUSAppointmentConfigsCount(id) {
 }
 
 export function useGetDepartmentAppointmentConfigs(id) {
-  const URL = endpoints.tables.departmentappointmentconfig(id);
+  const URL = endpoints.appointment_configs.department.all(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -156,30 +91,8 @@ export function useGetDepartmentAppointmentConfigs(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetDepartmentAppointmentConfigsCount(id) {
-  const URL = endpoints.tables.departmentappointmentconfigcount(id);
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      appointmentConfigCount: data,
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
-    await mutate(URL);
-  };
-
-  return { ...memoizedValue, refetch };
-}
-
 export function useGetAppointmentConfig(id) {
-  const URL = endpoints.tables.appointmentconfig(id);
+  const URL = endpoints.appointment_configs.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

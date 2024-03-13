@@ -90,14 +90,14 @@ export default function OverviewAppView() {
 
   useEffect(() => {
     if (oldpatientsdata.length > 0) {
-      const mappedData = oldpatientsdata.map((Data) => Data);
+      const mappedData = oldpatientsdata.map((Data, idx) => Data);
       setOlddata(mappedData[0].identification_num);
     }
   }, [oldpatientsdata, oldData]);
 
   useEffect(() => {
     if (oldpatientsdata.length > 0) {
-      const mappedData = oldpatientsdata.map((Data) => Data);
+      const mappedData = oldpatientsdata.map((Data, idx) => Data);
       setUs(mappedData[0].unit_service);
     }
   }, [oldpatientsdata, Us]);
@@ -145,7 +145,9 @@ export default function OverviewAppView() {
           </Box>
         </Grid>
       </Grid>
-      {user?.patient?.identification_num === oldData &&user?.patient?.is_onboarded === false && user?.role === 'patient' ? (
+      {user?.patient?.identification_num === oldData &&
+      user?.patient?.is_onboarded === false &&
+      user?.role === 'patient' ? (
         <Dialog open={dialog.value} onClose={dialog.onTrue}>
           <DialogTitle>
             {curLangAr

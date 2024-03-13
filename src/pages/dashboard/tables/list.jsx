@@ -9,6 +9,7 @@ export default function TablesListPage() {
     <>
       <Helmet>
         <title> Super Admin: Tables List</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <TablesListView />

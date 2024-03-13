@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetDepartment } from 'src/api';
-import ACLGuard from 'src/auth/guard/acl-guard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -13,16 +12,17 @@ import DepartmentRoomsView from 'src/sections/super-admin/unitservices/departmen
 
 export default function DepartmentRoomsPage() {
   const params = useParams();
-  const {depid} = params;
+  const { depid } = params;
   const { data, loading } = useGetDepartment(depid);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="department" subcategory="rooms" acl="read">
+    <>
       <Helmet>
         <title>{name || ''} Department Rooms</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentRoomsView departmentData={data} />}
-    </ACLGuard>
+    </>
   );
 }

@@ -4,7 +4,6 @@ import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetWorkShift } from 'src/api';
-import { useTranslate } from 'src/locales';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -16,8 +15,6 @@ import TableNewEditForm from './table-new-edit-form';
 export default function TableEditView() {
   const settings = useSettingsContext();
 
-  const { t } = useTranslate();
-
   const params = useParams();
   const { id } = params;
   const { data } = useGetWorkShift(id);
@@ -28,7 +25,7 @@ export default function TableEditView() {
         links={[
           {
             name: 'dashboard',
-            href: paths.superadmin,
+            href: paths.superadmin.root,
           },
           {
             name: 'tables',

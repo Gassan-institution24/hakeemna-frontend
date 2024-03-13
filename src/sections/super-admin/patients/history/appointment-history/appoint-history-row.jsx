@@ -9,8 +9,6 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -44,8 +42,6 @@ export default function InvoiceTableRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
-
-  const confirm = useBoolean();
 
   const popover = usePopover();
   const DDL = usePopover();
@@ -118,7 +114,7 @@ export default function InvoiceTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status !== 'canceled' && (
+        {status === 'available' && (
           <MenuItem
             onClick={() => {
               onCancelRow();

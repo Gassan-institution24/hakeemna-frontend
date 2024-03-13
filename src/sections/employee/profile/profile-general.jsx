@@ -16,9 +16,9 @@ import { Tooltip, MenuItem, Typography } from '@mui/material';
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetCountries, useGetSpecialties, useGetEmployeeTypes } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetCountries, useGetSpecialties, useGetUSActiveEmployeeTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -36,13 +36,16 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { countriesData } = useGetCountries();
-  const { employeeTypesData } = useGetEmployeeTypes();
-  const { specialtiesData } = useGetSpecialties();
-
   const { user } = useAuthContext();
 
+  const { countriesData } = useGetCountries();
+  const { specialtiesData } = useGetSpecialties();
+  const { employeeTypesData } = useGetUSActiveEmployeeTypes(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   // console.log('employeeData', employeeData);
 
@@ -100,14 +103,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
     defaultValues,
   });
   const {
-    getValues,
+    watch,
     setValue,
     handleSubmit,
     control,
     formState: { isSubmitting },
   } = methods;
 
-  const values = getValues();
+  const values = watch();
 
   const handleDrop = useCallback(
     (name, acceptedFiles) => {
@@ -134,8 +137,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
       });
 
       // console.log('formData', formData);
-      await axios.patch(endpoints.tables.employee(employeeData._id), formData);
-      enqueueSnackbar('Update success!');
+      await axios.patch(endpoints.employees.one(employeeData._id), formData);
+      enqueueSnackbar(t('updated successfully!'));
       refetch();
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
@@ -144,21 +147,21 @@ export default function AccountGeneral({ employeeData, refetch }) {
     }
   });
 
-  const handleEnglishInputChange = (event) => {
-    // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
+  // const handleEnglishInputChange = (event) => {
+  //   // Validate the input based on English language rules
+  //   const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
 
-    if (englishRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-    }
-  };
+  //   if (englishRegex.test(event.target.value)) {
+  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+  //   }
+  // };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
         {/* img */}
         <Grid xs={12} md={4}>
-          <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textalign: 'center' }}>
+          <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
             <RHFUploadAvatar
               // helperText={
               //   <Typography
@@ -167,7 +170,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               //       mt: 3,
               //       mx: 'auto',
               //       display: 'block',
-              //       textalign: 'center',
+              //       textAlign: 'center',
               //       color: 'text.disabled',
               //     }}
               //   >
@@ -211,6 +214,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               />
               <Tooltip placement="top" title="Phone number of service unit">
                 <MuiTelInput
+                  defaultCountry="JO"
                   forceCallingCode
                   variant="filled"
                   label={`${t('phone')}* : `}
@@ -246,7 +250,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       mx: 'auto',
                       mb: 1,
                       display: 'block',
-                      textalign: 'center',
+                      textAlign: 'center',
                       color: 'text.disabled',
                     }}
                   >
@@ -269,7 +273,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       mx: 'auto',
                       mb: 1,
                       display: 'block',
-                      textalign: 'center',
+                      textAlign: 'center',
                       color: 'text.disabled',
                     }}
                   >
@@ -292,7 +296,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                       mx: 'auto',
                       mb: 1,
                       display: 'block',
-                      textalign: 'center',
+                      textAlign: 'center',
                       color: 'text.disabled',
                     }}
                   >
@@ -325,9 +329,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {countriesData.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
-                    {country.name_english}
+                {countriesData.map((country, idx) => (
+                  <MenuItem key={idx} value={country._id}>
+                    {curLangAr ? country.name_arabic : country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
@@ -335,6 +339,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               <Tooltip placement="top" title="Phone number of service unit">
                 <MuiTelInput
                   forceCallingCode
+                  defaultCountry="JO"
                   label={t('alternative mobile number')}
                   value={alterPhone}
                   onChange={(newPhone) => {
@@ -351,9 +356,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {specialtiesData.map((specialty) => (
-                  <MenuItem value={specialty._id} key={specialty._id}>
-                    {specialty.name_english}
+                {specialtiesData.map((specialty, idx) => (
+                  <MenuItem value={specialty._id} key={idx}>
+                    {curLangAr ? specialty.name_arabic : specialty.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
@@ -364,8 +369,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                <MenuItem value="male">male</MenuItem>
-                <MenuItem value="female">female</MenuItem>
+                <MenuItem value="male">{t('male')}</MenuItem>
+                <MenuItem value="female">{t('female')}</MenuItem>
               </RHFSelect>
               <RHFSelect
                 label={`${t('employee type')} *`}
@@ -374,9 +379,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {employeeTypesData.map((type) => (
-                  <MenuItem value={type._id} key={type._id}>
-                    {type.name_english}
+                {employeeTypesData.map((type, idx) => (
+                  <MenuItem value={type._id} key={idx}>
+                    {curLangAr ? type.name_arabic : type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>

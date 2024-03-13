@@ -35,7 +35,7 @@ export default function TableCreateView({ departmentData }) {
           },
           {
             name: `${departmentData.name_english || ''} ${t('activities')}`,
-            href: paths.superadmin.unitservices.departments.activities.root(id,departmentData._id),
+            href: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
           },
           { name: t('new') },
         ]}

@@ -8,9 +8,10 @@ import OffersHomeView from 'src/sections/unit-service/offers/view/home';
 
 export default function OffersHomePage() {
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="offers" acl="read">
+    <ACLGuard category="unit_service" subcategory="offers" acl="read">
       <Helmet>
         <title>Offers</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <OffersHomeView />

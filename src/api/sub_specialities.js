@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetSubSpecialties() {
-  const URL = endpoints.tables.subspecialties;
+  const URL = endpoints.subspecialities.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -25,7 +25,7 @@ export function useGetSubSpecialties() {
   return { ...memoizedValue, refetch };
 }
 export function useGetSubSpecialty(id) {
-  const URL = endpoints.tables.subspeciality(id);
+  const URL = endpoints.subspecialities.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

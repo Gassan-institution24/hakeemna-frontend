@@ -12,6 +12,7 @@ export default function Specialitiess() {
     <>
       <Helmet>
         <title>{t('specialities')}</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <Specialities />

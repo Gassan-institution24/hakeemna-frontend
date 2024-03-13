@@ -83,7 +83,7 @@
 //   const renderDescription = (
 //     <Stack
 //       sx={{
-//         textalign: { xs: 'center', md: 'unset' },
+//         textAlign: { xs: 'center', md: 'unset' },
 //         pl: { md: 5 },
 //         pt: { md: 15 },
 //       }}
@@ -187,9 +187,9 @@
 //               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
 //             }}
 //           >
-//             {['Angular', 'React', 'Vue'].map((tab) => (
+//             {['Angular', 'React', 'Vue'].map((tab, idx)  => (
 //               <Tab
-//                 key={tab}
+//                 key={idx}
 //                 value={tab}
 //                 label={tab}
 //                 sx={{
@@ -213,8 +213,8 @@
 //             }}
 //             aria-label="app"
 //           >
-//             {['chat', 'mail', 'bell'].map((item) => (
-//               <ToggleButton key={item} value={item} aria-label={item} disabled={item === 'bell'}>
+//             {['chat', 'mail', 'bell'].map((item, idx)  => (
+//               <ToggleButton tem} value={item} aria-label={item} disabled={item === 'bell'}>
 //                 {item === 'chat' && <Iconify icon="solar:chat-round-dots-bold" />}
 //                 {item === 'mail' && <Iconify icon="fluent:mail-24-filled" />}
 //                 {item === 'bell' && <Iconify icon="solar:bell-bing-bold" />}
@@ -251,8 +251,8 @@
 
 //         <m.div variants={varFade().in}>
 //           <AvatarGroup>
-//             {[...Array(8)].map((_, index) => (
-//               <Avatar key={index} src={_mock.image.avatar(index)} />
+//             {[...Array(8)].map((_, index, idx)  => (
+//               <Avatar key={idx} src={_mock.image.avatar(index)} />
 //             ))}
 //           </AvatarGroup>
 //         </m.div>
@@ -426,8 +426,8 @@
 //                   value={select}
 //                   onChange={handleChangeSelect}
 //                 >
-//                   {['Option 1', 'Option 2', 'Option 3', 'Option 4'].map((option) => (
-//                     <MenuItem key={option} value={option}>
+//                   {['Option 1', 'Option 2', 'Option 3', 'Option 4'].map((option, idx)  => (
+//                     <MenuItem key={idx} value={option}>
 //                       {option}
 //                     </MenuItem>
 //                   ))}
@@ -461,7 +461,7 @@
 //         </Grid>
 
 //         {!mdUp && (
-//           <Grid xs={12} sx={{ textalign: 'center' }}>
+//           <Grid xs={12} sx={{ textAlign: 'center' }}>
 //             {viewAllBtn}
 //           </Grid>
 //         )}

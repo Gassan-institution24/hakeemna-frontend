@@ -8,6 +8,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import ListItemText from '@mui/material/ListItemText';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
+import { useTranslate } from 'src/locales';
+
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 
@@ -45,6 +47,8 @@ const NOTIFICATIONS = [
 export default function AccountNotifications() {
   const { enqueueSnackbar } = useSnackbar();
 
+  const { t } = useTranslate();
+
   const methods = useForm({
     mode: 'onTouched',
     defaultValues: {
@@ -64,7 +68,7 @@ export default function AccountNotifications() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      enqueueSnackbar('Update success!');
+      enqueueSnackbar(t('updated successfully!'));
     } catch (error) {
       console.error(error);
     }
@@ -78,8 +82,8 @@ export default function AccountNotifications() {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack component={Card} spacing={3} sx={{ p: 3 }}>
-        {NOTIFICATIONS.map((notification) => (
-          <Grid key={notification.subheader} container spacing={3}>
+        {NOTIFICATIONS.map((notification, idx) => (
+          <Grid key={idx} container spacing={3}>
             <Grid xs={12} md={4}>
               <ListItemText
                 primary={notification.subheader}
@@ -96,9 +100,9 @@ export default function AccountNotifications() {
                   control={control}
                   render={({ field }) => (
                     <>
-                      {notification.items.map((item) => (
+                      {notification.items.map((item, index) => (
                         <FormControlLabel
-                          key={item.id}
+                          key={index}
                           label={item.label}
                           labelPlacement="start"
                           control={
@@ -124,7 +128,6 @@ export default function AccountNotifications() {
 
         <LoadingButton
           type="submit"
-          tabIndex={-1}
           tabIndex={-1}
           variant="contained"
           loading={isSubmitting}

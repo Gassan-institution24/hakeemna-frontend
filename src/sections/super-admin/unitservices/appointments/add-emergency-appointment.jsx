@@ -24,10 +24,10 @@ import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
-  useGetUSWorkGroups,
-  useGetUSWorkShifts,
-  useGetUSServiceTypes,
   useGetAppointmentTypes,
+  useGetUSActiveWorkGroups,
+  useGetUSActiveWorkShifts,
+  useGetUSActiveServiceTypes,
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -46,9 +46,9 @@ export default function BookManually({ onClose, refetch, ...other }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSServiceTypes(id);
-  const { workGroupsData } = useGetUSWorkGroups(id);
-  const { workShiftsData } = useGetUSWorkShifts(id);
+  const { serviceTypesData } = useGetUSActiveServiceTypes(id);
+  const { workGroupsData } = useGetUSActiveWorkGroups(id);
+  const { workShiftsData } = useGetUSActiveWorkShifts(id);
 
   // console.log('workGroupsData', workGroupsData);
 
@@ -80,7 +80,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const appoint = await axios.post(endpoints.tables.appointments, {
+      const appoint = await axios.post(endpoints.appointments.all, {
         ...data,
         emergency: true,
         unit_service: id,
@@ -93,7 +93,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
         msg: `created an emergency appointment <strong>[ ${appoint?.data?.code} ]</strong>`,
       });
       reset();
-      enqueueSnackbar('Create success!');
+      enqueueSnackbar(t('created successfully!'));
       refetch();
 
       onClose();
@@ -157,8 +157,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
                 }}
               >
                 <RHFSelect name="appointment_type" label={`${t('appointment type')} *`}>
-                  {appointmenttypesData.map((option, index) => (
-                    <MenuItem key={index} value={option._id}>
+                  {appointmenttypesData.map((option, index, idx) => (
+                    <MenuItem key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -169,15 +169,15 @@ export default function BookManually({ onClose, refetch, ...other }) {
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
                   {workShiftsData &&
-                    workShiftsData.map((option, index) => (
-                      <MenuItem key={index} value={option._id}>
+                    workShiftsData.map((option, index, idx) => (
+                      <MenuItem key={idx} value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
                       </MenuItem>
                     ))}
                 </RHFSelect>
                 <RHFSelect name="work_group" label={`${t('work group')} *`}>
-                  {workGroupsData.map((option, index) => (
-                    <MenuItem key={index} value={option._id}>
+                  {workGroupsData.map((option, index, idx) => (
+                    <MenuItem key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}

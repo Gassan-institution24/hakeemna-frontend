@@ -9,6 +9,7 @@ export default function MaintenancePage() {
     <>
       <Helmet>
         <title> Maintenance</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <MaintenanceView />

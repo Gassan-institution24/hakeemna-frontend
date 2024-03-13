@@ -1,8 +1,9 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { AuthGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
+import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
+import WorkGroupPermissionsBarLayout from 'src/layouts/workgroup-permission-minibar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -51,6 +52,10 @@ const RecieptsNewPage = lazy(() => import('src/pages/employee/accounting/reciept
 const CommunicationHomePage = lazy(() => import('src/pages/employee/communication/home'));
 // WORK GROUPS
 const WorkGroupsHomePage = lazy(() => import('src/pages/employee/wgroups/home'));
+const WorkGroupsPermissionPage = lazy(() => import('src/pages/employee/wgroups/permissions/home'));
+const WorkGroupsEmployeePermissionPage = lazy(() =>
+  import('src/pages/employee/wgroups/permissions/employee')
+);
 // QUALITY CONTROL
 const QCHomePage = lazy(() => import('src/pages/employee/qualitycontrol/home'));
 
@@ -79,11 +84,13 @@ export const unitServiceEmployeeDashboardRoutes = [
     path: 'dashboard',
     element: (
       <AuthGuard>
-        <DashboardLayout>
-          <Suspense fallback={<LoadingScreen />}>
-            <Outlet />
-          </Suspense>
-        </DashboardLayout>
+        <RoleBasedGuard hasContent roles={['admin', 'employee']}>
+          <DashboardLayout>
+            <Suspense fallback={<LoadingScreen />}>
+              <Outlet />
+            </Suspense>
+          </DashboardLayout>
+        </RoleBasedGuard>
       </AuthGuard>
     ),
     children: [
@@ -151,7 +158,24 @@ export const unitServiceEmployeeDashboardRoutes = [
       },
       {
         path: 'wgroups',
-        children: [{ element: <WorkGroupsHomePage />, index: true }],
+        children: [
+          { element: <WorkGroupsHomePage />, index: true },
+          {
+            path: ':wgid',
+            element: (
+              <WorkGroupPermissionsBarLayout>
+                <Outlet />
+              </WorkGroupPermissionsBarLayout>
+            ),
+            children: [
+              { element: <WorkGroupsPermissionPage />, index: true },
+              {
+                path: 'employee/:emid',
+                element: <WorkGroupsEmployeePermissionPage />,
+              },
+            ],
+          },
+        ],
       },
       {
         path: 'qc',

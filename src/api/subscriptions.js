@@ -4,7 +4,29 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetSubscriptions() {
-  const URL = endpoints.tables.subscriptions;
+  const URL = endpoints.subscriptions.all;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      subscriptionsData: data || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
+export function useGetActiveSubscriptions() {
+  const URL = endpoints.subscriptions.active;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -25,7 +47,7 @@ export function useGetSubscriptions() {
   return { ...memoizedValue, refetch };
 }
 export function useGetSubscription(id) {
-  const URL = endpoints.tables.subscription(id);
+  const URL = endpoints.subscriptions.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

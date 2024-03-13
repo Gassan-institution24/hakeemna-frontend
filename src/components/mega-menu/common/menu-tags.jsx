@@ -21,9 +21,9 @@ export default function MenuTags({ tags, ...other }) {
         Hot Products:
       </Typography>
 
-      {tags.map((tag, index) => (
+      {tags.map((tag, index, idx) => (
         <Link
-          key={tag.title}
+          key={idx}
           component={RouterLink}
           href={tag.path}
           variant="caption"

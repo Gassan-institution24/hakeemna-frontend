@@ -1,8 +1,7 @@
-import axios from 'axios';
 import * as Yup from 'yup';
+import { useMemo } from 'react';
 import { isEqual } from 'lodash';
 import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -17,13 +16,12 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSEmployees, useGetUSDepartments } from 'src/api';
+import { useGetUSActiveDepartments, useGetUSActiveEmployeeEngs } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
@@ -39,15 +37,13 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { user } = useAuthContext();
 
-  const { employeesData } = useGetUSEmployees(
+  const { employeesData } = useGetUSActiveEmployeeEngs(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
 
-  const { departmentsData } = useGetUSDepartments(
+  const { departmentsData } = useGetUSActiveDepartments(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-
-  const [selectedEmployees, setSelectedEmployees] = useState([]);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -61,14 +57,17 @@ export default function TableNewEditForm({ currentTable }) {
   const defaultValues = useMemo(
     () => ({
       unit_service:
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
       department: currentTable?.department?._id || null,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      employees: currentTable?.employees || [],
+      employees: currentTable?.employees.map((info, idx) => info.employee) || [],
     }),
     [currentTable, user?.employee]
   );
+  console.log('currentTable', currentTable);
+  console.log('defaultValues', defaultValues);
+  console.log('employeesData', employeesData);
 
   const methods = useForm({
     mode: 'onTouched',
@@ -95,43 +94,28 @@ export default function TableNewEditForm({ currentTable }) {
 
   const {
     reset,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
+  const values = watch();
+
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.workgroup(currentTable._id),
-          data: {
-            modifications_nums: (currentTable.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        });
+        await axiosInstance.patch(endpoints.work_groups.one(currentTable._id), data);
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.workgroups.root,
-          msg: `updated a work group <strong>${data.name_english}</strong>`,
+          msg: `updated a work group <strong>${data.name_english || ''}</strong>`,
         });
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.tables.workgroups,
-          data: {
-            ip_address_user_creation: address.data.IPv4,
-            user_creation: user._id,
-            ...data,
-          },
-        });
+        await axiosInstance.post(endpoints.work_groups.all, data);
         socket.emit('created', {
           user,
           link: paths.unitservice.tables.workgroups.root,
-          msg: `created a work group <strong>${data.name_english}</strong>`,
+          msg: `created a work group <strong>${data.name_english || ''}</strong>`,
         });
       }
       reset();
@@ -171,8 +155,8 @@ export default function TableNewEditForm({ currentTable }) {
               label={`${t('name arabic')} *`}
             />
             <RHFSelect name="department" label={t('department')}>
-              {departmentsData.map((department) => (
-                <MenuItem key={department._id} value={department._id}>
+              {departmentsData.map((department, idx) => (
+                <MenuItem key={idx} value={department._id}>
                   {curLangAr ? department.name_arabic : department.name_english}
                 </MenuItem>
               ))}
@@ -185,24 +169,24 @@ export default function TableNewEditForm({ currentTable }) {
               multiple
               disableCloseOnSelect
               options={employeesData.filter(
-                (option) => !selectedEmployees.some((item) => isEqual(option, item))
+                (option) => !values.employees.some((item) => isEqual(option, item))
               )}
               getOptionLabel={(option) => option._id}
-              renderOption={(props, option) => (
-                <li {...props} key={option._id} value={option._id}>
-                  {option.employee.first_name} {option.employee.middle_name}{' '}
-                  {option.employee.family_name}
+              renderOption={(props, option, idx) => (
+                <li {...props} key={idx} value={option._id}>
+                  {option.employee?.first_name} {option.employee?.middle_name}{' '}
+                  {option.employee?.family_name}
                 </li>
               )}
               onChange={(event, newValue) => {
-                setSelectedEmployees(newValue);
+                // setSelectedEmployees(newValue);
                 methods.setValue('employees', newValue, { shouldValidate: true });
               }}
               renderTags={(selected, getTagProps) =>
                 selected.map((option, index) => (
                   <Chip
                     {...getTagProps({ index })}
-                    key={option._id}
+                    key={index}
                     label={option.employee.first_name}
                     size="small"
                     color="info"

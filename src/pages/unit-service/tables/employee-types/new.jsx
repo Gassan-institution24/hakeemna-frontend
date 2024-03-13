@@ -8,9 +8,10 @@ import EmployeeTypeNewView from 'src/sections/unit-service/tables/employee-types
 
 export default function EmployeeTypeNewPage() {
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="employee_type" acl="create">
+    <ACLGuard category="unit_service" subcategory="management_tables" acl="create">
       <Helmet>
         <title>New Employee Type</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <EmployeeTypeNewView />

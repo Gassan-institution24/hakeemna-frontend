@@ -104,10 +104,10 @@
   "DDL": "معلومات التعديل",
   "creation time": "وقت الإنشاء",
   "creator": "المنشأ",
-  "creator IP": "كود المنشأ",
+  "creator IP": "IP المنشأ",
   "editing time": "وقت التعديل",
   "editor": "المعدل",
-  "editor IP": "كود المعدل",
+  "editor IP": "IP المعدل",
   "modifications no": "عدد التعديلات",
   "view": "إظهار التفاصيل",
   "clear": "مسح",
@@ -160,6 +160,7 @@
   "male": "ذكر",
   "save": "حفظ",
   "appointment time": "وقت الموعد",
+  "appointment duration time": "مدة الموعد",
   "configuration frequency": "تكرار انشاء المواعيد",
   "min": "دقيقة",
   "Saturday": "السبت",
@@ -172,9 +173,9 @@
   "day": "يوم",
   "appointments number": "عدد المواعيد",
   "work start time": "وقت بدء العمل",
-  "break start time": "وقت بدء البريك",
+  "break start time": "وقت بدء الاستراحة",
   "work end time": "وقت انتهاء العمل",
-  "break end time": "وقت انتهاء البريك",
+  "break end time": "وقت انتهاء الاستراحة",
   "online avaliable": "متاحة للحجز أونلاين",
   "max size of": "الحجم الأقصى",
   "upload photo": "رفع صورة",
@@ -184,7 +185,7 @@
   "unit service type": "نوع وحدة الخدمة",
   "sector type": "نوع العمل",
   "Public": "عام",
-  "Privet": "خاص",
+  "private": "خاص",
   "Charity": "خيري",
   "alternative mobile number": "رقم موبايل بديل",
   "location GPS": "موقع جغرافي",
@@ -217,6 +218,36 @@
   "Next Step": "الخطوة التالية",
   "create account": "إنشاء حساب",
   "non profit organization": "مؤسسة غير ربحية",
+  "Drop or Select file": " اسحب او اختار ملف",
+  "Drop files here or click": "اسحب الملفات من كمبيوترك او اضغط",
+  "browse": "تصفح",
+  "thorough your machine": "للاختيار من جهازك",
+  "new configuration": "إعدادات مواعيد جديدة",
+  "delete": "حذف",
+  "deleted": "محذوف",
+  "Today": "اليوم",
+  "Month": "شهر",
+  "Week": "اسبوع",
+  "Day": "يوم",
+  "Agenda": "قائمة المواعيد",
+  "new event": "موعد جديد",
+  "Edit Event": "تعديل موعد",
+  "delete event": "حذف موعد",
+  "Add Event": "إضافة موعد",
+  "all day": "كل اليوم",
+  "events": "مواعيد",
+  "colors": "ألوان",
+  "range": "الفترة",
+  "Reset": "إعادة تهيئة",
+  "Select One Employee to start": "اختر موظف لتعديل الصلاحيات",
+  "department and all its work groups": "القسم وجميع مجموعات عمله",
+  "giving or withdrowing permissions refered to all": "إعطاء او سحب صلاحيات لجميع",
+  "adjust schedual": "منشأ إعدادات المواعيد",
+  "visibility page": "الظهور على صفحة وحدة الخدمة",
+  "visibility online appointment": "الظهور في المواعيد",
+  "attendance": "الدوام",
+  "service unit and all its departments": "وحدة الخدمة وأقسامها",
+  "permissions": "الصلاحيات",
 
   "Good Morning ☀️": "صباح الخير ☀️",
   "Good Evening 🌑 ": "مساء الخير 🌑",
@@ -241,7 +272,7 @@
   "My appointments": "مواعيدي",
   "Finished appoinment": "ألمواعيد ألمنتهية",
   "Appointments": "ألمواعيد",
-  "Filters": "غربلة",
+  "Filters": "تخصيص",
   "Time": "ألتاريخ",
   "From": "من",
   "To": "الى",
@@ -360,6 +391,34 @@
   "Visitors": " زائر  ",
   "Fees: ": " السعر:  ",
   "More issues": "أخرى",
+  "calender": "التقويم",
+  "measurment type": "الوحدة",
+  "price per unit": "السعر للوحدة",
+  "new service": "خدمة جديدة",
+  "number": "الرقم",
+  "en-US": "ar",
+  "new emergency appointment": "موعد طوارئ جديد",
+  "How many minutes do you want to delay?": "عدد الدقائق المراد تأخيرها",
+  "book manually": "حجز يدوي",
+  "marital status": "الحالة الاجتماعية",
+  "mobile number": "رقم الهاتف",
+  "Click here to fill your data": "اضغط هنا لملئ البيانات",
+  "Is this you?": "هل هذا انت؟",
+  "We found a record with similar information for ": "لقد وجدنا حساب بنفس المعلومات المدخلة",
+
+
+  "uncanceled successfully!":"تم التفعيل بنجاح",
+  "delayed successfully!":"تم التأخير بنجاح",
+  "Password has changed successfully!":"تم تغيير كلمة السر بنجاح",
+  "canceled successfully!":"تم الإلغاء بنجاح",
+  "added successfully!":"تمت الإضافة بنجاح",
+  "created successfully!":"تم الإنشاء بنجاح",
+  "updated successfully!":"تم التعديل بنجاح",
+  "deleted successfully!":"تم الحذف بنجاح",
+  "this company already exist":"هذه الشركة موجودة مسبقا",
+  "uploaded successfully!":"تم الرفع بنجاح",
+  "booked successfully!":"تم الحجز بنجاح",
+  "Invalid file type or size":"نوع الملف غير صالح",
 
   "list": "قائمة",
   "edit": "تعديل",

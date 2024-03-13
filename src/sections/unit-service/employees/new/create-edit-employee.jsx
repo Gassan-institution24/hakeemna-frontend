@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
@@ -28,8 +27,8 @@ import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetCountries,
   useGetSpecialties,
-  useGetUSDepartments,
-  useGetUSEmployeeTypes,
+  useGetUSActiveDepartments,
+  useGetUSActiveEmployeeTypes,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -48,11 +47,12 @@ export default function TableNewEditForm({ currentTable }) {
   const { user } = useAuthContext();
 
   const { countriesData } = useGetCountries();
-  const { employeeTypesData } = useGetUSEmployeeTypes(
+  const { employeeTypesData } = useGetUSActiveEmployeeTypes(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
+
   const { specialtiesData } = useGetSpecialties();
-  const { departmentsData } = useGetUSDepartments(
+  const { departmentsData } = useGetUSActiveDepartments(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
 
@@ -111,14 +111,14 @@ export default function TableNewEditForm({ currentTable }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+  // const handleArabicInputChange = (event) => {
+  //   // Validate the input based on Arabic language rules
+  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
 
-    if (arabicRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-    }
-  };
+  //   if (arabicRegex.test(event.target.value)) {
+  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+  //   }
+  // };
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
@@ -132,38 +132,22 @@ export default function TableNewEditForm({ currentTable }) {
   const {
     reset,
     handleSubmit,
-    trigger,
     formState: { isSubmitting },
   } = methods;
 
-  const values = methods.getValues();
-
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       await axiosInstance.post(endpoints.auth.register, {
-        ip_address_user_creation: address.data.IPv4,
-        user_creation: user._id,
         role: 'employee',
         userName: `${data.first_name} ${data.family_name}`,
         ...data,
       });
-      // await axiosHandler({
-      //   method: 'POST',
-      //   path: endpoints.auth.register,
-      //   data: {
-      //     ip_address_user_creation: address.data.IPv4,
-      //     user_creation: user._id,
-      //     role: 'employee',
-      //     userName: `${data.first_name} ${data.family_name}`,
-      //     ...data,
-      //   },
-      // });
+
       socket.emit('created', {
         data,
         user,
         link: paths.unitservice.employees.root,
-        msg: `created an employee <strong>${data.name_english}</strong>`,
+        msg: `created an employee <strong>${data.name_english || ''}</strong>`,
       });
       reset();
       router.push(paths.unitservice.employees.root);
@@ -190,7 +174,7 @@ export default function TableNewEditForm({ currentTable }) {
           <Card sx={{ p: 3 }}>
             {!!errorMsg && (
               <Alert sx={{ mb: 3 }} severity="error">
-                <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+                <div> {errorMsg} </div>
               </Alert>
             )}
             <Box
@@ -228,6 +212,7 @@ export default function TableNewEditForm({ currentTable }) {
               />
               <MuiTelInput
                 forceCallingCode
+                defaultCountry="JO"
                 value={phone}
                 label={`${t('phone')} *`}
                 onChange={(newPhone) => {
@@ -238,36 +223,36 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect name="nationality" label={`${t('nationality')} *`}>
-                {countriesData.map((nationality) => (
-                  <MenuItem key={nationality._id} value={nationality._id}>
+                {countriesData.map((nationality, idx) => (
+                  <MenuItem key={idx} value={nationality._id}>
                     {curLangAr ? nationality.name_arabic : nationality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="department" label={t('department')}>
-                {departmentsData.map((department) => (
-                  <MenuItem key={department._id} value={department._id}>
+                {departmentsData.map((department, idx) => (
+                  <MenuItem key={idx} value={department._id}>
                     {curLangAr ? department.name_arabic : department.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="employee_type" label={`${t('employee type')} *`}>
-                {employeeTypesData.map((employee_type) => (
-                  <MenuItem key={employee_type._id} value={employee_type._id}>
+                {employeeTypesData.map((employee_type, idx) => (
+                  <MenuItem key={idx} value={employee_type._id}>
                     {curLangAr ? employee_type.name_arabic : employee_type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="speciality" label={`${t('specialty')} *`}>
-                {specialtiesData.map((speciality) => (
-                  <MenuItem key={speciality._id} value={speciality._id}>
+                {specialtiesData.map((speciality, idx) => (
+                  <MenuItem key={idx} value={speciality._id}>
                     {curLangAr ? speciality.name_arabic : speciality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="gender" label={`${t('gender')} *`}>
-                <MenuItem value="male">Male</MenuItem>
-                <MenuItem value="female">Female</MenuItem>
+                <MenuItem value="male">{t('male')}</MenuItem>
+                <MenuItem value="female">{t('female')}</MenuItem>
               </RHFSelect>
             </Box>
             <Box

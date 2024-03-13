@@ -15,12 +15,13 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import { useUnitTime } from 'src/utils/format-time';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+
+import { useUnitTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSServiceTypes, useGetAppointmentTypes } from 'src/api';
+import { useGetAppointmentTypes, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -37,14 +38,14 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const weekDays = [
     { value: 'saturday', label: t('Saturday') },
     { value: 'sunday', label: t('Sunday') },
-    { value: 'Monday', label: t('Monday') },
+    { value: 'monday', label: t('Monday') },
     { value: 'tuesday', label: t('Tuesday') },
     { value: 'wednesday', label: t('Wednesday') },
     { value: 'thursday', label: t('Thursday') },
     { value: 'friday', label: t('Friday') },
   ];
 
-  const { control, setValue, watch, resetField, getValues, setError } = useFormContext();
+  const { control, setValue, watch, setError, clearErrors } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -58,7 +59,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const [showAppointments, setShowAppointments] = useState({});
   const [appointmentsNum, setAppointmentsNum] = useState({});
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSServiceTypes(
+  const { serviceTypesData } = useGetUSActiveServiceTypes(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
@@ -92,6 +93,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       };
       append(newItem);
     } catch (e) {
+      console.error(e);
       setErrorMsg(e.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -103,8 +105,20 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   async function processDayDetails(index) {
     try {
+      clearErrors();
       if (!values.appointment_time) {
+        setValue(`days_details[${index}].appointments`, []);
         setError('appointment_time');
+        return;
+      }
+      if (!values.days_details[index].work_start_time) {
+        setValue(`days_details[${index}].appointments`, []);
+        setError(`days_details[${index}].work_start_time`);
+        return;
+      }
+      if (!values.days_details[index].work_end_time) {
+        setValue(`days_details[${index}].appointments`, []);
+        setError(`days_details[${index}].work_end_time`);
         return;
       }
       const results = [];
@@ -112,27 +126,29 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       const currentDay = values.days_details[index];
       const work_start = new Date(currentDay.work_start_time).getTime();
       let work_end = new Date(currentDay.work_end_time).getTime();
-      let break_start = new Date(currentDay.break_start_time).getTime();
-      let break_end = new Date(currentDay.break_end_time).getTime();
+      let break_start = currentDay.break_start_time
+        ? new Date(currentDay.break_start_time).getTime()
+        : null;
+      let break_end = currentDay.break_end_time
+        ? new Date(currentDay.break_end_time).getTime()
+        : null;
 
       if (work_start >= work_end) {
         work_end += 24 * 60 * 60 * 1000;
       }
-      if (work_start > break_start) {
+      if (break_start && work_start > break_start) {
         break_start += 24 * 60 * 60 * 1000;
       }
-      if (break_start > break_end) {
+      if (break_start && break_end && break_start > break_end) {
         break_end += 24 * 60 * 60 * 1000;
       }
       let curr_start = work_start;
       while (curr_start + appointment_time <= work_end) {
-        console.log(curr_start + appointment_time);
-        console.log('appointment_time', appointment_time);
-        console.log(work_end);
         if (
-          (curr_start <= break_end && curr_start < break_start) ||
-          (curr_start + appointment_time > break_end &&
-            curr_start + appointment_time >= break_start)
+          !break_start ||
+          !break_end ||
+          curr_start + appointment_time <= break_start ||
+          curr_start >= break_end
         ) {
           results.push({
             appointment_type: currentDay.appointment_type,
@@ -145,13 +161,13 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
           curr_start += appointment_time;
         }
       }
-      console.log(results);
       setValue(`days_details[${index}].appointments`, results);
       setShowAppointments({
         ...showAppointments,
         [index]: true,
       });
     } catch (e) {
+      console.error(e);
       setErrorMsg(e.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -159,7 +175,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   const renderValues = (selectedIds) => {
     const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item?._id));
-    const results = [];
     return selectedItems
       ?.map(
         (item) => item?.name_english
@@ -236,7 +251,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
         >
           {fields.map((item, index) => (
             <Stack
-              key={item?.id}
+              key={index}
               // alignItems="flex-start"
               // flexWrap="wrap"
               spacing={1.5}
@@ -269,8 +284,8 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                               values.days_details[index]?.day !== option.value
                           )
                       )
-                      .map((option) => (
-                        <MenuItem value={option.value}>{option.label}</MenuItem>
+                      .map((option, idx) => (
+                        <MenuItem key={idx} value={option.value}>{option.label}</MenuItem>
                       ))}
                   </RHFSelect>
                   <RHFSelect
@@ -283,7 +298,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     }}
                     label={`${t('appointment type')} *`}
                   >
-                    {appointmenttypesData?.map((option) => (
+                    {appointmenttypesData?.map((option, idx) => (
                       <MenuItem value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
                       </MenuItem>
@@ -311,11 +326,11 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                           }}
                           renderValue={renderValues}
                         >
-                          {serviceTypesData?.map((option) => {
+                          {serviceTypesData?.map((option, idx) => {
                             const selected = field?.value?.includes(option._id);
 
                             return (
-                              <MenuItem key={option._id} value={option._id}>
+                              <MenuItem key={idx} value={option._id}>
                                 <Checkbox size="small" disableRipple checked={selected} />
 
                                 {curLangAr ? option?.name_arabic : option?.name_english}

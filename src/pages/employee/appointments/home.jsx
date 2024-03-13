@@ -7,9 +7,10 @@ import AppointmentHomeView from 'src/sections/employee/appointments/view/home';
 
 export default function AppointmentsHomePage() {
   return (
-    <ACLGuard hasContent category="employee" subcategory="appointments" acl="read">
+    <ACLGuard category="work_group" subcategory="appointments" acl="read">
       <Helmet>
         <title>Appointments</title>
+        <meta name="description" content="meta" />
       </Helmet>
       <AppointmentHomeView />
     </ACLGuard>

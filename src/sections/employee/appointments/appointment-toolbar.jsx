@@ -10,10 +10,9 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSWorkShifts, useGetEmployeeWorkGroups } from 'src/api';
+import { useGetUSActiveWorkShifts, useGetEmployeeActiveWorkGroups } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -33,21 +32,14 @@ export default function AppointmentToolbar({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { workGroupsData } = useGetEmployeeWorkGroups(
+  const { workGroupsData } = useGetEmployeeActiveWorkGroups(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
   );
-  const { workShiftsData } = useGetUSWorkShifts(
+  const { workShiftsData } = useGetUSActiveWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
 
   const popover = usePopover();
-
-  const handleFilterName = useCallback(
-    (event) => {
-      onFilters('name', event.target.value);
-    },
-    [onFilters]
-  );
 
   const handleFilterTypes = useCallback(
     (event) => {
@@ -116,8 +108,8 @@ export default function AppointmentToolbar({
               },
             }}
           >
-            {options.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
+            {options.map((option, idx) => (
+              <MenuItem key={idx} value={option._id}>
                 {curLangAr ? option?.name_arabic : option?.name_english}
               </MenuItem>
             ))}
@@ -143,8 +135,8 @@ export default function AppointmentToolbar({
               },
             }}
           >
-            {workGroupsData.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
+            {workGroupsData.map((option, idx) => (
+              <MenuItem key={idx} value={option._id}>
                 {curLangAr ? option?.name_arabic : option?.name_english}
               </MenuItem>
             ))}
@@ -170,8 +162,8 @@ export default function AppointmentToolbar({
               },
             }}
           >
-            {workShiftsData.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
+            {workShiftsData.map((option, idx) => (
+              <MenuItem key={idx} value={option._id}>
                 {curLangAr ? option?.name_arabic : option?.name_english}
               </MenuItem>
             ))}
@@ -221,11 +213,11 @@ export default function AppointmentToolbar({
           <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-          {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
+          {/* {ACLGuard({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (
             <IconButton color="error" onClick={onAdd}>
               <Iconify icon="zondicons:add-outline" />
             </IconButton>
-          )}
+          )} */}
         </Stack>
       </Stack>
       {/* </Stack> */}

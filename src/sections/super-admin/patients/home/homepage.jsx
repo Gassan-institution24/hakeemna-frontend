@@ -35,8 +35,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import TableDetailRow from './table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -60,16 +59,16 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
 const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
+  // { value: 'all', label: 'All' },
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
   // { value: 'public', label: 'public' },
-  // { value: 'privet', label: 'privet' },
+  // { value: 'private', label: 'private' },
   // { value: 'charity', label: 'charity' },
 ];
 
@@ -111,7 +110,7 @@ export default function PatientTableView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -125,7 +124,7 @@ export default function PatientTableView() {
   //       code: data.code,
   //       name: data.name_english,
   //       category: data.category?.name_english,
-  //       symptoms: data.symptoms?.map((symptom) => symptom?.name_english),
+  //       symptoms: data.symptoms?.map((symptom, idx)  => symptom?.name_english),
   //     });
   //     return acc;
   //   }, []);
@@ -140,10 +139,8 @@ export default function PatientTableView() {
   // };
   const handleActivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.patient(id)}/updatestatus`,
-        data: { status: 'active' },
+      await axiosInstance.patch(`${endpoints.patients.one(id)}/updatestatus`, {
+        status: 'active',
       });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -152,10 +149,8 @@ export default function PatientTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.patient(id)}/updatestatus`,
-        data: { status: 'inactive' },
+      await axiosInstance.patch(`${endpoints.patients.one(id)}/updatestatus`, {
+        status: 'inactive',
       });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -164,10 +159,9 @@ export default function PatientTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.patients}/updatestatus`,
-      data: { status: 'active', ids: table.selected },
+    axiosInstance.patch(`${endpoints.patients.all}/updatestatus`, {
+      status: 'active',
+      ids: table.selected,
     });
     refetch();
     table.onUpdatePageDeleteRows({
@@ -178,10 +172,9 @@ export default function PatientTableView() {
   }, [dataFiltered.length, dataInPage.length, table, patientsData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.patients}/updatestatus`,
-      data: { status: 'inactive', ids: table.selected },
+    axiosInstance.patch(`${endpoints.patients.all}/updatestatus`, {
+      status: 'inactive',
+      ids: table.selected,
     });
     refetch();
     table.onUpdatePageDeleteRows({
@@ -297,9 +290,9 @@ export default function PatientTableView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -312,7 +305,7 @@ export default function PatientTableView() {
                       (tab.value === 'active' && 'success') ||
                       (tab.value === 'inactive' && 'error') ||
                       // (tab.value === 'public' && 'success') ||
-                      // (tab.value === 'privet' && 'error') ||
+                      // (tab.value === 'private' && 'error') ||
                       // (tab.value === 'charity' && 'success') ||
                       'default'
                     }
@@ -324,8 +317,8 @@ export default function PatientTableView() {
                       patientsData.filter((order) => order.status === 'inactive').length}
                     {/* {tab.value === 'public' &&
                       patientsData.filter((order) => order.sector_type === 'public').length}
-                    {tab.value === 'privet' &&
-                      patientsData.filter((order) => order.sector_type === 'privet').length}
+                    {tab.value === 'private' &&
+                      patientsData.filter((order) => order.sector_type === 'private').length}
                     {tab.value === 'charity' &&
                       patientsData.filter((order) => order.sector_type === 'charity').length} */}
                   </Label>
@@ -363,7 +356,7 @@ export default function PatientTableView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               // action={
@@ -406,7 +399,7 @@ export default function PatientTableView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -417,9 +410,9 @@ export default function PatientTableView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <TableDetailRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         filters={filters}
                         setFilters={setFilters}
@@ -513,7 +506,7 @@ export default function PatientTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -521,7 +514,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

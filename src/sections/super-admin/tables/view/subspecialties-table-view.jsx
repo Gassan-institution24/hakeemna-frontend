@@ -21,8 +21,6 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useTranslate } from 'src/locales';
-
 //
 
 import { useGetSubSpecialties } from 'src/api';
@@ -44,23 +42,24 @@ import {
   // TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-// import axiosHandler from 'src/utils/axios-handler';
+
 import TableDetailRow from '../subspecialties/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'all' },
-  { value: 'active', label: 'active' },
-  { value: 'inactive', label: 'inactive' },
-];
+// const STATUS_OPTIONS = [
+//   { value: 'all', label: 'all' },
+//   { value: 'active', label: 'active' },
+//   { value: 'inactive', label: 'inactive' },
+// ];
 
 const TABLE_HEAD = [
   /// edit
   { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name' },
+  { id: 'name_english', label: 'name' },
+  { id: 'name_arabic', label: 'arabic name' },
   { id: 'specialty', label: 'Specialty' },
   { id: 'description', label: 'Description' },
   // { id: 'created_at', label: 'Date Of Creation' },
@@ -75,15 +74,13 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
 
 export default function SubSpecialtiesTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
-
-  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -110,14 +107,10 @@ export default function SubSpecialtiesTableView() {
     dateError,
   });
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -156,59 +149,6 @@ export default function SubSpecialtiesTableView() {
     [table]
   );
 
-  // const handleActivate = useCallback(
-  //   async (id) => {
-  //     await axiosHandler({
-  //       method: 'PATCH',
-  //       path: `insurance/companies/${id}/updatestatus`, /// edit
-  //       data: { status: 'active' },
-  //     });
-  //     refetch();
-  //     table.onUpdatePageDeleteRow(dataInPage.length);
-  //   },
-  //   [dataInPage.length, table, refetch]
-  // );
-  // const handleInactivate = useCallback(
-  //   async (id) => {
-  //     await axiosHandler({
-  //       method: 'PATCH',
-  //       path: `insurance/companies/${id}/updatestatus`, /// edit
-  //       data: { status: 'inactive' },
-  //     });
-  //     refetch();
-  //     table.onUpdatePageDeleteRow(dataInPage.length);
-  //   },
-  //   [dataInPage.length, table, refetch]
-  // );
-
-  // const handleActivateRows = useCallback(async () => {
-  //   await axiosHandler({
-  //     method: 'PATCH',
-  //     path: `insurance/companies/updatestatus`, /// edit
-  //     data: { status: 'active', ids: table.selected },
-  //   });
-  //   refetch();
-  //   table.onUpdatePageDeleteRows({
-  //     totalRows: subspecialtiesData.length,
-  //     totalRowsInPage: dataInPage.length,
-  //     totalRowsFiltered: dataFiltered.length,
-  //   });
-  // }, [dataFiltered.length, dataInPage.length, table, subspecialtiesData, refetch]);
-
-  // const handleInactivateRows = useCallback(async () => {
-  //   await axiosHandler({
-  //     method: 'PATCH',
-  //     path: `insurance/companies/updatestatus`, /// edit
-  //     data: { status: 'inactive', ids: table.selected },
-  //   });
-  //   refetch();
-  //   table.onUpdatePageDeleteRows({
-  //     totalRows: subspecialtiesData.length,
-  //     totalRowsInPage: dataInPage.length,
-  //     totalRowsFiltered: dataFiltered.length,
-  //   });
-  // }, [dataFiltered.length, dataInPage.length, table, subspecialtiesData, refetch]);
-
   const handleEditRow = useCallback(
     (id) => {
       router.push(paths.superadmin.tables.subspecialities.edit(id));
@@ -219,20 +159,6 @@ export default function SubSpecialtiesTableView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
-
-  // const handleViewRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.order.details(id));
-  //   },
-  //   [router]
-  // );
-
-  // const handleFilterStatus = useCallback(
-  //   (event, newValue) => {
-  //     handleFilters('status', newValue);
-  //   },
-  //   [handleFilters]
-  // );
 
   if (loading) {
     return <LoadingScreen />;
@@ -278,9 +204,9 @@ export default function SubSpecialtiesTableView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx)  => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -336,7 +262,7 @@ export default function SubSpecialtiesTableView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx)  => row._id)
                 )
               }
               action={
@@ -384,9 +310,9 @@ export default function SubSpecialtiesTableView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <TableDetailRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         filters={filters}
                         setFilters={setFilters}
@@ -475,7 +401,7 @@ export default function SubSpecialtiesTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -483,7 +409,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

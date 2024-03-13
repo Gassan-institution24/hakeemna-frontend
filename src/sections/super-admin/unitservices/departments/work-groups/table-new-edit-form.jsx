@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import { isEqual } from 'lodash';
 import PropTypes from 'prop-types';
@@ -16,13 +15,12 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetDepartmentEmployees } from 'src/api';
-import { useLocales, useTranslate } from 'src/locales';
+import { useGetDepartmentActiveEmployeeEngs } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
@@ -33,14 +31,14 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const router = useRouter();
 
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
 
   const { id } = useParams();
 
   const { user } = useAuthContext();
 
-  const { employeesData } = useGetDepartmentEmployees(departmentData._id);
+  const { employeesData } = useGetDepartmentActiveEmployeeEngs(departmentData._id);
 
   const [selectedEmployees, setSelectedEmployees] = useState([]);
 
@@ -60,7 +58,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       department: departmentData._id,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      employees: currentTable?.employees || [],
+      employees: currentTable?.employees.map((info, idx) => info.employee) || [],
     }),
     [currentTable, departmentData, id]
   );
@@ -96,39 +94,25 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.workgroup(currentTable._id),
-          data: {
-            modifications_nums: (currentTable.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        });
+        await axiosInstance.patch(endpoints.work_groups.one(currentTable._id), data);
         socket.emit('updated', {
           data,
           user,
           link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
-          msg: `updated work group <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
+          msg: `updated work group <strong>${data.name_english || ''}</strong> in <strong>${
+            departmentData.name_english
+          }</strong> department`,
         });
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.tables.workgroups,
-          data: {
-            ip_address_user_creation: address.data.IPv4,
-            user_creation: user._id,
-            ...data,
-          },
-        });
+        await axiosInstance.post(endpoints.work_groups.all, data);
         socket.emit('created', {
           data,
           user,
           link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
-          msg: `created work group <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
+          msg: `created work group <strong>${data.name_english || ''}</strong> in <strong>${
+            departmentData.name_english
+          }</strong> department`,
         });
       }
       reset();
@@ -180,8 +164,8 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
                 (option) => !selectedEmployees.some((item) => isEqual(option, item))
               )}
               getOptionLabel={(option) => option._id}
-              renderOption={(props, option) => (
-                <li {...props} key={option._id} value={option._id}>
+              renderOption={(props, option, idx) => (
+                <li {...props} key={idx} value={option._id}>
                   {option.employee.first_name} {option.employee.middle_name}{' '}
                   {option.employee.family_name}
                 </li>
@@ -194,7 +178,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
                 selected.map((option, index) => (
                   <Chip
                     {...getTagProps({ index })}
-                    key={option._id}
+                    key={index}
                     label={option.employee.first_name}
                     size="small"
                     color="info"

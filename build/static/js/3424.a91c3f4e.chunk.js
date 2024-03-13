@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[3424],{90582:(i,e,s)=>{s.r(e),s.d(e,{default:()=>l});var a=s(6907),r=s(85362),t=s(80184);function l(){return(0,t.jsxs)(t.Fragment,{children:[(0,t.jsx)(a.ql,{children:(0,t.jsx)("title",{children:" Dashboard: Activities Table"})}),(0,t.jsx)(r.Vv,{})]})}}}]);
-//# sourceMappingURL=3424.a91c3f4e.chunk.js.map

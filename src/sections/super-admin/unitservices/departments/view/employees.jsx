@@ -20,13 +20,12 @@ import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetDepartmentEmployees } from 'src/api';
+import { useGetDepartmentEmployeeEngs } from 'src/api';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
@@ -57,7 +56,7 @@ import TableDetailFiltersResult from '../employees/table-details-filters-result'
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -99,7 +98,7 @@ export default function EmployeesTableView({ departmentData }) {
 
   const router = useRouter();
 
-  const { employeesData, loading, refetch } = useGetDepartmentEmployees(departmentData._id);
+  const { employeesData, loading, refetch } = useGetDepartmentEmployeeEngs(departmentData._id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -122,7 +121,7 @@ export default function EmployeesTableView({ departmentData }) {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -136,7 +135,7 @@ export default function EmployeesTableView({ departmentData }) {
   //       code: data.code,
   //       name: data.name_english,
   //       category: data.category?.name_english,
-  //       symptoms: data.symptoms?.map((symptom) => symptom?.name_english),
+  //       symptoms: data.symptoms?.map((symptom, idx)  => symptom?.name_english),
   //     });
   //     return acc;
   //   }, []);
@@ -152,10 +151,8 @@ export default function EmployeesTableView({ departmentData }) {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.employee(row._id)}/updatestatus`,
-          data: { status: 'active' },
+        await axiosInstance.patch(`${endpoints.employees.one(row._id)}/updatestatus`, {
+          status: 'active',
         });
         socket.emit('updated', {
           user,
@@ -175,10 +172,8 @@ export default function EmployeesTableView({ departmentData }) {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.employee(row._id)}/updatestatus`,
-          data: { status: 'inactive' },
+        await axiosInstance.patch(`${endpoints.employees.one(row._id)}/updatestatus`, {
+          status: 'inactive',
         });
         socket.emit('updated', {
           user,
@@ -198,14 +193,13 @@ export default function EmployeesTableView({ departmentData }) {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employees}/updatestatus`,
-        data: { status: 'active', ids: table.selected },
+      await axiosInstance.patch(`${endpoints.employees.all}/updatestatus`, {
+        status: 'active',
+        ids: table.selected,
       });
       socket.emit('updated', {
         user,
-        link: paths.superadmin.unitservices.departments.employees.root(id,departmentData._id),
+        link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
         msg: `activated many employees in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
@@ -233,10 +227,9 @@ export default function EmployeesTableView({ departmentData }) {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.employees}/updatestatus`,
-        data: { status: 'inactive', ids: table.selected },
+      await axiosInstance.patch(`${endpoints.employees.all}/updatestatus`, {
+        status: 'inactive',
+        ids: table.selected,
       });
       socket.emit('updated', {
         user,
@@ -341,7 +334,10 @@ export default function EmployeesTableView({ departmentData }) {
             checkAcl({ category: 'department', subcategory: 'employees', acl: 'create' }) && (
               <Button
                 component={RouterLink}
-                href={paths.superadmin.unitservices.departments.employees.new(id,departmentData._id)} /// edit
+                href={paths.superadmin.unitservices.departments.employees.new(
+                  id,
+                  departmentData._id
+                )} /// edit
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >
@@ -363,9 +359,9 @@ export default function EmployeesTableView({ departmentData }) {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -421,7 +417,7 @@ export default function EmployeesTableView({ departmentData }) {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               action={
@@ -467,7 +463,7 @@ export default function EmployeesTableView({ departmentData }) {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -478,9 +474,9 @@ export default function EmployeesTableView({ departmentData }) {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <TableDetailRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         filters={filters}
                         setFilters={setFilters}
@@ -570,7 +566,7 @@ export default function EmployeesTableView({ departmentData }) {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -578,7 +574,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

@@ -12,10 +12,6 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
-import { useRouter } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { useGetSystemErrors } from 'src/api';
 
 import Label from 'src/components/label';
@@ -31,8 +27,7 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import ErrosRow from './errors-row'; /// edit
 import FeedbackToolbar from './errors-toolbar';
@@ -51,13 +46,13 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'not read',
   errorCodes: [],
 };
 
 // ----------------------------------------------------------------------
 const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
+  // { value: 'all', label: 'All' },
   { value: 'read', label: 'Read' },
   { value: 'not read', label: 'not read' },
 ];
@@ -69,11 +64,6 @@ export default function DoctornaSystemErrorsView() {
   const componentRef = useRef();
 
   const settings = useSettingsContext();
-
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
-  const router = useRouter();
 
   const { systemErrorsData, loading, refetch } = useGetSystemErrors();
 
@@ -98,9 +88,10 @@ export default function DoctornaSystemErrorsView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const codeOptions = Array.from(new Set(systemErrorsData.map((data) => data.error_code)));
+  const codeOptions = Array.from(new Set(systemErrorsData.map((data, idx) => data.error_code)));
 
-  const canReset = !!filters?.name || filters.status !== 'all' || filters.errorCodes.length > 0;
+  const canReset =
+    !!filters?.name || filters.status !== 'not read' || filters.errorCodes.length > 0;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -113,7 +104,7 @@ export default function DoctornaSystemErrorsView() {
         code: info.code,
         name: info.name_english,
         category: info.category?.name_english,
-        symptoms: info.symptoms?.map((symptom) => symptom?.name_english),
+        symptoms: info.symptoms?.map((symptom, idx) => symptom?.name_english),
       });
       return acc;
     }, []);
@@ -149,11 +140,10 @@ export default function DoctornaSystemErrorsView() {
 
   const handleRead = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.systemError(id)}/updatestatus`, /// edit
-        data: { status: 'read' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.systemErrors.one(id)}/updatestatus`, /// edit
+        { status: 'read' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -162,11 +152,10 @@ export default function DoctornaSystemErrorsView() {
 
   const handleUnread = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.systemError(id)}/updatestatus`, /// edit
-        data: { status: 'not read' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.systemErrors.one(id)}/updatestatus`, /// edit
+        { status: 'not read' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -188,9 +177,9 @@ export default function DoctornaSystemErrorsView() {
             boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
           }}
         >
-          {STATUS_OPTIONS.map((tab) => (
+          {STATUS_OPTIONS.map((tab, idx) => (
             <Tab
-              key={tab.value}
+              key={idx}
               iconPosition="end"
               value={tab.value}
               label={tab.label}
@@ -251,7 +240,7 @@ export default function DoctornaSystemErrorsView() {
                 // onSelectAllRows={(checked) =>
                 //   table.onSelectAllRows(
                 //     checked,
-                //     dataFiltered.map((row) => row._id)
+                //     dataFiltered.map((row, idx)  => row._id)
                 //   )
                 // }
               />
@@ -262,9 +251,9 @@ export default function DoctornaSystemErrorsView() {
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
-                  .map((row) => (
+                  .map((row, idx) => (
                     <ErrosRow
-                      key={row._id}
+                      key={idx}
                       row={row}
                       filters={filters}
                       setFilters={setFilters}
@@ -307,7 +296,7 @@ export default function DoctornaSystemErrorsView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name, errorCodes } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -315,7 +304,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

@@ -3,7 +3,7 @@
 export function flattenArray(list, key = 'children') {
   let children = [];
 
-  const flatten = list?.map((item) => {
+  const flatten = list?.map((item, idx) => {
     if (item[key] && item[key].length) {
       children = [...children, ...item[key]];
     }

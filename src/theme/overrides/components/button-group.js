@@ -44,7 +44,7 @@ export function buttonGroup(theme) {
       },
     };
 
-    const colorStyle = COLORS.map((color) => ({
+    const colorStyle = COLORS.map((color, idx) => ({
       [`& .${buttonGroupClasses.grouped}`]: {
         '&:not(:last-of-type)': {
           ...(!outlinedVariant && {

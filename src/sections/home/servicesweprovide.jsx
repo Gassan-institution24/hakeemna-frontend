@@ -18,7 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  textalign: 'center',
+  textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
 
@@ -26,7 +26,7 @@ export default function Whydoc() {
   const renderDescription = (
     <Stack
       spacing={3}
-      sx={{ textalign: 'center', position: 'relative', top: '-50px' }}
+      sx={{ textAlign: 'center', position: 'relative', top: '-50px' }}
       // id="services"
     >
       <m.div variants={varFade().inDown}>
@@ -62,7 +62,7 @@ export default function Whydoc() {
               style={{
                 fontWeight: '700',
                 width: '250px',
-                textalign: 'left',
+                textAlign: 'left',
               }}
             >
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br /> Amet cupiditate ipsum
@@ -112,7 +112,7 @@ export default function Whydoc() {
               style={{
                 fontWeight: '700',
                 width: '250px',
-                textalign: 'left',
+                textAlign: 'left',
               }}
             >
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br /> Amet cupiditate ipsum

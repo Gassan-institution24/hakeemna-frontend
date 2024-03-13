@@ -22,7 +22,6 @@ import { RouterLink } from 'src/routes/components';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useGetHospitals } from 'src/api';
-import { useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -41,8 +40,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import TableDetailRow from '../hospital_list/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -51,14 +49,15 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [
-  { value: 'all', label: 'all' },
+  // { value: 'all', label: 'all' },
   { value: 'active', label: 'active' },
   { value: 'inactive', label: 'inactive' },
 ];
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'name', label: 'Name' },
+  { id: 'name_english', label: 'name' },
+  { id: 'name_arabic', label: 'arabic name' },
   { id: 'country', label: 'Country' },
   { id: 'city', label: 'city' },
   { id: 'status', label: 'Status' },
@@ -74,15 +73,13 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
 
 export default function HospitalsTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
-
-  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -115,7 +112,7 @@ export default function HospitalsTableView() {
   );
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -156,11 +153,10 @@ export default function HospitalsTableView() {
 
   const handleActivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.hospital(id)}/updatestatus`, /// edit
-        data: { status: 'active' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.hospitals.one(id)}/updatestatus`, /// edit
+        { status: 'active' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -168,11 +164,10 @@ export default function HospitalsTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.hospital(id)}/updatestatus`, /// edit
-        data: { status: 'inactive' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.hospitals.one(id)}/updatestatus`, /// edit
+        { status: 'inactive' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -180,11 +175,10 @@ export default function HospitalsTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.hospitals}/updatestatus`, /// edit
-      data: { status: 'active', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.hospitals.all}/updatestatus`, /// edit
+      { status: 'active', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: hospitalsData.length,
@@ -194,11 +188,10 @@ export default function HospitalsTableView() {
   }, [dataFiltered.length, dataInPage.length, table, hospitalsData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.hospitals}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.hospitals.all}/updatestatus`, /// edit
+      { status: 'inactive', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: hospitalsData.length,
@@ -276,9 +269,9 @@ export default function HospitalsTableView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -334,7 +327,7 @@ export default function HospitalsTableView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               action={
@@ -377,7 +370,7 @@ export default function HospitalsTableView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -388,9 +381,9 @@ export default function HospitalsTableView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <TableDetailRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
@@ -477,7 +470,7 @@ export default function HospitalsTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -485,7 +478,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

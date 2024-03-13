@@ -21,7 +21,6 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate } from 'src/locales';
 import { useGetPaymentMethods } from 'src/api';
 
 import Label from 'src/components/label';
@@ -41,8 +40,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import TableDetailRow from '../payment_methods/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -51,14 +49,15 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [
-  { value: 'all', label: 'all' },
+  // { value: 'all', label: 'all' },
   { value: 'active', label: 'active' },
   { value: 'inactive', label: 'inactive' },
 ];
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'name', label: 'Name' },
+  { id: 'name_english', label: 'name' },
+  { id: 'name_arabic', label: 'arabic name' },
   { id: 'status', label: 'Status' },
   // { id: 'created_at', label: 'Date Of Creation' },
   // { id: 'user_creation', label: 'Creater' },
@@ -72,15 +71,13 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
 
 export default function PaymentMethodsTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
-
-  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -113,7 +110,7 @@ export default function PaymentMethodsTableView() {
   );
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -154,11 +151,10 @@ export default function PaymentMethodsTableView() {
 
   const handleActivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.paymentmethod(id)}/updatestatus`, /// edit
-        data: { status: 'active' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.payment_methods.one(id)}/updatestatus`, /// edit
+        { status: 'active' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -166,11 +162,10 @@ export default function PaymentMethodsTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.paymentmethod(id)}/updatestatus`, /// edit
-        data: { status: 'inactive' },
-      });
+      await axiosInstance.patch(
+        `${endpoints.payment_methods.one(id)}/updatestatus`, /// edit
+        { status: 'inactive' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -178,11 +173,10 @@ export default function PaymentMethodsTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.paymentmethods}/updatestatus`, /// edit
-      data: { status: 'active', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.payment_methods.all}/updatestatus`, /// edit
+      { status: 'active', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: paymentMethodsData.length,
@@ -192,11 +186,10 @@ export default function PaymentMethodsTableView() {
   }, [dataFiltered.length, dataInPage.length, table, paymentMethodsData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.paymentmethods}/updatestatus`, /// edit
-      data: { status: 'inactive', ids: table.selected },
-    });
+    axiosInstance.patch(
+      `${endpoints.payment_methods.all}/updatestatus`, /// edit
+      { status: 'inactive', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
       totalRows: paymentMethodsData.length,
@@ -274,9 +267,9 @@ export default function PaymentMethodsTableView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -332,7 +325,7 @@ export default function PaymentMethodsTableView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               action={
@@ -375,7 +368,7 @@ export default function PaymentMethodsTableView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -386,9 +379,9 @@ export default function PaymentMethodsTableView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <TableDetailRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
@@ -475,7 +468,7 @@ export default function PaymentMethodsTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -483,7 +476,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

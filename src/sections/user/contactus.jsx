@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
 import { m } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,21 +8,22 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 import { varFade, MotionViewport } from 'src/components/animate';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function ContactUs() {
   const { enqueueSnackbar } = useSnackbar();
-  const [error, setError] = useState();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
+  const { user} =  useAuthContext()
   const curLangAr = currentLang.value === 'ar';
 
   const contactUsSchema = Yup.object().shape({
@@ -46,11 +46,9 @@ export default function ContactUs() {
 
   const onSubmit = handleSubmit(async (info) => {
     try {
-      const response = await axiosHandler({
-        setError,
-        method: 'POST',
-        path: `/api/contactus`,
-        data: info,
+      const response = await axiosInstance.post(`/api/contactus`, {
+        info,
+        user,
       });
       if (response) {
         enqueueSnackbar(
@@ -71,7 +69,6 @@ export default function ContactUs() {
         );
       }
     } catch (err) {
-      setError(err.message);
       enqueueSnackbar(err.message, { variant: 'error' });
     }
   });

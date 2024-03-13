@@ -8,7 +8,7 @@ import { alpha } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 import { UploadIllustration } from 'src/assets/illustrations';
 
 import Iconify from '../iconify';
@@ -42,8 +42,6 @@ export default function Upload({
   });
 
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   const hasFile = !!file && !multiple;
 
@@ -54,12 +52,10 @@ export default function Upload({
   const renderPlaceholder = (
     <Stack spacing={3} alignItems="center" justifyContent="center" flexWrap="wrap">
       <UploadIllustration sx={{ width: 1, maxWidth: 200 }} />
-      <Stack spacing={1} sx={{ textalign: 'center' }}>
-        <Typography variant="h6">
-          {curLangAr ? ' اسحب او اختار ملف' : 'Drop or Select file'}
-        </Typography>
+      <Stack spacing={1} sx={{ textAlign: 'center' }}>
+        <Typography variant="h6">{t('Drop or Select file')}</Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {curLangAr ? 'اسحب الملفات من كمبيوترك او اضغط ' : 'Drop files here or click'}
+          {t('Drop files here or click')}
           <Box
             component="span"
             sx={{
@@ -68,9 +64,9 @@ export default function Upload({
               textDecoration: 'underline',
             }}
           >
-            {curLangAr ? ' تصفح ' : 'browse'}
+            {t('browse')}
           </Box>
-          {curLangAr ? 'للاختيار من جهازك' : 'thorough your machine'}
+          {t('thorough your machine')}
         </Typography>
       </Stack>
     </Stack>

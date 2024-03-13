@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetIncomePaymentControl() {
-  const URL = endpoints.tables.incomePaymentControl;
+  const URL = endpoints.income_payment.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -26,7 +26,7 @@ export function useGetIncomePaymentControl() {
 }
 
 export function useGetPatientIncomePaymentControl(id) {
-  const URL = endpoints.tables.patientIncomePaymentControl(id);
+  const URL = endpoints.income_payment.patient.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -48,7 +48,7 @@ export function useGetPatientIncomePaymentControl(id) {
 }
 
 export function useGetDepartmentPaymentControl(id) {
-  const URL = endpoints.tables.departmentIncomePaymentControl(id);
+  const URL = endpoints.income_payment.department.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -70,7 +70,7 @@ export function useGetDepartmentPaymentControl(id) {
 }
 
 export function useGetStackholderIncomePaymentControl(id) {
-  const URL = endpoints.tables.stakeholderIncomePaymentControl(id);
+  const URL = endpoints.income_payment.stakeholder.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -92,7 +92,7 @@ export function useGetStackholderIncomePaymentControl(id) {
 }
 
 export function useGetIncomePayment(id) {
-  const URL = endpoints.tables.incomePayment(id);
+  const URL = endpoints.income_payment.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

@@ -15,8 +15,6 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetUSLicenseMovement } from 'src/api';
 import { StatusOptions } from 'src/assets/data/status-options';
@@ -45,7 +43,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -80,12 +78,9 @@ export default function UnitServicesAccountingView() {
 
   const settings = useSettingsContext();
 
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
   const router = useRouter();
 
-  const { licenseMovements, loading, refetch } = useGetUSLicenseMovement(
+  const { licenseMovements, loading } = useGetUSLicenseMovement(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
@@ -105,7 +100,7 @@ export default function UnitServicesAccountingView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -118,7 +113,7 @@ export default function UnitServicesAccountingView() {
         code: info.code,
         name: info.name_english,
         category: info.category?.name_english,
-        symptoms: info.symptoms?.map((symptom) => symptom?.name_english),
+        symptoms: info.symptoms?.map((symptom, idx) => symptom?.name_english),
       });
       return acc;
     }, []);
@@ -196,9 +191,9 @@ export default function UnitServicesAccountingView() {
             boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
           }}
         >
-          {STATUS_OPTIONS.map((tab) => (
+          {STATUS_OPTIONS.map((tab, idx) => (
             <Tab
-              key={tab.value}
+              key={idx}
               iconPosition="end"
               value={tab.value}
               label={tab.label}
@@ -259,7 +254,7 @@ export default function UnitServicesAccountingView() {
                 // onSelectAllRows={(checked) =>
                 //   table.onSelectAllRows(
                 //     checked,
-                //     dataFiltered.map((row) => row._id)
+                //     dataFiltered.map((row, idx)  => row._id)
                 //   )
                 // }
               />
@@ -270,9 +265,9 @@ export default function UnitServicesAccountingView() {
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
-                  .map((row) => (
+                  .map((row, idx) => (
                     <AccountingRow
-                      key={row._id}
+                      key={idx}
                       row={row}
                       filters={filters}
                       setFilters={setFilters}
@@ -313,7 +308,7 @@ export default function UnitServicesAccountingView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -321,7 +316,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

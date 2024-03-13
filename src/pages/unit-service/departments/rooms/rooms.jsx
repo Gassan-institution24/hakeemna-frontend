@@ -17,9 +17,10 @@ export default function DepartmentRoomsPage() {
   const { data, loading } = useGetDepartment(id);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="department" subcategory="rooms" acl="read">
+    <ACLGuard category="department" subcategory="management_tables" acl="read">
       <Helmet>
         <title>{name || ''} Department Rooms</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentRoomsView departmentData={data} />}

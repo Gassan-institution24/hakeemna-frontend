@@ -21,7 +21,7 @@ function NavSectionHorizontal({ data, slotProps, sx, ...other }) {
       }}
       {...other}
     >
-      {data.map((group, index) => (
+      {data.map((group, idx) => (
         <Stack
           component="nav"
           id="nav-section-horizontal"
@@ -34,7 +34,7 @@ function NavSectionHorizontal({ data, slotProps, sx, ...other }) {
           }}
           {...other}
         >
-          <Group key={group.subheader || index} items={group.items} slotProps={slotProps} />
+          <Group key={idx} items={group.items} slotProps={slotProps} />
         </Stack>
       ))}
     </Stack>
@@ -54,8 +54,8 @@ export default memo(NavSectionHorizontal);
 function Group({ items, slotProps }) {
   return (
     <>
-      {items.map((list) => (
-        <NavList key={list.title} data={list} depth={1} slotProps={slotProps} />
+      {items.map((list, idx) => (
+        <NavList key={idx} data={list} depth={1} slotProps={slotProps} />
       ))}
     </>
   );

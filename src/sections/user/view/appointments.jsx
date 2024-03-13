@@ -1,39 +1,39 @@
-import { useState, useCallback } from 'react';
+// import { useState, useCallback } from 'react';
 
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
+// import Tab from '@mui/material/Tab';
+// import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
 
-import Iconify from 'src/components/iconify';
+// import Iconify from 'src/components/iconify';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import AppointmentData from '../appointments/appointmentsforpatient';
-import PatientsAppointment from '../appointments/availableappointments';
+// import PatientsAppointment from '../appointments/availableappointments';
 // ----------------------------------------------------------------------
 
 export default function UserAppointmentsPage() {
   const { t } = useTranslate();
-  const [currentTab, setCurrentTab] = useState('appointmentData');
-  const handleChangeTab = useCallback((event, newValue) => {
-    setCurrentTab(newValue);
-  }, []);
+  // const [currentTab, setCurrentTab] = useState('appointmentData');
+  // const handleChangeTab = useCallback((event, newValue) => {
+  //   setCurrentTab(newValue);
+  // }, []);
 
-  const TABS = [
-    {
-      value: 'appointmentData',
-      label: t('My appointments'),
-      icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
-    },
-    {
-      value: 'bookappointments',
-      label: t('Book appointment'),
-      icon: <Iconify icon="solar:user-id-bold" width={24} />,
-    },
-  ];
+  // const TABS = [
+  //   {
+  //     value: 'appointmentData',
+  //     label: t('My appointments'),
+  //     icon: <Iconify icon="solar:bell-bing-bold" width={24} />,
+  //   },
+  //   // {
+  //   //   value: 'bookappointments',
+  //   //   label: t('Book appointment'),
+  //   //   icon: <Iconify icon="solar:user-id-bold" width={24} />,
+  //   // },
+  // ];
   return (
     <Container>
       <CustomBreadcrumbs
@@ -46,19 +46,20 @@ export default function UserAppointmentsPage() {
         sx={{ mb: { xs: 3, md: 5 } }}
       />
 
-      <Tabs
+      {/* <Tabs
         value={currentTab}
         onChange={handleChangeTab}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       >
-        {TABS.map((tab) => (
-          <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
+        {TABS.map((tab, idx)  => (
+          <Tab key={idx} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
       </Tabs>
       {currentTab === 'appointmentData' && <AppointmentData />}
-      {currentTab === 'bookappointments' && <PatientsAppointment />}
+      {currentTab === 'bookappointments' && <PatientsAppointment />} */}
+      <AppointmentData />
     </Container>
   );
 }

@@ -9,8 +9,6 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDateTime } from 'src/utils/format-time';
-
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -27,7 +25,6 @@ export default function AppointmentsTableRow({
   onViewRow,
   onCancelRow,
   onUnCancelRow,
-  onDeleteRow,
 }) {
   const {
     sequence_number,
@@ -63,18 +60,44 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell
-          sx={{
-            cursor: 'pointer',
-            color: '#3F54EB',
-            // textDecoration: 'underline',
-          }}
-          onClick={onViewRow}
+          sx={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            }) && {
+              cursor: 'pointer',
+              color: '#3F54EB',
+              // textDecoration: 'underline',
+            }
+          }
+          onClick={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            })
+              ? onViewRow
+              : null
+          }
           align="center"
         >
           {sequence_number}
         </TableCell>
 
-        <TableCell lang="ar" onClick={onViewRow} align="center">
+        <TableCell
+          lang="ar"
+          onClick={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            })
+              ? onViewRow
+              : null
+          }
+          align="center"
+        >
           <ListItemText
             primary={
               start_date
@@ -84,7 +107,19 @@ export default function AppointmentsTableRow({
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
-        <TableCell lang="ar" onClick={onViewRow} align="center">
+        <TableCell
+          lang="ar"
+          onClick={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            })
+              ? onViewRow
+              : null
+          }
+          align="center"
+        >
           <ListItemText
             primary={
               end_date
@@ -95,10 +130,34 @@ export default function AppointmentsTableRow({
           />
         </TableCell>
 
-        <TableCell lang="ar" onClick={onViewRow} align="center">
+        <TableCell
+          lang="ar"
+          onClick={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            })
+              ? onViewRow
+              : null
+          }
+          align="center"
+        >
           {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
         </TableCell>
-        <TableCell lang="ar" onClick={onViewRow} align="center">
+        <TableCell
+          lang="ar"
+          onClick={
+            checkAcl({
+              category: 'work_group',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            })
+              ? onViewRow
+              : null
+          }
+          align="center"
+        >
           {curLangAr ? work_group?.name_arabic : work_group?.name_english}
         </TableCell>
 
@@ -127,8 +186,12 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status !== 'canceled' &&
-          checkAcl({ category: 'employee', subcategory: 'appointment_configs', acl: 'delete' }) && (
+        {status === 'active' &&
+          checkAcl({
+            category: 'work_group',
+            subcategory: 'appointment_configs',
+            acl: 'delete',
+          }) && (
             <MenuItem
               onClick={() => {
                 onCancelRow();
@@ -136,12 +199,16 @@ export default function AppointmentsTableRow({
               }}
               sx={{ color: 'error.main' }}
             >
-              <Iconify icon="mdi:bell-cancel" />
-              {t('cancel')}
+              <Iconify icon="material-symbols:delete" />
+              {t('delete')}
             </MenuItem>
           )}
-        {status === 'canceled' &&
-          checkAcl({ category: 'employee', subcategory: 'appointment_configs', acl: 'update' }) && (
+        {status === 'inactive' &&
+          checkAcl({
+            category: 'work_group',
+            subcategory: 'appointment_configs',
+            acl: 'update',
+          }) && (
             <MenuItem
               onClick={() => {
                 onUnCancelRow();
@@ -153,10 +220,16 @@ export default function AppointmentsTableRow({
               {t('uncancel')}
             </MenuItem>
           )}
-        <MenuItem onClick={onViewRow}>
-          <Iconify icon="solar:eye-bold" />
-          {t('view')}
-        </MenuItem>
+        {checkAcl({
+          category: 'work_group',
+          subcategory: 'appointment_configs',
+          acl: 'update',
+        }) && (
+          <MenuItem onClick={onViewRow}>
+            <Iconify icon="solar:eye-bold" />
+            {t('view')}
+          </MenuItem>
+        )}
         <MenuItem onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
@@ -190,7 +263,17 @@ export default function AppointmentsTableRow({
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            secondary={format(new Date(updated_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
@@ -206,7 +289,6 @@ export default function AppointmentsTableRow({
 }
 
 AppointmentsTableRow.propTypes = {
-  onDeleteRow: PropTypes.func,
   onCancelRow: PropTypes.func,
   onUnCancelRow: PropTypes.func,
   onSelectRow: PropTypes.func,

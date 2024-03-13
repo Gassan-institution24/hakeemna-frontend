@@ -9,7 +9,8 @@
 //     <>
 //       <Helmet>
 //         <title> Dashboard: Permission Denied</title>
-//       </Helmet>
+//       <meta name="description" content='meta' />
+// </Helmet>
 
 //       <PermissionDeniedView />
 //     </>

@@ -10,16 +10,14 @@ import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
-import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
   TableNoData,
@@ -35,8 +33,8 @@ import ExistEmployeesRow from './exist-employees-row';
 
 export default function TableNewEditForm() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
 
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
@@ -48,16 +46,12 @@ export default function TableNewEditForm() {
     { id: '', width: 88 },
   ];
 
-  const router = useRouter();
+  const { user } = useAuthContext();
 
   const table = useTable({ defaultRowsPerPage: 10 });
 
   const unitServiceID =
     user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service._id;
-
-  const settings = useSettingsContext();
-
-  const { user } = useAuthContext();
 
   const [results, setResults] = useState([]);
   const [filters, setFilters] = useState({});
@@ -74,8 +68,6 @@ export default function TableNewEditForm() {
     rowsPerPage,
     //
     selected,
-    onSelectRow,
-    onSelectAllRows,
     //
     onSort,
     onChangeDense,
@@ -83,14 +75,14 @@ export default function TableNewEditForm() {
     onChangeRowsPerPage,
   } = table;
 
-  const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+  // const handleArabicInputChange = (event) => {
+  //   // Validate the input based on Arabic language rules
+  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
 
-    if (arabicRegex.test(event.target.value)) {
-      setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-    }
-  };
+  //   if (arabicRegex.test(event.target.value)) {
+  //     setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+  //   }
+  // };
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
@@ -103,7 +95,7 @@ export default function TableNewEditForm() {
 
   const handleEmployment = async (row) => {
     try {
-      await axios.post(endpoints.tables.employeeEngagements, {
+      await axios.post(endpoints.employee_engagements.all, {
         unit_service: unitServiceID,
         employee: row._id,
       });
@@ -123,7 +115,7 @@ export default function TableNewEditForm() {
   useEffect(() => {
     async function getExistEmployees() {
       if (Object.keys(filters).length) {
-        const { data } = await axios.post(endpoints.tables.findEmployee, {
+        const { data } = await axios.post(endpoints.employees.find, {
           unit_service:
             user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service
               ._id,
@@ -228,12 +220,8 @@ export default function TableNewEditForm() {
         />
 
         <TableBody>
-          {results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-            <ExistEmployeesRow
-              key={row.id}
-              row={row}
-              onEmploymentRow={() => handleEmployment(row)}
-            />
+          {results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => (
+            <ExistEmployeesRow key={idx} row={row} onEmploymentRow={() => handleEmployment(row)} />
           ))}
 
           <TableNoData

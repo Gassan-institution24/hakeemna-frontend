@@ -1,8 +1,10 @@
+import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import { ListItemText } from '@mui/material';
 import Collapse from '@mui/material/Collapse';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
@@ -10,8 +12,6 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-
-import { fDateTime } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -22,6 +22,7 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
   const {
     code,
     name_english,
+    name_arabic,
     diseases,
     description,
     created_at,
@@ -35,7 +36,6 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
 
   const popover = usePopover();
   const DDL = usePopover();
-  const details = usePopover();
   const collapse = useBoolean();
 
   const renderPrimary = (
@@ -45,6 +45,7 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
       </TableCell>
 
       <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{name_arabic}</TableCell>
 
       <TableCell align="center">{description}</TableCell>
       <TableCell align="center">
@@ -94,9 +95,9 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
               <Box sx={{ flex: 1 }}>name</Box>
               <Box sx={{ flex: 1 }}>Category</Box>
             </Stack>
-            {diseases.map((item) => (
+            {diseases.map((item, idx) => (
               <Stack
-                key={item._id}
+                key={idx}
                 direction="row"
                 alignItems="center"
                 sx={{
@@ -154,14 +155,34 @@ export default function CountriesTableRow({ row, selected, onEditRow }) {
         }}
       >
         <Box sx={{ fontWeight: 600 }}>Creation Time:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={format(new Date(created_at), 'dd MMM yyyy')}
+            secondary={format(new Date(created_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
         <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            secondary={format(new Date(updated_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editor:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editor IP:</Box>

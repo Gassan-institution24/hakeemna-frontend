@@ -180,7 +180,7 @@ const StyledNavItem = styled(ListItemButton, {
       fontSize: 10,
       minHeight: 56,
       lineHeight: '16px',
-      textalign: 'center',
+      textAlign: 'center',
       flexDirection: 'column',
       justifyContent: 'center',
       padding: theme.spacing(0.5),

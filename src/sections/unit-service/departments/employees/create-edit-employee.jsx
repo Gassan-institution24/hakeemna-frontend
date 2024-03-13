@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
@@ -20,13 +19,12 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetCountries, useGetSpecialties, useGetEmployeeTypes } from 'src/api';
+import { useGetCountries, useGetSpecialties, useGetUSActiveEmployeeTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -44,7 +42,9 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
   const { user } = useAuthContext();
 
   const { countriesData } = useGetCountries();
-  const { employeeTypesData } = useGetEmployeeTypes();
+  const { employeeTypesData } = useGetUSActiveEmployeeTypes(
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
+  );
   const { specialtiesData } = useGetSpecialties();
 
   const [phone, setPhone] = useState();
@@ -101,14 +101,14 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+  // const handleArabicInputChange = (event) => {
+  //   // Validate the input based on Arabic language rules
+  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
 
-    if (arabicRegex.test(event.target.value)) {
-      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-    }
-  };
+  //   if (arabicRegex.test(event.target.value)) {
+  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+  //   }
+  // };
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
@@ -128,18 +128,11 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       // console.log('data', data);
-      const address = await axios.get('https://geolocation-db.com/json/');
+
       if (currentTable) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.hospital(currentTable._id),
-          data: {
-            role: 'employee',
-            modifications_nums: (currentTable.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
+        await axiosInstance.patch(endpoints.hospitals.one(currentTable._id), {
+          role: 'employee',
+          ...data,
         });
         socket.emit('created', {
           data,
@@ -148,16 +141,10 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
           msg: `creating an employee <strong>${data.first_name}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.auth.register,
-          data: {
-            ip_address_user_creation: address.data.IPv4,
-            user_creation: user._id,
-            role: 'employee',
-            userName: `${data.first_name} ${data.family_name}`,
-            ...data,
-          },
+        await axiosInstance.post(endpoints.auth.register, {
+          role: 'employee',
+          userName: `${data.first_name} ${data.family_name}`,
+          ...data,
         });
         socket.emit('updated', {
           data,
@@ -216,6 +203,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
               />
               <MuiTelInput
                 forceCallingCode
+                defaultCountry="JO"
                 value={phone}
                 onChange={(newPhone) => {
                   matchIsValidTel(newPhone);
@@ -225,29 +213,29 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
               />
 
               <RHFSelect name="nationality" label={`${t('nationality')} *`}>
-                {countriesData.map((nationality) => (
-                  <MenuItem key={nationality._id} value={nationality._id}>
+                {countriesData.map((nationality, idx) => (
+                  <MenuItem key={idx} value={nationality._id}>
                     {curLangAr ? nationality.name_arabic : nationality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="employee_type" label={`${t('employee type')} *`}>
-                {employeeTypesData.map((employee_type) => (
-                  <MenuItem key={employee_type._id} value={employee_type._id}>
+                {employeeTypesData.map((employee_type, idx) => (
+                  <MenuItem key={idx} value={employee_type._id}>
                     {curLangAr ? employee_type.name_arabic : employee_type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="speciality" label={`${t('specialty')} *`}>
-                {specialtiesData.map((speciality) => (
-                  <MenuItem key={speciality._id} value={speciality._id}>
+                {specialtiesData.map((speciality, idx) => (
+                  <MenuItem key={idx} value={speciality._id}>
                     {curLangAr ? speciality.name_arabic : speciality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="gender" label={`${t('gender')} *`}>
-                <MenuItem value="male">{curLangAr ? 'ذكر' : 'Male'}</MenuItem>
-                <MenuItem value="female">{curLangAr ? 'انثى' : 'Female'}</MenuItem>
+                <MenuItem value="male">{t('male')}</MenuItem>
+                <MenuItem value="female">{t('female')}</MenuItem>
               </RHFSelect>
             </Box>
             <Box

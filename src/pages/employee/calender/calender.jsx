@@ -9,6 +9,7 @@ export default function CalendarPage() {
     <>
       <Helmet>
         <title> Dashboard: Calendar</title>
+        <meta name="description" content="meta" />
       </Helmet>
       <CalendarView />
     </>
