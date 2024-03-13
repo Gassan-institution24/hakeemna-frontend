@@ -19,7 +19,6 @@ import { fCurrency } from 'src/utils/format-number';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
 
 import InvoiceToolbar from './invoice-toolbar';
 
@@ -27,7 +26,7 @@ import InvoiceToolbar from './invoice-toolbar';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '& td': {
-    textalign: 'right',
+    textAlign: 'right',
     borderBottom: 'none',
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
@@ -41,8 +40,6 @@ const STATUS_OPTIONS = [
 ];
 
 export default function InvoiceDetails({ economicMovementData }) {
-  const settings = useSettingsContext();
-
   const renderTotal = (
     <>
       <StyledTableRow>
@@ -99,7 +96,7 @@ export default function InvoiceDetails({ economicMovementData }) {
         </Typography>
       </Grid>
 
-      <Grid xs={12} md={3} sx={{ py: 3, textalign: 'right' }}>
+      <Grid xs={12} md={3} sx={{ py: 3, textAlign: 'right' }}>
         <Typography variant="subtitle2">Have a Question?</Typography>
 
         <Typography variant="body2">support@doctorna.online</Typography>
@@ -126,8 +123,8 @@ export default function InvoiceDetails({ economicMovementData }) {
           </TableHead>
 
           <TableBody>
-            {economicMovementData.Provided_services?.map((row, index) => (
-              <TableRow key={index}>
+            {economicMovementData.Provided_services?.map((row, index, idx) => (
+              <TableRow key={idx}>
                 <TableCell align="center">{row.index + 1}</TableCell>
 
                 <TableCell align="center">

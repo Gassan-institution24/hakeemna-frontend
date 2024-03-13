@@ -38,8 +38,8 @@ export default function Toolbar({ id, simple, ...other }) {
       <div id={id}>
         <div className="ql-formats">
           <select className="ql-header" defaultValue="">
-            {HEADINGS.map((heading, index) => (
-              <option key={heading} value={index + 1}>
+            {HEADINGS.map((heading, index, idx) => (
+              <option key={idx} value={index + 1}>
                 {heading}
               </option>
             ))}

@@ -21,11 +21,9 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetCities } from 'src/api';
-import { useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -58,31 +56,25 @@ const STATUS_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'name', label: 'name' },
-  { id: 'country', label: 'Country' },
-  { id: 'status', label: 'Status' },
-  // { id: 'created_at', label: 'Date Of Creation' },
-  // { id: 'user_creation', label: 'Creater' },
-  // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
-  // { id: 'updated_at', label: 'Date Of Updating' },
-  // { id: 'user_modification', label: 'Last Modifier' },
-  // { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
-  // { id: 'modifications_nums', label: 'No Of Modifications' },
+  { id: 'code', label: 'code' },
+  { id: 'sequence_number', label: 'sequence' },
+  { id: 'name_english', label: 'name' },
+  { id: 'name_arabic', label: 'name arabic' },
+  { id: 'state', label: 'state' },
+  { id: 'country', label: 'country' },
+  { id: 'status', label: 'status' },
   { id: '', width: 88 },
 ];
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
 
 export default function CitiesTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
-
-  const { t } = useTranslate();
 
   const componentRef = useRef();
 
@@ -116,7 +108,7 @@ export default function CitiesTableView() {
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -157,11 +149,7 @@ export default function CitiesTableView() {
 
   const handleActivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.city(id)}/updatestatus`,
-        data: { status: 'active' },
-      });
+      await axiosInstance.patch(`${endpoints.cities.one(id)}/updatestatus`, { status: 'active' });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -169,10 +157,8 @@ export default function CitiesTableView() {
   );
   const handleInactivate = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.city(id)}/updatestatus`,
-        data: { status: 'inactive' },
+      await axiosInstance.patch(`${endpoints.cities.one(id)}/updatestatus`, {
+        status: 'inactive',
       });
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -181,10 +167,9 @@ export default function CitiesTableView() {
   );
 
   const handleActivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.cities}/updatemanystatus`,
-      data: { status: 'active', ids: table.selected },
+    axiosInstance.patch(`${endpoints.cities.all}/updatemanystatus`, {
+      status: 'active',
+      ids: table.selected,
     });
     refetch();
     table.onUpdatePageDeleteRows({
@@ -195,10 +180,9 @@ export default function CitiesTableView() {
   }, [dataFiltered.length, dataInPage.length, table, tableData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    await axiosHandler({
-      method: 'PATCH',
-      path: `${endpoints.tables.cities}/updatemanystatus`,
-      data: { status: 'inactive', ids: table.selected },
+    axiosInstance.patch(`${endpoints.cities.all}/updatemanystatus`, {
+      status: 'inactive',
+      ids: table.selected,
     });
     refetch();
     table.onUpdatePageDeleteRows({
@@ -277,9 +261,9 @@ export default function CitiesTableView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -335,7 +319,7 @@ export default function CitiesTableView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               action={
@@ -378,7 +362,7 @@ export default function CitiesTableView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -389,9 +373,9 @@ export default function CitiesTableView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <TableDetailRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
@@ -478,7 +462,7 @@ export default function CitiesTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -486,7 +470,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

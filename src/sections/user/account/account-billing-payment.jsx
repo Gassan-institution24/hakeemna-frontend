@@ -4,8 +4,8 @@ import CardHeader from '@mui/material/CardHeader';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useAuthContext } from 'src/auth/hooks';
-import { useGetPaymentmethods } from 'src/api/user';
+// import { useAuthContext } from 'src/auth/hooks';
+// import { useGetPaymentmethods } from 'src/api/user';
 
 import Iconify from 'src/components/iconify';
 // import PaymentCardItem from '../payment/payment-card-item';
@@ -14,8 +14,8 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function AccountBillingPayment() {
-  const { user } = useAuthContext();
-  const { paymentmethods } = useGetPaymentmethods();
+  // const { user } = useAuthContext();
+  // const { paymentmethods } = useGetPaymentmethods();
   // console.log(paymentmethods);
   const newCard = useBoolean();
   return (
@@ -45,8 +45,8 @@ export default function AccountBillingPayment() {
           }}
           sx={{ p: 3 }}
         >
-          {paymentmethods?.map((card) => (
-            <PaymentCardItem key={card._id} card={card.card_holder} />
+          {paymentmethods?.map((card, idx)  => (
+            <PaymentCardItem key={idx} card={card.card_holder} />
           ))}
         </Box> */}
       </Card>

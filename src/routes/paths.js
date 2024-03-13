@@ -72,23 +72,28 @@ export const paths = {
     },
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
+      qr: `${ROOTS.DASHBOARD}/myprofile/`,
       new: `${ROOTS.DASHBOARD}/user/new`,
       prescriptions: `${ROOTS.DASHBOARD}/user/prescriptions`,
+      family: `${ROOTS.DASHBOARD}/user/family`,
+      insurance: `${ROOTS.DASHBOARD}/user/insurance`,
       medicalreports: `${ROOTS.DASHBOARD}/user/medicalreports`,
       cards: `${ROOTS.DASHBOARD}/user/appointments`,
       profile: `${ROOTS.DASHBOARD}/user/profile`,
+      exist: `${ROOTS.DASHBOARD}/user/exist`,
+      create: `${ROOTS.DASHBOARD}/user/create`,
       account: `${ROOTS.DASHBOARD}/user/account`,
       share: `${ROOTS.DASHBOARD}/user/share`,
       financilmovment: `${ROOTS.DASHBOARD}/user/financilmovment`,
       patientsappointments: `${ROOTS.DASHBOARD}/user/appointments`,
-      bookappointment: (id)=>`${ROOTS.DASHBOARD}/user/bookappointment/${id}`,
-      doctorpage: (id)=>`${ROOTS.DASHBOARD}/user/doctorpage/${id}`,
+      bookappointment: (id) => `${ROOTS.DASHBOARD}/user/bookappointment/${id}`,
+      doctorpage: (id, date) => `${ROOTS.DASHBOARD}/user/doctorpage/${id}`,
       specialities: `${ROOTS.DASHBOARD}/user/specialities`,
       watingroom: `${ROOTS.DASHBOARD}/user/watingroom`,
       bmi: `${ROOTS.DASHBOARD}/user/bmi`,
       oldpatientdata: `${ROOTS.DASHBOARD}/user/oldpatientdata`,
       emergency: `${ROOTS.DASHBOARD}/user/emergency`,
-      edit: (id) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
+      edit: `${ROOTS.DASHBOARD}/user/contactus`,
     },
   },
   // super adnim
@@ -529,6 +534,15 @@ export const paths = {
         root: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups`,
         new: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups/new`,
         edit: (id, acid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups/${acid}/edit`,
+        permissions: {
+          root: (id, wgid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups/${wgid}`,
+          employee: (id, wgid, emid) =>
+            `${ROOTS.SUPERADMIN}/us/departments/${id}/wgroups/${wgid}/employee/${emid}`,
+        },
+      },
+      permissions: {
+        root: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/acl`,
+        employee: (id, emid) => `${ROOTS.SUPERADMIN}/us/departments/${id}/acl/${emid}`,
       },
       appointments: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/appointments`,
       appointmentconfiguration: (id) =>
@@ -640,19 +654,34 @@ export const paths = {
         root: `${ROOTS.SUPERADMIN}/us/tables/work_groups`,
         new: `${ROOTS.SUPERADMIN}/us/tables/work_groups/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/us/tables/work_groups/${id}/edit`,
+        permissions: {
+          root: (wgid) => `${ROOTS.SUPERADMIN}/us/tables/work_groups/${wgid}`,
+          employee: (wgid, emid) =>
+            `${ROOTS.SUPERADMIN}/us/tables/work_groups/${wgid}/employee/${emid}`,
+        },
       },
       rooms: {
         root: `${ROOTS.SUPERADMIN}/us/tables/rooms`,
         new: `${ROOTS.SUPERADMIN}/us/tables/rooms/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/us/tables/rooms/${id}/edit`,
       },
+      services: {
+        root: `${ROOTS.SUPERADMIN}/us/tables/services`,
+        new: `${ROOTS.SUPERADMIN}/us/tables/services/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/us/tables/services/${id}/edit`,
+      },
     },
   },
 
-  // unit service
   employee: {
     root: ROOTS.SUPERADMIN,
-    workGroups: `${ROOTS.SUPERADMIN}/wgroups`,
+    workGroups: {
+      root: `${ROOTS.SUPERADMIN}/wgroups`,
+      permissions: {
+        root: (wgid) => `${ROOTS.SUPERADMIN}/wgroups/${wgid}`,
+        employee: (wgid, emid) => `${ROOTS.SUPERADMIN}/wgroups/${wgid}/employee/${emid}`,
+      },
+    },
     entrancemanagement: {
       root: `${ROOTS.SUPERADMIN}/entrancemanagement`,
       new: `${ROOTS.SUPERADMIN}/entrancemanagement/new`,

@@ -19,7 +19,7 @@ import { varFade, MotionViewport } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
 
-export const SKILLS = [...Array(3)].map((_, index) => ({
+export const SKILLS = [...Array(3)].map((_, index, idx) => ({
   label: ['Development', 'Design', 'Marketing'][index],
   value: [20, 40, 60][index],
 }));
@@ -43,7 +43,7 @@ export default function AboutWhat() {
       component={MotionViewport}
       sx={{
         py: { xs: 10, md: 15 },
-        textalign: { xs: 'center', md: 'unset' },
+        textAlign: { xs: 'center', md: 'unset' },
       }}
     >
       <Grid container columnSpacing={{ md: 3 }} alignItems="flex-start">
@@ -94,10 +94,10 @@ export default function AboutWhat() {
           </m.div>
 
           <Stack spacing={3} sx={{ my: 5 }}>
-            {SKILLS.map((progress, index) => (
-              <Box component={m.div} key={progress.label} variants={varFade().inRight}>
+            {SKILLS.map((progress, index, idx) => (
+              <Box component={m.div} key={idx} variants={varFade().inRight}>
                 <Stack direction="row" alignItems="center" sx={{ mb: 1 }}>
-                  <Typography variant="subtitle2" sx={{ flexGrow: 1, textalign: 'left' }}>
+                  <Typography variant="subtitle2" sx={{ flexGrow: 1, textAlign: 'left' }}>
                     {progress.label}
                   </Typography>
 

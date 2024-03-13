@@ -51,18 +51,22 @@ export default function whoAreWe() {
       <Stack
         spacing={3}
         sx={{
-          textalign: 'center',
+          textAlign: 'center',
           mb: { xs: 5, md: 8 },
         }}
       >
         <m.div variants={varFade().inUp}>
-          <Typography component="div" variant="overline" sx={{ color: 'text.disabled',  textalign: 'center', }} >
+          <Typography
+            component="div"
+            variant="overline"
+            sx={{ color: 'text.disabled', textAlign: 'center' }}
+          >
             Doctona Online
           </Typography>
         </m.div>
 
         <m.div variants={varFade().inDown}>
-          <Typography  variant="h2">Who are we ?</Typography>
+          <Typography variant="h2">Who are we ?</Typography>
         </m.div>
       </Stack>
 
@@ -75,11 +79,11 @@ export default function whoAreWe() {
           md: 'repeat(4, 1fr)',
         }}
       >
-        {CARDS.map((card, index) => (
-          <m.div variants={varFade().inUp} key={card.title} >
+        {CARDS.map((card, index, idx) => (
+          <m.div variants={varFade().inUp} key={idx}>
             <Card
               sx={{
-                textalign: 'center',
+                textAlign: 'center',
                 boxShadow: { md: 'none' },
                 bgcolor: 'rgba(102, 255, 102, 0)',
                 p: (theme) => theme.spacing(10, 5),

@@ -39,10 +39,10 @@ export default function AboutVision() {
         py: { xs: 1.5, md: 2.5 },
       }}
     >
-      {['ibm', 'lya', 'spotify', 'netflix', 'hbo', 'amazon'].map((logo) => (
+      {['ibm', 'lya', 'spotify', 'netflix', 'hbo', 'amazon'].map((logo, idx) => (
         <Box
           component={m.img}
-          key={logo}
+          key={idx}
           variants={varFade().in}
           alt={logo}
           src={`/assets/icons/brands/ic_brand_${logo}.svg`}
@@ -94,7 +94,7 @@ export default function AboutVision() {
         </Box>
 
         <m.div variants={varFade().inUp}>
-          <Typography variant="h3" sx={{ textalign: 'center', maxWidth: 800, mx: 'auto' }}>
+          <Typography variant="h3" sx={{ textAlign: 'center', maxWidth: 800, mx: 'auto' }}>
             Our vision offering the best product nulla vehicula tortor scelerisque ultrices
             malesuada.
           </Typography>

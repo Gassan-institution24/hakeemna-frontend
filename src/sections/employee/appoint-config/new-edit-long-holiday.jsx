@@ -1,3 +1,4 @@
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -8,13 +9,13 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { useUnitTime } from 'src/utils/format-time';
+
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';
-import { zonedTimeToUtc } from 'date-fns-tz';
-import { useAuthContext } from 'src/auth/hooks';
-import { useUnitTime } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -27,14 +28,14 @@ export default function NewEditLongHolidays() {
 
   const { user } = useAuthContext();
 
-  const { control, setValue, watch, resetField, getValues } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'long_holidays',
   });
 
-  const values = getValues();
+  const values = watch();
 
   const handleAdd = () => {
     append({
@@ -64,9 +65,9 @@ export default function NewEditLongHolidays() {
           divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
           spacing={3}
         >
-          {fields.map((item, index) => (
+          {fields.map((item, index, idx) => (
             <Stack
-              key={item.id}
+              key={idx}
               alignItems="flex-start"
               spacing={1.5}
               sx={{ width: { xs: '100%', md: 'auto' } }}
@@ -98,6 +99,7 @@ export default function NewEditLongHolidays() {
                             ?.unit_service?.country?.time_zone ||
                             Intl.DateTimeFormat().resolvedOptions().timeZone
                         );
+                        setValue(`long_holidays[${index}].end_date`, selectedTime);
                         field.onChange(selectedTime);
                       }}
                       slotProps={{

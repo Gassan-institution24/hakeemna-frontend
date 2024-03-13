@@ -21,7 +21,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useGetUSRooms } from 'src/api';
@@ -44,11 +44,9 @@ import {
 } from 'src/components/table'; /// edit
 import { useSnackbar } from 'notistack';
 
-import axiosHandler from 'src/utils/axios-handler';
-
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
-import { useLocales, useTranslate } from 'src/locales';
 import { StatusOptions } from 'src/assets/data/status-options';
 
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -61,15 +59,15 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
 
 export default function RoomsTableView() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -101,6 +99,7 @@ export default function RoomsTableView() {
   const { roomsData, loading, refetch } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
+  console.log('roomsData', roomsData);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -122,7 +121,7 @@ export default function RoomsTableView() {
   );
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -164,15 +163,14 @@ export default function RoomsTableView() {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
-          data: { status: 'active' },
-        });
+        await axiosInstance.patch(
+          `${endpoints.rooms.one(row._id)}/updatestatus`, /// edit
+          { status: 'active' }
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.rooms.root,
-          msg: `activated a room <strong>${row.name_english}</strong>`,
+          msg: `activated a room <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -187,15 +185,14 @@ export default function RoomsTableView() {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.room(row._id)}/updatestatus`, /// edit
-          data: { status: 'inactive' },
-        });
+        await axiosInstance.patch(
+          `${endpoints.rooms.one(row._id)}/updatestatus`, /// edit
+          { status: 'inactive' }
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.rooms.root,
-          msg: `inactivated a room <strong>${row.name_english}</strong>`,
+          msg: `inactivated a room <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -210,11 +207,10 @@ export default function RoomsTableView() {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.rooms}/updatestatus`, /// edit
-        data: { status: 'active', ids: table.selected },
-      });
+      await axiosInstance.patch(
+        `${endpoints.rooms.all}/updatestatus`, /// edit
+        { status: 'active', ids: table.selected }
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.tables.rooms.root,
@@ -235,11 +231,10 @@ export default function RoomsTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.rooms}/updatestatus`, /// edit
-        data: { status: 'inactive', ids: table.selected },
-      });
+      await axiosInstance.patch(
+        `${endpoints.rooms.all}/updatestatus`, /// edit
+        { status: 'inactive', ids: table.selected }
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.tables.rooms.root,
@@ -304,7 +299,11 @@ export default function RoomsTableView() {
           //   { name: t('department rooms') },
           // ]}
           action={
-            checkAcl({ category: 'department', subcategory: 'rooms', acl: 'create' }) && (
+            checkAcl({
+              category: 'department',
+              subcategory: 'management_tables',
+              acl: 'create',
+            }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.tables.rooms.new}
@@ -329,9 +328,9 @@ export default function RoomsTableView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -388,11 +387,15 @@ export default function RoomsTableView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               action={
-                checkAcl({ category: 'department', subcategory: 'rooms', acl: 'update' }) && (
+                checkAcl({
+                  category: 'department',
+                  subcategory: 'management_tables',
+                  acl: 'update',
+                }) && (
                   <>
                     {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
@@ -413,7 +416,11 @@ export default function RoomsTableView() {
                 )
               }
               color={
-                checkAcl({ category: 'department', subcategory: 'rooms', acl: 'update' }) &&
+                checkAcl({
+                  category: 'department',
+                  subcategory: 'management_tables',
+                  acl: 'update',
+                }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'inactive')
@@ -434,7 +441,7 @@ export default function RoomsTableView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -445,9 +452,9 @@ export default function RoomsTableView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <TableDetailRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
@@ -534,7 +541,7 @@ export default function RoomsTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -542,7 +549,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

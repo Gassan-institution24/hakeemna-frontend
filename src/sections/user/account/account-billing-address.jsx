@@ -1,39 +1,39 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
+// import { useState, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 
-import { useBoolean } from 'src/hooks/use-boolean';
+// import { useBoolean } from 'src/hooks/use-boolean';
 
-import { usePopover } from 'src/components/custom-popover';
+// import { usePopover } from 'src/components/custom-popover';
 
 // import { AddressItem, AddressNewForm } from '../address';
 
 // ----------------------------------------------------------------------
 
 export default function AccountBillingAddress({ addressBook }) {
-  const [addressId, setAddressId] = useState('');
-  const DATA = [{ value: 'test' }];
-  const popover = usePopover();
+  // const [addressId, setAddressId] = useState('');
+  // const DATA = [{ value: 'test' }];
+  // const popover = usePopover();
 
-  const addressForm = useBoolean();
+  // const addressForm = useBoolean();
 
-  const handleAddNewAddress = useCallback((address) => {
-    console.info('ADDRESS', address);
-  }, []);
+  // const handleAddNewAddress = useCallback((address) => {
+  //   console.info('ADDRESS', address);
+  // }, []);
 
-  const handleSelectedId = useCallback(
-    (event, id) => {
-      popover.onOpen(event);
-      setAddressId(id);
-    },
-    [popover]
-  );
+  // const handleSelectedId = useCallback(
+  //   (event, id) => {
+  //     popover.onOpen(event);
+  //     setAddressId(id);
+  //   },
+  //   [popover]
+  // );
 
-  const handleClose = useCallback(() => {
-    popover.onClose();
-    setAddressId('');
-  }, [popover]);
+  // const handleClose = useCallback(() => {
+  //   popover.onClose();
+  //   setAddressId('');
+  // }, [popover]);
 
   return (
     <>
@@ -53,11 +53,11 @@ export default function AccountBillingAddress({ addressBook }) {
         /> */}
 
         {/* <Stack spacing={2.5} sx={{ p: 3 }}>
-          {DATA.map((address) => (
+          {DATA.map((address, idx)  => (
             <>
               <AddressItem
                 variant="outlined"
-                // key={address.id}
+                // key={idx}
                 address={address}
                 // action={
                 //   <IconButton

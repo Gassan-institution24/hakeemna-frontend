@@ -13,6 +13,7 @@ export default function Medicalreport() {
     <>
       <Helmet>
         <title> {t('Medical Reports')} </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <Medicalreports />

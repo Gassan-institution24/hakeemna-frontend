@@ -40,7 +40,7 @@
 //     <Box
 //       sx={{
 //         maxWidth: { md: 360 },
-//         textalign: { xs: 'center', md: 'unset' },
+//         textAlign: { xs: 'center', md: 'unset' },
 //       }}
 //     >
 //       <m.div variants={varFade().inUp}>
@@ -87,8 +87,8 @@
 //       }}
 //     >
 //       <Masonry spacing={3} columns={{ xs: 1, md: 2 }} sx={{ ml: 0 }}>
-//         {_testimonials.map((testimonial) => (
-//           <m.div key={testimonial.name} variants={varFade().inUp}>
+//         {_testimonials.map((testimonial, idx)  => (
+//           <m.div key={idx} variants={varFade().inUp}>
 //             <TestimonialCard testimonial={testimonial} />
 //           </m.div>
 //         ))}

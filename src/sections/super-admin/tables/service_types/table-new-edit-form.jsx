@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
@@ -15,11 +14,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useAuthContext } from 'src/auth/hooks';
-import { useGetWorkShifts, useGetUnitservices, useGetMeasurmentTypes } from 'src/api';
+import { useGetWorkShifts, useGetActiveUnitservices, useGetActiveMeasurmentTypes } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -29,11 +26,9 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const { user } = useAuthContext();
-
   // console.log('currentt', currentTable);
-  const { unitservicesData } = useGetUnitservices();
-  const { measurmentTypesData } = useGetMeasurmentTypes();
+  const { unitservicesData } = useGetActiveUnitservices();
+  const { measurmentTypesData } = useGetActiveMeasurmentTypes();
   const { workShiftsData } = useGetWorkShifts();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -92,24 +87,10 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.servicetype(currentTable._id),
-          data: {
-            modifications_nums: (currentTable.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        });
+        await axiosInstance.patch(endpoints.service_types.one(currentTable._id), data);
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.tables.servicetypes,
-          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
-        });
+        await axiosInstance.post(endpoints.service_types.all, data);
       }
       reset();
       // if (response.status.includes(200, 304)) {
@@ -153,22 +134,22 @@ export default function TableNewEditForm({ currentTable }) {
               />
 
               <RHFSelect name="unit_service" label="unit_service">
-                {unitservicesData.map((unit_service) => (
-                  <MenuItem key={unit_service._id} value={unit_service._id}>
+                {unitservicesData.map((unit_service, idx) => (
+                  <MenuItem key={idx} value={unit_service._id}>
                     {unit_service.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="work_shift" label="work_shift">
-                {workShiftsData.map((work_shift) => (
-                  <MenuItem key={work_shift._id} value={work_shift._id}>
+                {workShiftsData.map((work_shift, idx) => (
+                  <MenuItem key={idx} value={work_shift._id}>
                     {work_shift.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="Measurement_type" label="Measurement_type">
-                {measurmentTypesData.map((type) => (
-                  <MenuItem key={type._id} value={type._id}>
+                {measurmentTypesData.map((type, idx) => (
+                  <MenuItem key={idx} value={type._id}>
                     {type.name_english}
                   </MenuItem>
                 ))}

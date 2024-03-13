@@ -28,7 +28,7 @@ const useStyles = () =>
         body2: { fontSize: 9 },
         subtitle1: { fontSize: 10, fontWeight: 700 },
         subtitle2: { fontSize: 9, fontWeight: 700 },
-        alignRight: { textalign: 'right' },
+        alignRight: { textAlign: 'right' },
         page: {
           fontSize: 9,
           lineHeight: 1.6,
@@ -88,37 +88,16 @@ export default function InvoicePDF({ invoice, currentStatus }) {
   const {
     code,
     unit_service,
-    employee,
-    appointment,
+
     patient,
-    work_shift,
-    insurance,
-    type,
-    details,
     Total_Amount,
     Total_tax_Amount,
     Total_deduction_amount,
     Balance,
-    Currency,
-    stakeholder,
-    Concept,
-    Payment_Method,
-    bank,
-    Provided_services,
-    user_creation,
-    created_at,
 
-    items,
-    taxes,
-    dueDate,
-    discount,
-    shipping,
-    invoiceTo,
-    createDate,
-    totalAmount,
-    invoiceFrom,
-    invoiceNumber,
-    subTotal,
+    Provided_services,
+
+    created_at,
   } = invoice;
 
   const styles = useStyles();
@@ -200,8 +179,8 @@ export default function InvoicePDF({ invoice, currentStatus }) {
           </View>
 
           <View>
-            {Provided_services.map((item, index) => (
-              <View style={styles.tableRow} key={item.code}>
+            {Provided_services.map((item, index, idx) => (
+              <View style={styles.tableRow} key={idx}>
                 <View style={styles.tableCell_1}>
                   <Text>{index + 1}</Text>
                 </View>

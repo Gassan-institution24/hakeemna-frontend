@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
@@ -15,10 +14,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { useGetSymptoms, useGetCategories } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -28,8 +25,6 @@ import FormProvider, { RHFSelect, RHFTextField, RHFMultiSelect } from 'src/compo
 
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
-
-  const { user } = useAuthContext();
 
   const { categories } = useGetCategories();
 
@@ -62,7 +57,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
       description: currentSelected?.description || '',
       description_arabic: currentSelected?.description_arabic || '',
       category: currentSelected?.category?._id || '',
-      symptoms: currentSelected?.symptoms?.map((disease) => disease._id) || [],
+      symptoms: currentSelected?.symptoms?.map((disease, idx) => disease._id) || [],
     }),
     [currentSelected]
   );
@@ -99,24 +94,10 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentSelected) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.disease(currentSelected._id),
-          data: {
-            modifications_nums: (currentSelected.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        }); /// edit
+        await axiosInstance.patch(endpoints.diseases.one(currentSelected._id), data); /// edit
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.tables.diseases,
-          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
-        }); /// edit
+        await axiosInstance.post(endpoints.diseases.all, data); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
@@ -185,8 +166,8 @@ export default function CountriesNewEditForm({ currentSelected }) {
               />
 
               <RHFSelect name="category" label="category">
-                {categories.map((category) => (
-                  <MenuItem key={category._id} value={category._id}>
+                {categories.map((category, idx) => (
+                  <MenuItem key={idx} value={category._id}>
                     {category.name_english}
                   </MenuItem>
                 ))}

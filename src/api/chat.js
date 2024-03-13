@@ -125,7 +125,7 @@ export async function sendMessage(conversationId, messageData) {
     (currentData) => {
       const { conversations: currentConversations } = currentData;
 
-      const conversations = currentConversations.map((conversation) =>
+      const conversations = currentConversations.map((conversation, idx) =>
         conversation.id === conversationId
           ? {
               ...conversation,
@@ -192,7 +192,7 @@ export async function clickConversation(conversationId) {
       },
     ],
     (currentData) => {
-      const conversations = currentData.conversations.map((conversation) =>
+      const conversations = currentData.conversations.map((conversation, idx) =>
         conversation.id === conversationId ? { ...conversation, unreadCount: 0 } : conversation
       );
 

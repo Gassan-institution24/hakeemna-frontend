@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import DialogActions from '@mui/material/DialogActions';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { useParams, useRouter } from 'src/routes/hooks';
+// import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -21,10 +21,10 @@ import InvoicePDF from './invoice-pdf';
 // ----------------------------------------------------------------------
 
 export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, onChangeStatus }) {
-  const params = useParams();
-  const { id } = params;
+  // const params = useParams();
+  // const { id } = params;
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const view = useBoolean();
 
@@ -100,8 +100,8 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
             maxWidth: 160,
           }}
         >
-          {statusOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
+          {statusOptions.map((option, idx)  => (
+            <MenuItem key={idx} value={option.value}>
               {option.label}
             </MenuItem>
           ))}

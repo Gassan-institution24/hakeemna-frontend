@@ -9,6 +9,7 @@ export default function TableDetailsPage() {
     <>
       <Helmet>
         <title> Patients</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <PatientsView />

@@ -14,12 +14,9 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { useGetTables } from 'src/api';
-
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -39,9 +36,9 @@ import TablesTableFiltersResult from '../tables-table-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
-  startDate: null,
-  endDate: null,
+  // status: 'all',
+  // startDate: null,
+  // endDate: null,
 };
 
 export default function TablesListView() {
@@ -53,7 +50,7 @@ export default function TablesListView() {
 
   const confirm = useBoolean();
 
-  const { tableData, loading } = useGetTables();
+  // const { tableData, loading } = useGetTables();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -84,7 +81,7 @@ export default function TablesListView() {
       { tableName: 'measurement_types', documents: [] },
       { tableName: 'hospital_list', documents: [] },
       { tableName: 'deduction_config', documents: [] },
-      { tableName: 'rooms', documents: [] },
+      // { tableName: 'rooms', documents: [] },
       { tableName: 'specialities', documents: [] }, //
       { tableName: 'sub_specialities', documents: [] }, //
       { tableName: 'countries', documents: [] }, //
@@ -110,7 +107,7 @@ export default function TablesListView() {
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
+    !!filters.name ;
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
@@ -136,9 +133,9 @@ export default function TablesListView() {
     [router]
   );
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  // if (loading) {
+  //   return <LoadingScreen />;
+  // }
 
   return (
     <>
@@ -262,7 +259,7 @@ export default function TablesListView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -270,7 +267,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis?.map((el) => el[0]);
+  inputData = stabilizedThis?.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

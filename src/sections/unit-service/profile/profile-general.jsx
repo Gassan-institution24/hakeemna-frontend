@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { useState, useCallback } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState, useEffect, useCallback } from 'react';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import Box from '@mui/material/Box';
@@ -21,11 +21,11 @@ import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
-  useGetCities,
-  useGetUSTypes,
   useGetCountries,
   useGetUnitservice,
   useGetSpecialties,
+  useGetCountryCities,
+  useGetActiveUSTypes,
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -34,8 +34,8 @@ import FormProvider, { RHFSelect, RHFTextField, RHFUploadAvatar } from 'src/comp
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral({ unitServiceData }) {
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const [cities, setCities] = useState([]);
+  // const [selectedCountry, setSelectedCountry] = useState('');
+  // const [cities, setCities] = useState([]);
   const [companyLogo, setCompanyLog] = useState();
   const [phone, setPhone] = useState();
   const [alterPhone, setAlterPhone] = useState();
@@ -48,8 +48,7 @@ export default function AccountGeneral({ unitServiceData }) {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
   );
   const { countriesData } = useGetCountries();
-  const { tableData } = useGetCities();
-  const { unitserviceTypesData } = useGetUSTypes();
+  const { unitserviceTypesData } = useGetActiveUSTypes();
   const { specialtiesData } = useGetSpecialties();
 
   const { t } = useTranslate();
@@ -77,19 +76,19 @@ export default function AccountGeneral({ unitServiceData }) {
     company_logo: Yup.mixed(),
   });
 
-  const handleCountryChange = (event) => {
-    const selectedCountryId = event.target.value;
-    methods.setValue('country', selectedCountryId, { shouldValidate: true });
-    setSelectedCountry(selectedCountryId);
-  };
+  // const handleCountryChange = (event) => {
+  //   const selectedCountryId = event.target.value;
+  //   methods.setValue('country', selectedCountryId, { shouldValidate: true });
+  //   setSelectedCountry(selectedCountryId);
+  // };
 
-  useEffect(() => {
-    setCities(
-      selectedCountry
-        ? tableData.filter((info) => info?.country?._id === selectedCountry)
-        : tableData
-    );
-  }, [tableData, selectedCountry]);
+  // useEffect(() => {
+  //   setCities(
+  //     selectedCountry
+  //       ? tableData.filter((info) => info?.country?._id === selectedCountry)
+  //       : tableData
+  //   );
+  // }, [tableData, selectedCountry]);
 
   const defaultValues = {
     name_english: data?.name_english || '',
@@ -117,9 +116,12 @@ export default function AccountGeneral({ unitServiceData }) {
   });
   const {
     setValue,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const { tableData } = useGetCountryCities(watch().country);
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -142,7 +144,7 @@ export default function AccountGeneral({ unitServiceData }) {
       if (companyLogo) {
         formData.append('company_logo_pic', companyLogo);
         await axios.patch(
-          `${endpoints.tables.unitservice(
+          `${endpoints.unit_services.one(
             user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
               ._id
           )}/updatelogo`,
@@ -155,12 +157,12 @@ export default function AccountGeneral({ unitServiceData }) {
         });
       }
       await axios.patch(
-        endpoints.tables.unitservice(
+        endpoints.unit_services.one(
           user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
         ),
         dataToSend
       );
-      enqueueSnackbar('Update success!');
+      enqueueSnackbar(t('updated successfully!'));
       socket.emit('updated', {
         user,
         link: paths.unitservice.profile.root,
@@ -188,7 +190,7 @@ export default function AccountGeneral({ unitServiceData }) {
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
         <Grid xs={12} md={4}>
-          <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textalign: 'center' }}>
+          <Card sx={{ pt: 5, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
             <RHFUploadAvatar
               helperText={
                 <Typography
@@ -197,7 +199,7 @@ export default function AccountGeneral({ unitServiceData }) {
                     mt: 3,
                     mx: 'auto',
                     display: 'block',
-                    textalign: 'center',
+                    textAlign: 'center',
                     color: 'text.disabled',
                   }}
                 >
@@ -247,6 +249,7 @@ export default function AccountGeneral({ unitServiceData }) {
               <Tooltip placement="top" title="Phone number of service unit">
                 <MuiTelInput
                   forceCallingCode
+                  defaultCountry="JO"
                   variant="filled"
                   label={`${t('phone')}* : `}
                   value={phone}
@@ -280,14 +283,15 @@ export default function AccountGeneral({ unitServiceData }) {
             >
               <RHFSelect
                 label={`${t('country')} *`}
+                disabled
                 fullWidth
                 name="country"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                onChange={handleCountryChange}
+                // onChange={handleCountryChange}
               >
-                {countriesData.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
+                {countriesData.map((country, idx) => (
+                  <MenuItem key={idx} value={country._id}>
                     {curLangAr ? country.name_arabic : country.name_english}
                   </MenuItem>
                 ))}
@@ -295,13 +299,14 @@ export default function AccountGeneral({ unitServiceData }) {
 
               <RHFSelect
                 label={`${t('city')} *`}
+                disabled
                 fullWidth
                 name="city"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {cities.map((city) => (
-                  <MenuItem key={city._id} value={city._id}>
+                {tableData.map((city, idx) => (
+                  <MenuItem key={idx} value={city._id}>
                     {curLangAr ? city.name_arabic : city.name_english}
                   </MenuItem>
                 ))}
@@ -314,8 +319,8 @@ export default function AccountGeneral({ unitServiceData }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {unitserviceTypesData.map((type) => (
-                  <MenuItem value={type._id} key={type._id}>
+                {unitserviceTypesData.map((type, idx) => (
+                  <MenuItem value={type._id} key={idx}>
                     {curLangAr ? type.name_arabic : type.name_english}
                   </MenuItem>
                 ))}
@@ -328,8 +333,8 @@ export default function AccountGeneral({ unitServiceData }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {specialtiesData.map((specialty) => (
-                  <MenuItem value={specialty._id} key={specialty._id}>
+                {specialtiesData.map((specialty, idx) => (
+                  <MenuItem value={specialty._id} key={idx}>
                     {curLangAr ? specialty.name_arabic : specialty.name_english}
                   </MenuItem>
                 ))}
@@ -342,13 +347,14 @@ export default function AccountGeneral({ unitServiceData }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 <MenuItem value="public">{t('Public')}</MenuItem>
-                <MenuItem value="privet">{t('Privet')}</MenuItem>
+                <MenuItem value="private">{t('private')}</MenuItem>
                 <MenuItem value="charity">{t('Charity')}</MenuItem>
               </RHFSelect>
               <RHFTextField lang="ar" name="web_page" label={t('webpage')} />
               <Tooltip placement="top" title="Phone number of service unit">
                 <MuiTelInput
                   forceCallingCode
+                  defaultCountry="JO"
                   label={t('alternative mobile number')}
                   value={alterPhone}
                   onChange={(newPhone) => {

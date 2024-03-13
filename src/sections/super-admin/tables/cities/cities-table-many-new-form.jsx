@@ -1,23 +1,23 @@
 import * as XLSX from 'xlsx';
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import {
-  Checkbox,
-  MenuItem,
-  Select,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
+import {
+  Table,
+  Select,
+  Checkbox,
+  MenuItem,
+  TableRow,
+  TableBody,
+  TableCell,
+  TextField,
+  Typography,
+  TableContainer,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -26,17 +26,17 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetCountries } from 'src/api';
 
-import { useSnackbar } from 'src/components/snackbar';
-
-import { TableHeadCustom, TableSelectedAction, useTable } from 'src/components/table';
-import Scrollbar from 'src/components/scrollbar';
 import { Upload } from 'src/components/upload';
+import Scrollbar from 'src/components/scrollbar';
+import { useSnackbar } from 'src/components/snackbar';
+import { useTable, TableHeadCustom, TableSelectedAction } from 'src/components/table';
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { id: 'code', label: 'country', width: 'calc(100%/3)' },
-  { id: 'name', label: 'name english', width: 'calc(100%/3)' },
-  { id: 'identification_num', label: 'name arabic', width: 'calc(100%/3)' },
+  { label: 'country', width: 'calc(100%/4)' },
+  { label: 'name english', width: 'calc(100%/4)' },
+  { label: 'name arabic', width: 'calc(100%/4)' },
+  { label: 'state', width: 'calc(100%/4)' },
   // { id: '', width: 88 },
 ];
 export default function CitiesNewEditForm() {
@@ -94,19 +94,17 @@ export default function CitiesNewEditForm() {
 
   const handleDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
-    console.log('file', file);
 
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const data = e.target.result;
         const workbook = XLSX.read(data, { type: 'binary' });
-        console.log('workbook', workbook);
+
         const workSheets = workbook.Sheets[workbook.SheetNames[0]];
-        console.log('workSheets', workSheets);
+
         const jsonData = XLSX.utils.sheet_to_json(workSheets);
         setCities(jsonData);
-        console.log('jsonData', jsonData);
       };
       reader.readAsBinaryString(file);
     }
@@ -114,7 +112,7 @@ export default function CitiesNewEditForm() {
 
   const handleCreate = async () => {
     try {
-      await axiosInstance.post(endpoints.tables.manyCities, cities);
+      await axiosInstance.post(endpoints.cities.many, cities);
       router.push(paths.superadmin.tables.cities.root);
     } catch (e) {
       console.log(e);
@@ -147,7 +145,7 @@ export default function CitiesNewEditForm() {
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    cities.map((row, index) => index)
+                    cities.map((row, index, idx) => index)
                   )
                 }
                 action={
@@ -155,14 +153,14 @@ export default function CitiesNewEditForm() {
                     <Typography sx={{ fontSize: 14, fontWeight: 600, pr: 1 }}>Country:</Typography>
                     <Select
                       variant="filled"
-                      sx={{ width: '20%' }}
+                      sx={{ width: '20%', border: '1px solid gray' }}
                       size="small"
                       name="country"
                       label="country"
                       onChange={handleSelectMany}
                     >
-                      {countriesData.map((country) => (
-                        <MenuItem key={country._id} value={country._id}>
+                      {countriesData.map((country, idx) => (
+                        <MenuItem key={idx} value={country._id}>
                           {country.name_english}
                         </MenuItem>
                       ))}
@@ -206,8 +204,8 @@ export default function CitiesNewEditForm() {
                             size="small"
                             name="country"
                           >
-                            {countriesData.map((country) => (
-                              <MenuItem key={country._id} value={country._id}>
+                            {countriesData.map((country, idx) => (
+                              <MenuItem key={idx} value={country._id}>
                                 {country.name_english}
                               </MenuItem>
                             ))}
@@ -233,6 +231,16 @@ export default function CitiesNewEditForm() {
                             onChange={(e) => handleArabicInputChange(index, e)}
                             value={city.name_arabic}
                             name="name_arabic"
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            lang="ar"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={city.state}
+                            name="state"
                           />
                         </TableCell>
                       </TableRow>

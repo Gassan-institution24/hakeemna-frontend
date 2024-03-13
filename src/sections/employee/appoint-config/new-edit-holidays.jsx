@@ -1,3 +1,4 @@
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -8,13 +9,13 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { useUnitTime } from 'src/utils/format-time';
+
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { RHFTextField } from 'src/components/hook-form';
-import { zonedTimeToUtc } from 'date-fns-tz';
-import { useAuthContext } from 'src/auth/hooks';
-import { useUnitTime } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -27,14 +28,14 @@ export default function NewEditHolidays() {
 
   const { user } = useAuthContext();
 
-  const { control, setValue, watch, resetField, getValues } = useFormContext();
+  const { control, watch } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'holidays',
   });
 
-  const values = getValues();
+  const values = watch();
 
   const handleAdd = () => {
     append({
@@ -63,9 +64,9 @@ export default function NewEditHolidays() {
           divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
           spacing={2}
         >
-          {fields.map((item, index) => (
+          {fields.map((item, index, idx) => (
             <Stack
-              key={item.id}
+              key={idx}
               alignItems="flex-start"
               spacing={1.5}
               sx={{ width: { xs: '100%', md: 'auto' } }}

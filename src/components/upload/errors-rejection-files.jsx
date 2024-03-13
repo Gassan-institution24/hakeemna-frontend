@@ -23,23 +23,23 @@ export default function RejectionFiles({ fileRejections }) {
         py: 1,
         px: 2,
         mt: 3,
-        textalign: 'left',
+        textAlign: 'left',
         borderStyle: 'dashed',
         borderColor: 'error.main',
         bgcolor: (theme) => alpha(theme.palette.error.main, 0.08),
       }}
     >
-      {fileRejections.map(({ file, errors }) => {
+      {fileRejections.map(({ file, errors }, index) => {
         const { path, size } = fileData(file);
 
         return (
-          <Box key={path} sx={{ my: 1 }}>
+          <Box key={index} sx={{ my: 1 }}>
             <Typography variant="subtitle2" noWrap>
               {path} - {size ? fData(size) : ''}
             </Typography>
 
-            {errors.map((error) => (
-              <Box key={error.code} component="span" sx={{ typography: 'caption' }}>
+            {errors.map((error, idx) => (
+              <Box key={idx} component="span" sx={{ typography: 'caption' }}>
                 - {error.message}
               </Box>
             ))}

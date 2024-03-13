@@ -12,9 +12,9 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import {  useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -38,7 +38,6 @@ export default function AppointmentsFilters({
   appointmentTypeOptions,
   dateError,
 }) {
-
   const { t } = useTranslate();
   const handleFilterAppointtypes = useCallback(
     (e) => {
@@ -55,25 +54,6 @@ export default function AppointmentsFilters({
   const handleFiltedInsurance = useCallback(
     (e) => {
       onFilters('insurance', e.target.value);
-    },
-    [onFilters]
-  );
-  const handleFilterUnitServices = useCallback(
-    (e) => {
-      onFilters('feedback', e.target.value);
-    },
-    [onFilters]
-  );
-
-  const handleFilterStartDate = useCallback(
-    (e) => {
-      onFilters('start_date', e.target.value);
-    },
-    [onFilters]
-  );
-  const handleFilterEndDate = useCallback(
-    (e) => {
-      onFilters('end_date', e.target.value);
     },
     [onFilters]
   );
@@ -103,37 +83,14 @@ export default function AppointmentsFilters({
     </Stack>
   );
 
-  const renderDate = (
-    <Stack>
-      <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-        {t('Time')}
-      </Typography>
-      <Stack spacing={2.5}>
-        <DatePicker label={t('From')} value={filters.start_date} onChange={handleFilterStartDate} />
-
-        <DatePicker
-          label={t('To')}
-          value={filters.end_date}
-          onChange={handleFilterEndDate}
-          slotProps={{
-            textField: {
-              error: dateError,
-              helperText: dateError && 'To time must be later than start date',
-            },
-          }}
-        />
-      </Stack>
-    </Stack>
-  );
-
   const renderappointtypes = (
     <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         {t('Appointment Types')}
       </Typography>
       <Select onChange={handleFilterAppointtypes} name="appointment_type">
-        {appointmentTypeOptions.map((option) => (
-          <MenuItem key={option._id} value={option._id}>
+        {appointmentTypeOptions.map((option, idx) => (
+          <MenuItem key={idx} value={option._id}>
             {option?.name_english}
           </MenuItem>
         ))}
@@ -146,8 +103,8 @@ export default function AppointmentsFilters({
         {t('Countries')}
       </Typography>
       <Select onChange={handleFilterCountries} name="country">
-        {countriesOptions.map((option) => (
-          <MenuItem key={option._id} value={option._id}>
+        {countriesOptions.map((option, idx) => (
+          <MenuItem key={idx} value={option._id}>
             {option?.name_english}
           </MenuItem>
         ))}
@@ -161,8 +118,8 @@ export default function AppointmentsFilters({
         {t('insurance')}
       </Typography>
       <Select onChange={handleFiltedInsurance} name="insurance">
-        {insuranseCosData.map((option) => (
-          <MenuItem key={option._id} value={option._id}>
+        {insuranseCosData.map((option, idx) => (
+          <MenuItem key={idx} value={option._id}>
             {option?.name_english}
           </MenuItem>
         ))}
@@ -202,7 +159,7 @@ export default function AppointmentsFilters({
 
         <Scrollbar sx={{ px: 2.5, py: 3 }}>
           <Stack spacing={3}>
-            {renderDate}
+            {/* {renderDate} */}
             {renderappointtypes}
 
             {renderCountries}

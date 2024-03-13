@@ -16,11 +16,12 @@ import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import { fTimestamp } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import { ColorPicker } from 'src/components/color-utils';
+// import { ColorPicker } from 'src/components/color-utils';
 import FormProvider, { RHFSwitch, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -29,12 +30,13 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
   const { enqueueSnackbar } = useSnackbar();
 
   const { user } = useAuthContext();
+  const { t } = useTranslate();
 
   const EventSchema = Yup.object().shape({
     title: Yup.string().max(255).required('Title is required'),
     description: Yup.string().max(5000, 'Description must be at most 5000 characters'),
     // not required
-    color: Yup.string(),
+    // color: Yup.string(),
     allDay: Yup.boolean(),
     start: Yup.mixed(),
     end: Yup.mixed(),
@@ -73,11 +75,11 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
     try {
       if (!dateError) {
         if (currentEvent?._id) {
-          await axiosInstance.patch(`${endpoints.tables.calender}/${currentEvent?._id}`, eventData);
-          enqueueSnackbar('Update success!');
+          await axiosInstance.patch(`${endpoints.calender.all}/${currentEvent?._id}`, eventData);
+          enqueueSnackbar(t('updated successfully!'));
         } else {
-          await axiosInstance.post(endpoints.tables.calender, eventData);
-          enqueueSnackbar('Create success!');
+          await axiosInstance.post(endpoints.calender.all, eventData);
+          enqueueSnackbar(t('created successfully!'));
         }
         refetch();
         onClose();
@@ -91,27 +93,28 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
   const onDelete = useCallback(async () => {
     try {
-      await axiosInstance.delete(`${endpoints.tables.calender}/${currentEvent?._id}`);
-      enqueueSnackbar('Delete success!');
+      await axiosInstance.delete(`${endpoints.calender.all}/${currentEvent?._id}`);
+      enqueueSnackbar(t('deleted successfully!'));
       refetch();
       onClose();
     } catch (error) {
       console.error(error);
       enqueueSnackbar(error, { variant: 'error' });
     }
-  }, [currentEvent, enqueueSnackbar, onClose, refetch]);
+  }, [currentEvent, enqueueSnackbar, t, onClose, refetch]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={3} sx={{ px: 3 }}>
-        <RHFTextField name="title" label="Title" />
+        <RHFTextField lang="ar" name="title" label={t('title')} />
 
-        <RHFTextField name="description" label="Description" multiline rows={3} />
+        <RHFTextField lang="ar" name="description" label={t('description')} multiline rows={3} />
 
-        <RHFSwitch name="allDay" label="All day" />
+        <RHFSwitch lang="ar" name="allDay" label={t('all day')} />
 
         <Controller
           name="start"
+          lang="ar"
           control={control}
           render={({ field }) => (
             <MobileDateTimePicker
@@ -122,7 +125,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
                   field.onChange(fTimestamp(newValue));
                 }
               }}
-              label="Start date"
+              label={t('start date')}
               format="dd/MM/yyyy hh:mm a"
               slotProps={{
                 textField: {
@@ -135,6 +138,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
         <Controller
           name="end"
+          lang="ar"
           control={control}
           render={({ field }) => (
             <MobileDateTimePicker
@@ -145,7 +149,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
                   field.onChange(fTimestamp(newValue));
                 }
               }}
-              label="End date"
+              label={t('end date')}
               format="dd/MM/yyyy hh:mm a"
               slotProps={{
                 textField: {
@@ -158,7 +162,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
           )}
         />
 
-        <Controller
+        {/* <Controller
           name="color"
           control={control}
           render={({ field }) => (
@@ -168,12 +172,12 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
               colors={colorOptions}
             />
           )}
-        />
+        /> */}
       </Stack>
 
       <DialogActions>
         {!!currentEvent?.id && (
-          <Tooltip title="Delete Event">
+          <Tooltip lang="ar" title={t('delete event')}>
             <IconButton onClick={onDelete}>
               <Iconify icon="solar:trash-bin-trash-bold" />
             </IconButton>
@@ -182,18 +186,19 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
         <Box sx={{ flexGrow: 1 }} />
 
-        <Button variant="outlined" color="inherit" onClick={onClose}>
-          Cancel
+        <Button lang="ar" variant="outlined" color="inherit" onClick={onClose}>
+          {t('cancel')}
         </Button>
 
         <LoadingButton
+          lang="ar"
           type="submit"
           tabIndex={-1}
           variant="contained"
           loading={isSubmitting}
           disabled={dateError}
         >
-          Save Changes
+          {t('save changes')}
         </LoadingButton>
       </DialogActions>
     </FormProvider>

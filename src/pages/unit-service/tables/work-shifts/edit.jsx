@@ -17,9 +17,10 @@ export default function WorkShiftEditPage() {
   const { data, loading } = useGetWorkShift(id);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="work_shift" acl="update">
+    <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
       <Helmet>
         <title>Edit {name || ''} Work Shift</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <WorkShiftEditView workShiftData={data} />}

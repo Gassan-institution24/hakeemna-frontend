@@ -19,11 +19,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
@@ -37,7 +37,8 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import { LoadingScreen } from 'src/components/loading-screen';
+// import { LoadingScreen } from 'src/components/loading-screen';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
   emptyRows,
@@ -57,7 +58,7 @@ import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'pending',
   types: '',
   shift: '',
   group: '',
@@ -109,14 +110,14 @@ export default function AppointmentsView({ departmentData }) {
     appointmentsData,
     appointmentsLength,
     refetch,
-    all,
+    // all,
     available,
     notBooked,
     processing,
     canceled,
     finished,
     pending,
-    loading,
+    // loading,
   } = useGetDepartmentAppointments({
     id: departmentData?._id,
     page: table.page || 0,
@@ -145,13 +146,7 @@ export default function AppointmentsView({ departmentData }) {
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
   const TABS = [
-    { value: 'all', label: t('all'), color: 'default', count: all },
-    {
-      value: 'available',
-      label: t('available'),
-      color: 'secondary',
-      count: available,
-    },
+    // { value: 'all', label: t('all'), color: 'default', count: all },
     {
       value: 'pending',
       label: t('pending'),
@@ -177,6 +172,12 @@ export default function AppointmentsView({ departmentData }) {
       count: canceled,
     },
     {
+      value: 'available',
+      label: t('available'),
+      color: 'secondary',
+      count: available,
+    },
+    {
       value: 'not booked',
       label: t('not booked'),
       color: 'secondary',
@@ -195,16 +196,13 @@ export default function AppointmentsView({ departmentData }) {
   const handleCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/cancel`,
-        });
+        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/cancel`);
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.appointments(departmentData._id),
           msg: `canceled appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
         });
-        enqueueSnackbar('canceled successfully!');
+        enqueueSnackbar(t('canceled successfully!'));
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -213,23 +211,21 @@ export default function AppointmentsView({ departmentData }) {
       refetch();
       // table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [refetch, enqueueSnackbar, user, departmentData]
+    [refetch, enqueueSnackbar, user, t, departmentData]
   );
 
   const handleDelayRow = useCallback(
     async (row, min) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/delay`,
-          data: { minutes: min },
+        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/delay`, {
+          minutes: min,
         });
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.appointments(departmentData._id),
           msg: `delayed appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
         });
-        enqueueSnackbar('delayed successfully!');
+        enqueueSnackbar(t('delayed successfully!'));
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -239,22 +235,19 @@ export default function AppointmentsView({ departmentData }) {
       setMinToDelay(0);
       // table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [refetch, enqueueSnackbar, user, departmentData]
+    [refetch, enqueueSnackbar, user, t, departmentData]
   );
 
   const handleUnCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/uncancel`,
-        });
+        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/uncancel`);
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.appointments(departmentData._id),
           msg: `uncanceled appointment [ ${row.code} ] in department <strong>${departmentData.name_english}</strong>`,
         });
-        enqueueSnackbar('uncanceled successfully!');
+        enqueueSnackbar(t('uncanceled successfully!'));
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -263,22 +256,18 @@ export default function AppointmentsView({ departmentData }) {
       refetch();
       // table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [refetch, enqueueSnackbar, user, departmentData]
+    [refetch, enqueueSnackbar, user, t, departmentData]
   );
 
   const handleCancelRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, { ids: table.selected });
       socket.emit('updated', {
         user,
         link: paths.unitservice.departments.appointments(departmentData._id),
         msg: `canceled many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
-      enqueueSnackbar('canceled successfully!');
+      enqueueSnackbar(t('canceled successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -299,21 +288,21 @@ export default function AppointmentsView({ departmentData }) {
     enqueueSnackbar,
     departmentData,
     user,
+    t,
   ]);
 
   const handleDelayRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/delay`,
-        data: { ids: table.selected, minutes: minToDelay },
+      await axiosInstance.patch(`${endpoints.appointments.all}/delay`, {
+        ids: table.selected,
+        minutes: minToDelay,
       });
       socket.emit('updated', {
         user,
         link: paths.unitservice.departments.appointments(departmentData._id),
         msg: `delayed many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
-      enqueueSnackbar('delayed successfully!');
+      enqueueSnackbar(t('delayed successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -336,21 +325,20 @@ export default function AppointmentsView({ departmentData }) {
     enqueueSnackbar,
     departmentData,
     user,
+    t,
   ]);
 
   const handleUnCancelRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/uncancel`,
-        data: { ids: table.selected },
+      await axiosInstance.patch(`${endpoints.appointments.all}/uncancel`, {
+        ids: table.selected,
       });
       socket.emit('updated', {
         user,
         link: paths.unitservice.departments.appointments(departmentData._id),
         msg: `uncanceled many appointments in department <strong>${departmentData.name_english}</strong>`,
       });
-      enqueueSnackbar('uncanceled successfully!');
+      enqueueSnackbar(t('uncanceled successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -371,6 +359,7 @@ export default function AppointmentsView({ departmentData }) {
     enqueueSnackbar,
     departmentData,
     user,
+    t,
   ]);
 
   const handleViewRow = useCallback(
@@ -391,29 +380,35 @@ export default function AppointmentsView({ departmentData }) {
     setFilters(defaultFilters);
   }, []);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  // if (loading) {
+  //   return <LoadingScreen />;
+  // }
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        {/* <CustomBreadcrumbs
-          heading={t('appointments')} /// edit
-          links={[
-            {
-              name: t('dashboard'),
-              href: paths.unitservice.root,
-            },
-            {
-              name: t('departments'),
-              href: paths.unitservice.departments.root,
-            },
-            { name: t('appointments') },
-          ]}
+        <CustomBreadcrumbs
+          action={
+            checkAcl({ category: 'department', subcategory: 'appointments', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                onClick={() => addModal.onTrue()}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+                sx={{
+                  bgcolor: 'error.dark',
+                  '&:hover': {
+                    bgcolor: 'error.main',
+                  },
+                }}
+              >
+                {t('new emergency appointment')}
+              </Button>
+            )
+          }
           sx={{
-            mb: { xs: 3, md: 5 },
+            mb: { xs: 3, md: 3 },
           }}
-        /> */}
+        />
         <Card>
           <Tabs
             value={filters.status}
@@ -423,9 +418,9 @@ export default function AppointmentsView({ departmentData }) {
               boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {TABS.map((tab) => (
+            {TABS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 value={tab.value}
                 label={tab.label}
                 iconPosition="end"
@@ -473,7 +468,7 @@ export default function AppointmentsView({ departmentData }) {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered?.map((row) => row._id)
+                  dataFiltered?.map((row, idx) => row._id)
                 )
               }
               action={
@@ -488,7 +483,7 @@ export default function AppointmentsView({ departmentData }) {
                         <Iconify icon="mdi:timer-sync" />
                       </IconButton>
                     </Tooltip>
-                    {dataFiltered
+                    {/* {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
                       .some((data) => data.status === 'canceled') ? (
                       <Tooltip title="uncancel all">
@@ -502,7 +497,7 @@ export default function AppointmentsView({ departmentData }) {
                           <Iconify icon="mdi:bell-cancel" />
                         </IconButton>
                       </Tooltip>
-                    )}
+                    )} */}
                   </>
                 )
               }
@@ -526,16 +521,16 @@ export default function AppointmentsView({ departmentData }) {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered?.map((row) => row._id)
+                      dataFiltered?.map((row, idx) => row._id)
                     )
                   }
                 />
 
                 <TableBody>
-                  {dataFiltered?.map((row) => (
+                  {dataFiltered?.map((row, idx) => (
                     <AppointmentsRow
                       refetch={refetch}
-                      key={row._id}
+                      key={idx}
                       row={row}
                       selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}
@@ -632,7 +627,7 @@ export default function AppointmentsView({ departmentData }) {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <Box sx={{ fontSize: '0.8rem' }}>min</Box>
+                    <Box sx={{ fontSize: '0.8rem' }}>{t('min')}</Box>
                   </InputAdornment>
                 ),
               }}
@@ -665,7 +660,7 @@ export default function AppointmentsView({ departmentData }) {
 // function applyFilter({ inputData, comparator, filters, dateError }) {
 //   const { name, status, types, startDate, endDate } = filters;
 
-//   const stabilizedThis = inputData?.map((el, index) => [el, index]);
+//   const stabilizedThis = inputData?.map((el, index, idx)  => [el, index]);
 
 //   stabilizedThis.sort((a, b) => {
 //     const order = comparator(a[0], b[0]);
@@ -673,7 +668,7 @@ export default function AppointmentsView({ departmentData }) {
 //     return a[1] - b[1];
 //   });
 
-//   inputData = stabilizedThis?.map((el) => el[0]);
+//   inputData = stabilizedThis?.map((el, idx)  => el[0]);
 
 //   if (name) {
 //     inputData = inputData.filter(

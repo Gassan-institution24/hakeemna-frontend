@@ -9,6 +9,7 @@ export default function ForgotPasswordPage() {
     <>
       <Helmet>
         <title> Forgot Password</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <JwtForgetPasswordView />

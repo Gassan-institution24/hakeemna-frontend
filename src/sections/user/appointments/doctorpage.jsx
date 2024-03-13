@@ -17,7 +17,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-import { useParams } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -29,6 +30,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetAppointment,
   useGetEmployeeEngagement,
+  useGetEmployeeFeedbackes,
   useGetEmployeeSelectedAppointments,
 } from 'src/api';
 
@@ -42,42 +44,59 @@ import FormProvider from 'src/components/hook-form/form-provider';
 
 export default function Doctorpage() {
   const params = useParams();
+  const router = useRouter();
+
   const { id } = params;
   const { user } = useAuthContext();
   const [TimeData, setTimeData] = useState();
-  const datacheeck = useGetAppointment(TimeData).data;
-
   const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
   const dialog = useBoolean(false);
   const { enqueueSnackbar } = useSnackbar();
-
+  const { data } = useGetEmployeeEngagement(id);
+  const datacheeck = useGetAppointment(TimeData).data;
+  const { feedbackData } = useGetEmployeeFeedbackes(data?.employee?._id);
   const [currentDateTime, setCurrentDateTime] = useState();
+  const [patientNote, setPatientNote] = useState();
   const patientData = user?.patient?._id;
-  // const patientEmail = user?.email;
+  const patientinfo = user?.patient;
+  const patientEmail = user?.email;
+
   const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
     id,
     startDate: currentDateTime,
   });
-  const handleBook = async (pateinidd) => {
+  console.log(data);
+  const [selectedTime, setSelectedTime] = useState(null);
+
+  const handleTimeClick = (timeId) => {
+    setTimeData(timeId);
+    setSelectedTime(timeId);
+  };
+  const uniqueUserIds = new Set(feedbackData.map((feedback, idx) => feedback?.patient._id));
+  const numberOfUsers = uniqueUserIds.size;
+
+  const handleBook = async (Data) => {
     try {
-      await axios.patch(`${endpoints.tables.appointment(pateinidd)}/book`, {
-        data: { patient: patientData },
+      await axios.patch(`${endpoints.appointments.one(Data)}/bookappointment`, {
+        patient: patientData,
+        email: patientEmail,
+        pInfo: patientinfo,
+        appointmentinfo: datacheeck,
+        note: patientNote,
       });
+
       refetch();
       dialog.onFalse();
       enqueueSnackbar('Appointment booked successfully', { variant: 'success' });
+      setTimeout(() => {
+        router.push(paths.dashboard.user.patientsappointments);
+      }, 1000);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
-
-  const { data } = useGetEmployeeEngagement(id);
-
-  console.log(datacheeck);
-  console.log(TimeData);
-
   const renderHead = (
     <CardHeader
       disableTypography
@@ -96,15 +115,12 @@ export default function Doctorpage() {
   );
 
   const renderFollows = (
-    <Card sx={{ py: 3, textAlign: 'center', typography: 'h4' }}>
-      <Stack
-        direction="row"
-        divider={<Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />}
-      >
-        <Stack width={1}>{fNumber('sdsdds')}</Stack>
-
-        <Stack width={1}>{fNumber('info.totalFollowing')}</Stack>
-      </Stack>
+    <Card sx={{ py: 3, textAlign: 'center' }}>
+      <Typography typography="h6">
+        ( {fNumber(data?.employee?.rate)}{' '}
+        <Iconify icon="emojione:star" width={22} sx={{ position: 'relative', top: 3 }} />){' '}
+        {numberOfUsers > 0 ? `From ${numberOfUsers} visitors` : `No rate yet`}
+      </Typography>
     </Card>
   );
 
@@ -113,26 +129,37 @@ export default function Doctorpage() {
       <CardHeader title="About" />
 
       <Stack spacing={3} sx={{ p: 3 }}>
-        <Box sx={{ typography: 'body2' }}>{data?.employee?.description}</Box>
+        {data?.employee?.description ? (
+          <Box sx={{ typography: 'body2' }}>{data?.employee?.description}</Box>
+        ) : (
+          ''
+        )}
+        {data?.unit_service?.name_english ? (
+          <Stack direction="row" spacing={2}>
+            <Iconify icon="ic:round-business-center" width={24} />
 
-        <Stack direction="row" spacing={2}>
-          <Iconify icon="ic:round-business-center" width={24} />
+            <Box sx={{ typography: 'body2' }}>
+              {`Work at: `}
+              <Link variant="subtitle2" color="inherit">
+                {data?.unit_service?.name_english}
+              </Link>
+            </Box>
+          </Stack>
+        ) : (
+          ''
+        )}
 
-          <Box sx={{ typography: 'body2' }}>
-            {`Work at: `}
-            <Link variant="subtitle2" color="inherit">
-              {data?.unit_service?.name_english}
-            </Link>
-          </Box>
-        </Stack>
         <Stack direction="row" spacing={2}>
           <Iconify icon="mdi:location" width={24} />
 
           <Box sx={{ typography: 'body2' }}>
             {`Location: `}
             <Link variant="subtitle2" color="inherit">
-              {data?.unit_service?.city?.name_english} {` - `}{' '}
-              {data?.unit_service?.country?.name_english}
+              {data?.unit_service?.city?.name_english ? data?.unit_service?.city?.name_english : ''}{' '}
+              {` - `}{' '}
+              {data?.unit_service?.country?.name_english
+                ? data?.unit_service?.country?.name_english
+                : ''}
             </Link>
           </Box>
         </Stack>
@@ -169,7 +196,7 @@ export default function Doctorpage() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              textalign: 'center',
+              textAlign: 'center',
               margin: '20px',
               gap: '10px',
             }}
@@ -184,18 +211,20 @@ export default function Doctorpage() {
                 borderRadius: '50px',
               }}
             />
-            <Typography sx={{ color: 'black' }}>{datacheeck?.unit_service?.name_english}</Typography>
+            <Typography sx={{ color: 'black' }}>
+              {datacheeck?.unit_service?.name_english}
+            </Typography>
           </div>
           <DialogContent>
             <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
-            please confirm your appointment
+              please confirm your appointment
             </Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={dialog.onFalse} variant="outlined" color="inherit">
               Cancel
             </Button>
-            <Button onClick={() => handleBook(TimeData)} variant="contained">
+            <Button variant="contained" onClick={() => handleBook(TimeData)}>
               Book
             </Button>
           </DialogActions>
@@ -204,10 +233,8 @@ export default function Doctorpage() {
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <StaticDatePicker
-          orientation="landscape"
           disablePast
           componentsProps={{ actionBar: { actions: ['clear', 'today'] } }}
-          // value={currentDateTime}
           onChange={(e) => setCurrentDateTime(e?.$d)}
         />
       </LocalizationProvider>
@@ -221,7 +248,7 @@ export default function Doctorpage() {
             SELECT TIME
           </Typography>
 
-          <Box sx={{ display: 'flex', mt: 2 }}>
+          <Box sx={{ display: { md: 'flex', xs: 'block' }, mt: 2 }}>
             <Box
               sx={{
                 width: '50%',
@@ -229,41 +256,54 @@ export default function Doctorpage() {
                 display: 'grid',
                 gridTemplateColumns: '1fr',
                 mr: 2,
+                mb: { md: 0, xs: 5 },
               }}
             >
               <Box
                 sx={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr 1fr',
-                  mr: 2,
                 }}
               >
-                {appointmentsData?.map((time, index) => (
+                {appointmentsData?.map((time, index, idx) => (
                   <Button
-                    key={index}
-                    onClick={() => setTimeData(time?._id)}
-                    sx={{ border: '1px solid lightgreen', mb: 1, ml: 0.5 }}
+                    key={idx}
+                    onClick={() => handleTimeClick(time?._id)}
+                    sx={{
+                      border:
+                        time?._id === selectedTime ? '1px solid lightgreen' : '1px solid gray',
+                      mb: 1,
+                      ml: 0.5,
+                    }}
                   >
                     {fTime(time?.start_time)}{' '}
                   </Button>
                 ))}
               </Box>
 
-              <Box>
+              <Box sx={{ visibility: { md: 'visible', xs: 'hidden' } }}>
                 {TimeData !== undefined ? (
-                  <Button variant="contained" onClick={dialog.onTrue}>
+                  <Button
+                    variant="contained"
+                    sx={{ bgcolor: 'success.main' }}
+                    onClick={dialog.onTrue}
+                  >
                     Book
                   </Button>
                 ) : (
-                  <Button disabled variant="contained" onClick={dialog.onTrue}>
+                  <Button disabled variant="contained" onClick={dialog.onFalse}>
                     Book
                   </Button>
                 )}
               </Box>
             </Box>
-            <Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />
-            <Box sx={{ ml: 2 }}>
-              {datacheeck?.price && (
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ borderStyle: 'dashed', display: { md: 'block', xs: 'none' } }}
+            />
+            <Box sx={{ ml: 2, mb: 2 }}>
+              {datacheeck?.appointment_type && (
                 <Typography>
                   {' '}
                   <Iconify width={18} icon="ion:person-sharp" />
@@ -288,7 +328,7 @@ export default function Doctorpage() {
                   {datacheeck?.department?.name_english}{' '}
                 </Typography>
               )}
-              {datacheeck?.price && (
+              {datacheeck?.price !== undefined && (
                 <Typography>
                   {' '}
                   <Iconify width={18} sx={{ color: 'success.main' }} icon="mdi:cash-multiple" />
@@ -312,6 +352,35 @@ export default function Doctorpage() {
                   <Iconify width={18} sx={{ color: 'warning.main' }} icon="mingcute:time-line" />
                   &nbsp; Date: {fTime(datacheeck?.start_time)}{' '}
                 </Typography>
+              )}
+              {datacheeck && (
+                <Box sx={{ mt: 1 }}>
+                  <Typography sx={{ mb: 1 }}>
+                    Let us know if you have any notes <bt /> to follow for your appointment
+                  </Typography>
+                  <textarea
+                    placeholder="Ex: I have..."
+                    style={{
+                      borderRadius: 4,
+                      border: '2px solid lightgray',
+                      padding: 10,
+                      overflow: 'hidden',
+                    }}
+                    onChange={(e) => setPatientNote(e?.target?.value)}
+                  />
+                </Box>
+              )}
+            </Box>
+
+            <Box sx={{ visibility: { md: 'hidden', xs: 'visible' }, ml: 2 }}>
+              {TimeData !== undefined ? (
+                <Button variant="contained" onClick={dialog.onTrue}>
+                  Book
+                </Button>
+              ) : (
+                <Button disabled variant="contained" onClick={dialog.onFalse}>
+                  Book
+                </Button>
               )}
             </Box>
           </Box>
@@ -341,7 +410,13 @@ export default function Doctorpage() {
           {renderHead}
           {renderFollows}
 
-          {renderAbout}
+          {data?.unit_service?.country?.name_english ||
+          data?.unit_service?.city?.name_english ||
+          data?.unit_service?.name_english ||
+          data?.employee?.description
+            ? renderAbout
+            : ''}
+
           {data?.web_page?.length > 1 ? renderSocials : ''}
         </Stack>
       </Grid>
@@ -350,7 +425,7 @@ export default function Doctorpage() {
         <Stack spacing={3} mb={1}>
           {renderPostInput}
         </Stack>
-        <Stack spacing={3}>{renderList}</Stack>
+        <Stack>{renderList}</Stack>
       </Grid>
     </Grid>
   );

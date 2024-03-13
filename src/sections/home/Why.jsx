@@ -5,14 +5,14 @@ import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function Whydoc() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const renderDescription = (
-    <Stack spacing={3} sx={{ textalign: 'center', mb: 10 }}>
+    <Stack spacing={3} sx={{ textAlign: 'center', mb: 10 }}>
       <m.div variants={varFade().inDown}>
         <Typography variant="h2">
           Why Doctorna <span style={{ color: 'green' }}>?</span>
@@ -40,11 +40,11 @@ export default function Whydoc() {
           }}
         /> */}
       </div>
-      <Typography variant="h6" sx={{ textalign: 'center' }}>
+      <Typography variant="h6" sx={{ textAlign: 'center' }}>
         {' '}
         Dr.Grendizer{' '}
       </Typography>
-      <Typography sx={{ fontSize: 15, textalign: 'center', marginTop: '10px' }}>
+      <Typography sx={{ fontSize: 15, textAlign: 'center', marginTop: '10px' }}>
         Protection and bombing specialist based on the earth{' '}
       </Typography>
     </Box>

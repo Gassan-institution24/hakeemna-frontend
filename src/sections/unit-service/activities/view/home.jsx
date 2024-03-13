@@ -47,8 +47,7 @@ import {
 } from 'src/components/table'; /// edit
 import { useSnackbar } from 'notistack';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -58,7 +57,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -116,7 +115,7 @@ export default function ActivitesTableView() {
   );
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -158,15 +157,14 @@ export default function ActivitesTableView() {
   const handleActivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.activity(row._id)}/updatestatus`, /// edit
-          data: { status: 'active' },
-        });
+        await axiosInstance.patch(
+          `${endpoints.activities.one(row._id)}/updatestatus`, /// edit
+          { status: 'active' }
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.activities.root,
-          msg: `activated an activity <strong>${row.name_english}</strong>`,
+          msg: `activated an activity <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -181,15 +179,14 @@ export default function ActivitesTableView() {
   const handleInactivate = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.activity(row._id)}/updatestatus`, /// edit
-          data: { status: 'inactive' },
-        });
+        await axiosInstance.patch(
+          `${endpoints.activities.one(row._id)}/updatestatus`, /// edit
+          { status: 'inactive' }
+        );
         socket.emit('updated', {
           user,
           link: paths.unitservice.activities.root,
-          msg: `inactivated an activity <strong>${row.name_english}</strong>`,
+          msg: `inactivated an activity <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -204,11 +201,10 @@ export default function ActivitesTableView() {
 
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.activities}/updatestatus`, /// edit
-        data: { status: 'active', ids: table.selected },
-      });
+      await axiosInstance.patch(
+        `${endpoints.activities.all}/updatestatus`, /// edit
+        { status: 'active', ids: table.selected }
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.activities.root,
@@ -237,11 +233,10 @@ export default function ActivitesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.activities}/updatestatus`, /// edit
-        data: { status: 'inactive', ids: table.selected },
-      });
+      await axiosInstance.patch(
+        `${endpoints.activities.all}/updatestatus`, /// edit
+        { status: 'inactive', ids: table.selected }
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.activities.root,
@@ -317,7 +312,11 @@ export default function ActivitesTableView() {
             { name: t('activities') },
           ]}
           action={
-            checkAcl({ category: 'unit_service', subcategory: 'activities', acl: 'create' }) && (
+            checkAcl({
+              category: 'unit_service',
+              subcategory: 'management_tables',
+              acl: 'create',
+            }) && (
               <Button
                 component={RouterLink}
                 href={paths.unitservice.activities.new}
@@ -342,9 +341,9 @@ export default function ActivitesTableView() {
               boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {STATUS_OPTIONS.map((tab) => (
+            {STATUS_OPTIONS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 iconPosition="end"
                 value={tab.value}
                 label={tab.label}
@@ -402,13 +401,13 @@ export default function ActivitesTableView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               action={
                 checkAcl({
                   category: 'unit_service',
-                  subcategory: 'activities',
+                  subcategory: 'management_tables',
                   acl: 'update',
                 }) && (
                   <>
@@ -451,7 +450,7 @@ export default function ActivitesTableView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -462,9 +461,9 @@ export default function ActivitesTableView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <TableDetailRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         selected={table.selected.includes(row._id)}
                         setFilters={setFilters}
@@ -553,7 +552,7 @@ export default function ActivitesTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -561,7 +560,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

@@ -37,7 +37,7 @@ export default function FaqsHero() {
           sx={{
             bottom: { md: 80 },
             position: { md: 'absolute' },
-            textalign: { xs: 'center', md: 'unset' },
+            textAlign: { xs: 'center', md: 'unset' },
           }}
         >
           <div>
@@ -95,8 +95,8 @@ function TextAnimate({ text, variants, sx, ...other }) {
       }}
       {...other}
     >
-      {text.split('').map((letter, index) => (
-        <m.span key={index} variants={variants || varFade().inUp}>
+      {text.split('').map((letter, index, idx) => (
+        <m.span key={idx} variants={variants || varFade().inUp}>
           {letter}
         </m.span>
       ))}

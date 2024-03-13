@@ -7,13 +7,10 @@ import Button from '@mui/material/Button';
 import { RouterLink } from 'src/routes/components';
 
 import Iconify from 'src/components/iconify';
-import { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
 export default function PaymentDetailsToolbar({ backLink, editLink, ...other }) {
-  const popover = usePopover();
-
   return (
     <Stack
       spacing={1.5}

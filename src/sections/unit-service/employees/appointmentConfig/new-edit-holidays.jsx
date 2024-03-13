@@ -1,3 +1,4 @@
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -8,6 +9,9 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { useUnitTime } from 'src/utils/format-time';
+
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -20,14 +24,18 @@ export default function NewEditHolidays() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { control, setValue, watch, resetField, getValues } = useFormContext();
+  const { myunitTime } = useUnitTime();
+
+  const { user } = useAuthContext();
+
+  const { control, watch } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'holidays',
   });
 
-  const values = getValues();
+  const values = watch();
 
   const handleAdd = () => {
     append({
@@ -56,9 +64,9 @@ export default function NewEditHolidays() {
           divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
           spacing={2}
         >
-          {fields.map((item, index) => (
+          {fields.map((item, index, idx) => (
             <Stack
-              key={item.id}
+              key={idx}
               alignItems="flex-start"
               spacing={1.5}
               sx={{ width: { xs: '100%', md: 'auto' } }}
@@ -82,11 +90,15 @@ export default function NewEditHolidays() {
                     <DatePicker
                       label={t('date')}
                       // sx={{ flex: 1 }}
-                      value={
-                        new Date(values.holidays[index].date ? values.holidays[index].date : '')
-                      }
+                      value={myunitTime(values.holidays[index].date)}
                       onChange={(newValue) => {
-                        field.onChange(newValue);
+                        const selectedTime = zonedTimeToUtc(
+                          newValue,
+                          user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                            ?.unit_service?.country?.time_zone ||
+                            Intl.DateTimeFormat().resolvedOptions().timeZone
+                        );
+                        field.onChange(selectedTime);
                       }}
                       slotProps={{
                         textField: {

@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetDiseases() {
-  const URL = endpoints.tables.diseases;
+  const URL = endpoints.diseases.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -25,7 +25,7 @@ export function useGetDiseases() {
   return { ...memoizedValue, refetch };
 }
 export function useGetDisease(id) {
-  const URL = endpoints.tables.disease(id);
+  const URL = endpoints.diseases.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetTaxes() {
-  const URL = endpoints.tables.taxes;
+  const URL = endpoints.taxes.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -25,7 +25,7 @@ export function useGetTaxes() {
   return { ...memoizedValue, refetch };
 }
 export function useGetTax(id) {
-  const URL = endpoints.tables.tax(id);
+  const URL = endpoints.taxes.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

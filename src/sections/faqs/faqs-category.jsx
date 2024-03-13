@@ -74,8 +74,8 @@ export default function FaqsCategory() {
 
         <Drawer open={nav.value} onClose={nav.onFalse}>
           <Box gap={1} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 1 }}>
-            {CATEGORIES.map((category) => (
-              <CardMobile key={category.label} category={category} />
+            {CATEGORIES.map((category, idx) => (
+              <CardMobile key={idx} category={category} />
             ))}
           </Box>
         </Drawer>
@@ -93,8 +93,8 @@ export default function FaqsCategory() {
         lg: 'repeat(6, 1fr)',
       }}
     >
-      {CATEGORIES.map((category) => (
-        <m.div key={category.label} variants={varFade().in}>
+      {CATEGORIES.map((category, idx) => (
+        <m.div key={idx} variants={varFade().in}>
           <CardDesktop category={category} />
         </m.div>
       ))}
@@ -115,7 +115,7 @@ function CardDesktop({ category }) {
         borderRadius: 2,
         bgcolor: 'unset',
         cursor: 'pointer',
-        textalign: 'center',
+        textAlign: 'center',
         '&:hover': {
           bgcolor: 'background.paper',
           boxShadow: (theme) => theme.customShadows.z20,
@@ -147,12 +147,11 @@ function CardMobile({ category }) {
 
   return (
     <ListItemButton
-      key={label}
       sx={{
         py: 2,
         maxWidth: 140,
         borderRadius: 1,
-        textalign: 'center',
+        textAlign: 'center',
         alignItems: 'center',
         typography: 'subtitle2',
         flexDirection: 'column',
@@ -162,7 +161,7 @@ function CardMobile({ category }) {
     >
       <Image alt={icon} src={icon} sx={{ width: 48, height: 48, mb: 1 }} />
 
-      {category.label}
+      {label}
     </ListItemButton>
   );
 }

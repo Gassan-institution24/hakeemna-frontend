@@ -12,8 +12,8 @@
 // export default function FaqsList() {
 //   return (
 //     <div>
-//       {_faqs.map((accordion) => (
-//         <Accordion key={accordion.id}>
+//       {_faqs.map((accordion, idx)  => (
+//         <Accordion key={idx}>
 //           <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
 //             <Typography variant="subtitle1">{accordion.heading}</Typography>
 //           </AccordionSummary>

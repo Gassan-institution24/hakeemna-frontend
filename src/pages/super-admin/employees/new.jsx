@@ -9,6 +9,7 @@ export default function NewEmployeeHomePage() {
     <>
       <Helmet>
         <title>new employee</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <NewEmployeePage />

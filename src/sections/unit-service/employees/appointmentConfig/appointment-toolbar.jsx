@@ -9,7 +9,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { useTranslate } from 'src/locales';
-import ACLGuard from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -30,13 +29,6 @@ export default function ConfigTableToolbar({
   const handleFilterName = useCallback(
     (event) => {
       onFilters('name', event.target.value);
-    },
-    [onFilters]
-  );
-
-  const handleFilterService = useCallback(
-    (event) => {
-      onFilters('types', event);
     },
     [onFilters]
   );
@@ -112,15 +104,6 @@ export default function ConfigTableToolbar({
             <IconButton onClick={popover.onOpen}>
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton>
-            {ACLGuard({
-              category: 'employee',
-              subcategory: 'appointment_configs',
-              acl: 'update',
-            }) && (
-              <IconButton onClick={onAdd}>
-                <Iconify icon="zondicons:add-outline" />
-              </IconButton>
-            )}
           </Stack>
         </Stack>
       </Stack>

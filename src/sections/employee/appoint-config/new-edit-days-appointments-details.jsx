@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -16,13 +17,13 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
+import { useUnitTime } from 'src/utils/format-time';
+
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFCheckbox } from 'src/components/hook-form';
-import { zonedTimeToUtc } from 'date-fns-tz';
-import { useAuthContext } from 'src/auth/hooks';
-import { useUnitTime } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -41,14 +42,14 @@ export default function NewEditDayAppointmentsDetails({
 
   const { user } = useAuthContext();
 
-  const { control, setValue, watch, resetField, getValues } = useFormContext();
+  const { control, watch } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: `days_details[${ParentIndex}].appointments`,
   });
 
-  const values = getValues();
+  const values = watch();
 
   const handleAdd = () => {
     const defaultItem = {
@@ -86,7 +87,6 @@ export default function NewEditDayAppointmentsDetails({
 
   const renderValues = (selectedIds) => {
     const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item._id));
-    const results = [];
     return selectedItems
       ?.map(
         (item) => (curLangAr ? item.name_arabic : item.name_english)
@@ -120,7 +120,7 @@ export default function NewEditDayAppointmentsDetails({
         >
           {fields.map((item, index) => (
             <Stack
-              key={item.id}
+              key={index}
               alignItems="center"
               flexWrap="wrap"
               spacing={1.5}
@@ -133,8 +133,8 @@ export default function NewEditDayAppointmentsDetails({
                   name={`days_details[${ParentIndex}].appointments[${index}].appointment_type`}
                   label={`${t('appointment type')} *`}
                 >
-                  {appointmenttypesData?.map((option) => (
-                    <MenuItem value={option._id}>
+                  {appointmenttypesData?.map((option, idx) => (
+                    <MenuItem key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -185,11 +185,11 @@ export default function NewEditDayAppointmentsDetails({
                         label={t('service types')}
                         renderValue={renderValues}
                       >
-                        {serviceTypesData?.map((option) => {
+                        {serviceTypesData?.map((option, idx) => {
                           const selected = field?.value?.includes(option._id);
 
                           return (
-                            <MenuItem key={option._id} value={option._id}>
+                            <MenuItem key={idx} value={option._id}>
                               <Checkbox size="small" disableRipple checked={selected} />
 
                               {curLangAr ? option?.name_arabic : option?.name_english}

@@ -8,9 +8,10 @@ import InsuranceHomeView from 'src/sections/unit-service/insurance/view/home';
 
 export default function InsuranceHomePage() {
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="insurance" acl="read">
+    <ACLGuard category="unit_service" subcategory="unit_service_info" acl="read">
       <Helmet>
         <title>Insurances</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <InsuranceHomeView />

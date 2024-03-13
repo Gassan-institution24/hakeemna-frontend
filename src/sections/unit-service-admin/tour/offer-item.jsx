@@ -1,5 +1,5 @@
+import { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useRef, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -23,18 +23,8 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function TourItem({ tour, onView, onEdit, onStatusChange }) {
   const popover = usePopover();
-  const [timeDifference, setTimeDifference] = useState('');
   const ref = useRef();
-  const {
-    code,
-    Offer_name,
-    Offer_price,
-    created_at,
-    Offer_img,
-    Offer_start_date,
-    Offer_end_date,
-    status,
-  } = tour;
+  const { Offer_name, Offer_price, created_at, Offer_img } = tour;
 
   // const shortLabel = shortDateLabel(available.startDate, available.endDate);
 
@@ -169,9 +159,9 @@ export default function TourItem({ tour, onView, onEdit, onStatusChange }) {
           label: `${differenceBetweenDates(tour.Offer_start_date, tour.Offer_end_date)} Days`,
           icon: <Iconify icon="solar:clock-circle-bold" sx={{ color: 'info.main' }} />,
         },
-      ].map((item) => (
+      ].map((item, idx) => (
         <Stack
-          key={item.label}
+          key={idx}
           spacing={1}
           direction="row"
           alignItems="center"

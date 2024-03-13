@@ -81,7 +81,7 @@ export default function UploadAvatar({ error, file, disabled, helperText, sx, ..
     >
       <Iconify icon="solar:camera-add-bold" width={32} />
 
-      <Typography variant="caption">{file ? t('update photo') : t('upload photo')}</Typography>
+      {!sx?.width&&<Typography variant="caption">{file ? t('update photo') : t('upload photo')}</Typography>}
     </Stack>
   );
 

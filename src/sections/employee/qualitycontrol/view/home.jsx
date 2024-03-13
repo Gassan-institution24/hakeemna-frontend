@@ -13,9 +13,6 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeFeedbackes } from 'src/api';
@@ -45,7 +42,7 @@ import TableDetailFiltersResult from '../feedback-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'unread',
   rate: [],
 };
 
@@ -76,11 +73,6 @@ export default function DepartmentFeedbackView() {
 
   const settings = useSettingsContext();
 
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
-  const router = useRouter();
-
   const { feedbackData, loading } = useGetEmployeeFeedbackes(user?.employee?._id);
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -99,7 +91,7 @@ export default function DepartmentFeedbackView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all' || filters.rate.length > 0;
+  const canReset = !!filters?.name || filters.status !== 'unread' || filters.rate.length > 0;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -112,7 +104,7 @@ export default function DepartmentFeedbackView() {
         code: info.code,
         name: info.name_english,
         category: info.category?.name_english,
-        symptoms: info.symptoms?.map((symptom) => symptom?.name_english),
+        symptoms: info.symptoms?.map((symptom, idx) => symptom?.name_english),
       });
       return acc;
     }, []);
@@ -175,9 +167,9 @@ export default function DepartmentFeedbackView() {
             boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
           }}
         >
-          {QC_STATUS_OPTIONS.map((tab) => (
+          {QC_STATUS_OPTIONS.map((tab, idx) => (
             <Tab
-              key={tab.value}
+              key={idx}
               iconPosition="end"
               value={tab.value}
               label={tab.label}
@@ -237,7 +229,7 @@ export default function DepartmentFeedbackView() {
                 // onSelectAllRows={(checked) =>
                 //   table.onSelectAllRows(
                 //     checked,
-                //     dataFiltered.map((row) => row._id)
+                //     dataFiltered.map((row, idx)  => row._id)
                 //   )
                 // }
               />
@@ -248,9 +240,9 @@ export default function DepartmentFeedbackView() {
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
-                  .map((row) => (
+                  .map((row, idx) => (
                     <FeedbackRow
-                      key={row._id}
+                      key={idx}
                       row={row}
                       filters={filters}
                       setFilters={setFilters}
@@ -291,7 +283,7 @@ export default function DepartmentFeedbackView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name, rate } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -299,7 +291,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

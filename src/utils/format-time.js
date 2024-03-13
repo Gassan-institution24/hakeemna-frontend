@@ -1,10 +1,13 @@
+import ar from 'date-fns/locale/ar-SA';
 import { format, getTime, formatDistanceToNow } from 'date-fns';
+
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { formatInTimeZone } from 'date-fns-tz';
 
 // ----------------------------------------------------------------------
 
 export const useUnitTime = () => {
+  const { t } = useTranslate();
   const { user } = useAuthContext();
   function myunitTime(date) {
     const formattedDate = date ? new Date(date) : null;
@@ -13,7 +16,7 @@ export const useUnitTime = () => {
         ?.country?.time_zone;
 
     const value = formattedDate
-      ? new Date(formattedDate.toLocaleString('en-US', { timeZone }))
+      ? new Date(formattedDate.toLocaleString(t('en-US'), { timeZone }))
       : null;
 
     return value;
@@ -22,15 +25,15 @@ export const useUnitTime = () => {
     myunitTime,
   };
 };
-export function fDate(date, newFormat) {
+export function fDate(date, newFormat, arabic) {
   const fm = newFormat || 'dd MMM yyyy';
 
-  return date ? format(new Date(date), fm) : '';
+  return date ? format(new Date(date), fm, arabic ? { locale: ar } : null) : '';
 }
-export function fMonth(date, newFormat) {
+export function fMonth(date, newFormat, arabic) {
   const fm = newFormat || 'MMM yyyy';
 
-  return date ? format(new Date(date), fm) : '';
+  return date ? format(new Date(date), fm, arabic ? { locale: ar } : null) : '';
 }
 
 export function fDateTime(date, newFormat) {
@@ -41,6 +44,11 @@ export function fDateTime(date, newFormat) {
 
 export function fTime(date, newFormat) {
   const fm = newFormat || 'p';
+
+  return date ? format(new Date(date), fm) : '';
+}
+export function fDm(date, newFormat) {
+  const fm = newFormat || 'dd MMM';
 
   return date ? format(new Date(date), fm) : '';
 }

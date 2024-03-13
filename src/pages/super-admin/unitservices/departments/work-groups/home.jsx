@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import { useParams } from 'src/routes/hooks';
 
 import { useGetDepartment } from 'src/api';
-import ACLGuard from 'src/auth/guard/acl-guard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -13,16 +12,17 @@ import DepartmentWorkGroupsView from 'src/sections/super-admin/unitservices/depa
 
 export default function DepartmentWorkGroupsPage() {
   const params = useParams();
-  const {depid} = params;
+  const { depid } = params;
   const { data, loading } = useGetDepartment(depid);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="department" subcategory="work_groups" acl="read">
+    <>
       <Helmet>
         <title>{name || ''} Department Work Groups</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentWorkGroupsView departmentData={data} />}
-    </ACLGuard>
+    </>
   );
 }

@@ -13,6 +13,7 @@ export default function UserListPage() {
     <>
       <Helmet>
         <title> {t('My Prescriptions')} </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <UserListView />

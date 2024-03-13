@@ -4,7 +4,6 @@ import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import { useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -46,14 +45,12 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   rate: [],
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
 
 export default function StakeholdersFeedbacks() {
-  const theme = useTheme();
-
   const { t } = useTranslate();
 
   const settings = useSettingsContext();
@@ -62,7 +59,7 @@ export default function StakeholdersFeedbacks() {
 
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { feedbackData, loading, refetch } = useGetStakeholdersFeedbackes();
+  const { feedbackData, loading } = useGetStakeholdersFeedbackes();
 
   const separateEachStakeholderFeedbacks = useCallback(() => {
     const results = {};
@@ -84,7 +81,7 @@ export default function StakeholdersFeedbacks() {
       }
     });
 
-    const resultsArr = Object.keys(results).map((key) => ({ id: key, ...results[key] }));
+    const resultsArr = Object.keys(results).map((key, idx) => ({ id: key, ...results[key] }));
     return resultsArr;
   }, [feedbackData]);
 
@@ -106,41 +103,24 @@ export default function StakeholdersFeedbacks() {
 
   const denseHeight = table.dense ? 56 : 76;
 
-  const canReset = !!filters.name || filters.status !== 'all';
+  const canReset = !!filters.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-  const now = new Date();
 
-  const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
+  // const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
 
-  const getInvoiceLengthForTabs = (status) => {
-    const filterdData = applyFilter({
-      inputData: separateEachStakeholderFeedbacks(),
-      comparator: getComparator(table.order, table.orderBy),
-      filters: { ...filters, status: 'all' },
-      // dateError,
-    });
-    if (!status) {
-      return filterdData.length;
-    }
-    return filterdData.filter((item) => item.status === status).length;
-  };
-
-  const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
-    {
-      value: 'active',
-      label: 'Active',
-      color: 'success',
-      count: getInvoiceLength('active'),
-    },
-    {
-      value: 'inactive',
-      label: 'Inactive',
-      color: 'error',
-      count: getInvoiceLength('inactive'),
-    },
-  ];
+  // const getInvoiceLengthForTabs = (status) => {
+  //   const filterdData = applyFilter({
+  //     inputData: separateEachStakeholderFeedbacks(),
+  //     comparator: getComparator(table.order, table.orderBy),
+  //     filters: { ...filters, status: 'all' },
+  //     // dateError,
+  //   });
+  //   if (!status) {
+  //     return filterdData.length;
+  //   }
+  //   return filterdData.filter((item) => item.status === status).length;
+  // };
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -158,13 +138,6 @@ export default function StakeholdersFeedbacks() {
       router.push(paths.superadmin.stakeholders.feedback(id));
     },
     [router]
-  );
-
-  const handleFilterStatus = useCallback(
-    (event, newValue) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -230,8 +203,8 @@ export default function StakeholdersFeedbacks() {
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
-                  .map((row) => (
-                    <QCTableRow key={row.id} row={row} onViewRow={() => handleViewRow(row.id)} />
+                  .map((row, idx) => (
+                    <QCTableRow key={idx} row={row} onViewRow={() => handleViewRow(row.id)} />
                   ))}
 
                 <TableEmptyRows
@@ -269,7 +242,7 @@ export default function StakeholdersFeedbacks() {
 function applyFilter({ inputData, comparator, filters }) {
   const { name, status, rate } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -277,7 +250,7 @@ function applyFilter({ inputData, comparator, filters }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

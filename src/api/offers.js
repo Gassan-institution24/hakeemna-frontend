@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetOffers() {
-  const URL = endpoints.tables.offers;
+  const URL = endpoints.offers.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -26,7 +26,7 @@ export function useGetOffers() {
 }
 
 export function useGetStakeholderOffers(id) {
-  const URL = endpoints.tables.stakeholderOffers(id);
+  const URL = endpoints.offers.stakeholder.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -48,7 +48,7 @@ export function useGetStakeholderOffers(id) {
 }
 
 export function useGetOffer(id) {
-  const URL = endpoints.tables.offer(id);
+  const URL = endpoints.offers.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

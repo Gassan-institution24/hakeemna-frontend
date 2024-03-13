@@ -28,7 +28,7 @@ const useStyles = () =>
         body2: { fontSize: 9 },
         subtitle1: { fontSize: 10, fontWeight: 700 },
         subtitle2: { fontSize: 9, fontWeight: 700 },
-        alignRight: { textalign: 'right' },
+        alignRight: { textAlign: 'right' },
         page: {
           fontSize: 9,
           lineHeight: 1.6,
@@ -168,8 +168,8 @@ export default function InvoicePDF({ invoice, currentStatus }) {
           </View>
 
           <View>
-            {items.map((item, index) => (
-              <View style={styles.tableRow} key={item.id}>
+            {items.map((item, index, idx) => (
+              <View style={styles.tableRow} key={idx}>
                 <View style={styles.tableCell_1}>
                   <Text>{index + 1}</Text>
                 </View>

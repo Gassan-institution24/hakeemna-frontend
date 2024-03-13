@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
@@ -15,12 +14,15 @@ import { Checkbox, MenuItem, Typography, FormControlLabel } from '@mui/material'
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
-import { useGetCities, useGetUSTypes, useGetCountries, useGetSpecialties } from 'src/api';
+import {
+  useGetCountries,
+  useGetSpecialties,
+  useGetCountryCities,
+  useGetActiveUSTypes,
+} from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -32,11 +34,8 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { t } = useTranslate();
 
-  const { user } = useAuthContext();
-
   const { countriesData } = useGetCountries();
-  const { unitserviceTypesData } = useGetUSTypes();
-  const { tableData } = useGetCities();
+  const { unitserviceTypesData } = useGetActiveUSTypes();
   const { specialtiesData } = useGetSpecialties();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -83,6 +82,9 @@ export default function TableNewEditForm({ currentTable }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
+
+  const { tableData } = useGetCountryCities(methods.watch().country);
+
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
@@ -108,7 +110,6 @@ export default function TableNewEditForm({ currentTable }) {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    const address = await axios.get('https://geolocation-db.com/json/');
     try {
       // console.log('data', data);
       // const modifiedData = {
@@ -122,22 +123,9 @@ export default function TableNewEditForm({ currentTable }) {
       // };
       // // console.log("modifiedData",data)
       if (currentTable) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.subscription(currentTable._id),
-          data: {
-            modifications_nums: (currentTable.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        });
+        await axiosInstance.patch(endpoints.subscriptions.one(currentTable._id), data);
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.tables.subscriptions,
-          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
-        });
+        await axiosInstance.post(endpoints.subscriptions.all, data);
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
@@ -174,30 +162,30 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect name="country" label="Country">
-                {countriesData.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
+              <RHFSelect name="country" label={t('country')}>
+                {countriesData.map((country, idx) => (
+                  <MenuItem key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="city" label="city">
-                {tableData.map((city) => (
-                  <MenuItem key={city._id} value={city._id}>
+                {tableData.map((city, idx) => (
+                  <MenuItem key={idx} value={city._id}>
                     {city.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="US_type" label="US_type">
-                {unitserviceTypesData.map((type) => (
-                  <MenuItem key={type._id} value={type._id}>
+                {unitserviceTypesData.map((type, idx) => (
+                  <MenuItem key={idx} value={type._id}>
                     {type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="unit_service" label="Unit Service">
-                {specialtiesData.map((unit_service) => (
-                  <MenuItem key={unit_service._id} value={unit_service._id}>
+                {specialtiesData.map((unit_service, idx) => (
+                  <MenuItem key={idx} value={unit_service._id}>
                     {unit_service.name_english}
                   </MenuItem>
                 ))}

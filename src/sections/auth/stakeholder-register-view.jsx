@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Link from '@mui/material/Link';
@@ -18,9 +18,15 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
-import { useGetCities, useGetUSTypes, useGetCountries, useGetSpecialties } from 'src/api';
+import {
+  useGetCountries,
+  useGetSpecialties,
+  useGetCountryCities,
+  useGetActiveUSTypes,
+} from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -32,17 +38,17 @@ export default function JwtRegisterView() {
 
   const router = useRouter();
 
+  const { t } = useTranslate();
+
   const [errorMsg, setErrorMsg] = useState('');
 
-  const [selectedCountry, setSelectedCountry] = useState('');
+  // const [selectedCountry, setSelectedCountry] = useState('');
 
-  const [cities, setCities] = useState([]);
+  // const [cities, setCities] = useState([]);
 
   const { countriesData } = useGetCountries();
 
-  const { tableData } = useGetCities();
-
-  const { unitserviceTypesData } = useGetUSTypes();
+  const { unitserviceTypesData } = useGetActiveUSTypes();
 
   const { specialtiesData } = useGetSpecialties();
 
@@ -88,9 +94,13 @@ export default function JwtRegisterView() {
 
   const {
     reset,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+  const values = watch();
+
+  const { tableData } = useGetCountryCities(values.country);
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
@@ -113,7 +123,7 @@ export default function JwtRegisterView() {
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
     methods.setValue('country', selectedCountryId, { shouldValidate: true });
-    setSelectedCountry(selectedCountryId);
+    // setSelectedCountry(selectedCountryId);
     // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
   };
 
@@ -129,13 +139,13 @@ export default function JwtRegisterView() {
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
-  useEffect(() => {
-    setCities(
-      selectedCountry
-        ? tableData.filter((data) => data?.country?._id === selectedCountry)
-        : tableData
-    );
-  }, [tableData, selectedCountry]);
+  // useEffect(() => {
+  //   setCities(
+  //     selectedCountry
+  //       ? tableData.filter((data) => data?.country?._id === selectedCountry)
+  //       : tableData
+  //   );
+  // }, [tableData, selectedCountry]);
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
       <Typography variant="h4">Get started absolutely free</Typography>
@@ -157,7 +167,7 @@ export default function JwtRegisterView() {
         color: 'text.secondary',
         mt: 2.5,
         typography: 'caption',
-        textalign: 'center',
+        textAlign: 'center',
       }}
     >
       {'By signing up, I agree to '}
@@ -195,16 +205,16 @@ export default function JwtRegisterView() {
         <RHFTextField name="email" label="Email address" />
         <RHFTextField name="identification_num" label="Identification number" />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFSelect onChange={handleCountryChange} name="country" label="Country">
-            {countriesData.map((country) => (
-              <MenuItem key={country._id} value={country._id}>
+          <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
+            {countriesData.map((country, idx) => (
+              <MenuItem key={idx} value={country._id}>
                 {country.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect name="city" label="City">
-            {cities.map((city) => (
-              <MenuItem key={city._id} value={city._id}>
+            {tableData.map((city, idx) => (
+              <MenuItem key={idx} value={city._id}>
                 {city.name_english}
               </MenuItem>
             ))}
@@ -212,15 +222,15 @@ export default function JwtRegisterView() {
         </Stack>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect name="US_type" label="Unit Service Type">
-            {unitserviceTypesData.map((type) => (
-              <MenuItem key={type._id} value={type._id}>
+            {unitserviceTypesData.map((type, idx) => (
+              <MenuItem key={idx} value={type._id}>
                 {type.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect name="speciality" label="Speciality">
-            {specialtiesData.map((specialty) => (
-              <MenuItem key={specialty._id} value={specialty._id}>
+            {specialtiesData.map((specialty, idx) => (
+              <MenuItem key={idx} value={specialty._id}>
                 {specialty.name_english}
               </MenuItem>
             ))}
@@ -229,7 +239,7 @@ export default function JwtRegisterView() {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect name="sector_type" label="Sector type">
             <MenuItem value="public">Public</MenuItem>
-            <MenuItem value="privet">Privet</MenuItem>
+            <MenuItem value="private">private</MenuItem>
             <MenuItem value="charity">Charity</MenuItem>
           </RHFSelect>
         </Stack>

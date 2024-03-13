@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
@@ -16,11 +15,13 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useAuthContext } from 'src/auth/hooks';
-import { useGetSubscriptions, useGetPaymentMethods, useGetFreeSubscriptions } from 'src/api';
+import {
+  useGetFreeSubscriptions,
+  useGetActiveSubscriptions,
+  useGetActivePaymentMethods,
+} from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -30,11 +31,9 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function TableNewEditForm({ licenseMovementData, unitServiceData }) {
   const router = useRouter();
 
-  const { user } = useAuthContext();
-
   const { freeSubscriptionsData } = useGetFreeSubscriptions();
-  const { subscriptionsData } = useGetSubscriptions();
-  const { paymentMethodsData } = useGetPaymentMethods();
+  const { subscriptionsData } = useGetActiveSubscriptions();
+  const { paymentMethodsData } = useGetActivePaymentMethods();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -80,29 +79,10 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       if (licenseMovementData) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.licenseMovement(licenseMovementData._id),
-          data: {
-            modifications_nums: (licenseMovementData.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        }); /// edit
+        await axiosInstance.patch(endpoints.license_movements.one(licenseMovementData._id), data); /// edit
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.tables.licenseMovements,
-          data: {
-            unit_service: unitServiceData._id,
-            ip_address_user_creation: address.data.IPv4,
-            user_creation: user._id,
-            ...data,
-          },
-        }); /// edit
+        await axiosInstance.post(endpoints.license_movements.all, data); /// edit
       }
       reset();
       enqueueSnackbar(licenseMovementData ? 'Update success!' : 'Create success!');
@@ -127,22 +107,22 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
               }} /// edit
             >
               <RHFSelect name="free_subscription" label="Free Subscription">
-                {freeSubscriptionsData.map((subscription) => (
-                  <MenuItem key={subscription._id} value={subscription._id}>
+                {freeSubscriptionsData.map((subscription, idx) => (
+                  <MenuItem key={idx} value={subscription._id}>
                     {subscription.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="subscription" label="subscription">
-                {subscriptionsData.map((backage) => (
-                  <MenuItem key={backage._id} value={backage._id}>
+                {subscriptionsData.map((backage, idx) => (
+                  <MenuItem key={idx} value={backage._id}>
                     {backage.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="Payment_method" label="Payment method">
-                {paymentMethodsData.map((method) => (
-                  <MenuItem key={method._id} value={method._id}>
+                {paymentMethodsData.map((method, idx) => (
+                  <MenuItem key={idx} value={method._id}>
                     {method.name_english}
                   </MenuItem>
                 ))}

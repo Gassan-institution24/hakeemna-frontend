@@ -19,22 +19,25 @@ export default function Specialities() {
 
   return (
     <>
-    <Typography variant='h3'  mb={10} sx={{
-       ml: {
-        xs: 0,
-        sm: 6,
-        md: 14,
-      },
-       width: {
-        xs: 400,
-        sm: 700,
-        md: 700,
-      },
- 
-    }}>
-    What medical specialty are you looking for?
-    {/* ما هو التخصص الطبي الذي تبحث عنه */}
-    </Typography>
+      <Typography
+        variant="h3"
+        mb={10}
+        sx={{
+          ml: {
+            xs: 0,
+            sm: 6,
+            md: 14,
+          },
+          width: {
+            xs: 400,
+            sm: 700,
+            md: 700,
+          },
+        }}
+      >
+        What medical specialty are you looking for?
+        {/* ما هو التخصص الطبي الذي تبحث عنه */}
+      </Typography>
       <Box
         gap={{
           xs: 0,
@@ -43,27 +46,27 @@ export default function Specialities() {
         }}
         display="grid"
         gridTemplateColumns={{
-          xs: 'repeat(2, 2fr)',
+          xs: 'repeat(1, 1fr)',
           sm: 'repeat(3, 3fr)',
           md: 'repeat(4, 1fr)',
         }}
         sx={{
           ml: {
-            xs: 0.5,
+            xs: 6.5,
             sm: 7,
             md: 2,
             lg: 6,
-            xl: 15,
+            xl: 8,
           },
         }}
       >
-        {specialtiesData.map((data) => (
+        {specialtiesData.map((data, idx) => (
           <Button
             sx={{
               display: 'block',
               bgcolor: 'inherit',
               color: 'black',
-              width: '200px',
+              width: '300px',
               height: '200px',
               mb: {
                 xs: 2,

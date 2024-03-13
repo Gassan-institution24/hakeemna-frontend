@@ -46,11 +46,6 @@ export default function TourListView() {
 
   const [sortBy, setSortBy] = useState('latest');
 
-  const [search, setSearch] = useState({
-    query: '',
-    results: [],
-  });
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -187,7 +182,7 @@ export default function TourListView() {
 const applyFilter = ({ inputData, filters, sortBy, dateError }) => {
   const { stakeholder, cities, Offer_start_date, Offer_end_date, tourGuides } = filters;
 
-  const tourGuideIds = tourGuides.map((tourGuide) => tourGuide.id);
+  const tourGuideIds = tourGuides.map((tourGuide, idx) => tourGuide.id);
 
   // SORT BY
   if (sortBy === 'latest') {

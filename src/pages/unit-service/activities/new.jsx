@@ -8,9 +8,10 @@ import ActivityNewView from 'src/sections/unit-service/activities/view/new';
 
 export default function ActivityNewPage() {
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="activities" acl="create">
+    <ACLGuard category="unit_service" subcategory="management_tables" acl="create">
       <Helmet>
         <title>New Activity</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <ActivityNewView />

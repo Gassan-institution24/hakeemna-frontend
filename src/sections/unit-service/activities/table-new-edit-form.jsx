@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
@@ -15,12 +14,11 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useGetUSDepartments } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetUSActiveDepartments } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -36,7 +34,7 @@ export default function TableNewEditForm({ currentTable }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
-  const { departmentsData } = useGetUSDepartments(
+  const { departmentsData } = useGetUSActiveDepartments(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
@@ -96,39 +94,21 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.activity(currentTable._id)}`,
-          data: {
-            modifications_nums: (currentTable.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        });
+        await axiosInstance.patch(`${endpoints.activities.one(currentTable._id)}`, data);
         socket.emit('updated', {
           data,
           user,
           link: paths.unitservice.activities.root,
-          msg: `updated an activity <strong>${data.name_english}</strong>`,
+          msg: `updated an activity <strong>${data.name_english || ''}</strong>`,
         });
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: `${endpoints.tables.activities}`,
-          data: {
-            ip_address_user_creation: address.data.IPv4,
-            user_creation: user._id,
-            ...data,
-          },
-        });
+        await axiosInstance.post(`${endpoints.activities.all}`, data);
         socket.emit('created', {
           data,
           user,
           link: paths.unitservice.activities.root,
-          msg: `created an activity <strong>${data.name_english}</strong>`,
+          msg: `created an activity <strong>${data.name_english || ''}</strong>`,
         });
       }
       reset();
@@ -168,8 +148,8 @@ export default function TableNewEditForm({ currentTable }) {
                 label={`${t('name arabic')} *`}
               />
               <RHFSelect lang="ar" name="department" label={t('department')}>
-                {departmentsData.map((department) => (
-                  <MenuItem key={department._id} value={department._id}>
+                {departmentsData.map((department, idx) => (
+                  <MenuItem key={idx} value={department._id}>
                     {curLangAr ? department.name_arabic : department.name_english}
                   </MenuItem>
                 ))}

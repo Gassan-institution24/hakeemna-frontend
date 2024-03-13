@@ -16,6 +16,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { fDateTime } from 'src/utils/format-time';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ColorPicker } from 'src/components/color-utils';
@@ -38,6 +40,10 @@ export default function CalendarFilters({
   colorOptions,
   onClickEvent,
 }) {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const handleFilterColors = useCallback(
     (newValue) => {
       onFilters('colors', newValue);
@@ -66,11 +72,11 @@ export default function CalendarFilters({
       justifyContent="space-between"
       sx={{ py: 2, pr: 1, pl: 2.5 }}
     >
-      <Typography variant="h6" sx={{ flexGrow: 1 }}>
-        Filters
+      <Typography lang="ar" variant="h6" sx={{ flexGrow: 1 }}>
+        {t('Filters')}
       </Typography>
 
-      <Tooltip title="Reset">
+      <Tooltip title={t('Reset')}>
         <IconButton onClick={onResetFilters}>
           <Badge color="error" variant="dot" invisible={!canReset}>
             <Iconify icon="solar:restart-bold" />
@@ -84,26 +90,30 @@ export default function CalendarFilters({
     </Stack>
   );
 
-  const renderColors = (
-    <Stack spacing={1} sx={{ my: 3, px: 2.5 }}>
-      <Typography variant="subtitle2">Colors</Typography>
-      <ColorPicker
-        colors={colorOptions}
-        selected={filters.colors}
-        onSelectColor={handleFilterColors}
-      />
-    </Stack>
-  );
+  // const renderColors = (
+  //   <Stack spacing={1} sx={{ my: 3, px: 2.5 }}>
+  //     <Typography variant="subtitle2">{t('colors')}</Typography>
+  //     <ColorPicker
+  //       colors={colorOptions}
+  //       selected={filters.colors}
+  //       onSelectColor={handleFilterColors}
+  //     />
+  //   </Stack>
+  // );
 
   const renderDateRange = (
     <Stack spacing={1.5} sx={{ mb: 3, px: 2.5 }}>
-      <Typography variant="subtitle2">Range</Typography>
+      <Typography variant="subtitle2">{t('range')}</Typography>
 
       <Stack spacing={2}>
-        <DatePicker label="Start date" value={filters.startDate} onChange={handleFilterStartDate} />
+        <DatePicker
+          label={t('start date')}
+          value={filters.startDate}
+          onChange={handleFilterStartDate}
+        />
 
         <DatePicker
-          label="End date"
+          label={t('end date')}
           value={filters.endDate}
           onChange={handleFilterEndDate}
           slotProps={{
@@ -120,13 +130,13 @@ export default function CalendarFilters({
   const renderEvents = (
     <>
       <Typography variant="subtitle2" sx={{ px: 2.5, mb: 1 }}>
-        Events ({events.length})
+        {t('events')} ({events.length})
       </Typography>
 
       <Scrollbar sx={{ height: 1 }}>
-        {orderBy(events, ['end'], ['desc']).map((event) => (
+        {orderBy(events, ['end'], ['desc']).map((event, idx) => (
           <ListItemButton
-            key={event.id}
+            key={idx}
             onClick={() => onClickEvent(`${event.id}`)}
             sx={{
               py: 1.5,
@@ -159,12 +169,13 @@ export default function CalendarFilters({
                   sx={{ fontSize: 11, color: 'text.disabled' }}
                 >
                   {event.allDay ? (
-                    fDateTime(event.start, 'dd MMM yy')
+                    fDateTime(event.start, 'dd MMM yy', curLangAr)
                   ) : (
                     <>
-                      {`${fDateTime(event.start, 'dd MMM yy p')} - ${fDateTime(
+                      {`${fDateTime(event.start, 'dd MMM yy p', curLangAr)} - ${fDateTime(
                         event.end,
-                        'dd MMM yy p'
+                        'dd MMM yy p',
+                        curLangAr
                       )}`}
                     </>
                   )}
@@ -194,7 +205,7 @@ export default function CalendarFilters({
 
       <Divider sx={{ borderStyle: 'dashed' }} />
 
-      {renderColors}
+      {/* {renderColors} */}
 
       {renderDateRange}
 

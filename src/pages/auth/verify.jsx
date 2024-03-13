@@ -9,6 +9,7 @@ export default function VerifyPage() {
     <>
       <Helmet>
         <title> Verify</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <JwtVerifyView />

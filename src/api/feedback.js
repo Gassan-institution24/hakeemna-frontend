@@ -4,34 +4,12 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetUSFeedbackes(id) {
-  const URL = endpoints.tables.USfeedbacks(id);
+  const URL = endpoints.feedbacks.unit_service.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
       feedbackData: data || [],
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
-    await mutate(URL);
-  };
-
-  return { ...memoizedValue, refetch };
-}
-
-export function useGetUSFeedbackesCount(id) {
-  const URL = endpoints.tables.USfeedbacksCount(id);
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      feedbackCount: data,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -48,34 +26,12 @@ export function useGetUSFeedbackesCount(id) {
 }
 
 export function useGetDepartmentFeedbackes(id) {
-  const URL = endpoints.tables.departmentfeedbacks(id);
+  const URL = endpoints.feedbacks.department.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
       feedbackData: data || [],
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
-    await mutate(URL);
-  };
-
-  return { ...memoizedValue, refetch };
-}
-
-export function useGetDepartmentFeedbackesCount(id) {
-  const URL = endpoints.tables.departmentfeedbacksCount(id);
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      feedbackCount: data,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -92,51 +48,7 @@ export function useGetDepartmentFeedbackesCount(id) {
 }
 
 export function useGetEmployeeFeedbackes(id) {
-  const URL = endpoints.tables.employeefeedbacks(id);
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      feedbackData: data || [],
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
-    await mutate(URL);
-  };
-
-  return { ...memoizedValue, refetch };
-}
-
-export function useGetUSEmployeeFeedbackes(id, emid) {
-  const URL = endpoints.tables.usemployeefeedbacks(id, emid);
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      feedbackData: data || [],
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
-    await mutate(URL);
-  };
-
-  return { ...memoizedValue, refetch };
-}
-
-export function useGetDepartmentEmployeeFeedbackes(id, emid) {
-  const URL = endpoints.tables.departmentemployeefeedbacks(id, emid);
+  const URL = endpoints.feedbacks.employee.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -158,7 +70,7 @@ export function useGetDepartmentEmployeeFeedbackes(id, emid) {
 }
 
 export function useGetDoctornaFeedbackes() {
-  const URL = endpoints.tables.doctornafeedbacks;
+  const URL = endpoints.feedbacks.doctorna.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -180,7 +92,7 @@ export function useGetDoctornaFeedbackes() {
 }
 
 export function useGetUSsFeedbackes() {
-  const URL = endpoints.tables.USsfeedbacks;
+  const URL = endpoints.feedbacks.unit_service.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -202,7 +114,7 @@ export function useGetUSsFeedbackes() {
 }
 
 export function useGetStakeholdersFeedbackes() {
-  const URL = endpoints.tables.stakeholdersfeedbacks;
+  const URL = endpoints.feedbacks.stakeholder.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -224,7 +136,7 @@ export function useGetStakeholdersFeedbackes() {
 }
 
 export function useGetPatientFeedbacks(id) {
-  const URL = endpoints.tables.patientfeedbacks(id);
+  const URL = endpoints.feedbacks.patient.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -246,7 +158,7 @@ export function useGetPatientFeedbacks(id) {
 }
 
 export function useGetStakeholderFeedbacks(id) {
-  const URL = endpoints.tables.stakeholderFeedbacks(id);
+  const URL = endpoints.feedbacks.stakeholder.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -268,7 +180,7 @@ export function useGetStakeholderFeedbacks(id) {
 }
 
 export function useGetFeedback(id) {
-  const URL = endpoints.tables.feedback(id);
+  const URL = endpoints.feedbacks.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

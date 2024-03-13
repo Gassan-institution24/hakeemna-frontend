@@ -18,9 +18,10 @@ export default function DepartmentWorkGroupEditPage() {
   const { data, loading } = useGetWorkGroup(acid);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="department" subcategory="work_groups" acl="update">
+    <ACLGuard category="department" subcategory="management_tables" acl="update">
       <Helmet>
         <title> Edit {name || ''} Work Group </title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && (

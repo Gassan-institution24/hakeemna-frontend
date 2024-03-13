@@ -32,16 +32,6 @@ export default function InvoiceTableToolbar({
     [onFilters]
   );
 
-  const handleFilterService = useCallback(
-    (event) => {
-      onFilters(
-        'service',
-        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
-      );
-    },
-    [onFilters]
-  );
-
   const handleFilterStartDate = useCallback(
     (newValue) => {
       onFilters('startDate', newValue);
@@ -83,11 +73,11 @@ export default function InvoiceTableToolbar({
             value={filters.service}
             onChange={handleFilterService}
             input={<OutlinedInput label="Service" />}
-            renderValue={(selected) => selected.map((value) => value).join(', ')}
+            renderValue={(selected) => selected.map((value, idx)  => value).join(', ')}
             sx={{ textTransform: 'capitalize' }}
           >
-            {serviceOptions.map((option) => (
-              <MenuItem key={option} value={option}>
+            {serviceOptions.map((option, idx)  => (
+              <MenuItem key={idx} value={option}>
                 <Checkbox disableRipple size="small" checked={filters.service.includes(option)} />
                 {option}
               </MenuItem>

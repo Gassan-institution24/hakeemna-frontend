@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
@@ -15,11 +14,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetCountries } from 'src/api';
-import { useAuthContext } from 'src/auth/hooks';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -29,8 +26,6 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function CitiesNewEditForm({ currentCity }) {
   const router = useRouter();
 
-  const { user } = useAuthContext();
-
   const { countriesData } = useGetCountries();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -39,6 +34,7 @@ export default function CitiesNewEditForm({ currentCity }) {
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
     country: Yup.string().required('Country is required'),
+    state: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -46,6 +42,7 @@ export default function CitiesNewEditForm({ currentCity }) {
       name_arabic: currentCity?.name_arabic || '',
       name_english: currentCity?.name_english || '',
       country: currentCity?.country?._id || '',
+      state: currentCity?.state || '',
     }),
     [currentCity]
   );
@@ -83,24 +80,10 @@ export default function CitiesNewEditForm({ currentCity }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentCity) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.city(currentCity._id),
-          data: {
-            modifications_nums: (currentCity.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        });
+        await axiosInstance.patch(endpoints.cities.one(currentCity._id), data);
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.tables.cities,
-          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
-        });
+        await axiosInstance.post(endpoints.cities.all, data);
       }
       reset();
       enqueueSnackbar(currentCity ? 'Update success!' : 'Create success!');
@@ -136,10 +119,16 @@ export default function CitiesNewEditForm({ currentCity }) {
                 name="name_arabic"
                 label="name arabic"
               />
+              <RHFTextField
+                lang="ar"
+                onChange={handleArabicInputChange}
+                name="state"
+                label="state"
+              />
 
-              <RHFSelect name="country" label="Country">
-                {countriesData.map((category) => (
-                  <MenuItem key={category._id} value={category._id}>
+              <RHFSelect name="country" label="country">
+                {countriesData.map((category, idx) => (
+                  <MenuItem key={idx} value={category._id}>
                     {category.name_english}
                   </MenuItem>
                 ))}

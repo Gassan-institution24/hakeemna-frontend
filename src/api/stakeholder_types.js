@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetStakeholderTypes() {
-  const URL = endpoints.tables.stakeholdertypes;
+  const URL = endpoints.stakeholder_types.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -26,7 +26,7 @@ export function useGetStakeholderTypes() {
 }
 
 export function useGetStakeholderType(id) {
-  const URL = endpoints.tables.stakeholdertype(id);
+  const URL = endpoints.stakeholder_types.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

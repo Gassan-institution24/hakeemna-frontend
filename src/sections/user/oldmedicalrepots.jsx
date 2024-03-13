@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Page,
   Text,
@@ -15,7 +15,10 @@ import {
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
+import Grow from '@mui/material/Grow';
+import Alert from '@mui/material/Alert';
 import Dialog from '@mui/material/Dialog';
+import { alpha } from '@mui/material/styles';
 import Checkbox from '@mui/material/Checkbox';
 import { DatePicker } from '@mui/x-date-pickers';
 import IconButton from '@mui/material/IconButton';
@@ -25,13 +28,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { Button, MenuItem, Typography } from '@mui/material';
 
-import { useRouter } from 'src/routes/hooks';
-
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios from 'src/utils/axios';
 import { fDate } from 'src/utils/format-time';
 
+import { useGetSpecialties } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -49,12 +51,15 @@ export default function OldMedicalReports() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const [files, setFiles] = useState(null);
+  const [files, setFiles] = useState([]);
   const [filesPdf, setfilesPdf] = useState([]);
+
   const [filesPdftodelete, setfilesPdftodelete] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
+  const { specialtiesData } = useGetSpecialties();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,10 +73,11 @@ export default function OldMedicalReports() {
 
     fetchData();
   }, []);
-
   const delteeFile = async () => {
     try {
-      await axios.delete(`/api/oldmedicalreports/${filesPdftodelete._id}`);
+      await axios.patch(`/api/oldmedicalreports/${filesPdftodelete._id}`, {
+        Activation: 'Inactive',
+      });
       enqueueSnackbar(
         `${curLangAr ? 'تم حذف التقرير بنجاح' : 'Medical report deleted successfully'}`,
         { variant: 'success' }
@@ -84,7 +90,6 @@ export default function OldMedicalReports() {
       });
     }
   };
-
   const styles = StyleSheet.create({
     icon: {
       color: 'blue',
@@ -129,11 +134,11 @@ export default function OldMedicalReports() {
       padding: '10px',
     },
   });
-  const router = useRouter();
+  // const router = useRouter();
   const oldMedicalReportsSchema = Yup.object().shape({
     type: Yup.string().required(),
     date: Yup.date().required('Date is required'),
-    file: Yup.string().required(),
+    file: Yup.array().required(),
     name: Yup.string().required('File name is required'),
     note: Yup.string(),
     agree: Yup.boolean().required(),
@@ -141,77 +146,79 @@ export default function OldMedicalReports() {
   });
 
   const TYPE = ['Blod Test', 'X-ray Test', 'Health Check Test', 'Heart examination Test'];
-  const SPECIALTY = ['Bones', 'Heart'];
 
   const defaultValues = {
     type: '',
     date: '',
-    file: '',
+    file: [],
     name: '',
     note: '',
     agree: !checkChange,
     specialty: '',
   };
 
-  const MedicalreportsnPDF = ( { info } ) => (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <View>
-          <View style={styles.gridContainer}>
-            <Text style={styles.text}>
-              <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                Test Type:
-              </Text>{' '}
-              {info.type}
-            </Text>
-            <Text style={styles.text}>
-              <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                Test Date:
-              </Text>{' '}
-              {fDate(info.date)}
-            </Text>
-            <Text style={styles.text}>
-              <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                Date:
-              </Text>{' '}
-              {fDate(info.created_at)}
-            </Text>
-          </View>
-          <View style={styles.gridContainer2}>
-            <Text style={styles.text}>
-              <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                Test name:
-              </Text>{' '}
-              {info.name}
-            </Text>
-            <Text style={styles.text}>
-              <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                Specialty:
-              </Text>{' '}
-              {info.specialty}
-            </Text>
-          </View>
+  const MedicalreportsnPDF = useCallback(
+    ({ info }) => (
+      <Document>
+        <Page size="A4" style={styles.page}>
           <View>
-            <PdfImage src={info?.file} style={styles.image} />
+            <View style={styles.gridContainer}>
+              <Text style={styles.text}>
+                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
+                  Test Type:
+                </Text>{' '}
+                {info.type}
+              </Text>
+              <Text style={styles.text}>
+                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
+                  Test Date:
+                </Text>{' '}
+                {fDate(info.date)}
+              </Text>
+              <Text style={styles.text}>
+                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
+                  Date:
+                </Text>{' '}
+                {fDate(info.created_at)}
+              </Text>
+            </View>
+            <View style={styles.gridContainer2}>
+              <Text style={styles.text}>
+                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
+                  Test name:
+                </Text>{' '}
+                {info.name}
+              </Text>
+              <Text style={styles.text}>
+                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
+                  Specialty:
+                </Text>{' '}
+                {info.specialty}
+              </Text>
+            </View>
+            <View>
+              <PdfImage src={info?.file} style={styles.image} />
+            </View>
+            <View style={styles.gridFooter}>
+              <Text style={styles.text}>
+                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
+                  Note:
+                </Text>{' '}
+                {info.note}
+              </Text>
+            </View>
           </View>
-          <View style={styles.gridFooter}>
-            <Text style={styles.text}>
-              <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                Note:
-              </Text>{' '}
-              {info.note}
-            </Text>
-          </View>
-        </View>
-      </Page>
-    </Document>
+        </Page>
+      </Document>
+    ),
+    [styles]
   );
-
+  // console.log(info,"dfdfdf")
   MedicalreportsnPDF.propTypes = {
     info: PropTypes.shape({
       type: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
-      file: PropTypes.string,
+      file: PropTypes.array,
       name: PropTypes.string,
       note: PropTypes.string,
       specialty: PropTypes.string,
@@ -224,7 +231,7 @@ export default function OldMedicalReports() {
     defaultValues,
   });
   const {
-    setValue,
+    // setValue,
     control,
     reset,
     handleSubmit,
@@ -246,36 +253,37 @@ export default function OldMedicalReports() {
       validateSize: isValidSize,
     };
   };
-  // Inside the AccountGeneral component
   const handleDrop = (acceptedFiles) => {
-    const file = acceptedFiles[0];
+    const fileValidator = fuser(acceptedFiles.reduce((acc, file) => acc + file.size, 0));
 
-    // Validate file before setting the profile picture
-    const fileValidator = fuser(file.size);
+    const isValidFiles = acceptedFiles.every(
+      (file) =>
+        // const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
+        fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)
+    );
 
-    if (fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)) {
-      setFiles(file); // Save the file in state
-      const newFile = Object.assign(file, {
+    if (isValidFiles) {
+      // setFiles(acceptedFiles); // Save the files in state
+      const newFiles = acceptedFiles.map((file, idx) => ({
+        ...file,
         preview: URL.createObjectURL(file),
-      });
-      setValue('file', newFile);
+      }));
+      setFiles('file', newFiles);
     } else {
       // Handle invalid file type or size
-      enqueueSnackbar('Invalid file type or size', { variant: 'error' });
+      enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
     }
   };
 
   const onSubmit = async (data) => {
     const formData = new FormData();
-    const filesPath = files ? files.path.replace(/\\/g, '//') : '';
     Object.keys(data).forEach((key) => {
-      formData.append(key, key === 'file' ? filesPath : data[key]);
+      formData.append(key, data[key]);
     });
 
     if (files) {
       formData.append('medicalreports', files);
     }
-
     try {
       await axios.post('/api/oldmedicalreports', formData);
       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
@@ -284,13 +292,63 @@ export default function OldMedicalReports() {
       setfilesPdf(response.data);
       reset();
       setCheckChange(!checkChange);
+
+      // console.log('data', data);
+      // console.log('formData', formData);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
   };
+
+  const handleAlertClose = () => {
+    setShowAlert(false);
+  };
+
   return (
     <>
+      {showAlert && (
+        <Grow in={showAlert} timeout={600}>
+          <Alert
+            severity="info"
+            variant="filled"
+            sx={{ width: '50%', mb: 2 }}
+            action={
+              <>
+                <Button
+                  color="inherit"
+                  size="small"
+                  variant="outlined"
+                  sx={{
+                    mr: 1,
+                    border: (theme) => `1px solid ${alpha(theme.palette.common.white, 0.48)}`,
+                  }}
+                  onClick={handleAlertClose}
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  size="small"
+                  color="info"
+                  variant="contained"
+                  sx={{
+                    bgcolor: 'info.dark',
+                  }}
+                  onClick={() => {
+                    setShowAlert(false);
+                    delteeFile();
+                  }}
+                >
+                  Confirm
+                </Button>
+              </>
+            }
+          >
+            Please confirm the delettion
+          </Alert>
+        </Grow>
+      )}
       <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ gap: 1, mb: 5 }}>
         {t('Upload Your Perscription')}
         <Iconify icon="mingcute:add-line" />
@@ -315,8 +373,8 @@ export default function OldMedicalReports() {
               PaperPropsSx={{ textTransform: 'capitalize' }}
               sx={{ mb: 1.5 }}
             >
-              {TYPE.map((test) => (
-                <MenuItem value={test} key={test._id} sx={{ mb: 1 }}>
+              {TYPE.map((test, idx) => (
+                <MenuItem value={test} key={idx} sx={{ mb: 1 }}>
                   {test}
                 </MenuItem>
               ))}
@@ -329,9 +387,9 @@ export default function OldMedicalReports() {
               PaperPropsSx={{ textTransform: 'capitalize' }}
               sx={{ mb: 1 }}
             >
-              {SPECIALTY.map((test) => (
-                <MenuItem value={test} key={test._id} sx={{ mb: 1 }}>
-                  {test}
+              {specialtiesData.map((test, idx) => (
+                <MenuItem value={test?._id} key={idx} sx={{ mb: 1 }}>
+                  {test?.name_english}
                 </MenuItem>
               ))}
             </RHFSelect>
@@ -361,7 +419,9 @@ export default function OldMedicalReports() {
               sx={{ mb: 1 }}
               variant="outlined"
               onDrop={handleDrop}
+              multiple
             />
+
             <RHFTextField lang="en" name="note" label={t('More information')} />
           </DialogContent>
           <Checkbox
@@ -379,7 +439,7 @@ export default function OldMedicalReports() {
               mt: { md: -2.5, xs: -2.3 },
               ml: curLangAr ? { md: -31, xs: -5 } : { md: -19.5, xs: 4 },
               typography: 'caption',
-              textalign: 'center',
+              textAlign: 'center',
               fontSize: { md: 12, xs: 10 },
             }}
           >
@@ -416,7 +476,7 @@ export default function OldMedicalReports() {
           gap: 4,
         }}
       >
-        {filesPdf.map((info, i) => (
+        {filesPdf.map((info, i, idx) => (
           <Box>
             <Box>
               <Image
@@ -449,8 +509,8 @@ export default function OldMedicalReports() {
               sx={{ boxShadow: 'none', width: 'auto' }}
             >
               <PDFDownloadLink
-                key={i}
-                document={<MedicalreportsnPDF info={info} />}
+                key={idx}
+                document={<MedicalreportsnPDF info={filesPdf} />}
                 fileName={`${user?.patient.first_name} ${info.type} MediacalReport.pdf`}
                 style={styles.line}
               >
@@ -466,7 +526,7 @@ export default function OldMedicalReports() {
               </PDFDownloadLink>
               <MenuItem
                 onClick={() => {
-                  delteeFile();
+                  setShowAlert(true);
                   popover.onClose();
                 }}
                 onClose={popover.onClose}

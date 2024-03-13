@@ -19,11 +19,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
@@ -37,7 +37,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import { LoadingScreen } from 'src/components/loading-screen';
+// import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
@@ -58,7 +58,7 @@ import AddEmegencyAppointment from '../add-emergency-appointment';
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'pending',
   types: '',
   shift: '',
   group: '',
@@ -110,14 +110,14 @@ export default function AppointmentsView({ employeeData }) {
     appointmentsData,
     appointmentsLength,
     refetch,
-    all,
+    // all,
     available,
     notBooked,
     processing,
     canceled,
     finished,
     pending,
-    loading,
+    // loading,
   } = useGetEmployeeAppointments({
     id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
     page: table.page || 0,
@@ -126,8 +126,6 @@ export default function AppointmentsView({ employeeData }) {
     order: table.order || 'asc',
     filters: filters || null,
   });
-
-  console.log('appointmentsData', appointmentsData);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -157,13 +155,7 @@ export default function AppointmentsView({ employeeData }) {
   //   appointmentsData.filter((item) => item.status === status).length;
 
   const TABS = [
-    { value: 'all', label: t('all'), color: 'default', count: all },
-    {
-      value: 'available',
-      label: t('available'),
-      color: 'secondary',
-      count: available,
-    },
+    // { value: 'all', label: t('all'), color: 'default', count: all },
     {
       value: 'pending',
       label: t('pending'),
@@ -189,6 +181,12 @@ export default function AppointmentsView({ employeeData }) {
       count: canceled,
     },
     {
+      value: 'available',
+      label: t('available'),
+      color: 'secondary',
+      count: available,
+    },
+    {
       value: 'not booked',
       label: t('not booked'),
       color: 'secondary',
@@ -210,10 +208,7 @@ export default function AppointmentsView({ employeeData }) {
   const handleCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/cancel`,
-        });
+        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/cancel`);
         socket.emit('updated', {
           user,
           link: paths.unitservice.appointments.root,
@@ -224,20 +219,18 @@ export default function AppointmentsView({ employeeData }) {
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
         console.error(error);
       }
-      enqueueSnackbar('canceled successfully!');
+      enqueueSnackbar(t('canceled successfully!'));
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user]
+    [dataInPage.length, table, refetch, enqueueSnackbar, t, user]
   );
 
   const handleDelayRow = useCallback(
     async (row, min) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/delay`,
-          data: { minutes: min },
+        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/delay`, {
+          minutes: min,
         });
         socket.emit('updated', {
           user,
@@ -249,21 +242,18 @@ export default function AppointmentsView({ employeeData }) {
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
         console.error(error);
       }
-      enqueueSnackbar('delayed successfully!');
+      enqueueSnackbar(t('delayed successfully!'));
       refetch();
       setMinToDelay(0);
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user]
+    [dataInPage.length, table, t, refetch, enqueueSnackbar, user]
   );
 
   const handleUnCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/uncancel`,
-        });
+        await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/uncancel`);
         socket.emit('updated', {
           user,
           link: paths.unitservice.appointments.root,
@@ -274,20 +264,18 @@ export default function AppointmentsView({ employeeData }) {
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
         console.error(error);
       }
-      enqueueSnackbar('uncanceled successfully!');
+      enqueueSnackbar(t('uncanceled successfully!'));
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user]
+    [dataInPage.length, table,t, refetch, enqueueSnackbar, user]
   );
 
   const handleCancelRows = useCallback(
     async (id) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointments}/cancel`,
-          data: { ids: table.selected },
+        await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, {
+          ids: table.selected,
         });
         socket.emit('updated', {
           user,
@@ -299,7 +287,7 @@ export default function AppointmentsView({ employeeData }) {
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
         console.error(error);
       }
-      enqueueSnackbar('canceled successfully!');
+      enqueueSnackbar(t('canceled successfully!'));
       refetch();
       table.onUpdatePageDeleteRows({
         totalRows: appointmentsLength,
@@ -313,6 +301,7 @@ export default function AppointmentsView({ employeeData }) {
       dataInPage.length,
       appointmentsLength,
       table,
+      t,
       enqueueSnackbar,
       user,
     ]
@@ -320,17 +309,16 @@ export default function AppointmentsView({ employeeData }) {
 
   const handleDelayRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/delay`,
-        data: { ids: table.selected, minutes: minToDelay },
+      await axiosInstance.patch(`${endpoints.appointments.all}/delay`, {
+        ids: table.selected,
+        minutes: minToDelay,
       });
       socket.emit('updated', {
         user,
         link: paths.unitservice.appointments.root,
         msg: `dealayed many appointments`,
       });
-      enqueueSnackbar('delayed successfully!');
+      enqueueSnackbar(t('delayed successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -349,6 +337,7 @@ export default function AppointmentsView({ employeeData }) {
     dataInPage.length,
     appointmentsLength,
     table,
+    t,
     minToDelay,
     enqueueSnackbar,
     user,
@@ -357,12 +346,10 @@ export default function AppointmentsView({ employeeData }) {
   const handleUnCancelRows = useCallback(
     async (id) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointments}/uncancel`,
-          data: { ids: table.selected },
+        await axiosInstance.patch(`${endpoints.appointments.all}/uncancel`, {
+          ids: table.selected,
         });
-        enqueueSnackbar('uncanceled successfully!');
+        enqueueSnackbar(t('uncanceled successfully!'));
         socket.emit('updated', {
           user,
           link: paths.unitservice.appointments.root,
@@ -387,6 +374,7 @@ export default function AppointmentsView({ employeeData }) {
       appointmentsLength,
       table,
       user,
+      t,
       enqueueSnackbar,
     ]
   );
@@ -408,9 +396,9 @@ export default function AppointmentsView({ employeeData }) {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  // if (loading) {
+  //   return <LoadingScreen />;
+  // }
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -420,6 +408,24 @@ export default function AppointmentsView({ employeeData }) {
             { name: t('dashboard'), href: paths.dashboard.root },
             { name: t('appointments') },
           ]}
+          action={
+            checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                onClick={() => addModal.onTrue()}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+                sx={{
+                  bgcolor: 'error.dark',
+                  '&:hover': {
+                    bgcolor: 'error.main',
+                  },
+                }}
+              >
+                {t('new emergency appointment')}
+              </Button>
+            )
+          }
           sx={{
             mb: { xs: 3, md: 5 },
           }}
@@ -433,9 +439,9 @@ export default function AppointmentsView({ employeeData }) {
               boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {TABS.map((tab) => (
+            {TABS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 value={tab.value}
                 label={tab.label}
                 iconPosition="end"
@@ -483,12 +489,12 @@ export default function AppointmentsView({ employeeData }) {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered?.map((row) => row._id)
+                  dataFiltered?.map((row, idx) => row._id)
                 )
               }
               action={
                 checkAcl({
-                  category: 'employee',
+                  category: 'work_group',
                   subcategory: 'appointments',
                   acl: 'update',
                 }) && (
@@ -498,7 +504,7 @@ export default function AppointmentsView({ employeeData }) {
                         <Iconify icon="mdi:timer-sync" />
                       </IconButton>
                     </Tooltip>
-                    {dataFiltered
+                    {/* {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
                       .some((data) => data.status === 'canceled') ? (
                       <Tooltip title="uncancel all">
@@ -512,12 +518,12 @@ export default function AppointmentsView({ employeeData }) {
                           <Iconify icon="mdi:bell-cancel" />
                         </IconButton>
                       </Tooltip>
-                    )}
+                    )} */}
                   </>
                 )
               }
               color={
-                checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'update' }) &&
+                checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) &&
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'canceled')
@@ -537,7 +543,7 @@ export default function AppointmentsView({ employeeData }) {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered?.map((row) => row._id)
+                      dataFiltered?.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -548,10 +554,10 @@ export default function AppointmentsView({ employeeData }) {
                     //   table.page * table.rowsPerPage,
                     //   table.page * table.rowsPerPage + table.rowsPerPage
                     // )
-                    ?.map((row) => (
+                    ?.map((row, idx) => (
                       <AppointmentsRow
                         refetch={refetch}
-                        key={row._id}
+                        key={idx}
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
@@ -643,7 +649,7 @@ export default function AppointmentsView({ employeeData }) {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <Box sx={{ fontSize: '0.8rem' }}>min</Box>
+                    <Box sx={{ fontSize: '0.8rem' }}>{t('min')}</Box>
                   </InputAdornment>
                 ),
               }}
@@ -676,7 +682,7 @@ export default function AppointmentsView({ employeeData }) {
 // function applyFilter({ inputData, comparator, filters, dateError }) {
 //   const { name, status, types, startDate, endDate } = filters;
 
-//   const stabilizedThis = inputData?.map((el, index) => [el, index]);
+//   const stabilizedThis = inputData?.map((el, index, idx)  => [el, index]);
 
 //   stabilizedThis?.sort((a, b) => {
 //     const order = comparator(a[0], b[0]);
@@ -684,7 +690,7 @@ export default function AppointmentsView({ employeeData }) {
 //     return a[1] - b[1];
 //   });
 
-//   inputData = stabilizedThis?.map((el) => el[0]);
+//   inputData = stabilizedThis?.map((el, idx)  => el[0]);
 
 //   if (name) {
 //     inputData = inputData.filter(

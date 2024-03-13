@@ -18,7 +18,7 @@ export default function TourDetailsContent({ tour }) {
   const renderGallery = (
     <Box gap={1} display="grid">
       <m.div
-        key={tour.Offer_img}
+        key={tour._id}
         whileHover="hover"
         variants={{
           hover: { opacity: 0.8 },
@@ -75,8 +75,8 @@ export default function TourDetailsContent({ tour }) {
           value: tour.Offer_price,
           icon: <Iconify icon="tdesign:money" />,
         },
-      ].map((item) => (
-        <Stack key={item.label} spacing={1.5} direction="row">
+      ].map((item, idx) => (
+        <Stack key={idx} spacing={1.5} direction="row">
           {item.icon}
           <ListItemText
             primary={item.label}
@@ -97,50 +97,50 @@ export default function TourDetailsContent({ tour }) {
     </Box>
   );
 
-  const renderContent = (
-    // <>
-    //   {/* <Markdown children={content} /> */}
+  // const renderContent = (
+  // <>
+  //   {/* <Markdown children={content} /> */}
 
-    //   <Stack spacing={2}>
-    //     <Typography variant="h6"> Services</Typography>
+  //   <Stack spacing={2}>
+  //     <Typography variant="h6"> Services</Typography>
 
-    //     <Box
-    //       rowGap={2}
-    //       display="grid"
-    //       gridTemplateColumns={{
-    //         xs: 'repeat(1, 1fr)',
-    //         md: 'repeat(2, 1fr)',
-    //       }}
-    //     >
-    //       {/* {TOUR_SERVICE_OPTIONS.map((service) => (
-    //         <Stack
-    //           key={service.label}
-    //           spacing={1}
-    //           direction="row"
-    //           alignItems="center"
-    //           sx={{
-    //             ...(services.includes(service.label) && {
-    //               color: 'text.disabled',
-    //             }),
-    //           }}
-    //         >
-    //           <Iconify
-    //             icon="eva:checkmark-circle-2-outline"
-    //             sx={{
-    //               color: 'primary.main',
-    //               ...(services.includes(service.label) && {
-    //                 color: 'text.disabled',
-    //               }),
-    //             }}
-    //           />
-    //           {service.label}
-    //         </Stack>
-    //       ))} */}
-    //     </Box>
-    //   </Stack>
-    // </>
-    <></>
-  );
+  //     <Box
+  //       rowGap={2}
+  //       display="grid"
+  //       gridTemplateColumns={{
+  //         xs: 'repeat(1, 1fr)',
+  //         md: 'repeat(2, 1fr)',
+  //       }}
+  //     >
+  //       {/* {TOUR_SERVICE_OPTIONS.map((service, idx)  => (
+  //         <Stack
+  //           key={idx}
+  //           spacing={1}
+  //           direction="row"
+  //           alignItems="center"
+  //           sx={{
+  //             ...(services.includes(service.label) && {
+  //               color: 'text.disabled',
+  //             }),
+  //           }}
+  //         >
+  //           <Iconify
+  //             icon="eva:checkmark-circle-2-outline"
+  //             sx={{
+  //               color: 'primary.main',
+  //               ...(services.includes(service.label) && {
+  //                 color: 'text.disabled',
+  //               }),
+  //             }}
+  //           />
+  //           {service.label}
+  //         </Stack>
+  //       ))} */}
+  //     </Box>
+  //   </Stack>
+  // </>
+  // <></>
+  // );
 
   return (
     <>
@@ -155,7 +155,7 @@ export default function TourDetailsContent({ tour }) {
 
         <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
 
-        {renderContent}
+        {/* {renderContent} */}
       </Stack>
     </>
   );

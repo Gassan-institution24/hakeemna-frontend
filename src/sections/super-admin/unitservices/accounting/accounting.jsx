@@ -18,8 +18,6 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 import { useRouter, useParams } from 'src/routes/hooks';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
 import { useGetUSLicenseMovement } from 'src/api';
 
 import Label from 'src/components/label';
@@ -37,7 +35,6 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { useTranslate } from 'src/locales';
 
 import AccountingRow from './accounting-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -64,16 +61,16 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
 const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
+  // { value: 'all', label: 'All' },
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
   // { value: 'public', label: 'public' },
-  // { value: 'privet', label: 'privet' },
+  // { value: 'private', label: 'private' },
   // { value: 'charity', label: 'charity' },
 ];
 
@@ -88,12 +85,9 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
 
   const settings = useSettingsContext();
 
-  const confirmActivate = useBoolean();
-  const confirmInactivate = useBoolean();
-
   const router = useRouter();
 
-  const { licenseMovements, loading, refetch } = useGetUSLicenseMovement(id);
+  const { licenseMovements, loading } = useGetUSLicenseMovement(id);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -109,11 +103,9 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
     dateError,
   });
 
-  const { t } = useTranslate();
-
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -127,7 +119,7 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
         code: info.code,
         name: info.name_english,
         category: info.category?.name_english,
-        symptoms: info.symptoms?.map((symptom) => symptom?.name_english),
+        symptoms: info.symptoms?.map((symptom, idx) => symptom?.name_english),
       });
       return acc;
     }, []);
@@ -167,8 +159,6 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
     },
     [handleFilters]
   );
-  const unitserviceName = unitServiceData?.name_english;
-
   if (loading) {
     return <LoadingScreen />;
   }
@@ -212,9 +202,9 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
             boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
           }}
         >
-          {STATUS_OPTIONS.map((tab) => (
+          {STATUS_OPTIONS.map((tab, idx) => (
             <Tab
-              key={tab.value}
+              key={idx}
               iconPosition="end"
               value={tab.value}
               label={tab.label}
@@ -274,7 +264,7 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
                 // onSelectAllRows={(checked) =>
                 //   table.onSelectAllRows(
                 //     checked,
-                //     dataFiltered.map((row) => row._id)
+                //     dataFiltered.map((row, idx)  => row._id)
                 //   )
                 // }
               />
@@ -285,9 +275,9 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
-                  .map((row) => (
+                  .map((row, idx) => (
                     <AccountingRow
-                      key={row._id}
+                      key={idx}
                       row={row}
                       filters={filters}
                       setFilters={setFilters}
@@ -328,7 +318,7 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -336,7 +326,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

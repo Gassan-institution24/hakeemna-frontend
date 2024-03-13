@@ -1,13 +1,13 @@
+import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
+import { ListItemText } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-
-import { fDateTime } from 'src/utils/format-time';
 
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
@@ -28,12 +28,15 @@ export default function UnitServiceEmployeesRow({
   setFilters,
   filters,
   onViewRow,
+  onChangeVisPage,
+  onChangeVisOnlineApp,
 }) {
   const {
-    code,
     sequence_number,
     employee,
-    Adjust_schedule,
+    visibility_online_appointment,
+    visibility_US_page,
+    adjust_schedual,
     status,
     created_at,
     user_creation,
@@ -65,7 +68,6 @@ export default function UnitServiceEmployeesRow({
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
-          // textDecoration: 'underline',
         }}
         onClick={onViewRow}
         align="center"
@@ -78,46 +80,37 @@ export default function UnitServiceEmployeesRow({
           style={{ width: '10px' }}
         />
       </TableCell>
-      {/* <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onViewRow}
-        align="center"
-      >
-        {sequence_number}
-      </TableCell> */}
       <TableCell
         sx={{
           cursor: 'pointer',
           color: '#3F54EB',
-          // textDecoration: 'underline',
         }}
         onClick={onViewRow}
         align="center"
       >
-        {employee.first_name} {employee.family_name}
+        {employee?.first_name} {employee?.family_name}
       </TableCell>
       <TableCell lang="ar" align="center">
-        {curLangAr ? employee.employee_type?.name_arabic : employee.employee_type?.name_english}
+        {curLangAr ? employee?.employee_type?.name_arabic : employee?.employee_type?.name_english}
       </TableCell>
       <TableCell lang="ar" align="center">
-        {employee.email}
+        {employee?.email}
       </TableCell>
       <TableCell lang="ar" align="center">
-        {curLangAr ? employee.nationality?.name_arabic : employee.nationality?.name_english}
+        <Checkbox checked={visibility_online_appointment} onClick={onChangeVisOnlineApp} />
+      </TableCell>
+      <TableCell lang="ar" align="center">
+        <Checkbox checked={visibility_US_page} onClick={onChangeVisPage} />
       </TableCell>
       {/* <TableCell lang="ar" align="center">
         <Iconify
           icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'}
           width={16}
         />
-      </TableCell>
-      <TableCell lang="ar" align="center">
-        <Iconify icon={Adjust_schedule ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
       </TableCell> */}
+      <TableCell lang="ar" align="center">
+        <Iconify icon={adjust_schedual ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
+      </TableCell>
       <TableCell lang="ar" align="center">
         <Label
           lang="ar"
@@ -158,7 +151,7 @@ export default function UnitServiceEmployeesRow({
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon="ic:baseline-pause" />
-                {t('inactivate')}
+                {t('delete')}
               </MenuItem>
             )
           : checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'update' }) && (
@@ -193,14 +186,34 @@ export default function UnitServiceEmployeesRow({
         }}
       >
         <Box sx={{ fontWeight: 600 }}>{t('creation time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(created_at)}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={format(new Date(created_at), 'dd MMM yyyy')}
+            secondary={format(new Date(created_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
-        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{fDateTime(updated_at)}</Box>
+        <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
+          <ListItemText
+            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            secondary={format(new Date(updated_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_modification?.email}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editor IP')}:</Box>
@@ -222,6 +235,8 @@ UnitServiceEmployeesRow.propTypes = {
   onInactivate: PropTypes.func,
   onEditRow: PropTypes.func,
   onViewRow: PropTypes.func,
+  onChangeVisPage: PropTypes.func,
+  onChangeVisOnlineApp: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
   filters: PropTypes.object,

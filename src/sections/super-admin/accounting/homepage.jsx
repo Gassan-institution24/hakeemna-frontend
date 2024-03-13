@@ -17,7 +17,6 @@ import UnitServicesAccounting from './unit-services/accounting-table';
 // ----------------------------------------------------------------------
 
 export default function AccountingHomePage() {
-
   const { t } = useTranslate();
 
   const settings = useSettingsContext();

@@ -71,15 +71,15 @@ export default function TablesTableToolbar({
           value={filters.rate}
           onChange={handleFilterRate}
           input={<OutlinedInput label="Rate" />}
-          renderValue={(selected) => selected.map((value) => value).join(', ')}
+          renderValue={(selected) => selected.map((value, idx) => value).join(', ')}
           MenuProps={{
             PaperProps: {
               sx: { maxHeight: 240 },
             },
           }}
         >
-          {rateOptions.map((option) => (
-            <MenuItem key={option} value={option}>
+          {rateOptions.map((option, idx) => (
+            <MenuItem key={idx} value={option}>
               <Checkbox disableRipple size="small" checked={filters.rate.includes(option)} />
               <Rating size="small" readOnly value={option} precision={0.1} max={5} />
             </MenuItem>

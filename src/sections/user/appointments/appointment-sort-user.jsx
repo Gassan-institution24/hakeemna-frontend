@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 
-import {useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -13,7 +13,6 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function JobSort({ sort, onSort, sortOptions }) {
   const popover = usePopover();
-
   const { t } = useTranslate();
   return (
     <>
@@ -43,9 +42,9 @@ export default function JobSort({ sort, onSort, sortOptions }) {
       </Button>
 
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 140 }}>
-        {sortOptions.map((option) => (
+        {sortOptions.map((option, idx) => (
           <MenuItem
-            key={option.value}
+            key={idx}
             selected={option.value === sort}
             onClick={() => {
               popover.onClose();

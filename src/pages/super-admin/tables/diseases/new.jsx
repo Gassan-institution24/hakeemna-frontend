@@ -9,6 +9,7 @@ export default function TableCreatePage() {
     <>
       <Helmet>
         <title> super: Create a new Disease</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <TableCreateView />

@@ -15,7 +15,6 @@ import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useGetSurgeries } from 'src/api';
-import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -37,16 +36,11 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'all' },
-  { value: 'active', label: 'active' },
-  { value: 'inactive', label: 'inactive' },
-];
-
 const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
-  { id: 'name', label: 'name' },
+  { id: 'name_english', label: 'name' },
+  { id: 'name_arabic', label: 'arabic name' },
   { id: 'description', label: 'description' },
   { id: 'diseases', label: 'diseases' },
   // { id: 'created_at', label: 'Date Of Creation' },
@@ -61,7 +55,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -70,15 +64,13 @@ export default function SurgeriesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { t } = useTranslate();
-
   const componentRef = useRef();
 
   const router = useRouter();
 
   const settings = useSettingsContext();
 
-  const { tableData, loading, refetch } = useGetSurgeries();
+  const { tableData, loading } = useGetSurgeries();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -94,14 +86,10 @@ export default function SurgeriesTableView() {
     dateError,
   });
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -115,7 +103,7 @@ export default function SurgeriesTableView() {
         code: data.code,
         name: data.name_english,
         description: data.description,
-        diseases: data.diseases?.map((disease) => disease.name_english),
+        diseases: data.diseases?.map((disease, idx) => disease.name_english),
       });
       return acc;
     }, []);
@@ -226,9 +214,9 @@ export default function SurgeriesTableView() {
                     table.page * table.rowsPerPage,
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
-                  .map((row) => (
+                  .map((row, idx) => (
                     <TableDetailRow
-                      key={row._id}
+                      key={idx}
                       row={row}
                       selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}
@@ -267,7 +255,7 @@ export default function SurgeriesTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -275,7 +263,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

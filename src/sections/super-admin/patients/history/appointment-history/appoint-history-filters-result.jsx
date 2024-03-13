@@ -22,11 +22,6 @@ export default function InvoiceTableFiltersResult({
 }) {
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
-  const handleRemoveService = (inputValue) => {
-    const newValue = filters.types.filter((item) => item !== inputValue);
-    onFilters('types', newValue);
-  };
-
   const handleRemoveStatus = () => {
     onFilters('status', 'all');
   };
@@ -46,7 +41,7 @@ export default function InvoiceTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {filters.status !== 'all' && (
+        {filters.status !== 'active' && (
           <Block label="Status:">
             <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
           </Block>

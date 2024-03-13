@@ -7,21 +7,19 @@ import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
 import { useRouter, useParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
 import { fTimestamp } from 'src/utils/format-time';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
@@ -33,6 +31,7 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
   emptyRows,
@@ -53,7 +52,7 @@ import ConfigFiltersResult from '../appointmentConfig/appointment-filters-result
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'active',
   startDate: null,
   endDate: null,
 };
@@ -113,7 +112,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const denseHeight = table.dense ? 56 : 76;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || !!filters.startDate || !!filters.endDate;
+    !!filters.name || filters.status !== 'active' || !!filters.startDate || !!filters.endDate;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -121,7 +120,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     appointmentConfigData.filter((item) => item.status === status).length;
 
   const TABS = [
-    { value: 'all', label: t('all'), color: 'default', count: appointmentConfigData.length },
+    // { value: 'all', label: t('all'), color: 'default', count: appointmentConfigData.length },
     {
       value: 'active',
       label: t('active'),
@@ -150,14 +149,11 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const handleCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/cancel`,
-        });
+        await axiosInstance.delete(`${endpoints.appointment_configs.one(row._id)}`);
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.appointmentconfig.root(id),
-          msg: `canceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
+          msg: `deleted an appointment configuration <strong>[ ${row.code} ]</strong>`,
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
@@ -173,10 +169,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const handleUnCancelRow = useCallback(
     async (row) => {
       try {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.appointment(row._id)}/uncancel`,
-        });
+        await axiosInstance.patch(`${endpoints.appointment_configs.one(row._id)}/uncancel`);
         socket.emit('updated', {
           user,
           link: paths.unitservice.employees.appointmentconfig.root(id),
@@ -195,10 +188,8 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   const handleCancelRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
+      await axiosInstance.patch(`${endpoints.appointment_configs.all}/cancel`, {
+        ids: table.selected,
       });
       socket.emit('updated', {
         user,
@@ -229,10 +220,8 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   const handleUnCancelRows = useCallback(async () => {
     try {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/uncancel`,
-        data: { ids: table.selected },
+      await axiosInstance.patch(`${endpoints.appointment_configs.all}/uncancel`, {
+        ids: table.selected,
       });
       socket.emit('updated', {
         user,
@@ -286,6 +275,27 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+        <CustomBreadcrumbs
+          action={
+            checkAcl({
+              category: 'employee',
+              subcategory: 'appointment_configs',
+              acl: 'update',
+            }) && (
+              <Button
+                component={RouterLink}
+                href={paths.unitservice.employees.appointmentconfig.new(id)}
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                {t('new configuration')}
+              </Button>
+            )
+          }
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
+        />
         <Card>
           <Tabs
             value={filters.status}
@@ -295,9 +305,9 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
               boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {TABS.map((tab) => (
+            {TABS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 value={tab.value}
                 label={tab.label}
                 iconPosition="end"
@@ -322,7 +332,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
             onAdd={handleAdd}
             //
             dateError={dateError}
-            // serviceOptions={appointmenttypesData.map((option) => option)}
+            // serviceOptions={appointmenttypesData.map((option, idx)  => option)}
           />
 
           {canReset && (
@@ -345,7 +355,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               action={
@@ -355,7 +365,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                   acl: 'update',
                 }) && (
                   <>
-                    {dataFiltered
+                    {/* {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
                       .some((data) => data.status === 'canceled') ? (
                       <Tooltip title="uncancel all">
@@ -369,7 +379,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                           <Iconify icon="mdi:bell-cancel" />
                         </IconButton>
                       </Tooltip>
-                    )}
+                    )} */}
                   </>
                 )
               }
@@ -398,7 +408,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -409,9 +419,9 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <AppointConfigRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
@@ -502,9 +512,9 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, types, startDate, endDate } = filters;
+  const { name, status, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -512,7 +522,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

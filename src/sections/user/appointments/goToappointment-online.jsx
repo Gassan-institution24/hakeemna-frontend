@@ -7,17 +7,16 @@ import { useCallback } from 'react';
 // import { paths } from 'src/routes/paths';
 // import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetUnitservices } from 'src/api';
+import { useGetActiveUnitservices } from 'src/api';
 
 import OnlineAppointmentList from './appointment-online';
 
 // ----------------------------------------------------------------------
 
 export default function AppointmentItem({ patientData, refetch }) {
-  const { unitservicesData, loading } = useGetUnitservices();
+  const { unitservicesData, loading } = useGetActiveUnitservices();
   // const router = useRouter();
   // const handleView = useCallback(
   //   (id) => {
@@ -26,13 +25,9 @@ export default function AppointmentItem({ patientData, refetch }) {
   //   [router]
   // );
 
- const handleBook = useCallback(
+  const handleBook = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointment(id)}/book`,
-        data: { patient: patientData },
-      });
+      await axiosInstance.patch(`${endpoints.appointments.one(id)}/book`, { patient: patientData });
       refetch();
     },
     [patientData, refetch]
@@ -40,9 +35,9 @@ export default function AppointmentItem({ patientData, refetch }) {
   return (
     <>
       {!loading &&
-        unitservicesData.map((info) => (
+        unitservicesData.map((info, idx) => (
           <OnlineAppointmentList
-            key={info.id}
+            key={idx}
             Units={info}
             patientData={patientData}
             onBook={handleBook}

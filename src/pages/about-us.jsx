@@ -9,6 +9,7 @@ export default function AboutPage() {
     <>
       <Helmet>
         <title> About us</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <AboutView />

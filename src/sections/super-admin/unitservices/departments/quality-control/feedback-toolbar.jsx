@@ -13,7 +13,7 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 
@@ -27,8 +27,6 @@ export default function TablesTableToolbar({
   onResetFilters,
 }) {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   const handleFilterName = useCallback(
     (event) => {
@@ -73,15 +71,15 @@ export default function TablesTableToolbar({
           value={filters.rate}
           onChange={handleFilterRate}
           input={<OutlinedInput label={t('rate')} />}
-          renderValue={(selected) => selected.map((value) => value).join(', ')}
+          renderValue={(selected) => selected.map((value, idx) => value).join(', ')}
           MenuProps={{
             PaperProps: {
               sx: { maxHeight: 240 },
             },
           }}
         >
-          {rateOptions.map((option) => (
-            <MenuItem key={option} value={option}>
+          {rateOptions.map((option, idx) => (
+            <MenuItem key={idx} value={option}>
               <Checkbox disableRipple size="small" checked={filters.rate.includes(option)} />
               <Rating size="small" readOnly value={option} precision={0.1} max={5} />
             </MenuItem>

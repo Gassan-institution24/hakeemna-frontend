@@ -1,29 +1,58 @@
-import { Box, Divider, Typography } from '@mui/material';
+import { useState, useCallback } from 'react';
 
+import { Tab, Tabs } from '@mui/material';
+import { Box, Container } from '@mui/system';
+
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetPatientAppointments } from 'src/api';
-import { useLocales, useTranslate } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
+import { useSettingsContext } from 'src/components/settings';
 
 import Currentappoinment from './apointmentscurrent';
 import FinishedAppoinment from './apointmentsfinished';
 
 export default function AppointmentData() {
   const { user } = useAuthContext();
-  const { appointmentsData } = useGetPatientAppointments(user?.patient?._id);
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  const { appointmentsData, refetch } = useGetPatientAppointments(user?.patient?._id);
   const { t } = useTranslate();
+  const settings = useSettingsContext();
 
-  // const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending');
+  const [currentTab, setCurrentTab] = useState('upcoming');
+  const handleChangeTab = useCallback((event, newValue) => {
+    setCurrentTab(newValue);
+  }, []);
 
+  const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending');
+  const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');
+  const TABS = [
+    {
+      value: 'upcoming',
+      label: t('Upcoming Appointments'),
+      icon: <Iconify icon="mingcute:time-line" width={24} />,
+    },
+    {
+      value: 'Finished',
+      label: t('Finished appoinment'),
+      icon: <Iconify icon="ep:finished" width={24} />,
+    },
+  ];
 
   return (
-    <>
-      {/* {pendingAppointments.lenght > 0 ? ( */}
-      <>
-        <Typography variant="h4" sx={{ mb: 2 }}>
-          {curLangAr ? 'مواعيد لليوم' : 'Appointment for today'}
-        </Typography>
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Tabs
+        value={currentTab}
+        onChange={handleChangeTab}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      >
+        {TABS.map((tab, idx) => (
+          <Tab key={idx} label={tab.label} icon={tab.icon} value={tab.value} />
+        ))}
+      </Tabs>
+      {currentTab === 'upcoming' && (
         <Box
           sx={{
             display: 'grid',
@@ -32,21 +61,11 @@ export default function AppointmentData() {
             mb: 2,
           }}
         >
-          <Currentappoinment pendingAppointments={appointmentsData} />
+          <Currentappoinment pendingAppointments={pendingAppointments} refetch={refetch} />
         </Box>
-      </>
-      {/* ) : ( */}
-      {/* <Typography variant="h4" sx={{ mb: 2 }}>
-          {curLangAr ? 'لا يوجد لديك مواعيد اليوم' : ' No appointment for today'}
-        </Typography> */}
-      {/* )} */}
+      )}
 
-      {/* {finishedAppointments ? ( */}
-      <>
-        <Divider sx={{ mb: 2 }} />
-        <Typography variant="h4" sx={{ mb: 2 }}>
-          {t('Finished appoinment')}
-        </Typography>
+      {currentTab === 'Finished' && (
         <Box
           sx={{
             display: 'grid',
@@ -55,12 +74,9 @@ export default function AppointmentData() {
             mb: 2,
           }}
         >
-          <FinishedAppoinment />
+          <FinishedAppoinment finishedAppointments={finishedAppointments} />
         </Box>
-      </>
-      {/* ) : ( */}
-      {/* '' */}
-      {/* )} */}
-    </>
+      )}
+    </Container>
   );
 }

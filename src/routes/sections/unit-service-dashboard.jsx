@@ -1,11 +1,15 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { AuthGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
+import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import SecondaryNavLayout from 'src/layouts/employee-topbar';
 import DepartmentNavLayout from 'src/layouts/department-topbar';
+import EmployeeMinBarLayout from 'src/layouts/employees-minibar';
 import RecieptsInfoPage from 'src/pages/employee/accounting/reciepts/info';
+import DepartmentPermissionsBarLayout from 'src/layouts/department-permission-minibar';
+import USWorkGroupPermissionsBarLayout from 'src/layouts/US-workgroup-permission-minibar';
+import DepartmentWorkGroupPermissionsBarLayout from 'src/layouts/department-workgroup-permission-minibar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -52,8 +56,20 @@ const DepartmentsWorkGroupsPage = lazy(() =>
 const DepartmentsNewWorkGroupsPage = lazy(() =>
   import('src/pages/unit-service/departments/work-groups/add')
 );
+const DepartmentsWorkGroupsPermissionPage = lazy(() =>
+  import('src/pages/unit-service/departments/work-groups/permissions/home')
+);
+const DepartmentsWorkGroupsEmployeePermissionPage = lazy(() =>
+  import('src/pages/unit-service/departments/work-groups/permissions/employee')
+);
 const DepartmentsEditWorkGroupsPage = lazy(() =>
   import('src/pages/unit-service/departments/work-groups/edit')
+);
+const DepartmentsPermissionsPage = lazy(() =>
+  import('src/pages/unit-service/departments/permissions/home')
+);
+const DepartmentsEmployeePermissionsPage = lazy(() =>
+  import('src/pages/unit-service/departments/permissions/employee')
 );
 const DepartmentsEditPage = lazy(() => import('src/pages/unit-service/departments/edit'));
 // EMPLOYEES
@@ -164,10 +180,20 @@ const WorkShiftsEditPage = lazy(() => import('src/pages/unit-service/tables/work
 const WorkGroupsHomePage = lazy(() => import('src/pages/unit-service/tables/work-groups/home'));
 const WorkGroupsNewPage = lazy(() => import('src/pages/unit-service/tables/work-groups/new'));
 const WorkGroupsEditPage = lazy(() => import('src/pages/unit-service/tables/work-groups/edit'));
+const WorkGroupsPermissionPage = lazy(() =>
+  import('src/pages/unit-service/tables/work-groups/permissions/home')
+);
+const WorkGroupsEmployeePermissionPage = lazy(() =>
+  import('src/pages/unit-service/tables/work-groups/permissions/employee')
+);
 // ROOMS
 const RoomsHomePage = lazy(() => import('src/pages/unit-service/tables/rooms/home'));
 const RoomsNewPage = lazy(() => import('src/pages/unit-service/tables/rooms/new'));
 const RoomsEditPage = lazy(() => import('src/pages/unit-service/tables/rooms/edit'));
+// Services
+const ServicesHomePage = lazy(() => import('src/pages/unit-service/tables/services/home'));
+const ServicesNewPage = lazy(() => import('src/pages/unit-service/tables/services/new'));
+const ServicesEditPage = lazy(() => import('src/pages/unit-service/tables/services/edit'));
 // OLD PATIENT
 const OldPatientPage = lazy(() => import('src/pages/unit-service/old-patient/home'));
 const ChatPage = lazy(() => import('src/pages/dashboard/chat'));
@@ -178,11 +204,13 @@ export const unitServiceDashboardRoutes = [
     path: 'dashboard/us',
     element: (
       <AuthGuard>
-        <DashboardLayout>
-          <Suspense fallback={<LoadingScreen />}>
-            <Outlet />
-          </Suspense>
-        </DashboardLayout>
+        <RoleBasedGuard hasContent roles={['admin', 'employee']}>
+          <DashboardLayout>
+            <Suspense fallback={<LoadingScreen />}>
+              <Outlet />
+            </Suspense>
+          </DashboardLayout>
+        </RoleBasedGuard>
       </AuthGuard>
     ),
     children: [
@@ -233,7 +261,34 @@ export const unitServiceDashboardRoutes = [
                 children: [
                   { element: <DepartmentsWorkGroupsPage />, index: true },
                   { path: 'new', element: <DepartmentsNewWorkGroupsPage /> },
+                  {
+                    path: ':wgid',
+                    element: (
+                      <DepartmentWorkGroupPermissionsBarLayout>
+                        <Outlet />
+                      </DepartmentWorkGroupPermissionsBarLayout>
+                    ),
+                    children: [
+                      { element: <DepartmentsWorkGroupsPermissionPage />, index: true },
+                      {
+                        path: 'employee/:emid',
+                        element: <DepartmentsWorkGroupsEmployeePermissionPage />,
+                      },
+                    ],
+                  },
                   { path: ':acid/edit', element: <DepartmentsEditWorkGroupsPage /> },
+                ],
+              },
+              {
+                path: 'acl',
+                element: (
+                  <DepartmentPermissionsBarLayout>
+                    <Outlet />
+                  </DepartmentPermissionsBarLayout>
+                ),
+                children: [
+                  { element: <DepartmentsPermissionsPage />, index: true },
+                  { path: ':emid', element: <DepartmentsEmployeePermissionsPage /> },
                 ],
               },
               { path: 'appointments', element: <DepartmentsAppointmentsPage /> },
@@ -252,7 +307,9 @@ export const unitServiceDashboardRoutes = [
             path: ':id',
             element: (
               <SecondaryNavLayout>
-                <Outlet />
+                <EmployeeMinBarLayout>
+                  <Outlet />
+                </EmployeeMinBarLayout>
               </SecondaryNavLayout>
             ),
             children: [
@@ -399,6 +456,18 @@ export const unitServiceDashboardRoutes = [
               { element: <WorkGroupsHomePage />, index: true },
               { path: 'new', element: <WorkGroupsNewPage /> },
               { path: ':id/edit', element: <WorkGroupsEditPage /> },
+              {
+                path: ':wgid',
+                element: (
+                  <USWorkGroupPermissionsBarLayout>
+                    <Outlet />
+                  </USWorkGroupPermissionsBarLayout>
+                ),
+                children: [
+                  { element: <WorkGroupsPermissionPage />, index: true },
+                  { path: 'employee/:emid', element: <WorkGroupsEmployeePermissionPage /> },
+                ],
+              },
             ],
           },
           {
@@ -407,6 +476,14 @@ export const unitServiceDashboardRoutes = [
               { element: <RoomsHomePage />, index: true },
               { path: 'new', element: <RoomsNewPage /> },
               { path: ':id/edit', element: <RoomsEditPage /> },
+            ],
+          },
+          {
+            path: 'services',
+            children: [
+              { element: <ServicesHomePage />, index: true },
+              { path: 'new', element: <ServicesNewPage /> },
+              { path: ':id/edit', element: <ServicesEditPage /> },
             ],
           },
         ],

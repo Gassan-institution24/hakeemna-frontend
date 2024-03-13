@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
 import { paths } from 'src/routes/paths';
-import { useParams, useRouter } from 'src/routes/hooks';
+import { useParams } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -24,21 +24,18 @@ import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
-  useGetUSWorkShifts,
-  useGetUSServiceTypes,
   useGetAppointmentTypes,
-  useGetEmployeeWorkGroups,
+  useGetUSActiveWorkShifts,
+  useGetUSActiveServiceTypes,
+  useGetEmployeeActiveWorkGroups,
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import { usePopover } from 'src/components/custom-popover';
 import FormProvider, { RHFSelect, RHFMultiSelect } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function BookManually({ onClose, refetch, ...other }) {
-  const router = useRouter();
-  const popover = usePopover();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuthContext();
   const { id } = useParams();
@@ -48,11 +45,11 @@ export default function BookManually({ onClose, refetch, ...other }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { appointmenttypesData } = useGetAppointmentTypes();
-  const { serviceTypesData } = useGetUSServiceTypes(
+  const { serviceTypesData } = useGetUSActiveServiceTypes(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
-  const { workGroupsData } = useGetEmployeeWorkGroups(id);
-  const { workShiftsData } = useGetUSWorkShifts(
+  const { workGroupsData } = useGetEmployeeActiveWorkGroups(id);
+  const { workShiftsData } = useGetUSActiveWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
@@ -84,16 +81,11 @@ export default function BookManually({ onClose, refetch, ...other }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const {
-    reset,
-    setValue,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+  const { reset, setValue, handleSubmit } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const appoint = await axios.post(endpoints.tables.appointments, {
+      const appoint = await axios.post(endpoints.appointments.all, {
         ...data,
         department: workGroupsData.filter((item) => item._id === data.work_group)?.[0]?.department
           ?._id,
@@ -106,7 +98,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
         msg: `creatied emergency appointment <strong>[ ${appoint.data.code} ]</strong>`,
       });
       reset();
-      enqueueSnackbar('Create success!');
+      enqueueSnackbar(t('created successfully!'));
       refetch();
 
       onClose();
@@ -170,8 +162,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
                 }}
               >
                 <RHFSelect name="appointment_type" label={`${t('appointment type')} *`}>
-                  {appointmenttypesData.map((option, index) => (
-                    <MenuItem key={index} value={option._id}>
+                  {appointmenttypesData.map((option, index, idx) => (
+                    <MenuItem key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -182,15 +174,15 @@ export default function BookManually({ onClose, refetch, ...other }) {
                   PaperPropsSx={{ textTransform: 'capitalize' }}
                 >
                   {workShiftsData &&
-                    workShiftsData.map((option, index) => (
-                      <MenuItem key={index} value={option._id}>
+                    workShiftsData.map((option, index, idx) => (
+                      <MenuItem key={idx} value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
                       </MenuItem>
                     ))}
                 </RHFSelect>
                 <RHFSelect name="work_group" label={`${t('work group')} *`}>
-                  {workGroupsData.map((option, index) => (
-                    <MenuItem key={index} value={option._id}>
+                  {workGroupsData.map((option, index, idx) => (
+                    <MenuItem key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}

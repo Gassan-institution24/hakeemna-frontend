@@ -13,7 +13,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -30,6 +30,8 @@ export default function InvoiceTableToolbar({
   options,
 }) {
   const popover = usePopover();
+
+  const checkAcl = useAclGuard();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -96,7 +98,7 @@ export default function InvoiceTableToolbar({
             renderValue={(selected) =>
               options
                 .filter((value) => selected.includes(value._id))
-                .map((value) => (curLangAr ? value?.name_arabic : value?.name_english))
+                .map((value, idx) => (curLangAr ? value?.name_arabic : value?.name_english))
                 .join(', ')
             }
             MenuProps={{
@@ -105,8 +107,8 @@ export default function InvoiceTableToolbar({
               },
             }}
           >
-            {options.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
+            {options.map((option, idx) => (
+              <MenuItem key={idx} value={option._id}>
                 <Checkbox
                   disableRipple
                   size="small"
@@ -161,7 +163,7 @@ export default function InvoiceTableToolbar({
             <IconButton onClick={popover.onOpen}>
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton>
-            {ACLGuard({ category: 'unit_service', subcategory: 'appointments', acl: 'create' }) && (
+            {checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'create' }) && (
               <IconButton color="error" onClick={onAdd}>
                 <Iconify icon="zondicons:add-outline" />
               </IconButton>

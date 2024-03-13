@@ -13,7 +13,6 @@ import Iconify from 'src/components/iconify';
 
 export default function StakeholderInfoContent({ stakeholderData, offerData }) {
   const {
-    code,
     employee_type,
     unit_service,
     country,
@@ -26,26 +25,10 @@ export default function StakeholderInfoContent({ stakeholderData, offerData }) {
     price,
     start_date,
     end_date,
-    img,
     services,
     unit_services_beneficiary,
     employee_beneficiary,
     patients_beneficiary,
-    status,
-
-    identification_num,
-    stakeholder_type,
-    stakeholder_registration,
-    tax_num,
-    address,
-    web_page,
-    company_logo,
-    phone,
-    mobile_num,
-    specialty,
-    bank_acc,
-    email,
-    insurance,
   } = offerData;
 
   const renderOverview = (
@@ -108,32 +91,32 @@ export default function StakeholderInfoContent({ stakeholderData, offerData }) {
         },
         {
           label: 'Services',
-          value: services.map((service) => service.name_english).join(', '),
+          value: services.map((service, idx) => service.name_english).join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Unit Services Beneficiary',
           value: unit_services_beneficiary
-            .map((unitService) => unitService.name_english)
+            .map((unitService, idx) => unitService.name_english)
             .join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Employee Beneficiary',
-          value: employee_beneficiary.map((employee) => employee.name_english).join(', '),
+          value: employee_beneficiary.map((employee, idx) => employee.name_english).join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: 'Patients Beneficiary',
           value: patients_beneficiary
-            .map((patient) => `${patient.first_name} ${patient.last_name}`)
+            .map((patient, idx) => `${patient.first_name} ${patient.last_name}`)
             .join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
-      ].map((item) => (
+      ].map((item, idx) => (
         <>
           {item.value && (
-            <Stack key={item.label} spacing={1.5}>
+            <Stack key={idx} spacing={1.5}>
               {/* {item.icon} */}
               <ListItemText
                 primary={item.label}

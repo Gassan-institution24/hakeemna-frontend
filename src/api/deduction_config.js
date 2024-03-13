@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetDeductions() {
-  const URL = endpoints.tables.deductions;
+  const URL = endpoints.deductions.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -26,7 +26,7 @@ export function useGetDeductions() {
 }
 
 export function useGetDeduction(id) {
-  const URL = endpoints.tables.deduction(id);
+  const URL = endpoints.deductions.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance from 'src/utils/axios';
 
 import TourItem from './offer-item';
 
@@ -14,8 +14,6 @@ import TourItem from './offer-item';
 
 export default function TourList({ offers, refetch }) {
   const router = useRouter();
-  const [status, setStatus] = useState();
-  // offers.map((info)=> setStatus(info.status))
 
   const handleView = useCallback(
     (id) => {
@@ -33,11 +31,7 @@ export default function TourList({ offers, refetch }) {
 
   const handleStatusChange = useCallback(
     (id, newStatus) => {
-      axiosHandler({
-        method: 'PATCH',
-        path: `/api/suppliersoffers/${id}`,
-        data: { status: newStatus },
-      });
+      axiosInstance.patch(`/api/suppliersoffers/${id}`, { status: newStatus });
       refetch();
     },
     [refetch]
@@ -54,9 +48,9 @@ export default function TourList({ offers, refetch }) {
           md: 'repeat(3, 1fr)',
         }}
       >
-        {offers.map((tour) => (
+        {offers.map((tour, idx) => (
           <TourItem
-            key={tour.id}
+            key={idx}
             tour={tour}
             onView={() => handleView(tour._id)}
             onEdit={() => handleEdit(tour._id)}

@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
@@ -16,7 +16,7 @@ import axios, { endpoints } from 'src/utils/axios';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetCities, useGetCountries } from 'src/api';
+import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFUploadAvatar } from 'src/components/hook-form';
@@ -24,17 +24,17 @@ import FormProvider, { RHFSelect, RHFTextField, RHFUploadAvatar } from 'src/comp
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral({ data, refetch }) {
-  const [oldpatientsdata, setOldpatientsdata] = useState();
+  // const [oldpatientsdata, setOldpatientsdata] = useState();
   const { user } = useAuthContext();
   const [profilePicture, setProfilePicture] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries();
-  const [cities, setCities] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const { tableData } = useGetCities();
+  // const [cities, setCities] = useState([]);
+  // const [selectedCountry, setSelectedCountry] = useState('');
   const { t } = useTranslate();
   const [em_phone, setEMphone] = useState(data.mobile_num1);
   const [em_phone2, setEMphone2] = useState(data.mobile_num2);
+  console.log(user?.patient?.other_medication_notes);
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
@@ -52,20 +52,7 @@ export default function AccountGeneral({ data, refetch }) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
     }
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.post('/api/oldpatientsdata/details', {
-          identification_num: user?.patient?.identification_num,
-        });
-        setOldpatientsdata(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
 
-    fetchData();
-  }, [user.patient.identification_num]);
   const UpdateUserSchema = Yup.object().shape({
     first_name: Yup.string(),
     middle_name: Yup.string(),
@@ -86,20 +73,6 @@ export default function AccountGeneral({ data, refetch }) {
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
 
-  const handleCountryChange = (event) => {
-    const selectedCountryId = event.target.value;
-    methods.setValue('country', selectedCountryId, { shouldValidate: true });
-    setSelectedCountry(selectedCountryId);
-  };
-
-  useEffect(() => {
-    setCities(
-      selectedCountry
-        ? tableData.filter((countryData) => countryData?.country?._id === selectedCountry)
-        : tableData
-    );
-  }, [tableData, selectedCountry]);
-
   const defaultValues = {
     first_name: data?.first_name || '',
     middle_name: data?.middle_name || '',
@@ -114,7 +87,7 @@ export default function AccountGeneral({ data, refetch }) {
     address: data?.address || '',
     sport_exercises: data?.sport_exercises || '',
     smoking: data?.smoking || '',
-    other_medication_notes: '',
+    other_medication_notes: [],
     profile_picture: data?.profile_picture?.replace(/\\/g, '//') || '',
   };
 
@@ -125,9 +98,12 @@ export default function AccountGeneral({ data, refetch }) {
   });
   const {
     setValue,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const { tableData } = useGetCountryCities(watch().country);
 
   const fuser = (fuserSize) => {
     const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif'];
@@ -157,11 +133,23 @@ export default function AccountGeneral({ data, refetch }) {
       });
       setValue('profile_picture', newFile);
     } else {
-      enqueueSnackbar('Invalid file type or size', { variant: 'error' });
+      enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
     }
   };
 
   const onSubmit = async (profileData) => {
+    if (data.other_medication_notes && data.other_medication_notes.length > 0) {
+      // Concatenate the new value to the old array
+      profileData.other_medication_notes = [
+        ...data.other_medication_notes,
+        profileData.other_medication_notes
+      ];
+    } else {
+      // If there is no old value, create a new array with the new value
+      profileData.other_medication_notes = [profileData.other_medication_notes];
+    }
+    
+
     // Create a new FormData object
     const formData = new FormData();
 
@@ -175,11 +163,11 @@ export default function AccountGeneral({ data, refetch }) {
     }
 
     try {
-      await axios.patch(`${endpoints.tables.patient(user?.patient._id)}`, formData);
+      await axios.patch(`${endpoints.patients.one(user?.patient._id)}`, formData);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
       setTimeout(() => {
         window.location.reload();
-      }, 2000);
+      }, 1000);
     } catch (error) {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
@@ -190,7 +178,7 @@ export default function AccountGeneral({ data, refetch }) {
       <Grid container spacing={3}>
         {/* img */}
         <Grid xs={12} md={4}>
-          <Card sx={{ pt: 10, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textalign: 'center' }}>
+          <Card sx={{ pt: 10, height: { md: '100%' }, pb: { xs: 5 }, px: 3, textAlign: 'center' }}>
             <RHFUploadAvatar
               name="profile_picture"
               onDrop={handleDrop}
@@ -201,7 +189,7 @@ export default function AccountGeneral({ data, refetch }) {
                     mt: 6,
                     mx: 'auto',
                     display: 'block',
-                    textalign: 'center',
+                    textAlign: 'center',
                     color: 'text.disabled',
                     fontSize: 17,
                   }}
@@ -248,6 +236,7 @@ export default function AccountGeneral({ data, refetch }) {
               <MuiTelInput
                 label={`${t('Mobile Number')} *`}
                 forceCallingCode
+                defaultCountry="JO"
                 value={em_phone}
                 onChange={(newPhone) => {
                   matchIsValidTel(newPhone);
@@ -258,6 +247,7 @@ export default function AccountGeneral({ data, refetch }) {
               <MuiTelInput
                 label={`${t('Alternative Mobile Number')} *`}
                 forceCallingCode
+                defaultCountry="JO"
                 value={em_phone2}
                 onChange={(newPhone2) => {
                   matchIsValidTel(newPhone2);
@@ -279,8 +269,8 @@ export default function AccountGeneral({ data, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {countriesData.map((nationality) => (
-                  <MenuItem key={nationality._id} value={nationality._id}>
+                {countriesData.map((nationality, idx) => (
+                  <MenuItem key={idx} value={nationality._id}>
                     {nationality.name_english}
                   </MenuItem>
                 ))}
@@ -292,10 +282,10 @@ export default function AccountGeneral({ data, refetch }) {
                 name="country"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                onChange={handleCountryChange}
+                // onChange={handleCountryChange}
               >
-                {countriesData.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
+                {countriesData.map((country, idx) => (
+                  <MenuItem key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
@@ -308,8 +298,8 @@ export default function AccountGeneral({ data, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {cities.map((city) => (
-                  <MenuItem key={city._id} value={city._id}>
+                {tableData.map((city, idx) => (
+                  <MenuItem key={idx} value={city._id}>
                     {city.name_english}
                   </MenuItem>
                 ))}
@@ -322,8 +312,8 @@ export default function AccountGeneral({ data, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {SECDATAFORMAP.map((test) => (
-                  <MenuItem value={test} key={test}>
+                {SECDATAFORMAP.map((test, idx) => (
+                  <MenuItem value={test} key={idx}>
                     {test}
                   </MenuItem>
                 ))}
@@ -336,8 +326,8 @@ export default function AccountGeneral({ data, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                {DATAFORMAP.map((test) => (
-                  <MenuItem value={test} key={test._id}>
+                {DATAFORMAP.map((test, idx) => (
+                  <MenuItem value={test} key={idx}>
                     {test}
                   </MenuItem>
                 ))}

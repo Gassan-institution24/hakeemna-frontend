@@ -20,8 +20,8 @@ import ListItemText from '@mui/material/ListItemText';
 
 import { fDate } from 'src/utils/format-time';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content/empty-content';
@@ -30,8 +30,8 @@ import Doclogo from '../../components/logo/doc.png';
 
 export default function Medicalreports() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const styles = StyleSheet.create({
     icon: {
@@ -63,7 +63,7 @@ export default function Medicalreports() {
       border: 1,
     },
     text: {
-      textalign: 'center',
+      textAlign: 'center',
       fontSize: 15,
     },
     text2: {
@@ -113,10 +113,10 @@ export default function Medicalreports() {
     },
   });
 
-  const PrescriptionPDF = () => (
+  const PrescriptionPDF = (
     <Document>
       <Page size="A4" style={styles.page}>
-        {user?.patient.Mediacalreports.map((info) => (
+        {user?.patient.Mediacalreports.map((info, idx) => (
           <View>
             <View style={styles.gridContainer}>
               <PdfImage src={Doclogo} style={styles.image} />
@@ -144,7 +144,7 @@ export default function Medicalreports() {
   );
   // console.log(user?.patient);
   return user?.patient.Mediacalreports?.length > 0 ? (
-    user?.patient.Mediacalreports.map((info) => (
+    user?.patient.Mediacalreports.map((info, index) => (
       <Card
         sx={{
           backgroundImage: `url(https://mawthook.com/wp-content/uploads/2020/07/%D8%AA%D8%B1%D8%AC%D9%85%D8%A9-%D8%A7%D9%84%D9%85%D8%B5%D8%B7%D9%84%D8%AD%D8%A7%D8%AA-%D8%A7%D9%84%D8%B7%D8%A8%D9%8A%D8%A9.jpg)`,
@@ -220,9 +220,9 @@ export default function Medicalreports() {
                 <Iconify width={16} icon="fa6-solid:file-prescription" sx={{ flexShrink: 0 }} />
               ),
             },
-          ].map((item) => (
+          ].map((item, idx) => (
             <Stack
-              key={item.label}
+              key={idx}
               spacing={0.5}
               flexShrink={0}
               direction="row"

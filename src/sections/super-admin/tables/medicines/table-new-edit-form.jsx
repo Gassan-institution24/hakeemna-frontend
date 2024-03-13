@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
@@ -16,10 +15,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { useGetSymptoms, useGetCountries, useGetMedFamilies } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -36,8 +33,6 @@ const DefaultDoses = ['5 mg', '10 mg', '50 mg'];
 
 export default function CountriesNewEditForm({ currentSelected }) {
   const router = useRouter();
-
-  const { user } = useAuthContext();
 
   const { tableData } = useGetSymptoms();
   const { countriesData } = useGetCountries();
@@ -81,7 +76,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
       packaging: currentSelected?.packaging || '',
       scientific_name: currentSelected?.scientific_name || '',
       barcode: currentSelected?.barcode || '',
-      side_effects: currentSelected?.side_effects?.map((disease) => disease._id) || [],
+      side_effects: currentSelected?.side_effects?.map((disease, idx) => disease._id) || [],
       family: currentSelected?.family?._id || '',
     }),
     [currentSelected]
@@ -101,24 +96,10 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentSelected) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: endpoints.tables.medicine(currentSelected._id),
-          data: {
-            modifications_nums: (currentSelected.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        }); /// edit
+        await axiosInstance.patch(endpoints.medicines.one(currentSelected._id), data); /// edit
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: endpoints.tables.medicines,
-          data: { ip_address_user_creation: address.data.IPv4, user_creation: user._id, ...data },
-        }); /// edit
+        await axiosInstance.post(endpoints.medicines.all, data); /// edit
       }
       reset();
       enqueueSnackbar(currentSelected ? 'Update success!' : 'Create success!');
@@ -162,10 +143,10 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 placeholder="+ concentration"
                 multiple
                 freeSolo
-                options={DefaultDoses.map((option) => option)}
+                options={DefaultDoses.map((option, idx) => option)}
                 getOptionLabel={(option) => option}
-                renderOption={(props, option) => (
-                  <li {...props} key={option}>
+                renderOption={(props, option, idx) => (
+                  <li {...props} key={idx}>
                     {option}
                   </li>
                 )}
@@ -173,7 +154,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
                   selected.map((option, index) => (
                     <Chip
                       {...getTagProps({ index })}
-                      key={option}
+                      key={index}
                       label={option}
                       size="small"
                       color="info"
@@ -211,16 +192,16 @@ export default function CountriesNewEditForm({ currentSelected }) {
               }}
             >
               <RHFSelect name="country" label="country">
-                {countriesData.map((country) => (
-                  <MenuItem key={country._id} value={country._id}>
+                {countriesData.map((country, idx) => (
+                  <MenuItem key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
 
               <RHFSelect name="family" label="family">
-                {families.map((family) => (
-                  <MenuItem key={family._id} value={family._id}>
+                {families.map((family, idx) => (
+                  <MenuItem key={idx} value={family._id}>
                     {family.name_english}
                   </MenuItem>
                 ))}

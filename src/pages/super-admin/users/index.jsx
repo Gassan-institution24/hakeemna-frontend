@@ -9,6 +9,7 @@ export default function UsersHomePage() {
     <>
       <Helmet>
         <title>users</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <UsersPage />

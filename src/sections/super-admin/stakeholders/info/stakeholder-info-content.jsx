@@ -12,7 +12,6 @@ import Iconify from 'src/components/iconify';
 export default function StakeholderInfoContent({ stakeholderData }) {
   // console.log('stakeholderData', stakeholderData);
   const {
-    code,
     name_english,
     identification_num,
     stakeholder_type,
@@ -22,15 +21,11 @@ export default function StakeholderInfoContent({ stakeholderData }) {
     tax_num,
     address,
     web_page,
-    company_logo,
     phone,
     mobile_num,
     specialty,
-    bank_acc,
-    city,
     email,
     insurance,
-    status,
   } = stakeholderData;
 
   const renderOverview = (
@@ -58,7 +53,7 @@ export default function StakeholderInfoContent({ stakeholderData }) {
         },
         {
           label: 'insurance',
-          value: insurance.map((company) => company.name_english).join(', '),
+          value: insurance.map((company, idx) => company.name_english).join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
@@ -106,10 +101,10 @@ export default function StakeholderInfoContent({ stakeholderData }) {
           value: specialty?.name_english,
           icon: <Iconify icon="solar:wad-of-money-bold" />,
         },
-      ].map((item) => (
+      ].map((item, idx) => (
         <>
           {item.value && (
-            <Stack key={item.label} spacing={1.5}>
+            <Stack key={idx} spacing={1.5}>
               {/* {item.icon} */}
               <ListItemText
                 primary={item.label}

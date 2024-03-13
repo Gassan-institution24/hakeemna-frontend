@@ -18,9 +18,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { endpoints } from 'src/utils/axios';
 import { fTimestamp } from 'src/utils/format-time';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetAppointmentTypes, useGetPatientAppointments } from 'src/api';
 
@@ -63,7 +62,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  status: 'pending',
   startDate: null,
   endDate: null,
 };
@@ -107,7 +106,7 @@ export default function AppointHistoryView({ patientData }) {
   const denseHeight = table.dense ? 56 : 76;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
+    !!filters.name || filters.status !== 'pending' || (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -123,7 +122,7 @@ export default function AppointHistoryView({ patientData }) {
   // const getPercentByStatus = (status) => (getAppointLength(status) / appointmentsData.length) * 100;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
+    // { value: 'all', label: 'All', color: 'default', count: appointmentsData.length },
     {
       value: 'pending',
       label: 'Pending',
@@ -163,7 +162,7 @@ export default function AppointHistoryView({ patientData }) {
 
   const handleCancelRow = useCallback(
     async (id) => {
-      await axiosHandler({ method: 'PATCH', path: `${endpoints.tables.appointment(id)}/cancel` });
+      await axiosInstance.patch(`${endpoints.appointments.one(id)}/cancel`);
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
@@ -171,16 +170,8 @@ export default function AppointHistoryView({ patientData }) {
   );
   const handleCancelRows = useCallback(
     async (id) => {
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
-      });
-      await axiosHandler({
-        method: 'PATCH',
-        path: `${endpoints.tables.appointments}/cancel`,
-        data: { ids: table.selected },
-      });
+      await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, { ids: table.selected });
+      await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, { ids: table.selected });
       refetch();
       table.onUpdatePageDeleteRows({
         totalRows: appointmentsData.length,
@@ -228,9 +219,9 @@ export default function AppointHistoryView({ patientData }) {
               boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
             }}
           >
-            {TABS.map((tab) => (
+            {TABS.map((tab, idx) => (
               <Tab
-                key={tab.value}
+                key={idx}
                 value={tab.value}
                 label={tab.label}
                 iconPosition="end"
@@ -254,7 +245,7 @@ export default function AppointHistoryView({ patientData }) {
             onAdd={handleAddRow}
             //
             dateError={dateError}
-            serviceOptions={appointmenttypesData.map((option) => option)}
+            serviceOptions={appointmenttypesData.map((option, idx) => option)}
           />
 
           {canReset && (
@@ -277,7 +268,7 @@ export default function AppointHistoryView({ patientData }) {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row._id)
+                  dataFiltered.map((row, idx) => row._id)
                 )
               }
               action={
@@ -301,7 +292,7 @@ export default function AppointHistoryView({ patientData }) {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row._id)
+                      dataFiltered.map((row, idx) => row._id)
                     )
                   }
                 />
@@ -312,9 +303,9 @@ export default function AppointHistoryView({ patientData }) {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row, idx) => (
                       <PatientHistoryRow
-                        key={row._id}
+                        key={idx}
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
@@ -376,9 +367,9 @@ export default function AppointHistoryView({ patientData }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, types, startDate, endDate } = filters;
+  const { name, status, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -386,7 +377,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

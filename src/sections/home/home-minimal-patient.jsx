@@ -45,7 +45,7 @@ export default function HomeMinimalpatient() {
       <Stack
         spacing={3}
         sx={{
-          textalign: 'center',
+          textAlign: 'center',
           mb: { xs: 5, md: 10 },
         }}
       >
@@ -71,11 +71,11 @@ export default function HomeMinimalpatient() {
           md: 'repeat(3, 1fr)',
         }}
       >
-        {CARDS.map((card, index) => (
-          <m.div variants={varFade().inUp} key={card.title}>
+        {CARDS.map((card, index, idx) => (
+          <m.div variants={varFade().inUp} key={idx}>
             <Card
               sx={{
-                textalign: 'center',
+                textAlign: 'center',
                 boxShadow: { md: 'none' },
                 bgcolor: 'background.default',
                 p: (theme) => theme.spacing(10, 5),
@@ -109,7 +109,7 @@ export default function HomeMinimalpatient() {
       <m.div variants={varFade().in}>
         <Box
           sx={{
-            textalign: 'center',
+            textAlign: 'center',
             mt: {
               xs: 5,
               md: 10,

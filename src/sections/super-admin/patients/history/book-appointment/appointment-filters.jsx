@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import Radio from '@mui/material/Radio';
 import Stack from '@mui/material/Stack';
@@ -38,11 +38,6 @@ export default function JobFilters({
   appointmentTypeOptions,
   dateError,
 }) {
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const [selectedInsurance, setSelectedInsurance] = useState('');
-
-  const [cities, setCities] = useState([]);
-
   const handleFilterAppointtypes = useCallback(
     (newValue) => {
       onFilters('appointtypes', newValue);
@@ -57,7 +52,7 @@ export default function JobFilters({
   );
   const handleFilterCountries = useCallback(
     (newValue) => {
-      setSelectedCountry(newValue);
+      // setSelectedCountry(newValue);
       onFilters('countries', newValue);
     },
     [onFilters]
@@ -141,9 +136,9 @@ export default function JobFilters({
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Payment Methods
       </Typography>
-      {paymentMethodsOptions.map((option) => (
+      {paymentMethodsOptions.map((option, idx) => (
         <FormControlLabel
-          key={option._id}
+          key={idx}
           control={
             <Radio
               checked={option._id === filters.payment_methods}
@@ -166,9 +161,9 @@ export default function JobFilters({
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Appointment Types
       </Typography>
-      {appointmentTypeOptions.map((option) => (
+      {appointmentTypeOptions.map((option, idx) => (
         <FormControlLabel
-          key={option._id}
+          key={idx}
           control={
             <Radio
               checked={option._id === filters.appointtypes}
@@ -191,9 +186,9 @@ export default function JobFilters({
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Countries
       </Typography>
-      <select onChange={handleFilterCountries} name="country" label="Country">
-        {countriesOptions?.map((country) => (
-          <option key={country._id} value={country._id}>
+      <select onChange={handleFilterCountries} name="country" label="country">
+        {countriesOptions?.map((country, idx) => (
+          <option key={idx} value={country._id}>
             {country?.name_english}
           </option>
         ))}
@@ -206,10 +201,10 @@ export default function JobFilters({
         insurance
       </Typography>
       <select onChange={handleFiltedInsurance} name="insurance" label="insurance">
-        {insuranseCosData?.map((info) => (
+        {insuranseCosData?.map((info, index, idx) => (
           <>
             <option />
-            <option key={info._id} value={info._id}>
+            <option key={idx} value={info._id}>
               {info?.name_english}
             </option>
           </>
@@ -223,9 +218,9 @@ export default function JobFilters({
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Unit services
       </Typography>
-      {unitServicesOptions.map((option) => (
+      {unitServicesOptions.map((option, idx) => (
         <FormControlLabel
-          key={option._id}
+          key={idx}
           control={
             <Radio
               checked={option._id === filters.unitServices}

@@ -7,17 +7,8 @@ import TableCell from '@mui/material/TableCell';
 // ----------------------------------------------------------------------
 
 export default function OldPatientsRow({ row, selected, onEmploymentRow }) {
-  const {
-    code,
-    first_name,
-    middle_name,
-    family_name,
-    identification_num,
-    email,
-    phone,
-    birth_date,
-    files,
-  } = row;
+  const { code, first_name, middle_name, family_name, identification_num, email, phone, files } =
+    row;
 
   const renderPrimary = (
     <TableRow hover selected={selected}>

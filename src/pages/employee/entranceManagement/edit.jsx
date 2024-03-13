@@ -15,9 +15,10 @@ export default function EditPage() {
   const { data } = useGetAppointment(id);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="employee" subcategory="entrance_management" acl="update">
+    <ACLGuard category="work_group" subcategory="entrance_management" acl="update">
       <Helmet>
         <title> Edit {name || ''} Appointment</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       {data && <EntranceManagementEditView appointmentData={data} />}

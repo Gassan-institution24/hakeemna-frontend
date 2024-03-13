@@ -38,9 +38,9 @@ export default function TourDetailsBookers({ bookers }) {
         md: 'repeat(3, 1fr)',
       }}
     >
-      {bookers.map((booker) => (
+      {bookers.map((booker, idx) => (
         <BookerItem
-          key={booker.id}
+          key={idx}
           booker={booker}
           selected={approved.includes(booker.id)}
           onSelected={() => handleClick(booker.id)}
@@ -58,7 +58,7 @@ TourDetailsBookers.propTypes = {
 
 function BookerItem({ booker, selected, onSelected }) {
   return (
-    <Stack component={Card} direction="row" spacing={2} key={booker.id} sx={{ p: 3 }}>
+    <Stack component={Card} direction="row" spacing={2} key={booker._id} sx={{ p: 3 }}>
       <Avatar alt={booker.name} src={booker.avatarUrl} sx={{ width: 48, height: 48 }} />
 
       <Stack spacing={2} flexGrow={1}>

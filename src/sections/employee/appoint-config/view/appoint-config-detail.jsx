@@ -25,7 +25,6 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
-import { useSettingsContext } from 'src/components/settings';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -56,8 +55,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const settings = useSettingsContext();
-
   const saving = useBoolean(false);
   const updating = useBoolean(false);
 
@@ -78,14 +75,27 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       .min(1, 'must be at least 1')
       .max(360, 'must be at most 360'),
     holidays: Yup.array(),
-    long_holidays: Yup.array(),
+    long_holidays: Yup.array().of(
+      Yup.object().shape({
+        start_date: Yup.date().nullable(),
+        end_date: Yup.date().nullable(),
+        // .when(
+        //   'start_date',
+        //   (startDate, schema) =>
+        //     startDate
+        //       ? schema.min(startDate, 'End date must be after start date')
+        //       : schema // If start_date doesn't exist, leave end_date validation as is
+        // ),
+        description: Yup.string().nullable(),
+      })
+    ),
     work_group: Yup.string().required('Work Group is required'),
     work_shift: Yup.string().required('Work Shift is required'),
     days_details: Yup.array().of(
       Yup.object().shape({
         day: Yup.string().required('Day is required'),
-        work_start_time: Yup.mixed().nullable().required('work start time is required'),
-        work_end_time: Yup.mixed().nullable().required('work end time is required'),
+        work_start_time: Yup.date().nullable().required('work start time is required'),
+        work_end_time: Yup.date().nullable().required('work end time is required'),
         appointments: Yup.array(),
         service_types: Yup.array(),
         appointment_type: Yup.string().nullable(),
@@ -143,7 +153,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     defaultValues,
   });
   const {
-    reset,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
@@ -151,7 +160,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const handleSaving = async () => {
     saving.onTrue();
     try {
-      await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
+      await axios.patch(`${endpoints.appointment_configs.all}/${appointmentConfigData?._id}`, {
         ...dataToUpdate,
         ImmediateEdit: false,
       });
@@ -160,7 +169,9 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         link: paths.unitservice.employees.appointmentconfig.root(
           user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
         ),
-        msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
+        msg: `updated an appointment configuration <strong>[ ${
+          appointmentConfigData.code || ''
+        } ]</strong>`,
       });
       enqueueSnackbar(t('updated successfully!'));
       saving.onFalse();
@@ -179,18 +190,20 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   const handleUpdating = async () => {
     updating.onTrue();
     try {
-      await axios.patch(`${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`, {
+      await axios.patch(`${endpoints.appointment_configs.all}/${appointmentConfigData?._id}`, {
         ...dataToUpdate,
         ImmediateEdit: true,
       });
       socket.emit('updated', {
         user,
         link: paths.employee.appointmentconfiguration.root,
-        msg: `updated an appointment configuration <strong>[ ${appointmentConfigData.code} ]</strong>`,
+        msg: `updated an appointment configuration <strong>[ ${
+          appointmentConfigData.code || ''
+        } ]</strong>`,
       });
       updating.onFalse();
       confirm.onFalse();
-      enqueueSnackbar(t('Updated successfully!'));
+      enqueueSnackbar(t('updated successfully!'));
       router.push(paths.employee.appointmentconfiguration.root);
       // await refetch();
     } catch (error) {
@@ -221,7 +234,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           confirm.onTrue();
         } else {
           await axios.patch(
-            `${endpoints.tables.appointmentconfigs}/${appointmentConfigData?._id}`,
+            `${endpoints.appointment_configs.all}/${appointmentConfigData?._id}`,
             data
           );
           socket.emit('updated', {
@@ -230,20 +243,20 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             link: paths.unitservice.employees.appointmentconfig.root(
               user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
             ),
-            msg: `updated an appointment configuration ${appointmentConfigData.code}`,
+            msg: `updated an appointment configuration ${appointmentConfigData.code || ''}`,
           });
           router.push(paths.employee.appointmentconfiguration.root);
         }
       } else {
         updating.onTrue();
-        await axios.post(endpoints.tables.appointmentconfigs, data);
+        await axios.post(endpoints.appointment_configs.all, data);
         socket.emit('created', {
           data,
           user,
           link: paths.unitservice.employees.appointmentconfig.root(
             user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
           ),
-          msg: `created an appointment config <strong>${data.name_english}</strong>`,
+          msg: `created an appointment config <strong>${data.name_english || ''}</strong>`,
         });
         updating.onFalse();
         router.push(paths.employee.appointmentconfiguration.root);
@@ -269,11 +282,10 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       // console.log(errors);
       setErrorMsg(
         Object.keys(errors)
-          .map((key) => errors?.[key]?.message)
+          .map((key, idx) => errors?.[key]?.message)
           .join('<br>')
       );
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [errors]);
 
   console.log('errorMsg', errorMsg);
@@ -340,7 +352,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             <Card>
               {!!errorMsg && (
                 <Alert sx={{ borderRadius: 0 }} severity="error">
-                  <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+                  <div> {errorMsg} </div>
                 </Alert>
               )}
               <NewEditDetails

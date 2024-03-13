@@ -18,7 +18,7 @@ import { useSettingsContext } from 'src/components/settings';
 import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
 import AccountPopover from '../common/account-popover';
-import ContactsPopover from '../common/contacts-popover';
+// import ContactsPopover from '../common/contacts-popover';
 import LanguagePopover from '../common/language-popover';
 import ServiceUnitPopover from '../common/service-unit-popover';
 import NotificationsPopover from '../common/notifications-popover';
@@ -66,7 +66,7 @@ export default function Header({ onOpenNav }) {
 
         <NotificationsPopover />
 
-        <ContactsPopover />
+        {/* <ContactsPopover /> */}
 
         {/* <SettingsButton /> */}
 

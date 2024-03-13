@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
@@ -14,13 +13,11 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { endpoints } from 'src/utils/axios';
-import axiosHandler from 'src/utils/axios-handler';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useGetUnitservices } from 'src/api';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -31,12 +28,10 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const router = useRouter();
 
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
-
-  const { unitservicesData } = useGetUnitservices();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -91,33 +86,15 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const address = await axios.get('https://geolocation-db.com/json/');
       if (currentTable) {
-        await axiosHandler({
-          method: 'PATCH',
-          path: `${endpoints.tables.activity(currentTable._id)}`,
-          data: {
-            modifications_nums: (currentTable.modifications_nums || 0) + 1,
-            ip_address_user_modification: address.data.IPv4,
-            user_modification: user._id,
-            ...data,
-          },
-        });
+        await axiosInstance.patch(`${endpoints.activities.one(currentTable._id)}`, data);
         socket.emit('updated', {
           user,
           link: paths.unitservice.departments.activities.root(departmentData._id),
           msg: `editted an activity <strong>[ ${data.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } else {
-        await axiosHandler({
-          method: 'POST',
-          path: `${endpoints.tables.activities}`,
-          data: {
-            ip_address_user_creation: address.data.IPv4,
-            user_creation: user._id,
-            ...data,
-          },
-        });
+        await axiosInstance.post(`${endpoints.activities.all}`, data);
         socket.emit('created', {
           user,
           link: paths.unitservice.departments.activities.root(departmentData._id),

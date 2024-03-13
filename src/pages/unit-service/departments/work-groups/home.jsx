@@ -17,9 +17,10 @@ export default function DepartmentWorkGroupsPage() {
   const { data, loading } = useGetDepartment(id);
   const name = data?.name_english;
   return (
-    <ACLGuard hasContent category="department" subcategory="work_groups" acl="read">
+    <ACLGuard category="department" subcategory="management_tables" acl="read">
       <Helmet>
         <title>{name || ''} Department Work Groups</title>
+        <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
       {!loading && <DepartmentWorkGroupsView departmentData={data} />}

@@ -36,7 +36,12 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetCities, useGetUSTypes, useGetCountries, useGetSpecialties } from 'src/api';
+import {
+  useGetCountries,
+  useGetSpecialties,
+  useGetCountryCities,
+  useGetActiveUSTypes,
+} from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -54,17 +59,15 @@ export default function JwtRegisterView() {
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('');
+  // const [selectedCountry, setSelectedCountry] = useState('');
   const [page, setPage] = useState(0);
-  const [cities, setCities] = useState([]);
-  const [us_phone, setUSphone] = useState();
+  // const [cities, setCities] = useState([]);
+  // const [us_phone, setUSphone] = useState();
   const [em_phone, setEMphone] = useState();
 
   const { countriesData } = useGetCountries();
-  const { tableData } = useGetCities();
-  const { unitserviceTypesData } = useGetUSTypes();
+  const { unitserviceTypesData } = useGetActiveUSTypes();
   const { specialtiesData } = useGetSpecialties();
-  // const { employeeTypesData } = useGetEmployeeTypes();
 
   const searchParams = useSearchParams();
 
@@ -79,16 +82,16 @@ export default function JwtRegisterView() {
   const RegisterSchema = Yup.object().shape({
     us_name_arabic: Yup.string().required('Service unit name is required'),
     us_name_english: Yup.string().required('Service unit name is required'),
-    us_email: Yup.string()
-      .required('Service unit email is required')
-      .email('Service unit email must be a valid email address'),
+    // us_email: Yup.string()
+    //   .required('Service unit email is required')
+    //   .email('Service unit email must be a valid email address'),
     us_identification_num: Yup.string().required('Service unit ID number is required'),
     us_country: Yup.string().required('Service unit country is required'),
     us_city: Yup.string().required('Service unit city is required'),
     US_type: Yup.string().required('Service unit type is required'),
     us_speciality: Yup.string().nullable(),
     us_sector_type: Yup.string().required('Service unit sector is required'),
-    us_phone: Yup.string().required('Service unit phone is required'),
+    // us_phone: Yup.string().required('Service unit phone is required'),
 
     em_first_name: Yup.string().required('Employee first name is required'),
     em_middle_name: Yup.string().required('Employee middle name is required'),
@@ -112,14 +115,14 @@ export default function JwtRegisterView() {
   const defaultValues = {
     us_name_arabic: '',
     us_name_english: '',
-    us_email: '',
+    // us_email: '',
     us_identification_num: '',
     us_country: null,
     us_city: null,
     US_type: null,
     us_speciality: null,
     us_sector_type: '',
-    us_phone: '',
+    // us_phone: '',
     em_first_name: '',
     em_middle_name: '',
     em_family_name: '',
@@ -141,13 +144,13 @@ export default function JwtRegisterView() {
   });
 
   const {
-    reset,
-    trigger,
     handleSubmit,
-    formState: { isSubmitting, isValid, errors },
+    watch,
+    formState: { isSubmitting, errors },
   } = methods;
+  const values = watch();
 
-  const values = methods.getValues();
+  const { tableData } = useGetCountryCities(values.us_country);
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
@@ -169,7 +172,7 @@ export default function JwtRegisterView() {
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
     methods.setValue('us_country', selectedCountryId, { shouldValidate: true });
-    setSelectedCountry(selectedCountryId);
+    // setSelectedCountry(selectedCountryId);
     // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
   };
 
@@ -190,19 +193,19 @@ export default function JwtRegisterView() {
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
-  useEffect(() => {
-    setCities(
-      selectedCountry
-        ? tableData.filter((data) => data?.country?._id === selectedCountry)
-        : tableData
-    );
-  }, [tableData, selectedCountry]);
+  // useEffect(() => {
+  //   setCities(
+  //     selectedCountry
+  //       ? tableData.filter((data) => data?.country?._id === selectedCountry)
+  //       : tableData
+  //   );
+  // }, [tableData, selectedCountry]);
   useEffect(() => {
     if (Object.keys(errors).length) {
       // console.log(errors);
       setErrorMsg(
         Object.keys(errors)
-          .map((key) => errors?.[key]?.message)
+          .map((key, idx) => errors?.[key]?.message)
           .join('<br>')
       );
     }
@@ -221,11 +224,11 @@ export default function JwtRegisterView() {
         </Link>
       </Stack>
       <Stepper activeStep={page}>
-        {steps.map((label, index) => {
+        {steps.map((label, index, idx) => {
           const stepProps = {};
           const labelProps = { lang: 'ar' };
           return (
-            <Step key={label} {...stepProps}>
+            <Step key={idx} {...stepProps}>
               <StepLabel {...labelProps}>{label}</StepLabel>
             </Step>
           );
@@ -241,7 +244,7 @@ export default function JwtRegisterView() {
         color: 'text.secondary',
         mt: 2,
         typography: 'caption',
-        // textalign: 'center',
+        // textAlign: 'center',
       }}
       lang="ar"
     >
@@ -271,7 +274,7 @@ export default function JwtRegisterView() {
     <Stack spacing={2}>
       {!!errorMsg && (
         <Alert severity="error">
-          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+          <div> {errorMsg} </div>
         </Alert>
       )}
       {/* <Alert severity="info">Service unit information</Alert> */}
@@ -294,7 +297,7 @@ export default function JwtRegisterView() {
       <Tooltip placement="top" title="Identification number of service unit">
         <RHFTextField lang="ar" name="us_identification_num" label={`${t('ID number')} *`} />
       </Tooltip>
-      <Tooltip placement="top" title="Phone number of service unit">
+      {/* <Tooltip placement="top" title="Phone number of service unit">
         <MuiTelInput
           forceCallingCode
           label={`${t('phone')} *`}
@@ -305,13 +308,13 @@ export default function JwtRegisterView() {
             methods.setValue('us_phone', newPhone);
           }}
         />
-      </Tooltip>
+      </Tooltip> */}
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+      {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <Tooltip placement="top" title="email address of service unit">
           <RHFTextField lang="ar" name="us_email" label={`${t('email')} *`} />
         </Tooltip>
-      </Stack>
+      </Stack> */}
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <Tooltip placement="top" title="country which service unit placed">
           <RHFSelect
@@ -320,8 +323,8 @@ export default function JwtRegisterView() {
             name="us_country"
             label={`${t('country')} *`}
           >
-            {countriesData.map((country) => (
-              <MenuItem key={country._id} value={country._id}>
+            {countriesData.map((country, idx) => (
+              <MenuItem key={idx} value={country._id}>
                 {curLangAr ? country.name_arabic : country.name_english}
               </MenuItem>
             ))}
@@ -329,8 +332,8 @@ export default function JwtRegisterView() {
         </Tooltip>
         <Tooltip placement="top" title="city which service unit placed">
           <RHFSelect lang="ar" name="us_city" label={`${t('city')} *`}>
-            {cities.map((city) => (
-              <MenuItem key={city._id} value={city._id}>
+            {tableData.map((city, idx) => (
+              <MenuItem key={idx} value={city._id}>
                 {curLangAr ? city.name_arabic : city.name_english}
               </MenuItem>
             ))}
@@ -341,8 +344,8 @@ export default function JwtRegisterView() {
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <Tooltip placement="top" title="type of the service unit">
           <RHFSelect lang="ar" name="US_type" label={`${t('service unit type')} *`}>
-            {unitserviceTypesData.map((type) => (
-              <MenuItem key={type._id} value={type._id}>
+            {unitserviceTypesData.map((type, idx) => (
+              <MenuItem key={idx} value={type._id}>
                 {curLangAr ? type.name_arabic : type.name_english}
               </MenuItem>
             ))}
@@ -350,8 +353,8 @@ export default function JwtRegisterView() {
         </Tooltip>
         <Tooltip placement="top" title="unit service speciality">
           <RHFSelect lang="ar" name="us_speciality" label={`${t('speciality')} *`}>
-            {specialtiesData.map((specialty) => (
-              <MenuItem key={specialty._id} value={specialty._id}>
+            {specialtiesData.map((specialty, idx) => (
+              <MenuItem key={idx} value={specialty._id}>
                 {curLangAr ? specialty.name_arabic : specialty.name_english}
               </MenuItem>
             ))}
@@ -362,7 +365,7 @@ export default function JwtRegisterView() {
         <Tooltip placement="top" title="service unit sector type">
           <RHFSelect lang="ar" name="us_sector_type" label={t('sector type')}>
             <MenuItem value="public">{t('Public')}</MenuItem>
-            <MenuItem value="privet">{t('Privet')}</MenuItem>
+            <MenuItem value="private">{t('private')}</MenuItem>
             <MenuItem value="non profit organization">{t('non profit organization')}</MenuItem>
           </RHFSelect>
         </Tooltip>
@@ -399,7 +402,7 @@ export default function JwtRegisterView() {
     <Stack spacing={2}>
       {!!errorMsg && (
         <Alert severity="error">
-          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+          <div> {errorMsg} </div>
         </Alert>
       )}
       {/* <Alert severity="info">Employee information</Alert> */}
@@ -439,16 +442,16 @@ export default function JwtRegisterView() {
         </Tooltip>
         <Tooltip placement="top" title="speciality of admin">
           <RHFSelect lang="ar" name="em_speciality" label={t('speciality')}>
-            {specialtiesData.map((specialty) => (
-              <MenuItem key={specialty._id} value={specialty._id}>
+            {specialtiesData.map((specialty, idx) => (
+              <MenuItem key={idx} value={specialty._id}>
                 {curLangAr ? specialty.name_arabic : specialty.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
         </Tooltip>
         {/* <RHFSelect name="em_type" label="Employee type">
-          {employeeTypesData.map((type) => (
-            <MenuItem key={type._id} value={type._id}>
+          {employeeTypesData.map((type, idx)  => (
+            <MenuItem key={idx} value={type._id}>
               {type.name_english}
             </MenuItem>
           ))}
@@ -465,8 +468,8 @@ export default function JwtRegisterView() {
       >
         <Tooltip placement="top" title="admin nationality">
           <RHFSelect lang="ar" name="em_nationality" label={`${t('nationality')} *`}>
-            {countriesData.map((country) => (
-              <MenuItem key={country._id} value={country._id}>
+            {countriesData.map((country, idx) => (
+              <MenuItem key={idx} value={country._id}>
                 {curLangAr ? country.name_arabic : country.name_english}
               </MenuItem>
             ))}
@@ -486,6 +489,7 @@ export default function JwtRegisterView() {
           <MuiTelInput
             label={`${t('phone')} *`}
             forceCallingCode
+            defaultCountry='JO'
             value={em_phone}
             onChange={(newPhone) => {
               matchIsValidTel(newPhone);
@@ -527,7 +531,7 @@ export default function JwtRegisterView() {
     <Stack spacing={2}>
       {!!errorMsg && (
         <Alert severity="error">
-          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+          <div> {errorMsg} </div>
         </Alert>
       )}
       {/* <Alert severity="info">Sign in information</Alert> */}

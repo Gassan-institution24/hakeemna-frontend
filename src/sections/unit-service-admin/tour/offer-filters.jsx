@@ -13,8 +13,8 @@ import Typography from '@mui/material/Typography';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { useGetCities } from 'src/api';
-import { useGetStackholder } from 'src/api/user';
+import { useGetCities, useGetStakeholder } from 'src/api';
+// import { useGetStakeholder } from 'src/api/user';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -39,7 +39,7 @@ export default function TourFilters({
   dateError,
 }) {
   const { tableData } = useGetCities();
-  const { stakeholder } = useGetStackholder();
+  const { stakeholder } = useGetStakeholder();
   // console.log(stakeholder);
   const handleFilterStack = useCallback(
     (newValue) => {
@@ -70,13 +70,6 @@ export default function TourFilters({
   const handleFilterEndDate = useCallback(
     (newValue) => {
       onFilters('Offer_end_date', newValue);
-    },
-    [onFilters]
-  );
-
-  const handleFilterTourGuide = useCallback(
-    (newValue) => {
-      onFilters('tourGuides', newValue);
     },
     [onFilters]
   );
@@ -138,9 +131,9 @@ export default function TourFilters({
       <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
         cities
       </Typography>
-      {tableData.map((option) => (
+      {tableData.map((option, idx) => (
         <FormControlLabel
-          key={option?.key}
+          key={idx}
           control={
             <Checkbox
               checked={filters.cities.includes(option._id)}
@@ -153,57 +146,57 @@ export default function TourFilters({
     </Stack>
   );
 
-  const renderTourGuide = (
-    // <Stack>
-    //   <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-    //     Tour Guide
-    //   </Typography>
+  // const renderTourGuide = (
+  //   // <Stack>
+  //   //   <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
+  //   //     Tour Guide
+  //   //   </Typography>
 
-    //   <Autocomplete
-    //     multiple
-    //     disableCloseOnSelect
-    //     options={tourGuideOptions}
-    //     value={filters.tourGuides}
-    //     onChange={(event, newValue) => handleFilterTourGuide(newValue)}
-    //     getOptionLabel={(option) => option.name}
-    //     renderInput={(params) => <TextField placeholder="Select Tour Guides" {...params} />}
-    //     renderOption={(props, tourGuide) => (
-    //       <li {...props} key={tourGuide.id}>
-    //         <Avatar
-    //           key={tourGuide.id}
-    //           alt={tourGuide.avatarUrl}
-    //           src={tourGuide.avatarUrl}
-    //           sx={{ width: 24, height: 24, flexShrink: 0, mr: 1 }}
-    //         />
+  //   //   <Autocomplete
+  //   //     multiple
+  //   //     disableCloseOnSelect
+  //   //     options={tourGuideOptions}
+  //   //     value={filters.tourGuides}
+  //   //     onChange={(event, newValue) => handleFilterTourGuide(newValue)}
+  //   //     getOptionLabel={(option) => option.name}
+  //   //     renderInput={(params) => <TextField placeholder="Select Tour Guides" {...params} />}
+  //   //     renderOption={(props, tourGuide) => (
+  //   //       <li {...props} key={idx}>
+  //   //         <Avatar
+  //   //           key={idx}
+  //   //           alt={tourGuide.avatarUrl}
+  //   //           src={tourGuide.avatarUrl}
+  //   //           sx={{ width: 24, height: 24, flexShrink: 0, mr: 1 }}
+  //   //         />
 
-    //         {tourGuide.name}
-    //       </li>
-    //     )}
-    //     renderTags={(selected, getTagProps) =>
-    //       selected.map((tourGuide, index) => (
-    //         <Chip
-    //           {...getTagProps({ index })}
-    //           key={tourGuide.id}
-    //           size="small"
-    //           variant="soft"
-    //           label={tourGuide.name}
-    //           avatar={<Avatar alt={tourGuide.name} src={tourGuide.avatarUrl} />}
-    //         />
-    //       ))
-    //     }
-    //   />
-    // </Stack>
-    <></>
-  );
+  //   //         {tourGuide.name}
+  //   //       </li>
+  //   //     )}
+  //   //     renderTags={(selected, getTagProps) =>
+  //   //       selected.map((tourGuide, index, idx)  => (
+  //   //         <Chip
+  //   //           {...getTagProps({ index })}
+  //   //           key={idx}
+  //   //           size="small"
+  //   //           variant="soft"
+  //   //           label={tourGuide.name}
+  //   //           avatar={<Avatar alt={tourGuide.name} src={tourGuide.avatarUrl} />}
+  //   //         />
+  //   //       ))
+  //   //     }
+  //   //   />
+  //   // </Stack>
+  //   <></>
+  // );
 
   const renderServices = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
         stakeholder
       </Typography>
-      {stakeholder.map((option) => (
+      {stakeholder.map((option, idx) => (
         <FormControlLabel
-          key={option?.key}
+          key={idx}
           control={
             <Checkbox
               checked={filters.stakeholder.includes(option._id)}

@@ -67,7 +67,7 @@ export function button(theme) {
       }),
     };
 
-    const colorStyle = COLORS.map((color) => ({
+    const colorStyle = COLORS.map((color, idx) => ({
       ...(ownerState.color === color && {
         // CONTAINED
         ...(containedVariant && {

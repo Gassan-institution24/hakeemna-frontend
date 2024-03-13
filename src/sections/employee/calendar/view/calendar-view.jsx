@@ -3,6 +3,7 @@ import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import timelinePlugin from '@fullcalendar/timeline';
+import arLocale from '@fullcalendar/core/locales/ar';
 import { useState, useEffect, useCallback } from 'react';
 import interactionPlugin from '@fullcalendar/interaction';
 
@@ -23,6 +24,7 @@ import { fTimestamp } from 'src/utils/format-time';
 import { updateEvent } from 'src/api/calendar';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeCalender } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 import { CALENDAR_COLOR_OPTIONS } from 'src/assets/data/calender-colors';
 
 import Iconify from 'src/components/iconify';
@@ -50,6 +52,10 @@ export default function CalendarView() {
 
   const { user } = useAuthContext();
 
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const settings = useSettingsContext();
 
   const smUp = useResponsive('up', 'sm');
@@ -61,6 +67,8 @@ export default function CalendarView() {
   const { CalenderData, loading, refetch } = useGetEmployeeCalender(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   );
+
+  console.log('CalenderData', CalenderData);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -142,13 +150,13 @@ export default function CalendarView() {
             mb: { xs: 3, md: 5 },
           }}
         >
-          <Typography variant="h4">Calendar</Typography>
+          <Typography variant="h4">{t('calendar')}</Typography>
           <Button
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
             onClick={onOpenForm}
           >
-            New Event
+            {t('new event')}
           </Button>
         </Stack>
 
@@ -198,6 +206,7 @@ export default function CalendarView() {
                 timeGridPlugin,
                 interactionPlugin,
               ]}
+              locale={curLangAr ? arLocale : null}
             />
           </StyledCalendar>
         </Card>
@@ -213,8 +222,8 @@ export default function CalendarView() {
           exit: theme.transitions.duration.shortest - 80,
         }}
       >
-        <DialogTitle sx={{ minHeight: 76 }}>
-          {openForm && <> {currentEvent?._id ? 'Edit Event' : 'Add Event'}</>}
+        <DialogTitle lang="ar" sx={{ minHeight: 76 }}>
+          {openForm && <> {currentEvent?._id ? t('Edit Event') : t('Add Event')}</>}
         </DialogTitle>
 
         <CalendarForm
@@ -250,9 +259,9 @@ export default function CalendarView() {
 function applyFilter({ inputData, filters, dateError }) {
   const { colors, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData?.map((el, index) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (colors.length) {
     inputData = inputData.filter((event) => colors.includes(event.color));

@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetCurrencies() {
-  const URL = endpoints.tables.currencies;
+  const URL = endpoints.currency.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -25,7 +25,7 @@ export function useGetCurrencies() {
   return { ...memoizedValue, refetch };
 }
 export function useGetCurrency(id) {
-  const URL = endpoints.tables.currency(id);
+  const URL = endpoints.currency.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

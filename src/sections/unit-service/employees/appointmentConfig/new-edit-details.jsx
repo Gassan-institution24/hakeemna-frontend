@@ -1,19 +1,20 @@
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router';
+import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { useUnitTime } from 'src/utils/format-time';
+
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSWorkShifts, useGetEmployeeWorkGroups } from 'src/api';
+import { useGetUSActiveWorkShifts, useGetEmployeeActiveWorkGroups } from 'src/api';
 
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
 
@@ -27,23 +28,25 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
   const weekDays = [
     { value: 'saturday', label: t('Saturday') },
     { value: 'sunday', label: t('Sunday') },
-    { value: 'Monday', label: t('Monday') },
+    { value: 'monday', label: t('Monday') },
     { value: 'tuesday', label: t('Tuesday') },
     { value: 'wednesday', label: t('Wednesday') },
     { value: 'thursday', label: t('Thursday') },
     { value: 'friday', label: t('Friday') },
   ];
 
-  const { control, watch, getValues, setValue } = useFormContext();
+  const { control, watch, trigger } = useFormContext();
 
-  const values = getValues();
+  const values = watch();
+
+  const { myunitTime } = useUnitTime();
 
   const { user } = useAuthContext();
 
-  const { id } = useParams();
-
-  const { workGroupsData } = useGetEmployeeWorkGroups(id);
-  const { workShiftsData } = useGetUSWorkShifts(
+  const { workGroupsData } = useGetEmployeeActiveWorkGroups(
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
+  );
+  const { workShiftsData } = useGetUSActiveWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
@@ -69,9 +72,15 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
               <DatePicker
                 label={`${t('start date')} *`}
                 // sx={{ flex: 1 }}
-                value={new Date(values.start_date || '')}
+                value={myunitTime(values.start_date)}
                 onChange={(newValue) => {
-                  field.onChange(newValue);
+                  const selectedTime = zonedTimeToUtc(
+                    newValue,
+                    user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                      ?.unit_service?.country?.time_zone ||
+                      Intl.DateTimeFormat().resolvedOptions().timeZone
+                  );
+                  field.onChange(selectedTime);
                 }}
                 slotProps={{
                   textField: {
@@ -91,9 +100,15 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
               <DatePicker
                 label={t('end date')}
                 // sx={{ flex: 1 }}
-                value={new Date(values.end_date || '')}
+                value={myunitTime(values.end_date)}
                 onChange={(newValue) => {
-                  field.onChange(newValue);
+                  const selectedTime = zonedTimeToUtc(
+                    newValue,
+                    user?.employee?.employee_engagements[user?.employee.selected_engagement]
+                      ?.unit_service?.country?.time_zone ||
+                      Intl.DateTimeFormat().resolvedOptions().timeZone
+                  );
+                  field.onChange(selectedTime);
                 }}
                 slotProps={{
                   textField: {
@@ -120,8 +135,8 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             PaperPropsSx={{ textTransform: 'capitalize' }}
             disabled={Boolean(appointmentConfigData)}
           >
-            {workShiftsData.map((option) => (
-              <MenuItem key={option._id} value={option._id}>
+            {workShiftsData.map((option, idx) => (
+              <MenuItem key={idx} value={option._id}>
                 {curLangAr ? option?.name_arabic : option?.name_english}
               </MenuItem>
             ))}
@@ -135,40 +150,34 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             disabled={Boolean(appointmentConfigData)}
           >
             {workGroupsData &&
-              workGroupsData?.map((option) => (
-                <MenuItem key={option._id} value={option._id}>
+              workGroupsData?.map((option, idx) => (
+                <MenuItem key={idx} value={option._id}>
                   {curLangAr ? option?.name_arabic : option?.name_english}
                 </MenuItem>
               ))}
           </RHFSelect>
-          <Controller
+          <RHFTextField
+            fullWidth
+            step="5"
             name="appointment_time"
-            control={control}
-            render={({ field, fieldState: { error } }) => (
-              <TextField
-                fullWidth
-                label={t('appointment duration time')}
-                type="number"
-                lang="ar"
-                value={field.value === 0 ? '' : field.value}
-                onChange={(event) => {
-                  field.onChange(Number(event.target.value));
-                  setAppointTime(event.target.value);
-                }}
-                error={!!error}
-                size="small"
-                InputLabelProps={{ shrink: true }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Box lang="ar" sx={{ fontSize: '0.8rem' }}>
-                        {t('min')}
-                      </Box>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            )}
+            label={t('appointment duration time')}
+            type="number"
+            lang="ar"
+            onBlur={(event) => {
+              setAppointTime(event.target.value);
+              trigger('appointment_time');
+            }}
+            size="small"
+            InputLabelProps={{ shrink: true }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Box lang="ar" sx={{ fontSize: '0.8rem' }}>
+                    {t('min')}
+                  </Box>
+                </InputAdornment>
+              ),
+            }}
           />
           <RHFTextField
             lang="ar"
@@ -188,7 +197,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             name="config_frequency"
             label={t('configuration frequency')}
             type="number"
-            inputProps={{ min: 0, max: 30, textalign: 'center' }}
+            inputProps={{ min: 0, max: 30, textAlign: 'center' }}
             InputLabelProps={{ shrink: true }}
           />
         </Stack>

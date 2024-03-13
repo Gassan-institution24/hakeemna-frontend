@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetLicenseMovements() {
-  const URL = endpoints.tables.licenseMovements;
+  const URL = endpoints.license_movements.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -26,7 +26,7 @@ export function useGetLicenseMovements() {
 }
 
 export function useGetUSLicenseMovement(id) {
-  const URL = endpoints.tables.unitServiceLicenseMovement(id);
+  const URL = endpoints.license_movements.unit_service.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -48,7 +48,7 @@ export function useGetUSLicenseMovement(id) {
 }
 
 export function useGetUSLicenseMovements() {
-  const URL = endpoints.tables.unitServiceLicenseMovements;
+  const URL = endpoints.license_movements.unit_service.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -70,7 +70,7 @@ export function useGetUSLicenseMovements() {
 }
 
 export function useGetStakeholderLicenseMovement(id) {
-  const URL = endpoints.tables.stakeholderLicenseMovement(id);
+  const URL = endpoints.license_movements.stakeholder.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -92,7 +92,7 @@ export function useGetStakeholderLicenseMovement(id) {
 }
 
 export function useGetStakeholderLicenseMovements() {
-  const URL = endpoints.tables.stakeholderLicenseMovements;
+  const URL = endpoints.license_movements.stakeholder.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -114,7 +114,7 @@ export function useGetStakeholderLicenseMovements() {
 }
 
 export function useGetLicenseMovement(id) {
-  const URL = endpoints.tables.licenseMovement(id);
+  const URL = endpoints.license_movements.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

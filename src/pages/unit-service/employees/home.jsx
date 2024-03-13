@@ -8,9 +8,10 @@ import EmployeeHomeView from 'src/sections/unit-service/employees/view/home';
 
 export default function EmployeeHomePage() {
   return (
-    <ACLGuard hasContent category="unit_service" subcategory="employees" acl="read">
+    <ACLGuard category="unit_service" subcategory="employees" acl="read">
       <Helmet>
         <title>Employees</title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <EmployeeHomeView />
