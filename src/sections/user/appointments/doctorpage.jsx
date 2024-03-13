@@ -51,7 +51,6 @@ export default function Doctorpage() {
   const { maxWidth } = useState('xs');
   const dialog = useBoolean(false);
   const { enqueueSnackbar } = useSnackbar();
-  // enqueueSnackbar("Thanks for your cooperation", { variant: 'success' });
 
   const [currentDateTime, setCurrentDateTime] = useState();
   const patientData = user?.patient?._id;
