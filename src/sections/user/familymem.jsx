@@ -5,6 +5,7 @@ import { Stack } from '@mui/system';
 import { LoadingButton } from '@mui/lab';
 import IconButton from '@mui/material/IconButton';
 import { Card, Avatar, MenuItem, TextField, ListItemText, InputAdornment } from '@mui/material';
+import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -18,14 +19,17 @@ import Iconify from 'src/components/iconify';
 // import { varHover } from 'src/components/animate';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
 export default function FamilyMembers() {
-  const { user } = useAuthContext();
+  const { user, login } = useAuthContext();
   const { oldPatientsData } = useGetPatientFamily(user?.patient?._id);
   const popover = usePopover();
   const confirm = useBoolean();
   const showPassword = useBoolean();
   const loading = useBoolean();
+  const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -37,7 +41,8 @@ export default function FamilyMembers() {
   const [selectedIndex, setSelectedIndex] = useState();
   const [errorMsg, setErrorMsg] = useState();
 
-
+console.log(password)
+console.log(selectedIndex)
   const handleCheckPassword = async () => {
     try {
       await axios.post(endpoints.auth.checkPassword, {
@@ -56,10 +61,10 @@ export default function FamilyMembers() {
 
   const handleChangeUS = async () => {
     try {
-      await axios.patch(endpoints.patients.one(user?.patient?._id), {
-        patient: selectedIndex,
-      });
-      window.location.reload();
+      await login?.(selectedIndex, password);
+
+      router.push(PATH_AFTER_LOGIN);
+      // window.location.reload();
       loading.onFalse();
     } catch (error) {
       console.error(error);
@@ -69,14 +74,13 @@ export default function FamilyMembers() {
     }
   };
 
-  console.log(oldPatientsData);
-  console.log(selectedIndex, 'selectedIndex');
+
   return oldPatientsData?.map((info, index) => (
     <Card key={index}>
       <IconButton
         onClick={(event) => {
           popover.onOpen(event);
-          setSelectedIndex(info?._id);
+          setSelectedIndex(info?.email);
         }}
         sx={{ position: 'absolute', top: 8, right: 8 }}
       >
