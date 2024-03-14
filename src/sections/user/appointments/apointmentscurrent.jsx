@@ -27,6 +27,7 @@ import { useSnackbar } from 'src/components/snackbar';
 export default function Currentappoinment({ pendingAppointments, refetch }) {
   const { enqueueSnackbar } = useSnackbar();
   const [theId, setTheId] = useState();
+  console.log(pendingAppointments);
   const dialog = useBoolean(false);
   const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
@@ -98,9 +99,9 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
               sx={{ width: 48, height: 48, mb: 2 }}
             />
 
-            {info?.work_group?.employees?.map((doctor, name, idx) => (
+            {info?.work_group?.employees?.map((doctor, name) => (
               <ListItemText
-                key={idx}
+                key={name}
                 primary={
                   doctor?.employee?.visibility_online_appointment === true ? (
                     <span style={{ color: 'inherit' }}>
@@ -151,10 +152,6 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
                 label: `${fTime(info.start_time)}`,
                 icon: <Iconify width={16} icon="icon-park-solid:time" sx={{ flexShrink: 0 }} />,
               },
-              // {
-              //   label: info?.department?.name_english,
-              //   icon: <Iconify width={16} icon="medical-icon:health-services" sx={{ flexShrink: 0 }} />,
-              // },
               {
                 label: info?.status,
                 icon: (

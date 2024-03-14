@@ -1,25 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Box } from '@mui/system';
 import { Card, Typography } from '@mui/material';
 
 import { fMonth } from 'src/utils/format-time';
 
-import { useAuthContext } from 'src/auth/hooks';
+import {  useTranslate } from 'src/locales';
 import { useGetPatientInsurance } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
-export default function InsurancePage() {
-  const { user } = useAuthContext();
-
-  const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
+export default function InsurancePage({ user }) {
+  const { patientInsuranseData } = useGetPatientInsurance(user);
+  console.log(patientInsuranseData, 'patientInsuranseData');
+  const { t } = useTranslate();
 
   return (
     <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-      {patientInsuranseData?.map((info, key, idx) => (
-        <Card key={idx} sx={{ borderRadius: 1, width: '75%', mb: 5, bgcolor: '#64a3aa' }}>
+      {patientInsuranseData?.map((info, key) => (
+        <Card key={key} sx={{ borderRadius: 1, width: '75%', mb: 5, bgcolor: '#64a3aa' }}>
           <Box
             sx={{
               bgcolor: '#ddf0ee',
@@ -35,7 +36,8 @@ export default function InsurancePage() {
           >
             <Iconify sx={{ color: '#64a3aa' }} icon="akar-icons:health" /> &nbsp;&nbsp;
             <Typography sx={{ color: '#64a3aa', fontWeight: 600, fontSize: 16 }}>
-              Insurance Card
+             
+              {t('Insurance Card')}
             </Typography>
           </Box>
           <Box sx={{ display: { md: 'flex', xs: 'block' }, margin: 1, gap: 2 }}>
@@ -45,12 +47,16 @@ export default function InsurancePage() {
             />
             <Box>
               <Box sx={{ mb: 1 }}>
-                <Typography>{info?.insurance?.name_english}</Typography>
-                <Typography>
+                <Typography sx={{ color: '#e1eeed' }}>{info?.insurance?.name_english}</Typography>
+                <Typography sx={{ color: '#e1eeed' }}>
                   {info?.patient?.first_name} {info?.patient?.last_name}
                 </Typography>
-                <Typography>{info?.type?.Coverage_name}</Typography>
-                <Typography> Ex: {fMonth(info?.insurance_expiry_time)}</Typography>
+                <Typography sx={{ color: '#e1eeed' }}>{info?.type?.Coverage_name}</Typography>
+                <Typography sx={{ color: '#e1eeed' }}>{info?.insurance_client_num}</Typography>
+                <Typography sx={{ color: '#e1eeed' }}>
+                  {' '}
+                  Ex: {fMonth(info?.insurance_expiry_time)}
+                </Typography>
               </Box>
 
               <Image
@@ -76,3 +82,7 @@ export default function InsurancePage() {
     </Box>
   );
 }
+
+InsurancePage.propTypes = {
+  user: PropTypes.object,
+};

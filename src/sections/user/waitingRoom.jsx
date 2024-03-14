@@ -3,19 +3,18 @@ import { Button, Typography } from '@mui/material';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetUSEmployeeEngs, useGetPatientOneAppointments } from 'src/api';
 
-import WatingRoomDialog from './watingRoomDialog';
+import WatingRoomDialog from './waitingRoomDialog';
 // ----------------------------------------------------------------------
 
 export default function WatingRoom() {
   const { user } = useAuthContext();
   const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
   const { employeesData } = useGetUSEmployeeEngs(appointmentsData?.unit_service?._id);
-  console.log(appointmentsData, 'appointmentsData');
+
   const today = new Date();
-  console.log(today, 'today');
 
   return appointmentsData?.hasFeedback === false && today > appointmentsData?.start_time ? (
-    employeesData?.map((info, index, idx) => <WatingRoomDialog employeesData={info} key={idx} />)
+    employeesData?.map((info, index) => <WatingRoomDialog employeesData={info} key={index} />)
   ) : (
     <>
       <Typography>Are you coming?</Typography>
