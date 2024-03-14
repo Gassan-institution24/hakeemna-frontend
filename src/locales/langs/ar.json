@@ -12,7 +12,9 @@
   "appointments": "المواعيد",
   "accounting": "المحاسبة",
   "management tables": "جداول ادارية",
-  "insurance": "التأمين",
+  "Insurance": " التأمين",
+  "insurance": " التأمين",
+
   "suppliers offers": "عروض المنشاّت",
   "communication": "التواصل",
   "quality control": "التغذية الراجعة",
@@ -253,12 +255,13 @@
   "Good Evening 🌑 ": "مساء الخير 🌑",
   "How To Use": "طريقة الأستخدام",
   "Available Offers": "العروض ألمتوفرة",
-  "settings": "ألاعدادت",
+  "settings": "الإعدادات",
   "my appointments": "مواعيدي",
+  "family": "افراد العائلة",
   "book appointment": "حجز موعد",
   "Book appointment": "حجز موعد",
-  "wating room": "غرفة ألانتظار",
-  "watingroom": "غرفة ألانتظار",
+  "wating room": "غرفة الإنتظار",
+  "watingroom": "غرفة الإنتظار",
   "emergency": "الطوارئ",
   "Emergency": "الطوارئ",
   "medical reports": "التقارير الطبية",
@@ -281,7 +284,15 @@
   "Latest": "الأحدث",
   "latest": "الأحدث",
   "Oldest": "الأقدم",
+  "Add New": "اظافة",
   "oldest": "الأقدم",
+  "insurance*": "التامين",
+  "Expiry date*": "تاريخ الانتهاء",
+  "Card number*": "رقم البطاقة ",
+  "My insurance cards": "تاميني",
+  "Insurance Card": "بطاقة التامين",
+  "The attached card must be present and real": "يجب أن تكون البطاقة المرفقة موجودة وحقيقية",
+  "Add your insurance cards here": " اظف معلومات التامين",
   "Ratings": "ألاعلى تقييم",
   "Sort By:": "ترتيب حسب:",
   "Account Settings": "أعدادات الحساب",
@@ -311,9 +322,11 @@
   "File name*": "اسم الملف*",
   "More information": "المزيد من المعلومات",
   "I reed the ": " لقد قرأت  ",
-  "And agree to ": " واوافق على",
+  "And agree to ": " واوافق على ",
   "Terms of Service ": " شروط ألخدمة ",
-  " Privacy Policy": " سياسة ألخصوصية ",
+  " Terms of Service ": " شروط ألخدمة ",
+  " Privacy Policy": "  سياسة ألخصوصية  ",
+  " Privacy Policy ": "  سياسة ألخصوصية  ",
   "Upload Your Perscription": "تحميل ملفاات قديمة",
   "Name": "اسم الدواء",
   "Dose": "الجرعة",
@@ -327,7 +340,7 @@
   "Notifications": "الاشعارات",
   "Security": "الامان",
   "Last Name": " الاسم الاخير",
-  "Email Address": " الايميل",
+  "Email Address": " البريد الالكتروني",
   "Mobile Number": " رقم الهاتف",
   "Alternative Mobile Number": " رقم هاتف احتياطي",
   "Address": " العنوان ",
@@ -406,19 +419,18 @@
   "Is this you?": "هل هذا انت؟",
   "We found a record with similar information for ": "لقد وجدنا حساب بنفس المعلومات المدخلة",
 
-
-  "uncanceled successfully!":"تم التفعيل بنجاح",
-  "delayed successfully!":"تم التأخير بنجاح",
-  "Password has changed successfully!":"تم تغيير كلمة السر بنجاح",
-  "canceled successfully!":"تم الإلغاء بنجاح",
-  "added successfully!":"تمت الإضافة بنجاح",
-  "created successfully!":"تم الإنشاء بنجاح",
-  "updated successfully!":"تم التعديل بنجاح",
-  "deleted successfully!":"تم الحذف بنجاح",
-  "this company already exist":"هذه الشركة موجودة مسبقا",
-  "uploaded successfully!":"تم الرفع بنجاح",
-  "booked successfully!":"تم الحجز بنجاح",
-  "Invalid file type or size":"نوع الملف غير صالح",
+  "uncanceled successfully!": "تم التفعيل بنجاح",
+  "delayed successfully!": "تم التأخير بنجاح",
+  "Password has changed successfully!": "تم تغيير كلمة السر بنجاح",
+  "canceled successfully!": "تم الإلغاء بنجاح",
+  "added successfully!": "تمت الإضافة بنجاح",
+  "created successfully!": "تم الإنشاء بنجاح",
+  "updated successfully!": "تم التعديل بنجاح",
+  "deleted successfully!": "تم الحذف بنجاح",
+  "this company already exist": "هذه الشركة موجودة مسبقا",
+  "uploaded successfully!": "تم الرفع بنجاح",
+  "booked successfully!": "تم الحجز بنجاح",
+  "Invalid file type or size": "نوع الملف غير صالح",
 
   "list": "قائمة",
   "edit": "تعديل",
@@ -438,7 +450,7 @@
   "general": "عام",
   "banking": "مصرفية",
   "booking": "حجز",
-  "profile": "ملف التعريف",
+  "profile": " الملف التعريفي",
   "account": "الحساب",
   "product": "منتج",
   "invoice": "فاتورة",

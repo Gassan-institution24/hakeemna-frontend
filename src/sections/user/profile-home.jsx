@@ -21,6 +21,8 @@ export default function ProfileHome() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
+  console.log(patientInsuranseData,"patientInsuranseData");
+  console.log(user?.patient?._id);
   const tokenPlaceholder =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjhlZDQxNTJhYWQ5MjY2NGMxN2ZkNyIsImlhdCI6MTcxMDA0ODQzNCwiZXhwIjoxNzE3ODI0NDM0fQ.pI645Yv07aWxMh6k1gz6ogt30aSRhQ_y1dUQX0PgHrY';
 
@@ -52,7 +54,7 @@ export default function ProfileHome() {
               icon="guidance:no-drug-or-substance"
             />
             &nbsp;
-            {t(' Drug Allergies')}
+            {t('Drug Allergies')}
           </Typography>
           <Stack spacing={1}>
             {user?.patient?.drug_allergies?.map((drug, drugkey, idx) => (
@@ -135,8 +137,8 @@ export default function ProfileHome() {
             {t('Insurance')}
           </Typography>
           <Stack spacing={1} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
-            {patientInsuranseData?.map((company, companykey, idx) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
+            {patientInsuranseData?.map((company, companykey) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={companykey}>
                 -&nbsp; {company?.insurance?.name_english}
               </li>
             ))}

@@ -5,7 +5,8 @@ import { Stack } from '@mui/system';
 import { LoadingButton } from '@mui/lab';
 import IconButton from '@mui/material/IconButton';
 import { Card, Avatar, MenuItem, TextField, ListItemText, InputAdornment } from '@mui/material';
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+
+import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -13,18 +14,19 @@ import axios, { endpoints } from 'src/utils/axios';
 
 import { useGetPatientFamily } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { PATH_AFTER_LOGIN } from 'src/config-global';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-// import { varHover } from 'src/components/animate';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useRouter } from 'src/routes/hooks';
-import { paths } from 'src/routes/paths';
+
 
 export default function FamilyMembers() {
   const { user, login } = useAuthContext();
   const { oldPatientsData } = useGetPatientFamily(user?.patient?._id);
+  console.log(user,"user");
+
   const popover = usePopover();
   const confirm = useBoolean();
   const showPassword = useBoolean();
@@ -41,8 +43,7 @@ export default function FamilyMembers() {
   const [selectedIndex, setSelectedIndex] = useState();
   const [errorMsg, setErrorMsg] = useState();
 
-console.log(password)
-console.log(selectedIndex)
+
   const handleCheckPassword = async () => {
     try {
       await axios.post(endpoints.auth.checkPassword, {
@@ -74,7 +75,6 @@ console.log(selectedIndex)
     }
   };
 
-
   return oldPatientsData?.map((info, index) => (
     <Card key={index}>
       <IconButton
@@ -88,7 +88,6 @@ console.log(selectedIndex)
       </IconButton>
 
       <Stack sx={{ p: 3, pb: 2 }}>
-  
         <Avatar
           alt={info?.name_english}
           src={info?.unit_service?.company_logo}
@@ -98,14 +97,13 @@ console.log(selectedIndex)
 
         <ListItemText
           primary={
-        
             <span style={{ color: 'inherit' }}>
               {info?.first_name} {info?.family_name}
             </span>
           }
           secondary={<span style={{ color: 'inherit' }}>oooo</span>}
           primaryTypographyProps={{
-            variant: 'subtitle1', 
+            variant: 'subtitle1',
           }}
           secondaryTypographyProps={{
             mt: 1,
@@ -155,8 +153,8 @@ console.log(selectedIndex)
         content={
           <>
             {curLangAr
-              ? 'ادخل كلمة المرور الخاصة بك لتبديل وحدة الخدمة'
-              : 'Enter your password to switch to different service unit'}
+              ? 'ادخل كلمة المرور الخاصة بك لتبديل الحساب '
+              : 'Enter your password to switch to different account'}
             <TextField
               name="password"
               type={showPassword.value ? 'text' : 'password'}
@@ -185,7 +183,6 @@ console.log(selectedIndex)
             onClick={async () => {
               loading.onTrue();
               await handleCheckPassword();
-    
             }}
           >
             {curLangAr ? 'تبديل' : 'Switch'}

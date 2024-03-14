@@ -39,7 +39,7 @@ export default function ProfileQr() {
               icon="guidance:no-drug-or-substance"
             />
             &nbsp;
-            {t(' Drug Allergies')}
+            {t('Drug Allergies')}
           </Typography>
           <Stack spacing={1}>
             {user?.patient?.drug_allergies?.map((drug, drugkey, idx) => (

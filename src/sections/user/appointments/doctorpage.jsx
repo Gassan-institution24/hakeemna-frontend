@@ -66,14 +66,14 @@ export default function Doctorpage() {
     id,
     startDate: currentDateTime,
   });
-  console.log(data);
+
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
     setTimeData(timeId);
     setSelectedTime(timeId);
   };
-  const uniqueUserIds = new Set(feedbackData.map((feedback, idx) => feedback?.patient._id));
+  const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient._id));
   const numberOfUsers = uniqueUserIds.size;
 
   const handleBook = async (Data) => {
@@ -303,7 +303,7 @@ export default function Doctorpage() {
               sx={{ borderStyle: 'dashed', display: { md: 'block', xs: 'none' } }}
             />
             <Box sx={{ ml: 2, mb: 2 }}>
-              {datacheeck?.appointment_type && (
+              {datacheeck?.employee && (
                 <Typography>
                   {' '}
                   <Iconify width={18} icon="ion:person-sharp" />

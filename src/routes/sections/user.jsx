@@ -30,7 +30,7 @@ const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const ContactUS = lazy(() => import('src/pages/dashboard/user/contaactus'));
 const Medicalreports = lazy(() => import('src/pages/dashboard/user/Medicalreports'));
 const Emergency = lazy(() => import('src/pages/dashboard/user/emergency'));
-const Watingroom = lazy(() => import('src/pages/dashboard/user/watingroom'));
+const Watingroom = lazy(() => import('src/pages/dashboard/user/waitingroom'));
 const BMI = lazy(() => import('src/sections/user/bmi'));
 const Oldpatientsdata = lazy(() => import('src/sections/user/oldpatientsdata'));
 const ProfileQr =  lazy(() => import('src/sections/user/profile-qr'));
