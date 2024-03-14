@@ -49,8 +49,8 @@ export default function Insuranceinfo() {
     type: Yup.string(),
     patient: Yup.string(),
     // file: Yup.array().required('File name is required'),
-    // insurance: Yup.string().required(),
-    // insurance_client_num: Yup.string(),
+    insurance: Yup.string().required(),
+    insurance_client_num: Yup.string(),
     agree: Yup.boolean().required(),
     insurance_expiry_time: Yup.date().required('Date is required'),
   });
@@ -72,7 +72,6 @@ export default function Insuranceinfo() {
   const {
     // setValue,
     control,
-    reset,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -82,7 +81,6 @@ export default function Insuranceinfo() {
       await axios.post('/api/insurance/data', data);
       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
       dialog.onFalse();
-      reset();
       setCheckChange(!checkChange);
       setTimeout(() => {
         window.location.reload();
@@ -108,7 +106,8 @@ export default function Insuranceinfo() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            Add New
+            
+            {t('Add New')}
           </Button>
         }
         sx={{ mb: { xs: 3, md: 5 } }}
@@ -120,7 +119,8 @@ export default function Insuranceinfo() {
           </DialogTitle>
           <DialogContent>
             <Typography sx={{ color: 'red', mb: 5, fontSize: 14 }}>
-              The attached card must be present and real
+              
+              {t('The attached card must be present and real')}
             </Typography>
             <Controller
               name="insurance_expiry_time"
@@ -134,7 +134,7 @@ export default function Insuranceinfo() {
                       fullWidth: true,
                       error: !!error,
                       helperText: error?.message,
-                      label: 'Expiry date',
+                      label: `${t('Expiry date*')}`
                     },
                   }}
                 />
@@ -147,7 +147,7 @@ export default function Insuranceinfo() {
               sx={{ mb: 1.5 }}
             />
             <RHFSelect
-              label={t('insuranse*')}
+              label={t('insurance*')}
               fullWidth
               name="insurance"
               PaperPropsSx={{ textTransform: 'capitalize' }}
@@ -197,7 +197,7 @@ export default function Insuranceinfo() {
             sx={{
               color: 'text.secondary',
               mt: { md: -2.5, xs: -2.3 },
-              ml: curLangAr ? { md: -31, xs: -5 } : { md: -21, xs: 4 },
+              ml: curLangAr ? { md: 31, xs: -5 } : { md: -21, xs: 4 },
               typography: 'caption',
               textAlign: 'center',
               fontSize: { md: 12, xs: 10 },
@@ -209,7 +209,7 @@ export default function Insuranceinfo() {
             </Link>
             {t('And agree to ')}
             <Link underline="always" color="text.primary">
-              {t('Terms of Service ')}
+              {t(' Terms of Service ')}
             </Link>
             .
           </Typography>
@@ -229,7 +229,7 @@ export default function Insuranceinfo() {
           </DialogActions>
         </FormProvider>
       </Dialog>{' '}
-      <InsurancePage />
+      <InsurancePage user = {user?.patient?._id} />
     </Container>
   );
 }
