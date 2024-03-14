@@ -37,7 +37,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import { LoadingScreen } from 'src/components/loading-screen';
+// import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -117,7 +117,7 @@ export default function AppointmentsView({ departmentData }) {
     canceled,
     finished,
     pending,
-    loading,
+    // loading,
   } = useGetDepartmentAppointments({
     id: departmentData?._id,
     page: table.page || 0,
@@ -380,9 +380,9 @@ export default function AppointmentsView({ departmentData }) {
     setFilters(defaultFilters);
   }, []);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  // if (loading) {
+  //   return <LoadingScreen />;
+  // }
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
