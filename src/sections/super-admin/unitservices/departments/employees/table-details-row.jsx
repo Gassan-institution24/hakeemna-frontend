@@ -59,12 +59,6 @@ export default function CountriesTableRow({
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
       <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onViewRow}
         align="center"
       >
         <div style={{ display: 'flex', gap: 3 }}>
@@ -76,12 +70,6 @@ export default function CountriesTableRow({
         </div>
       </TableCell>
       <TableCell
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={onViewRow}
         align="center"
       >
         {employee.first_name} {employee.family_name}

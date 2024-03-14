@@ -172,7 +172,7 @@ export default function TableNewEditForm({ currentTable }) {
                 (option) => !values.employees.some((item) => isEqual(option, item))
               )}
               getOptionLabel={(option) => option._id}
-              renderOption={(props, option,idx) => (
+              renderOption={(props, option, idx) => (
                 <li {...props} key={idx} value={option._id}>
                   {option.employee?.first_name} {option.employee?.middle_name}{' '}
                   {option.employee?.family_name}
@@ -183,10 +183,10 @@ export default function TableNewEditForm({ currentTable }) {
                 methods.setValue('employees', newValue, { shouldValidate: true });
               }}
               renderTags={(selected, getTagProps) =>
-                selected.map((option, index, idx) => (
+                selected.map((option, index) => (
                   <Chip
                     {...getTagProps({ index })}
-                    key={idx}
+                    key={index}
                     label={option.employee.first_name}
                     size="small"
                     color="info"

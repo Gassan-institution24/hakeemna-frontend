@@ -298,6 +298,7 @@ export const endpoints = {
   patients: {
     all: '/api/patient',
     find: '/api/patient/find',
+    family: (id) => `/api/patient/myfamily/${id}`,
     one: (id) => `/api/patient/${id}`,
   },
   oldpatient: {

@@ -17,17 +17,17 @@ import TableContainer from '@mui/material/TableContainer';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fTimestamp } from 'src/utils/format-time';
+// import { fTimestamp } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetAppointmentTypes } from 'src/api';
+import { useGetAppointmentTypes, useGetUSAppointments } from 'src/api';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
@@ -40,7 +40,7 @@ import {
   useTable,
   emptyRows,
   TableNoData,
-  getComparator,
+  // getComparator,
   TableEmptyRows,
   TableHeadCustom,
   TableSelectedAction,
@@ -64,7 +64,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsView({ employeeData, appointmentsData, refetch }) {
+export default function AppointmentsView() {
   const { t } = useTranslate();
   const TABLE_HEAD = [
     { id: 'sequence_number', label: t('sequence') },
@@ -86,6 +86,9 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
 
   const router = useRouter();
 
+  const params = useParams();
+  const { id } = params;
+
   const { enqueueSnackbar } = useSnackbar();
 
   const table = useTable({ defaultOrderBy: 'code' });
@@ -102,19 +105,40 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
   const [filters, setFilters] = useState(defaultFilters);
   const [minToDelay, setMinToDelay] = useState(0);
 
+  const {
+    appointmentsData,
+    appointmentsLength,
+    refetch,
+    // all,
+    available,
+    notBooked,
+    processing,
+    canceled,
+    finished,
+    pending,
+    // loading,
+  } = useGetUSAppointments({
+    id,
+    page: table.page || 0,
+    sortBy: table.orderBy || 'code',
+    rowsPerPage: table.rowsPerPage || 5,
+    order: table.order || 'asc',
+    filters: filters || null,
+  });
+
   const dateError =
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()
       : false;
 
-  const dataFiltered = applyFilter({
-    inputData: appointmentsData,
-    comparator: getComparator(table.order, table.orderBy),
-    filters,
-    dateError,
-  });
+  // const appointmentsData = applyFilter({
+  //   inputData: appointmentsData,
+  //   comparator: getComparator(table.order, table.orderBy),
+  //   filters,
+  //   dateError,
+  // });
 
-  const dataInPage = dataFiltered.slice(
+  const dataInPage = appointmentsData.slice(
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
@@ -128,48 +152,48 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
     !!filters.endDate ||
     filters.types.length > 0;
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+  const notFound = (!appointmentsData.length && canReset) || !appointmentsData.length;
 
-  const getAppointLength = (status) =>
-    appointmentsData.filter((item) => item.status === status).length;
+  // const getAppointLength = (status) =>
+  //   appointmentsData.filter((item) => item.status === status).length;
 
   const TABS = [
-    // { value: 'all', label: t('all'), color: 'default', count: appointmentsData.length },
+    // { value: 'all', label: t('all'), color: 'default', count: appointmentsLength },
     {
       value: 'pending',
       label: t('pending'),
       color: 'warning',
-      count: getAppointLength('pending'),
+      count: pending,
     },
     {
       value: 'processing',
       label: t('processing'),
       color: 'info',
-      count: getAppointLength('processing'),
+      count: processing,
     },
     {
       value: 'finished',
       label: t('finished'),
       color: 'success',
-      count: getAppointLength('finished'),
+      count: finished,
     },
     {
       value: 'canceled',
       label: t('canceled'),
       color: 'error',
-      count: getAppointLength('canceled'),
+      count: canceled,
     },
     {
       value: 'available',
       label: t('available'),
       color: 'secondary',
-      count: getAppointLength('available'),
+      count: available,
     },
     {
       value: 'not booked',
       label: t('not booked'),
       color: 'secondary',
-      count: getAppointLength('not booked'),
+      count: notBooked,
     },
   ];
 
@@ -250,41 +274,38 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
     [dataInPage.length, table, refetch, t, enqueueSnackbar, user]
   );
 
-  const handleCancelRows = useCallback(
-    async (id) => {
-      try {
-        await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, {
-          ids: table.selected,
-        });
-        enqueueSnackbar(t('canceled successfully!'));
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.appointments.root,
-          msg: `canceled many appointments`,
-        });
-      } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
-        console.error(error);
-      }
-      refetch();
-      table.onUpdatePageDeleteRows({
-        totalRows: appointmentsData.length,
-        totalRowsInPage: dataInPage.length,
-        totalRowsFiltered: dataFiltered.length,
+  const handleCancelRows = useCallback(async () => {
+    try {
+      await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, {
+        ids: table.selected,
       });
-    },
-    [
-      refetch,
-      dataFiltered.length,
-      dataInPage.length,
-      appointmentsData.length,
-      table,
-      t,
-      enqueueSnackbar,
-      user,
-    ]
-  );
+      enqueueSnackbar(t('canceled successfully!'));
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.appointments.root,
+        msg: `canceled many appointments`,
+      });
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
+    }
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: appointmentsLength,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: appointmentsData.length,
+    });
+  }, [
+    refetch,
+    appointmentsData.length,
+    dataInPage.length,
+    appointmentsLength,
+    table,
+    t,
+    enqueueSnackbar,
+    user,
+  ]);
 
   const handleDelayRows = useCallback(async () => {
     try {
@@ -306,15 +327,15 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
     refetch();
     setMinToDelay(0);
     table.onUpdatePageDeleteRows({
-      totalRows: appointmentsData.length,
+      totalRows: appointmentsLength,
       totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
+      totalRowsFiltered: appointmentsData.length,
     });
   }, [
     refetch,
-    dataFiltered.length,
-    dataInPage.length,
     appointmentsData.length,
+    dataInPage.length,
+    appointmentsLength,
     table,
     user,
     t,
@@ -322,45 +343,42 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
     enqueueSnackbar,
   ]);
 
-  const handleUnCancelRows = useCallback(
-    async (id) => {
-      try {
-        await axiosInstance.patch(`${endpoints.appointments.all}/uncancel`, {
-          ids: table.selected,
-        });
-        enqueueSnackbar(t('uncanceled successfully!'));
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.appointments.root,
-          msg: `uncanceled many appointments`,
-        });
-      } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
-        console.error(error);
-      }
-      refetch();
-      table.onUpdatePageDeleteRows({
-        totalRows: appointmentsData.length,
-        totalRowsInPage: dataInPage.length,
-        totalRowsFiltered: dataFiltered.length,
+  const handleUnCancelRows = useCallback(async () => {
+    try {
+      await axiosInstance.patch(`${endpoints.appointments.all}/uncancel`, {
+        ids: table.selected,
       });
-    },
-    [
-      refetch,
-      dataFiltered.length,
-      dataInPage.length,
-      appointmentsData.length,
-      table,
-      user,
-      t,
-      enqueueSnackbar,
-    ]
-  );
+      enqueueSnackbar(t('uncanceled successfully!'));
+      socket.emit('updated', {
+        user,
+        link: paths.unitservice.appointments.root,
+        msg: `uncanceled many appointments`,
+      });
+    } catch (error) {
+      socket.emit('error', { error, user, location: window.location.pathname });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      console.error(error);
+    }
+    refetch();
+    table.onUpdatePageDeleteRows({
+      totalRows: appointmentsLength,
+      totalRowsInPage: dataInPage.length,
+      totalRowsFiltered: appointmentsData.length,
+    });
+  }, [
+    refetch,
+    appointmentsData.length,
+    dataInPage.length,
+    appointmentsLength,
+    table,
+    user,
+    t,
+    enqueueSnackbar,
+  ]);
 
   const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.invoice.details(id));
+    (_id) => {
+      router.push(paths.dashboard.invoice.details(_id));
     },
     [router]
   );
@@ -438,7 +456,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
               //
               onResetFilters={handleResetFilters}
               //
-              results={dataFiltered.length}
+              results={appointmentsData.length}
               sx={{ p: 2.5, pt: 0 }}
             />
           )}
@@ -447,11 +465,11 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
             <TableSelectedAction
               // dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={dataFiltered.length}
+              rowCount={appointmentsData.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered?.map((row, idx) => row._id)
+                  appointmentsData?.map((row, idx) => row._id)
                 )
               }
               action={
@@ -466,7 +484,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
                         <Iconify icon="mdi:timer-sync" />
                       </IconButton>
                     </Tooltip>
-                    {/* {dataFiltered
+                    {/* {appointmentsData
                       .filter((row) => table.selected.includes(row._id))
                       .some((data) => data.status === 'canceled') ? (
                       <Tooltip title="uncancel all">
@@ -485,7 +503,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
                 )
               }
               color={
-                dataFiltered
+                appointmentsData
                   .filter((row) => table.selected.includes(row._id))
                   .some((data) => data.status === 'canceled')
                   ? 'primary'
@@ -498,18 +516,18 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={appointmentsData.length}
+                  rowCount={appointmentsLength}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered?.map((row, idx) => row._id)
+                      appointmentsData?.map((row, idx) => row._id)
                     )
                   }
                 />
                 <TableBody>
-                  {dataFiltered
+                  {appointmentsData
                     .slice(
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
@@ -530,7 +548,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, appointmentsLength)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -540,7 +558,7 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered.length}
+            count={appointmentsData.length}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
@@ -639,64 +657,59 @@ export default function AppointmentsView({ employeeData, appointmentsData, refet
 
 // ----------------------------------------------------------------------
 
-function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, types, startDate, endDate } = filters;
+// function applyFilter({ inputData, comparator, filters, dateError }) {
+//   const { name, status, types, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
+//   const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
-  stabilizedThis?.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
+//   stabilizedThis?.sort((a, b) => {
+//     const order = comparator(a[0], b[0]);
+//     if (order !== 0) return order;
+//     return a[1] - b[1];
+//   });
 
-  inputData = stabilizedThis?.map((el, idx) => el[0]);
+//   inputData = stabilizedThis?.map((el, idx) => el[0]);
 
-  if (name) {
-    inputData = inputData.filter(
-      (appointment) =>
-        (appointment?.work_shift?.name_english &&
-          appointment?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (appointment?.work_shift?.name_arabic &&
-          appointment?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (appointment?.work_group?.name_english &&
-          appointment?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (appointment?.work_group?.name_arabic &&
-          appointment?.work_group?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        appointment?._id === name ||
-        JSON.stringify(appointment.code) === name
-    );
-  }
+//   if (name) {
+//     inputData = inputData.filter(
+//       (appointment) =>
+//         (appointment?.work_shift?.name_english &&
+//           appointment?.work_shift?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+//         (appointment?.work_shift?.name_arabic &&
+//           appointment?.work_shift?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+//         (appointment?.work_group?.name_english &&
+//           appointment?.work_group?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+//         (appointment?.work_group?.name_arabic &&
+//           appointment?.work_group?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+//         appointment?._id === name ||
+//         JSON.stringify(appointment.code) === name
+//     );
+//   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((appointment) => appointment.status === status);
-  }
+//   if (status !== 'all') {
+//     inputData = inputData.filter((appointment) => appointment.status === status);
+//   }
 
-  if (!dateError) {
-    if (startDate && endDate) {
-      inputData = inputData.filter(
-        (appointment) =>
-          fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
-          fTimestamp(appointment.start_time) <= fTimestamp(endDate)
-      );
-    } else if (startDate) {
-      const endOfDay = new Date(startDate);
-      endOfDay.setDate(endOfDay.getDate() + 1);
-      inputData = inputData.filter(
-        (appointment) =>
-          fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
-          fTimestamp(appointment.start_time) < fTimestamp(endOfDay)
-      );
-    }
-  }
-  if (types.length > 0) {
-    inputData = inputData.filter((appoint) => types?.includes(appoint.appointment_type._id));
-  }
+//   if (!dateError) {
+//     if (startDate && endDate) {
+//       inputData = inputData.filter(
+//         (appointment) =>
+//           fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
+//           fTimestamp(appointment.start_time) <= fTimestamp(endDate)
+//       );
+//     } else if (startDate) {
+//       const endOfDay = new Date(startDate);
+//       endOfDay.setDate(endOfDay.getDate() + 1);
+//       inputData = inputData.filter(
+//         (appointment) =>
+//           fTimestamp(appointment.start_time) >= fTimestamp(startDate) &&
+//           fTimestamp(appointment.start_time) < fTimestamp(endOfDay)
+//       );
+//     }
+//   }
+//   if (types.length > 0) {
+//     inputData = inputData.filter((appoint) => types?.includes(appoint.appointment_type._id));
+//   }
 
-  return inputData;
-}
-AppointmentsView.propTypes = {
-  employeeData: PropTypes.object,
-  appointmentsData: PropTypes.array,
-  refetch: PropTypes.func,
-};
+//   return inputData;
+// }
