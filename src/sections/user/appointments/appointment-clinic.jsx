@@ -15,14 +15,13 @@ export default function AppointmetClinic({ doc }) {
   const params = useParams();
   const { id } = params;
   const { loading } = useGetEmployeeEngsBySpecialty(id);
-
   if (loading) {
     return <LoadingScreen />;
   }
   return (
     <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'column', md: '1fr 1fr' } }}>
-      {doc?.map((info, forkey, idx) => (
-        <DoctorCard key={idx} info={info} />
+      {doc?.map((info, forkey) => (
+        <DoctorCard key={forkey} info={info} />
       ))}
     </Box>
   );

@@ -3,8 +3,11 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetPatientInsurance() {
-  const URL = endpoints.insurance_data.one;
+
+
+export function useGetPatientInsurance(id) {
+
+  const URL = endpoints.insurance_data.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

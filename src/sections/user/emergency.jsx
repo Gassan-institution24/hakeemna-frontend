@@ -25,18 +25,7 @@ export default function Emergency() {
       }}
     >
       <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Iconify
-          icon="radix-icons:dot"
-          sx={{
-            color: '#128CA9',
-            width: '4%',
-            height: '4%',
-            position: 'absolute',
-            top: { xl: '19.2%', lg: '23%', md: '28.5%' },
-            left: { xl: '25.5%', lg: '23.8%', md: '1.4%' },
-            display: { md: 'flex', xs: 'none' },
-          }}
-        />
+   
         <Typography
           sx={{
             mb: { md: 4, xl: 10, xs: 6 },

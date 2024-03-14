@@ -58,9 +58,8 @@ export default function AppointmentBooking() {
   const openFilters = useBoolean();
   const [sortBy, setSortBy] = useState('rateing');
   const [search, setSearch] = useState();
-  // console.log(id);
   const { data } = useGetEmployeeEngsBySpecialty(id);
-  // console.log(data);
+
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { insuranseCosData } = useGetInsuranceCos();
@@ -71,7 +70,6 @@ export default function AppointmentBooking() {
 
   const sortOptions = [
     { value: 'rateing', label: t('Rateing') },
-    // { value: 'rateing', label: t('Nearst') }
   ];
 
   const dateError =
