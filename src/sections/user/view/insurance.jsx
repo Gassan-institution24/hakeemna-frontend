@@ -49,8 +49,8 @@ export default function Insuranceinfo() {
     type: Yup.string(),
     patient: Yup.string(),
     // file: Yup.array().required('File name is required'),
-    insurance: Yup.string().required(),
-    insurance_client_num: Yup.string(),
+    // insurance: Yup.string().required(),
+    // insurance_client_num: Yup.string(),
     agree: Yup.boolean().required(),
     insurance_expiry_time: Yup.date().required('Date is required'),
   });
