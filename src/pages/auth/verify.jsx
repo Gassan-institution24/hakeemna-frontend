@@ -8,7 +8,7 @@ export default function VerifyPage() {
   return (
     <>
       <Helmet>
-        <title> Verify</title>
+        <title>Hakeemna: Verify</title>
         <meta name="description" content="meta" />
       </Helmet>
 

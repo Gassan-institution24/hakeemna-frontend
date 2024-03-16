@@ -18,9 +18,8 @@ import { useSettingsContext } from 'src/components/settings';
 
 export default function EmployeeInfoContent({ employeeData }) {
   const {
-    first_name,
-    middle_name,
-    family_name,
+    name_english,
+    name_arabic,
     nationality,
     profrssion_practice_num,
     birth_date,
@@ -60,18 +59,13 @@ export default function EmployeeInfoContent({ employeeData }) {
       >
         {[
           {
-            label: t('first name'),
-            value: first_name,
+            label: t('Full name in English'),
+            value: name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: t('middle name'),
-            value: middle_name,
-            icon: <Iconify icon="solar:calendar-date-bold" />,
-          },
-          {
-            label: t('family name'),
-            value: family_name,
+            label: t('Full name in Arabic'),
+            value: name_arabic,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {

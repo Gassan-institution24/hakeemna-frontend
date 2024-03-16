@@ -13,7 +13,7 @@ export default function NewEmployeeAppointconfigPage() {
   const params = useParams();
   const { id } = params;
   const employeeData = useGetEmployee(id).data;
-  const name = employeeData?.first_name;
+  const name = employeeData?.name_english;
 
   return (
     <ACLGuard category="unit_service" subcategory="appointment_configs" acl="create">

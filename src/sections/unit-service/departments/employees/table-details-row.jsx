@@ -84,7 +84,7 @@ export default function CountriesTableRow({
         onClick={onViewRow}
         align="center"
       >
-        {employee.first_name} {employee.family_name}
+        {curLangAr ? employee.name_arabic : employee.name_english}
       </TableCell>
       <TableCell lang="ar" align="center">
         {curLangAr ? employee.employee_type?.name_arabic : employee.employee_type?.name_english}

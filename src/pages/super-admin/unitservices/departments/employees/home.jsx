@@ -12,7 +12,7 @@ export default function DepartmentEmployeesPage() {
   const params = useParams();
   const { depid } = params;
   const { data } = useGetDepartment(depid);
-  const name = data?.first_name;
+  const name = data?.name_english;
   return (
     <>
       <Helmet>
