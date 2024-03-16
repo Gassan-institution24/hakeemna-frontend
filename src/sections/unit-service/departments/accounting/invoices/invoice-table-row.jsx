@@ -211,10 +211,10 @@ export default function MovementTableRow({
             }}
           />
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator')}:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
-        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('creator IP')}:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>{t('created by IP')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>{t('editing time')}:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>
