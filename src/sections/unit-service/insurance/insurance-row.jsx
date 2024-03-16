@@ -33,7 +33,7 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
       >
         {curLangAr ? type?.name_arabic : type?.name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      {/* <TableCell lang="ar" align="center">
         <Label
           lang="ar"
           variant="soft"
@@ -43,7 +43,7 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
         >
           {t(status)}
         </Label>
-      </TableCell>
+      </TableCell> */}
       <TableCell lang="ar" align="center">
         {webpage}
       </TableCell>
