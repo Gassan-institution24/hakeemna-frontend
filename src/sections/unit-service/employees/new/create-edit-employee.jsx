@@ -66,9 +66,8 @@ export default function TableNewEditForm({ currentTable }) {
     department: Yup.string().nullable(),
     employee_type: Yup.string().required('Employee Type is required'),
     email: Yup.string().required('email is required'),
-    first_name: Yup.string().required('First name is required'),
-    middle_name: Yup.string().required('Middle name is required'),
-    family_name: Yup.string().required('Family name is required'),
+    name_english: Yup.string().required('First name is required'),
+    name_arabic: Yup.string().required('Middle name is required'),
     nationality: Yup.string().required('Nationality is required'),
     address: Yup.string(),
     phone: Yup.string().required('phone is required'),
@@ -89,9 +88,8 @@ export default function TableNewEditForm({ currentTable }) {
       department: currentTable?.department?._id || null,
       employee_type: currentTable?.employee_type?._id || null,
       email: currentTable?.email || '',
-      first_name: currentTable?.first_name || '',
-      middle_name: currentTable?.middle_name || '',
-      family_name: currentTable?.family_name || '',
+      name_english: currentTable?.name_english || '',
+      name_arabic: currentTable?.name_arabic || '',
       nationality: currentTable?.nationality || '',
       address: currentTable?.address || '',
       phone: currentTable?.phone || '079',
@@ -111,14 +109,14 @@ export default function TableNewEditForm({ currentTable }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  // const handleArabicInputChange = (event) => {
-  //   // Validate the input based on Arabic language rules
-  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
 
-  //   if (arabicRegex.test(event.target.value)) {
-  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-  //   }
-  // };
+    if (arabicRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
@@ -139,7 +137,7 @@ export default function TableNewEditForm({ currentTable }) {
     try {
       await axiosInstance.post(endpoints.auth.register, {
         role: 'employee',
-        userName: `${data.first_name} ${data.family_name}`,
+        userName: data.name_english,
         ...data,
       });
 
@@ -189,20 +187,14 @@ export default function TableNewEditForm({ currentTable }) {
               <RHFTextField
                 lang="ar"
                 onChange={handleEnglishInputChange}
-                name="first_name"
-                label={`${t('first name')} *`}
+                name="name_english"
+                label={`${t('Full name in English')} *`}
               />
               <RHFTextField
                 lang="ar"
-                onChange={handleEnglishInputChange}
-                name="middle_name"
-                label={`${t('middle name')} *`}
-              />
-              <RHFTextField
-                lang="ar"
-                onChange={handleEnglishInputChange}
-                name="family_name"
-                label={`${t('family name')} *`}
+                onChange={handleArabicInputChange}
+                name="name_arabic"
+                label={`${t('Full name in Arabic')} *`}
               />
               <RHFTextField
                 lang="ar"

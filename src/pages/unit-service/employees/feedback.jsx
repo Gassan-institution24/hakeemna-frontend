@@ -14,7 +14,7 @@ export default function EmployeeFeedbackPage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetEmployeeEngagement(id);
-  const name = data?.first_name;
+  const name = data?.employee?.name_english;
   return (
     <>
       <Helmet>

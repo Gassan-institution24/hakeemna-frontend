@@ -227,15 +227,15 @@ export function useNavData() {
         children: [
           // show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }), {
           //   title: t('appointment types'), path: paths.unitservice.tables.appointypes.root },
-          {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'read',
-            }),
-            title: t('employee types'),
-            path: paths.unitservice.tables.employeetypes.root,
-          },
+          // {
+          //   show: checkAcl({
+          //     category: 'unit_service',
+          //     subcategory: 'management_tables',
+          //     acl: 'read',
+          //   }),
+          //   title: t('employee types'),
+          //   path: paths.unitservice.tables.employeetypes.root,
+          // },
           {
             show: checkAcl({
               category: 'unit_service',

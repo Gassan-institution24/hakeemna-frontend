@@ -18,7 +18,7 @@ import { useParams, useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetDepartmentActiveEmployeeEngs } from 'src/api';
 
@@ -31,8 +31,8 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const router = useRouter();
 
   const { t } = useTranslate();
-  // const { currentLang } = useLocales();
-  // const curLangAr = currentLang.value === 'ar';
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { id } = useParams();
 
@@ -166,8 +166,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
               getOptionLabel={(option) => option._id}
               renderOption={(props, option, idx) => (
                 <li {...props} key={idx} value={option._id}>
-                  {option.employee.first_name} {option.employee.middle_name}{' '}
-                  {option.employee.family_name}
+                  {curLangAr?option.employee?.name_arabic:option.employee.name_english}
                 </li>
               )}
               onChange={(event, newValue) => {
@@ -179,7 +178,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
                   <Chip
                     {...getTagProps({ index })}
                     key={index}
-                    label={option.employee.first_name}
+                    label={curLangAr?option.employee?.name_arabic:option.employee.name_english}
                     size="small"
                     color="info"
                     variant="soft"

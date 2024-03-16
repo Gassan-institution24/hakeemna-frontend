@@ -8,7 +8,7 @@ export default function RegisterPage() {
   return (
     <>
       <Helmet>
-        <title> Register As Stakeholder</title>
+        <title> Hakeemna: Stakeholder registration</title>
         <meta name="description" content="meta" />
       </Helmet>
 

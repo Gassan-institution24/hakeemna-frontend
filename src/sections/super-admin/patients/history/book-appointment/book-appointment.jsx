@@ -128,7 +128,7 @@ export default function AppointmentListView({ patientData }) {
               appointment.work_group.employees &&
               appointment.work_group.employees.some(
                 (employee) =>
-                  employee.first_name?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+                  employee.name_english?.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
               )) ||
             (appointment.work_group &&
               appointment.work_group.employees &&

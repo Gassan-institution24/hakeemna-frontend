@@ -8,7 +8,8 @@ export default function RegisterPage() {
   return (
     <>
       <Helmet>
-        <title> Jwt: Register</title>
+        <title> Hakeemna: Register Page </title>
+        <meta name="description" content="meta" />
       </Helmet>
 
       <JwtRegisterView />

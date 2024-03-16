@@ -26,8 +26,7 @@ export default function CountriesTableRow({
 }) {
   const {
     code,
-    first_name,
-    family_name,
+    name_english,
     employee_engagements,
     email,
     status,
@@ -55,9 +54,7 @@ export default function CountriesTableRow({
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell align="center">
-        {first_name} {family_name}
-      </TableCell>
+      <TableCell align="center">{name_english}</TableCell>
       <TableCell align="center">{email}</TableCell>
       <TableCell align="center">
         {employee_engagements.map((engagement, index, idx) => (

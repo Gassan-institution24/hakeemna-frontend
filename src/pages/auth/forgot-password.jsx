@@ -8,7 +8,7 @@ export default function ForgotPasswordPage() {
   return (
     <>
       <Helmet>
-        <title> Forgot Password</title>
+        <title> Hakeemna: Forgot Password</title>
         <meta name="description" content="meta" />
       </Helmet>
 

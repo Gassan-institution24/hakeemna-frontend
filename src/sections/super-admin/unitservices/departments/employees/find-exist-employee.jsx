@@ -74,14 +74,14 @@ export default function TableNewEditForm({ departmentData }) {
     onChangeRowsPerPage,
   } = table;
 
-  // const handleArabicInputChange = (event) => {
-  //   // Validate the input based on Arabic language rules
-  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
 
-  //   if (arabicRegex.test(event.target.value)) {
-  //     setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-  //   }
-  // };
+    if (arabicRegex.test(event.target.value)) {
+      setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+    }
+  };
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
@@ -102,7 +102,7 @@ export default function TableNewEditForm({ departmentData }) {
       socket.emit('updated', {
         user,
         link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
-        msg: `employed an employee <strong>[ ${row.first_name} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
+        msg: `employed an employee <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
       });
       enqueueSnackbar(t('employment successfully!'));
     } catch (error) {
@@ -170,20 +170,14 @@ export default function TableNewEditForm({ departmentData }) {
           <TextField
             lang="en"
             onChange={handleEnglishInputChange}
-            name="first_name"
-            label={t('first name')}
+            name="name_english"
+            label={t('Full name in English')}
           />
           <TextField
             lang="en"
-            onChange={handleEnglishInputChange}
-            name="middle_name"
-            label={t('middle name')}
-          />
-          <TextField
-            lang="en"
-            onChange={handleEnglishInputChange}
-            name="family_name"
-            label={t('family name')}
+            onChange={handleArabicInputChange}
+            name="name_arabic"
+            label={t('Full name in Arabic')}
           />
         </Box>
       </Card>

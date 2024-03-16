@@ -165,13 +165,13 @@ const ProfileEditPage = lazy(() => import('src/pages/unit-service/profile/edit')
 //   import('src/pages/unit-service/tables/appointment-types/edit')
 // );
 // EMPLOYEE TYPES
-const EmployeeTypesHomePage = lazy(() =>
-  import('src/pages/unit-service/tables/employee-types/home')
-);
-const EmployeeTypesNewPage = lazy(() => import('src/pages/unit-service/tables/employee-types/new'));
-const EmployeeTypesEditPage = lazy(() =>
-  import('src/pages/unit-service/tables/employee-types/edit')
-);
+// const EmployeeTypesHomePage = lazy(() =>
+//   import('src/pages/unit-service/tables/employee-types/home')
+// );
+// const EmployeeTypesNewPage = lazy(() => import('src/pages/unit-service/tables/employee-types/new'));
+// const EmployeeTypesEditPage = lazy(() =>
+//   import('src/pages/unit-service/tables/employee-types/edit')
+// );
 // WORK SHIFTS
 const WorkShiftsHomePage = lazy(() => import('src/pages/unit-service/tables/work-shifts/home'));
 const WorkShiftsNewPage = lazy(() => import('src/pages/unit-service/tables/work-shifts/new'));
@@ -434,14 +434,14 @@ export const unitServiceDashboardRoutes = [
           //     { path: ':id/edit', element: <AppointmentTypesEditPage /> },
           //   ],
           // },
-          {
-            path: 'employee_types',
-            children: [
-              { element: <EmployeeTypesHomePage />, index: true },
-              { path: 'new', element: <EmployeeTypesNewPage /> },
-              { path: ':id/edit', element: <EmployeeTypesEditPage /> },
-            ],
-          },
+          // {
+          //   path: 'employee_types',
+          //   children: [
+          //     { element: <EmployeeTypesHomePage />, index: true },
+          //     { path: 'new', element: <EmployeeTypesNewPage /> },
+          //     { path: ':id/edit', element: <EmployeeTypesEditPage /> },
+          //   ],
+          // },
           {
             path: 'work_shifts',
             children: [
