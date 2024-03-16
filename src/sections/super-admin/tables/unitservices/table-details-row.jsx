@@ -219,10 +219,10 @@ export default function CountriesTableRow({
             }}
           />
         </Box>
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>created by:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{user_creation?.email}</Box>
 
-        <Box sx={{ pt: 1, fontWeight: 600 }}>Creator IP:</Box>
+        <Box sx={{ pt: 1, fontWeight: 600 }}>created by IP:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>{ip_address_user_creation}</Box>
         <Box sx={{ pt: 1, fontWeight: 600 }}>Editing Time:</Box>
         <Box sx={{ pb: 1, borderBottom: '1px solid gray' }}>

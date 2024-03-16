@@ -72,7 +72,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'active',
+  // status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -93,6 +93,8 @@ export default function SpecialtiesTableView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
+  console.log('specialtiesData', specialtiesData);
+
   const dateError =
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()
@@ -112,7 +114,7 @@ export default function SpecialtiesTableView() {
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'active';
+  const canReset = !!filters?.name;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -401,7 +403,7 @@ export default function SpecialtiesTableView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name } = filters;
+  const { name } = filters;
 
   const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
@@ -425,9 +427,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
-  }
+  // if (status !== 'all') {
+  //   inputData = inputData.filter((order) => order.status === status);
+  // }
 
   return inputData;
 }

@@ -62,7 +62,7 @@ const TABLE_HEAD = [
   { id: 'status', label: 'Status' },
   // { id: 'created_at', label: 'Date Of Creation' },
   // { id: 'user_creation', label: 'Creater' },
-  // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
+  // { id: 'ip_address_user_creation', label: 'IP Of ' },
   // { id: 'updated_at', label: 'Date Of Updating' },
   // { id: 'user_modification', label: 'Last Modifier' },
   // { id: 'ip_address_user_modification', label: 'IP Of Modifier' },

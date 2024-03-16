@@ -81,7 +81,7 @@ export const endpoints = {
     one: (id) => `/api/medicines/${id}`,
   },
   specialities: {
-    all: '/api/specialities/',
+    all: '/api/specialities',
     many: '/api/specialities/many',
     one: (id) => `/api/specialities/${id}`,
   },
