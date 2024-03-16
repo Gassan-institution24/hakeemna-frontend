@@ -62,7 +62,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'active',
+  // status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -390,7 +390,7 @@ export default function DepartmentsTableView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name } = filters;
+  const { name } = filters;
 
   const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
@@ -418,9 +418,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
-  }
+  // if (status !== 'all') {
+  //   inputData = inputData.filter((order) => order.status === status);
+  // }
 
   return inputData;
 }
