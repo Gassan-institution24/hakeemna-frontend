@@ -67,7 +67,7 @@ export default function MovementTableRow({
         <TableCell lang="ar" align="center">
           <ListItemText
             primary={curLangAr ? unit_service?.name_arabic : unit_service?.name_english}
-            secondary={employee?.first_name}
+            secondary={employee?.name_english}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,

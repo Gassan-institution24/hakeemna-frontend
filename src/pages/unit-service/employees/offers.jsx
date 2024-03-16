@@ -15,7 +15,7 @@ export default function EmployeeOffersPage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetEmployee(id);
-  const name = data?.first_name;
+  const name = data?.name_english;
   return (
     <ACLGuard category="unit_service" subcategory="offers" acl="read">
       <Helmet>

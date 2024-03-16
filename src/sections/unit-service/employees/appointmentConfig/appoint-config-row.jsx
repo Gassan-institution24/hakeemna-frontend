@@ -117,7 +117,7 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'available' &&
+        {/* {status === 'available' &&
           checkAcl({ category: 'employee', subcategory: 'appointment_configs', acl: 'delete' }) && (
             <MenuItem
               onClick={() => {
@@ -142,7 +142,7 @@ export default function AppointmentsTableRow({
               <Iconify icon="material-symbols-light:notifications-active-rounded" />
               {t('uncancel')}
             </MenuItem>
-          )}
+          )} */}
         <MenuItem onClick={onViewRow}>
           <Iconify icon="solar:eye-bold" />
           {t('view')}

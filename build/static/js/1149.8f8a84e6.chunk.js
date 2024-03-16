@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[1149],{59347:(e,s,n)=>{n.r(s),n.d(s,{default:()=>r});var a=n(6907),t=n(99423),i=n(80184);function r(){return(0,i.jsxs)(i.Fragment,{children:[(0,i.jsxs)(a.ql,{children:[(0,i.jsx)("title",{children:" Hakeemna: New Password"}),(0,i.jsx)("meta",{name:"description",content:"meta"})]}),(0,i.jsx)(t.lz,{})]})}}}]);
+//# sourceMappingURL=1149.8f8a84e6.chunk.js.map

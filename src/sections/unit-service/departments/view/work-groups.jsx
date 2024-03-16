@@ -586,22 +586,13 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         (data?.employees &&
           data?.employees?.some(
             (employee) =>
-              employee.employee.first_name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+              employee.employee.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1
           )) ||
         (data?.employees &&
           data?.employees?.some(
             (employee) =>
-              employee.employee.middle_name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+              employee.employee.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1
           )) ||
-        (data?.employees &&
-          data?.employees?.some(
-            (employee) =>
-              employee.employee.family_name.toLowerCase().indexOf(name.toLowerCase()) !== -1
-          )) ||
-        // (data?.employees &&
-        //   data?.employees?.some((employee) =>
-        //     employee.employee.name_arabic.toLowerCase().indexOf(name.toLowerCase())
-        //    !== -1))||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

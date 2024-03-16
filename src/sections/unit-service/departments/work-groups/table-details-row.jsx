@@ -86,9 +86,10 @@ export default function TableDetailsRow({
       </TableCell>
       <TableCell onClick={onViewRow} lang="ar" align="center">
         {employees
-          .map(
-            (employee) =>
-              `${employee.employee?.employee?.first_name} ${employee.employee?.employee?.family_name}`
+          .map((employee) =>
+            curLangAr
+              ? employee?.employee?.employee?.name_arabic
+              : employee.employee?.employee?.name_english
           )
           .join(', ')}
       </TableCell>

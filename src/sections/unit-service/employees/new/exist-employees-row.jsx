@@ -12,16 +12,7 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function ExistEmployeesRow({ row, selected, onEmploymentRow }) {
-  const {
-    code,
-    first_name,
-    middle_name,
-    family_name,
-    identification_num,
-    email,
-    phone,
-    birth_date,
-  } = row;
+  const { code, name_english, name_arabic, identification_num, email, phone, birth_date } = row;
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
@@ -30,7 +21,7 @@ export default function ExistEmployeesRow({ row, selected, onEmploymentRow }) {
       </TableCell>
 
       <TableCell lang="ar" align="center">
-        {first_name} {middle_name} {family_name}
+        {name_english || name_arabic}
       </TableCell>
       <TableCell lang="ar" align="center">
         {identification_num}

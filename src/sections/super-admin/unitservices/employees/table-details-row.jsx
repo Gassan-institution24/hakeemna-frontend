@@ -70,7 +70,7 @@ export default function UnitServiceEmployeesRow({
       </TableCell>
       <TableCell align="center">{sequence_number}</TableCell>
       <TableCell align="center">
-        {employee.first_name} {employee.family_name}
+        {curLangAr ? employee.name_arabic : employee.name_english}
       </TableCell>
       <TableCell lang="ar" align="center">
         {curLangAr ? employee.employee_type?.name_arabic : employee.employee_type?.name_english}
