@@ -102,7 +102,7 @@ export default function TableNewEditForm() {
       socket.emit('created', {
         user,
         link: paths.unitservice.employees.root,
-        msg: `created an employee <strong>${row.first_name}</strong>`,
+        msg: `created an employee <strong>${row.name_english}</strong>`,
       });
       enqueueSnackbar(t('employment successfully!'));
     } catch (error) {
@@ -172,20 +172,14 @@ export default function TableNewEditForm() {
           <TextField
             lang="en"
             onChange={handleEnglishInputChange}
-            name="first_name"
-            label={t('first name')}
+            name="name_english"
+            label={t('Full name in English')}
           />
           <TextField
             lang="en"
             onChange={handleEnglishInputChange}
-            name="middle_name"
-            label={t('middle name')}
-          />
-          <TextField
-            lang="en"
-            onChange={handleEnglishInputChange}
-            name="family_name"
-            label={t('family name')}
+            name="name_arabic"
+            label={t('Full name in Arabic')}
           />
         </Box>
       </Card>

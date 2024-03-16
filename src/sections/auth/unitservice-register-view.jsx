@@ -45,6 +45,7 @@ import {
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { h } from '@fullcalendar/core/preact';
 
 // ----------------------------------------------------------------------
 
@@ -93,9 +94,8 @@ export default function JwtRegisterView() {
     us_sector_type: Yup.string().required('Service unit sector is required'),
     // us_phone: Yup.string().required('Service unit phone is required'),
 
-    em_first_name: Yup.string().required('Employee first name is required'),
-    em_middle_name: Yup.string().required('Employee middle name is required'),
-    em_family_name: Yup.string().required('Employee family name is required'),
+    em_name_english: Yup.string().required('Employee first name is required'),
+    em_name_arabic: Yup.string().required('Employee middle name is required'),
     em_nationality: Yup.string().required('Employee nationality is required'),
     em_identification_num: Yup.string().required('Employee ID number is required'),
     em_profrssion_practice_num: Yup.string().required(
@@ -123,9 +123,8 @@ export default function JwtRegisterView() {
     us_speciality: null,
     us_sector_type: '',
     // us_phone: '',
-    em_first_name: '',
-    em_middle_name: '',
-    em_family_name: '',
+    em_name_english: '',
+    em_name_arabic: '',
     em_nationality: null,
     em_identification_num: '',
     em_profrssion_practice_num: '',
@@ -182,7 +181,7 @@ export default function JwtRegisterView() {
       // console.log(data);
       await register?.({
         role: 'admin',
-        userName: `${data.em_first_name} ${data.em_family_name}`,
+        userName: data.em_name_english,
         ...data,
       });
 
@@ -420,26 +419,26 @@ export default function JwtRegisterView() {
           <RHFTextField
             lang="ar"
             onChange={handleEnglishInputChange}
-            name="em_first_name"
-            label={`${t('first name')} *`}
+            name="em_name_english"
+            label={`${t('Full name in English')} *`}
           />
         </Tooltip>
         <Tooltip placement="top" title="admin middle name - father name -">
           <RHFTextField
             lang="ar"
-            onChange={handleEnglishInputChange}
-            name="em_middle_name"
-            label={`${t('middle name')} *`}
+            onChange={handleArabicInputChange}
+            name="em_name_arabic"
+            label={`${t('Full name in Arabic')} *`}
           />
         </Tooltip>
-        <Tooltip placement="top" title="admin family name">
+        {/* <Tooltip placement="top" title="admin family name">
           <RHFTextField
             lang="ar"
             onChange={handleEnglishInputChange}
             name="em_family_name"
             label={`${t('family name')} *`}
           />
-        </Tooltip>
+        </Tooltip> */}
         <Tooltip placement="top" title="speciality of admin">
           <RHFSelect lang="ar" name="em_speciality" label={t('speciality')}>
             {specialtiesData.map((specialty, idx) => (
@@ -489,7 +488,7 @@ export default function JwtRegisterView() {
           <MuiTelInput
             label={`${t('phone')} *`}
             forceCallingCode
-            defaultCountry='JO'
+            defaultCountry="JO"
             value={em_phone}
             onChange={(newPhone) => {
               matchIsValidTel(newPhone);

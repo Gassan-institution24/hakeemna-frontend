@@ -572,14 +572,14 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.employee?.first_name &&
-          data?.employee?.first_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.employee?.middle_name &&
-          data?.employee?.middle_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.name_english &&
+          data?.employee?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.name_arabic &&
+          data?.employee?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.email &&
           data?.employee?.email?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.employee?.family_name &&
-          data?.employee?.family_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        // (data?.employee?.family_name &&
+        //   data?.employee?.family_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.name_english &&
           data?.employee?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.country?.name_english &&

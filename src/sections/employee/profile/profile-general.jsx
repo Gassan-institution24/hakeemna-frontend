@@ -52,9 +52,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const UpdateUserSchema = Yup.object().shape({
     employee_type: Yup.string().required('Employee type is required.'),
     email: Yup.string().required('Email is required.'),
-    first_name: Yup.string().required('First name is required.'),
-    middle_name: Yup.string(),
-    family_name: Yup.string().required('Family name is required.'),
+    name_english: Yup.string().required('First name is required.'),
+    name_arabic: Yup.string(),
     nationality: Yup.string().required('Nationality is required.'),
     profrssion_practice_num: Yup.string().required('Profrssion practice number is required.'),
     identification_num: Yup.string().required('ID number is required.'),
@@ -76,9 +75,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const defaultValues = {
     employee_type: employeeData?.employee_type?._id || null,
     email: employeeData?.email || '',
-    first_name: employeeData?.first_name || '',
-    middle_name: employeeData?.middle_name || '',
-    family_name: employeeData?.family_name || '',
+    name_english: employeeData?.name_english || '',
+    name_arabic: employeeData?.name_arabic || '',
     nationality: employeeData?.nationality?._id || '',
     profrssion_practice_num: employeeData?.profrssion_practice_num || '',
     identification_num: employeeData?.identification_num || '',
@@ -319,9 +317,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField lang="ar" name="first_name" label={`${t('first name')} *`} />
-              <RHFTextField lang="ar" name="middle_name" label={t('middle name')} />
-              <RHFTextField lang="ar" name="family_name" label={`${t('family name')} *`} />
+              <RHFTextField lang="ar" name="name_english" label={`${t('first name')} *`} />
+              <RHFTextField lang="ar" name="name_arabic" label={t('middle name')} />
               <RHFSelect
                 label={`${t('nationality')} *`}
                 fullWidth

@@ -18,7 +18,7 @@ export default function EmployeeAppointconfigPage() {
   const { appointmentConfigData, loading, refetch } = useGetEmployeeAppointmentConfigs(id);
   // console.log('employeeData', employeeData);
   // console.log('appointmentConfigData', appointmentConfigData);
-  const name = employeeData?.first_name;
+  const name = employeeData?.name_english;
 
   return (
     <ACLGuard category="unit_service" subcategory="appointment_configs" acl="read">

@@ -13,7 +13,7 @@ export default function DepartmentEmployeesPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetDepartment(id);
-  const name = data?.first_name;
+  const name = data?.name_english;
   return (
     <ACLGuard category="department" subcategory="employees" acl="read">
       <Helmet>

@@ -8,7 +8,7 @@ export default function ActivationPage() {
   return (
     <>
       <Helmet>
-        <title> Activation</title>
+        <title> Hakeemna: Activation</title>
         <meta name="description" content="meta" />
       </Helmet>
 

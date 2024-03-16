@@ -56,9 +56,8 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     // department: Yup.string(),
     employee_type: Yup.string().required('Employee Type is required'),
     email: Yup.string().required('email is required'),
-    first_name: Yup.string().required('First name is required'),
-    middle_name: Yup.string(),
-    family_name: Yup.string().required('Family name is required'),
+    name_english: Yup.string().required('name is required'),
+    name_arabic: Yup.string(),
     nationality: Yup.string().required('Nationality is required'),
     address: Yup.string(),
     phone: Yup.string().required('phone is required'),
@@ -79,9 +78,8 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       department: departmentData._id,
       employee_type: currentTable?.employee_type || '',
       email: currentTable?.email || '',
-      first_name: currentTable?.first_name || '',
-      middle_name: currentTable?.middle_name || '',
-      family_name: currentTable?.family_name || '',
+      name_english: currentTable?.name_english || '',
+      name_arabic: currentTable?.name_arabic || '',
       nationality: currentTable?.nationality || '',
       address: currentTable?.address || '',
       phone: currentTable?.phone || '079',
@@ -101,14 +99,14 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  // const handleArabicInputChange = (event) => {
-  //   // Validate the input based on Arabic language rules
-  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
 
-  //   if (arabicRegex.test(event.target.value)) {
-  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-  //   }
-  // };
+    if (arabicRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
@@ -138,19 +136,19 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
           data,
           user,
           link: paths.unitservice.departments.employees.root(departmentData._id),
-          msg: `creating an employee <strong>${data.first_name}</strong> in <strong>${departmentData.name_english}</strong> department`,
+          msg: `creating an employee <strong>${data.em_name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       } else {
         await axiosInstance.post(endpoints.auth.register, {
           role: 'employee',
-          userName: `${data.first_name} ${data.family_name}`,
+          userName: data.name_english,
           ...data,
         });
         socket.emit('updated', {
           data,
           user,
           link: paths.unitservice.departments.employees.root(departmentData._id),
-          msg: `updating an employee <strong>${data.first_name}</strong> in <strong>${departmentData.name_english}</strong> department`,
+          msg: `updating an employee <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
       }
       reset();
@@ -180,20 +178,14 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
               <RHFTextField
                 lang="ar"
                 onChange={handleEnglishInputChange}
-                name="first_name"
-                label={`${t('first name')} *`}
+                name="name_english"
+                label={`${t('Full name in English')} *`}
               />
               <RHFTextField
                 lang="ar"
-                onChange={handleEnglishInputChange}
-                name="middle_name"
-                label={t('middle name')}
-              />
-              <RHFTextField
-                lang="ar"
-                onChange={handleEnglishInputChange}
-                name="family_name"
-                label={`${t('family name')} *`}
+                onChange={handleArabicInputChange}
+                name="name_arabic"
+                label={t('Full name in Arabic')}
               />
               <RHFTextField
                 lang="ar"

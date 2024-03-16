@@ -96,10 +96,8 @@ export default function UnitServicesInsuranceView() {
   );
   const filteredInsuranceCos = insuranseCosData.filter(
     (company) =>
-      !data?.insurance?.some((info) => info._id === company._id && info.status === 'active')
+      !data?.insurance?.some((info) => info._id === company._id )
   );
-
-  console.log('data', data);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -112,7 +110,6 @@ export default function UnitServicesInsuranceView() {
     filters,
     dateError,
   });
-  console.log('dataFiltered', dataFiltered);
 
   const dataInPage = dataFiltered?.slice(
     table.page * table.rowsPerPage,

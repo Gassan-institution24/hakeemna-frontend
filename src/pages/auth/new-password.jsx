@@ -8,7 +8,7 @@ export default function NewPasswordPage() {
   return (
     <>
       <Helmet>
-        <title> New Password</title>
+        <title> Hakeemna: New Password</title>
         <meta name="description" content="meta" />
       </Helmet>
 

@@ -174,8 +174,7 @@ export default function TableNewEditForm({ currentTable }) {
               getOptionLabel={(option) => option._id}
               renderOption={(props, option, idx) => (
                 <li {...props} key={idx} value={option._id}>
-                  {option.employee?.first_name} {option.employee?.middle_name}{' '}
-                  {option.employee?.family_name}
+                  {curLangAr ? option.employee.name_arabic : option.employee?.name_english}
                 </li>
               )}
               onChange={(event, newValue) => {
@@ -187,7 +186,7 @@ export default function TableNewEditForm({ currentTable }) {
                   <Chip
                     {...getTagProps({ index })}
                     key={index}
-                    label={option.employee.first_name}
+                    label={curLangAr ? option.employee.name_arabic : option.employee.name_english}
                     size="small"
                     color="info"
                     variant="soft"

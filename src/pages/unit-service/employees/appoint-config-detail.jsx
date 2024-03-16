@@ -16,7 +16,7 @@ export default function EmployeeAppointconfigPage() {
   const { id, coid } = params;
   const employeeData = useGetEmployeeEngagement(id).data;
   const { data, loading, refetch } = useGetAppointmentConfig(coid);
-  const name = employeeData?.first_name;
+  const name = employeeData?.name_english;
   // console.log('employeeData', employeeData);
 
   return (
