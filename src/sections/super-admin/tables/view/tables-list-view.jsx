@@ -72,12 +72,12 @@ export default function TablesListView() {
       { tableName: 'diseases', documents: [] }, //
       { tableName: 'insurance_companies', documents: [] }, //
       { tableName: 'unit_service_types', documents: [] },
-      { tableName: 'activities', documents: [] },
+      // { tableName: 'activities', documents: [] },
       { tableName: 'employee_types', documents: [] },
       { tableName: 'payment_methods', documents: [] },
       { tableName: 'stakeholder_types', documents: [] },
-      { tableName: 'work_shifts', documents: [] },
-      { tableName: 'service_types', documents: [] },
+      // { tableName: 'work_shifts', documents: [] },
+      // { tableName: 'service_types', documents: [] },
       { tableName: 'measurement_types', documents: [] },
       { tableName: 'hospital_list', documents: [] },
       { tableName: 'deduction_config', documents: [] },
@@ -88,11 +88,11 @@ export default function TablesListView() {
       { tableName: 'added_value_tax_GD', documents: [] },
       { tableName: 'departments', documents: [] }, //
       { tableName: 'medicines', documents: [] }, //
-      { tableName: 'unit_services', documents: [] }, //
+      // { tableName: 'unit_services', documents: [] }, //
       { tableName: 'appointment_types', documents: [] }, //
       { tableName: 'free_subscriptions', documents: [] }, //
       { tableName: 'symptoms', documents: [] }, //
-      { tableName: 'patients', documents: [] },
+      // { tableName: 'patients', documents: [] },
       { tableName: 'diets', documents: [] }, //
       { tableName: 'currencies', documents: [] }, //
       { tableName: 'analyses', documents: [] }, //
@@ -106,8 +106,7 @@ export default function TablesListView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset =
-    !!filters.name ;
+  const canReset = !!filters.name;
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
@@ -146,10 +145,6 @@ export default function TablesListView() {
             {
               name: 'superadmin',
               href: paths.superadmin.root,
-            },
-            {
-              name: 'management tables',
-              href: paths.superadmin.tables.list,
             },
             { name: 'tables' },
           ]}

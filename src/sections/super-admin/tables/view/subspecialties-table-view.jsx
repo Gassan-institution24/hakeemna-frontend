@@ -74,7 +74,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'active',
+  // status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -110,7 +110,7 @@ export default function SubSpecialtiesTableView() {
   // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'active';
+  const canReset = !!filters?.name;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -427,9 +427,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
-  }
+  // if (status !== 'all') {
+  //   inputData = inputData.filter((order) => order.status === status);
+  // }
 
   return inputData;
 }

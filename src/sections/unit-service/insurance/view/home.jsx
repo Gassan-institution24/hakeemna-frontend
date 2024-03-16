@@ -48,7 +48,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const defaultFilters = {
   name: '',
-  status: 'active',
+  // status: 'active',
 };
 
 // ----------------------------------------------------------------------
@@ -65,7 +65,7 @@ export default function UnitServicesInsuranceView() {
     { id: 'code', label: t('code') },
     { id: 'name_english', label: t('name') },
     { id: 'type', label: t('type') },
-    { id: 'status', label: t('status') },
+    // { id: 'status', label: t('status') },
     { id: 'webpage', label: t('webpage') },
     { id: 'phone', label: t('phone') },
     { id: 'address', label: t('address') },
@@ -99,6 +99,8 @@ export default function UnitServicesInsuranceView() {
       !data?.insurance?.some((info) => info._id === company._id && info.status === 'active')
   );
 
+  console.log('data', data);
+
   const dateError =
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()
@@ -110,6 +112,7 @@ export default function UnitServicesInsuranceView() {
     filters,
     dateError,
   });
+  console.log('dataFiltered', dataFiltered);
 
   const dataInPage = dataFiltered?.slice(
     table.page * table.rowsPerPage,
@@ -118,7 +121,7 @@ export default function UnitServicesInsuranceView() {
 
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'active';
+  const canReset = !!filters?.name;
 
   const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
@@ -131,7 +134,7 @@ export default function UnitServicesInsuranceView() {
         code: info.code,
         name: info.name_english,
         category: info.category?.name_english,
-        symptoms: info.symptoms?.map((symptom, idx) => symptom?.name_english),
+        symptoms: info.symptoms?.map((symptom) => symptom?.name_english),
       });
       return acc;
     }, []);
@@ -158,6 +161,7 @@ export default function UnitServicesInsuranceView() {
           link: paths.unitservice.insurance.root,
           msg: `added an insurance`,
         });
+        enqueueSnackbar('added successfully');
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
         enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -355,7 +359,7 @@ export default function UnitServicesInsuranceView() {
           </TableContainer>
 
           <TablePaginationCustom
-            count={dataFiltered?.length}
+            count={dataFiltered?.length || 0}
             page={table.page}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
@@ -375,8 +379,8 @@ export default function UnitServicesInsuranceView() {
             scrollbarColor: 'darkgray lightgray',
           }}
         >
-          {filteredInsuranceCos?.map((company) => (
-            <MenuItem onClick={() => handleAddRow(company._id)}>
+          {filteredInsuranceCos?.map((company, idx) => (
+            <MenuItem key={idx} onClick={() => handleAddRow(company._id)}>
               {/* <Iconify icon="ic:baseline-add" /> */}
               {curLangAr ? company?.name_arabic : company?.name_english}
             </MenuItem>
@@ -390,9 +394,9 @@ export default function UnitServicesInsuranceView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name } = filters;
+  const { name } = filters;
 
-  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
+  const stabilizedThis = inputData?.map((el, index) => [el, index]);
 
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -416,10 +420,6 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
-  }
-
-  if (status !== 'all') {
-    inputData = inputData?.filter((order) => order.status === status);
   }
 
   return inputData;
