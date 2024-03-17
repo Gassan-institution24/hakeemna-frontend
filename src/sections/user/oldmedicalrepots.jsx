@@ -264,9 +264,9 @@ export default function OldMedicalReports() {
 
     if (isValidFiles) {
       // setFiles(acceptedFiles); // Save the files in state
-      const newFiles = acceptedFiles.map((file, idx) => ({
+      const newFiles = acceptedFiles.map((file) => ({
         ...file,
-        preview: URL.createObjectURL(file),
+        // preview: URL.createObjectURL(file),
       }));
       setFiles('file', newFiles);
     } else {
@@ -293,8 +293,8 @@ export default function OldMedicalReports() {
       reset();
       setCheckChange(!checkChange);
 
-      // console.log('data', data);
-      // console.log('formData', formData);
+      console.log('data', data);
+      console.log('formData', formData);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
@@ -419,7 +419,7 @@ export default function OldMedicalReports() {
               sx={{ mb: 1 }}
               variant="outlined"
               onDrop={handleDrop}
-              multiple
+              // multiple
             />
 
             <RHFTextField lang="en" name="note" label={t('More information')} />

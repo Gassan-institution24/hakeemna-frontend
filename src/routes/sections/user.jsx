@@ -11,7 +11,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------
 
 // OVERVIEW
-// const IndexPage = lazy(() => import('src/pages/dashboard/app'));
+const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 // const TablesListPage = lazy(() => import('src/pages/dashboard/tables/list'));
 // USER
 const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
@@ -50,7 +50,7 @@ export const userRoutes = [
       </AuthGuard>
     ),
     children: [
-      // { element: <IndexPage />, index: true },
+      { element: <IndexPage />, index: true },
       {
         path: 'user',
         element: (

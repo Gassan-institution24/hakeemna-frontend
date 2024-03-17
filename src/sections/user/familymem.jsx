@@ -23,8 +23,9 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function FamilyMembers() {
   const { user, login } = useAuthContext();
-  const { oldPatientsData } = useGetPatientFamily(user?.patient?._id);
-  console.log(user, 'user');
+  const { oldPatientsData } = useGetPatientFamily(user?.patient?.[user.index_of]?._id);
+
+  console.log(user?.patient?.[user.index_of]?._id,"sdsdv");
 
   const popover = usePopover();
   const confirm = useBoolean();
@@ -99,7 +100,7 @@ export default function FamilyMembers() {
               {info?.first_name} {info?.family_name}
             </span>
           }
-          secondary={<span style={{ color: 'inherit' }}>oooo</span>}
+          // secondary={<span style={{ color: 'inherit' }}> <Iconify icon="flat-color-icons:cell-phone"/> {info?.mobile_num1}</span>}
           primaryTypographyProps={{
             variant: 'subtitle1',
           }}

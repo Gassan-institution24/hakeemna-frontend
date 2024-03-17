@@ -116,7 +116,7 @@ export default function Medicalreports() {
   const PrescriptionPDF = (
     <Document>
       <Page size="A4" style={styles.page}>
-        {user?.patient.Mediacalreports.map((info, idx) => (
+        {user?.patient?.[user.index_of].Mediacalreports.map((info, idx) => (
           <View>
             <View style={styles.gridContainer}>
               <PdfImage src={Doclogo} style={styles.image} />
@@ -127,10 +127,10 @@ export default function Medicalreports() {
             <View style={styles.gridBody}>
               <Text style={styles.text}>Medical Report</Text>
               <Text style={styles.text2}>
-                Name: {user?.patient?.first_name} {user?.patient?.last_name}
+                Name: {user?.patient?.[user.index_of]?.first_name} {user?.patient?.[user.index_of]?.last_name}
               </Text>
-              <Text style={styles.text2}>Age: {fDate(user?.patient.birth_date)}</Text>
-              <Text style={styles.text2}>ID no: {user?.patient?.identification_num}</Text>
+              <Text style={styles.text2}>Age: {fDate(user?.patient?.[user.index_of].birth_date)}</Text>
+              <Text style={styles.text2}>ID no: {user?.patient?.[user.index_of]?.identification_num}</Text>
             </View>
             <View style={styles.gridFooter}>
               <Text>{info?.description}</Text>
@@ -142,9 +142,9 @@ export default function Medicalreports() {
       </Page>
     </Document>
   );
-  // console.log(user?.patient);
-  return user?.patient.Mediacalreports?.length > 0 ? (
-    user?.patient.Mediacalreports.map((info, index) => (
+  // console.log(user?.patient?.[user.index_of]);
+  return user?.patient?.[user.index_of].Mediacalreports?.length > 0 ? (
+    user?.patient?.[user.index_of].Mediacalreports.map((info, index) => (
       <Card
         sx={{
           backgroundImage: `url(https://mawthook.com/wp-content/uploads/2020/07/%D8%AA%D8%B1%D8%AC%D9%85%D8%A9-%D8%A7%D9%84%D9%85%D8%B5%D8%B7%D9%84%D8%AD%D8%A7%D8%AA-%D8%A7%D9%84%D8%B7%D8%A8%D9%8A%D8%A9.jpg)`,
@@ -180,7 +180,7 @@ export default function Medicalreports() {
           <PDFDownloadLink
             style={styles.pdf}
             document={<PrescriptionPDF medicines={[info]} />}
-            fileName={`${user?.patient?.first_name} MediacalReport.pdf`}
+            fileName={`${user?.patient?.[user.index_of]?.first_name} MediacalReport.pdf`}
           >
             {({ loading }) =>
               loading ? (
@@ -211,7 +211,7 @@ export default function Medicalreports() {
               icon: <Iconify width={16} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
             },
             {
-              label: `${user?.patient?.first_name} ${user?.patient?.last_name}`,
+              label: `${user?.patient?.[user.index_of]?.first_name} ${user?.patient?.[user.index_of]?.last_name}`,
               icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
             },
             {
