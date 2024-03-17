@@ -1,7 +1,7 @@
-import useSWR, { mutate } from 'swr';
 import { useMemo } from 'react';
+import useSWR, { mutate } from 'swr';
 
-import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
+import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetOldPatient() {
   const URL = endpoints.tables.oldpatient();

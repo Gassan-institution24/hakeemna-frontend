@@ -73,14 +73,14 @@ export default function TableNewEditForm({ departmentData }) {
     onChangeRowsPerPage,
   } = table;
 
-  const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+  // const handleArabicInputChange = (event) => {
+  //   // Validate the input based on Arabic language rules
+  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
 
-    if (arabicRegex.test(event.target.value)) {
-      setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-    }
-  };
+  //   if (arabicRegex.test(event.target.value)) {
+  //     setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+  //   }
+  // };
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules

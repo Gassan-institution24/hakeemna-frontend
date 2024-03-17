@@ -399,7 +399,7 @@ export default function SubSpecialtiesTableView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name } = filters;
+  const { name } = filters;
 
   const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 

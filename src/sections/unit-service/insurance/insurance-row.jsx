@@ -4,17 +4,16 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useLocales } from 'src/locales';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
 export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) {
-  const { code, name_english, name_arabic, type, status, webpage, phone, address } = row;
+  const { code, name_english, name_arabic, type, webpage, phone, address } = row;
 
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';

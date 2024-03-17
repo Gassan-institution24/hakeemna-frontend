@@ -2,9 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { useParams } from 'src/routes/hooks';
 
-import { useGetUnitservice, useGetUSAppointments } from 'src/api';
-
-import { LoadingScreen } from 'src/components/loading-screen';
+import { useGetUnitservice } from 'src/api';
 
 import UnitServiceAppointemnts from 'src/sections/super-admin/unitservices/appointments/view/home';
 // ----------------------------------------------------------------------

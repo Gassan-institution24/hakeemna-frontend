@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
@@ -27,8 +26,8 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetAppointmentTypes, useGetUSAppointments } from 'src/api';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
+import { useGetUSAppointments, useGetAppointmentTypes } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
