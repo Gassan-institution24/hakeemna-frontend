@@ -57,7 +57,7 @@ export default function Insuranceinfo() {
 
   const defaultValues = {
     type: '',
-    patient: user?.patient?._id,
+    patient: user?.patient?.[user.index_of]?._id,
     // file: [],
     insurance: '',
     insurance_client_num: '',
@@ -229,7 +229,7 @@ export default function Insuranceinfo() {
           </DialogActions>
         </FormProvider>
       </Dialog>{' '}
-      <InsurancePage user = {user?.patient?._id} />
+      <InsurancePage user = {user?.patient?.[user.index_of]?._id} />
     </Container>
   );
 }
