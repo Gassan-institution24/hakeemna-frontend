@@ -109,6 +109,7 @@ export default function TableNewEditForm({ currentTable }) {
           user,
           link: paths.unitservice.activities.root,
           msg: `created an activity <strong>${data.name_english || ''}</strong>`,
+          ar_msg: `إنشاء نشاط  <strong>${data.name_arabic || ''}</strong>`,
         });
       }
       reset();
@@ -116,7 +117,7 @@ export default function TableNewEditForm({ currentTable }) {
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   });

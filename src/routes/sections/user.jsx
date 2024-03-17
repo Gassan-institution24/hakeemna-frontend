@@ -33,7 +33,7 @@ const Emergency = lazy(() => import('src/pages/dashboard/user/emergency'));
 const Watingroom = lazy(() => import('src/pages/dashboard/user/waitingroom'));
 const BMI = lazy(() => import('src/sections/user/bmi'));
 const Oldpatientsdata = lazy(() => import('src/sections/user/oldpatientsdata'));
-const ProfileQr =  lazy(() => import('src/sections/user/profile-qr'));
+const ProfileQr = lazy(() => import('src/sections/user/profile-qr'));
 
 // ----------------------------------------------------------------------
 

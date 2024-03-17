@@ -95,8 +95,7 @@ export default function UnitServicesInsuranceView() {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
   const filteredInsuranceCos = insuranseCosData.filter(
-    (company) =>
-      !data?.insurance?.some((info) => info._id === company._id )
+    (company) => !data?.insurance?.some((info) => info._id === company._id)
   );
 
   const dateError =
@@ -161,13 +160,22 @@ export default function UnitServicesInsuranceView() {
         enqueueSnackbar('added successfully');
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage?.length);
     },
-    [dataInPage?.length, table, refetch, data?._id, data?.insurance, user, enqueueSnackbar]
+    [
+      dataInPage?.length,
+      table,
+      refetch,
+      data?._id,
+      data?.insurance,
+      user,
+      enqueueSnackbar,
+      curLangAr,
+    ]
   );
   const handleDeleteRow = useCallback(
     async (id) => {
@@ -184,13 +192,22 @@ export default function UnitServicesInsuranceView() {
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage?.length);
     },
-    [dataInPage?.length, table, refetch, data?._id, data?.insurance, user, enqueueSnackbar]
+    [
+      dataInPage?.length,
+      table,
+      refetch,
+      data?._id,
+      data?.insurance,
+      user,
+      enqueueSnackbar,
+      curLangAr,
+    ]
   );
 
   const handleFilters = useCallback(

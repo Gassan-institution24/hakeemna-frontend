@@ -15,8 +15,8 @@ import { useRouter } from 'src/routes/hooks';
 
 // import { useMockedUser } from 'src/hooks/use-mocked-user';
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 import { varHover } from 'src/components/animate';
 import { useSnackbar } from 'src/components/snackbar';
@@ -26,6 +26,8 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function AccountPopover() {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const OPTIONS = [
     {
       label: t('Home'),
@@ -58,7 +60,7 @@ export default function AccountPopover() {
       // router.replace('/');
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }
   };
 
@@ -108,7 +110,7 @@ export default function AccountPopover() {
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 200, p: 0 }}>
         <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.employee?.first_name} {user?.employee?.family_name}
+            {user?.employee?.name_english}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>

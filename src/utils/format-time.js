@@ -57,10 +57,10 @@ export function fTimestamp(date) {
   return date ? getTime(new Date(date)) : '';
 }
 
-export function fToNow(date) {
-  return date
-    ? formatDistanceToNow(new Date(date), {
-        addSuffix: true,
-      })
-    : '';
+export function fToNow(date, arabic) {
+  const optionsObj = { addSuffix: true };
+  if (arabic) {
+    optionsObj.locale = ar;
+  }
+  return date ? formatDistanceToNow(new Date(date), optionsObj) : '';
 }

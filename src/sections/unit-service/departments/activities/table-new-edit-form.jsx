@@ -16,8 +16,8 @@ import { useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -28,8 +28,8 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const router = useRouter();
 
   const { t } = useTranslate();
-  // const { currentLang } = useLocales();
-  // const curLangAr = currentLang.value === 'ar';
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
 
@@ -99,6 +99,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           user,
           link: paths.unitservice.departments.activities.root(departmentData._id),
           msg: `created an activity <strong>[ ${data.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
+          ar_msg: `إنشاء نشاط  <strong>[ ${data.name_arabic} ]</strong> في قسم <strong>${departmentData.name_arabic}</strong>`,
         });
       }
       reset();
@@ -106,7 +107,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   });

@@ -123,7 +123,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
 
       onClose();
     } catch (error) {
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   });

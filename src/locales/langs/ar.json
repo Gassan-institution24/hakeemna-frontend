@@ -16,6 +16,7 @@
   "Insurance": "شركات التأمين المعتمدة",
   "Full name in English": "الأسم الكامل باللغة الانجليزية",
   "Full name in Arabic": "الأسم الكامل باللغة العربية",
+  "there is no document with this id": "الأسم الكامل باللغة العربية",
 
   "suppliers offers": "عروض المنشاّت",
   "communication": "التواصل",
@@ -433,6 +434,11 @@
   "uploaded successfully!": "تم الرفع بنجاح",
   "booked successfully!": "تم الحجز بنجاح",
   "Invalid file type or size": "نوع الملف غير صالح",
+  "create a new work group": "مجموعة عمل جديدة",
+  "see more":"رؤية المزيد",
+  "updated":"تعديل",
+  "created":"إنشاء",
+  "error":"خطأ",
 
   "list": "قائمة",
   "edit": "تعديل",

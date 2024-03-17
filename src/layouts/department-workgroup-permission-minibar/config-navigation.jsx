@@ -28,9 +28,7 @@ export function useNavData() {
       return [];
     }
     return data.employees.map((info, idx) => ({
-      title: curLangAr
-        ? info.employee.employee?.family_name
-        : `${info.employee.employee?.first_name} ${info.employee.employee?.family_name}`,
+      title: curLangAr ? info.employee.employee?.name_arabic : info.employee.employee?.name_english,
       path: paths.unitservice.departments.workGroups.permissions.employee(id, wgid, info._id),
       icon: <Iconify icon="ion:person" />,
     }));

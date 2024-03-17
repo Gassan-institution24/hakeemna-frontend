@@ -97,6 +97,7 @@ export default function BookManually({
         user,
         link: paths.superadmin.unitservices.departments.appointments(id, departmentData._id),
         msg: `created an emergency appointment <strong>${appoint?.data?.code}</strong> into <strong>${departmentData.name_english}</strong> department`,
+        ar_msg: `إنشاء موعد طارئ <strong>${appoint?.data?.code}</strong> داخل قسم <strong>${departmentData.name_arabic}</strong>`,
       });
       reset();
       enqueueSnackbar(t('created successfully!'));
@@ -104,7 +105,7 @@ export default function BookManually({
 
       onClose();
     } catch (error) {
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   });

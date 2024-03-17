@@ -120,7 +120,7 @@ export default function TableNewEditForm({ currentTable }) {
       router.push(paths.unitservice.tables.rooms.root);
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   });

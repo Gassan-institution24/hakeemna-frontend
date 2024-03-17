@@ -26,6 +26,7 @@ import { fNumber } from 'src/utils/format-number';
 import axios, { endpoints } from 'src/utils/axios';
 import { fDate, fTime } from 'src/utils/format-time';
 
+import { useLocales } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import {
   useGetAppointment,
@@ -45,6 +46,8 @@ import FormProvider from 'src/components/hook-form/form-provider';
 export default function Doctorpage() {
   const params = useParams();
   const router = useRouter();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { id } = params;
   const { user } = useAuthContext();
@@ -94,7 +97,7 @@ export default function Doctorpage() {
       }, 1000);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }
   };
   const renderHead = (

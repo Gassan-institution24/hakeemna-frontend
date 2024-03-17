@@ -297,7 +297,7 @@ export default function OldMedicalReports() {
       console.log('formData', formData);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }
   };
 
