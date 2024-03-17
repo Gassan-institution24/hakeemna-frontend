@@ -17,9 +17,9 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useCountdownSeconds } from 'src/hooks/use-countdown';
 
-import { useTranslate } from 'src/locales';
 import { SentIcon } from 'src/assets/icons';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -32,7 +32,9 @@ export default function NewPasswordView() {
 
   const router = useRouter();
 
-  const {t} = useTranslate()
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const searchParams = useSearchParams();
 
@@ -84,7 +86,7 @@ export default function NewPasswordView() {
       enqueueSnackbar(t('Password has changed successfully!'));
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }
   });
 

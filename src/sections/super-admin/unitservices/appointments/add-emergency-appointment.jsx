@@ -99,7 +99,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
       onClose();
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   });

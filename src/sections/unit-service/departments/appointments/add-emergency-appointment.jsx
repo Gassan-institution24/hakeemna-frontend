@@ -97,6 +97,7 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
         user,
         link: paths.unitservice.departments.appointments(departmentData._id),
         msg: `created an emergency appointment <strong>${appoint?.data?.code}</strong> into <strong>${departmentData.name_english}</strong> department`,
+        ar_msg: `إنشاء موعد طارئ <strong>${appoint?.data?.code}</strong> في قسم <strong>${departmentData.name_arabic}</strong> department`,
       });
       reset();
       enqueueSnackbar(t('created successfully!'));
@@ -105,7 +106,7 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
       onClose();
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   });

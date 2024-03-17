@@ -8,10 +8,14 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 
 import { fToNow } from 'src/utils/format-time';
+import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function NotificationItem({ notification, handleClick }) {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const renderAvatar = (
     <ListItemAvatar>
       {notification.avatarUrl ? (
@@ -45,7 +49,7 @@ export default function NotificationItem({ notification, handleClick }) {
   const renderText = (
     <ListItemText
       disableTypography
-      primary={reader(notification.title)}
+      primary={reader(curLangAr ? notification.title_arabic : notification.title)}
       secondary={
         <Stack
           direction="row"
@@ -68,8 +72,8 @@ export default function NotificationItem({ notification, handleClick }) {
             />
           }
         >
-          {fToNow(notification.created_at)}
-          {notification.category}
+          {fToNow(notification.created_at,curLangAr)}
+          {t(notification.category)}
         </Stack>
       }
       primaryTypographyProps={{

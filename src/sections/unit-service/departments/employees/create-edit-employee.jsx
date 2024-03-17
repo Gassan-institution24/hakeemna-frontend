@@ -137,6 +137,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
           user,
           link: paths.unitservice.departments.employees.root(departmentData._id),
           msg: `creating an employee <strong>${data.em_name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
+          ar_msg: `إضافة موظف  <strong>${data.name_arabic}</strong> إلى قسم <strong>${departmentData.name_arabic}</strong>`,
         });
       } else {
         await axiosInstance.post(endpoints.auth.register, {
@@ -156,7 +157,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       router.push(paths.unitservice.departments.employees.root(departmentData._id));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   });

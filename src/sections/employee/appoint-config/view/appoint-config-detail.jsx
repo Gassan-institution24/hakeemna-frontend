@@ -184,7 +184,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       socket.emit('error', { error, user, location: window.location.pathname });
       saving.onFalse();
       confirm.onFalse();
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }
   };
   const handleUpdating = async () => {
@@ -213,7 +213,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       socket.emit('error', { error, user, location: window.location.pathname });
       updating.onFalse();
       confirm.onFalse();
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }
   };
 
@@ -257,6 +257,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
           ),
           msg: `created an appointment config <strong>${data.name_english || ''}</strong>`,
+          ar_msg: `إنشاء إعدادت مواعيد <strong>${data.name_english || ''}</strong>`,
         });
         updating.onFalse();
         router.push(paths.employee.appointmentconfiguration.root);
@@ -273,7 +274,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       updating.onFalse();
       socket.emit('error', { error, user, location: window.location.pathname });
       loadingSend.onFalse();
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }
   });
 

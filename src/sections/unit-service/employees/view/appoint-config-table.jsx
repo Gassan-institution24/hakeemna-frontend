@@ -22,8 +22,8 @@ import { fTimestamp } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
@@ -61,6 +61,8 @@ const defaultFilters = {
 
 export default function AppointConfigView({ appointmentConfigData, refetch }) {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const TABLE_HEAD = [
     { id: 'sequence_number', label: t('number') },
     { id: 'start_date', label: t('start date') },
@@ -157,13 +159,13 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, id, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, id, enqueueSnackbar,curLangAr]
   );
 
   const handleUnCancelRow = useCallback(
@@ -177,13 +179,13 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, id, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, id, enqueueSnackbar, curLangAr]
   );
 
   const handleCancelRows = useCallback(async () => {
@@ -198,7 +200,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
       });
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -216,6 +218,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     user,
     id,
     enqueueSnackbar,
+    curLangAr
   ]);
 
   const handleUnCancelRows = useCallback(async () => {
@@ -230,7 +233,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
       });
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -248,6 +251,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     user,
     id,
     enqueueSnackbar,
+    curLangAr
   ]);
 
   const handleAdd = useCallback(() => {

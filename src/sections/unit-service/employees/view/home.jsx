@@ -19,9 +19,9 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useTranslate } from 'src/locales';
 import { useGetUSEmployeeEngs } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
@@ -63,6 +63,8 @@ const defaultFilters = {
 
 export default function EmployeesTableView() {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const TABLE_HEAD = [
     { id: 'sequence_number', label: t('number') },
     { id: 'online', label: t('online') },
@@ -160,13 +162,13 @@ export default function EmployeesTableView() {
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -181,13 +183,13 @@ export default function EmployeesTableView() {
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -203,7 +205,7 @@ export default function EmployeesTableView() {
       });
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -219,6 +221,7 @@ export default function EmployeesTableView() {
     employeesData,
     refetch,
     user,
+    curLangAr,
     enqueueSnackbar,
   ]);
 
@@ -235,7 +238,7 @@ export default function EmployeesTableView() {
       });
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -251,6 +254,7 @@ export default function EmployeesTableView() {
     employeesData,
     refetch,
     user,
+    curLangAr,
     enqueueSnackbar,
   ]);
 
@@ -293,10 +297,10 @@ export default function EmployeesTableView() {
         refetch();
         enqueueSnackbar(t('updated successfully!'));
       } catch (error) {
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       }
     },
-    [employeesData, refetch, t, enqueueSnackbar]
+    [employeesData, refetch, t, enqueueSnackbar, curLangAr]
   );
   const handleChangeVisOnlineApp = useCallback(
     async (id) => {
@@ -308,10 +312,10 @@ export default function EmployeesTableView() {
         refetch();
         enqueueSnackbar(t('updated successfully!'));
       } catch (error) {
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       }
     },
-    [employeesData, refetch, t, enqueueSnackbar]
+    [employeesData, refetch, t, enqueueSnackbar, curLangAr]
   );
 
   const handleFilterStatus = useCallback(

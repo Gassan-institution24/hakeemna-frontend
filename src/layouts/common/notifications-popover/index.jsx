@@ -22,6 +22,7 @@ import axios, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetMyNotifications } from 'src/api';
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -35,6 +36,7 @@ export default function NotificationsPopover() {
   const router = useRouter();
 
   const drawer = useBoolean();
+  const { t } = useTranslate();
 
   const { user } = useAuthContext();
 
@@ -79,6 +81,9 @@ export default function NotificationsPopover() {
       setPage(1);
       refetch();
     });
+    socket.on('test', () => {
+      console.log('test emitted');
+    });
   }, []);
   /* eslint-enable */
 
@@ -114,7 +119,7 @@ export default function NotificationsPopover() {
       >
         <Stack direction="row" alignItems="center" sx={{ py: 2, pl: 2.5, pr: 1, minHeight: 68 }}>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Notifications
+            {t('Notifications')}
           </Typography>
 
           {!!unread.length && (
@@ -152,7 +157,7 @@ export default function NotificationsPopover() {
                 }}
                 size="large"
               >
-                see more
+                {t('see more')}
               </LoadingButton>
             </Box>
           )}

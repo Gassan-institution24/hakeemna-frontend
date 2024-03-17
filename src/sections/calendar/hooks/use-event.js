@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import merge from 'lodash/merge';
 
-import { CALENDAR_COLOR_OPTIONS } from 'src/_mock/_calendar';
+// import { CALENDAR_COLOR_OPTIONS } from 'src/_mock/_calendar';
 
 // ----------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ export default function useEvent(events, selectEventId, selectedRange, openForm)
       id: '',
       title: '',
       description: '',
-      color: CALENDAR_COLOR_OPTIONS[1],
+      // color: CALENDAR_COLOR_OPTIONS[1],
       allDay: false,
       start: selectedRange ? selectedRange.start : new Date().getTime(),
       end: selectedRange ? selectedRange.end : new Date().getTime(),

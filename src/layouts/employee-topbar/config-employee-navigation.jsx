@@ -3,9 +3,9 @@ import { useMemo } from 'react';
 import { paths } from 'src/routes/paths';
 import { useRouter, useParams } from 'src/routes/hooks';
 
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeEngagement } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
@@ -16,6 +16,8 @@ export function useNavData() {
   const params = useParams();
   const router = useRouter();
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const { id } = params;
 
@@ -82,9 +84,9 @@ export function useNavData() {
       {
         items: [
           {
-            title: t(
-              `${employeeData?.employee?.first_name} ${employeeData?.employee?.family_name}`
-            ),
+            title: curLangAr
+              ? employeeData?.employee?.name_arabic
+              : employeeData?.employee?.name_english,
             path: paths.unitservice.employees.info(id),
             icon: <Iconify icon="fluent:person-info-20-filled" />,
           },
@@ -104,7 +106,7 @@ export function useNavData() {
       return [...employeeSecDashboard];
     }
     return [...employeeSecDashboard];
-  }, [t, user, router, id, employeeData, checkAcl]);
+  }, [t, user, router, id, employeeData, checkAcl, curLangAr]);
 
   return data;
 }

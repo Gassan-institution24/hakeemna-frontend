@@ -24,8 +24,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useGetAppointmentTypes, useGetDepartmentAppointments } from 'src/api';
 
@@ -64,6 +64,8 @@ const defaultFilters = {
 
 export default function AppointmentsView({ unitServiceData, departmentData }) {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const TABLE_HEAD = [
     { id: 'sequence_number', label: t('sequence') },
     { id: 'appoint_number', label: t('number') },
@@ -210,13 +212,13 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
         enqueueSnackbar(t('canceled successfully!'));
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user, t, departmentData, id]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user, t, departmentData, id, curLangAr]
   );
 
   const handleDelayRow = useCallback(
@@ -233,14 +235,14 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
         enqueueSnackbar(t('delayed successfully!'));
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       setMinToDelay(0);
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user, t, departmentData, id]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user, t, departmentData, id, curLangAr]
   );
 
   const handleUnCancelRow = useCallback(
@@ -255,13 +257,13 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
         enqueueSnackbar(t('uncanceled successfully!'));
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, user, t, departmentData, id]
+    [dataInPage.length, table, refetch, enqueueSnackbar, user, t, departmentData, id, curLangAr]
   );
 
   const handleCancelRows = useCallback(async () => {
@@ -275,7 +277,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
       enqueueSnackbar(t('canceled successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -286,6 +288,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
     });
   }, [
     refetch,
+    curLangAr,
     appointmentsData.length,
     dataInPage.length,
     appointmentsLength,
@@ -311,7 +314,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
       enqueueSnackbar(t('delayed successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -323,6 +326,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
     });
   }, [
     refetch,
+    curLangAr,
     appointmentsData.length,
     dataInPage.length,
     appointmentsLength,
@@ -348,7 +352,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
       enqueueSnackbar(t('uncanceled successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -359,6 +363,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
     });
   }, [
     refetch,
+    curLangAr,
     appointmentsData.length,
     dataInPage.length,
     appointmentsLength,

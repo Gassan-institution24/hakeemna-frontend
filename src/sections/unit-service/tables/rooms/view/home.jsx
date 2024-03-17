@@ -44,8 +44,8 @@ import {
 } from 'src/components/table'; /// edit
 import { useSnackbar } from 'notistack';
 
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
@@ -66,8 +66,8 @@ const defaultFilters = {
 
 export default function RoomsTableView() {
   const { t } = useTranslate();
-  // const { currentLang } = useLocales();
-  // const curLangAr = currentLang.value === 'ar';
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -174,13 +174,13 @@ export default function RoomsTableView() {
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -196,13 +196,13 @@ export default function RoomsTableView() {
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -218,7 +218,7 @@ export default function RoomsTableView() {
       });
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -227,7 +227,16 @@ export default function RoomsTableView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user, enqueueSnackbar]);
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    table,
+    roomsData,
+    refetch,
+    user,
+    enqueueSnackbar,
+    curLangAr,
+  ]);
 
   const handleInactivateRows = useCallback(async () => {
     try {
@@ -242,7 +251,7 @@ export default function RoomsTableView() {
       });
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -251,7 +260,16 @@ export default function RoomsTableView() {
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, roomsData, refetch, user, enqueueSnackbar]);
+  }, [
+    dataFiltered.length,
+    dataInPage.length,
+    table,
+    roomsData,
+    refetch,
+    user,
+    enqueueSnackbar,
+    curLangAr,
+  ]);
 
   const handleEditRow = useCallback(
     (id) => {

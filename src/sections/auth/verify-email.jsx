@@ -16,6 +16,7 @@ import { useCountdownSeconds } from 'src/hooks/use-countdown';
 
 import axios, { endpoints } from 'src/utils/axios';
 
+import { useLocales } from 'src/locales';
 import { EmailInboxIcon } from 'src/assets/icons';
 
 import Iconify from 'src/components/iconify';
@@ -29,6 +30,9 @@ export default function ClassicVerifyView() {
   const email = searchParams.get('email');
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const VerifySchema = Yup.object().shape({
     code: Yup.string().min(6, 'Code must be at least 6 characters').required('Code is required'),
@@ -57,7 +61,7 @@ export default function ClassicVerifyView() {
       router.push(paths.dashboard.root);
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }
   });
   const handleResendCode = useCallback(async () => {
@@ -66,9 +70,9 @@ export default function ClassicVerifyView() {
       await axios.post(endpoints.auth.resendActivation, { email });
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }
-  }, [startCountdown, email, enqueueSnackbar]);
+  }, [startCountdown, email, enqueueSnackbar, curLangAr]);
 
   const renderForm = (
     <Stack spacing={3} alignItems="center">
