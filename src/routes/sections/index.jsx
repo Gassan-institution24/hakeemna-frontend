@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { lazy, useRef } from 'react';
 import { useRoutes } from 'react-router-dom';
 
 import MainLayout from 'src/layouts/main';
@@ -11,7 +11,7 @@ import { dashboardRoutes } from './super-admin-dashboard';
 import { unitServiceDashboardRoutes } from './unit-service-dashboard';
 import { unitServiceEmployeeDashboardRoutes } from './employee-dashboard';
 
-// const Page404 = lazy(() => import('src/pages/404'));
+const Page404 = lazy(() => import('src/pages/404'));
 
 // ----------------------------------------------------------------------
 
@@ -60,6 +60,6 @@ export default function Router() {
     ...userRoutes,
 
     // No match 404
-    // { path: '*', element: <Page404 /> },
+    { path: '*', element: <Page404 /> },
   ]);
 }

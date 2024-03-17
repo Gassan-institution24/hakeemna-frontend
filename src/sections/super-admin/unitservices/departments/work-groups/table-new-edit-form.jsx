@@ -113,6 +113,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           msg: `created work group <strong>${data.name_english || ''}</strong> in <strong>${
             departmentData.name_english
           }</strong> department`,
+          ar_msg: `إنشاء مجموعة عمل <strong>${data.name_arabic || ''}</strong> في قسم <strong>${
+            departmentData.name_arabic
+          }</strong>`,
         });
       }
       reset();
@@ -122,7 +125,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       );
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   });
@@ -166,7 +169,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
               getOptionLabel={(option) => option._id}
               renderOption={(props, option, idx) => (
                 <li {...props} key={idx} value={option._id}>
-                  {curLangAr?option.employee?.name_arabic:option.employee.name_english}
+                  {curLangAr ? option.employee?.name_arabic : option.employee.name_english}
                 </li>
               )}
               onChange={(event, newValue) => {
@@ -178,7 +181,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
                   <Chip
                     {...getTagProps({ index })}
                     key={index}
-                    label={curLangAr?option.employee?.name_arabic:option.employee.name_english}
+                    label={curLangAr ? option.employee?.name_arabic : option.employee.name_english}
                     size="small"
                     color="info"
                     variant="soft"

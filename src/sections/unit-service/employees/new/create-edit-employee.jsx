@@ -157,7 +157,7 @@ export default function TableNewEditForm({ currentTable }) {
         user,
         location: window.location.pathname,
       });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });

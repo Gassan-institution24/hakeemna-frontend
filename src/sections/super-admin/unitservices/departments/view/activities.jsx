@@ -25,9 +25,9 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetDepartmentActivities } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
@@ -67,6 +67,8 @@ const defaultFilters = {
 
 export default function ActivitesTableView({ departmentData }) {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
     { id: 'name', label: t('name') },
@@ -171,13 +173,13 @@ export default function ActivitesTableView({ departmentData }) {
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, departmentData, user, enqueueSnackbar, id]
+    [dataInPage.length, table, refetch, departmentData, user, enqueueSnackbar, id, curLangAr]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -193,13 +195,13 @@ export default function ActivitesTableView({ departmentData }) {
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, departmentData, user, enqueueSnackbar, id]
+    [dataInPage.length, table, refetch, departmentData, user, enqueueSnackbar, id, curLangAr]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -215,7 +217,7 @@ export default function ActivitesTableView({ departmentData }) {
       });
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -234,6 +236,7 @@ export default function ActivitesTableView({ departmentData }) {
     user,
     enqueueSnackbar,
     id,
+    curLangAr,
   ]);
 
   const handleInactivateRows = useCallback(async () => {
@@ -249,7 +252,7 @@ export default function ActivitesTableView({ departmentData }) {
       });
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -268,6 +271,7 @@ export default function ActivitesTableView({ departmentData }) {
     user,
     enqueueSnackbar,
     id,
+    curLangAr,
   ]);
 
   const handleEditRow = useCallback(

@@ -16,8 +16,8 @@ import { useParams } from 'src/routes/hooks';
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
 import {
@@ -35,6 +35,8 @@ import ExistEmployeesRow from './exist-employees-row';
 
 export default function TableNewEditForm({ departmentData }) {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { id } = useParams();
 
@@ -107,7 +109,7 @@ export default function TableNewEditForm({ departmentData }) {
       enqueueSnackbar(t('employment successfully!'));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   };

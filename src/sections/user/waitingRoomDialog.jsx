@@ -20,8 +20,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios from 'src/utils/axios';
 
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import { useGetPatientOneAppointments } from 'src/api';
 
 import Image from 'src/components/image';
@@ -33,6 +33,8 @@ import FormProvider from 'src/components/hook-form/form-provider';
 export default function WatingRoomDialog({ employeesData }) {
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const UpdateUserSchema = Yup.object().shape({
     Body: Yup.string(),
@@ -113,7 +115,7 @@ export default function WatingRoomDialog({ employeesData }) {
       }, 1000);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }
   };
   return (
