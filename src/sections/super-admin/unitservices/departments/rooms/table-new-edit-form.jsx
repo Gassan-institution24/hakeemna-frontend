@@ -16,8 +16,8 @@ import { useParams, useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -30,8 +30,8 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const { id } = useParams();
 
   const { t } = useTranslate();
-  // const { currentLang } = useLocales();
-  // const curLangAr = currentLang.value === 'ar';
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
   // console.log('department ddd', departmentData);
@@ -111,6 +111,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           msg: `created room <strong>${data.name_english || ''}</strong> into <strong>${
             departmentData.name_english
           }</strong> department`,
+          ar_msg: `إنشاء غرفة <strong>${data.name_arabic || ''}</strong> داخل قسم <strong>${
+            departmentData.name_arabic
+          }</strong>`,
         });
       }
       reset();
@@ -118,7 +121,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       router.push(paths.superadmin.unitservices.departments.rooms.root(id, departmentData._id));
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   });

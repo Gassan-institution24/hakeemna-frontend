@@ -87,7 +87,7 @@ export default function Insuranceinfo() {
       }, 1000);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }
   };
 
@@ -106,7 +106,6 @@ export default function Insuranceinfo() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            
             {t('Add New')}
           </Button>
         }
@@ -119,7 +118,6 @@ export default function Insuranceinfo() {
           </DialogTitle>
           <DialogContent>
             <Typography sx={{ color: 'red', mb: 5, fontSize: 14 }}>
-              
               {t('The attached card must be present and real')}
             </Typography>
             <Controller
@@ -134,7 +132,7 @@ export default function Insuranceinfo() {
                       fullWidth: true,
                       error: !!error,
                       helperText: error?.message,
-                      label: `${t('Expiry date*')}`
+                      label: `${t('Expiry date*')}`,
                     },
                   }}
                 />
@@ -229,7 +227,7 @@ export default function Insuranceinfo() {
           </DialogActions>
         </FormProvider>
       </Dialog>{' '}
-      <InsurancePage user = {user?.patient?._id} />
+      <InsurancePage user={user?.patient?._id} />
     </Container>
   );
 }

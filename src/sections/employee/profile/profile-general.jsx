@@ -140,7 +140,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       refetch();
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   });
@@ -317,8 +317,12 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField lang="ar" name="name_english" label={`${t('first name')} *`} />
-              <RHFTextField lang="ar" name="name_arabic" label={t('middle name')} />
+              <RHFTextField
+                lang="ar"
+                name="name_english"
+                label={`${t('Full name in English')} *`}
+              />
+              <RHFTextField lang="ar" name="name_arabic" label={t('Full name in Arabic')} />
               <RHFSelect
                 label={`${t('nationality')} *`}
                 fullWidth

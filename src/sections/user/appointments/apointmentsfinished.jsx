@@ -32,7 +32,7 @@ export default function FinishedAppoinment({ finishedAppointments }) {
                 doctor?.employee?.visibility_online_appointment === true ? (
                   <span style={{ color: 'inherit' }}>
                     {' '}
-                    Dr. {doctor?.employee?.employee?.first_name}
+                    Dr. {doctor?.employee?.employee?.name_english}
                   </span>
                 ) : null
               }

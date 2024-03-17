@@ -18,6 +18,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axios, { endpoints } from 'src/utils/axios';
 import { fTime, fDate } from 'src/utils/format-time';
 
+import { useLocales } from 'src/locales';
+
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -27,6 +29,8 @@ import { useSnackbar } from 'src/components/snackbar';
 export default function Currentappoinment({ pendingAppointments, refetch }) {
   const { enqueueSnackbar } = useSnackbar();
   const [theId, setTheId] = useState();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   console.log(pendingAppointments);
   const dialog = useBoolean(false);
   const { fullWidth } = useState(false);
@@ -39,7 +43,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
       dialog.onFalse();
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }
   };
 
@@ -106,7 +110,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
                   doctor?.employee?.visibility_online_appointment === true ? (
                     <span style={{ color: 'inherit' }}>
                       {' '}
-                      Dr. {doctor?.employee?.employee?.first_name}
+                      Dr. {doctor?.employee?.employee?.name_english}
                     </span>
                   ) : null
                 }

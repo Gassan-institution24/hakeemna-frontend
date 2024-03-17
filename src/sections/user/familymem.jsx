@@ -21,11 +21,10 @@ import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-
 export default function FamilyMembers() {
   const { user, login } = useAuthContext();
   const { oldPatientsData } = useGetPatientFamily(user?.patient?._id);
-  console.log(user,"user");
+  console.log(user, 'user');
 
   const popover = usePopover();
   const confirm = useBoolean();
@@ -43,7 +42,6 @@ export default function FamilyMembers() {
   const [selectedIndex, setSelectedIndex] = useState();
   const [errorMsg, setErrorMsg] = useState();
 
-
   const handleCheckPassword = async () => {
     try {
       await axios.post(endpoints.auth.checkPassword, {
@@ -55,7 +53,7 @@ export default function FamilyMembers() {
     } catch (error) {
       console.error(error);
       setErrorMsg(error);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       loading.onFalse();
     }
   };
@@ -70,7 +68,7 @@ export default function FamilyMembers() {
     } catch (error) {
       console.error(error);
       loading.onFalse();
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       popover.onClose();
     }
   };

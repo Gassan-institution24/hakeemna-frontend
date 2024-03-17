@@ -22,9 +22,9 @@ import { RouterLink } from 'src/routes/components';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
 import { useGetUSActivities } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { StatusOptions } from 'src/assets/data/status-options';
 
@@ -65,6 +65,8 @@ const defaultFilters = {
 export default function ActivitesTableView() {
   const { STATUS_OPTIONS } = StatusOptions();
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const TABLE_HEAD = [
     { id: 'sequence_number', label: t('number') },
     { id: 'name', label: t('name') },
@@ -168,13 +170,13 @@ export default function ActivitesTableView() {
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -190,13 +192,13 @@ export default function ActivitesTableView() {
         });
       } catch (error) {
         socket.emit('error', { error, user, location: window.location.pathname });
-        enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -212,7 +214,7 @@ export default function ActivitesTableView() {
       });
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -225,6 +227,7 @@ export default function ActivitesTableView() {
     dataFiltered.length,
     dataInPage.length,
     table,
+    curLangAr,
     activitiesData,
     refetch,
     user,
@@ -244,7 +247,7 @@ export default function ActivitesTableView() {
       });
     } catch (error) {
       socket.emit('error', { error, user, location: window.location.pathname });
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
     refetch();
@@ -257,6 +260,7 @@ export default function ActivitesTableView() {
     dataFiltered.length,
     dataInPage.length,
     table,
+    curLangAr,
     activitiesData,
     refetch,
     user,

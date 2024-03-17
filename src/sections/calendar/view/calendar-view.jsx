@@ -20,7 +20,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { CALENDAR_COLOR_OPTIONS } from 'src/_mock/_calendar';
+// import { CALENDAR_COLOR_OPTIONS } from 'src/_mock/_calendar';
 import { updateEvent, useGetEvents } from 'src/api/calendar';
 
 import Iconify from 'src/components/iconify';
@@ -213,7 +213,7 @@ export default function CalendarView() {
 
         <CalendarForm
           currentEvent={currentEvent}
-          colorOptions={CALENDAR_COLOR_OPTIONS}
+          // colorOptions={CALENDAR_COLOR_OPTIONS}
           onClose={onCloseForm}
         />
       </Dialog>
@@ -231,7 +231,7 @@ export default function CalendarView() {
         dateError={dateError}
         //
         events={events}
-        colorOptions={CALENDAR_COLOR_OPTIONS}
+        // colorOptions={CALENDAR_COLOR_OPTIONS}
         onClickEvent={onClickEventInFilters}
       />
     </>

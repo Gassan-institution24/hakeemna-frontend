@@ -31,9 +31,7 @@ export function useNavData() {
       currpath[4] = info._id;
       const path = currpath.join('/');
       return {
-        title: curLangAr
-          ? info.employee.family_name
-          : `${info.employee.first_name} ${info.employee.family_name}`,
+        title: curLangAr ? info.employee.name_arabic : info.employee.name_english,
         path,
         icon: <Iconify icon="ion:person" />,
       };
