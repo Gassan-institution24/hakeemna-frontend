@@ -132,7 +132,7 @@ export default function Prescriptions() {
     () => (
       <Document>
         <Page size="A4" style={styles.page}>
-          {user?.patient.medicines.map((med, idx) => (
+          {user?.patient?.[user.index_of].medicines.map((med, idx) => (
             <View key={idx}>
               <View style={styles.imgItem}>
                 <PdfImage src={Doclogo} style={styles.image} />
@@ -146,7 +146,7 @@ export default function Prescriptions() {
               </View>
               <View style={styles.gridContainer}>
                 <Text>Name: {user.userName}</Text>
-                <Text>Age: {calculateAge(user?.patient.birth_date)}</Text>
+                <Text>Age: {calculateAge(user?.patient?.[user.index_of].birth_date)}</Text>
                 <Text>Date: {fDate(currentDate)}</Text>
               </View>
               <View style={styles.gridBody}>
@@ -193,7 +193,7 @@ export default function Prescriptions() {
 
   return (
     <div>
-      {user?.patient.medicines.map((med, idx) => (
+      {user?.patient?.[user.index_of].medicines.map((med, idx) => (
         <List key={idx} sx={{ bgcolor: 'aliceblue' }}>
           <ListItem sx={{ mb: 1 }}>
             <ListItemAvatar sx={{ display: { xs: 'none', md: 'inline' } }}>
@@ -216,7 +216,7 @@ export default function Prescriptions() {
             />
             <PDFDownloadLink
               document={<PrescriptionPDF medicines={[med]} />}
-              fileName={`${user?.patient.first_name} prescription.pdf`}
+              fileName={`${user?.patient?.[user.index_of].first_name} prescription.pdf`}
             >
               {({ loading }) =>
                 loading ? (

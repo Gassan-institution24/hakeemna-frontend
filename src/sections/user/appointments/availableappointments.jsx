@@ -203,7 +203,7 @@ export default function AppointmentBooking() {
         </Tabs>
         {/* {currentTab === 'online' && (
           <OnlineAppointmentList
-            patientData={user?.patient?._id}
+            patientData={user?.patient?.[user.index_of]?._id}
             refetch={refetch}
             dataFiltered={dataFiltered}
           />
