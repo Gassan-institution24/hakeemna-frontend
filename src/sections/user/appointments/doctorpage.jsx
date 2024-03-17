@@ -58,8 +58,8 @@ export default function Doctorpage() {
   const { feedbackData } = useGetEmployeeFeedbackes(data?.employee?._id);
   const [currentDateTime, setCurrentDateTime] = useState();
   const [patientNote, setPatientNote] = useState();
-  const patientData = user?.patient?._id;
-  const patientinfo = user?.patient;
+  const patientData = user?.patient?.[user.index_of]?._id;
+  const patientinfo = user?.patient?.[user.index_of];
   const patientEmail = user?.email;
 
   const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({

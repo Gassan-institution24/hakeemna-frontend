@@ -3,11 +3,12 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { Box } from '@mui/system';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { MenuItem, Typography } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
@@ -19,6 +20,7 @@ import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
+import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
@@ -30,7 +32,6 @@ export default function Create() {
   const [errorMsg, setErrorMsg] = useState('');
   const { user } = useAuthContext();
   const password = useBoolean();
-
   const RegisterSchema = Yup.object().shape({
     first_name: Yup.string().required('First name required'),
     family_name: Yup.string().required('Last name required'),
@@ -50,7 +51,7 @@ export default function Create() {
     first_name: '',
     family_name: '',
     email: '',
-    family_members: user?.patient?._id,
+    family_members: user?.patient?.[user.index_of]?._id,
     password: '',
     confirmPassword: '',
     mobile_num1: '',
@@ -94,77 +95,93 @@ export default function Create() {
   });
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Stack spacing={2.5}>
-        {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+      <Box sx={{ display: 'flex', flexDirection: { md: 'row', xs: 'column' } }}>
+        <Stack spacing={2.5} sx={{ width: { md: '50%', xs: '80%' }, ml: 5, mt: 5, mr: 15 }}>
+          {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+          <Typography
+            variant="h3"
+            sx={{ textAlign: 'center', display: { md: 'none', xs: 'block' } }}
+          >
+            Add Account
+          </Typography>
 
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFTextField name="first_name" label="First name" />
-          <RHFTextField name="family_name" label="Last name" />
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+            <RHFTextField name="first_name" label="First name" />
+            <RHFTextField name="family_name" label="Last name" />
+          </Stack>
+
+          <RHFTextField name="email" label="Email address" />
+          <RHFTextField name="identification_num" label="Identification number" />
+          <RHFTextField name="mobile_num1" label={t('mobile number')} />
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+            <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
+              {countriesData?.map((country, idx) => (
+                <MenuItem key={idx} value={country?._id}>
+                  {country?.name_english}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+            <RHFSelect name="city" label="City">
+              {tableData?.map((city, idx) => (
+                <MenuItem key={idx} value={city?._id}>
+                  {city?.name_english}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+            <RHFSelect name="gender" label="Gender">
+              <MenuItem value="male">male</MenuItem>
+              <MenuItem value="female">female</MenuItem>
+            </RHFSelect>
+          </Stack>
+          <RHFTextField
+            name="password"
+            label="Password"
+            type={password.value ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={password.onToggle} edge="end">
+                    <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <RHFTextField
+            name="confirmPassword"
+            label="Confirm Password"
+            type={password.value ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={password.onToggle} edge="end">
+                    <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <LoadingButton
+            fullWidth
+            color="inherit"
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isSubmitting}
+          >
+            Create account
+          </LoadingButton>
         </Stack>
-
-        <RHFTextField name="email" label="Email address" />
-        <RHFTextField name="identification_num" label="Identification number" />
-        <RHFTextField name="mobile_num1" label={t('mobile number')} />
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
-            {countriesData?.map((country, idx) => (
-              <MenuItem key={idx} value={country?._id}>
-                {country?.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-          <RHFSelect name="city" label="City">
-            {tableData?.map((city, idx) => (
-              <MenuItem key={idx} value={city?._id}>
-                {city?.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-          <RHFSelect name="gender" label="Gender">
-            <MenuItem value="male">male</MenuItem>
-            <MenuItem value="female">female</MenuItem>
-          </RHFSelect>
+        <Stack sx={{ display: { md: 'block', xs: 'none' }, ml: 10, mt: 5 }}>
+          <Typography variant="h3" sx={{ textAlign: 'center' }}>
+            Add Account
+          </Typography>
+         {/* <Box > */}
+         <Image src="https://www.sender.net/wp-content/uploads/2022/07/best-newsletter-software.webp"  />
+         {/* </Box> */}
         </Stack>
-        <RHFTextField
-          name="password"
-          label="Password"
-          type={password.value ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={password.onToggle} edge="end">
-                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-        <RHFTextField
-          name="confirmPassword"
-          label="Confirm Password"
-          type={password.value ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={password.onToggle} edge="end">
-                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-
-        <LoadingButton
-          fullWidth
-          color="inherit"
-          size="large"
-          type="submit"
-          variant="contained"
-          loading={isSubmitting}
-        >
-          Create account
-        </LoadingButton>
-      </Stack>
+      </Box>
     </FormProvider>
   );
 }

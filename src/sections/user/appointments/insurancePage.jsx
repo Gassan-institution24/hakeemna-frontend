@@ -14,7 +14,6 @@ import Image from 'src/components/image/image';
 
 export default function InsurancePage({ user }) {
   const { patientInsuranseData } = useGetPatientInsurance(user);
-  console.log(patientInsuranseData, 'patientInsuranseData');
   const { t } = useTranslate();
 
   return (
