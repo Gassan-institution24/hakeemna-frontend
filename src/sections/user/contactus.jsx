@@ -10,12 +10,12 @@ import Typography from '@mui/material/Typography';
 
 import axiosInstance from 'src/utils/axios';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 import { varFade, MotionViewport } from 'src/components/animate';
-import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 

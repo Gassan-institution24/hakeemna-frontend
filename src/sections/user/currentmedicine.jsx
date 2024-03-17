@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useGetUser } from 'src/api/user';
-import axiosHandler from 'src/utils/axios-handler';
+import React from 'react';
+
 import Table from '@mui/material/Table';
+import Paper from '@mui/material/Paper';
+import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { useAuthContext } from 'src/auth/hooks';
+import TableContainer from '@mui/material/TableContainer';
+
+// import { useGetUser } from 'src/api/user';
+// import { useAuthContext } from 'src/auth/hooks';
 
 export default function ProfileFollowers() {
-  const { data } = useGetUser();
-  const [countdowns, setCountdowns] = useState({});
+  // const { data } = useGetUser();
+  // const [countdowns, setCountdowns] = useState({});
 
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
 
   // useEffect(() => {
   //   if (data) {
@@ -43,29 +44,27 @@ export default function ProfileFollowers() {
   // }, [data]);
 
   return (
-    <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Name</TableCell>
-              <TableCell align="right">Frequently</TableCell>
-              <TableCell align="right">Dose</TableCell>
-              <TableCell align="right">Duration</TableCell>
-              <TableCell align="right">Price</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {/* <TableRow key={} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="center">Name</TableCell>
+            <TableCell align="right">Frequently</TableCell>
+            <TableCell align="right">Dose</TableCell>
+            <TableCell align="right">Duration</TableCell>
+            <TableCell align="right">Price</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {/* <TableRow key={} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell align="center">{}</TableCell>
                 <TableCell align="right">{}</TableCell>
                 <TableCell align="right"></TableCell>
                 <TableCell align="right"></TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow> */}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }

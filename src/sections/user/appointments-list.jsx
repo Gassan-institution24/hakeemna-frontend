@@ -1,22 +1,26 @@
-import { useAuthContext } from 'src/auth/hooks';
 import { useState, useCallback } from 'react';
+
 import Tab from '@mui/material/Tab';
-import Container from '@mui/material/Container';
-import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Container from '@mui/material/Container';
+
+// import { useGetPatient } from 'src/api/tables';
+import { useAuthContext } from 'src/auth/hooks';
+
 import Iconify from 'src/components/iconify';
-import { useSettingsContext } from 'src/components/settings';
-import { useGetPatient } from 'src/api/tables';
-import Appoinment from './apointments';
-import FinishedAppoinment from './apointmentsfinished';
-import AppointmentBooking from './apointmentsbooking';
+// import { useSettingsContext } from 'src/components/settings';
+
+// import Appoinment from './apointments';
+// import AppointmentBooking from './appointments/apointmentsbooking';
+import FinishedAppoinment from './appointments/apointmentsfinished';
 // ----------------------------------------------------------------------
 
 export default function UserCardList() {
   const { user } = useAuthContext();
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const [currentTab, setCurrentTab] = useState('My Appointments');
-  const { data } = useGetPatient(user?.patient._id);
+  // const { data } = useGetPatient(user?.patient._id);
 
   const TABS = [
     {
@@ -60,7 +64,7 @@ export default function UserCardList() {
               md: 'repeat(3, 1fr)',
             }}
           >
-            <Appoinment user={user?.patient._id} />
+            {/* <Appoinment user={user?.patient._id} /> */}
           </Box>
           <hr />
           <h3>Finished Appointment</h3>
@@ -78,7 +82,7 @@ export default function UserCardList() {
         </>
       )}
 
-      {currentTab === 'BookAppointment' && <AppointmentBooking patientData={data} />}
+      {/* {currentTab === 'BookAppointment' && <AppointmentBooking patientData={data} />} */}
     </Container>
   );
 }

@@ -20,7 +20,6 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ColorPicker } from 'src/components/color-utils';
 
 // ----------------------------------------------------------------------
 
@@ -44,12 +43,12 @@ export default function CalendarFilters({
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const handleFilterColors = useCallback(
-    (newValue) => {
-      onFilters('colors', newValue);
-    },
-    [onFilters]
-  );
+  // const handleFilterColors = useCallback(
+  //   (newValue) => {
+  //     onFilters('colors', newValue);
+  //   },
+  //   [onFilters]
+  // );
 
   const handleFilterStartDate = useCallback(
     (newValue) => {

@@ -9,7 +9,7 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { useAclGuard } from 'src/auth/guard/acl-guard';
+// import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
@@ -45,7 +45,7 @@ export default function AppointmentsTableRow({
 
   const { t } = useTranslate();
 
-  const checkAcl = useAclGuard();
+  // const checkAcl = useAclGuard();
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
