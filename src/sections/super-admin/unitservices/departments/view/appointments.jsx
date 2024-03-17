@@ -26,8 +26,8 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetAppointmentTypes, useGetDepartmentAppointments } from 'src/api';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
+import { useGetAppointmentTypes, useGetDepartmentAppointments } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -144,8 +144,8 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
 
   const notFound = (!appointmentsData.length && canReset) || !appointmentsData.length;
 
-  const getAppointLength = (status) =>
-    appointmentsData.filter((item) => item.status === status).length;
+  // const getAppointLength = (status) =>
+  //   appointmentsData.filter((item) => item.status === status).length;
 
   const TABS = [
     // { value: 'all', label: t('all'), color: 'default', count: appointmentsLength },
