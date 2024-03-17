@@ -45,7 +45,6 @@ import {
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { h } from '@fullcalendar/core/preact';
 
 // ----------------------------------------------------------------------
 

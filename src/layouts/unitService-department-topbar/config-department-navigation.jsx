@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'src/routes/hooks';
 
 import { useGetDepartment } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
+// import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -16,7 +16,7 @@ export function useNavData() {
   const params = useParams();
   const router = useRouter();
 
-  const checkAcl = useAclGuard();
+  // const checkAcl = useAclGuard();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();

@@ -1,6 +1,5 @@
 import { m } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -22,11 +21,11 @@ import { varFade, MotionViewport } from 'src/components/animate';
 export default function HomePricing() {
   const mdUp = useResponsive('up', 'md');
 
-  const [currentTab, setCurrentTab] = useState('Standard');
+  // const [currentTab, setCurrentTab] = useState('Standard');
 
-  const handleChangeTab = useCallback((event, newValue) => {
-    setCurrentTab(newValue);
-  }, []);
+  // const handleChangeTab = useCallback((event, newValue) => {
+  //   setCurrentTab(newValue);
+  // }, []);
 
   const renderDescription = (
     <Stack spacing={3} sx={{ mb: 10, textAlign: 'center' }}>
@@ -153,7 +152,7 @@ export default function HomePricing() {
 // ----------------------------------------------------------------------
 
 function PlanCard({ plan, sx, ...other }) {
-  const { license, commons, options, icons } = plan;
+  const { license, commons, options } = plan;
 
   const standardLicense = license === 'Standard';
 
