@@ -15,8 +15,7 @@ import { useParams, useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -33,7 +32,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
 
   const { id } = useParams();
 
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -90,20 +89,8 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
     try {
       if (currentTable) {
         await axiosInstance.patch(`${endpoints.activities.one(currentTable._id)}`, data);
-        socket.emit('updated', {
-          user,
-          link: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
-          msg: `editted an activity <strong>[ ${data.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
-          ar_msg: `تعديل نشاط <strong>[ ${data.name_arabic} ]</strong> في قسم <strong>${departmentData.name_arabic}</strong>`,
-        });
       } else {
         await axiosInstance.post(`${endpoints.activities.all}`, data);
-        socket.emit('created', {
-          user,
-          link: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
-          msg: `created an activity <strong>[ ${data.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
-          ar_msg: `إنشاء نشاط <strong>[ ${data.name_arabic} ]</strong> في قسم <strong>${departmentData.name_arabic}</strong>`,
-        });
       }
       reset();
       router.push(
@@ -111,7 +98,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       );
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

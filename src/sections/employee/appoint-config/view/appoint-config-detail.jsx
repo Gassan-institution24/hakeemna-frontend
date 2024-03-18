@@ -164,15 +164,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ...dataToUpdate,
         ImmediateEdit: false,
       });
-      socket.emit('updated', {
-        user,
-        link: paths.unitservice.employees.appointmentconfig.root(
-          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
-        ),
-        msg: `updated an appointment configuration <strong>[ ${
-          appointmentConfigData.code || ''
-        } ]</strong>`,
-      });
       enqueueSnackbar(t('updated successfully!'));
       saving.onFalse();
       confirm.onFalse();
@@ -181,7 +172,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       console.error(error);
       setErrorMsg(typeof error === 'string' ? error : error.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       saving.onFalse();
       confirm.onFalse();
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
@@ -194,13 +185,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ...dataToUpdate,
         ImmediateEdit: true,
       });
-      socket.emit('updated', {
-        user,
-        link: paths.employee.appointmentconfiguration.root,
-        msg: `updated an appointment configuration <strong>[ ${
-          appointmentConfigData.code || ''
-        } ]</strong>`,
-      });
       updating.onFalse();
       confirm.onFalse();
       enqueueSnackbar(t('updated successfully!'));
@@ -210,7 +194,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       console.error(error);
       setErrorMsg(typeof error === 'string' ? error : error.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       updating.onFalse();
       confirm.onFalse();
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
@@ -237,14 +221,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             `${endpoints.appointment_configs.all}/${appointmentConfigData?._id}`,
             data
           );
-          socket.emit('updated', {
-            data,
-            user,
-            link: paths.unitservice.employees.appointmentconfig.root(
-              user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
-            ),
-            msg: `updated an appointment configuration ${appointmentConfigData.code || ''}`,
-          });
           router.push(paths.employee.appointmentconfiguration.root);
         }
       } else {
@@ -272,7 +248,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       window.scrollTo({ top: 0, behavior: 'smooth' });
       console.error(error);
       updating.onFalse();
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       loadingSend.onFalse();
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
     }

@@ -86,7 +86,7 @@ export default function AccountChangePassword() {
         enqueueSnackbar(response.data || 'Password update failed!', { variant: 'error' });
       }
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

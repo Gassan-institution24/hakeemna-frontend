@@ -158,14 +158,14 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
           msg: `deleted an appointment configuration <strong>[ ${row.code} ]</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, id, enqueueSnackbar,curLangAr]
+    [dataInPage.length, table, refetch, user, id, enqueueSnackbar, curLangAr]
   );
 
   const handleUnCancelRow = useCallback(
@@ -178,7 +178,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
           msg: `uncanceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -199,7 +199,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         msg: `canceled many appointment configurations`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -218,7 +218,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     user,
     id,
     enqueueSnackbar,
-    curLangAr
+    curLangAr,
   ]);
 
   const handleUnCancelRows = useCallback(async () => {
@@ -232,7 +232,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         msg: `uncanceled many appointment configurations`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -251,7 +251,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
     user,
     id,
     enqueueSnackbar,
-    curLangAr
+    curLangAr,
   ]);
 
   const handleAdd = useCallback(() => {

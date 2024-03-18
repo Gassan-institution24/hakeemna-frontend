@@ -12,8 +12,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -24,7 +23,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 export default function AccountChangePassword() {
   const { enqueueSnackbar } = useSnackbar();
 
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -79,7 +78,7 @@ export default function AccountChangePassword() {
         enqueueSnackbar(response.data || t('Password update failed!'), { variant: 'error' });
       }
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

@@ -14,12 +14,11 @@ export default function DepartmentQCPage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetDepartment(id);
-  const name = data?.name_english;
   return (
     // <ACLGuard category="department" subcategory="quality_control" acl="read">
     <>
       <Helmet>
-        <title>{name || ''} Department Quality Control</title>
+        <title>{data.name_english} :Quality Control</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

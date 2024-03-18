@@ -18,7 +18,7 @@ export default function EmployeeFeedbackPage() {
   return (
     <>
       <Helmet>
-        <title> {name || ''} Employee Feedback</title>
+        <title> {name} : Feedback</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

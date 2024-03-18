@@ -145,18 +145,12 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
           userName: data.name_english,
           ...data,
         });
-        socket.emit('updated', {
-          data,
-          user,
-          link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
-          msg: `updating an employee <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
-        });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.superadmin.unitservices.departments.employees.root(id, departmentData._id));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

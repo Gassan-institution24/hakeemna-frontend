@@ -16,11 +16,10 @@ export default function DepartmentRoomEditPage() {
   const { id, acid } = params;
   const departmentData = useGetDepartment(id).data;
   const { data, loading } = useGetRoom(acid);
-  const name = data?.name_english;
   return (
     <ACLGuard category="department" subcategory="management_tables" acl="update">
       <Helmet>
-        <title> Edit {name || ''} Room </title>
+        <title>{departmentData.name_english} : Edit Room </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

@@ -18,7 +18,7 @@ export default function NewEmployeeAppointconfigPage() {
   return (
     <ACLGuard category="unit_service" subcategory="appointment_configs" acl="create">
       <Helmet>
-        <title> {name || ''} Employee Appointment Config</title>
+        <title> {name} : Appointment Config</title>
         <meta name="description" content="meta" />
       </Helmet>
 

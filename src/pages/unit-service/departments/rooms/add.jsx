@@ -18,7 +18,7 @@ export default function DepartmentRoomNewPage() {
   return (
     <ACLGuard category="department" subcategory="management_tables" acl="create">
       <Helmet>
-        <title> Add Room </title>
+        <title>{data.name_english} : Add Room </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

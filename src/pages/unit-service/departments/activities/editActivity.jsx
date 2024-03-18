@@ -16,11 +16,10 @@ export default function DepartmentActivityEditPage() {
   const { id, acid } = params;
   const departmentData = useGetDepartment(id).data;
   const { data, loading } = useGetActivity(acid);
-  const name = data?.name_english;
   return (
     <ACLGuard category="department" subcategory="management_tables" acl="update">
       <Helmet>
-        <title> Edit {name || ''} Activity </title>
+        <title> {data.name_english} : Edit Activity </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

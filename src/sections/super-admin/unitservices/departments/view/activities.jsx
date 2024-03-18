@@ -24,8 +24,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 import { useGetDepartmentActivities } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
@@ -83,7 +82,7 @@ export default function ActivitesTableView({ departmentData }) {
 
   const checkAcl = useAclGuard();
 
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
 
   const { STATUS_OPTIONS } = StatusOptions();
 
@@ -166,20 +165,15 @@ export default function ActivitesTableView({ departmentData }) {
           `${endpoints.activities.one(row._id)}/updatestatus`, /// edit
           { status: 'active' }
         );
-        socket.emit('updated', {
-          user,
-          link: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
-          msg: `activated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
-        });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, departmentData, user, enqueueSnackbar, id, curLangAr]
+    [dataInPage.length, table, refetch, enqueueSnackbar, curLangAr]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -188,20 +182,15 @@ export default function ActivitesTableView({ departmentData }) {
           `${endpoints.activities.one(row._id)}/updatestatus`, /// edit
           { status: 'inactive' }
         );
-        socket.emit('updated', {
-          user,
-          link: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
-          msg: `inactivated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
-        });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, departmentData, user, enqueueSnackbar, id, curLangAr]
+    [dataInPage.length, table, refetch, enqueueSnackbar, curLangAr]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -210,13 +199,8 @@ export default function ActivitesTableView({ departmentData }) {
         `${endpoints.activities.all}/updatestatus`, /// edit
         { status: 'active', ids: table.selected }
       );
-      socket.emit('updated', {
-        user,
-        link: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
-        msg: `activated many activities in department <strong>${departmentData.name_english}</strong>`,
-      });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -232,10 +216,7 @@ export default function ActivitesTableView({ departmentData }) {
     table,
     activitiesData,
     refetch,
-    departmentData,
-    user,
     enqueueSnackbar,
-    id,
     curLangAr,
   ]);
 
@@ -245,13 +226,8 @@ export default function ActivitesTableView({ departmentData }) {
         `${endpoints.activities.all}/updatestatus`, /// edit
         { status: 'inactive', ids: table.selected }
       );
-      socket.emit('updated', {
-        user,
-        link: paths.superadmin.unitservices.departments.activities.root(id, departmentData._id),
-        msg: `inactivated many activities in department <strong>${departmentData.name_english}</strong>`,
-      });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -267,10 +243,7 @@ export default function ActivitesTableView({ departmentData }) {
     table,
     activitiesData,
     refetch,
-    departmentData,
-    user,
     enqueueSnackbar,
-    id,
     curLangAr,
   ]);
 

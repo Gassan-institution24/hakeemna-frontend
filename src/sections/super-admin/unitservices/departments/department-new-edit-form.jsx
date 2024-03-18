@@ -15,8 +15,7 @@ import { useParams, useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -33,7 +32,7 @@ export default function TableNewEditForm({ currentTable }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -90,30 +89,17 @@ export default function TableNewEditForm({ currentTable }) {
           unit_service: id,
           ...data,
         });
-        socket.emit('updated', {
-          data,
-          user,
-          link: paths.superadmin.unitservices.departments.info(id, currentTable._id),
-          msg: `updating department <strong>${data.name_english || ''}</strong>`,
-        });
       } else {
-        const newDepartment = await axiosInstance.post(endpoints.departments.all, {
+        await axiosInstance.post(endpoints.departments.all, {
           ...data,
           unit_service: id,
-        });
-        socket.emit('created', {
-          data,
-          user,
-          link: paths.superadmin.unitservices.departments.info(id, newDepartment._id),
-          msg: `creating department <strong>${data.name_english || ''}</strong>`,
-          ar_msg: `إنشاء قسم جديد <strong>${data.ar_msg || ''}</strong>`,
         });
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.superadmin.unitservices.departments.root(id));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

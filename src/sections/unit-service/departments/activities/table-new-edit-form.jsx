@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -106,11 +106,24 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       router.push(paths.unitservice.departments.activities.root(departmentData._id));
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
   });
+
+  /* eslint-disable */
+  useEffect(() => {
+    reset({
+      department: departmentData._id,
+      unit_service: departmentData.unit_service._id,
+      name_english: currentTable?.name_english || '',
+      name_arabic: currentTable?.name_arabic || '',
+      details: currentTable?.details || '',
+      details_arabic: currentTable?.details_arabic || '',
+    });
+  }, [currentTable]);
+  /* eslint-enable */
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

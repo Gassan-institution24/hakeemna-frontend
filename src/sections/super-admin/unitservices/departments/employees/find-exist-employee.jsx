@@ -10,13 +10,11 @@ import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
-import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -52,7 +50,7 @@ export default function TableNewEditForm({ departmentData }) {
 
   const table = useTable({ defaultRowsPerPage: 10 });
 
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
 
   const [results, setResults] = useState([]);
   const [filters, setFilters] = useState({});
@@ -101,14 +99,9 @@ export default function TableNewEditForm({ departmentData }) {
         department: departmentData._id,
         employee: row._id,
       });
-      socket.emit('updated', {
-        user,
-        link: paths.superadmin.unitservices.departments.employees.root(id, departmentData._id),
-        msg: `employed an employee <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
-      });
       enqueueSnackbar(t('employment successfully!'));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

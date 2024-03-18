@@ -15,11 +15,10 @@ export default function EmployeeAccountingPage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetEmployee(id);
-  const name = data?.name_english;
   return (
     <ACLGuard category="unit_service" subcategory="accounting" acl="read">
       <Helmet>
-        <title> {name || ''} Employee Accounting</title>
+        <title> {data.name_english} : Accounting</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

@@ -8,8 +8,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import ListItemText from '@mui/material/ListItemText';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import socket from 'src/socket';
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import FormProvider from 'src/components/hook-form';
@@ -53,7 +52,7 @@ export default function AccountNotifications() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
 
   const methods = useForm({
     mode: 'onTouched',
@@ -76,7 +75,7 @@ export default function AccountNotifications() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       enqueueSnackbar(t('updated successfully!'));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

@@ -176,14 +176,14 @@ export default function ServicesTableView() {
           msg: `activated a service <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user,curLangAr, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, curLangAr, enqueueSnackbar]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -198,14 +198,14 @@ export default function ServicesTableView() {
           msg: `inactivated a service <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user,curLangAr, enqueueSnackbar]
+    [dataInPage.length, table, refetch, user, curLangAr, enqueueSnackbar]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -220,7 +220,7 @@ export default function ServicesTableView() {
         msg: `activated many services`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -238,7 +238,7 @@ export default function ServicesTableView() {
     refetch,
     user,
     enqueueSnackbar,
-    curLangAr
+    curLangAr,
   ]);
 
   const handleInactivateRows = useCallback(async () => {
@@ -253,7 +253,7 @@ export default function ServicesTableView() {
         msg: `inactivated many services`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -271,7 +271,7 @@ export default function ServicesTableView() {
     refetch,
     user,
     enqueueSnackbar,
-    curLangAr
+    curLangAr,
   ]);
 
   const handleEditRow = useCallback(

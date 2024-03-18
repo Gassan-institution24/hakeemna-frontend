@@ -7,16 +7,14 @@ import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Grid, Card, Container, Typography, CardHeader } from '@mui/material';
 
-import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
 import { useGetWorkGroup } from 'src/api';
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -40,7 +38,7 @@ export default function TableNewEditForm() {
 
   const { data } = useGetWorkGroup(wgid);
 
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
 
   const mdUp = useResponsive('up', 'md');
 
@@ -96,15 +94,10 @@ export default function TableNewEditForm() {
   const onSubmit = handleSubmit(async (submitData) => {
     try {
       axios.patch(endpoints.work_groups.employee.acl(emid), { acl: submitData });
-      socket.emit('updated', {
-        user,
-        link: paths.unitservice.employees.acl(emid),
-        msg: `updated a department employee permissions`,
-      });
       enqueueSnackbar(t('updated successfully!'));
       //   router.push(paths.superadmin.subscriptions.root);
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

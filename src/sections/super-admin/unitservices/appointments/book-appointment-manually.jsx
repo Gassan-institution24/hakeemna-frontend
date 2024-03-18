@@ -15,12 +15,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
-import { paths } from 'src/routes/paths';
-
 import axios, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
@@ -31,7 +28,7 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 
 export default function BookAppointmentManually({ refetch, appointment, onClose, ...other }) {
   const { enqueueSnackbar } = useSnackbar();
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -100,17 +97,12 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
           data
         );
       }
-      socket.emit('updated', {
-        user,
-        link: paths.unitservice.appointments.root,
-        msg: `booked an appointment <strong>[ ${appointment.code} ]</strong>`,
-      });
       enqueueSnackbar(t('booked successfully!'));
       refetch();
 
       onClose();
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
