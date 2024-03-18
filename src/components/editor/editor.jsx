@@ -1,9 +1,10 @@
 /* eslint-disable perfectionist/sort-imports */
 import 'src/utils/highlight';
 
-import { alpha } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
+
+import { alpha } from '@mui/material/styles';
 
 import { StyledEditor } from './styles';
 import Toolbar, { formats } from './toolbar';

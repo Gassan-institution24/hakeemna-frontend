@@ -16,7 +16,7 @@ export default function DepartmentEmployeeNewPage() {
   return (
     <ACLGuard category="department" subcategory="employees" acl="create">
       <Helmet>
-        <title> Add Employee </title>
+        <title>{data.name_english} : Add Employee </title>
         <meta name="description" content="meta" />
       </Helmet>
 

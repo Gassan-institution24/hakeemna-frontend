@@ -91,14 +91,6 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           department: departmentData._id,
           ...data,
         });
-        socket.emit('updated', {
-          data,
-          user,
-          link: paths.superadmin.unitservices.departments.rooms.root(id, departmentData._id),
-          msg: `updated room <strong>${data.name_english || ''}</strong> in <strong>${
-            departmentData.name_english
-          }</strong> department`,
-        });
       } else {
         await axiosInstance.post(endpoints.rooms.all, {
           department: departmentData._id,
@@ -120,7 +112,7 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
       router.push(paths.superadmin.unitservices.departments.rooms.root(id, departmentData._id));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

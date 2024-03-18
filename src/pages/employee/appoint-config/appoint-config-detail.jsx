@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useParams } from 'src/routes/hooks';
 
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAuthContext } from 'src/auth/hooks';
 import { useGetAppointmentConfig } from 'src/api';
 
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -15,11 +16,12 @@ export default function EmployeeAppointconfigPage() {
   const params = useParams();
   const { coid } = params;
   const { data, loading, refetch } = useGetAppointmentConfig(coid);
+  const { user } = useAuthContext();
 
   return (
     <ACLGuard category="work_group" subcategory="appointment_configs" acl="update">
       <Helmet>
-        <title> Appointment Config Detail </title>
+        <title> {user?.employee?.name_english} : Appointment Config Detail </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

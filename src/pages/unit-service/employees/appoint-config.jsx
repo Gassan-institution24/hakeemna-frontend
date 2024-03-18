@@ -16,14 +16,12 @@ export default function EmployeeAppointconfigPage() {
   const { id } = params;
   const employeeData = useGetEmployeeEngagement(id).data;
   const { appointmentConfigData, loading, refetch } = useGetEmployeeAppointmentConfigs(id);
-  // console.log('employeeData', employeeData);
-  // console.log('appointmentConfigData', appointmentConfigData);
   const name = employeeData?.name_english;
 
   return (
     <ACLGuard category="unit_service" subcategory="appointment_configs" acl="read">
       <Helmet>
-        <title> {name || ''} Employee Appointment Config</title>
+        <title> {name} : Appointment Config</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

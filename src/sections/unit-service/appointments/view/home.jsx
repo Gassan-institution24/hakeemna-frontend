@@ -209,7 +209,7 @@ export default function AppointmentsView({ employeeData }) {
           msg: `canceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -232,7 +232,7 @@ export default function AppointmentsView({ employeeData }) {
           msg: `delayed an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -254,7 +254,7 @@ export default function AppointmentsView({ employeeData }) {
           msg: `uncanceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -277,7 +277,7 @@ export default function AppointmentsView({ employeeData }) {
           msg: `canceled many appointments`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -314,7 +314,7 @@ export default function AppointmentsView({ employeeData }) {
         msg: `delayed many appointments`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -351,7 +351,7 @@ export default function AppointmentsView({ employeeData }) {
           msg: `uncanceled many appointments`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }

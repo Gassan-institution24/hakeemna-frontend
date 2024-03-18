@@ -15,11 +15,10 @@ export default function DepartmentPermissionsPage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetDepartment(id);
-  const name = data?.name_english;
   return (
     <ACLGuard category="department" subcategory="permissions" acl="update">
       <Helmet>
-        <title>{name || ''} Department permissions</title>
+        <title>{data.name_english} : Department permissions</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

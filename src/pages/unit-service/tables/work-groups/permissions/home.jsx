@@ -4,6 +4,7 @@ import { useParams } from 'src/routes/hooks';
 
 import { useGetWorkGroup } from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAuthContext } from 'src/auth/hooks';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -16,10 +17,18 @@ export default function WorkGroupPermissionsPage() {
   const { wgid } = params;
   const { data, loading } = useGetWorkGroup(wgid);
   const name = data?.name_english;
+
+  const { user } = useAuthContext();
+  const serviceUnitName =
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+      ?.name_english;
+
   return (
     <ACLGuard category="unit_service" subcategory="permissions" acl="update">
       <Helmet>
-        <title>{name || 'Work group'} permissions</title>
+        <title>
+          {serviceUnitName} : {name} permissions
+        </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

@@ -4,6 +4,7 @@ import { useParams } from 'src/routes/hooks';
 
 import { useGetRoom } from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAuthContext } from 'src/auth/hooks';
 
 import RoomEditView from 'src/sections/unit-service/tables/rooms/view/edit';
 
@@ -13,11 +14,16 @@ export default function RoomEditPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetRoom(id);
-  const name = data?.name_english;
+
+  const { user } = useAuthContext();
+  const serviceUnitName =
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+      ?.name_english;
+
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
       <Helmet>
-        <title>Edit {name || ''} Room</title>
+        <title>{serviceUnitName} : Edit Room</title>
         <meta name="description" content="meta" />
       </Helmet>
 

@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -108,6 +108,25 @@ export default function CountriesNewEditForm({ currentSelected }) {
       console.error(error);
     }
   });
+
+  /* eslint-disable */
+  useEffect(() => {
+    reset({
+      country: currentSelected?.country?._id || '',
+      trade_name: currentSelected?.trade_name || '',
+      concentrations: currentSelected?.concentrations || [],
+      agent: currentSelected?.agent || '',
+      price_1: currentSelected?.price_1 || '',
+      price_2: currentSelected?.price_2 || '',
+      ATCCODE: currentSelected?.ATCCODE || '',
+      packaging: currentSelected?.packaging || '',
+      scientific_name: currentSelected?.scientific_name || '',
+      barcode: currentSelected?.barcode || '',
+      side_effects: currentSelected?.side_effects?.map((disease, idx) => disease._id) || [],
+      family: currentSelected?.family?._id || '',
+    });
+  }, [currentSelected]);
+  /* eslint-enable */
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
