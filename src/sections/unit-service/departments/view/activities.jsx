@@ -170,7 +170,7 @@ export default function ActivitesTableView({ departmentData }) {
           msg: `activated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -192,7 +192,7 @@ export default function ActivitesTableView({ departmentData }) {
           msg: `inactivated activity <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -214,7 +214,7 @@ export default function ActivitesTableView({ departmentData }) {
         msg: `activated many activities in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -248,7 +248,7 @@ export default function ActivitesTableView({ departmentData }) {
         msg: `inactivated many activities in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

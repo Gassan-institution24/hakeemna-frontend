@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -107,6 +107,20 @@ export default function TableNewEditForm({ currentTable }) {
       console.error(error);
     }
   });
+
+  /* eslint-disable */
+  useEffect(() => {
+    reset({
+      name_arabic: currentTable?.name_arabic || '',
+      name_english: currentTable?.name_english || '',
+      unit_service:
+        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
+      work_shift: currentTable?.work_shift?._id || null,
+      Measurement_type: currentTable?.Measurement_type?._id || null,
+      Price_per_unit: currentTable?.Price_per_unit || '',
+    });
+  }, [currentTable]);
+  /* eslint-enable */
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

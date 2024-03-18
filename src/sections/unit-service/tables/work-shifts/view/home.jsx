@@ -169,7 +169,7 @@ export default function WorkGroupsTableView() {
           msg: `activated a work shift <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -191,7 +191,7 @@ export default function WorkGroupsTableView() {
           msg: `inactivated a work shift <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -213,7 +213,7 @@ export default function WorkGroupsTableView() {
         msg: `activated many work shifts`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -246,7 +246,7 @@ export default function WorkGroupsTableView() {
         msg: `inactivated many work shifts`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

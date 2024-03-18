@@ -19,7 +19,7 @@ export default function DepartmentActivitiesPage() {
   return (
     <ACLGuard category="department" subcategory="management_tables" acl="read">
       <Helmet>
-        <title>{name || ''} Department Activities</title>
+        <title>{name} : Department Activities</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

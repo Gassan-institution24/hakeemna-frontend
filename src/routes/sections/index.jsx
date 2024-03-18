@@ -11,7 +11,7 @@ import { dashboardRoutes } from './super-admin-dashboard';
 import { unitServiceDashboardRoutes } from './unit-service-dashboard';
 import { unitServiceEmployeeDashboardRoutes } from './employee-dashboard';
 
-const Page404 = lazy(() => import('src/pages/404'));
+const Page404 = lazy(() => import('src/pages/errors/404'));
 
 // ----------------------------------------------------------------------
 

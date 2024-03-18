@@ -20,9 +20,9 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetMyNotifications } from 'src/api';
-import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';

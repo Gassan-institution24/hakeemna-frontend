@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[8172],{88172:(e,s,a)=>{a.r(s),a.d(s,{default:()=>r});var i=a(6907),n=a(85362),t=a(80184);function r(){return(0,t.jsxs)(t.Fragment,{children:[(0,t.jsxs)(i.ql,{children:[(0,t.jsx)("title",{children:" Dashboard: Service Types Table"}),(0,t.jsx)("meta",{name:"description",content:"meta"})]}),(0,t.jsx)(n.U$,{})]})}}}]);
+//# sourceMappingURL=8172.5de4f9dc.chunk.js.map

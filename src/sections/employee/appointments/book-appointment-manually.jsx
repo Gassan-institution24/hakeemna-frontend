@@ -105,18 +105,12 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
           msg: `registered an appointment`,
         });
       }
-      socket.emit('updated', {
-        data,
-        user,
-        link: paths.unitservice.employees.root,
-        msg: `Booked an appointment <strong>${appointment.code}</strong>`,
-      });
       enqueueSnackbar(t('created successfully!'));
       refetch();
 
       onClose();
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

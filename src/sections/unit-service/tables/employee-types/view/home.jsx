@@ -170,14 +170,14 @@ export default function EmployeeTypesTable() {
           msg: `activated an employee type <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar,curLangAr]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -192,14 +192,14 @@ export default function EmployeeTypesTable() {
           msg: `inactivated an employee type <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar,curLangAr]
+    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
   );
 
   const handleActivateRows = useCallback(async () => {
@@ -214,7 +214,7 @@ export default function EmployeeTypesTable() {
         msg: `activated many employee types`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -232,7 +232,7 @@ export default function EmployeeTypesTable() {
     refetch,
     user,
     enqueueSnackbar,
-    curLangAr
+    curLangAr,
   ]);
 
   const handleInactivateRows = useCallback(async () => {
@@ -247,7 +247,7 @@ export default function EmployeeTypesTable() {
         msg: `inactivated many employee types`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -265,7 +265,7 @@ export default function EmployeeTypesTable() {
     refetch,
     user,
     enqueueSnackbar,
-    curLangAr
+    curLangAr,
   ]);
 
   const handleEditRow = useCallback(

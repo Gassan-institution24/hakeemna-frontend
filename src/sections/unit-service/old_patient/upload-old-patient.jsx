@@ -90,7 +90,7 @@ export default function UploadOldPatient({ refetch }) {
       enqueueSnackbar(t('uploaded successfully!'));
       // router.push(paths.unitservice.tables.employeetypes.root);
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

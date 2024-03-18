@@ -170,14 +170,14 @@ export default function RoomsTableView({ departmentData }) {
           msg: `activated room <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, departmentData, enqueueSnackbar,curLangAr]
+    [dataInPage.length, table, refetch, user, departmentData, enqueueSnackbar, curLangAr]
   );
   const handleInactivate = useCallback(
     async (row) => {
@@ -192,7 +192,7 @@ export default function RoomsTableView({ departmentData }) {
           msg: `inactivated room <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -214,7 +214,7 @@ export default function RoomsTableView({ departmentData }) {
         msg: `activated many rooms in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -248,7 +248,7 @@ export default function RoomsTableView({ departmentData }) {
         msg: `inactivated many rooms in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

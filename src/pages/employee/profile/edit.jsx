@@ -1,15 +1,18 @@
 import { Helmet } from 'react-helmet-async';
 
+import { useAuthContext } from 'src/auth/hooks';
+
 import EmployeeEditProfileView from 'src/sections/employee/profile/view/edit';
 
 // ----------------------------------------------------------------------
 
 export default function EditPage() {
+  const { user } = useAuthContext();
   return (
     // <ACLGuard category="employee" subcategory="info" acl="update">
     <>
       <Helmet>
-        <title>Edit Profile</title>
+        <title> {user?.employee?.name_english} : Edit Profile</title>
         <meta name="description" content="meta" />
       </Helmet>
 

@@ -174,7 +174,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       confirm.onFalse();
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       setErrorMsg(typeof error === 'string' ? error : error.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       saving.onFalse();
@@ -205,7 +205,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     } catch (error) {
       setErrorMsg(typeof error === 'string' ? error : error.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       updating.onFalse();
       confirm.onFalse();
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
@@ -260,7 +260,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     } catch (error) {
       setErrorMsg(typeof error === 'string' ? error : error.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       updating.onFalse();
       loadingSend.onFalse();
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });

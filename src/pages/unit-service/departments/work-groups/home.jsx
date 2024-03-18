@@ -15,11 +15,10 @@ export default function DepartmentWorkGroupsPage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetDepartment(id);
-  const name = data?.name_english;
   return (
     <ACLGuard category="department" subcategory="management_tables" acl="read">
       <Helmet>
-        <title>{name || ''} Department Work Groups</title>
+        <title>{data.name_english} : Work Groups</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
