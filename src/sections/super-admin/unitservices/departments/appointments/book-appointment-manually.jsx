@@ -15,13 +15,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
-import { paths } from 'src/routes/paths';
-import { useParams } from 'src/routes/hooks';
+// import { useParams } from 'src/routes/hooks';
 
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
@@ -32,8 +31,8 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 
 export default function BookAppointmentManually({ refetch, appointment, onClose, ...other }) {
   const { enqueueSnackbar } = useSnackbar();
-  const { user } = useAuthContext();
-  const { id } = useParams();
+  // const { user } = useAuthContext();
+  // const { id } = useParams();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -95,27 +94,11 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
         await axios.patch(endpoints.appointments.book(appointment._id), {
           patient: data._id,
         });
-        socket.emit('updated', {
-          user,
-          link: paths.superadmin.unitservices.departments.appointments(
-            id,
-            appointment.department._id
-          ),
-          msg: `booked an appointment ${appointment.code} in department <strong>${appointment.department.name_english}</strong>`,
-        });
       } else {
         await axios.patch(
           endpoints.appointments.patient.createPatientAndBookAppoint(appointment._id),
           data
         );
-        socket.emit('updated', {
-          user,
-          link: paths.superadmin.unitservices.departments.appointments(
-            id,
-            appointment.department._id
-          ),
-          msg: `booked an appointment ${appointment.code} in department <strong>${appointment.department.name_english}</strong>`,
-        });
         socket.emit('register', data);
       }
       enqueueSnackbar(t('created successfully!'));

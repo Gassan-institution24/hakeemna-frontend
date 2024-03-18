@@ -152,11 +152,7 @@ export default function TableNewEditForm({ currentTable }) {
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
     } catch (error) {
       console.error(error);
-      socket.emit('error', {
-        error: typeof error === 'string' ? error : error.message,
-        user,
-        location: window.location.pathname,
-      });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }

@@ -8,6 +8,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 
 import { fToNow } from 'src/utils/format-time';
+
 import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------

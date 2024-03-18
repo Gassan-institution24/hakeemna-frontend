@@ -16,11 +16,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 
-import { paths } from 'src/routes/paths';
-
 import axios, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
@@ -80,17 +77,12 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const appoint = await axios.post(endpoints.appointments.all, {
+      await axios.post(endpoints.appointments.all, {
         ...data,
         emergency: true,
         unit_service: id,
         department: workGroupsData.filter((item) => item._id === data.work_group)?.[0]?.department
           ._id,
-      });
-      socket.emit('updated', {
-        user,
-        link: paths.unitservice.appointments.root,
-        msg: `created an emergency appointment <strong>[ ${appoint?.data?.code} ]</strong>`,
       });
       reset();
       enqueueSnackbar(t('created successfully!'));
@@ -98,7 +90,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
       onClose();
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

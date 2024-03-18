@@ -15,11 +15,10 @@ export default function DepartmentAppointmentConfigPage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetDepartment(id);
-  const name = data?.name_english;
   return (
     <ACLGuard category="department" subcategory="appointment_configs" acl="read">
       <Helmet>
-        <title>{name || ''} Department Appointment Configuration</title>
+        <title>{data.name_english} : Appointment Configuration</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

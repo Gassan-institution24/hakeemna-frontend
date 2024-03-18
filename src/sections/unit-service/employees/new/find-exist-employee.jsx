@@ -106,7 +106,7 @@ export default function TableNewEditForm() {
       });
       enqueueSnackbar(t('employment successfully!'));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

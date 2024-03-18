@@ -20,7 +20,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fTimestamp } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
@@ -155,22 +154,16 @@ export default function AppointConfigView() {
       try {
         await axiosInstance.delete(endpoints.appointment_configs.one(row._id));
         refetch();
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.employees.appointmentconfig.root(
-            user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
-          ),
-          msg: `deleted an appointment configuration <strong>[ ${row.code} ]</strong>`,
-        });
+
         refetch();
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
+    [dataInPage.length, table, refetch,  enqueueSnackbar, curLangAr]
   );
 
   const handleUnCancelRow = useCallback(
@@ -178,22 +171,14 @@ export default function AppointConfigView() {
       try {
         await axiosInstance.patch(`${endpoints.appointment_configs.one(row._id)}/uncancel`);
         refetch();
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.employees.appointmentconfig.root(
-            user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
-          ),
-          msg: `uncanceled an appointment configuration <strong>[ ${row.code} ]</strong>`,
-        });
-        refetch();
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
+    [dataInPage.length, table, refetch,  enqueueSnackbar, curLangAr]
   );
 
   const handleCancelRows = useCallback(async () => {
@@ -202,16 +187,8 @@ export default function AppointConfigView() {
         ids: table.selected,
       });
       refetch();
-      socket.emit('updated', {
-        user,
-        link: paths.unitservice.employees.appointmentconfig.root(
-          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
-        ),
-        msg: `canceled many appointment configurations`,
-      });
-      refetch();
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -226,7 +203,6 @@ export default function AppointConfigView() {
     dataInPage.length,
     appointmentConfigData.length,
     table,
-    user,
     curLangAr,
     enqueueSnackbar,
   ]);
@@ -237,16 +213,8 @@ export default function AppointConfigView() {
         ids: table.selected,
       });
       refetch();
-      socket.emit('updated', {
-        user,
-        link: paths.unitservice.employees.appointmentconfig.root(
-          user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
-        ),
-        msg: `uncanceled many appointment configurations`,
-      });
-      refetch();
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -261,7 +229,6 @@ export default function AppointConfigView() {
     dataInPage.length,
     appointmentConfigData.length,
     table,
-    user,
     curLangAr,
     enqueueSnackbar,
   ]);

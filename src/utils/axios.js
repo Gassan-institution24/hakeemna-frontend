@@ -199,6 +199,7 @@ export const endpoints = {
   unit_service_types: {
     all: '/api/ustypes',
     active: '/api/ustypes/active',
+    one: (id) => `/api/ustypes/${id}`,
   },
   unit_services: {
     all: '/api/unitservice',

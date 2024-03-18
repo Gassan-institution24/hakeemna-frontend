@@ -212,7 +212,7 @@ export default function AppointmentsView({ employeeData }) {
           msg: `canceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -220,7 +220,7 @@ export default function AppointmentsView({ employeeData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, t, user,curLangAr]
+    [dataInPage.length, table, refetch, enqueueSnackbar, t, user, curLangAr]
   );
 
   const handleDelayRow = useCallback(
@@ -235,7 +235,7 @@ export default function AppointmentsView({ employeeData }) {
           msg: `delayed an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -244,7 +244,7 @@ export default function AppointmentsView({ employeeData }) {
       setMinToDelay(0);
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, t, user,curLangAr]
+    [dataInPage.length, table, refetch, enqueueSnackbar, t, user, curLangAr]
   );
 
   const handleUnCancelRow = useCallback(
@@ -257,7 +257,7 @@ export default function AppointmentsView({ employeeData }) {
           msg: `uncanceled an appointment <strong>[ ${row.code} ]</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -265,7 +265,7 @@ export default function AppointmentsView({ employeeData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, t, user,curLangAr]
+    [dataInPage.length, table, refetch, enqueueSnackbar, t, user, curLangAr]
   );
 
   const handleCancelRows = useCallback(async () => {
@@ -277,7 +277,7 @@ export default function AppointmentsView({ employeeData }) {
         msg: `canceled many appointments`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -297,7 +297,7 @@ export default function AppointmentsView({ employeeData }) {
     enqueueSnackbar,
     user,
     t,
-    curLangAr
+    curLangAr,
   ]);
 
   const handleDelayRows = useCallback(async () => {
@@ -313,7 +313,7 @@ export default function AppointmentsView({ employeeData }) {
       });
       enqueueSnackbar(t('delayed successfully!'));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -334,7 +334,7 @@ export default function AppointmentsView({ employeeData }) {
     enqueueSnackbar,
     user,
     t,
-    curLangAr
+    curLangAr,
   ]);
 
   const handleUnCancelRows = useCallback(async () => {
@@ -349,7 +349,7 @@ export default function AppointmentsView({ employeeData }) {
         msg: `uncanceled many appointments`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -368,7 +368,7 @@ export default function AppointmentsView({ employeeData }) {
     user,
     enqueueSnackbar,
     t,
-    curLangAr
+    curLangAr,
   ]);
 
   const handleViewRow = useCallback(

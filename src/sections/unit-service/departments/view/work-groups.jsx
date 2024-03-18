@@ -171,7 +171,7 @@ export default function WorkGroupsTableView({ departmentData }) {
           }</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -195,7 +195,7 @@ export default function WorkGroupsTableView({ departmentData }) {
           }</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -217,7 +217,7 @@ export default function WorkGroupsTableView({ departmentData }) {
         msg: `activated many work group in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -251,7 +251,7 @@ export default function WorkGroupsTableView({ departmentData }) {
         msg: `inactivated many work group in department <strong>${departmentData.name_english}</strong>`,
       });
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }

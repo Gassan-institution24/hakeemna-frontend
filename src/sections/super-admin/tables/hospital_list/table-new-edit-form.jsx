@@ -108,6 +108,18 @@ export default function TableNewEditForm({ currentTable }) {
       console.error(error);
     }
   });
+
+  /* eslint-disable */
+  useEffect(() => {
+    reset({
+      name_arabic: currentTable?.name_arabic || '',
+      name_english: currentTable?.name_english || '',
+      country: currentTable?.country?._id || null,
+      city: currentTable?.city?._id || null,
+    });
+  }, [currentTable]);
+  /* eslint-enable */
+
   useEffect(() => {
     setCities(
       selectedCountry

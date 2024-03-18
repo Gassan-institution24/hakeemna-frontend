@@ -15,11 +15,10 @@ export default function DepartmentEditPage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetDepartment(id);
-  const name = data?.name_english;
   return (
     <ACLGuard category="unit_service" subcategory="departments" acl="update">
       <Helmet>
-        <title> Edit {name || ''} Department </title>
+        <title>{data.name_english} : Edit Department </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

@@ -25,7 +25,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
@@ -211,13 +210,8 @@ export default function AppointmentsView({ employeeData }) {
     async (row) => {
       try {
         await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/cancel`);
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.appointments.root,
-          msg: `canceled an appointment <strong>[ ${row.code} ]</strong>`,
-        });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -225,7 +219,7 @@ export default function AppointmentsView({ employeeData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, enqueueSnackbar, t, user, curLangAr]
+    [dataInPage.length, table, refetch, enqueueSnackbar, t, curLangAr]
   );
 
   const handleDelayRow = useCallback(
@@ -234,13 +228,8 @@ export default function AppointmentsView({ employeeData }) {
         await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/delay`, {
           minutes: min,
         });
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.appointments.root,
-          msg: `delayed an appointment <strong>[ ${row.code} ]</strong>`,
-        });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -249,20 +238,15 @@ export default function AppointmentsView({ employeeData }) {
       setMinToDelay(0);
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, t, refetch, enqueueSnackbar, user, curLangAr]
+    [dataInPage.length, table, t, refetch, enqueueSnackbar, curLangAr]
   );
 
   const handleUnCancelRow = useCallback(
     async (row) => {
       try {
         await axiosInstance.patch(`${endpoints.appointments.one(row._id)}/uncancel`);
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.appointments.root,
-          msg: `uncanceled an appointment <strong>[ ${row.code} ]</strong>`,
-        });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -270,7 +254,7 @@ export default function AppointmentsView({ employeeData }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, t, refetch, enqueueSnackbar, user, curLangAr]
+    [dataInPage.length, table, t, refetch, enqueueSnackbar, curLangAr]
   );
 
   const handleCancelRows = useCallback(
@@ -279,13 +263,8 @@ export default function AppointmentsView({ employeeData }) {
         await axiosInstance.patch(`${endpoints.appointments.all}/cancel`, {
           ids: table.selected,
         });
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.appointments.root,
-          msg: `canceled many appointments`,
-        });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -306,7 +285,7 @@ export default function AppointmentsView({ employeeData }) {
       t,
       curLangAr,
       enqueueSnackbar,
-      user,
+      
     ]
   );
 
@@ -316,14 +295,9 @@ export default function AppointmentsView({ employeeData }) {
         ids: table.selected,
         minutes: minToDelay,
       });
-      socket.emit('updated', {
-        user,
-        link: paths.unitservice.appointments.root,
-        msg: `dealayed many appointments`,
-      });
       enqueueSnackbar(t('delayed successfully!'));
     } catch (error) {
-      socket.emit('error', { error, user, location: window.location.pathname });
+      // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
       console.error(error);
     }
@@ -344,7 +318,7 @@ export default function AppointmentsView({ employeeData }) {
     curLangAr,
     minToDelay,
     enqueueSnackbar,
-    user,
+  
   ]);
 
   const handleUnCancelRows = useCallback(
@@ -354,13 +328,8 @@ export default function AppointmentsView({ employeeData }) {
           ids: table.selected,
         });
         enqueueSnackbar(t('uncanceled successfully!'));
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.appointments.root,
-          msg: `uncanceled many appointments`,
-        });
       } catch (error) {
-        socket.emit('error', { error, user, location: window.location.pathname });
+        // error emitted in backend
         enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
         console.error(error);
       }
@@ -377,7 +346,6 @@ export default function AppointmentsView({ employeeData }) {
       dataInPage.length,
       appointmentsLength,
       table,
-      user,
       t,
       curLangAr,
       enqueueSnackbar,
