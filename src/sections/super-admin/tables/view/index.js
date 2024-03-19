@@ -6,6 +6,7 @@ export { default as ActivitiesTableView } from './activities-table-view';
 export { default as WorkShiftsTableView } from './work-shifts-table-view';
 export { default as ServiceTypesTableView } from './service-types-table-view';
 export { default as EmployeeTypesTableView } from './EmployeeTypes-table-view';
+export { default as InsuranceTypesTableView } from './Insurance-types-table-view';
 export { default as PaymentMethodsTableView } from './payment-methods-table-view';
 export { default as DeductionConfigTableView } from './deduction-config-table-view';
 export { default as MeasurmentTypesTableView } from './measurement-types-table-view';

@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useMemo, useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -22,7 +22,7 @@ import axios, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetCountries, useGetCountryCities } from 'src/api';
+import { useFindPatient, useGetCountries, useGetCountryCities } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -36,13 +36,6 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  const [email, setEmail] = useState();
-  const [identification_num, setID] = useState();
-  const [mobile_num1, setPhoneNumber] = useState();
-  // const [cities, setCities] = useState([]);
-  // const [selectedCountry, setSelectedCountry] = useState('');
-  const [existPatients, setExistPatients] = useState([]);
 
   const { countriesData } = useGetCountries();
 
@@ -86,7 +79,9 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
   });
   const { reset, setValue, watch, handleSubmit } = methods;
 
-  const { tableData } = useGetCountryCities(watch().country);
+  const values = watch();
+
+  const { tableData } = useGetCountryCities(values.country);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -116,50 +111,11 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
     }
   });
 
-  // const handleCountryChange = (event) => {
-  //   const selectedCountryId = event.target.value;
-  //   methods.setValue('country', selectedCountryId, { shouldValidate: true });
-  //   setSelectedCountry(selectedCountryId);
-  //   // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
-  // };
-
-  // useEffect(() => {
-  //   setCities(
-  //     selectedCountry
-  //       ? tableData.filter((data) => data?.country?._id === selectedCountry)
-  //       : tableData
-  //   );
-  // }, [tableData, selectedCountry]);
-
-  useEffect(() => {
-    console.log('inside useEffect');
-    async function getExistPatients() {
-      const results = [];
-      if (email) {
-        const { data } = await axios.post(endpoints.patients.find, { email });
-        console.log('dataaaa', data);
-        if (data && data.length) {
-          results.push(...data);
-        }
-      }
-      if (identification_num) {
-        const { data } = await axios.post(endpoints.patients.find, { identification_num });
-        console.log('dataaaa', data);
-        if (data && data.length) {
-          results.push(...data);
-        }
-      }
-      if (mobile_num1) {
-        const { data } = await axios.post(endpoints.patients.find, { mobile_num1 });
-        console.log('dataaaa', data);
-        if (data && data.length) {
-          results.push(...data);
-        }
-      }
-      setExistPatients(results);
-    }
-    getExistPatients();
-  }, [identification_num, mobile_num1, email]);
+  const { existPatients } = useFindPatient({
+    email: values.email,
+    identification_num: values.identification_num,
+    mobile_num1: values.mobile_num1,
+  });
 
   function handleFillData(info) {
     reset({
@@ -184,14 +140,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
         <FormProvider methods={methods} onSubmit={onSubmit}>
           <DialogTitle sx={{ mb: 1 }}> {t('book manually')} </DialogTitle>
           {existPatients?.map((patient, index, idx) => (
-            <Alert
-              key={idx}
-              severity="info"
-              onClose={() => {
-                setExistPatients(existPatients.filter((info) => info !== patient));
-              }}
-              sx={{ width: 1, marginBottom: 2 }}
-            >
+            <Alert key={idx} severity="info" sx={{ width: 1, marginBottom: 2 }}>
               {t('We found a record with similar information for ')}{' '}
               <strong>
                 {patient.first_name} {patient.family_name}
@@ -210,7 +159,6 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                 }}
                 onClick={() => {
                   handleFillData(patient);
-                  setExistPatients([]);
                 }}
               >
                 {t('Click here to fill your data')}
@@ -232,31 +180,11 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
               >
                 <RHFTextField lang="ar" name="first_name" label={t('first name')} />
                 <RHFTextField lang="ar" name="family_name" label={t('family name')} />
-                <RHFTextField
-                  lang="ar"
-                  onChange={(e) => {
-                    setValue('email', e.target.value);
-                    setEmail(e.target.value);
-                  }}
-                  name="email"
-                  label={t('email')}
-                />
-                <RHFTextField
-                  lang="ar"
-                  onChange={(e) => {
-                    setValue('identification_num', e.target.value);
-                    setID(e.target.value);
-                  }}
-                  name="identification_num"
-                  label={t('ID number')}
-                />
+                <RHFTextField lang="ar" name="email" label={t('email')} />
+                <RHFTextField lang="ar" name="identification_num" label={t('ID number')} />
                 <RHFTextField
                   lang="ar"
                   type="number"
-                  onChange={(e) => {
-                    setValue('mobile_num1', e.target.value);
-                    setPhoneNumber(e.target.value);
-                  }}
                   name="mobile_num1"
                   label={t('mobile number')}
                 />

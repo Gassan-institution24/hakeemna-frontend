@@ -24,14 +24,14 @@ export function useNavData() {
 
   const handleLogout = useCallback(async () => {
     try {
-      await logout();
       popover.onClose();
-      // router, router.replace('/');
+      logout();
+      router.replace('/login');
     } catch (error) {
       console.error(error);
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
     }
-  }, [logout, popover, enqueueSnackbar]);
+  }, [logout, popover, enqueueSnackbar, router]);
 
   const data = useMemo(() => {
     const superAdminItems = [

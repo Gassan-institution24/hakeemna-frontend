@@ -9,7 +9,6 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -29,12 +28,13 @@ export default function TableDetailsRow({
     code,
     name_english,
     name_arabic,
-    country,
-    city,
-    type,
-    webpage,
-    phone,
-    address,
+    Coverage_name,
+    // country,
+    // city,
+    // type,
+    // webpage,
+    // phone,
+    // address,
     status,
     created_at,
     user_creation,
@@ -60,8 +60,9 @@ export default function TableDetailsRow({
 
       <TableCell align="center">{name_english}</TableCell>
       <TableCell align="center">{name_arabic}</TableCell>
+      <TableCell align="center">{Coverage_name}</TableCell>
 
-      <TableCell
+      {/* <TableCell
         align="center"
         sx={{
           cursor: 'pointer',
@@ -106,7 +107,7 @@ export default function TableDetailsRow({
         >
           {status}
         </Label>
-      </TableCell>
+      </TableCell> */}
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         {/* <IconButton

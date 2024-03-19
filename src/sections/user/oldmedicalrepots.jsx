@@ -533,7 +533,7 @@ export default function OldMedicalReports() {
                 sx={{ color: 'red' }}
               >
                 <Iconify icon="material-symbols:delete-outline" />
-                {t('Delete')}
+                {t('inactivate')}
               </MenuItem>
             </CustomPopover>
           </Box>

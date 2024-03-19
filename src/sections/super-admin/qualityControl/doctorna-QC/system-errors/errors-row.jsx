@@ -19,6 +19,8 @@ export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRe
     code,
     status,
     error_code,
+    URL,
+    method,
     error_msg,
     location,
     created_at,
@@ -35,10 +37,12 @@ export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRe
 
   const renderPrimary = (
     <TableRow hover>
-      <TableCell align="center">{code}</TableCell>
+      {/* <TableCell align="center">{code}</TableCell> */}
       <TableCell align="center">{error_code}</TableCell>
-      <TableCell align="center">
-        {error_msg} {location ? 'in' : ''} {location}
+      <TableCell align="center">{method}</TableCell>
+      <TableCell align="center">{URL.length > 30 ? `${URL.slice(4, 30)}..` : URL}</TableCell>
+      <TableCell align="center" sx={{ wordWrap: 'break-word' }}>
+        {error_msg}
       </TableCell>
       <TableCell align="center">
         <Label

@@ -4,11 +4,11 @@ import { useParams } from 'src/routes/hooks';
 
 import { useGetDepartment } from 'src/api';
 import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAuthContext } from 'src/auth/hooks';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
 import DepartmentEditView from 'src/sections/unit-service/departments/view/edit';
-import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 

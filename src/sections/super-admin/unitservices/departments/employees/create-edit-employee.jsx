@@ -24,7 +24,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetCountries, useGetSpecialties, useGetUSActiveEmployeeTypes } from 'src/api';
+import { useGetCountries, useGetSpecialties, useGetActiveEmployeeTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -44,9 +44,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
   const { user } = useAuthContext();
 
   const { countriesData } = useGetCountries();
-  const { employeeTypesData } = useGetUSActiveEmployeeTypes(
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
-  );
+  const { employeeTypesData } = useGetActiveEmployeeTypes();
   const { specialtiesData } = useGetSpecialties();
 
   const [phone, setPhone] = useState();

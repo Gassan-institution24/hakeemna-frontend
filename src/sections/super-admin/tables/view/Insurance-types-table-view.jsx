@@ -21,11 +21,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useGetUSEmployeeTypes } from 'src/api';
-import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
-import { StatusOptions } from 'src/assets/data/status-options';
+import { useGetInsuranceTypes } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -44,45 +40,51 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { useSnackbar } from 'notistack';
-
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
-
-import TableDetailRow from '../table-details-row'; /// edit
+import TableDetailRow from '../insurance_types/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
+const STATUS_OPTIONS = [
+  // { value: 'all', label: 'all' },
+  { value: 'active', label: 'active' },
+  { value: 'inactive', label: 'inactive' },
+];
+
+const TABLE_HEAD = [
+  /// edit
+  { id: 'code', label: 'Code' },
+  { id: 'name_english', label: 'name' },
+  { id: 'name_arabic', label: 'arabic name' },
+  { id: 'Coverage_name', label: 'Coverage name' },
+  // { id: 'country', label: 'Country' },
+  // { id: 'city', label: 'City' },
+  // { id: 'type', label: 'Type' },
+  // { id: 'webpage', label: 'webpage' },
+  // { id: 'phone', label: 'phone' },
+  // { id: 'address', label: 'address' },
+  // { id: 'status', label: 'Status' },
+  // { id: 'created_at', label: 'Date Of Creation' },
+  // { id: 'user_creation', label: 'Creater' },
+  // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
+  // { id: 'updated_at', label: 'Date Of Updating' },
+  // { id: 'user_modification', label: 'Last Modifier' },
+  // { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
+  // { id: 'modifications_nums', label: 'No Of Modifications' },
+  { id: '', width: 88 },
+];
+
 const defaultFilters = {
   name: '',
-  status: 'active',
+  // status: 'active',
 };
 
 // ----------------------------------------------------------------------
 
-export default function EmployeeTypesTable() {
-  const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-  const TABLE_HEAD = [
-    { id: 'code', label: t('code') },
-    { id: 'name', label: t('name') },
-    // { id: 'employees', label: t('Employees') },
-    { id: 'status', label: t('status') },
-    { id: '', width: 88 },
-  ];
-
-  const { enqueueSnackbar } = useSnackbar();
-
-  const checkAcl = useAclGuard();
-
-  const { STATUS_OPTIONS } = StatusOptions();
-
-  const { user } = useAuthContext();
-
+export default function InsuranceTypesTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -94,7 +96,9 @@ export default function EmployeeTypesTable() {
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
-  const { employeeTypesData, loading, refetch } = useGetUSEmployeeTypes();
+  const { insuranseTypesData, loading, refetch } = useGetInsuranceTypes();
+
+  console.log('insuranseTypesData', insuranseTypesData);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -104,7 +108,7 @@ export default function EmployeeTypesTable() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: employeeTypesData,
+    inputData: insuranseTypesData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -114,6 +118,7 @@ export default function EmployeeTypesTable() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
+  // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.status !== 'active';
@@ -141,7 +146,7 @@ export default function EmployeeTypesTable() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'RoomsTable.xlsx'); /// edit
+    saveAs(data, 'insuranceCompaniesTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -156,119 +161,57 @@ export default function EmployeeTypesTable() {
   );
 
   const handleActivate = useCallback(
-    async (row) => {
-      try {
-        await axiosInstance.patch(
-          `${endpoints.employee_types.one(row._id)}/updatestatus`, /// edit
-          { status: 'active' }
-        );
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.tables.employeetypes.root,
-          msg: `activated an employee type <strong>${row.name_english || ''}</strong>`,
-        });
-      } catch (error) {
-        // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
-        console.error(error);
-      }
+    async (id) => {
+      await axiosInstance.patch(
+        `${endpoints.insurance_types.one(id)}/updatestatus`, /// edit
+        { status: 'active' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
+    [dataInPage.length, table, refetch]
   );
   const handleInactivate = useCallback(
-    async (row) => {
-      try {
-        await axiosInstance.patch(
-          `${endpoints.employee_types.one(row._id)}/updatestatus`, /// edit
-          { status: 'inactive' }
-        );
-        socket.emit('updated', {
-          user,
-          link: paths.unitservice.tables.employeetypes.root,
-          msg: `inactivated an employee type <strong>${row.name_english || ''}</strong>`,
-        });
-      } catch (error) {
-        // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
-        console.error(error);
-      }
+    async (id) => {
+      await axiosInstance.patch(
+        `${endpoints.insurance_types.one(id)}/updatestatus`, /// edit
+        { status: 'inactive' }
+      );
       refetch();
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
+    [dataInPage.length, table, refetch]
   );
 
   const handleActivateRows = useCallback(async () => {
-    try {
-      await axiosInstance.patch(
-        `${endpoints.employee_types.all}/updatestatus`, /// edit
-        { status: 'active', ids: table.selected }
-      );
-      socket.emit('updated', {
-        user,
-        link: paths.unitservice.tables.employeetypes.root,
-        msg: `activated many employee types`,
-      });
-    } catch (error) {
-      // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
-      console.error(error);
-    }
+    axiosInstance.patch(
+      `${endpoints.insurance_types.all}/updatestatus`, /// edit
+      { status: 'active', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: employeeTypesData.length,
+      totalRows: insuranseTypesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [
-    dataFiltered.length,
-    dataInPage.length,
-    table,
-    employeeTypesData,
-    refetch,
-    user,
-    enqueueSnackbar,
-    curLangAr,
-  ]);
+  }, [dataFiltered.length, dataInPage.length, table, insuranseTypesData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
-    try {
-      await axiosInstance.patch(
-        `${endpoints.employee_types.all}/updatestatus`, /// edit
-        { status: 'inactive', ids: table.selected }
-      );
-      socket.emit('updated', {
-        user,
-        link: paths.unitservice.tables.employeetypes.root,
-        msg: `inactivated many employee types`,
-      });
-    } catch (error) {
-      // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
-      console.error(error);
-    }
+    axiosInstance.patch(
+      `${endpoints.insurance_types.all}/updatestatus`, /// edit
+      { status: 'inactive', ids: table.selected }
+    );
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: employeeTypesData.length,
+      totalRows: insuranseTypesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [
-    dataFiltered.length,
-    dataInPage.length,
-    table,
-    employeeTypesData,
-    refetch,
-    user,
-    enqueueSnackbar,
-    curLangAr,
-  ]);
+  }, [dataFiltered.length, dataInPage.length, table, insuranseTypesData, refetch]);
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.tables.employeetypes.edit(id));
+      router.push(paths.superadmin.tables.insuranceTypes.edit(id));
     },
     [router]
   );
@@ -290,36 +233,36 @@ export default function EmployeeTypesTable() {
     },
     [handleFilters]
   );
+
   if (loading) {
     return <LoadingScreen />;
   }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading={t('employee types')} /// edit
+          heading="Insurance Types" /// edit
           links={[
             {
-              name: t('dashboard'),
-              href: paths.unitservice.root,
+              name: 'dashboard',
+              href: paths.superadmin.root,
             },
-            { name: t('employee types') },
+            {
+              name: 'Tables',
+              href: paths.superadmin.tables.list,
+            },
+            { name: 'Insurance Types' }, /// edit
           ]}
           action={
-            checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'create',
-            }) && (
-              <Button
-                component={RouterLink}
-                href={paths.unitservice.tables.employeetypes.new}
-                variant="contained"
-                startIcon={<Iconify icon="mingcute:add-line" />}
-              >
-                {t('new employee type')}
-              </Button>
-            )
+            <Button
+              component={RouterLink}
+              href={paths.superadmin.tables.insuranceTypes.new} /// edit
+              variant="contained"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+            >
+              New Insurance type
+            </Button> /// edit
           }
           sx={{
             mb: { xs: 3, md: 5 },
@@ -343,7 +286,6 @@ export default function EmployeeTypesTable() {
                 label={tab.label}
                 icon={
                   <Label
-                    lang="ar"
                     variant={
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
@@ -353,11 +295,11 @@ export default function EmployeeTypesTable() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && employeeTypesData.length}
+                    {tab.value === 'all' && insuranseTypesData.length}
                     {tab.value === 'active' &&
-                      employeeTypesData.filter((order) => order.status === 'active').length}
+                      insuranseTypesData.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      employeeTypesData.filter((order) => order.status === 'inactive').length}
+                      insuranseTypesData.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
@@ -452,17 +394,19 @@ export default function EmployeeTypesTable() {
                       <TableDetailRow
                         key={idx}
                         row={row}
+                        filters={filters}
+                        setFilters={setFilters}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onActivate={() => handleActivate(row)}
-                        onInactivate={() => handleInactivate(row)}
+                        onActivate={() => handleActivate(row._id)}
+                        onInactivate={() => handleInactivate(row._id)}
                         onEditRow={() => handleEditRow(row._id)}
                       />
                     ))}
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, employeeTypesData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, insuranseTypesData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -551,23 +495,21 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     inputData = inputData.filter(
       (data) =>
         (data?.name_english &&
-          data?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.name_arabic &&
           data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.employees &&
-          data?.employees?.some(
-            (employee) =>
-              employee.employee.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1
-          )) ||
-        (data?.employees &&
-          data?.employees?.some(
-            (employee) =>
-              employee.employee.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1
-          )) ||
-        // (data?.employees &&
-        //   data?.employees?.some((employee) =>
-        //     employee.employee.name_arabic.toLowerCase().indexOf(name.toLowerCase())
-        //    !== -1))||
+        (data?.country?.name_english &&
+          data?.country?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.country?.name_arabic &&
+          data?.country?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city?.name_english &&
+          data?.city?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city?.name_arabic &&
+          data?.city?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.type?.name_english &&
+          data?.type?.name_english.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.type?.name_arabic &&
+          data?.type?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

@@ -116,6 +116,7 @@ export const endpoints = {
   },
   employee_types: {
     all: '/api/employeetypes/',
+    active: '/api/employeetypes/active',
     one: (id) => `/api/employeetypes/${id}`,
     unit_service: {
       all: (id) => `/api/employeetypes/unitservice/${id}`,
@@ -125,7 +126,16 @@ export const endpoints = {
   employees: {
     all: '/api/employees/',
     one: (id) => `/api/employees/${id}`,
-    find: '/api/employees/find',
+    find: ({
+      email,
+      identification_num,
+      code,
+      phone,
+      profrssion_practice_num,
+      name_english,
+      name_arabic,
+    }) =>
+      `/api/employees/find?id=${identification_num}&&email=${email}&&code=${code}&&name_english=${name_english}&&name_arabic=${name_arabic}&&profrssion_practice_num=${profrssion_practice_num}&&phone=${phone}`,
   },
   employee_engagements: {
     all: '/api/employees/engagement/',
@@ -298,7 +308,8 @@ export const endpoints = {
   },
   patients: {
     all: '/api/patient',
-    find: '/api/patient/find',
+    find: ({ identification_num, email, mobile_num1 }) =>
+      `/api/patient/find?id=${identification_num}&&email=${email}&&mobile=${mobile_num1}`,
     family: (id) => `/api/patient/myfamily/${id}`,
     one: (id) => `/api/patient/${id}`,
   },

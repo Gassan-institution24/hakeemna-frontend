@@ -13,6 +13,9 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { useAclGuard } from 'src/auth/guard/acl-guard';
@@ -57,6 +60,8 @@ export default function AppointmentsTableRow({
     modifications_nums,
   } = row;
 
+  const router = useRouter();
+
   const { t } = useTranslate();
 
   const checkAcl = useAclGuard();
@@ -93,7 +98,15 @@ export default function AppointmentsTableRow({
         <TableCell lang="ar" align="center">
           {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
         </TableCell>
-        <TableCell lang="ar" align="center">
+        <TableCell
+          lang="ar"
+          align="center"
+          sx={{
+            cursor: 'pointer',
+            color: '#3F54EB',
+          }}
+          onClick={() => router.push(paths.employee.patients.info(patient._id))}
+        >
           {patient?.first_name} {patient?.family_name}
         </TableCell>
 
