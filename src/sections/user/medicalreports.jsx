@@ -142,10 +142,10 @@ export default function Medicalreports() {
       </Page>
     </Document>
   );
-  // console.log(user?.patient);
   return user?.patient.Mediacalreports?.length > 0 ? (
     user?.patient.Mediacalreports.map((info, index) => (
       <Card
+      key={index}
         sx={{
           backgroundImage: `url(https://mawthook.com/wp-content/uploads/2020/07/%D8%AA%D8%B1%D8%AC%D9%85%D8%A9-%D8%A7%D9%84%D9%85%D8%B5%D8%B7%D9%84%D8%AD%D8%A7%D8%AA-%D8%A7%D9%84%D8%B7%D8%A8%D9%8A%D8%A9.jpg)`,
           backgroundRepeat: 'no-repeat',

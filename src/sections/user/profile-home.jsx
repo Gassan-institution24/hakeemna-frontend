@@ -21,8 +21,7 @@ export default function ProfileHome() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
-  console.log(patientInsuranseData,"patientInsuranseData");
-  console.log(user?.patient?._id);
+ 
   const tokenPlaceholder =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjhlZDQxNTJhYWQ5MjY2NGMxN2ZkNyIsImlhdCI6MTcxMDA0ODQzNCwiZXhwIjoxNzE3ODI0NDM0fQ.pI645Yv07aWxMh6k1gz6ogt30aSRhQ_y1dUQX0PgHrY';
 
@@ -57,8 +56,8 @@ export default function ProfileHome() {
             {t('Drug Allergies')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.drug_allergies?.map((drug, drugkey, idx) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
+            {user?.patient?.drug_allergies?.map((drug, drugkey) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={drugkey}>
                 -&nbsp; {drug?.trade_name}
               </li>
             ))}
@@ -77,8 +76,8 @@ export default function ProfileHome() {
             {t('Diseases')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.diseases?.map((disease, diseasekey, idx) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
+            {user?.patient?.diseases?.map((disease, diseasekey) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={diseasekey}>
                 -&nbsp; {disease?.name_english}
               </li>
             ))}
@@ -97,8 +96,8 @@ export default function ProfileHome() {
             {t('Surgeries')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.surgeries?.map((surgery, surgerykey, idx) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
+            {user?.patient?.surgeries?.map((surgery, surgerykey) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={surgerykey}>
                 -&nbsp; {surgery.name}
               </li>
             ))}
@@ -117,8 +116,8 @@ export default function ProfileHome() {
             {t('Medicines')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.medicines?.map((data, datakey, idx) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
+            {user?.patient?.medicines?.map((data, datakey) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={datakey}>
                 -&nbsp; {data?.medicine?.trade_name}
               </li>
             ))}
@@ -261,7 +260,7 @@ export default function ProfileHome() {
         <Typography variant="h4" sx={{ mt: 2 }}>
           {curLangAr
             ? user?.patient.name_arabic
-            : `${user?.patient?.first_name} ${user?.patient?.last_name}`}
+            : `${user?.patient?.first_name} ${user?.patient?.family_name}`}
         </Typography>
       </div>
       {[
@@ -339,10 +338,10 @@ export default function ProfileHome() {
           value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
-      ].map((item, ii, idx) => (
+      ].map((item, ii) => (
         <>
           {item.value && (
-            <Stack key={idx}>
+            <Stack key={ii}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span

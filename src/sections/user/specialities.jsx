@@ -5,12 +5,15 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useGetSpecialties } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image/image';
 
 export default function Specialities() {
   const router = useRouter();
-
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const { specialtiesData } = useGetSpecialties();
 
   const handleViewRow = (id) => {
@@ -35,8 +38,7 @@ export default function Specialities() {
           },
         }}
       >
-        What medical specialty are you looking for?
-        {/* ما هو التخصص الطبي الذي تبحث عنه */}
+        {t('What medical specialty are you looking for?')}
       </Typography>
       <Box
         gap={{
@@ -47,8 +49,10 @@ export default function Specialities() {
         display="grid"
         gridTemplateColumns={{
           xs: 'repeat(1, 1fr)',
-          sm: 'repeat(3, 3fr)',
-          md: 'repeat(4, 1fr)',
+          sm: 'repeat(2, 3fr)',
+          md: 'repeat(2, 1fr)',
+          lg: 'repeat(2, 1fr)',
+          xl: 'repeat(3, 1fr)',
         }}
         sx={{
           ml: {
@@ -62,12 +66,12 @@ export default function Specialities() {
       >
         {specialtiesData.map((data, idx) => (
           <Button
+            key={idx}
             sx={{
               display: 'block',
               bgcolor: 'inherit',
               color: 'black',
-              width: '300px',
-              height: '200px',
+              width: '40vh',
               mb: {
                 xs: 2,
                 sm: 0,
@@ -80,10 +84,12 @@ export default function Specialities() {
             {/* {data?.specialitiesimge && ( */}
             <Image
               src="https://icon-library.com/images/specialty-icon/specialty-icon-12.jpg"
-              sx={{ width: '100px', height: '100px', mb: 2 }}
+              sx={{ width: 70, height: 70, mb: 2 }}
             />
             {/* // )} */}
-            <Typography sx={{ fontWeight: 600 }}>{data?.name_english}</Typography>
+            <Typography sx={{ fontWeight: 600 }}>
+              {curLangAr ? data?.name_arabic : data?.name_english}
+            </Typography>
           </Button>
         ))}
       </Box>
