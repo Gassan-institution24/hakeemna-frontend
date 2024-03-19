@@ -22,7 +22,7 @@ export default function UserCardList() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const [currentTab, setCurrentTab] = useState('Prescriptions');
-  const { data } = useGetPatient(user?.patient?.[user.index_of]._id);
+  const { data } = useGetPatient(user?.patient._id);
   const TABS = [
     {
       value: 'Prescriptions',
@@ -74,7 +74,7 @@ export default function UserCardList() {
           }}
           sx={{ width: '100%' }}
         >
-          <Prescriptions user={user?.patient?.[user.index_of]._id} />
+          <Prescriptions user={user?.patient._id} />
         </Box>
       )}
 

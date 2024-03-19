@@ -15,7 +15,7 @@ import FinishedAppoinment from './apointmentsfinished';
 
 export default function AppointmentData() {
   const { user } = useAuthContext();
-  const { appointmentsData, refetch } = useGetPatientAppointments(user?.patient?.[user.index_of]?._id);
+  const { appointmentsData, refetch } = useGetPatientAppointments(user?.patient?._id);
   const { t } = useTranslate();
   const settings = useSettingsContext();
 

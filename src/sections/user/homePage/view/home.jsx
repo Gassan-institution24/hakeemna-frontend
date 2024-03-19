@@ -48,7 +48,7 @@ export default function OverviewAppView() {
 
   const yesfunction = async () => {
     try {
-      const response = await axios.patch(`/api/patient/${user?.patient?.[user.index_of]?._id}/updateonboard`, {
+      const response = await axios.patch(`/api/patient/${user?.patient?._id}/updateonboard`, {
         is_onboarded: true,
       });
       setOldpatientsdata(response.data);
@@ -61,7 +61,7 @@ export default function OverviewAppView() {
   };
   const nofunction = async () => {
     try {
-      const response = await axios.patch(`/api/patient/${user?.patient?.[user.index_of]?._id}/updateonboard`, {
+      const response = await axios.patch(`/api/patient/${user?.patient?._id}/updateonboard`, {
         is_onboarded: true,
       });
       setOldpatientsdata(response.data);
@@ -77,7 +77,7 @@ export default function OverviewAppView() {
     const fetchData = async () => {
       try {
         const response = await axios.post('/api/oldpatientsdata/details', {
-          identification_num: user?.patient?.[user.index_of]?.identification_num,
+          identification_num: user?.patient?.identification_num,
         });
         setOldpatientsdata(response.data);
       } catch (error) {
@@ -106,7 +106,7 @@ export default function OverviewAppView() {
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <AppWelcome
-            title={`${greeting} \n ${user?.patient?.[user.index_of]?.first_name} ${user?.patient?.[user.index_of]?.last_name}`}
+            title={`${greeting} \n ${user?.patient?.first_name} ${user?.patient?.last_name}`}
             description={
               curLangAr
                 ? 'قم بتغذية جسدك، وتمكين عقلك  فالعافية هي مفتاح الحياة النابضة بالحياة.'
@@ -145,8 +145,8 @@ export default function OverviewAppView() {
           </Box>
         </Grid>
       </Grid>
-      {user?.patient?.[user.index_of]?.identification_num === oldData &&
-      user?.patient?.[user.index_of]?.is_onboarded === false &&
+      {user?.patient?.identification_num === oldData &&
+      user?.patient?.is_onboarded === false &&
       user?.role === 'patient' ? (
         <Dialog open={dialog.value} onClose={dialog.onTrue}>
           <DialogTitle>

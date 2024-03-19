@@ -58,16 +58,16 @@ export default function InsurancePage({ user }) {
                 </Typography>
               </Box>
 
-              <Image
+              {/* <Image
                 src="https://static.vecteezy.com/system/resources/previews/022/722/106/non_2x/barcode-qr-code-transparent-free-free-png.png"
                 sx={{ width: '200px', height: '30px', ml: -1.9 }}
-              />
+              /> */}
             </Box>
             <Iconify
               icon="mi:options-vertical"
               sx={{
                 position: 'relative',
-                right: -75,
+                right: '-40%',
                 color: '#ddf0ee',
                 '&:hover': {
                   color: 'black',

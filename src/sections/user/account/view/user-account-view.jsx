@@ -42,7 +42,7 @@ export default function AccountView() {
   ];
 
   const { user } = useAuthContext();
-  const { data, refetch, loading } = useGetPatient(user?.patient?.[user.index_of]?._id);
+  const { data, refetch, loading } = useGetPatient(user?.patient?._id);
   const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('general');

@@ -20,7 +20,7 @@ export default function UserCardList() {
   const { user } = useAuthContext();
   // const settings = useSettingsContext();
   const [currentTab, setCurrentTab] = useState('My Appointments');
-  // const { data } = useGetPatient(user?.patient?.[user.index_of]._id);
+  // const { data } = useGetPatient(user?.patient._id);
 
   const TABS = [
     {
@@ -64,7 +64,7 @@ export default function UserCardList() {
               md: 'repeat(3, 1fr)',
             }}
           >
-            {/* <Appoinment user={user?.patient?.[user.index_of]._id} /> */}
+            {/* <Appoinment user={user?.patient._id} /> */}
           </Box>
           <hr />
           <h3>Finished Appointment</h3>
@@ -77,7 +77,7 @@ export default function UserCardList() {
               md: 'repeat(3, 1fr)',
             }}
           >
-            <FinishedAppoinment user={user?.patient?.[user.index_of]._id} />
+            <FinishedAppoinment user={user?.patient._id} />
           </Box>
         </>
       )}

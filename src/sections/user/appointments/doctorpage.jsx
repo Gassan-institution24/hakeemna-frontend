@@ -61,8 +61,8 @@ export default function Doctorpage() {
   const { feedbackData } = useGetEmployeeFeedbackes(data?.employee?._id);
   const [currentDateTime, setCurrentDateTime] = useState();
   const [patientNote, setPatientNote] = useState();
-  const patientData = user?.patient?.[user.index_of]?._id;
-  const patientinfo = user?.patient?.[user.index_of];
+  const patientData = user?.patient?._id;
+  const patientinfo = user?.patient;
   const patientEmail = user?.email;
 
   const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
@@ -106,7 +106,7 @@ export default function Doctorpage() {
       avatar={<Avatar src={data?.employee?.picture} alt="data" />}
       title={
         <Link color="inherit" variant="subtitle1">
-          {data?.employee?.first_name} {data?.employee?.middle_name} {data?.employee?.family_name}
+          {data?.employee?.name_english}
         </Link>
       }
       subheader={
@@ -306,13 +306,14 @@ export default function Doctorpage() {
               sx={{ borderStyle: 'dashed', display: { md: 'block', xs: 'none' } }}
             />
             <Box sx={{ ml: 2, mb: 2 }}>
-              {datacheeck?.employee && (
-                <Typography>
-                  {' '}
-                  <Iconify width={18} icon="ion:person-sharp" />
-                  &nbsp; Doctor: {data?.employee?.first_name} {data?.employee?.family_name}
-                </Typography>
-              )}
+              {datacheeck?.work_group?.employees &&
+                datacheeck.work_group.employees.map((doctor, index) => (
+                  <Typography key={index}>
+                    {' '}
+                    <Iconify width={18} icon="ion:person-sharp" />
+                    &nbsp; Doctor: {doctor?.employee?.employee?.name_english}
+                  </Typography>
+                ))}
               {datacheeck?.appointment_type?.name_english && (
                 <Typography>
                   {' '}
