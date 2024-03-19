@@ -12,7 +12,7 @@ export default function WorkGroupPermissionsPage() {
   return (
     <ACLGuard category="work_group" subcategory="permissions" acl="update">
       <Helmet>
-        <title>{user?.employee?.name_english} : work group permissions</title>
+        <title>{user?.employee?.name_english || 'employee'} : work group permissions</title>
         <meta name="description" content="meta" />
       </Helmet>
       <WorkGroupPermissionsView />

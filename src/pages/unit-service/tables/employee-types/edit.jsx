@@ -25,7 +25,7 @@ export default function EmployeeTypeEditPage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
       <Helmet>
-        <title>{serviceUnitName} : Edit Employee Type</title>
+        <title>{serviceUnitName || 'Service unit'} : Edit Employee Type</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

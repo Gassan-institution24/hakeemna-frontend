@@ -18,7 +18,7 @@ export default function DepartmentWorkGroupNewPage() {
   return (
     <ACLGuard category="department" subcategory="management_tables" acl="create">
       <Helmet>
-        <title>{data.name_english} : New Work Group </title>
+        <title>{data.name_english || 'Deartment'} : New Work Group </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

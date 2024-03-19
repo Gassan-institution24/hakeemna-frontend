@@ -18,7 +18,7 @@ export default function DepartmentAppointmentConfigPage() {
   return (
     <ACLGuard category="department" subcategory="appointment_configs" acl="read">
       <Helmet>
-        <title>{data.name_english} : Appointment Configuration</title>
+        <title>{data.name_english || 'Deartment'} : Appointment Configuration</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

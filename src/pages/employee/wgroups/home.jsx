@@ -11,7 +11,7 @@ export default function WorkGroupHomePage() {
   return (
     <>
       <Helmet>
-        <title> {user?.employee?.name_english} : Work Groups</title>
+        <title> {user?.employee?.name_english || 'employee'} : Work Groups</title>
         <meta name="description" content="meta" />
       </Helmet>
 

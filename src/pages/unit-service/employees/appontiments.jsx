@@ -19,7 +19,7 @@ export default function EmployeeAppointmentsPage() {
   return (
     <ACLGuard category="unit_service" subcategory="appointments" acl="read">
       <Helmet>
-        <title>{name} : Appointments</title>
+        <title>{name || 'Employee'} : Appointments</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

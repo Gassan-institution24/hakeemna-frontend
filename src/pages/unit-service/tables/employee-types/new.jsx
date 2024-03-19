@@ -15,7 +15,7 @@ export default function EmployeeTypeNewPage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="create">
       <Helmet>
-        <title>{serviceUnitName} : New Employee Type</title>
+        <title>{serviceUnitName || 'Service unit'} : New Employee Type</title>
         <meta name="description" content="meta" />
       </Helmet>
 

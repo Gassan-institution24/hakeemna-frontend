@@ -15,7 +15,7 @@ export default function EditPage() {
   return (
     <ACLGuard category="unit_service" subcategory="unit_service_info" acl="update">
       <Helmet>
-        <title>{serviceUnitName} : Edit Profile</title>
+        <title>{serviceUnitName || 'Service unit'} : Edit Profile</title>
         <meta name="description" content="meta" />
       </Helmet>
 
