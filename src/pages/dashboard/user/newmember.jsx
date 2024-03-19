@@ -51,7 +51,7 @@ export default function Create() {
     first_name: '',
     family_name: '',
     email: '',
-    family_members: user?.patient?.[user.index_of]?._id,
+    family_members: user?.patient?._id,
     password: '',
     confirmPassword: '',
     mobile_num1: '',

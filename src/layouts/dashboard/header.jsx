@@ -1,17 +1,22 @@
 import PropTypes from 'prop-types';
 
+import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 
+import { useRouter } from 'src/routes/hooks';
+
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgBlur } from 'src/theme/css';
+import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Logo from 'src/components/logo';
+import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
 
@@ -27,8 +32,19 @@ import NotificationsPopover from '../common/notifications-popover';
 
 export default function Header({ onOpenNav }) {
   const theme = useTheme();
+  const router = useRouter();
 
   const settings = useSettingsContext();
+
+  const parentToken = sessionStorage.getItem('parentToken');
+  const switchBack = () => {
+    sessionStorage.setItem('accessToken', parentToken);
+    sessionStorage.removeItem('parentToken');
+    router.push(PATH_AFTER_LOGIN);
+    window.location.reload();
+  };
+
+ 
 
   const isNavHorizontal = settings.themeLayout === 'horizontal';
 
@@ -61,7 +77,13 @@ export default function Header({ onOpenNav }) {
         spacing={{ xs: 0.5, sm: 2 }}
       >
         <ServiceUnitPopover />
-
+        {parentToken ? (
+          <Button onClick={switchBack}>
+            <Iconify icon="icon-park:back" /> Switch
+          </Button>
+        ) : (
+          ''
+        )}
         <LanguagePopover />
 
         <NotificationsPopover />

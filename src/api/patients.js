@@ -52,7 +52,7 @@ export function useGetPatientFamily(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      oldPatientsData: data || [],
+      Data: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

@@ -23,9 +23,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function FamilyMembers() {
   const { user, login } = useAuthContext();
-  const { oldPatientsData } = useGetPatientFamily(user?.patient?.[user.index_of]?._id);
-
-  console.log(user?.patient?.[user.index_of]?._id,"sdsdv");
+  const { Data } = useGetPatientFamily(user?.patient?._id);
 
   const popover = usePopover();
   const confirm = useBoolean();
@@ -61,6 +59,8 @@ export default function FamilyMembers() {
 
   const handleChangeUS = async () => {
     try {
+      const accessToken = sessionStorage.getItem('accessToken')
+      sessionStorage.setItem('parentToken', accessToken)
       await login?.(selectedIndex, password);
 
       router.push(PATH_AFTER_LOGIN);
@@ -69,12 +69,11 @@ export default function FamilyMembers() {
     } catch (error) {
       console.error(error);
       loading.onFalse();
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       popover.onClose();
     }
   };
-
-  return oldPatientsData?.map((info, index) => (
+  return Data?.map((info, index) => (
     <Card key={index}>
       <IconButton
         onClick={(event) => {

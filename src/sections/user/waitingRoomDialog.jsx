@@ -43,7 +43,7 @@ export default function WatingRoomDialog({ employeesData }) {
   const [rating, setRating] = useState();
 
   const { user } = useAuthContext();
-  const { appointmentsData } = useGetPatientOneAppointments(user?.patient?.[user.index_of]?._id);
+  const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
   const skipfunction = async () => {
     try {
       await axios.patch(`api/appointments/${appointmentsData._id}`, {
@@ -98,7 +98,7 @@ export default function WatingRoomDialog({ employeesData }) {
         ...dataSumbmit,
         Selection: selectedValue,
         Rate: rating,
-        patient: user?.patient?.[user.index_of]._id,
+        patient: user?.patient._id,
         appointment: appointmentsData._id,
         department: appointmentsData.department?._id,
         employee: employeesData.employee?._id,
