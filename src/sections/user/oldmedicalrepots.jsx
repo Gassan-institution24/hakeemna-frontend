@@ -136,7 +136,6 @@ export default function OldMedicalReports() {
   });
   // const router = useRouter();
   const oldMedicalReportsSchema = Yup.object().shape({
-    type: Yup.string().required(),
     date: Yup.date().required('Date is required'),
     file: Yup.array().required(),
     name: Yup.string().required('File name is required'),
@@ -148,7 +147,6 @@ export default function OldMedicalReports() {
   const TYPE = ['Blod Test', 'X-ray Test', 'Health Check Test', 'Heart examination Test'];
 
   const defaultValues = {
-    type: '',
     date: '',
     file: [],
     name: '',
@@ -163,12 +161,6 @@ export default function OldMedicalReports() {
         <Page size="A4" style={styles.page}>
           <View>
             <View style={styles.gridContainer}>
-              <Text style={styles.text}>
-                <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
-                  Test Type:
-                </Text>{' '}
-                {info.type}
-              </Text>
               <Text style={styles.text}>
                 <Text style={{ color: 'black', fontSize: '14px', justifyContent: 'space-between' }}>
                   Test Date:
@@ -216,7 +208,6 @@ export default function OldMedicalReports() {
   // console.log(info,"dfdfdf")
   MedicalreportsnPDF.propTypes = {
     info: PropTypes.shape({
-      type: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
       file: PropTypes.array,
       name: PropTypes.string,
@@ -253,52 +244,56 @@ export default function OldMedicalReports() {
       validateSize: isValidSize,
     };
   };
-  const handleDrop = (acceptedFiles) => {
-    const fileValidator = fuser(acceptedFiles.reduce((acc, file) => acc + file.size, 0));
-
-    const isValidFiles = acceptedFiles.every(
-      (file) =>
-        // const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
-        fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)
-    );
-
-    if (isValidFiles) {
-      // setFiles(acceptedFiles); // Save the files in state
-      const newFiles = acceptedFiles.map((file) => ({
-        ...file,
-        // preview: URL.createObjectURL(file),
-      }));
-      setFiles('file', newFiles);
-    } else {
-      // Handle invalid file type or size
-      enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
-    }
-  };
-
-  const onSubmit = async (data) => {
-    const formData = new FormData();
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key]);
-    });
-
-    if (files) {
-      formData.append('medicalreports', files);
-    }
-    try {
-      await axios.post('/api/oldmedicalreports', formData);
-      enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
-      dialog.onFalse();
-      const response = await axios.get('/api/oldmedicalreports');
-      setfilesPdf(response.data);
-      reset();
-      setCheckChange(!checkChange);
-
-      console.log('data', data);
-      console.log('formData', formData);
-    } catch (error) {
-      console.error(error.message);
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
-    }
+  const handleDrop = (acceptedFiles) => { 
+    console.log(acceptedFiles,"acceptedFiles"); 
+ 
+    const fileValidator = fuser(acceptedFiles.reduce((acc, file) => acc + file.size, 0)); 
+ 
+    const isValidFiles = acceptedFiles.every( 
+      (file) => 
+        // const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase(); 
+        fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size) 
+    ); 
+ 
+    if (isValidFiles) { 
+      // setFiles(acceptedFiles); // Save the files in state 
+      const newFiles = acceptedFiles 
+      console.log(newFiles,"newfiles"); 
+      setFiles((currentFiles)=>[ 
+        ...currentFiles, ...newFiles 
+      ]) 
+    } else { 
+      // Handle invalid file type or size 
+      enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' }); 
+    } 
+  }; 
+ 
+  const onSubmit = async (data) => { 
+    const formData = new FormData(); 
+    Object.keys(data).forEach((key) => { 
+      formData.append(key, data[key]); 
+    }); 
+    console.log(files,"files");  
+ 
+    if (files) { 
+       
+      files.forEach((f)=> formData.append('medicalreports[]',f)) 
+    } 
+    try { 
+      console.log(Object.fromEntries(formData),"sdsd"); 
+      await axios.post('/api/oldmedicalreports', formData); 
+      enqueueSnackbar('medical report uploaded successfully', { variant: 'success' }); 
+      dialog.onFalse(); 
+      const response = await axios.get('/api/oldmedicalreports'); 
+      setfilesPdf(response.data); 
+      reset(); 
+      setCheckChange(!checkChange); 
+ 
+      console.log('data', data); 
+    } catch (error) { 
+      console.error(error.message); 
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' }); 
+    } 
   };
 
   const handleAlertClose = () => {
@@ -366,20 +361,7 @@ export default function OldMedicalReports() {
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
             <RHFTextField lang="en" name="name" label={t('File name*')} sx={{ mb: 1.5 }} />
-            <RHFSelect
-              label={t('Type*')}
-              fullWidth
-              name="type"
-              PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ mb: 1.5 }}
-            >
-              {TYPE.map((test, idx) => (
-                <MenuItem value={test} key={idx} sx={{ mb: 1 }}>
-                  {test}
-                </MenuItem>
-              ))}
-            </RHFSelect>
-
+          
             <RHFSelect
               label={t('Specialty*')}
               fullWidth
@@ -497,7 +479,7 @@ export default function OldMedicalReports() {
                 <Iconify icon="eva:more-vertical-fill" />
               </IconButton>
               <ListItemText>
-                {info.type} &nbsp;
+                {info.sp} &nbsp;
                 {/* {t('File')} */}File
               </ListItemText>
             </Box>
@@ -511,7 +493,7 @@ export default function OldMedicalReports() {
               <PDFDownloadLink
                 key={idx}
                 document={<MedicalreportsnPDF info={filesPdf} />}
-                fileName={`${user?.patient.first_name} ${info.type} MediacalReport.pdf`}
+                fileName={`${user?.patient.first_name} ${info.specialty} MediacalReport.pdf`}
                 style={styles.line}
               >
                 <MenuItem

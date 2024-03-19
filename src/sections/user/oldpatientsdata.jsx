@@ -32,7 +32,7 @@ export default function Oldpatientsdata() {
     const fetchData = async () => {
       try {
         const response = await axios.post('/api/oldpatientsdata/details', {
-          identification_num: user?.patient?.[user.index_of]?.identification_num,
+          identification_num: user?.patient?.identification_num,
         });
         setOldpatientsdata(response.data);
       } catch (error) {

@@ -115,7 +115,9 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
                   ) : null
                 }
                 secondary={
+                  doctor?.employee?.visibility_online_appointment === true ? (
                   <span style={{ color: 'inherit' }}> {info?.unit_service?.name_english}</span>
+                  ): null
                 }
                 primaryTypographyProps={{
                   typography: 'subtitle1',
