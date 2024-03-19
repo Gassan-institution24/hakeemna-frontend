@@ -18,7 +18,7 @@ export default function EmployeeInfoPage() {
   return (
     <>
       <Helmet>
-        <title>{name} : Employee Info</title>
+        <title>{name || 'Employee'} : Info</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

@@ -12,7 +12,7 @@ export default function EditPage() {
     // <ACLGuard category="employee" subcategory="info" acl="update">
     <>
       <Helmet>
-        <title> {user?.employee?.name_english} : Edit Profile</title>
+        <title> {user?.employee?.name_english || 'employee'} : Edit Profile</title>
         <meta name="description" content="meta" />
       </Helmet>
 
