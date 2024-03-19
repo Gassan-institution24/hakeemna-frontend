@@ -53,11 +53,11 @@ export default function AccountPopover() {
 
   const popover = usePopover();
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
-      await logout();
       popover.onClose();
-      // router.replace('/');
+      logout();
+      router.replace('/login');
     } catch (error) {
       console.error(error);
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });

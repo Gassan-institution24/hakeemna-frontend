@@ -15,9 +15,9 @@ import { Tooltip, MenuItem, Typography } from '@mui/material';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { useAuthContext } from 'src/auth/hooks';
+// import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetCountries, useGetSpecialties, useGetUSActiveEmployeeTypes } from 'src/api';
+import { useGetCountries, useGetSpecialties, useGetActiveEmployeeTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -35,13 +35,11 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
 
   const { countriesData } = useGetCountries();
   const { specialtiesData } = useGetSpecialties();
-  const { employeeTypesData } = useGetUSActiveEmployeeTypes(
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
-  );
+  const { employeeTypesData } = useGetActiveEmployeeTypes();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
