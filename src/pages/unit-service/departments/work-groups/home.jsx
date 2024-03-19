@@ -18,7 +18,7 @@ export default function DepartmentWorkGroupsPage() {
   return (
     <ACLGuard category="department" subcategory="management_tables" acl="read">
       <Helmet>
-        <title>{data.name_english} : Work Groups</title>
+        <title>{data.name_english || 'Deartment'} : Work Groups</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

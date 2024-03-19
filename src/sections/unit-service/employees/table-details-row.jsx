@@ -47,7 +47,7 @@ export default function UnitServiceEmployeesRow({
     modifications_nums,
     online,
   } = row;
-  // console.log('row', row);
+  console.log('row', row);
 
   const { t } = useTranslate();
 
@@ -88,7 +88,7 @@ export default function UnitServiceEmployeesRow({
         onClick={onViewRow}
         align="center"
       >
-        {curLangAr?employee?.name_arabic:employee?.name_english}
+        {curLangAr ? employee?.name_arabic : employee?.name_english}
       </TableCell>
       <TableCell lang="ar" align="center">
         {curLangAr ? employee?.employee_type?.name_arabic : employee?.employee_type?.name_english}

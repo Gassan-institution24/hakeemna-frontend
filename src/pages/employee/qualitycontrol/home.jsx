@@ -10,7 +10,7 @@ export default function QualityControlPage() {
   return (
     <>
       <Helmet>
-        <title> {user?.employee?.name_english} : Quality Control</title>
+        <title> {user?.employee?.name_english || 'employee'} : Quality Control</title>
         <meta name="description" content="meta" />
       </Helmet>
 

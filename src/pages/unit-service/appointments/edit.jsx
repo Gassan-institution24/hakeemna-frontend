@@ -16,14 +16,14 @@ export default function AppointmentEditPage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetAppointment(id);
-   const { user } = useAuthContext();
-   const serviceUnitName =
-     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
-       ?.name_english;
+  const { user } = useAuthContext();
+  const serviceUnitName =
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+      ?.name_english;
   return (
     <ACLGuard category="unit_service" subcategory="appointments" acl="update">
       <Helmet>
-        <title>{serviceUnitName} : Edit Appointment</title>
+        <title>{serviceUnitName || 'Service unit'} : Edit Appointment</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

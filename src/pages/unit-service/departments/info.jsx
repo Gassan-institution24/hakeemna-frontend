@@ -19,7 +19,7 @@ export default function DepartmentInfoPage() {
     // <ACLGuard category="department" subcategory="department_info" acl="read">
     <>
       <Helmet>
-        <title>{name || ''} Department Info</title>
+        <title>{name || 'Deartment'} : Info</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

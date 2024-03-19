@@ -19,7 +19,7 @@ export default function DepartmentRoomEditPage() {
   return (
     <ACLGuard category="department" subcategory="management_tables" acl="update">
       <Helmet>
-        <title>{departmentData.name_english} : Edit Room </title>
+        <title>{departmentData.name_english || 'Deartment'} : Edit Room </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

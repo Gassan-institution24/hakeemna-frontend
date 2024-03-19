@@ -15,7 +15,7 @@ export default function OldPatientPage() {
   return (
     <ACLGuard category="unit_service" subcategory="old_patient" acl="create">
       <Helmet>
-        <title>{serviceUnitName} : Old patient</title>
+        <title>{serviceUnitName || 'Service unit'} : Old patient</title>
         <meta name="description" content="meta" />
       </Helmet>
 
