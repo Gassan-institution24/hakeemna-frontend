@@ -15,7 +15,7 @@ export default function WorkGroupHomePage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="read">
       <Helmet>
-        <title>{serviceUnitName} : Work Groups</title>
+        <title>{serviceUnitName || 'Service unit'} : Work Groups</title>
         <meta name="description" content="meta" />
       </Helmet>
 

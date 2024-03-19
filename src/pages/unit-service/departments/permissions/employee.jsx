@@ -15,7 +15,7 @@ export default function DepartmentEmployeePermissionPage() {
   return (
     <ACLGuard category="department" subcategory="permissions" acl="update">
       <Helmet>
-        <title>{data.name_english} : permissions </title>
+        <title>{data.name_english || 'Deartment'} : permissions </title>
         <meta name="description" content="meta" />
       </Helmet>
       <DepartmentEmployeePermissionsView />

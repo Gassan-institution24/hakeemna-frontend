@@ -15,7 +15,7 @@ export default function RoomHomePage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="read">
       <Helmet>
-        <title>{serviceUnitName} : Rooms</title>
+        <title>{serviceUnitName || 'Service unit'} : Rooms</title>
         <meta name="description" content="meta" />
       </Helmet>
 

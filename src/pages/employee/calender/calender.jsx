@@ -11,7 +11,7 @@ export default function CalendarPage() {
   return (
     <>
       <Helmet>
-        <title> {user?.employee?.name_english} : Calendar</title>
+        <title> {user?.employee?.name_english || 'employee'} : Calendar</title>
         <meta name="description" content="meta" />
       </Helmet>
       <CalendarView />

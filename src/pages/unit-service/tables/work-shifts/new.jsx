@@ -15,7 +15,7 @@ export default function WorkShiftNewPage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="create">
       <Helmet>
-        <title>{serviceUnitName} : New Work Shift</title>
+        <title>{serviceUnitName || 'Service unit'} : New Work Shift</title>
         <meta name="description" content="meta" />
       </Helmet>
 
