@@ -15,9 +15,10 @@ import Lightbox, { useLightBox } from 'src/components/lightbox';
 
 // ----------------------------------------------------------------------
 
-export default function ProfileGallery({ gallery }) {
+export default function ProfileGallery() {
   const theme = useTheme();
 
+const gallery = []
   const slides = gallery.map((slide, idx) => ({
     src: slide.imageUrl,
   }));
@@ -92,6 +93,3 @@ export default function ProfileGallery({ gallery }) {
   );
 }
 
-ProfileGallery.propTypes = {
-  gallery: PropTypes.array,
-};
