@@ -18,7 +18,7 @@ import TableContainer from '@mui/material/TableContainer';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+// import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -89,7 +89,7 @@ export default function AppointmentsView({ employeeData }) {
 
   const settings = useSettingsContext();
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -285,7 +285,6 @@ export default function AppointmentsView({ employeeData }) {
       t,
       curLangAr,
       enqueueSnackbar,
-      
     ]
   );
 
@@ -318,7 +317,6 @@ export default function AppointmentsView({ employeeData }) {
     curLangAr,
     minToDelay,
     enqueueSnackbar,
-  
   ]);
 
   const handleUnCancelRows = useCallback(
@@ -350,13 +348,6 @@ export default function AppointmentsView({ employeeData }) {
       curLangAr,
       enqueueSnackbar,
     ]
-  );
-
-  const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.invoice.details(id));
-    },
-    [router]
   );
 
   const handleFilterStatus = useCallback(
@@ -534,7 +525,6 @@ export default function AppointmentsView({ employeeData }) {
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onViewRow={() => handleViewRow(row._id)}
                         onDelayRow={handleDelayRow}
                         onCancelRow={() => handleCancelRow(row)}
                         onUnCancelRow={() => handleUnCancelRow(row)}

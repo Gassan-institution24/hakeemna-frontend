@@ -7,7 +7,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -16,17 +15,15 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetCountries } from 'src/api';
-
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const { countriesData } = useGetCountries();
+  // const { countriesData } = useGetCountries();
   // const { insuranseTypesData } = useGetInsuranceTypes();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -34,24 +31,26 @@ export default function TableNewEditForm({ currentTable }) {
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
-    country: Yup.string().required('Country is required'),
-    city: Yup.string().required('city is required'),
-    type: Yup.string().nullable(),
-    webpage: Yup.string().required('webpage is requires'),
-    phone: Yup.string().required('phone number is required'),
-    address: Yup.string().required('address is required'),
+    Coverage_name: Yup.string().required('Name is required'),
+    // country: Yup.string().required('Country is required'),
+    // city: Yup.string().required('city is required'),
+    // type: Yup.string().nullable(),
+    // webpage: Yup.string().required('webpage is requires'),
+    // phone: Yup.string().required('phone number is required'),
+    // address: Yup.string().required('address is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      country: currentTable?.country?._id || null,
-      city: currentTable?.city?._id || null,
-      type: currentTable?.type?._id || null,
-      webpage: currentTable?.webpage || '',
-      phone: currentTable?.phone || '',
-      address: currentTable?.address || '',
+      Coverage_name: currentTable?.Coverage_name || '',
+      // country: currentTable?.country?._id || null,
+      // city: currentTable?.city?._id || null,
+      // type: currentTable?.type?._id || null,
+      // webpage: currentTable?.webpage || '',
+      // phone: currentTable?.phone || '',
+      // address: currentTable?.address || '',
     }),
     [currentTable]
   );
@@ -91,9 +90,9 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.insurance_companies.one(currentTable._id), data);
+        await axiosInstance.patch(endpoints.insurance_types.one(currentTable._id), data);
       } else {
-        await axiosInstance.post(endpoints.insurance_companies.all, data);
+        await axiosInstance.post(endpoints.insurance_types.all, data);
       }
       reset();
       // if (response.status.includes(200, 304)) {
@@ -103,7 +102,7 @@ export default function TableNewEditForm({ currentTable }) {
       //     variant: 'error',
       //   });
       // }
-      router.push(paths.superadmin.tables.insurancecomapnies.root);
+      router.push(paths.superadmin.tables.insuranceTypes.root);
     } catch (error) {
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
       console.error(error);
@@ -136,14 +135,20 @@ export default function TableNewEditForm({ currentTable }) {
                 name="name_arabic"
                 label="name arabic"
               />
+              <RHFTextField
+                lang="ar"
+                onChange={handleEnglishInputChange}
+                name="Coverage_name"
+                label="Coverage name"
+              />
 
-              <RHFSelect name="country" label="country">
+              {/* <RHFSelect name="country" label="country">
                 {countriesData.map((country, idx) => (
                   <MenuItem key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
-              </RHFSelect>
+              </RHFSelect> */}
               {/* <RHFSelect name="city" label="city">
                 {tableData.map((city, idx) => (
                   <MenuItem key={idx} value={city._id}>
@@ -158,9 +163,9 @@ export default function TableNewEditForm({ currentTable }) {
                   </MenuItem>
                 ))}
               </RHFSelect> */}
-              <RHFTextField name="webpage" label="web page link" />
+              {/* <RHFTextField name="webpage" label="web page link" />
               <RHFTextField name="phone" label="phone no" />
-              <RHFTextField name="address" label="address" />
+              <RHFTextField name="address" label="address" /> */}
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

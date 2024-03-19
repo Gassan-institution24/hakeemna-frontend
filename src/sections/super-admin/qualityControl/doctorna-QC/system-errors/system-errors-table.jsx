@@ -37,10 +37,12 @@ import TableDetailFiltersResult from './table-details-filters-result';
 
 const TABLE_HEAD = [
   /// to edit
-  { id: 'code', label: 'Code' },
-  { id: 'Error Code', label: 'Error Code' },
-  { id: 'Error Message', label: 'Error Message' },
-  { id: 'status', label: 'Status' },
+  // { id: 'code', label: 'Code' },
+  { id: 'Error Code', label: 'code' },
+  { id: 'Error Code', label: 'method' },
+  { id: 'Error Code', label: 'URL' },
+  { id: 'Error Message', label: 'message' },
+  { id: 'status', label: 'status' },
   { id: '', width: 88 },
 ];
 
@@ -59,7 +61,7 @@ const STATUS_OPTIONS = [
 
 export default function DoctornaSystemErrorsView() {
   /// edit
-  const table = useTable({ defaultOrderBy: 'code' });
+  const table = useTable({ defaultOrderBy: 'code', defaultOrder: 'desc' });
 
   const componentRef = useRef();
 
@@ -167,7 +169,7 @@ export default function DoctornaSystemErrorsView() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <Card>
         <Tabs
           value={filters.status}

@@ -8,7 +8,7 @@ export const StatusOptions = () => {
     STATUS_OPTIONS: [
       // { value: 'all', label: t('all') },
       { value: 'active', label: t('active') },
-      { value: 'inactive', label: t('deleted') },
+      { value: 'inactive', label: t('inactive') },
     ],
     QC_STATUS_OPTIONS: [
       // { value: 'all', label: t('all') },

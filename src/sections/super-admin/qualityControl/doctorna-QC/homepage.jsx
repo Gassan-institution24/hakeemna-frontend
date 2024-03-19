@@ -39,7 +39,7 @@ export default function DoctornaQCPage() {
     </Tabs>
   );
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth='xl'>
       <CustomBreadcrumbs
         heading="Doctorna Quality Control"
         links={[

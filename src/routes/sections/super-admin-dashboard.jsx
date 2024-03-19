@@ -194,10 +194,16 @@ const DeductionConfigCreatePage = lazy(() =>
 const DeductionConfigEditPage = lazy(() =>
   import('src/pages/super-admin/tables/deduction_config/edit')
 );
-// ROOMS
-// const RoomsTablePage = lazy(() => import('src/pages/super-admin/tables/rooms/table'));
-// const RoomCreatePage = lazy(() => import('src/pages/super-admin/tables/rooms/new'));
-// const RoomEditPage = lazy(() => import('src/pages/super-admin/tables/rooms/edit'));
+// INSURANCE TYPES
+const InsuranceTypesTablePage = lazy(() =>
+  import('src/pages/super-admin/tables/insurance-types/table')
+);
+const InsuranceTypeCreatePage = lazy(() =>
+  import('src/pages/super-admin/tables/insurance-types/new')
+);
+const InsuranceTypeEditPage = lazy(() =>
+  import('src/pages/super-admin/tables/insurance-types/edit')
+);
 // UNITSERVICES SIDEBAR OPTIONS
 const UnitservicesPage = lazy(() => import('src/pages/super-admin/unitservices/home'));
 // UNITSERVICES ACCOUNTING
@@ -947,15 +953,15 @@ export const dashboardRoutes = [
               { path: ':id/edit', element: <DeductionConfigEditPage /> },
             ],
           },
-          // {
-          //   path: 'rooms',
-          //   children: [
-          //     { element: <RoomsTablePage />, index: true },
-          //     { path: 'list', element: <RoomsTablePage /> },
-          //     { path: 'new', element: <RoomCreatePage /> },
-          //     { path: ':id/edit', element: <RoomEditPage /> },
-          //   ],
-          // },
+          {
+            path: 'insurance_types',
+            children: [
+              { element: <InsuranceTypesTablePage />, index: true },
+              { path: 'list', element: <InsuranceTypesTablePage /> },
+              { path: 'new', element: <InsuranceTypeCreatePage /> },
+              { path: ':id/edit', element: <InsuranceTypeEditPage /> },
+            ],
+          },
         ],
       },
     ],

@@ -380,6 +380,11 @@ export const paths = {
         new: `${ROOTS.SUPERADMIN}/tables/insurance_companies/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/insurance_companies/${id}/edit`,
       },
+      insuranceTypes: {
+        root: `${ROOTS.SUPERADMIN}/tables/insurance_types`,
+        new: `${ROOTS.SUPERADMIN}/tables/insurance_types/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/insurance_types/${id}/edit`,
+      },
       medcategories: {
         root: `${ROOTS.SUPERADMIN}/tables/medical_categories`,
         new: `${ROOTS.SUPERADMIN}/tables/medical_categories/new`,
@@ -681,6 +686,9 @@ export const paths = {
         root: (wgid) => `${ROOTS.SUPERADMIN}/wgroups/${wgid}`,
         employee: (wgid, emid) => `${ROOTS.SUPERADMIN}/wgroups/${wgid}/employee/${emid}`,
       },
+    },
+    patients: {
+      info: (id) => `${ROOTS.SUPERADMIN}/patients/${id}`,
     },
     entrancemanagement: {
       root: `${ROOTS.SUPERADMIN}/entrancemanagement`,

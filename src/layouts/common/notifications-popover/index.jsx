@@ -81,9 +81,6 @@ export default function NotificationsPopover() {
       setPage(1);
       refetch();
     });
-    socket.on('test', () => {
-      console.log('test emitted');
-    });
   }, []);
   /* eslint-enable */
 

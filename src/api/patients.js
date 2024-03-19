@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import useSWR, { mutate } from 'swr';
 
-import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
+import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetPatients() {
   const URL = endpoints.patients.all;
@@ -73,7 +73,7 @@ export function useGetPatient(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      data,
+      data: data || {},
       loading: isLoading,
       error,
       validating: isValidating,
@@ -89,15 +89,13 @@ export function useGetPatient(id) {
   return { ...memoizedValue, refetch };
 }
 
+export function useFindPatient({ identification_num, email, mobile_num1 }) {
+  const URL = endpoints.patients.find({ identification_num, email, mobile_num1 });
 
-export function useGetFindPatient(obj) {
-  const URL = endpoints.patients.find;
-  // console.log('url', URL);
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, axiosInstance.get(URL, obj));
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      data,
+      existPatients: data || [],
       loading: isLoading,
       error,
       validating: isValidating,
