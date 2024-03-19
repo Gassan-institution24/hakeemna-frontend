@@ -15,7 +15,7 @@ export default function ProfilePage() {
   return (
     <ACLGuard category="unit_service" subcategory="unit_service_info" acl="update">
       <Helmet>
-        <title>{serviceUnitName} : Profile</title>
+        <title>{serviceUnitName || 'Service unit'} : Profile</title>
         <meta name="description" content="meta" />
       </Helmet>
 

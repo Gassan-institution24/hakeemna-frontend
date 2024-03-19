@@ -15,7 +15,7 @@ export default function DepartmentsHomePage() {
   return (
     <ACLGuard category="unit_service" subcategory="departments" acl="read">
       <Helmet>
-        <title>{serviceUnitName} : Departments </title>
+        <title>{serviceUnitName || 'Service unit'} : Departments </title>
         <meta name="description" content="meta" />
       </Helmet>
 

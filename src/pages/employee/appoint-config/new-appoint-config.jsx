@@ -12,7 +12,7 @@ export default function NewEmployeeAppointconfigPage() {
   return (
     <ACLGuard category="work_group" subcategory="appointment_configs" acl="create">
       <Helmet>
-        <title> {user?.employee?.name_english} : New Appointment Config</title>
+        <title> {user?.employee?.name_english || 'employee'} : New Appointment Config</title>
         <meta name="description" content="meta" />
       </Helmet>
 

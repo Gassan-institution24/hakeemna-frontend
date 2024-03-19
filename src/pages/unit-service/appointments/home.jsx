@@ -8,14 +8,14 @@ import AppointmentsHomeView from 'src/sections/unit-service/appointments/view/ho
 // ----------------------------------------------------------------------
 
 export default function AppointmentsHomePage() {
-   const { user } = useAuthContext();
-   const serviceUnitName =
-     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
-       ?.name_english;
+  const { user } = useAuthContext();
+  const serviceUnitName =
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+      ?.name_english;
   return (
     <ACLGuard category="unit_service" subcategory="appointments" acl="read">
       <Helmet>
-        <title>{serviceUnitName} : Appointments</title>
+        <title>{serviceUnitName || 'Service unit'} : Appointments</title>
         <meta name="description" content="meta" />
       </Helmet>
       <AppointmentsHomeView />

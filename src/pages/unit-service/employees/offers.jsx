@@ -19,7 +19,7 @@ export default function EmployeeOffersPage() {
   return (
     <ACLGuard category="unit_service" subcategory="offers" acl="read">
       <Helmet>
-        <title> {name} : Offers</title>
+        <title> {name || 'Employee'} : Offers</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

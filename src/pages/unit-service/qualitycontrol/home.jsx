@@ -14,7 +14,7 @@ export default function QualityControlPage() {
   return (
     <ACLGuard category="unit_service" subcategory="unit_service_info" acl="read">
       <Helmet>
-        <title>{serviceUnitName} : Quality Control</title>
+        <title>{serviceUnitName || 'Service unit'} : Quality Control</title>
         <meta name="description" content="meta" />
       </Helmet>
 
