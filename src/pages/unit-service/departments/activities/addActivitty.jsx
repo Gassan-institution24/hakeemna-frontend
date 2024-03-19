@@ -18,7 +18,7 @@ export default function DepartmentActivityNewPage() {
   return (
     <ACLGuard category="department" subcategory="management_tables" acl="create">
       <Helmet>
-        <title> {data.name_english} : Add Activity </title>
+        <title> {data.name_english || 'Deartment'} : Add Activity </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

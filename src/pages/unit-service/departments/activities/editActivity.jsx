@@ -19,7 +19,7 @@ export default function DepartmentActivityEditPage() {
   return (
     <ACLGuard category="department" subcategory="management_tables" acl="update">
       <Helmet>
-        <title> {data.name_english} : Edit Activity </title>
+        <title> {data.name_english || 'Deartment'} : Edit Activity </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

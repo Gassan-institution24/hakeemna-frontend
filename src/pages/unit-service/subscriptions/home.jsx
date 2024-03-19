@@ -15,7 +15,7 @@ export default function SubscriptionsHomePage() {
   return (
     <ACLGuard category="unit_service" subcategory="unit_service_info" acl="read">
       <Helmet>
-        <title>{serviceUnitName} : Subscriptions</title>
+        <title>{serviceUnitName || 'Service unit'} : Subscriptions</title>
         <meta name="description" content="meta" />
       </Helmet>
 

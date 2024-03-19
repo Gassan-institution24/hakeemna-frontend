@@ -18,7 +18,7 @@ export default function DepartmentQCPage() {
     // <ACLGuard category="department" subcategory="quality_control" acl="read">
     <>
       <Helmet>
-        <title>{data.name_english} :Quality Control</title>
+        <title>{data.name_english || 'Deartment'} : Quality Control</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

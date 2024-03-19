@@ -12,7 +12,7 @@ export default function EmployeeProfilePage() {
     // <ACLGuard category="employee" subcategory="info" acl="read">
     <>
       <Helmet>
-        <title> {user?.employee?.name_english} : My Profile</title>
+        <title> {user?.employee?.name_english || 'employee'} : My Profile</title>
         <meta name="description" content="meta" />
       </Helmet>
 

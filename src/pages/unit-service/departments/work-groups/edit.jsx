@@ -19,7 +19,7 @@ export default function DepartmentWorkGroupEditPage() {
   return (
     <ACLGuard category="department" subcategory="management_tables" acl="update">
       <Helmet>
-        <title>{departmentData.name_english} : Edit Work Group</title>
+        <title>{departmentData.name_english || 'Deartment'} : Edit Work Group</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
