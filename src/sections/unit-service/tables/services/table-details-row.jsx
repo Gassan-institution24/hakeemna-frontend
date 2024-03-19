@@ -134,7 +134,7 @@ export default function TableDetailsRow({
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon="ic:baseline-pause" />
-                {t('delete')}
+                {t('inactivate')}
               </MenuItem>
             )
           : checkAcl({

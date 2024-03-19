@@ -200,7 +200,7 @@ export default function AppointmentsTableRow({
               sx={{ color: 'error.main' }}
             >
               <Iconify icon="material-symbols:delete" />
-              {t('delete')}
+              {t('inactivate')}
             </MenuItem>
           )}
         {status === 'inactive' &&

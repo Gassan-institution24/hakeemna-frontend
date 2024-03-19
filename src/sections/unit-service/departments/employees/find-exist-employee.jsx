@@ -1,5 +1,5 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -15,6 +15,7 @@ import { paths } from 'src/routes/paths';
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
+import { useFindEmployee } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -51,7 +52,6 @@ export default function TableNewEditForm({ departmentData }) {
 
   const { user } = useAuthContext();
 
-  const [results, setResults] = useState([]);
   const [filters, setFilters] = useState({});
 
   const theme = useTheme();
@@ -73,14 +73,14 @@ export default function TableNewEditForm({ departmentData }) {
     onChangeRowsPerPage,
   } = table;
 
-  // const handleArabicInputChange = (event) => {
-  //   // Validate the input based on Arabic language rules
-  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
 
-  //   if (arabicRegex.test(event.target.value)) {
-  //     setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-  //   }
-  // };
+    if (arabicRegex.test(event.target.value)) {
+      setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+    }
+  };
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
@@ -112,21 +112,16 @@ export default function TableNewEditForm({ departmentData }) {
     }
   };
 
-  useEffect(() => {
-    async function getExistEmployees() {
-      if (Object.keys(filters).length) {
-        const { data } = await axios.post(endpoints.employees.find, {
-          unit_service:
-            user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service
-              ._id,
-          filters,
-        });
-        setResults(data);
-      }
-    }
-    getExistEmployees();
-  }, [filters, user?.employee]);
-  // console.log('results', results);
+  const { existEmployees } = useFindEmployee({
+    email: filters.email || null,
+    identification_num: filters.identification_num || null,
+    code: filters.identification_num,
+    phone: filters.identification_num,
+    profrssion_practice_num: filters.profrssion_practice_num,
+    name_english: filters.name_english,
+    name_arabic: filters.name_arabic,
+  });
+
   return (
     <Box>
       <Card sx={{ p: 3 }}>
@@ -177,7 +172,7 @@ export default function TableNewEditForm({ departmentData }) {
           />
           <TextField
             lang="en"
-            onChange={handleEnglishInputChange}
+            onChange={handleArabicInputChange}
             name="name_arabic"
             label={t('Full name in Arabic')}
           />
@@ -214,12 +209,18 @@ export default function TableNewEditForm({ departmentData }) {
         />
 
         <TableBody>
-          {results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => (
-            <ExistEmployeesRow key={idx} row={row} onEmploymentRow={() => handleEmployment(row)} />
-          ))}
+          {existEmployees
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row, idx) => (
+              <ExistEmployeesRow
+                key={idx}
+                row={row}
+                onEmploymentRow={() => handleEmployment(row)}
+              />
+            ))}
 
           <TableNoData
-            notFound={results.length === 0}
+            notFound={existEmployees.length === 0}
             sx={{
               m: -2,
               borderRadius: 1.5,
@@ -229,7 +230,7 @@ export default function TableNewEditForm({ departmentData }) {
         </TableBody>
       </Table>
       <TablePaginationCustom
-        count={results.length}
+        count={existEmployees.length}
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={onChangePage}
