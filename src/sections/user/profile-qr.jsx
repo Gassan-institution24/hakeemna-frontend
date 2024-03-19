@@ -15,7 +15,7 @@ import Image from 'src/components/image/image';
 export default function ProfileQr() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
-  const { patientInsuranseData } = useGetPatientInsurance(user?.patient?.[user.index_of]?._id);
+  const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   function calculateAge(birthDate) {
@@ -31,7 +31,7 @@ export default function ProfileQr() {
 
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
-      {user?.patient?.[user.index_of]?.drug_allergies?.length > 0 && (
+      {user?.patient?.drug_allergies?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -42,8 +42,8 @@ export default function ProfileQr() {
             {t('Drug Allergies')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.[user.index_of]?.drug_allergies?.map((drug, drugkey, idx) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
+            {user?.patient?.drug_allergies?.map((drug, drugkey) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={drugkey}>
                 -&nbsp; {drug?.trade_name}
               </li>
             ))}
@@ -51,7 +51,7 @@ export default function ProfileQr() {
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.[user.index_of]?.diseases?.length > 0 && (
+      {user?.patient?.diseases?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -62,8 +62,8 @@ export default function ProfileQr() {
             {t('Diseases')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.[user.index_of]?.diseases?.map((disease, diseasekey, idx) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
+            {user?.patient?.diseases?.map((disease, diseasekey) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={diseasekey}>
                 -&nbsp; {disease?.name_english}
               </li>
             ))}
@@ -71,7 +71,7 @@ export default function ProfileQr() {
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.[user.index_of]?.surgeries?.length > 0 && (
+      {user?.patient?.surgeries?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -82,8 +82,8 @@ export default function ProfileQr() {
             {t('Surgeries')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.[user.index_of]?.surgeries?.map((surgery, surgerykey, idx) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
+            {user?.patient?.surgeries?.map((surgery, surgerykey) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={surgerykey}>
                 -&nbsp; {surgery.name}
               </li>
             ))}
@@ -91,7 +91,7 @@ export default function ProfileQr() {
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.[user.index_of]?.medicines?.length > 0 && (
+      {user?.patient?.medicines?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -102,8 +102,8 @@ export default function ProfileQr() {
             {t('Medicines')}
           </Typography>
           <Stack spacing={1}>
-            {user?.patient?.[user.index_of]?.medicines?.map((data, datakey, idx) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
+            {user?.patient?.medicines?.map((data, datakey) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={datakey}>
                 -&nbsp; {data?.medicine?.trade_name}
               </li>
             ))}
@@ -122,8 +122,8 @@ export default function ProfileQr() {
             {t('Insurance')}
           </Typography>
           <Stack spacing={1} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
-            {patientInsuranseData?.map((company, companykey, idx) => (
-              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={idx}>
+            {patientInsuranseData?.map((company, companykey) => (
+              <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }} key={companykey}>
                 -&nbsp; {company?.insurance?.name_english}
               </li>
             ))}
@@ -132,7 +132,7 @@ export default function ProfileQr() {
         </Stack>
       )}
 
-      {user?.patient?.[user.index_of].sport_exercises && (
+      {user?.patient.sport_exercises && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -143,12 +143,12 @@ export default function ProfileQr() {
             {t('Sport Exercises')}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            -&nbsp; {user?.patient?.[user.index_of]?.sport_exercises}
+            -&nbsp; {user?.patient?.sport_exercises}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.[user.index_of]?.eating_diet && (
+      {user?.patient?.eating_diet && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -158,12 +158,12 @@ export default function ProfileQr() {
             {t('Eating Diet')}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            -&nbsp; {user?.patient?.[user.index_of]?.eating_diet?.name_english}
+            -&nbsp; {user?.patient?.eating_diet?.name_english}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.[user.index_of]?.alcohol_consumption && (
+      {user?.patient?.alcohol_consumption && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -174,12 +174,12 @@ export default function ProfileQr() {
             {t('Alcohol Consumption')}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            -&nbsp; {user?.patient?.[user.index_of]?.alcohol_consumption}
+            -&nbsp; {user?.patient?.alcohol_consumption}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.[user.index_of]?.smoking && (
+      {user?.patient?.smoking && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -190,12 +190,12 @@ export default function ProfileQr() {
             {t('Smoking')}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            -&nbsp; {user?.patient?.[user.index_of]?.smoking}
+            -&nbsp; {user?.patient?.smoking}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.[user.index_of]?.other_medication_notes?.length > 0 ? (
+      {user?.patient?.other_medication_notes?.length > 0 ? (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -205,8 +205,8 @@ export default function ProfileQr() {
             &nbsp;
             {t('Notes')}
           </Typography>
-          {user?.patient?.[user.index_of]?.other_medication_notes.map((info, infokey, idx) => (
-            <li key={idx} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
+          {user?.patient?.other_medication_notes.map((info, infokey) => (
+            <li key={infokey} style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
               -&nbsp; {info}
             </li>
           ))}
@@ -222,7 +222,7 @@ export default function ProfileQr() {
       <div>
         <Image
           alt="profile"
-          src={user?.patient?.[user.index_of]?.profile_picture?.replace(/\\/g, '/')}
+          src={user?.patient?.profile_picture?.replace(/\\/g, '/')}
           sx={{
             height: '150px',
             width: '100px',
@@ -244,35 +244,35 @@ export default function ProfileQr() {
         />
         <Typography variant="h4" sx={{ mt: 2 }}>
           {curLangAr
-            ? user?.patient?.[user.index_of].name_arabic
-            : `${user?.patient?.[user.index_of]?.first_name} ${user?.patient?.[user.index_of]?.last_name}`}
+            ? user?.patient.name_arabic
+            : `${user?.patient?.first_name} ${user?.patient?.last_name}`}
         </Typography>
       </div>
       {[
         {
           label: t('Gender'),
-          value: user?.patient?.[user.index_of]?.gender,
+          value: user?.patient?.gender,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: t('Age'),
-          value: calculateAge(user?.patient?.[user.index_of]?.birth_date),
+          value: calculateAge(user?.patient?.birth_date),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: t('Height'),
-          value: user?.patient?.[user.index_of]?.height,
+          value: user?.patient?.height,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: t('Weight'),
-          value: user?.patient?.[user.index_of]?.weight,
+          value: user?.patient?.weight,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
-      ].map((item, i, idx) => (
+      ].map((item, i) => (
         <>
           {item.value && (
-            <Stack key={idx}>
+            <Stack key={i}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span
@@ -295,38 +295,38 @@ export default function ProfileQr() {
       {[
         {
           label: t('Identification Number'),
-          value: user?.patient?.[user.index_of]?.identification_num,
+          value: user?.patient?.identification_num,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: t('Blood Type'),
-          value: user?.patient?.[user.index_of]?.blood_type,
+          value: user?.patient?.blood_type,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: t('Marital Status'),
-          value: user?.patient?.[user.index_of]?.marital_status,
+          value: user?.patient?.marital_status,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: t('Address'),
-          value: user?.patient?.[user.index_of]?.address,
+          value: user?.patient?.address,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
           label: t('Mobile Number'),
-          value: user?.patient?.[user.index_of]?.mobile_num1,
+          value: user?.patient?.mobile_num1,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
         {
           label: t('Second Mobile Number'),
-          value: user?.patient?.[user.index_of]?.mobile_num2,
+          value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
-      ].map((item, ii, idx) => (
+      ].map((item, ii) => (
         <>
           {item.value && (
-            <Stack key={idx}>
+            <Stack key={ii}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span
@@ -350,43 +350,43 @@ export default function ProfileQr() {
       {[
         {
           label: t('Identification Number'),
-          value: user?.patient?.[user.index_of]?.identification_num,
+          value: user?.patient?.identification_num,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: t('Blood Type'),
-          value: user?.patient?.[user.index_of]?.blood_type,
+          value: user?.patient?.blood_type,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: t('Pregnant'),
-          value: user?.patient?.[user.index_of]?.pregnant ? 'Yes' : 'No',
+          value: user?.patient?.pregnant ? 'Yes' : 'No',
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: t('Marital Status'),
-          value: user?.patient?.[user.index_of]?.marital_status,
+          value: user?.patient?.marital_status,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
           label: t('Address'),
-          value: user?.patient?.[user.index_of]?.address,
+          value: user?.patient?.address,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
           label: t('Mobile Number'),
-          value: user?.patient?.[user.index_of]?.mobile_num1,
+          value: user?.patient?.mobile_num1,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
         {
           label: t('Second Mobile Number'),
-          value: user?.patient?.[user.index_of]?.mobile_num2,
+          value: user?.patient?.mobile_num2,
           icon: <Iconify icon="carbon:skill-level-basic" />,
         },
-      ].map((item, iii, idx) => (
+      ].map((item, iii) => (
         <>
           {item.value && (
-            <Stack key={idx} spacing={2}>
+            <Stack key={iii} spacing={2}>
               <Typography sx={{ color: 'gray' }} variant="body1">
                 {item.label} : &nbsp;
                 <span
@@ -409,7 +409,7 @@ export default function ProfileQr() {
     <Grid container spacing={3}>
       <Grid xs={12} md={4}>
         {renderOverview}
-        {user?.patient?.[user.index_of].gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
+        {user?.patient.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
       </Grid>
 
       <Grid xs={12} md={7}>

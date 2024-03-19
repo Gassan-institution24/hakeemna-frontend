@@ -34,7 +34,7 @@ export default function AccountGeneral({ data, refetch }) {
   const { t } = useTranslate();
   const [em_phone, setEMphone] = useState(data.mobile_num1);
   const [em_phone2, setEMphone2] = useState(data.mobile_num2);
-  console.log(user?.patient?.[user.index_of]?.other_medication_notes);
+  console.log(user?.patient?.other_medication_notes);
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
@@ -163,7 +163,7 @@ export default function AccountGeneral({ data, refetch }) {
     }
 
     try {
-      await axios.patch(`${endpoints.patients.one(user?.patient?.[user.index_of]._id)}`, formData);
+      await axios.patch(`${endpoints.patients.one(user?.patient._id)}`, formData);
       enqueueSnackbar(`${t('Profile updated successfully')}`, { variant: 'success' });
       setTimeout(() => {
         window.location.reload();
