@@ -8,7 +8,7 @@ import WatingRoomDialog from './waitingRoomDialog';
 
 export default function WatingRoom() {
   const { user } = useAuthContext();
-  const { appointmentsData } = useGetPatientOneAppointments(user?.patient?.[user.index_of]?._id);
+  const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
   const { employeesData } = useGetUSEmployeeEngs(appointmentsData?.unit_service?._id);
 
   const today = new Date();

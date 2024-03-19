@@ -57,7 +57,7 @@ export default function Insuranceinfo() {
 
   const defaultValues = {
     type: '',
-    patient: user?.patient?.[user.index_of]?._id,
+    patient: user?.patient?._id,
     // file: [],
     insurance: '',
     insurance_client_num: '',
@@ -195,7 +195,7 @@ export default function Insuranceinfo() {
             sx={{
               color: 'text.secondary',
               mt: { md: -2.5, xs: -2.3 },
-              ml: curLangAr ? { md: 31, xs: -5 } : { md: -21, xs: 4 },
+              ml: curLangAr ? { md:-30, xs: -5 } : { md: -21, xs: 4 },
               typography: 'caption',
               textAlign: 'center',
               fontSize: { md: 12, xs: 10 },
@@ -227,7 +227,7 @@ export default function Insuranceinfo() {
           </DialogActions>
         </FormProvider>
       </Dialog>{' '}
-      <InsurancePage user = {user?.patient?.[user.index_of]?._id} />
+      <InsurancePage user = {user?.patient?._id} />
     </Container>
   );
 }
