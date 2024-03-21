@@ -16,13 +16,13 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRead, filters }) {
   const {
-    code,
+    // code,
     status,
     error_code,
     URL,
     method,
     error_msg,
-    location,
+    // location,
     created_at,
     user_creation,
     ip_address_user_creation,

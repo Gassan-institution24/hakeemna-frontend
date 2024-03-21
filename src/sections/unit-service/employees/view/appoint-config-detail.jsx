@@ -279,8 +279,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     }
   }, [errors]);
 
-  console.log('errorMsg', errorMsg);
-
+  // console.log('errorMsg', errorMsg);
+  /* eslint-disable */
   useEffect(() => {
     if (appointmentConfigData) {
       methods.reset({
@@ -323,8 +323,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ],
       });
     }
-  }, [appointmentConfigData, methods, user, employeeInfo?.department]);
-
+  }, [appointmentConfigData, user, employeeInfo?.department]);
+  /* eslint-enable */
   return (
     <>
       <Container maxWidth="lg">

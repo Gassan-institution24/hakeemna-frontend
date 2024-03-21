@@ -28,9 +28,9 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
     End_date,
     Users_num,
     price,
-    Payment_method,
-    Payment_frequency,
-    note,
+    // Payment_method,
+    // Payment_frequency,
+    // note,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -85,7 +85,7 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
       <TableCell lang="ar" align="center">
         {price}
       </TableCell>
-      <TableCell
+      {/* <TableCell
         align="center"
         onClick={() => setFilters({ ...filters, name: Payment_method?.name_english })}
       >
@@ -96,7 +96,7 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
       </TableCell>
       <TableCell lang="ar" align="center">
         {note}
-      </TableCell>
+      </TableCell> */}
       <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />

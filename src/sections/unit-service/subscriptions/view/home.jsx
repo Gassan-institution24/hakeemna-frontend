@@ -67,9 +67,9 @@ export default function UnitServicesAccountingView() {
     { id: 'End_date', label: t('end date') },
     { id: 'Users_num', label: t('users no') },
     { id: 'price', label: t('price') },
-    { id: 'Payment_method', label: t('payment method') },
-    { id: 'Payment_frequency', label: t('payment frequency') },
-    { id: 'notes', label: t('notes') },
+    // { id: 'Payment_method', label: t('payment method') },
+    // { id: 'Payment_frequency', label: t('payment frequency') },
+    // { id: 'notes', label: t('notes') },
     { id: '', width: 88 },
   ];
 
@@ -180,7 +180,7 @@ export default function UnitServicesAccountingView() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            New License
+            {t('new license')}
           </Button> /// edit
         }
         sx={{
