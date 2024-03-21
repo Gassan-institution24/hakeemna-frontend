@@ -1,3 +1,4 @@
+import JsPdf from 'jspdf';
 import * as Yup from 'yup';
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -17,7 +18,6 @@ import {
   Table,
   Paper,
   Button,
-  // Divider,
   MenuItem,
   TableRow,
   TableBody,
@@ -33,7 +33,6 @@ import axios from 'src/utils/axios';
 import { fDate } from 'src/utils/format-time';
 
 import { useGetSpecialties } from 'src/api';
-// import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify/iconify';
@@ -48,13 +47,10 @@ export default function OldMedicalReports() {
   const [ImgFiles, setImgFiles] = useState([]);
   const [Filesdata, setFilesdata] = useState([]);
   const [FileToDelete, setFileToDelete] = useState([]);
-  // const [FileToDownload, setFileToDownload] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  // const { user } = useAuthContext();
   const { specialtiesData } = useGetSpecialties();
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -67,7 +63,6 @@ export default function OldMedicalReports() {
 
     fetchData();
   }, []);
-  console.log(Filesdata);
 
   const delteeFile = async () => {
     try {
@@ -138,13 +133,14 @@ export default function OldMedicalReports() {
     const fileValidator = fuser(acceptedFiles.reduce((acc, file) => acc + file.size, 0));
 
     const isValidFiles = acceptedFiles.every(
-      (file) => fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)
+      (file) =>
+        // const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
+        fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)
     );
 
     if (isValidFiles) {
-      // setImgFiles(acceptedFiles); // Save the files in state
+      // setFiles(acceptedFiles); // Save the files in state
       const newFiles = acceptedFiles;
-      console.log(newFiles, 'newfiles');
       setValue(newFiles);
       setImgFiles((currentFiles) => [...currentFiles, ...newFiles]);
     } else {
@@ -152,7 +148,6 @@ export default function OldMedicalReports() {
       enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
     }
   };
-
   const onSubmit = async (data) => {
     const formData = new FormData();
     Object.keys(data).forEach((key) => {
@@ -171,8 +166,6 @@ export default function OldMedicalReports() {
       setFilesdata(response.data);
       reset();
       setCheckChange(!checkChange);
-
-      console.log('data', data);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
@@ -181,6 +174,22 @@ export default function OldMedicalReports() {
 
   const handleAlertClose = () => {
     setShowAlert(false);
+  };
+
+  const downloadAsPDF = (report) => {
+    // Create a new PDF instance
+    const pdf = new JsPdf();
+
+    // Add report details to the PDF
+    pdf.text(`File Name: ${report.name}`, 10, 10);
+    pdf.text(`Specialty: ${report.specialty.name_english}`, 10, 20);
+    pdf.text(`Date: ${fDate(report.date)}`, 10, 30);
+    if (report.note) {
+      pdf.text(`Note: ${report.note}`, 10, 40);
+    }
+
+    // Save the PDF
+    pdf.save(`${report.name}.pdf`);
   };
 
   return (
@@ -346,8 +355,12 @@ export default function OldMedicalReports() {
         </FormProvider>
       </Dialog>
       {Filesdata?.map((info, i) => (
-        <TableContainer component={Paper} key={i} sx={{ border: '1px solid lightgray',borderRadius: '6px'  }}>
-          <Table sx={{ mb: 1,   }}>
+        <TableContainer
+          component={Paper}
+          key={i}
+          sx={{ border: '1px solid lightgray', borderRadius: '6px', mb: 2 }}
+        >
+          <Table sx={{ mb: 1 }}>
             <TableHead>
               <TableRow>
                 <TableCell> {t('File Name')}</TableCell>
@@ -379,15 +392,15 @@ export default function OldMedicalReports() {
                   </TableCell>
                 )}
                 <TableCell>
-                  <Button  variant="outlined" sx={{mr:1}}>
+                  <Button onClick={() => downloadAsPDF(info)} variant="outlined" sx={{ mr: 1 }}>
                     {t('Download')} &nbsp; <Iconify icon="flat-color-icons:download" />
                   </Button>
+
                   <Button
                     onClick={() => {
                       setFileToDelete(info?._id);
                       setShowAlert(true);
                     }}
-                   
                   >
                     {t('Delete')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
                   </Button>
