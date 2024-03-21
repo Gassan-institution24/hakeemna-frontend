@@ -67,7 +67,7 @@ export default function AccountGeneral({ data, refetch }) {
     address: Yup.string(),
     sport_exercises: Yup.string(),
     smoking: Yup.string(),
-    other_medication_notes: Yup.string(),
+    other_medication_notes: Yup.array(),
     profile_picture: Yup.string(),
   });
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
