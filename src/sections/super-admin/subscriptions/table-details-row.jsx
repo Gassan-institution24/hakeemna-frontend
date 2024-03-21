@@ -39,7 +39,7 @@ export default function TableDetailsRow({
     package_old_files_Management,
     package_TAX_Income_reporting,
     period_in_months,
-    cost_in_usd,
+    price_in_usd,
     status,
     created_at,
     user_creation,
@@ -143,7 +143,7 @@ export default function TableDetailsRow({
         {package_TAX_Income_reporting && <li>Package TAX Income Reporting</li>}
       </TableCell>
       <TableCell align="center">{period_in_months}</TableCell>
-      <TableCell align="center">{cost_in_usd ? `$${cost_in_usd}` : 'Free'}</TableCell>
+      <TableCell align="center">{price_in_usd ? `$${price_in_usd}` : 'Free'}</TableCell>
       <TableCell align="center">
         <Label
           variant="soft"

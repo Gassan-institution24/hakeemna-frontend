@@ -31,6 +31,7 @@ export function useTranslate() {
     (newlang) => {
       i18n.changeLanguage(newlang);
       settings.onChangeDirectionByLang(newlang);
+      window.location.reload();
     },
     [i18n, settings]
   );

@@ -73,13 +73,12 @@ export default function AppointmentsView({ departmentData }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const TABLE_HEAD = [
-    { id: 'sequence_number', label: t('sequence') },
+    { id: 'start_time', label: t('start time') },
     { id: 'appoint_number', label: t('number') },
     { id: 'appointment_type', label: t('appointment type') },
-    { id: 'work_group', label: t('work group') },
-    { id: 'work_shift', label: t('work shift') },
     { id: 'patient', label: t('patient') },
-    { id: 'start_time', label: t('start time') },
+    { id: 'note', label: t('note') },
+    { id: 'work_group', label: t('work group') },
     { id: 'status', label: t('status') },
     { id: '' },
   ];

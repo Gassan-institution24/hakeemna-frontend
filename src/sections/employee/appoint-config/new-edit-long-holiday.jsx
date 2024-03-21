@@ -65,9 +65,9 @@ export default function NewEditLongHolidays() {
           divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
           spacing={3}
         >
-          {fields.map((item, index, idx) => (
+          {fields.map((item, index) => (
             <Stack
-              key={idx}
+              key={index}
               alignItems="flex-start"
               spacing={1.5}
               sx={{ width: { xs: '100%', md: 'auto' } }}
