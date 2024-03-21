@@ -33,9 +33,12 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { useTranslate } from 'src/locales';
 import { Button } from '@mui/material';
+
 import { RouterLink } from 'src/routes/components';
+
+import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 
 import AccountingRow from '../subscription-row'; /// edit
@@ -64,9 +67,9 @@ export default function UnitServicesAccountingView() {
     { id: 'End_date', label: t('end date') },
     { id: 'Users_num', label: t('users no') },
     { id: 'price', label: t('price') },
-    { id: 'Payment_method', label: t('payment method') },
-    { id: 'Payment_frequency', label: t('payment frequency') },
-    { id: 'notes', label: t('notes') },
+    // { id: 'Payment_method', label: t('payment method') },
+    // { id: 'Payment_frequency', label: t('payment frequency') },
+    // { id: 'notes', label: t('notes') },
     { id: '', width: 88 },
   ];
 
@@ -177,7 +180,7 @@ export default function UnitServicesAccountingView() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            New License
+            {t('new license')}
           </Button> /// edit
         }
         sx={{

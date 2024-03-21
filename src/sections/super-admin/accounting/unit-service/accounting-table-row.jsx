@@ -53,7 +53,7 @@ export default function MovementTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell> */}
 
-        <TableCell>{code}</TableCell>
+        <TableCell align="center">{code}</TableCell>
 
         <TableCell align="center">
           <ListItemText

@@ -47,7 +47,7 @@ export default function TableNewEditForm({ currentTable }) {
     city: Yup.string().nullable(),
     US_type: Yup.string().nullable(),
     unit_service: Yup.string().nullable(),
-    cost_in_usd: Yup.number(),
+    price_in_usd: Yup.number(),
     package_appointment: Yup.boolean(),
     package_accounting: Yup.boolean(),
     package_docotor_report: Yup.boolean(),
@@ -64,7 +64,7 @@ export default function TableNewEditForm({ currentTable }) {
       city: currentTable?.city?._id || null,
       US_type: currentTable?.US_type?._id || null,
       unit_service: currentTable?.unit_service?._id || null,
-      cost_in_usd: currentTable?.cost_in_usd || 0,
+      price_in_usd: currentTable?.price_in_usd || 0,
       package_appointment: currentTable?.package_appointment || false,
       package_accounting: currentTable?.package_accounting || false,
       package_docotor_report: currentTable?.package_docotor_report || false,
@@ -200,7 +200,7 @@ export default function TableNewEditForm({ currentTable }) {
                 }
               /> */}
               <RHFTextField type="number" name="period_in_months" label="period in months" />
-              <RHFTextField type="number" name="cost_in_usd" label="Cost in USD" />
+              <RHFTextField type="number" name="price_in_usd" label="Cost in USD" />
             </Box>
             <Typography marginTop={{ xs: 1, sm: 3 }} variant="subtitle2">
               Packages

@@ -1,14 +1,11 @@
 import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
@@ -20,7 +17,6 @@ import { fTimestamp } from 'src/utils/format-time';
 import { useTranslate } from 'src/locales';
 import { useGetUSLicenseMovement } from 'src/api';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -57,7 +53,7 @@ const TABLE_HEAD = [
 const defaultFilters = {
   name: '',
   service: [],
-  status: 'available',
+  // status: 'available',
   startDate: null,
   endDate: null,
 };
@@ -65,7 +61,7 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function USlicenseMovementView({ unitServiceData }) {
-  const theme = useTheme();
+  // const theme = useTheme();
 
   const { t } = useTranslate();
 
@@ -73,11 +69,14 @@ export default function USlicenseMovementView({ unitServiceData }) {
 
   const router = useRouter();
 
-  const table = useTable({ defaultOrderBy: 'code' });
+  const table = useTable();
 
   // const confirm = useBoolean();
 
   const { licenseMovements, loading } = useGetUSLicenseMovement(unitServiceData?._id);
+
+  console.log('unitServiceData', unitServiceData);
+  console.log('licenseMovements', licenseMovements);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -103,25 +102,25 @@ export default function USlicenseMovementView({ unitServiceData }) {
   const canReset =
     !!filters.name ||
     !!filters.service.length ||
-    filters.status !== 'available' ||
+    // filters.status !== 'available' ||
     (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
   // const getInvoiceLength = (status) => dataFiltered.filter((item) => item.status === status).length;
 
-  const getInvoiceLengthForTabs = (status) => {
-    const filterdData = applyFilter({
-      inputData: licenseMovements,
-      comparator: getComparator(table.order, table.orderBy),
-      filters: { ...filters, status: 'all' },
-      dateError,
-    });
-    if (!status) {
-      return filterdData.length;
-    }
-    return filterdData.filter((item) => item.status === status).length;
-  };
+  // const getInvoiceLengthForTabs = (status) => {
+  //   const filterdData = applyFilter({
+  //     inputData: licenseMovements,
+  //     comparator: getComparator(table.order, table.orderBy),
+  //     filters ,
+  //     dateError,
+  //   });
+  //   if (!status) {
+  //     return filterdData.length;
+  //   }
+  //   return filterdData.filter((item) => item.status === status).length;
+  // };
 
   // const getTotalAmount = (status) =>
   //   sumBy(
@@ -131,33 +130,33 @@ export default function USlicenseMovementView({ unitServiceData }) {
 
   // const getPercentByStatus = (status) => (getInvoiceLength(status) / dataFiltered.length) * 100;
 
-  const TABS = [
-    // { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
-    {
-      value: 'active',
-      label: 'active',
-      color: 'success',
-      count: getInvoiceLengthForTabs('active'),
-    },
-    {
-      value: 'inactive',
-      label: 'inactive',
-      color: 'warning',
-      count: getInvoiceLengthForTabs('inactive'),
-    },
-    // {
-    //   value: 'overdue',
-    //   label: 'Overdue',
-    //   color: 'error',
-    //   count: getInvoiceLengthForTabs('overdue'),
-    // },
-    // {
-    //   value: 'draft',
-    //   label: 'Draft',
-    //   color: 'default',
-    //   count: getInvoiceLength('draft'),
-    // },
-  ];
+  // const TABS = [
+  //   // { value: 'all', label: 'All', color: 'default', count: getInvoiceLengthForTabs() },
+  //   {
+  //     value: 'active',
+  //     label: 'active',
+  //     color: 'success',
+  //     count: getInvoiceLengthForTabs('active'),
+  //   },
+  //   {
+  //     value: 'inactive',
+  //     label: 'inactive',
+  //     color: 'warning',
+  //     count: getInvoiceLengthForTabs('inactive'),
+  //   },
+  //   // {
+  //   //   value: 'overdue',
+  //   //   label: 'Overdue',
+  //   //   color: 'error',
+  //   //   count: getInvoiceLengthForTabs('overdue'),
+  //   // },
+  //   // {
+  //   //   value: 'draft',
+  //   //   label: 'Draft',
+  //   //   color: 'default',
+  //   //   count: getInvoiceLength('draft'),
+  //   // },
+  // ];
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -205,12 +204,12 @@ export default function USlicenseMovementView({ unitServiceData }) {
     [router]
   );
 
-  const handleFilterStatus = useCallback(
-    (event, newValue) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
-  );
+  // const handleFilterStatus = useCallback(
+  //   (event, newValue) => {
+  //     handleFilters('status', newValue);
+  //   },
+  //   [handleFilters]
+  // );
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -256,7 +255,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
         />
 
         <Card>
-          <Tabs
+          {/* <Tabs
             value={filters.status}
             onChange={handleFilterStatus}
             sx={{
@@ -282,7 +281,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
                 }
               />
             ))}
-          </Tabs>
+          </Tabs> */}
 
           <MovementTableToolbar
             filters={filters}
@@ -432,7 +431,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name, status, startDate, endDate } = filters;
+  const { name,  startDate, endDate } = filters;
 
   const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
@@ -460,9 +459,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((invoice) => invoice.status === status);
-  }
+  // if (status !== 'all') {
+  //   inputData = inputData.filter((invoice) => invoice.status === status);
+  // }
 
   // if (service.length) {
   //   inputData = inputData.filter((invoice) =>

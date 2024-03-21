@@ -65,7 +65,7 @@ const TABLE_HEAD = [
   { id: 'unit_service', label: 'Unit Service' },
   { id: 'packages', label: 'Packages' },
   { id: 'period_months_offer', label: 'Period in Months' },
-  { id: 'cost_in_usd', label: 'Cost' },
+  { id: 'price_in_usd', label: 'Cost' },
   { id: 'status', label: 'Status' },
   { id: '', width: 88 },
 ];
@@ -511,16 +511,16 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (fees.length) {
     inputData = inputData.filter((subscription) => {
       if (fees.includes('Free')) {
-        return !subscription.cost_in_usd;
+        return !subscription.price_in_usd;
       }
       if (fees.includes('$50 and less')) {
-        return subscription.cost_in_usd <= 50;
+        return subscription.price_in_usd <= 50;
       }
       if (fees.includes('$100 and less')) {
-        return subscription.cost_in_usd <= 100;
+        return subscription.price_in_usd <= 100;
       }
       if (fees.includes('More than $100')) {
-        return subscription.cost_in_usd > 100;
+        return subscription.price_in_usd > 100;
       }
       return false;
     });

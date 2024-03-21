@@ -42,11 +42,11 @@ export default function AppointmentsTableRow({
   onDeleteRow,
 }) {
   const {
-    sequence_number,
+    note,
     appoint_number,
     unit_service,
     work_group,
-    work_shift,
+    // work_shift,
     appointment_type,
     patient,
     start_time,
@@ -84,33 +84,6 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell lang="ar" align="center">
-          {sequence_number}
-        </TableCell>
-        <TableCell lang="ar" align="center">
-          {appoint_number}
-        </TableCell>
-        <TableCell lang="ar" align="center">
-          {curLangAr ? appointment_type?.name_arabic : appointment_type?.name_english}
-        </TableCell>
-        <TableCell lang="ar" align="center">
-          {curLangAr ? work_group?.name_arabic : work_group?.name_english}
-        </TableCell>
-        <TableCell lang="ar" align="center">
-          {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
-        </TableCell>
-        <TableCell
-          lang="ar"
-          align="center"
-          sx={{
-            cursor: 'pointer',
-            color: '#3F54EB',
-          }}
-          onClick={() => router.push(paths.employee.patients.info(patient._id))}
-        >
-          {patient?.first_name} {patient?.family_name}
-        </TableCell>
-
-        <TableCell lang="ar" align="center">
           <ListItemText
             primary={
               isValid(new Date(start_time)) &&
@@ -136,6 +109,32 @@ export default function AppointmentsTableRow({
             }}
           />
         </TableCell>
+        <TableCell lang="ar" align="center">
+          {appoint_number}
+        </TableCell>
+        <TableCell lang="ar" align="center">
+          {curLangAr ? appointment_type?.name_arabic : appointment_type?.name_english}
+        </TableCell>
+        <TableCell
+          lang="ar"
+          align="center"
+          sx={{
+            cursor: 'pointer',
+            color: '#3F54EB',
+          }}
+          onClick={() => router.push(paths.employee.patients.info(patient._id))}
+        >
+          {patient?.first_name} {patient?.family_name}
+        </TableCell>
+        <TableCell lang="ar" align="center">
+          {note}
+        </TableCell>
+        <TableCell lang="ar" align="center">
+          {curLangAr ? work_group?.name_arabic : work_group?.name_english}
+        </TableCell>
+        {/* <TableCell lang="ar" align="center">
+          {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
+        </TableCell> */}
 
         <TableCell lang="ar" align="center">
           <Label

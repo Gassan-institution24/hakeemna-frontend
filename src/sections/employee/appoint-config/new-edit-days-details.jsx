@@ -17,6 +17,8 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
+import { useBoolean } from 'src/hooks/use-boolean';
+
 import { useUnitTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -24,6 +26,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetAppointmentTypes, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
+import { LoadingScreen } from 'src/components/loading-screen';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import NewEditDayAppointmentsDetails from './new-edit-days-appointments-details';
@@ -34,6 +37,8 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { myunitTime } = useUnitTime();
+
+  const proccessing = useBoolean();
 
   const weekDays = [
     { value: 'saturday', label: t('Saturday') },
@@ -105,6 +110,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   async function processDayDetails(index) {
     try {
+      proccessing.onTrue();
       clearErrors();
       if (!values.appointment_time) {
         setValue(`days_details[${index}].appointments`, []);
@@ -166,8 +172,10 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
         ...showAppointments,
         [index]: true,
       });
+      proccessing.onFalse();
     } catch (e) {
       console.error(e);
+      proccessing.onFalse();
       setErrorMsg(e.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -233,6 +241,9 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     }
   }, [appointTime]);
   /* eslint-enable */
+  if (proccessing.value) {
+    <LoadingScreen />;
+  }
   return (
     <>
       <Divider flexItem sx={{ borderStyle: 'solid' }} />
@@ -285,7 +296,9 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                           )
                       )
                       .map((option, idx) => (
-                        <MenuItem key={idx} value={option.value}>{option.label}</MenuItem>
+                        <MenuItem key={idx} value={option.value}>
+                          {option.label}
+                        </MenuItem>
                       ))}
                   </RHFSelect>
                   <RHFSelect
@@ -299,7 +312,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     label={`${t('appointment type')} *`}
                   >
                     {appointmenttypesData?.map((option, idx) => (
-                      <MenuItem value={option._id}>
+                      <MenuItem key={idx} value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
                       </MenuItem>
                     ))}

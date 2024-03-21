@@ -1,10 +1,14 @@
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useAuthContext } from 'src/auth/hooks';
-import { LoadingScreen } from 'src/components/loading-screen';
-import { useBoolean } from 'src/hooks/use-boolean';
-import { useRouter } from 'src/routes/hooks';
+
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
+import { useBoolean } from 'src/hooks/use-boolean';
+
+import { useAuthContext } from 'src/auth/hooks';
+
+import { LoadingScreen } from 'src/components/loading-screen';
 
 import OverviewAppView from 'src/sections/user/homePage/view/home';
 
