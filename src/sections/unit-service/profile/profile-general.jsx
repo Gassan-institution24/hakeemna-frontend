@@ -315,6 +315,7 @@ export default function AccountGeneral({ unitServiceData }) {
               <RHFSelect
                 label={`${t('unit service type')} *`}
                 fullWidth
+                disabled
                 name="US_type"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}

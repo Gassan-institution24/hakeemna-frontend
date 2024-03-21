@@ -2,9 +2,13 @@ import { m } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 
+import { Button } from '@mui/material';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
+import { RouterLink } from 'src/routes/components';
+
+import { useTranslate } from 'src/locales';
 import { useGetwgroupEmployeeEngs } from 'src/api';
 import { ForbiddenIllustration } from 'src/assets/illustrations';
 
@@ -18,10 +22,14 @@ export function useAclGuard() {
   const { data } = useGetwgroupEmployeeEngs(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
   );
+
+  console.log(
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+  );
   const checkAcl = useCallback(
     ({ category, subcategory, acl }) => {
       // if (
-      //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.status !==
+      //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?.status !==
       //   'active'
       // ) {
       //   return false;
@@ -51,6 +59,7 @@ export function useAclGuard() {
 }
 export default function ACLGuard({ category, subcategory, acl, children, sx }) {
   const { user } = useAuthContext();
+  const { t } = useTranslate();
 
   const currentACL = user?.employee?.employee_engagements?.[user.employee.selected_engagement].acl;
 
@@ -59,21 +68,21 @@ export default function ACLGuard({ category, subcategory, acl, children, sx }) {
   );
 
   if (
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.status !==
-      'active' &&
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+      ?.status !== 'active' &&
     subcategory !== 'unit_service_info'
   ) {
     return (
       <Container maxWidth="lg" component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
         <m.div variants={varBounce().in}>
           <Typography variant="h3" sx={{ mb: 2 }}>
-            Service Unit Licence expired
+            {t('Service Unit Licence expired')}
           </Typography>
         </m.div>
 
         <m.div variants={varBounce().in}>
           <Typography sx={{ color: 'text.secondary' }}>
-            You cannot access data from this service unit
+            {t('You cannot access data from this service unit')}
           </Typography>
         </m.div>
 
@@ -85,6 +94,16 @@ export default function ACLGuard({ category, subcategory, acl, children, sx }) {
             }}
           />
         </m.div>
+        {currentACL?.unit_service?.unit_service_info?.includes('create') && (
+          <Button
+            component={RouterLink}
+            href="/dashboard/us/subscriptions/new"
+            size="large"
+            variant="contained"
+          >
+            {t('Add new licence')}
+          </Button>
+        )}
       </Container>
     );
   }
@@ -114,13 +133,13 @@ export default function ACLGuard({ category, subcategory, acl, children, sx }) {
     <Container maxWidth="lg" component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
       <m.div variants={varBounce().in}>
         <Typography variant="h3" sx={{ mb: 2 }}>
-          Permission Denied
+          {t('Permission Denied')}
         </Typography>
       </m.div>
 
       <m.div variants={varBounce().in}>
         <Typography sx={{ color: 'text.secondary' }}>
-          You do not have permission to access this page
+          {t('You do not have permission to access this page')}
         </Typography>
       </m.div>
 
