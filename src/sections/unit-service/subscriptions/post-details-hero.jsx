@@ -4,11 +4,9 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
-import SpeedDial from '@mui/material/SpeedDial';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 import { alpha, useTheme } from '@mui/material/styles';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -17,7 +15,6 @@ import { fDate } from 'src/utils/format-time';
 // import { _socials } from 'src/_mock';
 import { bgGradient } from 'src/theme/css';
 
-import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 

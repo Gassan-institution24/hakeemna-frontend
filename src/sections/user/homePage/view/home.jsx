@@ -1,3 +1,4 @@
+import YouTube from 'react-youtube';
 import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
@@ -19,13 +20,12 @@ import axios from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
+import Image from 'src/components/image';
 import { useSnackbar } from 'src/components/snackbar';
 import { useSettingsContext } from 'src/components/settings';
 
 import AppWelcome from '../app-welcome';
 import AppFeatured from '../app-featured';
-// import Photo from './photo.png';
-// test
 
 // ----------------------------------------------------------------------
 
@@ -45,7 +45,6 @@ export default function OverviewAppView() {
   const currentHour = new Date().getHours();
   const isMorning = currentHour >= 0 && currentHour < 12;
   const greeting = isMorning ? t(`Good Morning ☀️`) : t(`Good Evening 🌑`);
-
   const yesfunction = async () => {
     try {
       const response = await axios.patch(`/api/patient/${user?.patient?._id}/updateonboard`, {
@@ -90,14 +89,14 @@ export default function OverviewAppView() {
 
   useEffect(() => {
     if (oldpatientsdata.length > 0) {
-      const mappedData = oldpatientsdata.map((Data, idx) => Data);
+      const mappedData = oldpatientsdata.map((Data) => Data);
       setOlddata(mappedData[0].identification_num);
     }
   }, [oldpatientsdata, oldData]);
 
   useEffect(() => {
     if (oldpatientsdata.length > 0) {
-      const mappedData = oldpatientsdata.map((Data, idx) => Data);
+      const mappedData = oldpatientsdata.map((Data) => Data);
       setUs(mappedData[0].unit_service);
     }
   }, [oldpatientsdata, Us]);
@@ -106,13 +105,15 @@ export default function OverviewAppView() {
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <AppWelcome
-            title={`${greeting} \n ${user?.patient?.first_name} ${user?.patient?.last_name}`}
+            title={`${greeting} \n ${user?.patient?.first_name} ${user?.patient?.family_name}`}
             description={
               curLangAr
                 ? 'قم بتغذية جسدك، وتمكين عقلك  فالعافية هي مفتاح الحياة النابضة بالحياة.'
                 : 'Nourish your body, empower your mind – wellness is the key to a vibrant life.'
             }
-            //   img={<Image src={Photo} />}
+            img={
+              <Image src="https://static.tildacdn.com/tild3963-3735-4335-b535-346338303236/Pulse2.gif" />
+            }
             action={
               <Button variant="contained" color="primary">
                 {curLangAr ? 'احسب مؤشر كتلة الجسم' : ' Calculate your BMI'}
@@ -127,6 +128,17 @@ export default function OverviewAppView() {
         <Grid xs={12} md={12} sx={{ height: '400px' }}>
           <Typography variant="h3">{t('How To Use')}</Typography>
           <Box sx={{ position: 'relative', mt: 1 }}>
+            <YouTube
+              videoId="IGsRxmC40Bw" // Replace with your YouTube video ID
+              opts={{
+                height: '320',
+                width: '100%',
+                playerVars: {
+                  autoplay: 0,
+                },
+              }}
+              onReady={(event) => event.target.pauseVideo()}
+            />
             {/* <iframe
               src="https://www.youtube.com/embed/IGsRxmC40Bw?si=gULZ3W4Jy6BPk7p6"
               title="YouTube video player"

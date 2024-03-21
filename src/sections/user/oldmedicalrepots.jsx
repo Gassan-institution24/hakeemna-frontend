@@ -1,10 +1,8 @@
 import * as Yup from 'yup';
-import React, { useCallback, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-// import Box from '@mui/material/Box';
-// import { Stack } from '@mui/system';
 import Link from '@mui/material/Link';
 import Grow from '@mui/material/Grow';
 import Alert from '@mui/material/Alert';
@@ -15,12 +13,24 @@ import { DatePicker } from '@mui/x-date-pickers';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import {  Button, MenuItem, Typography } from '@mui/material';
+import {
+  Table,
+  Paper,
+  Button,
+  // Divider,
+  MenuItem,
+  TableRow,
+  TableBody,
+  TableCell,
+  TableHead,
+  Typography,
+  TableContainer,
+} from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios from 'src/utils/axios';
-// import { fDate } from 'src/utils/format-time';/
+import { fDate } from 'src/utils/format-time';
 
 import { useGetSpecialties } from 'src/api';
 // import { useAuthContext } from 'src/auth/hooks';
@@ -35,47 +45,48 @@ export default function OldMedicalReports() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const [files, setFiles] = useState([]);
+  const [ImgFiles, setImgFiles] = useState([]);
+  const [Filesdata, setFilesdata] = useState([]);
+  const [FileToDelete, setFileToDelete] = useState([]);
+  // const [FileToDownload, setFileToDownload] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   // const { user } = useAuthContext();
   const { specialtiesData } = useGetSpecialties();
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get('/api/oldmedicalreports');
-  //       setfilesPdf(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/api/oldmedicalreports');
+        setFilesdata(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
-  //   fetchData();
-  // }, []);
+    fetchData();
+  }, []);
+  console.log(Filesdata);
 
-
-  // const delteeFile = async () => {
-  //   try {
-  //     await axios.patch(`/api/oldmedicalreports/${filesPdftodelete._id}`, {
-  //       Activation: 'Inactive',
-  //     });
-  //     enqueueSnackbar(
-  //       `${curLangAr ? 'تم حذف التقرير بنجاح' : 'Medical report deleted successfully'}`,
-  //       { variant: 'success' }
-  //     );
-  //     const response = await axios.get('/api/oldmedicalreports');
-  //     setfilesPdf(response.data);
-  //   } catch (error) {
-  //     enqueueSnackbar(`${curLangAr ? 'حدث خطأ ما, الرجاء المحاوله لاحقا' : 'Unable to delete'}`, {
-  //       variant: 'error',
-  //     });
-  //   }
-  // };
-
+  const delteeFile = async () => {
+    try {
+      await axios.patch(`/api/oldmedicalreports/${FileToDelete}`, {
+        Activation: 'Inactive',
+      });
+      enqueueSnackbar(
+        `${curLangAr ? 'تم حذف التقرير بنجاح' : 'Medical report deleted successfully'}`,
+        { variant: 'success' }
+      );
+      const response = await axios.get('/api/oldmedicalreports');
+      setFilesdata(response.data);
+    } catch (error) {
+      enqueueSnackbar(`${curLangAr ? 'حدث خطأ ما, الرجاء المحاوله لاحقا' : 'Unable to delete'}`, {
+        variant: 'error',
+      });
+    }
+  };
   const oldMedicalReportsSchema = Yup.object().shape({
-    type: Yup.string().required(),
     date: Yup.date().required('Date is required'),
     file: Yup.array().required(),
     name: Yup.string().required('File name is required'),
@@ -84,10 +95,7 @@ export default function OldMedicalReports() {
     specialty: Yup.string().required(),
   });
 
-  const TYPE = ['Blod Test', 'X-ray Test', 'Health Check Test', 'Heart examination Test'];
-
   const defaultValues = {
-    type: '',
     date: '',
     file: [],
     name: '',
@@ -104,7 +112,6 @@ export default function OldMedicalReports() {
   const {
     setValue,
     control,
-    watch,
     reset,
     handleSubmit,
     formState: { isSubmitting },
@@ -131,64 +138,37 @@ export default function OldMedicalReports() {
     const fileValidator = fuser(acceptedFiles.reduce((acc, file) => acc + file.size, 0));
 
     const isValidFiles = acceptedFiles.every(
-      (file) =>
-        // const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
-        fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)
+      (file) => fileValidator.validateFile(file.name) && fileValidator.validateSize(file.size)
     );
 
     if (isValidFiles) {
-      // setFiles(acceptedFiles); // Save the files in state
+      // setImgFiles(acceptedFiles); // Save the files in state
       const newFiles = acceptedFiles;
       console.log(newFiles, 'newfiles');
-      setValue(newFiles)
-      setFiles((currentFiles) => [...currentFiles, ...newFiles]);
+      setValue(newFiles);
+      setImgFiles((currentFiles) => [...currentFiles, ...newFiles]);
     } else {
       // Handle invalid file type or size
       enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
     }
   };
 
-  const values = watch();
-
-  const handleDropMultiFile = useCallback(
-    (acceptedFiles) => {
-      // console.log('acceptedFiles', acceptedFiles);
-      const test = values.file || files;
-      // console.log('files', files);
-
-      const newFiles = acceptedFiles.map((file, idx) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        })
-      );
-  
-
-      setFiles([...test, ...newFiles]);
-      setValue('file', files, {
-        shouldValidate: true,
-      });
-    },
-    [setValue, values.file, files]
-  );
-
-
   const onSubmit = async (data) => {
     const formData = new FormData();
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
     });
-    console.log(files, 'files');
 
-    if (files) {
-      files.forEach((f) => formData.append('medicalreports[]', f));
+    if (ImgFiles) {
+      ImgFiles.forEach((f) => formData.append('medicalreports[]', f));
     }
     try {
       console.log(Object.fromEntries(formData), 'sdsd');
       await axios.post('/api/oldmedicalreports', formData);
       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
       dialog.onFalse();
-      // const response = await axios.get('/api/oldmedicalreports');
-      // setfilesPdf(response.data);
+      const response = await axios.get('/api/oldmedicalreports');
+      setFilesdata(response.data);
       reset();
       setCheckChange(!checkChange);
 
@@ -202,8 +182,6 @@ export default function OldMedicalReports() {
   const handleAlertClose = () => {
     setShowAlert(false);
   };
-
-
 
   return (
     <>
@@ -237,7 +215,7 @@ export default function OldMedicalReports() {
                   }}
                   onClick={() => {
                     setShowAlert(false);
-                    // delteeFile();
+                    delteeFile();
                   }}
                 >
                   Confirm
@@ -266,19 +244,6 @@ export default function OldMedicalReports() {
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
             <RHFTextField lang="en" name="name" label={t('File name*')} sx={{ mb: 1.5 }} />
-            <RHFSelect
-              label={t('Type*')}
-              fullWidth
-              name="type"
-              PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ mb: 1.5 }}
-            >
-              {TYPE.map((test, idx) => (
-                <MenuItem value={test} key={idx} sx={{ mb: 1 }}>
-                  {test}
-                </MenuItem>
-              ))}
-            </RHFSelect>
 
             <RHFSelect
               label={t('Specialty*')}
@@ -380,9 +345,58 @@ export default function OldMedicalReports() {
           </DialogActions>
         </FormProvider>
       </Dialog>
+      {Filesdata?.map((info, i) => (
+        <TableContainer component={Paper} key={i} sx={{ border: '1px solid lightgray',borderRadius: '6px'  }}>
+          <Table sx={{ mb: 1,   }}>
+            <TableHead>
+              <TableRow>
+                <TableCell> {t('File Name')}</TableCell>
+                <TableCell> {t('Specialty')}</TableCell>
+                <TableCell> {t('Date')}</TableCell>
+                {info?.note ? <TableCell> {t('Note')}</TableCell> : ''}
 
+                <TableCell> {t('Options')}</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  {info?.name && info.name.length > 10
+                    ? `${info.name.substring(0, 10)}...`
+                    : info?.name}
+                </TableCell>
 
-  
+                {curLangAr ? (
+                  <TableCell>{info?.specialty?.name_arabic.substring(0, 12) || ''}</TableCell>
+                ) : (
+                  <TableCell>{info?.specialty?.name_english.substring(0, 12) || ''}</TableCell>
+                )}
+
+                <TableCell>{fDate(info?.date)}</TableCell>
+                {info?.note && (
+                  <TableCell>
+                    {info.note.length > 7 ? `${info.note.substring(0, 7)}...` : info.note}
+                  </TableCell>
+                )}
+                <TableCell>
+                  <Button  variant="outlined" sx={{mr:1}}>
+                    {t('Download')} &nbsp; <Iconify icon="flat-color-icons:download" />
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setFileToDelete(info?._id);
+                      setShowAlert(true);
+                    }}
+                   
+                  >
+                    {t('Delete')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ))}
     </>
   );
 }
