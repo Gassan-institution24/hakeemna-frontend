@@ -34,6 +34,9 @@ import {
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
 import { useTranslate } from 'src/locales';
+import { Button } from '@mui/material';
+import { RouterLink } from 'src/routes/components';
+import Iconify from 'src/components/iconify';
 
 import AccountingRow from '../subscription-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
@@ -167,16 +170,16 @@ export default function UnitServicesAccountingView() {
           },
           { name: t('subscriptions') }, /// edit
         ]}
-        // action={
-        //   <Button
-        //     component={RouterLink}
-        //     href={paths.superadmin.unitservices.newAccounting(user?.employee?.employee_engagements[selected||user?.employee.selected_engagement]?.unit_service._id)} /// edit
-        //     variant="contained"
-        //     startIcon={<Iconify icon="mingcute:add-line" />}
-        //   >
-        //     New License
-        //   </Button> /// edit
-        // }
+        action={
+          <Button
+            component={RouterLink}
+            href={paths.unitservice.subscriptions.new} /// edit
+            variant="contained"
+            startIcon={<Iconify icon="mingcute:add-line" />}
+          >
+            New License
+          </Button> /// edit
+        }
         sx={{
           mb: { xs: 3, md: 5 },
         }}

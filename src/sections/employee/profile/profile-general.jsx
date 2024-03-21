@@ -11,7 +11,7 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Tooltip, MenuItem, Typography } from '@mui/material';
+import { Tooltip, MenuItem, Typography, Chip } from '@mui/material';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -26,6 +26,7 @@ import FormProvider, {
   RHFTextField,
   RHFUploadBox,
   RHFUploadAvatar,
+  RHFAutocomplete,
 } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
@@ -67,6 +68,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     signature: Yup.mixed().nullable(),
     stamp: Yup.mixed().nullable(),
     picture: Yup.mixed().nullable(),
+    languages: Yup.array().required('languages is required'),
   });
 
   const defaultValues = {
@@ -90,6 +92,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     signature: employeeData?.signature || null,
     stamp: employeeData?.stamp || null,
     picture: employeeData?.picture || null,
+    languages: employeeData?.languages || [],
   };
 
   const methods = useForm({
@@ -422,6 +425,40 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 )}
               />
             </Box>
+            <RHFAutocomplete
+              sx={{ mt: 3 }}
+              name="languages"
+              lang="ar"
+              label={`${t('languages')} *`}
+              multiple
+              disableCloseOnSelect
+              options={[t('arabic'), t('english'), t('frensh'), t('turkish'), t('german')].filter(
+                (option) => !values.languages.some((item) => option === item)
+              )}
+              getOptionLabel={(option) => option}
+              renderOption={(props, option, idx) => (
+                <li {...props} lang="ar" key={idx} value={option}>
+                  {option}
+                </li>
+              )}
+              onChange={(event, newValue) => {
+                // setSelectedEmployees(newValue);
+                methods.setValue('languages', newValue, { shouldValidate: true });
+              }}
+              renderTags={(selected, getTagProps) =>
+                selected.map((option, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    lang="ar"
+                    key={index}
+                    label={option}
+                    size="small"
+                    color="info"
+                    variant="soft"
+                  />
+                ))
+              }
+            />
             <RHFTextField
               lang="ar"
               multiline

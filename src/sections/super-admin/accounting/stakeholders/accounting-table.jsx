@@ -48,7 +48,7 @@ const TABLE_HEAD = [
 
 const defaultFilters = {
   name: '',
-  status: 'available',
+  status: 'active',
 };
 
 // ----------------------------------------------------------------------
