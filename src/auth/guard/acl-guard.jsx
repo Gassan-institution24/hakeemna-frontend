@@ -20,6 +20,12 @@ export function useAclGuard() {
   );
   const checkAcl = useCallback(
     ({ category, subcategory, acl }) => {
+      // if (
+      //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.status !==
+      //   'active'
+      // ) {
+      //   return false;
+      // }
       const currentACL =
         user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.acl;
       if (category === 'work_group') {
@@ -51,6 +57,37 @@ export default function ACLGuard({ category, subcategory, acl, children, sx }) {
   const { data } = useGetwgroupEmployeeEngs(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
   );
+
+  if (
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.status !==
+      'active' &&
+    subcategory !== 'unit_service_info'
+  ) {
+    return (
+      <Container maxWidth="lg" component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
+        <m.div variants={varBounce().in}>
+          <Typography variant="h3" sx={{ mb: 2 }}>
+            Service Unit Licence expired
+          </Typography>
+        </m.div>
+
+        <m.div variants={varBounce().in}>
+          <Typography sx={{ color: 'text.secondary' }}>
+            You cannot access data from this service unit
+          </Typography>
+        </m.div>
+
+        <m.div variants={varBounce().in}>
+          <ForbiddenIllustration
+            sx={{
+              height: 260,
+              my: { xs: 5, sm: 10 },
+            }}
+          />
+        </m.div>
+      </Container>
+    );
+  }
 
   if (category === 'work_group') {
     if (
