@@ -23,9 +23,9 @@ export function useAclGuard() {
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
   );
 
-  console.log(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
-  );
+  // console.log(
+  //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+  // );
   const checkAcl = useCallback(
     ({ category, subcategory, acl }) => {
       // if (
