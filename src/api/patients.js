@@ -110,3 +110,30 @@ export function useFindPatient({ identification_num, email, mobile_num1 }) {
 
   return { ...memoizedValue, refetch };
 }
+
+export function useFindPatients({ identification_num, mobile_num1, first_name }) {
+  const URL = endpoints.patients.findPatient({
+    identification_num,
+    mobile_num1,
+    first_name,
+    // name_arabic,
+  });
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      existPatient: data || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
