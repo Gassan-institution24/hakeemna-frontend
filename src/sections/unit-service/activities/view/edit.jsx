@@ -27,7 +27,7 @@ export default function TableEditView({ activityData }) {
           },
           {
             name: t('activities'),
-            href: paths.unitservice.activities.root,
+            href: paths.unitservice.tables.activities.root,
           },
           { name: t('edit') },
         ]}

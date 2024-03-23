@@ -41,10 +41,12 @@ import {
   useGetSpecialties,
   useGetCountryCities,
   useGetActiveUSTypes,
+  useGetEmployeeTypes,
 } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFRadioGroup, RHFSelect, RHFTextField } from 'src/components/hook-form';
+import Markdown from 'src/components/markdown/markdown';
 
 // ----------------------------------------------------------------------
 
@@ -52,7 +54,6 @@ export default function JwtRegisterView() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const steps = [t('service unit'), t('admin'), t('account')];
 
   const { register } = useAuthContext();
 
@@ -68,6 +69,9 @@ export default function JwtRegisterView() {
   const { countriesData } = useGetCountries();
   const { unitserviceTypesData } = useGetActiveUSTypes();
   const { specialtiesData } = useGetSpecialties();
+  const { employeeTypesData } = useGetEmployeeTypes();
+
+  console.log('employeeTypesData', employeeTypesData);
 
   const searchParams = useSearchParams();
 
@@ -80,6 +84,9 @@ export default function JwtRegisterView() {
   const policyDialog = useBoolean();
 
   const RegisterSchema = Yup.object().shape({
+    US_type: Yup.string().required('Service unit type is required'),
+    employees_number: Yup.string().required('employees number is required'),
+
     us_name_arabic: Yup.string().required('Service unit name is required'),
     us_name_english: Yup.string().required('Service unit name is required'),
     // us_email: Yup.string()
@@ -88,7 +95,6 @@ export default function JwtRegisterView() {
     us_identification_num: Yup.string().required('Service unit ID number is required'),
     us_country: Yup.string().required('Service unit country is required'),
     us_city: Yup.string().required('Service unit city is required'),
-    US_type: Yup.string().required('Service unit type is required'),
     us_speciality: Yup.string().nullable(),
     us_sector_type: Yup.string().required('Service unit sector is required'),
     // us_phone: Yup.string().required('Service unit phone is required'),
@@ -100,7 +106,7 @@ export default function JwtRegisterView() {
     em_profrssion_practice_num: Yup.string().required(
       'Employee prefession practice number is required'
     ),
-    // em_type: Yup.string().required('Employee type is required'),
+    em_type: Yup.string().required('Employee type is required'),
     em_phone: Yup.string().required('Employee phone is required'),
     em_speciality: Yup.string().nullable(),
 
@@ -127,7 +133,7 @@ export default function JwtRegisterView() {
     em_nationality: null,
     em_identification_num: '',
     em_profrssion_practice_num: '',
-    // em_type: '',
+    em_type: '',
     em_phone: '',
     em_speciality: null,
     email: '',
@@ -149,6 +155,15 @@ export default function JwtRegisterView() {
   const values = watch();
 
   const { tableData } = useGetCountryCities(values.us_country);
+
+  const steps = [
+    t(
+      unitserviceTypesData.find((type) => type._id === values.US_type)?.name_english ||
+        'service unit'
+    ),
+    t('manager'),
+    t('account'),
+  ];
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
@@ -200,7 +215,6 @@ export default function JwtRegisterView() {
   // }, [tableData, selectedCountry]);
   useEffect(() => {
     if (Object.keys(errors).length) {
-      // console.log(errors);
       setErrorMsg(
         Object.keys(errors)
           .map((key, idx) => errors?.[key]?.message)
@@ -221,17 +235,19 @@ export default function JwtRegisterView() {
           {t('Sign in')}
         </Link>
       </Stack>
-      <Stepper activeStep={page}>
-        {steps.map((label, index, idx) => {
-          const stepProps = {};
-          const labelProps = { lang: 'ar' };
-          return (
-            <Step key={idx} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
+      {values.US_type !== null && (
+        <Stepper activeStep={page}>
+          {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = { lang: 'ar' };
+            return (
+              <Step key={index} {...stepProps}>
+                <StepLabel {...labelProps}>{label}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+      )}
     </Stack>
   );
 
@@ -272,28 +288,47 @@ export default function JwtRegisterView() {
     <Stack spacing={2}>
       {!!errorMsg && (
         <Alert severity="error">
-          <div> {errorMsg} </div>
+          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
         </Alert>
       )}
       {/* <Alert severity="info">Service unit information</Alert> */}
+      {curLangAr && (
+        <Tooltip placement="top" title="Service unit name in arabic">
+          <RHFTextField
+            lang="ar"
+            onChange={handleArabicInputChange}
+            name="us_name_arabic"
+            label={`${t('Arabic name of service unit')} *`}
+            placeholder="عيادة الدكتور أحمد"
+          />
+        </Tooltip>
+      )}
       <Tooltip placement="top" title="Service unit name in english">
         <RHFTextField
           lang="ar"
           onChange={handleEnglishInputChange}
           name="us_name_english"
-          label={`${t('name english')} *`}
+          label={`${t('English name of service unit')} *`}
+          placeholder="Dr.Ahmad Clinic"
         />
       </Tooltip>
-      <Tooltip placement="top" title="Service unit name in arabic">
+      {!curLangAr && (
+        <Tooltip placement="top" title="Service unit name in arabic">
+          <RHFTextField
+            lang="ar"
+            onChange={handleArabicInputChange}
+            name="us_name_arabic"
+            label={`${t('Arabic name of service unit')} *`}
+            placeholder="عيادة الدكتور أحمد"
+          />
+        </Tooltip>
+      )}
+      <Tooltip placement="top" title="Identification number of service unit">
         <RHFTextField
           lang="ar"
-          onChange={handleArabicInputChange}
-          name="us_name_arabic"
-          label={`${t('name arabic')} *`}
+          name="us_identification_num"
+          label={`${t('The national number of the service unit')} *`}
         />
-      </Tooltip>
-      <Tooltip placement="top" title="Identification number of service unit">
-        <RHFTextField lang="ar" name="us_identification_num" label={`${t('ID number')} *`} />
       </Tooltip>
       {/* <Tooltip placement="top" title="Phone number of service unit">
         <MuiTelInput
@@ -313,34 +348,34 @@ export default function JwtRegisterView() {
           <RHFTextField lang="ar" name="us_email" label={`${t('email')} *`} />
         </Tooltip>
       </Stack> */}
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <Tooltip placement="top" title="country which service unit placed">
-          <RHFSelect
-            lang="ar"
-            onChange={handleCountryChange}
-            name="us_country"
-            label={`${t('country')} *`}
-          >
-            {countriesData.map((country, idx) => (
-              <MenuItem key={idx} value={country._id}>
-                {curLangAr ? country.name_arabic : country.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-        </Tooltip>
-        <Tooltip placement="top" title="city which service unit placed">
-          <RHFSelect lang="ar" name="us_city" label={`${t('city')} *`}>
-            {tableData.map((city, idx) => (
-              <MenuItem key={idx} value={city._id}>
-                {curLangAr ? city.name_arabic : city.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-        </Tooltip>
-      </Stack>
+      {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}> */}
+      <Tooltip placement="top" title="country which service unit placed">
+        <RHFSelect
+          lang="ar"
+          onChange={handleCountryChange}
+          name="us_country"
+          label={`${t('region ( country )')} *`}
+        >
+          {countriesData.map((country, idx) => (
+            <MenuItem key={idx} value={country._id}>
+              {curLangAr ? country.name_arabic : country.name_english}
+            </MenuItem>
+          ))}
+        </RHFSelect>
+      </Tooltip>
+      <Tooltip placement="top" title="city which service unit placed">
+        <RHFSelect lang="ar" name="us_city" label={`${t('region ( city )')} *`}>
+          {tableData.map((city, idx) => (
+            <MenuItem key={idx} value={city._id}>
+              {curLangAr ? city.name_arabic : city.name_english}
+            </MenuItem>
+          ))}
+        </RHFSelect>
+      </Tooltip>
+      {/* </Stack> */}
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <Tooltip placement="top" title="type of the service unit">
+      {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}> */}
+      {/* <Tooltip placement="top" title="type of the service unit">
           <RHFSelect lang="ar" name="US_type" label={`${t('service unit type')} *`}>
             {unitserviceTypesData.map((type, idx) => (
               <MenuItem key={idx} value={type._id}>
@@ -348,8 +383,8 @@ export default function JwtRegisterView() {
               </MenuItem>
             ))}
           </RHFSelect>
-        </Tooltip>
-        <Tooltip placement="top" title="unit service speciality">
+        </Tooltip> */}
+      {/* <Tooltip placement="top" title="unit service speciality">
           <RHFSelect lang="ar" name="us_speciality" label={`${t('speciality')} *`}>
             {specialtiesData.map((specialty, idx) => (
               <MenuItem key={idx} value={specialty._id}>
@@ -357,18 +392,15 @@ export default function JwtRegisterView() {
               </MenuItem>
             ))}
           </RHFSelect>
-        </Tooltip>
-      </Stack>
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <Tooltip placement="top" title="service unit sector type">
-          <RHFSelect lang="ar" name="us_sector_type" label={t('sector type')}>
-            <MenuItem value="public">{t('Public')}</MenuItem>
-            <MenuItem value="private">{t('private')}</MenuItem>
-            <MenuItem value="non profit organization">{t('non profit organization')}</MenuItem>
-          </RHFSelect>
-        </Tooltip>
-      </Stack>
-
+        </Tooltip> */}
+      <Tooltip placement="top" title="service unit sector type">
+        <RHFSelect lang="ar" name="us_sector_type" label={t('sector type')}>
+          <MenuItem value="public">{t('Public')}</MenuItem>
+          <MenuItem value="private">{t('private')}</MenuItem>
+          <MenuItem value="non profit organization">{t('non profit organization')}</MenuItem>
+        </RHFSelect>
+      </Tooltip>
+      {/* </Stack> */}
       <LoadingButton
         fullWidth
         color="inherit"
@@ -400,7 +432,7 @@ export default function JwtRegisterView() {
     <Stack spacing={2}>
       {!!errorMsg && (
         <Alert severity="error">
-          <div> {errorMsg} </div>
+          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
         </Alert>
       )}
       {/* <Alert severity="info">Employee information</Alert> */}
@@ -411,25 +443,40 @@ export default function JwtRegisterView() {
         display="grid"
         gridTemplateColumns={{
           xs: 'repeat(1, 1fr)',
-          sm: 'repeat(2, 1fr)',
+          sm: 'repeat(1, 1fr)',
         }}
       >
+        {curLangAr && (
+          <Tooltip placement="top" title="admin middle name - father name -">
+            <RHFTextField
+              lang="ar"
+              onChange={handleArabicInputChange}
+              name="em_name_arabic"
+              label={`${t('Full name in Arabic')} *`}
+              placeholder="أحمد سالم القناص"
+            />
+          </Tooltip>
+        )}
         <Tooltip placement="top" title="admin first name">
           <RHFTextField
             lang="ar"
             onChange={handleEnglishInputChange}
             name="em_name_english"
             label={`${t('Full name in English')} *`}
+            placeholder="Ahmad Salem Al-kanas"
           />
         </Tooltip>
-        <Tooltip placement="top" title="admin middle name - father name -">
-          <RHFTextField
-            lang="ar"
-            onChange={handleArabicInputChange}
-            name="em_name_arabic"
-            label={`${t('Full name in Arabic')} *`}
-          />
-        </Tooltip>
+        {!curLangAr && (
+          <Tooltip placement="top" title="admin middle name - father name -">
+            <RHFTextField
+              lang="ar"
+              onChange={handleArabicInputChange}
+              name="em_name_arabic"
+              label={`${t('Full name in Arabic')} *`}
+              placeholder="أحمد سالم القناص"
+            />
+          </Tooltip>
+        )}
         {/* <Tooltip placement="top" title="admin family name">
           <RHFTextField
             lang="ar"
@@ -438,22 +485,25 @@ export default function JwtRegisterView() {
             label={`${t('family name')} *`}
           />
         </Tooltip> */}
-        <Tooltip placement="top" title="speciality of admin">
-          <RHFSelect lang="ar" name="em_speciality" label={t('speciality')}>
-            {specialtiesData.map((specialty, idx) => (
-              <MenuItem key={idx} value={specialty._id}>
-                {curLangAr ? specialty.name_arabic : specialty.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
-        </Tooltip>
-        {/* <RHFSelect name="em_type" label="Employee type">
-          {employeeTypesData.map((type, idx)  => (
+        <RHFSelect name="em_type" label="Employee type">
+          {employeeTypesData.map((type, idx) => (
             <MenuItem key={idx} value={type._id}>
               {type.name_english}
             </MenuItem>
           ))}
-        </RHFSelect> */}
+        </RHFSelect>
+        {employeeTypesData.find((type) => type._id === values.em_type)?.name_english ===
+          ('doctor' || 'Doctor') && (
+          <Tooltip placement="top" title="speciality of admin">
+            <RHFSelect lang="ar" name="em_speciality" label={t('speciality')}>
+              {specialtiesData.map((specialty, idx) => (
+                <MenuItem key={idx} value={specialty._id}>
+                  {curLangAr ? specialty.name_arabic : specialty.name_english}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+          </Tooltip>
+        )}
       </Box>
       <Box
         rowGap={3}
@@ -474,21 +524,29 @@ export default function JwtRegisterView() {
           </RHFSelect>
         </Tooltip>
         <Tooltip placement="top" title="admin identification number">
-          <RHFTextField lang="ar" name="em_identification_num" label={`${t('ID number')} *`} />
-        </Tooltip>
-        <Tooltip placement="top" title="admin proffession practice number">
           <RHFTextField
             lang="ar"
-            name="em_profrssion_practice_num"
-            label={`${t('profrssion practice number')} *`}
+            name="em_identification_num"
+            label={`${t('identification number of manager')} *`}
           />
         </Tooltip>
+        {employeeTypesData.find((type) => type._id === values.em_type)?.name_english ===
+          ('doctor' || 'Doctor') && (
+          <Tooltip placement="top" title="admin proffession practice number">
+            <RHFTextField
+              lang="ar"
+              name="em_profrssion_practice_num"
+              label={`${t('profrssion practice number')} *`}
+            />
+          </Tooltip>
+        )}
         <Tooltip placement="top" title="admin phone number">
           <MuiTelInput
             label={`${t('phone')} *`}
             forceCallingCode
             defaultCountry="JO"
             value={em_phone}
+            placeholder="7 XXXX XXXX"
             onChange={(newPhone) => {
               matchIsValidTel(newPhone);
               setEMphone(newPhone);
@@ -529,7 +587,7 @@ export default function JwtRegisterView() {
     <Stack spacing={2}>
       {!!errorMsg && (
         <Alert severity="error">
-          <div> {errorMsg} </div>
+          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
         </Alert>
       )}
       {/* <Alert severity="info">Sign in information</Alert> */}
@@ -597,6 +655,38 @@ export default function JwtRegisterView() {
     </Stack>
   );
 
+  const htmlContent = `
+<br/>
+<br/>
+
+<p>You will create a service unit account in 3 seperate steps :</p>
+<br/>
+<ul>
+<li> <strong> first step: </strong> You should add required information about the service unit itself</li>
+<li> <strong> second step: </strong> You should add required information about you -the manager of the service unit- </li>
+<li> <strong> third step: </strong> You should add information about the login information and service unit subscription </li>
+</ul>
+
+<br/>
+<br/>
+<br/>
+<p>To create a service unit account you will need to have :</p>
+
+<br/>
+
+<ul>
+  <li>
+    The national number of the service unit
+  </li>
+  <li>
+    The identification number of the manager of the service unit
+  </li>
+  <li>
+    The profession practice number of the manager of the service unit -if doctor-
+  </li>
+</ul>
+`;
+
   return (
     <>
       {renderHead}
@@ -604,33 +694,52 @@ export default function JwtRegisterView() {
         {page === 0 && renderForm}
         {page === 1 && renderFormEmployee}
         {page === 2 && renderFormAuth}
+
+        <Dialog open={dialog.value} scroll="paper">
+          <DialogTitle sx={{ pb: 2 }}>Welcome to our community</DialogTitle>
+
+          <DialogContent dividers="paper">
+            <DialogContentText tabIndex={-1}>
+              <Markdown children={htmlContent} />
+            </DialogContentText>
+            <span style={{ display: 'block', padding: 0.75, color: 'red', fontSize: 12 }}>
+              Select your service unit type
+            </span>
+            <RHFSelect sx={{ pb: 2 }} lang="ar" name="US_type">
+              {unitserviceTypesData.map((type, idx) => (
+                <MenuItem key={idx} value={type._id}>
+                  {curLangAr ? type.name_arabic : type.name_english}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+            <span style={{ display: 'block', padding: 0.75, color: 'red', fontSize: 12 }}>
+              Select the approximate number of your employees
+            </span>
+            <RHFRadioGroup
+              row
+              name="employees_number"
+              spacing={3}
+              options={[
+                { value: '3', label: '1-3 employees' },
+                { value: '10', label: '3-10 employees' },
+                { value: '>10', label: 'more than 10 employees' },
+              ]}
+            />
+          </DialogContent>
+
+          <DialogActions>
+            {/* <Button onClick={dialog.onFalse}>Cancel</Button> */}
+
+            <Button
+              disabled={!values.employees_number || !values.US_type}
+              variant="contained"
+              onClick={dialog.onFalse}
+            >
+              I understand
+            </Button>
+          </DialogActions>
+        </Dialog>
       </FormProvider>
-
-      <Dialog open={dialog.value} onClose={dialog.onFalse} scroll="paper">
-        <DialogTitle sx={{ pb: 2 }}>Subscribe</DialogTitle>
-
-        <DialogContent dividers="paper">
-          <DialogContentText tabIndex={-1}>
-            {[...new Array(50)]
-              .map(
-                () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-              )
-              .join('\n')}
-          </DialogContentText>
-        </DialogContent>
-
-        <DialogActions>
-          <Button onClick={dialog.onFalse}>Cancel</Button>
-
-          <Button variant="contained" onClick={dialog.onFalse}>
-            Subscribe
-          </Button>
-        </DialogActions>
-      </Dialog>
-
       <Dialog open={policyDialog.value} onClose={policyDialog.onFalse} scroll="paper">
         <DialogTitle sx={{ pb: 2 }}>Subscribe</DialogTitle>
 
