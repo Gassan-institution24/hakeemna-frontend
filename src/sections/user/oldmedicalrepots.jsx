@@ -27,6 +27,9 @@ import {
   TableContainer,
 } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios from 'src/utils/axios';
@@ -39,6 +42,7 @@ import Iconify from 'src/components/iconify/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
 
+
 export default function OldMedicalReports() {
   const dialog = useBoolean();
   const { t } = useTranslate();
@@ -49,6 +53,9 @@ export default function OldMedicalReports() {
   const [FileToDelete, setFileToDelete] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [hoveredButtonId, setHoveredButtonId] = useState(null);
+
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { specialtiesData } = useGetSpecialties();
   useEffect(() => {
@@ -63,6 +70,17 @@ export default function OldMedicalReports() {
 
     fetchData();
   }, []);
+
+  const handleHover = (id) => {
+    setHoveredButtonId(id);
+  };
+
+  const handleMouseOut = () => {
+    setHoveredButtonId(null);
+  };
+  const handleViewClick = (id) => {
+    router.push(paths.dashboard.user.oldmedicalreportsview(id));
+  };
 
   const delteeFile = async () => {
     try {
@@ -85,7 +103,7 @@ export default function OldMedicalReports() {
     date: Yup.date().required('Date is required'),
     file: Yup.array().required(),
     name: Yup.string().required('File name is required'),
-    note: Yup.string(),
+    note: Yup.string().nullable(),
     agree: Yup.boolean().required(),
     specialty: Yup.string().required(),
   });
@@ -94,7 +112,7 @@ export default function OldMedicalReports() {
     date: '',
     file: [],
     name: '',
-    note: '',
+    note: null,
     agree: !checkChange,
     specialty: '',
   };
@@ -108,12 +126,14 @@ export default function OldMedicalReports() {
     setValue,
     control,
     reset,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+  const values = watch();
 
   const fuser = (fuserSize) => {
-    const allowedExtensions = ['.jpeg', '.png', '.jpg', '.gif', '.pdf'];
+    const allowedExtensions = ['.jpeg', '.png', '.jpg', '.gif'];
 
     const isValidFile = (fileName) => {
       const fileExtension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
@@ -128,8 +148,6 @@ export default function OldMedicalReports() {
     };
   };
   const handleDrop = (acceptedFiles) => {
-    console.log(acceptedFiles, 'acceptedFiles');
-
     const fileValidator = fuser(acceptedFiles.reduce((acc, file) => acc + file.size, 0));
 
     const isValidFiles = acceptedFiles.every(
@@ -141,13 +159,14 @@ export default function OldMedicalReports() {
     if (isValidFiles) {
       // setFiles(acceptedFiles); // Save the files in state
       const newFiles = acceptedFiles;
-      setValue(newFiles);
       setImgFiles((currentFiles) => [...currentFiles, ...newFiles]);
+      setValue('file', [...values.file, ...newFiles]);
     } else {
       // Handle invalid file type or size
       enqueueSnackbar(t('Invalid file type or size'), { variant: 'error' });
     }
   };
+
   const onSubmit = async (data) => {
     const formData = new FormData();
     Object.keys(data).forEach((key) => {
@@ -354,6 +373,7 @@ export default function OldMedicalReports() {
           </DialogActions>
         </FormProvider>
       </Dialog>
+
       {Filesdata?.map((info, i) => (
         <TableContainer
           component={Paper}
@@ -367,6 +387,7 @@ export default function OldMedicalReports() {
                 <TableCell> {t('Specialty')}</TableCell>
                 <TableCell> {t('Date')}</TableCell>
                 {info?.note ? <TableCell> {t('Note')}</TableCell> : ''}
+
 
                 <TableCell> {t('Options')}</TableCell>
               </TableRow>
@@ -394,6 +415,17 @@ export default function OldMedicalReports() {
                 <TableCell>
                   <Button onClick={() => downloadAsPDF(info)} variant="outlined" sx={{ mr: 1 }}>
                     {t('Download')} &nbsp; <Iconify icon="flat-color-icons:download" />
+                  </Button>
+                  <Button
+                    sx={{ mr: 1 }}
+                    onMouseOver={() => handleHover(info?._id)}
+                    onMouseOut={handleMouseOut}
+                    onClick={()=>handleViewClick(info?._id)}
+                  >
+                    {t('View')} &nbsp;{' '}
+                    <Iconify
+                      icon={hoveredButtonId === info?._id ? 'emojione:eye' : 'tabler:eye-closed'}
+                    />
                   </Button>
 
                   <Button
