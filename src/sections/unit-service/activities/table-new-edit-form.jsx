@@ -99,7 +99,7 @@ export default function TableNewEditForm({ currentTable }) {
         socket.emit('updated', {
           data,
           user,
-          link: paths.unitservice.activities.root,
+          link: paths.unitservice.tables.activities.root,
           msg: `updated an activity <strong>${data.name_english || ''}</strong>`,
         });
       } else {
@@ -107,13 +107,13 @@ export default function TableNewEditForm({ currentTable }) {
         socket.emit('created', {
           data,
           user,
-          link: paths.unitservice.activities.root,
+          link: paths.unitservice.tables.activities.root,
           msg: `created an activity <strong>${data.name_english || ''}</strong>`,
           ar_msg: `إنشاء نشاط  <strong>${data.name_arabic || ''}</strong>`,
         });
       }
       reset();
-      router.push(paths.unitservice.activities.root);
+      router.push(paths.unitservice.tables.activities.root);
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
     } catch (error) {
       // error emitted in backend

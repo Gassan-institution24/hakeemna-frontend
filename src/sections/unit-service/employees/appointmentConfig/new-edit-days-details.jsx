@@ -177,7 +177,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item?._id));
     return selectedItems
       ?.map(
-        (item) => item?.name_english
+        (item) => (curLangAr ? item?.name_arabic : item?.name_english)
         // price += item?.Price_per_unit || 0
       )
       .join(', ');

@@ -332,14 +332,6 @@ export const unitServiceDashboardRoutes = [
         ],
       },
       {
-        path: 'activities',
-        children: [
-          { element: <ActivitiesHomePage />, index: true },
-          { path: 'new', element: <ActivitiesNewPage /> },
-          { path: ':id/edit', element: <ActivitiesEditPage /> },
-        ],
-      },
-      {
         path: 'appointments',
         children: [
           { element: <AppointmentsHomePage />, index: true },
@@ -442,6 +434,14 @@ export const unitServiceDashboardRoutes = [
           //     { path: ':id/edit', element: <EmployeeTypesEditPage /> },
           //   ],
           // },
+          {
+            path: 'activities',
+            children: [
+              { element: <ActivitiesHomePage />, index: true },
+              { path: 'new', element: <ActivitiesNewPage /> },
+              { path: ':id/edit', element: <ActivitiesEditPage /> },
+            ],
+          },
           {
             path: 'work_shifts',
             children: [
