@@ -1,12 +1,15 @@
 // date-pickers
 import merge from 'lodash/merge';
 import { enUS as enUSAdapter, arSA as arSAAdapter } from 'date-fns/locale';
-
-import { enUS as enUSDate } from '@mui/x-date-pickers/locales';
 // core
 import { enUS as enUSCore, arSA as arSACore } from '@mui/material/locale';
+
 // data-grid
 import { enUS as enUSDataGrid, arSD as arSDDataGrid } from '@mui/x-data-grid';
+
+import { enUS as enUSDate } from '@mui/x-date-pickers/locales';
+
+import arLocale from 'date-fns/locale/ar';
 
 // PLEASE REMOVE `LOCAL STORAGE` WHEN YOU CHANGE SETTINGS.
 // ----------------------------------------------------------------------
@@ -43,7 +46,7 @@ export const allLangs = [
   {
     label: 'العربية',
     value: 'ar',
-    systemValue: merge(arSDDataGrid, arSACore),
+    systemValue: merge(arSDDataGrid, arSACore, { locale: { arLocale } }),
     adapterLocale: arSAAdapter,
     icon: 'mdi:abjad-arabic',
   },

@@ -172,54 +172,6 @@ export function useNavData() {
         icon: <Iconify icon="uis:web-section-alt" />,
       },
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'read' }),
-        title: t('employees'),
-        path: paths.unitservice.employees.root,
-        icon: <Iconify icon="fluent:people-20-filled" />,
-      },
-      // {
-      // show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
-      // title: t('access control'),
-      //   path: paths.unitservice.acl,
-      //   icon: <Iconify icon="mdi:account-secure" />,
-      // },
-      {
-        show: checkAcl({ category: 'unit_service', subcategory: 'management_tables', acl: 'read' }),
-        title: t('activities'),
-        path: paths.unitservice.activities.root,
-        icon: <Iconify icon="material-symbols:volunteer-activism" />,
-      },
-      {
-        show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
-        title: t('appointments'),
-        path: paths.unitservice.appointments.root,
-        icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
-      },
-      {
-        show:
-          false && checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
-        title: t('accounting'),
-        path: paths.unitservice.accounting.root,
-        icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
-        children: [
-          {
-            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
-            title: t('economic movements'),
-            path: paths.unitservice.accounting.economicmovements.root,
-          },
-          {
-            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
-            title: t('payment control'),
-            path: paths.unitservice.accounting.paymentcontrol.root,
-          },
-          {
-            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
-            title: t('reciepts'),
-            path: paths.unitservice.accounting.reciepts.root,
-          },
-        ],
-      },
-      {
         show: checkAcl({ category: 'unit_service', subcategory: 'management_tables', acl: 'read' }),
         title: t('management tables'),
         path: paths.unitservice.tables.root,
@@ -236,6 +188,12 @@ export function useNavData() {
           //   title: t('employee types'),
           //   path: paths.unitservice.tables.employeetypes.root,
           // },
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }),
+            title: t('departments'),
+            path: paths.unitservice.departments.root,
+            // icon: <Iconify icon="uis:web-section-alt" />,
+          },
           {
             show: checkAcl({
               category: 'unit_service',
@@ -271,6 +229,58 @@ export function useNavData() {
             }),
             title: t('services'),
             path: paths.unitservice.tables.services.root,
+          },
+          {
+            show: checkAcl({
+              category: 'unit_service',
+              subcategory: 'management_tables',
+              acl: 'read',
+            }),
+            title: t('activities'),
+            path: paths.unitservice.tables.activities.root,
+            // icon: <Iconify icon="material-symbols:volunteer-activism" />,
+          },
+        ],
+      },
+      {
+        show: checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'read' }),
+        title: t('employees'),
+        path: paths.unitservice.employees.root,
+        icon: <Iconify icon="fluent:people-20-filled" />,
+      },
+      // {
+      // show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+      // title: t('access control'),
+      //   path: paths.unitservice.acl,
+      //   icon: <Iconify icon="mdi:account-secure" />,
+      // },
+      {
+        show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
+        title: t('appointments'),
+        path: paths.unitservice.appointments.root,
+        icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+      },
+      {
+        show:
+          false && checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+        title: t('accounting'),
+        path: paths.unitservice.accounting.root,
+        icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
+        children: [
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            title: t('economic movements'),
+            path: paths.unitservice.accounting.economicmovements.root,
+          },
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            title: t('payment control'),
+            path: paths.unitservice.accounting.paymentcontrol.root,
+          },
+          {
+            show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+            title: t('reciepts'),
+            path: paths.unitservice.accounting.reciepts.root,
           },
         ],
       },

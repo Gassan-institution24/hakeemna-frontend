@@ -578,11 +578,6 @@ export const paths = {
       },
       acl: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/acl`,
     },
-    activities: {
-      root: `${ROOTS.SUPERADMIN}/us/activities`,
-      new: `${ROOTS.SUPERADMIN}/us/activities/new`,
-      edit: (id) => `${ROOTS.SUPERADMIN}/us/activities/${id}/edit`,
-    },
     appointments: {
       root: `${ROOTS.SUPERADMIN}/us/appointments`,
       new: `${ROOTS.SUPERADMIN}/us/appointments/new`,
@@ -642,6 +637,11 @@ export const paths = {
     tables: {
       root: `${ROOTS.SUPERADMIN}/us/tables`,
       details: (tablename) => `${ROOTS.SUPERADMIN}/us/tables/${tablename}`,
+      activities: {
+        root: `${ROOTS.SUPERADMIN}/us/tables/activities`,
+        new: `${ROOTS.SUPERADMIN}/us/tables/activities/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/us/tables/activities/${id}/edit`,
+      },
       appointypes: {
         root: `${ROOTS.SUPERADMIN}/us/tables/appointment_types`,
         new: `${ROOTS.SUPERADMIN}/us/tables/appointment_types/new`,

@@ -33,18 +33,16 @@ import { useTable, TableHeadCustom, TableSelectedAction } from 'src/components/t
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { label: 'name english *', width: 'calc(100%/5)' },
-  { label: 'name arabic *', width: 'calc(100%/5)' },
-  { label: 'description english', width: 'calc(100%/5)' },
-  { label: 'description arabic', width: 'calc(100%/5)' },
-  { label: 'photo', width: 'calc(100%/5)' },
+  { label: 'name english *', width: 'calc(100%/4)' },
+  { label: 'name arabic *', width: 'calc(100%/4)' },
+  { label: 'description english', width: 'calc(100%/4)' },
+  { label: 'description arabic', width: 'calc(100%/4)' },
+  // { label: 'photo', width: 'calc(100%/5)' },
 ];
 export default function NewEditManyForm() {
   const router = useRouter();
 
   const table = useTable({ defaultOrderBy: 'code' });
-
-  // const { countriesData } = useGetCountries(); /// edit
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -73,25 +71,6 @@ export default function NewEditManyForm() {
       });
     }
   };
-  // const handleSelect = (index, event) => {
-  //   setData((prev) => {
-  //     const updated = [...prev];
-  //     updated[index] = { ...updated[index], [event.target.name]: event.target.value };
-  //     return updated;
-  //   });
-  // };
-
-  // const handleSelectMany = (event) => {
-  //   setData((prev) => {
-  //     const updated = [...prev];
-  //     console.log(' table.selected', table.selected);
-  //     table.selected.forEach((item) => {
-  //       updated[item] = { ...updated[item], [event.target.name]: event.target.value };
-  //     });
-  //     console.log('updated', updated);
-  //     return updated;
-  //   });
-  // };
 
   const handleDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -111,22 +90,20 @@ export default function NewEditManyForm() {
     }
   }, []);
 
-  console.log(data);
+  // const handleDropImg = useCallback((name, acceptedFiles, index) => {
+  //   const file = acceptedFiles[0];
+  //   const newFile = Object.assign(file, {
+  //     preview: URL.createObjectURL(file),
+  //   });
 
-  const handleDropImg = useCallback((name, acceptedFiles, index) => {
-    const file = acceptedFiles[0];
-    const newFile = Object.assign(file, {
-      preview: URL.createObjectURL(file),
-    });
-
-    if (file) {
-      setData((prev) => {
-        const updated = [...prev];
-        updated[index] = { ...updated[index], [name]: newFile };
-        return updated;
-      });
-    }
-  }, []);
+  //   if (file) {
+  //     setData((prev) => {
+  //       const updated = [...prev];
+  //       updated[index] = { ...updated[index], [name]: newFile };
+  //       return updated;
+  //     });
+  //   }
+  // }, []);
 
   const handleCreate = async () => {
     try {
@@ -136,17 +113,8 @@ export default function NewEditManyForm() {
         alert('Please fill in all required fields.');
         return;
       }
-      // const formDataArray = data.map((obj, idx) => {
-      //   const formData = new FormData();
-      //   Object.keys(obj).forEach((key) => {
-      //     console.log('key', key);
-      //     console.log('obj[key]', obj[key]);
-      //     formData.set(key, obj[key]);
-      //   });
-      //   return formData;
-      // });
       await axiosInstance.post(endpoints.specialities.many, data);
-      router.push(paths.superadmin.tables.specialities.root); /// edit
+      router.push(paths.superadmin.tables.specialities.root);
     } catch (e) {
       console.log(e);
       enqueueSnackbar(e, { variant: 'error' });
@@ -179,28 +147,9 @@ export default function NewEditManyForm() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      data.map((row, index, idx) => index)
+                      data.map((row, index) => index)
                     )
                   }
-                  // action={
-                  //   <>
-                  //     <Typography sx={{ fontSize: 14, fontWeight: 600, pr: 1 }}>Country:</Typography>
-                  //     <Select
-                  //       variant="filled"
-                  //       sx={{ width: '20%', border: '1px solid gray' }}
-                  //       size="small"
-                  //       name="country"
-                  //       label="country"
-                  //       onChange={handleSelectMany}
-                  //     >
-                  //       {countriesData.map((country, idx)  => (
-                  //         <MenuItem key={idx} value={country._id}>
-                  //           {country.name_english}
-                  //         </MenuItem>
-                  //       ))}
-                  //     </Select>
-                  //   </>
-                  // }
                   color="primary"
                 />
 
@@ -219,32 +168,14 @@ export default function NewEditManyForm() {
                     />
 
                     <TableBody>
-                      {data.map((one, index, idx) => (
-                        <TableRow key={idx} hover selected={table.selected.includes(index)}>
+                      {data.map((one, index) => (
+                        <TableRow key={index} hover selected={table.selected.includes(index)}>
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={table.selected.includes(index)}
                               onClick={() => table.onSelectRow(index)}
                             />
                           </TableCell>
-
-                          {/* <TableCell align="center">
-                          <Select
-                            variant="filled"
-                            required
-                            value={one.country || ''}
-                            onChange={(e) => handleSelect(index, e)}
-                            sx={{ width: '80%' }}
-                            size="small"
-                            name="country"
-                          >
-                            {countriesData.map((country, idx)  => (
-                              <MenuItem key={idx} value={country._id}>
-                                {country.name_english}
-                              </MenuItem>
-                            ))}
-                            </Select>
-                          </TableCell> */}
 
                           <TableCell align="center">
                             <TextField
@@ -286,21 +217,21 @@ export default function NewEditManyForm() {
                               name="description_arabic"
                             />
                           </TableCell>
-                          <TableCell>
+                          {/* <TableCell>
                             <UploadAvatar
                               sx={{
                                 mx: 'auto',
                                 width: 90,
                                 height: 90,
                               }}
-                              name="specialitiesimge"
-                              file={one.specialitiesimge}
-                              value={one.specialitiesimge}
+                              name="photo"
+                              file={one.photo}
+                              value={one.photo}
                               onDrop={(acceptedFiles) =>
-                                handleDropImg(`specialitiesimge`, acceptedFiles, index)
+                                handleDropImg(`photo`, acceptedFiles, index)
                               }
                             />
-                          </TableCell>
+                          </TableCell> */}
                         </TableRow>
                       ))}
                     </TableBody>
