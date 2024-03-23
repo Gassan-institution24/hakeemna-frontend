@@ -165,7 +165,7 @@ export default function ActivitesTableView() {
         );
         socket.emit('updated', {
           user,
-          link: paths.unitservice.activities.root,
+          link: paths.unitservice.tables.activities.root,
           msg: `activated an activity <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
@@ -187,7 +187,7 @@ export default function ActivitesTableView() {
         );
         socket.emit('updated', {
           user,
-          link: paths.unitservice.activities.root,
+          link: paths.unitservice.tables.activities.root,
           msg: `inactivated an activity <strong>${row.name_english || ''}</strong>`,
         });
       } catch (error) {
@@ -209,7 +209,7 @@ export default function ActivitesTableView() {
       );
       socket.emit('updated', {
         user,
-        link: paths.unitservice.activities.root,
+        link: paths.unitservice.tables.activities.root,
         msg: `activated many activities`,
       });
     } catch (error) {
@@ -242,7 +242,7 @@ export default function ActivitesTableView() {
       );
       socket.emit('updated', {
         user,
-        link: paths.unitservice.activities.root,
+        link: paths.unitservice.tables.activities.root,
         msg: `inactivated many activities`,
       });
     } catch (error) {
@@ -269,14 +269,14 @@ export default function ActivitesTableView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.unitservice.activities.edit(id));
+      router.push(paths.unitservice.tables.activities.edit(id));
     },
     [router]
   );
 
   const handleCreate = useCallback(
     (id) => {
-      router.push(paths.unitservice.activities.new);
+      router.push(paths.unitservice.tables.activities.new);
     },
     [router]
   );
@@ -323,7 +323,7 @@ export default function ActivitesTableView() {
             }) && (
               <Button
                 component={RouterLink}
-                href={paths.unitservice.activities.new}
+                href={paths.unitservice.tables.activities.new}
                 variant="contained"
                 startIcon={<Iconify icon="mingcute:add-line" />}
               >

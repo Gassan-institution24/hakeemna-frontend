@@ -25,7 +25,7 @@ export default function TableCreateView() {
           },
           {
             name: t('activities'),
-            href: paths.unitservice.activities.root,
+            href: paths.unitservice.tables.activities.root,
           },
           { name: t('new') },
         ]}

@@ -109,6 +109,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
   } = methods;
 
   const values = watch();
+  console.log('values', values);
 
   const handleDrop = useCallback(
     (name, acceptedFiles) => {
@@ -129,12 +130,16 @@ export default function AccountGeneral({ employeeData, refetch }) {
       // console.log('data', data);
       const formData = new FormData();
       Object.keys(data).forEach((key) => {
-        if (data[key] !== defaultValues[key]) {
+        if (Array.isArray(data[key])) {
+          data[key].forEach((value, index) => {
+            formData.append(`${key}[${index}]`, value);
+          });
+        } else if (data[key] !== defaultValues[key]) {
           formData.append(key, data[key]);
         }
       });
 
-      // console.log('formData', formData);
+      console.log('formData', formData);
       await axios.patch(endpoints.employees.one(employeeData._id), formData);
       enqueueSnackbar(t('updated successfully!'));
       refetch();
