@@ -70,6 +70,10 @@ export const endpoints = {
     many: '/api/medCategories/many',
     one: (id) => `/api/medCategories/${id}`,
   },
+  oldmedicalreports: {
+    all: '/api/oldmedicalreports/',
+    one: (id) => `/api/oldmedicalreports/${id}`,
+  },
   medfamilies: {
     all: '/api/drugfamilies/',
     many: '/api/drugfamilies/many',
@@ -310,6 +314,8 @@ export const endpoints = {
     all: '/api/patient',
     find: ({ identification_num, email, mobile_num1 }) =>
       `/api/patient/find?id=${identification_num}&&email=${email}&&mobile=${mobile_num1}`,
+    findPatient: ({ identification_num, mobile_num1, first_name }) =>
+      `/api/patient/findpatient?id=${identification_num}&&mobile=${mobile_num1}&&first_name=${first_name}`,
     family: (id) => `/api/patient/myfamily/${id}`,
     one: (id) => `/api/patient/${id}`,
   },
