@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 
 import Box from '@mui/material/Box';
@@ -9,51 +8,34 @@ import { useTheme } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 
-import { paths } from 'src/routes/paths';
-
-import axios, { endpoints } from 'src/utils/axios';
+// import { paths } from 'src/routes/paths';
 
 // import socket from 'src/socket';
-import {  useFindPatients } from 'src/api';
-import {  useTranslate } from 'src/locales';
-import { useAuthContext } from 'src/auth/hooks';
+import { useFindPatients } from 'src/api';
+import { useTranslate } from 'src/locales';
 
-import { useSnackbar } from 'src/components/snackbar';
-import {
-  useTable,
-  TableNoData,
-  TableHeadCustom,
-} from 'src/components/table';
+import { useTable, TableNoData, TableHeadCustom } from 'src/components/table';
 
-import ExistPatientRow from './exist-patient-row'; 
+import ExistPatientRow from './exist-patient-row';
 
 // ----------------------------------------------------------------------
 
 export default function Exist() {
-
   const { t } = useTranslate();
-  // const { currentLang } = useLocales();
-  // const curLangAr = currentLang.value === 'ar';
 
   const TABLE_HEAD = [
-    // { id: 'name', label: t('name') },
     { id: 'identification_num', label: t('ID number') },
     { id: 'first_name', label: t('First Name') },
-    // { id: 'name_arabic', label: t('Name Arabic') },
+    { id: 'name_arabic', label: t('Name Arabic') },
     { id: 'mobile_num1', label: t('Phone') },
+    { id: 'options', label: t('options') },
   ];
 
-  const { user } = useAuthContext();
-
   const table = useTable({ defaultRowsPerPage: 10 });
-
-  const patientID = user?.patient?._id;
 
   const [filters, setFilters] = useState({});
 
   const theme = useTheme();
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const {
     page,
@@ -82,31 +64,13 @@ export default function Exist() {
     }
   };
 
-  // const handleEmployment = async (row) => {
-  //   try {
-  //     await axios.post(endpoints.employee_engagements.all, {
-  //       patient: patientID,
-  //       employee: row._id,
-  //     });
-  //     // socket.emit('created', {
-  //     //   user,
-  //     //   link: paths.unitservice.employees.root,
-  //     //   msg: `created an employee <strong>${row.first_name}</strong>`,
-  //     // });
-  //     enqueueSnackbar(t('employment successfully!'));
-  //   } catch (error) {
-  //     // error emitted in backend
-  //     enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
-  //     console.error(error);
-  //   }
-  // };
   const { existPatient } = useFindPatients({
     identification_num: filters.identification_num || null,
-    phone: filters.identification_num,
+    mobile_num1: filters.mobile_num1,
     first_name: filters.first_name,
-    // name_arabic: filters.name_arabic,
+    name_arabic: filters?.name_arabic,
   });
-
+  console.log(existPatient, 'existPatient');
   return (
     <Box>
       <Card sx={{ p: 3 }}>
@@ -119,31 +83,30 @@ export default function Exist() {
             sm: 'repeat(4, 1fr)',
           }}
         >
-
           <TextField
             onChange={handleEnglishInputChange}
             name="identification_num"
             label={t('ID number')}
           />
-  
-          <TextField
-            onChange={handleEnglishInputChange}
-            name="mobile_num1"
-            label={t('phone')}
-            type="number"
-          />
+
           <TextField
             lang="en"
             onChange={handleEnglishInputChange}
             name="first_name"
             label={t('name in English')}
           />
-          {/* <TextField
+          <TextField
             lang="en"
             onChange={handleArabicInputChange}
             name="name_arabic"
             label={t('name in Arabic')}
-          /> */}
+          />
+          <TextField
+            onChange={handleEnglishInputChange}
+            name="mobile_num1"
+            label={t('phone')}
+            type="number"
+          />
         </Box>
       </Card>
 
@@ -177,11 +140,7 @@ export default function Exist() {
           {existPatient
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, idx) => (
-              <ExistPatientRow
-                key={idx}
-                row={row}
-                // onEmploymentRow={() => handleEmployment(row)}
-              />
+              <ExistPatientRow key={idx} row={row} />
             ))}
 
           <TableNoData
@@ -194,10 +153,6 @@ export default function Exist() {
           />
         </TableBody>
       </Table>
-     
     </Box>
-  )
-      
-    
- 
+  );
 }
