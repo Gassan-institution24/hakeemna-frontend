@@ -68,8 +68,6 @@ export default function CalendarView() {
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   );
 
-  console.log('CalenderData', CalenderData);
-
   const dateError =
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()

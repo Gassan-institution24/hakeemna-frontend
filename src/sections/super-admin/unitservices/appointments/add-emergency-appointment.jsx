@@ -47,8 +47,6 @@ export default function BookManually({ onClose, refetch, ...other }) {
   const { workGroupsData } = useGetUSActiveWorkGroups(id);
   const { workShiftsData } = useGetUSActiveWorkShifts(id);
 
-  // console.log('workGroupsData', workGroupsData);
-
   const NewUserSchema = Yup.object().shape({
     work_shift: Yup.string().required('Work Shift is required'),
     work_group: Yup.string().required('Work Group is required'),

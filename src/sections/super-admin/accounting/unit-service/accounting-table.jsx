@@ -75,9 +75,6 @@ export default function USlicenseMovementView({ unitServiceData }) {
 
   const { licenseMovements, loading } = useGetUSLicenseMovement(unitServiceData?._id);
 
-  console.log('unitServiceData', unitServiceData);
-  console.log('licenseMovements', licenseMovements);
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =

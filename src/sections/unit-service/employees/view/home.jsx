@@ -328,7 +328,6 @@ export default function EmployeesTableView() {
   /* eslint-disable */
   useEffect(() => {
     socket.on('employeeStatusUpdated', () => {
-      console.log('employee status updated');
       refetch();
     });
   }, []);
@@ -592,7 +591,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   });
 
   inputData = stabilizedThis.map((el, idx) => el[0]);
-  // console.log('inputData', inputData);
+
   if (name) {
     inputData = inputData.filter(
       (data) =>

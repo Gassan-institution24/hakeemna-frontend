@@ -101,7 +101,7 @@ export default function UsersTableView() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-  // console.log(dataFiltered);
+
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.role !== 'all' || filters.status !== 'active';
@@ -111,7 +111,6 @@ export default function UsersTableView() {
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
-  console.log('filters', filters);
 
   const handleDownload = () => {
     const excelBody = dataFiltered.reduce((acc, data) => {

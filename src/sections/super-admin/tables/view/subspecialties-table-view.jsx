@@ -107,7 +107,6 @@ export default function SubSpecialtiesTableView() {
     dateError,
   });
 
-  // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name;

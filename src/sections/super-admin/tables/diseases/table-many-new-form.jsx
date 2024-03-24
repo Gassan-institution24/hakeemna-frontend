@@ -87,11 +87,11 @@ export default function NewEditManyForm() {
   const handleSelectMany = (event) => {
     setData((prev) => {
       const updated = [...prev];
-      console.log(' table.selected', table.selected);
+
       table.selected.forEach((item) => {
         updated[item] = { ...updated[item], [event.target.name]: event.target.value };
       });
-      console.log('updated', updated);
+
       return updated;
     });
   };
@@ -114,7 +114,6 @@ export default function NewEditManyForm() {
     }
   }, []);
 
-  console.log(data);
   const handleCreate = async () => {
     const isFormValid = data.every(
       (one) => one.name_english && one.name_arabic && one.category && one.symptoms.length
@@ -128,7 +127,6 @@ export default function NewEditManyForm() {
       await axiosInstance.post(endpoints.diseases.many, data);
       router.push(paths.superadmin.tables.diseases.root); /// edit
     } catch (e) {
-      console.log(e);
       enqueueSnackbar(e, { variant: 'error' });
     }
   };

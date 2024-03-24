@@ -85,11 +85,11 @@ export default function NewEditManyForm() {
   const handleSelectMany = (event) => {
     setData((prev) => {
       const updated = [...prev];
-      console.log(' table.selected', table.selected);
+
       table.selected.forEach((item) => {
         updated[item] = { ...updated[item], [event.target.name]: event.target.value };
       });
-      console.log('updated', updated);
+
       return updated;
     });
   };
@@ -123,7 +123,6 @@ export default function NewEditManyForm() {
       await axiosInstance.post(endpoints.subspecialities.many, data);
       router.push(paths.superadmin.tables.subspecialities.root); /// edit
     } catch (e) {
-      console.log(e);
       enqueueSnackbar(e, { variant: 'error' });
     }
   };

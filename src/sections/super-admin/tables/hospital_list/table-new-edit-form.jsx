@@ -26,12 +26,10 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  // console.log('currr', currentTable);
   const { countriesData } = useGetCountries();
   const [selectedCountry, setSelectedCountry] = useState(currentTable?.country?._id || null);
   const [cities, setCities] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  // console.log('test', cities);
 
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),

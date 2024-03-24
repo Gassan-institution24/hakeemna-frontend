@@ -18,7 +18,7 @@ export default function TableEditView() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetSymptom(id);
-  // console.log(data);
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

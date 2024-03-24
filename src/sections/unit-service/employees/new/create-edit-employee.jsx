@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
+import { matchIsValidTel } from 'mui-tel-input';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
-import { Alert, MenuItem } from '@mui/material';
+import { Alert, MenuItem, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -33,7 +33,12 @@ import {
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, {
+  RHFCheckbox,
+  RHFPhoneNumber,
+  RHFSelect,
+  RHFTextField,
+} from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -56,7 +61,6 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const [phone, setPhone] = useState();
   const [errorMsg, setErrorMsg] = useState('');
 
   const NewUserSchema = Yup.object().shape({
@@ -68,10 +72,14 @@ export default function TableNewEditForm({ currentTable }) {
     name_arabic: Yup.string().required('Middle name is required'),
     nationality: Yup.string().required('Nationality is required'),
     address: Yup.string(),
-    phone: Yup.string().required('phone is required'),
-    speciality: Yup.string().required('speciality is required'),
+    phone: Yup.string()
+      .required('phone is required')
+      .test('is-valid-phone', 'Invalid phone number', (value) => matchIsValidTel(value)),
+    speciality: Yup.string().nullable(),
     gender: Yup.string().required('gender is required'),
     birth_date: Yup.string(),
+    visibility_US_page: Yup.bool(),
+    visibility_online_appointment: Yup.bool(),
     password: Yup.string().min(8, 'Password must be at least 8 characters'),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
@@ -83,16 +91,18 @@ export default function TableNewEditForm({ currentTable }) {
       unit_service:
         currentTable?.unit_service?._id ||
         user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-      department: currentTable?.department?._id || null,
-      employee_type: currentTable?.employee_type?._id || null,
+      department: currentTable?.department?._id || '',
+      employee_type: currentTable?.employee_type?._id || '',
       email: currentTable?.email || '',
       name_english: currentTable?.name_english || '',
       name_arabic: currentTable?.name_arabic || '',
       nationality: currentTable?.nationality || '',
       address: currentTable?.address || '',
-      phone: currentTable?.phone || '079',
+      phone: currentTable?.phone || '',
       speciality: currentTable?.speciality || '',
       gender: currentTable?.gender || '',
+      visibility_US_page: currentTable?.visibility_US_page || false,
+      visibility_online_appointment: currentTable?.visibility_online_appointment || false,
       birth_date: currentTable?.birth_date || '',
       password: currentTable?.password || '',
       confirmPassword: currentTable?.confirmPassword || '',
@@ -190,23 +200,7 @@ export default function TableNewEditForm({ currentTable }) {
                 name="name_arabic"
                 label={`${t('Full name in Arabic')} *`}
               />
-              <RHFTextField
-                lang="ar"
-                onChange={handleEnglishInputChange}
-                name="address"
-                label={t('address')}
-              />
-              <MuiTelInput
-                forceCallingCode
-                defaultCountry="JO"
-                value={phone}
-                label={`${t('phone')} *`}
-                onChange={(newPhone) => {
-                  matchIsValidTel(newPhone);
-                  setPhone(newPhone);
-                  methods.setValue('phone', newPhone);
-                }}
-              />
+              <RHFPhoneNumber name="phone" label={t('phone number')} placeholder="X XXXX XXXX" />
 
               <RHFSelect name="nationality" label={`${t('nationality')} *`}>
                 {countriesData.map((nationality, idx) => (
@@ -240,6 +234,24 @@ export default function TableNewEditForm({ currentTable }) {
                 <MenuItem value="male">{t('male')}</MenuItem>
                 <MenuItem value="female">{t('female')}</MenuItem>
               </RHFSelect>
+              <RHFCheckbox
+                sx={{ px: 2 }}
+                name="visibility_US_page"
+                label={
+                  <Typography lang="ar" sx={{ fontSize: 12 }}>
+                    {t('visible on online page')}
+                  </Typography>
+                }
+              />
+              <RHFCheckbox
+                sx={{ px: 2 }}
+                name="visibility_online_appointment"
+                label={
+                  <Typography lang="ar" sx={{ fontSize: 12 }}>
+                    {t('visible in online appointments')}
+                  </Typography>
+                }
+              />
             </Box>
             <Box
               rowGap={3}
@@ -251,6 +263,12 @@ export default function TableNewEditForm({ currentTable }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
+              <RHFTextField
+                lang="ar"
+                onChange={handleEnglishInputChange}
+                name="address"
+                label={t('address')}
+              />
               <RHFTextField lang="ar" name="email" label={`${t('email')} *`} />
               <RHFTextField
                 lang="ar"

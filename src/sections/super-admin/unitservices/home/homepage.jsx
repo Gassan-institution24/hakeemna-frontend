@@ -93,8 +93,6 @@ export default function UnitServicesTableView() {
 
   const { unitservicesData, loading, refetch } = useGetUnitservices();
 
-  // console.log('unitservicesData', unitservicesData);
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =

@@ -10,7 +10,6 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function StakeholderInfoContent({ stakeholderData }) {
-  // console.log('stakeholderData', stakeholderData);
   const {
     name_english,
     identification_num,

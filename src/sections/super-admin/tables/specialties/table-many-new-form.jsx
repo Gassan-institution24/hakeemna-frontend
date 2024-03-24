@@ -26,9 +26,9 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // import { useGetCountries } from 'src/api';
 
+import { Upload } from 'src/components/upload';
 import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
-import { Upload, UploadAvatar } from 'src/components/upload';
 import { useTable, TableHeadCustom, TableSelectedAction } from 'src/components/table';
 
 // ----------------------------------------------------------------------
@@ -116,7 +116,6 @@ export default function NewEditManyForm() {
       await axiosInstance.post(endpoints.specialities.many, data);
       router.push(paths.superadmin.tables.specialities.root);
     } catch (e) {
-      console.log(e);
       enqueueSnackbar(e, { variant: 'error' });
     }
   };

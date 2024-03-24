@@ -17,7 +17,6 @@ import Image from 'src/components/image/image';
 
 export default function DoctorCard({ info }) {
   const { nearstappointment } = useGetNearstAppointment(info?._id);
-  console.log(info);
   const router = useRouter();
   const handleViewRow = (ids) => {
     router.push(paths.dashboard.user.doctorpage(ids));
