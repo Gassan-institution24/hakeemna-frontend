@@ -21,12 +21,12 @@ export default function ProfileHome() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
- 
-  const tokenPlaceholder =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjhlZDQxNTJhYWQ5MjY2NGMxN2ZkNyIsImlhdCI6MTcxMDA0ODQzNCwiZXhwIjoxNzE3ODI0NDM0fQ.pI645Yv07aWxMh6k1gz6ogt30aSRhQ_y1dUQX0PgHrY';
+
+  const accessToken = sessionStorage.getItem('accessToken');
 
   // Replace the placeholder with the actual token (you need to get or generate the token)
-  const qrCodeLink = `http://localhost:3006/dashboard/user/myprofile/${user?.patient?._id}?token=${tokenPlaceholder}`;
+  const qrCodeLink = `https://api.doctorna.online/dashboard/user/myprofile/?token=${accessToken}`;
+
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   function calculateAge(birthDate) {
@@ -35,7 +35,10 @@ export default function ProfileHome() {
       const dob = new Date(birthDate);
 
       const age = today.getFullYear() - dob.getFullYear();
-      return age;
+      if (age === 0) {
+        return `${today.getMonth() - dob.getMonth()} months`;
+      }
+      return `${age} years`;
     }
     return '';
   }

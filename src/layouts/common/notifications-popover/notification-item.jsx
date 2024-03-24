@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
+import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import ListItemText from '@mui/material/ListItemText';
@@ -38,6 +39,7 @@ export default function NotificationItem({ notification, handleClick }) {
               (notification.type === 'error' && 'error') ||
               (notification.type === 'created' && 'created') ||
               (notification.type === 'updated' && 'updated') ||
+              // (notification.type === 'badge' && 'badge') ||
               (notification.type === 'delivery' && 'ic_delivery')
             }.svg`}
             sx={{ width: 24, height: 24 }}
@@ -73,7 +75,7 @@ export default function NotificationItem({ notification, handleClick }) {
             />
           }
         >
-          {fToNow(notification.created_at,curLangAr)}
+          {fToNow(notification.created_at, curLangAr)}
           {t(notification.category)}
         </Stack>
       }
@@ -99,6 +101,19 @@ export default function NotificationItem({ notification, handleClick }) {
     />
   );
 
+  const beAmember = (
+    <>
+      {/* <ListItemText primary={reader(curLangAr ? notification.title_arabic : notification.title)} /> */}
+      <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
+        <Button size="small" variant="contained">
+          Accept
+        </Button>
+        <Button size="small" variant="outlined">
+          Decline
+        </Button>
+      </Stack>
+    </>
+  );
   // const friendAction = (
   //   <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
   //     <Button size="small" variant="contained">
@@ -225,7 +240,7 @@ export default function NotificationItem({ notification, handleClick }) {
       {renderUnReadBadge}
 
       {renderAvatar}
-
+      {beAmember}
       <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
         {renderText}
         {/* {notification.type === 'friend' && friendAction}

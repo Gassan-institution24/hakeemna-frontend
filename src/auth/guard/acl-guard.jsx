@@ -67,46 +67,46 @@ export default function ACLGuard({ category, subcategory, acl, children, sx }) {
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
   );
 
-  if (
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
-      ?.status !== 'active' &&
-    subcategory !== 'unit_service_info'
-  ) {
-    return (
-      <Container maxWidth="lg" component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
-        <m.div variants={varBounce().in}>
-          <Typography variant="h3" sx={{ mb: 2 }}>
-            {t('Service Unit Licence expired')}
-          </Typography>
-        </m.div>
+  // if (
+  //   user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service
+  //     ?.status !== 'active' &&
+  //   subcategory !== 'unit_service_info'
+  // ) {
+  //   return (
+  //     <Container maxWidth="lg" component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
+  //       <m.div variants={varBounce().in}>
+  //         <Typography variant="h3" sx={{ mb: 2 }}>
+  //           {t('Service Unit Licence expired')}
+  //         </Typography>
+  //       </m.div>
 
-        <m.div variants={varBounce().in}>
-          <Typography sx={{ color: 'text.secondary' }}>
-            {t('You cannot access data from this service unit')}
-          </Typography>
-        </m.div>
+  //       <m.div variants={varBounce().in}>
+  //         <Typography sx={{ color: 'text.secondary' }}>
+  //           {t('You cannot access data from this service unit')}
+  //         </Typography>
+  //       </m.div>
 
-        <m.div variants={varBounce().in}>
-          <ForbiddenIllustration
-            sx={{
-              height: 260,
-              my: { xs: 5, sm: 10 },
-            }}
-          />
-        </m.div>
-        {currentACL?.unit_service?.unit_service_info?.includes('create') && (
-          <Button
-            component={RouterLink}
-            href="/dashboard/us/subscriptions/new"
-            size="large"
-            variant="contained"
-          >
-            {t('Add new licence')}
-          </Button>
-        )}
-      </Container>
-    );
-  }
+  //       <m.div variants={varBounce().in}>
+  //         <ForbiddenIllustration
+  //           sx={{
+  //             height: 260,
+  //             my: { xs: 5, sm: 10 },
+  //           }}
+  //         />
+  //       </m.div>
+  //       {currentACL?.unit_service?.unit_service_info?.includes('create') && (
+  //         <Button
+  //           component={RouterLink}
+  //           href="/dashboard/us/subscriptions/new"
+  //           size="large"
+  //           variant="contained"
+  //         >
+  //           {t('Add new licence')}
+  //         </Button>
+  //       )}
+  //     </Container>
+  //   );
+  // }
 
   if (category === 'work_group') {
     if (
