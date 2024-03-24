@@ -91,8 +91,6 @@ export default function EconomicMovementsView({ patientData }) {
     dateError,
   });
 
-  // console.log('dataFiltered', dataFiltered);
-
   // const dataInPage = dataFiltered.slice(
   //   table.page * table.rowsPerPage,
   //   table.page * table.rowsPerPage + table.rowsPerPage

@@ -99,7 +99,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       })
     ),
   });
-  // console.log('user', user);
 
   const defaultValues = useMemo(
     () => ({
@@ -270,7 +269,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   useEffect(() => {
     if (Object.keys(errors).length) {
-      // console.log(errors);
       setErrorMsg(
         Object.keys(errors)
           .map((key, idx) => errors?.[key]?.message)
@@ -279,7 +277,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     }
   }, [errors]);
 
-  // console.log('errorMsg', errorMsg);
   /* eslint-disable */
   useEffect(() => {
     if (appointmentConfigData) {

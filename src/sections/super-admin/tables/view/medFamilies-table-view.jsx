@@ -85,7 +85,6 @@ export default function FamiliesTableView() {
     dateError,
   });
 
-  // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name;

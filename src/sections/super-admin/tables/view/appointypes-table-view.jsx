@@ -109,10 +109,10 @@ export default function AppointmentTypesTableView() {
   //   table.page * table.rowsPerPage,
   //   table.page * table.rowsPerPage + table.rowsPerPage
   // );
-  // console.log(dataFiltered);
+
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name ;
+  const canReset = !!filters?.name;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 

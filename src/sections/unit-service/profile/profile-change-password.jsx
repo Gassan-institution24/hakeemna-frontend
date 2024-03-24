@@ -78,7 +78,7 @@ export default function AccountChangePassword() {
         link: paths.unitservice.profile.root,
         msg: `updated the service unit profile`,
       });
-      // console.log(response);
+
       if (response.status === 201) {
         reset();
         enqueueSnackbar(t('updated successfully!'), { variant: 'success' });

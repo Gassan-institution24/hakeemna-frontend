@@ -92,8 +92,6 @@ export default function UnitServicesTableView() {
 
   const settings = useSettingsContext();
 
-  // console.log('settings', settings);
-
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 

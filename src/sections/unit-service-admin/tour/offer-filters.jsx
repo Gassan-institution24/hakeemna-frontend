@@ -40,7 +40,7 @@ export default function TourFilters({
 }) {
   const { tableData } = useGetCities();
   const { stakeholder } = useGetStakeholder();
-  // console.log(stakeholder);
+
   const handleFilterStack = useCallback(
     (newValue) => {
       const checked = filters.stakeholder.includes(newValue)

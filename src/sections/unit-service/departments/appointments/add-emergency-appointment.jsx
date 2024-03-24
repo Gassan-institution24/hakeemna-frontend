@@ -53,8 +53,6 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
-  // console.log('workGroupsData', workGroupsData);
-
   const NewUserSchema = Yup.object().shape({
     work_shift: Yup.string().required('Work Shift is required'),
     work_group: Yup.string().required('Work Group is required'),
@@ -91,7 +89,7 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
             ._id,
         department: departmentData._id,
       });
-      console.log('appoint', appoint);
+
       socket.emit('created', {
         data,
         user,

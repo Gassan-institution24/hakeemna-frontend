@@ -37,7 +37,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
     });
     return acc;
   }, []);
-  // console.log('multiii', symptomsMultiSelect);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const NewSchema = Yup.object().shape({

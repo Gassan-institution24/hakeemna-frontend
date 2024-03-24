@@ -1,15 +1,13 @@
 // date-pickers
 import merge from 'lodash/merge';
+import arLocale from 'date-fns/locale/ar';
 import { enUS as enUSAdapter, arSA as arSAAdapter } from 'date-fns/locale';
-// core
-import { enUS as enUSCore, arSA as arSACore } from '@mui/material/locale';
-
-// data-grid
-import { enUS as enUSDataGrid, arSD as arSDDataGrid } from '@mui/x-data-grid';
 
 import { enUS as enUSDate } from '@mui/x-date-pickers/locales';
-
-import arLocale from 'date-fns/locale/ar';
+// core
+import { enUS as enUSCore, arSA as arSACore } from '@mui/material/locale';
+// data-grid
+import { enUS as enUSDataGrid, arSD as arSDDataGrid } from '@mui/x-data-grid';
 
 // PLEASE REMOVE `LOCAL STORAGE` WHEN YOU CHANGE SETTINGS.
 // ----------------------------------------------------------------------

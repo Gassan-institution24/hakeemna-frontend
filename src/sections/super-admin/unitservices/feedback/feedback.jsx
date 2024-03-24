@@ -102,7 +102,7 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
-  // console.log(unitServiceData);
+
   const handleDownload = () => {
     const excelBody = dataFiltered.reduce((acc, info) => {
       acc.push({

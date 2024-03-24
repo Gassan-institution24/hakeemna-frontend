@@ -31,7 +31,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
   const [theId, setTheId] = useState();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  console.log(pendingAppointments);
+
   const dialog = useBoolean(false);
   const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
@@ -116,8 +116,8 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
                 }
                 secondary={
                   doctor?.employee?.visibility_online_appointment === true ? (
-                  <span style={{ color: 'inherit' }}> {info?.unit_service?.name_english}</span>
-                  ): null
+                    <span style={{ color: 'inherit' }}> {info?.unit_service?.name_english}</span>
+                  ) : null
                 }
                 primaryTypographyProps={{
                   typography: 'subtitle1',

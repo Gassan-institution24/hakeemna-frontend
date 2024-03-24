@@ -46,8 +46,6 @@ export default function CitiesNewEditForm({ currentCity }) {
     }),
     [currentCity]
   );
-  // console.log(currentCity);
-  // console.log(defaultValues);
 
   const methods = useForm({
     mode: 'onTouched',

@@ -16,7 +16,6 @@ import { useSettingsContext } from 'src/components/settings';
 
 export default function DepartmentInfoContent({ departmentData }) {
   const { name_english, name_arabic, general_info, unit_service } = departmentData;
-  // console.log('departmentData');
 
   const settings = useSettingsContext();
 

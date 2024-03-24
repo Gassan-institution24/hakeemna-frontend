@@ -29,7 +29,6 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { user } = useAuthContext();
 
-  // console.log('currentt', currentTable);
   const { measurmentTypesData } = useGetActiveMeasurmentTypes();
   const { workShiftsData } = useGetUSActiveWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id

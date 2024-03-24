@@ -69,8 +69,6 @@ export default function DepartmentFeedbackView() {
 
   const { user } = useAuthContext();
 
-  // console.log('user', user);
-
   const settings = useSettingsContext();
 
   const { feedbackData, loading } = useGetEmployeeFeedbackes(user?.employee?._id);

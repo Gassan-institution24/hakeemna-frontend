@@ -99,7 +99,6 @@ export default function RoomsTableView() {
   const { roomsData, loading, refetch } = useGetUSRooms(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
-  console.log('roomsData', roomsData);
 
   const [filters, setFilters] = useState(defaultFilters);
 
