@@ -15,10 +15,9 @@ import { useGetNearstAppointment } from 'src/api';
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
-
 export default function DoctorCard({ info }) {
   const { nearstappointment } = useGetNearstAppointment(info?._id);
-// console.log(info);
+  console.log(info);
   const router = useRouter();
   const handleViewRow = (ids) => {
     router.push(paths.dashboard.user.doctorpage(ids));
@@ -51,10 +50,15 @@ export default function DoctorCard({ info }) {
         <Box sx={{ display: 'inline-flex' }}>
           <Typography sx={{ fontSize: 13 }}>Dr.</Typography>&nbsp;
           <Typography sx={{ fontSize: 13 }}>{info?.employee?.name_english}</Typography>&nbsp;
-          {/* <Typography sx={{ fontSize: 13 }}>{info?.employee?.family_name}</Typography> */}
         </Box>
+        {info?.employee?.languages?.map((language, index) => (
+          <Typography sx={{ fontSize: 13, display: 'inline' }} key={index}>
+            {language}&nbsp;
+          </Typography>
+        ))}
         <Typography sx={{ fontSize: 11, color: 'grey' }}>
-          {info?.employee?.speciality?.name_english} / {info?.employee?.sub_speciality?.name_english}
+          {info?.employee?.speciality?.name_english} /{' '}
+          {info?.employee?.sub_speciality?.name_english}
         </Typography>
         <Box sx={{ position: 'relative', left: '-0.1%', mt: 1 }}>
           <Typography sx={{ fontSize: 13 }}>
