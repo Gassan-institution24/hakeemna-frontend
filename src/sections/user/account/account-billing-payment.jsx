@@ -16,7 +16,7 @@ import Iconify from 'src/components/iconify';
 export default function AccountBillingPayment() {
   // const { user } = useAuthContext();
   // const { paymentmethods } = useGetPaymentmethods();
-  // console.log(paymentmethods);
+
   const newCard = useBoolean();
   return (
     <>

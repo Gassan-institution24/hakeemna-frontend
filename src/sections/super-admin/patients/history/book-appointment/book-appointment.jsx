@@ -61,7 +61,6 @@ export default function AppointmentListView({ patientData }) {
 
   const { appointmentsData, refetch } = useGetAvailableAppointments();
 
-  // console.log('dataaaaaaaapp', appointmentsData);
   const { countriesData } = useGetCountries();
   const { tableData } = useGetCities();
   const { unitservicesData } = useGetActiveUnitservices();

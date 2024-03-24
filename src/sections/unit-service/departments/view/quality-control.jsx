@@ -98,7 +98,7 @@ export default function DepartmentFeedbackView({ departmentData }) {
   const printHandler = useReactToPrint({
     content: () => componentRef.current,
   });
-  // console.log(departmentData);
+
   const handleDownload = () => {
     const excelBody = dataFiltered.reduce((acc, info) => {
       acc.push({

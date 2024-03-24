@@ -20,7 +20,6 @@ export default function MovementTableRow({
   onEditRow,
   onDeleteRow,
 }) {
-  // console.log('row', row);
   const { unit_service, start_date, end_date, count, payments, user_no, status } = row;
 
   const popover = usePopover();

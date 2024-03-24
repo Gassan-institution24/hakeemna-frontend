@@ -22,8 +22,6 @@ export default function PatientProfile() {
   const { id } = useParams();
   const { data } = useGetPatient(id);
 
-  console.log('data', data);
-
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(data?._id);
 

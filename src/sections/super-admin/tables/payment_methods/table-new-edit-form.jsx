@@ -21,7 +21,6 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
-  // console.log('methods', currentTable);
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();

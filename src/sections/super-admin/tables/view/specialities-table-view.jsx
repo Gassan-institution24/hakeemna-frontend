@@ -93,8 +93,6 @@ export default function SpecialtiesTableView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  console.log('specialtiesData', specialtiesData);
-
   const dateError =
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()
@@ -111,7 +109,7 @@ export default function SpecialtiesTableView() {
   //   table.page * table.rowsPerPage,
   //   table.page * table.rowsPerPage + table.rowsPerPage
   // );
-  // console.log(dataFiltered);
+
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name;

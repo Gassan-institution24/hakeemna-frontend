@@ -18,7 +18,7 @@ export default function CountryEditView() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetUser(id);
-  console.log(data);
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

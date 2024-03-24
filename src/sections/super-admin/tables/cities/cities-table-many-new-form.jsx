@@ -83,11 +83,11 @@ export default function CitiesNewEditForm() {
   const handleSelectMany = (event) => {
     setCities((prevCities) => {
       const updatedCities = [...prevCities];
-      console.log(' table.selected', table.selected);
+
       table.selected.forEach((item) => {
         updatedCities[item] = { ...updatedCities[item], country: event.target.value };
       });
-      console.log('updatedCities', updatedCities);
+
       return updatedCities;
     });
   };
@@ -115,7 +115,6 @@ export default function CitiesNewEditForm() {
       await axiosInstance.post(endpoints.cities.many, cities);
       router.push(paths.superadmin.tables.cities.root);
     } catch (e) {
-      console.log(e);
       enqueueSnackbar(e, { variant: 'error' });
     }
   };

@@ -243,7 +243,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      console.log('error', JSON.stringify(error));
       setErrorMsg(typeof error === 'string' ? error : error.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       console.error(error);
@@ -256,7 +255,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   useEffect(() => {
     if (Object.keys(errors).length) {
-      // console.log(errors);
       setErrorMsg(
         Object.keys(errors)
           .map((key, idx) => errors?.[key]?.message)
