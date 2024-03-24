@@ -30,11 +30,17 @@ export default function Prescriptions() {
   const { t } = useTranslate();
 
   function calculateAge(birthDate) {
-    const today = new Date();
-    const dob = new Date(birthDate);
+    if (birthDate) {
+      const today = new Date();
+      const dob = new Date(birthDate);
 
-    const age = today.getFullYear() - dob.getFullYear();
-    return age;
+      const age = today.getFullYear() - dob.getFullYear();
+      if (age === 0) {
+        return `${today.getMonth() - dob.getMonth()} months`;
+      }
+      return `${age} years`;
+    }
+    return '';
   }
   function calculateDuration(startDate, endDate) {
     const start = new Date(startDate);
