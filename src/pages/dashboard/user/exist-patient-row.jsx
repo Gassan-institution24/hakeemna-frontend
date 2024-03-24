@@ -11,29 +11,31 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-
+import EmptyContent from 'src/components/empty-content/empty-content';
+// import socket from 'src/socket';
+// import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
 export default function ExistPatientRow({ row, selected }) {
-  const {_id, identification_num, mobile_num1, first_name, name_arabic } = row;
+  const { _id, identification_num, mobile_num1, first_name, name_arabic } = row;
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
 
-  const handleEmployment = async () => {
+  const handleAddFamily = async () => {
     try {
-      await axios.patch(endpoints.patients.one(_id), {
-        family_members: user?.patient?.id,
-      });
-      // socket.emit('created', {
+      // await axios.patch(endpoints.patients.one(_id), {
+      //   family_members: user?.patient?._id,
+      // });
+      // socket.emit('badge', {
       //   user,
-      //   link: paths.unitservice.employees.root,
+      //   link: paths.dashboard.user.root,
       //   msg: `created an employee <strong>${row.first_name}</strong>`,
       // });
-      enqueueSnackbar(t('employment successfully!'));
+      enqueueSnackbar(t('Invitation sent successfully'));
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
@@ -48,22 +50,43 @@ export default function ExistPatientRow({ row, selected }) {
       <TableCell lang="ar" align="center">
         {first_name}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      {/* <TableCell lang="ar" align="center">
         {name_arabic}
-      </TableCell>
+      </TableCell> */}
 
       <TableCell lang="ar" align="center">
         {mobile_num1}
       </TableCell>
       <TableCell lang="ar" align="center">
-        <Button variant="outlined" onClick={() => handleEmployment()}>
-          {t('Request To Add')} &nbsp; <Iconify sx={{ mb: '5px' }} icon="icon-park:add-user" />
-        </Button>
+        {/* <Button disabled variant="outlined">
+          {t('Waiting acceptation')} &nbsp; <Iconify sx={{  display:{md:'block', xs:'none'} }} icon="icon-park:time" />
+        </Button> */}
+         <Button variant="outlined" onClick={() => handleAddFamily()}>
+          {t('Request To Add')} &nbsp; <Iconify sx={{ mb: '5px', display:{md:'block', xs:'none'} }} icon="icon-park:add-user" />
+        </Button> 
       </TableCell>
     </TableRow>
   );
 
-  return <>{renderPrimary}</>;
+  return row?.family_members.length === 0 && row?._id !== user?.patient?._id ? (
+    renderPrimary
+  ) : (
+    <EmptyContent
+      filled
+      title={t('No Data')}
+      sx={{
+        py: 10,
+        width: {
+          sm: '250%',
+          xs: '200%',
+          md: '321.5%',
+          lg: '321.5%',
+          xl: '321.5%',
+        }
+      }}
+    />
+  );
+  // return <> {renderPrimary} </>
 }
 
 ExistPatientRow.propTypes = {
