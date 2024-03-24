@@ -9,10 +9,6 @@ import { useTheme } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 
-import { paths } from 'src/routes/paths';
-
-import axios, { endpoints } from 'src/utils/axios';
-
 // import socket from 'src/socket';
 import {  useFindPatients } from 'src/api';
 import {  useTranslate } from 'src/locales';

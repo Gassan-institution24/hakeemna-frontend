@@ -55,8 +55,6 @@ export default function BookManually({
   const { workGroupsData } = useGetDepartmentActiveWorkGroups(depid);
   const { workShiftsData } = useGetUSActiveWorkShifts(id);
 
-  // console.log('workGroupsData', workGroupsData);
-
   const NewUserSchema = Yup.object().shape({
     work_shift: Yup.string().required('Work Shift is required'),
     work_group: Yup.string().required('Work Group is required'),
@@ -91,7 +89,7 @@ export default function BookManually({
         unit_service: id,
         department: departmentData._id,
       });
-      console.log('appoint', appoint);
+
       socket.emit('created', {
         data,
         user,

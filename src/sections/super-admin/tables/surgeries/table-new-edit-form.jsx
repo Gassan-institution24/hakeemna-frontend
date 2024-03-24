@@ -34,7 +34,7 @@ export default function SurgeriesNewEditForm({ currentSelected }) {
     });
     return acc;
   }, []);
-  // console.log('multiii', diseasesMultiSelect);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const NewSchema = Yup.object().shape({

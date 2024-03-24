@@ -26,7 +26,6 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  // console.log('currentt', currentTable);
   const { unitservicesData } = useGetActiveUnitservices();
   const { measurmentTypesData } = useGetActiveMeasurmentTypes();
   const { workShiftsData } = useGetWorkShifts();

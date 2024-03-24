@@ -31,8 +31,6 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   const navData = useNavData();
 
-  // console.log('nav dataaa', navData);
-
   useEffect(() => {
     if (openNav) {
       onCloseNav();

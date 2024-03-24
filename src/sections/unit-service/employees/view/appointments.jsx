@@ -130,8 +130,6 @@ export default function AppointmentsView({ employeeData }) {
     filters: filters || null,
   });
 
-  console.log('appointmentsData', appointmentsData);
-
   const dateError =
     filters.startDate && filters.endDate
       ? filters.startDate.getTime() > filters.endDate.getTime()

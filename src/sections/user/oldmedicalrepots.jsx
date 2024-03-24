@@ -42,7 +42,6 @@ import Iconify from 'src/components/iconify/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
 
-
 export default function OldMedicalReports() {
   const dialog = useBoolean();
   const { t } = useTranslate();
@@ -177,7 +176,6 @@ export default function OldMedicalReports() {
       ImgFiles.forEach((f) => formData.append('medicalreports[]', f));
     }
     try {
-      console.log(Object.fromEntries(formData), 'sdsd');
       await axios.post('/api/oldmedicalreports', formData);
       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
       dialog.onFalse();
@@ -388,7 +386,6 @@ export default function OldMedicalReports() {
                 <TableCell> {t('Date')}</TableCell>
                 {info?.note ? <TableCell> {t('Note')}</TableCell> : ''}
 
-
                 <TableCell> {t('Options')}</TableCell>
               </TableRow>
             </TableHead>
@@ -420,7 +417,7 @@ export default function OldMedicalReports() {
                     sx={{ mr: 1 }}
                     onMouseOver={() => handleHover(info?._id)}
                     onMouseOut={handleMouseOut}
-                    onClick={()=>handleViewClick(info?._id)}
+                    onClick={() => handleViewClick(info?._id)}
                   >
                     {t('View')} &nbsp;{' '}
                     <Iconify

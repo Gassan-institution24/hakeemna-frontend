@@ -69,8 +69,6 @@ export default function JwtLoginView() {
       console.error(error);
       // reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
-      console.log(error);
-      console.log(error === 'Your account is inactive!');
       if (error === 'Your account is inactive!') {
         setEmail(data.email);
       }

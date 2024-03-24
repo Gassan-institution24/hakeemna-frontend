@@ -68,9 +68,7 @@ export default function AppointmentBooking() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const sortOptions = [
-    { value: 'rateing', label: t('Rateing') },
-  ];
+  const sortOptions = [{ value: 'rateing', label: t('Rateing') }];
 
   const dateError =
     filters.Offer_start_date && filters.Offer_end_date
@@ -219,7 +217,6 @@ export default function AppointmentBooking() {
 function applyFilter({ inputData, search, comparator, filters, sortBy }) {
   const { insurance } = filters;
   const { countries } = filters;
-  // console.log(inputData, 'inputData1');
 
   // SORT BY
   if (sortBy === 'rateing') {

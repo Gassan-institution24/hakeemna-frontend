@@ -44,7 +44,6 @@ export default function UnitServiceEmployeesRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
-  // console.log('row', row);
 
   const { t } = useTranslate();
 

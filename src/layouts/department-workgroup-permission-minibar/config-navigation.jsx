@@ -21,8 +21,6 @@ export function useNavData() {
   const { user } = useAuthContext();
   const { data, loading } = useGetWorkGroup(wgid);
 
-  console.log(data);
-
   const employeeItems = useMemo(() => {
     if (loading || !data) {
       return [];

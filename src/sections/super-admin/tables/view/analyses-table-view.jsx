@@ -78,10 +78,9 @@ export default function AnalysesTableView() {
     dateError,
   });
 
-  // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name ;
+  const canReset = !!filters?.name;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 

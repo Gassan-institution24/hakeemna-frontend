@@ -3,7 +3,6 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-
 export function useGetNotifications() {
   const URL = endpoints.notifications.all;
 
@@ -26,7 +25,6 @@ export function useGetNotifications() {
   return { ...memoizedValue, refetch };
 }
 export function useGetMyNotifications(id, emid, page) {
-  // console.log(id, emid);
   const URL = endpoints.notifications.my(id, emid, page);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);

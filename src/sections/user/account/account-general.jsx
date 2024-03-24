@@ -34,7 +34,7 @@ export default function AccountGeneral({ data, refetch }) {
   const { t } = useTranslate();
   const [em_phone, setEMphone] = useState(data.mobile_num1);
   const [em_phone2, setEMphone2] = useState(data.mobile_num2);
-  console.log(user?.patient?.other_medication_notes);
+
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
@@ -142,13 +142,12 @@ export default function AccountGeneral({ data, refetch }) {
       // Concatenate the new value to the old array
       profileData.other_medication_notes = [
         ...data.other_medication_notes,
-        profileData.other_medication_notes
+        profileData.other_medication_notes,
       ];
     } else {
       // If there is no old value, create a new array with the new value
       profileData.other_medication_notes = [profileData.other_medication_notes];
     }
-    
 
     // Create a new FormData object
     const formData = new FormData();

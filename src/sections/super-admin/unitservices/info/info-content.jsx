@@ -10,7 +10,6 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function UnitServiceInfoContent({ unitServiceData }) {
-  // console.log('unitServiceData', unitServiceData);
   const {
     name_english,
     country,

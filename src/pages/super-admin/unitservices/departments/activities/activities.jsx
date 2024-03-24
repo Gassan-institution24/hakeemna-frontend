@@ -15,7 +15,6 @@ export default function DepartmentActivitiesPage() {
   const { depid } = params;
   const { data, loading } = useGetDepartment(depid);
   const name = data?.name_english;
-  console.log('data', data);
   return (
     <>
       <Helmet>
