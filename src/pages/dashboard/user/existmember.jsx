@@ -6,7 +6,6 @@ import Table from '@mui/material/Table';
 import { TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
-import { tableCellClasses } from '@mui/material/TableCell';
 
 // import { paths } from 'src/routes/paths';
 
@@ -26,7 +25,7 @@ export default function Exist() {
   const TABLE_HEAD = [
     { id: 'identification_num', label: t('ID number') },
     { id: 'first_name', label: t('First Name') },
-    { id: 'name_arabic', label: t('Name Arabic') },
+    // { id: 'name_arabic', label: t('Name Arabic') },
     { id: 'mobile_num1', label: t('Phone') },
     { id: 'options', label: t('options') },
   ];
@@ -40,10 +39,7 @@ export default function Exist() {
   const {
     page,
     rowsPerPage,
-    //
     selected,
-    //
-    onSort,
   } = table;
 
   const handleArabicInputChange = (event) => {
@@ -70,7 +66,6 @@ export default function Exist() {
     first_name: filters.first_name,
     name_arabic: filters?.name_arabic,
   });
-  console.log(existPatient, 'existPatient');
   return (
     <Box>
       <Card sx={{ p: 3 }}>
@@ -112,7 +107,6 @@ export default function Exist() {
 
       <Table
         sx={{
-          minWidth: 960,
           borderCollapse: 'separate',
           borderSpacing: '0 16px',
         }}
@@ -121,25 +115,11 @@ export default function Exist() {
           headLabel={TABLE_HEAD}
           //   rowCount={tableData.length}
           numSelected={selected.length}
-          onSort={onSort}
-          sx={{
-            [`& .${tableCellClasses.head}`]: {
-              '&:first-of-type': {
-                borderTopLeftRadius: 12,
-                borderBottomLeftRadius: 12,
-              },
-              '&:last-of-type': {
-                borderTopRightRadius: 12,
-                borderBottomRightRadius: 12,
-              },
-            },
-          }}
         />
 
         <TableBody>
           {existPatient
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, idx) => (
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, idx) => (
               <ExistPatientRow key={idx} row={row} />
             ))}
 
