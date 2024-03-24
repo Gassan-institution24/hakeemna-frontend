@@ -137,13 +137,12 @@ export default function AccountGeneral({ data, refetch }) {
       // Concatenate the new value to the old array
       profileData.other_medication_notes = [
         ...data.other_medication_notes,
-        profileData.other_medication_notes
+        profileData.other_medication_notes,
       ];
     } else {
       // If there is no old value, create a new array with the new value
       profileData.other_medication_notes = [profileData.other_medication_notes];
     }
-    
 
     // Create a new FormData object
     const formData = new FormData();

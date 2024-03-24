@@ -85,9 +85,7 @@ export default function TableNewEditForm({ licenseMovementData, stakeholderData 
         await axiosInstance.post(endpoints.license_movements.all, data); /// edit
       }
       reset();
-      // console.log('before router');
       router.push(paths.superadmin.accounting.stakeholder.root(stakeholderData._id));
-      // console.log('after router');
       enqueueSnackbar(licenseMovementData ? 'Update success!' : 'Create success!');
     } catch (error) {
       console.error(error);

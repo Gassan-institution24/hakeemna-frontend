@@ -46,8 +46,6 @@ export default function TableNewEditForm({ currentTable }) {
     }),
     [currentTable]
   );
-  // console.log(currentTable);
-  // console.log(defaultValues);
 
   const methods = useForm({
     mode: 'onTouched',

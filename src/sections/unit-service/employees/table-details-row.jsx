@@ -47,7 +47,6 @@ export default function UnitServiceEmployeesRow({
     modifications_nums,
     online,
   } = row;
-  console.log('row', row);
 
   const { t } = useTranslate();
 

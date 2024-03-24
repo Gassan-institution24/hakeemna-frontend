@@ -12,9 +12,7 @@ import PatientInfo from 'src/sections/super-admin/patients/info/patient-info';
 export default function TableCreatePage() {
   const params = useParams();
   const { id } = params;
-  // console.log('iddd', id);
   const { data, loading } = useGetPatient(id);
-  // console.log('patient dataa', data);
   const patientName =
     (data?.first_name && data?.last_name && `${data?.first_name} ${data?.last_name}`) ||
     (data?.first_name && data?.first_name) ||

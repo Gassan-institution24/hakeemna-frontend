@@ -102,8 +102,6 @@ export default function ServicesTableView() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
   );
 
-  console.log('serviceTypesData', serviceTypesData);
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =

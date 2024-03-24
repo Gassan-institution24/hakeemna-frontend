@@ -74,8 +74,6 @@ export default function TableNewEditForm({ currentTable }) {
     }),
     [currentTable]
   );
-  // console.log('currrrent', currentTable);
-  // console.log(defaultValues);
 
   const methods = useForm({
     mode: 'onTouched',
@@ -111,7 +109,6 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      // console.log('data', data);
       // const modifiedData = {
       //   ...data,
       //   package_appointment: Boolean(data.package_appointment),

@@ -304,7 +304,6 @@ export default function EmployeesTableView({ departmentData }) {
   /* eslint-disable */
   useEffect(() => {
     socket.on('employeeStatusUpdated', () => {
-      console.log('employee status updated');
       refetch();
     });
   }, []);
