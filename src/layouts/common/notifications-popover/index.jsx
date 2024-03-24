@@ -50,6 +50,10 @@ export default function NotificationsPopover() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id,
     page
   );
+  // const { patientNotifications } = useGetPatientNotifications(
+  //   user?.patient?._id,
+  // );
+  // console.log(patientNotifications,"patientNotifications");
 
   const handleClick = async (id, link) => {
     drawer.onFalse();
@@ -81,6 +85,11 @@ export default function NotificationsPopover() {
       setPage(1);
       refetch();
     });
+    // socket.on('badge', () => {
+    //   setAllNotifications([]);
+    //   setPage(1);
+    //   refetch();
+    // });
   }, []);
   /* eslint-enable */
 

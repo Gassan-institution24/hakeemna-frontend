@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Box } from '@mui/system';
@@ -23,6 +23,7 @@ import { useGetCountries, useGetCountryCities } from 'src/api';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { DatePicker } from '@mui/x-date-pickers';
 
 export default function Create() {
   const { countriesData } = useGetCountries();
@@ -41,7 +42,7 @@ export default function Create() {
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .min(8, 'Confirm password must be at least 8 characters'),
     identification_num: Yup.string().required('Identification number is required'),
-    mobile_num1: Yup.string().required('Mobile number is required'),
+    birth_date: Yup.date().required('birth_date is required'),
     gender: Yup.string().required('Gender is required'),
     country: Yup.string().required('Country is required'),
     city: Yup.string().required('City is required'),
@@ -54,7 +55,7 @@ export default function Create() {
     family_members: user?.patient?._id,
     password: '',
     confirmPassword: '',
-    mobile_num1: '',
+    birth_date: '',
     identification_num: '',
     gender: '',
     country: null,
@@ -70,6 +71,7 @@ export default function Create() {
   const {
     reset,
     watch,
+    control,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -112,7 +114,27 @@ export default function Create() {
 
           <RHFTextField name="email" label="Email address" />
           <RHFTextField name="identification_num" label="Identification number" />
-          <RHFTextField name="mobile_num1" label={t('mobile number')} />
+          <Controller
+                name="birth_date"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <DatePicker
+                    label={t('birth date')}
+                    // sx={{ flex: 1 }}
+                    value={new Date(values.birth_date ? values.birth_date : '')}
+                    onChange={(newValue) => {
+                      field.onChange(newValue);
+                    }}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!error,
+                        helperText: error?.message,
+                      },
+                    }}
+                  />
+                )}
+              />
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
               {countriesData?.map((country, idx) => (

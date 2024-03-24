@@ -50,11 +50,11 @@ export default function DoctorCard({ info }) {
       <Box sx={{ mr: 4 }}>
         <Box sx={{ display: 'inline-flex' }}>
           <Typography sx={{ fontSize: 13 }}>Dr.</Typography>&nbsp;
-          <Typography sx={{ fontSize: 13 }}>{info?.employee?.first_name}</Typography>&nbsp;
-          <Typography sx={{ fontSize: 13 }}>{info?.employee?.family_name}</Typography>
+          <Typography sx={{ fontSize: 13 }}>{info?.employee?.name_english}</Typography>&nbsp;
+          {/* <Typography sx={{ fontSize: 13 }}>{info?.employee?.family_name}</Typography> */}
         </Box>
-        <Typography sx={{ fontSize: 12, color: 'grey' }}>
-          {info?.employee?.speciality?.name_english}
+        <Typography sx={{ fontSize: 11, color: 'grey' }}>
+          {info?.employee?.speciality?.name_english} / {info?.employee?.sub_speciality?.name_english}
         </Typography>
         <Box sx={{ position: 'relative', left: '-0.1%', mt: 1 }}>
           <Typography sx={{ fontSize: 13 }}>
