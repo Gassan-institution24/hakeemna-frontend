@@ -24,19 +24,14 @@ import FormProvider, { RHFSelect, RHFTextField, RHFUploadAvatar } from 'src/comp
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral({ data, refetch }) {
-  // const [oldpatientsdata, setOldpatientsdata] = useState();
   const { user } = useAuthContext();
   const [profilePicture, setProfilePicture] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const { countriesData } = useGetCountries();
-  // const [cities, setCities] = useState([]);
-  // const [selectedCountry, setSelectedCountry] = useState('');
   const { t } = useTranslate();
   const [em_phone, setEMphone] = useState(data.mobile_num1);
   const [em_phone2, setEMphone2] = useState(data.mobile_num2);
-
   const handleArabicInputChange = (event) => {
-    // Validate the input based on Arabic language rules
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
 
     if (arabicRegex.test(event.target.value)) {
