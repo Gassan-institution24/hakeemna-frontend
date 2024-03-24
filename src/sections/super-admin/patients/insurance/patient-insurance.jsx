@@ -104,7 +104,6 @@ export default function PatientInsuranceView({ patientData, refetch }) {
     dateError,
   });
 
-  // console.log('dataata', patientData);
   const { t } = useTranslate();
 
   const dataInPage = dataFiltered?.slice(
@@ -158,7 +157,7 @@ export default function PatientInsuranceView({ patientData, refetch }) {
       refetch();
       table.onUpdatePageDeleteRow(dataInPage?.length);
     },
-    [dataInPage?.length, table, refetch, patientData?._id,t, patientData?.insurance]
+    [dataInPage?.length, table, refetch, patientData?._id, t, patientData?.insurance]
   );
   const handleDeleteRow = useCallback(
     async (id) => {

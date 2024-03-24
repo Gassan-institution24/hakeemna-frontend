@@ -39,7 +39,6 @@ export default function CountriesTableRow({
     modifications_nums,
   } = row;
 
-  console.log('employee_engagements', employee_engagements);
 
   const DDL = usePopover();
   const popover = usePopover();

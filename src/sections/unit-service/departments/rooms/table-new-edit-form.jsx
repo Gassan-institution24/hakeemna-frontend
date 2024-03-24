@@ -32,7 +32,6 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
   const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
-  // console.log('department ddd', departmentData);
 
   const { enqueueSnackbar } = useSnackbar();
 

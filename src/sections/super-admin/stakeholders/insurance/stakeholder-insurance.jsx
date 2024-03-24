@@ -104,7 +104,6 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
     dateError,
   });
 
-  // console.log('dataata', stakeholderData);
   const { t } = useTranslate();
 
   const dataInPage = dataFiltered?.slice(

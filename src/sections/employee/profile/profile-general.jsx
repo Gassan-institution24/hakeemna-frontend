@@ -45,7 +45,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  // console.log('employeeData', employeeData);
 
   const UpdateUserSchema = Yup.object().shape({
     employee_type: Yup.string().required('Employee type is required.'),
@@ -109,7 +108,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
   } = methods;
 
   const values = watch();
-  console.log('values', values);
 
   const handleDrop = useCallback(
     (name, acceptedFiles) => {
@@ -127,7 +125,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      // console.log('data', data);
       const formData = new FormData();
       Object.keys(data).forEach((key) => {
         if (Array.isArray(data[key])) {
@@ -138,8 +135,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
           formData.append(key, data[key]);
         }
       });
-
-      console.log('formData', formData);
       await axios.patch(endpoints.employees.one(employeeData._id), formData);
       enqueueSnackbar(t('updated successfully!'));
       refetch();

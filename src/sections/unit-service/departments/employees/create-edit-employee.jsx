@@ -123,8 +123,6 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      // console.log('data', data);
-
       if (currentTable) {
         await axiosInstance.patch(endpoints.hospitals.one(currentTable._id), {
           role: 'employee',

@@ -81,8 +81,6 @@ export default function EconomicMovementsView({ employeeData }) {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
-  // console.log('employeeData', employeeData);
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -96,8 +94,6 @@ export default function EconomicMovementsView({ employeeData }) {
     filters,
     dateError,
   });
-
-  // console.log('dataFiltered', dataFiltered);
 
   // const dataInPage = dataFiltered.slice(
   //   table.page * table.rowsPerPage,

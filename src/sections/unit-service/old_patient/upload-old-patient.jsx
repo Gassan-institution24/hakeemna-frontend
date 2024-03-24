@@ -63,7 +63,6 @@ export default function UploadOldPatient({ refetch }) {
   const { reset, handleSubmit, watch, setValue } = methods;
 
   const values = watch();
-  // console.log('watch', watch());
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -77,8 +76,7 @@ export default function UploadOldPatient({ refetch }) {
           formData.append(key, data[key]);
         }
       });
-      // console.log('data', data);
-      // console.log('formData', formData);
+
       await axios.post(endpoints.oldpatient.all, formData);
       socket.emit('updated', {
         user,
@@ -116,16 +114,13 @@ export default function UploadOldPatient({ refetch }) {
 
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
-      // console.log('acceptedFiles', acceptedFiles);
       const files = values.files || uploadedFiles;
-      // console.log('files', files);
 
       const newFiles = acceptedFiles.map((file, idx) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
         })
       );
-      // console.log('newFiles', newFiles);
 
       // Concatenate the new files with the existing ones
       const updatedFiles = [...files, ...newFiles];

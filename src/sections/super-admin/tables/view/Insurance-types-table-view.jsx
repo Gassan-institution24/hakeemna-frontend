@@ -98,8 +98,6 @@ export default function InsuranceTypesTableView() {
 
   const { insuranseTypesData, loading, refetch } = useGetInsuranceTypes();
 
-  console.log('insuranseTypesData', insuranseTypesData);
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -118,7 +116,7 @@ export default function InsuranceTypesTableView() {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
-  // console.log(dataFiltered);
+
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name || filters.status !== 'active';

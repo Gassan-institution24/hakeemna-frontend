@@ -85,8 +85,6 @@ export default function StakeholdersFeedbacks() {
     return resultsArr;
   }, [feedbackData]);
 
-  // console.log('separateEachStakeholderFeedbacks', separateEachStakeholderFeedbacks());
-
   const [filters, setFilters] = useState(defaultFilters);
 
   // const dateError =

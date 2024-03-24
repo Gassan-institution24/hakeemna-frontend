@@ -78,7 +78,6 @@ export default function CategoriesTableView() {
     dateError,
   });
 
-  // console.log(dataFiltered);
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !!filters?.name;

@@ -89,8 +89,6 @@ export default function TableNewEditForm({ currentTable }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      // console.log('data', data);
-
       if (currentTable) {
         await axiosInstance.patch(endpoints.work_shifts.one(currentTable._id), data);
         socket.emit('updated', {
