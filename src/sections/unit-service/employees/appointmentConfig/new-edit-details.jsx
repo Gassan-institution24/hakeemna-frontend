@@ -10,12 +10,17 @@ import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { paths } from 'src/routes/paths';
+
+import { useNewScreen } from 'src/hooks/use-new-screen';
+
 import { useUnitTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetUSActiveWorkShifts, useGetEmployeeActiveWorkGroups } from 'src/api';
 
+import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -42,6 +47,8 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
   const { myunitTime } = useUnitTime();
 
   const { user } = useAuthContext();
+
+  const { handleAddNew } = useNewScreen();
 
   const { workGroupsData } = useGetEmployeeActiveWorkGroups(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
@@ -140,6 +147,22 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                 {curLangAr ? option?.name_arabic : option?.name_english}
               </MenuItem>
             ))}
+            <Divider />
+            <MenuItem
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: 1,
+                fontWeight: 600,
+                // color: 'error.main',
+              }}
+              onClick={() => handleAddNew(paths.unitservice.tables.workshifts.new)}
+            >
+              <Typography lang="ar" variant="body2" sx={{ color: 'info.main' }}>
+                {t('Add new')}
+              </Typography>
+              <Iconify icon="material-symbols:new-window-sharp" />
+            </MenuItem>
           </RHFSelect>
           <RHFSelect
             size="small"
@@ -155,6 +178,22 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
                   {curLangAr ? option?.name_arabic : option?.name_english}
                 </MenuItem>
               ))}
+            <Divider />
+            <MenuItem
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: 1,
+                fontWeight: 600,
+                // color: 'error.main',
+              }}
+              onClick={() => handleAddNew(paths.unitservice.tables.workgroups.new)}
+            >
+              <Typography lang="ar" variant="body2" sx={{ color: 'info.main' }}>
+                {t('Add new')}
+              </Typography>
+              <Iconify icon="material-symbols:new-window-sharp" />
+            </MenuItem>
           </RHFSelect>
           <RHFTextField
             fullWidth

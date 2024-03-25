@@ -1,6 +1,6 @@
 // date-pickers
 import merge from 'lodash/merge';
-import arLocale from 'date-fns/locale/ar';
+// import arLocale from 'date-fns/locale/ar';
 import { enUS as enUSAdapter, arSA as arSAAdapter } from 'date-fns/locale';
 
 import { enUS as enUSDate } from '@mui/x-date-pickers/locales';
@@ -44,7 +44,7 @@ export const allLangs = [
   {
     label: 'العربية',
     value: 'ar',
-    systemValue: merge(arSDDataGrid, arSACore, { locale: { arLocale } }),
+    systemValue: merge(arSDDataGrid, arSACore),
     adapterLocale: arSAAdapter,
     icon: 'mdi:abjad-arabic',
   },

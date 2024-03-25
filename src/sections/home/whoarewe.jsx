@@ -100,7 +100,7 @@ export default function whoAreWe() {
                 {card.title}
               </Typography>
 
-              <Typography sx={{ color: 'text.secondary' }}>{card.description}</Typography>
+              {/* <Typography sx={{ color: 'text.secondary' }}>{card.description}</Typography> */}
             </Card>
           </m.div>
         ))}

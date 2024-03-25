@@ -7,25 +7,29 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Divider, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+// import { useRouter } from 'src/routes/hooks';
+
+import { useNewScreen } from 'src/hooks/use-new-screen';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetUSActiveWorkShifts, useGetActiveMeasurmentTypes } from 'src/api';
 
+import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
-  const router = useRouter();
+  // const router = useRouter();
 
   const { user } = useAuthContext();
 
@@ -35,6 +39,10 @@ export default function TableNewEditForm({ currentTable }) {
   );
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const { handleAddNew } = useNewScreen();
+
+  const { t } = useTranslate();
 
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
@@ -94,16 +102,11 @@ export default function TableNewEditForm({ currentTable }) {
         await axiosInstance.post(endpoints.service_types.all, data);
       }
       reset();
-      // if (response.status.includes(200, 304)) {
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
-      // } else {
-      //   enqueueSnackbar('Please try again later!', {
-      //     variant: 'error',
-      //   });
-      // }
-      router.push(paths.unitservice.tables.services.root);
+      // router.push(paths.unitservice.tables.services.root);
     } catch (error) {
       console.error(error);
+      enqueueSnackbar(error, { variant: 'error' });
     }
   });
 
@@ -154,8 +157,24 @@ export default function TableNewEditForm({ currentTable }) {
                     {work_shift.name_english}
                   </MenuItem>
                 ))}
+                <Divider />
+                <MenuItem
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: 1,
+                    fontWeight: 600,
+                    // color: 'error.main',
+                  }}
+                  onClick={() => handleAddNew(paths.unitservice.tables.workshifts.new)}
+                >
+                  <Typography lang="ar" variant="body2" sx={{ color: 'info.main' }}>
+                    {t('Add new')}
+                  </Typography>
+                  <Iconify icon="material-symbols:new-window-sharp" />
+                </MenuItem>
               </RHFSelect>
-              <RHFSelect name="Measurement_type" label="Measurement_type">
+              <RHFSelect name="Measurement_type" label="Measurement type">
                 {measurmentTypesData.map((type, idx) => (
                   <MenuItem key={idx} value={type._id}>
                     {type.name_english}

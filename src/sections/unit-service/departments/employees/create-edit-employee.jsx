@@ -8,10 +8,10 @@ import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { MenuItem, Typography } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
@@ -28,7 +28,7 @@ import { useGetCountries, useGetSpecialties, useGetActiveEmployeeTypes } from 's
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFCheckbox, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -62,6 +62,8 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
     speciality: Yup.string().required('speciality is required'),
     gender: Yup.string().required('gender is required'),
     birth_date: Yup.string(),
+    visibility_US_page: Yup.bool(),
+    visibility_online_appointment: Yup.bool(),
     password: Yup.string().required('password is required'),
     confirmPassword: Yup.string().required('confirmPassword is required'),
   });
@@ -84,6 +86,8 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
       speciality: currentTable?.speciality || '',
       gender: currentTable?.gender || '',
       birth_date: currentTable?.birth_date || '',
+      visibility_US_page: currentTable?.visibility_US_page || false,
+      visibility_online_appointment: currentTable?.visibility_online_appointment || false,
       password: currentTable?.password || '',
       confirmPassword: currentTable?.confirmPassword || '',
     }),
@@ -226,6 +230,24 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 <MenuItem value="male">{t('male')}</MenuItem>
                 <MenuItem value="female">{t('female')}</MenuItem>
               </RHFSelect>
+              <RHFCheckbox
+                sx={{ px: 2 }}
+                name="visibility_US_page"
+                label={
+                  <Typography lang="ar" sx={{ fontSize: 12 }}>
+                    {t('visible on online page')}
+                  </Typography>
+                }
+              />
+              <RHFCheckbox
+                sx={{ px: 2 }}
+                name="visibility_online_appointment"
+                label={
+                  <Typography lang="ar" sx={{ fontSize: 12 }}>
+                    {t('visible in online appointments')}
+                  </Typography>
+                }
+              />
             </Box>
             <Box
               rowGap={3}

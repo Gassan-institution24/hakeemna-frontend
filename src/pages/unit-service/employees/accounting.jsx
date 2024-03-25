@@ -18,7 +18,7 @@ export default function EmployeeAccountingPage() {
   return (
     <ACLGuard category="unit_service" subcategory="accounting" acl="read">
       <Helmet>
-        <title> {data.name_english || 'Employee'} : Accounting</title>
+        <title> {data?.name_english || 'Employee'} : Accounting</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
