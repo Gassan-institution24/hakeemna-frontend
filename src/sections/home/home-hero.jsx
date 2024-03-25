@@ -173,15 +173,21 @@ export default function HomeHero() {
       }}
     >
       <m.div variants={varFade().in}>
+        <Typography variant="h4" sx={{ textAlign: 'center', pb: 8, color: 'success.dark' }}>
+          The web page currently under development .
+        </Typography>
+      </m.div>
+
+      <m.div variants={varFade().in}>
         <Typography
-          variant="h2"
+          variant="h3"
           sx={{
             textAlign: 'center',
           }}
           id="home"
         >
-          Keep in <br />
-          Health with
+          Start with <br />
+          Electronic Healthcare Records
         </Typography>
       </m.div>
 
@@ -201,9 +207,10 @@ export default function HomeHero() {
 
       <m.div variants={varFade().in}>
         <Typography variant="body2" sx={{ textAlign: 'center' }}>
-          The most extensive assembly of healthcare providers and recipients.
+          The most extensive community of healthcare providers and beneficiaries.
         </Typography>
       </m.div>
+
       <br />
 
       <m.div variants={varFade().in}>

@@ -9,12 +9,14 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Divider, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+// import { useRouter } from 'src/routes/hooks';
+
+import { useNewScreen } from 'src/hooks/use-new-screen';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -23,19 +25,22 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetUSActiveDepartments, useGetUSActiveEmployeeEngs } from 'src/api';
 
+import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
-  const router = useRouter();
+  // const router = useRouter();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
+
+  const { handleAddNew } = useNewScreen();
 
   const { employeesData } = useGetUSActiveEmployeeEngs(
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?._id
@@ -117,7 +122,7 @@ export default function TableNewEditForm({ currentTable }) {
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      router.push(paths.unitservice.tables.workgroups.root);
+      // router.push(paths.unitservice.tables.workgroups.root);
     } catch (error) {
       // // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
@@ -170,6 +175,22 @@ export default function TableNewEditForm({ currentTable }) {
                   {curLangAr ? department.name_arabic : department.name_english}
                 </MenuItem>
               ))}
+              <Divider />
+              <MenuItem
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  gap: 1,
+                  fontWeight: 600,
+                  // color: 'error.main',
+                }}
+                onClick={() => handleAddNew(paths.unitservice.departments.new)}
+              >
+                <Typography lang="ar" variant="body2" sx={{ color: 'info.main' }}>
+                  {t('Add new')}
+                </Typography>
+                <Iconify icon="material-symbols:new-window-sharp" />
+              </MenuItem>
             </RHFSelect>
             {/* <Stack spacing={1.5}> */}
             {/* <Typography variant="subtitle2">Working schedule</Typography> */}

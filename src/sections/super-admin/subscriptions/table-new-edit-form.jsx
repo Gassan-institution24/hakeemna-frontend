@@ -19,7 +19,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useTranslate } from 'src/locales';
 import {
   useGetCountries,
-  useGetSpecialties,
+  useGetUnitservices,
   useGetCountryCities,
   useGetActiveUSTypes,
 } from 'src/api';
@@ -36,7 +36,7 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { countriesData } = useGetCountries();
   const { unitserviceTypesData } = useGetActiveUSTypes();
-  const { specialtiesData } = useGetSpecialties();
+  const { unitservicesData } = useGetUnitservices();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -46,6 +46,7 @@ export default function TableNewEditForm({ currentTable }) {
     country: Yup.string().nullable(),
     city: Yup.string().nullable(),
     US_type: Yup.string().nullable(),
+    sector_type: Yup.string().nullable(),
     unit_service: Yup.string().nullable(),
     price_in_usd: Yup.number(),
     package_appointment: Yup.boolean(),
@@ -63,6 +64,7 @@ export default function TableNewEditForm({ currentTable }) {
       country: currentTable?.country?._id || null,
       city: currentTable?.city?._id || null,
       US_type: currentTable?.US_type?._id || null,
+      sector_type: currentTable?.sector_type || null,
       unit_service: currentTable?.unit_service?._id || null,
       price_in_usd: currentTable?.price_in_usd || 0,
       package_appointment: currentTable?.package_appointment || false,
@@ -159,6 +161,20 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
+              <RHFSelect name="sector_type" label="Sector type">
+                {['public', 'private', 'non profit organization'].map((type, idx) => (
+                  <MenuItem key={idx} value={type}>
+                    {type}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFSelect name="US_type" label="US_type">
+                {unitserviceTypesData.map((type, idx) => (
+                  <MenuItem key={idx} value={type._id}>
+                    {type.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
               <RHFSelect name="country" label={t('country')}>
                 {countriesData.map((country, idx) => (
                   <MenuItem key={idx} value={country._id}>
@@ -173,15 +189,8 @@ export default function TableNewEditForm({ currentTable }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="US_type" label="US_type">
-                {unitserviceTypesData.map((type, idx) => (
-                  <MenuItem key={idx} value={type._id}>
-                    {type.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
               <RHFSelect name="unit_service" label="Unit Service">
-                {specialtiesData.map((unit_service, idx) => (
+                {unitservicesData.map((unit_service, idx) => (
                   <MenuItem key={idx} value={unit_service._id}>
                     {unit_service.name_english}
                   </MenuItem>

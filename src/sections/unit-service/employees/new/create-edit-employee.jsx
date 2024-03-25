@@ -2,22 +2,23 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { useMemo, useState } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { matchIsValidTel } from 'mui-tel-input';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
-import { Alert, MenuItem, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import { Alert, Divider, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useNewScreen } from 'src/hooks/use-new-screen';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -34,10 +35,10 @@ import {
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
-  RHFCheckbox,
-  RHFPhoneNumber,
   RHFSelect,
+  RHFCheckbox,
   RHFTextField,
+  RHFPhoneNumber,
 } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -60,6 +61,8 @@ export default function TableNewEditForm({ currentTable }) {
   );
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const { handleAddNew } = useNewScreen();
 
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -165,9 +168,6 @@ export default function TableNewEditForm({ currentTable }) {
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
-  // useEffect(() => {
-  //   trigger();
-  // }, [trigger, methods]);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -209,12 +209,40 @@ export default function TableNewEditForm({ currentTable }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="department" label={t('department')}>
+              <RHFSelect
+                name="department"
+                label={t('department')}
+                // InputProps={{
+                //   endAdornment: (
+                //     <InputAdornment position="start">
+                //       <IconButton onClick={handleAddNew} edge="start">
+                //         <Iconify icon="mdi:add-bold" />
+                //       </IconButton>
+                //     </InputAdornment>
+                //   ),
+                // }}
+              >
                 {departmentsData.map((department, idx) => (
-                  <MenuItem key={idx} value={department._id}>
+                  <MenuItem lang="ar" key={idx} value={department._id}>
                     {curLangAr ? department.name_arabic : department.name_english}
                   </MenuItem>
                 ))}
+                <Divider />
+                <MenuItem
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: 1,
+                    fontWeight: 600,
+                    // color: 'error.main',
+                  }}
+                  onClick={() => handleAddNew(paths.unitservice.departments.new)}
+                >
+                  <Typography lang="ar" variant="body2" sx={{ color: 'info.main' }}>
+                    {t('Add new')}
+                  </Typography>
+                  <Iconify icon="material-symbols:new-window-sharp" />
+                </MenuItem>
               </RHFSelect>
               <RHFSelect name="employee_type" label={`${t('employee type')} *`}>
                 {employeeTypesData.map((employee_type, idx) => (

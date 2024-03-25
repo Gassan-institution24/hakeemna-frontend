@@ -240,7 +240,8 @@ export default function NotificationItem({ notification, handleClick }) {
       {renderUnReadBadge}
 
       {renderAvatar}
-      {beAmember}
+
+      {notification.type === 'delivery' && beAmember}
       <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
         {renderText}
         {/* {notification.type === 'friend' && friendAction}

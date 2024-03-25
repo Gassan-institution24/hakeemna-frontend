@@ -12,7 +12,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -26,7 +25,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
-  const router = useRouter();
+  // const router = useRouter();
 
   const { user } = useAuthContext();
 
@@ -106,7 +105,7 @@ export default function TableNewEditForm({ currentTable }) {
       }
       reset();
       enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      router.push(paths.unitservice.tables.workshifts.root);
+      // router.push(paths.unitservice.tables.workshifts.root);
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });

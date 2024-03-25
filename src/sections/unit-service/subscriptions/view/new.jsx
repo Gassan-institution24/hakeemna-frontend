@@ -1,16 +1,21 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 
-import { useGetActiveSubscriptions } from 'src/api';
+import { useGetUSSubscriptions } from 'src/api';
 
 // import { _pricingPlans } from 'src/_mock';
+
+import { useAuthContext } from 'src/auth/hooks';
 
 import PricingCard from '../pricing-card';
 
 // ----------------------------------------------------------------------
 
 export default function PricingView() {
-  const { subscriptionsData } = useGetActiveSubscriptions();
+  const { user } = useAuthContext();
+  const { subscriptionsData } = useGetUSSubscriptions(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id
+  );
   return (
     <Container>
       <Box
