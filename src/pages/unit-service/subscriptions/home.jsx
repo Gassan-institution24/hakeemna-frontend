@@ -11,7 +11,7 @@ export default function SubscriptionsHomePage() {
   const { user } = useAuthContext();
   const serviceUnitName =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
-      ?.name_english;
+      ?.nam;
   return (
     <ACLGuard category="unit_service" subcategory="unit_service_info" acl="read">
       <Helmet>

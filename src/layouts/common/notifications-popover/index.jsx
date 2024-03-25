@@ -59,6 +59,8 @@ export default function NotificationsPopover() {
     drawer.onFalse();
     router.push(link);
     await axios.patch(endpoints.notifications.readOne(id));
+    setAllNotifications([]);
+    setPage(1);
     refetch();
   };
 

@@ -6,11 +6,9 @@ import Box from '@mui/material/Box';
 import ScrollProgress from 'src/components/scroll-progress';
 
 import Us from '../uspage';
-import Whydoc from '../Why';
 import HomeHero from '../home-hero';
 import Whowweare from '../whoarewe';
 import Patient from '../patientpage';
-import Servicesweprovide from '../servicesweprovide';
 // ----------------------------------------------------------------------
 
 export default function HomeView({ divRef, divRef2 }) {
@@ -39,7 +37,7 @@ export default function HomeView({ divRef, divRef2 }) {
           bgcolor: 'background.default',
         }}
       >
-        <Whydoc />
+        {/* <Whydoc /> */}
       </Box>
       <Box
         sx={{
@@ -50,7 +48,7 @@ export default function HomeView({ divRef, divRef2 }) {
         }}
         id="services"
       >
-        <Servicesweprovide />
+        {/* <Servicesweprovide /> */}
       </Box>
       <Box
         ref={divRef}

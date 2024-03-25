@@ -45,7 +45,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-
   const UpdateUserSchema = Yup.object().shape({
     employee_type: Yup.string().required('Employee type is required.'),
     email: Yup.string().required('Email is required.'),
@@ -63,6 +62,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     Bachelor_year_graduation: Yup.number(),
     University_graduation_Bachelor: Yup.string(),
     University_graduation_Specialty: Yup.string(),
+    about_me: Yup.string(),
     scanned_identity: Yup.mixed().nullable(),
     signature: Yup.mixed().nullable(),
     stamp: Yup.mixed().nullable(),
@@ -91,6 +91,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     signature: employeeData?.signature || null,
     stamp: employeeData?.stamp || null,
     picture: employeeData?.picture || null,
+    about_me: employeeData?.about_me || '',
     languages: employeeData?.languages || [],
   };
 
@@ -466,6 +467,14 @@ export default function AccountGeneral({ employeeData, refetch }) {
               rows={2}
               name="address"
               label={t('address')}
+            />
+            <RHFTextField
+              lang="ar"
+              multiline
+              sx={{ mt: 3 }}
+              rows={3}
+              name="about_me"
+              label={t('about me')}
             />
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
