@@ -20,7 +20,7 @@ export default function EmployeeAppointconfigPage() {
   return (
     <ACLGuard category="unit_service" subcategory="appointment_configs" acl="update">
       <Helmet>
-        <title> {employeeData.name_english || 'Employee'} : Appointment Config</title>
+        <title> {employeeData?.name_english || 'Employee'} : Appointment Config</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

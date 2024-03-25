@@ -50,11 +50,11 @@ export default function Patient() {
             }}
           >
             <h1 style={{ color: 'green' }}>I am a patient</h1>
-            <p>
+            {/* <p>
               Lorem ipsum, dolor sit amet consectetur adipisicing elit culpa
               <br /> porro aut molestiaks vitae minjus tempore odio tempore odio. <br />
               tempore odio Lorem ipsum sit amet consectetur adipjkisicing.
-            </p>
+            </p> */}
             <Button
               href={paths.auth.register}
               sx={{

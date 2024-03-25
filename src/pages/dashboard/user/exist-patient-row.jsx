@@ -4,8 +4,6 @@ import { Button } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
-import axios, { endpoints } from 'src/utils/axios';
-
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -18,7 +16,7 @@ import EmptyContent from 'src/components/empty-content/empty-content';
 // ----------------------------------------------------------------------
 
 export default function ExistPatientRow({ row, selected }) {
-  const { _id, identification_num, mobile_num1, first_name, name_arabic } = row;
+  const {  identification_num, mobile_num1, first_name } = row;
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const { currentLang } = useLocales();

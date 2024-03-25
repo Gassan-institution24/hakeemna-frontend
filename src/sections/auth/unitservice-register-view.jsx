@@ -123,7 +123,7 @@ export default function JwtRegisterView() {
       .test('is-valid-phone', 'Invalid phone number', (value) => matchIsValidTel(value)),
     em_speciality: Yup.string().nullable(),
     visibility_US_page: Yup.bool(),
-    // visibility_online_appointment: Yup.bool(),
+    visibility_online_appointment: Yup.bool(),
 
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().min(8, 'Password must be at least 8 character'),
@@ -153,7 +153,7 @@ export default function JwtRegisterView() {
     em_phone: '',
     em_speciality: null,
     visibility_US_page: false,
-    // visibility_online_appointment: false,
+    visibility_online_appointment: false,
 
     email: '',
     password: '',
@@ -564,15 +564,26 @@ export default function JwtRegisterView() {
         )}
         {/* <Tooltip placement="top" title="admin phone number"> */}
         <RHFPhoneNumber name="em_phone" label={t('phone number')} placeholder="X XXXX XXXX" />
-        <RHFCheckbox
-          sx={{ px: 2 }}
-          name="visibility_US_page"
-          label={
-            <Typography lang="ar" sx={{ fontSize: 12 }}>
-              {t('visible on online page')}
-            </Typography>
-          }
-        />
+        <div>
+          <RHFCheckbox
+            sx={{ px: 2 }}
+            name="visibility_US_page"
+            label={
+              <Typography lang="ar" sx={{ fontSize: 12 }}>
+                {t('visible on service unit online page')}
+              </Typography>
+            }
+          />
+          <RHFCheckbox
+            sx={{ px: 2 }}
+            name="visibility_online_appointment"
+            label={
+              <Typography lang="ar" sx={{ fontSize: 12 }}>
+                {t('visible on online ')}
+              </Typography>
+            }
+          />
+        </div>
       </Box>
 
       <LoadingButton

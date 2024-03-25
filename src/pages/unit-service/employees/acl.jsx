@@ -15,7 +15,7 @@ export default function EmployeeACLPage() {
   return (
     <ACLGuard category="unit_service" subcategory="permissions" acl="update">
       <Helmet>
-        <title>{data.name_english || 'Employee'} : Access control list</title>
+        <title>{data?.name_english || 'Employee'} : Access control list</title>
         <meta name="description" content="meta" />
       </Helmet>
       <EmployeeACLView />

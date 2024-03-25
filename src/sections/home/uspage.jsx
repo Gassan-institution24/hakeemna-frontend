@@ -72,12 +72,12 @@ export default function Unitservice() {
               fontSize: 18,
             }}
           >
-            <h1 style={{ color: 'green' }}>I am a unitservices</h1>
-            <p>
+            <h1 style={{ color: 'green' }}>I am a health care provider</h1>
+            {/* <p>
               Lorem ipsum, dolor sit amet consectetur adipisicing elit culpa
               <br /> porro aut molestiaks vitae minjus tempore odio tempore odio. <br />
               tempore odio Lorem ipsum sit amet consectetur adipjkisicing.
-            </p>
+            </p> */}
             <Button
               href={paths.auth.registersu}
               sx={{

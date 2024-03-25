@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
+// import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -16,31 +16,31 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetActiveUnitservices } from 'src/api';
+// import { useGetActiveUnitservices } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const { unitservicesData } = useGetActiveUnitservices();
+  // const { unitservicesData } = useGetActiveUnitservices();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
-    unit_service: Yup.string(),
+    // unit_service: Yup.string(),
   });
 
   const defaultValues = useMemo(
     () => ({
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      unit_service: currentTable?.unit_service?._id || null,
+      // unit_service: currentTable?.unit_service?._id || null,
     }),
     [currentTable]
   );
@@ -132,13 +132,13 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect name="unit_service" label="Unit Service">
+              {/* <RHFSelect name="unit_service" label="Unit Service">
                 {unitservicesData.map((unit_service, idx) => (
                   <MenuItem key={idx} value={unit_service._id}>
                     {unit_service.name_english}
                   </MenuItem>
                 ))}
-              </RHFSelect>
+              </RHFSelect> */}
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

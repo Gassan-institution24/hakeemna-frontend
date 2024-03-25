@@ -17,7 +17,10 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
+import { paths } from 'src/routes/paths';
+
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useNewScreen } from 'src/hooks/use-new-screen';
 
 import { useUnitTime } from 'src/utils/format-time';
 
@@ -39,6 +42,8 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const { myunitTime } = useUnitTime();
 
   const proccessing = useBoolean();
+
+  const { handleAddNew } = useNewScreen();
 
   const weekDays = [
     { value: 'saturday', label: t('Saturday') },
@@ -350,6 +355,22 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                               </MenuItem>
                             );
                           })}
+                          <Divider />
+                          <MenuItem
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                              gap: 1,
+                              fontWeight: 600,
+                              // color: 'error.main',
+                            }}
+                            onClick={() => handleAddNew(paths.unitservice.tables.services.new)}
+                          >
+                            <Typography lang="ar" variant="body2" sx={{ color: 'info.main' }}>
+                              {t('Add new')}
+                            </Typography>
+                            <Iconify icon="material-symbols:new-window-sharp" />
+                          </MenuItem>
                         </Select>
 
                         {!!error && (
