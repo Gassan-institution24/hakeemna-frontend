@@ -1,5 +1,6 @@
 import JsPdf from 'jspdf';
 import * as Yup from 'yup';
+import { addDays } from 'date-fns';
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -43,6 +44,12 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
 
 export default function OldMedicalReports() {
+  // Inside the OldMedicalReports component
+  const today = new Date(); // Get today's date
+
+  // Calculate max date as today's date
+  const maxDate = addDays(today, 0); // You can adjust the offset if needed
+
   const dialog = useBoolean();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -276,7 +283,7 @@ export default function OldMedicalReports() {
               fullWidth
               name="specialty"
               PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ mb: 1 }}
+              sx={{ mb: 1.5 }}
             >
               {specialtiesData.map((test, idx) => (
                 <MenuItem value={test?._id} key={idx} sx={{ mb: 1 }}>
@@ -291,6 +298,8 @@ export default function OldMedicalReports() {
               render={({ field, fieldState: { error } }) => (
                 <DatePicker
                   {...field}
+                  label={t('Date of making the medical report*')}
+                  maxDate={maxDate} // Set maxDate to prevent selecting dates bigger than today
                   sx={{ mb: 1 }}
                   slotProps={{
                     textField: {
@@ -302,6 +311,7 @@ export default function OldMedicalReports() {
                 />
               )}
             />
+
             <RHFUpload
               autoFocus
               fullWidth
@@ -339,19 +349,19 @@ export default function OldMedicalReports() {
             sx={{
               color: 'text.secondary',
               mt: { md: -2.5, xs: -2.3 },
-              ml: curLangAr ? { md: -31, xs: -5 } : { md: -19.5, xs: 4 },
+              ml: curLangAr ? { md: -31, xs: -5 } : { md: -8, xs: 4 },
               typography: 'caption',
               textAlign: 'center',
               fontSize: { md: 12, xs: 10 },
             }}
           >
-            {t('I reed the ')}
-            <Link underline="always" color="text.primary">
-              {t(' Privacy Policy')}
-            </Link>
-            {t('And agree to ')}
+            {t('I have read and agreed to these ')}
             <Link underline="always" color="text.primary">
               {t('Terms of Service ')}
+            </Link>
+            {t('And the ')}
+            <Link underline="always" color="text.primary">
+              {t('Privacy Policy')}
             </Link>
             .
           </Typography>
