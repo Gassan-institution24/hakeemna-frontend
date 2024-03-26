@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import { Button } from '@mui/material';
+// import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import ListItemText from '@mui/material/ListItemText';
@@ -10,13 +10,17 @@ import ListItemButton from '@mui/material/ListItemButton';
 
 import { fToNow } from 'src/utils/format-time';
 
+// import { useAuthContext } from 'src/auth/hooks';
+// import { useGetPatientNotifications } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function NotificationItem({ notification, handleClick }) {
   const { t } = useTranslate();
+  // const { user } = useAuthContext();
   const { currentLang } = useLocales();
+  // const { patientNotifications } = useGetPatientNotifications(user?.patient?._id);
   const curLangAr = currentLang.value === 'ar';
   const renderAvatar = (
     <ListItemAvatar>
@@ -39,7 +43,7 @@ export default function NotificationItem({ notification, handleClick }) {
               (notification.type === 'error' && 'error') ||
               (notification.type === 'created' && 'created') ||
               (notification.type === 'updated' && 'updated') ||
-              // (notification.type === 'badge' && 'badge') ||
+              (notification.type === 'request' && 'request') ||
               (notification.type === 'delivery' && 'ic_delivery')
             }.svg`}
             sx={{ width: 24, height: 24 }}
@@ -101,19 +105,19 @@ export default function NotificationItem({ notification, handleClick }) {
     />
   );
 
-  const beAmember = (
-    <>
-      {/* <ListItemText primary={reader(curLangAr ? notification.title_arabic : notification.title)} /> */}
-      <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
-        <Button size="small" variant="contained">
-          Accept
-        </Button>
-        <Button size="small" variant="outlined">
-          Decline
-        </Button>
-      </Stack>
-    </>
-  );
+  // const beAmember = (
+  //   <>
+  //     {/* <ListItemText primary={reader(curLangAr ? notification.title_arabic : notification.title)} /> */}
+  //     <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
+  //       <Button size="small" variant="contained">
+  //         Accept
+  //       </Button>
+  //       <Button size="small" variant="outlined">
+  //         Decline
+  //       </Button>
+  //     </Stack>
+  //   </>
+  // );
   // const friendAction = (
   //   <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
   //     <Button size="small" variant="contained">
@@ -241,7 +245,26 @@ export default function NotificationItem({ notification, handleClick }) {
 
       {renderAvatar}
 
-      {notification.type === 'delivery' && beAmember}
+      {/* {patientNotifications?.map(
+        (info) =>
+          info.type === 'request' && (
+            <>
+              <ListItemText primary={reader(curLangAr ? info.title_arabic : info.title)} />
+              <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
+                <Button
+                  size="small"
+                  variant="contained"
+                  // onClick={() => handleAddFamily(info?.patient)}
+                >
+                  Accept
+                </Button>
+                <Button size="small" variant="outlined">
+                  Decline
+                </Button>
+              </Stack>
+            </>
+          )
+      )} */}
       <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
         {renderText}
         {/* {notification.type === 'friend' && friendAction}
