@@ -476,7 +476,7 @@ export function useNavData() {
           {
             title: t('prescriptions'),
             path: paths.dashboard.user.prescriptions,
-            icon: <Iconify icon="material-symbols-light:prescriptions-outline" />,
+            icon: <Iconify icon="material-symbols:prescriptions-outline" />,
           },
           {
             title: t('family'),
@@ -489,9 +489,14 @@ export function useNavData() {
             icon: <Iconify icon="streamline:insurance-hand" />,
           },
           {
+            title: t('History'),
+            path: '#',
+            icon: <Iconify icon="material-symbols:history" />,
+          },
+          {
             title: t('Financial movements'),
             path: paths.dashboard.user.financilmovment,
-            icon: <Iconify icon="arcticons:gnucash" />,
+            icon: <Iconify icon="material-symbols:finance-rounded" />,
           },
           {
             title: t('contact us'),
