@@ -11,15 +11,15 @@ const socket = io(URL, {
 socket.on('connect_error', (error) => {
   console.info('Failed to connect to the backend server:', error);
 
-  if (window.location.pathname !== '/maintenance') {
-    window.location.pathname = '/maintenance';
-  }
+  // if (window.location.pathname !== '/maintenance') {
+  //   window.location.pathname = '/maintenance';
+  // }
 });
 socket.on('connect', () => {
   console.info('Successfully connected to the backend server');
-  if (window.location.pathname === '/maintenance') {
-    window.history.back();
-  }
+  // if (window.location.pathname === '/maintenance') {
+  //   window.history.back();
+  // }
 });
 
 export default socket;

@@ -16,7 +16,7 @@ import { NavItem } from './nav-item';
 export default function NavList({ data }) {
   const active = useActiveLink(data.path, !!data.children);
 
-  const [openMenu, setOpenMenu] = useState(false);
+  const [openMenu, setOpenMenu] = useState(true);
 
   const handleToggleMenu = useCallback(() => {
     if (data.children) {
@@ -42,7 +42,10 @@ export default function NavList({ data }) {
       />
 
       {!!data.children && (
-        <Collapse in={openMenu} unmountOnExit>
+        <Collapse
+          in={openMenu}
+          // unmountOnExit
+        >
           <NavSectionVertical
             data={data.children}
             slotProps={{

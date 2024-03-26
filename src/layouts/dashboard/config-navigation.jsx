@@ -170,12 +170,14 @@ export function useNavData() {
         title: t('departments'),
         path: paths.unitservice.departments.root,
         icon: <Iconify icon="uis:web-section-alt" />,
+        navItemId: 'USDepartmentNav',
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'management_tables', acl: 'read' }),
         title: t('management tables'),
         path: paths.unitservice.tables.root,
         icon: <Iconify icon="icon-park-twotone:data" />,
+        navItemId: 'USTablesNav',
         children: [
           // show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }), {
           //   title: t('appointment types'), path: paths.unitservice.tables.appointypes.root },
@@ -202,6 +204,7 @@ export function useNavData() {
             }),
             title: t('work shifts'),
             path: paths.unitservice.tables.workshifts.root,
+            navItemId: 'USWorkShiftNav',
           },
           {
             show: checkAcl({
@@ -211,6 +214,7 @@ export function useNavData() {
             }),
             title: t('work groups'),
             path: paths.unitservice.tables.workgroups.root,
+            navItemId: 'USWorkGroupNav',
           },
           {
             show: checkAcl({
@@ -220,6 +224,7 @@ export function useNavData() {
             }),
             title: t('rooms'),
             path: paths.unitservice.tables.rooms.root,
+            navItemId: 'USRoomsNav',
           },
           {
             show: checkAcl({
@@ -229,6 +234,7 @@ export function useNavData() {
             }),
             title: t('services'),
             path: paths.unitservice.tables.services.root,
+            navItemId: 'USServicesNav',
           },
           {
             show: checkAcl({
@@ -238,6 +244,7 @@ export function useNavData() {
             }),
             title: t('activities'),
             path: paths.unitservice.tables.activities.root,
+            navItemId: 'USActivitiesNav',
             // icon: <Iconify icon="material-symbols:volunteer-activism" />,
           },
         ],
@@ -247,6 +254,7 @@ export function useNavData() {
         title: t('employees'),
         path: paths.unitservice.employees.root,
         icon: <Iconify icon="fluent:people-20-filled" />,
+        navItemId: 'USEmployeesNav',
       },
       // {
       // show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
@@ -259,6 +267,7 @@ export function useNavData() {
         title: t('appointments'),
         path: paths.unitservice.appointments.root,
         icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+        navItemId: 'USAppointmentsNav',
       },
       {
         show:
@@ -266,6 +275,7 @@ export function useNavData() {
         title: t('accounting'),
         path: paths.unitservice.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
+        navItemId: 'USAccountingNav',
         children: [
           {
             show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
@@ -289,6 +299,7 @@ export function useNavData() {
         title: t('insurance'),
         path: paths.unitservice.insurance.root,
         icon: <Iconify icon="ic:baseline-security" />,
+        navItemId: 'USInsuranceNav',
       },
       {
         show: false && checkAcl({ category: 'unit_service', subcategory: 'offers', acl: 'read' }),
@@ -303,18 +314,21 @@ export function useNavData() {
         title: t('communication'),
         path: paths.unitservice.communication.root,
         icon: <Iconify icon="solar:call-chat-bold" />,
+        navItemId: 'USCommunicationNav',
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'quality_control', acl: 'read' }),
         title: t('quality control'),
         path: paths.unitservice.qualityControl.root,
         icon: <Iconify icon="healthicons:world-care" />,
+        navItemId: 'USQualityControlNav',
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'unit_service_info', acl: 'read' }),
         title: t('subscriptions'),
         path: paths.unitservice.subscriptions.root,
         icon: <Iconify icon="streamline:subscription-cashflow-solid" />,
+        navItemId: 'USSubscriptionsNav',
       },
       {
         show: checkAcl({
@@ -325,12 +339,14 @@ export function useNavData() {
         title: t('service unit info'),
         path: paths.unitservice.profile.root,
         icon: <Iconify icon="fa-solid:clinic-medical" />,
+        navItemId: 'USInfoNav',
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
         title: t('old patient data'),
         path: paths.unitservice.oldPatient,
         icon: <Iconify icon="entypo:upload" />,
+        navItemId: 'USOldPatientsNav',
       },
     ];
     const unitServicesDashboars = [
@@ -351,54 +367,63 @@ export function useNavData() {
         title: t('entrance management'),
         path: paths.employee.entrancemanagement.root,
         icon: <Iconify icon="oi:timer" />,
+        navItemId: 'EMEntranceNav',
       },
       {
         show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
         title: t('appointments'),
         path: paths.employee.appointments.root,
         icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+        navItemId: 'EMAppointmentsNav',
       },
       {
         show: checkAcl({ category: 'work_group', subcategory: 'appointment_configs', acl: 'read' }),
         title: t('appointment configuration'),
         path: paths.employee.appointmentconfiguration.root,
         icon: <Iconify icon="fluent:content-settings-16-regular" />,
+        navItemId: 'EMAppointConfigNav',
       },
       {
         show: true,
         title: t('work groups'),
         path: paths.employee.workGroups.root,
         icon: <Iconify icon="heroicons:user-group-solid" />,
+        navItemId: 'EMWorkGroupsNav',
       },
       {
         show: false,
         title: t('accounting'),
         path: paths.employee.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
+        navItemId: 'EMAccountingNav',
       },
       {
         show: false,
         title: t('communication'),
         path: paths.employee.communication.root,
         icon: <Iconify icon="solar:call-chat-bold" />,
+        navItemId: 'EMCommunicationNav',
       },
       {
         show: true,
         title: t('quality control'),
         path: paths.employee.qualityControl.root,
         icon: <Iconify icon="healthicons:world-care" />,
+        navItemId: 'EMQualityControlNav',
       },
       {
         show: true,
         title: t('profile'),
         path: paths.employee.profile.root,
         icon: <Iconify icon="iconamoon:profile-bold" />,
+        navItemId: 'EMProfileNav',
       },
       {
         show: true,
         title: t('calender'),
         path: paths.employee.calender,
         icon: <Iconify icon="simple-line-icons:calender" />,
+        navItemId: 'EMCalenderNav',
       },
     ];
     const employeeDashboard = [
