@@ -11,7 +11,6 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { paths } from 'src/routes/paths';
 
 // import { MotivationIllustration } from 'src/assets/illustrations';
 // import {
@@ -24,7 +23,6 @@ import { paths } from 'src/routes/paths';
 
 import Iconify from 'src/components/iconify';
 import Walktour, { useWalktour } from 'src/components/walktour';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 // import ComponentHero from 'src/sections/_examples/component-hero';
 // import EcommerceWelcome from 'src/sections/overview/e-commerce/ecommerce-welcome';
