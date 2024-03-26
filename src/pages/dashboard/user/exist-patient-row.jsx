@@ -9,7 +9,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-// import EmptyContent from 'src/components/empty-content/empty-content';
+import EmptyContent from 'src/components/empty-content/empty-content';
 // import socket from 'src/socket';
 // import { paths } from 'src/routes/paths';
 import axios, { endpoints } from 'src/utils/axios';
@@ -38,9 +38,10 @@ export default function ExistPatientRow({ row, selected }) {
 
 
   const handleAddFamily = async () => {
-    try {
+    // const { enqueueSnackbar } = useSnackbar();
   
-      await axios.post(endpoints.notifications.all,defaultValues);
+    try {
+      await axios.post(endpoints.notifications.all, defaultValues);
       enqueueSnackbar(t('Invitation sent successfully'));
     } catch (error) {
       // error emitted in backend
@@ -48,6 +49,7 @@ export default function ExistPatientRow({ row, selected }) {
       console.error(error);
     }
   };
+  
   const renderPrimary = (
     <TableRow selected={selected}>
       <TableCell lang="ar" align="center">
@@ -78,25 +80,25 @@ export default function ExistPatientRow({ row, selected }) {
     </TableRow>
   );
 
-  // return row?.family_members.length === 0 && row?._id !== user?.patient?._id ? (
-    // renderPrimary
-  // ) : (
-    // <EmptyContent
-    //   filled
-    //   title={t('No Data')}
-    //   sx={{
-    //     py: 10,
-    //     width: {
-    //       sm: '250%',
-    //       xs: '200%',
-    //       md: '321.5%',
-    //       lg: '321.5%',
-    //       xl: '321.5%',
-    //     },
-    //   }}
-    // />
-  // );
-  return <> {renderPrimary} </>
+  return row?.family_members.length === 0 && row?._id !== user?.patient?._id ? (
+    renderPrimary
+  ) : (
+    <EmptyContent
+      filled
+      title={t('No Data')}
+      sx={{
+        py: 10,
+        width: {
+          sm: '250%',
+          xs: '200%',
+          md: '321.5%',
+          lg: '321.5%',
+          xl: '321.5%',
+        },
+      }}
+    />
+  );
+  // return <> {renderPrimary} </>
 }
 
 ExistPatientRow.propTypes = {
