@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+// import { Button, ListItemText } from '@mui/material';
 
 import { useRouter } from 'src/routes/hooks';
 
@@ -20,7 +21,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useTranslate } from 'src/locales';
+import {  useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetMyNotifications } from 'src/api';
 
@@ -37,8 +38,10 @@ export default function NotificationsPopover() {
 
   const drawer = useBoolean();
   const { t } = useTranslate();
-
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
+  // const { patientNotifications } = useGetPatientNotifications(user?.patient?._id);
 
   const smUp = useResponsive('up', 'sm');
 
@@ -50,11 +53,6 @@ export default function NotificationsPopover() {
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?._id,
     page
   );
-  // const { patientNotifications } = useGetPatientNotifications(
-  //   user?.patient?._id,
-  // );
-  // console.log(patientNotifications,"patientNotifications");
-
   const handleClick = async (id, link) => {
     drawer.onFalse();
     router.push(link);
@@ -63,6 +61,20 @@ export default function NotificationsPopover() {
     setPage(1);
     refetch();
   };
+
+  // const handleAddFamily = async (id) => {
+  //   try {
+  //     await axios.patch(endpoints.patients.one(id), {
+  //       family_members: user?.patient?._id,
+  //     });
+
+  //     alert(t('Invitation sent successfully'));
+  //   } catch (error) {
+  //     // error emitted in backend
+  //     alert(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+  //     console.error(error);
+  //   }
+  // };
 
   const handleMarkAllAsRead = async () => {
     await axios.patch(`${endpoints.notifications.all}/read`, { ids: unread });
@@ -87,11 +99,11 @@ export default function NotificationsPopover() {
       setPage(1);
       refetch();
     });
-    // socket.on('badge', () => {
-    //   setAllNotifications([]);
-    //   setPage(1);
-    //   refetch();
-    // });
+    socket.on('request', () => {
+      setAllNotifications([]);
+      setPage(1);
+      refetch();
+    });
   }, []);
   /* eslint-enable */
 
@@ -129,7 +141,6 @@ export default function NotificationsPopover() {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             {t('Notifications')}
           </Typography>
-
           {!!unread.length && (
             <Tooltip title="Mark all as read">
               <IconButton color="primary" onClick={handleMarkAllAsRead}>
@@ -146,14 +157,32 @@ export default function NotificationsPopover() {
         </Stack>
 
         <Divider />
-
         <Scrollbar>
           <List disablePadding>
-            {/* {!loading && */}
-            {allNotifications?.map((notification, idx) => (
-              <NotificationItem handleClick={handleClick} key={idx} notification={notification} />
-            ))}
+            {!loading &&
+              allNotifications.map((notification, idx) => (
+                <NotificationItem handleClick={handleClick} key={idx} notification={notification}  />
+              ))}
           </List>
+
+          {/* {patientNotifications?.map((info) => (
+            <>
+              <ListItemText primary={reader(curLangAr ? info.title_arabic : info.title)} />
+              <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={() => handleAddFamily(info?.patient)}
+                >
+                  Accept
+                </Button>
+                <Button size="small" variant="outlined">
+                  Decline
+                </Button>
+              </Stack>
+            </>
+          ))} */}
+         
           {hasMore && (
             <Box sx={{ p: 1 }}>
               <LoadingButton
@@ -174,3 +203,16 @@ export default function NotificationsPopover() {
     </>
   );
 }
+// function reader(data) {
+//   return (
+//     <Box
+//       dangerouslySetInnerHTML={{ __html: data }}
+//       sx={{
+//         mb: 0.5,
+//         '& p': { typography: 'body2', m: 0 },
+//         '& a': { color: 'inherit', textDecoration: 'none' },
+//         '& strong': { typography: 'subtitle2' },
+//       }}
+//     />
+//   );
+// }
