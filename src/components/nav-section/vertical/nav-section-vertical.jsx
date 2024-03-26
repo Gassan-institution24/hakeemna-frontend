@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
-import { memo, useState, useCallback, useEffect } from 'react';
+import { memo, useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Collapse from '@mui/material/Collapse';
 import ListSubheader from '@mui/material/ListSubheader';
-
 
 import NavList from './nav-list';
 
