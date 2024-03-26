@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
@@ -73,13 +73,19 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
-  const handleAdd = () => {
-    try {
-      const dayToCreate = weekDays.filter(
+  const dayToCreate = useMemo(
+    () =>
+      weekDays.filter(
         (option) =>
           !values.weekend.includes(option.value) &&
           !values.days_details.some((detail) => detail.day === option.value)
-      )[0]?.value;
+      )[0]?.value,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [values.days_details, values.weekend]
+  );
+
+  const handleAdd = useCallback(() => {
+    try {
       if (!dayToCreate) {
         throw Error('No valid date to create');
       }
@@ -107,147 +113,161 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       setErrorMsg(e.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values.days_details, dayToCreate]);
 
   const handleRemove = (index) => {
     remove(index);
   };
 
-  async function processDayDetails(index) {
-    try {
-      proccessing.onTrue();
-      clearErrors();
-      if (!values.appointment_time) {
-        setValue(`days_details[${index}].appointments`, []);
-        setError('appointment_time');
-        return;
+  const processDayDetails = useCallback(
+    (index) => {
+      try {
+        proccessing.onTrue();
+        clearErrors();
+        if (!values.appointment_time) {
+          setValue(`days_details[${index}].appointments`, []);
+          setError('appointment_time');
+          return;
+        }
+        if (!values.days_details[index].work_start_time) {
+          setValue(`days_details[${index}].appointments`, []);
+          setError(`days_details[${index}].work_start_time`);
+          return;
+        }
+        if (!values.days_details[index].work_end_time) {
+          setValue(`days_details[${index}].appointments`, []);
+          setError(`days_details[${index}].work_end_time`);
+          return;
+        }
+        const results = [];
+        const appointment_time = values.appointment_time * 60 * 1000;
+        const currentDay = values.days_details[index];
+        const work_start = new Date(currentDay.work_start_time).getTime();
+        let work_end = new Date(currentDay.work_end_time).getTime();
+        let break_start = currentDay.break_start_time
+          ? new Date(currentDay.break_start_time).getTime()
+          : null;
+        let break_end = currentDay.break_end_time
+          ? new Date(currentDay.break_end_time).getTime()
+          : null;
+
+        if (work_start >= work_end) {
+          work_end += 24 * 60 * 60 * 1000;
+        }
+        if (break_start && work_start > break_start) {
+          break_start += 24 * 60 * 60 * 1000;
+        }
+        if (break_start && break_end && break_start > break_end) {
+          break_end += 24 * 60 * 60 * 1000;
+        }
+        let curr_start = work_start;
+        while (curr_start + appointment_time <= work_end) {
+          if (
+            !break_start ||
+            !break_end ||
+            curr_start + appointment_time <= break_start ||
+            curr_start >= break_end
+          ) {
+            results.push({
+              appointment_type: currentDay.appointment_type,
+              start_time: curr_start,
+              online_available: true,
+              service_types: currentDay.service_types,
+            });
+            curr_start += appointment_time;
+          } else {
+            curr_start += appointment_time;
+          }
+        }
+        setValue(`days_details[${index}].appointments`, results);
+        setShowAppointments({
+          ...showAppointments,
+          [index]: true,
+        });
+        proccessing.onFalse();
+      } catch (e) {
+        console.error(e);
+        proccessing.onFalse();
+        setErrorMsg(e.message);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-      if (!values.days_details[index].work_start_time) {
-        setValue(`days_details[${index}].appointments`, []);
-        setError(`days_details[${index}].work_start_time`);
-        return;
-      }
-      if (!values.days_details[index].work_end_time) {
-        setValue(`days_details[${index}].appointments`, []);
-        setError(`days_details[${index}].work_end_time`);
-        return;
-      }
-      const results = [];
-      const appointment_time = values.appointment_time * 60 * 1000;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [values.appointment_time, values.days_details]
+  );
+
+  const renderValues = useCallback(
+    (selectedIds) => {
+      const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item?._id));
+      return selectedItems
+        ?.map(
+          (item) => (curLangAr ? item?.name_arabic : item?.name_english)
+          // price += item?.Price_per_unit || 0
+        )
+        .join(', ');
+      // setOverAllPrice(price)
+      // return results.join(', ')
+    },
+    [serviceTypesData, curLangAr]
+  );
+
+  const appointEstimatedNum = useCallback(
+    (index) => {
       const currentDay = values.days_details[index];
+      if (currentDay?.appointments.length) {
+        return currentDay?.appointments.length;
+      }
+      const appointment_time = values.appointment_time * 60 * 1000;
       const work_start = new Date(currentDay.work_start_time).getTime();
       let work_end = new Date(currentDay.work_end_time).getTime();
-      let break_start = currentDay.break_start_time
-        ? new Date(currentDay.break_start_time).getTime()
-        : null;
-      let break_end = currentDay.break_end_time
-        ? new Date(currentDay.break_end_time).getTime()
-        : null;
-
-      if (work_start >= work_end) {
+      let break_start = new Date(currentDay.break_start_time).getTime();
+      let break_end = new Date(currentDay.break_end_time).getTime();
+      if (work_start > work_end) {
         work_end += 24 * 60 * 60 * 1000;
       }
-      if (break_start && work_start > break_start) {
+      if (work_start > break_start) {
         break_start += 24 * 60 * 60 * 1000;
       }
-      if (break_start && break_end && break_start > break_end) {
+      if (work_start > break_end) {
         break_end += 24 * 60 * 60 * 1000;
       }
-      let curr_start = work_start;
-      while (curr_start + appointment_time <= work_end) {
-        if (
-          !break_start ||
-          !break_end ||
-          curr_start + appointment_time <= break_start ||
-          curr_start >= break_end
-        ) {
-          results.push({
-            appointment_type: currentDay.appointment_type,
-            start_time: curr_start,
-            online_available: true,
-            service_types: currentDay.service_types,
-          });
-          curr_start += appointment_time;
-        } else {
-          curr_start += appointment_time;
-        }
+      if (
+        work_start < break_end &&
+        work_start <= break_start &&
+        work_end >= break_end &&
+        work_end > break_start
+      ) {
+        return (
+          Math.floor((work_end - work_start - (break_end - break_start)) / appointment_time) || 0
+        );
       }
-      setValue(`days_details[${index}].appointments`, results);
-      setShowAppointments({
-        ...showAppointments,
-        [index]: true,
-      });
-      proccessing.onFalse();
-    } catch (e) {
-      console.error(e);
-      proccessing.onFalse();
-      setErrorMsg(e.message);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
+      if (
+        work_start < break_end &&
+        work_start <= break_start &&
+        work_end <= break_end &&
+        work_end > break_start
+      ) {
+        return (
+          Math.floor((work_end - work_start - (work_end - break_start)) / appointment_time) || 0
+        );
+      }
+      return Math.floor((work_end - work_start) / appointment_time) || 0;
+    },
+    [values.appointment_time, values.days_details]
+  );
 
-  const renderValues = (selectedIds) => {
-    const selectedItems = serviceTypesData?.filter((item) => selectedIds?.includes(item?._id));
-    return selectedItems
-      ?.map(
-        (item) => (curLangAr ? item?.name_arabic : item?.name_english)
-        // price += item?.Price_per_unit || 0
-      )
-      .join(', ');
-    // setOverAllPrice(price)
-    // return results.join(', ')
-  };
-  function appointEstimatedNum(index) {
-    const currentDay = values.days_details[index];
-    if (currentDay?.appointments.length) {
-      return currentDay?.appointments.length;
-    }
-    const appointment_time = values.appointment_time * 60 * 1000;
-    const work_start = new Date(currentDay.work_start_time).getTime();
-    let work_end = new Date(currentDay.work_end_time).getTime();
-    let break_start = new Date(currentDay.break_start_time).getTime();
-    let break_end = new Date(currentDay.break_end_time).getTime();
-    if (work_start > work_end) {
-      work_end += 24 * 60 * 60 * 1000;
-    }
-    if (work_start > break_start) {
-      break_start += 24 * 60 * 60 * 1000;
-    }
-    if (work_start > break_end) {
-      break_end += 24 * 60 * 60 * 1000;
-    }
-    if (
-      work_start < break_end &&
-      work_start <= break_start &&
-      work_end >= break_end &&
-      work_end > break_start
-    ) {
-      return (
-        Math.floor((work_end - work_start - (break_end - break_start)) / appointment_time) || 0
-      );
-    }
-    if (
-      work_start < break_end &&
-      work_start <= break_start &&
-      work_end <= break_end &&
-      work_end > break_start
-    ) {
-      return Math.floor((work_end - work_start - (work_end - break_start)) / appointment_time) || 0;
-    }
-    return Math.floor((work_end - work_start) / appointment_time) || 0;
-  }
-
-  /* eslint-disable */
   useEffect(() => {
     if (appointTime) {
-      for (let index = 0; index < values.days_details.length; index++) {
+      for (let index = 0; index < values.days_details.length; index += 1) {
         processDayDetails(index);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appointTime]);
-  /* eslint-enable */
+
   if (proccessing.value) {
-    <LoadingScreen />;
+    return <LoadingScreen />;
   }
   return (
     <>
