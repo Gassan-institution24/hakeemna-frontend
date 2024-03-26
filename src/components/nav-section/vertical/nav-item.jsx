@@ -19,6 +19,7 @@ const NavItem = forwardRef(
       title,
       path,
       icon,
+      navItemId,
       info,
       disabled,
       caption,
@@ -36,7 +37,6 @@ const NavItem = forwardRef(
     ref
   ) => {
     const subItem = depth !== 1;
-
     const renderContent = (
       <StyledNavItem
         ref={ref}
@@ -47,6 +47,7 @@ const NavItem = forwardRef(
         disabled={disabled}
         onClick={logout}
         {...other}
+        id={navItemId}
       >
         {!subItem && icon && (
           <Box component="span" className="icon">
@@ -129,6 +130,7 @@ const NavItem = forwardRef(
         underline="none"
         onClick={logout}
         sx={{
+          // padding: 3,
           ...(disabled && {
             cursor: 'default',
           }),
@@ -148,6 +150,7 @@ NavItem.propTypes = {
   icon: PropTypes.element,
   info: PropTypes.element,
   title: PropTypes.string,
+  navItemId: PropTypes.string,
   disabled: PropTypes.bool,
   hasChild: PropTypes.bool,
   caption: PropTypes.string,

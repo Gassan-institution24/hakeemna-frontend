@@ -1,21 +1,29 @@
 import PropTypes from 'prop-types';
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useEffect } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Collapse from '@mui/material/Collapse';
 import ListSubheader from '@mui/material/ListSubheader';
 
+
 import NavList from './nav-list';
 
 // ----------------------------------------------------------------------
 
-function NavSectionVertical({ data, slotProps, ...other }) {
+function NavSectionVertical({ data, slotProps,walktourRun, ...other }) {
+
   return (
     <Stack component="nav" id="nav-section-vertical" {...other}>
       {data
         .filter((item) => item.items.length)
         .map((group, idx) => (
-          <Group key={idx} subheader={group.subheader} items={group.items} slotProps={slotProps} />
+          <Group
+            key={idx}
+            walktourRun={walktourRun}
+            subheader={group.subheader}
+            items={group.items}
+            slotProps={slotProps}
+          />
         ))}
     </Stack>
   );
@@ -24,20 +32,30 @@ function NavSectionVertical({ data, slotProps, ...other }) {
 NavSectionVertical.propTypes = {
   data: PropTypes.array,
   slotProps: PropTypes.object,
+  walktourRun: PropTypes.bool,
 };
 
 export default memo(NavSectionVertical);
 
 // ----------------------------------------------------------------------
 
-function Group({ subheader, items, slotProps }) {
+function Group({ subheader, walktourRun, items, slotProps }) {
   const [open, setOpen] = useState(true);
 
   const handleToggle = useCallback(() => {
     setOpen((prev) => !prev);
   }, []);
   const renderContent = items.map((list, idx) => (
-    <NavList key={idx} data={list} depth={1} slotProps={slotProps} />
+    // <div id={list.navItemId}>
+    <NavList
+      // id={list.navItemId}
+      walktourRun={walktourRun}
+      key={idx}
+      data={list}
+      depth={1}
+      slotProps={slotProps}
+    />
+    // </div>
   ));
 
   return (
@@ -81,6 +99,7 @@ function Group({ subheader, items, slotProps }) {
 
 Group.propTypes = {
   items: PropTypes.array,
+  walktourRun: PropTypes.bool,
   subheader: PropTypes.string,
   slotProps: PropTypes.object,
 };

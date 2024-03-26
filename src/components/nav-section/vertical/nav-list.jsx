@@ -10,7 +10,7 @@ import NavItem from './nav-item';
 
 // ----------------------------------------------------------------------
 
-export default function NavList({ data, depth, slotProps }) {
+export default function NavList({ data, walktourRun, depth, slotProps }) {
   const pathname = usePathname();
 
   const active = useActiveLink(data.path);
@@ -48,6 +48,7 @@ export default function NavList({ data, depth, slotProps }) {
         caption={data.caption}
         disabled={data.disabled}
         logout={data.onClick}
+        navItemId={data.navItemId}
         //
         depth={depth}
         hasChild={!!data.children}
@@ -63,7 +64,7 @@ export default function NavList({ data, depth, slotProps }) {
       />
 
       {!!data.children && (
-        <Collapse in={openMenu} unmountOnExit>
+        <Collapse in={openMenu || walktourRun} unmountOnExit>
           <NavSubList data={data.children} depth={depth} slotProps={slotProps} />
         </Collapse>
       )}
@@ -75,6 +76,7 @@ NavList.propTypes = {
   data: PropTypes.object,
   depth: PropTypes.number,
   slotProps: PropTypes.object,
+  walktourRun: PropTypes.bool,
 };
 
 // ----------------------------------------------------------------------
@@ -83,7 +85,13 @@ function NavSubList({ data, depth, slotProps }) {
   return (
     <>
       {data.map((list, idx) => (
-        <NavList key={idx} data={list} depth={depth + 1} slotProps={slotProps} />
+        <NavList
+          // id={list.navItemId}
+          key={idx}
+          data={list}
+          depth={depth + 1}
+          slotProps={slotProps}
+        />
       ))}
     </>
   );
