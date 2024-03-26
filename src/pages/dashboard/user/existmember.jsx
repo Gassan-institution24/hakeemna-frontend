@@ -12,6 +12,7 @@ import TableBody from '@mui/material/TableBody';
 // import socket from 'src/socket';
 import { useFindPatients } from 'src/api';
 import { useTranslate } from 'src/locales';
+// import { useAuthContext } from 'src/auth/hooks';
 
 import { useTable, TableNoData, TableHeadCustom } from 'src/components/table';
 
@@ -21,7 +22,7 @@ import ExistPatientRow from './exist-patient-row';
 
 export default function Exist() {
   const { t } = useTranslate();
-
+// const { user} = useAuthContext()
   const TABLE_HEAD = [
     { id: 'identification_num', label: t('ID number') },
     { id: 'first_name', label: t('First Name') },
@@ -35,6 +36,7 @@ export default function Exist() {
   const [filters, setFilters] = useState({});
 
   const theme = useTheme();
+  // const { patientNotifications } = useGetPatientNotifications(user?.patient?._id);
 
   const {
     page,
