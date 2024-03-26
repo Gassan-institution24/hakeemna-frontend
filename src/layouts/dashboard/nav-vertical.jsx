@@ -10,16 +10,16 @@ import { usePathname } from 'src/routes/hooks';
 import { useResponsive } from 'src/hooks/use-responsive';
 // import { useMockedUser } from 'src/hooks/use-mocked-user';
 
+import { Typography } from '@mui/material';
+
 import { useAuthContext } from 'src/auth/hooks';
 
 import Logo from 'src/components/logo';
+import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { NavSectionVertical } from 'src/components/nav-section';
-
 import Walktour, { useWalktour } from 'src/components/walktour';
-import { Typography } from '@mui/material';
 
-import Iconify from 'src/components/iconify';
 import { NAV } from '../config-layout';
 import { useNavData } from './config-navigation';
 // import NavToggleButton from '../common/nav-toggle-button';
