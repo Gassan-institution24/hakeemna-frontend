@@ -54,9 +54,9 @@ export function useGetPatientNotifications(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      patientNotifications: data || [],
+      patientNotifications: data?.notifications || [],
       hasMore: data?.hasMore || false,
-      unread: data?.unread || 0,
+      unread: data?.unread || [],
       loading: isLoading,
       error,
       validating: isValidating,
