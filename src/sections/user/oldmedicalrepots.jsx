@@ -276,14 +276,14 @@ export default function OldMedicalReports() {
                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
-            <RHFTextField lang="en" name="name" label={t('File name*')} sx={{ mb: 1.5 }} />
+            <RHFTextField lang="en" name="name" label={t('File name*')} sx={{ mb: 2 }} />
 
             <RHFSelect
               label={t('Specialty*')}
               fullWidth
               name="specialty"
               PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ mb: 1.5 }}
+              sx={{ mb: 2 }}
             >
               {specialtiesData.map((test, idx) => (
                 <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
@@ -300,7 +300,7 @@ export default function OldMedicalReports() {
                   {...field}
                   label={t('Date of making the medical report*')}
                   maxDate={maxDate} // Set maxDate to prevent selecting dates bigger than today
-                  sx={{ mb: 1 }}
+                  sx={{ mb: 2 }}
                   slotProps={{
                     textField: {
                       fullWidth: true,
@@ -317,7 +317,7 @@ export default function OldMedicalReports() {
               fullWidth
               name="file"
               margin="dense"
-              sx={{ mb: 1 }}
+              sx={{ mb: 2 }}
               variant="outlined"
               onDrop={handleDrop}
               // onRemove={(inputFile) => {
@@ -349,17 +349,17 @@ export default function OldMedicalReports() {
             sx={{
               color: 'text.secondary',
               mt: { md: -2.5, xs: -2.3 },
-              ml: curLangAr ? { md: -31, xs: -5 } : { md: -8, xs: 4 },
+              ml: curLangAr ? { md: -31, xs: -5 } : { md: -10, xs: 4 },
               typography: 'caption',
               textAlign: 'center',
               fontSize: { md: 12, xs: 10 },
             }}
           >
-            {t('I have read and agreed to these ')}
+            {t('I have read and agreed to these ')}&nbsp;
             <Link underline="always" color="text.primary">
-              {t('Terms of Service ')}
+              {t('Terms of Service ')}&nbsp;
             </Link>
-            {t('And the ')}
+            {t('And the ')}&nbsp;
             <Link underline="always" color="text.primary">
               {t('Privacy Policy')}
             </Link>
