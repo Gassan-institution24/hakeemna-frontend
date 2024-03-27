@@ -78,7 +78,14 @@ export default function Doctorpage() {
   };
   const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient._id));
   const numberOfUsers = uniqueUserIds.size;
-
+  const defaultValues = {
+    patient: patientData,
+    title: `An appointment has been booked for ${patientinfo?.first_name}`,
+    title_arabic: `تم حجز موعد ل${patientinfo?.name_arabic}`,
+    photo_URL: 'https://static.vecteezy.com/system/resources/thumbnails/017/060/777/small/3d-calendar-with-clock-checkmark-icons-marked-date-notification-bell-isolated-schedule-appointment-concept-3d-render-illustration-png.png',
+    category: 'patientbooking',
+    type: 'patientbooking',
+  };
   const handleBook = async (Data) => {
     try {
       await axios.patch(`${endpoints.appointments.one(Data)}/bookappointment`, {
@@ -87,6 +94,7 @@ export default function Doctorpage() {
         pInfo: patientinfo,
         appointmentinfo: datacheeck,
         note: patientNote,
+        info: defaultValues,
       });
 
       refetch();

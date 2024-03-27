@@ -23,6 +23,7 @@ import { useLocales } from 'src/locales';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -31,13 +32,22 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
   const [theId, setTheId] = useState();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
+  const { user } = useAuthContext();
   const dialog = useBoolean(false);
   const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
+  const defaultValues = {
+    patient: user?.patient?._id,
+    title: `Appointment canceled successfully`,
+    title_arabic: `تم الغاء الموعد بنجاح`,
+    photo_URL:
+      'https://cdn-icons-png.freepik.com/512/391/391247.png',
+    category: 'appointmentcancel',
+    type: 'appointmentcancel',
+  };
   const cancelBook = async () => {
     try {
-      await axios.patch(`${endpoints.appointments.one(theId)}/cancel`);
+      await axios.patch(`${endpoints.appointments.one(theId)}/cancel`, { info: defaultValues });
       refetch();
       enqueueSnackbar('Your appointment canceled successfully', { variant: 'success' });
       dialog.onFalse();
@@ -91,7 +101,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
           <IconButton
             onClick={() => savedId(info?._id)}
             sx={{ position: 'absolute', top: 8, right: 8, '&:hover': { color: 'red' } }}
-            title="Delete"
+            title="Cancele"
           >
             <Iconify icon="mdi:cancel-bold" />
           </IconButton>

@@ -13,6 +13,7 @@ import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgBlur } from 'src/theme/css';
+import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Logo from 'src/components/logo';
@@ -27,13 +28,14 @@ import AccountPopover from '../common/account-popover';
 import LanguagePopover from '../common/language-popover';
 import ServiceUnitPopover from '../common/service-unit-popover';
 import NotificationsPopover from '../common/notifications-popover';
+import NotificationsPopoverPatient from '../common/notifications-popover/indexPatient';
 
 // ----------------------------------------------------------------------
 
 export default function Header({ onOpenNav }) {
   const theme = useTheme();
   const router = useRouter();
-
+  const { user } = useAuthContext();
   const settings = useSettingsContext();
 
   const parentToken = sessionStorage.getItem('parentToken');
@@ -43,8 +45,6 @@ export default function Header({ onOpenNav }) {
     router.push(PATH_AFTER_LOGIN);
     window.location.reload();
   };
-
- 
 
   const isNavHorizontal = settings.themeLayout === 'horizontal';
 
@@ -86,7 +86,7 @@ export default function Header({ onOpenNav }) {
         )}
         <LanguagePopover />
 
-        <NotificationsPopover />
+        {user?.role === 'patient' ? <NotificationsPopoverPatient /> : <NotificationsPopover />}
 
         {/* <ContactsPopover /> */}
 
