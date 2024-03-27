@@ -144,7 +144,7 @@ export default function NotificationsPopoverPatient() {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             {t('Notifications')}
           </Typography>
-          {!!unread.length  && (
+          {!!unread.length && (
             <Tooltip title="Mark all as read">
               <IconButton color="primary" onClick={handleMarkAllAsRead}>
                 <Iconify icon="eva:done-all-fill" />

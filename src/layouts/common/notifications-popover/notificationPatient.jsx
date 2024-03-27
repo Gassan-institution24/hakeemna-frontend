@@ -163,9 +163,7 @@ export default function NotificationItem({ notification, handleClick }) {
           {notification?.isUnRead === true ? beAmember : ''}
         </Stack>
       ) : (
-        <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
-        {renderText}
-      </Stack>
+        <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>{renderText}</Stack>
       )}
     </ListItemButton>
   );

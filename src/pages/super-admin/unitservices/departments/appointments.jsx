@@ -20,10 +20,7 @@ export default function DepartmentAppointmentsPage() {
         <title>{name || ''} Department Appointments</title>
         <meta name="description" content="meta" />
       </Helmet>
-        <DepartmentAppointmentsView
-          unitServiceData={unitServiceData}
-          departmentData={data}
-        />
+      <DepartmentAppointmentsView unitServiceData={unitServiceData} departmentData={data} />
     </>
   );
 }

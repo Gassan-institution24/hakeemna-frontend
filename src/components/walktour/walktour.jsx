@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import Joyride from 'react-joyride';
 
 import { alpha, useTheme } from '@mui/material/styles';
+
 import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------

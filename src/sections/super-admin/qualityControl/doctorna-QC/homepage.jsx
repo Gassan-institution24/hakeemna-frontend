@@ -39,7 +39,7 @@ export default function DoctornaQCPage() {
     </Tabs>
   );
   return (
-    <Container maxWidth='xl'>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Doctorna Quality Control"
         links={[

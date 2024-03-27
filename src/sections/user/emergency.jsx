@@ -25,7 +25,6 @@ export default function Emergency() {
       }}
     >
       <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-   
         <Typography
           sx={{
             mb: { md: 4, xl: 10, xs: 6 },
@@ -88,7 +87,6 @@ export default function Emergency() {
             <Iconify width="65%" sx={{ mt: '15%', color: '#4E6892' }} icon="carbon:person" />
           </Box>
           <Box
-         
             sx={{
               border: '3px solid #4E6892',
               borderRadius: '100%',

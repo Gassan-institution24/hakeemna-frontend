@@ -71,7 +71,7 @@ export default function Family() {
         </DialogActions>
       </Dialog>
 
-      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap:3 }}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 3 }}>
         <Familymem />
       </Box>
     </Container>

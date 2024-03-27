@@ -22,7 +22,7 @@ import ExistPatientRow from './exist-patient-row';
 
 export default function Exist() {
   const { t } = useTranslate();
-// const { user} = useAuthContext()
+  // const { user} = useAuthContext()
   const TABLE_HEAD = [
     { id: 'identification_num', label: t('ID number') },
     { id: 'first_name', label: t('First Name') },
@@ -38,11 +38,7 @@ export default function Exist() {
   const theme = useTheme();
   // const { patientNotifications } = useGetPatientNotifications(user?.patient?._id);
 
-  const {
-    page,
-    rowsPerPage,
-    selected,
-  } = table;
+  const { page, rowsPerPage, selected } = table;
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
@@ -121,7 +117,8 @@ export default function Exist() {
 
         <TableBody>
           {existPatient
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, idx) => (
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            ?.map((row, idx) => (
               <ExistPatientRow key={idx} row={row} />
             ))}
 

@@ -21,7 +21,6 @@ export default function AppointmentSearch({
   canReset,
   onResetFilters,
 }) {
-
   const { t } = useTranslate();
   const handleFilterName = useCallback(
     (event) => {
@@ -77,7 +76,7 @@ export default function AppointmentSearch({
             ),
           }}
         />
-{/* 
+        {/* 
         <IconButton onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton> */}

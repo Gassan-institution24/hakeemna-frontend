@@ -66,33 +66,32 @@ export const mainRoutes = [
     ],
   },
   // {
-    //   element: (
-      //     <SimpleLayout>
-      //       <Suspense fallback={<SplashScreen />}>
-      //         <Outlet />
-      //       </Suspense>
-      //     </SimpleLayout>
-      //   ),
-      //   children: [
-        //     { path: 'pricing', element: <PricingPage /> },
-        //     { path: 'payment', element: <PaymentPage /> },
-        //   ],
-        // },
-        {
-            element: (
-                <CompactLayout>
-                  <Suspense fallback={<SplashScreen />}>
-                    <Outlet />
-                  </Suspense>
-                </CompactLayout>
-              ),
-              children: [
-              { path: 'maintenance', element: <MaintenancePage /> },
-              //     // { path: 'coming-soon', element: <ComingSoonPage /> },
-              //     // { path: '500', element: <Page500 /> },
-              //     { path: '*', element: <Page404 /> },
-              //     // { path: '403', element: <Page403 /> },
-                ],
-              },
-            ];
-            
+  //   element: (
+  //     <SimpleLayout>
+  //       <Suspense fallback={<SplashScreen />}>
+  //         <Outlet />
+  //       </Suspense>
+  //     </SimpleLayout>
+  //   ),
+  //   children: [
+  //     { path: 'pricing', element: <PricingPage /> },
+  //     { path: 'payment', element: <PaymentPage /> },
+  //   ],
+  // },
+  {
+    element: (
+      <CompactLayout>
+        <Suspense fallback={<SplashScreen />}>
+          <Outlet />
+        </Suspense>
+      </CompactLayout>
+    ),
+    children: [
+      { path: 'maintenance', element: <MaintenancePage /> },
+      //     // { path: 'coming-soon', element: <ComingSoonPage /> },
+      //     // { path: '500', element: <Page500 /> },
+      //     { path: '*', element: <Page404 /> },
+      //     // { path: '403', element: <Page403 /> },
+    ],
+  },
+];

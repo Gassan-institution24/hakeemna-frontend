@@ -18,7 +18,8 @@ export default function ActivityEditPage() {
   const { data, loading } = useGetActivity(id);
   const { user } = useAuthContext();
   const serviceUnitName =
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?.name_english;
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+      ?.name_english;
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
       <Helmet>
