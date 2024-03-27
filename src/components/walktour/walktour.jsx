@@ -2,11 +2,26 @@ import PropTypes from 'prop-types';
 import Joyride from 'react-joyride';
 
 import { alpha, useTheme } from '@mui/material/styles';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
+const arabicLocal = {
+  back: 'رجوع',
+  close: 'إغلاق',
+  last: 'إغلاق',
+  next: 'التالي',
+  skip: 'تخطي',
+  // Add more translations as needed for tooltips, etc.
+};
+
 export default function Walktour({ locale, ...other }) {
   const theme = useTheme();
+
+  const pageHeight = document.body.scrollHeight;
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const lightMode = theme.palette.mode === 'light';
 
@@ -32,16 +47,22 @@ export default function Walktour({ locale, ...other }) {
     <Joyride
       scrollOffset={120}
       // spotlightPadding={16}
-      locale={{
-        last: 'Close',
-        ...locale,
-      }}
+      locale={
+        curLangAr
+          ? arabicLocal
+          : {
+              last: 'Close',
+              ...locale,
+            }
+      }
       styles={{
         options: {
           zIndex: 9999,
           arrowColor: arrowStyles.color,
         },
         overlay: {
+          width: '100%',
+          height: pageHeight,
           backgroundColor: alpha(theme.palette.grey[900], 0.8),
         },
         spotlight: {
@@ -91,12 +112,14 @@ export default function Walktour({ locale, ...other }) {
         // Button
         buttonNext: {
           ...btnStyles,
+          marginRight: theme.spacing(1.25),
           marginLeft: theme.spacing(1.25),
           color: lightMode ? theme.palette.common.white : theme.palette.grey[800],
           backgroundColor: lightMode ? theme.palette.grey[800] : theme.palette.common.white,
         },
         buttonBack: {
           ...btnStyles,
+          marginLeft: theme.spacing(1.25),
           color: theme.palette.text.primary,
           border: `solid 1px ${alpha(theme.palette.grey[500], 0.32)}`,
         },
@@ -105,14 +128,15 @@ export default function Walktour({ locale, ...other }) {
           color: theme.palette.text.primary,
         },
         buttonClose: {
-          top: 8,
-          right: 8,
-          width: 12,
-          height: 12,
-          borderRadius: '50%',
-          display: 'inline-flex',
-          padding: theme.spacing(1.5),
-          color: theme.palette.grey[500],
+          display: 'none',
+          // top: 8,
+          // right: 8,
+          // width: 12,
+          // height: 12,
+          // borderRadius: '50%',
+          // display: 'inline-flex',
+          // padding: theme.spacing(1.5),
+          // color: theme.palette.grey[500],
         },
       }}
       floaterProps={{

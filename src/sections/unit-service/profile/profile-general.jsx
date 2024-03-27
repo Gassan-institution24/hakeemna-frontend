@@ -56,18 +56,18 @@ export default function AccountGeneral({ unitServiceData }) {
   const curLangAr = currentLang.value === 'ar';
 
   const UpdateUserSchema = Yup.object().shape({
-    name_english: Yup.string().required('Name is required.'),
-    name_arabic: Yup.string().required('Name is required.'),
-    country: Yup.string().required('Country is required.'),
-    city: Yup.string().required('City is required.'),
-    US_type: Yup.string().required('Unit service type is required.'),
-    email: Yup.string().required('Email is required.'),
+    name_english: Yup.string().required(t('required field')),
+    name_arabic: Yup.string().required(t('required field')),
+    country: Yup.string().required(t('required field')),
+    city: Yup.string().required(t('required field')),
+    US_type: Yup.string().required(t('required field')),
+    email: Yup.string().required(t('required field')),
     sector_type: Yup.string(),
     speciality: Yup.string(),
-    identification_num: Yup.string().required('ID number is required.'),
+    identification_num: Yup.string().required(t('required field')),
     address: Yup.string(),
     web_page: Yup.string(),
-    phone: Yup.string().required('Phone number is required.'),
+    phone: Yup.string().required(t('required field')),
     mobile_num: Yup.string(),
     introduction_letter: Yup.string(),
     location_gps: Yup.string(),
@@ -219,31 +219,14 @@ export default function AccountGeneral({ unitServiceData }) {
               }}
             >
               <RHFTextField
-                lang="ar"
                 disabled
                 variant="filled"
                 name="identification_num"
                 label={`${t('ID number')}* :`}
               />
-              <RHFTextField
-                lang="ar"
-                variant="filled"
-                name="name_english"
-                label={`${t('name')}* :`}
-              />
-              <RHFTextField
-                lang="ar"
-                variant="filled"
-                name="name_arabic"
-                label={`${t('name arabic')}* :`}
-              />
-              <RHFTextField
-                lang="ar"
-                type="email"
-                variant="filled"
-                name="email"
-                label={`${t('email')}* :`}
-              />
+              <RHFTextField variant="filled" name="name_english" label={`${t('name')}* :`} />
+              <RHFTextField variant="filled" name="name_arabic" label={`${t('name arabic')}* :`} />
+              <RHFTextField type="email" variant="filled" name="email" label={`${t('email')}* :`} />
               <Tooltip placement="top" title="Phone number of service unit">
                 <MuiTelInput
                   forceCallingCode
@@ -259,7 +242,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 />
               </Tooltip>
               {/* <RHFTextField
-                lang="ar"
+                
                 type="number"
                 variant="filled"
                 name="phone"
@@ -289,7 +272,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 // onChange={handleCountryChange}
               >
                 {countriesData.map((country, idx) => (
-                  <MenuItem key={idx} value={country._id}>
+                  <MenuItem lang="ar" key={idx} value={country._id}>
                     {curLangAr ? country.name_arabic : country.name_english}
                   </MenuItem>
                 ))}
@@ -304,7 +287,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {tableData.map((city, idx) => (
-                  <MenuItem key={idx} value={city._id}>
+                  <MenuItem lang="ar" key={idx} value={city._id}>
                     {curLangAr ? city.name_arabic : city.name_english}
                   </MenuItem>
                 ))}
@@ -319,7 +302,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {unitserviceTypesData.map((type, idx) => (
-                  <MenuItem value={type._id} key={idx}>
+                  <MenuItem lang="ar" value={type._id} key={idx}>
                     {curLangAr ? type.name_arabic : type.name_english}
                   </MenuItem>
                 ))}
@@ -333,7 +316,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {specialtiesData.map((specialty, idx) => (
-                  <MenuItem value={specialty._id} key={idx}>
+                  <MenuItem lang="ar" value={specialty._id} key={idx}>
                     {curLangAr ? specialty.name_arabic : specialty.name_english}
                   </MenuItem>
                 ))}
@@ -345,11 +328,17 @@ export default function AccountGeneral({ unitServiceData }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                <MenuItem value="public">{t('Public')}</MenuItem>
-                <MenuItem value="private">{t('private')}</MenuItem>
-                <MenuItem value="charity">{t('Charity')}</MenuItem>
+                <MenuItem lang="ar" value="public">
+                  {t('Public')}
+                </MenuItem>
+                <MenuItem lang="ar" value="private">
+                  {t('private')}
+                </MenuItem>
+                <MenuItem lang="ar" value="charity">
+                  {t('Charity')}
+                </MenuItem>
               </RHFSelect>
-              <RHFTextField lang="ar" name="web_page" label={t('webpage')} />
+              <RHFTextField name="web_page" label={t('webpage')} />
               <Tooltip placement="top" title="Phone number of service unit">
                 <MuiTelInput
                   forceCallingCode
@@ -363,18 +352,10 @@ export default function AccountGeneral({ unitServiceData }) {
                   }}
                 />
               </Tooltip>
-              <RHFTextField lang="ar" name="location_gps" label={t('location GPS')} />
+              <RHFTextField name="location_gps" label={t('location GPS')} />
             </Box>
+            <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} />
             <RHFTextField
-              lang="ar"
-              multiline
-              sx={{ mt: 3 }}
-              rows={2}
-              name="address"
-              label={t('address')}
-            />
-            <RHFTextField
-              lang="ar"
               multiline
               colSpan={14}
               rows={4}

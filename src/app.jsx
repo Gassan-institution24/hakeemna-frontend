@@ -55,7 +55,9 @@ export default function App() {
               <SnackbarProvider>
                 <SettingsDrawer />
                 <ProgressBar />
-                <Router />
+                <div lang="ar" style={{ height: '100%', width: '100%', textTransform: 'capitalize' }}>
+                  <Router />
+                </div>
               </SnackbarProvider>
             </MotionLazy>
           </ThemeProvider>

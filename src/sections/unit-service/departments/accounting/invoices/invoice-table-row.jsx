@@ -56,7 +56,7 @@ export default function MovementTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        {/* <TableCell lang="ar" padding="checkbox">
+        {/* <TableCell  padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell> */}
 
@@ -83,7 +83,7 @@ export default function MovementTableRow({
           /> */}
         </TableCell>
 
-        <TableCell lang="ar" align="center">
+        <TableCell align="center">
           <ListItemText
             primary={curLangAr ? unit_service?.name_arabic : unit_service?.name_english}
             secondary={employee?.name_english}
@@ -96,7 +96,7 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell lang="ar" align="center">
+        <TableCell align="center">
           <ListItemText
             primary={appointment?.code}
             secondary={
@@ -113,21 +113,18 @@ export default function MovementTableRow({
           />
         </TableCell>
 
-        <TableCell lang="ar" align="center">
+        <TableCell align="center">
           {curLangAr ? stakeholder?.name_arabic : stakeholder?.name_english}
         </TableCell>
-        <TableCell lang="ar" align="center">
-          {Provided_services.length}
-        </TableCell>
+        <TableCell align="center">{Provided_services.length}</TableCell>
 
-        <TableCell lang="ar" align="center">
+        <TableCell align="center">
           {Currency?.symbol}
           {Balance}
         </TableCell>
 
-        <TableCell lang="ar" align="center">
+        <TableCell align="center">
           <Label
-            lang="ar"
             variant="soft"
             color={
               (status === 'paid' && 'success') ||
@@ -140,7 +137,7 @@ export default function MovementTableRow({
           </Label>
         </TableCell>
 
-        <TableCell lang="ar" align="right" sx={{ px: 1 }}>
+        <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
@@ -154,6 +151,7 @@ export default function MovementTableRow({
         sx={{ width: 160 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             onViewRow();
             popover.onClose();
@@ -163,7 +161,7 @@ export default function MovementTableRow({
           {t('view')}
         </MenuItem>
 
-        {/* <MenuItem
+        {/* <MenuItem lang="ar" 
           onClick={() => {
             onEditRow();
             popover.onClose();
@@ -172,14 +170,14 @@ export default function MovementTableRow({
           <Iconify icon="solar:pen-bold" />
           {t('edit')}
           </MenuItem> */}
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
 
         {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
         {/* 
-        <MenuItem
+        <MenuItem lang="ar" 
           onClick={() => {
             confirm.onTrue();
             popover.onClose();

@@ -155,7 +155,6 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name english"
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label="name arabic"
@@ -163,35 +162,35 @@ export default function TableNewEditForm({ currentTable }) {
 
               <RHFSelect name="sector_type" label="Sector type">
                 {['public', 'private', 'non profit organization'].map((type, idx) => (
-                  <MenuItem key={idx} value={type}>
+                  <MenuItem lang="ar" key={idx} value={type}>
                     {type}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="US_type" label="US_type">
                 {unitserviceTypesData.map((type, idx) => (
-                  <MenuItem key={idx} value={type._id}>
+                  <MenuItem lang="ar" key={idx} value={type._id}>
                     {type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="country" label={t('country')}>
                 {countriesData.map((country, idx) => (
-                  <MenuItem key={idx} value={country._id}>
+                  <MenuItem lang="ar" key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="city" label="city">
                 {tableData.map((city, idx) => (
-                  <MenuItem key={idx} value={city._id}>
+                  <MenuItem lang="ar" key={idx} value={city._id}>
                     {city.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="unit_service" label="Unit Service">
                 {unitservicesData.map((unit_service, idx) => (
-                  <MenuItem key={idx} value={unit_service._id}>
+                  <MenuItem lang="ar" key={idx} value={unit_service._id}>
                     {unit_service.name_english}
                   </MenuItem>
                 ))}

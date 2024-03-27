@@ -362,7 +362,7 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
           }}
         >
           {filteredInsuranceCos?.map((company, idx) => (
-            <MenuItem onClick={() => handleAddRow(company._id)}>
+            <MenuItem lang="ar" onClick={() => handleAddRow(company._id)}>
               {/* <Iconify icon="ic:baseline-add" /> */}
               {company?.name_english}
             </MenuItem>

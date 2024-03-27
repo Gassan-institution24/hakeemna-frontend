@@ -59,8 +59,8 @@ export default function FamilyMembers() {
 
   const handleChangeUS = async () => {
     try {
-      const accessToken = sessionStorage.getItem('accessToken')
-      sessionStorage.setItem('parentToken', accessToken)
+      const accessToken = sessionStorage.getItem('accessToken');
+      sessionStorage.setItem('parentToken', accessToken);
       await login?.(selectedIndex, password);
 
       router.push(PATH_AFTER_LOGIN);
@@ -130,6 +130,7 @@ export default function FamilyMembers() {
         sx={{ boxShadow: 'none', width: 'auto' }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             // Close the popover
             popover.onClose();
@@ -144,7 +145,6 @@ export default function FamilyMembers() {
         </MenuItem>
       </CustomPopover>
       <ConfirmDialog
-        lang="ar"
         open={confirm.value || loading.value}
         onClose={confirm.onFalse}
         title={t('confirm password')}

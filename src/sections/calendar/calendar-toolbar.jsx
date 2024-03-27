@@ -113,6 +113,7 @@ export default function CalendarToolbar({
       >
         {VIEW_OPTIONS.map((viewOption) => (
           <MenuItem
+            lang="ar"
             key={viewOption.value}
             selected={viewOption.value === view}
             onClick={() => {

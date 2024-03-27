@@ -66,11 +66,11 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     start_date: Yup.date().nullable(),
     end_date: Yup.date().nullable(),
     appointment_time: Yup.number()
-      .required('Appointment Time is required')
+      .required(t('required field'))
       .min(5, 'Appointment Time must be at least 5')
       .max(180, 'Appointment Time must be at most 180'),
     config_frequency: Yup.number()
-      .required('Configuration Frequency is required')
+      .required(t('required field'))
       .min(1, 'must be at least 1')
       .max(360, 'must be at most 360'),
     holidays: Yup.array(),
@@ -86,13 +86,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         description: Yup.string().nullable(),
       })
     ),
-    work_group: Yup.string().required('Work Group is required'),
-    work_shift: Yup.string().required('Work Shift is required'),
+    work_group: Yup.string().required(t('required field')),
+    work_shift: Yup.string().required(t('required field')),
     days_details: Yup.array().of(
       Yup.object().shape({
-        day: Yup.string().required('Day is required'),
-        work_start_time: Yup.date().nullable().required('work start time is required'),
-        work_end_time: Yup.date().nullable().required('work end time is required'),
+        day: Yup.string().required(t('required field')),
+        work_start_time: Yup.date().nullable().required(t('required field')),
+        work_end_time: Yup.date().nullable().required(t('required field')),
         appointments: Yup.array(),
         service_types: Yup.array(),
         appointment_type: Yup.string().nullable(),
@@ -268,6 +268,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   });
 
   useEffect(() => {
+    setErrorMsg();
     if (Object.keys(errors).length) {
       setErrorMsg(
         Object.keys(errors)

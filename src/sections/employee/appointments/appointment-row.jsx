@@ -79,11 +79,11 @@ export default function AppointmentsTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell lang="ar" padding="checkbox">
+        <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell lang="ar" align="center">
+        <TableCell align="center">
           <ListItemText
             primary={
               isValid(new Date(start_time)) &&
@@ -109,14 +109,11 @@ export default function AppointmentsTableRow({
             }}
           />
         </TableCell>
-        <TableCell lang="ar" align="center">
-          {appoint_number}
-        </TableCell>
-        <TableCell lang="ar" align="center">
+        <TableCell align="center">{appoint_number}</TableCell>
+        <TableCell align="center">
           {curLangAr ? appointment_type?.name_arabic : appointment_type?.name_english}
         </TableCell>
         <TableCell
-          lang="ar"
           align="center"
           sx={{
             cursor: 'pointer',
@@ -126,19 +123,16 @@ export default function AppointmentsTableRow({
         >
           {patient?.first_name} {patient?.family_name}
         </TableCell>
-        <TableCell lang="ar" align="center">
-          {note}
-        </TableCell>
-        <TableCell lang="ar" align="center">
+        <TableCell align="center">{note}</TableCell>
+        <TableCell align="center">
           {curLangAr ? work_group?.name_arabic : work_group?.name_english}
         </TableCell>
-        {/* <TableCell lang="ar" align="center">
+        {/* <TableCell  align="center">
           {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
         </TableCell> */}
 
-        <TableCell lang="ar" align="center">
+        <TableCell align="center">
           <Label
-            lang="ar"
             variant="soft"
             color={
               (status === 'available' && 'secondary') ||
@@ -154,7 +148,7 @@ export default function AppointmentsTableRow({
           </Label>
         </TableCell>
 
-        <TableCell lang="ar" align="right" sx={{ px: 1 }}>
+        <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
@@ -172,6 +166,7 @@ export default function AppointmentsTableRow({
         {status === 'available' &&
           checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
+              lang="ar"
               sx={{ color: 'success.main' }}
               onClick={() => {
                 Book.onTrue();
@@ -185,6 +180,7 @@ export default function AppointmentsTableRow({
         {status === 'available' &&
           checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'delete' }) && (
             <MenuItem
+              lang="ar"
               onClick={() => {
                 onCancelRow();
                 popover.onClose();
@@ -198,6 +194,7 @@ export default function AppointmentsTableRow({
         {status === 'canceled' &&
           checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
+              lang="ar"
               onClick={() => {
                 onUnCancelRow();
                 popover.onClose();
@@ -209,12 +206,12 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
-          <MenuItem onClick={confirmDelayOne.onTrue}>
+          <MenuItem lang="ar" onClick={confirmDelayOne.onTrue}>
             <Iconify icon="mdi:timer-sync" />
             {t('delay')}
           </MenuItem>
         )}
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
@@ -294,7 +291,6 @@ export default function AppointmentsTableRow({
           <Button
             variant="contained"
             color="info"
-            lang="ar"
             onClick={() => {
               confirmDelayOne.onFalse();
               onDelayRow(row, minToDelay);

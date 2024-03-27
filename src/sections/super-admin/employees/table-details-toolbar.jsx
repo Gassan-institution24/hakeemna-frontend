@@ -74,10 +74,18 @@ export default function OrderTableToolbar({
               },
             }}
           >
-            <MenuItem value="admin">admin</MenuItem>
-            <MenuItem value="superadmin">superadmin</MenuItem>
-            <MenuItem value="employee">employee</MenuItem>
-            <MenuItem value="patient">patient</MenuItem>
+            <MenuItem lang="ar" value="admin">
+              admin
+            </MenuItem>
+            <MenuItem lang="ar" value="superadmin">
+              superadmin
+            </MenuItem>
+            <MenuItem lang="ar" value="employee">
+              employee
+            </MenuItem>
+            <MenuItem lang="ar" value="patient">
+              patient
+            </MenuItem>
           </Select>
         </FormControl>
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
@@ -119,6 +127,7 @@ export default function OrderTableToolbar({
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             onPrint();
             popover.onClose();
@@ -129,6 +138,7 @@ export default function OrderTableToolbar({
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             onDownload();
             popover.onClose();
@@ -138,7 +148,7 @@ export default function OrderTableToolbar({
           Import
         </MenuItem>
 
-        {/* <MenuItem
+        {/* <MenuItem lang="ar" 
           onClick={() => {
             onDownload()
             popover.onClose();

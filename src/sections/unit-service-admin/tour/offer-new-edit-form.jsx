@@ -212,7 +212,7 @@ export default function TourNewEditForm({ currentTour }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {tableData.map((option, idx) => (
-                  <MenuItem key={idx} value={option._id}>
+                  <MenuItem lang="ar" key={idx} value={option._id}>
                     {option.name_english}
                   </MenuItem>
                 ))}
@@ -228,7 +228,7 @@ export default function TourNewEditForm({ currentTour }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {stakeholder.map((option, idx) => (
-                  <MenuItem key={idx} value={option._id}>
+                  <MenuItem lang="ar" key={idx} value={option._id}>
                     {option.stakeholder_name}
                   </MenuItem>
                 ))}

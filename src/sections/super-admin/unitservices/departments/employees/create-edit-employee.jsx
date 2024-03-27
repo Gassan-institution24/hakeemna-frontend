@@ -167,19 +167,16 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
               }}
             >
               <RHFTextField
-                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label={`${t('Full name in English')} *`}
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label={t('Full name in Arabic')}
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="address"
                 label={t('address')}
@@ -197,28 +194,32 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
 
               <RHFSelect name="nationality" label={`${t('nationality')} *`}>
                 {countriesData.map((nationality, idx) => (
-                  <MenuItem key={idx} value={nationality._id}>
+                  <MenuItem lang="ar" key={idx} value={nationality._id}>
                     {curLangAr ? nationality.name_arabic : nationality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="employee_type" label={`${t('employee type')} *`}>
                 {employeeTypesData.map((employee_type, idx) => (
-                  <MenuItem key={idx} value={employee_type._id}>
+                  <MenuItem lang="ar" key={idx} value={employee_type._id}>
                     {curLangAr ? employee_type.name_arabic : employee_type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="speciality" label={`${t('specialty')} *`}>
                 {specialtiesData.map((speciality, idx) => (
-                  <MenuItem key={idx} value={speciality._id}>
+                  <MenuItem lang="ar" key={idx} value={speciality._id}>
                     {curLangAr ? speciality.name_arabic : speciality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="gender" label={`${t('gender')} *`}>
-                <MenuItem value="male">{t('male')}</MenuItem>
-                <MenuItem value="female">{t('female')}</MenuItem>
+                <MenuItem lang="ar" value="male">
+                  {t('male')}
+                </MenuItem>
+                <MenuItem lang="ar" value="female">
+                  {t('female')}
+                </MenuItem>
               </RHFSelect>
             </Box>
             <Box
@@ -231,9 +232,8 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
-              <RHFTextField lang="ar" name="email" label={`${t('email')} *`} />
+              <RHFTextField name="email" label={`${t('email')} *`} />
               <RHFTextField
-                lang="ar"
                 name="password"
                 label={`${t('password')} *`}
                 type={password.value ? 'text' : 'password'}
@@ -250,7 +250,6 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                 }}
               />
               <RHFTextField
-                lang="ar"
                 name="confirmPassword"
                 label={`${t('confirm password')} *`}
                 type={password.value ? 'text' : 'password'}

@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
+import { Divider, MenuItem, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -32,6 +32,8 @@ import {
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFMultiSelect } from 'src/components/hook-form';
+import Iconify from 'src/components/iconify';
+import { useNewScreen } from 'src/hooks/use-new-screen';
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +46,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
+  const { handleAddNew } = useNewScreen();
+
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { serviceTypesData } = useGetUSActiveServiceTypes(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
@@ -54,11 +58,11 @@ export default function BookManually({ onClose, refetch, ...other }) {
   );
 
   const NewUserSchema = Yup.object().shape({
-    work_shift: Yup.string().required('Work Shift is required'),
-    work_group: Yup.string().required('Work Group is required'),
+    work_shift: Yup.string().required(t('required field')),
+    work_group: Yup.string().required(t('required field')),
     service_types: Yup.array(),
-    appointment_type: Yup.string().required('Appointment Type is required'),
-    start_time: Yup.date().required('Start time is required'),
+    appointment_type: Yup.string().required(t('required field')),
+    start_time: Yup.date().required(t('required field')),
   });
 
   const defaultValues = useMemo(
@@ -161,7 +165,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
               >
                 <RHFSelect name="appointment_type" label={`${t('appointment type')} *`}>
                   {appointmenttypesData.map((option, index, idx) => (
-                    <MenuItem key={idx} value={option._id}>
+                    <MenuItem lang="ar" key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -173,23 +177,58 @@ export default function BookManually({ onClose, refetch, ...other }) {
                 >
                   {workShiftsData &&
                     workShiftsData.map((option, index, idx) => (
-                      <MenuItem key={idx} value={option._id}>
+                      <MenuItem lang="ar" key={idx} value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
                       </MenuItem>
                     ))}
+                  <Divider />
+                  <MenuItem
+                    lang="ar"
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      gap: 1,
+                      fontWeight: 600,
+                      // color: 'error.main',
+                    }}
+                    onClick={() => handleAddNew(paths.unitservice.tables.workshifts.new)}
+                  >
+                    <Typography variant="body2" sx={{ color: 'info.main' }}>
+                      {t('Add new')}
+                    </Typography>
+                    <Iconify icon="material-symbols:new-window-sharp" />
+                  </MenuItem>
                 </RHFSelect>
                 <RHFSelect name="work_group" label={`${t('work group')} *`}>
                   {workGroupsData.map((option, index, idx) => (
-                    <MenuItem key={idx} value={option._id}>
+                    <MenuItem lang="ar" key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
+                  <Divider />
+                  <MenuItem
+                    lang="ar"
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      gap: 1,
+                      fontWeight: 600,
+                      // color: 'error.main',
+                    }}
+                    onClick={() => handleAddNew(paths.unitservice.tables.workgroups.new)}
+                  >
+                    <Typography variant="body2" sx={{ color: 'info.main' }}>
+                      {t('Add new')}
+                    </Typography>
+                    <Iconify icon="material-symbols:new-window-sharp" />
+                  </MenuItem>
                 </RHFSelect>
                 <RHFMultiSelect
                   checkbox
                   name="service_types"
                   label={t('service types')}
                   options={serviceTypesData}
+                  path={paths.unitservice.tables.services.new}
                 />
               </Box>
             </Box>

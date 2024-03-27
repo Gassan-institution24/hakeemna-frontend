@@ -141,6 +141,7 @@ export default function ConfigTableToolbar({
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}
@@ -150,6 +151,7 @@ export default function ConfigTableToolbar({
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}

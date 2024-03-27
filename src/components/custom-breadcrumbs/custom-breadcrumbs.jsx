@@ -27,7 +27,7 @@ export default function CustomBreadcrumbs({
         <Box sx={{ flexGrow: 1, display: 'flex', gap: 3, alignItems: 'center' }}>
           {/* HEADING */}
           {heading && (
-            <Typography variant="h4" gutterBottom>
+            <Typography textTransform="capitalize" variant="h4" gutterBottom>
               {heading}
             </Typography>
           )}
@@ -41,14 +41,14 @@ export default function CustomBreadcrumbs({
                   link={link}
                   activeLast={activeLast}
                   disabled={link.name === lastLink}
-                  // lang="ar"
+                  //
                 />
               ))}
             </Breadcrumbs>
           )}
         </Box>
 
-        {action && <Box sx={{ flexShrink: 0 }}> {action} </Box>}
+        {action && <Box sx={{ flexShrink: 0, textTransform: 'capitalize' }}> {action} </Box>}
       </Stack>
 
       {/* MORE LINK */}

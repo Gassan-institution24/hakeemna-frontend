@@ -78,7 +78,6 @@ export function RHFMultiCheckbox({ row, name, label, options, spacing, helperTex
           >
             {options.map((option, idx) => (
               <FormControlLabel
-                lang="ar"
                 key={idx}
                 control={
                   <Checkbox

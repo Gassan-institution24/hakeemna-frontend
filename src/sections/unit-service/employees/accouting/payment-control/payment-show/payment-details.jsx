@@ -43,51 +43,43 @@ export default function InvoiceDetails({ paymentData }) {
   const renderTotal = (
     <>
       <StyledTableRow>
-        <TableCell lang="ar" colSpan={4} />
-        <TableCell lang="ar" sx={{ color: 'text.secondary' }}>
+        <TableCell colSpan={4} />
+        <TableCell sx={{ color: 'text.secondary' }}>
           <Box sx={{ mt: 2 }} />
           Subtotal
         </TableCell>
-        <TableCell lang="ar" width={120} sx={{ typography: 'subtitle2' }}>
+        <TableCell width={120} sx={{ typography: 'subtitle2' }}>
           <Box sx={{ mt: 2 }} />
           {fCurrency(paymentData.amount)}
         </TableCell>
       </StyledTableRow>
 
       {/* <StyledTableRow>
-        <TableCell lang="ar" colSpan={3} />
-        <TableCell lang="ar" sx={{ color: 'text.secondary' }}>Tax</TableCell>
-        <TableCell lang="ar" width={120} sx={{ color: 'error.main', typography: 'body2' }}>
+        <TableCell  colSpan={3} />
+        <TableCell  sx={{ color: 'text.secondary' }}>Tax</TableCell>
+        <TableCell  width={120} sx={{ color: 'error.main', typography: 'body2' }}>
           {fCurrency(-paymentData.Total_tax_Amount)}
         </TableCell>
       </StyledTableRow> */}
 
       <StyledTableRow>
-        <TableCell lang="ar" colSpan={4} />
-        <TableCell lang="ar" sx={{ color: 'text.secondary' }}>
-          Deduction
-        </TableCell>
-        <TableCell lang="ar" width={120} sx={{ color: 'error.main', typography: 'body2' }}>
+        <TableCell colSpan={4} />
+        <TableCell sx={{ color: 'text.secondary' }}>Deduction</TableCell>
+        <TableCell width={120} sx={{ color: 'error.main', typography: 'body2' }}>
           {fCurrency(-paymentData.deduction_amount)}
         </TableCell>
       </StyledTableRow>
 
       <StyledTableRow>
-        <TableCell lang="ar" colSpan={4} />
-        <TableCell lang="ar" sx={{ color: 'text.secondary' }}>
-          Taxes
-        </TableCell>
-        <TableCell lang="ar" width={120}>
-          {fCurrency(paymentData.sales_tax_amount)}
-        </TableCell>
+        <TableCell colSpan={4} />
+        <TableCell sx={{ color: 'text.secondary' }}>Taxes</TableCell>
+        <TableCell width={120}>{fCurrency(paymentData.sales_tax_amount)}</TableCell>
       </StyledTableRow>
 
       <StyledTableRow>
-        <TableCell lang="ar" colSpan={4} />
-        <TableCell lang="ar" sx={{ typography: 'subtitle1' }}>
-          Total
-        </TableCell>
-        <TableCell lang="ar" width={140} sx={{ typography: 'subtitle1' }}>
+        <TableCell colSpan={4} />
+        <TableCell sx={{ typography: 'subtitle1' }}>Total</TableCell>
+        <TableCell width={140} sx={{ typography: 'subtitle1' }}>
           {fCurrency(paymentData.total_amount)}
         </TableCell>
       </StyledTableRow>
@@ -118,39 +110,25 @@ export default function InvoiceDetails({ paymentData }) {
         <Table sx={{ minWidth: 960 }}>
           <TableHead>
             <TableRow>
-              <TableCell lang="ar" width={40}>
-                #
-              </TableCell>
+              <TableCell width={40}>#</TableCell>
 
-              <TableCell lang="ar" sx={{ typography: 'subtitle2' }}>
-                Received Amount
-              </TableCell>
+              <TableCell sx={{ typography: 'subtitle2' }}>Received Amount</TableCell>
 
-              <TableCell lang="ar" align="center">
-                Invoice no
-              </TableCell>
+              <TableCell align="center">Invoice no</TableCell>
 
-              <TableCell lang="ar" align="right">
-                Invoice Amount
-              </TableCell>
+              <TableCell align="right">Invoice Amount</TableCell>
 
-              <TableCell lang="ar" align="right">
-                Total Received Amount
-              </TableCell>
+              <TableCell align="right">Total Received Amount</TableCell>
 
-              <TableCell lang="ar" align="right">
-                Remained Amount
-              </TableCell>
+              <TableCell align="right">Remained Amount</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
             <TableRow>
-              <TableCell lang="ar" align="center">
-                {paymentData.code}
-              </TableCell>
+              <TableCell align="center">{paymentData.code}</TableCell>
 
-              <TableCell lang="ar" align="center">
+              <TableCell align="center">
                 <Box sx={{ maxWidth: 560 }}>
                   <Typography variant="subtitle2">{fCurrency(paymentData?.amount)}</Typography>
 
@@ -160,21 +138,13 @@ export default function InvoiceDetails({ paymentData }) {
                 </Box>
               </TableCell>
 
-              <TableCell lang="ar" align="center">
-                {paymentData.invoice?.code}
-              </TableCell>
+              <TableCell align="center">{paymentData.invoice?.code}</TableCell>
 
-              <TableCell lang="ar" align="right">
-                {fCurrency(paymentData.invoice?.Balance)}
-              </TableCell>
+              <TableCell align="right">{fCurrency(paymentData.invoice?.Balance)}</TableCell>
 
-              <TableCell lang="ar" align="right">
-                {fCurrency(paymentData.invoice?.Balance)}
-              </TableCell>
+              <TableCell align="right">{fCurrency(paymentData.invoice?.Balance)}</TableCell>
 
-              <TableCell lang="ar" align="right">
-                {fCurrency(20)}
-              </TableCell>
+              <TableCell align="right">{fCurrency(20)}</TableCell>
             </TableRow>
 
             {renderTotal}
@@ -207,7 +177,6 @@ export default function InvoiceDetails({ paymentData }) {
 
           <Stack spacing={1} alignItems={{ xs: 'flex-start', md: 'flex-end' }}>
             <Label
-              lang="ar"
               variant="soft"
               color={
                 (paymentData.status === 'paid' && 'success') ||

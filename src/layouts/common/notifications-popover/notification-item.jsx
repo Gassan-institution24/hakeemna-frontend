@@ -55,6 +55,7 @@ export default function NotificationItem({ notification, handleClick }) {
 
   const renderText = (
     <ListItemText
+      lang="ar"
       disableTypography
       primary={reader(curLangAr ? notification.title_arabic : notification.title)}
       secondary={

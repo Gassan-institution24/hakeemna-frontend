@@ -58,29 +58,26 @@ export default function TableDetailsRow({
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell lang="ar" padding="checkbox">
+      <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell lang="ar" align="center">
-        {curLangAr ? name_arabic : name_english}
-      </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">{curLangAr ? name_arabic : name_english}</TableCell>
+      <TableCell align="center">
         {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">
         {curLangAr ? Measurement_type?.name_arabic : Measurement_type?.name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">
         {Price_per_unit} {currency?.symbol}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">
         <Label
-          lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -90,7 +87,7 @@ export default function TableDetailsRow({
         </Label>
       </TableCell>
 
-      <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         {/* <IconButton
           color={collapse.value ? 'inherit' : 'default'}
           onClick={collapse.onToggle}
@@ -127,6 +124,7 @@ export default function TableDetailsRow({
               acl: 'delete',
             }) && (
               <MenuItem
+                lang="ar"
                 onClick={() => {
                   onInactivate();
                   popover.onClose();
@@ -143,6 +141,7 @@ export default function TableDetailsRow({
               acl: 'update',
             }) && (
               <MenuItem
+                lang="ar"
                 onClick={() => {
                   onActivate();
                   popover.onClose();
@@ -156,6 +155,7 @@ export default function TableDetailsRow({
 
         {checkAcl({ category: 'department', subcategory: 'management_tables', acl: 'update' }) && (
           <MenuItem
+            lang="ar"
             onClick={() => {
               onEditRow();
               popover.onClose();
@@ -165,7 +165,7 @@ export default function TableDetailsRow({
             {t('edit')}
           </MenuItem>
         )}
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>

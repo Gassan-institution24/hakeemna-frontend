@@ -56,7 +56,7 @@ export default function AppointmentsTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell lang="ar" padding="checkbox">
+        <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
@@ -72,29 +72,28 @@ export default function AppointmentsTableRow({
           {sequence_number}
         </TableCell>
 
-        <TableCell lang="ar" onClick={onViewRow} align="center">
+        <TableCell onClick={onViewRow} align="center">
           <ListItemText
             primary={isValid(new Date(start_date)) && format(new Date(start_date), 'dd MMM yyyy')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
-        <TableCell lang="ar" onClick={onViewRow} align="center">
+        <TableCell onClick={onViewRow} align="center">
           <ListItemText
             primary={isValid(new Date(end_date)) && format(new Date(end_date), 'dd MMM yyyy')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
           />
         </TableCell>
 
-        <TableCell lang="ar" onClick={onViewRow} align="center">
+        <TableCell onClick={onViewRow} align="center">
           {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
         </TableCell>
-        <TableCell lang="ar" onClick={onViewRow} align="center">
+        <TableCell onClick={onViewRow} align="center">
           {curLangAr ? work_group?.name_arabic : work_group?.name_english}
         </TableCell>
 
-        <TableCell lang="ar" align="center">
+        <TableCell align="center">
           <Label
-            lang="ar"
             variant="soft"
             color={
               (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -104,7 +103,7 @@ export default function AppointmentsTableRow({
           </Label>
         </TableCell>
 
-        <TableCell lang="ar" align="right" sx={{ px: 1 }}>
+        <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
@@ -119,7 +118,7 @@ export default function AppointmentsTableRow({
       >
         {/* {status === 'available' &&
           checkAcl({ category: 'employee', subcategory: 'appointment_configs', acl: 'delete' }) && (
-            <MenuItem
+            <MenuItem lang="ar" 
               onClick={() => {
                 onCancelRow();
                 popover.onClose();
@@ -132,7 +131,7 @@ export default function AppointmentsTableRow({
           )}
         {status === 'canceled' &&
           checkAcl({ category: 'employee', subcategory: 'appointment_configs', acl: 'update' }) && (
-            <MenuItem
+            <MenuItem lang="ar" 
               onClick={() => {
                 onUnCancelRow();
                 popover.onClose();
@@ -143,11 +142,11 @@ export default function AppointmentsTableRow({
               {t('uncancel')}
             </MenuItem>
           )} */}
-        <MenuItem onClick={onViewRow}>
+        <MenuItem lang="ar" onClick={onViewRow}>
           <Iconify icon="solar:eye-bold" />
           {t('view')}
         </MenuItem>
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>

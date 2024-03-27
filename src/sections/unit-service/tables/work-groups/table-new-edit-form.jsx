@@ -53,9 +53,9 @@ export default function TableNewEditForm({ currentTable }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    department: Yup.string().required('department is required'),
-    name_arabic: Yup.string().required('Name is required'),
-    name_english: Yup.string().required('Name is required'),
+    department: Yup.string().required(t('required field')),
+    name_arabic: Yup.string().required(t('required field')),
+    name_english: Yup.string().required(t('required field')),
     employees: Yup.array().min(1, 'Choose at least one option'),
   });
 
@@ -66,7 +66,7 @@ export default function TableNewEditForm({ currentTable }) {
       department: currentTable?.department?._id || null,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      employees: currentTable?.employees.map((info, idx) => info.employee) || [],
+      employees: currentTable?.employees?.map((info, idx) => info.employee) || [],
     }),
     [currentTable, user?.employee]
   );
@@ -138,7 +138,7 @@ export default function TableNewEditForm({ currentTable }) {
       department: currentTable?.department?._id || null,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      employees: currentTable?.employees.map((info, idx) => info.employee) || [],
+      employees: currentTable?.employees?.map((info, idx) => info.employee) || [],
     });
   }, [currentTable]);
   /* eslint-enable */
@@ -158,25 +158,24 @@ export default function TableNewEditForm({ currentTable }) {
             }}
           >
             <RHFTextField
-              lang="ar"
               onChange={handleEnglishInputChange}
               name="name_english"
               label={`${t('name english')} *`}
             />
             <RHFTextField
-              lang="ar"
               onChange={handleArabicInputChange}
               name="name_arabic"
               label={`${t('name arabic')} *`}
             />
             <RHFSelect name="department" label={t('department')}>
               {departmentsData.map((department, idx) => (
-                <MenuItem key={idx} value={department._id}>
+                <MenuItem lang="ar" key={idx} value={department._id}>
                   {curLangAr ? department.name_arabic : department.name_english}
                 </MenuItem>
               ))}
               <Divider />
               <MenuItem
+                lang="ar"
                 sx={{
                   display: 'flex',
                   justifyContent: 'flex-end',
@@ -186,7 +185,7 @@ export default function TableNewEditForm({ currentTable }) {
                 }}
                 onClick={() => handleAddNew(paths.unitservice.departments.new)}
               >
-                <Typography lang="ar" variant="body2" sx={{ color: 'info.main' }}>
+                <Typography variant="body2" sx={{ color: 'info.main' }}>
                   {t('Add new')}
                 </Typography>
                 <Iconify icon="material-symbols:new-window-sharp" />
@@ -213,7 +212,7 @@ export default function TableNewEditForm({ currentTable }) {
                 methods.setValue('employees', newValue, { shouldValidate: true });
               }}
               renderTags={(selected, getTagProps) =>
-                selected.map((option, index) => (
+                selected?.map((option, index) => (
                   <Chip
                     {...getTagProps({ index })}
                     key={index}
