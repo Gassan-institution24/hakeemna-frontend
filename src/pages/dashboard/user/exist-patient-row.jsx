@@ -26,12 +26,13 @@ export default function ExistPatientRow({ row, selected }) {
   const { t } = useTranslate();
 
   const defaultValues = {
+    sender: user?.patient?._id,
     patient: row?._id,
     title: `${user?.patient?.first_name} want to add you as a family member`,
     title_arabic: `${user?.patient?.name_arabic} يريد اظافتك كفرد عائلة`,
     photo_URL: 'https://cdn-icons-png.flaticon.com/512/6193/6193226.png',
-    category: 'request',
-    type: 'request',
+    category: 'invite',
+    type: 'invite',
   };
 
 
@@ -41,7 +42,7 @@ export default function ExistPatientRow({ row, selected }) {
     // const { enqueueSnackbar } = useSnackbar();
   
     try {
-      await axios.post(endpoints.notifications.all, defaultValues);
+      await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
       enqueueSnackbar(t('Invitation sent successfully'));
     } catch (error) {
       // error emitted in backend
