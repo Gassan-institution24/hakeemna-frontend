@@ -125,7 +125,7 @@
 //           >
 //             <RHFSelect name="status" label="Status">
 //               {USER_STATUS_OPTIONS.map((status, idx)  => (
-//                 <MenuItem key={idx} value={status.value}>
+//                 <MenuItem lang="ar"  key={idx} value={status.value}>
 //                   {status.label}
 //                 </MenuItem>
 //               ))}

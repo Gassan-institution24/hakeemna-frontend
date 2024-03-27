@@ -12,7 +12,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-// import { useAuthContext } from 'src/auth/hooks';
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -23,7 +23,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 export default function AccountChangePassword() {
   const { enqueueSnackbar } = useSnackbar();
 
-  // const { user } = useAuthContext();
+  const { user } = useAuthContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -34,19 +34,20 @@ export default function AccountChangePassword() {
   const showconfirmPassword = useBoolean();
 
   const ChangePassWordSchema = Yup.object().shape({
-    passwordCurrent: Yup.string().required('Old Password is required'),
+    passwordCurrent: Yup.string().required(t('required field')),
     password: Yup.string()
-      .required('New Password is required')
-      .min(8, 'Password must be at least 6 characters')
+      .required(t('required field'))
+      .min(8, `${t('must be at least')} 8`)
       .test(
         'no-match',
-        'New password must be different than old password',
+        t('New password must be different than old password'),
         (value, { parent }) => value !== parent.passwordCurrent
       ),
-    confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Passwords must match'),
+    confirmPassword: Yup.string().oneOf([Yup.ref('password')], t('Passwords must match')),
   });
 
   const defaultValues = {
+    email: user?.email,
     passwordCurrent: '',
     password: '',
     confirmPassword: '',
@@ -86,8 +87,8 @@ export default function AccountChangePassword() {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack component={Card} spacing={3} sx={{ p: 3 }}>
+        <RHFTextField value={user?.email} name="email" />
         <RHFTextField
-          lang="ar"
           name="passwordCurrent"
           type={showpasswordCurrent.value ? 'text' : 'password'}
           label={t('current password')}
@@ -105,7 +106,6 @@ export default function AccountChangePassword() {
         />
 
         <RHFTextField
-          lang="ar"
           name="password"
           label={t('new password')}
           type={showpassword.value ? 'text' : 'password'}
@@ -127,7 +127,6 @@ export default function AccountChangePassword() {
         />
 
         <RHFTextField
-          lang="ar"
           name="confirmPassword"
           type={showconfirmPassword.value ? 'text' : 'password'}
           label={t('confirm new password')}

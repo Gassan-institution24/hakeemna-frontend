@@ -123,21 +123,15 @@ export default function CitiesNewEditForm({ currentCity }) {
                 label="name english"
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label="name arabic"
               />
-              <RHFTextField
-                lang="ar"
-                onChange={handleArabicInputChange}
-                name="state"
-                label="state"
-              />
+              <RHFTextField onChange={handleArabicInputChange} name="state" label="state" />
 
               <RHFSelect name="country" label="country">
                 {countriesData.map((category, idx) => (
-                  <MenuItem key={idx} value={category._id}>
+                  <MenuItem lang="ar" key={idx} value={category._id}>
                     {category.name_english}
                   </MenuItem>
                 ))}

@@ -23,7 +23,7 @@ export default function ContactUs() {
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
-  const { user} =  useAuthContext()
+  const { user } = useAuthContext();
   const curLangAr = currentLang.value === 'ar';
 
   const contactUsSchema = Yup.object().shape({

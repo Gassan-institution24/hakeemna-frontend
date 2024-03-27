@@ -89,7 +89,7 @@ export default function InvoiceTableToolbar({
             sx={{ textTransform: 'capitalize' }}
           >
             {serviceOptions.map((option, idx) => (
-              <MenuItem key={idx} value={option}>
+              <MenuItem lang="ar" key={idx} value={option}>
                 <Checkbox disableRipple size="small" checked={filters.service.includes(option)} />
                 {option}
               </MenuItem>
@@ -150,6 +150,7 @@ export default function InvoiceTableToolbar({
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}
@@ -159,6 +160,7 @@ export default function InvoiceTableToolbar({
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}
@@ -168,6 +170,7 @@ export default function InvoiceTableToolbar({
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}

@@ -32,11 +32,11 @@ export default function UploadOldPatient({ refetch }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    first_name: Yup.string().required('First name is required'),
+    first_name: Yup.string().required(t('required field')),
     middle_name: Yup.string(),
-    family_name: Yup.string().required('family name is required'),
+    family_name: Yup.string().required(t('required field')),
     identification_num: Yup.string(),
-    phone: Yup.string().required('Phone is required'),
+    phone: Yup.string().required(t('required field')),
     files: Yup.array(),
   });
 
@@ -147,32 +147,27 @@ export default function UploadOldPatient({ refetch }) {
           }}
         >
           <RHFTextField
-            lang="ar"
             onChange={handleEnglishInputChange}
             name="first_name"
             label={`${t('first name')} *`}
           />
           <RHFTextField
-            lang="ar"
             onChange={handleEnglishInputChange}
             name="middle_name"
             label={t('middle name')}
           />
           <RHFTextField
-            lang="ar"
             onChange={handleEnglishInputChange}
             name="family_name"
             label={`${t('family name')} *`}
           />
-          <RHFTextField lang="ar" type="email" name="email" label={`${t('email')} *`} />
+          <RHFTextField type="email" name="email" label={`${t('email')} *`} />
           <RHFTextField
-            lang="ar"
             onChange={handleEnglishInputChange}
             name="identification_num"
             label={t('ID number')}
           />
           <RHFTextField
-            lang="ar"
             onChange={handleEnglishInputChange}
             name="phone"
             label={t('phone')}

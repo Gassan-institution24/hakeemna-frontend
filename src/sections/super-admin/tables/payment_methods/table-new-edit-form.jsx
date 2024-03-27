@@ -118,7 +118,6 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name english"
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label="name arabic"

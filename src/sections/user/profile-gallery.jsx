@@ -1,4 +1,3 @@
-
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
@@ -17,7 +16,7 @@ import Lightbox, { useLightBox } from 'src/components/lightbox';
 export default function ProfileGallery() {
   const theme = useTheme();
 
-const gallery = []
+  const gallery = [];
   const slides = gallery.map((slide, idx) => ({
     src: slide.imageUrl,
   }));
@@ -91,4 +90,3 @@ const gallery = []
     </>
   );
 }
-

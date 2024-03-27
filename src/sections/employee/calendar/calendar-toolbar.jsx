@@ -65,7 +65,6 @@ export default function CalendarToolbar({
       >
         {smUp && (
           <Button
-            lang="ar"
             size="small"
             color="inherit"
             onClick={popover.onOpen}
@@ -120,9 +119,9 @@ export default function CalendarToolbar({
       >
         {VIEW_OPTIONS.map((viewOption, idx) => (
           <MenuItem
+            lang="ar"
             key={idx}
             selected={viewOption.value === view}
-            lang="ar"
             onClick={() => {
               popover.onClose();
               onChangeView(viewOption.value);

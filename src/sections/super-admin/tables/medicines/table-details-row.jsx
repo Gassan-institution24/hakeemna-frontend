@@ -125,6 +125,7 @@ export default function CountriesTableRow({
       >
         {status === 'active' ? (
           <MenuItem
+            lang="ar"
             onClick={() => {
               onInactivate();
               popover.onClose();
@@ -136,6 +137,7 @@ export default function CountriesTableRow({
           </MenuItem>
         ) : (
           <MenuItem
+            lang="ar"
             onClick={() => {
               onActivate();
               popover.onClose();
@@ -147,6 +149,7 @@ export default function CountriesTableRow({
           </MenuItem>
         )}
         <MenuItem
+          lang="ar"
           onClick={() => {
             onEditRow();
             popover.onClose();
@@ -155,11 +158,11 @@ export default function CountriesTableRow({
           <Iconify icon="fluent:edit-32-filled" />
           Edit
         </MenuItem>
-        <MenuItem onClick={details.onOpen}>
+        <MenuItem lang="ar" onClick={details.onOpen}>
           <Iconify icon="gg:details-more" />
           Details
         </MenuItem>
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
         </MenuItem>

@@ -177,7 +177,6 @@ export default function UnitServicesFeedbackView() {
               label={tab.label}
               icon={
                 <Label
-                  lang="ar"
                   variant={
                     ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                   }

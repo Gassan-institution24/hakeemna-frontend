@@ -55,7 +55,7 @@ export default function CountriesTableRow({
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell lang="ar" padding="checkbox">
+      <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
       <TableCell
@@ -86,27 +86,24 @@ export default function CountriesTableRow({
       >
         {curLangAr ? employee.name_arabic : employee.name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">
         {curLangAr ? employee.employee_type?.name_arabic : employee.employee_type?.name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">
-        {employee.email}
-      </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">{employee.email}</TableCell>
+      <TableCell align="center">
         {curLangAr ? employee.nationality?.name_arabic : employee.nationality?.name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">
         <Iconify
           icon={employee.validatd_identity ? 'eva:checkmark-fill' : 'mingcute:close-line'}
           width={16}
         />
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">
         <Iconify icon={Adjust_schedule ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">
         <Label
-          lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -116,7 +113,7 @@ export default function CountriesTableRow({
         </Label>
       </TableCell>
 
-      <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -137,6 +134,7 @@ export default function CountriesTableRow({
         {status === 'active'
           ? checkAcl({ category: 'department', subcategory: 'employees', acl: 'delete' }) && (
               <MenuItem
+                lang="ar"
                 onClick={() => {
                   onInactivate();
                   popover.onClose();
@@ -149,6 +147,7 @@ export default function CountriesTableRow({
             )
           : checkAcl({ category: 'department', subcategory: 'employees', acl: 'update' }) && (
               <MenuItem
+                lang="ar"
                 onClick={() => {
                   onActivate();
                   popover.onClose();
@@ -159,11 +158,11 @@ export default function CountriesTableRow({
                 {t('activate')}
               </MenuItem>
             )}
-        <MenuItem onClick={onViewRow}>
+        <MenuItem lang="ar" onClick={onViewRow}>
           <Iconify icon="solar:eye-bold" />
           {t('view')}
         </MenuItem>
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>

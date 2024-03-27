@@ -19,11 +19,11 @@ import axios, { endpoints } from 'src/utils/axios';
 import { fTime, fDate } from 'src/utils/format-time';
 
 import { useLocales } from 'src/locales';
+import { useAuthContext } from 'src/auth/hooks';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -40,8 +40,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
     patient: user?.patient?._id,
     title: `Appointment canceled successfully`,
     title_arabic: `تم الغاء الموعد بنجاح`,
-    photo_URL:
-      'https://cdn-icons-png.freepik.com/512/391/391247.png',
+    photo_URL: 'https://cdn-icons-png.freepik.com/512/391/391247.png',
     category: 'appointmentcancel',
     type: 'appointmentcancel',
   };

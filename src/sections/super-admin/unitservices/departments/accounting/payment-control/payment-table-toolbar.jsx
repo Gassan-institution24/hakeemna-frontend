@@ -98,7 +98,7 @@ export default function PaymentTableToolbar({
             // }}
           >
             {serviceOptions.map((option, idx) => (
-              <MenuItem key={idx} value={option}>
+              <MenuItem lang="ar" key={idx} value={option}>
                 <Checkbox disableRipple size="small" checked={filters.service.includes(option)} />
                 {option}
               </MenuItem>
@@ -159,6 +159,7 @@ export default function PaymentTableToolbar({
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}
@@ -168,6 +169,7 @@ export default function PaymentTableToolbar({
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}
@@ -177,6 +179,7 @@ export default function PaymentTableToolbar({
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}

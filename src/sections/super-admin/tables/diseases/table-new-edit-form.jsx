@@ -141,7 +141,6 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 label="name english"
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label="name arabic"
@@ -168,7 +167,6 @@ export default function CountriesNewEditForm({ currentSelected }) {
                 rows={3}
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleArabicInputChange}
                 sx={{ mt: 3 }}
                 name="description_arabic"
@@ -180,7 +178,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
               <RHFSelect name="category" label="category">
                 {categories.map((category, idx) => (
-                  <MenuItem key={idx} value={category._id}>
+                  <MenuItem lang="ar" key={idx} value={category._id}>
                     {category.name_english}
                   </MenuItem>
                 ))}

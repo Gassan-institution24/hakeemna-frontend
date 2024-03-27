@@ -101,7 +101,7 @@ export default function TableDetailsRow({
         sx={{ width: 140 }}
       >
         {/* {status === 'active' ? (
-          <MenuItem
+          <MenuItem lang="ar" 
             onClick={() => {
               onInactivate();
               popover.onClose();
@@ -112,7 +112,7 @@ export default function TableDetailsRow({
             Inactivate
           </MenuItem>
         ) : (
-          <MenuItem
+          <MenuItem lang="ar" 
             onClick={() => {
               onActivate();
               popover.onClose();
@@ -125,6 +125,7 @@ export default function TableDetailsRow({
         )} */}
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             onEditRow();
             popover.onClose();
@@ -133,7 +134,7 @@ export default function TableDetailsRow({
           <Iconify icon="fluent:edit-32-filled" />
           Edit
         </MenuItem>
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
         </MenuItem>

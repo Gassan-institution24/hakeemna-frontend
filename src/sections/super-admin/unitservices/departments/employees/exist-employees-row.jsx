@@ -16,27 +16,17 @@ export default function ExistEmployeesRow({ row, selected, onEmploymentRow }) {
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell lang="ar" align="center">
-        {name_english || name_arabic}
-      </TableCell>
-      <TableCell lang="ar" align="center">
-        {identification_num}
-      </TableCell>
-      <TableCell lang="ar" align="center">
-        {email}
-      </TableCell>
-      <TableCell lang="ar" align="center">
-        {phone}
-      </TableCell>
-      <TableCell lang="ar" align="center">
-        {fDate(birth_date)}
-      </TableCell>
+      <TableCell align="center">{name_english || name_arabic}</TableCell>
+      <TableCell align="center">{identification_num}</TableCell>
+      <TableCell align="center">{email}</TableCell>
+      <TableCell align="center">{phone}</TableCell>
+      <TableCell align="center">{fDate(birth_date)}</TableCell>
 
-      <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton onClick={onEmploymentRow}>
           <Iconify icon="zondicons:user-add" />
         </IconButton>

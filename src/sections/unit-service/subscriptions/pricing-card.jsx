@@ -131,9 +131,7 @@ export default function PricingCard({ card, sx, ...other }) {
     <Stack direction="row">
       <Typography variant="h4">{price_in_usd ? '$' : ''}</Typography>
 
-      <Typography lang="ar" variant="h2">
-        {price_in_usd || t('FREE')}
-      </Typography>
+      <Typography variant="h2">{price_in_usd || t('FREE')}</Typography>
 
       <Typography
         component="span"

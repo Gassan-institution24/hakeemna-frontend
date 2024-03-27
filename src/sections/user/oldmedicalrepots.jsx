@@ -286,7 +286,7 @@ export default function OldMedicalReports() {
               sx={{ mb: 2 }}
             >
               {specialtiesData.map((test, idx) => (
-                <MenuItem value={test?._id} key={idx} sx={{ mb: 1 }}>
+                <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
                   {curLangAr ? test?.name_arabic : test?.name_english}
                 </MenuItem>
               ))}

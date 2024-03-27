@@ -14,7 +14,6 @@ import EmptyContent from 'src/components/empty-content/empty-content';
 // import { paths } from 'src/routes/paths';
 import axios, { endpoints } from 'src/utils/axios';
 
-
 // ----------------------------------------------------------------------
 
 export default function ExistPatientRow({ row, selected }) {
@@ -35,12 +34,9 @@ export default function ExistPatientRow({ row, selected }) {
     type: 'invite',
   };
 
-
-
-
   const handleAddFamily = async () => {
     // const { enqueueSnackbar } = useSnackbar();
-  
+
     try {
       await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
       enqueueSnackbar(t('Invitation sent successfully'));
@@ -50,23 +46,17 @@ export default function ExistPatientRow({ row, selected }) {
       console.error(error);
     }
   };
-  
+
   const renderPrimary = (
     <TableRow selected={selected}>
-      <TableCell lang="ar" align="center">
-        {identification_num}
-      </TableCell>
-      <TableCell lang="ar" align="center">
-        {first_name}
-      </TableCell>
-      {/* <TableCell lang="ar" align="center">
+      <TableCell align="center">{identification_num}</TableCell>
+      <TableCell align="center">{first_name}</TableCell>
+      {/* <TableCell  align="center">
         {name_arabic}
       </TableCell> */}
 
-      <TableCell lang="ar" align="center">
-        {mobile_num1}
-      </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">{mobile_num1}</TableCell>
+      <TableCell align="center">
         {/* <Button disabled variant="outlined">
           {t('Waiting acceptation')} &nbsp; <Iconify sx={{  display:{md:'block', xs:'none'} }} icon="icon-park:time" />
         </Button> */}

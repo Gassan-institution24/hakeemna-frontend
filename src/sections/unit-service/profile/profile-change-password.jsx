@@ -37,16 +37,16 @@ export default function AccountChangePassword() {
   const showconfirmPassword = useBoolean();
 
   const ChangePassWordSchema = Yup.object().shape({
-    passwordCurrent: Yup.string().required('Old Password is required'),
+    passwordCurrent: Yup.string().required(t('required field')),
     password: Yup.string()
-      .required('New Password is required')
-      .min(8, 'Password must be at least 6 characters')
+      .required(t('required field'))
+      .min(8, `${t('must be at least')} 8`)
       .test(
         'no-match',
-        'New password must be different than old password',
+        t('New password must be different than old password'),
         (value, { parent }) => value !== parent.passwordCurrent
       ),
-    confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Passwords must match'),
+    confirmPassword: Yup.string().oneOf([Yup.ref('password')], t('Passwords must match')),
   });
 
   const defaultValues = {
@@ -96,7 +96,6 @@ export default function AccountChangePassword() {
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack component={Card} spacing={3} sx={{ p: 3 }}>
         <RHFTextField
-          lang="ar"
           name="passwordCurrent"
           type={showpasswordCurrent.value ? 'text' : 'password'}
           label="Current Password"
@@ -114,7 +113,6 @@ export default function AccountChangePassword() {
         />
 
         <RHFTextField
-          lang="ar"
           name="password"
           label="New Password"
           type={showpassword.value ? 'text' : 'password'}
@@ -136,7 +134,6 @@ export default function AccountChangePassword() {
         />
 
         <RHFTextField
-          lang="ar"
           name="confirmPassword"
           type={showconfirmPassword.value ? 'text' : 'password'}
           label="Confirm New Password"

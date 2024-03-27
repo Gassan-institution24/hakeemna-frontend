@@ -108,28 +108,32 @@ export default function TableNewEditForm({ licenseMovementData, unitServiceData 
             >
               <RHFSelect name="free_subscription" label="Free Subscription">
                 {freeSubscriptionsData.map((subscription, idx) => (
-                  <MenuItem key={idx} value={subscription._id}>
+                  <MenuItem lang="ar" key={idx} value={subscription._id}>
                     {subscription.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="subscription" label="subscription">
                 {subscriptionsData.map((backage, idx) => (
-                  <MenuItem key={idx} value={backage._id}>
+                  <MenuItem lang="ar" key={idx} value={backage._id}>
                     {backage.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="Payment_method" label="Payment method">
                 {paymentMethodsData.map((method, idx) => (
-                  <MenuItem key={idx} value={method._id}>
+                  <MenuItem lang="ar" key={idx} value={method._id}>
                     {method.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="Payment_frequency" label="Payment Frequency">
-                <MenuItem value="once a week">once a week</MenuItem>
-                <MenuItem value="once a month">once a month</MenuItem>
+                <MenuItem lang="ar" value="once a week">
+                  once a week
+                </MenuItem>
+                <MenuItem lang="ar" value="once a month">
+                  once a month
+                </MenuItem>
               </RHFSelect>
               <DatePicker
                 name="Start_date"

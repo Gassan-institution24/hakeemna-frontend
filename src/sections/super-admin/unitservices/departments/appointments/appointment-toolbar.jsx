@@ -108,7 +108,7 @@ export default function AppointmentsTableToolbar({
             }}
           >
             {options.map((option, idx) => (
-              <MenuItem key={idx} value={option._id}>
+              <MenuItem lang="ar" key={idx} value={option._id}>
                 <Checkbox
                   disableRipple
                   size="small"
@@ -179,6 +179,7 @@ export default function AppointmentsTableToolbar({
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}
@@ -188,6 +189,7 @@ export default function AppointmentsTableToolbar({
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}

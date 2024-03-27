@@ -36,8 +36,8 @@ export default function TableNewEditForm({ currentTable }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    name_arabic: Yup.string().required('Name is required'),
-    name_english: Yup.string().required('Name is required'),
+    name_arabic: Yup.string().required(t('required field')),
+    name_english: Yup.string().required(t('required field')),
   });
 
   const defaultValues = useMemo(
@@ -131,13 +131,11 @@ export default function TableNewEditForm({ currentTable }) {
             }}
           >
             <RHFTextField
-              lang="ar"
               onChange={handleEnglishInputChange}
               name="name_english"
               label={`${t('name english')} *`}
             />
             <RHFTextField
-              lang="ar"
               onChange={handleArabicInputChange}
               name="name_arabic"
               label={`${t('name arabic')} *`}
