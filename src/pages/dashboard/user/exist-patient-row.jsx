@@ -14,7 +14,6 @@ import { useSnackbar } from 'src/components/snackbar';
 // import { paths } from 'src/routes/paths';
 import axios, { endpoints } from 'src/utils/axios';
 
-
 // ----------------------------------------------------------------------
 
 export default function ExistPatientRow({ row, selected }) {
@@ -34,13 +33,9 @@ export default function ExistPatientRow({ row, selected }) {
     type: 'request',
   };
 
-
-
-
   const handleAddFamily = async () => {
     try {
-  
-      await axios.post(endpoints.notifications.all,defaultValues);
+      await axios.post(endpoints.notifications.all, defaultValues);
       enqueueSnackbar(t('Invitation sent successfully'));
     } catch (error) {
       // error emitted in backend
@@ -50,20 +45,14 @@ export default function ExistPatientRow({ row, selected }) {
   };
   const renderPrimary = (
     <TableRow selected={selected}>
-      <TableCell lang="ar" align="center">
-        {identification_num}
-      </TableCell>
-      <TableCell lang="ar" align="center">
-        {first_name}
-      </TableCell>
-      {/* <TableCell lang="ar" align="center">
+      <TableCell align="center">{identification_num}</TableCell>
+      <TableCell align="center">{first_name}</TableCell>
+      {/* <TableCell  align="center">
         {name_arabic}
       </TableCell> */}
 
-      <TableCell lang="ar" align="center">
-        {mobile_num1}
-      </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">{mobile_num1}</TableCell>
+      <TableCell align="center">
         {/* <Button disabled variant="outlined">
           {t('Waiting acceptation')} &nbsp; <Iconify sx={{  display:{md:'block', xs:'none'} }} icon="icon-park:time" />
         </Button> */}
@@ -79,24 +68,24 @@ export default function ExistPatientRow({ row, selected }) {
   );
 
   // return row?.family_members.length === 0 && row?._id !== user?.patient?._id ? (
-    // renderPrimary
+  // renderPrimary
   // ) : (
-    // <EmptyContent
-    //   filled
-    //   title={t('No Data')}
-    //   sx={{
-    //     py: 10,
-    //     width: {
-    //       sm: '250%',
-    //       xs: '200%',
-    //       md: '321.5%',
-    //       lg: '321.5%',
-    //       xl: '321.5%',
-    //     },
-    //   }}
-    // />
+  // <EmptyContent
+  //   filled
+  //   title={t('No Data')}
+  //   sx={{
+  //     py: 10,
+  //     width: {
+  //       sm: '250%',
+  //       xs: '200%',
+  //       md: '321.5%',
+  //       lg: '321.5%',
+  //       xl: '321.5%',
+  //     },
+  //   }}
+  // />
   // );
-  return <> {renderPrimary} </>
+  return <> {renderPrimary} </>;
 }
 
 ExistPatientRow.propTypes = {

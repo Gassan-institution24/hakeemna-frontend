@@ -163,7 +163,7 @@ export default function AppointConfigView() {
       }
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch,  enqueueSnackbar, curLangAr]
+    [dataInPage.length, table, refetch, enqueueSnackbar, curLangAr]
   );
 
   const handleUnCancelRow = useCallback(
@@ -178,7 +178,7 @@ export default function AppointConfigView() {
       }
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, refetch,  enqueueSnackbar, curLangAr]
+    [dataInPage.length, table, refetch, enqueueSnackbar, curLangAr]
   );
 
   const handleCancelRows = useCallback(async () => {
@@ -297,7 +297,6 @@ export default function AppointConfigView() {
                 iconPosition="end"
                 icon={
                   <Label
-                    lang="ar"
                     variant={
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }

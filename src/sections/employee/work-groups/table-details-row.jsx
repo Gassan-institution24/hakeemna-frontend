@@ -39,7 +39,6 @@ export default function TableDetailsRow({ row, selected, onView }) {
             ? onView
             : null
         }
-        lang="ar"
         align="center"
       >
         <Box>{code}</Box>
@@ -65,7 +64,6 @@ export default function TableDetailsRow({ row, selected, onView }) {
             ? onView
             : null
         }
-        lang="ar"
         align="center"
       >
         {curLangAr ? name_arabic : name_english}
@@ -80,7 +78,6 @@ export default function TableDetailsRow({ row, selected, onView }) {
             ? onView
             : null
         }
-        lang="ar"
         align="center"
       >
         {employees
@@ -91,7 +88,7 @@ export default function TableDetailsRow({ row, selected, onView }) {
           )
           .join(', ')}
       </TableCell>
-      <TableCell lang="ar" align="center" />
+      <TableCell align="center" />
     </TableRow>
   );
 

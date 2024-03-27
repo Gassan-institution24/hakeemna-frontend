@@ -169,7 +169,7 @@ export default function NewEditManyForm() {
                   onChange={handleSelectMany}
                 >
                   {categories.map((category, idx) => (
-                    <MenuItem key={idx} value={category._id}>
+                    <MenuItem lang="ar" key={idx} value={category._id}>
                       {category.name_english}
                     </MenuItem>
                   ))}
@@ -185,7 +185,7 @@ export default function NewEditManyForm() {
                   onChange={handleSelectMany}
                 >
                   {tableData.map((symptom, idx) => (
-                    <MenuItem key={idx} value={symptom._id}>
+                    <MenuItem lang="ar" key={idx} value={symptom._id}>
                       {symptom.name_english}
                     </MenuItem>
                   ))}
@@ -223,7 +223,6 @@ export default function NewEditManyForm() {
                       <TextField
                         size="small"
                         variant="filled"
-                        lang="ar"
                         onChange={(e) => handleEnglishInputChange(index, e)}
                         value={one.name_english}
                         name="name_english"
@@ -233,7 +232,6 @@ export default function NewEditManyForm() {
                       <TextField
                         size="small"
                         variant="filled"
-                        lang="ar"
                         onChange={(e) => handleArabicInputChange(index, e)}
                         value={one.name_arabic}
                         name="name_arabic"
@@ -250,7 +248,7 @@ export default function NewEditManyForm() {
                         name="category"
                       >
                         {categories.map((category, idx) => (
-                          <MenuItem key={idx} value={category._id}>
+                          <MenuItem lang="ar" key={idx} value={category._id}>
                             {category.name_english}
                           </MenuItem>
                         ))}
@@ -282,7 +280,7 @@ export default function NewEditManyForm() {
                         )}
                       >
                         {tableData.map((symptom, idx) => (
-                          <MenuItem key={idx} value={symptom._id}>
+                          <MenuItem lang="ar" key={idx} value={symptom._id}>
                             {/* <Checkbox
                                   checked={one?.symptoms?.includes(symptom._id)}
                                   size="small"
@@ -297,7 +295,6 @@ export default function NewEditManyForm() {
                       <TextField
                         size="small"
                         variant="filled"
-                        lang="ar"
                         onChange={(e) => handleEnglishInputChange(index, e)}
                         value={one.description}
                         name="description"
@@ -307,7 +304,6 @@ export default function NewEditManyForm() {
                       <TextField
                         size="small"
                         variant="filled"
-                        lang="ar"
                         onChange={(e) => handleArabicInputChange(index, e)}
                         value={one.description_arabic}
                         name="description_arabic"

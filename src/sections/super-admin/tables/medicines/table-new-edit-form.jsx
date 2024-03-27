@@ -212,7 +212,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
             >
               <RHFSelect name="country" label="country">
                 {countriesData.map((country, idx) => (
-                  <MenuItem key={idx} value={country._id}>
+                  <MenuItem lang="ar" key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
@@ -220,7 +220,7 @@ export default function CountriesNewEditForm({ currentSelected }) {
 
               <RHFSelect name="family" label="family">
                 {families.map((family, idx) => (
-                  <MenuItem key={idx} value={family._id}>
+                  <MenuItem lang="ar" key={idx} value={family._id}>
                     {family.name_english}
                   </MenuItem>
                 ))}

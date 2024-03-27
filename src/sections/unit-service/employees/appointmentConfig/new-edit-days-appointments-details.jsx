@@ -98,16 +98,11 @@ export default function NewEditDayAppointmentsDetails({
   };
   return (
     // <Dialog maxWidth="sm" open={open}>
-    <Collapse
-      in={open}
-      // timeout="auto"
-      // unmountOnExit
-      sx={{ bgcolor: 'background.neutral' }}
-    >
+    <Collapse in={open} timeout="auto" unmountOnExit sx={{ bgcolor: 'background.neutral' }}>
       <Box sx={{ px: 2, pb: 0 }}>
         {values.days_details[ParentIndex].appointments &&
           values.days_details[ParentIndex].appointments.length > 0 && (
-            <Typography variant="p" lang="ar" sx={{ color: 'text.disabled', mb: 3, fontSize: 14 }}>
+            <Typography variant="p" sx={{ color: 'text.disabled', mb: 3, fontSize: 14 }}>
               {t('appointments')}:
             </Typography>
           )}
@@ -134,7 +129,7 @@ export default function NewEditDayAppointmentsDetails({
                   label={`${t('appointment type')} *`}
                 >
                   {appointmenttypesData?.map((option, idx) => (
-                    <MenuItem value={option._id}>
+                    <MenuItem lang="ar" value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -145,7 +140,6 @@ export default function NewEditDayAppointmentsDetails({
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <MobileTimePicker
-                      lang="ar"
                       minutesStep="5"
                       label={t('start time')}
                       value={myunitTime(
@@ -189,7 +183,7 @@ export default function NewEditDayAppointmentsDetails({
                           const selected = field?.value?.includes(option._id);
 
                           return (
-                            <MenuItem key={idx} value={option._id}>
+                            <MenuItem lang="ar" key={idx} value={option._id}>
                               <Checkbox size="small" disableRipple checked={selected} />
 
                               {curLangAr ? option?.name_arabic : option?.name_english}
@@ -206,14 +200,10 @@ export default function NewEditDayAppointmentsDetails({
                   size="small"
                   InputLabelProps={{ shrink: true }}
                   name={`days_details[${ParentIndex}].appointments[${index}].online_available`}
-                  label={
-                    <Typography lang="ar" sx={{ fontSize: 12 }}>
-                      {t('online avaliable')}
-                    </Typography>
-                  }
+                  label={<Typography sx={{ fontSize: 12 }}>{t('online avaliable')}</Typography>}
                 />
                 {/* <RHFTextField
-              lang="ar"
+              
                   size="small"
                   name={`days_details[${ParentIndex}].appointments[${index}].price`}
                   label="Price"

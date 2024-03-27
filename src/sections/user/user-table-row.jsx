@@ -93,6 +93,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             confirm.onTrue();
             popover.onClose();
@@ -104,6 +105,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             onEditRow();
             popover.onClose();

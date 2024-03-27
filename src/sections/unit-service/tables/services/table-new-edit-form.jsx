@@ -45,11 +45,11 @@ export default function TableNewEditForm({ currentTable }) {
   const { t } = useTranslate();
 
   const NewUserSchema = Yup.object().shape({
-    name_arabic: Yup.string().required('Name is required'),
-    name_english: Yup.string().required('Name is required'),
+    name_arabic: Yup.string().required(t('required field')),
+    name_english: Yup.string().required(t('required field')),
     work_shift: Yup.string().nullable(),
-    Measurement_type: Yup.string().required('measurment type is required'),
-    Price_per_unit: Yup.string().required('price is required'),
+    Measurement_type: Yup.string().required(t('required field')),
+    Price_per_unit: Yup.string().required(t('required field')),
   });
 
   const defaultValues = useMemo(
@@ -145,7 +145,6 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name english"
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label="name arabic"
@@ -153,12 +152,13 @@ export default function TableNewEditForm({ currentTable }) {
 
               <RHFSelect name="work_shift" label="work_shift">
                 {workShiftsData.map((work_shift, idx) => (
-                  <MenuItem key={idx} value={work_shift._id}>
+                  <MenuItem lang="ar" key={idx} value={work_shift._id}>
                     {work_shift.name_english}
                   </MenuItem>
                 ))}
                 <Divider />
                 <MenuItem
+                  lang="ar"
                   sx={{
                     display: 'flex',
                     justifyContent: 'flex-end',
@@ -168,7 +168,7 @@ export default function TableNewEditForm({ currentTable }) {
                   }}
                   onClick={() => handleAddNew(paths.unitservice.tables.workshifts.new)}
                 >
-                  <Typography lang="ar" variant="body2" sx={{ color: 'info.main' }}>
+                  <Typography variant="body2" sx={{ color: 'info.main' }}>
                     {t('Add new')}
                   </Typography>
                   <Iconify icon="material-symbols:new-window-sharp" />
@@ -176,7 +176,7 @@ export default function TableNewEditForm({ currentTable }) {
               </RHFSelect>
               <RHFSelect name="Measurement_type" label="Measurement type">
                 {measurmentTypesData.map((type, idx) => (
-                  <MenuItem key={idx} value={type._id}>
+                  <MenuItem lang="ar" key={idx} value={type._id}>
                     {type.name_english}
                   </MenuItem>
                 ))}

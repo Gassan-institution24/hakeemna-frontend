@@ -71,7 +71,7 @@ export default function CalendarFilters({
       justifyContent="space-between"
       sx={{ py: 2, pr: 1, pl: 2.5 }}
     >
-      <Typography lang="ar" variant="h6" sx={{ flexGrow: 1 }}>
+      <Typography variant="h6" sx={{ flexGrow: 1 }}>
         {t('Filters')}
       </Typography>
 

@@ -118,7 +118,6 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name english"
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label="name arabic"
@@ -126,7 +125,7 @@ export default function TableNewEditForm({ currentTable }) {
 
               <RHFSelect name="department" label="department">
                 {departmentsData.map((department, idx) => (
-                  <MenuItem key={idx} value={department._id}>
+                  <MenuItem lang="ar" key={idx} value={department._id}>
                     {department.name_english}
                   </MenuItem>
                 ))}

@@ -191,6 +191,7 @@ export default function TourItem({ tour, onView, onEdit, onStatusChange }) {
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
             onView(tour._id);
@@ -201,6 +202,7 @@ export default function TourItem({ tour, onView, onEdit, onStatusChange }) {
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
             onEdit(tour._id);
@@ -211,6 +213,7 @@ export default function TourItem({ tour, onView, onEdit, onStatusChange }) {
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
             onStatusChange();

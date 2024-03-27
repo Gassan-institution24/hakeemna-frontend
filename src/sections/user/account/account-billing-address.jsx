@@ -80,7 +80,7 @@ export default function AccountBillingAddress({ addressBook }) {
       </Card>
 
       {/* <CustomPopover open={popover.open} onClose={handleClose}>
-        <MenuItem
+        <MenuItem lang="ar" 
           onClick={() => {
             handleClose();
             console.info('SET AS PRIMARY', addressId);
@@ -90,7 +90,7 @@ export default function AccountBillingAddress({ addressBook }) {
           Set as primary
         </MenuItem>
 
-        <MenuItem
+        <MenuItem lang="ar" 
           onClick={() => {
             handleClose();
             console.info('EDIT', addressId);
@@ -100,7 +100,7 @@ export default function AccountBillingAddress({ addressBook }) {
           Edit
         </MenuItem>
 
-        <MenuItem
+        <MenuItem lang="ar" 
           onClick={() => {
             handleClose();
             console.info('DELETE', addressId);

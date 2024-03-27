@@ -29,7 +29,6 @@ export default function UsersNewEditForm({ currentSelected }) {
 
   const password = useBoolean();
 
-
   const [errorMsg, setErrorMsg] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -118,17 +117,24 @@ export default function UsersNewEditForm({ currentSelected }) {
               }} /// edit
             >
               {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
-              <RHFTextField lang="ar" name="userName" label="username" />
-              <RHFTextField lang="ar" name="email" label="email" />
+              <RHFTextField name="userName" label="username" />
+              <RHFTextField name="email" label="email" />
               <RHFSelect name="role" label="Role">
-                <MenuItem value="admin">admin</MenuItem>
-                <MenuItem value="superadmin">superadmin</MenuItem>
-                <MenuItem value="employee">employee</MenuItem>
-                <MenuItem value="patient">patient</MenuItem>
+                <MenuItem lang="ar" value="admin">
+                  admin
+                </MenuItem>
+                <MenuItem lang="ar" value="superadmin">
+                  superadmin
+                </MenuItem>
+                <MenuItem lang="ar" value="employee">
+                  employee
+                </MenuItem>
+                <MenuItem lang="ar" value="patient">
+                  patient
+                </MenuItem>
               </RHFSelect>
               {!currentSelected && (
                 <RHFTextField
-                  lang="ar"
                   name="password"
                   label="password"
                   type={password.value ? 'text' : 'password'}
@@ -147,7 +153,6 @@ export default function UsersNewEditForm({ currentSelected }) {
               )}
               {!currentSelected && (
                 <RHFTextField
-                  lang="ar"
                   name="confirmPassword"
                   label="confirm password"
                   type={password.value ? 'text' : 'password'}

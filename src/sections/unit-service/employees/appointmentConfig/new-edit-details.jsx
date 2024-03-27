@@ -143,12 +143,13 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             disabled={Boolean(appointmentConfigData)}
           >
             {workShiftsData.map((option, idx) => (
-              <MenuItem key={idx} value={option._id}>
+              <MenuItem lang="ar" key={idx} value={option._id}>
                 {curLangAr ? option?.name_arabic : option?.name_english}
               </MenuItem>
             ))}
             <Divider />
             <MenuItem
+              lang="ar"
               sx={{
                 display: 'flex',
                 justifyContent: 'flex-end',
@@ -158,7 +159,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
               }}
               onClick={() => handleAddNew(paths.unitservice.tables.workshifts.new)}
             >
-              <Typography lang="ar" variant="body2" sx={{ color: 'info.main' }}>
+              <Typography variant="body2" sx={{ color: 'info.main' }}>
                 {t('Add new')}
               </Typography>
               <Iconify icon="material-symbols:new-window-sharp" />
@@ -174,12 +175,13 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
           >
             {workGroupsData &&
               workGroupsData?.map((option, idx) => (
-                <MenuItem key={idx} value={option._id}>
+                <MenuItem lang="ar" key={idx} value={option._id}>
                   {curLangAr ? option?.name_arabic : option?.name_english}
                 </MenuItem>
               ))}
             <Divider />
             <MenuItem
+              lang="ar"
               sx={{
                 display: 'flex',
                 justifyContent: 'flex-end',
@@ -189,7 +191,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
               }}
               onClick={() => handleAddNew(paths.unitservice.tables.workgroups.new)}
             >
-              <Typography lang="ar" variant="body2" sx={{ color: 'info.main' }}>
+              <Typography variant="body2" sx={{ color: 'info.main' }}>
                 {t('Add new')}
               </Typography>
               <Iconify icon="material-symbols:new-window-sharp" />
@@ -201,7 +203,6 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             name="appointment_time"
             label={t('appointment duration time')}
             type="number"
-            lang="ar"
             onBlur={(event) => {
               setAppointTime(event.target.value);
               trigger('appointment_time');
@@ -211,15 +212,12 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Box lang="ar" sx={{ fontSize: '0.8rem' }}>
-                    {t('min')}
-                  </Box>
+                  <Box sx={{ fontSize: '0.8rem' }}>{t('min')}</Box>
                 </InputAdornment>
               ),
             }}
           />
           <RHFTextField
-            lang="ar"
             size="small"
             InputProps={{
               startAdornment: (

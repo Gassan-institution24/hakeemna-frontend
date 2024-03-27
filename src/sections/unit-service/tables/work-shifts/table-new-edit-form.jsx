@@ -36,10 +36,10 @@ export default function TableNewEditForm({ currentTable }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    name_arabic: Yup.string().required('Name is required'),
-    name_english: Yup.string().required('Name is required'),
-    start_time: Yup.date().required('Start time is required'),
-    end_time: Yup.date().required('End time is required'),
+    name_arabic: Yup.string().required(t('required field')),
+    name_english: Yup.string().required(t('required field')),
+    start_time: Yup.date().required(t('required field')),
+    end_time: Yup.date().required(t('required field')),
   });
 
   const defaultValues = useMemo(
@@ -140,13 +140,11 @@ export default function TableNewEditForm({ currentTable }) {
             }}
           >
             <RHFTextField
-              lang="ar"
               onChange={handleEnglishInputChange}
               name="name_english"
               label={`${t('name english')} *`}
             />
             <RHFTextField
-              lang="ar"
               onChange={handleArabicInputChange}
               name="name_arabic"
               label={`${t('name arabic')} *`}
@@ -165,7 +163,6 @@ export default function TableNewEditForm({ currentTable }) {
                 // control={control}
                 render={({ field, fieldState: { error } }) => (
                   <MobileTimePicker
-                    lang="ar"
                     minutesStep="5"
                     label={t('start time')}
                     value={values.start_time ? new Date(values.start_time) : null}
@@ -188,7 +185,6 @@ export default function TableNewEditForm({ currentTable }) {
                 // control={control}
                 render={({ field, fieldState: { error } }) => (
                   <MobileTimePicker
-                    lang="ar"
                     minutesStep="5"
                     label={t('end time')}
                     value={values.end_time ? new Date(values.end_time) : null}

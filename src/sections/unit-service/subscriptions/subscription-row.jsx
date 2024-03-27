@@ -47,9 +47,7 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
 
   const renderPrimary = (
     <TableRow hover>
-      <TableCell lang="ar" align="center">
-        {code}
-      </TableCell>
+      <TableCell align="center">{code}</TableCell>
       <TableCell
         align="center"
         onClick={() => setFilters({ ...filters, name: free_subscription?.name_english })}
@@ -62,9 +60,8 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
       >
         {subscription?.name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">
         <Label
-          lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -73,31 +70,23 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
           {t(status)}
         </Label>
       </TableCell>
-      <TableCell lang="ar" align="center">
-        {fDateTime(Start_date)}
-      </TableCell>
-      <TableCell lang="ar" align="center">
-        {fDateTime(End_date)}
-      </TableCell>
-      <TableCell lang="ar" align="center">
-        {Users_num}
-      </TableCell>
-      <TableCell lang="ar" align="center">
-        {price}
-      </TableCell>
+      <TableCell align="center">{fDateTime(Start_date)}</TableCell>
+      <TableCell align="center">{fDateTime(End_date)}</TableCell>
+      <TableCell align="center">{Users_num}</TableCell>
+      <TableCell align="center">{price}</TableCell>
       {/* <TableCell
         align="center"
         onClick={() => setFilters({ ...filters, name: Payment_method?.name_english })}
       >
         {Payment_method?.name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell  align="center">
         {Payment_frequency}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell  align="center">
         {note}
       </TableCell> */}
-      <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -115,6 +104,7 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             onEditRow();
             popover.onClose();
@@ -123,7 +113,7 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
           <Iconify icon="fluent:edit-32-filled" />
           {t('edit')}
         </MenuItem>
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>

@@ -220,7 +220,7 @@ export default function CalendarView() {
           exit: theme.transitions.duration.shortest - 80,
         }}
       >
-        <DialogTitle lang="ar" sx={{ minHeight: 76 }}>
+        <DialogTitle sx={{ minHeight: 76 }}>
           {openForm && <> {currentEvent?._id ? t('Edit Event') : t('Add Event')}</>}
         </DialogTitle>
 

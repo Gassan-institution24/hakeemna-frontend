@@ -264,7 +264,7 @@ export default function AccountGeneral({ data, refetch }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {countriesData.map((nationality, idx) => (
-                  <MenuItem key={idx} value={nationality._id}>
+                  <MenuItem lang="ar" key={idx} value={nationality._id}>
                     {nationality.name_english}
                   </MenuItem>
                 ))}
@@ -279,7 +279,7 @@ export default function AccountGeneral({ data, refetch }) {
                 // onChange={handleCountryChange}
               >
                 {countriesData.map((country, idx) => (
-                  <MenuItem key={idx} value={country._id}>
+                  <MenuItem lang="ar" key={idx} value={country._id}>
                     {country.name_english}
                   </MenuItem>
                 ))}
@@ -293,7 +293,7 @@ export default function AccountGeneral({ data, refetch }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {tableData.map((city, idx) => (
-                  <MenuItem key={idx} value={city._id}>
+                  <MenuItem lang="ar" key={idx} value={city._id}>
                     {city.name_english}
                   </MenuItem>
                 ))}
@@ -307,7 +307,7 @@ export default function AccountGeneral({ data, refetch }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {SECDATAFORMAP.map((test, idx) => (
-                  <MenuItem value={test} key={idx}>
+                  <MenuItem lang="ar" value={test} key={idx}>
                     {test}
                   </MenuItem>
                 ))}
@@ -321,7 +321,7 @@ export default function AccountGeneral({ data, refetch }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {DATAFORMAP.map((test, idx) => (
-                  <MenuItem value={test} key={idx}>
+                  <MenuItem lang="ar" value={test} key={idx}>
                     {test}
                   </MenuItem>
                 ))}

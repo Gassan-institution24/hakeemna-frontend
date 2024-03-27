@@ -71,6 +71,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRe
       >
         {status === 'read' ? (
           <MenuItem
+            lang="ar"
             onClick={() => {
               onUnread();
               popover.onClose();
@@ -82,6 +83,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRe
           </MenuItem>
         ) : (
           <MenuItem
+            lang="ar"
             onClick={() => {
               onRead();
               popover.onClose();
@@ -93,7 +95,7 @@ export default function FeedbackRow({ row, onEditRow, setFilters, onUnread, onRe
           </MenuItem>
         )}
 
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
         </MenuItem>

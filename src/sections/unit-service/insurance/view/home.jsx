@@ -283,7 +283,7 @@ export default function UnitServicesInsuranceView() {
                 label={tab.label}
                 icon={
                   <Label
-                    lang="ar"
+                    
                     variant={
                       ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
                     }
@@ -394,7 +394,7 @@ export default function UnitServicesInsuranceView() {
           }}
         >
           {filteredInsuranceCos?.map((company, idx) => (
-            <MenuItem key={idx} onClick={() => handleAddRow(company._id)}>
+            <MenuItem lang="ar" key={idx} onClick={() => handleAddRow(company._id)}>
               {/* <Iconify icon="ic:baseline-add" /> */}
               {curLangAr ? company?.name_arabic : company?.name_english}
             </MenuItem>

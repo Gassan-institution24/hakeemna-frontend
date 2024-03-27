@@ -159,6 +159,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
       >
         {}
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
             onView();
@@ -169,6 +170,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
             onEdit();
@@ -179,6 +181,7 @@ export default function AppointmentItem({ appointment, onBook, onView, onEdit, o
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
             onDelete();

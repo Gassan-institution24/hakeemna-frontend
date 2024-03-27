@@ -171,7 +171,7 @@ export default function NewEditManyForm() {
                       onChange={handleSelectMany}
                     >
                       {countriesData.map((country, idx) => (
-                        <MenuItem key={idx} value={country._id}>
+                        <MenuItem lang="ar" key={idx} value={country._id}>
                           {country.name_english}
                         </MenuItem>
                       ))}
@@ -186,7 +186,7 @@ export default function NewEditManyForm() {
                       onChange={handleSelectMany}
                     >
                       {tableData.map((city, idx) => (
-                        <MenuItem key={idx} value={city._id}>
+                        <MenuItem lang="ar" key={idx} value={city._id}>
                           {city.name_english}
                         </MenuItem>
                       ))}
@@ -231,7 +231,7 @@ export default function NewEditManyForm() {
                             name="country"
                           >
                             {countriesData.map((country, idx) => (
-                              <MenuItem key={idx} value={country._id}>
+                              <MenuItem lang="ar" key={idx} value={country._id}>
                                 {country.name_english}
                               </MenuItem>
                             ))}
@@ -249,7 +249,7 @@ export default function NewEditManyForm() {
                             name="city"
                           >
                             {tableData.map((city, idx) => (
-                              <MenuItem key={idx} value={city._id}>
+                              <MenuItem lang="ar" key={idx} value={city._id}>
                                 {city.name_english}
                               </MenuItem>
                             ))}
@@ -260,7 +260,6 @@ export default function NewEditManyForm() {
                           <TextField
                             size="small"
                             variant="filled"
-                            lang="ar"
                             onChange={(e) => handleEnglishInputChange(index, e)}
                             value={one.name_english}
                             name="name_english"
@@ -270,7 +269,6 @@ export default function NewEditManyForm() {
                           <TextField
                             size="small"
                             variant="filled"
-                            lang="ar"
                             onChange={(e) => handleArabicInputChange(index, e)}
                             value={one.name_arabic}
                             name="name_arabic"
@@ -280,7 +278,6 @@ export default function NewEditManyForm() {
                           <TextField
                             size="small"
                             variant="filled"
-                            lang="ar"
                             onChange={(e) => handleEnglishInputChange(index, e)}
                             value={one.description}
                             name="description"
@@ -290,7 +287,6 @@ export default function NewEditManyForm() {
                           <TextField
                             size="small"
                             variant="filled"
-                            lang="ar"
                             onChange={(e) => handleArabicInputChange(index, e)}
                             value={one.description_arabic}
                             name="description_arabic"

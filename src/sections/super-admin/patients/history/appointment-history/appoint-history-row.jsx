@@ -116,6 +116,7 @@ export default function InvoiceTableRow({
       >
         {status === 'available' && (
           <MenuItem
+            lang="ar"
             onClick={() => {
               onCancelRow();
               popover.onClose();
@@ -126,7 +127,7 @@ export default function InvoiceTableRow({
             Cancel
           </MenuItem>
         )}
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
         </MenuItem>

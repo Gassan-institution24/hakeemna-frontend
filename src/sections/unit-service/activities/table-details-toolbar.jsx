@@ -91,6 +91,7 @@ export default function OrderTableToolbar({
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             onPrint();
             popover.onClose();
@@ -101,6 +102,7 @@ export default function OrderTableToolbar({
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             onDownload();
             popover.onClose();
@@ -110,7 +112,7 @@ export default function OrderTableToolbar({
           Import
         </MenuItem>
 
-        {/* <MenuItem
+        {/* <MenuItem lang="ar" 
           onClick={() => {
             onDownload()
             popover.onClose();

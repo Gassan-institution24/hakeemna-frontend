@@ -67,26 +67,26 @@ export default function TableNewEditForm({ currentTable }) {
   const [errorMsg, setErrorMsg] = useState('');
 
   const NewUserSchema = Yup.object().shape({
-    // unit_service: Yup.string().required('Unit Service is required'),
+    // unit_service: Yup.string().required(t('required field')),
     department: Yup.string().nullable(),
-    employee_type: Yup.string().required('Employee Type is required'),
-    email: Yup.string().required('email is required'),
-    name_english: Yup.string().required('First name is required'),
-    name_arabic: Yup.string().required('Middle name is required'),
-    nationality: Yup.string().required('Nationality is required'),
+    employee_type: Yup.string().required(t('required field')),
+    email: Yup.string().required(t('required field')),
+    name_english: Yup.string().required(t('required field')),
+    name_arabic: Yup.string().required(t('required field')),
+    nationality: Yup.string().required(t('required field')),
     address: Yup.string(),
     phone: Yup.string()
-      .required('phone is required')
-      .test('is-valid-phone', 'Invalid phone number', (value) => matchIsValidTel(value)),
+      .required(t('required field'))
+      .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
     speciality: Yup.string().nullable(),
-    gender: Yup.string().required('gender is required'),
+    gender: Yup.string().required(t('required field')),
     birth_date: Yup.string(),
     visibility_US_page: Yup.bool(),
     visibility_online_appointment: Yup.bool(),
-    password: Yup.string().min(8, 'Password must be at least 8 characters'),
+    password: Yup.string().min(8, `${t('must be at least')} 8`),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .min(8, 'Confirm password must be at least 8 characters'),
+      .oneOf([Yup.ref('password'), null], t('Passwords must match'))
+      .min(8, `${t('must be at least')} 8`),
   });
 
   const defaultValues = useMemo(
@@ -189,13 +189,11 @@ export default function TableNewEditForm({ currentTable }) {
               }}
             >
               <RHFTextField
-                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label={`${t('Full name in English')} *`}
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label={`${t('Full name in Arabic')} *`}
@@ -204,7 +202,7 @@ export default function TableNewEditForm({ currentTable }) {
 
               <RHFSelect name="nationality" label={`${t('nationality')} *`}>
                 {countriesData.map((nationality, idx) => (
-                  <MenuItem key={idx} value={nationality._id}>
+                  <MenuItem lang="ar" key={idx} value={nationality._id}>
                     {curLangAr ? nationality.name_arabic : nationality.name_english}
                   </MenuItem>
                 ))}
@@ -229,6 +227,7 @@ export default function TableNewEditForm({ currentTable }) {
                 ))}
                 <Divider />
                 <MenuItem
+                  lang="ar"
                   sx={{
                     display: 'flex',
                     justifyContent: 'flex-end',
@@ -238,7 +237,7 @@ export default function TableNewEditForm({ currentTable }) {
                   }}
                   onClick={() => handleAddNew(paths.unitservice.departments.new)}
                 >
-                  <Typography lang="ar" variant="body2" sx={{ color: 'info.main' }}>
+                  <Typography variant="body2" sx={{ color: 'info.main' }}>
                     {t('Add new')}
                   </Typography>
                   <Iconify icon="material-symbols:new-window-sharp" />
@@ -246,36 +245,36 @@ export default function TableNewEditForm({ currentTable }) {
               </RHFSelect>
               <RHFSelect name="employee_type" label={`${t('employee type')} *`}>
                 {employeeTypesData.map((employee_type, idx) => (
-                  <MenuItem key={idx} value={employee_type._id}>
+                  <MenuItem lang="ar" key={idx} value={employee_type._id}>
                     {curLangAr ? employee_type.name_arabic : employee_type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="speciality" label={`${t('specialty')} *`}>
                 {specialtiesData.map((speciality, idx) => (
-                  <MenuItem key={idx} value={speciality._id}>
+                  <MenuItem lang="ar" key={idx} value={speciality._id}>
                     {curLangAr ? speciality.name_arabic : speciality.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="gender" label={`${t('gender')} *`}>
-                <MenuItem value="male">{t('male')}</MenuItem>
-                <MenuItem value="female">{t('female')}</MenuItem>
+                <MenuItem lang="ar" value="male">
+                  {t('male')}
+                </MenuItem>
+                <MenuItem lang="ar" value="female">
+                  {t('female')}
+                </MenuItem>
               </RHFSelect>
               <RHFCheckbox
                 sx={{ px: 2 }}
                 name="visibility_US_page"
-                label={
-                  <Typography lang="ar" sx={{ fontSize: 12 }}>
-                    {t('visible on online page')}
-                  </Typography>
-                }
+                label={<Typography sx={{ fontSize: 12 }}>{t('visible on online page')}</Typography>}
               />
               <RHFCheckbox
                 sx={{ px: 2 }}
                 name="visibility_online_appointment"
                 label={
-                  <Typography lang="ar" sx={{ fontSize: 12 }}>
+                  <Typography sx={{ fontSize: 12 }}>
                     {t('visible in online appointments')}
                   </Typography>
                 }
@@ -292,14 +291,12 @@ export default function TableNewEditForm({ currentTable }) {
               }}
             >
               <RHFTextField
-                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="address"
                 label={t('address')}
               />
-              <RHFTextField lang="ar" name="email" label={`${t('email')} *`} />
+              <RHFTextField name="email" label={`${t('email')} *`} />
               <RHFTextField
-                lang="ar"
                 name="password"
                 label={`${t('password')} *`}
                 type={password.value ? 'text' : 'password'}
@@ -316,7 +313,6 @@ export default function TableNewEditForm({ currentTable }) {
                 }}
               />
               <RHFTextField
-                lang="ar"
                 name="confirmPassword"
                 label={`${t('confirm password')} *`}
                 type={password.value ? 'text' : 'password'}

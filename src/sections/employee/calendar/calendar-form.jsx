@@ -33,8 +33,10 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
   const { t } = useTranslate();
 
   const EventSchema = Yup.object().shape({
-    title: Yup.string().max(255).required('Title is required'),
-    description: Yup.string().max(5000, 'Description must be at most 5000 characters'),
+    title: Yup.string()
+      .max(255, `${t('must be at most')} 255`)
+      .required(t('required field')),
+    description: Yup.string().max(5000, `${t('must be at most')} 5000`),
     // not required
     // color: Yup.string(),
     allDay: Yup.boolean(),
@@ -106,15 +108,14 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={3} sx={{ px: 3 }}>
-        <RHFTextField lang="ar" name="title" label={t('title')} />
+        <RHFTextField name="title" label={t('title')} />
 
-        <RHFTextField lang="ar" name="description" label={t('description')} multiline rows={3} />
+        <RHFTextField name="description" label={t('description')} multiline rows={3} />
 
-        <RHFSwitch lang="ar" name="allDay" label={t('all day')} />
+        <RHFSwitch name="allDay" label={t('all day')} />
 
         <Controller
           name="start"
-          lang="ar"
           control={control}
           render={({ field }) => (
             <MobileDateTimePicker
@@ -138,7 +139,6 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
         <Controller
           name="end"
-          lang="ar"
           control={control}
           render={({ field }) => (
             <MobileDateTimePicker
@@ -177,7 +177,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
       <DialogActions>
         {!!currentEvent?.id && (
-          <Tooltip lang="ar" title={t('delete event')}>
+          <Tooltip title={t('delete event')}>
             <IconButton onClick={onDelete}>
               <Iconify icon="solar:trash-bin-trash-bold" />
             </IconButton>
@@ -186,12 +186,11 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
         <Box sx={{ flexGrow: 1 }} />
 
-        <Button lang="ar" variant="outlined" color="inherit" onClick={onClose}>
+        <Button variant="outlined" color="inherit" onClick={onClose}>
           {t('cancel')}
         </Button>
 
         <LoadingButton
-          lang="ar"
           type="submit"
           tabIndex={-1}
           variant="contained"

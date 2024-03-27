@@ -90,7 +90,7 @@ export default function InvoiceToolbar({ invoice, currentStatus, statusOptions, 
           }}
         >
           {statusOptions.map((option, idx)  => (
-            <MenuItem key={idx} value={option.value}>
+            <MenuItem lang="ar"  key={idx} value={option.value}>
               {option.label}
             </MenuItem>
           ))}

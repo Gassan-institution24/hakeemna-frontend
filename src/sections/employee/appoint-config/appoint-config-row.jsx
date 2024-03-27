@@ -55,7 +55,7 @@ export default function AppointmentsTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell lang="ar" padding="checkbox">
+        <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
@@ -86,7 +86,6 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell
-          lang="ar"
           onClick={
             checkAcl({
               category: 'work_group',
@@ -108,7 +107,6 @@ export default function AppointmentsTableRow({
           />
         </TableCell>
         <TableCell
-          lang="ar"
           onClick={
             checkAcl({
               category: 'work_group',
@@ -131,7 +129,6 @@ export default function AppointmentsTableRow({
         </TableCell>
 
         <TableCell
-          lang="ar"
           onClick={
             checkAcl({
               category: 'work_group',
@@ -146,7 +143,6 @@ export default function AppointmentsTableRow({
           {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
         </TableCell>
         <TableCell
-          lang="ar"
           onClick={
             checkAcl({
               category: 'work_group',
@@ -161,9 +157,8 @@ export default function AppointmentsTableRow({
           {curLangAr ? work_group?.name_arabic : work_group?.name_english}
         </TableCell>
 
-        <TableCell lang="ar" align="center">
+        <TableCell align="center">
           <Label
-            lang="ar"
             variant="soft"
             color={
               (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -173,7 +168,7 @@ export default function AppointmentsTableRow({
           </Label>
         </TableCell>
 
-        <TableCell lang="ar" align="right" sx={{ px: 1 }}>
+        <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
@@ -192,7 +187,7 @@ export default function AppointmentsTableRow({
             subcategory: 'appointment_configs',
             acl: 'delete',
           }) && (
-            <MenuItem
+            <MenuItem lang="ar" 
               onClick={() => {
                 onCancelRow();
                 popover.onClose();
@@ -209,7 +204,7 @@ export default function AppointmentsTableRow({
             subcategory: 'appointment_configs',
             acl: 'update',
           }) && (
-            <MenuItem
+            <MenuItem lang="ar" 
               onClick={() => {
                 onUnCancelRow();
                 popover.onClose();
@@ -225,12 +220,12 @@ export default function AppointmentsTableRow({
           subcategory: 'appointment_configs',
           acl: 'update',
         }) && (
-          <MenuItem onClick={onViewRow}>
+          <MenuItem lang="ar" onClick={onViewRow}>
             <Iconify icon="solar:eye-bold" />
             {t('view')}
           </MenuItem>
         )}
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>
