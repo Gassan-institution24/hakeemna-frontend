@@ -21,7 +21,7 @@ export default function ServiceUnitAppointmentsPage() {
       </Helmet>
       {/* {loading && <LoadingScreen />} */}
       {/* {!loading && ( */}
-        <UnitServiceAppointemnts unitServiceData={data} />
+      <UnitServiceAppointemnts unitServiceData={data} />
       {/* )} */}
     </>
   );

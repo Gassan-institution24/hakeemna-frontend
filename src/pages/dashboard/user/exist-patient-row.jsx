@@ -36,7 +36,7 @@ export default function ExistPatientRow({ row, selected }) {
 
   const handleAddFamily = async () => {
     // const { enqueueSnackbar } = useSnackbar();
-  
+
     try {
       await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
       enqueueSnackbar(t('Invitation sent successfully'));
@@ -46,7 +46,7 @@ export default function ExistPatientRow({ row, selected }) {
       console.error(error);
     }
   };
-  
+
   const renderPrimary = (
     <TableRow selected={selected}>
       <TableCell align="center">{identification_num}</TableCell>

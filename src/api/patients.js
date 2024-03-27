@@ -111,7 +111,7 @@ export function useFindPatient({ identification_num, email, mobile_num1 }) {
   return { ...memoizedValue, refetch };
 }
 
-export function useFindPatients({ identification_num, mobile_num1, first_name,name_arabic }) {
+export function useFindPatients({ identification_num, mobile_num1, first_name, name_arabic }) {
   const URL = endpoints.patients.findPatient({
     identification_num,
     mobile_num1,

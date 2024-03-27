@@ -9,7 +9,7 @@ export function useGetoldmedicalreports() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      data ,
+      data,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -31,7 +31,7 @@ export function useGetOneoldmedicalreports(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      oldmedicalreports : data,
+      oldmedicalreports: data,
       loading: isLoading,
       error,
       validating: isValidating,
