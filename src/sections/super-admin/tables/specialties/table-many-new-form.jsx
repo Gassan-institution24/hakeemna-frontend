@@ -180,7 +180,6 @@ export default function NewEditManyForm() {
                             <TextField
                               size="small"
                               variant="filled"
-                              lang="ar"
                               onChange={(e) => handleEnglishInputChange(index, e)}
                               value={one.name_english}
                               name="name_english"
@@ -190,7 +189,6 @@ export default function NewEditManyForm() {
                             <TextField
                               size="small"
                               variant="filled"
-                              lang="ar"
                               onChange={(e) => handleArabicInputChange(index, e)}
                               value={one.name_arabic}
                               name="name_arabic"
@@ -200,7 +198,6 @@ export default function NewEditManyForm() {
                             <TextField
                               size="small"
                               variant="filled"
-                              lang="ar"
                               onChange={(e) => handleEnglishInputChange(index, e)}
                               value={one.description}
                               name="description"
@@ -210,7 +207,6 @@ export default function NewEditManyForm() {
                             <TextField
                               size="small"
                               variant="filled"
-                              lang="ar"
                               onChange={(e) => handleArabicInputChange(index, e)}
                               value={one.description_arabic}
                               name="description_arabic"

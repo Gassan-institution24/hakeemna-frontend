@@ -224,6 +224,7 @@ export default function JwtRegisterView() {
     }
   });
   useEffect(() => {
+    setErrorMsg();
     if (Object.keys(errors).length) {
       setErrorMsg(
         Object.keys(errors)
@@ -270,7 +271,6 @@ export default function JwtRegisterView() {
         typography: 'caption',
         // textAlign: 'center',
       }}
-      lang="ar"
     >
       <Checkbox checked={agree} onChange={(e) => setAgree(e.target.checked)} />
       {t('I agree to ')}
@@ -306,7 +306,6 @@ export default function JwtRegisterView() {
       {curLangAr && (
         // <Tooltip placement="top" title="Service unit name in arabic">
         <RHFTextField
-          lang="ar"
           onChange={handleArabicInputChange}
           name="us_name_arabic"
           label={t('Arabic name of service unit')}
@@ -316,7 +315,6 @@ export default function JwtRegisterView() {
       )}
       {/* <Tooltip placement="top" title="Service unit name in english"> */}
       <RHFTextField
-        lang="ar"
         onChange={handleEnglishInputChange}
         name="us_name_english"
         label={t('English name of service unit')}
@@ -326,7 +324,6 @@ export default function JwtRegisterView() {
       {!curLangAr && (
         // <Tooltip placement="top" title="Service unit name in arabic">
         <RHFTextField
-          lang="ar"
           onChange={handleArabicInputChange}
           name="us_name_arabic"
           label={t('Arabic name of service unit')}
@@ -336,7 +333,6 @@ export default function JwtRegisterView() {
       )}
       {/* <Tooltip placement="top" title="Identification number of service unit"> */}
       <RHFTextField
-        lang="ar"
         name="us_identification_num"
         label={t('The national number of the service unit')}
       />
@@ -356,28 +352,23 @@ export default function JwtRegisterView() {
 
       {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
         <Tooltip placement="top" title="email address of service unit">
-          <RHFTextField lang="ar" name="us_email" label={t('email')} />
+          <RHFTextField  name="us_email" label={t('email')} />
         </Tooltip>
       </Stack> */}
       {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}> */}
       {/* <Tooltip placement="top" title="country which service unit placed"> */}
-      <RHFSelect
-        lang="ar"
-        onChange={handleCountryChange}
-        name="us_country"
-        label={t('region ( country )')}
-      >
+      <RHFSelect onChange={handleCountryChange} name="us_country" label={t('region ( country )')}>
         {countriesData.map((country, idx) => (
-          <MenuItem key={idx} value={country._id}>
+          <MenuItem lang="ar" key={idx} value={country._id}>
             {curLangAr ? country.name_arabic : country.name_english}
           </MenuItem>
         ))}
       </RHFSelect>
       {/* </Tooltip> */}
       {/* <Tooltip placement="top" title="city which service unit placed"> */}
-      <RHFSelect lang="ar" name="us_city" label={t('region ( city )')}>
+      <RHFSelect name="us_city" label={t('region ( city )')}>
         {tableData.map((city, idx) => (
-          <MenuItem key={idx} value={city._id}>
+          <MenuItem lang="ar" key={idx} value={city._id}>
             {curLangAr ? city.name_arabic : city.name_english}
           </MenuItem>
         ))}
@@ -387,28 +378,34 @@ export default function JwtRegisterView() {
 
       {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}> */}
       {/* <Tooltip placement="top" title="type of the service unit">
-          <RHFSelect lang="ar" name="US_type" label={t('service unit type')}>
+          <RHFSelect  name="US_type" label={t('service unit type')}>
             {unitserviceTypesData.map((type, idx) => (
-              <MenuItem key={idx} value={type._id}>
+              <MenuItem lang="ar"  key={idx} value={type._id}>
                 {curLangAr ? type.name_arabic : type.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
         </Tooltip> */}
       {/* <Tooltip placement="top" title="unit service speciality">
-          <RHFSelect lang="ar" name="us_speciality" label={t('speciality')}>
+          <RHFSelect  name="us_speciality" label={t('speciality')}>
             {specialtiesData.map((specialty, idx) => (
-              <MenuItem key={idx} value={specialty._id}>
+              <MenuItem lang="ar"  key={idx} value={specialty._id}>
                 {curLangAr ? specialty.name_arabic : specialty.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
         </Tooltip> */}
       {/* <Tooltip placement="top" title="service unit sector type"> */}
-      <RHFSelect lang="ar" name="us_sector_type" label={t('sector type')}>
-        <MenuItem value="public">{t('Public')}</MenuItem>
-        <MenuItem value="private">{t('private')}</MenuItem>
-        <MenuItem value="non profit organization">{t('non profit organization')}</MenuItem>
+      <RHFSelect name="us_sector_type" label={t('sector type')}>
+        <MenuItem lang="ar" value="public">
+          {t('Public')}
+        </MenuItem>
+        <MenuItem lang="ar" value="private">
+          {t('private')}
+        </MenuItem>
+        <MenuItem lang="ar" value="non profit organization">
+          {t('non profit organization')}
+        </MenuItem>
       </RHFSelect>
       {/* </Tooltip> */}
       {/* </Stack> */}
@@ -469,7 +466,6 @@ export default function JwtRegisterView() {
         {curLangAr && (
           // <Tooltip placement="top" title="admin middle name - father name -">
           <RHFTextField
-            lang="ar"
             onChange={handleArabicInputChange}
             name="em_name_arabic"
             label={t('Manager full name in Arabic')}
@@ -479,7 +475,6 @@ export default function JwtRegisterView() {
         )}
         {/* <Tooltip placement="top" title="admin first name"> */}
         <RHFTextField
-          lang="ar"
           onChange={handleEnglishInputChange}
           name="em_name_english"
           label={t('Manager full name in English')}
@@ -489,7 +484,6 @@ export default function JwtRegisterView() {
         {!curLangAr && (
           // <Tooltip placement="top" title="admin middle name - father name -">
           <RHFTextField
-            lang="ar"
             onChange={handleArabicInputChange}
             name="em_name_arabic"
             label={t('Manager full name in Arabic')}
@@ -499,7 +493,7 @@ export default function JwtRegisterView() {
         )}
         {/* <Tooltip placement="top" title="admin family name">
           <RHFTextField
-            lang="ar"
+            
             onChange={handleEnglishInputChange}
             name="em_family_name"
             label={t('family name')}
@@ -507,7 +501,7 @@ export default function JwtRegisterView() {
         </Tooltip> */}
         <RHFSelect name="em_type" label="Employee type">
           {employeeTypesData.map((type, idx) => (
-            <MenuItem key={idx} value={type._id}>
+            <MenuItem lang="ar" key={idx} value={type._id}>
               {type.name_english}
             </MenuItem>
           ))}
@@ -516,9 +510,9 @@ export default function JwtRegisterView() {
           .find((type) => type._id === values.em_type)
           ?.name_english?.toLowerCase() === 'doctor' && (
           // <Tooltip placement="top" title="speciality of admin">
-          <RHFSelect lang="ar" name="em_speciality" label={t('speciality')}>
+          <RHFSelect name="em_speciality" label={t('speciality')}>
             {specialtiesData.map((specialty, idx) => (
-              <MenuItem key={idx} value={specialty._id}>
+              <MenuItem lang="ar" key={idx} value={specialty._id}>
                 {curLangAr ? specialty.name_arabic : specialty.name_english}
               </MenuItem>
             ))}
@@ -536,30 +530,22 @@ export default function JwtRegisterView() {
         }}
       >
         {/* <Tooltip placement="top" title="admin nationality"> */}
-        <RHFSelect lang="ar" name="em_nationality" label={t('nationality')}>
+        <RHFSelect name="em_nationality" label={t('nationality')}>
           {countriesData.map((country, idx) => (
-            <MenuItem key={idx} value={country._id}>
+            <MenuItem lang="ar" key={idx} value={country._id}>
               {curLangAr ? country.name_arabic : country.name_english}
             </MenuItem>
           ))}
         </RHFSelect>
         {/* </Tooltip> */}
         {/* <Tooltip placement="top" title="admin identification number"> */}
-        <RHFTextField
-          lang="ar"
-          name="em_identification_num"
-          label={t('identification number of manager')}
-        />
+        <RHFTextField name="em_identification_num" label={t('identification number of manager')} />
         {/* </Tooltip> */}
         {employeeTypesData
           .find((type) => type._id === values.em_type)
           ?.name_english?.toLowerCase() === 'doctor' && (
           // <Tooltip placement="top" title="admin proffession practice number">
-          <RHFTextField
-            lang="ar"
-            name="em_profrssion_practice_num"
-            label={t('profession practice number')}
-          />
+          <RHFTextField name="em_profrssion_practice_num" label={t('profession practice number')} />
           // </Tooltip>
         )}
         {/* <Tooltip placement="top" title="admin phone number"> */}
@@ -569,7 +555,7 @@ export default function JwtRegisterView() {
             sx={{ px: 2 }}
             name="visibility_US_page"
             label={
-              <Typography lang="ar" sx={{ fontSize: 12 }}>
+              <Typography sx={{ fontSize: 12 }}>
                 {t('visible on service unit online page')}
               </Typography>
             }
@@ -577,11 +563,7 @@ export default function JwtRegisterView() {
           <RHFCheckbox
             sx={{ px: 2 }}
             name="visibility_online_appointment"
-            label={
-              <Typography lang="ar" sx={{ fontSize: 12 }}>
-                {t('visible on online ')}
-              </Typography>
-            }
+            label={<Typography sx={{ fontSize: 12 }}>{t('visible on online ')}</Typography>}
           />
         </div>
       </Box>
@@ -632,7 +614,6 @@ export default function JwtRegisterView() {
       {curLangAr && (
         // <Tooltip placement="top" title="admin middle name - father name -">
         <RHFTextField
-          lang="ar"
           disabled
           // onChange={handleArabicInputChange}
           name="em_name_arabic"
@@ -643,7 +624,6 @@ export default function JwtRegisterView() {
       )}
       {/* <Tooltip placement="top" title="admin first name"> */}
       <RHFTextField
-        lang="ar"
         disabled
         // onChange={handleEnglishInputChange}
         name="em_name_english"
@@ -654,7 +634,6 @@ export default function JwtRegisterView() {
       {!curLangAr && (
         // <Tooltip placement="top" title="admin middle name - father name -">
         <RHFTextField
-          lang="ar"
           disabled
           // onChange={handleArabicInputChange}
           name="em_name_arabic"
@@ -664,11 +643,10 @@ export default function JwtRegisterView() {
         // </Tooltip>
       )}
       {/* <Tooltip placement="top" title="admin email address to sign in"> */}
-      <RHFTextField lang="ar" name="email" label={t('email')} />
+      <RHFTextField name="email" label={t('email')} />
       {/* </Tooltip> */}
       {/* <Tooltip placement="top" title="admin password to sign in"> */}
       <RHFTextField
-        lang="ar"
         name="password"
         label={t('password')}
         type={password.value ? 'text' : 'password'}
@@ -685,7 +663,6 @@ export default function JwtRegisterView() {
       {/* </Tooltip> */}
       {/* <Tooltip placement="top" title="admin confirm password to sign in"> */}
       <RHFTextField
-        lang="ar"
         name="confirmPassword"
         label={t('confirm password')}
         type={password.value ? 'text' : 'password'}
@@ -709,7 +686,6 @@ export default function JwtRegisterView() {
       <LoadingButton
         fullWidth
         disabled={!values.email || !values.password || !values.confirmPassword || !agree}
-        lang="ar"
         color="inherit"
         size="large"
         type="submit"
@@ -739,8 +715,8 @@ export default function JwtRegisterView() {
 <br/>
 <ul>
 <li> <strong> first step: </strong> You should add required information about the service unit itself</li>
-<li> <strong> second step: </strong> You should add required information about you -the manager of the service unit- </li>
-<li> <strong> third step: </strong> You should add information about the login information and service unit subscription </li>
+<li> <strong> second step: </strong> You should add required information about you (the manager of the service unit/ institution), in this step you create a new user account  that has a full access to the data related with your institution in this system.\n This manager account (user) is deigned to have the role of ¨Admin¨ of your institution. This manager could have administrative functions like secratery, healtcare provider like doctor or any other function. </li>
+<li> <strong> third step: </strong> You should add login information for the administrator user (unique email and password); and next select the appropriate free subscription offer for your institution. </li>
 </ul>
 
 <br/>
@@ -781,9 +757,9 @@ export default function JwtRegisterView() {
             <span style={{ display: 'block', padding: 0.75, color: 'green', fontSize: 12 }}>
               Select your service unit type
             </span>
-            <RHFSelect sx={{ pb: 2 }} lang="ar" name="US_type">
+            <RHFSelect sx={{ pb: 2 }} name="US_type">
               {unitserviceTypesData.map((type, idx) => (
-                <MenuItem key={idx} value={type._id}>
+                <MenuItem lang="ar" key={idx} value={type._id}>
                   {curLangAr ? type.name_arabic : type.name_english}
                 </MenuItem>
               ))}

@@ -8,13 +8,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import { Divider, MenuItem, Typography } from '@mui/material';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+
+import { paths } from 'src/routes/paths';
+
+import { useNewScreen } from 'src/hooks/use-new-screen';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -27,6 +31,7 @@ import {
   useGetUSActiveServiceTypes,
 } from 'src/api';
 
+import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFMultiSelect } from 'src/components/hook-form';
 
@@ -41,6 +46,8 @@ export default function BookManually({ onClose, refetch, ...other }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const { handleAddNew } = useNewScreen();
 
   const { appointmenttypesData } = useGetAppointmentTypes();
   const { serviceTypesData } = useGetUSActiveServiceTypes(id);
@@ -97,7 +104,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
   return (
     <Dialog maxWidth="lg" onClose={onClose} {...other}>
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle lang="ar" sx={{ mb: 1 }}>
+        <DialogTitle sx={{ mb: 1 }}>
           {curLangAr ? 'إنشاء موعد طوارئ جديد' : 'New Emergency Appointment'}
         </DialogTitle>
 
@@ -148,7 +155,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
               >
                 <RHFSelect name="appointment_type" label={`${t('appointment type')} *`}>
                   {appointmenttypesData.map((option, index, idx) => (
-                    <MenuItem key={idx} value={option._id}>
+                    <MenuItem lang="ar" key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -160,21 +167,56 @@ export default function BookManually({ onClose, refetch, ...other }) {
                 >
                   {workShiftsData &&
                     workShiftsData.map((option, index, idx) => (
-                      <MenuItem key={idx} value={option._id}>
+                      <MenuItem lang="ar" key={idx} value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
                       </MenuItem>
                     ))}
+                  <Divider />
+                  <MenuItem
+                    lang="ar"
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      gap: 1,
+                      fontWeight: 600,
+                      // color: 'error.main',
+                    }}
+                    onClick={() => handleAddNew(paths.unitservice.tables.workshifts.new)}
+                  >
+                    <Typography variant="body2" sx={{ color: 'info.main' }}>
+                      {t('Add new')}
+                    </Typography>
+                    <Iconify icon="material-symbols:new-window-sharp" />
+                  </MenuItem>
                 </RHFSelect>
                 <RHFSelect name="work_group" label={`${t('work group')} *`}>
                   {workGroupsData.map((option, index, idx) => (
-                    <MenuItem key={idx} value={option._id}>
+                    <MenuItem lang="ar" key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
+                  <Divider />
+                  <MenuItem
+                    lang="ar"
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      gap: 1,
+                      fontWeight: 600,
+                      // color: 'error.main',
+                    }}
+                    onClick={() => handleAddNew(paths.unitservice.tables.workgroups.new)}
+                  >
+                    <Typography variant="body2" sx={{ color: 'info.main' }}>
+                      {t('Add new')}
+                    </Typography>
+                    <Iconify icon="material-symbols:new-window-sharp" />
+                  </MenuItem>
                 </RHFSelect>
                 <RHFMultiSelect
                   checkbox
                   name="service_types"
+                  path={paths.unitservice.tables.services.new}
                   label={t('service types')}
                   options={serviceTypesData}
                 />

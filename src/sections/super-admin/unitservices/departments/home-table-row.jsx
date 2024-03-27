@@ -60,7 +60,7 @@ export default function CountriesTableRow({
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
-      <TableCell lang="ar" padding="checkbox">
+      <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
       <TableCell
@@ -70,7 +70,6 @@ export default function CountriesTableRow({
           // textDecoration: 'underline',
         }}
         onClick={onShow}
-        lang="ar"
         align="center"
       >
         {sequence_number}
@@ -82,14 +81,12 @@ export default function CountriesTableRow({
           // textDecoration: 'underline',
         }}
         onClick={onShow}
-        lang="ar"
         align="center"
       >
         {curLangAr ? name_arabic : name_english}
       </TableCell>
-      <TableCell lang="ar" align="center">
+      <TableCell align="center">
         <Label
-          lang="ar"
           variant="soft"
           color={
             (status === 'active' && 'success') || (status === 'inactive' && 'error') || 'default'
@@ -179,7 +176,7 @@ export default function CountriesTableRow({
       >
         {roomsCount}
       </TableCell> */}
-      <TableCell lang="ar" align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>
@@ -200,6 +197,7 @@ export default function CountriesTableRow({
         {status === 'active'
           ? checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'delete' }) && (
               <MenuItem
+                lang="ar"
                 onClick={() => {
                   onInactivate();
                   // popover.onClose();
@@ -212,6 +210,7 @@ export default function CountriesTableRow({
             )
           : checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
               <MenuItem
+                lang="ar"
                 onClick={() => {
                   onActivate();
                   // popover.onClose();
@@ -224,6 +223,7 @@ export default function CountriesTableRow({
             )}
         {checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'update' }) && (
           <MenuItem
+            lang="ar"
             onClick={() => {
               onEditRow();
               popover.onClose();
@@ -233,7 +233,7 @@ export default function CountriesTableRow({
             {t('edit')}
           </MenuItem>
         )}
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
         </MenuItem>

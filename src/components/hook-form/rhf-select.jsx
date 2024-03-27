@@ -9,9 +9,14 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import { Divider, Typography } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
 
-import { useLocales } from 'src/locales';
+import { useNewScreen } from 'src/hooks/use-new-screen';
+
+import { useLocales, useTranslate } from 'src/locales';
+
+import Iconify from '../iconify';
 
 // ----------------------------------------------------------------------
 
@@ -73,6 +78,7 @@ RHFSelect.propTypes = {
 
 export function RHFMultiSelect({
   name,
+  path,
   chip,
   label,
   options,
@@ -81,10 +87,13 @@ export function RHFMultiSelect({
   helperText,
   ...other
 }) {
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const { control } = useFormContext();
+
+  const { handleAddNew } = useNewScreen();
 
   const renderValues = (selectedIds) => {
     const selectedItems = options.filter((item) => selectedIds?.includes(item._id));
@@ -129,13 +138,32 @@ export function RHFMultiSelect({
               const selected = field?.value?.includes(option._id);
 
               return (
-                <MenuItem key={idx} value={option._id}>
+                <MenuItem lang="ar" key={idx} value={option._id}>
                   {checkbox && <Checkbox size="small" disableRipple checked={selected} />}
 
                   {curLangAr ? option.name_arabic : option.name_english}
                 </MenuItem>
               );
             })}
+            {path && <Divider />}
+            {path && (
+              <MenuItem
+                lang="ar"
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  gap: 1,
+                  fontWeight: 600,
+                  // color: 'error.main',
+                }}
+                onClick={() => handleAddNew(path)}
+              >
+                <Typography variant="body2" sx={{ color: 'info.main' }}>
+                  {t('Add new')}
+                </Typography>
+                <Iconify icon="material-symbols:new-window-sharp" />
+              </MenuItem>
+            )}
           </Select>
 
           {(!!error || helperText) && (
@@ -150,6 +178,7 @@ export function RHFMultiSelect({
 RHFMultiSelect.propTypes = {
   checkbox: PropTypes.bool,
   chip: PropTypes.bool,
+  path: PropTypes.string,
   helperText: PropTypes.object,
   label: PropTypes.string,
   name: PropTypes.string,

@@ -120,25 +120,21 @@ export default function TableNewEditForm({ currentTable }) {
               }}
             >
               <RHFTextField
-                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label={`${t('name english')} *`}
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label={`${t('name arabic')} *`}
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleEnglishInputChange}
                 name="general_info"
                 label={t('general info')}
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleArabicInputChange}
                 name="general_info_arabic"
                 label={t('general info in arabic')}

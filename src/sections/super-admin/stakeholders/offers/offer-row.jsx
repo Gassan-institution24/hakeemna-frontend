@@ -116,6 +116,7 @@ export default function OffersTableRow({
       >
         {status === 'active' ? (
           <MenuItem
+            lang="ar"
             onClick={() => {
               onInactivate();
               popover.onClose();
@@ -127,6 +128,7 @@ export default function OffersTableRow({
           </MenuItem>
         ) : (
           <MenuItem
+            lang="ar"
             onClick={() => {
               onActivate();
               popover.onClose();
@@ -138,6 +140,7 @@ export default function OffersTableRow({
           </MenuItem>
         )}
         <MenuItem
+          lang="ar"
           onClick={() => {
             onView();
             popover.onClose();
@@ -146,7 +149,7 @@ export default function OffersTableRow({
           <Iconify icon="solar:eye-bold" />
           View
         </MenuItem>
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
         </MenuItem>

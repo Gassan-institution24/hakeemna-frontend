@@ -60,11 +60,11 @@ export default function InsuranceRow({ row, onDeleteRow, setFilters, filters }) 
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar"  onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
         </MenuItem>
-        <MenuItem onClick={onDeleteRow} sx={{ color: 'error.main' }}>
+        <MenuItem lang="ar"  onClick={onDeleteRow} sx={{ color: 'error.main' }}>
           <Iconify icon="mi:delete" />
           Delete
         </MenuItem>

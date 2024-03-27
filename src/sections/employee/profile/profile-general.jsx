@@ -30,6 +30,58 @@ import FormProvider, {
 } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
+const languages = [
+  'English',
+  'العربية', // Arabic
+  'Français', // French
+  'Deutsch', // German
+  'Español', // Spanish
+  'Italiano', // Italian
+  '中文', // Chinese (Mandarin)
+  'हिन्दी', // Hindi
+  'Português', // Portuguese
+  'বাংলা', // Bengali
+  'Pусский', // Russian
+  '日本語', // Japanese
+  'Język polski', // Polish
+  'Bahasa Indonesia', // Indonesian
+  'Türkçe', // Turkish
+  '한국어', // Korean
+  'فارسی', // Persian (Farsi)
+  'Tiếng Việt', // Vietnamese
+  'ไทย', // Thai
+  'Nederlands', // Dutch
+  'Svenska', // Swedish
+  'עברית', // Hebrew
+  'Dansk', // Danish
+  'Ελληνικά', // Greek
+  'Suomi', // Finnish
+  'Magyar', // Hungarian
+  'Čeština', // Czech
+  'Filipino', // Filipino (Tagalog)
+  'Română', // Romanian
+  'Bahasa Melayu', // Malay
+  'Українська', // Ukrainian
+  'Kiswahili', // Swahili
+  'ភាសាខ្មែរ', // Khmer (Cambodian)
+  'తెలుగు', // Telugu
+  'Bahasa Jawa', // Javanese
+  'ಕನ್ನಡ', // Kannada
+  'ਪੰਜਾਬੀ', // Punjabi
+  'മലയാളം', // Malayalam
+  'اردو', // Urdu
+  'සිංහල', // Sinhala
+  'ગુજરાતી', // Gujarati
+  'தமிழ்', // Tamil
+  'བོད་སྐད་', // Tibetan
+  'Монгол хэл', // Mongolian
+  'isiZulu', // Zulu
+  'isiXhosa', // Xhosa
+  'Igbo', // Igbo
+  'Hausa', // Hausa
+  'Yorùbá', // Yoruba
+];
+
 export default function AccountGeneral({ employeeData, refetch }) {
   const [phone, setPhone] = useState();
   const [alterPhone, setAlterPhone] = useState();
@@ -46,19 +98,19 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const curLangAr = currentLang.value === 'ar';
 
   const UpdateUserSchema = Yup.object().shape({
-    employee_type: Yup.string().required('Employee type is required.'),
-    email: Yup.string().required('Email is required.'),
-    name_english: Yup.string().required('First name is required.'),
+    employee_type: Yup.string().required(t('required field')),
+    email: Yup.string().required(t('required field')),
+    name_english: Yup.string().required(t('required field')),
     name_arabic: Yup.string(),
-    nationality: Yup.string().required('Nationality is required.'),
-    profrssion_practice_num: Yup.string().required('Profrssion practice number is required.'),
-    identification_num: Yup.string().required('ID number is required.'),
+    nationality: Yup.string().required(t('required field')),
+    profrssion_practice_num: Yup.string().required(t('required field')),
+    identification_num: Yup.string().required(t('required field')),
     tax_num: Yup.string(),
-    phone: Yup.string().required('Phone number is required'),
+    phone: Yup.string().required(t('required field')),
     mobile_num: Yup.string(),
-    speciality: Yup.string().required('speciality'),
-    gender: Yup.string().required('gender'),
-    birth_date: Yup.date().required('birth_date'),
+    speciality: Yup.string().required(t('required field')),
+    gender: Yup.string().required(t('required field')),
+    birth_date: Yup.date().required(t('required field')),
     Bachelor_year_graduation: Yup.number(),
     University_graduation_Bachelor: Yup.string(),
     University_graduation_Specialty: Yup.string(),
@@ -67,7 +119,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
     signature: Yup.mixed().nullable(),
     stamp: Yup.mixed().nullable(),
     picture: Yup.mixed().nullable(),
-    languages: Yup.array().required('languages is required'),
+    languages: Yup.array().required(t('required field')),
   });
 
   const defaultValues = {
@@ -191,21 +243,19 @@ export default function AccountGeneral({ employeeData, refetch }) {
               }}
             >
               <RHFTextField
-                lang="ar"
-                // disabled
+                disabled
                 variant="filled"
                 name="identification_num"
                 label={`${t('ID number')} :`}
               />
               <RHFTextField
-                lang="ar"
-                // disabled
+                disabled
                 variant="filled"
                 name="profrssion_practice_num"
                 label={`${t('profrssion practice number')} :`}
               />
               <RHFTextField
-                lang="ar"
+                disabled
                 type="email"
                 variant="filled"
                 name="email"
@@ -318,12 +368,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField
-                lang="ar"
-                name="name_english"
-                label={`${t('Full name in English')} *`}
-              />
-              <RHFTextField lang="ar" name="name_arabic" label={t('Full name in Arabic')} />
+              <RHFTextField name="name_english" label={`${t('Full name in English')} *`} />
+              <RHFTextField name="name_arabic" label={t('Full name in Arabic')} />
               <RHFSelect
                 label={`${t('nationality')} *`}
                 fullWidth
@@ -332,12 +378,12 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {countriesData.map((country, idx) => (
-                  <MenuItem key={idx} value={country._id}>
+                  <MenuItem lang="ar" key={idx} value={country._id}>
                     {curLangAr ? country.name_arabic : country.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFTextField lang="ar" type="number" name="tax_num" label={t('tax number')} />
+              <RHFTextField type="number" name="tax_num" label={t('tax number')} />
               <Tooltip placement="top" title="Phone number of service unit">
                 <MuiTelInput
                   forceCallingCode
@@ -359,7 +405,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {specialtiesData.map((specialty, idx) => (
-                  <MenuItem value={specialty._id} key={idx}>
+                  <MenuItem lang="ar" value={specialty._id} key={idx}>
                     {curLangAr ? specialty.name_arabic : specialty.name_english}
                   </MenuItem>
                 ))}
@@ -371,8 +417,12 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
-                <MenuItem value="male">{t('male')}</MenuItem>
-                <MenuItem value="female">{t('female')}</MenuItem>
+                <MenuItem lang="ar" value="male">
+                  {t('male')}
+                </MenuItem>
+                <MenuItem lang="ar" value="female">
+                  {t('female')}
+                </MenuItem>
               </RHFSelect>
               <RHFSelect
                 label={`${t('employee type')} *`}
@@ -382,25 +432,22 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {employeeTypesData.map((type, idx) => (
-                  <MenuItem value={type._id} key={idx}>
+                  <MenuItem lang="ar" value={type._id} key={idx}>
                     {curLangAr ? type.name_arabic : type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
 
               <RHFTextField
-                lang="ar"
                 type="number"
                 name="Bachelor_year_graduation"
                 label={t('bachelor year graduation')}
               />
               <RHFTextField
-                lang="ar"
                 name="University_graduation_Bachelor"
                 label={t('university graduation bachelor')}
               />
               <RHFTextField
-                lang="ar"
                 name="University_graduation_Specialty"
                 label={t('university graduation specialty')}
               />
@@ -429,16 +476,15 @@ export default function AccountGeneral({ employeeData, refetch }) {
             <RHFAutocomplete
               sx={{ mt: 3 }}
               name="languages"
-              lang="ar"
               label={`${t('languages')} *`}
               multiple
               disableCloseOnSelect
-              options={[t('arabic'), t('english'), t('frensh'), t('turkish'), t('german')].filter(
+              options={languages.filter(
                 (option) => !values.languages.some((item) => option === item)
               )}
               getOptionLabel={(option) => option}
               renderOption={(props, option, idx) => (
-                <li {...props} lang="ar" key={idx} value={option}>
+                <li {...props} key={idx} value={option}>
                   {option}
                 </li>
               )}
@@ -450,7 +496,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 selected.map((option, index) => (
                   <Chip
                     {...getTagProps({ index })}
-                    lang="ar"
                     key={index}
                     label={option}
                     size="small"
@@ -460,22 +505,8 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 ))
               }
             />
-            <RHFTextField
-              lang="ar"
-              multiline
-              sx={{ mt: 3 }}
-              rows={2}
-              name="address"
-              label={t('address')}
-            />
-            <RHFTextField
-              lang="ar"
-              multiline
-              sx={{ mt: 3 }}
-              rows={3}
-              name="about_me"
-              label={t('about me')}
-            />
+            <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} />
+            <RHFTextField multiline sx={{ mt: 3 }} rows={3} name="about_me" label={t('about me')} />
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>

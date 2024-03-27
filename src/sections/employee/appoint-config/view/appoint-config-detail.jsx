@@ -26,6 +26,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import FormProvider from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import Walktour, { useWalktour } from 'src/components/walktour';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import NewEditDetails from '../new-edit-details';
@@ -48,6 +49,64 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   ).data;
 
+  const walktour = useWalktour({
+    defaultRun: true,
+    showProgress: true,
+    steps: [
+      {
+        target: '#currEMNewEditDetails',
+        title: 'General information',
+        disableBeacon: true,
+        content: (
+          <Typography sx={{ color: 'text.secondary' }}>
+            In this part you will add a start date and end date where this config should start
+            automatically adding appointments, and work shift
+            <br />
+            in addition to work shift and work group you have already created for organisation
+            perposes <br />
+            and appointment duratin time for every day <br />
+            <span style={{ color: 'red' }}>important:</span> remember the configuration frequency
+            refered to when should appointments created (before how many days)
+          </Typography>
+        ),
+      },
+      {
+        target: '#currEMNewEditDaysDetails',
+        title: 'Step 2',
+        disableBeacon: true,
+        content: (
+          <Typography sx={{ color: 'text.secondary' }}>
+            here you can add a detailed day routine for every week day and this data reflect
+            directly to appointments
+            <br />
+            <span style={{ color: 'red' }}>remember:</span> remember to choose am and pm in time
+            pickers
+          </Typography>
+        ),
+      },
+      {
+        target: '#currEMNewEditHolidays',
+        title: 'Step 3',
+        disableBeacon: true,
+        content: (
+          <Typography sx={{ color: 'text.secondary' }}>
+            here you can add holidays for one day only
+          </Typography>
+        ),
+      },
+      {
+        target: '#currEMNewEditLongHolidays',
+        title: 'Step 4',
+        disableBeacon: true,
+        content: (
+          <Typography sx={{ color: 'text.secondary' }}>
+            here you can add holidays for more than one day
+          </Typography>
+        ),
+      },
+    ],
+  });
+
   const [appointTime, setAppointTime] = useState(0);
 
   const [dataToUpdate, setDataToUpdate] = useState([]);
@@ -67,13 +126,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     start_date: Yup.date().nullable(),
     end_date: Yup.date().nullable(),
     appointment_time: Yup.number()
-      .required('Appointment Time is required')
-      .min(5, 'Appointment Time must be at least 5')
-      .max(180, 'Appointment Time must be at most 180'),
+      .required(t('required field'))
+      .min(5, `${t('must be at least')} 5`)
+      .max(180, `${t('must be at most')} 5`),
     config_frequency: Yup.number()
-      .required('Configuration Frequency is required')
-      .min(1, 'must be at least 1')
-      .max(360, 'must be at most 360'),
+      .required(t('required field'))
+      .min(1, `${t('must be at least')} 1`)
+      .max(360, `${t('must be at most')} 360`),
     holidays: Yup.array(),
     long_holidays: Yup.array().of(
       Yup.object().shape({
@@ -89,13 +148,13 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         description: Yup.string().nullable(),
       })
     ),
-    work_group: Yup.string().required('Work Group is required'),
-    work_shift: Yup.string().required('Work Shift is required'),
+    work_group: Yup.string().required(t('required field')),
+    work_shift: Yup.string().required(t('required field')),
     days_details: Yup.array().of(
       Yup.object().shape({
-        day: Yup.string().required('Day is required'),
-        work_start_time: Yup.date().nullable().required('work start time is required'),
-        work_end_time: Yup.date().nullable().required('work end time is required'),
+        day: Yup.string().required(t('required field')),
+        work_start_time: Yup.date().nullable().required(t('required field')),
+        work_end_time: Yup.date().nullable().required(t('required field')),
         appointments: Yup.array(),
         service_types: Yup.array(),
         appointment_type: Yup.string().nullable(),
@@ -254,6 +313,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   });
 
   useEffect(() => {
+    setErrorMsg();
     if (Object.keys(errors).length) {
       setErrorMsg(
         Object.keys(errors)
@@ -311,6 +371,17 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
 
   return (
     <>
+      <Walktour
+        continuous
+        showProgress
+        showSkipButton
+        disableOverlayClose
+        steps={walktour.steps}
+        run={walktour.run}
+        callback={walktour.onCallback}
+        getHelpers={walktour.setHelpers}
+        // scrollDuration={500}
+      />
       <Container maxWidth="lg">
         <CustomBreadcrumbs
           heading={t('appointment configuration')}
@@ -330,13 +401,21 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
                   <div> {errorMsg} </div>
                 </Alert>
               )}
-              <NewEditDetails
-                setAppointTime={setAppointTime}
-                appointmentConfigData={appointmentConfigData}
-              />
-              <NewEditDaysDetails setErrorMsg={setErrorMsg} appointTime={appointTime} />
-              <NewEditHolidays />
-              <NewEditLongHolidays />
+              <div id="currEMNewEditDetails">
+                <NewEditDetails
+                  setAppointTime={setAppointTime}
+                  appointmentConfigData={appointmentConfigData}
+                />
+              </div>
+              <div id="currEMNewEditDaysDetails">
+                <NewEditDaysDetails setErrorMsg={setErrorMsg} appointTime={appointTime} />
+              </div>
+              <div id="currEMNewEditHolidays">
+                <NewEditHolidays />
+              </div>
+              <div id="currEMNewEditLongHolidays">
+                <NewEditLongHolidays />
+              </div>
             </Card>
           )}
 

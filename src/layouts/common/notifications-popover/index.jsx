@@ -21,7 +21,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import {  useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetMyNotifications } from 'src/api';
 
@@ -138,7 +138,7 @@ export default function NotificationsPopover() {
         }}
       >
         <Stack direction="row" alignItems="center" sx={{ py: 2, pl: 2.5, pr: 1, minHeight: 68 }}>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          <Typography lang="ar" variant="h6" sx={{ flexGrow: 1 }}>
             {t('Notifications')}
           </Typography>
           {!!unread.length && (
@@ -161,7 +161,7 @@ export default function NotificationsPopover() {
           <List disablePadding>
             {!loading &&
               allNotifications.map((notification, idx) => (
-                <NotificationItem handleClick={handleClick} key={idx} notification={notification}  />
+                <NotificationItem handleClick={handleClick} key={idx} notification={notification} />
               ))}
           </List>
 
@@ -182,7 +182,7 @@ export default function NotificationsPopover() {
               </Stack>
             </>
           ))} */}
-         
+
           {hasMore && (
             <Box sx={{ p: 1 }}>
               <LoadingButton

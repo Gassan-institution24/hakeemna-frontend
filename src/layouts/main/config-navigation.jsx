@@ -40,5 +40,4 @@ export const navConfig = [
     icon: <Iconify icon="mdi:register" />,
     path: paths?.auth.register,
   },
-
 ];

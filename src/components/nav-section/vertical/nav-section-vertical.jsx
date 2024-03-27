@@ -9,8 +9,7 @@ import NavList from './nav-list';
 
 // ----------------------------------------------------------------------
 
-function NavSectionVertical({ data, slotProps,walktourRun, ...other }) {
-
+function NavSectionVertical({ data, slotProps, walktourRun, ...other }) {
   return (
     <Stack component="nav" id="nav-section-vertical" {...other}>
       {data
@@ -65,7 +64,6 @@ function Group({ subheader, walktourRun, items, slotProps }) {
             disableGutters
             disableSticky
             onClick={handleToggle}
-            lang="ar"
             sx={{
               fontSize: 11,
               cursor: 'pointer',

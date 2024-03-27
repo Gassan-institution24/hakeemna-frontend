@@ -82,6 +82,7 @@ export default function TourDetailsToolbar({
       >
         {publishOptions.map((option, idx) => (
           <MenuItem
+            lang="ar"
             key={idx}
             selected={option.value === publish}
             onClick={() => {

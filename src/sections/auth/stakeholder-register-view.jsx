@@ -194,7 +194,6 @@ export default function JwtRegisterView() {
             label="Name in english"
           />
           <RHFTextField
-            lang="ar"
             onChange={handleArabicInputChange}
             name="name_arabic"
             label="Name in arabic"
@@ -206,14 +205,14 @@ export default function JwtRegisterView() {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
             {countriesData.map((country, idx) => (
-              <MenuItem key={idx} value={country._id}>
+              <MenuItem lang="ar" key={idx} value={country._id}>
                 {country.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect name="city" label="City">
             {tableData.map((city, idx) => (
-              <MenuItem key={idx} value={city._id}>
+              <MenuItem lang="ar" key={idx} value={city._id}>
                 {city.name_english}
               </MenuItem>
             ))}
@@ -222,14 +221,14 @@ export default function JwtRegisterView() {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect name="US_type" label="Unit Service Type">
             {unitserviceTypesData.map((type, idx) => (
-              <MenuItem key={idx} value={type._id}>
+              <MenuItem lang="ar" key={idx} value={type._id}>
                 {type.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect name="speciality" label="Speciality">
             {specialtiesData.map((specialty, idx) => (
-              <MenuItem key={idx} value={specialty._id}>
+              <MenuItem lang="ar" key={idx} value={specialty._id}>
                 {specialty.name_english}
               </MenuItem>
             ))}
@@ -237,9 +236,15 @@ export default function JwtRegisterView() {
         </Stack>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect name="sector_type" label="Sector type">
-            <MenuItem value="public">Public</MenuItem>
-            <MenuItem value="private">private</MenuItem>
-            <MenuItem value="charity">Charity</MenuItem>
+            <MenuItem lang="ar" value="public">
+              Public
+            </MenuItem>
+            <MenuItem lang="ar" value="private">
+              private
+            </MenuItem>
+            <MenuItem lang="ar" value="charity">
+              Charity
+            </MenuItem>
           </RHFSelect>
         </Stack>
 

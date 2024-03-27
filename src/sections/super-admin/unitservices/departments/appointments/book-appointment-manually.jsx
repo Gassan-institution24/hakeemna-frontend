@@ -129,9 +129,14 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
       gender: info.gender || '',
     });
   }
+
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
   return (
     <>
-      <Dialog maxWidth="lg" onClose={onClose} sx={{ width: 'auto' }} {...other}>
+      <Dialog maxWidth="lg" onClose={handleClose} sx={{ width: 'auto' }} {...other}>
         <FormProvider methods={methods} onSubmit={onSubmit}>
           <DialogTitle sx={{ mb: 1 }}> {t('book manually')} </DialogTitle>
           {existPatients?.map((patient, index, idx) => (
@@ -173,18 +178,12 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   sm: 'repeat(2, 1fr)',
                 }}
               >
-                <RHFTextField lang="ar" name="first_name" label={t('first name')} />
-                <RHFTextField lang="ar" name="family_name" label={t('family name')} />
-                <RHFTextField lang="ar" name="email" label={t('email')} />
-                <RHFTextField lang="ar" name="identification_num" label={t('ID number')} />
+                <RHFTextField name="first_name" label={t('first name')} />
+                <RHFTextField name="family_name" label={t('family name')} />
+                <RHFTextField name="email" label={t('email')} />
+                <RHFTextField name="identification_num" label={t('ID number')} />
+                <RHFTextField type="number" name="mobile_num1" label={t('mobile number')} />
                 <RHFTextField
-                  lang="ar"
-                  type="number"
-                  name="mobile_num1"
-                  label={t('mobile number')}
-                />
-                <RHFTextField
-                  lang="ar"
                   type="number"
                   name="mobile_num2"
                   label={t('alternative mobile number')}
@@ -214,7 +213,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   // InputLabelProps={{ shrink: true }}
                 >
                   {countriesData.map((option, index, idx) => (
-                    <MenuItem key={idx} value={option._id}>
+                    <MenuItem lang="ar" key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -226,7 +225,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   // InputLabelProps={{ shrink: true }}
                 >
                   {countriesData.map((option, index, idx) => (
-                    <MenuItem key={idx} value={option._id}>
+                    <MenuItem lang="ar" key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -238,7 +237,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   // InputLabelProps={{ shrink: true }}
                 >
                   {tableData.map((option, index, idx) => (
-                    <MenuItem key={idx} value={option._id}>
+                    <MenuItem lang="ar" key={idx} value={option._id}>
                       {curLangAr ? option?.name_arabic : option?.name_english}
                     </MenuItem>
                   ))}
@@ -248,26 +247,40 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   label={t('marital status')}
                   // InputLabelProps={{ shrink: true }}
                 >
-                  <MenuItem value="single">{t('single')}</MenuItem>
-                  <MenuItem value="married">{t('married')}</MenuItem>
-                  <MenuItem value="widowed">{t('widowed')}</MenuItem>
-                  <MenuItem value="separated">{t('separated')}</MenuItem>
-                  <MenuItem value="divorced">{t('divorced')} </MenuItem>
+                  <MenuItem lang="ar" value="single">
+                    {t('single')}
+                  </MenuItem>
+                  <MenuItem lang="ar" value="married">
+                    {t('married')}
+                  </MenuItem>
+                  <MenuItem lang="ar" value="widowed">
+                    {t('widowed')}
+                  </MenuItem>
+                  <MenuItem lang="ar" value="separated">
+                    {t('separated')}
+                  </MenuItem>
+                  <MenuItem lang="ar" value="divorced">
+                    {t('divorced')}{' '}
+                  </MenuItem>
                 </RHFSelect>
                 <RHFSelect
                   name="gender"
                   label={t('gender')}
                   // InputLabelProps={{ shrink: true }}
                 >
-                  <MenuItem value="male">{t('male')}</MenuItem>
-                  <MenuItem value="female">{t('female')}</MenuItem>
+                  <MenuItem lang="ar" value="male">
+                    {t('male')}
+                  </MenuItem>
+                  <MenuItem lang="ar" value="female">
+                    {t('female')}
+                  </MenuItem>
                 </RHFSelect>
               </Box>
             </Stack>
           </DialogContent>
 
           <DialogActions>
-            <Button color="inherit" variant="outlined" onClick={onClose}>
+            <Button color="inherit" variant="outlined" onClick={handleClose}>
               {t('cancel')}
             </Button>
 

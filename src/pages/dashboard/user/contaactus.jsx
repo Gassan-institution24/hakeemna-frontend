@@ -7,10 +7,7 @@ import { UserEditView } from 'src/sections/user/view';
 // ----------------------------------------------------------------------
 
 export default function UserEditPage() {
-
   const { t } = useTranslate();
-
-
 
   return (
     <>
@@ -19,7 +16,7 @@ export default function UserEditPage() {
         <meta name="description" content="meta" />
       </Helmet>
 
-      <UserEditView/>
+      <UserEditView />
     </>
   );
 }

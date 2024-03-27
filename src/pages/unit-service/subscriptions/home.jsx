@@ -10,8 +10,7 @@ import SubscriptionsHomeView from 'src/sections/unit-service/subscriptions/view/
 export default function SubscriptionsHomePage() {
   const { user } = useAuthContext();
   const serviceUnitName =
-    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
-      ?.nam;
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service?.nam;
   return (
     <ACLGuard category="unit_service" subcategory="unit_service_info" acl="read">
       <Helmet>

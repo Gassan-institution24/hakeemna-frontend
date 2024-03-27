@@ -174,6 +174,7 @@ export default function MovementTableRow({
         sx={{ width: 160 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             onViewRow();
             popover.onClose();
@@ -184,6 +185,7 @@ export default function MovementTableRow({
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             onEditRow();
             popover.onClose();
@@ -192,14 +194,14 @@ export default function MovementTableRow({
           <Iconify icon="solar:pen-bold" />
           Edit
         </MenuItem>
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
         </MenuItem>
 
         {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
         {/* 
-        <MenuItem
+        <MenuItem lang="ar" 
           onClick={() => {
             confirm.onTrue();
             popover.onClose();

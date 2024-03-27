@@ -428,7 +428,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { name,  startDate, endDate } = filters;
+  const { name, startDate, endDate } = filters;
 
   const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 

@@ -81,7 +81,7 @@ export default function TablesTableToolbar({
           }}
         >
           {rateOptions.map((option, idx) => (
-            <MenuItem key={idx} value={option}>
+            <MenuItem lang="ar" key={idx} value={option}>
               <Checkbox disableRipple size="small" checked={filters.rate.includes(option)} />
               <Rating size="small" readOnly value={option} precision={0.1} max={5} />
             </MenuItem>

@@ -57,7 +57,7 @@ const NavItem = forwardRef(
         )}
 
         {isBigMdScreen && title && (
-          <Box component="span" className="label" lang="ar">
+          <Box component="span" className="label">
             {title}
           </Box>
         )}

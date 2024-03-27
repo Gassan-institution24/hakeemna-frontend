@@ -77,7 +77,6 @@ export default function NewEditHolidays() {
                 sx={{ width: { xs: '100%', md: 'auto' } }}
               >
                 <RHFTextField
-                  lang="ar"
                   size="small"
                   name={`holidays[${index}].description`}
                   label={t('description')}

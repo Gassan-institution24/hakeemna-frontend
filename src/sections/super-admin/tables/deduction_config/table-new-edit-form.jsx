@@ -146,7 +146,6 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name english"
               />
               <RHFTextField
-                lang="ar"
                 onChange={handleArabicInputChange}
                 name="name_arabic"
                 label="name arabic"
@@ -154,28 +153,32 @@ export default function TableNewEditForm({ currentTable }) {
 
               <RHFSelect name="unit_service" label="Unit Service">
                 {unitservicesData.map((unit_service, idx) => (
-                  <MenuItem key={idx} value={unit_service._id}>
+                  <MenuItem lang="ar" key={idx} value={unit_service._id}>
                     {unit_service.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="Employee" label="Employee">
                 {employeesData.map((Employee, idx) => (
-                  <MenuItem key={idx} value={Employee._id}>
+                  <MenuItem lang="ar" key={idx} value={Employee._id}>
                     {Employee.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="Service" label="Service">
                 {serviceTypesData.map((type, idx) => (
-                  <MenuItem key={idx} value={type._id}>
+                  <MenuItem lang="ar" key={idx} value={type._id}>
                     {type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
               <RHFSelect name="type" label="Type">
-                <MenuItem value="from income">from income </MenuItem>
-                <MenuItem value="from sales">from sales </MenuItem>
+                <MenuItem lang="ar" value="from income">
+                  from income{' '}
+                </MenuItem>
+                <MenuItem lang="ar" value="from sales">
+                  from sales{' '}
+                </MenuItem>
               </RHFSelect>
               <RHFTextField name="Place_of_service" label="Place of service" />
               <RHFTextField type="number" name="percentage" label="percentage %" />

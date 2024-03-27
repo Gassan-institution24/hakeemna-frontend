@@ -153,6 +153,7 @@ export default function CountriesTableRow({
       >
         {status === 'active' ? (
           <MenuItem
+            lang="ar"
             onClick={() => {
               onInactivate();
               // popover.onClose();
@@ -164,6 +165,7 @@ export default function CountriesTableRow({
           </MenuItem>
         ) : (
           <MenuItem
+            lang="ar"
             onClick={() => {
               onActivate();
               // popover.onClose();
@@ -174,7 +176,7 @@ export default function CountriesTableRow({
             activate
           </MenuItem>
         )}
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
         </MenuItem>

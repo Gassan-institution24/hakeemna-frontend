@@ -100,8 +100,8 @@ export default function ServiceUnitPopover() {
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 160 }}>
         {user?.employee?.employee_engagements?.map((option, index, idx) => (
           <MenuItem
-            key={idx}
             lang="ar"
+            key={idx}
             selected={option?.unit_service?._id === selected?.unit_service?._id}
             onClick={() => {
               setSelectedIndex(index);
@@ -113,7 +113,6 @@ export default function ServiceUnitPopover() {
         ))}
       </CustomPopover>
       <ConfirmDialog
-        lang="ar"
         open={confirm.value || loading.value}
         onClose={confirm.onFalse}
         title={t('confirm password')}

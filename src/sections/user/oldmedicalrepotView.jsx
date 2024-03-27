@@ -40,9 +40,9 @@ export default function OldmedicalrepotView() {
         <Typography sx={{ fontWeight: 600, p: 2 }}>
           {t('Specialty')}: &nbsp; &nbsp;
           <span style={{ color: 'gray', fontWeight: 400 }}>
-            {
-              curLangAr ? oldmedicalreports?.specialty.name_arabic : oldmedicalreports?.specialty.name_english
-            }
+            {curLangAr
+              ? oldmedicalreports?.specialty.name_arabic
+              : oldmedicalreports?.specialty.name_english}
           </span>
         </Typography>
         <Typography sx={{ fontWeight: 600, p: 2 }}>
@@ -56,7 +56,8 @@ export default function OldmedicalrepotView() {
           </Typography>
         )}
         <Button onClick={() => handleViewClick()} variant="outlined" sx={{ mt: 2 }}>
-          <Iconify icon="icon-park:back" />&nbsp; {t('Back')}
+          <Iconify icon="icon-park:back" />
+          &nbsp; {t('Back')}
         </Button>
       </Box>
       <Box sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}>

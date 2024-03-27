@@ -168,10 +168,10 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
         }
       }
       setValue(`days_details[${index}].appointments`, results);
-      setShowAppointments({
-        ...showAppointments,
-        [index]: true,
-      });
+      // setShowAppointments({
+      //   ...showAppointments,
+      //   [index]: true,
+      // });
     } catch (e) {
       console.error(e);
       setErrorMsg(e.message);
@@ -291,7 +291,9 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                           )
                       )
                       .map((option, idx) => (
-                        <MenuItem value={option.value}>{option.label}</MenuItem>
+                        <MenuItem lang="ar" value={option.value}>
+                          {option.label}
+                        </MenuItem>
                       ))}
                   </RHFSelect>
                   <RHFSelect
@@ -305,7 +307,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     label={`${t('appointment type')} *`}
                   >
                     {appointmenttypesData?.map((option, idx) => (
-                      <MenuItem value={option._id}>
+                      <MenuItem lang="ar" value={option._id}>
                         {curLangAr ? option?.name_arabic : option?.name_english}
                       </MenuItem>
                     ))}
@@ -336,7 +338,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                             const selected = field?.value?.includes(option._id);
 
                             return (
-                              <MenuItem key={idx} value={option._id}>
+                              <MenuItem lang="ar" key={idx} value={option._id}>
                                 <Checkbox size="small" disableRipple checked={selected} />
 
                                 {curLangAr ? option?.name_arabic : option?.name_english}
@@ -345,6 +347,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                           })}
                           <Divider />
                           <MenuItem
+                            lang="ar"
                             sx={{
                               display: 'flex',
                               justifyContent: 'flex-end',
@@ -354,7 +357,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                             }}
                             onClick={() => handleAddNew(paths.unitservice.tables.services.new)}
                           >
-                            <Typography lang="ar" variant="body2" sx={{ color: 'info.main' }}>
+                            <Typography variant="body2" sx={{ color: 'info.main' }}>
                               {t('Add new')}
                             </Typography>
                             <Iconify icon="material-symbols:new-window-sharp" />
@@ -368,7 +371,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     )}
                   />
                   <RHFTextField
-                    lang="ar"
                     disabled
                     size="small"
                     name={`days_details[${index}].appointment_number`}
@@ -387,7 +389,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
-                        lang="ar"
                         minutesStep="5"
                         label={t('work start time')}
                         value={myunitTime(values.days_details[index]?.work_start_time)}
@@ -418,7 +419,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
-                        lang="ar"
                         minutesStep="5"
                         label={t('work end time')}
                         value={myunitTime(values.days_details[index]?.work_end_time)}
@@ -448,7 +448,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
-                        lang="ar"
                         minutesStep="5"
                         label={t('break start time')}
                         value={myunitTime(values.days_details[index]?.break_start_time)}
@@ -479,7 +478,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
-                        lang="ar"
                         minutesStep="5"
                         label={t('break end time')}
                         value={myunitTime(values.days_details[index]?.break_end_time)}
@@ -520,7 +518,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     size="small"
                     onClick={() =>
                       setShowAppointments({
-                        ...showAppointments,
                         [index]: !showAppointments[index],
                       })
                     }
@@ -541,6 +538,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                 appointmenttypesData={appointmenttypesData}
                 open={showAppointments[index]}
                 ParentIndex={index}
+                unmountOnExit
               />
             </Stack>
           ))}

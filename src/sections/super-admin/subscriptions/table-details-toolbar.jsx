@@ -86,7 +86,7 @@ export default function OrderTableToolbar({
             }}
           >
             {FeesOptions.map((option, idx) => (
-              <MenuItem key={idx} value={option}>
+              <MenuItem lang="ar" key={idx} value={option}>
                 <Checkbox disableRipple size="small" checked={filters.fees.includes(option)} />
                 {option}
               </MenuItem>
@@ -132,6 +132,7 @@ export default function OrderTableToolbar({
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             onPrint();
             popover.onClose();
@@ -142,6 +143,7 @@ export default function OrderTableToolbar({
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             onDownload();
             popover.onClose();
@@ -151,7 +153,7 @@ export default function OrderTableToolbar({
           Import
         </MenuItem>
 
-        {/* <MenuItem
+        {/* <MenuItem lang="ar" 
           onClick={() => {
             onDownload()
             popover.onClose();

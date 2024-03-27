@@ -182,7 +182,7 @@ export default function NewEditManyForm() {
                   onChange={handleSelectMany}
                 >
                   {countriesData.map((country, idx) => (
-                    <MenuItem key={idx} value={country._id}>
+                    <MenuItem lang="ar" key={idx} value={country._id}>
                       {country.name_english}
                     </MenuItem>
                   ))}
@@ -197,7 +197,7 @@ export default function NewEditManyForm() {
                   onChange={handleSelectMany}
                 >
                   {families.map((family, idx) => (
-                    <MenuItem key={idx} value={family._id}>
+                    <MenuItem lang="ar" key={idx} value={family._id}>
                       {family.name_english}
                     </MenuItem>
                   ))}
@@ -242,7 +242,7 @@ export default function NewEditManyForm() {
                         name="country"
                       >
                         {countriesData.map((country, idx) => (
-                          <MenuItem key={idx} value={country._id}>
+                          <MenuItem lang="ar" key={idx} value={country._id}>
                             {country.name_english}
                           </MenuItem>
                         ))}
@@ -260,7 +260,7 @@ export default function NewEditManyForm() {
                         name="family"
                       >
                         {families.map((family, idx) => (
-                          <MenuItem key={idx} value={family._id}>
+                          <MenuItem lang="ar" key={idx} value={family._id}>
                             {family.name_english}
                           </MenuItem>
                         ))}
@@ -271,7 +271,6 @@ export default function NewEditManyForm() {
                       <TextField
                         size="small"
                         variant="filled"
-                        lang="ar"
                         onChange={(e) => handleEnglishInputChange(index, e)}
                         value={one.trade_name}
                         name="trade_name"
@@ -281,7 +280,6 @@ export default function NewEditManyForm() {
                       <TextField
                         size="small"
                         variant="filled"
-                        lang="ar"
                         onChange={(e) => handleEnglishInputChange(index, e)}
                         value={one.scientific_name}
                         name="scientific_name"
@@ -339,7 +337,7 @@ export default function NewEditManyForm() {
                         )}
                       >
                         {tableData.map((symptom, idx) => (
-                          <MenuItem key={idx} value={symptom._id}>
+                          <MenuItem lang="ar" key={idx} value={symptom._id}>
                             {/* <Checkbox
                                   checked={one?.symptoms?.includes(symptom._id)}
                                   size="small"
@@ -355,7 +353,6 @@ export default function NewEditManyForm() {
                         type="number"
                         size="small"
                         variant="filled"
-                        lang="ar"
                         onChange={(e) => handleArabicInputChange(index, e)}
                         value={one.price}
                         name="price"
@@ -366,7 +363,6 @@ export default function NewEditManyForm() {
                         type="number"
                         size="small"
                         variant="filled"
-                        lang="ar"
                         onChange={(e) => handleArabicInputChange(index, e)}
                         value={one.ATCCODE}
                         name="ATCCODE"
@@ -377,7 +373,6 @@ export default function NewEditManyForm() {
                         type="number"
                         size="small"
                         variant="filled"
-                        lang="ar"
                         onChange={(e) => handleArabicInputChange(index, e)}
                         value={one.barcode}
                         name="barcode"
@@ -388,7 +383,6 @@ export default function NewEditManyForm() {
                         type="number"
                         size="small"
                         variant="filled"
-                        lang="ar"
                         onChange={(e) => handleArabicInputChange(index, e)}
                         value={one.packaging}
                         name="packaging"

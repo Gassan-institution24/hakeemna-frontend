@@ -159,7 +159,7 @@ export default function CitiesNewEditForm() {
                       onChange={handleSelectMany}
                     >
                       {countriesData.map((country, idx) => (
-                        <MenuItem key={idx} value={country._id}>
+                        <MenuItem lang="ar" key={idx} value={country._id}>
                           {country.name_english}
                         </MenuItem>
                       ))}
@@ -204,7 +204,7 @@ export default function CitiesNewEditForm() {
                             name="country"
                           >
                             {countriesData.map((country, idx) => (
-                              <MenuItem key={idx} value={country._id}>
+                              <MenuItem lang="ar" key={idx} value={country._id}>
                                 {country.name_english}
                               </MenuItem>
                             ))}
@@ -215,7 +215,6 @@ export default function CitiesNewEditForm() {
                           <TextField
                             size="small"
                             variant="filled"
-                            lang="ar"
                             onChange={(e) => handleEnglishInputChange(index, e)}
                             value={city.name_english}
                             name="name_english"
@@ -226,7 +225,6 @@ export default function CitiesNewEditForm() {
                           <TextField
                             size="small"
                             variant="filled"
-                            lang="ar"
                             onChange={(e) => handleArabicInputChange(index, e)}
                             value={city.name_arabic}
                             name="name_arabic"
@@ -236,7 +234,6 @@ export default function CitiesNewEditForm() {
                           <TextField
                             size="small"
                             variant="filled"
-                            lang="ar"
                             onChange={(e) => handleEnglishInputChange(index, e)}
                             value={city.state}
                             name="state"

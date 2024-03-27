@@ -6,7 +6,7 @@ import { Card, Typography } from '@mui/material';
 
 import { fMonth } from 'src/utils/format-time';
 
-import {  useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 import { useGetPatientInsurance } from 'src/api';
 
 import Iconify from 'src/components/iconify';
@@ -35,7 +35,6 @@ export default function InsurancePage({ user }) {
           >
             <Iconify sx={{ color: '#64a3aa' }} icon="akar-icons:health" /> &nbsp;&nbsp;
             <Typography sx={{ color: '#64a3aa', fontWeight: 600, fontSize: 16 }}>
-             
               {t('Insurance Card')}
             </Typography>
           </Box>

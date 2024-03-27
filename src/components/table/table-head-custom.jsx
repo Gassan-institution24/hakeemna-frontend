@@ -52,7 +52,6 @@ export default function TableHeadCustom({
             align={headCell.align || 'center'}
             sortDirection={orderBy === headCell.id ? order : false}
             sx={{ width: headCell.width, minWidth: headCell.minWidth }}
-            lang="ar"
           >
             {onSort ? (
               <TableSortLabel
@@ -60,7 +59,7 @@ export default function TableHeadCustom({
                 active={orderBy === headCell.id}
                 direction={orderBy === headCell.id ? order : 'asc'}
                 onClick={() => onSort(headCell.id)}
-                lang="ar"
+                sx={{ textTransform: 'capitalize' }}
               >
                 {headCell.label}
 

@@ -152,7 +152,7 @@ export default function Insuranceinfo() {
               sx={{ mb: 1.5 }}
             >
               {insuranseCosData.map((test, idx) => (
-                <MenuItem value={test?._id} key={idx} sx={{ mb: 1 }}>
+                <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
                   {test?.name_english}
                 </MenuItem>
               ))}
@@ -165,7 +165,7 @@ export default function Insuranceinfo() {
               sx={{ mb: 1.5 }}
             >
               {insuranseTypesData.map((test, idx) => (
-                <MenuItem value={test?._id} key={idx} sx={{ mb: 1 }}>
+                <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
                   {test?.Coverage_name}
                 </MenuItem>
               ))}
@@ -195,7 +195,7 @@ export default function Insuranceinfo() {
             sx={{
               color: 'text.secondary',
               mt: { md: -2.5, xs: -2.3 },
-              ml: curLangAr ? { md:-30, xs: -5 } : { md: -21, xs: 4 },
+              ml: curLangAr ? { md: -30, xs: -5 } : { md: -21, xs: 4 },
               typography: 'caption',
               textAlign: 'center',
               fontSize: { md: 12, xs: 10 },
@@ -227,7 +227,7 @@ export default function Insuranceinfo() {
           </DialogActions>
         </FormProvider>
       </Dialog>{' '}
-      <InsurancePage user = {user?.patient?._id} />
+      <InsurancePage user={user?.patient?._id} />
     </Container>
   );
 }

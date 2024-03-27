@@ -96,6 +96,7 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             onEditRow();
             popover.onClose();
@@ -104,7 +105,7 @@ export default function AccountingRow({ row, onEditRow, setFilters, filters }) {
           <Iconify icon="fluent:edit-32-filled" />
           Edit
         </MenuItem>
-        <MenuItem onClick={DDL.onOpen}>
+        <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL
         </MenuItem>

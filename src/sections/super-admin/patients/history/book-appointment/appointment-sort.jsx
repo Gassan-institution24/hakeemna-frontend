@@ -41,6 +41,7 @@ export default function JobSort({ sort, onSort, sortOptions }) {
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 140 }}>
         {sortOptions.map((option, idx) => (
           <MenuItem
+            lang="ar"
             key={idx}
             selected={option.value === sort}
             onClick={() => {

@@ -178,21 +178,25 @@ export default function JwtRegisterView() {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
             {countriesData?.map((country, idx) => (
-              <MenuItem key={idx} value={country?._id}>
+              <MenuItem lang="ar" key={idx} value={country?._id}>
                 {country?.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect name="city" label="City">
             {tableData?.map((city, idx) => (
-              <MenuItem key={idx} value={city?._id}>
+              <MenuItem lang="ar" key={idx} value={city?._id}>
                 {city?.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
           <RHFSelect name="gender" label="Gender">
-            <MenuItem value="male">male</MenuItem>
-            <MenuItem value="female">female</MenuItem>
+            <MenuItem lang="ar" value="male">
+              male
+            </MenuItem>
+            <MenuItem lang="ar" value="female">
+              female
+            </MenuItem>
           </RHFSelect>
         </Stack>
         <RHFTextField

@@ -427,7 +427,7 @@
 //                   onChange={handleChangeSelect}
 //                 >
 //                   {['Option 1', 'Option 2', 'Option 3', 'Option 4'].map((option, idx)  => (
-//                     <MenuItem key={idx} value={option}>
+//                     <MenuItem lang="ar"  key={idx} value={option}>
 //                       {option}
 //                     </MenuItem>
 //                   ))}

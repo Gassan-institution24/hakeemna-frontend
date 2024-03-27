@@ -77,7 +77,7 @@ export default function UserTableToolbar({
             }}
           >
             {roleOptions.map((option, idx) => (
-              <MenuItem key={idx} value={option}>
+              <MenuItem lang="ar" key={idx} value={option}>
                 <Checkbox disableRipple size="small" checked={filters.role.includes(option)} />
                 {option}
               </MenuItem>
@@ -113,6 +113,7 @@ export default function UserTableToolbar({
         sx={{ width: 140 }}
       >
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}
@@ -122,6 +123,7 @@ export default function UserTableToolbar({
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}
@@ -131,6 +133,7 @@ export default function UserTableToolbar({
         </MenuItem>
 
         <MenuItem
+          lang="ar"
           onClick={() => {
             popover.onClose();
           }}

@@ -115,44 +115,48 @@ export default function Create() {
           <RHFTextField name="email" label="Email address" />
           <RHFTextField name="identification_num" label="Identification number" />
           <Controller
-                name="birth_date"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <DatePicker
-                    label={t('birth date')}
-                    // sx={{ flex: 1 }}
-                    value={new Date(values.birth_date ? values.birth_date : '')}
-                    onChange={(newValue) => {
-                      field.onChange(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        fullWidth: true,
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
+            name="birth_date"
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <DatePicker
+                label={t('birth date')}
+                // sx={{ flex: 1 }}
+                value={new Date(values.birth_date ? values.birth_date : '')}
+                onChange={(newValue) => {
+                  field.onChange(newValue);
+                }}
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    error: !!error,
+                    helperText: error?.message,
+                  },
+                }}
               />
+            )}
+          />
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
               {countriesData?.map((country, idx) => (
-                <MenuItem key={idx} value={country?._id}>
+                <MenuItem lang="ar" key={idx} value={country?._id}>
                   {country?.name_english}
                 </MenuItem>
               ))}
             </RHFSelect>
             <RHFSelect name="city" label="City">
               {tableData?.map((city, idx) => (
-                <MenuItem key={idx} value={city?._id}>
+                <MenuItem lang="ar" key={idx} value={city?._id}>
                   {city?.name_english}
                 </MenuItem>
               ))}
             </RHFSelect>
             <RHFSelect name="gender" label="Gender">
-              <MenuItem value="male">male</MenuItem>
-              <MenuItem value="female">female</MenuItem>
+              <MenuItem lang="ar" value="male">
+                male
+              </MenuItem>
+              <MenuItem lang="ar" value="female">
+                female
+              </MenuItem>
             </RHFSelect>
           </Stack>
           <RHFTextField
@@ -199,9 +203,9 @@ export default function Create() {
           <Typography variant="h3" sx={{ textAlign: 'center' }}>
             Add Account
           </Typography>
-         {/* <Box > */}
-         <Image src="https://www.sender.net/wp-content/uploads/2022/07/best-newsletter-software.webp"  />
-         {/* </Box> */}
+          {/* <Box > */}
+          <Image src="https://www.sender.net/wp-content/uploads/2022/07/best-newsletter-software.webp" />
+          {/* </Box> */}
         </Stack>
       </Box>
     </FormProvider>

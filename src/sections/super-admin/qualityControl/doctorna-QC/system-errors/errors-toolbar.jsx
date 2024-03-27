@@ -78,7 +78,7 @@ export default function TablesTableToolbar({
           }}
         >
           {codeOptions.map((option, idx) => (
-            <MenuItem key={idx} value={option}>
+            <MenuItem lang="ar" key={idx} value={option}>
               <Checkbox disableRipple size="small" checked={filters.errorCodes.includes(option)} />
               {option}
             </MenuItem>

@@ -83,7 +83,7 @@ function Searchbar() {
 
     return Object.keys(data)
       .sort((a, b) => -b.localeCompare(a))
-      .map((group, index) => ( 
+      .map((group, index) => (
         <List key={group || index} disablePadding>
           {data[group].map((item, idx) => {
             const { title, path } = item;

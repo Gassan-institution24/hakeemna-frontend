@@ -36,7 +36,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
   const navData = useNavData();
 
   const walktour = useWalktour({
-    // defaultRun: true,
+    defaultRun: user && !user.last_online,
     showProgress: true,
     steps: [
       {
@@ -109,10 +109,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
     ],
   });
 
-  useEffect(() => {
-    if (!user?.last_online) walktour.setRun(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user?.last_online) walktour.setRun(true);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [user]);
 
   useEffect(() => {
     if (openNav) {
