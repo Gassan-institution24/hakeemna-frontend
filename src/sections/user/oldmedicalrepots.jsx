@@ -204,6 +204,7 @@ export default function OldMedicalReports() {
     // Create a new PDF instance
     const pdf = new JsPdf();
 
+    console.log(report, 'report');
     // Add report details to the PDF
     pdf.text(`File Name: ${report.name}`, 10, 10);
     pdf.text(`Specialty: ${report.specialty.name_english}`, 10, 20);
@@ -211,9 +212,36 @@ export default function OldMedicalReports() {
     if (report.note) {
       pdf.text(`Note: ${report.note}`, 10, 40);
     }
+     addImagesToPDF(pdf, report.file).then(modifiedPdf => {
+      modifiedPdf.save(`${report.name}.pdf`);
+    });
+  
+  };
 
-    // Save the PDF
-    pdf.save(`${report.name}.pdf`);
+  const fetchImageAsBase64 = async (url) => {
+    // const response = await fetch(`http://localhost:3000/uploaded-files/patients/old_medical_reports/${url}`);
+    const response = await fetch(`https://api.doctorna.online/uploaded-files/patients/old_medical_reports/${url}`);
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  const addImagesToPDF = async (doc, imageUrls) => {
+    const imagePromises = imageUrls.map((url) => fetchImageAsBase64(url));
+    const images = await Promise.all(imagePromises);
+
+    images.forEach((base64data, index) => {
+      doc.addImage(base64data, 'JPEG', 10, index * 50 + 50, 180, 40);
+      if (index < imageUrls.length - 1) {
+        doc.addPage();
+      }
+    });
+
+    return doc;
   };
 
   return (

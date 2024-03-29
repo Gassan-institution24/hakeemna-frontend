@@ -61,10 +61,13 @@ export default function OldmedicalrepotView() {
         </Button>
       </Box>
       <Box sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}>
-        <Image
-          src="https://s3-eu-west-1.amazonaws.com/blog-ecotree/blog/0001/01/ad46dbb447cd0e9a6aeecd64cc2bd332b0cbcb79.jpeg"
-          sx={{ m: 1 }}
-        />
+     {oldmedicalreports?.file?.map((img)=>(
+         <Image
+         src={`https://api.doctorna.online/uploaded-files/patients/old_medical_reports/${img}`}
+        //  src={`http://localhost:3000/uploaded-files/patients/old_medical_reports/${img}`}
+         sx={{ m: 1 }}
+       />
+     ))}
       </Box>
     </Stack>
   );
