@@ -73,7 +73,7 @@ export default function Sidebar() {
             sx={{ color: 'green', width: '50%', height: '40%' }}
             icon="ph:calendar-duotone"
           />
-          <Typography sx={{ fontSize: 12 }}>Search</Typography>
+          <Typography sx={{ fontSize: 12 }}>Test</Typography>
         </Button>
         <Divider />
         <Button
