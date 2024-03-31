@@ -391,6 +391,7 @@ export const endpoints = {
     },
     patient: {
       many: (id) => `/api/appointments/patient/${id}`,
+      notify: (id) => `/api/appointments/notify/${id}`,
       one: (id) => `/api/appointments/onepatient/${id}`,
       createPatientAndBookAppoint: (id) => `/api/appointments/${id}/newpatient`,
     },
