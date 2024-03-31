@@ -77,7 +77,7 @@ export default function TableNewEditForm() {
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
 
     if (arabicRegex.test(event.target.value)) {
       setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
@@ -86,7 +86,7 @@ export default function TableNewEditForm() {
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
 
     if (englishRegex.test(event.target.value)) {
       setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
@@ -112,7 +112,7 @@ export default function TableNewEditForm() {
     }
   };
   const { existEmployees } = useFindEmployee({
-    email: filters.email || null,
+    email: filters.email?.toLowerCase() || null,
     identification_num: filters.identification_num || null,
     code: filters.identification_num,
     phone: filters.identification_num,

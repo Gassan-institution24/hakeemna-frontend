@@ -28,6 +28,7 @@ const MaintenancePage = lazy(() => import('src/pages/maintenance'));
 // const PostDetailsPage = lazy(() => import('src/pages/post/details'));
 const Patientsservices = lazy(() => import('src/pages/services/patients'));
 const Unitservices = lazy(() => import('src/pages/services/unit'));
+const ServiceUnitPage = lazy(() => import('src/pages/service-unit-page/details'));
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,7 @@ export const mainRoutes = [
       // { path: 'contact-us', element: <ContactPage /> },
       { path: 'patients', element: <Patientsservices /> },
       { path: 'unit', element: <Unitservices /> },
+      { path: 'serviceunit/:id', element: <ServiceUnitPage /> },
       // { path: 'faqs', element: <FaqsPage /> },
       // {
       //   path: 'product',

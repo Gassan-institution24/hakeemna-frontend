@@ -11,6 +11,8 @@ import { bgGradient } from 'src/theme/css';
 
 import Logo from 'src/components/logo';
 
+import LanguagePopover from '../common/language-popover';
+
 // ----------------------------------------------------------------------
 
 export default function AuthClassicLayout({ children, image, title }) {
@@ -29,17 +31,21 @@ export default function AuthClassicLayout({ children, image, title }) {
   );
 
   const renderContent = (
-    <Stack
-      sx={{
-        width: 1,
-        mx: 'auto',
-        maxWidth: 480,
-        px: { xs: 2, md: 8 },
-        pt: { xs: 10, md: 10 },
-        pb: { xs: 15, md: 0 },
-      }}
-    >
-      {children}
+    <Stack sx={{ width: { sm: '100%', md: '100%', lg: '35%' } }}>
+      <LanguagePopover />
+      <Stack
+        sx={{
+          width: 1,
+          mx: 'auto',
+          // my: 'auto',
+          maxWidth: 480,
+          px: { xs: 2, md: 8 },
+          pt: { xs: 10, md: 10 },
+          pb: { xs: 15, md: 0 },
+        }}
+      >
+        {children}
+      </Stack>
     </Stack>
   );
 
@@ -108,7 +114,6 @@ export default function AuthClassicLayout({ children, image, title }) {
       }}
     >
       {renderLogo}
-
       {mdUp && renderSection}
 
       {renderContent}

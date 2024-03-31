@@ -389,6 +389,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
+                        ampmInClock
                         minutesStep="5"
                         label={t('work start time')}
                         value={myunitTime(values.days_details[index]?.work_start_time)}
@@ -419,6 +420,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
+                        ampmInClock
                         minutesStep="5"
                         label={t('work end time')}
                         value={myunitTime(values.days_details[index]?.work_end_time)}
@@ -448,6 +450,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
+                        ampmInClock
                         minutesStep="5"
                         label={t('break start time')}
                         value={myunitTime(values.days_details[index]?.break_start_time)}
@@ -478,6 +481,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
+                        ampmInClock
                         minutesStep="5"
                         label={t('break end time')}
                         value={myunitTime(values.days_details[index]?.break_end_time)}

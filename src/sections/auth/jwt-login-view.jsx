@@ -22,6 +22,8 @@ import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { Box } from '@mui/material';
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +31,8 @@ export default function JwtLoginView() {
   const { login } = useAuthContext();
 
   const router = useRouter();
+
+  const { t } = useTranslate();
 
   const [errorMsg, setErrorMsg] = useState('');
   const [email, setEmail] = useState('');
@@ -40,8 +44,10 @@ export default function JwtLoginView() {
   const password = useBoolean();
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().required('Password is required'),
+    email: Yup.string()
+      .required(t('required field'))
+      .email(t('Email must be a valid email address')),
+    password: Yup.string().required(t('required field')),
   });
 
   const defaultValues = {
@@ -77,13 +83,21 @@ export default function JwtLoginView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
-      <Typography variant="h4">Sign in to Doctorna</Typography>
+      <Typography variant="h4">{t('Login')}</Typography>
 
-      <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2">New user?</Typography>
+      <Stack direction="row" alignItems="flex-end" spacing={0.5}>
+        <Typography color="text.disabled" variant="subtitle1">
+          {t('new user?')}
+        </Typography>
 
-        <Link component={RouterLink} href={paths.auth.register} variant="subtitle2">
-          Create an account
+        <Link
+          sx={{ px: 0.5, fontWeight: 400, fontSize: 13 }}
+          component={RouterLink}
+          href={paths.auth.register}
+          variant="subtitle2"
+          underline="always"
+        >
+          {t('create an account')}
         </Link>
       </Stack>
     </Stack>
@@ -96,17 +110,17 @@ export default function JwtLoginView() {
           {errorMsg}{' '}
           {email && (
             <Link component={RouterLink} href={paths.auth.verify(email)} variant="subtitle2">
-              verify your account
+              {t('verify your account')}
             </Link>
           )}
         </Alert>
       )}
 
-      <RHFTextField name="email" label="Email address" />
+      <RHFTextField name="email" label={t('email address')} />
 
       <RHFTextField
         name="password"
-        label="Password"
+        label={t('password')}
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -125,9 +139,9 @@ export default function JwtLoginView() {
         href={paths.auth.forgotPassword}
         color="inherit"
         underline="always"
-        sx={{ alignSelf: 'flex-end' }}
+        sx={{ alignSelf: 'flex-end', mt: 5 }}
       >
-        Forgot password?
+        {t('Forgot password?')}
       </Link>
 
       <LoadingButton
@@ -138,7 +152,7 @@ export default function JwtLoginView() {
         variant="contained"
         loading={isSubmitting}
       >
-        Login
+        {t('Login')}
       </LoadingButton>
     </Stack>
   );
@@ -146,6 +160,7 @@ export default function JwtLoginView() {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderHead}
+      <Box height="5vh" />
       {renderForm}
     </FormProvider>
   );

@@ -8,5 +8,5 @@ export * from './bounce';
 // export * from './rotate';
 export * from './actions';
 export * from './container';
-// export * from './transition';
+export * from './transition';
 // export * from './background';

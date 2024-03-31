@@ -1,5 +1,5 @@
 import ar from 'date-fns/locale/ar-SA';
-import { format, getTime, formatDistanceToNow } from 'date-fns';
+import { format, getTime, formatDistanceToNow, isValid } from 'date-fns';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -28,7 +28,7 @@ export const useUnitTime = () => {
 export function fDate(date, newFormat, arabic) {
   const fm = newFormat || 'dd MMM yyyy';
 
-  return date ? format(new Date(date), fm, arabic ? { locale: ar } : null) : '';
+  return date && isValid(date) ? format(new Date(date), fm, arabic ? { locale: ar } : null) : '';
 }
 export function fMonth(date, newFormat, arabic) {
   const fm = newFormat || 'MMM yyyy';
@@ -63,4 +63,21 @@ export function fToNow(date, arabic) {
     optionsObj.locale = ar;
   }
   return date ? formatDistanceToNow(new Date(date), optionsObj) : '';
+}
+
+export function isBetween(inputDate, startDate, endDate) {
+  const date = new Date(inputDate);
+
+  const results =
+    new Date(date.toDateString()) >= new Date(startDate.toDateString()) &&
+    new Date(date.toDateString()) <= new Date(endDate.toDateString());
+
+  return results;
+}
+
+export function isAfter(startDate, endDate) {
+  const results =
+    startDate && endDate ? new Date(startDate).getTime() > new Date(endDate).getTime() : false;
+
+  return results;
 }
