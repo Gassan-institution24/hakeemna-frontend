@@ -6,7 +6,7 @@
   "services": "الخدمات",
   "control panel": "لوحة التحكم",
   "departments": "الأقسام",
-  "employees": "الموظفين",
+  "employees": "موظفين",
   "activities": "الأنشطة والمهام التنفيذية",
   "activity": "نشاط",
   "appointments": "المواعيد",
@@ -231,7 +231,7 @@
   "country": "الدولة",
   "city": "المدينة",
   "unit service type": "نوع وحدة الخدمة",
-  "sector type": "نوع العمل",
+  "sector type": "قطاع العمل",
   "Public": "عام",
   "private": "خاص",
   "Charity": "خيري",
@@ -253,7 +253,6 @@
   "service unit": "وحدة الخدمة",
   "admin": "الآدمن",
   "Already have an account?": "لديك حساب في موقعنا؟",
-  "Sign in": "تسجيل الدخول",
   "back": "إلى الخلف",
   "Terms of Service": "شروط الخدمة ",
   "Privacy Policy": "سياسة الخصوصية ",
@@ -262,6 +261,7 @@
   "service unit type": "نوع وحدة الخدمة",
   "speciality": "التخصص",
   "By signing up, I agree to ": " أوافق على ",
+  "I agree to": " أوافق على ",
   " and ": " و ",
   "Next Step": "الخطوة التالية",
   "create account": "إنشاء حساب",
@@ -293,9 +293,41 @@
   "adjust schedual": "منشأ إعدادات المواعيد",
   "visibility page": "الظهور على صفحة وحدة الخدمة",
   "visibility online appointment": "الظهور في المواعيد",
+  "visible on service unit online page": "الظهور على صفحة وحدة الخدمة",
+  "visible on online appointments": "الظهور في المواعيد",
   "attendance": "الدوام",
   "service unit and all its departments": "وحدة الخدمة وأقسامها",
   "permissions": "الصلاحيات",
+  "welcome to our community": "أهلا بك في مجتمعنا الصحي",
+  "select your service unit type": "إختر نوع وحدة الخدمة التي تريد إنشاءها",
+  "select the approximate number of your employees": "إختر عدد الموظفين التقريبي",
+  "I understand": "التالي",
+  "more than 10 employees": "10 موظفين أو أكثر",
+  "manager": "معلومات المدير",
+  "information": "معلومات",
+  "Arabic name of service unit": "اسم وحدة الخدمة باللغة العربية",
+  "English name of service unit": "اسم وحدة الخدمة باللغة الانجليزية",
+  "The national number of the service unit": "الرقم الوطني للمنشأة",
+  "region ( country )": "مركز الشركة (الدولة)",
+  "region ( city )": "مركز الشركة (المدينة)",
+  "Manager full name in Arabic": "الاسم الكامل لمدير وحدة الخدمة باللغة العربية",
+  "Manager full name in English": "الاسم الكامل لمدير وحدة الخدمة باللغة الانجليزية",
+  "identification number of manager": "الرقم الوطني لمدير وحدة الخدمة",
+  "profession practice number": "رقم ممارسة المهنة",
+  "must be at least three words": "يجب أن تحتوي على 3 كلمات على الاقل",
+  "Hakeemna Login": "تسجيل الدخول",
+  "new user?": "مستخدم جديد؟",
+  "create an account": "إنشاء حساب جديد",
+  "verify your account": "تأكيد اللحساب",
+  "Forgot password?": "هل نسيت كلمة المرور؟",
+  "Login": "تسجيل الدخول",
+  "email address": "البريد الالكتروني",
+  "Email must be a valid email address": "البريد الالكتروني غير صحيح",
+  "send request": "إرسال الطلب",
+  "need help ?": "تريد مساعدة ؟",
+  "return to login": "الرجوع إلى صفحة تسجيل الدخول",
+  "Forgot your password?": "نسيت كلمة السر؟",
+  "Please enter the email address associated with your account and We will email you a link to reset your password.": "أدخل البريد الالكتروني لحسابك لتصلك رسالة لتأكيد الحساب",
 
   "Good Morning ☀️": "صباح الخير ☀️",
   "Good Evening 🌑 ": "مساء الخير 🌑",
@@ -492,6 +524,18 @@
   "updated":"تعديل",
   "created":"إنشاء",
   "error":"خطأ",
+  "update password":"تحديث كلمة المرور",
+  "Don’t have a code?":"لم يصلك كود التأكيد؟",
+  "resend code":"إعادة إرسال الرمز",
+  "request sent successfully!":"تم إرسال الطلب بنجاح",
+  "We've sent a 6-digit confirmation email to your email.":"تم إرسال كود مكون من 6 خانات لإيميلك",
+  "please enter the code in below box to verify your email.":"أدخل الرمز في المربع ادناه لتاكيد ايميلك",
+  "verify":"تأكيد",
+  "please check your email!":"الرجاء مراجعة البريد الالكتروني",
+  "we have emailed a 6-digit confirmation code to acb@domain, please enter the code in below box to verify your email.":"تم إرسال رمز التأكيد لايميلك , الرجاء ادخال الرمز في المربع ادناه",
+  "sorry, Page Not Found!":"هذه الصفحة غير موجودة!",
+  "sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be sure to check your spelling.":"لم نستطيع إيجاد الصفحة التي تبحث عنها. ربما تكون قد اخطأت الكتابة",
+  "Go Home":"الصفحة الرئيسية",
 
   "list": "قائمة",
   "edit": "تعديل",

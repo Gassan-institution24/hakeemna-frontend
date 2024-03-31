@@ -85,51 +85,53 @@ export default function JwtRegisterView() {
   const policyDialog = useBoolean();
 
   const RegisterSchema = Yup.object().shape({
-    US_type: Yup.string().required('Service unit type is required'),
-    employees_number: Yup.string().required('employees number is required'),
+    US_type: Yup.string().required(t('required field')),
+    employees_number: Yup.string().required(t('required field')),
 
-    us_name_arabic: Yup.string().required('Service unit name is required'),
-    us_name_english: Yup.string().required('Service unit name is required'),
+    us_name_arabic: Yup.string().required(t('required field')),
+    us_name_english: Yup.string().required(t('required field')),
     // us_email: Yup.string()
     //   .required('Service unit email is required')
     //   .email('Service unit email must be a valid email address'),
-    us_identification_num: Yup.string().required('Service unit ID number is required'),
-    us_country: Yup.string().nullable().required('Service unit country is required'),
-    us_city: Yup.string().required('Service unit city is required'),
+    us_identification_num: Yup.string().required(t('required field')),
+    us_country: Yup.string().nullable().required(t('required field')),
+    us_city: Yup.string().required(t('required field')),
     // us_speciality: Yup.string().nullable(),
-    us_sector_type: Yup.string().required('Service unit sector is required'),
+    us_sector_type: Yup.string().required(t('required field')),
     // us_phone: Yup.string().required('Service unit phone is required'),
 
     em_name_english: Yup.string()
-      .required('Employee english name is required')
-      .test('at-least-three-words', 'Please enter at least three words', (value) => {
+      .required(t('required field'))
+      .test('at-least-three-words', t('must be at least three words'), (value) => {
         if (!value) return false; // If no value, fail the validation
         const words = value.trim().split(/\s+/); // Split the input by spaces
         return words.length >= 3; // Return true if there are at least three words
       }),
     em_name_arabic: Yup.string()
-      .required('Employee arabic name is required')
-      .test('at-least-three-words', 'Please enter at least three words', (value) => {
+      .required(t('required field'))
+      .test('at-least-three-words', t('must be at least three words'), (value) => {
         if (!value) return false; // If no value, fail the validation
         const words = value.trim().split(/\s+/); // Split the input by spaces
         return words.length >= 3; // Return true if there are at least three words
       }),
-    em_nationality: Yup.string().required('Employee nationality is required'),
-    em_identification_num: Yup.string().required('Employee ID number is required'),
+    em_nationality: Yup.string().required(t('required field')),
+    em_identification_num: Yup.string().required(t('required field')),
     em_profrssion_practice_num: Yup.string(),
-    em_type: Yup.string().required('Employee type is required'),
+    em_type: Yup.string().required(t('required field')),
     em_phone: Yup.string()
-      .required('Employee phone is required')
-      .test('is-valid-phone', 'Invalid phone number', (value) => matchIsValidTel(value)),
+      .required(t('required field'))
+      .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
     em_speciality: Yup.string().nullable(),
     visibility_US_page: Yup.bool(),
     visibility_online_appointment: Yup.bool(),
 
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().min(8, 'Password must be at least 8 character'),
+    email: Yup.string()
+      .required(t('required field'))
+      .email(t('Email must be a valid email address')),
+    password: Yup.string().min(8, `${t('must be at least')} 8`),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .min(8, 'Confirm password must be at least 8 characters'),
+      .oneOf([Yup.ref('password'), null], t('Passwords must match'))
+      .min(8, `${t('must be at least')} 8`),
   });
 
   const defaultValues = {
@@ -176,17 +178,16 @@ export default function JwtRegisterView() {
   const { tableData } = useGetCountryCities(values.us_country);
 
   const steps = [
-    t(
-      unitserviceTypesData.find((type) => type._id === values.US_type)?.name_english ||
-        'service unit'
-    ),
+    curLangAr
+      ? unitserviceTypesData.find((type) => type._id === values.US_type)?.name_arabic
+      : unitserviceTypesData.find((type) => type._id === values.US_type)?.name_english,
     t('manager'),
     t('account'),
   ];
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
     if (arabicRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
     }
@@ -194,7 +195,7 @@ export default function JwtRegisterView() {
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
 
     if (englishRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
@@ -220,7 +221,8 @@ export default function JwtRegisterView() {
     } catch (error) {
       console.error(error);
       // reset();
-      setErrorMsg(typeof error === 'string' ? error : error.message);
+
+      setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
     }
   });
   useEffect(() => {
@@ -228,11 +230,11 @@ export default function JwtRegisterView() {
     if (Object.keys(errors).length) {
       setErrorMsg(
         Object.keys(errors)
-          .map((key, idx) => errors?.[key]?.message)
+          .map((key, idx) => t(errors?.[key]?.message))
           .join('<br>')
       );
     }
-  }, [errors]);
+  }, [errors, t]);
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 3, position: 'relative' }}>
       <Typography variant="h4">
@@ -243,7 +245,7 @@ export default function JwtRegisterView() {
           {t('Already have an account?')}
         </Typography>
         <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
-          {t('Sign in')}
+          {t('login')}
         </Link>
       </Stack>
       {values.US_type !== null && (
@@ -273,7 +275,7 @@ export default function JwtRegisterView() {
       }}
     >
       <Checkbox checked={agree} onChange={(e) => setAgree(e.target.checked)} />
-      {t('I agree to ')}
+      {t('I agree to')}
       <Link
         onClick={policyDialog.onTrue}
         sx={{ cursor: 'pointer' }}
@@ -410,6 +412,7 @@ export default function JwtRegisterView() {
       {/* </Tooltip> */}
       {/* </Stack> */}
       <LoadingButton
+        sx={{ mt: 4 }}
         fullWidth
         disabled={
           !values.us_name_arabic ||
@@ -437,7 +440,7 @@ export default function JwtRegisterView() {
           color="inherit"
           disabled={page === 0}
           onClick={() => setPage((prev) => prev - 1)}
-          // sx={{ m: 1 }}
+          sx={{ mt: -1.5 }}
         >
           {t('back')}
         </Button>
@@ -499,10 +502,10 @@ export default function JwtRegisterView() {
             label={t('family name')}
           />
         </Tooltip> */}
-        <RHFSelect name="em_type" label="Employee type">
+        <RHFSelect name="em_type" label={t('employee type')}>
           {employeeTypesData.map((type, idx) => (
             <MenuItem lang="ar" key={idx} value={type._id}>
-              {type.name_english}
+              {curLangAr ? type.name_arabic : type.name_english}
             </MenuItem>
           ))}
         </RHFSelect>
@@ -563,12 +566,15 @@ export default function JwtRegisterView() {
           <RHFCheckbox
             sx={{ px: 2 }}
             name="visibility_online_appointment"
-            label={<Typography sx={{ fontSize: 12 }}>{t('visible on online ')}</Typography>}
+            label={
+              <Typography sx={{ fontSize: 12 }}>{t('visible on online appointments')}</Typography>
+            }
           />
         </div>
       </Box>
 
       <LoadingButton
+        sx={{ mt: 4 }}
         fullWidth
         disabled={
           !values.em_name_arabic ||
@@ -576,7 +582,10 @@ export default function JwtRegisterView() {
           !values.em_identification_num ||
           !values.em_nationality ||
           !values.em_type ||
-          !values.em_phone
+          !values.em_phone ||
+          !matchIsValidTel(values.em_phone) ||
+          values.em_name_arabic.trim().split(/\s+/)?.length < 3 ||
+          values.em_name_english.trim().split(/\s+/)?.length < 3
         }
         color="inherit"
         size="large"
@@ -596,7 +605,7 @@ export default function JwtRegisterView() {
           color="inherit"
           disabled={page === 0}
           onClick={() => setPage((prev) => prev - 1)}
-          // sx={{ m: 1 }}
+          sx={{ mt: -1.5 }}
         >
           {t('back')}
         </Button>
@@ -684,6 +693,7 @@ export default function JwtRegisterView() {
       {renderTerms}
 
       <LoadingButton
+        sx={{ mt: 4 }}
         fullWidth
         disabled={!values.email || !values.password || !values.confirmPassword || !agree}
         color="inherit"
@@ -699,7 +709,7 @@ export default function JwtRegisterView() {
           color="inherit"
           disabled={page === 0}
           onClick={() => setPage((prev) => prev - 1)}
-          // sx={{ m: 1 }}
+          sx={{ mt: -1.5 }}
         >
           {t('back')}
         </Button>
@@ -707,6 +717,37 @@ export default function JwtRegisterView() {
     </Stack>
   );
 
+  const htmlContentAR = `
+<br/>
+<br/>
+
+<p>تنقسم هذة المرحلة إلى 3 خطوات </p>
+<br/>
+<ul>
+<li> <strong> الخطوة الأولى: </strong>  تتطلب من المستخدم بيانات ومعلومات وحدة الخدمة مثل : الرقم الوطني للمنشأة  </li>
+<li> <strong> الخطوة الثانية: </strong> تتطلب من المستخدم معلومات مدير العيادة مثل : الرقم الوطني و رقم ممارسة المهنة .. </li>
+<li> <strong> المرحلة الثالثة: </strong> تتطلب معلومات الدخول للصفحة مثل: البريد الالكتروني و كلمة المرور </li>
+</ul>
+
+<br/>
+<br/>
+<br/>
+<p>لإنشاء وحدة خدمة جديدة سوف تحتاج :</p>
+
+<br/>
+
+<ul>
+  <li>
+    الرقم الوطني للمنشأة
+  </li>
+  <li>
+    الرقم الوطني لإدارة المنشأة
+  </li>
+  <li>
+    رقم ممارسة المهنة لمدير المنشأة (ان كان طبيبا)
+  </li>
+</ul>
+`;
   const htmlContent = `
 <br/>
 <br/>
@@ -748,16 +789,16 @@ export default function JwtRegisterView() {
         {page === 2 && renderFormAuth}
 
         <Dialog open={dialog.value} scroll="paper">
-          <DialogTitle sx={{ pb: 2 }}>Welcome to our community</DialogTitle>
+          <DialogTitle sx={{ pb: 2 }}>{t('welcome to our community')}</DialogTitle>
 
           <DialogContent dividers>
             <div tabIndex={-1}>
-              <Markdown children={htmlContent} />
+              <Markdown children={curLangAr ? htmlContentAR : htmlContent} />
             </div>
             <span style={{ display: 'block', padding: 0.75, color: 'green', fontSize: 12 }}>
-              Select your service unit type
+              {t('select your service unit type')}
             </span>
-            <RHFSelect sx={{ pb: 2 }} name="US_type">
+            <RHFSelect sx={{ pb: 2 }} name={t('US_type')}>
               {unitserviceTypesData.map((type, idx) => (
                 <MenuItem lang="ar" key={idx} value={type._id}>
                   {curLangAr ? type.name_arabic : type.name_english}
@@ -765,16 +806,16 @@ export default function JwtRegisterView() {
               ))}
             </RHFSelect>
             <span style={{ display: 'block', padding: 0.75, color: 'green', fontSize: 12 }}>
-              Select the approximate number of your employees
+              {t('select the approximate number of your employees')}
             </span>
             <RHFRadioGroup
               row
               name="employees_number"
               spacing={3}
               options={[
-                { value: '3', label: '1-3 employees' },
-                { value: '10', label: '3-10 employees' },
-                { value: '>10', label: 'more than 10 employees' },
+                { value: '3', label: `1-3 ${t('employees')}` },
+                { value: '10', label: `3-10 ${t('employees')}` },
+                { value: '>10', label: t('more than 10 employees') },
               ]}
             />
           </DialogContent>
@@ -787,7 +828,7 @@ export default function JwtRegisterView() {
               variant="contained"
               onClick={dialog.onFalse}
             >
-              I understand
+              {t('I understand')}
             </Button>
           </DialogActions>
         </Dialog>

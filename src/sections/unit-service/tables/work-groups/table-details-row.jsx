@@ -180,6 +180,10 @@ export default function TableDetailsRow({
             {t('edit')}
           </MenuItem>
         )}
+        <MenuItem lang="ar" onClick={onView}>
+          <Iconify icon="material-symbols-light:security" />
+          {t('permissions')}
+        </MenuItem>
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}

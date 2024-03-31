@@ -10,6 +10,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -39,13 +40,15 @@ export default function LanguagePopover() {
   return (
     <>
       {user?.role !== 'superadmin' && (
-        <IconButton
+        <Button
           component={m.button}
           whileTap="tap"
           whileHover="hover"
           variants={varHover(1.05)}
           onClick={popover.onOpen}
           sx={{
+            fontSize: 13,
+            fontWeight: 600,
             width: 40,
             height: 40,
             ...(popover.open && {
@@ -53,9 +56,9 @@ export default function LanguagePopover() {
             }),
           }}
         >
-          {/* {currentLang.value}  */}
-          <Iconify icon={currentLang.icon} sx={{ borderRadius: 0.65, width: 28 }} />
-        </IconButton>
+          {currentLang.label}
+          {/* <Iconify icon={currentLang.icon} sx={{ borderRadius: 0.65, width: 28 }} /> */}
+        </Button>
       )}
 
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 160 }}>

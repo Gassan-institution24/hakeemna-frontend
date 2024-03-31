@@ -47,14 +47,16 @@ export default function NewPasswordView() {
   const { countdown, counting, startCountdown } = useCountdownSeconds(60);
 
   const VerifySchema = Yup.object().shape({
-    code: Yup.string().min(6, 'Code must be at least 6 characters').required('Code is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string()
-      .min(8, 'Password must be at least 8 characters')
-      .required('Password is required'),
+    code: Yup.string()
+      .min(6, `${t('must be at least')} 6`)
+      .required(t('required field')),
+    email: Yup.string()
+      .required(t('required field'))
+      .email(t('Email must be a valid email address')),
+    password: Yup.string().min(8, t('Password must be minimum 8+')).required(t('required field')),
     confirmPassword: Yup.string()
-      .required('Confirm password is required')
-      .oneOf([Yup.ref('password')], 'Passwords must match'),
+      .required(t('required field'))
+      .oneOf([Yup.ref('password')], t('Passwords must match')),
   });
 
   const defaultValues = {
@@ -103,7 +105,7 @@ export default function NewPasswordView() {
     <Stack spacing={3} alignItems="center">
       <RHFTextField
         name="email"
-        label="Email"
+        label={t('email')}
         placeholder="example@gmail.com"
         InputLabelProps={{ shrink: true }}
       />
@@ -112,7 +114,7 @@ export default function NewPasswordView() {
 
       <RHFTextField
         name="password"
-        label="Password"
+        label={t('password')}
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -127,7 +129,7 @@ export default function NewPasswordView() {
 
       <RHFTextField
         name="confirmPassword"
-        label="Confirm New Password"
+        label={t('confirm new password')}
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -147,15 +149,16 @@ export default function NewPasswordView() {
         variant="contained"
         loading={isSubmitting}
       >
-        Update Password
+        {t('update password')}
       </LoadingButton>
 
       <Typography variant="body2">
-        {`Don’t have a code? `}
+        {t(`Don’t have a code?`)}
         <Link
           variant="subtitle2"
           onClick={handleResendCode}
           sx={{
+            px: 1,
             cursor: 'pointer',
             ...(counting && {
               color: 'text.disabled',
@@ -163,7 +166,7 @@ export default function NewPasswordView() {
             }),
           }}
         >
-          Resend code {counting && `(${countdown}s)`}
+          {t('resend code')} {counting && `(${countdown}s)`}
         </Link>
       </Typography>
 
@@ -178,7 +181,7 @@ export default function NewPasswordView() {
         }}
       >
         <Iconify icon="eva:arrow-ios-back-fill" width={16} />
-        Return to sign in
+        {t('return to login')}
       </Link>
     </Stack>
   );
@@ -188,12 +191,12 @@ export default function NewPasswordView() {
       <SentIcon sx={{ height: 96 }} />
 
       <Stack spacing={1} sx={{ my: 5 }}>
-        <Typography variant="h3">Request sent successfully!</Typography>
+        <Typography variant="h3">{t('request sent successfully!')}</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          We&apos;ve sent a 6-digit confirmation email to your email.
+          {t("We've sent a 6-digit confirmation email to your email.")}
           <br />
-          Please enter the code in below box to verify your email.
+          {t('please enter the code in below box to verify your email.')}
         </Typography>
       </Stack>
     </>

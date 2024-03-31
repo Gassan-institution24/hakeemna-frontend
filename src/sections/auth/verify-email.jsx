@@ -16,7 +16,7 @@ import { useCountdownSeconds } from 'src/hooks/use-countdown';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { useLocales } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { EmailInboxIcon } from 'src/assets/icons';
 
 import Iconify from 'src/components/iconify';
@@ -31,11 +31,15 @@ export default function ClassicVerifyView() {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
+  const { t } = useTranslate();
+
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
   const VerifySchema = Yup.object().shape({
-    code: Yup.string().min(6, 'Code must be at least 6 characters').required('Code is required'),
+    code: Yup.string()
+      .min(6, `${t('must be at least')} 6`)
+      .required(t('required field')),
   });
 
   const defaultValues = {
@@ -92,15 +96,16 @@ export default function ClassicVerifyView() {
         variant="contained"
         loading={isSubmitting}
       >
-        Verify
+        {t('verify')}
       </LoadingButton>
 
       <Typography variant="body2">
-        {`Don’t have a code? `}
+        {t(`Don’t have a code?`)}
         <Link
           onClick={handleResendCode}
           variant="subtitle2"
           sx={{
+            px: 1,
             cursor: 'pointer',
             ...(counting && {
               color: 'text.disabled',
@@ -108,7 +113,7 @@ export default function ClassicVerifyView() {
             }),
           }}
         >
-          Resend code {counting && `(${countdown}s)`}
+          {t('resend code')} {counting && `(${countdown}s)`}
         </Link>
       </Typography>
 
@@ -123,7 +128,7 @@ export default function ClassicVerifyView() {
         }}
       >
         <Iconify icon="eva:arrow-ios-back-fill" width={16} />
-        Return to sign in
+        {t('return to login')}
       </Link>
     </Stack>
   );
@@ -133,11 +138,12 @@ export default function ClassicVerifyView() {
       <EmailInboxIcon sx={{ height: 96 }} />
 
       <Stack spacing={1} sx={{ my: 5 }}>
-        <Typography variant="h3">Please check your email!</Typography>
+        <Typography variant="h3">{t('please check your email!')}</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          We have emailed a 6-digit confirmation code to acb@domain, please enter the code in below
-          box to verify your email.
+          {t(
+            'we have emailed a 6-digit confirmation code to acb@domain, please enter the code in below box to verify your email.'
+          )}
         </Typography>
       </Stack>
     </>
