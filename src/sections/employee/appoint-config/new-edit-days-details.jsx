@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import { zonedTimeToUtc } from 'date-fns-tz';
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
+import { enUS } from 'date-fns/locale'; 
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
@@ -73,19 +74,13 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
-  const dayToCreate = useMemo(
-    () =>
-      weekDays.filter(
+  const handleAdd = useCallback(() => {
+    try {
+      const dayToCreate = weekDays.filter(
         (option) =>
           !values.weekend.includes(option.value) &&
           !values.days_details.some((detail) => detail.day === option.value)
-      )[0]?.value,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [values.days_details, values.weekend]
-  );
-
-  const handleAdd = useCallback(() => {
-    try {
+      )[0]?.value;
       if (!dayToCreate) {
         throw Error('No valid date to create');
       }
@@ -114,10 +109,13 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values.days_details, dayToCreate]);
+  }, [values]);
 
   const handleRemove = (index) => {
     remove(index);
+    // const newDetails = values.days_details;
+    // newDetails.splice(index,1)
+    // setValue('days_details', values.days_details);
   };
 
   const processDayDetails = useCallback(
@@ -314,15 +312,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     label={t('day')}
                   >
                     {weekDays
-                      .filter(
-                        (option) =>
-                          !values.weekend.includes(option.value) &&
-                          !values.days_details.some(
-                            (detail) =>
-                              detail.day === option.value &&
-                              values.days_details[index]?.day !== option.value
-                          )
-                      )
+                      .filter((option) => !values.weekend.includes(option.value))
                       .map((option, idx) => (
                         <MenuItem lang="ar" key={idx} value={option.value}>
                           {option.label}
@@ -422,8 +412,11 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
+                        ampmInClock
+                        locale={enUS}
                         minutesStep="5"
                         label={t('work start time')}
+                        format="hh:mm a"
                         value={myunitTime(values.days_details[index]?.work_start_time)}
                         onChange={(newValue) => {
                           const selectedTime = zonedTimeToUtc(
@@ -452,6 +445,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
+                        ampmInClock
                         minutesStep="5"
                         label={t('work end time')}
                         value={myunitTime(values.days_details[index]?.work_end_time)}
@@ -481,6 +475,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
+                        ampmInClock
                         minutesStep="5"
                         label={t('break start time')}
                         value={myunitTime(values.days_details[index]?.break_start_time)}
@@ -511,6 +506,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
+                        ampmInClock
                         minutesStep="5"
                         label={t('break end time')}
                         value={myunitTime(values.days_details[index]?.break_end_time)}

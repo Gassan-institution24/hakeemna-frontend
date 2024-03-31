@@ -3,6 +3,8 @@ import { Outlet } from 'react-router-dom';
 
 import CompactLayout from 'src/layouts/compact';
 import AuthClassicLayout from 'src/layouts/auth/classic';
+// import AuthModernLayout from 'src/layouts/auth/modern';
+// import AuthModernCompLayout from 'src/layouts/auth/modern-compact';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 

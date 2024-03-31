@@ -222,31 +222,31 @@ export function useNavData() {
               subcategory: 'management_tables',
               acl: 'read',
             }),
-            title: t('rooms'),
-            path: paths.unitservice.tables.rooms.root,
-            navItemId: 'USRoomsNav',
-          },
-          {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'read',
-            }),
             title: t('services'),
             path: paths.unitservice.tables.services.root,
             navItemId: 'USServicesNav',
           },
-          {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'read',
-            }),
-            title: t('activities'),
-            path: paths.unitservice.tables.activities.root,
-            navItemId: 'USActivitiesNav',
-            // icon: <Iconify icon="material-symbols:volunteer-activism" />,
-          },
+          // {
+          //   show: checkAcl({
+          //     category: 'unit_service',
+          //     subcategory: 'management_tables',
+          //     acl: 'read',
+          //   }),
+          //   title: t('rooms'),
+          //   path: paths.unitservice.tables.rooms.root,
+          //   navItemId: 'USRoomsNav',
+          // },
+          // {
+          //   show: checkAcl({
+          //     category: 'unit_service',
+          //     subcategory: 'management_tables',
+          //     acl: 'read',
+          //   }),
+          //   title: t('activities'),
+          //   path: paths.unitservice.tables.activities.root,
+          //   navItemId: 'USActivitiesNav',
+          //   // icon: <Iconify icon="material-symbols:volunteer-activism" />,
+          // },
         ],
       },
       {

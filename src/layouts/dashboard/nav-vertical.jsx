@@ -62,6 +62,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
         ),
       },
       {
+        target: '#USWorkShiftNav',
+        title: 'Step 4',
+        disableBeacon: true,
+        content: (
+          <Typography sx={{ color: 'text.secondary' }}>
+            after that you also should add new work shifts for organization reasons, and to be able
+            to add new appointment configuration
+          </Typography>
+        ),
+      },
+      {
         target: '#USWorkGroupNav',
         title: 'Step 3',
         disableBeacon: true,
@@ -70,17 +81,6 @@ export default function NavVertical({ openNav, onCloseNav }) {
             then you should add new work groups in order to be able to add new appointment - work
             group: is a term for a group of employees that work together in one appointment - like :
             doctor, secretery, nurse.
-          </Typography>
-        ),
-      },
-      {
-        target: '#USWorkShiftNav',
-        title: 'Step 4',
-        disableBeacon: true,
-        content: (
-          <Typography sx={{ color: 'text.secondary' }}>
-            after that you also should add new work shifts for organization reasons, and to be able
-            to add new appointment configuration
           </Typography>
         ),
       },

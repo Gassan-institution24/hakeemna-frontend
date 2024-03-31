@@ -23,7 +23,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetCountries,
   useGetUnitservice,
-  useGetSpecialties,
+  // useGetSpecialties,
   useGetCountryCities,
   useGetActiveUSTypes,
 } from 'src/api';
@@ -49,7 +49,7 @@ export default function AccountGeneral({ unitServiceData }) {
   );
   const { countriesData } = useGetCountries();
   const { unitserviceTypesData } = useGetActiveUSTypes();
-  const { specialtiesData } = useGetSpecialties();
+  // const { specialtiesData } = useGetSpecialties();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -63,7 +63,7 @@ export default function AccountGeneral({ unitServiceData }) {
     US_type: Yup.string().required(t('required field')),
     email: Yup.string().required(t('required field')),
     sector_type: Yup.string(),
-    speciality: Yup.string(),
+    // speciality: Yup.string(),
     identification_num: Yup.string().required(t('required field')),
     address: Yup.string(),
     web_page: Yup.string(),
@@ -96,7 +96,7 @@ export default function AccountGeneral({ unitServiceData }) {
     US_type: data?.US_type?._id || null,
     email: data?.email || '',
     sector_type: data?.sector_type || '',
-    speciality: data?.speciality?._id || null,
+    // speciality: data?.speciality?._id || null,
     identification_num: data?.identification_num || '',
     address: data?.address || '',
     web_page: data?.web_page || '',
@@ -177,7 +177,7 @@ export default function AccountGeneral({ unitServiceData }) {
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
 
     if (englishRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
@@ -308,7 +308,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 ))}
               </RHFSelect>
 
-              <RHFSelect
+              {/* <RHFSelect
                 label={`${t('specialty')} *`}
                 fullWidth
                 name="speciality"
@@ -320,8 +320,9 @@ export default function AccountGeneral({ unitServiceData }) {
                     {curLangAr ? specialty.name_arabic : specialty.name_english}
                   </MenuItem>
                 ))}
-              </RHFSelect>
+              </RHFSelect> */}
               <RHFSelect
+                disabled
                 label={t('sector type')}
                 fullWidth
                 name="sector_type"
