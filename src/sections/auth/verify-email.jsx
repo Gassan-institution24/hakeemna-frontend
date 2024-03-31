@@ -16,8 +16,8 @@ import { useCountdownSeconds } from 'src/hooks/use-countdown';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { EmailInboxIcon } from 'src/assets/icons';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
