@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { useParams } from 'src/routes/hooks';
 
-import { TourEditView } from 'src/sections/tour/view';
+// import { TourEditView } from 'src/sections/tour/view';
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ export default function TourEditPage() {
         <title> Dashboard: Tour Edit</title>
       </Helmet>
 
-      <TourEditView id={`${id}`} />
+      {/* <TourEditView id={`${id}`} /> */}
     </>
   );
 }
