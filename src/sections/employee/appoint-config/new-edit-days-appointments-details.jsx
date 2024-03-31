@@ -140,6 +140,7 @@ export default function NewEditDayAppointmentsDetails({
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <MobileTimePicker
+                      ampmInClock
                       minutesStep="5"
                       label={t('start time')}
                       value={myunitTime(

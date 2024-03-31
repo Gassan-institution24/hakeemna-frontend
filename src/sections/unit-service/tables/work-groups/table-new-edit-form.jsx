@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { isEqual } from 'lodash';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { useMemo, useEffect } from 'react';
@@ -78,7 +77,7 @@ export default function TableNewEditForm({ currentTable }) {
   });
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
 
     if (arabicRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
@@ -87,7 +86,7 @@ export default function TableNewEditForm({ currentTable }) {
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
 
     if (englishRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
@@ -199,7 +198,8 @@ export default function TableNewEditForm({ currentTable }) {
               multiple
               disableCloseOnSelect
               options={employeesData.filter(
-                (option) => !values.employees.some((item) => isEqual(option, item))
+                (option) =>
+                  !values.employees.some((item) => option._id === item._id || option._id === item)
               )}
               getOptionLabel={(option) => option._id}
               renderOption={(props, option, idx) => (

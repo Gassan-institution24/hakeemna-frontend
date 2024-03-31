@@ -17,12 +17,15 @@ import { PasswordIcon } from 'src/assets/icons';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function ForgotPasswordView() {
   const { forgotPassword } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
+
+  const { t } = useTranslate();
 
   const router = useRouter();
 
@@ -63,7 +66,7 @@ export default function ForgotPasswordView() {
 
   const renderForm = (
     <Stack spacing={3} alignItems="center">
-      <RHFTextField name="email" label="Email address" />
+      <RHFTextField name="email" label={t('email address')} />
 
       <LoadingButton
         fullWidth
@@ -72,7 +75,7 @@ export default function ForgotPasswordView() {
         variant="contained"
         loading={isSubmitting}
       >
-        Send Request
+        {t('send request')}
       </LoadingButton>
 
       <Link
@@ -86,7 +89,7 @@ export default function ForgotPasswordView() {
         }}
       >
         <Iconify icon="eva:arrow-ios-back-fill" width={16} />
-        Return to sign in
+        {t('return to login')}
       </Link>
     </Stack>
   );
@@ -96,11 +99,12 @@ export default function ForgotPasswordView() {
       <PasswordIcon sx={{ height: 96 }} />
 
       <Stack spacing={1} sx={{ my: 5 }}>
-        <Typography variant="h3">Forgot your password?</Typography>
+        <Typography variant="h3">{t('Forgot your password?')}</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Please enter the email address associated with your account and We will email you a link
-          to reset your password.
+          {t(
+            'Please enter the email address associated with your account and We will email you a link to reset your password.'
+          )}
         </Typography>
       </Stack>
     </>

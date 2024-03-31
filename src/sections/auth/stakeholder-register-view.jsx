@@ -104,7 +104,7 @@ export default function JwtRegisterView() {
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_-]*$/; // Range for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
 
     if (arabicRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
@@ -113,7 +113,7 @@ export default function JwtRegisterView() {
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
-    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%]*$/; // Only allow letters and spaces
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
 
     if (englishRegex.test(event.target.value)) {
       methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
@@ -153,7 +153,7 @@ export default function JwtRegisterView() {
         <Typography variant="body2"> Already have an account? </Typography>
 
         <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
-          Sign in
+          login
         </Link>
       </Stack>
     </Stack>
