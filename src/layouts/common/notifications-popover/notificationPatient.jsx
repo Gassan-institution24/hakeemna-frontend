@@ -24,8 +24,6 @@ export default function NotificationItem({ notification, handleClick }) {
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
 
-  // console.log(notification, 'notification');
-
   const defaultValues = {
     sender: notification?.patient,
     patient: notification?.sender,
@@ -42,6 +40,18 @@ export default function NotificationItem({ notification, handleClick }) {
         family_members: notification?.sender,
       });
       await axios.post(`${endpoints.notifications.all}/accept`, defaultValues);
+      enqueueSnackbar(t('Invitation sent successfully'));
+    } catch (error) {
+      // error emitted in backend
+      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      console.error(error);
+    }
+  };
+
+
+  const handleConfirmation = async () => {
+    try {
+      // await axios.post(`${endpoints.notifications.all}/accept`, defaultValues);
       enqueueSnackbar(t('Invitation sent successfully'));
     } catch (error) {
       // error emitted in backend
@@ -81,6 +91,22 @@ export default function NotificationItem({ notification, handleClick }) {
         variant="contained"
         onClick={() => {
           handleAddFamily();
+        }}
+      >
+        Accept
+      </Button>
+      <Button size="small" variant="outlined">
+        Decline
+      </Button>
+    </Stack>
+  );
+  const confirmation = (
+    <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
+      <Button
+        size="small"
+        variant="contained"
+        onClick={() => {
+          handleConfirmation();
         }}
       >
         Accept
@@ -131,7 +157,7 @@ export default function NotificationItem({ notification, handleClick }) {
   const renderUnReadBadge = notification.isUnRead && (
     <Box
       sx={{
-        top: 26,
+        top: 15,
         width: 8,
         height: 8,
         right: 20,
@@ -164,6 +190,15 @@ export default function NotificationItem({ notification, handleClick }) {
         </Stack>
       ) : (
         <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>{renderText}</Stack>
+      )}
+
+      
+      {notification.type === 'upcoming' ? (
+        <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
+          {notification?.isUnRead === true ? confirmation : ''}
+        </Stack>
+      ) : (
+        ''
       )}
     </ListItemButton>
   );
