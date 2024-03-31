@@ -139,21 +139,6 @@ export default function OverviewAppView() {
               }}
               onReady={(event) => event.target.pauseVideo()}
             />
-            {/* <iframe
-              src="https://www.youtube.com/embed/IGsRxmC40Bw?si=gULZ3W4Jy6BPk7p6"
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                height: '320px',
-                width: '100%',
-                borderRadius: '10px',
-                border: 'none',
-              }}
-            /> */}
           </Box>
         </Grid>
       </Grid>
