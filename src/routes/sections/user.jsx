@@ -15,6 +15,7 @@ const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 // const TablesListPage = lazy(() => import('src/pages/dashboard/tables/list'));
 // USER
 const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
+const Sidebar = lazy(() => import('src/sections/user/view/siedBarmd'))
 const OldmedicalrepotView = lazy(() => import('src/sections/user/oldmedicalrepotView'));
 const UserAppointmentsPage = lazy(() => import('src/pages/dashboard/user/appointments'));
 const Booking = lazy(() => import('src/pages/dashboard/user/appointmentsbooking'));
@@ -64,6 +65,7 @@ export const userRoutes = [
         children: [
           { element: <UserProfilePage />, index: true },
           { path: 'profile', element: <UserProfilePage /> },
+          { path: 'Sidebar', element: <Sidebar /> },
           { path: 'oldmedicalreportsview/:id', element: <OldmedicalrepotView /> },
           { path: 'myprofile/:id', element: <ProfileQr /> },
           { path: 'medicalreports', element: <Medicalreports /> },
