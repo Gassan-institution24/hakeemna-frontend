@@ -64,11 +64,11 @@ export default function Doctorpage() {
   const patientData = user?.patient?._id;
   const patientinfo = user?.patient;
   const patientEmail = user?.email;
-
   const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
     id,
     startDate: currentDateTime,
   });
+
 
   const [selectedTime, setSelectedTime] = useState(null);
 
@@ -277,7 +277,7 @@ export default function Doctorpage() {
                   gridTemplateColumns: '1fr 1fr 1fr',
                 }}
               >
-                {appointmentsData?.map((time, index, idx) => (
+                {appointmentsData?.map((time, idx) => (
                   <Button
                     key={idx}
                     onClick={() => handleTimeClick(time?._id)}
@@ -363,7 +363,7 @@ export default function Doctorpage() {
                 <Typography>
                   {' '}
                   <Iconify width={18} sx={{ color: 'warning.main' }} icon="mingcute:time-line" />
-                  &nbsp; Date: {fTime(datacheeck?.start_time)}{' '}
+                  &nbsp; Time: {fTime(datacheeck?.start_time)}{' '}
                 </Typography>
               )}
               {datacheeck && (
