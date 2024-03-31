@@ -22,7 +22,7 @@ import axios, { endpoints } from 'src/utils/axios';
 import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetPatientNotifications } from 'src/api';
+import { useGetPatientNotifications, useGetpatientNotify } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -43,8 +43,33 @@ export default function NotificationsPopoverPatient() {
   const { patientNotifications, hasMore, unread, refetch, loading } = useGetPatientNotifications(
     user?.patient?._id
   );
-  console.log(patientNotifications);
-  console.log(unread);
+
+  // const { notifyData } = useGetpatientNotify(user?.patient?._id);
+  // console.log(notifyData, 'notifyData');
+
+
+  // useEffect(() => {
+  //   if (notifyData) {
+  //     const infoData = {
+  //       patient: user?.patient?._id,
+  //       title: `Please let us know if you're coming or not`,
+  //       title_arabic: `الرجاء اعلامنا ما إذا كنت قادمًا أو لا`,
+  //       photo_URL: 'https://cdn-icons-png.flaticon.com/512/2867/2867644.png',
+  //       category: 'upcoming',
+  //       type: 'upcoming',
+  //     };
+      
+  //     notifyData.forEach(async (data) => {
+  //       try {
+  //         await axios.post(`${endpoints.notifications.all}/confirmation`, infoData);
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  //     });
+     
+  //   }
+  // }, [notifyData, user?.patient?._id]);
+  
 
   const smUp = useResponsive('up', 'sm');
 
@@ -71,7 +96,7 @@ export default function NotificationsPopoverPatient() {
     socket.on('request', (data) => {
       console.log(data);
       setAllNotifications([]);
-      setPage(1);
+      // setPage(1);
       refetch();
     });
   }, []);
@@ -79,7 +104,7 @@ export default function NotificationsPopoverPatient() {
     socket.on('invite', (data) => {
       console.log(data);
       setAllNotifications([]);
-      setPage(1);
+      // setPage(1);
       refetch();
     });
   }, []);
@@ -102,7 +127,14 @@ export default function NotificationsPopoverPatient() {
 
   useEffect(() => {
     socket.on('appointmentcancel', (data) => {
-      console.log(data);
+      setAllNotifications([]);
+      // setPage(1);
+      refetch();
+    });
+  }, []);
+
+  useEffect(() => {
+    socket.on('upcoming', (data) => {
       setAllNotifications([]);
       // setPage(1);
       refetch();

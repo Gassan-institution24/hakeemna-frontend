@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Box from '@mui/material/Box';
-
+import { useMediaQuery } from 'react-responsive';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
-
 import { useSettingsContext } from 'src/components/settings';
+import SmallSidebar from 'src/sections/user/view/sideBarsm';
+import Sidebar from 'src/sections/user/view/siedBarmd';
 
 import Main from './main';
 import Header from './header';
@@ -14,10 +14,13 @@ import NavMini from './nav-mini';
 import NavVertical from './nav-vertical';
 import NavHorizontal from './nav-horizontal';
 
+
+
 // ----------------------------------------------------------------------
 
 export default function UserDashboardLayout({ children }) {
   const settings = useSettingsContext();
+  const isSmallScreen = useMediaQuery({ maxWidth: 767 });
 
   const lgUp = useResponsive('up', 'lg');
 
@@ -80,7 +83,8 @@ export default function UserDashboardLayout({ children }) {
 
         <Main>
           {children}
-          {/* {screenSize === 'xs' ? <SmallSidebar /> : <Sidebarmd />} */}
+          {isSmallScreen ? <SmallSidebar /> : <Sidebar />}
+          
         </Main>
       </Box>
     </>
