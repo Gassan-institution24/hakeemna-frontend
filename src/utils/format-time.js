@@ -1,5 +1,5 @@
 import ar from 'date-fns/locale/ar-SA';
-import { format, getTime, formatDistanceToNow, isValid } from 'date-fns';
+import { format, getTime, isValid, formatDistanceToNow } from 'date-fns';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';

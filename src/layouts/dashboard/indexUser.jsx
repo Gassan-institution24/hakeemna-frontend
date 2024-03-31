@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
 import { useMediaQuery } from 'react-responsive';
+
+import Box from '@mui/material/Box';
+
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
+
 import { useSettingsContext } from 'src/components/settings';
-import SmallSidebar from 'src/sections/user/view/sideBarsm';
+
 import Sidebar from 'src/sections/user/view/siedBarmd';
+import SmallSidebar from 'src/sections/user/view/sideBarsm';
 
 import Main from './main';
 import Header from './header';

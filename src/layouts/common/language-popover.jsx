@@ -1,8 +1,8 @@
 import { m } from 'framer-motion';
 import { useEffect, useCallback } from 'react';
 
+import { Button } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -10,7 +10,6 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

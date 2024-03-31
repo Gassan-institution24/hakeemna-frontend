@@ -5,17 +5,15 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 
-import { paths } from 'src/routes/paths';
 
 // import { _tours, TOUR_DETAILS_TABS, TOUR_PUBLISH_OPTIONS } from 'src/_mock';
 
+import { useGetUnitservice, useGetUSAvailableAppointments } from 'src/api';
+
 import Label from 'src/components/label';
 import { useSettingsContext } from 'src/components/settings';
-import { useGetUSAppointments, useGetUSAvailableAppointments, useGetUnitservice } from 'src/api';
 
-import TourDetailsToolbar from '../tour-details-toolbar';
 import TourDetailsContent from '../tour-details-content';
-import TourDetailsBookers from '../tour-details-bookers';
 
 // ----------------------------------------------------------------------
 
