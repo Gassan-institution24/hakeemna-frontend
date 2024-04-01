@@ -5,7 +5,8 @@ import { Button, Typography } from '@mui/material';
 import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 
-import { fDate } from 'src/utils/format-time';
+// import { fDate } from 'src/utils/format-time';
+import {fDateAndTime} from 'src/utils/format-time'
 
 import { useGetOneoldmedicalreports } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
@@ -47,7 +48,7 @@ export default function OldmedicalrepotView() {
         </Typography>
         <Typography sx={{ fontWeight: 600, p: 2 }}>
           {t('Date')}:&nbsp; &nbsp;
-          <span style={{ color: 'gray', fontWeight: 400 }}>{fDate(oldmedicalreports?.date)}</span>
+          <span style={{ color: 'gray', fontWeight: 400 }}>{fDateAndTime(oldmedicalreports?.date)}</span>
         </Typography>
         {oldmedicalreports?.note && (
           <Typography sx={{ fontWeight: 600, p: 2 }}>
