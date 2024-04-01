@@ -34,7 +34,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios from 'src/utils/axios';
-import { fDate } from 'src/utils/format-time';
+import { fDateAndTime } from 'src/utils/format-time';
 
 import { useGetSpecialties } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
@@ -60,7 +60,7 @@ export default function OldMedicalReports() {
   const [checkChange, setCheckChange] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
-
+console.log(Filesdata)
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { specialtiesData } = useGetSpecialties();
@@ -199,24 +199,27 @@ export default function OldMedicalReports() {
   const handleAlertClose = () => {
     setShowAlert(false);
   };
-
   const downloadAsPDF = (report) => {
     // Create a new PDF instance
     const pdf = new JsPdf();
 
-    console.log(report, 'report');
+    // Load Arabic font
+    pdf.addFont('/fonts/IBMPlexSansArabic-Regular.ttf', 'ArabicFont', 'normal');
+
+    // Set font to the loaded Arabic font
+    pdf.setFont('ArabicFont');
+
     // Add report details to the PDF
     pdf.text(`File Name: ${report.name}`, 10, 10);
     pdf.text(`Specialty: ${report.specialty.name_english}`, 10, 20);
-    pdf.text(`Date: ${fDate(report.date)}`, 10, 30);
+    pdf.text(`Date: ${fDateAndTime(report.date)}`, 10, 30);
     if (report.note) {
       pdf.text(`Note: ${report.note}`, 10, 40);
     }
      addImagesToPDF(pdf, report.file).then(modifiedPdf => {
       modifiedPdf.save(`${report.name}.pdf`);
     });
-  
-  };
+};
 
   const fetchImageAsBase64 = async (url) => {
     // const response = await fetch(`http://localhost:3000/uploaded-files/patients/old_medical_reports/${url}`);
@@ -441,7 +444,7 @@ export default function OldMedicalReports() {
                   <TableCell>{info?.specialty?.name_english.substring(0, 12) || ''}</TableCell>
                 )}
 
-                <TableCell>{fDate(info?.date)}</TableCell>
+                <TableCell>{fDateAndTime(info?.date)}</TableCell>
                 {info?.note && (
                   <TableCell>
                     {info.note.length > 7 ? `${info.note.substring(0, 7)}...` : info.note}
