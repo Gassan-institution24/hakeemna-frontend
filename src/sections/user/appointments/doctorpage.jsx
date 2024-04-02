@@ -69,7 +69,6 @@ export default function Doctorpage() {
     startDate: currentDateTime,
   });
 
-
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
@@ -106,7 +105,9 @@ export default function Doctorpage() {
       }, 1000);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
     }
   };
   const renderHead = (

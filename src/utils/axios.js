@@ -314,8 +314,9 @@ export const endpoints = {
   },
   patients: {
     all: '/api/patient',
-    find: ({ identification_num, email, mobile_num1 }) =>
-      `/api/patient/find?id=${identification_num}&&email=${email}&&mobile=${mobile_num1}`,
+    find: `/api/patient/find`,
+    // find: ({ identification_num, email, mobile_num1 }) =>
+    //   `/api/patient/find?id=${identification_num}&&email=${email}&&mobile=${mobile_num1}`,
     findPatient: ({ identification_num, mobile_num1, first_name, name_arabic }) =>
       `/api/patient/findpatient?id=${identification_num}&&mobile=${mobile_num1}&&first_name=${first_name}&&name_arabic=${name_arabic}`,
     family: (id) => `/api/patient/myfamily/${id}`,

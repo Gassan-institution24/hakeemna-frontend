@@ -6,17 +6,17 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 // import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDate } from 'src/utils/format-time';
+import { fTime } from 'src/utils/format-time';
 
 // import { TOUR_SERVICE_OPTIONS } from 'src/_mock';
 
 import { useParams } from 'src/routes/hooks';
 
 import { useGetUSActiveEmployeeEngs } from 'src/api';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
@@ -28,31 +28,16 @@ import TourDetailsBookers from './tour-details-bookers';
 
 // ----------------------------------------------------------------------
 
-const TOUR_SERVICE_OPTIONS = [
-  { value: 'Audio guide', label: 'Audio guide' },
-  { value: 'Food and drinks', label: 'Food and drinks' },
-  { value: 'Lunch', label: 'Lunch' },
-  { value: 'Private tour', label: 'Private tour' },
-  { value: 'Special activities', label: 'Special activities' },
-  { value: 'Entrance fees', label: 'Entrance fees' },
-  { value: 'Gratuities', label: 'Gratuities' },
-  { value: 'Pick-up and drop off', label: 'Pick-up and drop off' },
-  { value: 'Professional guide', label: 'Professional guide' },
-  {
-    value: 'Transport by air-conditioned',
-    label: 'Transport by air-conditioned',
-  },
-];
-
 export default function TourDetailsContent({ tour }) {
   const {
     name_english,
+    name_arabic,
     company_logo,
     introduction_letter,
-    services,
+    arabic_introduction_letter,
     tourGuides,
-    available,
-    work_hours,
+    work_start_time,
+    work_end_time,
     phone,
     rate,
     rate_numbers,
@@ -61,18 +46,27 @@ export default function TourDetailsContent({ tour }) {
     sector_type,
     US_type,
     web_page,
+    work_days,
     email,
+    insurance,
+    location_gps,
   } = tour;
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { id } = useParams();
   const { employeesData } = useGetUSActiveEmployeeEngs(id);
-  console.log('employeesData', employeesData);
+
+  const getDirections = () => {
+    window.location.href = location_gps;
+  };
 
   const slides = [{ src: company_logo }];
   // const slides = company_logo?.map((slide) => ({
   //   src: slide,
   // }));
-
   const {
     selected: selectedImage,
     open: openLightbox,
@@ -91,51 +85,49 @@ export default function TourDetailsContent({ tour }) {
     >
       {[
         {
-          label: 'email',
-          value: email,
-          icon: <Iconify icon="entypo:email" />,
+          label: t('type'),
+          value: curLangAr ? US_type?.name_arabic : US_type?.name_english,
+          icon: <Iconify icon="ri:hospital-fill" />,
         },
         {
-          label: 'website',
-          value: web_page,
-          icon: <Iconify icon="fluent-mdl2:website" />,
+          label: t('sector type'),
+          value: t(sector_type),
+          icon: <Iconify icon="fluent:class-24-filled" />,
         },
         {
-          label: 'work days',
-          value: `${fDate(available?.startDate)} - ${fDate(available?.endDate)}`,
+          label: t('work days'),
+          value: work_days.length === 7 ? t('All days') : work_days.map((day) => t(day)).join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'work hours',
-          value: work_hours,
+          label: t('work hours'),
+          value:
+            work_start_time === work_end_time
+              ? t('24 hours')
+              : `${fTime(work_start_time, 'p', curLangAr)} - ${fTime(work_end_time,'p',curLangAr)}`,
           icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
-          label: 'Contact name',
-          value: tourGuides?.map((tourGuide) => tourGuide.phoneNumber).join(', '),
-          icon: <Iconify icon="solar:user-rounded-bold" />,
-        },
-        {
-          label: 'Contact phone',
+          label: t('contact phone'),
           value: phone,
           icon: <Iconify icon="solar:phone-bold" />,
         },
         {
-          label: 'sector type',
-          value: sector_type,
-          icon: <Iconify icon="fluent:class-24-filled" />,
+          label: t('email'),
+          value: email,
+          icon: <Iconify icon="entypo:email" />,
         },
         {
-          label: 'type',
-          value: US_type?.name_english,
-          icon: <Iconify icon="ri:hospital-fill" />,
+          label: t('website'),
+          value: web_page,
+          icon: <Iconify icon="fluent-mdl2:website" />,
         },
       ].map((item) => (
         <Stack key={item.label} spacing={1.5} direction="row">
           {item.icon}
           <ListItemText
             primary={item.label}
-            secondary={item.value}
+            secondary={<span dir={item.label === 'رقم الهاتف' ? 'ltr' : 'auto'}>{item.value}</span>}
             primaryTypographyProps={{
               typography: 'body2',
               color: 'text.secondary',
@@ -145,6 +137,7 @@ export default function TourDetailsContent({ tour }) {
               typography: 'subtitle2',
               color: 'text.primary',
               component: 'span',
+              textTransform: 'none',
             }}
           />
         </Stack>
@@ -156,12 +149,12 @@ export default function TourDetailsContent({ tour }) {
     <Stack>
       <Stack direction="row" sx={{ mb: 3 }}>
         <Typography variant="h4" sx={{ flexGrow: 1 }}>
-          {name_english}
+          {curLangAr ? name_arabic : name_english}
         </Typography>
 
-        <IconButton>
+        {/* <IconButton>
           <Iconify icon="solar:share-bold" />
-        </IconButton>
+        </IconButton> */}
 
         {/* <Checkbox
           defaultChecked
@@ -177,12 +170,25 @@ export default function TourDetailsContent({ tour }) {
           <Box component="span" sx={{ typography: 'subtitle2' }}>
             {rate}
           </Box>
-          <Link sx={{ color: 'text.secondary' }}>({rate_numbers} reviews)</Link>
+          <Link sx={{ color: 'text.secondary' }}>
+            ({rate_numbers} {t('reviews')})
+          </Link>
         </Stack>
 
-        <Stack direction="row" alignItems="center" spacing={0.5} sx={{ typography: 'body2' }}>
+        <Stack
+          onClick={getDirections}
+          direction="row"
+          alignItems="center"
+          spacing={0.5}
+          sx={{
+            typography: 'body2',
+            cursor: location_gps ? 'pointer' : '',
+            textDecoration: location_gps ? 'underline' : '',
+          }}
+        >
           <Iconify icon="mingcute:location-fill" sx={{ color: 'error.main' }} />
-          {country?.name_english}, {city?.name_english}
+          {curLangAr ? country?.name_arabic : country?.name_english},{' '}
+          {curLangAr ? city?.name_arabic : city?.name_english}
         </Stack>
 
         {/* <Stack direction="row" alignItems="center" spacing={0.5} sx={{ typography: 'subtitle2' }}>
@@ -262,45 +268,71 @@ export default function TourDetailsContent({ tour }) {
   );
 
   const renderContent = (
-    <Stack sx={{mb:5}}>
-      <Markdown children={introduction_letter} />
+    <Stack sx={{ mb: 5, mx: 2 }}>
+      {/* {introduction_letter && (
+        <Typography sx={{ mb: 1 }} variant="h6">
+          {t('introduction letter')}
+        </Typography>
+      )} */}
+      <Markdown
+        sx={{ px: 5, textTransform: 'none' }}
+        children={curLangAr ? arabic_introduction_letter : introduction_letter}
+      />
 
-      {/* <Stack spacing={2}> */}
-      <Typography variant="h6"> Employees </Typography>
-      <TourDetailsBookers bookers={employeesData} />
-      {/* <Box
-          rowGap={2}
-          display="grid"
-          gridTemplateColumns={{
-            xs: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
-          }}
+      <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
+
+      <Typography variant="h6">{t('insurance companies')}</Typography>
+
+      {insurance.length === 0 && (
+        <Typography
+          sx={{ px: 5, py: 1, color: 'text.disabled', textTransform: 'none' }}
+          variant="subtitle2"
         >
-          {employeesData?.map((service) => (
-            <Stack
-              key={service.label}
-              spacing={1}
-              direction="row"
-              alignItems="center"
+          {t('Does not work with any insurance company')}
+        </Typography>
+      )}
+
+      <Box
+        rowGap={2}
+        columnGap={2}
+        display="grid"
+        justifyContent="center"
+        gridTemplateColumns={{
+          xs: 'repeat(1, 1fr)',
+          md: 'repeat(3, 1fr)',
+        }}
+        sx={{ px: 5, py: 1 }}
+      >
+        {insurance?.map((insur) => (
+          <Stack
+            key={insur._id}
+            spacing={1}
+            direction="row"
+            alignItems="center"
+            sx={{
+              ...(insurance?.includes(insur._id) && {
+                color: 'text.disabled',
+              }),
+            }}
+          >
+            <Iconify
+              icon="eva:checkmark-circle-2-outline"
               sx={{
-                ...(employeesData?.includes(service.label) && {
+                color: 'primary.main',
+                ...(insurance?.includes(insur._id) && {
                   color: 'text.disabled',
                 }),
               }}
-            >
-              <Iconify
-                icon="eva:checkmark-circle-2-outline"
-                sx={{
-                  color: 'primary.main',
-                  ...(employeesData?.includes(service.label) && {
-                    color: 'text.disabled',
-                  }),
-                }}
-              />
-              {service.label}
-            </Stack>
-          ))}
-        </Box> */}
+            />
+            {curLangAr ? insur?.name_arabic : insur?.name_english}
+          </Stack>
+        ))}
+      </Box>
+      <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
+      <Typography sx={{ mt: 2 }} variant="h6">
+        {t('Employees')}
+      </Typography>
+      <TourDetailsBookers bookers={employeesData} />
       {/* </Stack> */}
     </Stack>
   );
@@ -310,15 +342,15 @@ export default function TourDetailsContent({ tour }) {
       {renderGallery}
 
       {/* <Stack sx={{ maxWidth: 720, mx: 'auto' }}> */}
-        {/* {renderHead} */}
+      {/* {renderHead} */}
 
-        {/* <Divider sx={{ borderStyle: 'dashed', my: 5 }} /> */}
+      {/* <Divider sx={{ borderStyle: 'dashed', my: 5 }} /> */}
 
-        {/* {renderOverview} */}
+      {/* {renderOverview} */}
 
-        {/* <Divider sx={{ borderStyle: 'dashed', my: 5 }} /> */}
+      <Divider sx={{ borderStyle: 'dashed', my: 5 }} />
 
-        {renderContent}
+      {renderContent}
       {/* </Stack> */}
     </>
   );

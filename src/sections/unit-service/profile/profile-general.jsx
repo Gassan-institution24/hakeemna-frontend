@@ -2,15 +2,15 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { useState, useCallback } from 'react';
+import { matchIsValidTel } from 'mui-tel-input';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Tooltip, MenuItem, Typography } from '@mui/material';
+import { Chip, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
@@ -29,16 +29,33 @@ import {
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField, RHFUploadAvatar } from 'src/components/hook-form';
+import FormProvider, {
+  RHFSelect,
+  RHFTextField,
+  RHFTimePicker,
+  RHFPhoneNumber,
+  RHFAutocomplete,
+  RHFUploadAvatar,
+} from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral({ unitServiceData }) {
-  // const [selectedCountry, setSelectedCountry] = useState('');
-  // const [cities, setCities] = useState([]);
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
+  const daysOfWeek = [
+    t('sunday'),
+    t('monday'),
+    t('tuesday'),
+    t('wednesday'),
+    t('thursday'),
+    t('friday'),
+    t('saturday'),
+  ];
+
   const [companyLogo, setCompanyLog] = useState();
-  const [phone, setPhone] = useState();
-  const [alterPhone, setAlterPhone] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -50,10 +67,6 @@ export default function AccountGeneral({ unitServiceData }) {
   const { countriesData } = useGetCountries();
   const { unitserviceTypesData } = useGetActiveUSTypes();
   // const { specialtiesData } = useGetSpecialties();
-
-  const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
 
   const UpdateUserSchema = Yup.object().shape({
     name_english: Yup.string().required(t('required field')),
@@ -67,9 +80,15 @@ export default function AccountGeneral({ unitServiceData }) {
     identification_num: Yup.string().required(t('required field')),
     address: Yup.string(),
     web_page: Yup.string(),
-    phone: Yup.string().required(t('required field')),
+    work_days: Yup.array().min(1, `${t('must be at least')} 1`),
+    work_start_time: Yup.date().required(t('required field')),
+    work_end_time: Yup.date().required(t('required field')),
+    phone: Yup.string()
+      .required(t('required field'))
+      .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
     mobile_num: Yup.string(),
     introduction_letter: Yup.string(),
+    arabic_introduction_letter: Yup.string(),
     location_gps: Yup.string(),
     company_logo: Yup.mixed(),
   });
@@ -100,12 +119,18 @@ export default function AccountGeneral({ unitServiceData }) {
     identification_num: data?.identification_num || '',
     address: data?.address || '',
     web_page: data?.web_page || '',
+    work_days: data?.work_days || [],
+    work_start_time: data?.work_start_time || null,
+    work_end_time: data?.work_end_time || null,
     phone: data?.phone || '',
     mobile_num: data?.mobile_num || '',
     introduction_letter: data?.introduction_letter || '',
+    arabic_introduction_letter: data?.arabic_introduction_letter || '',
     location_gps: data?.location_gps || '',
     company_logo: data?.company_logo || '',
   };
+
+  console.log('data work start', data);
 
   const methods = useForm({
     mode: 'onTouched',
@@ -119,6 +144,7 @@ export default function AccountGeneral({ unitServiceData }) {
     formState: { isSubmitting },
   } = methods;
 
+  const values = watch();
   const { tableData } = useGetCountryCities(watch().country);
 
   const handleDrop = useCallback(
@@ -170,10 +196,21 @@ export default function AccountGeneral({ unitServiceData }) {
       console.info('DATA', dataToSend);
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
   });
+
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+
+    if (arabicRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
 
   const handleEnglishInputChange = (event) => {
     // Validate the input based on English language rules
@@ -224,23 +261,14 @@ export default function AccountGeneral({ unitServiceData }) {
                 name="identification_num"
                 label={`${t('ID number')}* :`}
               />
-              <RHFTextField variant="filled" name="name_english" label={`${t('name')}* :`} />
+              <RHFTextField
+                variant="filled"
+                name="name_english"
+                label={`${t('name english')}* :`}
+              />
               <RHFTextField variant="filled" name="name_arabic" label={`${t('name arabic')}* :`} />
               <RHFTextField type="email" variant="filled" name="email" label={`${t('email')}* :`} />
-              <Tooltip placement="top" title="Phone number of service unit">
-                <MuiTelInput
-                  forceCallingCode
-                  defaultCountry="JO"
-                  variant="filled"
-                  label={`${t('phone')}* : `}
-                  value={phone}
-                  onChange={(newPhone) => {
-                    matchIsValidTel(newPhone);
-                    setPhone(newPhone);
-                    methods.setValue('phone', newPhone);
-                  }}
-                />
-              </Tooltip>
+              <RHFPhoneNumber name="phone" label={t('phone number')} />
               {/* <RHFTextField
                 
                 type="number"
@@ -339,22 +367,50 @@ export default function AccountGeneral({ unitServiceData }) {
                   {t('Charity')}
                 </MenuItem>
               </RHFSelect>
+              <RHFPhoneNumber name="mobile_num" label={t('alternative mobile number')} />
               <RHFTextField name="web_page" label={t('webpage')} />
-              <Tooltip placement="top" title="Phone number of service unit">
-                <MuiTelInput
-                  forceCallingCode
-                  defaultCountry="JO"
-                  label={t('alternative mobile number')}
-                  value={alterPhone}
-                  onChange={(newPhone) => {
-                    matchIsValidTel(newPhone);
-                    setAlterPhone(newPhone);
-                    methods.setValue('mobile_num', newPhone);
-                  }}
-                />
-              </Tooltip>
+              <RHFTimePicker name="work_start_time" label={t('work start time')} />
+              <RHFTimePicker
+                name="work_end_time"
+                label={t('work end time')}
+                helperText={t(
+                  'choose 12 am for both start and end time if you are working 24 hours'
+                )}
+              />
               <RHFTextField name="location_gps" label={t('location GPS')} />
             </Box>
+            <RHFAutocomplete
+              sx={{ mt: 3 }}
+              name="work_days"
+              label={`${t('work days')} *`}
+              multiple
+              disableCloseOnSelect
+              options={daysOfWeek.filter(
+                (option) => !values.work_days.some((item) => option === item)
+              )}
+              getOptionLabel={(option) => option}
+              renderOption={(props, option, idx) => (
+                <li {...props} key={idx} value={option}>
+                  {option}
+                </li>
+              )}
+              // onChange={(event, newValue) => {
+              //   // setSelectedEmployees(newValue);
+              //   methods.setValue('work_days', newValue, { shouldValidate: true });
+              // }}
+              renderTags={(selected, getTagProps) =>
+                selected.map((option, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    key={index}
+                    label={option}
+                    size="small"
+                    color="info"
+                    variant="soft"
+                  />
+                ))
+              }
+            />
             <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} />
             <RHFTextField
               multiline
@@ -363,7 +419,16 @@ export default function AccountGeneral({ unitServiceData }) {
               sx={{ mt: 3 }}
               onChange={handleEnglishInputChange}
               name="introduction_letter"
-              label={t('introduction letter')}
+              label={t('introduction letter in english')}
+            />
+            <RHFTextField
+              multiline
+              colSpan={14}
+              rows={4}
+              sx={{ mt: 3 }}
+              onChange={handleArabicInputChange}
+              name="arabic_introduction_letter"
+              label={t('introduction letter in arabic')}
             />
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>

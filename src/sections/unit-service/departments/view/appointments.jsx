@@ -51,7 +51,7 @@ import {
 
 import AppointmentsRow from '../appointments/appointment-row';
 import PatientHistoryToolbar from '../appointments/appointment-toolbar';
-import HistoryFiltersResult from '../appointments/appointment-filters-result';
+// import HistoryFiltersResult from '../appointments/appointment-filters-result';
 import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 // ----------------------------------------------------------------------
@@ -161,6 +161,12 @@ export default function AppointmentsView({ departmentData }) {
       count: processing,
     },
     {
+      value: 'available',
+      label: t('available'),
+      color: 'secondary',
+      count: available,
+    },
+    {
       value: 'finished',
       label: t('finished'),
       color: 'success',
@@ -171,12 +177,6 @@ export default function AppointmentsView({ departmentData }) {
       label: t('canceled'),
       color: 'error',
       count: canceled,
-    },
-    {
-      value: 'available',
-      label: t('available'),
-      color: 'secondary',
-      count: available,
     },
     {
       value: 'not booked',
@@ -206,7 +206,9 @@ export default function AppointmentsView({ departmentData }) {
         enqueueSnackbar(t('canceled successfully!'));
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       refetch();
@@ -229,7 +231,9 @@ export default function AppointmentsView({ departmentData }) {
         enqueueSnackbar(t('delayed successfully!'));
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       refetch();
@@ -251,7 +255,9 @@ export default function AppointmentsView({ departmentData }) {
         enqueueSnackbar(t('uncanceled successfully!'));
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       refetch();
@@ -271,7 +277,9 @@ export default function AppointmentsView({ departmentData }) {
       enqueueSnackbar(t('canceled successfully!'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     refetch();
@@ -307,7 +315,9 @@ export default function AppointmentsView({ departmentData }) {
       enqueueSnackbar(t('delayed successfully!'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     refetch();
@@ -344,7 +354,9 @@ export default function AppointmentsView({ departmentData }) {
       enqueueSnackbar(t('uncanceled successfully!'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     refetch();
@@ -380,13 +392,6 @@ export default function AppointmentsView({ departmentData }) {
     [handleFilters]
   );
 
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
-
-  // if (loading) {
-  //   return <LoadingScreen />;
-  // }
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -405,7 +410,7 @@ export default function AppointmentsView({ departmentData }) {
                   },
                 }}
               >
-                {t('new emergency appointment')}
+                {t('new ergent appointment')}
               </Button>
             )
           }
@@ -451,7 +456,7 @@ export default function AppointmentsView({ departmentData }) {
             options={appointmenttypesData}
           />
 
-          {canReset && (
+          {/* {canReset && (
             <HistoryFiltersResult
               filters={filters}
               onFilters={handleFilters}
@@ -461,7 +466,7 @@ export default function AppointmentsView({ departmentData }) {
               results={dataFiltered.length}
               sx={{ p: 2.5, pt: 0 }}
             />
-          )}
+          )} */}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
@@ -578,10 +583,11 @@ export default function AppointmentsView({ departmentData }) {
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Cancel"
+        title={t('cancel')}
         content={
           <>
-            Are you sure want to cancel <strong> {table.selected.length} </strong> items?
+            {t('Are you sure want to cancel')} <strong> {table.selected.length} </strong>{' '}
+            {t('items?')}
           </>
         }
         action={
@@ -593,17 +599,18 @@ export default function AppointmentsView({ departmentData }) {
               handleCancelRows();
             }}
           >
-            Cancel
+            {t('cancel')}
           </Button>
         }
       />
       <ConfirmDialog
         open={confirmUnCancel.value}
         onClose={confirmUnCancel.onFalse}
-        title="UnCancel"
+        title={t('uncancel')}
         content={
           <>
-            Are you sure want to uncancel <strong> {table.selected.length} </strong> items?
+            {t('Are you sure want to uncancel')} <strong> {table.selected.length} </strong>{' '}
+            {t('items?')}
           </>
         }
         action={
@@ -615,7 +622,7 @@ export default function AppointmentsView({ departmentData }) {
               handleUnCancelRows();
             }}
           >
-            uncancel
+            {t('uncancel')}
           </Button>
         }
       />
@@ -625,7 +632,7 @@ export default function AppointmentsView({ departmentData }) {
         title={t('delay')}
         content={
           <>
-            How many minutes do you want to delay items?
+            {t('How many minutes do you want to delay items?')}
             <TextField
               InputProps={{
                 endAdornment: (
@@ -638,6 +645,7 @@ export default function AppointmentsView({ departmentData }) {
               sx={{ p: 2, width: '100%' }}
               size="small"
               onChange={(e) => setMinToDelay(e.target.value)}
+              helperText={t('knowing that you can type a negative value to make it earlier')}
             />
           </>
         }

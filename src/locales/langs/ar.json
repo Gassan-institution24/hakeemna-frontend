@@ -7,6 +7,7 @@
   "control panel": "لوحة التحكم",
   "departments": "الأقسام",
   "employees": "موظفين",
+  "Employees": "الموظفين",
   "activities": "الأنشطة والمهام التنفيذية",
   "activity": "نشاط",
   "appointments": "المواعيد",
@@ -200,7 +201,7 @@
   "new room": "غرفة جديدة",
   "Create new room": "غرفة جديدة",
   "tax number": "الرقم الضريبي",
-  "mobile Number": "رقم الموبايل",
+  "mobile Number": "رقم الهاتف",
   "bachelor year graduation": "تاريخ التخرج من البكالوريوس",
   "university graduation bachelor": "الجامعة المتخرج منها",
   "university graduation specialty": "التخصص",
@@ -218,6 +219,13 @@
   "Wednesday": "الأربعاء",
   "Thursday": "الخميس",
   "Friday": "الجمعة",
+  "saturday": "السبت",
+  "sunday": "الأحد",
+  "monday": "الاثنين",
+  "tuesday": "الثلاثاء",
+  "wednesday": "الأربعاء",
+  "thursday": "الخميس",
+  "friday": "الجمعة",
   "day": "يوم",
   "appointments number": "عدد المواعيد",
   "work start time": "وقت بدء العمل",
@@ -233,11 +241,15 @@
   "unit service type": "نوع وحدة الخدمة",
   "sector type": "قطاع العمل",
   "Public": "عام",
+  "Private": "خاص",
+  "public": "عام",
   "private": "خاص",
   "Charity": "خيري",
-  "alternative mobile number": "رقم موبايل بديل",
+  "alternative mobile number": "رقم هاتف بديل",
   "location GPS": "موقع جغرافي",
   "introduction letter": "الرسالة الترحيبية",
+  "introduction letter in english": "الرسالة الترحيبية باللغة الانجليزية",
+  "introduction letter in arabic": "الرسالة الترحيبية باللغة العربية",
   "save changes": "حفظ التغييرات",
   "scanned ID": "الهوية الشخصية",
   "signature": "التوقيع",
@@ -287,6 +299,7 @@
   "colors": "ألوان",
   "range": "الفترة",
   "Reset": "إعادة تهيئة",
+  "note": "ملاحظات",
   "Select One Employee to start": "اختر موظف لتعديل الصلاحيات",
   "department and all its work groups": "القسم وجميع مجموعات عمله",
   "giving or withdrowing permissions refered to all": "إعطاء او سحب صلاحيات لجميع",
@@ -328,6 +341,20 @@
   "return to login": "الرجوع إلى صفحة تسجيل الدخول",
   "Forgot your password?": "نسيت كلمة السر؟",
   "Please enter the email address associated with your account and We will email you a link to reset your password.": "أدخل البريد الالكتروني لحسابك لتصلك رسالة لتأكيد الحساب",
+  "work days": "أيام العمل الأسبوعية",
+  "All days": "جميع أيام الأسبوع",
+  "work hours": "ساعات العمل",
+  "24 hours": "24 ساعة",
+  "contact phone": "رقم الهاتف",
+  "website": "الموقع الالكتروني",
+  "Does not work with any insurance company": "ليست مشتركة مع أي شركة تأمين",
+  "insurance companies": "شركات التأمين المعتمدة",
+  "reviews": "تقييمات",
+  "choose 12 am for both start and end time if you are working 24 hours": "اختر الساعة 12 صباحا لوقت بدء وانتهاء الدوام ان كانت ساعات العمل 24 ساعة",
+  "visit profile": "الملف التعريفي",
+  "show page": "الصفحة الرئيسية",
+
+
 
   "Good Morning ☀️": "صباح الخير ☀️",
   "Good Evening 🌑 ": "مساء الخير 🌑",
@@ -498,14 +525,16 @@
   "new service": "خدمة جديدة",
   "number": "الرقم",
   "en-US": "ar",
-  "new emergency appointment": "موعد طوارئ جديد",
+  "new ergent appointment": "موعد مستعجل جديد",
   "How many minutes do you want to delay?": "عدد الدقائق المراد تأخيرها",
+  "How many minutes do you want to delay items?": "عدد الدقائق المراد تأخيرها",
   "book manually": "حجز يدوي",
   "marital status": "الحالة الاجتماعية",
   "mobile number": "رقم الهاتف",
   "Click here to fill your data": "اضغط هنا لملئ البيانات",
   "Is this you?": "هل هذا انت؟",
   "We found a record with similar information for ": "لقد وجدنا حساب بنفس المعلومات المدخلة",
+  "knowing that you can type a negative value to make it earlier": "يمكنك ادخال رقم سالب لتبكير الموعد",
 
   "uncanceled successfully!": "تم التفعيل بنجاح",
   "delayed successfully!": "تم التأخير بنجاح",
@@ -536,6 +565,8 @@
   "sorry, Page Not Found!":"هذه الصفحة غير موجودة!",
   "sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be sure to check your spelling.":"لم نستطيع إيجاد الصفحة التي تبحث عنها. ربما تكون قد اخطأت الكتابة",
   "Go Home":"الصفحة الرئيسية",
+  "from":"من",
+  "to":"الى",
 
   "list": "قائمة",
   "edit": "تعديل",
