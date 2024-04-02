@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[8265],{79355:(e,s,n)=>{n.r(s),n.d(s,{default:()=>r});var t=n(6907),a=n(77560),i=n(80184);function r(){return(0,i.jsxs)(i.Fragment,{children:[(0,i.jsxs)(t.ql,{children:[(0,i.jsx)("title",{children:" Hakeemna: Forgot Password"}),(0,i.jsx)("meta",{name:"description",content:"meta"})]}),(0,i.jsx)(a.s3,{})]})}}}]);
-//# sourceMappingURL=8265.d8313d78.chunk.js.map

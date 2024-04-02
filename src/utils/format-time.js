@@ -42,10 +42,10 @@ export function fDateTime(date, newFormat) {
   return date ? format(new Date(date), fm) : '';
 }
 
-export function fTime(date, newFormat) {
+export function fTime(date, newFormat, arabic) {
   const fm = newFormat || 'p';
 
-  return date ? format(new Date(date), fm) : '';
+  return date ? format(new Date(date), fm, arabic ? { locale: ar } : null) : '';
 }
 export function fDm(date, newFormat) {
   const fm = newFormat || 'dd MMM';

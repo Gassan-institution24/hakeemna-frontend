@@ -192,7 +192,9 @@ export default function OldMedicalReports() {
       setCheckChange(!checkChange);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
     }
   };
 
@@ -212,15 +214,16 @@ export default function OldMedicalReports() {
     if (report.note) {
       pdf.text(`Note: ${report.note}`, 10, 40);
     }
-     addImagesToPDF(pdf, report.file).then(modifiedPdf => {
+    addImagesToPDF(pdf, report.file).then((modifiedPdf) => {
       modifiedPdf.save(`${report.name}.pdf`);
     });
-  
   };
 
   const fetchImageAsBase64 = async (url) => {
     // const response = await fetch(`http://localhost:3000/uploaded-files/patients/old_medical_reports/${url}`);
-    const response = await fetch(`https://api.doctorna.online/uploaded-files/patients/old_medical_reports/${url}`);
+    const response = await fetch(
+      `https://api.doctorna.online/uploaded-files/patients/old_medical_reports/${url}`
+    );
     const blob = await response.blob();
     return new Promise((resolve, reject) => {
       const reader = new FileReader();

@@ -29,7 +29,8 @@ export default function TableDetailsRow({
     code,
     name_english,
     name_arabic,
-    unit_service,
+    // unit_service,
+    us_type,
     status,
     created_at,
     user_creation,
@@ -58,14 +59,14 @@ export default function TableDetailsRow({
 
       <TableCell
         align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={() => setFilters({ ...filters, name: unit_service.name_english })}
+        // sx={{
+        //   cursor: 'pointer',
+        //   color: '#3F54EB',
+        //   // textDecoration: 'underline',
+        // }}
+        // onClick={() => setFilters({ ...filters, name: us_type.name_english })}
       >
-        {unit_service?.name_english}
+        {us_type?.name_english}
       </TableCell>
       <TableCell align="center">
         <Label

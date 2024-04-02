@@ -89,8 +89,18 @@ export function useGetPatient(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useFindPatient({ identification_num, email, mobile_num1 }) {
-  const URL = endpoints.patients.find({ identification_num, email, mobile_num1 });
+export function useFindPatient({
+  name_english,
+  name_arabic,
+  email,
+  identification_num,
+  mobile_num1,
+  mobile_num2,
+}) {
+  const URL = [
+    endpoints.patients.find,
+    { params: { name_english, name_arabic, email, identification_num, mobile_num1, mobile_num2 } },
+  ];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

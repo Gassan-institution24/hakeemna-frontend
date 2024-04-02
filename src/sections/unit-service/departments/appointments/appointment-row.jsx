@@ -4,12 +4,12 @@ import { format, isValid } from 'date-fns';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { TextField } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+import { TextField, Typography } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
 import InputAdornment from '@mui/material/InputAdornment';
 
@@ -284,7 +284,27 @@ export default function AppointmentsTableRow({
               sx={{ p: 2, width: '100%' }}
               size="small"
               onChange={(e) => setMinToDelay(e.target.value)}
+              helperText={t('knowing that you can type a negative value to make it earlier')}
             />
+            {minToDelay !== 0 && (
+              <Typography variant="body2" sx={{ textAlign: 'center', color: 'error.main' }}>
+                {t('from')}&nbsp;
+                {new Date(start_time).toLocaleTimeString(t('en-US'), {
+                  timeZone: unit_service?.country?.time_zone,
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+                {/* {'     >>     '} */}
+                &nbsp;{t('to')}&nbsp;
+                {new Date(
+                  new Date(start_time).getTime() + minToDelay * 60 * 1000
+                ).toLocaleTimeString(t('en-US'), {
+                  timeZone: unit_service?.country?.time_zone,
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </Typography>
+            )}
           </>
         }
         action={

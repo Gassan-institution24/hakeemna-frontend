@@ -43,11 +43,12 @@ export default function NotificationItem({ notification, handleClick }) {
       enqueueSnackbar(t('Invitation sent successfully'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
   };
-
 
   const handleConfirmation = async () => {
     try {
@@ -55,7 +56,9 @@ export default function NotificationItem({ notification, handleClick }) {
       enqueueSnackbar(t('Invitation sent successfully'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
   };
@@ -192,7 +195,6 @@ export default function NotificationItem({ notification, handleClick }) {
         <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>{renderText}</Stack>
       )}
 
-      
       {notification.type === 'upcoming' ? (
         <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
           {notification?.isUnRead === true ? confirmation : ''}

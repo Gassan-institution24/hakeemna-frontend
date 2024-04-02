@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
-import { MuiTelInput } from 'mui-tel-input';
 import { Controller, useFormContext } from 'react-hook-form';
+
+import { DatePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
-export default function RHFPhoneNumber({ name, helperText, type, ...other }) {
+export default function RHFDatePicker({ name, helperText, type, ...other }) {
   const { control } = useFormContext();
 
   return (
@@ -12,16 +13,18 @@ export default function RHFPhoneNumber({ name, helperText, type, ...other }) {
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <MuiTelInput
+        <DatePicker
           {...field}
           fullWidth
-          dir="ltr"
-          forceCallingCode
-          defaultCountry="JO"
-          placeholder="7 XXXX XXXX"
+          type={type}
           value={field.value}
-          onChange={(newPhone) => {
-            field.onChange(newPhone);
+          onChange={(newValue) => {
+            field.onChange(newValue);
+          }}
+          slotProps={{
+            textField: {
+              fullWidth: true,
+            },
           }}
           error={!!error}
           helperText={error ? error?.message : helperText}
@@ -32,7 +35,7 @@ export default function RHFPhoneNumber({ name, helperText, type, ...other }) {
   );
 }
 
-RHFPhoneNumber.propTypes = {
+RHFDatePicker.propTypes = {
   helperText: PropTypes.object,
   name: PropTypes.string,
   type: PropTypes.string,

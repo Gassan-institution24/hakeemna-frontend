@@ -37,7 +37,6 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -51,7 +50,7 @@ import {
 
 import AppointmentsRow from '../appointments/appointment-row';
 import PatientHistoryToolbar from '../appointments/appointment-toolbar';
-import HistoryFiltersResult from '../appointments/appointment-filters-result';
+// import HistoryFiltersResult from '../appointments/appointment-filters-result';
 import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 // ----------------------------------------------------------------------
@@ -120,7 +119,7 @@ export default function AppointmentsView({ employeeData }) {
     canceled,
     finished,
     pending,
-    loading,
+    // loading,
   } = useGetEmployeeAppointments({
     id,
     page: table.page || 0,
@@ -163,6 +162,12 @@ export default function AppointmentsView({ employeeData }) {
       count: processing,
     },
     {
+      value: 'available',
+      label: t('available'),
+      color: 'secondary',
+      count: available,
+    },
+    {
       value: 'finished',
       label: t('finished'),
       color: 'success',
@@ -173,12 +178,6 @@ export default function AppointmentsView({ employeeData }) {
       label: t('canceled'),
       color: 'error',
       count: canceled,
-    },
-    {
-      value: 'available',
-      label: t('available'),
-      color: 'secondary',
-      count: available,
     },
     {
       value: 'not booked',
@@ -210,7 +209,9 @@ export default function AppointmentsView({ employeeData }) {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       enqueueSnackbar(t('canceled successfully!'));
@@ -233,7 +234,9 @@ export default function AppointmentsView({ employeeData }) {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       enqueueSnackbar(t('delayed successfully!'));
@@ -255,7 +258,9 @@ export default function AppointmentsView({ employeeData }) {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       enqueueSnackbar(t('uncanceled successfully!'));
@@ -275,7 +280,9 @@ export default function AppointmentsView({ employeeData }) {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     enqueueSnackbar(t('canceled successfully!'));
@@ -311,7 +318,9 @@ export default function AppointmentsView({ employeeData }) {
       enqueueSnackbar(t('delayed successfully!'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     refetch();
@@ -347,7 +356,9 @@ export default function AppointmentsView({ employeeData }) {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     refetch();
@@ -382,13 +393,14 @@ export default function AppointmentsView({ employeeData }) {
     [handleFilters]
   );
 
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
+  // const handleResetFilters = useCallback(() => {
+  //   setFilters(defaultFilters);
+  // }, []);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  // if (loading) {
+  //   return <LoadingScreen />;
+  // }
+
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -407,7 +419,7 @@ export default function AppointmentsView({ employeeData }) {
                   },
                 }}
               >
-                {t('new emergency appointment')}
+                {t('new ergent appointment')}
               </Button>
             )
           }
@@ -453,7 +465,7 @@ export default function AppointmentsView({ employeeData }) {
             options={appointmenttypesData}
           />
 
-          {canReset && (
+          {/* {canReset && (
             <HistoryFiltersResult
               filters={filters}
               onFilters={handleFilters}
@@ -463,7 +475,7 @@ export default function AppointmentsView({ employeeData }) {
               results={dataFiltered.length}
               sx={{ p: 2.5, pt: 0 }}
             />
-          )}
+          )} */}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
@@ -572,10 +584,11 @@ export default function AppointmentsView({ employeeData }) {
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Cancel"
+        title={t('cancel')}
         content={
           <>
-            Are you sure want to cancel <strong> {table.selected.length} </strong> items?
+            {t('Are you sure want to cancel')} <strong> {table.selected.length} </strong>{' '}
+            {t('items?')}
           </>
         }
         action={
@@ -587,17 +600,18 @@ export default function AppointmentsView({ employeeData }) {
               handleCancelRows();
             }}
           >
-            Cancel
+            {t('cancel')}
           </Button>
         }
       />
       <ConfirmDialog
         open={confirmUnCancel.value}
         onClose={confirmUnCancel.onFalse}
-        title="UnCancel"
+        title={t('uncancel')}
         content={
           <>
-            Are you sure want to uncancel <strong> {table.selected.length} </strong> items?
+            {t('Are you sure want to uncancel')} <strong> {table.selected.length} </strong>{' '}
+            {t('items?')}
           </>
         }
         action={
@@ -609,7 +623,7 @@ export default function AppointmentsView({ employeeData }) {
               handleUnCancelRows();
             }}
           >
-            uncancel
+            {t('uncancel')}
           </Button>
         }
       />
@@ -619,7 +633,7 @@ export default function AppointmentsView({ employeeData }) {
         title={t('delay')}
         content={
           <>
-            How many minutes do you want to delay items?
+            {t('How many minutes do you want to delay items?')}
             <TextField
               InputProps={{
                 endAdornment: (
@@ -632,6 +646,7 @@ export default function AppointmentsView({ employeeData }) {
               sx={{ p: 2, width: '100%' }}
               size="small"
               onChange={(e) => setMinToDelay(e.target.value)}
+              helperText={t('knowing that you can type a negative value to make it earlier')}
             />
           </>
         }
