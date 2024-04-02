@@ -34,7 +34,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios from 'src/utils/axios';
-import { fDate } from 'src/utils/format-time';
+import { fDateAndTime } from 'src/utils/format-time';
 
 import { useGetSpecialties } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
@@ -60,7 +60,6 @@ export default function OldMedicalReports() {
   const [checkChange, setCheckChange] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
-
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { specialtiesData } = useGetSpecialties();
@@ -201,18 +200,32 @@ export default function OldMedicalReports() {
   const handleAlertClose = () => {
     setShowAlert(false);
   };
-
   const downloadAsPDF = (report) => {
     // Create a new PDF instance
     const pdf = new JsPdf();
 
-    console.log(report, 'report');
+    // Load Arabic font
+    pdf.addFont('/fonts/IBMPlexSansArabic-Regular.ttf', 'ArabicFont', 'normal');
+
+    // Set font to the loaded Arabic font
+    pdf.setFont('ArabicFont');
+
     // Add report details to the PDF
     pdf.text(`File Name: ${report.name}`, 10, 10);
     pdf.text(`Specialty: ${report.specialty.name_english}`, 10, 20);
-    pdf.text(`Date: ${fDate(report.date)}`, 10, 30);
+    pdf.text(`Date: ${fDateAndTime(report.date)}`, 10, 30);
+    pdf.text(`Note: `, 10, 40);
+
     if (report.note) {
-      pdf.text(`Note: ${report.note}`, 10, 40);
+      const maxLength = 50; // Maximum characters per line
+      let startY = 40;
+      let remainingText = report.note;
+      while (remainingText.length > 0) {
+        const currentLine = remainingText.substring(0, maxLength);
+        pdf.text(`${currentLine}`, 25, startY);
+        startY += 10; // Increment the y-position for the next line
+        remainingText = remainingText.substring(maxLength);
+      }
     }
     addImagesToPDF(pdf, report.file).then((modifiedPdf) => {
       modifiedPdf.save(`${report.name}.pdf`);
@@ -222,7 +235,7 @@ export default function OldMedicalReports() {
   const fetchImageAsBase64 = async (url) => {
     // const response = await fetch(`http://localhost:3000/uploaded-files/patients/old_medical_reports/${url}`);
     const response = await fetch(
-      `https://api.doctorna.online/uploaded-files/patients/old_medical_reports/${url}`
+      `http://localhost:3000/uploaded-files/patients/old_medical_reports/${url}`
     );
     const blob = await response.blob();
     return new Promise((resolve, reject) => {
@@ -238,7 +251,8 @@ export default function OldMedicalReports() {
     const images = await Promise.all(imagePromises);
 
     images.forEach((base64data, index) => {
-      doc.addImage(base64data, 'JPEG', 10, index * 50 + 50, 180, 40);
+      // Adjust the positioning and styling of the image here
+      doc.addImage(base64data, 'JPEG', 10, index * 10 + 60, 180, 200); // Adjust as needed
       if (index < imageUrls.length - 1) {
         doc.addPage();
       }
@@ -444,7 +458,7 @@ export default function OldMedicalReports() {
                   <TableCell>{info?.specialty?.name_english.substring(0, 12) || ''}</TableCell>
                 )}
 
-                <TableCell>{fDate(info?.date)}</TableCell>
+                <TableCell>{fDateAndTime(info?.date)}</TableCell>
                 {info?.note && (
                   <TableCell>
                     {info.note.length > 7 ? `${info.note.substring(0, 7)}...` : info.note}

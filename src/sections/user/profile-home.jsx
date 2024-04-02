@@ -25,7 +25,8 @@ export default function ProfileHome() {
   const accessToken = sessionStorage.getItem('accessToken');
 
   // Replace the placeholder with the actual token (you need to get or generate the token)
-  const qrCodeLink = `https://doctorna.online/dashboard/user/myprofile/?token=${accessToken}`;
+  const qrCodeLink = `https://doctorna.online`;
+  // const qrCodeLink = `https://doctorna.online/dashboard/user/myprofile/?token=${accessToken}`;
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
