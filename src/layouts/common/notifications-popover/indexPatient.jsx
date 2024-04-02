@@ -37,39 +37,12 @@ export default function NotificationsPopoverPatient() {
 
   const drawer = useBoolean();
   const { t } = useTranslate();
-  // const { currentLang } = useLocales();
-  // const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const { patientNotifications, hasMore, unread, refetch, loading } = useGetPatientNotifications(
     user?.patient?._id
   );
 
-  // const { notifyData } = useGetpatientNotify(user?.patient?._id);
-  // console.log(notifyData, 'notifyData');
 
-
-  // useEffect(() => {
-  //   if (notifyData) {
-  //     const infoData = {
-  //       patient: user?.patient?._id,
-  //       title: `Please let us know if you're coming or not`,
-  //       title_arabic: `الرجاء اعلامنا ما إذا كنت قادمًا أو لا`,
-  //       photo_URL: 'https://cdn-icons-png.flaticon.com/512/2867/2867644.png',
-  //       category: 'upcoming',
-  //       type: 'upcoming',
-  //     };
-      
-  //     notifyData.forEach(async (data) => {
-  //       try {
-  //         await axios.post(`${endpoints.notifications.all}/confirmation`, infoData);
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     });
-     
-  //   }
-  // }, [notifyData, user?.patient?._id]);
-  
 
   const smUp = useResponsive('up', 'sm');
 

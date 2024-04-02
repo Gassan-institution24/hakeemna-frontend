@@ -41,6 +41,11 @@ export function fDateTime(date, newFormat) {
 
   return date ? format(new Date(date), fm) : '';
 }
+export function fDateAndTime(date, newFormat) {
+  const fm = newFormat || 'dd MMM yyyy ';
+
+  return date ? format(new Date(date), fm) : '';
+}
 
 export function fTime(date, newFormat, arabic) {
   const fm = newFormat || 'p';
