@@ -14,7 +14,7 @@ const stickySidebarStyle = {
   display: 'flex',
   right: 0,
   zIndex: 1,
-  height: 'auto',
+  height: '35vh',
   width: 'auto',
   margin: 3,
   position: 'fixed',
@@ -48,6 +48,7 @@ export default function Sidebar() {
       <Box style={insidestickySidebar}>
         <Button
           sx={{
+            width:'9vh',
             display: 'inline',
             '&:hover': {
               bgcolor: 'inherit',
@@ -55,13 +56,14 @@ export default function Sidebar() {
           }}
           onClick={gotoHome}
         >
-          <Iconify sx={{ color: 'green', width: '50%', height: '40%' }} icon="cil:home" />
-          <Typography sx={{ fontSize: 12 }}>Home</Typography>
+          <Iconify sx={{ color: 'green', width: '40%', height: '10%' }} icon="cil:home" />
+          <Typography sx={{ fontSize: 10.5 }}>Home</Typography>
         </Button>
 
         <Divider />
         <Button
           sx={{
+            width:'9vh',
             display: 'inline',
             '&:hover': {
               bgcolor: 'inherit',
@@ -70,14 +72,15 @@ export default function Sidebar() {
           onClick={gotoAppointments}
         >
           <Iconify
-            sx={{ color: 'green', width: '50%', height: '40%' }}
+            sx={{ color: 'green', width: '40%', height: '10%' }}
             icon="ph:calendar-duotone"
           />
-          <Typography sx={{ fontSize: 12 }}>Test</Typography>
+          <Typography sx={{ fontSize: 10.5 }}>Appointments</Typography>
         </Button>
         <Divider />
         <Button
           sx={{
+            width:'9vh',
             display: 'inline',
             '&:hover': {
               bgcolor: 'inherit',
@@ -85,12 +88,13 @@ export default function Sidebar() {
           }}
           onClick={gotoProfile}
         >
-          <Iconify sx={{ color: 'green', width: '50%', height: '40%' }} icon="gg:profile" />
-          <Typography sx={{ fontSize: 12 }}>Profile</Typography>
+          <Iconify sx={{ color: 'green', width: '40%', height: '10%' }} icon="gg:profile" />
+          <Typography sx={{ fontSize: 10.5 }}>Profile</Typography>
         </Button>
         <Divider />
         <Button
           sx={{
+            width:'9vh',
             display: 'inline',
             '&:hover': {
               bgcolor: 'inherit',
@@ -98,14 +102,15 @@ export default function Sidebar() {
           }}
         >
           <Iconify
-            sx={{ color: 'green', width: '50%', height: '40%' }}
+            sx={{ color: 'green', width: '40%', height: '10%' }}
             icon="material-symbols:history"
           />
-          <Typography sx={{ fontSize: 12 }}>History</Typography>
+          <Typography sx={{ fontSize: 10.5 }}>History</Typography>
         </Button>
         <Divider />
         <Button
           sx={{
+            width:'9vh',
             display: 'inline',
             '&:hover': {
               bgcolor: 'inherit',
@@ -114,10 +119,10 @@ export default function Sidebar() {
           onClick={gotoSetting}
         >
           <Iconify
-            sx={{ color: 'green', width: '50%', height: '40%' }}
+            sx={{ color: 'green', width: '40%', height: '10%' }}
             icon="ant-design:setting-outlined"
           />
-          <Typography sx={{ fontSize: 12 }}>Setting</Typography>
+          <Typography sx={{ fontSize: 10.5 }}>Setting</Typography>
         </Button>
       </Box>
     </Box>
