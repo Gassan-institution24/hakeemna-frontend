@@ -88,7 +88,9 @@ export default function NewPasswordView() {
       enqueueSnackbar(t('Password has changed successfully!'));
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
     }
   });
 

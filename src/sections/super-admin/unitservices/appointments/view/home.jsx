@@ -47,7 +47,7 @@ import {
 
 import AppointmentsRow from '../appointment-row';
 import PatientHistoryToolbar from '../appointment-toolbar';
-import HistoryFiltersResult from '../appointment-filters-result';
+// import HistoryFiltersResult from '../appointment-filters-result';
 import AddEmegencyAppointment from '../add-emergency-appointment';
 
 // ----------------------------------------------------------------------
@@ -214,7 +214,9 @@ export default function AppointmentsView() {
         enqueueSnackbar(t('canceled successfully!'));
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       refetch();
@@ -232,7 +234,9 @@ export default function AppointmentsView() {
         enqueueSnackbar(t('delayed successfully!'));
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       refetch();
@@ -249,7 +253,9 @@ export default function AppointmentsView() {
         enqueueSnackbar(t('uncanceled successfully!'));
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       refetch();
@@ -266,7 +272,9 @@ export default function AppointmentsView() {
       enqueueSnackbar(t('canceled successfully!'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     refetch();
@@ -296,7 +304,9 @@ export default function AppointmentsView() {
       enqueueSnackbar(t('delayed successfully!'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     refetch();
@@ -327,7 +337,9 @@ export default function AppointmentsView() {
       enqueueSnackbar(t('uncanceled successfully!'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     refetch();
@@ -361,9 +373,9 @@ export default function AppointmentsView() {
     [handleFilters]
   );
 
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
+  // const handleResetFilters = useCallback(() => {
+  //   setFilters(defaultFilters);
+  // }, []);
 
   return (
     <>
@@ -419,7 +431,7 @@ export default function AppointmentsView() {
             options={appointmenttypesData}
           />
 
-          {canReset && (
+          {/* {canReset && (
             <HistoryFiltersResult
               filters={filters}
               onFilters={handleFilters}
@@ -429,7 +441,7 @@ export default function AppointmentsView() {
               results={appointmentsData.length}
               sx={{ p: 2.5, pt: 0 }}
             />
-          )}
+          )} */}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
@@ -592,7 +604,7 @@ export default function AppointmentsView() {
         title={t('delay')}
         content={
           <>
-            How many minutes do you want to delay items?
+            {t('How many minutes do you want to delay items?')}
             <TextField
               InputProps={{
                 endAdornment: (
@@ -605,6 +617,7 @@ export default function AppointmentsView() {
               sx={{ p: 2, width: '100%' }}
               size="small"
               onChange={(e) => setMinToDelay(e.target.value)}
+              helperText={t('knowing that you can type a negative value to make it earlier')}
             />
           </>
         }

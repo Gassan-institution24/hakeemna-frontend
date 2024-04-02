@@ -24,12 +24,12 @@ export default function ConfirmDialog({
   // const { currentLang } = useLocales();
   // const curLangAr = currentLang.value === 'ar';
   return (
-    <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose} {...other}>
-      <DialogTitle sx={{ pb: 2 }}>{title}</DialogTitle>
+    <Dialog lang="ar" fullWidth maxWidth="xs" open={open} onClose={onClose} {...other}>
+      <DialogTitle sx={{ pb: 2, textTransform: 'capitalize' }}>{title}</DialogTitle>
 
       {content && <DialogContent sx={{ typography: 'body2' }}> {content} </DialogContent>}
 
-      <DialogActions>
+      <DialogActions sx={{ textTransform: 'capitalize' }}>
         {action}
 
         {!withoutCancel && (

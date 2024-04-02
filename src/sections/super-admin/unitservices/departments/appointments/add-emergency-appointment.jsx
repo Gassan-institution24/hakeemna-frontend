@@ -108,7 +108,9 @@ export default function BookManually({
 
       onClose();
     } catch (error) {
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
   });
@@ -117,7 +119,7 @@ export default function BookManually({
     <Dialog maxWidth="lg" onClose={onClose} {...other}>
       <FormProvider methods={methods} onSubmit={onSubmit}>
         <DialogTitle sx={{ mb: 1 }}>
-          {curLangAr ? 'إنشاء موعد طوارئ جديد' : 'New Emergency Appointment'}
+          {curLangAr ? 'إنشاء موعد مستعجل جديد' : 'new ergent appointment'}
         </DialogTitle>
 
         <DialogContent sx={{ overflow: 'unset' }}>

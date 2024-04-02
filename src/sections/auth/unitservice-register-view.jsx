@@ -552,7 +552,7 @@ export default function JwtRegisterView() {
           // </Tooltip>
         )}
         {/* <Tooltip placement="top" title="admin phone number"> */}
-        <RHFPhoneNumber name="em_phone" label={t('phone number')} placeholder="X XXXX XXXX" />
+        <RHFPhoneNumber name="em_phone" label={t('phone number')} />
         <div>
           <RHFCheckbox
             sx={{ px: 2 }}
