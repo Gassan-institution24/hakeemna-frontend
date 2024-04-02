@@ -164,7 +164,9 @@ export default function TableNewEditForm({ currentTable }) {
     } catch (error) {
       console.error(error);
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
@@ -198,7 +200,7 @@ export default function TableNewEditForm({ currentTable }) {
                 name="name_arabic"
                 label={`${t('Full name in Arabic')} *`}
               />
-              <RHFPhoneNumber name="phone" label={t('phone number')} placeholder="X XXXX XXXX" />
+              <RHFPhoneNumber name="phone" label={t('phone number')} />
 
               <RHFSelect name="nationality" label={`${t('nationality')} *`}>
                 {countriesData.map((nationality, idx) => (

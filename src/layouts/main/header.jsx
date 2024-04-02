@@ -29,6 +29,7 @@ import { navConfig } from './config-navigation';
 import LoginButton from '../common/login-button';
 import SigupButton from '../common/signup-button';
 import HeaderShadow from '../common/header-shadow';
+import LanguagePopover from '../common/language-popover';
 // ----------------------------------------------------------------------
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -131,9 +132,14 @@ export default function Header({ scrollToDiv, scrollToDiv2 }) {
             {mdUp && <LoginButton />}
             {mdUp && <SigupButton scrollToDiv={scrollToDiv} />}
 
+            <Stack sx={{ mr: 1 }}>
+              <LanguagePopover />
+            </Stack>
             <m.div variants={varFade().inUp}>
               <FormControlLabel
-                control={<MaterialUISwitch sx={{ m: 1 }} checked={settings.themeMode === 'dark'} />}
+                control={
+                  <MaterialUISwitch sx={{ my: 1, ml: 1 }} checked={settings.themeMode === 'dark'} />
+                }
                 onClick={() =>
                   settings.onUpdate('themeMode', settings.themeMode === 'light' ? 'dark' : 'light')
                 }

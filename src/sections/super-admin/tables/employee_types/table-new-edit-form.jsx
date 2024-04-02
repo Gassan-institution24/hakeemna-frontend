@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-// import { MenuItem } from '@mui/material';
+import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -18,8 +18,10 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // import { useGetActiveUnitservices } from 'src/api';
 
+import { useGetActiveUSTypes } from 'src/api';
+
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -27,12 +29,14 @@ export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
   // const { unitservicesData } = useGetActiveUnitservices();
+  const { unitserviceTypesData } = useGetActiveUSTypes();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
+    us_type: Yup.string(),
     // unit_service: Yup.string(),
   });
 
@@ -40,6 +44,7 @@ export default function TableNewEditForm({ currentTable }) {
     () => ({
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
+      us_type: currentTable?.us_type?._id || null,
       // unit_service: currentTable?.unit_service?._id || null,
     }),
     [currentTable]
@@ -130,6 +135,14 @@ export default function TableNewEditForm({ currentTable }) {
                 name="name_arabic"
                 label="name arabic"
               />
+
+              <RHFSelect name="unit_service" label="Unit Service type">
+                {unitserviceTypesData.map((type, idx) => (
+                  <MenuItem lang="ar" key={idx} value={type._id}>
+                    {type.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
 
               {/* <RHFSelect name="unit_service" label="Unit Service">
                 {unitservicesData.map((unit_service, idx) => (

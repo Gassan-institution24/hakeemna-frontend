@@ -1,17 +1,17 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
+import { matchIsValidTel } from 'mui-tel-input';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Chip, MenuItem, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Chip, Tooltip, MenuItem, Typography } from '@mui/material';
 
 import axios, { endpoints } from 'src/utils/axios';
 
@@ -25,6 +25,7 @@ import FormProvider, {
   RHFSelect,
   RHFTextField,
   RHFUploadBox,
+  RHFPhoneNumber,
   RHFUploadAvatar,
   RHFAutocomplete,
 } from 'src/components/hook-form';
@@ -83,9 +84,6 @@ const languages = [
 ];
 
 export default function AccountGeneral({ employeeData, refetch }) {
-  const [phone, setPhone] = useState();
-  const [alterPhone, setAlterPhone] = useState();
-
   const { enqueueSnackbar } = useSnackbar();
 
   // const { user } = useAuthContext();
@@ -106,7 +104,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
     profrssion_practice_num: Yup.string().required(t('required field')),
     identification_num: Yup.string().required(t('required field')),
     tax_num: Yup.string(),
-    phone: Yup.string().required(t('required field')),
+    phone: Yup.string()
+      .required(t('required field'))
+      .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
     mobile_num: Yup.string(),
     speciality: Yup.string().required(t('required field')),
     gender: Yup.string().required(t('required field')),
@@ -193,7 +193,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
       refetch();
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
   });
@@ -261,20 +263,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 name="email"
                 label={`${t('email')} :`}
               />
-              <Tooltip placement="top" title="Phone number of service unit">
-                <MuiTelInput
-                  defaultCountry="JO"
-                  forceCallingCode
-                  variant="filled"
-                  label={`${t('phone')}* : `}
-                  value={phone}
-                  onChange={(newPhone) => {
-                    matchIsValidTel(newPhone);
-                    setPhone(newPhone);
-                    methods.setValue('phone', newPhone);
-                  }}
-                />
-              </Tooltip>
+              <RHFPhoneNumber name="phone" label={t('phone number')} />
               <Box
                 rowGap={3}
                 columnGap={2}
@@ -384,19 +373,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 ))}
               </RHFSelect>
               <RHFTextField type="number" name="tax_num" label={t('tax number')} />
-              <Tooltip placement="top" title="Phone number of service unit">
-                <MuiTelInput
-                  forceCallingCode
-                  defaultCountry="JO"
-                  label={t('alternative mobile number')}
-                  value={alterPhone}
-                  onChange={(newPhone) => {
-                    matchIsValidTel(newPhone);
-                    setAlterPhone(newPhone);
-                    methods.setValue('mobile_num', newPhone);
-                  }}
-                />
-              </Tooltip>
+              <RHFPhoneNumber name="mobile_num" label={t('alternative mobile number')} />
               <RHFSelect
                 label={`${t('specialty')} *`}
                 fullWidth

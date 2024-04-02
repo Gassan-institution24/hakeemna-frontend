@@ -64,12 +64,12 @@ export default function TourFilters({
     [onFilters]
   );
 
-  const handleFilterDestination = useCallback(
-    (newValue) => {
-      onFilters('destination', newValue);
-    },
-    [onFilters]
-  );
+  // const handleFilterDestination = useCallback(
+  //   (newValue) => {
+  //     onFilters('destination', newValue);
+  //   },
+  //   [onFilters]
+  // );
 
   const handleFilterTourGuide = useCallback(
     (newValue) => {

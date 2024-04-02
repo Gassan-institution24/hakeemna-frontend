@@ -16,7 +16,7 @@ const EntranceManagementEditPage = lazy(() => import('src/pages/employee/entranc
 
 // APPOINTMENTS
 const AppointmentsHomePage = lazy(() => import('src/pages/employee/appointments/home'));
-const AppointmentsInfoPage = lazy(() => import('src/pages/employee/appointments/info'));
+const AppointmentsBookPage = lazy(() => import('src/pages/employee/appointments/book'));
 
 // ACCOUNTING
 // ECONOMIC MOVEMENTS
@@ -111,14 +111,14 @@ export const unitServiceEmployeeDashboardRoutes = [
         path: 'appointments',
         children: [
           { element: <AppointmentsHomePage />, index: true },
-          { path: ':id/info', element: <AppointmentsInfoPage /> },
+          { path: ':id/book', element: <AppointmentsBookPage /> },
         ],
       },
       {
         path: 'patients/:id',
         children: [
           { element: <PatientInfoPage />, index: true },
-          // { path: ':id/info', element: <AppointmentsInfoPage /> },
+          // { path: ':id/info', element: <AppointmentsBookPage /> },
         ],
       },
       {

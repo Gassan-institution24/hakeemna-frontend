@@ -108,7 +108,9 @@ export default function TableNewEditForm({ currentTable }) {
       // router.push(paths.unitservice.tables.workshifts.root);
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
   });

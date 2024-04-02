@@ -50,6 +50,7 @@ export const paths = {
     root: ROOTS.PAGES,
     patients: `/patients`,
     unit: `/unit`,
+    serviceUnit: (id) => `/serviceunit/${id}`,
   },
 
   // DASHBOARD
@@ -698,7 +699,7 @@ export const paths = {
     },
     appointments: {
       root: `${ROOTS.SUPERADMIN}/appointments`,
-      info: (id) => `${ROOTS.SUPERADMIN}/appointments/${id}/info`,
+      book: (id) => `${ROOTS.SUPERADMIN}/appointments/${id}/book`,
     },
     appointmentconfiguration: {
       root: `${ROOTS.SUPERADMIN}/appointmentconfig`,

@@ -158,7 +158,9 @@ export default function AppointConfigView() {
         refetch();
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -173,7 +175,9 @@ export default function AppointConfigView() {
         refetch();
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -189,7 +193,9 @@ export default function AppointConfigView() {
       refetch();
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     table.onUpdatePageDeleteRows({
@@ -215,7 +221,9 @@ export default function AppointConfigView() {
       refetch();
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     table.onUpdatePageDeleteRows({
@@ -444,10 +452,11 @@ export default function AppointConfigView() {
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Cancel"
+        title={t('cancel')}
         content={
           <>
-            Are you sure want to cancel <strong> {table.selected.length} </strong> items?
+            {t('Are you sure want to cancel')} <strong> {table.selected.length} </strong>{' '}
+            {t('items?')}
           </>
         }
         action={
@@ -459,17 +468,18 @@ export default function AppointConfigView() {
               handleCancelRows();
             }}
           >
-            Cancel
+            {t('cancel')}
           </Button>
         }
       />
       <ConfirmDialog
         open={confirmUnCancel.value}
         onClose={confirmUnCancel.onFalse}
-        title="UnCancel"
+        title={t('uncancel')}
         content={
           <>
-            Are you sure want to uncancel <strong> {table.selected.length} </strong> items?
+            {t('Are you sure want to uncancel')} <strong> {table.selected.length} </strong>{' '}
+            {t('items?')}
           </>
         }
         action={
@@ -481,7 +491,7 @@ export default function AppointConfigView() {
               handleUnCancelRows();
             }}
           >
-            uncancel
+            {t('uncancel')}
           </Button>
         }
       />

@@ -162,7 +162,9 @@ export default function EmployeesTableView() {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       refetch();
@@ -183,7 +185,9 @@ export default function EmployeesTableView() {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
         console.error(error);
       }
       refetch();
@@ -205,7 +209,9 @@ export default function EmployeesTableView() {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     refetch();
@@ -238,7 +244,9 @@ export default function EmployeesTableView() {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
       console.error(error);
     }
     refetch();
@@ -297,7 +305,9 @@ export default function EmployeesTableView() {
         refetch();
         enqueueSnackbar(t('updated successfully!'));
       } catch (error) {
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
       }
     },
     [employeesData, refetch, t, enqueueSnackbar, curLangAr]
@@ -312,7 +322,9 @@ export default function EmployeesTableView() {
         refetch();
         enqueueSnackbar(t('updated successfully!'));
       } catch (error) {
-        enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
+        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+          variant: 'error',
+        });
       }
     },
     [employeesData, refetch, t, enqueueSnackbar, curLangAr]
