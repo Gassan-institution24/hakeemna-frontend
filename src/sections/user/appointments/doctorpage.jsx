@@ -69,7 +69,6 @@ export default function Doctorpage() {
     startDate: currentDateTime,
   });
 
-
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
@@ -319,8 +318,12 @@ export default function Doctorpage() {
                 datacheeck.work_group.employees.map((doctor, index) => (
                   <Typography key={index}>
                     {' '}
-                    <Iconify width={18} icon="ion:person-sharp" />
-                    &nbsp; Doctor: {doctor?.employee?.employee?.name_english}
+                    {doctor?.employee?.visibility_online_appointment === true ? (
+                      <span style={{ color: 'inherit' }}>
+                        <Iconify width={18} icon="noto:health-worker" />
+                        &nbsp; {doctor?.employee?.employee?.name_english}
+                      </span>
+                    ) : null}
                   </Typography>
                 ))}
               {datacheeck?.appointment_type?.name_english && (

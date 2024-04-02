@@ -20,10 +20,10 @@ import { useLocales, useTranslate } from 'src/locales';
 export default function NotificationItem({ notification, handleClick }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
+
   const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
-
   const defaultValues = {
     sender: notification?.patient,
     patient: notification?.sender,
@@ -48,16 +48,15 @@ export default function NotificationItem({ notification, handleClick }) {
     }
   };
 
-
   const handleConfirmation = async () => {
-    try {
-      // await axios.post(`${endpoints.notifications.all}/accept`, defaultValues);
-      enqueueSnackbar(t('Invitation sent successfully'));
-    } catch (error) {
-      // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message : error.message, { variant: 'error' });
-      console.error(error);
-    }
+    await axios.patch(`${endpoints.appointments.one('660bd5e14233aa2084894779')}/coming`, {
+      coming: 'true',
+    });
+  };
+  const handleUnConfirmation = async () => {
+    await axios.patch(`${endpoints.appointments.one('660bd5e14233aa2084894779')}/coming`, {
+      coming: 'false',
+    });
   };
 
   const renderAvatar = (
@@ -109,10 +108,16 @@ export default function NotificationItem({ notification, handleClick }) {
           handleConfirmation();
         }}
       >
-        Accept
+        yes
       </Button>
-      <Button size="small" variant="outlined">
-        Decline
+      <Button
+        size="small"
+        variant="outlined"
+        onClick={() => {
+          handleUnConfirmation();
+        }}
+      >
+        no
       </Button>
     </Stack>
   );
@@ -192,7 +197,6 @@ export default function NotificationItem({ notification, handleClick }) {
         <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>{renderText}</Stack>
       )}
 
-      
       {notification.type === 'upcoming' ? (
         <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
           {notification?.isUnRead === true ? confirmation : ''}
