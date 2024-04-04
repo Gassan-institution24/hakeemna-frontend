@@ -92,10 +92,10 @@ export default function WatingRoomDialog({ employeesData }) {
 
   const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
-  const onSubmit = async (dataSumbmit) => {
+  const onSubmit = async (dataSubmit) => {
     try {
       const newData = {
-        ...dataSumbmit,
+        ...dataSubmit,
         Selection: selectedValue,
         Rate: rating,
         patient: user?.patient._id,
@@ -103,13 +103,11 @@ export default function WatingRoomDialog({ employeesData }) {
         department: appointmentsData.department?._id,
         employee: employeesData?.employee?.employee?._id,
       };
-      await axios.post('api/feedback', newData);
-      await axios.patch(`api/appointments/${appointmentsData._id}`, {
-        hasFeedback: true,
-      });
+      await axios.post('api/feedback', newData); // Assuming this endpoint is for creating feedback
+      await axios.patch(`api/appointments/feedback/${appointmentsData._id}`);
       dialog.onFalse();
       enqueueSnackbar(t('Thanks for your cooperation'), { variant: 'success' });
-
+  
       setTimeout(() => {
         window.location.reload();
       }, 1000);
@@ -120,6 +118,7 @@ export default function WatingRoomDialog({ employeesData }) {
       });
     }
   };
+  
   return (
     <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

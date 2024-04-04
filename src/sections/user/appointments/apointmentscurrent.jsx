@@ -16,7 +16,7 @@ import DialogActions from '@mui/material/DialogActions';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios, { endpoints } from 'src/utils/axios';
-import { fTime, fDate } from 'src/utils/format-time';
+import { fTime, fDateAndTime } from 'src/utils/format-time';
 
 import { useLocales } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -143,17 +143,19 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
             ))}
 
             <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-              {fDate(info?.start_time)}
+              {fDateAndTime(info?.start_time)}
             </Stack>
-            <Stack
-              spacing={0.5}
-              direction="row"
-              alignItems="center"
-              sx={{ color: 'primary.main', typography: 'caption', mt: 1 }}
-            >
-              <Iconify width={16} icon="emojione-v1:note-page" />
-              {info.note}
-            </Stack>
+            {info?.not && (
+              <Stack
+                spacing={0.5}
+                direction="row"
+                alignItems="center"
+                sx={{ color: 'primary.main', typography: 'caption', mt: 1 }}
+              >
+                <Iconify width={16} icon="emojione-v1:note-page" />
+                {info.note}
+              </Stack>
+            )}
           </Stack>
 
           <Divider sx={{ borderStyle: 'dashed' }} />

@@ -17,6 +17,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
 import { useEventListener } from 'src/hooks/use-event-listener';
 
+import { useAuthContext } from 'src/auth/hooks';
+
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -30,7 +32,7 @@ import { applyFilter, groupedData, getAllItems } from './utils';
 
 function Searchbar() {
   const theme = useTheme();
-
+const {user} = useAuthContext()
   const router = useRouter();
 
   const search = useBoolean();
@@ -112,7 +114,17 @@ function Searchbar() {
         <Iconify icon="eva:search-fill" />
       </IconButton>
 
-      {lgUp && <Label sx={{ px: 0.75, fontSize: 12, color: 'text.secondary' }}>⌘K</Label>}
+      {lgUp && user?.role === 'patient' ? (
+        <Label sx={{backgroundColor:'none'}}>
+          <Iconify icon="meteocons:code-green" width={30} />
+          <span title="code" >
+            O-sdkm
+          </span>
+        </Label>
+      )
+      :
+      <Label sx={{ px: 0.75, fontSize: 12, color: 'text.secondary' }}>⌘K</Label>
+    }
     </Stack>
   );
 

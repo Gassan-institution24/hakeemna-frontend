@@ -18,7 +18,7 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDate } from 'src/utils/format-time';
+import { fDateAndTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -129,7 +129,7 @@ export default function Medicalreports() {
               <Text style={styles.text2}>
                 Name: {user?.patient?.first_name} {user?.patient?.last_name}
               </Text>
-              <Text style={styles.text2}>Age: {fDate(user?.patient.birth_date)}</Text>
+              <Text style={styles.text2}>Age: {fDateAndTime(user?.patient.birth_date)}</Text>
               <Text style={styles.text2}>ID no: {user?.patient?.identification_num}</Text>
             </View>
             <View style={styles.gridFooter}>
@@ -175,7 +175,7 @@ export default function Medicalreports() {
           />
 
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-            {fDate(info?.created_at)}
+            {fDateAndTime(info?.created_at)}
           </Stack>
           <PDFDownloadLink
             style={styles.pdf}

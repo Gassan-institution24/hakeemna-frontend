@@ -15,7 +15,7 @@ export default function WatingRoom({ employeeId }) {
   const [hasFeedback, setHasFeedback] = useState();
 
   useEffect(() => {
-    if (!appointmentsData?.hasFeedback && new Date() > new Date(appointmentsData?.end_time)) {
+    if (!appointmentsData?.hasFeedback) {
       setHasFeedback(true);
     }
   }, [appointmentsData]);
