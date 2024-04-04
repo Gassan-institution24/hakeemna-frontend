@@ -15,7 +15,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 
-import { fDate } from 'src/utils/format-time';
+import { fDateAndTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -153,7 +153,7 @@ export default function Prescriptions() {
               <View style={styles.gridContainer}>
                 <Text>Name: {user.userName}</Text>
                 <Text>Age: {calculateAge(user?.patient.birth_date)}</Text>
-                <Text>Date: {fDate(currentDate)}</Text>
+                <Text>Date: {fDateAndTime(currentDate)}</Text>
               </View>
               <View style={styles.gridBody}>
                 <View style={styles.table}>
@@ -212,12 +212,12 @@ export default function Prescriptions() {
             <ListItemText primary={t('Frequently')} secondary={med.frequently} />
             <ListItemText
               primary={t('Start Date')}
-              secondary={fDate(med.startdate)}
+              secondary={fDateAndTime(med.startdate)}
               sx={{ display: { xs: 'none', md: 'inline' } }}
             />
             <ListItemText
               primary={t('End Date')}
-              secondary={fDate(med.enddate)}
+              secondary={fDateAndTime(med.enddate)}
               sx={{ display: { xs: 'none', md: 'inline' } }}
             />
             <PDFDownloadLink
