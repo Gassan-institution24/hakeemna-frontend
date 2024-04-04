@@ -22,7 +22,7 @@ export default function ProfileHome() {
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
 
-  const accessToken = sessionStorage.getItem('accessToken');
+  // const accessToken = sessionStorage.getItem('accessToken');
 
   // Replace the placeholder with the actual token (you need to get or generate the token)
   const qrCodeLink = `https://doctorna.online`;
