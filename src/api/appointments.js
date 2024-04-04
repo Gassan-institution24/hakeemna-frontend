@@ -96,7 +96,7 @@ export function useGetPatientOneAppointments(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      appointmentsData: data || [],
+      appointmentsData: data || {},
       loading: isLoading,
       error,
       validating: isValidating,
