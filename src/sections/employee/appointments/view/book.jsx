@@ -5,45 +5,63 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 
 import { useLocales, useTranslate } from 'src/locales';
-// import { useAuthContext } from 'src/auth/hooks';
-import { useFindPatient, useGetCountries, useGetCountryCities } from 'src/api';
+import { useAuthContext } from 'src/auth/hooks';
+import {
+  useFindPatient,
+  useGetCountries,
+  useGetCountryCities,
+  useGetEmployeeAppointments,
+} from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 // import UploadOldPatient from '../upload-old-patient';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 // import { LoadingScreen } from 'src/components/loading-screen';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, MenuItem } from '@mui/material';
+import { Box, Card, MenuItem, Stack } from '@mui/material';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { useRouter, useSearchParams } from 'src/routes/hooks';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFSelect, RHFTextField, RHFDatePicker, RHFPhoneNumber } from 'src/components/hook-form';
 
 import UploadedOldPatients from '../uploaded-old-patients';
-
+import BookingCustomerReviews from '../booking-customer-reviews';
 // ----------------------------------------------------------------------
 
 export default function TableCreateView() {
-  const settings = useSettingsContext();
-  //   const { user } = useAuthContext();
+  // const settings = useSettingsContext();
+  const { user } = useAuthContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { countriesData } = useGetCountries();
 
-  //   const checkAcl = useAclGuard();
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const appointment = searchParams.get('appointment');
+  const day = searchParams.get('day');
+
+  const [selected, setSelected] = useState(appointment);
+
+  const { appointmentsData, loading } = useGetEmployeeAppointments({
+    id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+    filters: { startDate: day ? new Date(day) : new Date(), status: 'available' },
+  });
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
+    sequence_number: Yup.string(),
     name_english: Yup.string(),
     name_arabic: Yup.string(),
     email: Yup.string(),
@@ -60,6 +78,7 @@ export default function TableCreateView() {
 
   const defaultValues = useMemo(
     () => ({
+      sequence_number: '',
       name_english: '',
       name_arabic: '',
       email: '',
@@ -93,6 +112,7 @@ export default function TableCreateView() {
   const { tableData } = useGetCountryCities(values.country);
 
   const { existPatients } = useFindPatient({
+    sequence_number: values.sequence_number,
     name_english: values.name_english,
     name_arabic: values.name_arabic,
     email: values.email.toLowerCase(),
@@ -103,11 +123,13 @@ export default function TableCreateView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await axiosInstance.post(endpoints.oldpatient.all, data);
-      //   refetch();
+      await axiosInstance.patch(
+        endpoints.appointments.patient.createPatientAndBookAppoint(selected),
+        data
+      );
+      enqueueSnackbar(t('created successfully!'));
       reset();
-      enqueueSnackbar(t('uploaded successfully!'));
-      // router.push(paths.unitservice.tables.employeetypes.root);
+      router.back();
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
@@ -134,9 +156,22 @@ export default function TableCreateView() {
       setValue(event.target.name, event.target.value);
     }
   };
+  const sequenceChangeHandler = (event) => {
+    const { value } = event.target;
+    const newValue = value.replace(/\D/g, '');
+    if (newValue.length <= 3) {
+      setValue(event.target.name, newValue);
+    } else if (newValue.length === 4 && newValue.charAt(3) === '-') {
+      setValue(event.target.name, newValue.slice(0, 3));
+    } else if (newValue.length === 4 && newValue.charAt(3) !== '-') {
+      setValue(event.target.name, `${newValue.slice(0, 3)}-${newValue.slice(3)}`);
+    } else {
+      setValue(event.target.name, newValue);
+    }
+  };
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('Book Appointment')}
         links={[
@@ -155,7 +190,24 @@ export default function TableCreateView() {
         }}
       />
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ px: 3, pb: 3 }}>
+          <BookingCustomerReviews
+            selected={selected}
+            loading={loading}
+            setSelected={setSelected}
+            list={appointmentsData}
+            // sx={{ mt: SPACING }}
+          />
+          <RHFTextField
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ style: { textAlign: 'center' } }}
+            sx={{ width: '200px', mb: 3, textAlign: 'center' }}
+            size="small"
+            name="sequence_number"
+            onChange={sequenceChangeHandler}
+            placeholder="001-22"
+            label={t('patient-code')}
+          />
           <Box
             sx={{ mb: 3 }}
             rowGap={3}
@@ -233,12 +285,17 @@ export default function TableCreateView() {
               </MenuItem>
             </RHFSelect>
           </Box>
-          {existPatients.length > 0 && <UploadedOldPatients oldPatients={existPatients} />}
+
+          <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+            <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
+              {t('create new patient and book')}
+            </LoadingButton>
+          </Stack>
+          {existPatients.length > 0 && (
+            <UploadedOldPatients selected={selected} reset={reset} oldPatients={existPatients} />
+          )}
         </Card>
       </FormProvider>
-      <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
-        {t('create new patient')}
-      </LoadingButton>
     </Container>
   );
 }

@@ -15,7 +15,7 @@ export default function TableCreateView() {
   const settings = useSettingsContext();
   const { t } = useTranslate();
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('Create a new activity')}
         links={[

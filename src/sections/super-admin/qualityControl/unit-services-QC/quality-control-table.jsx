@@ -129,7 +129,7 @@ export default function USsFeedbacks() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Unit Services Quality Control"
         links={[

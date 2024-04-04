@@ -148,7 +148,7 @@ export default function FamiliesTableView() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Medicine Family" /// edit
         links={[

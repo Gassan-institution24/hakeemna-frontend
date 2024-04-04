@@ -234,7 +234,7 @@ export default function SubscriptionTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('Subscriptions')} /// edit
           links={[

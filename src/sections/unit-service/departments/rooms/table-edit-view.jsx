@@ -11,7 +11,7 @@ import TableNewEditForm from './table-new-edit-form';
 export default function TableEditView({ roomData, departmentData }) {
   const settings = useSettingsContext();
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       {/* <CustomBreadcrumbs
         heading="Edit Room"
         links={[

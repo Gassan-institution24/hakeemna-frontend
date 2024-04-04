@@ -27,6 +27,7 @@ export default function RHFTimePicker({ name, helperText, type, ...other }) {
           minutesStep="5"
           format="hh:mm a"
           value={myunitTime(field.value)}
+          InputLabelProps={{ shrink: true }}
           onChange={(newValue) => {
             const selectedTime = zonedTimeToUtc(
               newValue,

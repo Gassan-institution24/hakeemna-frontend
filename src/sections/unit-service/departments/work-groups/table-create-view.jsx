@@ -11,7 +11,7 @@ import TableNewEditForm from './table-new-edit-form';
 export default function TableCreateView({ departmentData }) {
   const settings = useSettingsContext();
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       {/* <CustomBreadcrumbs
         heading={t("Create a new work group")}
         links={[

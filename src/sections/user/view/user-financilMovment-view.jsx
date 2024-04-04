@@ -15,7 +15,7 @@ export default function Financilmovment() {
   const settings = useSettingsContext();
   const { t } = useTranslate();
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('financil movment')}
         links={[

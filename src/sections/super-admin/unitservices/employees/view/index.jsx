@@ -321,7 +321,7 @@ export default function EmployeesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           action={
             // checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'create' }) && (

@@ -71,7 +71,7 @@ export default function PatientHistoryView({ patientData }) {
     'Patient';
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`${patientName} History`}
         links={[

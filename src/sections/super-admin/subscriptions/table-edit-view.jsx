@@ -22,7 +22,7 @@ export default function TableEditView() {
   const { id } = params;
   const { data } = useGetSubscription(id);
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('Update Subscription')}
         links={[

@@ -141,7 +141,7 @@ export default function DepartmentFeedbackView() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('quality control')} /// edit
         links={[

@@ -30,7 +30,7 @@ export default function TableCreateView({ employeeData }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('new employee')}
           links={[

@@ -286,7 +286,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           action={
             checkAcl({

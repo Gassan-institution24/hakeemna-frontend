@@ -193,7 +193,7 @@ export default function LicenseMovementsView() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <Card>
         <Tabs
           value={filters.status}

@@ -11,7 +11,7 @@ import TableNewEditForm from './table-new-edit-form';
 export default function TableEditView({ WorkGroupData, departmentData }) {
   const settings = useSettingsContext();
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       {WorkGroupData && departmentData && (
         <TableNewEditForm departmentData={departmentData} currentTable={WorkGroupData} />
       )}

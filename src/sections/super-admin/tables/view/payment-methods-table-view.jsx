@@ -229,7 +229,7 @@ export default function PaymentMethodsTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Payment Methods" /// edit
           links={[

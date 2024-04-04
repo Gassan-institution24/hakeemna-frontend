@@ -239,7 +239,7 @@ export default function UnitServicesInsuranceView() {
   }
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('insurance')} /// edit
           links={[

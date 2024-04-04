@@ -21,7 +21,7 @@ export default function TableEditView() {
 
   const { data } = useGetFreeSubscription(id);
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Update Free Subscription"
         links={[

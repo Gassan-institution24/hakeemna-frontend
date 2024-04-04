@@ -19,7 +19,7 @@ export default function UserProfileView() {
   const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('profile')}
         links={[

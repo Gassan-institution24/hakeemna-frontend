@@ -141,7 +141,7 @@ export default function AnalysesTableView() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Analyses" /// edit
         links={[

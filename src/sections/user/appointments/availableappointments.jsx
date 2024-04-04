@@ -176,7 +176,7 @@ export default function AppointmentBooking() {
   // }, []);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <Stack
         spacing={2.5}
         sx={{

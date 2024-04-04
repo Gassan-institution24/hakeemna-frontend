@@ -222,7 +222,7 @@ export default function StakeholderlicenseMovementView({ stakeholderData }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('accounting')}
           links={[

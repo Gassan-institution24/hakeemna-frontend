@@ -36,6 +36,7 @@ export default function AppointmentsTableRow({
   onSelectRow,
   refetch,
   onViewRow,
+  onBookAppoint,
   onDelayRow,
   onCancelRow,
   onUnCancelRow,
@@ -155,7 +156,7 @@ export default function AppointmentsTableRow({
         </TableCell>
       </TableRow>
 
-      <BookManually refetch={refetch} appointment={row} open={Book.value} onClose={Book.onFalse} />
+      {/* <BookManually refetch={refetch} appointment={row} open={Book.value} onClose={Book.onFalse} /> */}
 
       <CustomPopover
         open={popover.open}
@@ -169,7 +170,7 @@ export default function AppointmentsTableRow({
               lang="ar"
               sx={{ color: 'success.main' }}
               onClick={() => {
-                Book.onTrue();
+                onBookAppoint();
                 popover.onClose();
               }}
             >
@@ -329,6 +330,7 @@ AppointmentsTableRow.propTypes = {
   onCancelRow: PropTypes.func,
   onUnCancelRow: PropTypes.func,
   onSelectRow: PropTypes.func,
+  onBookAppoint: PropTypes.func,
   onViewRow: PropTypes.func,
   onDelayRow: PropTypes.func,
   refetch: PropTypes.func,

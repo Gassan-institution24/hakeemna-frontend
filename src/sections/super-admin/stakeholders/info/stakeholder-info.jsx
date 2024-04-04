@@ -15,7 +15,7 @@ export default function StakeholderDetailsView({ stakeholderData }) {
   const settings = useSettingsContext();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <StakeholderDetailsToolbar
         backLink={paths.superadmin.stakeholders.root}
         // editLink={paths.superadmin.stakeholders.edit(`${stakeholderData?._id}`)}

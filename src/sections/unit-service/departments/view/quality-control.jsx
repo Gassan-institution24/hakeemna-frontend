@@ -144,7 +144,7 @@ export default function DepartmentFeedbackView({ departmentData }) {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       {/* <CustomBreadcrumbs
           heading={`${departmentData.name_english || ''} ${t('department feedbacks')}`} /// edit
           links={[

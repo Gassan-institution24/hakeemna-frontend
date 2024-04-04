@@ -12,7 +12,7 @@ export default function UnitServiceDetailsView({ unitServiceData }) {
   const settings = useSettingsContext();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <UnitServiceDetailsContent unitServiceData={unitServiceData} />
     </Container>
   );

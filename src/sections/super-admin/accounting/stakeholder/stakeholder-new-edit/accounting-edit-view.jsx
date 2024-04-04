@@ -24,7 +24,7 @@ export default function USAppointmentEditView({ stakeholderData, licenseMovement
 
   const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`Edit ${stakeholderName} Accounting`} /// edit
         links={[

@@ -12,7 +12,7 @@ import TableNewEditForm from './table-new-edit-form';
 export default function TableCreateView() {
   const settings = useSettingsContext();
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Create a new Payment Method"
         links={[

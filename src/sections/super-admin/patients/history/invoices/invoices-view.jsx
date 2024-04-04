@@ -220,7 +220,7 @@ export default function EconomicMovementsView({ patientData }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <Card
           sx={{
             mb: { xs: 3, md: 5 },

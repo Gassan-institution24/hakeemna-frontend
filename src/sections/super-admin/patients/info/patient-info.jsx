@@ -15,7 +15,7 @@ export default function PatientsInfoView({ patientData }) {
   const settings = useSettingsContext();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <PatientInfoToolbar
         backLink={paths.superadmin.patients.root}
         // editLink={paths.superadmin.patients.edit(`${patientData?._id}`)}

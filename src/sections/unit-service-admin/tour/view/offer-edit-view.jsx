@@ -19,7 +19,7 @@ export default function TourEditView({ id }) {
   const { data } = useGetOffer(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Edit"
         links={[

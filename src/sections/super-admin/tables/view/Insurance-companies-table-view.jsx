@@ -237,7 +237,7 @@ export default function InsuranceCompaniesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Insurance Companies" /// edit
           links={[

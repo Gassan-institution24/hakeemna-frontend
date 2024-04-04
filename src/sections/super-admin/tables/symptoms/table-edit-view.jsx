@@ -20,7 +20,7 @@ export default function TableEditView() {
   const { data } = useGetSymptom(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Update Symptom"
         links={[

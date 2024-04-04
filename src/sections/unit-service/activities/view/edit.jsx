@@ -17,7 +17,7 @@ export default function TableEditView({ activityData }) {
   const settings = useSettingsContext();
   const { t } = useTranslate();
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('Edit Activity')}
         links={[

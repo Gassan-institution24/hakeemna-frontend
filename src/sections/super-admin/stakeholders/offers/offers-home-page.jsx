@@ -45,7 +45,7 @@ export default function StakeholderOffersView({ stakeholderData }) {
   // );
   const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`${stakeholderName} Offers`}
         links={[

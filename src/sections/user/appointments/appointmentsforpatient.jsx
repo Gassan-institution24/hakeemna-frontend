@@ -40,7 +40,7 @@ export default function AppointmentData() {
   ];
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <Tabs
         value={currentTab}
         onChange={handleChangeTab}

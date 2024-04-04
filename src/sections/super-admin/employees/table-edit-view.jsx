@@ -20,7 +20,7 @@ export default function CountryEditView() {
   const { data } = useGetUser(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Edit user"
         links={[

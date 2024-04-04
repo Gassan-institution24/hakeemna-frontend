@@ -142,7 +142,7 @@ export default function EmployeeFeedbackView({ employeeData }) {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <Card>
         <Tabs
           value={filters.status}

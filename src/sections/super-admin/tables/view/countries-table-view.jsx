@@ -234,7 +234,7 @@ export default function CountriesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Countries" /// edit
           links={[

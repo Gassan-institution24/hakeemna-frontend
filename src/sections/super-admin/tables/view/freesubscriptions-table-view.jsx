@@ -239,7 +239,7 @@ export default function FreeSubscriptionTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Free Subscriptions" /// edit
           links={[
