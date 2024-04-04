@@ -24,7 +24,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fNumber } from 'src/utils/format-number';
 import axios, { endpoints } from 'src/utils/axios';
-import { fDate, fTime } from 'src/utils/format-time';
+import {fTime, fDateAndTime } from 'src/utils/format-time';
 
 import { useLocales } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
@@ -361,7 +361,7 @@ export default function Doctorpage() {
                     sx={{ color: 'palevioletred' }}
                     icon="lets-icons:date-range-fill"
                   />
-                  &nbsp; Date: {fDate(datacheeck?.start_time)}{' '}
+                  &nbsp; Date: {fDateAndTime(datacheeck?.start_time)}{' '}
                 </Typography>
               )}
               {datacheeck?.start_time && (

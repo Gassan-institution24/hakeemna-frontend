@@ -1,41 +1,28 @@
-import { Button, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
+import { useState,useEffect } from 'react';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSEmployeeEngs, useGetPatientOneAppointments } from 'src/api';
+import { useGetPatientOneAppointments } from 'src/api';
+
+import EmptyContent from 'src/components/empty-content';
 
 import WatingRoomDialog from './waitingRoomDialog';
 // ----------------------------------------------------------------------
 
-export default function WatingRoom() {
+export default function WatingRoom({ employeeId }) {
   const { user } = useAuthContext();
   const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
-  const { employeesData } = useGetUSEmployeeEngs(appointmentsData?.unit_service?._id);
+  const [hasFeedback, setHasFeedback] = useState();
 
-  const today = new Date();
-
-  return appointmentsData?.hasFeedback === false && today > appointmentsData?.start_time ? (
-    employeesData?.map((info, index) => <WatingRoomDialog employeesData={info} key={index} />)
-  ) : (
-    <>
-      <Typography>Are you coming?</Typography>
-      <Button
-        variant="contained"
-        sx={{ bgcolor: 'success.main', width: '100px', mb: 3 }}
-        onClick={() => {
-          alert('ok');
-        }}
-      >
-        yes
-      </Button>
-      <Button
-        variant="contained"
-        sx={{ bgcolor: 'success.main', width: '100px' }}
-        onClick={() => {
-          alert('ok');
-        }}
-      >
-        no
-      </Button>
-    </>
-  );
+  useEffect(() => {
+    if (!appointmentsData?.hasFeedback) {
+      setHasFeedback(true);
+    }
+  }, [appointmentsData]);
+console.log(appointmentsData );
+  return hasFeedback ? <WatingRoomDialog employeesData={employeeId} /> : <EmptyContent/>
 }
+
+WatingRoom.propTypes = {
+  employeeId: PropTypes.object,
+};

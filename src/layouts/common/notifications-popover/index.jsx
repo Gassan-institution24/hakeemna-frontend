@@ -165,23 +165,7 @@ export default function NotificationsPopover() {
               ))}
           </List>
 
-          {/* {patientNotifications?.map((info) => (
-            <>
-              <ListItemText primary={reader(curLangAr ? info.title_arabic : info.title)} />
-              <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
-                <Button
-                  size="small"
-                  variant="contained"
-                  onClick={() => handleAddFamily(info?.patient)}
-                >
-                  Accept
-                </Button>
-                <Button size="small" variant="outlined">
-                  Decline
-                </Button>
-              </Stack>
-            </>
-          ))} */}
+
 
           {hasMore && (
             <Box sx={{ p: 1 }}>

@@ -8,7 +8,7 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fTime, fDate } from 'src/utils/format-time';
+import { fTime, fDateAndTime } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
@@ -52,7 +52,7 @@ export default function FinishedAppoinment({ finishedAppointments }) {
           ))}
 
           <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-            {fDate(info?.start_time)}
+            {fDateAndTime(info?.start_time)}
           </Stack>
           <Stack
             spacing={0.5}
@@ -60,8 +60,17 @@ export default function FinishedAppoinment({ finishedAppointments }) {
             alignItems="center"
             sx={{ color: 'primary.main', typography: 'caption', mt: 1 }}
           >
-            <Iconify width={16} icon="emojione-v1:note-page" />
-            {info.note}
+            {info?.not && (
+              <Stack
+                spacing={0.5}
+                direction="row"
+                alignItems="center"
+                sx={{ color: 'primary.main', typography: 'caption', mt: 1 }}
+              >
+                <Iconify width={16} icon="emojione-v1:note-page" />
+                {info.note}
+              </Stack>
+            )}
           </Stack>
         </Stack>
 

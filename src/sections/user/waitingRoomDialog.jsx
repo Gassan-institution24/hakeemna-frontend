@@ -26,7 +26,6 @@ import { useGetPatientOneAppointments } from 'src/api';
 
 import Image from 'src/components/image';
 import { useSnackbar } from 'src/components/snackbar';
-// import EmptyContent from 'src/components/empty-content';
 import FormProvider from 'src/components/hook-form/form-provider';
 // ----------------------------------------------------------------------
 
@@ -44,6 +43,7 @@ export default function WatingRoomDialog({ employeesData }) {
 
   const { user } = useAuthContext();
   const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
+  console.log(appointmentsData, 'appointmentsData');
   const skipfunction = async () => {
     try {
       await axios.patch(`api/appointments/${appointmentsData._id}`, {
@@ -92,24 +92,22 @@ export default function WatingRoomDialog({ employeesData }) {
 
   const { fullWidth } = useState(false);
   const { maxWidth } = useState('xs');
-  const onSubmit = async (dataSumbmit) => {
+  const onSubmit = async (dataSubmit) => {
     try {
       const newData = {
-        ...dataSumbmit,
+        ...dataSubmit,
         Selection: selectedValue,
         Rate: rating,
         patient: user?.patient._id,
         appointment: appointmentsData._id,
         department: appointmentsData.department?._id,
-        employee: employeesData.employee?._id,
+        employee: employeesData?.employee?.employee?._id,
       };
-      await axios.post('api/feedback', newData);
-      await axios.patch(`api/appointments/${appointmentsData._id}`, {
-        hasFeedback: true,
-      });
+      await axios.post('api/feedback', newData); // Assuming this endpoint is for creating feedback
+      await axios.patch(`api/appointments/feedback/${appointmentsData._id}`);
       dialog.onFalse();
       enqueueSnackbar(t('Thanks for your cooperation'), { variant: 'success' });
-
+  
       setTimeout(() => {
         window.location.reload();
       }, 1000);
@@ -120,6 +118,7 @@ export default function WatingRoomDialog({ employeesData }) {
       });
     }
   };
+  
   return (
     <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -134,12 +133,18 @@ export default function WatingRoomDialog({ employeesData }) {
           }}
         >
           <DialogTitle>{t('Rate your appointment')}</DialogTitle>
+          <DialogContent>
+            {t(`How was your experience with `)}{' '}
+            {curLangAr
+              ? `${appointmentsData?.unit_service?.name_arabic}`
+              : `${appointmentsData?.unit_service?.name_english}`}
+          </DialogContent>
           <Image
-            src="https://cdn.altibbi.com/cdn/large/0/10/logo_1296490409_651.gif"
+            src={appointmentsData?.unit_service?.company_logo}
             sx={{ width: '60px', height: '60px', border: 1, borderRadius: '50px' }}
           />
           {/* <Typography sx={{ color: 'black' }}>
-              {curLangAr ? `${data?.name_arabic}` : `${data?.name_english}`}{' '}
+              
             </Typography> */}
           <Rating
             size="large"
@@ -155,7 +160,7 @@ export default function WatingRoomDialog({ employeesData }) {
           <DialogContent>
             <Box component="form" noValidate>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-                {RATEELEMENTS?.map((infotwo, indextwo, idx) => (
+                {RATEELEMENTS?.map((infotwo, idx) => (
                   <div key={idx}>
                     <Box
                       sx={{
