@@ -26,7 +26,7 @@ import { useGetUnitservice, useGetInsuranceCos } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -83,7 +83,7 @@ export default function UnitServicesInsuranceView() {
 
   const popover = usePopover();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { user } = useAuthContext();
 
@@ -239,7 +239,7 @@ export default function UnitServicesInsuranceView() {
   }
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('insurance')} /// edit
           links={[

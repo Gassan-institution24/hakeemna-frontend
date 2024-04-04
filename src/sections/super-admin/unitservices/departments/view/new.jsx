@@ -7,7 +7,7 @@ import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TableNewEditForm from '../department-new-edit-form';
@@ -15,13 +15,13 @@ import TableNewEditForm from '../department-new-edit-form';
 // ----------------------------------------------------------------------
 
 export default function USAccountingCreateView({ unitServiceData }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { t } = useTranslate();
   const params = useParams();
   const { id } = params;
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('create new department')} /// edit
         links={[

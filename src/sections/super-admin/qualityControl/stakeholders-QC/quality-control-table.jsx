@@ -13,7 +13,7 @@ import { useTranslate } from 'src/locales';
 import { useGetStakeholdersFeedbackes } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -53,7 +53,7 @@ const defaultFilters = {
 export default function StakeholdersFeedbacks() {
   const { t } = useTranslate();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const router = useRouter();
 
@@ -147,7 +147,7 @@ export default function StakeholdersFeedbacks() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('Stakeholders Quality Control')}
         links={[

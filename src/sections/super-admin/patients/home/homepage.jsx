@@ -22,7 +22,7 @@ import { useTranslate } from 'src/locales';
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -80,7 +80,7 @@ export default function PatientTableView() {
 
   const componentRef = useRef();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
@@ -256,7 +256,7 @@ export default function PatientTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Patients" /// edit
           links={[

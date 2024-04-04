@@ -7,7 +7,7 @@ import { useParams } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TableNewEditForm from '../department-new-edit-form';
@@ -15,12 +15,12 @@ import TableNewEditForm from '../department-new-edit-form';
 // ----------------------------------------------------------------------
 
 export default function TableEditView({ departmentData }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const { t } = useTranslate();
 
   const { id } = useParams();
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('update department')}
         links={[

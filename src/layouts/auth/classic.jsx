@@ -31,17 +31,25 @@ export default function AuthClassicLayout({ children, image, title }) {
   );
 
   const renderContent = (
-    <Stack sx={{ width: { sm: '100%', md: '100%', lg: '35%' } }}>
-      <LanguagePopover />
+    <Stack sx={{ width: { sm: '100vw', md: '100%', lg: '35%' } }}>
       <Stack
         sx={{
-          width: 1,
+          display: { xs: 'flex', sm: 'block' },
+          justifyContent: { xs: 'flex-end' },
+          alignItems: { xs: 'flex-end' },
+        }}
+      >
+        <LanguagePopover />
+      </Stack>
+      <Stack
+        sx={{
+          width: '100%',
           mx: 'auto',
           // my: 'auto',
           maxWidth: 480,
           px: { xs: 2, md: 8 },
           pt: { xs: 10, md: 10 },
-          pb: { xs: 15, md: 0 },
+          pb: { xs: 5, md: 0 },
         }}
       >
         {children}
@@ -108,9 +116,9 @@ export default function AuthClassicLayout({ children, image, title }) {
   return (
     <Stack
       component="main"
-      direction="row"
+      direction={mdUp ? 'row' : 'column'}
       sx={{
-        minHeight: '100vh',
+        minHeight: '100%',
       }}
     >
       {renderLogo}

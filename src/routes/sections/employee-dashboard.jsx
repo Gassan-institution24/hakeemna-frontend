@@ -111,7 +111,7 @@ export const unitServiceEmployeeDashboardRoutes = [
         path: 'appointments',
         children: [
           { element: <AppointmentsHomePage />, index: true },
-          { path: ':id/book', element: <AppointmentsBookPage /> },
+          { path: 'book', element: <AppointmentsBookPage /> },
         ],
       },
       {

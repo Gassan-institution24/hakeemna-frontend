@@ -27,7 +27,7 @@ import { useGetInsuranceCos } from 'src/api';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -80,7 +80,7 @@ export default function PatientInsuranceView({ patientData, refetch }) {
 
   const componentRef = useRef();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const popover = usePopover();
 
@@ -206,7 +206,7 @@ export default function PatientInsuranceView({ patientData, refetch }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={`${patientName} Insurance`} /// edit
           links={[

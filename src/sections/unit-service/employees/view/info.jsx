@@ -12,7 +12,7 @@ import { fMonth } from 'src/utils/format-time';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ export default function EmployeeInfoContent({ employeeData }) {
     speciality,
   } = employeeData.employee;
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -185,7 +185,7 @@ export default function EmployeeInfoContent({ employeeData }) {
     </Stack>
   );
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <Grid container spacing={3} justifyContent="center">
         <Grid item xs={12} md={8}>
           {renderOverview}

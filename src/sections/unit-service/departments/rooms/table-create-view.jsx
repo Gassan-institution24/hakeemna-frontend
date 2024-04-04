@@ -2,17 +2,17 @@ import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 import TableNewEditForm from './table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
 export default function TableCreateView({ departmentData }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       {/* <CustomBreadcrumbs
         heading={t('Create new room')}
         links={[

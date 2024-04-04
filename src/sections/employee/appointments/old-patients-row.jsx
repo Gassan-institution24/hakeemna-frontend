@@ -3,36 +3,83 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import { Button, IconButton } from '@mui/material';
+
+import { useBoolean } from 'src/hooks/use-boolean';
+
+import { useLocales, useTranslate } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 
 // ----------------------------------------------------------------------
 
 export default function OldPatientsRow({ row, selected, onEmploymentRow }) {
-  const { code, first_name, middle_name, family_name, identification_num, email, phone, files } =
-    row;
+  const {
+    sequence_number,
+    name_english,
+    name_arabic,
+    nationality,
+    birth_date,
+    identification_num,
+    email,
+    mobile_num1,
+    mobile_num2,
+  } = row;
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
+  const confirm = useBoolean();
 
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell align="center">
-        <Box>{code}</Box>
+        <Box>
+          {String(nationality.code).padStart(3, '0')}-{sequence_number}
+        </Box>
       </TableCell>
 
-      <TableCell align="center">
-        {first_name} {middle_name} {family_name}
+      <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{name_arabic}</TableCell>
+      <TableCell align="center">{mobile_num1}</TableCell>
+      <TableCell align="center">{mobile_num2}</TableCell>
+      <TableCell align="center" sx={{ textTransform: 'none' }}>
+        {email}
       </TableCell>
       <TableCell align="center">{identification_num}</TableCell>
-      <TableCell align="center">{email}</TableCell>
-      <TableCell align="center">{phone}</TableCell>
-      <TableCell align="center">{files?.length}</TableCell>
+      <TableCell align="center">
+        {curLangAr ? nationality?.name_arabic : nationality?.name_english}
+      </TableCell>
+      <TableCell align="center">{birth_date}</TableCell>
 
-      {/* <TableCell  align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton onClick={onEmploymentRow}>
-          <Iconify icon="zondicons:user-add" />
+      <TableCell align="center" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        <IconButton onClick={confirm.onToggle}>
+          <Iconify width="27px" color="info.main" icon="mdi:book-add" />
         </IconButton>
-      </TableCell> */}
+      </TableCell>
     </TableRow>
   );
 
-  return <>{renderPrimary}</>;
+  return (
+    <>
+      {renderPrimary}
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title={t('confirm checking information')}
+        content={t(
+          'Do you confirm checking patient data and check at least three values if they are true?'
+        )}
+        action={
+          <Button variant="contained" color="info" onClick={onEmploymentRow}>
+            {t('confirm')}
+          </Button>
+        }
+      />
+    </>
+  );
 }
 
 OldPatientsRow.propTypes = {

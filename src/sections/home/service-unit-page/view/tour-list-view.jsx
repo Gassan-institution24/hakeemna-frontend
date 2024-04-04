@@ -17,7 +17,7 @@ import { countries } from 'src/assets/data';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TourList from '../tour-list';
@@ -38,7 +38,7 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function TourListView() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const openFilters = useBoolean();
 
@@ -155,7 +155,7 @@ export default function TourListView() {
   );
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="List"
         links={[

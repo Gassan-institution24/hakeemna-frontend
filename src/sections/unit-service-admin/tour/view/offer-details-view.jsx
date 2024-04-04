@@ -8,7 +8,7 @@ import { paths } from 'src/routes/paths';
 
 import { useGetOffer } from 'src/api';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 import TourDetailsToolbar from '../offer-details-toolbar';
 import TourDetailsContent from '../offer-details-content';
@@ -16,7 +16,7 @@ import TourDetailsContent from '../offer-details-content';
 // ----------------------------------------------------------------------
 
 export default function TourDetailsView({ id }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const { data } = useGetOffer(id);
   const [publish, setPublish] = useState(data?.publish);
 
@@ -57,7 +57,7 @@ export default function TourDetailsView({ id }) {
   );
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <TourDetailsToolbar
         backLink={paths.dashboard.tour.root}
         editLink={paths.dashboard.tour.edit(id)}

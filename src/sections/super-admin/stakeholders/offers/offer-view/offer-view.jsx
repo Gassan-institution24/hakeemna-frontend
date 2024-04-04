@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 import StakeholderOfferContent from './offer-view-content';
 import StakeholderOfferToolbar from './offer-view-toolbar';
@@ -12,10 +12,10 @@ import StakeholderOfferToolbar from './offer-view-toolbar';
 // ----------------------------------------------------------------------
 
 export default function StakeholderOfferView({ stakeholderData, offerData }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <StakeholderOfferToolbar
         backLink={paths.superadmin.stakeholders.offers(stakeholderData._id)}
         // editLink={paths.superadmin.stakeholders.edit(`${stakeholderData?._id}`)}

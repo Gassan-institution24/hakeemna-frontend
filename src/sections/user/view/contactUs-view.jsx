@@ -4,7 +4,7 @@ import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import Contact from '../contactus';
@@ -12,11 +12,11 @@ import Contact from '../contactus';
 // ----------------------------------------------------------------------
 
 export default function ContactUsView() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const { t } = useTranslate();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('contact us')}
         links={[

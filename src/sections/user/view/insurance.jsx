@@ -25,7 +25,7 @@ import { useGetInsuranceTypes, useGetActiveInsuranceCos } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
@@ -34,7 +34,7 @@ import InsurancePage from '../appointments/insurancePage';
 // ----------------------------------------------------------------------
 
 export default function Insuranceinfo() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const { t } = useTranslate();
   const dialog = useBoolean(false);
   const { currentLang } = useLocales();
@@ -94,7 +94,7 @@ export default function Insuranceinfo() {
   };
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('My insurance cards')}
         links={[

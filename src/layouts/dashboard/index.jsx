@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { useBoolean } from 'src/hooks/use-boolean';
 // import { useResponsive } from 'src/hooks/use-responsive';
 
-// import { useSettingsContext } from 'src/components/settings';
+// // import { useSettingsContext } from 'src/components/settings';
 
 import Main from './main';
 import Header from './header';
@@ -16,7 +16,7 @@ import NavVertical from './nav-vertical';
 // ----------------------------------------------------------------------
 
 export default function DashboardLayout({ children }) {
-  // const settings = useSettingsContext();
+  // // const settings = useSettingsContext();
 
   // const lgUp = useResponsive('up', 'lg');
 

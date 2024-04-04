@@ -11,7 +11,7 @@ import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import AccountGeneral from '../account-general';
@@ -43,7 +43,7 @@ export default function AccountView() {
 
   const { user } = useAuthContext();
   const { data, refetch, loading } = useGetPatient(user?.patient?._id);
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('general');
 
@@ -52,7 +52,7 @@ export default function AccountView() {
   }, []);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('Account')}
         links={[

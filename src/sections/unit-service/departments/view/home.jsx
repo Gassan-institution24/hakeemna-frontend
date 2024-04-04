@@ -33,7 +33,7 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -90,7 +90,7 @@ export default function UnitServicesTableView() {
 
   const componentRef = useRef();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
@@ -314,7 +314,7 @@ export default function UnitServicesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('departments')} /// edit
           links={[

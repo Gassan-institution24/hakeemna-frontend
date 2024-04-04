@@ -18,7 +18,7 @@ import { useGetSurgeries } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -68,7 +68,7 @@ export default function SurgeriesTableView() {
 
   const router = useRouter();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { tableData, loading } = useGetSurgeries();
 
@@ -144,7 +144,7 @@ export default function SurgeriesTableView() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Surgeries" /// edit
         links={[
