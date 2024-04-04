@@ -12,7 +12,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import FindExistPatient from '../new/find-exist-employee';
@@ -21,7 +21,7 @@ import TableNewEditForm from '../new/create-edit-employee';
 // ----------------------------------------------------------------------
 
 export default function TableCreateView({ employeeData }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';

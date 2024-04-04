@@ -8,7 +8,7 @@ import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import StakeholderAccounting from './stakeholders/accounting-table';
@@ -19,7 +19,7 @@ import UnitServicesAccounting from './unit-services/accounting-table';
 export default function AccountingHomePage() {
   const { t } = useTranslate();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('Unit Services');
 

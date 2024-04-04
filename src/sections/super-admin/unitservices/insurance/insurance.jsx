@@ -27,7 +27,7 @@ import { useGetActiveInsuranceCos } from 'src/api';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -84,7 +84,7 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
 
   const popover = usePopover();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const [filters, setFilters] = useState(defaultFilters);
 

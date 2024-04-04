@@ -10,7 +10,7 @@ import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 // import OffersView from './offers-table';
@@ -20,7 +20,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 export default function StakeholderOffersView({ stakeholderData }) {
   const { t } = useTranslate();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   // const [currentTab, setCurrentTab] = useState('Offers');
 

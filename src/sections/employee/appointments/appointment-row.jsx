@@ -26,8 +26,6 @@ import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import BookManually from './book-appointment-manually';
-
 // ----------------------------------------------------------------------
 
 export default function AppointmentsTableRow({

@@ -6,7 +6,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-// import { useSettingsContext } from 'src/components/settings';
+// // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import DoctornaFeedback from './doctorna-feedback/feedback';
@@ -15,7 +15,7 @@ import SystemError from './system-errors/system-errors-table';
 // ----------------------------------------------------------------------
 
 export default function DoctornaQCPage() {
-  // const settings = useSettingsContext();
+  // // const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('Feedback');
 

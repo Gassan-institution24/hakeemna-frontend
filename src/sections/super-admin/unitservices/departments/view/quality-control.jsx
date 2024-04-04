@@ -20,7 +20,7 @@ import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
@@ -71,7 +71,7 @@ export default function DepartmentFeedbackView({ departmentData }) {
 
   const componentRef = useRef();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { feedbackData, loading } = useGetDepartmentFeedbackes(depid);
 

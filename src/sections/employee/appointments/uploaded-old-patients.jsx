@@ -1,11 +1,16 @@
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 
-import Table from '@mui/material/Table';
 import { Stack } from '@mui/material';
+import Table from '@mui/material/Table';
 import { useTheme } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
+
+import { useRouter } from 'src/routes/hooks';
+
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -16,9 +21,6 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import axiosInstance, { endpoints } from 'src/utils/axios';
-import { useSnackbar } from 'notistack';
-import { useRouter } from 'src/routes/hooks';
 import ExistEmployeesRow from './old-patients-row';
 
 // ----------------------------------------------------------------------

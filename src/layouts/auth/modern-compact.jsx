@@ -41,7 +41,7 @@ export default function AuthModernCompactLayout({ children }) {
           sx={{
             py: 5,
             px: 3,
-            width:'600px',
+            width: '600px',
             maxWidth: '100%',
           }}
         >

@@ -9,7 +9,7 @@ import Container from '@mui/material/Container';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
-// import { useSettingsContext } from 'src/components/settings';
+// // import { useSettingsContext } from 'src/components/settings';
 
 // import Appoinment from './apointments';
 // import AppointmentBooking from './appointments/apointmentsbooking';
@@ -18,7 +18,7 @@ import FinishedAppoinment from './appointments/apointmentsfinished';
 
 export default function UserCardList() {
   const { user } = useAuthContext();
-  // const settings = useSettingsContext();
+  // // const settings = useSettingsContext();
   const [currentTab, setCurrentTab] = useState('My Appointments');
   // const { data } = useGetPatient(user?.patient._id);
 

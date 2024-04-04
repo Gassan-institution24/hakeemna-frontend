@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 import UnitServiceDetailsContent from './info-content';
 
 // ----------------------------------------------------------------------
 
 export default function UnitServiceDetailsView({ unitServiceData }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   return (
     <Container maxWidth="xl">

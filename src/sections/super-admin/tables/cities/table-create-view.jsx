@@ -5,7 +5,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TableNewEditOneForm from './cities-create-edit-one';
@@ -14,7 +14,7 @@ import TableNewEditForm from './cities-table-many-new-form';
 // ----------------------------------------------------------------------
 
 export default function TableCreateView() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const [currentTab, setCurrentTab] = useState('many');
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
