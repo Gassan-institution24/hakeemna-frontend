@@ -20,7 +20,7 @@ export default function TableEditView({ departmentData, activityData }) {
 
   const { id } = useParams();
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`${t('edit')} ${activityData.name_english || ''} ${t('activity')}`}
         links={[

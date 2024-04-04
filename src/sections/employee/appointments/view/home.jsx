@@ -18,7 +18,7 @@ import TableContainer from '@mui/material/TableContainer';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
-// import { useRouter } from 'src/routes/hooks';
+import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -88,7 +88,7 @@ export default function AppointmentsView({ employeeData }) {
 
   const settings = useSettingsContext();
 
-  // const router = useRouter();
+  const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -203,6 +203,18 @@ export default function AppointmentsView({ employeeData }) {
       }));
     },
     [table]
+  );
+
+  const handleBookRow = useCallback(
+    async (row) => {
+      router.push(
+        paths.employee.appointments.book({
+          appointment: row._id,
+          day: row.start_time.split('T')[0],
+        })
+      );
+    },
+    [router]
   );
 
   const handleCancelRow = useCallback(
@@ -378,7 +390,7 @@ export default function AppointmentsView({ employeeData }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('appointments')}
           links={[
@@ -539,6 +551,7 @@ export default function AppointmentsView({ employeeData }) {
                         onSelectRow={() => table.onSelectRow(row._id)}
                         onDelayRow={handleDelayRow}
                         onCancelRow={() => handleCancelRow(row)}
+                        onBookAppoint={() => handleBookRow(row)}
                         onUnCancelRow={() => handleUnCancelRow(row)}
                       />
                     ))}

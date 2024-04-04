@@ -408,7 +408,7 @@ export default function AppointmentsView({ employeeData }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('appointments')} /// edit
           links={[

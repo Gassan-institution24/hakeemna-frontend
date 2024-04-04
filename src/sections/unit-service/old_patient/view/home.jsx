@@ -25,7 +25,7 @@ export default function TableCreateView() {
   const checkAcl = useAclGuard();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('old patient data')}
         links={[

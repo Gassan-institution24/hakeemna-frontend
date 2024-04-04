@@ -229,7 +229,7 @@ export default function WorkShiftsTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Unit Service Types" /// edit
           links={[

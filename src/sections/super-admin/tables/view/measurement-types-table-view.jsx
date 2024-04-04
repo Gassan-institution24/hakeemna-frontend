@@ -230,7 +230,7 @@ export default function MeasurmentTypesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Measurment Types" /// edit
           links={[

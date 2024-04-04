@@ -23,7 +23,7 @@ export default function USAccountingCreateView({ stakeholderData }) {
 
   const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`Create new ${stakeholderName} accounting`} /// edit
         links={[

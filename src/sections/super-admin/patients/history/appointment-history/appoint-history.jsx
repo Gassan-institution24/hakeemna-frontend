@@ -209,7 +209,7 @@ export default function AppointHistoryView({ patientData }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <Card>
           <Tabs
             value={filters.status}

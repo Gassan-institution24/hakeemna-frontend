@@ -40,6 +40,7 @@ export function RHFSelect({
           {...field}
           select
           fullWidth
+          InputLabelProps={{ shrink: true }}
           SelectProps={{
             native,
             MenuProps: {

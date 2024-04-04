@@ -148,7 +148,7 @@ export default function DietsTableView() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Diets" /// edit
         links={[

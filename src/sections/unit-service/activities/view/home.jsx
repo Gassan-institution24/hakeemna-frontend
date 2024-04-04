@@ -313,7 +313,7 @@ export default function ActivitesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('activities')} /// edit
           links={[

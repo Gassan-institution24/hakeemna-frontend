@@ -224,7 +224,7 @@ export default function RoomsTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Rooms" /// edit
           links={[

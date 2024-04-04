@@ -53,7 +53,7 @@ export default function StakeholderHistoryView({ stakeholderData }) {
   );
   const stakeholderName = stakeholderData?.name_english || 'Stakeholder';
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`${stakeholderName} History`}
         links={[

@@ -15,7 +15,7 @@ export default function EconomicMovementInfoView({ patientData }) {
   const settings = useSettingsContext();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <JobDetailsToolbar
         backLink={paths.superadmin.patients.root}
         editLink={paths.superadmin.patients.edit(`${patientData?._id}`)}

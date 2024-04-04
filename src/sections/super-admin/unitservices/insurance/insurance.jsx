@@ -200,7 +200,7 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           // heading={`${unitserviceName} Insurance`} /// edit
           // links={[

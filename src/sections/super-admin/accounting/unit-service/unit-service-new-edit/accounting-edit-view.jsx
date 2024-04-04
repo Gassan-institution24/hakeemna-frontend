@@ -23,7 +23,7 @@ export default function USAppointmentEditView({ unitServiceData, licenseMovement
   const params = useParams();
   const { id } = params;
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`Edit ${unitServiceName} Accounting`} /// edit
         links={[

@@ -261,7 +261,7 @@ export default function AppointConfigView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('appointment configuration')}
           links={[

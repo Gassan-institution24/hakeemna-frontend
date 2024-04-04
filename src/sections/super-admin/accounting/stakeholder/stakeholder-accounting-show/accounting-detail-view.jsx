@@ -17,7 +17,7 @@ export default function InvoiceDetailView({ economicMovementData }) {
   const { id } = params;
   const settings = useSettingsContext();
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <InvoiceDetailToolbar
         backLink={paths.superadmin.patients.history.root(id)}
         // editLink={paths.superadmin.patients.history.invoices.edit(id,economicMovementData._id)}

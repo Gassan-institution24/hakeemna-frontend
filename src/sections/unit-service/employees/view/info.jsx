@@ -185,7 +185,7 @@ export default function EmployeeInfoContent({ employeeData }) {
     </Stack>
   );
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <Grid container spacing={3} justifyContent="center">
         <Grid item xs={12} md={8}>
           {renderOverview}

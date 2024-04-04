@@ -262,7 +262,7 @@ export default function StakeholderTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('Stakeholders')} /// edit
           links={[

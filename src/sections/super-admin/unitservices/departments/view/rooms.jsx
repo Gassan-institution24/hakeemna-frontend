@@ -315,7 +315,7 @@ export default function RoomsTableView({ departmentData }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           // heading={`${curLangAr?departmentData.name_arabic:departmentData.name_english || ''} ${t('department rooms')}`} /// edit
           // links={[

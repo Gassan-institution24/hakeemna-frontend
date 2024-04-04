@@ -18,7 +18,7 @@ export default function TableEditView() {
   const { id } = params;
   const { data } = useGetRoom(id);
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Update room"
         links={[

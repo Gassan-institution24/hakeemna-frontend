@@ -30,7 +30,7 @@ export default function CountryCreateView() {
     },
   ];
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Create a new Surgery" /// edit
         links={[

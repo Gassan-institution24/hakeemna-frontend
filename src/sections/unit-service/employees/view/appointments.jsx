@@ -403,7 +403,7 @@ export default function AppointmentsView({ employeeData }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           action={
             checkAcl({ category: 'employee', subcategory: 'appointments', acl: 'create' }) && (

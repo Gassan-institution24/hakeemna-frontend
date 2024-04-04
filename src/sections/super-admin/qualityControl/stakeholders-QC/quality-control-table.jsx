@@ -147,7 +147,7 @@ export default function StakeholdersFeedbacks() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('Stakeholders Quality Control')}
         links={[

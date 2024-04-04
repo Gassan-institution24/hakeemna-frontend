@@ -19,7 +19,7 @@ export default function TableEditView() {
   const { id } = params;
   const { data } = useGetMeasurmentType(id);
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Update Measurment Type"
         links={[

@@ -64,7 +64,7 @@ export default function AccountView() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('profile')}
         links={[{ name: t('dashboard'), href: paths.dashboard.root }, { name: t('profile') }]}

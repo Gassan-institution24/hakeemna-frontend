@@ -200,7 +200,7 @@ export default function StakeholderInsuranceView({ stakeholderData, refetch }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={`${stakeholderName} Insurance`} /// edit
           links={[

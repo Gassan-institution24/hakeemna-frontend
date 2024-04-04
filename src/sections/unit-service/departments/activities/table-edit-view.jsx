@@ -17,7 +17,7 @@ export default function TableEditView({ departmentData, activityData }) {
   const settings = useSettingsContext();
   const { t } = useTranslate();
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`${t('edit')} ${activityData.name_english || ''} ${t('activity')}`}
         links={[

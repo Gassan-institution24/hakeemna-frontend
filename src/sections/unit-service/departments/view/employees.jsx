@@ -323,7 +323,7 @@ export default function EmployeesTableView({ departmentData }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           // heading={`${departmentData.name_english || ''} ${t('department employees')}`} /// edit
           // links={[

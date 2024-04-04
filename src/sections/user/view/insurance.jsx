@@ -94,7 +94,7 @@ export default function Insuranceinfo() {
   };
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('My insurance cards')}
         links={[

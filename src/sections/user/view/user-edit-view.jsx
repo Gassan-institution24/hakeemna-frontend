@@ -17,7 +17,7 @@
 //   const currentUser = _userList.find((user) => user.id === id);
 
 //   return (
-//     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+//     <Container maxWidth='xl'>
 //       <CustomBreadcrumbs
 //         heading="Edit"
 //         links={[

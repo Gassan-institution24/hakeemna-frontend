@@ -30,7 +30,7 @@ export default function TableCreateView() {
     },
   ];
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Create a new hospital"
         links={[

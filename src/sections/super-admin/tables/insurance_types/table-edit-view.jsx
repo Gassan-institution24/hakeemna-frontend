@@ -19,7 +19,7 @@ export default function TableEditView() {
   const { id } = params;
   const { isuranceData } = useGetInsuranceCo(id);
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Update Insurance Company"
         links={[

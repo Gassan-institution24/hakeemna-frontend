@@ -303,7 +303,7 @@ export default function EmployeeTypesTable() {
   }
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('employee types')} /// edit
           links={[

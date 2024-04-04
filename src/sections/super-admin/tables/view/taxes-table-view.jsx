@@ -230,7 +230,7 @@ export default function TaxesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Taxes" /// edit
           links={[

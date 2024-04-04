@@ -237,7 +237,7 @@ export default function UnitServicesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Unit Services" /// edit
           links={[

@@ -224,7 +224,7 @@ export default function UsersTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Employees" /// edit
           links={[

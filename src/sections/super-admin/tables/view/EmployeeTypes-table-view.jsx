@@ -230,7 +230,7 @@ export default function EmployeeTypesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Employee Types" /// edit
           links={[

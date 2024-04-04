@@ -19,7 +19,7 @@ export default function USAccountingCreateView({ unitServiceData }) {
   const params = useParams();
   const { id } = params;
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`Create new ${unitServiceName} accounting`} /// edit
         links={[

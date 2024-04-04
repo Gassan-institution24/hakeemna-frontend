@@ -304,7 +304,7 @@ export default function WorkGroupsTableView() {
   }
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('work shifts')} /// edit
           links={[

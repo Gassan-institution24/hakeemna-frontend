@@ -20,7 +20,7 @@ export default function CountryEditView() {
   const { data } = useGetSurgery(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Update Surgery" /// edit
         links={[

@@ -155,7 +155,7 @@ export default function CurrencyTableView() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Currency" /// edit
         links={[

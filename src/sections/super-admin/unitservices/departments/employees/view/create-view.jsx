@@ -33,7 +33,7 @@ export default function TableCreateView({ departmentData }) {
   const select = useBoolean(true);
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('Create a new employee account')}
           links={[

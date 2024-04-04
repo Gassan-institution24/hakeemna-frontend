@@ -394,7 +394,7 @@ export default function AppointmentsView({ departmentData }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           action={
             checkAcl({ category: 'department', subcategory: 'appointments', acl: 'create' }) && (

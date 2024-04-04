@@ -232,7 +232,7 @@ export default function WorkShiftsTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Work Shifts" /// edit
           links={[

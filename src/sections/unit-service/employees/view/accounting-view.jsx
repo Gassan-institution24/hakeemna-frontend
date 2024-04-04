@@ -38,7 +38,7 @@ export default function EmployeeAccountingView({ employeeData }) {
   );
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       {/* <CustomBreadcrumbs
         heading={`${employeeData.name_english || 'Deaprtment'} History`}
         links={[

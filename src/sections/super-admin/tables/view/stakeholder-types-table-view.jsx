@@ -232,7 +232,7 @@ export default function StakeholderTypesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Stakeholder Types" /// edit
           links={[

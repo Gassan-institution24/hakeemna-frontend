@@ -233,7 +233,7 @@ export default function ServiceTypesTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Service Types" /// edit
           links={[

@@ -218,7 +218,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('accounting')}
           links={[

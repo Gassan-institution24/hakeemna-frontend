@@ -237,7 +237,7 @@ export default function DeductionConfigTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Deduction Config" /// edit
           links={[

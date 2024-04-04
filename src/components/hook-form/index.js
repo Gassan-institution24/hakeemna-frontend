@@ -12,5 +12,6 @@ export { default as RHFRadioGroup } from './rhf-radio-group';
 export { default as RHFTimePicker } from './rhf-time-picker';
 export { default as RHFSelectCard } from './rhf-select-card';
 export { default as RHFDatePicker } from './rhf-date-picker';
+export { default as RHFPatientCode } from './rhf-patient-code';
 export { default as RHFPhoneNumber } from './rhf-phone-number';
 export { default as RHFAutocomplete } from './rhf-autocomplete';

@@ -29,7 +29,7 @@ export default function AccountView() {
     return <LoadingScreen />;
   }
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('unit service info')}
         links={[

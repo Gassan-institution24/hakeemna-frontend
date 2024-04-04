@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 
 import Table from '@mui/material/Table';
+import { Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import {
   useTable,
@@ -15,28 +16,59 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
+import axiosInstance, { endpoints } from 'src/utils/axios';
+import { useSnackbar } from 'notistack';
+import { useRouter } from 'src/routes/hooks';
 import ExistEmployeesRow from './old-patients-row';
 
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
-export default function UploadedOldPatients({ oldPatients }) {
+export default function UploadedOldPatients({ reset, selected, oldPatients }) {
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const TABLE_HEAD = [
     { id: 'code', label: t('code') },
-    { id: 'name', label: t('name') },
-    { id: 'identification_num', label: t('ID number') },
+    { id: 'name_english', label: t('name in english') },
+    { id: 'name_arabic', label: t('name in arabic') },
+    { id: 'mobile_num1', label: t('mobile number') },
+    { id: 'mobile_num2', label: t('alternative mobile number') },
     { id: 'email', label: t('email') },
-    { id: 'phone', label: t('phone') },
-    { id: 'files', label: t('files number') },
+    { id: 'identification_num', label: t('ID number') },
+    { id: 'nationality', label: t('nationality') },
+    { id: 'birth_date', label: t('birth date') },
+    { id: 'book', width: 88 },
+    // { id: 'files', label: t('files number') },
     // { id: '', width: 88 },
   ];
+
+  const router = useRouter();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const table = useTable({ defaultRowsPerPage: 10 });
 
   const theme = useTheme();
 
+  const handleEmployment = async (row) => {
+    try {
+      await axiosInstance.patch(endpoints.appointments.book(selected), {
+        patient: row._id,
+      });
+      enqueueSnackbar(t('booked successfully!'));
+      reset();
+      router.back();
+    } catch (error) {
+      // error emitted in backend
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
+      console.error(error);
+    }
+  };
   const {
     dense,
     page,
@@ -44,7 +76,7 @@ export default function UploadedOldPatients({ oldPatients }) {
     orderBy,
     rowsPerPage,
     //
-    selected,
+    // selected,
     //
     onSort,
     onChangeDense,
@@ -52,7 +84,7 @@ export default function UploadedOldPatients({ oldPatients }) {
     onChangeRowsPerPage,
   } = table;
   return (
-    <>
+    <Stack>
       <Table
         size={dense ? 'small' : 'medium'}
         sx={{
@@ -66,7 +98,7 @@ export default function UploadedOldPatients({ oldPatients }) {
           orderBy={orderBy}
           headLabel={TABLE_HEAD}
           //   rowCount={tableData.length}
-          numSelected={selected.length}
+          // numSelected={selected.length}
           onSort={onSort}
           sx={{
             [`& .${tableCellClasses.head}`]: {
@@ -89,7 +121,7 @@ export default function UploadedOldPatients({ oldPatients }) {
               <ExistEmployeesRow
                 key={idx}
                 row={row}
-                // onEmploymentRow={() => handleEmployment(row._id)}
+                onEmploymentRow={() => handleEmployment(row)}
               />
             ))}
 
@@ -118,9 +150,11 @@ export default function UploadedOldPatients({ oldPatients }) {
           },
         }}
       />
-    </>
+    </Stack>
   );
 }
 UploadedOldPatients.propTypes = {
   oldPatients: PropTypes.array,
+  reset: PropTypes.func,
+  selected: PropTypes.string,
 };

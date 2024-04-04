@@ -20,7 +20,7 @@ export default function TableEditView() {
   const { id } = params;
   const { data } = useGetDepartment(id);
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Update Department"
         links={[

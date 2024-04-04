@@ -156,7 +156,7 @@ export default function PatientFeedbackView({ patientData }) {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`${patientName} feedback`} /// edit
         links={[

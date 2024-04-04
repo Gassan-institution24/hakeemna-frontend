@@ -231,7 +231,7 @@ export default function HospitalsTableView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Hospital List" /// edit
           links={[
