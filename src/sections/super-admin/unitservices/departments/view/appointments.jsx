@@ -34,7 +34,7 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
   emptyRows,
@@ -83,7 +83,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
 
   const theme = useTheme();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const router = useRouter();
 

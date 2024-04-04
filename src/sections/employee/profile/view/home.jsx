@@ -12,7 +12,7 @@ import { useAuthContext } from 'src/auth/hooks';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -25,7 +25,7 @@ import AccountChangePassword from '../profile-change-password';
 // ----------------------------------------------------------------------
 
 export default function AccountView() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { t } = useTranslate();
 

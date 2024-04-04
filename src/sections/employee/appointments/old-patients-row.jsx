@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import Iconify from 'src/components/iconify';
 import { Button, IconButton } from '@mui/material';
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useLocales, useTranslate } from 'src/locales';
+
 import { useBoolean } from 'src/hooks/use-boolean';
+
+import { useLocales, useTranslate } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 
 // ----------------------------------------------------------------------
 

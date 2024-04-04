@@ -6,7 +6,7 @@ import { paths } from 'src/routes/paths';
 import { useParams, useRouter } from 'src/routes/hooks';
 
 // import { fDate } from 'src/utils/format-time';
-import {fDateAndTime} from 'src/utils/format-time'
+import { fDateAndTime } from 'src/utils/format-time';
 
 import { useGetOneoldmedicalreports } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
@@ -48,7 +48,9 @@ export default function OldmedicalrepotView() {
         </Typography>
         <Typography sx={{ fontWeight: 600, p: 2 }}>
           {t('Date')}:&nbsp; &nbsp;
-          <span style={{ color: 'gray', fontWeight: 400 }}>{fDateAndTime(oldmedicalreports?.date)}</span>
+          <span style={{ color: 'gray', fontWeight: 400 }}>
+            {fDateAndTime(oldmedicalreports?.date)}
+          </span>
         </Typography>
         {oldmedicalreports?.note && (
           <Typography sx={{ fontWeight: 600, p: 2 }}>
@@ -62,13 +64,13 @@ export default function OldmedicalrepotView() {
         </Button>
       </Box>
       <Box sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}>
-     {oldmedicalreports?.file?.map((img)=>(
-         <Image
-         src={`https://api.doctorna.online/uploaded-files/patients/old_medical_reports/${img}`}
-        //  src={`http://localhost:3000/uploaded-files/patients/old_medical_reports/${img}`}
-         sx={{ m: 1 }}
-       />
-     ))}
+        {oldmedicalreports?.file?.map((img) => (
+          <Image
+            src={`https://api.doctorna.online/uploaded-files/patients/old_medical_reports/${img}`}
+            //  src={`http://localhost:3000/uploaded-files/patients/old_medical_reports/${img}`}
+            sx={{ m: 1 }}
+          />
+        ))}
       </Box>
     </Stack>
   );

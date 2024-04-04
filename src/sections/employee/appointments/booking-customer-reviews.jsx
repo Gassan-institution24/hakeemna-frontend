@@ -1,24 +1,18 @@
 import PropTypes from 'prop-types';
-import { format, isValid } from 'date-fns';
+import { isValid } from 'date-fns';
+import { useState, useEffect } from 'react';
 
-import Chip from '@mui/material/Chip';
-import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Rating from '@mui/material/Rating';
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import CardHeader from '@mui/material/CardHeader';
-import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
-import { fDateTime } from 'src/utils/format-time';
-
-import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
-import { useLocales, useTranslate } from 'src/locales';
-import Iconify from 'src/components/iconify';
-import { useEffect, useState } from 'react';
 import { useResponsive } from 'src/hooks/use-responsive';
+
+import { useLocales, useTranslate } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
+import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
 
 // ----------------------------------------------------------------------
 

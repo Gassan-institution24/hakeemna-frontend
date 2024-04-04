@@ -5,7 +5,7 @@ import { paths } from 'src/routes/paths';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import ProfileHome from '../profile-home';
@@ -13,7 +13,7 @@ import ProfileHome from '../profile-home';
 // ----------------------------------------------------------------------
 
 export default function UserProfileView() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';

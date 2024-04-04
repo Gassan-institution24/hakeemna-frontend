@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 import StakeholderDetailsContent from './stakeholder-info-content';
 import StakeholderDetailsToolbar from './stakeholder-info-toolbar';
@@ -12,7 +12,7 @@ import StakeholderDetailsToolbar from './stakeholder-info-toolbar';
 // ----------------------------------------------------------------------
 
 export default function StakeholderDetailsView({ stakeholderData }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   return (
     <Container maxWidth="xl">

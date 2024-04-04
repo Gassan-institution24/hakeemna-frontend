@@ -18,8 +18,6 @@ import NavMini from './nav-mini';
 import NavVertical from './nav-vertical';
 import NavHorizontal from './nav-horizontal';
 
-
-
 // ----------------------------------------------------------------------
 
 export default function UserDashboardLayout({ children }) {
@@ -88,7 +86,6 @@ export default function UserDashboardLayout({ children }) {
         <Main>
           {children}
           {isSmallScreen ? <SmallSidebar /> : <Sidebar />}
-          
         </Main>
       </Box>
     </>

@@ -17,7 +17,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeWorkGroups } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -65,7 +65,7 @@ export default function WorkGroupsTableView() {
 
   const componentRef = useRef();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   //   const router = useRouter();
 

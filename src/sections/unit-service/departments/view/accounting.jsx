@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 import EconomicMovementsView from '../accounting/invoices/invoices-view';
 import PaymentControlView from '../accounting/payment-control/payment-control';
@@ -13,7 +13,7 @@ import PaymentControlView from '../accounting/payment-control/payment-control';
 // ----------------------------------------------------------------------
 
 export default function PatientHistoryView({ departmentData }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('Invoices');
 

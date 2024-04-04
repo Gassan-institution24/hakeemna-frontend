@@ -28,7 +28,7 @@ export default function ExistEmployeesRow({ row, selected, onEmploymentRow }) {
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
         <IconButton onClick={onEmploymentRow}>
-          <Iconify sx={{color:'success.dark'}} icon="zondicons:user-add" />
+          <Iconify sx={{ color: 'success.dark' }} icon="zondicons:user-add" />
         </IconButton>
       </TableCell>
     </TableRow>

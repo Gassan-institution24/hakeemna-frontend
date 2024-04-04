@@ -12,7 +12,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useGetUSsFeedbackes } from 'src/api';
 
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -50,7 +50,7 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function USsFeedbacks() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const router = useRouter();
 

@@ -9,7 +9,7 @@ import { useGetUnitservice } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -18,7 +18,7 @@ import AccountGeneral from '../profile-general';
 // ----------------------------------------------------------------------
 
 export default function AccountView() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const serviceUnitID =

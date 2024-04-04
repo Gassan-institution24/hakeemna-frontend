@@ -29,7 +29,7 @@ import { useGetSubSpecialties } from 'src/api';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 // import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -84,7 +84,7 @@ export default function SubSpecialtiesTableView() {
 
   const componentRef = useRef();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const router = useRouter();
 

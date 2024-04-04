@@ -12,7 +12,7 @@ import { fMonth } from 'src/utils/format-time';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ export default function EmployeeInfoContent({ employeeData }) {
     speciality,
   } = employeeData.employee;
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();

@@ -17,7 +17,7 @@ import { useGetDoctornaFeedbackes } from 'src/api';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
@@ -65,7 +65,7 @@ export default function UnitServicesFeedbackView({ unitServiceData }) {
 
   const componentRef = useRef();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { feedbackData, loading, refetch } = useGetDoctornaFeedbackes();
 

@@ -10,14 +10,14 @@ import ListItemText from '@mui/material/ListItemText';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
 
 export default function DepartmentInfoContent({ departmentData }) {
   const { name_english, name_arabic, general_info, unit_service } = departmentData;
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();

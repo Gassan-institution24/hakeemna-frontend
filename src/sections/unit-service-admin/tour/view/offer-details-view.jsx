@@ -8,7 +8,7 @@ import { paths } from 'src/routes/paths';
 
 import { useGetOffer } from 'src/api';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 import TourDetailsToolbar from '../offer-details-toolbar';
 import TourDetailsContent from '../offer-details-content';
@@ -16,7 +16,7 @@ import TourDetailsContent from '../offer-details-content';
 // ----------------------------------------------------------------------
 
 export default function TourDetailsView({ id }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const { data } = useGetOffer(id);
   const [publish, setPublish] = useState(data?.publish);
 

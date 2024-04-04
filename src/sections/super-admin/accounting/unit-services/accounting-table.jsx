@@ -16,7 +16,7 @@ import { useGetUSLicenseMovements } from 'src/api';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
@@ -56,7 +56,7 @@ const defaultFilters = {
 export default function LicenseMovementsView() {
   const theme = useTheme();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const router = useRouter();
 

@@ -4,7 +4,7 @@
 
 // import { paths } from 'src/routes/paths';
 
-// import { useSettingsContext } from 'src/components/settings';
+// // import { useSettingsContext } from 'src/components/settings';
 // import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 // // import UserNewEditForm from '../user-new-edit-form';
@@ -12,7 +12,7 @@
 // // ----------------------------------------------------------------------
 
 // export default function UserEditView({ id }) {
-//   const settings = useSettingsContext();
+//   // const settings = useSettingsContext();
 
 //   const currentUser = _userList.find((user) => user.id === id);
 

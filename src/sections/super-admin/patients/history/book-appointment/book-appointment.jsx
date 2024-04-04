@@ -23,7 +23,7 @@ import {
 } from 'src/api';
 
 import EmptyContent from 'src/components/empty-content';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import AppointmentList from './appointment-list';
@@ -46,7 +46,7 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function AppointmentListView({ patientData }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { t } = useTranslate();
 

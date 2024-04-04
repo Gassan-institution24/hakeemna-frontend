@@ -36,7 +36,7 @@ export default function AuthClassicLayout({ children, image, title }) {
         sx={{
           display: { xs: 'flex', sm: 'block' },
           justifyContent: { xs: 'flex-end' },
-          alignItems: { xs: 'flex-end'},
+          alignItems: { xs: 'flex-end' },
         }}
       >
         <LanguagePopover />

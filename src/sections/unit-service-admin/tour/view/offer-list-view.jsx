@@ -17,7 +17,7 @@ import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TourList from '../offer-list';
@@ -38,7 +38,7 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function TourListView() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { t } = useTranslate();
 

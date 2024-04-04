@@ -9,7 +9,7 @@ import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 // import { useGetStakeholderAppointments } from 'src/api';
@@ -22,7 +22,7 @@ import PaymentControlView from './payment-control/payment-control';
 export default function StakeholderHistoryView({ stakeholderData }) {
   const { t } = useTranslate();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('Appointment');
 

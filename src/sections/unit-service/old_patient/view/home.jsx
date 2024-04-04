@@ -7,7 +7,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeOldPatient } from 'src/api';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -17,7 +17,7 @@ import UploadedOldPatients from '../uploaded-old-patients';
 // ----------------------------------------------------------------------
 
 export default function TableCreateView() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const { user } = useAuthContext();
   const { t } = useTranslate();
   const { oldPatients, refetch, loading } = useGetEmployeeOldPatient(user?.employee?._id);

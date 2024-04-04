@@ -22,7 +22,7 @@ import { useGetDepartmentPaymentControl } from 'src/api';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
   emptyRows,
@@ -66,7 +66,7 @@ const defaultFilters = {
 export default function IncomePaymentControlView({ departmentData }) {
   const theme = useTheme();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const router = useRouter();
 

@@ -4,8 +4,8 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import {
   useFindPatient,
   useGetCountries,
@@ -14,20 +14,21 @@ import {
 } from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
-// import UploadOldPatient from '../upload-old-patient';
-import { useEffect, useMemo, useState } from 'react';
 // import { LoadingScreen } from 'src/components/loading-screen';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
+// import UploadOldPatient from '../upload-old-patient';
+import { useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, MenuItem, Stack } from '@mui/material';
+import { Box, Card, Stack, MenuItem } from '@mui/material';
 
-import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
 
-// import { useSettingsContext } from 'src/components/settings';
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+// // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFSelect, RHFTextField, RHFDatePicker, RHFPhoneNumber } from 'src/components/hook-form';
@@ -37,7 +38,7 @@ import BookingCustomerReviews from '../booking-customer-reviews';
 // ----------------------------------------------------------------------
 
 export default function TableCreateView() {
-  // const settings = useSettingsContext();
+  // // const settings = useSettingsContext();
   const { user } = useAuthContext();
 
   const { t } = useTranslate();
