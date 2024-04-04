@@ -22,12 +22,11 @@ export default function ProfileHome() {
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
 
-  const accessToken = sessionStorage.getItem('accessToken');
+  // const accessToken = sessionStorage.getItem('accessToken');
 
   // Replace the placeholder with the actual token (you need to get or generate the token)
   const qrCodeLink = `https://doctorna.online`;
   // const qrCodeLink = `https://doctorna.online/dashboard/user/myprofile/?token=${accessToken}`;
-
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   function calculateAge(birthDate) {
@@ -265,6 +264,7 @@ export default function ProfileHome() {
           {curLangAr
             ? user?.patient.name_arabic
             : `${user?.patient?.first_name} ${user?.patient?.family_name}`}
+         
         </Typography>
       </div>
       {[
