@@ -20,7 +20,7 @@ import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
@@ -70,7 +70,7 @@ export default function EmployeeFeedbackView({ employeeData }) {
 
   const componentRef = useRef();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { feedbackData, loading } = useGetEmployeeFeedbackes(id);
 
@@ -142,7 +142,7 @@ export default function EmployeeFeedbackView({ employeeData }) {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <Card>
         <Tabs
           value={filters.status}

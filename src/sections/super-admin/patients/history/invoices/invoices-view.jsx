@@ -22,7 +22,7 @@ import { useGetPatientEconomicMovements } from 'src/api';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
@@ -67,7 +67,7 @@ const defaultFilters = {
 export default function EconomicMovementsView({ patientData }) {
   const theme = useTheme();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const router = useRouter();
 
@@ -220,7 +220,7 @@ export default function EconomicMovementsView({ patientData }) {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <Card
           sx={{
             mb: { xs: 3, md: 5 },

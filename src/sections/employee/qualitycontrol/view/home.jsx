@@ -20,7 +20,7 @@ import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -69,7 +69,7 @@ export default function DepartmentFeedbackView() {
 
   const { user } = useAuthContext();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { feedbackData, loading } = useGetEmployeeFeedbackes(user?.employee?._id);
 
@@ -141,7 +141,7 @@ export default function DepartmentFeedbackView() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('quality control')} /// edit
         links={[

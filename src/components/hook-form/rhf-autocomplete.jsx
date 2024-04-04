@@ -28,6 +28,7 @@ export default function RHFAutocomplete({
             <TextField
               label={label}
               variant={variant}
+              InputLabelProps={{ shrink: true }}
               placeholder={placeholder}
               error={!!error}
               helperText={error ? error?.message : helperText}

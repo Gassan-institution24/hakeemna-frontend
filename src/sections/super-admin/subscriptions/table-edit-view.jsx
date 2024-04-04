@@ -6,7 +6,7 @@ import { useParams } from 'src/routes/hooks';
 import { useTranslate } from 'src/locales';
 import { useGetSubscription } from 'src/api';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TableNewEditForm from './table-new-edit-form';
@@ -14,7 +14,7 @@ import TableNewEditForm from './table-new-edit-form';
 // ----------------------------------------------------------------------
 
 export default function TableEditView() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { t } = useTranslate();
 
@@ -22,7 +22,7 @@ export default function TableEditView() {
   const { id } = params;
   const { data } = useGetSubscription(id);
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('Update Subscription')}
         links={[

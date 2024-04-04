@@ -9,7 +9,7 @@ import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import EconomicMovementsView from './invoices/invoices-view';
@@ -21,7 +21,7 @@ import PaymentControlView from './payment-control/payment-control';
 export default function PatientHistoryView({ patientData }) {
   const { t } = useTranslate();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('Appointment');
 
@@ -71,7 +71,7 @@ export default function PatientHistoryView({ patientData }) {
     'Patient';
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`${patientName} History`}
         links={[

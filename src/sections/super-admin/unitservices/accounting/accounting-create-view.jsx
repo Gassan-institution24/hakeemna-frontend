@@ -5,7 +5,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TableNewEditForm from './accounting-new-edit-form';
@@ -13,13 +13,13 @@ import TableNewEditForm from './accounting-new-edit-form';
 // ----------------------------------------------------------------------
 
 export default function USAccountingCreateView({ unitServiceData }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const unitServiceName = unitServiceData?.name_english || 'Unit Service';
   const params = useParams();
   const { id } = params;
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`Create new ${unitServiceName} accounting`} /// edit
         links={[

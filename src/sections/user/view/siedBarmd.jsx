@@ -48,7 +48,7 @@ export default function Sidebar() {
       <Box style={insidestickySidebar}>
         <Button
           sx={{
-            width:'9vh',
+            width: '9vh',
             display: 'inline',
             '&:hover': {
               bgcolor: 'inherit',
@@ -63,7 +63,7 @@ export default function Sidebar() {
         <Divider />
         <Button
           sx={{
-            width:'9vh',
+            width: '9vh',
             display: 'inline',
             '&:hover': {
               bgcolor: 'inherit',
@@ -80,7 +80,7 @@ export default function Sidebar() {
         <Divider />
         <Button
           sx={{
-            width:'9vh',
+            width: '9vh',
             display: 'inline',
             '&:hover': {
               bgcolor: 'inherit',
@@ -94,7 +94,7 @@ export default function Sidebar() {
         <Divider />
         <Button
           sx={{
-            width:'9vh',
+            width: '9vh',
             display: 'inline',
             '&:hover': {
               bgcolor: 'inherit',
@@ -110,7 +110,7 @@ export default function Sidebar() {
         <Divider />
         <Button
           sx={{
-            width:'9vh',
+            width: '9vh',
             display: 'inline',
             '&:hover': {
               bgcolor: 'inherit',

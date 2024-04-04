@@ -20,7 +20,7 @@ import { useGetPatientFeedbacks } from 'src/api';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -74,7 +74,7 @@ export default function PatientFeedbackView({ patientData }) {
 
   const componentRef = useRef();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { feedbackData, loading } = useGetPatientFeedbacks(id);
 
@@ -156,7 +156,7 @@ export default function PatientFeedbackView({ patientData }) {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={`${patientName} feedback`} /// edit
         links={[

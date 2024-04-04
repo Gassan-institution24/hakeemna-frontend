@@ -20,7 +20,7 @@ import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
@@ -71,7 +71,7 @@ export default function UnitServicesFeedbackView() {
 
   const componentRef = useRef();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { feedbackData, loading } = useGetUSFeedbackes(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
@@ -145,7 +145,7 @@ export default function UnitServicesFeedbackView() {
   }
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading={t('feedback')} /// edit
         links={[

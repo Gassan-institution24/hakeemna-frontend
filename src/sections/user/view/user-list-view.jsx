@@ -25,7 +25,7 @@
 // import Iconify from 'src/components/iconify';
 // import Scrollbar from 'src/components/scrollbar';
 // import { ConfirmDialog } from 'src/components/custom-dialog';
-// import { useSettingsContext } from 'src/components/settings';
+// // import { useSettingsContext } from 'src/components/settings';
 // import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 // import {
 //   useTable,
@@ -66,7 +66,7 @@
 // export default function UserListView() {
 //   const table = useTable();
 
-//   const settings = useSettingsContext();
+//   // const settings = useSettingsContext();
 
 //   const router = useRouter();
 
@@ -145,7 +145,7 @@
 
 //   return (
 //     <>
-//       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+//       <Container maxWidth='xl'>
 //         <CustomBreadcrumbs
 //           heading="List"
 //           links={[

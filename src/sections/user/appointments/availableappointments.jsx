@@ -26,7 +26,7 @@ import {
 } from 'src/api';
 
 // import Iconify from 'src/components/iconify';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 import AppointmentSort from './appointment-sort-user';
 import ClinicAppointmentList from './appointment-clinic';
@@ -52,7 +52,7 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function AppointmentBooking() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const { t } = useTranslate();
   const { id } = useParams();
   const openFilters = useBoolean();
@@ -176,7 +176,7 @@ export default function AppointmentBooking() {
   // }, []);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <Stack
         spacing={2.5}
         sx={{

@@ -5,7 +5,7 @@ import { useParams } from 'src/routes/hooks';
 
 import { useGetCity } from 'src/api';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TableNewEditForm from './cities-create-edit-one';
@@ -13,13 +13,13 @@ import TableNewEditForm from './cities-create-edit-one';
 // ----------------------------------------------------------------------
 
 export default function TableEditView() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const params = useParams();
   const { id } = params;
   const { data } = useGetCity(id);
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Update city"
         links={[

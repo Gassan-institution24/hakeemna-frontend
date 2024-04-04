@@ -6,7 +6,7 @@ import { paths } from 'src/routes/paths';
 
 import { useGetOffer } from 'src/api';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TourNewEditForm from '../offer-new-edit-form';
@@ -14,12 +14,12 @@ import TourNewEditForm from '../offer-new-edit-form';
 // ----------------------------------------------------------------------
 
 export default function TourEditView({ id }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { data } = useGetOffer(id);
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Edit"
         links={[

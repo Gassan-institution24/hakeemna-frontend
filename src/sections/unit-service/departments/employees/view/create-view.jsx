@@ -12,7 +12,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TableNewEditForm from '../create-edit-employee';
@@ -21,7 +21,7 @@ import FindExistEmployee from '../find-exist-employee';
 // ----------------------------------------------------------------------
 
 export default function TableCreateView({ departmentData }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -30,7 +30,7 @@ export default function TableCreateView({ departmentData }) {
   const select = useBoolean(true);
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading={t('Create a new employee account')}
           links={[

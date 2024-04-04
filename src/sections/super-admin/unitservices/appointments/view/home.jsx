@@ -33,7 +33,7 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
   emptyRows,
@@ -81,7 +81,7 @@ export default function AppointmentsView() {
 
   const checkAcl = useAclGuard();
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const router = useRouter();
 
@@ -379,7 +379,7 @@ export default function AppointmentsView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         {/* <CustomBreadcrumbs
           heading={t('appointments')} /// edit
           links={[

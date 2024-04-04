@@ -2,7 +2,7 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import TourNewEditForm from '../tour-new-edit-form';
@@ -10,10 +10,10 @@ import TourNewEditForm from '../tour-new-edit-form';
 // ----------------------------------------------------------------------
 
 export default function TourCreateView() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       <CustomBreadcrumbs
         heading="Create a new tour"
         links={[

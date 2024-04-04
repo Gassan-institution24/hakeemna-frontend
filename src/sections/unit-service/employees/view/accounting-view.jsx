@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 import EconomicMovementsView from '../accouting/invoices/invoices-view';
 import PaymentControlView from '../accouting/payment-control/payment-control';
@@ -13,7 +13,7 @@ import PaymentControlView from '../accouting/payment-control/payment-control';
 // ----------------------------------------------------------------------
 
 export default function EmployeeAccountingView({ employeeData }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('Invoices');
 
@@ -38,7 +38,7 @@ export default function EmployeeAccountingView({ employeeData }) {
   );
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth="xl">
       {/* <CustomBreadcrumbs
         heading={`${employeeData.name_english || 'Deaprtment'} History`}
         links={[

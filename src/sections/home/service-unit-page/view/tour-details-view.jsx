@@ -5,13 +5,12 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 
-
 // import { _tours, TOUR_DETAILS_TABS, TOUR_PUBLISH_OPTIONS } from 'src/_mock';
 
 import { useGetUnitservice, useGetUSAvailableAppointments } from 'src/api';
 
 import Label from 'src/components/label';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 
 import TourDetailsContent from '../tour-details-content';
 
@@ -23,7 +22,7 @@ const TOUR_DETAILS_TABS = [
 ];
 
 export default function TourDetailsView({ id }) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const { data } = useGetUnitservice(id);
   const { appointmentsData } = useGetUSAvailableAppointments(id);
@@ -63,7 +62,7 @@ export default function TourDetailsView({ id }) {
   );
 
   return (
-    <Container sx={{mt:7}} maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container sx={{ mt: 7 }} maxWidth="xl">
       {/* <TourDetailsToolbar
         // backLink={paths.dashboard.tour.root}
         // editLink={paths.dashboard.tour.edit(`${currentTour?.id}`)}

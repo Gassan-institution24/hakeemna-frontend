@@ -21,6 +21,7 @@ export default function RHFDatePicker({ name, helperText, type, ...other }) {
           onChange={(newValue) => {
             field.onChange(newValue);
           }}
+          InputLabelProps={{ shrink: true }}
           slotProps={{
             textField: {
               fullWidth: true,

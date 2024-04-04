@@ -42,8 +42,6 @@ export default function NotificationsPopoverPatient() {
     user?.patient?._id
   );
 
-
-
   const smUp = useResponsive('up', 'sm');
 
   // const [page, setPage] = useState(1);

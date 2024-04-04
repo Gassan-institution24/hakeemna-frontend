@@ -699,7 +699,8 @@ export const paths = {
     },
     appointments: {
       root: `${ROOTS.SUPERADMIN}/appointments`,
-      book: (id) => `${ROOTS.SUPERADMIN}/appointments/${id}/book`,
+      book: (params) =>
+        `${ROOTS.SUPERADMIN}/appointments/book?day=${params.day}&&appointment=${params.appointment}`,
     },
     appointmentconfiguration: {
       root: `${ROOTS.SUPERADMIN}/appointmentconfig`,

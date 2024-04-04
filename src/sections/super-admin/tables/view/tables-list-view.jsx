@@ -16,7 +16,7 @@ import { fTimestamp } from 'src/utils/format-time';
 
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
+// import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -44,7 +44,7 @@ const defaultFilters = {
 export default function TablesListView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const router = useRouter();
 
@@ -139,7 +139,7 @@ export default function TablesListView() {
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container maxWidth="xl">
         <CustomBreadcrumbs
           heading="Tables"
           links={[
