@@ -49,10 +49,10 @@ export default function AccountGeneral({ data, refetch }) {
   };
 
   const UpdateUserSchema = Yup.object().shape({
-    first_name: Yup.string(),
-    middle_name: Yup.string(),
+    name_english: Yup.string(),
+    // middle_name: Yup.string(),
     name_arabic: Yup.string(),
-    family_name: Yup.string(),
+    // family_name: Yup.string(),
     email: Yup.string(),
     mobile_num1: Yup.string(),
     mobile_num2: Yup.string(),
@@ -69,10 +69,10 @@ export default function AccountGeneral({ data, refetch }) {
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
 
   const defaultValues = {
-    first_name: data?.first_name || '',
-    middle_name: data?.middle_name || '',
+    name_english: data?.name_english || '',
+    // middle_name: data?.middle_name || '',
     name_arabic: data?.name_arabic || '',
-    family_name: data?.family_name || '',
+    // family_name: data?.family_name || '',
     email: data?.email || '',
     mobile_num1: data?.mobile_num1 || '',
     mobile_num2: data?.mobile_num2 || '',
@@ -208,25 +208,25 @@ export default function AccountGeneral({ data, refetch }) {
               }}
             >
               <RHFTextField
-                name="first_name"
+                name="name_english"
                 label={t('First Name')}
                 onChange={handleEnglishInputChange}
               />
-              <RHFTextField
+              {/* <RHFTextField
                 name="middle_name"
                 label={t('Middle name')}
                 onChange={handleEnglishInputChange}
-              />
+              /> */}
               <RHFTextField
                 name="name_arabic"
                 label={t('Name in arabic')}
                 onChange={handleArabicInputChange}
               />
-              <RHFTextField
+              {/* <RHFTextField
                 name="family_name"
                 label={t('Last Name')}
                 onChange={handleEnglishInputChange}
-              />
+              /> */}
               <MuiTelInput
                 label={`${t('Mobile Number')} *`}
                 forceCallingCode
