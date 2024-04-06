@@ -61,7 +61,7 @@ export default function Exist() {
   const { existPatient } = useFindPatients({
     identification_num: filters.identification_num || null,
     mobile_num1: filters.mobile_num1,
-    first_name: filters.first_name,
+    name_english: filters.name_english,
     name_arabic: filters?.name_arabic,
   });
   return (
