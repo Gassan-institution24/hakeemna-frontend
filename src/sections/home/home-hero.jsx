@@ -14,14 +14,14 @@ import { paths } from 'src/routes/paths';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { HEADER } from 'src/layouts/config-layout';
-import Language from 'src/layouts/common/language-home-page';
+// import Language from 'src/layouts/common/language-home-page';
 import { bgBlur, bgGradient, textGradient } from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
 import { varFade, MotionContainer } from 'src/components/animate';
 
-import More from './view/uns.webp';
 import Tall from './view/image.png';
+import Preview from './view/preview.png';
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
@@ -140,7 +140,7 @@ export default function HomeHero() {
     }
 
     scrollY.on('change', (scrollHeight) => {
-      const scrollPercent = (scrollHeight * 100) / heroHeight;
+      const scrollPercent = (scrollHeight * 200) / heroHeight;
 
       setPercent(Math.floor(scrollPercent));
     });
@@ -175,11 +175,6 @@ export default function HomeHero() {
         },
       }}
     >
-      <m.div variants={varFade().in}>
-        <Typography variant="h4" sx={{ textAlign: 'center', pb: 8, color: 'success.dark' }}>
-          The web page currently under development .
-        </Typography>
-      </m.div>
 
       <m.div variants={varFade().in}>
         <Typography
@@ -189,8 +184,7 @@ export default function HomeHero() {
           }}
           id="home"
         >
-          Start with <br />
-          Electronic Healthcare Records
+          It is time for digital transformation
         </Typography>
       </m.div>
 
@@ -204,13 +198,17 @@ export default function HomeHero() {
             repeat: Infinity,
           }}
         >
-          Doctorna
+          Hakeemna
         </StyledTextGradient>
       </m.div>
 
       <m.div variants={varFade().in}>
         <Typography variant="body2" sx={{ textAlign: 'center' }}>
-          The most extensive community of healthcare providers and beneficiaries.
+          A platform that provides an integrated electronic system for personal medical and health
+          records, organizing work between medical service providers and users in the private
+          sector. This organization allows improving the quality and efficiency of medical services
+          and enhances communication and cooperation between them, contributing to achieving
+          sustainable development in the field of health care.
         </Typography>
       </m.div>
 
@@ -229,7 +227,7 @@ export default function HomeHero() {
           >
             Get Started
           </Button>
-          <Button
+          {/* <Button
             color="inherit"
             size="large"
             variant="outlined"
@@ -238,7 +236,7 @@ export default function HomeHero() {
           >
             <Language />
             Language
-          </Button>
+          </Button> */}
         </Stack>
       </m.div>
 
@@ -248,7 +246,8 @@ export default function HomeHero() {
           <Iconify icon="solar:health-broken" color="green" width={30} sx={{ m: 0.5 }} />
           <Iconify icon="ri:mental-health-line" color="lightblue" width={30} sx={{ m: 0.5 }} />
           <Iconify icon="pajamas:status-health" color="red" width={30} sx={{ m: 0.5 }} />
-          <Iconify icon="icon-park:medicine-bottle" width={30} sx={{ m: 0.5 }} />
+          <Iconify icon="iconoir:community" color="#2E87FD" width={30} sx={{ m: 0.5 }} />
+          {/* <Iconify icon="icon-park:medicine-bottle" width={30} sx={{ m: 0.5 }} /> */}
         </m.div>
       </Stack>
     </Stack>
@@ -280,7 +279,7 @@ export default function HomeHero() {
           animate={{ y: ['0%', '100%'] }}
           transition={transition}
           alt={lightMode ? 'light_1' : 'dark_1'}
-          src={Tall}
+          src={Preview}
           sx={{ position: 'absolute', mt: -5 }}
         />
         <Box
@@ -288,7 +287,7 @@ export default function HomeHero() {
           animate={{ y: ['-100%', '0%'] }}
           transition={transition}
           alt={lightMode ? 'light_1' : 'dark_1'}
-          src={Tall}
+          src={Preview}
           sx={{ position: 'absolute' }}
         />
       </Stack>

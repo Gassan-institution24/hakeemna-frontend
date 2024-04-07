@@ -1,7 +1,7 @@
 import JsPdf from 'jspdf';
 import * as Yup from 'yup';
 import { addDays } from 'date-fns';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -36,8 +36,9 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axios from 'src/utils/axios';
 import { fDateAndTime } from 'src/utils/format-time';
 
-import { useGetSpecialties } from 'src/api';
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetSpecialties, useGetPatintoldmedicalreports } from 'src/api';
 
 import Iconify from 'src/components/iconify/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -49,32 +50,21 @@ export default function OldMedicalReports() {
 
   // Calculate max date as today's date
   const maxDate = addDays(today, 0); // You can adjust the offset if needed
-
   const dialog = useBoolean();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [ImgFiles, setImgFiles] = useState([]);
-  const [Filesdata, setFilesdata] = useState([]);
   const [FileToDelete, setFileToDelete] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [hoveredButtonId, setHoveredButtonId] = useState(null);
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const { user } = useAuthContext();
   const { specialtiesData } = useGetSpecialties();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('/api/oldmedicalreports');
-        setFilesdata(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { oldmedicalreportsdata, refetch } = useGetPatintoldmedicalreports(user?.patient?._id);
+  console.log(oldmedicalreportsdata, 'oldmedicalreportsdata');
 
   const handleHover = (id) => {
     setHoveredButtonId(id);
@@ -96,8 +86,7 @@ export default function OldMedicalReports() {
         `${curLangAr ? 'تم حذف التقرير بنجاح' : 'Medical report deleted successfully'}`,
         { variant: 'success' }
       );
-      const response = await axios.get('/api/oldmedicalreports');
-      setFilesdata(response.data);
+      refetch()
     } catch (error) {
       enqueueSnackbar(`${curLangAr ? 'حدث خطأ ما, الرجاء المحاوله لاحقا' : 'Unable to delete'}`, {
         variant: 'error',
@@ -118,6 +107,7 @@ export default function OldMedicalReports() {
     file: [],
     name: '',
     note: null,
+    patient: user?.patient?._id,
     agree: !checkChange,
     specialty: '',
   };
@@ -185,10 +175,9 @@ export default function OldMedicalReports() {
       await axios.post('/api/oldmedicalreports', formData);
       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
       dialog.onFalse();
-      const response = await axios.get('/api/oldmedicalreports');
-      setFilesdata(response.data);
       reset();
       setCheckChange(!checkChange);
+      refetch()
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
@@ -427,7 +416,7 @@ export default function OldMedicalReports() {
         </FormProvider>
       </Dialog>
 
-      {Filesdata?.map((info, i) => (
+      {oldmedicalreportsdata?.map((info, i) => (
         <TableContainer
           component={Paper}
           key={i}
