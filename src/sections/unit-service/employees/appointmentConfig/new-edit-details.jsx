@@ -11,6 +11,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
 
 import { useNewScreen } from 'src/hooks/use-new-screen';
 
@@ -22,7 +23,6 @@ import { useGetUSActiveWorkShifts, useGetEmployeeActiveWorkGroups } from 'src/ap
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
-import { useParams } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 

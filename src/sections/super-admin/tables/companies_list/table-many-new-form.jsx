@@ -8,8 +8,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import {
   Table,
-  // Select,
-  Checkbox,
   // MenuItem,
   TableRow,
   TableBody,
@@ -59,17 +57,17 @@ export default function NewEditManyForm() {
 
   const [data, setData] = useState([]);
 
-  const handleArabicInputChange = (index, event) => {
-    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/;
+  // const handleArabicInputChange = (index, event) => {
+  //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/;
 
-    if (arabicRegex.test(event.target.value)) {
-      setData((prev) => {
-        const updated = [...prev];
-        updated[index] = { ...updated[index], [event.target.name]: event.target.value };
-        return updated;
-      });
-    }
-  };
+  //   if (arabicRegex.test(event.target.value)) {
+  //     setData((prev) => {
+  //       const updated = [...prev];
+  //       updated[index] = { ...updated[index], [event.target.name]: event.target.value };
+  //       return updated;
+  //     });
+  //   }
+  // };
 
   const handleEnglishInputChange = (index, event) => {
     // const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/;
