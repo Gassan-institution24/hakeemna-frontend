@@ -14,11 +14,14 @@ import { paths } from 'src/routes/paths';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { HEADER } from 'src/layouts/config-layout';
+import Language from 'src/layouts/common/language-home-page';
 import { bgBlur, bgGradient, textGradient } from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
 import { varFade, MotionContainer } from 'src/components/animate';
 
+import More from './view/uns.webp';
+import Tall from './view/image.png';
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
@@ -226,6 +229,16 @@ export default function HomeHero() {
           >
             Get Started
           </Button>
+          <Button
+            color="inherit"
+            size="large"
+            variant="outlined"
+            rel="noopener"
+            sx={{ borderColor: 'text.primary' }}
+          >
+            <Language />
+            Language
+          </Button>
         </Stack>
       </m.div>
 
@@ -240,7 +253,6 @@ export default function HomeHero() {
       </Stack>
     </Stack>
   );
-
   const renderSlides = (
     <Stack
       direction="row"
@@ -263,23 +275,22 @@ export default function HomeHero() {
           position: 'relative',
         }}
       >
-        {/* <Box
+        <Box
           component={m.img}
           animate={{ y: ['0%', '100%'] }}
           transition={transition}
           alt={lightMode ? 'light_1' : 'dark_1'}
-          src='https://i.pinimg.com/originals/b8/23/e3/b823e38cc01fdb9278b6f7faa2feda6d.gif'
+          src={Tall}
           sx={{ position: 'absolute', mt: -5 }}
-        /> */}
-        {/* 
+        />
         <Box
           component={m.img}
           animate={{ y: ['-100%', '0%'] }}
           transition={transition}
           alt={lightMode ? 'light_1' : 'dark_1'}
-          src='https://i.pinimg.com/originals/ea/7f/2d/ea7f2dd47969349da148ea0b4ec56815.gif'
+          src={Tall}
           sx={{ position: 'absolute' }}
-        />  */}
+        />
       </Stack>
 
       <Stack
@@ -292,7 +303,7 @@ export default function HomeHero() {
           animate={{ y: ['100%', '0%'] }}
           transition={transition}
           alt={lightMode ? 'light_2' : 'dark_2'}
-          src="https://cdn.dribbble.com/users/3726898/screenshots/15468954/media/b3a0f8865b485187e200839facdc22ac.gif"
+          src={Tall}
           sx={{ position: 'absolute', mt: -5 }}
         />
         <Box
@@ -300,15 +311,7 @@ export default function HomeHero() {
           animate={{ y: ['0%', '-100%'] }}
           transition={transition}
           alt={lightMode ? 'light_2' : 'dark_2'}
-          src="https://cdn.dribbble.com/users/856306/screenshots/4120104/medical_building_800x600.gif"
-          sx={{ position: 'absolute' }}
-        />
-        <Box
-          component={m.img}
-          animate={{ y: ['0%', '-100%'] }}
-          transition={transition}
-          alt={lightMode ? 'light_2' : 'dark_2'}
-          src="https://cdn.dribbble.com/users/856306/screenshots/4120104/medical_building_800x600.gif"
+          src={Tall}
           sx={{ position: 'absolute' }}
         />
       </Stack>

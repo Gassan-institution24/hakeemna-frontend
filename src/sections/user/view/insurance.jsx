@@ -29,7 +29,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import InsurancePage from '../appointments/insurancePage';
+import InsurancePage from './insurancePage';
 
 // ----------------------------------------------------------------------
 

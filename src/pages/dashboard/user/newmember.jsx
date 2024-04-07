@@ -34,8 +34,7 @@ export default function Create() {
   const { user } = useAuthContext();
   const password = useBoolean();
   const RegisterSchema = Yup.object().shape({
-    first_name: Yup.string().required('First name required'),
-    family_name: Yup.string().required('Last name required'),
+    name_english: Yup.string().required('First name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string()
@@ -49,8 +48,7 @@ export default function Create() {
   });
 
   const defaultValues = {
-    first_name: '',
-    family_name: '',
+    name_english: '',
     email: '',
     family_members: user?.patient?._id,
     password: '',
@@ -87,7 +85,7 @@ export default function Create() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await register?.({ userName: `${data.first_name} ${data.family_name}`, ...data });
+      await register?.({ userName: `${data.name_english}`, ...data });
       router.push(paths.auth.verify(data.email));
     } catch (error) {
       console.error(error);
@@ -108,8 +106,8 @@ export default function Create() {
           </Typography>
 
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <RHFTextField name="first_name" label="First name" />
-            <RHFTextField name="family_name" label="Last name" />
+            <RHFTextField name="name_english" label="First name" />
+            {/* <RHFTextField name="family_name" label="Last name" /> */}
           </Stack>
 
           <RHFTextField name="email" label="Email address" />
