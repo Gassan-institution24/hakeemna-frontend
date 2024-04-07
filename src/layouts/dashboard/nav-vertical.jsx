@@ -35,6 +35,9 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   const navData = useNavData();
 
+  const USLogo =
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?.country;
+
   const walktour = useWalktour({
     defaultRun: user && !user.last_online,
     showProgress: true,

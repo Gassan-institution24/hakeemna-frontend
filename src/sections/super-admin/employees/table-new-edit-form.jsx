@@ -116,7 +116,12 @@ export default function UsersNewEditForm({ currentSelected }) {
                 sm: 'repeat(1, 1fr)',
               }} /// edit
             >
-              {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+              {!!errorMsg && (
+                <Alert severity="error">
+                  {/* eslint-disable-next-line react/no-danger */}
+                  <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+                </Alert>
+              )}
               <RHFTextField name="userName" label="username" />
               <RHFTextField name="email" label="email" />
               <RHFSelect name="role" label="Role">

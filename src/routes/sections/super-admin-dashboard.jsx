@@ -66,6 +66,10 @@ const SymptomEditPage = lazy(() => import('src/pages/super-admin/tables/symptoms
 const DietsTablePage = lazy(() => import('src/pages/super-admin/tables/diets/table'));
 const DietCreatePage = lazy(() => import('src/pages/super-admin/tables/diets/new'));
 const DietEditPage = lazy(() => import('src/pages/super-admin/tables/diets/edit'));
+// COMPANIES
+const CompaniesTablePage = lazy(() => import('src/pages/super-admin/tables/companies_list/table'));
+const CompanyCreatePage = lazy(() => import('src/pages/super-admin/tables/companies_list/new'));
+const CompanyEditPage = lazy(() => import('src/pages/super-admin/tables/companies_list/edit'));
 // ANALYSIS
 const AnalysisTablePage = lazy(() => import('src/pages/super-admin/tables/analysis/table'));
 const AnalysisCreatePage = lazy(() => import('src/pages/super-admin/tables/analysis/new'));
@@ -762,6 +766,15 @@ export const dashboardRoutes = [
               { path: 'list', element: <DietsTablePage /> },
               { path: 'new', element: <DietCreatePage /> },
               { path: ':id/edit', element: <DietEditPage /> },
+            ],
+          },
+          {
+            path: 'companies',
+            children: [
+              { element: <CompaniesTablePage />, index: true },
+              { path: 'list', element: <CompaniesTablePage /> },
+              { path: 'new', element: <CompanyCreatePage /> },
+              { path: ':id/edit', element: <CompanyEditPage /> },
             ],
           },
           {

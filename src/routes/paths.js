@@ -367,6 +367,11 @@ export const paths = {
         new: `${ROOTS.SUPERADMIN}/tables/diets/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/diets/${id}/edit`,
       },
+      companies: {
+        root: `${ROOTS.SUPERADMIN}/tables/companies`,
+        new: `${ROOTS.SUPERADMIN}/tables/companies/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/companies/${id}/edit`,
+      },
       diseases: {
         root: `${ROOTS.SUPERADMIN}/tables/diseases`,
         new: `${ROOTS.SUPERADMIN}/tables/diseases/new`,
@@ -699,8 +704,7 @@ export const paths = {
     },
     appointments: {
       root: `${ROOTS.SUPERADMIN}/appointments`,
-      book: (params) =>
-        `${ROOTS.SUPERADMIN}/appointments/book?day=${params.day}&&appointment=${params.appointment}`,
+      book: `${ROOTS.SUPERADMIN}/book`,
     },
     appointmentconfiguration: {
       root: `${ROOTS.SUPERADMIN}/appointmentconfig`,

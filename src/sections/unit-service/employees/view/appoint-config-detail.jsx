@@ -18,7 +18,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
+// import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetEmployeeEngagement } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
@@ -105,9 +105,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       unit_service:
         appointmentConfigData?.unit_service._id ||
         user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-      department:
-        employeeInfo?.department?._id ||
-        user?.employee?.employee_engagements[user?.employee.selected_engagement]?.department?._id,
+      department: employeeInfo?.department?._id || null,
       start_date: appointmentConfigData?.start_date || null,
       end_date: appointmentConfigData?.end_date || null,
       weekend: appointmentConfigData?.weekend || [],
@@ -161,20 +159,20 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ...dataToUpdate,
         ImmediateEdit: false,
       });
-      socket.emit('updated', {
-        user,
-        link: paths.unitservice.employees.appointmentconfig.root(id),
-        msg: `updated an appointment configuration <strong>[ ${
-          appointmentConfigData.code || ''
-        } ]</strong>`,
-      });
+      // socket.emit('updated', {
+      //   user,
+      //   link: paths.unitservice.employees.appointmentconfig.root(id),
+      //   msg: `updated an appointment configuration <strong>[ ${
+      //     appointmentConfigData.code || ''
+      //   } ]</strong>`,
+      // });
       enqueueSnackbar(t('updated successfully!'));
       saving.onFalse();
       confirm.onFalse();
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
     } catch (error) {
       // error emitted in backend
-      setErrorMsg(typeof error === 'string' ? error : error.message);
+      setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       saving.onFalse();
       confirm.onFalse();
@@ -191,20 +189,20 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         ...dataToUpdate,
         ImmediateEdit: true,
       });
-      socket.emit('updated', {
-        user,
-        link: paths.unitservice.employees.appointmentconfig.root(id),
-        msg: `updated an appointment configuration <strong>[ ${
-          appointmentConfigData.code || ''
-        } ]</strong>`,
-      });
+      // socket.emit('updated', {
+      //   user,
+      //   link: paths.unitservice.employees.appointmentconfig.root(id),
+      //   msg: `updated an appointment configuration <strong>[ ${
+      //     appointmentConfigData.code || ''
+      //   } ]</strong>`,
+      // });
       updating.onFalse();
       confirm.onFalse();
       enqueueSnackbar(t('updated successfully!'));
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
       // await refetch();
     } catch (error) {
-      setErrorMsg(typeof error === 'string' ? error : error.message);
+      setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       // error emitted in backend
       updating.onFalse();
@@ -236,23 +234,23 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             `${endpoints.appointment_configs.all}/${appointmentConfigData?._id}`,
             data
           );
-          socket.emit('updated', {
-            data,
-            user,
-            link: paths.unitservice.employees.appointmentconfig.root(id),
-            msg: `updated an appointment configuration ${appointmentConfigData.code || ''}`,
-          });
+          // socket.emit('updated', {
+          //   data,
+          //   user,
+          //   link: paths.unitservice.employees.appointmentconfig.root(id),
+          //   msg: `updated an appointment configuration ${appointmentConfigData.code || ''}`,
+          // });
           router.push(paths.unitservice.employees.appointmentconfig.root(id));
         }
       } else {
         updating.onTrue();
         await axios.post(endpoints.appointment_configs.all, data);
-        socket.emit('created', {
-          data,
-          user,
-          link: paths.unitservice.employees.appointmentconfig.root(id),
-          msg: `created an appointment config <strong>${data.name_english || ''}</strong>`,
-        });
+        // socket.emit('created', {
+        //   data,
+        //   user,
+        //   link: paths.unitservice.employees.appointmentconfig.root(id),
+        //   msg: `created an appointment config <strong>${data.name_english || ''}</strong>`,
+        // });
         updating.onFalse();
         enqueueSnackbar(t('added successfully!'));
         router.push(paths.unitservice.employees.appointmentconfig.root(id));
@@ -261,7 +259,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      setErrorMsg(typeof error === 'string' ? error : error.message);
+      setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       // error emitted in backend
       updating.onFalse();
@@ -337,7 +335,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             <Card>
               {!!errorMsg && (
                 <Alert sx={{ borderRadius: 0 }} severity="error">
-                  <div> {errorMsg} </div>
+                  {/* eslint-disable-next-line react/no-danger */}
+                  <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
                 </Alert>
               )}
               <NewEditDetails

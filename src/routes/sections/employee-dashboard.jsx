@@ -109,11 +109,9 @@ export const unitServiceEmployeeDashboardRoutes = [
       },
       {
         path: 'appointments',
-        children: [
-          { element: <AppointmentsHomePage />, index: true },
-          { path: 'book', element: <AppointmentsBookPage /> },
-        ],
+        children: [{ element: <AppointmentsHomePage />, index: true }],
       },
+      { path: 'book', element: <AppointmentsBookPage /> },
       {
         path: 'patients/:id',
         children: [

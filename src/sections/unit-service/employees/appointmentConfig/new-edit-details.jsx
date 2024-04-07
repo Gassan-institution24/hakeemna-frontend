@@ -22,6 +22,7 @@ import { useGetUSActiveWorkShifts, useGetEmployeeActiveWorkGroups } from 'src/ap
 
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField, RHFMultiCheckbox } from 'src/components/hook-form';
+import { useParams } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +30,8 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const { id } = useParams();
 
   const weekDays = [
     { value: 'saturday', label: t('Saturday') },
@@ -50,9 +53,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
 
   const { handleAddNew } = useNewScreen();
 
-  const { workGroupsData } = useGetEmployeeActiveWorkGroups(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
-  );
+  const { workGroupsData } = useGetEmployeeActiveWorkGroups(id);
   const { workShiftsData } = useGetUSActiveWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );

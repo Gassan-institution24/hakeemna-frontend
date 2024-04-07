@@ -98,11 +98,26 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const UpdateUserSchema = Yup.object().shape({
     employee_type: Yup.string().required(t('required field')),
     email: Yup.string().required(t('required field')),
-    name_english: Yup.string().required(t('required field')),
-    name_arabic: Yup.string(),
+    name_english: Yup.string()
+      .required(t('required field'))
+      .test('at-least-three-words', t('must be at least three words'), (value) => {
+        if (!value) return false; // If no value, fail the validation
+        const words = value.trim().split(/\s+/); // Split the input by spaces
+        return words.length >= 3; // Return true if there are at least three words
+      }),
+    name_arabic: Yup.string()
+      .required(t('required field'))
+      .test('at-least-three-words', t('must be at least three words'), (value) => {
+        if (!value) return false; // If no value, fail the validation
+        const words = value.trim().split(/\s+/); // Split the input by spaces
+        return words.length >= 3; // Return true if there are at least three words
+      }),
     nationality: Yup.string().required(t('required field')),
     profrssion_practice_num: Yup.string().required(t('required field')),
-    identification_num: Yup.string().required(t('required field')),
+    identification_num: Yup.string()
+      .required(t('required field'))
+      .min(8, `${t('must be at least')} 8`)
+      .max(15, `${t('must be at most')} 15`),
     tax_num: Yup.string(),
     phone: Yup.string()
       .required(t('required field'))

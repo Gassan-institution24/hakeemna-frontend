@@ -44,6 +44,7 @@ export default function AppointmentsTableRow({
     appoint_number,
     unit_service,
     work_group,
+    coming,
     // work_shift,
     appointment_type,
     note,
@@ -123,6 +124,12 @@ export default function AppointmentsTableRow({
           {patient?.first_name} {patient?.family_name}
         </TableCell>
         <TableCell align="center">{note}</TableCell>
+        <TableCell align="center">
+          <Iconify
+            icon={coming ? 'eva:checkmark-fill' : 'mingcute:close-line'}
+            width={16}
+          />
+        </TableCell>
         <TableCell align="center">
           {curLangAr ? work_group?.name_arabic : work_group?.name_english}
         </TableCell>

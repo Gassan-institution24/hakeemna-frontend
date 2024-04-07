@@ -107,7 +107,8 @@ export default function JwtLoginView() {
     <Stack spacing={2.5}>
       {!!errorMsg && (
         <Alert severity="error">
-          {errorMsg}{' '}
+          {/* eslint-disable-next-line react/no-danger */}
+          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
           {email && (
             <Link component={RouterLink} href={paths.auth.verify(email)} variant="subtitle2">
               {t('verify your account')}

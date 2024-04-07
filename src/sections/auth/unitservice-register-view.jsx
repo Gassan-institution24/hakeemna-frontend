@@ -115,7 +115,10 @@ export default function JwtRegisterView() {
         return words.length >= 3; // Return true if there are at least three words
       }),
     em_nationality: Yup.string().required(t('required field')),
-    em_identification_num: Yup.string().required(t('required field')),
+    em_identification_num: Yup.string()
+      .required(t('required field'))
+      .min(8, `${t('must be at least')} 8`)
+      .max(15, `${t('must be at most')} 15`),
     em_profrssion_practice_num: Yup.string(),
     em_type: Yup.string().required(t('required field')),
     em_phone: Yup.string()

@@ -100,8 +100,7 @@ export default function NewEditDayAppointmentsDetails({
     // <Dialog maxWidth="sm" open={open}>
     <Collapse in={open} timeout="auto" unmountOnExit sx={{ bgcolor: 'background.neutral' }}>
       <Box sx={{ px: 2, pb: 0 }}>
-        {values.days_details[ParentIndex].appointments &&
-          values.days_details[ParentIndex].appointments.length > 0 && (
+        {values.days_details[ParentIndex]?.appointments?.length > 0 && (
             <Typography variant="p" sx={{ color: 'text.disabled', mb: 3, fontSize: 14 }}>
               {t('appointments')}:
             </Typography>
@@ -229,8 +228,7 @@ export default function NewEditDayAppointmentsDetails({
         <Divider
           sx={{
             mt:
-              values.days_details[ParentIndex].appointments &&
-              values.days_details[ParentIndex].appointments.length > 0
+              values.days_details[ParentIndex]?.appointments?.length > 0
                 ? 3
                 : 0,
             mb: 1,

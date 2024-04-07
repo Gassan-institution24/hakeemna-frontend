@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import { isValid } from 'date-fns';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import CardHeader from '@mui/material/CardHeader';
 import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -13,57 +14,151 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
+import { DateCalendar, DigitalClock, StaticDatePicker } from '@mui/x-date-pickers';
+import { Button, Grid } from '@mui/material';
+import TimeList from 'src/components/time-list/time-list';
 
 // ----------------------------------------------------------------------
 
-export default function BookingCustomerReviews({ selected, setSelected, list, loading, ...other }) {
+export default function BookingCustomerReviews({
+  selected,
+  AppointDates,
+  setSelected,
+  selectedDate,
+  setSelectedDate,
+  list,
+  loading,
+}) {
   const { t } = useTranslate();
 
-  const [curIndex, setCurIndex] = useState();
+  const [timeListItem, setTimeListItem] = useState();
+  const mdUp = useResponsive('up', 'md');
 
   const carousel = useCarousel({
     adaptiveHeight: true,
-    initialSlide: curIndex || 0,
   });
 
   useEffect(() => {
     if (!loading.value) {
-      if (list.length) {
+      if (!selected) {
+        setSelected(list?.[0]?._id);
+        setTimeListItem(list?.[0]?._id);
+        carousel.onTogo(0);
+      } else if (!list.some((one) => one._id === selected)) {
+        setSelected(list?.[0]?._id);
+        setTimeListItem(list?.[0]?._id);
+        carousel.onTogo(0);
+      } else {
         list.forEach((one, index) => {
-          console.log('one.selected', selected);
-          console.log('one', one._id);
-          console.log('one._id === selected', one._id === selected);
           if (one._id === selected) {
-            console.log('one.index', index);
-            setCurIndex(index);
+            carousel.onTogo(index);
+            setSelected(list?.[index]?._id);
+            setTimeListItem(list?.[index]?._id);
           }
         });
-      } else setCurIndex(0);
+      }
     }
-  }, [list, selected, loading]);
-
-  useEffect(() => {
-    setSelected(list[carousel.currentIndex]?._id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [list, carousel.currentIndex]);
+  }, [list, loading.value]);
+
+  // useEffect(() => {
+  //   setSelected(list[carousel.currentIndex]?._id);
+  //   setSelectedItem(list[carousel.currentIndex]?._id);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [carousel.currentIndex]);
+
+  // useEffect(() => {
+  // setSelected(selectedItem);
+  // list.forEach((one, index) => {
+  // if (one._id === selectedItem) {
+  // carousel.onTogo(index);
+  // }
+  // });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [selectedItem]);
+
+  const carouselHandler = (dir) => {
+    let index = carousel.currentIndex;
+    if (dir === 'next') {
+      carousel.onNext();
+      if (index === list.length - 1) {
+        index = 0;
+      } else {
+        index += 1;
+      }
+    }
+    if (dir === 'prev') {
+      carousel.onPrev();
+      if (index === 0) {
+        index = list.length - 1;
+      } else index -= 1;
+    }
+    setSelected(list[index]?._id);
+    setTimeListItem(list[index]?._id);
+  };
+
+  const timeListChangeHandler = (newValue) => {
+    setSelected(newValue);
+    setTimeListItem(newValue);
+    list.forEach((one, index) => {
+      if (one._id === newValue) {
+        carousel.onTogo(index);
+      }
+    });
+  };
 
   return (
     // <Card {...other}>
     <>
-      <CardHeader
-        title={t('Appointment details')}
-        // subheader="Appointment"
-        action={<CarouselArrows onNext={carousel.onNext} onPrev={carousel.onPrev} />}
-      />
-
+      <Stack direction={mdUp ? 'row' : 'column'} justifyContent="space-around">
+        <StaticDatePicker
+          sx={{ width: '100%', flexGrow: 1, flexShrink: 0.4 }}
+          orientation={mdUp ? 'landscape' : ''}
+          shouldDisableDate={(day) =>
+            !AppointDates.some((date) => {
+              const appointDate = new Date(date);
+              const currentDate = new Date(day);
+              return (
+                appointDate.getFullYear() === currentDate.getFullYear() &&
+                appointDate.getMonth() === currentDate.getMonth() &&
+                appointDate.getDate() === currentDate.getDate()
+              );
+            })
+          }
+          slotProps={{ actionBar: { actions: [] } }}
+          value={new Date(selectedDate)}
+          onChange={(newValue) => setSelectedDate(newValue)}
+        />
+        <TimeList list={list} onChange={timeListChangeHandler} value={timeListItem} />
+      </Stack>
+      <Divider sx={{ borderStyle: 'dashed' }} />
+      {selected && (
+        <CardHeader
+          title={
+            <Typography
+              sx={{ py: 2, fontWeight: 700 }}
+              variant="caption"
+              color="text.secondary"
+              textTransform="uppercase"
+            >
+              {t('Appointment details')}
+            </Typography>
+          }
+          // subheader="Appointment"
+          action={
+            <CarouselArrows
+              onNext={() => carouselHandler('next')}
+              onPrev={() => carouselHandler('prev')}
+            />
+          }
+        />
+      )}
       <Carousel style={{ dir: 'rtl' }} ref={carousel.carouselRef} {...carousel.carouselSettings}>
         {list.map((item) => (
           <ReviewItem key={item._id} item={item} />
         ))}
       </Carousel>
-
-      <Divider sx={{ borderStyle: 'dashed', my: 3 }} />
-
+      <Divider sx={{ borderStyle: 'dashed', mb: 3 }} />
       {/* <Stack spacing={2} direction="row" alignItems="center" sx={{ p: 3 }}>
         <Button
         fullWidth
@@ -90,9 +185,12 @@ export default function BookingCustomerReviews({ selected, setSelected, list, lo
 
 BookingCustomerReviews.propTypes = {
   selected: PropTypes.string,
+  selectedDate: PropTypes.string,
+  AppointDates: PropTypes.array,
   list: PropTypes.array,
   loading: PropTypes.bool,
   setSelected: PropTypes.func,
+  setSelectedDate: PropTypes.func,
 };
 
 // ----------------------------------------------------------------------
@@ -179,8 +277,8 @@ function ReviewItem({ item }) {
               />
             ),
           },
-        ].map((one) => (
-          <Stack key={one.label} spacing={0.5} direction="row">
+        ].map((one, idx) => (
+          <Stack key={idx} spacing={0.5} direction="row">
             {one.icon}
             <ListItemText
               primary={one.label}
