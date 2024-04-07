@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import { Select, InputLabel, FormControl, OutlinedInput } from '@mui/material';
+// import { Select, InputLabel, FormControl, OutlinedInput } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 
@@ -35,12 +35,12 @@ export default function OrderTableToolbar({
     },
     [onFilters]
   );
-  const handleFilterRole = useCallback(
-    (event) => {
-      onFilters('role', event.target.value);
-    },
-    [onFilters]
-  );
+  // const handleFilterRole = useCallback(
+  //   (event) => {
+  //     onFilters('role', event.target.value);
+  //   },
+  //   [onFilters]
+  // );
 
   return (
     <>
@@ -56,7 +56,7 @@ export default function OrderTableToolbar({
           pr: { xs: 2.5, md: 1 },
         }}
       >
-        <FormControl
+        {/* <FormControl
           sx={{
             flexShrink: 0,
             width: { xs: 1, md: 200 },
@@ -87,7 +87,7 @@ export default function OrderTableToolbar({
               patient
             </MenuItem>
           </Select>
-        </FormControl>
+        </FormControl> */}
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth

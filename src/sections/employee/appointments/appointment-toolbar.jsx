@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
+import { zonedTimeToUtc } from 'date-fns-tz';
 
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
@@ -7,8 +8,11 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
+import { MobileTimePicker } from '@mui/x-date-pickers';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+import { useUnitTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -31,6 +35,8 @@ export default function AppointmentToolbar({
   const { user } = useAuthContext();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const { myunitTime } = useUnitTime();
 
   const { workGroupsData } = useGetEmployeeActiveWorkGroups(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
@@ -70,6 +76,20 @@ export default function AppointmentToolbar({
   const handleFilterEndDate = useCallback(
     (newValue) => {
       onFilters('endDate', newValue);
+    },
+    [onFilters]
+  );
+
+  const handleFilterStartTime = useCallback(
+    (newValue) => {
+      onFilters('startTime', newValue);
+    },
+    [onFilters]
+  );
+
+  const handleFilterEndTime = useCallback(
+    (newValue) => {
+      onFilters('endTime', newValue);
     },
     [onFilters]
   );
@@ -188,6 +208,47 @@ export default function AppointmentToolbar({
             textField: {
               fullWidth: true,
               error: dateError,
+            },
+          }}
+          sx={{
+            width: { xs: 1, md: 200 },
+          }}
+        />
+        <MobileTimePicker
+          ampmInClock
+          minutesStep="5"
+          label={t('start time')}
+          value={myunitTime(filters.startTime)}
+          onChange={(newValue) => {
+            const selectedTime = zonedTimeToUtc(
+              newValue,
+              user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+                ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
+            );
+            handleFilterStartTime(selectedTime);
+          }}
+          slotProps={{ textField: { fullWidth: true } }}
+          sx={{
+            width: { xs: 1, md: 200 },
+          }}
+        />
+
+        <MobileTimePicker
+          ampmInClock
+          minutesStep="5"
+          label={t('end time')}
+          value={myunitTime(filters.endTime)}
+          onChange={(newValue) => {
+            const selectedTime = zonedTimeToUtc(
+              newValue,
+              user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+                ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
+            );
+            handleFilterEndTime(selectedTime);
+          }}
+          slotProps={{
+            textField: {
+              fullWidth: true,
             },
           }}
           sx={{

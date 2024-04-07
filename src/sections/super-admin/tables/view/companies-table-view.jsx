@@ -14,7 +14,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useGetDiets } from 'src/api';
+import { useGetCompanies } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -30,7 +30,7 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import TableDetailRow from '../diets/table-details-row'; /// edit
+import TableDetailRow from '../companies_list/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -38,21 +38,31 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const TABLE_HEAD = [
   /// to edit
-  { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'name' },
-  { id: 'name_arabic', label: 'arabic name' },
-  { id: 'description', label: 'description' },
+  { id: 'code', label: 'code' },
+  { id: 'unit_service_type', label: 'unit_service_type' },
+  { id: 'country', label: 'country' },
+  { id: 'city', label: 'city' },
+  { id: 'sector', label: 'sector' },
+  { id: 'commercial_name', label: 'commercial_name' },
+  { id: 'province', label: 'province' },
+  { id: 'address', label: 'address' },
+  { id: 'phone_number_1', label: 'phone_number_1' },
+  { id: 'Phone_number_2', label: 'Phone_number_2' },
+  { id: 'work_shift', label: 'work_shift' },
+  { id: 'constitution_objective', label: 'constitution_objective' },
+  { id: 'type_of_specialty_1', label: 'type_of_specialty_1' },
+  { id: 'type_of_specialty_2', label: 'type_of_specialty_2' },
   { id: '', width: 88 },
 ];
 
 const defaultFilters = {
   name: '',
-  status: 'active',
+  // status: 'active',
 };
 
 // ----------------------------------------------------------------------
 
-export default function DietsTableView() {
+export default function CompaniesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -62,7 +72,7 @@ export default function DietsTableView() {
 
   const router = useRouter();
 
-  const { dietsData, loading } = useGetDiets();
+  const { companiesData, loading } = useGetCompanies();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -72,7 +82,7 @@ export default function DietsTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: dietsData,
+    inputData: companiesData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -104,7 +114,7 @@ export default function DietsTableView() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'dietsTable.xlsx'); /// edit
+    saveAs(data, 'companiesTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -120,7 +130,7 @@ export default function DietsTableView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.diets.edit(id)); /// edit
+      router.push(paths.superadmin.tables.companies.edit(id)); /// edit
     },
     [router]
   );
@@ -143,7 +153,7 @@ export default function DietsTableView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Diets" /// edit
+        heading="companies" /// edit
         links={[
           {
             name: 'dashboard',
@@ -153,16 +163,16 @@ export default function DietsTableView() {
             name: 'Tables',
             href: paths.superadmin.tables.list,
           },
-          { name: 'Diets' }, /// edit
+          { name: 'companies' }, /// edit
         ]}
         action={
           <Button
             component={RouterLink}
-            href={paths.superadmin.tables.diets.new} /// edit
+            href={paths.superadmin.tables.companies.new} /// edit
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            New Diet
+            New company
           </Button> /// edit
         }
         sx={{
@@ -223,7 +233,7 @@ export default function DietsTableView() {
 
                 <TableEmptyRows
                   height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, dietsData.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, companiesData.length)}
                 />
 
                 <TableNoData notFound={notFound} />

@@ -45,6 +45,11 @@ export const endpoints = {
     many: '/api/currency/many',
     one: (id) => `/api/currency/${id}`,
   },
+  companies: {
+    all: '/api/companies/',
+    many: '/api/companies/many',
+    one: (id) => `/api/companies/${id}`,
+  },
   diets: {
     all: '/api/diets/',
     many: '/api/diets/many',
@@ -377,7 +382,7 @@ export const endpoints = {
     available: '/api/appointments/available',
     employee: {
       one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 5, order = 'asc', filters }) =>
-        `/api/appointments/employee/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
+        `/api/appointments/employee/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}&&startTime=${filters?.startTime}&&endTime=${filters?.endTime}`,
       nearst: (id) => `/api/appointments/nearst/${id}`,
       select: ({ id, startDate }) =>
         `/api/appointments/employeeselect/${id}?startDate=${startDate}`,

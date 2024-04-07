@@ -11,6 +11,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
 
 import { useNewScreen } from 'src/hooks/use-new-screen';
 
@@ -29,6 +30,8 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const { id } = useParams();
 
   const weekDays = [
     { value: 'saturday', label: t('Saturday') },
@@ -50,9 +53,7 @@ export default function NewEditDetails({ appointmentConfigData, setAppointTime }
 
   const { handleAddNew } = useNewScreen();
 
-  const { workGroupsData } = useGetEmployeeActiveWorkGroups(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
-  );
+  const { workGroupsData } = useGetEmployeeActiveWorkGroups(id);
   const { workShiftsData } = useGetUSActiveWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );

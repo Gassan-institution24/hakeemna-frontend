@@ -404,7 +404,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
             <Card>
               {!!errorMsg && (
                 <Alert sx={{ borderRadius: 0 }} severity="error">
-                  <div> {errorMsg} </div>
+                  {/* eslint-disable-next-line react/no-danger */}
+                  <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
                 </Alert>
               )}
               <div id="currEMNewEditDetails">

@@ -230,6 +230,7 @@ export function useGetEmployeeAppointments({ id, page, sortBy, rowsPerPage, orde
       processing: data?.processing || 0,
       pending: data?.pending || 0,
       canceled: data?.canceled || 0,
+      AppointDates: data?.dates || [],
       loading: isLoading,
       error,
       validating: isValidating,
