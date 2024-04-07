@@ -377,6 +377,13 @@ export function useNavData() {
         navItemId: 'EMAppointmentsNav',
       },
       {
+        show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }),
+        title: t('book appointments'),
+        path: paths.employee.appointments.book,
+        icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+        navItemId: 'EMAppointmentsNav',
+      },
+      {
         show: checkAcl({ category: 'work_group', subcategory: 'appointment_configs', acl: 'read' }),
         title: t('appointment configuration'),
         path: paths.employee.appointmentconfiguration.root,

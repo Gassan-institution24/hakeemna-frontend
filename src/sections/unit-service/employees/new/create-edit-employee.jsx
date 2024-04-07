@@ -178,7 +178,8 @@ export default function TableNewEditForm({ currentTable }) {
           <Card sx={{ p: 3 }}>
             {!!errorMsg && (
               <Alert sx={{ mb: 3 }} severity="error">
-                <div> {errorMsg} </div>
+                {/* eslint-disable-next-line react/no-danger */}
+                <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
               </Alert>
             )}
             <Box

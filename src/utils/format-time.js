@@ -13,7 +13,7 @@ export const useUnitTime = () => {
     const formattedDate = date ? new Date(date) : null;
     const timeZone =
       user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
-        ?.country?.time_zone;
+        ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     const value = formattedDate
       ? new Date(formattedDate.toLocaleString(t('en-US'), { timeZone }))
