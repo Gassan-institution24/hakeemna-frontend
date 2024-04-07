@@ -77,6 +77,7 @@ export const endpoints = {
   },
   oldmedicalreports: {
     all: '/api/oldmedicalreports/',
+    patient: (id) => `/api/oldmedicalreports/patient/${id}`,
     one: (id) => `/api/oldmedicalreports/${id}`,
   },
   medfamilies: {
