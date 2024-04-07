@@ -72,7 +72,6 @@ export default function AppointmentsTableRow({
   const popover = usePopover();
   const DDL = usePopover();
   const confirmDelayOne = useBoolean();
-  const Book = useBoolean();
 
   const [minToDelay, setMinToDelay] = useState(0);
 

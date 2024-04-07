@@ -1,22 +1,21 @@
 import PropTypes from 'prop-types';
 import { isValid } from 'date-fns';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import CardHeader from '@mui/material/CardHeader';
-import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import ListItemText from '@mui/material/ListItemText';
+import { StaticDatePicker } from '@mui/x-date-pickers';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
-import { DateCalendar, DigitalClock, StaticDatePicker } from '@mui/x-date-pickers';
-import { Button, Grid } from '@mui/material';
 import TimeList from 'src/components/time-list/time-list';
+import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
 
 // ----------------------------------------------------------------------
 
