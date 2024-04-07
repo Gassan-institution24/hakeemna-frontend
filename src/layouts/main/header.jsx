@@ -112,6 +112,7 @@ export default function Header({ scrollToDiv, scrollToDiv2 }) {
           }),
         }}
       >
+        <Language/>
         <Container sx={{ height: 1, display: 'flex', alignItems: 'center' }}>
           <Badge
             sx={{
@@ -146,8 +147,10 @@ export default function Header({ scrollToDiv, scrollToDiv2 }) {
               />
             </m.div>
 
-            {!mdUp && <NavMobile data={navConfig} />}
+            {!mdUp && <NavMobile data={navConfig} />
+          }
           </Stack>
+           
         </Container>
       </Toolbar>
 
