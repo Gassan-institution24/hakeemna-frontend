@@ -6,6 +6,8 @@ import { localStorageGetItem } from 'src/utils/storage-available';
 import { useSettingsContext } from 'src/components/settings';
 
 import { allLangs, defaultLang } from './config-lang';
+import { langs, defaultLangs } from './config-lang-home';
+
 
 // ----------------------------------------------------------------------
 
@@ -15,6 +17,15 @@ export function useLocales() {
   const currentLang = allLangs.find((lang) => lang.value === langStorage) || defaultLang;
   return {
     allLangs,
+    currentLang,
+  };
+}
+export function useLocalesHome() {
+  const langStorage = localStorageGetItem('i18nextLng');
+
+  const currentLang = langs.find((lang) => lang.value === langStorage) || defaultLangs;
+  return {
+    langs,
     currentLang,
   };
 }

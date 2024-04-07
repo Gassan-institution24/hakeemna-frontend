@@ -47,7 +47,7 @@ export default function InsurancePage({ user }) {
               <Box sx={{ mb: 1 }}>
                 <Typography sx={{ color: '#e1eeed' }}>{info?.insurance?.name_english}</Typography>
                 <Typography sx={{ color: '#e1eeed' }}>
-                  {info?.patient?.first_name} {info?.patient?.last_name}
+                  {info?.patient?.name_english} {info?.patient?.last_name}
                 </Typography>
                 <Typography sx={{ color: '#e1eeed' }}>{info?.type?.Coverage_name}</Typography>
                 <Typography sx={{ color: '#e1eeed' }}>{info?.insurance_client_num}</Typography>

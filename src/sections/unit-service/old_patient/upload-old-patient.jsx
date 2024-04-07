@@ -32,7 +32,7 @@ export default function UploadOldPatient({ refetch }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    first_name: Yup.string().required(t('required field')),
+    name_english: Yup.string().required(t('required field')),
     middle_name: Yup.string(),
     family_name: Yup.string().required(t('required field')),
     identification_num: Yup.string(),
@@ -45,7 +45,7 @@ export default function UploadOldPatient({ refetch }) {
       unit_service:
         user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
       employee: user?.employee?._id,
-      first_name: '',
+      name_english: '',
       middle_name: '',
       family_name: '',
       identification_num: '',
@@ -150,7 +150,7 @@ export default function UploadOldPatient({ refetch }) {
         >
           <RHFTextField
             onChange={handleEnglishInputChange}
-            name="first_name"
+            name="name_english"
             label={`${t('first name')} *`}
           />
           <RHFTextField

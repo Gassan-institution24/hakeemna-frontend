@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 
 import { varFade, MotionViewport } from 'src/components/animate';
 
+import Blue from './images/Paint.png';
+
 // ----------------------------------------------------------------------
 
 const CARDS = [
@@ -61,12 +63,27 @@ export default function whoAreWe() {
             variant="overline"
             sx={{ color: 'text.disabled', textAlign: 'center' }}
           >
-            Doctona Online
+            Hakeemna.com
           </Typography>
         </m.div>
 
         <m.div variants={varFade().inDown}>
-          <Typography variant="h2">Who are we ?</Typography>
+          <Typography sx={{}} variant="h2">
+            <Box
+              sx={{
+                flexGrow: 1,
+                backgroundImage: `url(${Blue})`,
+                backgroundSize: '290px',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                textAlign: 'center',
+                height: '100px',
+                width: '90%',
+                zIndex: -1,
+              }}
+            />
+            <span style={{ position: 'relative', top: -80 }}> Who are we <span style={{color:'#3399FE'}}>?</span> </span>
+          </Typography>
         </m.div>
       </Stack>
 
@@ -79,7 +96,7 @@ export default function whoAreWe() {
           md: 'repeat(4, 1fr)',
         }}
       >
-        {CARDS.map((card, index, idx) => (
+        {CARDS.map((card, idx) => (
           <m.div variants={varFade().inUp} key={idx}>
             <Card
               sx={{

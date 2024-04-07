@@ -263,7 +263,7 @@ export default function ProfileHome() {
         <Typography variant="h4" sx={{ mt: 2 }}>
           {curLangAr
             ? user?.patient.name_arabic
-            : `${user?.patient?.first_name} ${user?.patient?.family_name}`}
+            : `${user?.patient?.name_english}`}
          
         </Typography>
       </div>
@@ -462,7 +462,7 @@ export default function ProfileHome() {
         <Divider sx={{ borderWidth: 25, borderColor: '##EBE7E7', borderStyle: 'solid' }} />
         <Stack component={Card} spacing={1} sx={{ p: 3, bgcolor: '#00F67F', borderRadius: 0 }}>
           <Typography variant="h4" sx={{ textAlign: 'center', color: '#fff' }}>
-            {user?.patient?.first_name} {user?.patient?.middle_name} {user?.patient?.family_name}
+            {user?.patient?.name_english}
           </Typography>
           <Typography variant="h5" sx={{ textAlign: 'center', color: '#fff' }}>
             {user?.patient?.identification_num}

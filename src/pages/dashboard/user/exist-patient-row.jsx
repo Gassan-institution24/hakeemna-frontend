@@ -17,7 +17,7 @@ import axios, { endpoints } from 'src/utils/axios';
 // ----------------------------------------------------------------------
 
 export default function ExistPatientRow({ row, selected }) {
-  const { identification_num, mobile_num1, first_name } = row;
+  const { identification_num, mobile_num1, name_english } = row;
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const { currentLang } = useLocales();
@@ -27,7 +27,7 @@ export default function ExistPatientRow({ row, selected }) {
   const defaultValues = {
     sender: user?.patient?._id,
     patient: row?._id,
-    title: `${user?.patient?.first_name} want to add you as a family member`,
+    title: `${user?.patient?.name_english} want to add you as a family member`,
     title_arabic: `${user?.patient?.name_arabic} يريد اظافتك كفرد عائلة`,
     photo_URL: 'https://cdn-icons-png.flaticon.com/512/6193/6193226.png',
     category: 'invite',
@@ -52,7 +52,7 @@ export default function ExistPatientRow({ row, selected }) {
   const renderPrimary = (
     <TableRow selected={selected}>
       <TableCell align="center">{identification_num}</TableCell>
-      <TableCell align="center">{first_name}</TableCell>
+      <TableCell align="center">{name_english}</TableCell>
       {/* <TableCell  align="center">
         {name_arabic}
       </TableCell> */}

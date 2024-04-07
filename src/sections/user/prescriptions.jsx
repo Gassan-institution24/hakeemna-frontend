@@ -222,7 +222,7 @@ export default function Prescriptions() {
             />
             <PDFDownloadLink
               document={<PrescriptionPDF medicines={[med]} />}
-              fileName={`${user?.patient.first_name} prescription.pdf`}
+              fileName={`${user?.patient.name_english} prescription.pdf`}
             >
               {({ loading }) =>
                 loading ? (
