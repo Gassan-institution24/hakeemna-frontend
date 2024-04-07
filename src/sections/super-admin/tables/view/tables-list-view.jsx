@@ -99,6 +99,7 @@ export default function TablesListView() {
       { tableName: 'medical_categories', documents: [] }, //
       { tableName: 'medicines_families', documents: [] }, //
       { tableName: 'insurance_types', documents: [] }, //
+      { tableName: 'companies', documents: [] }, //
     ],
     comparator: getComparator(table.order, table.orderBy),
     filters,

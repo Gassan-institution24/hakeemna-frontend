@@ -35,7 +35,6 @@ export default function TourDetailsContent({ tour }) {
     company_logo,
     introduction_letter,
     arabic_introduction_letter,
-    tourGuides,
     work_start_time,
     work_end_time,
     phone,

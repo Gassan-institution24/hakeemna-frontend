@@ -88,7 +88,12 @@ export default function JwtLoginView() {
 
   const renderForm = (
     <Stack spacing={2.5}>
-      {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+      {!!errorMsg && (
+        <Alert severity="error">
+          {/* eslint-disable-next-line react/no-danger */}
+          <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
+        </Alert>
+      )}
 
       <RHFTextField name="email" label="Email address" />
 

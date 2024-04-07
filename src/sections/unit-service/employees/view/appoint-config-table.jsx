@@ -290,7 +290,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         <CustomBreadcrumbs
           action={
             checkAcl({
-              category: 'employee',
+              category: 'unit_service',
               subcategory: 'appointment_configs',
               acl: 'update',
             }) && (

@@ -63,6 +63,8 @@ const defaultFilters = {
   group: '',
   startDate: null,
   endDate: null,
+  startTime: null,
+  endTime: null,
 };
 
 // ----------------------------------------------------------------------
@@ -77,6 +79,7 @@ export default function AppointmentsView({ employeeData }) {
     { id: 'appointment_type', label: t('appointment type') },
     { id: 'patient', label: t('patient') },
     { id: 'note', label: t('note') },
+    { id: 'coming', label: t('is coming') },
     { id: 'work_group', label: t('work group') },
     { id: 'status', label: t('status') },
     { id: '' },
@@ -207,12 +210,15 @@ export default function AppointmentsView({ employeeData }) {
 
   const handleBookRow = useCallback(
     async (row) => {
-      router.push(
-        paths.employee.appointments.book({
-          appointment: row._id,
-          day: row.start_time.split('T')[0],
-        })
-      );
+      const queryParams = new URLSearchParams({
+        day: row.start_time,
+        appointment: row._id,
+      });
+
+      router.push({
+        pathname: paths.employee.appointments.book,
+        search: `?${queryParams.toString()}`,
+      });
     },
     [router]
   );

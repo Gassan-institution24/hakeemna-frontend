@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 
 import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
 
@@ -52,11 +53,12 @@ export default function TableCreateView() {
   const appointment = searchParams.get('appointment');
   const day = searchParams.get('day');
 
+  const [selectedDate, setSelectedDate] = useState(day ? new Date(day) : new Date());
   const [selected, setSelected] = useState(appointment);
 
-  const { appointmentsData, loading } = useGetEmployeeAppointments({
+  const { appointmentsData, AppointDates, loading } = useGetEmployeeAppointments({
     id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
-    filters: { startDate: day ? new Date(day) : new Date(), status: 'available' },
+    filters: { startDate: new Date(selectedDate), status: 'available' },
   });
 
   const { enqueueSnackbar } = useSnackbar();
@@ -192,13 +194,28 @@ export default function TableCreateView() {
       />
       <FormProvider methods={methods} onSubmit={onSubmit}>
         <Card sx={{ px: 3, pb: 3 }}>
-          <BookingCustomerReviews
-            selected={selected}
-            loading={loading}
-            setSelected={setSelected}
-            list={appointmentsData}
-            // sx={{ mt: SPACING }}
-          />
+          {!loading && (
+            <BookingCustomerReviews
+              selected={selected}
+              AppointDates={AppointDates}
+              loading={loading}
+              setSelected={setSelected}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              list={appointmentsData}
+              // sx={{ mt: SPACING }}
+            />
+          )}
+          <Typography
+            sx={{ py: 2, fontWeight: 700 }}
+            variant="caption"
+            color="text.secondary"
+            textTransform="uppercase"
+          >
+            {t('patient information')}
+          </Typography>
+          <br />
+          <br />
           <RHFTextField
             InputLabelProps={{ shrink: true }}
             inputProps={{ style: { textAlign: 'center' } }}
