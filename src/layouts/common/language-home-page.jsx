@@ -39,28 +39,25 @@ export default function Language() {
         variants={varHover(1.05)}
         onClick={popover.onOpen}
         sx={{
-          // fontSize: 13,
-          // fontWeight: 600,
-          // width: 40,
-          // height: 40,
+          fontSize: 15,
+          position:'relative',
+          top:-2,
+          fontWeight: 600,
           '&:hover': {
             backgroundColor: 'transparent',
           },
         }}
       >
-        {/* {currentLang.label} */}
-        {currentLang?.value === 'ar' ? (
-              <Iconify
-                icon={currentLang.icon}
-                sx={{ borderRadius: 0.65, width: 28, backgroundColor: '#007B3A', color: 'white' }}
-              />
-            ) : (
-              <Iconify icon={currentLang.icon} sx={{ borderRadius: 0.65, width: 28 }} />
-            )}
-       
+        {' '}
+        {currentLang.label}
       </Button>
 
-      <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 160 }}>
+      <CustomPopover
+        open={popover.open}
+        onClose={popover.onClose}
+        sx={{ width: 130 }}
+        arrow="top-left"
+      >
         {langs?.map((option, idx) => (
           <MenuItem
             lang="ar"

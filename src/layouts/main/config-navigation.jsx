@@ -24,12 +24,18 @@ export const navConfig = [
     path: '#',
     sectionId: 'services',
   },
-  // {
-  //   title: 'R&D',
-  //   icon: <Iconify icon="solar:notebook-bold-duotone" />,
-  //   path: 'https://front-pi-eight.vercel.app',
-  //   sectionId: 'home',
-  // },
+  {
+    title: 'R&D',
+    icon: <Iconify icon="solar:notebook-bold-duotone" />,
+    path: 'https://front-pi-eight.vercel.app',
+    sectionId: 'home',
+  },
+  {
+    title: 'Training',
+    icon: <Iconify icon="oui:training" />,
+    path: '#',
+    sectionId: 'home',
+  },
   {
     button: 'Login',
     icon: <Iconify icon="material-symbols:login" />,
