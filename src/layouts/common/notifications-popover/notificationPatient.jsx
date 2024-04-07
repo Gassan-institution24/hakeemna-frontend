@@ -27,7 +27,7 @@ export default function NotificationItem({ notification, handleClick }) {
   const defaultValues = {
     sender: notification?.patient,
     patient: notification?.sender,
-    title: `${user?.patient?.first_name} accept your invitation`,
+    title: `${user?.patient?.name_english} accept your invitation`,
     title_arabic: `${user?.patient?.name_arabic} وافق على الانظمام`,
     photo_URL: 'https://cdn-icons-png.flaticon.com/512/6193/6193226.png',
     category: 'accept',

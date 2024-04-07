@@ -257,7 +257,7 @@ export default function PatientProfile() {
           }}
         />
         <Typography variant="h4" sx={{ mt: 2 }}>
-          {curLangAr ? data.name_arabic : `${data?.first_name} ${data?.last_name}`}
+          {curLangAr ? data.name_arabic : `${data?.name_english}`}
         </Typography>
       </div>
       {[

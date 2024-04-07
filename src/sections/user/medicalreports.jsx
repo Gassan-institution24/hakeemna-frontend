@@ -127,7 +127,7 @@ export default function Medicalreports() {
             <View style={styles.gridBody}>
               <Text style={styles.text}>Medical Report</Text>
               <Text style={styles.text2}>
-                Name: {user?.patient?.first_name} {user?.patient?.last_name}
+                Name: {user?.patient?.name_english}
               </Text>
               <Text style={styles.text2}>Age: {fDateAndTime(user?.patient.birth_date)}</Text>
               <Text style={styles.text2}>ID no: {user?.patient?.identification_num}</Text>
@@ -180,7 +180,7 @@ export default function Medicalreports() {
           <PDFDownloadLink
             style={styles.pdf}
             document={<PrescriptionPDF medicines={[info]} />}
-            fileName={`${user?.patient?.first_name} MediacalReport.pdf`}
+            fileName={`${user?.patient?.name_english} MediacalReport.pdf`}
           >
             {({ loading }) =>
               loading ? (
@@ -211,7 +211,7 @@ export default function Medicalreports() {
               icon: <Iconify width={16} icon="mdi:doctor" sx={{ flexShrink: 0 }} />,
             },
             {
-              label: `${user?.patient?.first_name} ${user?.patient?.last_name}`,
+              label: `${user?.patient?.name_english} `,
               icon: <Iconify width={16} icon="fa:user" sx={{ flexShrink: 0 }} />,
             },
             {
