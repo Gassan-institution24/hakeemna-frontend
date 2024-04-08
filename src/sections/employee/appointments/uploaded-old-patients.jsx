@@ -1,20 +1,20 @@
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 
-import { Stack } from '@mui/material';
 import Table from '@mui/material/Table';
 import { useTheme } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
-import { useRouter } from 'src/routes/hooks';
+// import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
-
-import { useLocales, useTranslate } from 'src/locales';
 import { AddToGoogleCalendar, AddToIPhoneCalendar } from 'src/utils/calender';
 
+import { useLocales, useTranslate } from 'src/locales';
+
+import Scrollbar from 'src/components/scrollbar';
 import {
   useTable,
   TableNoData,
@@ -48,7 +48,7 @@ export default function UploadedOldPatients({ SelectedAppointment, reset, select
     // { id: '', width: 88 },
   ];
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -62,11 +62,11 @@ export default function UploadedOldPatients({ SelectedAppointment, reset, select
         patient: row._id,
       });
 
-      AddToGoogleCalendar(SelectedAppointment);
-      AddToIPhoneCalendar(SelectedAppointment);
+      await AddToGoogleCalendar(SelectedAppointment);
+      await AddToIPhoneCalendar(SelectedAppointment);
       enqueueSnackbar(t('booked successfully!'));
       reset();
-      router.back();
+      // router.back();
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
@@ -90,7 +90,7 @@ export default function UploadedOldPatients({ SelectedAppointment, reset, select
     onChangeRowsPerPage,
   } = table;
   return (
-    <Stack>
+    <Scrollbar>
       <Table
         size={dense ? 'small' : 'medium'}
         sx={{
@@ -156,7 +156,7 @@ export default function UploadedOldPatients({ SelectedAppointment, reset, select
           },
         }}
       />
-    </Stack>
+    </Scrollbar>
   );
 }
 UploadedOldPatients.propTypes = {
