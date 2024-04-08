@@ -27,6 +27,7 @@ import AccountPopover from '../common/account-popover';
 // import ContactsPopover from '../common/contacts-popover';
 import LanguagePopover from '../common/language-popover';
 import ServiceUnitPopover from '../common/service-unit-popover';
+import EmployeePatientToggle from '../common/employee-patient-toggel';
 import NotificationsPopover from '../common/notifications-popover';
 import NotificationsPopoverPatient from '../common/notifications-popover/indexPatient';
 
@@ -65,7 +66,10 @@ export default function Header({ onOpenNav }) {
         </IconButton>
       )}
       <Searchbar />
-   
+      {(user.role === 'admin' || user.role === 'employee' || (user.employee && user.patient)) && (
+        <EmployeePatientToggle />
+      )}
+
       {/* <TimeOutInActive /> */}
       <Stack
         flexGrow={1}
