@@ -381,7 +381,7 @@ export const endpoints = {
     book: (id) => `/api/appointments/${id}/book`,
     available: '/api/appointments/available',
     employee: {
-      one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 5, order = 'asc', filters }) =>
+      one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 100, order = 'asc', filters }) =>
         `/api/appointments/employee/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}&&startTime=${filters?.startTime}&&endTime=${filters?.endTime}`,
       nearst: (id) => `/api/appointments/nearst/${id}`,
       select: ({ id, startDate }) =>
@@ -643,6 +643,7 @@ export const endpoints = {
     resetpassword: '/api/auth/resetpassword',
     updatepassword: '/api/auth/updateCurrentPassowrd',
     checkPassword: '/api/auth/checkpassword',
+    toggleRole: '/api/auth/togglerole',
   },
   stakeholder: {
     getstakeholder: '/api/stakeholder',

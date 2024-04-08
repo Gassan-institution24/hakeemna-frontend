@@ -1,7 +1,13 @@
 import * as Yup from 'yup';
 
+import Select from '@mui/material/Select';
+import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import { MobileTimePicker } from '@mui/x-date-pickers';
+import OutlinedInput from '@mui/material/OutlinedInput';
 
 import { paths } from 'src/routes/paths';
 
@@ -12,6 +18,7 @@ import {
   useGetCountries,
   useGetCountryCities,
   useGetEmployeeAppointments,
+  useGetEmployeeActiveWorkGroups,
 } from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
@@ -25,9 +32,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Stack, MenuItem } from '@mui/material';
 
-import { useRouter, useSearchParams } from 'src/routes/hooks';
+import { useSearchParams } from 'src/routes/hooks';
 
+import { useUnitTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { AddToGoogleCalendar, AddToIPhoneCalendar } from 'src/utils/calender';
 
 // // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -37,7 +46,12 @@ import { RHFSelect, RHFTextField, RHFDatePicker, RHFPhoneNumber } from 'src/comp
 import UploadedOldPatients from '../uploaded-old-patients';
 import BookingCustomerReviews from '../booking-customer-reviews';
 // ----------------------------------------------------------------------
-
+const defaultFilters = {
+  status: 'available',
+  work_group: null,
+  startTime: null,
+  endTime: null,
+};
 export default function TableCreateView() {
   // // const settings = useSettingsContext();
   const { user } = useAuthContext();
@@ -47,7 +61,11 @@ export default function TableCreateView() {
   const curLangAr = currentLang.value === 'ar';
   const { countriesData } = useGetCountries();
 
-  const router = useRouter();
+  const { myunitTime } = useUnitTime();
+
+  // const router = useRouter();
+
+  const [filters, setFilters] = useState(defaultFilters);
 
   const searchParams = useSearchParams();
   const appointment = searchParams.get('appointment');
@@ -58,8 +76,12 @@ export default function TableCreateView() {
 
   const { appointmentsData, AppointDates, loading } = useGetEmployeeAppointments({
     id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
-    filters: { startDate: new Date(selectedDate), status: 'available' },
+    filters: { ...filters, startDate: new Date(selectedDate) },
   });
+
+  const { workGroupsData } = useGetEmployeeActiveWorkGroups(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
+  );
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -130,9 +152,12 @@ export default function TableCreateView() {
         endpoints.appointments.patient.createPatientAndBookAppoint(selected),
         data
       );
+      const SelectedAppointment = appointmentsData.find((appoint) => appoint._id === selected);
+      await AddToGoogleCalendar(SelectedAppointment);
+      await AddToIPhoneCalendar(SelectedAppointment);
       enqueueSnackbar(t('created successfully!'));
       reset();
-      router.back();
+      // router.back();
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
@@ -164,9 +189,9 @@ export default function TableCreateView() {
     const newValue = value.replace(/\D/g, '');
     if (newValue.length <= 3) {
       setValue(event.target.name, newValue);
-    } else if (newValue.length === 4 && newValue.charAt(3) === '-') {
+    } else if (newValue.length >= 4 && newValue.charAt(3) === '-') {
       setValue(event.target.name, newValue.slice(0, 3));
-    } else if (newValue.length === 4 && newValue.charAt(3) !== '-') {
+    } else if (newValue.length >= 4 && newValue.charAt(3) !== '-') {
       setValue(event.target.name, `${newValue.slice(0, 3)}-${newValue.slice(3)}`);
     } else {
       setValue(event.target.name, newValue);
@@ -194,6 +219,82 @@ export default function TableCreateView() {
       />
       <FormProvider methods={methods} onSubmit={onSubmit}>
         <Card sx={{ px: 3, pb: 3 }}>
+          <Box
+            sx={{ m: 3 }}
+            rowGap={3}
+            columnGap={2}
+            display="flex"
+            // gridTemplateColumns={{
+            //   xs: 'repeat(1, 1fr)',
+            //   sm: 'repeat(3, 1fr)',
+            // }}
+          >
+            <FormControl
+              sx={{
+                width: { xs: 1, md: 200 },
+              }}
+            >
+              <InputLabel shrink>{`${t('work group')}`}</InputLabel>
+
+              <Select
+                value={filters.group}
+                onChange={(event) => setFilters((prev) => ({ ...prev, group: event.target.value }))}
+                size="small"
+                input={<OutlinedInput label={t('work group')} />}
+                // renderValue={(selected) =>
+                //   selected
+                // }
+                // MenuProps={{
+                //   PaperProps: {
+                //     sx: { maxHeight: 240 },
+                //   },
+                // }}
+              >
+                {workGroupsData.map((option, idx) => (
+                  <MenuItem lang="ar" key={idx} value={option._id}>
+                    {curLangAr ? option?.name_arabic : option?.name_english}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <MobileTimePicker
+              ampmInClock
+              minutesStep="5"
+              label={t('from time')}
+              value={myunitTime(filters.startTime)}
+              onChange={(newValue) => {
+                const selectedTime = myunitTime(newValue);
+                setFilters((prev) => ({ ...prev, startTime: selectedTime }));
+              }}
+              slotProps={{ textField: { fullWidth: true, size: 'small' } }}
+              sx={{
+                width: { xs: 1, md: 200 },
+              }}
+            />
+
+            <MobileTimePicker
+              ampmInClock
+              minutesStep="5"
+              label={t('to time')}
+              value={myunitTime(filters.endTime)}
+              onChange={(newValue) => {
+                const selectedTime = myunitTime(newValue);
+                setFilters((prev) => ({ ...prev, endTime: selectedTime }));
+              }}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  size: 'small',
+                },
+              }}
+              sx={{
+                width: { xs: 1, md: 200 },
+              }}
+            />
+          </Box>
+
+          <Divider sx={{ borderStyle: 'dashed' }} />
+
           {!loading && (
             <BookingCustomerReviews
               selected={selected}
@@ -310,7 +411,12 @@ export default function TableCreateView() {
             </LoadingButton>
           </Stack>
           {existPatients.length > 0 && (
-            <UploadedOldPatients selected={selected} reset={reset} oldPatients={existPatients} />
+            <UploadedOldPatients
+              SelectedAppointment={appointmentsData.find((appoint) => appoint._id === selected)}
+              selected={selected}
+              reset={reset}
+              oldPatients={existPatients}
+            />
           )}
         </Card>
       </FormProvider>
