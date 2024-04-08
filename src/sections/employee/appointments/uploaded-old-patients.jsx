@@ -1,19 +1,20 @@
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 
-import { Stack } from '@mui/material';
 import Table from '@mui/material/Table';
 import { useTheme } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
-import { useRouter } from 'src/routes/hooks';
+// import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { AddToGoogleCalendar, AddToIPhoneCalendar } from 'src/utils/calender';
 
 import { useLocales, useTranslate } from 'src/locales';
 
+import Scrollbar from 'src/components/scrollbar';
 import {
   useTable,
   TableNoData,
@@ -27,7 +28,7 @@ import ExistEmployeesRow from './old-patients-row';
 
 // ----------------------------------------------------------------------
 
-export default function UploadedOldPatients({ reset, selected, oldPatients }) {
+export default function UploadedOldPatients({ SelectedAppointment, reset, selected, oldPatients }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -47,7 +48,7 @@ export default function UploadedOldPatients({ reset, selected, oldPatients }) {
     // { id: '', width: 88 },
   ];
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -60,9 +61,12 @@ export default function UploadedOldPatients({ reset, selected, oldPatients }) {
       await axiosInstance.patch(endpoints.appointments.book(selected), {
         patient: row._id,
       });
+
+      await AddToGoogleCalendar(SelectedAppointment);
+      await AddToIPhoneCalendar(SelectedAppointment);
       enqueueSnackbar(t('booked successfully!'));
       reset();
-      router.back();
+      // router.back();
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
@@ -86,7 +90,7 @@ export default function UploadedOldPatients({ reset, selected, oldPatients }) {
     onChangeRowsPerPage,
   } = table;
   return (
-    <Stack>
+    <Scrollbar>
       <Table
         size={dense ? 'small' : 'medium'}
         sx={{
@@ -152,11 +156,12 @@ export default function UploadedOldPatients({ reset, selected, oldPatients }) {
           },
         }}
       />
-    </Stack>
+    </Scrollbar>
   );
 }
 UploadedOldPatients.propTypes = {
   oldPatients: PropTypes.array,
   reset: PropTypes.func,
   selected: PropTypes.string,
+  SelectedAppointment: PropTypes.object,
 };

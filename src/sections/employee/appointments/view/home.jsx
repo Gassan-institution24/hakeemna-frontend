@@ -125,7 +125,7 @@ export default function AppointmentsView({ employeeData }) {
     id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
     page: table.page || 0,
     sortBy: table.orderBy || 'code',
-    rowsPerPage: table.rowsPerPage || 5,
+    rowsPerPage: table.rowsPerPage || 25,
     order: table.order || 'asc',
     filters: filters || null,
   });

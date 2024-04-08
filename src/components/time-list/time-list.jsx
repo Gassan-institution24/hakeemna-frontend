@@ -7,7 +7,6 @@ import { fTime } from 'src/utils/format-time';
 
 import { useLocales } from 'src/locales';
 
-
 // ----------------------------------------------------------------------
 
 export default function TimeList({ name, list, helperText, value, onChange, ...other }) {
@@ -20,16 +19,7 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
   // const TimeList = useCallback(
   // ({ name, list, helperText, onChange, ...other }) => (
   return (
-    <Stack
-      sx={{
-        width: '100%',
-        height: '100%',
-        flexGrow: 1,
-        flexShrink: 0.5,
-        // py: 8,
-        px: 3,
-      }}
-    >
+    <>
       <Typography
         sx={{ py: 2, fontWeight: 700 }}
         variant="caption"
@@ -60,6 +50,7 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
           <Button
             variant="outlined"
             sx={{
+              width: 100,
               // m: 0.7,
               // flexGrow: 1,
               '&:hover': {
@@ -82,7 +73,7 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
         ))}
       </Stack>
       {/* </Scrollbar> */}
-    </Stack>
+    </>
   );
   // [selectedItem, curLangAr]
 }
