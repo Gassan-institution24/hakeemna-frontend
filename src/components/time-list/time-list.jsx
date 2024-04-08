@@ -7,7 +7,6 @@ import { fTime } from 'src/utils/format-time';
 
 import { useLocales } from 'src/locales';
 
-
 // ----------------------------------------------------------------------
 
 export default function TimeList({ name, list, helperText, value, onChange, ...other }) {
@@ -25,7 +24,7 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
         width: '100%',
         height: '100%',
         flexGrow: 1,
-        flexShrink: 0.5,
+        flexShrink: 0.6,
         // py: 8,
         px: 3,
       }}
@@ -60,6 +59,7 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
           <Button
             variant="outlined"
             sx={{
+              width: 100,
               // m: 0.7,
               // flexGrow: 1,
               '&:hover': {

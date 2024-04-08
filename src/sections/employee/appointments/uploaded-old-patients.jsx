@@ -13,6 +13,7 @@ import { useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
+import { AddToGoogleCalendar, AddToIPhoneCalendar } from 'src/utils/calender';
 
 import {
   useTable,
@@ -27,7 +28,7 @@ import ExistEmployeesRow from './old-patients-row';
 
 // ----------------------------------------------------------------------
 
-export default function UploadedOldPatients({ reset, selected, oldPatients }) {
+export default function UploadedOldPatients({ SelectedAppointment, reset, selected, oldPatients }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -60,6 +61,9 @@ export default function UploadedOldPatients({ reset, selected, oldPatients }) {
       await axiosInstance.patch(endpoints.appointments.book(selected), {
         patient: row._id,
       });
+
+      AddToGoogleCalendar(SelectedAppointment);
+      AddToIPhoneCalendar(SelectedAppointment);
       enqueueSnackbar(t('booked successfully!'));
       reset();
       router.back();
@@ -159,4 +163,5 @@ UploadedOldPatients.propTypes = {
   oldPatients: PropTypes.array,
   reset: PropTypes.func,
   selected: PropTypes.string,
+  SelectedAppointment: PropTypes.object,
 };

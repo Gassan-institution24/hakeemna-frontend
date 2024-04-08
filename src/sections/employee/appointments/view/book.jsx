@@ -28,6 +28,7 @@ import { Box, Card, Stack, MenuItem } from '@mui/material';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { AddToGoogleCalendar, AddToIPhoneCalendar } from 'src/utils/calender';
 
 // // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -130,6 +131,9 @@ export default function TableCreateView() {
         endpoints.appointments.patient.createPatientAndBookAppoint(selected),
         data
       );
+      const SelectedAppointment = appointmentsData.find((appoint) => appoint._id === selected);
+      AddToGoogleCalendar(SelectedAppointment);
+      AddToIPhoneCalendar(SelectedAppointment);
       enqueueSnackbar(t('created successfully!'));
       reset();
       router.back();
@@ -310,7 +314,12 @@ export default function TableCreateView() {
             </LoadingButton>
           </Stack>
           {existPatients.length > 0 && (
-            <UploadedOldPatients selected={selected} reset={reset} oldPatients={existPatients} />
+            <UploadedOldPatients
+              SelectedAppointment={appointmentsData.find((appoint) => appoint._id === selected)}
+              selected={selected}
+              reset={reset}
+              oldPatients={existPatients}
+            />
           )}
         </Card>
       </FormProvider>
