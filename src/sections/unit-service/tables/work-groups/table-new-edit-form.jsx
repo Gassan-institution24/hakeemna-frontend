@@ -161,11 +161,13 @@ export default function TableNewEditForm({ currentTable }) {
             <RHFTextField
               onChange={handleEnglishInputChange}
               name="name_english"
+              placeholder="Dr.Ahmad WG"
               label={`${t('name english')} *`}
             />
             <RHFTextField
               onChange={handleArabicInputChange}
               name="name_arabic"
+              placeholder="فريق عمل الدكتور أحمد"
               label={`${t('name arabic')} *`}
             />
             <RHFSelect name="department" label={t('department')}>

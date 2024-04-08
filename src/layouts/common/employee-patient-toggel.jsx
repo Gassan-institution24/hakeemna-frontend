@@ -4,14 +4,15 @@ import { useSnackbar } from 'notistack';
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
+
 import axios, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
-import { varHover } from 'src/components/animate';
-import { paths } from 'src/routes/paths';
 import Iconify from 'src/components/iconify';
+import { varHover } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
 

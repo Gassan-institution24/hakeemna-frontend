@@ -217,7 +217,7 @@ export default function AppointmentToolbar({
         <MobileTimePicker
           ampmInClock
           minutesStep="5"
-          label={t('start time')}
+          label={t('from time')}
           value={myunitTime(filters.startTime)}
           onChange={(newValue) => {
             const selectedTime = zonedTimeToUtc(
@@ -236,7 +236,7 @@ export default function AppointmentToolbar({
         <MobileTimePicker
           ampmInClock
           minutesStep="5"
-          label={t('end time')}
+          label={t('to time')}
           value={myunitTime(filters.endTime)}
           onChange={(newValue) => {
             const selectedTime = zonedTimeToUtc(

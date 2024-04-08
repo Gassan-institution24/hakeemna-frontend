@@ -33,8 +33,19 @@ export default function BookingCustomerReviews({
   const [timeListItem, setTimeListItem] = useState();
   const mdUp = useResponsive('up', 'md');
 
+  const GetIndex = () => {
+    let result = 0;
+    list.forEach((one, index) => {
+      if (one._id === selected) {
+        result = index;
+      }
+    });
+    return result;
+  };
+
   const carousel = useCarousel({
     adaptiveHeight: true,
+    initialSlide: !loading && (GetIndex() || 0),
   });
 
   useEffect(() => {
@@ -128,7 +139,18 @@ export default function BookingCustomerReviews({
           value={new Date(selectedDate)}
           onChange={(newValue) => setSelectedDate(newValue)}
         />
-        <TimeList list={list} onChange={timeListChangeHandler} value={timeListItem} />
+        <Stack
+          sx={{
+            width: '100%',
+            height: '100%',
+            flexGrow: 1,
+            flexShrink: 0.6,
+            // py: 8,
+            px: 3,
+          }}
+        >
+          <TimeList list={list} onChange={timeListChangeHandler} value={timeListItem} />
+        </Stack>
       </Stack>
       <Divider sx={{ borderStyle: 'dashed' }} />
       {selected && (

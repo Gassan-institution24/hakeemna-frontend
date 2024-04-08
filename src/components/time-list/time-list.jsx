@@ -19,16 +19,7 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
   // const TimeList = useCallback(
   // ({ name, list, helperText, onChange, ...other }) => (
   return (
-    <Stack
-      sx={{
-        width: '100%',
-        height: '100%',
-        flexGrow: 1,
-        flexShrink: 0.6,
-        // py: 8,
-        px: 3,
-      }}
-    >
+    <>
       <Typography
         sx={{ py: 2, fontWeight: 700 }}
         variant="caption"
@@ -82,7 +73,7 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
         ))}
       </Stack>
       {/* </Scrollbar> */}
-    </Stack>
+    </>
   );
   // [selectedItem, curLangAr]
 }
