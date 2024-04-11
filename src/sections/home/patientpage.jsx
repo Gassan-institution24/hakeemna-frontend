@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { m } from 'framer-motion';
+import { useTranslate } from 'src/locales';
 
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
@@ -7,11 +8,15 @@ import Container from '@mui/material/Container';
 import { Grid, Paper, Button, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
+import Box from '@mui/material/Box';
 
 import { varFade, MotionViewport } from 'src/components/animate';
+import Image from 'src/components/image';
+import Arrow from './images/arrow.png';
 
-import circle from './images/circle.png';
-import medical from './images/medical.png';
+// import circle from './images/circle.png';
+// import medical from './images/medical.png';
+import Unitservice from './uspage';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1d222900' : 'rgba(255, 255, 255, 0)',
@@ -22,15 +27,33 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function Patient() {
+  const { t } = useTranslate();
   return (
     <Container component={MotionViewport}>
       <Stack
         spacing={3}
         sx={{ textAlign: 'center', p: 5, position: { md: 'relative' }, bottom: { md: '-40px' } }}
       >
-        <m.div variants={varFade().inDown}>
+        {/* <m.div variants={varFade().inDown}>
           <Typography variant="h2">Start Now</Typography>
-        </m.div>
+        </m.div> */}
+        <Typography sx={{}} variant="h2">
+            {/* <Box
+              sx={{
+                flexGrow: 1,
+                backgroundImage: `url(https://www.freepnglogos.com/uploads/line-png/gradient-orange-lines-png--30.png)`,
+                backgroundSize: '290px',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                textAlign: 'center',
+                height: '100px',
+                width: '90%',
+                // zIndex: -1,
+              }}
+            /> */}
+            <span style={{ position: 'relative', top: -130 }}> {t('Start Now')} <Image sx={{ height: '110px',
+                width: '100px',transform: 'rotate(-45deg)',position: 'relative', top: 20, left: -15 }} src={Arrow}/> </span>
+          </Typography>
       </Stack>
 
       <Grid
@@ -83,7 +106,7 @@ export default function Patient() {
             position: { md: 'relative' },
           }}
         >
-          <Item
+          {/* <Item
             sx={{
               backgroundImage: `url(${circle})`,
               backgroundSize: 'cover',
@@ -94,8 +117,8 @@ export default function Patient() {
               right: '-150px',
               top: '60px',
             }}
-          >
-            <img
+          > */}
+            {/* <img
               src={medical}
               alt="patient"
               style={{
@@ -106,8 +129,9 @@ export default function Patient() {
                 width: '250px',
                 height: '250px',
               }}
-            />
-          </Item>
+            /> */}
+          {/* </Item> */}
+            <Unitservice/>
         </Grid>
       </Grid>
     </Container>

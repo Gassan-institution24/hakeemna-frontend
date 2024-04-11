@@ -15,27 +15,40 @@ import Blue from './images/Paint.png';
 const CARDS = [
   {
     icon: 'https://static.vecteezy.com/system/resources/thumbnails/021/809/795/small/doctors-day-illustration-png.png',
-    title: 'Medical Hub',
+    title: 'Electronic Medical Hub',
     description:
-      'An integrated platform that brings both medical service providers and beneficiaries in one place',
+      'A platform that brings together providers and providers of medical and health care services ...',
   },
   {
-    icon: 'https://png.pngtree.com/png-vector/20220831/ourmid/pngtree-banyan-tree-logo-design-vector-png-image_6131481.png',
-    title: 'Green Managment',
+    icon: 'https://static.thenounproject.com/png/5140056-200.png',
+    title: 'Autonomy',
     description:
-      'An integrated platform that brings both medical service providers and beneficiaries in one place',
+      'The currently available electronic health records platforms cannot be used or benefited from them...',
   },
+  // number is 14
   {
-    icon: 'https://cdn-icons-png.flaticon.com/512/5695/5695909.png',
-    title: 'User Friendly',
+    icon: 'https://cdn-icons-png.flaticon.com/512/10074/10074030.png',
+    title: 'Credibility and transparency',
     description:
-      'An integrated platform that brings both medical service providers and beneficiaries in one place',
+      'Using our platform enables all categories of users (service providers and users of...',
   },
   {
     icon: 'https://www.zevenet.com/wp-content/uploads/2019/10/zevenet_website_icons-ABOUT_US_Research_and_development_Green-.svg',
-    title: 'R & D Support',
+    title: 'Research and Developmen',
     description:
-      'An integrated platform that brings both medical service providers and beneficiaries in one place',
+      'We seek to support and participate in scientific research in all relevant fields and...',
+  },
+  {
+    icon: 'https://png.pngtree.com/png-vector/20220831/ourmid/pngtree-banyan-tree-logo-design-vector-png-image_6131481.png',
+    title: 'green management',
+    description:
+      'This platform is designed to be a gateway towards sustainability and management committed...',
+  },
+  {
+    icon: 'https://cdn-icons-png.flaticon.com/512/5695/5695909.png',
+    title: 'User friendly and flexible',
+    description:
+      'The platform is designed to be easy to learn and use, and a free training...',
   },
 ];
 
@@ -93,7 +106,7 @@ export default function whoAreWe() {
         alignItems="center"
         gridTemplateColumns={{
           xs: 'repeat(1, 1fr)',
-          md: 'repeat(4, 1fr)',
+          md: 'repeat(3, 1fr)',
         }}
       >
         {CARDS.map((card, idx) => (
@@ -113,11 +126,11 @@ export default function whoAreWe() {
                 sx={{ mx: 'auto', width: 48, height: 48 }}
               />
 
-              <Typography variant="h5" sx={{ mt: 8, mb: 2 }}>
+              <Typography variant="h6" sx={{ mt: 8, mb: 2 }}>
                 {card.title}
               </Typography>
 
-              {/* <Typography sx={{ color: 'text.secondary' }}>{card.description}</Typography> */}
+              <Typography sx={{ color: 'text.secondary' }}>{card.description}</Typography>
             </Card>
           </m.div>
         ))}
