@@ -19,7 +19,7 @@ import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
 
 // ----------------------------------------------------------------------
 
-export default function BookingCustomerReviews({
+export default function BookDetails({
   selected,
   AppointDates,
   setSelected,
@@ -204,7 +204,7 @@ export default function BookingCustomerReviews({
   );
 }
 
-BookingCustomerReviews.propTypes = {
+BookDetails.propTypes = {
   selected: PropTypes.string,
   selectedDate: PropTypes.string,
   AppointDates: PropTypes.array,
@@ -284,7 +284,10 @@ function ReviewItem({ item }) {
           },
           {
             // label: t('work group'),
-            label: service_types?.reduce((total, service) => total + service.Price_per_unit, 0),
+            label: service_types?.reduce(
+              (total, service) => total + service.Price_per_unit || 0,
+              0
+            ),
             icon: <Iconify icon="solar:tag-price-bold" />,
           },
           {

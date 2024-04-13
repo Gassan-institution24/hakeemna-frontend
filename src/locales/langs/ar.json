@@ -52,6 +52,8 @@
   "Add new licence": "إضافة إشتراك جديد",
   "You do not have permission to access this page": "ليس لديك الصلاحية لدخول هذه الصفحة",
   "about me": "نص تعريفي بالموظف",
+  "arabic about me": "نص تعريفي بالموظف باللغة العربية",
+  "english about me": "نص تعريفي بالموظف باللغة الانجليزية",
   "required field": "الحقل مطلوب",
   "must be at least": "يجب أن تحتوي على الأقل",
   "must be at most": "يجب أن لا تحتوى على أكثر من",

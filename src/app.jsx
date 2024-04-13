@@ -5,7 +5,7 @@ import 'src/global.css';
 import 'src/locales/i18n';
 
 // ----------------------------------------------------------------------
-import React,{useEffect, useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import { AuthProvider } from 'src/auth/context/jwt';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
 import ProgressBar from 'src/components/progress-bar';

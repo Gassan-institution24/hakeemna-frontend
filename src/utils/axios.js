@@ -318,6 +318,11 @@ export const endpoints = {
     all: '/api/deductionconfig',
     one: (id) => `/api/deductionconfig/${id}`,
   },
+  keywords: {
+    find: '/api/keywords/find',
+    all: '/api/keywords',
+    arabic: '/api/keywords/ar',
+  },
   patients: {
     all: '/api/patient',
     find: `/api/patient/find`,

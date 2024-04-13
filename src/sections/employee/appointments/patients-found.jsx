@@ -9,8 +9,8 @@ import { tablePaginationClasses } from '@mui/material/TablePagination';
 
 // import { useRouter } from 'src/routes/hooks';
 
+import { addToCalendar } from 'src/utils/calender';
 import axiosInstance, { endpoints } from 'src/utils/axios';
-import { AddToGoogleCalendar, AddToIPhoneCalendar } from 'src/utils/calender';
 
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -22,13 +22,13 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import ExistEmployeesRow from './old-patients-row';
+import PatientFoundRow from './patients-found-row';
 
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
-export default function UploadedOldPatients({ SelectedAppointment, reset, selected, oldPatients }) {
+export default function PatientsFound({ SelectedAppointment, reset, selected, oldPatients }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -61,9 +61,7 @@ export default function UploadedOldPatients({ SelectedAppointment, reset, select
       await axiosInstance.patch(endpoints.appointments.book(selected), {
         patient: row._id,
       });
-
-      await AddToGoogleCalendar(SelectedAppointment);
-      await AddToIPhoneCalendar(SelectedAppointment);
+      await addToCalendar(SelectedAppointment);
       enqueueSnackbar(t('booked successfully!'));
       reset();
       // router.back();
@@ -124,11 +122,7 @@ export default function UploadedOldPatients({ SelectedAppointment, reset, select
           {oldPatients
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index, idx) => (
-              <ExistEmployeesRow
-                key={idx}
-                row={row}
-                onEmploymentRow={() => handleEmployment(row)}
-              />
+              <PatientFoundRow key={idx} row={row} onEmploymentRow={() => handleEmployment(row)} />
             ))}
 
           <TableNoData
@@ -159,7 +153,7 @@ export default function UploadedOldPatients({ SelectedAppointment, reset, select
     </Scrollbar>
   );
 }
-UploadedOldPatients.propTypes = {
+PatientsFound.propTypes = {
   oldPatients: PropTypes.array,
   reset: PropTypes.func,
   selected: PropTypes.string,
