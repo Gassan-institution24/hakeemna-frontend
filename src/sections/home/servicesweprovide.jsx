@@ -22,7 +22,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function Whydoc() {
+export default function ServicesWeprovide() {
   const renderDescription = (
     <Stack
       spacing={3}

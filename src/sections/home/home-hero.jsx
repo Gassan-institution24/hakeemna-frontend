@@ -14,7 +14,6 @@ import { paths } from 'src/routes/paths';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { HEADER } from 'src/layouts/config-layout';
-// import Language from 'src/layouts/common/language-home-page';
 import { bgBlur, bgGradient, textGradient } from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
@@ -175,14 +174,13 @@ export default function HomeHero() {
         },
       }}
     >
-
       <m.div variants={varFade().in}>
         <Typography
           variant="h3"
           sx={{
             textAlign: 'center',
           }}
-          id="home"
+          id="#"
         >
           It is time for digital transformation
         </Typography>
@@ -227,16 +225,6 @@ export default function HomeHero() {
           >
             Get Started
           </Button>
-          {/* <Button
-            color="inherit"
-            size="large"
-            variant="outlined"
-            rel="noopener"
-            sx={{ borderColor: 'text.primary' }}
-          >
-            <Language />
-            Language
-          </Button> */}
         </Stack>
       </m.div>
 
@@ -246,8 +234,8 @@ export default function HomeHero() {
           <Iconify icon="solar:health-broken" color="green" width={30} sx={{ m: 0.5 }} />
           <Iconify icon="ri:mental-health-line" color="lightblue" width={30} sx={{ m: 0.5 }} />
           <Iconify icon="pajamas:status-health" color="red" width={30} sx={{ m: 0.5 }} />
-          <Iconify icon="iconoir:community" color="#2E87FD" width={30} sx={{ m: 0.5 }} />
-          {/* <Iconify icon="icon-park:medicine-bottle" width={30} sx={{ m: 0.5 }} /> */}
+          {/* <Iconify icon="iconoir:community" color="#2E87FD" width={30} sx={{ m: 0.5 }} /> */}
+          <Iconify icon="icon-park:medicine-bottle" width={30} sx={{ m: 0.5 }} />
         </m.div>
       </Stack>
     </Stack>
