@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
+import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Chip, MenuItem, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -17,7 +18,13 @@ import axios, { endpoints } from 'src/utils/axios';
 
 // import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetCountries, useGetSpecialties, useGetActiveEmployeeTypes } from 'src/api';
+import {
+  useGetKeywrds,
+  useGetCountries,
+  useGetSpecialties,
+  useGetArabicKeywrds,
+  useGetActiveEmployeeTypes,
+} from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -29,6 +36,9 @@ import FormProvider, {
   RHFUploadAvatar,
   RHFAutocomplete,
 } from 'src/components/hook-form';
+
+import Certifications from './certifications';
+import ProfessionalMembership from './professional-membership';
 // ----------------------------------------------------------------------
 
 const languages = [
@@ -113,7 +123,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
         return words.length >= 3; // Return true if there are at least three words
       }),
     nationality: Yup.string().required(t('required field')),
-    profrssion_practice_num: Yup.string().required(t('required field')),
+    profrssion_practice_num: Yup.string(),
     identification_num: Yup.string()
       .required(t('required field'))
       .min(8, `${t('must be at least')} 8`)
@@ -130,11 +140,16 @@ export default function AccountGeneral({ employeeData, refetch }) {
     University_graduation_Bachelor: Yup.string(),
     University_graduation_Specialty: Yup.string(),
     about_me: Yup.string(),
+    arabic_about_me: Yup.string(),
     scanned_identity: Yup.mixed().nullable(),
     signature: Yup.mixed().nullable(),
     stamp: Yup.mixed().nullable(),
     picture: Yup.mixed().nullable(),
     languages: Yup.array().required(t('required field')),
+    certifications: Yup.array(),
+    memberships: Yup.array(),
+    keywords: Yup.array(),
+    arabic_keywords: Yup.array(),
   });
 
   const defaultValues = {
@@ -151,17 +166,31 @@ export default function AccountGeneral({ employeeData, refetch }) {
     speciality: employeeData?.speciality?._id || null,
     gender: employeeData?.gender || '',
     birth_date: employeeData?.birth_date || null,
-    Bachelor_year_graduation: employeeData?.Bachelor_year_graduation || '',
-    University_graduation_Bachelor: employeeData?.University_graduation_Bachelor || '',
-    University_graduation_Specialty: employeeData?.University_graduation_Specialty || '',
+    // Bachelor_year_graduation: employeeData?.Bachelor_year_graduation || '',
+    // University_graduation_Bachelor: employeeData?.University_graduation_Bachelor || '',
+    // University_graduation_Specialty: employeeData?.University_graduation_Specialty || '',
     scanned_identity: employeeData?.scanned_identity || null,
     signature: employeeData?.signature || null,
     stamp: employeeData?.stamp || null,
     picture: employeeData?.picture || null,
     about_me: employeeData?.about_me || '',
+    arabic_about_me: employeeData?.arabic_about_me || '',
     languages: employeeData?.languages || [],
+    arabic_keywords: employeeData?.arabic_keywords || [],
+    keywords: employeeData?.keywords || [],
+    memberships: employeeData?.memberships.length
+      ? employeeData?.memberships
+      : [{ name: '', institution: '' }],
+    certifications: employeeData?.certifications.length
+      ? employeeData?.certifications
+      : [
+          {
+            name: '',
+            institution: '',
+            year: null,
+          },
+        ],
   };
-
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(UpdateUserSchema),
@@ -176,6 +205,9 @@ export default function AccountGeneral({ employeeData, refetch }) {
   } = methods;
 
   const values = watch();
+
+  const { keywordsData } = useGetKeywrds();
+  const { arabicKeywordsData } = useGetArabicKeywrds();
 
   const handleDrop = useCallback(
     (name, acceptedFiles) => {
@@ -195,15 +227,20 @@ export default function AccountGeneral({ employeeData, refetch }) {
     try {
       const formData = new FormData();
       Object.keys(data).forEach((key) => {
-        if (Array.isArray(data[key])) {
-          data[key].forEach((value, index) => {
-            formData.append(`${key}[${index}]`, value);
-          });
-        } else if (data[key] !== defaultValues[key]) {
-          formData.append(key, data[key]);
+        if (['scanned_identity', 'signature', 'stamp', 'picture'].includes(key)) {
+          if (Array.isArray(data[key])) {
+            data[key].forEach((value, index) => {
+              formData.append(`${key}[${index}]`, value);
+            });
+          } else if (data[key] !== defaultValues[key]) {
+            formData.append(key, data[key]);
+          }
         }
       });
-      await axios.patch(endpoints.employees.one(employeeData._id), formData);
+      await axios.patch(endpoints.employees.one(employeeData._id), {
+        ...data,
+        formData,
+      });
       enqueueSnackbar(t('updated successfully!'));
       refetch();
     } catch (error) {
@@ -215,14 +252,23 @@ export default function AccountGeneral({ employeeData, refetch }) {
     }
   });
 
-  // const handleEnglishInputChange = (event) => {
-  //   // Validate the input based on English language rules
-  //   const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
+  const handleEnglishInputChange = (event) => {
+    // Validate the input based on English language rules
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
 
-  //   if (englishRegex.test(event.target.value)) {
-  //     methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-  //   }
-  // };
+    if (englishRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+
+    if (arabicRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -260,23 +306,52 @@ export default function AccountGeneral({ employeeData, refetch }) {
               }}
             >
               <RHFTextField
-                disabled
+                variant="filled"
+                name="name_english"
+                onChange={handleEnglishInputChange}
+                label={`${t('Full name in English')} *`}
+              />
+              <RHFTextField
+                variant="filled"
+                name="name_arabic"
+                onChange={handleArabicInputChange}
+                label={t('Full name in Arabic')}
+              />
+              <RHFSelect
+                variant="filled"
+                label={`${t('nationality')} *`}
+                fullWidth
+                name="nationality"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {countriesData.map((country, idx) => (
+                  <MenuItem lang="ar" key={idx} value={country._id}>
+                    {curLangAr ? country.name_arabic : country.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <TextField
+                // disabled
                 variant="filled"
                 name="identification_num"
                 label={`${t('ID number')} :`}
+                value={values.identification_num}
               />
-              <RHFTextField
-                disabled
+              <TextField
+                // disabled
                 variant="filled"
                 name="profrssion_practice_num"
                 label={`${t('profrssion practice number')} :`}
+                // value={values.profrssion_practice_num}
               />
-              <RHFTextField
-                disabled
+              <TextField
+                // disabled
                 type="email"
                 variant="filled"
                 name="email"
                 label={`${t('email')} :`}
+                value={values.email}
               />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
               <Box
@@ -372,21 +447,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name_english" label={`${t('Full name in English')} *`} />
-              <RHFTextField name="name_arabic" label={t('Full name in Arabic')} />
-              <RHFSelect
-                label={`${t('nationality')} *`}
-                fullWidth
-                name="nationality"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {countriesData.map((country, idx) => (
-                  <MenuItem lang="ar" key={idx} value={country._id}>
-                    {curLangAr ? country.name_arabic : country.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
               <RHFTextField type="number" name="tax_num" label={t('tax number')} />
               <RHFPhoneNumber name="mobile_num" label={t('alternative mobile number')} />
               <RHFSelect
@@ -430,7 +490,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 ))}
               </RHFSelect>
 
-              <RHFTextField
+              {/* <RHFTextField
                 type="number"
                 name="Bachelor_year_graduation"
                 label={t('bachelor year graduation')}
@@ -442,7 +502,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               <RHFTextField
                 name="University_graduation_Specialty"
                 label={t('university graduation specialty')}
-              />
+              /> */}
               <Controller
                 name="birth_date"
                 control={control}
@@ -480,10 +540,6 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   {option}
                 </li>
               )}
-              onChange={(event, newValue) => {
-                // setSelectedEmployees(newValue);
-                methods.setValue('languages', newValue, { shouldValidate: true });
-              }}
               renderTags={(selected, getTagProps) =>
                 selected.map((option, index) => (
                   <Chip
@@ -498,8 +554,85 @@ export default function AccountGeneral({ employeeData, refetch }) {
               }
             />
             <RHFTextField multiline sx={{ mt: 3 }} rows={2} name="address" label={t('address')} />
-            <RHFTextField multiline sx={{ mt: 3 }} rows={3} name="about_me" label={t('about me')} />
+            <RHFTextField
+              multiline
+              sx={{ mt: 3 }}
+              rows={3}
+              name="about_me"
+              label={t('english about me')}
+              onChange={handleEnglishInputChange}
+            />
+            <RHFTextField
+              multiline
+              sx={{ mt: 3 }}
+              rows={3}
+              name="arabic_about_me"
+              label={t('arabic about me')}
+              onChange={handleArabicInputChange}
+            />
 
+            <Certifications />
+            <ProfessionalMembership />
+
+            <RHFAutocomplete
+              sx={{ mb: 3 }}
+              name="keywords"
+              label={t('keywords')}
+              multiple
+              freeSolo
+              disableCloseOnSelect
+              placeholder="type then press enter to create new"
+              options={keywordsData.filter(
+                (option) => !values.keywords.some((item) => option === item)
+              )}
+              getOptionLabel={(option) => option}
+              renderOption={(props, option, idx) => (
+                <li {...props} key={idx} value={option}>
+                  {option}
+                </li>
+              )}
+              renderTags={(selected, getTagProps) =>
+                selected.map((option, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    key={index}
+                    label={option}
+                    size="small"
+                    color="info"
+                    variant="soft"
+                  />
+                ))
+              }
+            />
+            {/* <RHFAutocomplete
+              sx={{ mb: 3 }}
+              name="arabic_keywords"
+              label={t('arabic keywords')}
+              multiple
+              freeSolo
+              disableCloseOnSelect
+              options={arabicKeywordsData.filter(
+                (option) => !values.keywords.some((item) => option === item)
+              )}
+              getOptionLabel={(option) => option}
+              renderOption={(props, option, idx) => (
+                <li {...props} key={idx} value={option}>
+                  {option}
+                </li>
+              )}
+              renderTags={(selected, getTagProps) =>
+                selected.map((option, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    key={index}
+                    label={option}
+                    size="small"
+                    color="info"
+                    variant="soft"
+                  />
+                ))
+              }
+            /> */}
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
                 {t('save changes')}

@@ -14,7 +14,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 
 // ----------------------------------------------------------------------
 
-export default function OldPatientsRow({ row, selected, onEmploymentRow }) {
+export default function PatientFoundRow({ row, selected, onEmploymentRow }) {
   const {
     sequence_number,
     name_english,
@@ -82,7 +82,7 @@ export default function OldPatientsRow({ row, selected, onEmploymentRow }) {
   );
 }
 
-OldPatientsRow.propTypes = {
+PatientFoundRow.propTypes = {
   onEmploymentRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,

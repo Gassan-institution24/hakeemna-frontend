@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
+import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Chip, MenuItem, Typography } from '@mui/material';
 
@@ -30,7 +31,7 @@ import {
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
-  RHFSelect,
+  // RHFSelect,
   RHFTextField,
   RHFTimePicker,
   RHFPhoneNumber,
@@ -129,8 +130,6 @@ export default function AccountGeneral({ unitServiceData }) {
     location_gps: data?.location_gps || '',
     company_logo: data?.company_logo || '',
   };
-
-  console.log('data work start', data);
 
   const methods = useForm({
     mode: 'onTouched',
@@ -255,18 +254,25 @@ export default function AccountGeneral({ unitServiceData }) {
                 sm: 'repeat(1, 1fr)',
               }}
             >
-              <RHFTextField
-                disabled
+              <TextField
+                // disabled
                 variant="filled"
                 name="identification_num"
+                value={values.identification_num}
                 label={`${t('ID number')}* :`}
               />
-              <RHFTextField
+              <TextField
                 variant="filled"
                 name="name_english"
+                value={values.name_english}
                 label={`${t('name english')}* :`}
               />
-              <RHFTextField variant="filled" name="name_arabic" label={`${t('name arabic')}* :`} />
+              <TextField
+                variant="filled"
+                name="name_arabic"
+                value={values.name_arabic}
+                label={`${t('name arabic')}* :`}
+              />
               <RHFTextField type="email" variant="filled" name="email" label={`${t('email')}* :`} />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
               {/* <RHFTextField
@@ -290,11 +296,13 @@ export default function AccountGeneral({ unitServiceData }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFSelect
+              <TextField
+                select
                 label={`${t('country')} *`}
                 disabled
                 fullWidth
                 name="country"
+                value={values.country}
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
                 // onChange={handleCountryChange}
@@ -304,14 +312,16 @@ export default function AccountGeneral({ unitServiceData }) {
                     {curLangAr ? country.name_arabic : country.name_english}
                   </MenuItem>
                 ))}
-              </RHFSelect>
+              </TextField>
 
-              <RHFSelect
+              <TextField
+                select
                 label={`${t('city')} *`}
                 disabled
                 fullWidth
                 name="city"
                 InputLabelProps={{ shrink: true }}
+                value={values.city}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {tableData.map((city, idx) => (
@@ -319,14 +329,16 @@ export default function AccountGeneral({ unitServiceData }) {
                     {curLangAr ? city.name_arabic : city.name_english}
                   </MenuItem>
                 ))}
-              </RHFSelect>
+              </TextField>
 
-              <RHFSelect
+              <TextField
+                select
                 label={`${t('unit service type')} *`}
                 fullWidth
                 disabled
                 name="US_type"
                 InputLabelProps={{ shrink: true }}
+                value={values.US_type}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {unitserviceTypesData.map((type, idx) => (
@@ -334,7 +346,7 @@ export default function AccountGeneral({ unitServiceData }) {
                     {curLangAr ? type.name_arabic : type.name_english}
                   </MenuItem>
                 ))}
-              </RHFSelect>
+              </TextField>
 
               {/* <RHFSelect
                 label={`${t('specialty')} *`}
@@ -349,13 +361,15 @@ export default function AccountGeneral({ unitServiceData }) {
                   </MenuItem>
                 ))}
               </RHFSelect> */}
-              <RHFSelect
+              <TextField
                 disabled
+                select
                 label={t('sector type')}
                 fullWidth
                 name="sector_type"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
+                value={values.sector_type}
               >
                 <MenuItem lang="ar" value="public">
                   {t('Public')}
@@ -366,7 +380,7 @@ export default function AccountGeneral({ unitServiceData }) {
                 <MenuItem lang="ar" value="charity">
                   {t('Charity')}
                 </MenuItem>
-              </RHFSelect>
+              </TextField>
               <RHFPhoneNumber name="mobile_num" label={t('alternative mobile number')} />
               <RHFTextField name="web_page" label={t('webpage')} />
               <RHFTimePicker name="work_start_time" label={t('work start time')} />

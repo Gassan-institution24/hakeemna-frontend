@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { m } from 'framer-motion';
-import { useTranslate } from 'src/locales';
 
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
@@ -8,10 +6,12 @@ import Container from '@mui/material/Container';
 import { Grid, Paper, Button, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-import Box from '@mui/material/Box';
 
-import { varFade, MotionViewport } from 'src/components/animate';
+import { useTranslate } from 'src/locales';
+
 import Image from 'src/components/image';
+import { MotionViewport } from 'src/components/animate';
+
 import Arrow from './images/arrow.png';
 
 // import circle from './images/circle.png';
