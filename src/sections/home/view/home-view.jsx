@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 
 import ScrollProgress from 'src/components/scroll-progress';
 
-import Us from '../uspage';
 import HomeHero from '../home-hero';
 import Whowweare from '../whoarewe';
 import Patient from '../patientpage';

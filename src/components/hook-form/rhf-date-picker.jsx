@@ -5,7 +5,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
-export default function RHFDatePicker({ name, helperText, type, ...other }) {
+export default function RHFDatePicker({ name, helperText, type, views, ...other }) {
   const { control } = useFormContext();
 
   return (
@@ -17,7 +17,8 @@ export default function RHFDatePicker({ name, helperText, type, ...other }) {
           {...field}
           fullWidth
           type={type}
-          value={field.value}
+          value={new Date(field.value)}
+          views={views}
           onChange={(newValue) => {
             field.onChange(newValue);
           }}
@@ -25,11 +26,12 @@ export default function RHFDatePicker({ name, helperText, type, ...other }) {
           slotProps={{
             textField: {
               fullWidth: true,
+              // onClick: () => field.onFocus(),
+              ...other,
             },
           }}
           error={!!error}
           helperText={error ? error?.message : helperText}
-          {...other}
         />
       )}
     />
@@ -40,4 +42,5 @@ RHFDatePicker.propTypes = {
   helperText: PropTypes.object,
   name: PropTypes.string,
   type: PropTypes.string,
+  views: PropTypes.array,
 };

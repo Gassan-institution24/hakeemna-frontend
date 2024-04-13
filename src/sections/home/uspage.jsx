@@ -8,8 +8,6 @@ import { paths } from 'src/routes/paths';
 
 import { MotionViewport } from 'src/components/animate';
 
-import circleside from './images/circleside.png';
-import doctors from './images/class-medical.png';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1d222900' : 'rgba(255, 255, 255, 0)',
