@@ -1,10 +1,10 @@
 import { m } from 'framer-motion';
 import { useCallback } from 'react';
 
-import { Button } from '@mui/material';
+import { Box } from '@mui/system';
 import MenuItem from '@mui/material/MenuItem';
+import { Button, Typography } from '@mui/material';
 
-// import { useAuthContext } from 'src/auth/hooks';
 import { useTranslate, useLocalesHome } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
@@ -40,8 +40,8 @@ export default function Language() {
         onClick={popover.onOpen}
         sx={{
           fontSize: 15,
-          position:'relative',
-          top:-2,
+          position: 'relative',
+          top: -2,
           fontWeight: 600,
           '&:hover': {
             backgroundColor: 'transparent',
@@ -66,10 +66,14 @@ export default function Language() {
             onClick={() => handleChangeLang(option.value)}
           >
             {option?.label === 'العربية' ? (
-              <Iconify
-                icon={option.icon}
-                sx={{ borderRadius: 0.65, width: 28, backgroundColor: '#007B3A', color: 'white' }}
-              />
+              // <Iconify
+              //   icon={option.icon}
+              //   sx={{ borderRadius: 0.65, width: 28, backgroundColor: '#007B3A', color: 'white' }}
+              // />
+              <Box sx={{ borderRadius: 0.65, width: 30, backgroundColor: '#007B3A', color: 'white', textAlign:'center', mr:2 }}> 
+                <Typography>ض</Typography>
+              </Box>
+              
             ) : (
               <Iconify icon={option.icon} sx={{ borderRadius: 0.65, width: 28 }} />
             )}

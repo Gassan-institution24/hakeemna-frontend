@@ -1,14 +1,21 @@
 import PropTypes from 'prop-types';
-import { useScroll } from 'framer-motion';
+import { m, useScroll } from 'framer-motion';
 
 import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
+import { Stack, Container } from '@mui/system';
 
+import Image from 'src/components/image';
 import ScrollProgress from 'src/components/scroll-progress';
+import { varFade, MotionViewport } from 'src/components/animate';
 
-import Us from '../uspage';
+import Whydoc from '../Why';
+import Pupage from '../pupage';
 import HomeHero from '../home-hero';
 import Whowweare from '../whoarewe';
-import Patient from '../patientpage';
+import Arrow from '../images/arrow.png';
+import ServicesWeprovide from '../servicesweprovide';
+
 // ----------------------------------------------------------------------
 
 export default function HomeView({ divRef, divRef2 }) {
@@ -48,7 +55,7 @@ export default function HomeView({ divRef, divRef2 }) {
         }}
         id="services"
       >
-        {/* <Servicesweprovide /> */}
+        {/* <ServicesWeprovide /> */}
       </Box>
       <Box
         ref={divRef}
@@ -59,8 +66,30 @@ export default function HomeView({ divRef, divRef2 }) {
           p: 5,
         }}
       >
-        <Patient />
-        {/* <Us /> */}
+        <Container component={MotionViewport} sx={{ justifyContent: 'center' }}>
+          <Stack spacing={3}>
+            <m.div variants={varFade().inDown}>
+              <Typography sx={{ textAlign: 'center', mb: 8 }} variant="h2">
+                <span>
+                  Start Now
+                  <Image
+                    sx={{
+                      height: '110px',
+                      width: '100px',
+                      transform: 'rotate(-45deg)',
+                      position: 'relative',
+                      top: 20,
+                      left: -15,
+                    }}
+                    src={Arrow}
+                  />
+                </span>
+              </Typography>
+            </m.div>
+          </Stack> 
+        </Container>
+
+        <Pupage />
       </Box>
     </>
   );

@@ -32,7 +32,8 @@ import { applyFilter, groupedData, getAllItems } from './utils';
 
 function Searchbar() {
   const theme = useTheme();
-const {user} = useAuthContext()
+  const { user } = useAuthContext();
+
   const router = useRouter();
 
   const search = useBoolean();
@@ -115,16 +116,16 @@ const {user} = useAuthContext()
       </IconButton>
 
       {lgUp && user?.role === 'patient' ? (
-        <Label sx={{backgroundColor:'none'}}>
+        <Label sx={{ backgroundColor: 'none' }}>
           <Iconify icon="meteocons:code-green" width={30} />
-          <span title="code" >
-            O-sdkm
+          <span title="code">
+            {String(user?.patient?.nationality?.code).padStart(3, '0')}-
+            {user?.patient?.sequence_number}
           </span>
         </Label>
-      )
-      :
-      <Label sx={{ px: 0.75, fontSize: 12, color: 'text.secondary' }}>⌘K</Label>
-    }
+      ) : (
+        <Label sx={{ px: 0.75, fontSize: 12, color: 'text.secondary' }}>⌘K</Label>
+      )}
     </Stack>
   );
 
