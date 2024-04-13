@@ -35,7 +35,7 @@ export default function Unitservice() {
             position: { md: 'relative' },
           }}
         >
-          <Item
+          {/* <Item
             sx={{
               backgroundImage: `url(${circleside})`,
               backgroundSize: 'cover',
@@ -45,8 +45,8 @@ export default function Unitservice() {
               position: 'relative',
               left: '-100px',
             }}
-          >
-            <img
+          > */}
+            {/* <img
               src={doctors}
               alt="patient"
               style={{
@@ -57,8 +57,8 @@ export default function Unitservice() {
                 width: '250px',
                 height: '250px',
               }}
-            />
-          </Item>
+            /> */}
+          {/* </Item> */}
         </Grid>
         <Grid item xs={12} md={6}>
           <Item

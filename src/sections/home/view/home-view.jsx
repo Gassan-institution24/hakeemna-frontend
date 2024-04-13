@@ -60,7 +60,7 @@ export default function HomeView({ divRef, divRef2 }) {
         }}
       >
         <Patient />
-        <Us />
+        {/* <Us /> */}
       </Box>
     </>
   );
