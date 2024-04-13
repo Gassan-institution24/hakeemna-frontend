@@ -26,7 +26,7 @@ import {
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 // import UploadOldPatient from '../upload-old-patient';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { LoadingButton } from '@mui/lab';
@@ -34,17 +34,17 @@ import { Box, Card, Stack, MenuItem } from '@mui/material';
 
 import { useSearchParams } from 'src/routes/hooks';
 
+import { addToCalendar } from 'src/utils/calender';
 import { useUnitTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
-import { AddToGoogleCalendar, AddToIPhoneCalendar } from 'src/utils/calender';
 
 // // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFSelect, RHFTextField, RHFDatePicker, RHFPhoneNumber } from 'src/components/hook-form';
 
-import UploadedOldPatients from '../uploaded-old-patients';
-import BookingCustomerReviews from '../booking-customer-reviews';
+import BookDetails from '../book-details';
+import PatientsFound from '../patients-found';
 // ----------------------------------------------------------------------
 const defaultFilters = {
   status: 'available',
@@ -72,12 +72,19 @@ export default function TableCreateView() {
   const day = searchParams.get('day');
 
   const [selectedDate, setSelectedDate] = useState(day ? new Date(day) : new Date());
-  const [selected, setSelected] = useState(appointment);
 
   const { appointmentsData, AppointDates, loading } = useGetEmployeeAppointments({
     id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
     filters: { ...filters, startDate: new Date(selectedDate) },
   });
+
+  useEffect(() => {
+    if (!loading && !appointmentsData.length && AppointDates.length) {
+      setSelectedDate(AppointDates[0]);
+    }
+  }, [loading, appointmentsData.length, AppointDates]);
+
+  const [selected, setSelected] = useState(appointment);
 
   const { workGroupsData } = useGetEmployeeActiveWorkGroups(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id
@@ -93,9 +100,9 @@ export default function TableCreateView() {
     identification_num: Yup.string(),
     birth_date: Yup.mixed().nullable(),
     marital_status: Yup.string().nullable(),
-    nationality: Yup.string().nullable(),
-    country: Yup.string(),
-    city: Yup.string(),
+    nationality: Yup.string().required(t('required field')),
+    country: Yup.string().nullable(),
+    city: Yup.string().nullable(),
     mobile_num1: Yup.string(),
     mobile_num2: Yup.string(),
     gender: Yup.string(),
@@ -110,9 +117,9 @@ export default function TableCreateView() {
       identification_num: '',
       birth_date: null,
       marital_status: '',
-      nationality: '',
-      country: '',
-      city: '',
+      nationality: null,
+      country: null,
+      city: null,
       mobile_num1: '',
       mobile_num2: '',
       gender: '',
@@ -153,8 +160,7 @@ export default function TableCreateView() {
         data
       );
       const SelectedAppointment = appointmentsData.find((appoint) => appoint._id === selected);
-      await AddToGoogleCalendar(SelectedAppointment);
-      await AddToIPhoneCalendar(SelectedAppointment);
+      await addToCalendar(SelectedAppointment);
       enqueueSnackbar(t('created successfully!'));
       reset();
       // router.back();
@@ -296,7 +302,7 @@ export default function TableCreateView() {
           <Divider sx={{ borderStyle: 'dashed' }} />
 
           {!loading && (
-            <BookingCustomerReviews
+            <BookDetails
               selected={selected}
               AppointDates={AppointDates}
               loading={loading}
@@ -411,7 +417,7 @@ export default function TableCreateView() {
             </LoadingButton>
           </Stack>
           {existPatients.length > 0 && (
-            <UploadedOldPatients
+            <PatientsFound
               SelectedAppointment={appointmentsData.find((appoint) => appoint._id === selected)}
               selected={selected}
               reset={reset}
