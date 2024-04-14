@@ -1,209 +1,358 @@
 import * as React from 'react';
 
 import { Box } from '@mui/system';
-import Divider from '@mui/material/Divider';
-// import { useTheme } from '@mui/material/styles';
+import { Divider, Typography } from '@mui/material';
 
 import Iconify from 'src/components/iconify';
 
 export default function VerticalDividerText() {
-  // const theme = useTheme();
-
   return (
     <>
-      <Divider orientation="vertical" flexItem sx={{ mb: 10 }}>
-        <h1> WHAT WE DO</h1>
-        <h5 style={{ color: 'gray' }}>Get ready to manage your work with doctorna</h5>
-      </Divider>
+    <Divider orientation="vertical" flexItem sx={{ mb: 10 }}>
+    <h1> WHAT WE DO</h1>
+    <h6 style={{ color: 'gray' }}>
+          The Hakeemna.Online platform revolutionizes healthcare by storing and sharing personal
+          health records worldwide, enhancing patient care and communication with healthcare
+          providers. 
+        </h6>
+  </Divider>
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: {
+          sm: '1fr',
+          xs: '1fr',
+          md: '1fr 1fr ',
+          lg: '1fr 1fr ',
+          xl: '1fr 1fr 1fr',
+        },
+        m: 6,
+      }}
+    >
       <Box
-        container
         sx={{
-          display: 'grid',
-          gridTemplateColumns: { xl: '1fr 1fr 1fr', lg: '1fr 1fr 1fr', md: '1fr 1fr', xs: '1fr' },
-          placeItems: 'center',
-          gap: 10,
           mb: 10,
-          alignItems: 'start',
+          width: {
+            sm: '100%',
+            xs: '100%',
+            md: '100%',
+            lg: '100%',
+            xl: '90%',
+          },
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Iconify
-            icon="medical-icon:i-social-services"
-            sx={{
-              width: '16%',
-              height: '16%',
-              bgcolor: 'success.main',
-              color: 'white',
-              justifyContent: 'center',
-              borderRadius: '50%',
-              p: 2.2,
-            }}
-          />
-          <h3>Patient management and medical records</h3>
-          <Box
-            sx={{
-              listStyle: 'none',
-              textAlign: 'start',
-              position: 'relative',
-              left: { xl: 10, lg: 5, md: 10, xs: 0 },
-            }}
-          >
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Patients and suppliers communicate with me
-              electronically.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Preparing medical reports and prescriptions
-              electronically.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Freedom from excessive use of paper documents
-              and files.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Making patient budgets and managing files.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Managing patient records electronically.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Organizing relationships with patients.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Manage old paper patient files.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Increase patient satisfaction.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Appointment management.
-            </li>
-          </Box>
+        <Box
+          sx={{
+            backgroundColor: 'success.main',
+            width: 60,
+            height: 60,
+            textAlign: 'center',
+            borderRadius: 20,
+            margin: 'auto',
+            mb: 1,
+          }}
+        >
+          <Iconify icon="healthicons:outpatient" width={35} sx={{ color: 'white', m: 1.5 }} />
         </Box>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Iconify
-            icon="nimbus:marketing"
-            sx={{
-              width: '17%',
-              height: '17%',
-              bgcolor: 'success.main',
-              color: 'white',
-              justifyContent: 'center',
-              borderRadius: '50%',
-              p: 2.3,
-            }}
-          />
-          <h3>Marketing and public relations</h3>
-          <Box sx={{ listStyle: 'none', position: 'relative', left: { md: 40, xs: 0 } }}>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Organizing ties and business with medical
-              institutions.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Belonging to the Arab Medical Society Network.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Marketing campaigns.
-            </li>
-          </Box>
-        </Box>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Iconify
-            icon="material-symbols-light:finance-mode-rounded"
-            sx={{
-              width: '21%',
-              height: '21%',
-              bgcolor: 'success.main',
-              color: 'white',
-              justifyContent: 'center',
-              borderRadius: '50%',
-              p: 2,
-            }}
-          />
-          <h3>Business and Finance Administration</h3>
-          <Box
-            sx={{
-              listStyle: 'none',
-              position: 'relative',
-              left: { xl: -20, lg: -20, md: -20, xs: -20 },
-            }}
-          >
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Cloud storage for medical institution data.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Financial Affairs Administration.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Agenda management.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Electronic signature.
-            </li>
-          </Box>
-        </Box>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Iconify
-            icon="tdesign:institution-checked"
-            sx={{
-              width: '15%',
-              height: '15%',
-              bgcolor: 'success.main',
-              color: 'white',
-              justifyContent: 'center',
-              borderRadius: '50%',
-              p: 2,
-            }}
-          />
-          <h3>Management of medical institutions</h3>
-          <Box
-            sx={{
-              listStyle: 'none',
-              position: 'relative',
-              left: { xl: 50, lg: 25, md: 50, xs: 0 },
-            }}
-          >
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Enhancing medical institution efficiency
-              through daily management.
-            </li>
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Managing departments and activities.
-            </li>
-          </Box>
-        </Box>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Iconify
-            icon="oui:app-uptime"
-            sx={{
-              width: '17%',
-              height: '17%',
-              bgcolor: 'success.main',
-              color: 'white',
-              justifyContent: 'center',
-              borderRadius: '50%',
-              p: 2,
-            }}
-          />
-          <h3>Flexibility in services</h3>
-          <Box
-            sx={{
-              listStyle: 'none',
-              position: 'relative',
-              left: { xl: 90, lg: 90, md: 100, xs: 0 },
-            }}
-          >
-            <li style={{ fontSize: '13px' }}>
-              <Iconify icon="openmoji:check-mark" /> Ability to make modifications to suit the needs
-              of each client.
-            </li>
-          </Box>
-        </Box>
+        <Typography sx={{ textAlign: 'center' }} variant="h4">
+          Patient Affairs
+        </Typography>
+        <ul style={{ listStyle: 'none' }}>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} /> Managing old paper patient files and storing them
+            in electronic records.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} /> Managing patient records and files
+            electronically.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} /> Improving the mechanism for accessing your
+            medical information and patient files and the ability to access the rest of the data and
+            medical history.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} /> Support better decision-making in patient care.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} /> Managing and organizing public relations
+            electronically.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} /> Organizing patient relations and affairs.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} /> Increasing patient and visitor satisfaction with
+            the services provided and reducing waiting time in the clinic and other medical
+            institutions.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} /> Making financial budgets for patients and
+            managing premiums.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} /> Contributing to reducing medical errors related
+            to medication conflicts.
+          </li>
+        </ul>
       </Box>
-    </>
+      <Box
+        sx={{
+          mb: 10,
+          width: {
+            sm: '100%',
+            xs: '100%',
+            md: '100%',
+            lg: '100%',
+            xl: '90%',
+          },
+        }}
+      >
+        <Box
+          sx={{
+            backgroundColor: 'success.main',
+            width: 60,
+            height: 60,
+            textAlign: 'center',
+            borderRadius: 20,
+            margin: 'auto',
+            mb: 1,
+          }}
+        >
+          <Iconify icon="tabler:repeat" width={35} sx={{ color: 'white', m: 1.5 }} />
+        </Box>
+        <Typography sx={{ textAlign: 'center' }} variant="h4">
+          Routine and bureaucratic administrative
+        </Typography>
+        <ul style={{ listStyle: 'none' }}>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Managing the daily work of medical institutions with the aim of improving performance
+            and raising efficiency.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Preparing medical reports and prescriptions electronically.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Freedom from repetitive procedures (bureaucratic routine) and reducing the excessive use
+            of paper documents and files in accordance with sustainability plans.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Communicate with patients and suppliers electronically.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Managing appointments for patients, and the ability to book appointments in hospitals
+            participating in our platform to reserve the operating room or any other department.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Marketing campaigns.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Electronic signature and payment.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Storing the medical institution’s data and files in the cloud and protecting its
+            independence and confidentiality.
+          </li>
+        </ul>
+      </Box>
+      <Box
+        sx={{
+          mb: 10,
+          width: {
+            sm: '100%',
+            xs: '100%',
+            md: '100%',
+            lg: '100%',
+            xl: '90%',
+          },
+        }}
+      >
+        <Box
+          sx={{
+            backgroundColor: 'success.main',
+            width: 60,
+            height: 60,
+            textAlign: 'center',
+            borderRadius: 20,
+            margin: 'auto',
+            mb: 1,
+          }}
+        >
+          <Iconify icon="fluent-mdl2:financial-solid" width={35} sx={{ color: 'white', m: 1.5 }} />
+        </Box>
+        <Typography sx={{ textAlign: 'center' }} variant="h4">
+          Financial and tax affairs
+        </Typography>
+        <ul style={{ listStyle: 'none' }}>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Managing financial affairs and the fund.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Managing annual tax affairs.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Preparing annual tax return reports.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Managing financial deductions from the Doctors Syndicate, income tax, and others.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Organizing financial claims with medical institutions such as hospitals and insurance
+            companies.
+          </li>
+        </ul>
+      </Box>
+      <Box
+        sx={{
+          mb: 10,
+          width: {
+            sm: '100%',
+            xs: '100%',
+            md: '100%',
+            lg: '100%',
+            xl: '90%',
+          },
+        }}
+      >
+        <Box
+          sx={{
+            backgroundColor: 'success.main',
+            width: 60,
+            height: 60,
+            textAlign: 'center',
+            borderRadius: 20,
+            margin: 'auto',
+            mb: 1,
+          }}
+        >
+          <Iconify icon="oui:app-index-management" width={35} sx={{ color: 'white', m: 1.5 }} />
+        </Box>
+        <Typography sx={{ textAlign: 'center' }} variant="h4">
+          Regulatory affairs
+        </Typography>
+        <ul style={{ listStyle: 'none' }}>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Managing departments and activities.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Department of Human Ressources.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            The ability to manage each department and each work team independently.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Manage the agenda independently for everyone who works in the medical institution.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            The possibility for the visiting doctor or consultant to book an appointment
+            electronically at an independent medical institution (such as a hospital) to perform an
+            operation, for example, and send the patient’s information electronically.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Manage and book appointments electronically independently for each employee (such as a
+            doctor) and for each work team.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Organizing relationships and business with other medical institutions (such as
+            hospitals/medical laboratories, etc.).
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            The ability to make modifications to match and adapt to the needs of each client (such
+            as Medical Checklist, instructions, and reports).
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Continuous employee training and development according to the needs of each
+            organization.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Various working tools to organize daily practices.
+          </li>
+        </ul>
+      </Box>
+      <Box
+        sx={{
+          mb: 10,
+          width: {
+            sm: '100%',
+            xs: '100%',
+            md: '100%',
+            lg: '100%',
+            xl: '90%',
+          },
+        }}
+      >
+        <Box
+          sx={{
+            backgroundColor: 'success.main',
+            width: 60,
+            height: 60,
+            textAlign: 'center',
+            borderRadius: 20,
+            margin: 'auto',
+            mb: 1,
+          }}
+        >
+          <Iconify icon="ph:list-star-light" width={35} sx={{ color: 'white', m: 1.5 }} />
+        </Box>
+        <Typography sx={{ textAlign: 'center' }} variant="h4">
+          Other features
+        </Typography>
+        <ul style={{ listStyle: 'none' }}>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Reducing costs for managing the organization.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Possibility of using a phone, tablet, or computer.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            The possibility of making modifications (customization) that match the needs of each
+            medical institution.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            The platform was designed to work with more than one language.
+          </li>
+          <li style={{ fontSize: '12px', border:'2px dashed #E8E8E8',marginBottom:5,padding:5 }}>
+            <Iconify icon="token:dot" sx={{color:'success.main'}} />
+            Belonging to the Arab Medical Society Network includes obtaining the following <span style={{color:'#22C55E',fontSize: '14px'}}>benefits:</span>
+          </li>
+          <ol style={{ fontSize: '12px' }}>
+            <li>Reaching new patients</li>
+            <li>Improving the experience of communication and dealing with the patient.</li>
+            <li>Providing medical care in a manner compatible with this digital age.</li>
+            <li>Better data management.</li>
+            <li>Keeping pace with technological market requirements</li>
+          </ol>
+        </ul>
+      </Box>
+    </Box>
+
+     </>
   );
 }
