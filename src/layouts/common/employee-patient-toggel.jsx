@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { m } from 'framer-motion';
 import { useSnackbar } from 'notistack';
 
-import Button from '@mui/material/Button';
+import { LoadingButton } from '@mui/lab';
 import { Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -16,10 +17,11 @@ import { varHover } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
 
-export default function ServiceUnitPopover() {
+export default function EmployeePatientToggel() {
   const { enqueueSnackbar } = useSnackbar();
 
   const { user } = useAuthContext();
+  const [loading,setLoading] = useState()
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -27,21 +29,25 @@ export default function ServiceUnitPopover() {
 
   const handleChangeRole = async () => {
     try {
+      setLoading(true)
       await axios.patch(endpoints.auth.toggleRole);
+      setLoading(false)
       window.location.href = paths.dashboard.root;
     } catch (error) {
+      setLoading(false)
       console.error(error);
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
         variant: 'error',
       });
     }
   };
-
   return (
-    <Button
+    <LoadingButton
       component={m.button}
+      loading={loading}
       whileTap="tap"
       whileHover="hover"
+      loadingIndicator='Loading…'
       variants={varHover(1.05)}
       onClick={handleChangeRole}
       sx={{
@@ -55,6 +61,6 @@ export default function ServiceUnitPopover() {
       <Typography variant="body2" textTransform="lowercase" sx={{ textAlign: 'center', ml: 1 }}>
         {user.role === 'patient' ? t('switch to employee') : t('switch to patient')}
       </Typography>
-    </Button>
+    </LoadingButton>
   );
 }

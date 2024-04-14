@@ -817,8 +817,8 @@ export default function JwtRegisterView() {
               spacing={3}
               options={[
                 { value: '3', label: `1-3 ${t('employees')}` },
-                { value: '10', label: `3-10 ${t('employees')}` },
-                { value: '>10', label: t('more than 10 employees') },
+                { value: '5', label: `3-10 ${t('employees')}` },
+                { value: '10', label: t('more than 10 employees') },
               ]}
             />
           </DialogContent>

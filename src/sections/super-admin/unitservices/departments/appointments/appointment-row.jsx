@@ -121,7 +121,7 @@ export default function AppointmentsTableRow({
           }}
           onClick={() => router.push(paths.employee.patients.info(patient._id))}
         >
-          {patient?.first_name} {patient?.family_name}
+          {patient?.name_english}
         </TableCell>
         <TableCell align="center">{note}</TableCell>
         <TableCell align="center">
