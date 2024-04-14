@@ -29,13 +29,15 @@ export default function CountriesTableRow({
   showGeneralInfo,
 }) {
   const {
-    code,
+    sequence_number,
     name_english,
     email,
     US_type,
     sector_type,
     status,
     phone,
+    country,
+    city,
 
     created_at,
     user_creation,
@@ -63,7 +65,7 @@ export default function CountriesTableRow({
         onClick={showGeneralInfo}
         align="center"
       >
-        {code}
+        {String(country?.code).padStart(3, '0')}-{city?.sequence_number}-{sequence_number}
       </TableCell>
       <TableCell
         sx={{

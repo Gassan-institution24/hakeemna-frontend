@@ -2,21 +2,24 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
+// import { useMockedUser } from 'src/hooks/use-mocked-user';
+import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
+import { Typography } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useResponsive } from 'src/hooks/use-responsive';
-// import { useMockedUser } from 'src/hooks/use-mocked-user';
-
-import { Typography } from '@mui/material';
 
 import { useAuthContext } from 'src/auth/hooks';
 
-import Logo from 'src/components/logo';
+// import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import Doclogo from 'src/components/logo/doc.png';
 import { NavSectionVertical } from 'src/components/nav-section';
 import Walktour, { useWalktour } from 'src/components/walktour';
 
@@ -35,13 +38,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   const navData = useNavData();
 
+  const USData =
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
+  const isEmployee = ['employee', 'admin'].includes(user?.role);
+
   const walktour = useWalktour({
     defaultRun: user && !user.last_online,
     showProgress: true,
     steps: [
       {
         target: '#USDepartmentNav',
-        title: 'Step 1',
+        title: 'Creating departments',
         disableBeacon: true,
         content: (
           <Typography sx={{ color: 'text.secondary' }}>
@@ -52,7 +59,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       },
       {
         target: '#USEmployeesNav',
-        title: 'Step 2',
+        title: 'Adding employees',
         disableBeacon: true,
         content: (
           <Typography sx={{ color: 'text.secondary' }}>
@@ -63,7 +70,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       },
       {
         target: '#USWorkShiftNav',
-        title: 'Step 4',
+        title: 'Creating work shifts',
         disableBeacon: true,
         content: (
           <Typography sx={{ color: 'text.secondary' }}>
@@ -74,7 +81,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       },
       {
         target: '#USWorkGroupNav',
-        title: 'Step 3',
+        title: 'Creating work groups',
         disableBeacon: true,
         content: (
           <Typography sx={{ color: 'text.secondary' }}>
@@ -86,7 +93,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       },
       {
         target: '#USServicesNav',
-        title: 'Step 5',
+        title: 'Creating services',
         disableBeacon: true,
         content: (
           <Typography sx={{ color: 'text.secondary' }}>
@@ -97,7 +104,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       },
       {
         target: '#EMAppointConfigNav',
-        title: 'Step 6',
+        title: 'creating appointment configurations',
         disableBeacon: true,
         content: (
           <Typography sx={{ color: 'text.secondary' }}>
@@ -143,21 +150,48 @@ export default function NavVertical({ openNav, onCloseNav }) {
         getHelpers={walktour.setHelpers}
         // scrollDuration={500}
       />
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          px: 2,
-          pt: 2,
-          color: 'text.disabled',
-          mb: -4,
-          cursor: 'pointer',
-        }}
-        onClick={() => walktour.setRun(true)}
+      {isEmployee && (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            px: 2,
+            pt: 2,
+            color: 'text.disabled',
+            mb: -4,
+            cursor: 'pointer',
+          }}
+          onClick={() => walktour.setRun(true)}
+        >
+          <Iconify width={23} icon="material-symbols:help-outline" />
+        </Box>
+      )}
+      {isEmployee && (
+        <Typography variant="caption" paddingLeft="4px">
+          {String(USData?.country?.code).padStart(3, '0')}-{USData?.city?.sequence_number}-
+          {USData?.sequence_number}
+        </Typography>
+      )}
+      {/* <Logo sx={{ mt: 3, ml: 4, mb: 1 }} /> */}
+      <Link
+        component={RouterLink}
+        href={paths.pages.serviceUnit(USData?._id)}
+        sx={{ display: 'contents' }}
       >
-        <Iconify width={23} icon="material-symbols:help-outline" />
-      </Box>
-      <Logo sx={{ mt: 3, ml: 4, mb: 1 }} />
+        <Box
+          component="div"
+          sx={{
+            width: { xs: 200, md: 200 },
+            height: { xs: 110, md: 120 },
+            display: 'inline-flex',
+            mt: 3,
+            ml: 4,
+            mb: 1,
+          }}
+        >
+          <img src={isEmployee ? USData?.company_logo : Doclogo} alt="logo" />
+        </Box>
+      </Link>
       <NavSectionVertical
         data={navData}
         walktourRun={walktour.run}
@@ -165,9 +199,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
           currentRole: user?.role,
         }}
       />
-
       <Box sx={{ flexGrow: 1 }} />
-
       {/* <NavUpgrade /> */}
     </Scrollbar>
   );

@@ -32,7 +32,6 @@ export default function UnitServiceEmployeesRow({
   onChangeVisOnlineApp,
 }) {
   const {
-    sequence_number,
     employee,
     visibility_online_appointment,
     visibility_US_page,
@@ -71,7 +70,7 @@ export default function UnitServiceEmployeesRow({
         onClick={onViewRow}
         align="center"
       >
-        {sequence_number}
+        {String(employee?.nationality?.code).padStart(3, '0')}-{employee.sequence_number}
       </TableCell>
       <TableCell align="center">
         <Iconify

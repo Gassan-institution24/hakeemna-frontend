@@ -122,6 +122,7 @@ export default function BookDetails({
     <>
       <Stack direction={mdUp ? 'row' : 'column'} justifyContent="space-around">
         <StaticDatePicker
+          localeText={false}
           sx={{ width: '100%', flexGrow: 1, flexShrink: 0.4 }}
           orientation={mdUp ? 'landscape' : ''}
           shouldDisableDate={(day) =>
@@ -135,6 +136,7 @@ export default function BookDetails({
               );
             })
           }
+          slots={{ toolbar: 'test' }}
           slotProps={{ actionBar: { actions: [] } }}
           value={new Date(selectedDate)}
           onChange={(newValue) => setSelectedDate(newValue)}

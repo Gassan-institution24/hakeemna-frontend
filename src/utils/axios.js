@@ -649,6 +649,7 @@ export const endpoints = {
     updatepassword: '/api/auth/updateCurrentPassowrd',
     checkPassword: '/api/auth/checkpassword',
     toggleRole: '/api/auth/togglerole',
+    newUser: '/api/auth/newuser',
   },
   stakeholder: {
     getstakeholder: '/api/stakeholder',
