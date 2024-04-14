@@ -3,14 +3,18 @@ import * as React from 'react';
 import { Box } from '@mui/system';
 import { Divider, Typography } from '@mui/material';
 
+import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 
 export default function VerticalDividerText() {
+  const { t } = useTranslate();
+
   return (
     <>
     <Divider orientation="vertical" flexItem sx={{ mb: 10 }}>
-    <h1> WHAT WE DO</h1>
-    {/* <h5 style={{ color: 'gray' }}>Get ready to manage your work with doctorna</h5> */}
+    <h1> {t('WHAT WE DO')} </h1>
+    {/* <h6 style={{ color: 'gray' }}>Get ready to manage your work with doctorna</h6> */}
   </Divider>
     <Box
       sx={{
@@ -55,7 +59,7 @@ export default function VerticalDividerText() {
           />
         </Box>
         <Typography sx={{ textAlign: 'center' }} variant="h4">
-          Features for the user of medical services
+         {t('Features for the user of medical services')}
         </Typography>
         <ul style={{ listStyle: 'none' }}>
           <li
@@ -144,7 +148,7 @@ export default function VerticalDividerText() {
           <Iconify icon="guidance:changin-room-family" width={35} sx={{ color: 'white', m: 1.5 }} />
         </Box>
         <Typography sx={{ textAlign: 'center' }} variant="h4">
-          Organizing the affairs of family members
+          {t('Organizing the affairs of family members')}
         </Typography>
         <ul style={{ listStyle: 'none' }}>
           <li
@@ -220,7 +224,7 @@ export default function VerticalDividerText() {
           <Iconify icon="mdi:passport" width={35} sx={{ color: 'white', m: 1.5 }} />
         </Box>
         <Typography sx={{ textAlign: 'center' }} variant="h4">
-          Medical Tourism
+          {t('Medical tourism')}
         </Typography>
         <ul style={{ listStyle: 'none' }}>
           <li
@@ -281,7 +285,7 @@ export default function VerticalDividerText() {
           <Iconify icon="ph:list-star-light" width={35} sx={{ color: 'white', m: 1.5 }} />
         </Box>
         <Typography sx={{ textAlign: 'center' }} variant="h4">
-          Other features
+          {t('Other features')}
         </Typography>
         <ul style={{ listStyle: 'none' }}>
           <li
