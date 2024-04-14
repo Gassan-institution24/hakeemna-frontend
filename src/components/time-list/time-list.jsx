@@ -5,12 +5,12 @@ import Typography from '@mui/material/Typography';
 
 import { fTime } from 'src/utils/format-time';
 
-import { useLocales } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function TimeList({ name, list, helperText, value, onChange, ...other }) {
-  // const { t } = useTranslate();
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -26,7 +26,7 @@ export default function TimeList({ name, list, helperText, value, onChange, ...o
         color="text.secondary"
         textTransform="uppercase"
       >
-        Select time
+        {t('select time')}
       </Typography>
       {/* <Scrollbar
         sx={{

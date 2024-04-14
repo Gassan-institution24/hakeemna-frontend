@@ -53,6 +53,7 @@ export default function Walktour({ locale, ...other }) {
           ? arabicLocal
           : {
               last: 'Close',
+              next: 'Next',
               ...locale,
             }
       }
@@ -152,6 +153,7 @@ export default function Walktour({ locale, ...other }) {
         },
       }}
       {...other}
+      showProgress={false}
     />
   );
 }

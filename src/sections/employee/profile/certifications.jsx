@@ -6,10 +6,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
-import { useUnitTime } from 'src/utils/format-time';
-
-import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { RHFTextField, RHFDatePicker } from 'src/components/hook-form';
@@ -18,12 +15,6 @@ import { RHFTextField, RHFDatePicker } from 'src/components/hook-form';
 
 export default function Certifications() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-
-  const { myunitTime } = useUnitTime();
-
-  const { user } = useAuthContext();
 
   const { control, watch } = useFormContext();
 
@@ -68,7 +59,7 @@ export default function Certifications() {
               <RHFTextField
                 size="small"
                 name={`certifications[${index}].name`}
-                label={t('name')}
+                label={t('title')}
                 sx={{ flex: 0.5 }}
               />
               <RHFTextField
