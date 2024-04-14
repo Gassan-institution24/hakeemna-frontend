@@ -23,15 +23,14 @@ export default function Pupage() {
   }));
   const { t } = useTranslate();
   return (
-    <Container component={MotionViewport} sx={{ display: 'flex', gap: 10 }}>
-      <Grid sx={{ width: '50%', position: 'relative' }}>
+    <Container component={MotionViewport} sx={{ display: { md: 'flex', xs: 'block' }, gap: 10 }}>
+      <Grid sx={{ width: { md: '50%' }, position: 'relative' }}>
         <Grid item xs={12} md={6}>
           <Item
             sx={{
               textAlign: 'left',
               p: 1,
               fontSize: 18,
-          
             }}
           >
             <h1 style={{ color: 'green' }}>{t('I am a health care provider')}</h1>
@@ -60,7 +59,7 @@ export default function Pupage() {
           </Item>
         </Grid>
       </Grid>
-      <Grid sx={{ width: '50%', position: 'relative' }}>
+      <Grid sx={{ width: { md: '50%' }, position: 'relative' }}>
         <Grid item xs={12} md={6}>
           <Item
             sx={{
@@ -69,17 +68,17 @@ export default function Pupage() {
               fontSize: 18,
               zIndex: 999,
               position: 'relative',
-            }} 
+            }}
           >
             <h1 style={{ color: 'green' }}> {t('I am a patient')} </h1>
-            <Typography sx={{ mb: 3, width: '70%' }}>
+            <Typography sx={{ mb: 2, width: '70%' }}>
               {t(
                 'Hurry to register your data and your family members on the platform, which allows you to use all the platform’s services.'
               )}
             </Typography>
             <Button
               href={paths.auth.register}
-                sx={{
+              sx={{
                 bgcolor: 'success.main',
                 color: '#fff',
                 width: '130px',
@@ -95,7 +94,17 @@ export default function Pupage() {
             </Button>
           </Item>
           <Image
-            sx={{ position: 'relative', top: '-20vh', zIndex: 1, left: '-4vh' }}
+            sx={{
+              position: 'relative',
+              top: {
+                md:'-30vh',
+                lg:'-24vh',
+                xl:'-19vh',
+              },
+              zIndex: 1,
+              left: '-4vh',
+              visibility: { md: 'visible', xs: 'hidden' },
+            }}
             src={doctor}
           />
         </Grid>{' '}
