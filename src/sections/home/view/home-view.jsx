@@ -9,12 +9,10 @@ import Image from 'src/components/image';
 import ScrollProgress from 'src/components/scroll-progress';
 import { varFade, MotionViewport } from 'src/components/animate';
 
-import Whydoc from '../Why';
 import Pupage from '../pupage';
 import HomeHero from '../home-hero';
 import Whowweare from '../whoarewe';
 import Arrow from '../images/arrow.png';
-import ServicesWeprovide from '../servicesweprovide';
 
 // ----------------------------------------------------------------------
 

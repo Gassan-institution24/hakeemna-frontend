@@ -22,6 +22,12 @@ export function useNavData() {
   const { user } = useAuthContext();
   const checkAcl = useAclGuard();
 
+  const employees_number =
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
+      ?.employees_number || 10;
+
+  console.log('employees_number', employees_number);
+
   const handleLogout = useCallback(async () => {
     try {
       popover.onClose();
@@ -164,9 +170,83 @@ export function useNavData() {
         ],
       },
     ];
+    const unitServiceManagementTables = [
+      // show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }), {
+      //   title: t('appointment types'), path: paths.unitservice.tables.appointypes.root },
+      // {
+      //   show: checkAcl({
+      //     category: 'unit_service',
+      //     subcategory: 'management_tables',
+      //     acl: 'read',
+      //   }),
+      //   title: t('employee types'),
+      //   path: paths.unitservice.tables.employeetypes.root,
+      // },
+      {
+        show:
+          checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }) &&
+          employees_number > 3,
+        title: t('departments'),
+        path: paths.unitservice.departments.root,
+        // icon: <Iconify icon="uis:web-section-alt" />,
+      },
+      {
+        show: checkAcl({
+          category: 'unit_service',
+          subcategory: 'management_tables',
+          acl: 'read',
+        }),
+        title: t('work shifts'),
+        path: paths.unitservice.tables.workshifts.root,
+        navItemId: 'USWorkShiftNav',
+      },
+      {
+        show: checkAcl({
+          category: 'unit_service',
+          subcategory: 'management_tables',
+          acl: 'read',
+        }),
+        title: t('work groups'),
+        path: paths.unitservice.tables.workgroups.root,
+        navItemId: 'USWorkGroupNav',
+      },
+      {
+        show: checkAcl({
+          category: 'unit_service',
+          subcategory: 'management_tables',
+          acl: 'read',
+        }),
+        title: t('services'),
+        path: paths.unitservice.tables.services.root,
+        navItemId: 'USServicesNav',
+      },
+      // {
+      //   show: checkAcl({
+      //     category: 'unit_service',
+      //     subcategory: 'management_tables',
+      //     acl: 'read',
+      //   }),
+      //   title: t('rooms'),
+      //   path: paths.unitservice.tables.rooms.root,
+      //   navItemId: 'USRoomsNav',
+      // },
+      // {
+      //   show: checkAcl({
+      //     category: 'unit_service',
+      //     subcategory: 'management_tables',
+      //     acl: 'read',
+      //   }),
+      //   title: t('activities'),
+      //   path: paths.unitservice.tables.activities.root,
+      //   navItemId: 'USActivitiesNav',
+      //   // icon: <Iconify icon="material-symbols:volunteer-activism" />,
+      // },
+    ];
     const unitServiceItems = [
       {
-        show: checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }),
+        show:
+          checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }) &&
+          employees_number > 3,
         title: t('departments'),
         path: paths.unitservice.departments.root,
         icon: <Iconify icon="uis:web-section-alt" />,
@@ -178,76 +258,7 @@ export function useNavData() {
         path: paths.unitservice.tables.root,
         icon: <Iconify icon="icon-park-twotone:data" />,
         navItemId: 'USTablesNav',
-        children: [
-          // show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }), {
-          //   title: t('appointment types'), path: paths.unitservice.tables.appointypes.root },
-          // {
-          //   show: checkAcl({
-          //     category: 'unit_service',
-          //     subcategory: 'management_tables',
-          //     acl: 'read',
-          //   }),
-          //   title: t('employee types'),
-          //   path: paths.unitservice.tables.employeetypes.root,
-          // },
-          {
-            show: checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'read' }),
-            title: t('departments'),
-            path: paths.unitservice.departments.root,
-            // icon: <Iconify icon="uis:web-section-alt" />,
-          },
-          {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'read',
-            }),
-            title: t('work shifts'),
-            path: paths.unitservice.tables.workshifts.root,
-            navItemId: 'USWorkShiftNav',
-          },
-          {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'read',
-            }),
-            title: t('work groups'),
-            path: paths.unitservice.tables.workgroups.root,
-            navItemId: 'USWorkGroupNav',
-          },
-          {
-            show: checkAcl({
-              category: 'unit_service',
-              subcategory: 'management_tables',
-              acl: 'read',
-            }),
-            title: t('services'),
-            path: paths.unitservice.tables.services.root,
-            navItemId: 'USServicesNav',
-          },
-          // {
-          //   show: checkAcl({
-          //     category: 'unit_service',
-          //     subcategory: 'management_tables',
-          //     acl: 'read',
-          //   }),
-          //   title: t('rooms'),
-          //   path: paths.unitservice.tables.rooms.root,
-          //   navItemId: 'USRoomsNav',
-          // },
-          // {
-          //   show: checkAcl({
-          //     category: 'unit_service',
-          //     subcategory: 'management_tables',
-          //     acl: 'read',
-          //   }),
-          //   title: t('activities'),
-          //   path: paths.unitservice.tables.activities.root,
-          //   navItemId: 'USActivitiesNav',
-          //   // icon: <Iconify icon="material-symbols:volunteer-activism" />,
-          // },
-        ],
+        children: unitServiceManagementTables.filter((item) => item.show),
       },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'read' }),
@@ -538,7 +549,7 @@ export function useNavData() {
       return [...employeeDashboard, ...unitServicesDashboars];
     }
     return [...userItems];
-  }, [t, user, handleLogout, router, checkAcl]);
+  }, [t, user, handleLogout, router, checkAcl, employees_number]);
 
   return data;
 }

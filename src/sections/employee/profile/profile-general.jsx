@@ -22,7 +22,6 @@ import {
   useGetKeywrds,
   useGetCountries,
   useGetSpecialties,
-  useGetArabicKeywrds,
   useGetActiveEmployeeTypes,
 } from 'src/api';
 
@@ -133,7 +132,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       .required(t('required field'))
       .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
     mobile_num: Yup.string(),
-    speciality: Yup.string().required(t('required field')),
+    speciality: Yup.string(),
     gender: Yup.string().required(t('required field')),
     birth_date: Yup.date().required(t('required field')),
     Bachelor_year_graduation: Yup.number(),
@@ -207,7 +206,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
   const values = watch();
 
   const { keywordsData } = useGetKeywrds();
-  const { arabicKeywordsData } = useGetArabicKeywrds();
+  // const { arabicKeywordsData } = useGetArabicKeywrds();
 
   const handleDrop = useCallback(
     (name, acceptedFiles) => {
@@ -318,6 +317,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
                 label={t('Full name in Arabic')}
               />
               <RHFSelect
+                disabled
                 variant="filled"
                 label={`${t('nationality')} *`}
                 fullWidth
@@ -581,7 +581,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
               multiple
               freeSolo
               disableCloseOnSelect
-              placeholder="type then press enter to create new"
+              placeholder={t('type then press enter to create new')}
               options={keywordsData.filter(
                 (option) => !values.keywords.some((item) => option === item)
               )}

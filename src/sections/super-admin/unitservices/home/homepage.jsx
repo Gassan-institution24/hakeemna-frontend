@@ -510,15 +510,15 @@ export default function UnitServicesTableView() {
 function applyFilter({ inputData, comparator, filters, dateError }) {
   const { status, name } = filters;
 
-  const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
+  // const stabilizedThis = inputData?.map((el, index, idx) => [el, index]);
 
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
+  // stabilizedThis.sort((a, b) => {
+  //   const order = comparator(a[0], b[0]);
+  //   if (order !== 0) return order;
+  //   return a[1] - b[1];
+  // });
 
-  inputData = stabilizedThis.map((el, idx) => el[0]);
+  // inputData = stabilizedThis.map((el, idx) => el?.[0]);
 
   if (name) {
     inputData = inputData.filter(
@@ -537,7 +537,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.city?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.city?.name_arabic &&
           data?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.subscriptions[0] &&
+        (data?.subscriptions?.[0] &&
           data?.subscriptions?.some(
             (one) => one?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1
           )) ||

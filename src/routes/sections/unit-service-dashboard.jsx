@@ -253,7 +253,7 @@ export const unitServiceDashboardRoutes = [
               {
                 path: 'rooms',
                 children: [
-                  { element: <DepartmentsRoomsPage />, index: true },
+                  { element:<DepartmentsRoomsPage />, index: true },
                   { path: 'new', element: <DepartmentsNewRoomsPage /> },
                   { path: ':acid/edit', element: <DepartmentsEditRoomsPage /> },
                 ],
