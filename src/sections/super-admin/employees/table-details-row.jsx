@@ -25,7 +25,8 @@ export default function CountriesTableRow({
   onActivate,
 }) {
   const {
-    code,
+    sequence_number,
+    nationality,
     name_english,
     employee_engagements,
     email,
@@ -49,7 +50,9 @@ export default function CountriesTableRow({
       </TableCell>
 
       <TableCell align="center">
-        <Box>{code}</Box>
+        <Box>
+          {String(nationality?.code).padStart(3, '0')}-{sequence_number}
+        </Box>
       </TableCell>
 
       <TableCell align="center">{name_english}</TableCell>

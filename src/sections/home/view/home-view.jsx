@@ -14,7 +14,6 @@ import Pupage from '../pupage';
 import HomeHero from '../home-hero';
 import Whowweare from '../whoarewe';
 import Arrow from '../images/arrow.png';
-import ServicesWeprovide from '../servicesweprovide';
 
 // ----------------------------------------------------------------------
 
@@ -55,7 +54,7 @@ export default function HomeView({ divRef, divRef2 }) {
         }}
         id="services"
       >
-        <ServicesWeprovide />
+        {/* <ServicesWeprovide /> */}
       </Box>
       <Box
         ref={divRef}

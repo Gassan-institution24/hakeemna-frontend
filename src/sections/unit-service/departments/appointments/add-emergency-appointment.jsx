@@ -120,7 +120,7 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
     <Dialog maxWidth="lg" onClose={onClose} {...other}>
       <FormProvider methods={methods} onSubmit={onSubmit}>
         <DialogTitle sx={{ mb: 1 }}>
-          {curLangAr ? 'إنشاء موعد مستعجل جديد' : 'new ergent appointment'}
+          {curLangAr ? 'إنشاء موعد مستعجل جديد' : 'new urgent appointment'}
         </DialogTitle>
 
         <DialogContent sx={{ overflow: 'unset' }}>

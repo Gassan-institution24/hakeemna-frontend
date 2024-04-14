@@ -19,6 +19,7 @@ const ForgetPasswordPage = lazy(() => import('src/pages/auth/forgot-password'));
 const VerifyPage = lazy(() => import('src/pages/auth/verify'));
 const NewPasswordPage = lazy(() => import('src/pages/auth/new-password'));
 const ActivationPage = lazy(() => import('src/pages/auth/activation'));
+const PatientNewUserPage = lazy(() => import('src/pages/auth/patient-new-user'));
 
 // ----------------------------------------------------------------------
 
@@ -68,6 +69,7 @@ export const authRoutes = [
       { path: 'activation/:token', element: <ActivationPage /> },
       { path: 'new-password', element: <NewPasswordPage /> },
       { path: 'forgot-password', element: <ForgetPasswordPage /> },
+      { path: 'makeuser/:token', element: <PatientNewUserPage /> },
     ],
   },
 ];
