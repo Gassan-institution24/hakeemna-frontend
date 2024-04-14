@@ -410,7 +410,7 @@ export default function AppointmentsView({ departmentData }) {
                   },
                 }}
               >
-                {t('new ergent appointment')}
+                {t('new urgent appointment')}
               </Button>
             )
           }

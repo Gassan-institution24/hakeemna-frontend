@@ -9,6 +9,7 @@ import Image from 'src/components/image';
 import ScrollProgress from 'src/components/scroll-progress';
 import { varFade, MotionViewport } from 'src/components/animate';
 
+// import Whydoc from '../Why';
 import Pupage from '../pupage';
 import HomeHero from '../home-hero';
 import Whowweare from '../whoarewe';
@@ -53,7 +54,7 @@ export default function HomeView({ divRef, divRef2 }) {
         }}
         id="services"
       >
-        {/* <ServicesWeprovide /> */}
+        <ServicesWeprovide />
       </Box>
       <Box
         ref={divRef}
@@ -78,6 +79,7 @@ export default function HomeView({ divRef, divRef2 }) {
                       position: 'relative',
                       top: 20,
                       left: -15,
+                      display:{md:'inline-flex',xs:'none'}
                     }}
                     src={Arrow}
                   />

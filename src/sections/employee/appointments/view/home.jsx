@@ -417,7 +417,7 @@ export default function AppointmentsView({ employeeData }) {
                   },
                 }}
               >
-                {t('new ergent appointment')}
+                {t('new urgent appointment')}
               </Button>
             )
           }
