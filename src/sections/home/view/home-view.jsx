@@ -54,7 +54,7 @@ export default function HomeView({ divRef, divRef2 }) {
         }}
         id="services"
       >
-        <ServicesWeprovide />
+        {/* <ServicesWeprovide /> */}
       </Box>
       <Box
         ref={divRef}
