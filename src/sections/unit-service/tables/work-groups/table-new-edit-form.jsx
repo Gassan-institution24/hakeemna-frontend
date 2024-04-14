@@ -52,7 +52,7 @@ export default function TableNewEditForm({ currentTable }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    department: Yup.string().required(t('required field')),
+    department: Yup.string().nullable(),
     name_arabic: Yup.string().required(t('required field')),
     name_english: Yup.string().required(t('required field')),
     employees: Yup.array().min(1, 'Choose at least one option'),
@@ -105,7 +105,7 @@ export default function TableNewEditForm({ currentTable }) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
-        await axiosInstance.patch(endpoints.work_groups.one(currentTable._id), data);
+        await axiosInstance.patch(endpoints.work_groups.one(currentTable?._id), data);
         socket.emit('updated', {
           user,
           link: paths.unitservice.tables.workgroups.root,
@@ -139,7 +139,7 @@ export default function TableNewEditForm({ currentTable }) {
       department: currentTable?.department?._id || null,
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      employees: currentTable?.employees?.map((info, idx) => info.employee) || [],
+      employees: currentTable?.employees?.map((info, idx) => info?.employee) || [],
     });
   }, [currentTable]);
   /* eslint-enable */
@@ -172,7 +172,7 @@ export default function TableNewEditForm({ currentTable }) {
             />
             <RHFSelect name="department" label={t('department')}>
               {departmentsData.map((department, idx) => (
-                <MenuItem lang="ar" key={idx} value={department._id}>
+                <MenuItem lang="ar" key={idx} value={department?._id}>
                   {curLangAr ? department.name_arabic : department.name_english}
                 </MenuItem>
               ))}
@@ -203,12 +203,14 @@ export default function TableNewEditForm({ currentTable }) {
               disableCloseOnSelect
               options={employeesData.filter(
                 (option) =>
-                  !values.employees.some((item) => option._id === item._id || option._id === item)
+                  !values.employees.some(
+                    (item) => option?._id === item?._id || option?._id === item
+                  )
               )}
-              getOptionLabel={(option) => option._id}
+              getOptionLabel={(option) => option?._id}
               renderOption={(props, option, idx) => (
-                <li {...props} key={idx} value={option._id}>
-                  {curLangAr ? option.employee.name_arabic : option.employee?.name_english}
+                <li {...props} key={idx} value={option?._id}>
+                  {curLangAr ? option?.employee.name_arabic : option?.employee?.name_english}
                 </li>
               )}
               onChange={(event, newValue) => {
@@ -220,7 +222,7 @@ export default function TableNewEditForm({ currentTable }) {
                   <Chip
                     {...getTagProps({ index })}
                     key={index}
-                    label={curLangAr ? option.employee.name_arabic : option.employee.name_english}
+                    label={curLangAr ? option?.employee.name_arabic : option?.employee.name_english}
                     size="small"
                     color="info"
                     variant="soft"

@@ -31,7 +31,8 @@ export default function CountriesTableRow({
   showGeneralInfo,
 }) {
   const {
-    code,
+    sequence_number,
+    nationality,
     first_name,
     last_name,
     status,
@@ -52,7 +53,9 @@ export default function CountriesTableRow({
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <TableCell align="center">{code}</TableCell>
+      <TableCell align="center">
+        {String(nationality?.code).padStart(3, '0')}-{sequence_number}
+      </TableCell>
       <TableCell align="center">
         {first_name} {last_name}
       </TableCell>

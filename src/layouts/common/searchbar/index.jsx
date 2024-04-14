@@ -115,7 +115,7 @@ function Searchbar() {
         <Iconify icon="eva:search-fill" />
       </IconButton>
 
-      {lgUp && user?.role === 'patient' ? (
+      {lgUp && user?.role === 'patient' && (
         <Label sx={{ backgroundColor: 'none' }}>
           <Iconify icon="meteocons:code-green" width={30} />
           <span title="code">
@@ -123,8 +123,12 @@ function Searchbar() {
             {user?.patient?.sequence_number}
           </span>
         </Label>
-      ) : (
-        <Label sx={{ px: 0.75, fontSize: 12, color: 'text.secondary' }}>⌘K</Label>
+      )}
+      {lgUp && ['employee', 'admin'].includes(user?.role) && (
+        <Label sx={{ px: 0.75, fontSize: 12, color: 'text.secondary' }}>
+          {String(user?.employee?.nationality?.code).padStart(3, '0')}-
+          {user?.employee?.sequence_number}
+        </Label>
       )}
     </Stack>
   );
