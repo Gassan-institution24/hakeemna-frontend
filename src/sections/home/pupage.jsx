@@ -71,7 +71,7 @@ export default function Pupage() {
             }}
           >
             <h1 style={{ color: 'green' }}> {t('I am a patient')} </h1>
-            <Typography sx={{ mb: 3, width: '70%' }}>
+            <Typography sx={{ mb: 2, width: '70%' }}>
               {t(
                 'Hurry to register your data and your family members on the platform, which allows you to use all the platform’s services.'
               )}
@@ -96,7 +96,11 @@ export default function Pupage() {
           <Image
             sx={{
               position: 'relative',
-              top: '-20vh',
+              top: {
+                md:'-30vh',
+                lg:'-24vh',
+                xl:'-19vh',
+              },
               zIndex: 1,
               left: '-4vh',
               visibility: { md: 'visible', xs: 'hidden' },
