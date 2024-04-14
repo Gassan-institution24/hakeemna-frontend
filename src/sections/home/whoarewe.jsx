@@ -107,6 +107,7 @@ export default function WhoAreWe() {
                 height: '100px',
                 width: '90%',
                 zIndex: -1,
+                visibility:{md:'visible',xs:'hidden'}
               }}
             />
             <span style={{ position: 'relative', top: -80 }}>

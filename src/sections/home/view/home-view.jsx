@@ -80,6 +80,7 @@ export default function HomeView({ divRef, divRef2 }) {
                       position: 'relative',
                       top: 20,
                       left: -15,
+                      visibility:{md:'visible',xs:'hidden'}
                     }}
                     src={Arrow}
                   />
