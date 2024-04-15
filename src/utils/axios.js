@@ -213,6 +213,7 @@ export const endpoints = {
   },
   subscriptions: {
     all: '/api/subscription',
+    allinhome: '/api/subscription/inhome',
     unit_service: (id) => `/api/subscription/unitservice/${id}`,
     active: '/api/subscription/active',
     one: (id) => `/api/subscription/${id}`,
