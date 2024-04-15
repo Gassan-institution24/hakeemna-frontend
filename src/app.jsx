@@ -23,50 +23,49 @@ import ThemeProvider from 'src/theme';
 // ----------------------------------------------------------------------
 
 export default function App() {
+  // useEffect(() => {
+  //   document.addEventListener('copy', disableCopy);
+  //   return () => {
+  //     document.removeEventListener('copy', disableCopy);
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    document.addEventListener('copy', disableCopy);
-    return () => {
-      document.removeEventListener('copy', disableCopy);
-    };
-  }, []);
+  // const disableCopy = (e) => {
+  //   e.preventDefault();
+  // };
+  
+  // useEffect(() => {
+  //   document.addEventListener('screenshot', disablescreenshot);
+  //   return () => {
+  //     document.removeEventListener('screenshot', disablescreenshot);
+  //   };
+  // }, []);
 
-  const disableCopy = (e) => {
-    e.preventDefault();
-  };
+  // const disablescreenshot = (e) => {
+  //   e.preventDefault();
+  // };
+  // const [screenshotDetected, setScreenshotDetected] = useState(false);
 
-  useEffect(() => {
-    document.addEventListener('screenshot', disablescreenshot);
-    return () => {
-      document.removeEventListener('screenshot', disablescreenshot);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const handleScreenshot = () => {
+  //     setScreenshotDetected(true);
+  //     setTimeout(() => setScreenshotDetected(false), 1000); 
+  //   };
 
-  const disablescreenshot = (e) => {
-    e.preventDefault();
-  };
-  const [screenshotDetected, setScreenshotDetected] = useState(false);
+  //   document.addEventListener('screenshot', handleScreenshot);
 
-  useEffect(() => {
-    const handleScreenshot = () => {
-      setScreenshotDetected(true);
-      setTimeout(() => setScreenshotDetected(false), 1000);
-    };
+  //   return () => {
+  //     document.removeEventListener('screenshot', handleScreenshot);
+  //   };
+  // }, []);
 
-    document.addEventListener('screenshot', handleScreenshot);
-
-    return () => {
-      document.removeEventListener('screenshot', handleScreenshot);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (screenshotDetected) {
-      document.body.style.pointerEvents = 'none';
-    } else {
-      document.body.style.pointerEvents = 'auto';
-    }
-  }, [screenshotDetected]);
+  // useEffect(() => {
+  //   if (screenshotDetected) {
+  //     document.body.style.pointerEvents = 'none';
+  //   } else {
+  //     document.body.style.pointerEvents = 'auto';
+  //   }
+  // }, [screenshotDetected]);
 
   const charAt = `
   ██████╗

@@ -149,7 +149,7 @@ export default function ProfileHome() {
         </Stack>
       )}
 
-      {user?.patient.sport_exercises && (
+      {user?.patient?.sport_exercises && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -516,7 +516,7 @@ export default function ProfileHome() {
     <Grid container spacing={3}>
       <Grid xs={12} md={4}>
         {renderOverview}
-        {user?.patient.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
+        {user?.patient?.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
         <Box sx={{ display: { md: 'block', xs: 'none' } }}>{renderCard}</Box>
       </Grid>
 
