@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { matchIsValidTel } from 'mui-tel-input';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -200,8 +200,15 @@ export default function AccountGeneral({ employeeData, refetch }) {
     setValue,
     handleSubmit,
     control,
-    formState: { isSubmitting },
+    formState: { isSubmitting,errors },
   } = methods;
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+        Object.keys(errors)
+          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+    }
+  }, [errors,enqueueSnackbar]);
 
   const values = watch();
 
@@ -449,19 +456,25 @@ export default function AccountGeneral({ employeeData, refetch }) {
             >
               <RHFTextField type="number" name="tax_num" label={t('tax number')} />
               <RHFPhoneNumber name="mobile_num" label={t('alternative mobile number')} />
-              <RHFSelect
-                label={`${t('specialty')} *`}
-                fullWidth
+              <RHFAutocomplete
                 name="speciality"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {specialtiesData.map((specialty, idx) => (
-                  <MenuItem lang="ar" value={specialty._id} key={idx}>
-                    {curLangAr ? specialty.name_arabic : specialty.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
+                label={`${t('speciality')} *`}
+                options={specialtiesData.map((speciality) => speciality._id)}
+                getOptionLabel={(option) =>
+                  specialtiesData.find((one) => one._id === option)?.[
+                    curLangAr ? 'name_arabic' : 'name_english'
+                  ]
+                }
+                renderOption={(props, option, idx) => (
+                  <li {...props} key={idx} value={option}>
+                    {
+                      specialtiesData.find((one) => one._id === option)?.[
+                        curLangAr ? 'name_arabic' : 'name_english'
+                      ]
+                    }
+                  </li>
+                )}
+              />
               <RHFSelect
                 label={`${t('gender')} *`}
                 fullWidth
@@ -476,33 +489,25 @@ export default function AccountGeneral({ employeeData, refetch }) {
                   {t('female')}
                 </MenuItem>
               </RHFSelect>
-              <RHFSelect
-                label={`${t('employee type')} *`}
-                fullWidth
+              <RHFAutocomplete
                 name="employee_type"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {employeeTypesData.map((type, idx) => (
-                  <MenuItem lang="ar" value={type._id} key={idx}>
-                    {curLangAr ? type.name_arabic : type.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-
-              {/* <RHFTextField
-                type="number"
-                name="Bachelor_year_graduation"
-                label={t('bachelor year graduation')}
+                label={t('employee type')}
+                options={employeeTypesData.map((one) => one._id)}
+                getOptionLabel={(option) =>
+                  employeeTypesData.find((one) => one._id === option)?.[
+                    curLangAr ? 'name_arabic' : 'name_english'
+                  ]
+                }
+                renderOption={(props, option, idx) => (
+                  <li {...props} key={idx} value={option}>
+                    {
+                      employeeTypesData.find((one) => one._id === option)?.[
+                        curLangAr ? 'name_arabic' : 'name_english'
+                      ]
+                    }
+                  </li>
+                )}
               />
-              <RHFTextField
-                name="University_graduation_Bachelor"
-                label={t('university graduation bachelor')}
-              />
-              <RHFTextField
-                name="University_graduation_Specialty"
-                label={t('university graduation specialty')}
-              /> */}
               <Controller
                 name="birth_date"
                 control={control}

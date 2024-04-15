@@ -243,9 +243,7 @@ export default function ProfileQr() {
           }}
         />
         <Typography variant="h4" sx={{ mt: 2 }}>
-          {curLangAr
-            ? user?.patient.name_arabic
-            : `${user?.patient?.name_english}`}
+          {curLangAr ? user?.patient.name_arabic : `${user?.patient?.name_english}`}
         </Typography>
       </div>
       {[

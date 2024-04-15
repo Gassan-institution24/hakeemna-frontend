@@ -96,11 +96,7 @@ export default function FamilyMembers() {
         />
 
         <ListItemText
-          primary={
-            <span style={{ color: 'inherit' }}>
-              {info?.name_english} 
-            </span>
-          }
+          primary={<span style={{ color: 'inherit' }}>{info?.name_english}</span>}
           // secondary={<span style={{ color: 'inherit' }}> <Iconify icon="flat-color-icons:cell-phone"/> {info?.mobile_num1}</span>}
           primaryTypographyProps={{
             variant: 'subtitle1',

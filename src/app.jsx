@@ -5,7 +5,7 @@ import 'src/global.css';
 import 'src/locales/i18n';
 
 // ----------------------------------------------------------------------
-import React,{useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider } from 'src/auth/context/jwt';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
 import ProgressBar from 'src/components/progress-bar';
@@ -23,6 +23,7 @@ import ThemeProvider from 'src/theme';
 // ----------------------------------------------------------------------
 
 export default function App() {
+
   useEffect(() => {
     document.addEventListener('copy', disableCopy);
     return () => {
@@ -33,7 +34,7 @@ export default function App() {
   const disableCopy = (e) => {
     e.preventDefault();
   };
-  
+
   useEffect(() => {
     document.addEventListener('screenshot', disablescreenshot);
     return () => {
@@ -49,7 +50,7 @@ export default function App() {
   useEffect(() => {
     const handleScreenshot = () => {
       setScreenshotDetected(true);
-      setTimeout(() => setScreenshotDetected(false), 1000); 
+      setTimeout(() => setScreenshotDetected(false), 1000);
     };
 
     document.addEventListener('screenshot', handleScreenshot);

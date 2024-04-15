@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
+import { useState, useEffect } from 'react';
 
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
@@ -42,15 +42,19 @@ import NotificationsPopoverPatient from '../common/notifications-popover/indexPa
 export default function Header({ onOpenNav }) {
   const theme = useTheme();
   const router = useRouter();
-  const { user } = useAuthContext();
+  const { user, loading } = useAuthContext();
   const settings = useSettingsContext();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const [dialog, setDialog] = useState(user.role === 'admin' && !user.last_online);
+  const [dialog, setDialog] = useState(user.role === 'admin' && !user.last_online && !loading);
   const [tables, setTables] = useState([]);
+
+  useEffect(() => {
+    setDialog(user.role === 'admin' && !user.last_online && !loading);
+  }, [user.role, user.last_online, loading]);
 
   const { enqueueSnackbar } = useSnackbar();
 

@@ -23,7 +23,8 @@ export default function RHFTimePicker({ name, helperText, type, ...other }) {
         <MobileTimePicker
           {...field}
           fullWidth
-          ampmInClock
+          // ampmInClock
+          orientation="landscape"
           minutesStep="5"
           format="hh:mm a"
           value={myunitTime(field.value)}

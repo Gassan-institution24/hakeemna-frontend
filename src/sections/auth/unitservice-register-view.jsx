@@ -51,6 +51,7 @@ import FormProvider, {
   RHFTextField,
   RHFRadioGroup,
   RHFPhoneNumber,
+  RHFAutocomplete,
   // RHFSelectCard,
 } from 'src/components/hook-form';
 
@@ -505,24 +506,48 @@ export default function JwtRegisterView() {
             label={t('family name')}
           />
         </Tooltip> */}
-        <RHFSelect name="em_type" label={t('employee type')}>
-          {employeeTypesData.map((type, idx) => (
-            <MenuItem lang="ar" key={idx} value={type._id}>
-              {curLangAr ? type.name_arabic : type.name_english}
-            </MenuItem>
-          ))}
-        </RHFSelect>
+        <RHFAutocomplete
+          name="em_type"
+          label={t('employee type')}
+          options={employeeTypesData.map((one) => one._id)}
+          getOptionLabel={(option) =>
+            employeeTypesData.find((one) => one._id === option)?.[
+              curLangAr ? 'name_arabic' : 'name_english'
+            ]
+          }
+          renderOption={(props, option, idx) => (
+            <li {...props} key={idx} value={option}>
+              {
+                employeeTypesData.find((one) => one._id === option)?.[
+                  curLangAr ? 'name_arabic' : 'name_english'
+                ]
+              }
+            </li>
+          )}
+        />
         {employeeTypesData
           .find((type) => type._id === values.em_type)
           ?.name_english?.toLowerCase() === 'doctor' && (
           // <Tooltip placement="top" title="speciality of admin">
-          <RHFSelect name="em_speciality" label={t('speciality')}>
-            {specialtiesData.map((specialty, idx) => (
-              <MenuItem lang="ar" key={idx} value={specialty._id}>
-                {curLangAr ? specialty.name_arabic : specialty.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
+          <RHFAutocomplete
+            name="em_speciality"
+            label={`${t('speciality')} *`}
+            options={specialtiesData.map((speciality) => speciality._id)}
+            getOptionLabel={(option) =>
+              specialtiesData.find((one) => one._id === option)?.[
+                curLangAr ? 'name_arabic' : 'name_english'
+              ]
+            }
+            renderOption={(props, option, idx) => (
+              <li {...props} key={idx} value={option}>
+                {
+                  specialtiesData.find((one) => one._id === option)?.[
+                    curLangAr ? 'name_arabic' : 'name_english'
+                  ]
+                }
+              </li>
+            )}
+          />
           // </Tooltip>
         )}
       </Box>

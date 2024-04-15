@@ -81,8 +81,15 @@ export default function TableNewEditForm({ currentTable }) {
     reset,
     watch,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting,errors },
   } = methods;
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+        Object.keys(errors)
+          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+    }
+  }, [errors,enqueueSnackbar]);
 
   const values = watch();
 
@@ -165,7 +172,8 @@ export default function TableNewEditForm({ currentTable }) {
                 // control={control}
                 render={({ field, fieldState: { error } }) => (
                   <MobileTimePicker
-                    ampmInClock
+                    // ampmInClock
+                    orientation="landscape"
                     minutesStep="5"
                     label={t('start time')}
                     value={values.start_time ? new Date(values.start_time) : null}
@@ -188,7 +196,8 @@ export default function TableNewEditForm({ currentTable }) {
                 // control={control}
                 render={({ field, fieldState: { error } }) => (
                   <MobileTimePicker
-                    ampmInClock
+                    // ampmInClock
+                    orientation="landscape"
                     minutesStep="5"
                     label={t('end time')}
                     value={values.end_time ? new Date(values.end_time) : null}

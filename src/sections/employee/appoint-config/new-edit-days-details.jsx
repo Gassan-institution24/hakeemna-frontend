@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { enUS } from 'date-fns/locale';
+import { useSnackbar } from 'notistack';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { useState, useEffect, useCallback } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
@@ -45,6 +46,8 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const proccessing = useBoolean();
 
   const { handleAddNew } = useNewScreen();
+
+   const { enqueueSnackbar } = useSnackbar();
 
   const weekDays = [
     { value: 'saturday', label: t('Saturday') },
@@ -105,7 +108,10 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       append(newItem);
     } catch (e) {
       console.error(e);
-      setErrorMsg(e.message);
+      // setErrorMsg(e.message);
+      enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, {
+        variant: 'error',
+      });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -178,7 +184,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
             });
             curr_start += appointment_time;
           } else {
-            curr_start += appointment_time;
+            curr_start = break_end;
           }
         }
         setValue(`days_details[${index}].appointments`, results);
@@ -190,8 +196,9 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       } catch (e) {
         console.error(e);
         proccessing.onFalse();
-        setErrorMsg(e.message);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // setErrorMsg(e.message);
+        enqueueSnackbar(e.message,{variant:'error'})
+        // window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -412,7 +419,8 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
-                        ampmInClock
+                        // ampmInClock
+                        orientation="landscape"
                         locale={enUS}
                         minutesStep="5"
                         label={t('work start time')}
@@ -445,7 +453,8 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
-                        ampmInClock
+                        // ampmInClock
+                        orientation="landscape"
                         minutesStep="5"
                         label={t('work end time')}
                         value={myunitTime(values.days_details[index]?.work_end_time)}
@@ -475,7 +484,8 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
-                        ampmInClock
+                        // ampmInClock
+                        orientation="landscape"
                         minutesStep="5"
                         label={t('break start time')}
                         value={myunitTime(values.days_details[index]?.break_start_time)}
@@ -506,7 +516,8 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
-                        ampmInClock
+                        // ampmInClock
+                        orientation="landscape"
                         minutesStep="5"
                         label={t('break end time')}
                         value={myunitTime(values.days_details[index]?.break_end_time)}

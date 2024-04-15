@@ -8,7 +8,6 @@ import { useSettingsContext } from 'src/components/settings';
 import { allLangs, defaultLang } from './config-lang';
 import { langs, defaultLangs } from './config-lang-home';
 
-
 // ----------------------------------------------------------------------
 
 export function useLocales() {

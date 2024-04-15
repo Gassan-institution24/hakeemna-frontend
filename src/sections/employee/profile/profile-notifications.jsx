@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 import Card from '@mui/material/Card';
@@ -65,8 +66,15 @@ export default function AccountNotifications() {
     watch,
     control,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting,errors },
   } = methods;
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+        Object.keys(errors)
+          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+    }
+  }, [errors,enqueueSnackbar]);
 
   const values = watch();
 
