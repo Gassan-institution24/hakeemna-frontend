@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useMemo, useEffect } from 'react';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -84,7 +84,7 @@ export default function BookManually({ onClose, refetch, ...other }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const { reset, setValue, handleSubmit } = methods;
+  const { reset, setValue, handleSubmit,formState: { errors }, } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -114,6 +114,13 @@ export default function BookManually({ onClose, refetch, ...other }) {
       console.error(error);
     }
   });
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+        Object.keys(errors)
+          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+    }
+  }, [errors,enqueueSnackbar]);
 
   return (
     <Dialog maxWidth="lg" onClose={onClose} {...other}>

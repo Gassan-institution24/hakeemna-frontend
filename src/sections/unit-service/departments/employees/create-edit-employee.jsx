@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
@@ -28,7 +28,12 @@ import { useGetCountries, useGetSpecialties, useGetActiveEmployeeTypes } from 's
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFCheckbox, RHFTextField } from 'src/components/hook-form';
+import FormProvider, {
+  RHFSelect,
+  RHFCheckbox,
+  RHFTextField,
+  RHFAutocomplete,
+} from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -122,8 +127,15 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting,errors },
   } = methods;
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+        Object.keys(errors)
+          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+    }
+  }, [errors,enqueueSnackbar]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -218,13 +230,25 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="speciality" label={`${t('specialty')} *`}>
-                {specialtiesData.map((speciality, idx) => (
-                  <MenuItem lang="ar" key={idx} value={speciality._id}>
-                    {curLangAr ? speciality.name_arabic : speciality.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
+              <RHFAutocomplete
+                name="speciality"
+                label={`${t('speciality')} *`}
+                options={specialtiesData.map((speciality) => speciality._id)}
+                getOptionLabel={(option) =>
+                  specialtiesData.find((one) => one._id === option)?.[
+                    curLangAr ? 'name_arabic' : 'name_english'
+                  ]
+                }
+                renderOption={(props, option, idx) => (
+                  <li {...props} key={idx} value={option}>
+                    {
+                      specialtiesData.find((one) => one._id === option)?.[
+                        curLangAr ? 'name_arabic' : 'name_english'
+                      ]
+                    }
+                  </li>
+                )}
+              />
               <RHFSelect name="gender" label={`${t('gender')} *`}>
                 <MenuItem lang="ar" value="male">
                   {t('male')}

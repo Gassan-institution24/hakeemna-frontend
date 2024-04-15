@@ -50,6 +50,11 @@ export function useNavData() {
           //   icon: ICONS.dashboard,
           // },
           {
+            title: t('calender'),
+            path: paths.superadmin.ourCalendar,
+            icon: <Iconify icon="simple-line-icons:calender" />,
+          },
+          {
             title: t('Unit Services'),
             path: paths.superadmin.unitservices.root,
             icon: <Iconify icon="fa-solid:clinic-medical" />,

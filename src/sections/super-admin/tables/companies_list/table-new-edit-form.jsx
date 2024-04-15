@@ -218,7 +218,6 @@ export default function TableNewEditForm({ currentSelected }) {
                 name="type_of_specialty_2"
                 label="type_of_specialty_2"
               />
-             
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

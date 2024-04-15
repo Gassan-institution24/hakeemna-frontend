@@ -9,7 +9,29 @@ export function useGetEmployeeCalender(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      CalenderData: data || [],
+      CalenderData: data?.map((one) => ({ ...one, id: one._id })) || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
+export function useGetSuperAdminCalender() {
+  const URL = endpoints.calender.superadmin;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      CalenderData: data?.map((one) => ({ ...one, id: one._id })) || [],
       loading: isLoading,
       error,
       validating: isValidating,

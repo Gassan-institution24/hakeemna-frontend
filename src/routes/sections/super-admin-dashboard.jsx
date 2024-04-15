@@ -429,6 +429,9 @@ const EmployeesPage = lazy(() => import('src/pages/super-admin/employees/index')
 const EditEmployeePage = lazy(() => import('src/pages/super-admin/employees/edit'));
 const AddEmployeePage = lazy(() => import('src/pages/super-admin/employees/new'));
 
+// CALENDER
+const CalenderPage = lazy(() => import('src/pages/super-admin/calender/calender'));
+
 // ----------------------------------------------------------------------
 
 export const dashboardRoutes = [
@@ -448,6 +451,10 @@ export const dashboardRoutes = [
     children: [
       // { element: <IndexPage />, index: true },
       // { path: '', element: < /> },
+      {
+        path: 'ourcalender',
+        element: <CalenderPage />,
+      },
       {
         path: 'unitservices',
         children: [

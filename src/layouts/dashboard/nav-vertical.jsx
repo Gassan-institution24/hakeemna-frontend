@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import { Typography } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
@@ -14,6 +14,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 // import Logo from 'src/components/logo';
@@ -30,7 +31,7 @@ import { useNavData } from './config-navigation';
 // ----------------------------------------------------------------------
 
 export default function NavVertical({ openNav, onCloseNav }) {
-  const { user } = useAuthContext();
+  const { user, loading } = useAuthContext();
 
   const pathname = usePathname();
 
@@ -38,12 +39,14 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   const navData = useNavData();
 
+  const { t } = useTranslate();
+
   const USData =
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
   const isEmployee = ['employee', 'admin'].includes(user?.role);
 
   const walktour = useWalktour({
-    defaultRun: user && !user.last_online,
+    defaultRun: !loading && user && !user.last_online,
     showProgress: true,
     steps: [
       {
@@ -157,7 +160,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
             justifyContent: 'flex-end',
             px: 2,
             pt: 2,
-            color: 'text.disabled',
+            color: 'warning.dark',
             mb: -4,
             cursor: 'pointer',
           }}
@@ -167,15 +170,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
         </Box>
       )}
       {isEmployee && (
-        <Typography variant="caption" paddingLeft="4px">
-          {String(USData?.country?.code).padStart(3, '0')}-{USData?.city?.sequence_number}-
-          {USData?.sequence_number}
-        </Typography>
+        <Tooltip title={t('service unit code')}>
+          <Typography variant="caption" alignSelf="center" paddingLeft="4px">
+            {String(USData?.country?.code).padStart(3, '0')}-{USData?.city?.sequence_number}-
+            {USData?.sequence_number}
+          </Typography>
+        </Tooltip>
       )}
       {/* <Logo sx={{ mt: 3, ml: 4, mb: 1 }} /> */}
       <Link
         component={RouterLink}
-        href={paths.pages.serviceUnit(USData?._id)}
+        href={isEmployee ? paths.pages.serviceUnit(USData?._id) : '/'}
         sx={{ display: 'contents' }}
       >
         <Box

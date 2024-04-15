@@ -321,13 +321,10 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   useEffect(() => {
     setErrorMsg();
     if (Object.keys(errors).length) {
-      setErrorMsg(
         Object.keys(errors)
-          .map((key, idx) => errors?.[key]?.message)
-          .join('<br>')
-      );
+          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
     }
-  }, [errors]);
+  }, [errors,enqueueSnackbar]);
 
   /* eslint-disable */
   useEffect(() => {

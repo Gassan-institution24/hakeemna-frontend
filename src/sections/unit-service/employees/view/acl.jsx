@@ -85,8 +85,15 @@ export default function TableNewEditForm() {
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting,errors },
   } = methods;
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+        Object.keys(errors)
+          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+    }
+  }, [errors,enqueueSnackbar]);
 
   /* eslint-disable */
   useEffect(() => {

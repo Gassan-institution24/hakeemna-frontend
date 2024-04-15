@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -60,7 +60,14 @@ export default function UploadOldPatient({ refetch }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const { reset, handleSubmit, watch, setValue } = methods;
+  const { reset, handleSubmit, watch, setValue, formState: { errors }} = methods;
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+        Object.keys(errors)
+          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+    }
+  }, [errors,enqueueSnackbar]);
 
   const values = watch();
 
