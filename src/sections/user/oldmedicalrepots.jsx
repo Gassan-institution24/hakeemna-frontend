@@ -86,7 +86,7 @@ export default function OldMedicalReports() {
         `${curLangAr ? 'تم حذف التقرير بنجاح' : 'Medical report deleted successfully'}`,
         { variant: 'success' }
       );
-      refetch()
+      refetch();
     } catch (error) {
       enqueueSnackbar(`${curLangAr ? 'حدث خطأ ما, الرجاء المحاوله لاحقا' : 'Unable to delete'}`, {
         variant: 'error',
@@ -177,7 +177,7 @@ export default function OldMedicalReports() {
       dialog.onFalse();
       reset();
       setCheckChange(!checkChange);
-      refetch()
+      refetch();
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {

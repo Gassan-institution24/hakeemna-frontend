@@ -215,7 +215,8 @@ export default function AppointmentToolbar({
           }}
         />
         <MobileTimePicker
-          ampmInClock
+          // // ampmInClock
+          orientation="landscape"
           minutesStep="5"
           label={t('from time')}
           value={myunitTime(filters.startTime)}
@@ -234,7 +235,8 @@ export default function AppointmentToolbar({
         />
 
         <MobileTimePicker
-          ampmInClock
+          // ampmInClock
+          orientation="landscape"
           minutesStep="5"
           label={t('to time')}
           value={myunitTime(filters.endTime)}

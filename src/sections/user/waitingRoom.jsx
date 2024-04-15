@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetPatientOneAppointments } from 'src/api';
@@ -19,8 +19,8 @@ export default function WatingRoom({ employeeId }) {
       setHasFeedback(true);
     }
   }, [appointmentsData]);
-console.log(appointmentsData );
-  return hasFeedback ? <WatingRoomDialog employeesData={employeeId} /> : <EmptyContent/>
+  console.log(appointmentsData);
+  return hasFeedback ? <WatingRoomDialog employeesData={employeeId} /> : <EmptyContent />;
 }
 
 WatingRoom.propTypes = {

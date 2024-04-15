@@ -25,7 +25,7 @@ import {
 } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -178,13 +178,19 @@ export default function TableNewEditForm({ currentTable }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="speciality" label="speciality">
-                {specialtiesData.map((speciality, idx) => (
-                  <MenuItem lang="ar" key={idx} value={speciality._id}>
-                    {speciality.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
+              <RHFAutocomplete
+                name="speciality"
+                label="speciality"
+                options={specialtiesData.map((speciality) => speciality._id)}
+                getOptionLabel={(option) =>
+                  specialtiesData.find((one) => one._id === option)?.name_english
+                }
+                renderOption={(props, option, idx) => (
+                  <li {...props} key={idx} value={option}>
+                    {specialtiesData.find((one) => one._id === option)?.name_english}
+                  </li>
+                )}
+              />
               <RHFSelect name="general" label="Is it General?">
                 <MenuItem lang="ar" value>
                   Yes{' '}

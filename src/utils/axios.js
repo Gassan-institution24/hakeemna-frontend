@@ -307,6 +307,7 @@ export const endpoints = {
   calender: {
     all: '/api/calender',
     // one: (id) => `/api/calender/${id}`,
+    superadmin: '/api/calender/superadmin',
     employee: {
       all: (id) => `/api/calender/employee/${id}`,
     },
@@ -360,11 +361,11 @@ export const endpoints = {
     all: '/api/feedback',
     one: (id) => `/api/feedback/${id}`,
     unit_service: {
-      all: `/api/feedback/unitservice`,
+      all: `/api/feedback/unitservices`,
       one: (id) => `/api/feedback/unitservice/${id}`,
     },
     stakeholder: {
-      all: `/api/feedback/stakeholder`,
+      all: `/api/feedback/stakeholders`,
       one: (id) => `/api/feedback/stakeholder/${id}`,
     },
     doctorna: {

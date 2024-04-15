@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useMemo, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -77,7 +77,14 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const { reset, setValue, watch, handleSubmit } = methods;
+  const { reset, setValue, watch, handleSubmit, formState: { errors }, } = methods;
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+        Object.keys(errors)
+          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+    }
+  }, [errors,enqueueSnackbar]);
 
   const values = watch();
 

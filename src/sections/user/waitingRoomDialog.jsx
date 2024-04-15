@@ -107,7 +107,7 @@ export default function WatingRoomDialog({ employeesData }) {
       await axios.patch(`api/appointments/feedback/${appointmentsData._id}`);
       dialog.onFalse();
       enqueueSnackbar(t('Thanks for your cooperation'), { variant: 'success' });
-  
+
       setTimeout(() => {
         window.location.reload();
       }, 1000);
@@ -118,7 +118,7 @@ export default function WatingRoomDialog({ employeesData }) {
       });
     }
   };
-  
+
   return (
     <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

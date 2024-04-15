@@ -186,6 +186,13 @@ export default function CalendarView() {
               initialView={view}
               dayMaxEventRows={3}
               eventDisplay="block"
+              eventTimeFormat={{
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: 'short',
+              }}
+              eventBorderColor='white'
+              // eventContent={(info)=><div style={{width:'100%',padding:'2px',backgroundColor:info.event.backgroundColor}}><b>{fTime(info.event.start)}</b><i style={{marginLeft:4}}>{info.event.title}</i></div>}
               events={dataFiltered}
               headerToolbar={false}
               select={onSelectRange}

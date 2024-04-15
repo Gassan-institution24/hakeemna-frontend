@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -15,15 +16,17 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useGetInsuranceCos } from 'src/api';
+
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  // const { countriesData } = useGetCountries();
+  const { insuranseCosData } = useGetInsuranceCos();
   // const { insuranseTypesData } = useGetInsuranceTypes();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -32,7 +35,7 @@ export default function TableNewEditForm({ currentTable }) {
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
     Coverage_name: Yup.string().required('Name is required'),
-    // country: Yup.string().required('Country is required'),
+    insurance_company: Yup.string().required('insurance company is required'),
     // city: Yup.string().required('city is required'),
     // type: Yup.string().nullable(),
     // webpage: Yup.string().required('webpage is requires'),
@@ -45,7 +48,7 @@ export default function TableNewEditForm({ currentTable }) {
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
       Coverage_name: currentTable?.Coverage_name || '',
-      // country: currentTable?.country?._id || null,
+      insurance_company: currentTable?.insurance_company?._id || null,
       // city: currentTable?.city?._id || null,
       // type: currentTable?.type?._id || null,
       // webpage: currentTable?.webpage || '',
@@ -85,7 +88,7 @@ export default function TableNewEditForm({ currentTable }) {
     formState: { isSubmitting },
   } = methods;
 
-  // const { tableData } = useGetCountryCities(watch().country);
+  // const { tableData } = useGetinsurance_companyCities(watch().insurance_company);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -140,13 +143,13 @@ export default function TableNewEditForm({ currentTable }) {
                 label="Coverage name"
               />
 
-              {/* <RHFSelect name="country" label="country">
-                {countriesData.map((country, idx) => (
-                  <MenuItem lang="ar"  key={idx} value={country._id}>
-                    {country.name_english}
+              <RHFSelect name="insurance_company" label="insurance company">
+                {insuranseCosData.map((insurance_company, idx) => (
+                  <MenuItem lang="ar" key={idx} value={insurance_company._id}>
+                    {insurance_company.name_english}
                   </MenuItem>
                 ))}
-              </RHFSelect> */}
+              </RHFSelect>
               {/* <RHFSelect name="city" label="city">
                 {tableData.map((city, idx) => (
                   <MenuItem lang="ar"  key={idx} value={city._id}>

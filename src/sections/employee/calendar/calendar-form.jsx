@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -21,7 +21,7 @@ import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-// import { ColorPicker } from 'src/components/color-utils';
+import { ColorPicker } from 'src/components/color-utils';
 import FormProvider, { RHFSwitch, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -38,7 +38,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
       .required(t('required field')),
     description: Yup.string().max(5000, `${t('must be at most')} 5000`),
     // not required
-    // color: Yup.string(),
+    color: Yup.string(),
     allDay: Yup.boolean(),
     start: Yup.mixed(),
     end: Yup.mixed(),
@@ -55,8 +55,15 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
     watch,
     control,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting,errors },
   } = methods;
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+        Object.keys(errors)
+          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+    }
+  }, [errors,enqueueSnackbar]);
 
   const values = watch();
 
@@ -162,7 +169,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
           )}
         />
 
-        {/* <Controller
+        <Controller
           name="color"
           control={control}
           render={({ field }) => (
@@ -172,7 +179,7 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
               colors={colorOptions}
             />
           )}
-        /> */}
+        />
       </Stack>
 
       <DialogActions>

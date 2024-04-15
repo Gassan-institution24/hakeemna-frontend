@@ -5,6 +5,7 @@ import { memo, useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
+import { Tooltip } from '@mui/material';
 import InputBase from '@mui/material/InputBase';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
@@ -17,6 +18,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
 import { useEventListener } from 'src/hooks/use-event-listener';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Label from 'src/components/label';
@@ -41,6 +43,8 @@ function Searchbar() {
   const lgUp = useResponsive('up', 'lg');
 
   const [searchQuery, setSearchQuery] = useState('');
+
+  const { t } = useTranslate();
 
   const navData = useNavData();
 
@@ -125,10 +129,12 @@ function Searchbar() {
         </Label>
       )}
       {lgUp && ['employee', 'admin'].includes(user?.role) && (
-        <Label sx={{ px: 0.75, fontSize: 12, color: 'text.secondary' }}>
-          {String(user?.employee?.nationality?.code).padStart(3, '0')}-
-          {user?.employee?.sequence_number}
-        </Label>
+        <Tooltip title={t('employee code')}>
+          <Label sx={{ px: 0.75, fontSize: 12, color: 'text.secondary' }}>
+            {String(user?.employee?.nationality?.code).padStart(3, '0')}-
+            {user?.employee?.sequence_number}
+          </Label>
+        </Tooltip>
       )}
     </Stack>
   );
