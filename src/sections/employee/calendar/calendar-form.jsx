@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
-import { useCallback, useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
