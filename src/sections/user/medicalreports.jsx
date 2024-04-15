@@ -126,9 +126,7 @@ export default function Medicalreports() {
             </View>
             <View style={styles.gridBody}>
               <Text style={styles.text}>Medical Report</Text>
-              <Text style={styles.text2}>
-                Name: {user?.patient?.name_english}
-              </Text>
+              <Text style={styles.text2}>Name: {user?.patient?.name_english}</Text>
               <Text style={styles.text2}>Age: {fDateAndTime(user?.patient.birth_date)}</Text>
               <Text style={styles.text2}>ID no: {user?.patient?.identification_num}</Text>
             </View>

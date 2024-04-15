@@ -101,10 +101,10 @@ export default function NewEditDayAppointmentsDetails({
     <Collapse in={open} timeout="auto" unmountOnExit sx={{ bgcolor: 'background.neutral' }}>
       <Box sx={{ px: 2, pb: 0 }}>
         {values.days_details[ParentIndex]?.appointments?.length > 0 && (
-            <Typography variant="p" sx={{ color: 'text.disabled', mb: 3, fontSize: 14 }}>
-              {t('appointments')}:
-            </Typography>
-          )}
+          <Typography variant="p" sx={{ color: 'text.disabled', mb: 3, fontSize: 14 }}>
+            {t('appointments')}:
+          </Typography>
+        )}
 
         <Stack
           sx={{ mt: 3 }}
@@ -139,7 +139,8 @@ export default function NewEditDayAppointmentsDetails({
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <MobileTimePicker
-                      ampmInClock
+                      // ampmInClock
+                      orientation="landscape"
                       minutesStep="5"
                       label={t('start time')}
                       value={myunitTime(
@@ -227,10 +228,7 @@ export default function NewEditDayAppointmentsDetails({
 
         <Divider
           sx={{
-            mt:
-              values.days_details[ParentIndex]?.appointments?.length > 0
-                ? 3
-                : 0,
+            mt: values.days_details[ParentIndex]?.appointments?.length > 0 ? 3 : 0,
             mb: 1,
             borderStyle: 'dashed',
           }}

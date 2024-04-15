@@ -286,10 +286,9 @@ function ReviewItem({ item }) {
           },
           {
             // label: t('work group'),
-            label: service_types?.reduce(
-              (total, service) => total + service.Price_per_unit || 0,
-              0
-            ),
+            label: service_types.length
+              ? service_types?.reduce((total, service) => total + service.Price_per_unit || 0, 0)
+              : 0,
             icon: <Iconify icon="solar:tag-price-bold" />,
           },
           {

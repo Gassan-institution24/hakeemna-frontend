@@ -75,7 +75,7 @@ export default function TableCreateView() {
 
   const { appointmentsData, AppointDates, loading } = useGetEmployeeAppointments({
     id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
-    filters: { ...filters, startDate: new Date(selectedDate) },
+    filters: { ...filters, startDate: selectedDate },
   });
 
   useEffect(() => {
@@ -137,8 +137,15 @@ export default function TableCreateView() {
     handleSubmit,
     watch,
     setValue,
-    formState: { isSubmitting },
+    formState: { isSubmitting,errors },
   } = methods;
+  
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+        Object.keys(errors)
+          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+    }
+  }, [errors,enqueueSnackbar]);
 
   const values = watch();
   const { tableData } = useGetCountryCities(values.country);
@@ -264,7 +271,8 @@ export default function TableCreateView() {
               </Select>
             </FormControl>
             <MobileTimePicker
-              ampmInClock
+              // ampmInClock
+              orientation="landscape"
               minutesStep="5"
               label={t('from time')}
               value={myunitTime(filters.startTime)}
@@ -279,7 +287,8 @@ export default function TableCreateView() {
             />
 
             <MobileTimePicker
-              ampmInClock
+              // ampmInClock
+              orientation="landscape"
               minutesStep="5"
               label={t('to time')}
               value={myunitTime(filters.endTime)}

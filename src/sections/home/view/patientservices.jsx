@@ -13,8 +13,8 @@ export default function VerticalDividerText() {
   return (
     <>
     <Divider orientation="vertical" flexItem sx={{ mb: 10 }}>
-    <h1> {t('WHAT WE DO')} </h1>
-    {/* <h6 style={{ color: 'gray' }}>Get ready to manage your work with doctorna</h6> */}
+    <h1> WHAT WE DO</h1>
+    {/* <h5 style={{ color: 'gray' }}>Get ready to manage your work with doctorna</h5> */}
   </Divider>
     <Box
       sx={{
@@ -59,7 +59,7 @@ export default function VerticalDividerText() {
           />
         </Box>
         <Typography sx={{ textAlign: 'center' }} variant="h4">
-         {t('Features for the user of medical services')}
+          Features for the user of medical services
         </Typography>
         <ul style={{ listStyle: 'none' }}>
           <li
@@ -148,7 +148,7 @@ export default function VerticalDividerText() {
           <Iconify icon="guidance:changin-room-family" width={35} sx={{ color: 'white', m: 1.5 }} />
         </Box>
         <Typography sx={{ textAlign: 'center' }} variant="h4">
-          {t('Organizing the affairs of family members')}
+          Organizing the affairs of family members
         </Typography>
         <ul style={{ listStyle: 'none' }}>
           <li
@@ -224,7 +224,7 @@ export default function VerticalDividerText() {
           <Iconify icon="mdi:passport" width={35} sx={{ color: 'white', m: 1.5 }} />
         </Box>
         <Typography sx={{ textAlign: 'center' }} variant="h4">
-          {t('Medical tourism')}
+          Medical Tourism
         </Typography>
         <ul style={{ listStyle: 'none' }}>
           <li
@@ -285,7 +285,7 @@ export default function VerticalDividerText() {
           <Iconify icon="ph:list-star-light" width={35} sx={{ color: 'white', m: 1.5 }} />
         </Box>
         <Typography sx={{ textAlign: 'center' }} variant="h4">
-          {t('Other features')}
+          Other features
         </Typography>
         <ul style={{ listStyle: 'none' }}>
           <li

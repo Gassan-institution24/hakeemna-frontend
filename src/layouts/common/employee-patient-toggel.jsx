@@ -21,7 +21,7 @@ export default function EmployeePatientToggel() {
   const { enqueueSnackbar } = useSnackbar();
 
   const { user } = useAuthContext();
-  const [loading,setLoading] = useState()
+  const [loading, setLoading] = useState();
 
   const { t } = useTranslate();
   const { currentLang } = useLocales();
@@ -29,12 +29,12 @@ export default function EmployeePatientToggel() {
 
   const handleChangeRole = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       await axios.patch(endpoints.auth.toggleRole);
-      setLoading(false)
+      setLoading(false);
       window.location.href = paths.dashboard.root;
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       console.error(error);
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
         variant: 'error',
@@ -47,7 +47,7 @@ export default function EmployeePatientToggel() {
       loading={loading}
       whileTap="tap"
       whileHover="hover"
-      loadingIndicator='Loading…'
+      loadingIndicator="Loading…"
       variants={varHover(1.05)}
       onClick={handleChangeRole}
       sx={{

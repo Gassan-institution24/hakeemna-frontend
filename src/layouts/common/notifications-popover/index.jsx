@@ -165,8 +165,6 @@ export default function NotificationsPopover() {
               ))}
           </List>
 
-
-
           {hasMore && (
             <Box sx={{ p: 1 }}>
               <LoadingButton

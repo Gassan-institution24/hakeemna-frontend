@@ -124,10 +124,7 @@ export default function AppointmentsTableRow({
         </TableCell>
         <TableCell align="center">{note}</TableCell>
         <TableCell align="center">
-          <Iconify
-            icon={coming ? 'eva:checkmark-fill' : 'mingcute:close-line'}
-            width={16}
-          />
+          <Iconify icon={coming ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
         </TableCell>
         <TableCell align="center">
           {curLangAr ? work_group?.name_arabic : work_group?.name_english}

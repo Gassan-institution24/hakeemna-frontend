@@ -70,10 +70,18 @@ export default function Language() {
               //   icon={option.icon}
               //   sx={{ borderRadius: 0.65, width: 28, backgroundColor: '#007B3A', color: 'white' }}
               // />
-              <Box sx={{ borderRadius: 0.65, width: 30, backgroundColor: '#007B3A', color: 'white', textAlign:'center', mr:2 }}> 
+              <Box
+                sx={{
+                  borderRadius: 0.65,
+                  width: 30,
+                  backgroundColor: '#007B3A',
+                  color: 'white',
+                  textAlign: 'center',
+                  mr: 2,
+                }}
+              >
                 <Typography>ض</Typography>
               </Box>
-              
             ) : (
               <Iconify icon={option.icon} sx={{ borderRadius: 0.65, width: 28 }} />
             )}

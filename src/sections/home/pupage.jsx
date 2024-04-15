@@ -97,9 +97,9 @@ export default function Pupage() {
             sx={{
               position: 'relative',
               top: {
-                md:'-30vh',
-                lg:'-24vh',
-                xl:'-19vh',
+                md: '-30vh',
+                lg: '-24vh',
+                xl: '-19vh',
               },
               zIndex: 1,
               left: '-4vh',

@@ -28,7 +28,7 @@ import { useGetCountries, useGetSpecialties, useGetActiveEmployeeTypes } from 's
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -201,20 +201,44 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="employee_type" label={`${t('employee type')} *`}>
-                {employeeTypesData.map((employee_type, idx) => (
-                  <MenuItem lang="ar" key={idx} value={employee_type._id}>
-                    {curLangAr ? employee_type.name_arabic : employee_type.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <RHFSelect name="speciality" label={`${t('specialty')} *`}>
-                {specialtiesData.map((speciality, idx) => (
-                  <MenuItem lang="ar" key={idx} value={speciality._id}>
-                    {curLangAr ? speciality.name_arabic : speciality.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
+              <RHFAutocomplete
+                name="employee_type"
+                label={t('employee type')}
+                options={employeeTypesData.map((one) => one._id)}
+                getOptionLabel={(option) =>
+                  employeeTypesData.find((one) => one._id === option)?.[
+                    curLangAr ? 'name_arabic' : 'name_english'
+                  ]
+                }
+                renderOption={(props, option, idx) => (
+                  <li {...props} key={idx} value={option}>
+                    {
+                      employeeTypesData.find((one) => one._id === option)?.[
+                        curLangAr ? 'name_arabic' : 'name_english'
+                      ]
+                    }
+                  </li>
+                )}
+              />
+              <RHFAutocomplete
+                name="speciality"
+                label={`${t('speciality')} *`}
+                options={specialtiesData.map((speciality) => speciality._id)}
+                getOptionLabel={(option) =>
+                  specialtiesData.find((one) => one._id === option)?.[
+                    curLangAr ? 'name_arabic' : 'name_english'
+                  ]
+                }
+                renderOption={(props, option, idx) => (
+                  <li {...props} key={idx} value={option}>
+                    {
+                      specialtiesData.find((one) => one._id === option)?.[
+                        curLangAr ? 'name_arabic' : 'name_english'
+                      ]
+                    }
+                  </li>
+                )}
+              />
               <RHFSelect name="gender" label={`${t('gender')} *`}>
                 <MenuItem lang="ar" value="male">
                   {t('male')}

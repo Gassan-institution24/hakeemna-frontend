@@ -30,7 +30,7 @@ export function useGetPatintoldmedicalreports(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      oldmedicalreportsdata : data,
+      oldmedicalreportsdata: data,
       loading: isLoading,
       error,
       validating: isValidating,

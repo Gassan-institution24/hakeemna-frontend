@@ -78,14 +78,14 @@ export default function HomeView({ divRef, divRef2 }) {
                       position: 'relative',
                       top: 20,
                       left: -15,
-                      display:{md:'inline-flex',xs:'none'}
+                      display: { md: 'inline-flex', xs: 'none' },
                     }}
                     src={Arrow}
                   />
                 </span>
               </Typography>
             </m.div>
-          </Stack> 
+          </Stack>
         </Container>
 
         <Pupage />
