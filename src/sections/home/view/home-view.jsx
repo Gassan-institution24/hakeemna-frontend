@@ -5,20 +5,27 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import { Stack, Container } from '@mui/system';
 
+import { useLocales ,useTranslate} from 'src/locales';
+
 import Image from 'src/components/image';
 import ScrollProgress from 'src/components/scroll-progress';
 import { varFade, MotionViewport } from 'src/components/animate';
 
-// import Whydoc from '../Why';
+import Whydoc from '../aboutUs';
 import Pupage from '../pupage';
 import HomeHero from '../home-hero';
-import Whowweare from '../whoarewe';
+import OurMission from '../ourMission';
 import Arrow from '../images/arrow.png';
+import ArrowAr from '../images/arrowAr.png';
 import ServicesWeprovide from '../servicesweprovide';
 // ----------------------------------------------------------------------
 
 export default function HomeView({ divRef, divRef2 }) {
   const { scrollYProgress } = useScroll();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+  const { t } = useTranslate();
+  
   return (
     <>
       <ScrollProgress scrollYProgress={scrollYProgress} />
@@ -33,7 +40,7 @@ export default function HomeView({ divRef, divRef2 }) {
           boxShadow: '0px -5px 10px rgba(173, 216, 230, 0.115)',
         }}
       >
-        <Whowweare />
+        <OurMission />
       </Box>
       <Box
         sx={{
@@ -42,7 +49,7 @@ export default function HomeView({ divRef, divRef2 }) {
           bgcolor: 'background.default',
         }}
       >
-        {/* <Whydoc /> */}
+        <Whydoc />
       </Box>
       <Box
         sx={{
@@ -69,19 +76,34 @@ export default function HomeView({ divRef, divRef2 }) {
             <m.div variants={varFade().inDown}>
               <Typography sx={{ textAlign: 'center', mb: 8 }} variant="h2">
                 <span>
-                  Start Now
-                  <Image
-                    sx={{
-                      height: '110px',
-                      width: '100px',
-                      transform: 'rotate(-45deg)',
-                      position: 'relative',
-                      top: 20,
-                      left: -15,
-                      display: { md: 'inline-flex', xs: 'none' },
-                    }}
-                    src={Arrow}
-                  />
+                  {t('Start Now')}
+                  {curLangAr ? (
+                    <Image
+                      sx={{
+                        height: '200px',
+                        width: '200px',
+                        transform: 'rotate(45deg)',
+                        position: 'relative',
+                        top: 60,
+                        left: -60,
+                        display: { md: 'inline-flex', xs: 'none' },
+                      }}
+                      src={ArrowAr}
+                    />
+                  ) : (
+                    <Image
+                      sx={{
+                        height: '110px',
+                        width: '100px',
+                        transform: 'rotate(-45deg)',
+                        position: 'relative',
+                        top: 20,
+                        left: -15,
+                        display: { md: 'inline-flex', xs: 'none' },
+                      }}
+                      src={Arrow}
+                    />
+                  )}
                 </span>
               </Typography>
             </m.div>

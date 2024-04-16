@@ -11,11 +11,8 @@ import { useTranslate } from 'src/locales';
 
 import { varFade, MotionViewport } from 'src/components/animate';
 
-import Blue from './images/Paint.png';
-
 export default function WhoAreWe() {
   const [expandedCardIndex, setExpandedCardIndex] = useState(null); // Store the index of the expanded card
-
   const handleReadMoreClick = (index) => {
     if (expandedCardIndex === index) {
       setExpandedCardIndex(null); // Collapse the description if it's already expanded
@@ -70,41 +67,6 @@ export default function WhoAreWe() {
     },
   ];
 
-  // Inside your component...
-
-  const renderDescription = (description, index) => {
-    const variants = {
-      open: { height: 'auto', opacity: 1 },
-      closed: { height: 0, opacity: 0 },
-    };
-
-    if (expandedCardIndex === index) {
-      return (
-        <m.div // Use the m component
-          initial="closed"
-          animate="open"
-          exit="closed"
-          variants={variants}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
-        >
-          {description}
-        </m.div>
-      );
-    }
-    return description.length > 90 ? (
-      <>
-        {description.substring(0, 90)}{' '}
-        <Typography
-          style={{ color: '#3399FF', marginLeft: '5px', cursor: 'pointer' }}
-          onClick={() => handleReadMoreClick(index)}
-        >
-          {t('Read more')}
-        </Typography>
-      </>
-    ) : (
-      description
-    );
-  };
 
   return (
     <Container
@@ -112,7 +74,6 @@ export default function WhoAreWe() {
       sx={{
         py: { xs: 10, md: 10 },
       }}
-      id="About"
     >
       <Stack
         spacing={3}
@@ -136,24 +97,24 @@ export default function WhoAreWe() {
             <Box
               sx={{
                 flexGrow: 1,
-                backgroundImage: `url(${Blue})`,
+                backgroundImage: `url(https://png.pngtree.com/png-clipart/20220626/original/pngtree-paint-yellow-line-brush-isolated-transparent-png-image_8187171.png)`,
                 backgroundSize: '290px',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
                 textAlign: 'center',
                 height: '100px',
-                width: '90%',
+                width: '100%',
                 zIndex: -1,
                 visibility: { md: 'visible', xs: 'hidden' },
               }}
             />
             <span style={{ position: 'relative', top: -80 }}>
               {' '}
-              {t('Who are we')} <span style={{ color: '#3399FE' }}>?</span>{' '}
+              {t('our mission')}
             </span>
           </Typography>
         </m.div>
-        <Typography
+        {/* <Typography
           component="div"
           variant="overline"
           sx={{ color: 'text.disabled', textAlign: 'center' }}
@@ -177,7 +138,7 @@ export default function WhoAreWe() {
           {t(
             'The platform is characterized by being comprehensive for all individuals and institutions, whether the user ( medical service provider or patient ) subscribes to the services of insurance companies or not, as you can benefit from the services provided to you independently and without association with any insurance or insurance management groups.'
           )}
-        </Typography>
+        </Typography> */}
       </Stack>
 
       <Box

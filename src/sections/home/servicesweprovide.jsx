@@ -10,6 +10,7 @@ import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
+import { useTranslate } from 'src/locales';
 import { PATH_FOR_US_SERVICES, PATH_FOR_PATIENT_SERVICES } from 'src/config-global';
 
 import { varFade, MotionViewport } from 'src/components/animate';
@@ -23,6 +24,8 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function ServicesWeprovide() {
+  const { t } = useTranslate();
+
   const renderDescription = (
     <Stack
       spacing={3}
@@ -31,7 +34,7 @@ export default function ServicesWeprovide() {
     >
       <m.div variants={varFade().inDown}>
         <Typography id="services" variant="h2">
-          We Provide you:{' '}
+          {t('We Provide you:')}
         </Typography>
       </m.div>
     </Stack>
@@ -57,7 +60,7 @@ export default function ServicesWeprovide() {
               },
             }}
           >
-            <Typography variant="h5">As Patient </Typography>
+            <Typography variant="h6">{t('As Patient')} </Typography>
             <p
               style={{
                 fontWeight: '700',
@@ -65,8 +68,9 @@ export default function ServicesWeprovide() {
                 textAlign: 'left',
               }}
             >
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br /> Amet cupiditate ipsum
-              porro, harum quo facere exercitationem saepe blanditiis autem maiores necessitatibus
+              {t(
+                'Joining the Hakimna family offers access to a range of services, including electronic health records, doctor communication, electronic prescriptions, medical reports, and more.'
+              )}
             </p>
             <Button
               target="_blank"
@@ -86,7 +90,7 @@ export default function ServicesWeprovide() {
                 },
               }}
             >
-              Read More
+              {t('Read More')}
             </Button>
           </Item>
         </Grid>
@@ -100,14 +104,14 @@ export default function ServicesWeprovide() {
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               color: '#fff',
-              p: 5,
+              p: 4,
               '&:hover': {
                 backgroundImage:
                   'linear-gradient(rgba(64, 64, 64, 0.486), rgba(64, 64, 64, 0.486)), url(https://i.pinimg.com/736x/35/57/55/355755832670880825ad87838e18d6b6.jpg)',
               },
             }}
           >
-            <Typography variant="h5">As Unitservices </Typography>
+            <Typography variant="h6">{t('As Unitservices')} </Typography>
             <p
               style={{
                 fontWeight: '700',
@@ -115,8 +119,7 @@ export default function ServicesWeprovide() {
                 textAlign: 'left',
               }}
             >
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br /> Amet cupiditate ipsum
-              porro, harum quo facere exercitationem saepe blanditiis autem maiores necessitatibus
+              {t('Medical institutions face challenges in providing excellent services due to high requirements and competition. Digital transformation is necessary but costly due to the need for adapting to new technology.')}
             </p>
             <Button
               target="_blank"
@@ -126,7 +129,7 @@ export default function ServicesWeprovide() {
                 bgcolor: 'success.main',
                 color: '#fff',
                 position: 'relative',
-                top: '20px',
+                top: '10px',
                 width: '100px',
                 '&:hover': {
                   bgcolor: '#fff',
@@ -136,7 +139,7 @@ export default function ServicesWeprovide() {
                 },
               }}
             >
-              Read More
+              {t('Read More')}
             </Button>
           </Item>
         </Grid>
