@@ -13,6 +13,7 @@ import { paths } from 'src/routes/paths';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
+import { useTranslate } from 'src/locales';
 import { HEADER } from 'src/layouts/config-layout';
 import { bgBlur, bgGradient, textGradient } from 'src/theme/css';
 
@@ -37,7 +38,6 @@ const StyledRoot = styled('div')(({ theme }) => ({
     position: 'fixed',
   },
 }));
-
 const StyledWrapper = styled('div')(({ theme }) => ({
   height: '100%',
   overflow: 'hidden',
@@ -120,6 +120,7 @@ const StyledPolygon = styled('div')(({ opacity = 1, anchor = 'left', theme }) =>
 
 export default function HomeHero() {
   const mdUp = useResponsive('up', 'md');
+  const { t } = useTranslate();
 
   const theme = useTheme();
 
@@ -182,7 +183,7 @@ export default function HomeHero() {
           }}
           id="#"
         >
-          It is time for digital transformation
+          {t('It is time for digital transformation')}
         </Typography>
       </m.div>
 
@@ -196,17 +197,15 @@ export default function HomeHero() {
             repeat: Infinity,
           }}
         >
-          Hakeemna
+          {t('Hakeemna')}
         </StyledTextGradient>
       </m.div>
 
       <m.div variants={varFade().in}>
         <Typography variant="body2" sx={{ textAlign: 'center' }}>
-          A platform that provides an integrated electronic system for personal medical and health
-          records, organizing work between medical service providers and users in the private
-          sector. This organization allows improving the quality and efficiency of medical services
-          and enhances communication and cooperation between them, contributing to achieving
-          sustainable development in the field of health care.
+          {t(
+            'A platform that provides an integrated electronic system for personal medical and health records, organizing work between medical service providers and users in the private sector. This organization allows improving the quality and efficiency of medical services and enhances communication and cooperation between them, contributing to achieving sustainable development in the field of health care.'
+          )}
         </Typography>
       </m.div>
 
@@ -223,7 +222,7 @@ export default function HomeHero() {
             href={paths.auth.register}
             sx={{ borderColor: 'text.primary' }}
           >
-            Get Started
+            {t('Get Started')}
           </Button>
         </Stack>
       </m.div>
@@ -234,7 +233,6 @@ export default function HomeHero() {
           <Iconify icon="solar:health-broken" color="green" width={30} sx={{ m: 0.5 }} />
           <Iconify icon="ri:mental-health-line" color="lightblue" width={30} sx={{ m: 0.5 }} />
           <Iconify icon="pajamas:status-health" color="red" width={30} sx={{ m: 0.5 }} />
-          {/* <Iconify icon="iconoir:community" color="#2E87FD" width={30} sx={{ m: 0.5 }} /> */}
           <Iconify icon="icon-park:medicine-bottle" width={30} sx={{ m: 0.5 }} />
         </m.div>
       </Stack>
