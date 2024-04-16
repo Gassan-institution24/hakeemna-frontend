@@ -1,40 +1,28 @@
 import * as React from 'react';
 import { m } from 'framer-motion';
-import PropTypes from 'prop-types';
 
 import { Box } from '@mui/system';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { Typography } from '@mui/material';
 import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
-import { Divider, Typography } from '@mui/material';
+
+import { paths } from 'src/routes/paths';
 
 import { useTranslate } from 'src/locales';
-import { useGetSubscriptionsInhome } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-
-// import { _socials, _carouselsMembers } from 'src/_mock';
-
 import { varFade, MotionViewport } from 'src/components/animate';
-import Carousel, { CarouselArrows } from 'src/components/carousel';
-
-const _socials = ['red', 'black'];
 
 export default function VerticalDividerText() {
   const { t } = useTranslate();
-  const { subscriptionsData } = useGetSubscriptionsInhome();
-  console.log(subscriptionsData, 'sdsdsdsd');
 
   return (
     <>
-      <Divider orientation="vertical" flexItem sx={{ mb: 10 }}>
-        <h1>{t('WHAT WE DO')}</h1>
-        {/* <h6 style={{ color: 'gray' }}>
-      
-    </h6> */}
-      </Divider>
+      <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 8, md: 10 } }}>
+        <m.div variants={varFade().inUp}>
+          <Typography variant="h2">{t('WHAT WE DO')}</Typography>
+        </m.div>
+      </Container>
       <Box
         sx={{
           display: 'grid',
@@ -43,7 +31,7 @@ export default function VerticalDividerText() {
             xs: '1fr',
             md: '1fr 1fr ',
             lg: '1fr 1fr ',
-            xl: '1fr 1fr 1fr',
+            xl: '1fr 1fr 1fr ',
           },
           m: 6,
         }}
@@ -637,136 +625,22 @@ export default function VerticalDividerText() {
           </ul>
         </Box>
       </Box>
-
       <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 10, md: 15 } }}>
-        <m.div variants={varFade().inDown}>
-          <Typography variant="overline" sx={{ color: 'text.disabled' }}>
-            Pricing
-          </Typography>
-        </m.div>
-
         <m.div variants={varFade().inUp}>
           <Typography variant="h2" sx={{ my: 3 }}>
-            Get the right offer for your service unit
+            Join us and Get the right offer for your service unit
           </Typography>
         </m.div>
-
-        <m.div variants={varFade().inUp}>
-          <Typography
-            sx={{
-              mx: 'auto',
-              maxWidth: 640,
-              color: 'text.secondary',
-            }}
-          >
-            Start glowing up your work with Hakeemna.com
-          </Typography>
-        </m.div>
-
-        <Card
-          component={m.div}
-          variants={varFade().in}
-          sx={{
-            px: 1.5,
-            m: 1.5,
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr',
-          }}
-        >
-          {subscriptionsData.map((member, index) => (
-            <Box
-              sx={{
-                ...(index === 1 && {
-                  boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-                }),
-                m: 3,
-                ...(index === 0 && { border: '#ececec 1px solid' }),
-                ...(index === 2 && { border: '#ececec 1px solid' }),
-              }}
-            >
-              <Typography variant="subtitle1" sx={{ mt: 2.5, mb: 0.5 }}>
-                {member?.name_english}
-              </Typography>
-
-              <Typography variant="body2" sx={{ mb: 2.5, color: 'text.secondary' }}>
-                <Typography>
-                  {' '}
-                  <Iconify icon="bx:dollar"  sx={{ color:'#22C55E' }} />{member?.price_in_usd}/ {member?.period_in_months} Month</Typography>
-                
-                {member?.Users_num} Users
-              </Typography>
-              <Divider sx={{ borderStyle: 'dashed' }} />
-              <ul
-                style={{
-                  listStyle: 'none',
-                  textAlign: 'left',
-                  marginLeft: -15,
-                  marginTop: 25,
-                }}
-              >
-                {member?.package_appointment === true && (
-                  <li>
-                    <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} /> Appointment
-                    Package
-                  </li>
-                )}
-                {member?.package_accounting === true && (
-                  <li>
-                    <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} /> Accounting
-                    Package
-                  </li>
-                )}
-                {member?.package_docotor_report === true && (
-                  <li>
-                    <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} /> Docotor
-                    Report Package
-                  </li>
-                )}
-                {member?.package_final_reporting === true && (
-                  <li>
-                    <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} /> Final
-                    Reporting Package
-                  </li>
-                )}
-                {member?.package_old_files_Management === true && (
-                  <li>
-                    <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} /> Old Files
-                    Management Package
-                  </li>
-                )}
-                {member?.package_TAX_Income_reporting === true && (
-                  <li>
-                    <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} /> TAX Income
-                    Reporting Package
-                  </li>
-                )}
-              </ul>
-              {/* <Stack direction="row" alignItems="center" justifyContent="center" sx={{ p: 2 }}>
-                <IconButton>
-                  <Iconify icon="skill-icons:instagram" />
-                </IconButton>
-              </Stack> */}
-            </Box>
-            // <Button variant='contained'>Select</Button>
-          ))}
-        </Card>
-
         <Button
           size="large"
-          color="inherit"
           variant="outlined"
           endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={24} />}
-          sx={{ mx: 'auto' }}
+          sx={{ mx: 'auto', backgroundColor: 'success.main', color: 'white' }}
+          href={paths.pages.UsPricing}
         >
-          Show All
+          Subscriptions
         </Button>
       </Container>
     </>
   );
 }
-// package_appointment &&
-//   package_accounting &&
-//   package_docotor_report &&
-//   package_final_reporting &&
-//   package_old_files_Management &&
-//   package_TAX_Income_reporting
