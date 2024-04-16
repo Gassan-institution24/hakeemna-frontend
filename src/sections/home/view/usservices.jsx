@@ -663,42 +663,93 @@ export default function VerticalDividerText() {
           </Typography>
         </m.div>
 
-        <Box sx={{ position: 'relative' }}>
-          <CarouselArrows
-            filled
-            shape="rounded"
-            onNext={subscriptionsData.onNext}
-            onPrev={subscriptionsData.onPrev}
-            leftButtonProps={{
-              sx: {
-                left: 24,
-                ...(subscriptionsData.length < 5 && { display: 'none' }),
-              },
-            }}
-            rightButtonProps={{
-              sx: {
-                right: 24,
-                ...(subscriptionsData.length < 5 && { display: 'none' }),
-              },
-            }}
-          >
-            <Carousel>
-              {subscriptionsData.map((member) => (
-                <Box
-                  key={member.id}
-                  component={m.div}
-                  variants={varFade().in}
-                  sx={{
-                    px: 1.5,
-                    py: { xs: 8, md: 10 },
-                  }}
-                >
-                  <MemberCard member={member} />
-                </Box>
-              ))}
-            </Carousel>
-          </CarouselArrows>
-        </Box>
+        <Card
+          component={m.div}
+          variants={varFade().in}
+          sx={{
+            px: 1.5,
+            m: 1.5,
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr 1fr',
+          }}
+        >
+          {subscriptionsData.map((member, index) => (
+            <Box
+              sx={{
+                ...(index === 1 && {
+                  boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+                }),
+                m: 3,
+                ...(index === 0 && { border: '#ececec 1px solid' }),
+                ...(index === 2 && { border: '#ececec 1px solid' }),
+              }}
+            >
+              <Typography variant="subtitle1" sx={{ mt: 2.5, mb: 0.5 }}>
+                {member?.name_english}
+              </Typography>
+
+              <Typography variant="body2" sx={{ mb: 2.5, color: 'text.secondary' }}>
+                <Typography>
+                  {' '}
+                  <Iconify icon="bx:dollar"  sx={{ color:'#22C55E' }} />{member?.price_in_usd}/ {member?.period_in_months} Month</Typography>
+                
+                {member?.Users_num} Users
+              </Typography>
+              <Divider sx={{ borderStyle: 'dashed' }} />
+              <ul
+                style={{
+                  listStyle: 'none',
+                  textAlign: 'left',
+                  marginLeft: -15,
+                  marginTop: 25,
+                }}
+              >
+                {member?.package_appointment === true && (
+                  <li>
+                    <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} /> Appointment
+                    Package
+                  </li>
+                )}
+                {member?.package_accounting === true && (
+                  <li>
+                    <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} /> Accounting
+                    Package
+                  </li>
+                )}
+                {member?.package_docotor_report === true && (
+                  <li>
+                    <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} /> Docotor
+                    Report Package
+                  </li>
+                )}
+                {member?.package_final_reporting === true && (
+                  <li>
+                    <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} /> Final
+                    Reporting Package
+                  </li>
+                )}
+                {member?.package_old_files_Management === true && (
+                  <li>
+                    <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} /> Old Files
+                    Management Package
+                  </li>
+                )}
+                {member?.package_TAX_Income_reporting === true && (
+                  <li>
+                    <Iconify icon="material-symbols:check" width={15} sx={{ mr: 1 }} /> TAX Income
+                    Reporting Package
+                  </li>
+                )}
+              </ul>
+              {/* <Stack direction="row" alignItems="center" justifyContent="center" sx={{ p: 2 }}>
+                <IconButton>
+                  <Iconify icon="skill-icons:instagram" />
+                </IconButton>
+              </Stack> */}
+            </Box>
+            // <Button variant='contained'>Select</Button>
+          ))}
+        </Card>
 
         <Button
           size="large"
@@ -707,40 +758,15 @@ export default function VerticalDividerText() {
           endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={24} />}
           sx={{ mx: 'auto' }}
         >
-          All Members
+          Show All
         </Button>
       </Container>
     </>
   );
 }
-
-function MemberCard({ member }) {
-  return (
-    <Card>
-      <Typography variant="subtitle1" sx={{ mt: 2.5, mb: 0.5 }}>
-        {member?.name_english}
-      </Typography>
-
-      <Typography variant="body2" sx={{ mb: 2.5, color: 'text.secondary' }}>
-        {member?.price_in_usd} - {member?.period_in_months}
-      </Typography>
-
-      {/* <Box sx={{ px: 1 }}>
-        <Image
-          src="https://www.revenuecat.com/static/759854069658d26585c189d5c984313b/f2ab1/60706bf8c76297558975edbc_ios-subscription-offers-config.png"
-          ratio="1/1"
-          sx={{ borderRadius: 2 }}
-        />
-      </Box> */}
-
-      <Stack direction="row" alignItems="center" justifyContent="center" sx={{ p: 2 }}>
-        <IconButton>
-          <Iconify icon="skill-icons:instagram" />
-        </IconButton>
-      </Stack>
-    </Card>
-  );
-}
-MemberCard.propTypes = {
-  member: PropTypes.object,
-};
+// package_appointment &&
+//   package_accounting &&
+//   package_docotor_report &&
+//   package_final_reporting &&
+//   package_old_files_Management &&
+//   package_TAX_Income_reporting
