@@ -1,25 +1,22 @@
 import * as React from 'react';
+import { m } from 'framer-motion';
+import PropTypes from 'prop-types';
 
 import { Box } from '@mui/system';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
 import { Divider, Typography } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 import { useGetSubscriptionsInhome } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import { color, m } from 'framer-motion';
-import PropTypes from 'prop-types';
-
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import { alpha } from '@mui/material/styles';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
 
 // import { _socials, _carouselsMembers } from 'src/_mock';
 
-import Image from 'src/components/image';
 import { varFade, MotionViewport } from 'src/components/animate';
 import Carousel, { CarouselArrows } from 'src/components/carousel';
 
