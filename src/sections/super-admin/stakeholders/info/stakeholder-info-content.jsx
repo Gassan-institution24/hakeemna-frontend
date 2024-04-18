@@ -41,7 +41,7 @@ export default function StakeholderInfoContent({ stakeholderData }) {
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Unit Service',
+          label: 'unit of service',
           value: unit_service?.name_english,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },

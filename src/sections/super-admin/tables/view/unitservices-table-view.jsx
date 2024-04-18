@@ -239,7 +239,7 @@ export default function UnitServicesTableView() {
     <>
       <Container maxWidth="xl">
         <CustomBreadcrumbs
-          heading="Unit Services" /// edit
+          heading="unit of services" /// edit
           links={[
             {
               name: 'dashboard',
@@ -249,7 +249,7 @@ export default function UnitServicesTableView() {
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Unit Services' }, /// edit
+            { name: 'unit of services' }, /// edit
           ]}
           // action={
           //   <Button
@@ -258,7 +258,7 @@ export default function UnitServicesTableView() {
           //     variant="contained"
           //     startIcon={<Iconify icon="mingcute:add-line" />}
           //   >
-          //     New Unit Service
+          //     New unit of service
           //   </Button> /// edit
           // }
           sx={{

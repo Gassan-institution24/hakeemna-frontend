@@ -33,7 +33,7 @@ export default function CitiesNewEditForm({ currentTable }) {
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
-    unit_service: Yup.string().required('unit service is required'),
+    unit_service: Yup.string().required('unit of service is required'),
   });
 
   const defaultValues = useMemo(
@@ -125,7 +125,7 @@ export default function CitiesNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect name="unit_service" label="unit service">
+              <RHFSelect name="unit_service" label="unit of service">
                 {unitservicesData.map((unit, idx) => (
                   <MenuItem lang="ar" key={idx} value={unit._id}>
                     {unit.name_english}

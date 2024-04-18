@@ -47,7 +47,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   const { handleAddNew } = useNewScreen();
 
-   const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const weekDays = [
     { value: 'saturday', label: t('Saturday') },
@@ -197,7 +197,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
         console.error(e);
         proccessing.onFalse();
         // setErrorMsg(e.message);
-        enqueueSnackbar(e.message,{variant:'error'})
+        enqueueSnackbar(e.message, { variant: 'error' });
         // window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     },

@@ -58,7 +58,7 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'name' },
   { id: 'name_arabic', label: 'arabic name' },
-  { id: 'unit_service', label: 'Unit Service' },
+  { id: 'unit_service', label: 'unit of service' },
   { id: 'start_date', label: 'Start Date' },
   { id: 'end_date', label: 'End Date' },
   { id: 'status', label: 'Status' },

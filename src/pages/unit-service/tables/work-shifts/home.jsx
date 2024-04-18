@@ -15,7 +15,7 @@ export default function WorkShiftHomePage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="read">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : Work Shifts</title>
+        <title>{serviceUnitName || 'unit of service'} : Work Shifts</title>
         <meta name="description" content="meta" />
       </Helmet>
 

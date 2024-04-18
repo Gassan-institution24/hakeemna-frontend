@@ -76,15 +76,16 @@ export default function TableNewEditForm({ currentTable }) {
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting,errors },
+    formState: { isSubmitting, errors },
   } = methods;
 
   useEffect(() => {
     if (Object.keys(errors).length) {
-        Object.keys(errors)
-          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+      Object.keys(errors).forEach((key, idx) =>
+        enqueueSnackbar(errors?.[key]?.message, { variant: 'error' })
+      );
     }
-  }, [errors,enqueueSnackbar]);
+  }, [errors, enqueueSnackbar]);
 
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules

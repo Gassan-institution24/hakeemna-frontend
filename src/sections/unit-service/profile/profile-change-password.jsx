@@ -65,15 +65,16 @@ export default function AccountChangePassword() {
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting,errors },
+    formState: { isSubmitting, errors },
   } = methods;
 
   useEffect(() => {
     if (Object.keys(errors).length) {
-        Object.keys(errors)
-          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+      Object.keys(errors).forEach((key, idx) =>
+        enqueueSnackbar(errors?.[key]?.message, { variant: 'error' })
+      );
     }
-  }, [errors,enqueueSnackbar]);
+  }, [errors, enqueueSnackbar]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -84,7 +85,7 @@ export default function AccountChangePassword() {
       socket.emit('updated', {
         user,
         link: paths.unitservice.profile.root,
-        msg: `updated the service unit profile`,
+        msg: `updated the unit of service profile`,
       });
 
       if (response.status === 201) {

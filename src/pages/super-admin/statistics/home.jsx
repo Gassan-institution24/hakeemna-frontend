@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import StatisticsPage from 'src/sections/super-admin/statistics/home';
+import StatisticsPage from 'src/sections/super-admin/statistics/view/home';
 
 // ----------------------------------------------------------------------
 

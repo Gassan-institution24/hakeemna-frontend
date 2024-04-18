@@ -50,7 +50,7 @@ import HistoryFiltersResult from './appoint-history-filters-result';
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'Name', align: 'center' },
-  { id: 'unit_service', label: 'Unit Service' },
+  { id: 'unit_service', label: 'unit of service' },
   { id: 'appointment_type', label: 'Appointment Type' },
   { id: 'payment_method', label: 'Payment Method' },
   { id: 'start_time', label: 'Start Time' },

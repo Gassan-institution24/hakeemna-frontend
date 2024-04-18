@@ -17,7 +17,7 @@ export default function UnitServiceInfoPage() {
   return (
     <>
       <Helmet>
-        <title> Unit Services: {unitserviceName} Info </title>
+        <title> unit of services: {unitserviceName} Info </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

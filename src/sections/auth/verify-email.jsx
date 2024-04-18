@@ -145,9 +145,9 @@ export default function ClassicVerifyView() {
         <Typography variant="h3">{t('please check your email!')}</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {t(
-            'we have emailed a 6-digit confirmation code to acb@domain, please enter the code in below box to verify your email.'
-          )}
+          we have emailed a 6-digit confirmation code to{' '}
+          <span style={{ color: 'green', textTransform: 'lowercase' }}>{email}</span>, please enter
+          the code in below box to verify your email.
         </Typography>
       </Stack>
     </>

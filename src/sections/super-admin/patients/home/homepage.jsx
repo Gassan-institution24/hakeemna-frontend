@@ -47,6 +47,7 @@ const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'Name' },
+  { id: 'name_arabic', label: 'Name in arabic' },
   { id: 'status', label: 'Status' },
   { id: 'General-info', label: 'General Info' },
   { id: 'History', label: 'History' },
@@ -273,7 +274,7 @@ export default function PatientTableView() {
           //     variant="contained"
           //     startIcon={<Iconify icon="mingcute:add-line" />}
           //   >
-          //     New Unit Service
+          //     New unit of service
           //   </Button> /// edit
           // }
           sx={{
@@ -519,8 +520,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.first_name && data?.first_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.last_name && data?.last_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_english &&
+          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.name_arabic &&
+          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.name_english &&
           data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.country?.name_english &&

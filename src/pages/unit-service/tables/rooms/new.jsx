@@ -15,7 +15,7 @@ export default function RoomNewPage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="create">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : New Room</title>
+        <title>{serviceUnitName || 'unit of service'} : New Room</title>
         <meta name="description" content="meta" />
       </Helmet>
 

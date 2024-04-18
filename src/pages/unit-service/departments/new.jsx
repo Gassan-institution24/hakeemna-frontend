@@ -15,7 +15,7 @@ export default function DepartmentsNewPage() {
   return (
     <ACLGuard category="unit_service" subcategory="departments" acl="create">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} :New Department </title>
+        <title>{serviceUnitName || 'unit of service'} :New Department </title>
         <meta name="description" content="meta" />
       </Helmet>
 

@@ -8,7 +8,7 @@ export default function TableCreatePage() {
   return (
     <>
       <Helmet>
-        <title> super: Create a new Unit Service</title>
+        <title> super: Create a new unit of service</title>
         <meta name="description" content="meta" />
       </Helmet>
 

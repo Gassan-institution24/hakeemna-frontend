@@ -48,7 +48,7 @@ export default function UnitServiceInfoContent({ unitServiceData }) {
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Unit Service Type',
+          label: 'unit of service Type',
           value: US_type?.name_english,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },

@@ -52,7 +52,7 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    // unit_service: Yup.string().required('Unit Service is required'),
+    // unit_service: Yup.string().required('unit of service is required'),
     // department: Yup.string(),
     employee_type: Yup.string().required('Employee Type is required'),
     email: Yup.string().required('email is required'),

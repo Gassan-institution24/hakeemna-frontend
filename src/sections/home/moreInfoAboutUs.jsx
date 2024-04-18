@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 import { useCountdownDate } from 'src/hooks/use-countdown';
 
 import { useTranslate } from 'src/locales';
-// import { ComingSoonIllustration } from 'src/assets/illustrations';
 
 // import Image from 'src/components/image';
 

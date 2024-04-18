@@ -52,7 +52,7 @@ const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'code' },
   { id: 'name_english', label: 'Name' },
-  { id: 'US_type', label: 'service unit type' },
+  { id: 'US_type', label: 'unit of service type' },
   { id: 'sector_type', label: 'sector type' },
   { id: 'email', label: 'email' },
   { id: 'phone', label: 'phone number' },
@@ -262,13 +262,13 @@ export default function UnitServicesTableView() {
     <>
       <Container maxWidth="xl">
         <CustomBreadcrumbs
-          heading="Unit Services" /// edit
+          heading="unit of services" /// edit
           links={[
             {
               name: 'dashboard',
               href: paths.superadmin.root,
             },
-            { name: 'Unit Services' }, /// edit
+            { name: 'unit of services' }, /// edit
           ]}
           // action={
           //   <Button
@@ -277,7 +277,7 @@ export default function UnitServicesTableView() {
           //     variant="contained"
           //     startIcon={<Iconify icon="mingcute:add-line" />}
           //   >
-          //     New Unit Service
+          //     New unit of service
           //   </Button> /// edit
           // }
           sx={{

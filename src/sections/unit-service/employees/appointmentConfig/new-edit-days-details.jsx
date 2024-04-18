@@ -103,7 +103,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       append(newItem);
     } catch (e) {
       console.error(e);
-      enqueueSnackbar(e.message,{variant:'error'})
+      enqueueSnackbar(e.message, { variant: 'error' });
       // setErrorMsg(e.message);
       // window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -178,7 +178,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       // });
     } catch (e) {
       console.error(e);
-      enqueueSnackbar(e.message,{variant:'error'})
+      enqueueSnackbar(e.message, { variant: 'error' });
       // setErrorMsg(e.message);
       // window.scrollTo({ top: 0, behavior: 'smooth' });
     }

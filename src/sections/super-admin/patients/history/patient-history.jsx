@@ -62,13 +62,7 @@ export default function PatientHistoryView({ patientData }) {
       ))}
     </Tabs>
   );
-  const patientName =
-    (patientData?.first_name &&
-      patientData?.last_name &&
-      `${patientData?.first_name} ${patientData?.last_name}`) ||
-    (patientData?.first_name && patientData?.first_name) ||
-    (patientData?.last_name && patientData?.last_name) ||
-    'Patient';
+  const patientName = patientData?.name_english || 'Patient';
 
   return (
     <Container maxWidth="xl">

@@ -15,7 +15,7 @@ export default function InsuranceHomePage() {
   return (
     <ACLGuard category="unit_service" subcategory="unit_service_info" acl="read">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : Insurances</title>
+        <title>{serviceUnitName || 'unit of service'} : Insurances</title>
         <meta name="description" content="meta" />
       </Helmet>
 
