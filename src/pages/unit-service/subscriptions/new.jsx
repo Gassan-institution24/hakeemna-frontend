@@ -15,7 +15,7 @@ export default function SubscriptionNewPage() {
   return (
     <ACLGuard category="unit_service" subcategory="unit_service_info" acl="create">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : New Subscription</title>
+        <title>{serviceUnitName || 'unit of service'} : New Subscription</title>
         <meta name="description" content="meta" />
       </Helmet>
 

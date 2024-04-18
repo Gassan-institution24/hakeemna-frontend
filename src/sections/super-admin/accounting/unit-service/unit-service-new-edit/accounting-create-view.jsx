@@ -22,7 +22,7 @@ export default function USAccountingCreateView({ unitServiceData }) {
   const params = useParams();
   const { id } = params;
 
-  const unitServiceName = unitServiceData?.name_english || 'Unit Service';
+  const unitServiceName = unitServiceData?.name_english || 'unit of service';
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs

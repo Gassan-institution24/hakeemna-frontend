@@ -45,7 +45,7 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 const TABLE_HEAD = [
   /// to edit
   { id: 'code', label: 'Code' },
-  // { id: 'unit_service', label: 'Unit Service' },
+  // { id: 'unit_service', label: 'unit of service' },
   { id: 'free_subscription', label: 'Free Subscription' },
   { id: 'subscription', label: 'subscription' },
   { id: 'status', label: 'Status' },
@@ -173,7 +173,7 @@ export default function UnitServicesAccountingView({ unitServiceData }) {
         //     href: paths.superadmin.root,
         //   },
         //   {
-        //     name: 'Unit Services',
+        //     name: 'unit of services',
         //     href: paths.superadmin.unitservices.root,
         //   },
         //   { name: t(`${unitserviceName} accounting`) }, /// edit

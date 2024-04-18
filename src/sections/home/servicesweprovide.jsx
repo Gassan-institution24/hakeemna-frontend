@@ -119,7 +119,9 @@ export default function ServicesWeprovide() {
                 textAlign: 'left',
               }}
             >
-              {t('Medical institutions face challenges in providing excellent services due to high requirements and competition. Digital transformation is necessary but costly due to the need for adapting to new technology.')}
+              {t(
+                'Medical institutions face challenges in providing excellent services due to high requirements and competition. Digital transformation is necessary but costly due to the need for adapting to new technology.'
+              )}
             </p>
             <Button
               target="_blank"

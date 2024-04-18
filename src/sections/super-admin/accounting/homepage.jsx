@@ -21,13 +21,13 @@ export default function AccountingHomePage() {
 
   // const settings = useSettingsContext();
 
-  const [currentTab, setCurrentTab] = useState('Unit Services');
+  const [currentTab, setCurrentTab] = useState('unit of services');
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
 
-  const HistoryTabsList = ['Unit Services', 'Stakeholders'];
+  const HistoryTabsList = ['unit of services', 'Stakeholders'];
 
   const renderTabs = (
     <Tabs
@@ -62,7 +62,7 @@ export default function AccountingHomePage() {
 
       {renderTabs}
 
-      {currentTab === 'Unit Services' && <UnitServicesAccounting />}
+      {currentTab === 'unit of services' && <UnitServicesAccounting />}
       {currentTab === 'Stakeholders' && <StakeholderAccounting />}
     </Container>
   );

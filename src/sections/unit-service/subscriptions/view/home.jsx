@@ -59,7 +59,7 @@ export default function UnitServicesAccountingView() {
   const TABLE_HEAD = [
     /// to edit
     { id: 'code', label: t('code') },
-    // { id: 'unit_service', label: t('Unit Service') },
+    // { id: 'unit_service', label: t('unit of service') },
     { id: 'free_subscription', label: t('free subscription') },
     { id: 'subscription', label: t('subscription') },
     { id: 'status', label: t('status') },

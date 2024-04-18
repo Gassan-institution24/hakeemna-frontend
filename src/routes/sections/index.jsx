@@ -33,10 +33,10 @@ export default function Router() {
     // Dashboard routes
     ...dashboardRoutes,
 
-    // unit service dashboard routes
+    // unit of service dashboard routes
     ...unitServiceDashboardRoutes,
 
-    // unit service employee dashboard routes
+    // unit of service employee dashboard routes
     ...unitServiceEmployeeDashboardRoutes,
 
     // Main routes

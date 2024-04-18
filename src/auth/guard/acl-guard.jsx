@@ -73,13 +73,13 @@ export default function ACLGuard({ category, subcategory, acl, children, sx }) {
   //     <Container maxWidth="lg" component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
   //       <m.div variants={varBounce().in}>
   //         <Typography variant="h3" sx={{ mb: 2 }}>
-  //           {t('Service Unit Licence expired')}
+  //           {t('unit of service Licence expired')}
   //         </Typography>
   //       </m.div>
 
   //       <m.div variants={varBounce().in}>
   //         <Typography sx={{ color: 'text.secondary' }}>
-  //           {t('You cannot access data from this service unit')}
+  //           {t('You cannot access data from this unit of service')}
   //         </Typography>
   //       </m.div>
 

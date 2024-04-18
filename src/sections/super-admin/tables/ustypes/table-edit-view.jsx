@@ -22,7 +22,7 @@ export default function TableEditView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Update Unit Service Type"
+        heading="Update unit of service Type"
         links={[
           {
             name: 'dashboard',
@@ -33,10 +33,10 @@ export default function TableEditView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Unit Service Types',
+            name: 'unit of service Types',
             href: paths.superadmin.tables.unitservicetypes.root,
           },
-          { name: 'Update Unit Service Type' },
+          { name: 'Update unit of service Type' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import isEqual from 'lodash/isEqual';
 
 import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
@@ -25,12 +26,12 @@ import {
 // import { LoadingScreen } from 'src/components/loading-screen';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-// import UploadOldPatient from '../upload-old-patient';
-import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+// import UploadOldPatient from '../upload-old-patient';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Stack, MenuItem } from '@mui/material';
+import { Box, Card, Stack, MenuItem, IconButton } from '@mui/material';
 
 import { useSearchParams } from 'src/routes/hooks';
 
@@ -38,6 +39,7 @@ import { addToCalendar } from 'src/utils/calender';
 import { useUnitTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import Iconify from 'src/components/iconify';
 // // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider from 'src/components/hook-form/form-provider';
@@ -66,6 +68,8 @@ export default function TableCreateView() {
   // const router = useRouter();
 
   const [filters, setFilters] = useState(defaultFilters);
+
+  const canReset = !isEqual(filters, defaultFilters);
 
   const searchParams = useSearchParams();
   const appointment = searchParams.get('appointment');
@@ -137,15 +141,16 @@ export default function TableCreateView() {
     handleSubmit,
     watch,
     setValue,
-    formState: { isSubmitting,errors },
+    formState: { isSubmitting, errors },
   } = methods;
-  
+
   useEffect(() => {
     if (Object.keys(errors).length) {
-        Object.keys(errors)
-          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+      Object.keys(errors).forEach((key, idx) =>
+        enqueueSnackbar(errors?.[key]?.message, { variant: 'error' })
+      );
     }
-  }, [errors,enqueueSnackbar]);
+  }, [errors, enqueueSnackbar]);
 
   const values = watch();
   const { tableData } = useGetCountryCities(values.country);
@@ -210,6 +215,10 @@ export default function TableCreateView() {
       setValue(event.target.name, newValue);
     }
   };
+
+  const handleResetFilters = useCallback(() => {
+    setFilters(defaultFilters);
+  }, []);
 
   return (
     <Container maxWidth="xl">
@@ -306,6 +315,12 @@ export default function TableCreateView() {
                 width: { xs: 1, md: 200 },
               }}
             />
+
+            {canReset && (
+              <IconButton sx={{ color: 'error.main' }} onClick={handleResetFilters}>
+                <Iconify icon="solar:trash-bin-trash-bold" />
+              </IconButton>
+            )}
           </Box>
 
           <Divider sx={{ borderStyle: 'dashed' }} />

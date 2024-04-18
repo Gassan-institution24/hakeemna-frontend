@@ -232,7 +232,7 @@ export default function USlicenseMovementView({ unitServiceData }) {
             },
             {
               name: `${
-                (unitServiceData && unitServiceData.name_english) || 'Unit Service'
+                (unitServiceData && unitServiceData.name_english) || 'unit of service'
               } Accounting`,
             },
           ]}
