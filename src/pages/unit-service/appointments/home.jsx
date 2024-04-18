@@ -15,7 +15,7 @@ export default function AppointmentsHomePage() {
   return (
     <ACLGuard category="unit_service" subcategory="appointments" acl="read">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : Appointments</title>
+        <title>{serviceUnitName || 'unit of service'} : Appointments</title>
         <meta name="description" content="meta" />
       </Helmet>
       <AppointmentsHomeView />

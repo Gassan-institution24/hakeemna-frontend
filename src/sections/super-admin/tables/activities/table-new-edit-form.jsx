@@ -33,7 +33,7 @@ export default function TableNewEditForm({ currentTable }) {
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
-    unit_service: Yup.string().required('Unit Service is required'),
+    unit_service: Yup.string().required('unit of service is required'),
     department: Yup.string().nullable(),
     details: Yup.string(),
     details_arabic: Yup.string(),
@@ -139,7 +139,7 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect name="unit_service" label="Unit Service">
+              <RHFSelect name="unit_service" label="unit of service">
                 {unitservicesData.map((unit_service, idx) => (
                   <MenuItem lang="ar" key={idx} value={unit_service._id}>
                     {unit_service.name_english}

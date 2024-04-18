@@ -55,15 +55,16 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
     watch,
     control,
     handleSubmit,
-    formState: { isSubmitting,errors },
+    formState: { isSubmitting, errors },
   } = methods;
 
   useEffect(() => {
     if (Object.keys(errors).length) {
-        Object.keys(errors)
-          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+      Object.keys(errors).forEach((key, idx) =>
+        enqueueSnackbar(errors?.[key]?.message, { variant: 'error' })
+      );
     }
-  }, [errors,enqueueSnackbar]);
+  }, [errors, enqueueSnackbar]);
 
   const values = watch();
 
@@ -83,8 +84,8 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
     try {
       if (!dateError) {
-        if (currentEvent?._id) {
-          await axiosInstance.patch(`${endpoints.calender.all}/${currentEvent?._id}`, eventData);
+        if (currentEvent?.id) {
+          await axiosInstance.patch(`${endpoints.calender.all}/${currentEvent?.id}`, eventData);
           enqueueSnackbar(t('updated successfully!'));
         } else {
           await axiosInstance.post(endpoints.calender.all, eventData);

@@ -12,7 +12,7 @@ export default function ServiceUnitAppointmentsPage() {
   const { id } = params;
   const { data } = useGetUnitservice(id);
   // const { appointmentsData, loading } = useGetUSAppointments(id);
-  const unitServiceName = data?.name_english || 'unit service';
+  const unitServiceName = data?.name_english || 'unit of service';
   return (
     <>
       <Helmet>

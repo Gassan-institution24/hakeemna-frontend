@@ -84,7 +84,12 @@ export default function BookManually({ onClose, refetch, ...other }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const { reset, setValue, handleSubmit,formState: { errors }, } = methods;
+  const {
+    reset,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -117,10 +122,11 @@ export default function BookManually({ onClose, refetch, ...other }) {
 
   useEffect(() => {
     if (Object.keys(errors).length) {
-        Object.keys(errors)
-          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+      Object.keys(errors).forEach((key, idx) =>
+        enqueueSnackbar(errors?.[key]?.message, { variant: 'error' })
+      );
     }
-  }, [errors,enqueueSnackbar]);
+  }, [errors, enqueueSnackbar]);
 
   return (
     <Dialog maxWidth="lg" onClose={onClose} {...other}>

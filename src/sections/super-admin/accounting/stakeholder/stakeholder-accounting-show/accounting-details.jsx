@@ -193,7 +193,7 @@ export default function InvoiceDetails({ economicMovementData }) {
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               From
             </Typography>
-            {economicMovementData?.patient?.first_name} {economicMovementData?.patient?.last_name}
+            {economicMovementData?.patient?.name_english}
             <br />
             {economicMovementData?.patient?.country} {economicMovementData?.patient?.city}
             <br />

@@ -202,6 +202,10 @@ export const endpoints = {
     one: (id) => `/api/stakeholder/${id}`,
     active: '/api/stakeholder/active',
   },
+  statistics: {
+    all: '/api/statistics',
+    one: (id) => `/api/statistics/${id}`,
+  },
   service_types: {
     all: '/api/servicetypes',
     active: '/api/servicetypes/active',

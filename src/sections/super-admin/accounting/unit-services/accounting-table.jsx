@@ -36,7 +36,7 @@ import MovementTableFiltersResult from './accounting-filters-result';
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'unit_service', label: 'Unit Service' },
+  { id: 'unit_service', label: 'unit of service' },
   { id: 'Start_date', label: 'Start Subscription' },
   { id: 'End_date', label: 'End Subscription' },
   { id: 'count', label: 'Subscriptions no.' },

@@ -13,7 +13,7 @@ export default function TableCreatePage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetUnitservice(id);
-  const unitServiceName = data?.name_english || 'unit service';
+  const unitServiceName = data?.name_english || 'unit of service';
   return (
     <>
       <Helmet>

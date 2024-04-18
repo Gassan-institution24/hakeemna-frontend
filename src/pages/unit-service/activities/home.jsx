@@ -15,7 +15,7 @@ export default function ActivitiesHomePage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="read">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : Activities</title>
+        <title>{serviceUnitName || 'unit of service'} : Activities</title>
         <meta name="description" content="meta" />
       </Helmet>
 

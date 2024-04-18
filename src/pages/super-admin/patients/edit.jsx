@@ -13,11 +13,7 @@ export default function TableCreatePage() {
   const params = useParams();
   const { id } = params;
   const { data, loading } = useGetPatient(id);
-  const patientName =
-    (data?.first_name && data?.last_name && `${data?.first_name} ${data?.last_name}`) ||
-    (data?.first_name && data?.first_name) ||
-    (data?.last_name && data?.last_name) ||
-    'Patient';
+  const patientName = (data?.name_english && `${data?.name_english}`) || 'Patient';
   return (
     <>
       <Helmet>

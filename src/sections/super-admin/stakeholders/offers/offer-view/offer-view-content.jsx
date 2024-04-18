@@ -55,7 +55,7 @@ export default function StakeholderInfoContent({ stakeholderData, offerData }) {
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Unit Service',
+          label: 'unit of service',
           value: unit_service?.name_english,
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
@@ -95,7 +95,7 @@ export default function StakeholderInfoContent({ stakeholderData, offerData }) {
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'Unit Services Beneficiary',
+          label: 'unit of services Beneficiary',
           value: unit_services_beneficiary
             .map((unitService, idx) => unitService.name_english)
             .join(', '),
@@ -108,9 +108,7 @@ export default function StakeholderInfoContent({ stakeholderData, offerData }) {
         },
         {
           label: 'Patients Beneficiary',
-          value: patients_beneficiary
-            .map((patient, idx) => `${patient.first_name} ${patient.last_name}`)
-            .join(', '),
+          value: patients_beneficiary.map((patient, idx) => patient.name_english).join(', '),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
       ].map((item, idx) => (

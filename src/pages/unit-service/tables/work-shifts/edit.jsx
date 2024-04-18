@@ -25,7 +25,7 @@ export default function WorkShiftEditPage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : Edit Work Shift</title>
+        <title>{serviceUnitName || 'unit of service'} : Edit Work Shift</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

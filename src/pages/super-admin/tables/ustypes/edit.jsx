@@ -8,7 +8,7 @@ export default function TableEditPage() {
   return (
     <>
       <Helmet>
-        <title> super: Edit Unit Service Type</title>
+        <title> super: Edit unit of service Type</title>
         <meta name="description" content="meta" />
       </Helmet>
 

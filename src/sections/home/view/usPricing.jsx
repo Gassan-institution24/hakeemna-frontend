@@ -31,7 +31,7 @@ export default function UsPricing() {
 
       <m.div variants={varFade().inUp}>
         <Typography variant="h2" sx={{ my: 3 }}>
-          {t('Get the right offer for your service unit')}
+          {t('Get the right offer for your unit of service')}
         </Typography>
       </m.div>
 

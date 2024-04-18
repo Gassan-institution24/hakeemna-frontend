@@ -188,7 +188,7 @@ export default function TableNewEditForm({ currentTable }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="unit_service" label="Unit Service">
+              <RHFSelect name="unit_service" label="unit of service">
                 {unitservicesData.map((unit_service, idx) => (
                   <MenuItem lang="ar" key={idx} value={unit_service._id}>
                     {unit_service.name_english}

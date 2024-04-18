@@ -16,7 +16,7 @@ export default function WorkGroupNewPage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="create">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : New Work Group</title>
+        <title>{serviceUnitName || 'unit of service'} : New Work Group</title>
         <meta name="description" content="meta" />
       </Helmet>
 

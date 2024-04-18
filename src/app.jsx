@@ -23,16 +23,16 @@ import ThemeProvider from 'src/theme';
 // ----------------------------------------------------------------------
 
 export default function App() {
-  useEffect(() => {
-    document.addEventListener('copy', disableCopy);
-    return () => {
-      document.removeEventListener('copy', disableCopy);
-    };
-  }, []);
+  // useEffect(() => {
+  //   document.addEventListener('copy', disableCopy);
+  //   return () => {
+  //     document.removeEventListener('copy', disableCopy);
+  //   };
+  // }, []);
 
-  const disableCopy = (e) => {
-    e.preventDefault();
-  };
+  // const disableCopy = (e) => {
+  //   e.preventDefault();
+  // };
   
   // useEffect(() => {
   //   document.addEventListener('screenshot', disablescreenshot);
@@ -49,7 +49,7 @@ export default function App() {
   // useEffect(() => {
   //   const handleScreenshot = () => {
   //     setScreenshotDetected(true);
-  //     setTimeout(() => setScreenshotDetected(false), 1000); 
+  //     setTimeout(() => setScreenshotDetected(false), 1000);
   //   };
 
   //   document.addEventListener('screenshot', handleScreenshot);
