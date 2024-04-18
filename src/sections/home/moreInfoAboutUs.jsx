@@ -8,8 +8,9 @@ import { useCountdownDate } from 'src/hooks/use-countdown';
 
 import { useTranslate } from 'src/locales';
 
-import Logo from 'src/components/logo';
-import Image from 'src/components/image';
+// import Image from 'src/components/image';
+
+// import Doclogo from '../../components/logo/doc.png'
 // ----------------------------------------------------------------------
 
 export default function MoreInfoAboutUs() {
@@ -19,7 +20,7 @@ export default function MoreInfoAboutUs() {
   return (
     <>
       <Typography variant="h3" sx={{ mt: 5, mb: 2, textAlign: 'center' }}>
-        {t('About us')}
+        {t('About us - Team - our message')}
       </Typography>
 
       <Typography  sx={{ mb: 2, textAlign: 'center', color: 'text.secondary' }}>
@@ -28,8 +29,8 @@ export default function MoreInfoAboutUs() {
         )}
       </Typography>
 
-      {/* <ComingSoonIllustration sx={{  }} /> */}
-      <Image src={Logo} sx={{my: 10, height: 240}}/>
+      {/* el:idea */}
+      
 
       <Stack
         direction="row"
