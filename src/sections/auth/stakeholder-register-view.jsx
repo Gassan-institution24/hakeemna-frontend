@@ -67,7 +67,7 @@ export default function JwtRegisterView() {
     identification_num: Yup.string().required('Identification number is required'),
     country: Yup.string().required('Country is required'),
     city: Yup.string().required('City is required'),
-    US_type: Yup.string().required('Unit Service type is required'),
+    US_type: Yup.string().required('unit of service type is required'),
     speciality: Yup.string().nullable(),
     sector_type: Yup.string().required('Sector type is required'),
   });
@@ -219,7 +219,7 @@ export default function JwtRegisterView() {
           </RHFSelect>
         </Stack>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFSelect name="US_type" label="Unit Service Type">
+          <RHFSelect name="US_type" label="unit of service Type">
             {unitserviceTypesData.map((type, idx) => (
               <MenuItem lang="ar" key={idx} value={type._id}>
                 {type.name_english}

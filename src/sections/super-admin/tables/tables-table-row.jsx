@@ -253,7 +253,7 @@ export default function TablesTableRow({ row, selected, onViewRow }) {
   //         {tableName === 'departments' && (
   //           <Stack component={Paper} sx={{ m: 1.5 }}>
   //             {stackComponent({
-  //               arr: ['Code', 'Name', 'Unit Service', 'Created At', 'Updated At'],
+  //               arr: ['Code', 'Name', 'unit of service', 'Created At', 'Updated At'],
   //             })}
   //             {documents.map((item, idx)  =>
   //               stackComponent({

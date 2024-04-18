@@ -15,7 +15,7 @@ import TableNewEditForm from './accounting-new-edit-form';
 export default function USAppointmentEditView({ unitServiceData, licenseMovementData }) {
   // const settings = useSettingsContext();
 
-  const unitServiceName = unitServiceData?.name_english || 'Unit Service';
+  const unitServiceName = unitServiceData?.name_english || 'unit of service';
   const params = useParams();
   const { id } = params;
   return (
@@ -28,7 +28,7 @@ export default function USAppointmentEditView({ unitServiceData, licenseMovement
             href: paths.superadmin.root,
           },
           {
-            name: 'Unit Services',
+            name: 'unit of services',
             href: paths.superadmin.unitservices.root,
           },
           {

@@ -87,7 +87,7 @@ export const paths = {
       create: `${ROOTS.DASHBOARD}/user/create`,
       account: `${ROOTS.DASHBOARD}/user/account`,
       share: `${ROOTS.DASHBOARD}/user/share`,
-    
+
       financilmovment: `${ROOTS.DASHBOARD}/user/financilmovment`,
       patientsappointments: `${ROOTS.DASHBOARD}/user/appointments`,
       bookappointment: (id) => `${ROOTS.DASHBOARD}/user/bookappointment/${id}`,
@@ -494,7 +494,7 @@ export const paths = {
     },
   },
 
-  // unit service
+  // unit of service
   unitservice: {
     root: `${ROOTS.SUPERADMIN}/us`,
     acl: `${ROOTS.SUPERADMIN}/us/acl`,

@@ -84,7 +84,7 @@ const InsuranceCoCreatePage = lazy(() =>
 const InsuranceCoEditPage = lazy(() =>
   import('src/pages/super-admin/tables/insurance-companies/edit')
 );
-// UNIT SERVICES
+// unit of serviceS
 const USsTablePage = lazy(() => import('src/pages/super-admin/tables/unit-services/table'));
 const USCreatePage = lazy(() => import('src/pages/super-admin/tables/unit-services/new'));
 const USEditPage = lazy(() => import('src/pages/super-admin/tables/unit-services/edit'));
@@ -126,7 +126,7 @@ const FreeSubEditPage = lazy(() => import('src/pages/super-admin/tables/free-sub
 const TaxesTablePage = lazy(() => import('src/pages/super-admin/tables/added-value-taxes/table'));
 const TaxCreatePage = lazy(() => import('src/pages/super-admin/tables/added-value-taxes/new'));
 const TaxEditPage = lazy(() => import('src/pages/super-admin/tables/added-value-taxes/edit'));
-// UNIT SERVICE TYPES
+// unit of service TYPES
 const USTypesTablePage = lazy(() => import('src/pages/super-admin/tables/ustypes/table'));
 const USTypeCreatePage = lazy(() => import('src/pages/super-admin/tables/ustypes/new'));
 const USTypeEditPage = lazy(() => import('src/pages/super-admin/tables/ustypes/edit'));

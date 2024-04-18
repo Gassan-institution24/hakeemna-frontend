@@ -14,7 +14,7 @@ export default function TableCreateView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Create a new Unit Service Type" /// edit
+        heading="Create a new unit of service Type" /// edit
         links={[
           {
             name: 'dashboard',
@@ -25,10 +25,10 @@ export default function TableCreateView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Unit Service Types', /// edit
+            name: 'unit of service Types', /// edit
             href: paths.superadmin.tables.unitservicetypes.root,
           },
-          { name: 'New Unit Service Type' },
+          { name: 'New unit of service Type' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

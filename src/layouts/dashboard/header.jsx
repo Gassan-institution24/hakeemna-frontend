@@ -49,11 +49,11 @@ export default function Header({ onOpenNav }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const [dialog, setDialog] = useState(user.role === 'admin' && !user.last_online && !loading);
+  const [dialog, setDialog] = useState(!loading && !user.last_online &&user.role === 'admin');
   const [tables, setTables] = useState([]);
 
   useEffect(() => {
-    setDialog(user.role === 'admin' && !user.last_online && !loading);
+    setDialog(!loading&& user.role === 'admin' && !user.last_online );
   }, [user.role, user.last_online, loading]);
 
   const { enqueueSnackbar } = useSnackbar();

@@ -140,15 +140,16 @@ export default function AccountGeneral({ unitServiceData }) {
     setValue,
     watch,
     handleSubmit,
-    formState: { isSubmitting,errors },
+    formState: { isSubmitting, errors },
   } = methods;
 
   useEffect(() => {
     if (Object.keys(errors).length) {
-        Object.keys(errors)
-          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+      Object.keys(errors).forEach((key, idx) =>
+        enqueueSnackbar(errors?.[key]?.message, { variant: 'error' })
+      );
     }
-  }, [errors,enqueueSnackbar]);
+  }, [errors, enqueueSnackbar]);
 
   const values = watch();
   const { tableData } = useGetCountryCities(watch().country);
@@ -183,7 +184,7 @@ export default function AccountGeneral({ unitServiceData }) {
         socket.emit('updated', {
           user,
           link: paths.unitservice.profile.root,
-          msg: `uploaded logo to service unit profile`,
+          msg: `uploaded logo to unit of service profile`,
         });
       }
       await axios.patch(
@@ -196,7 +197,7 @@ export default function AccountGeneral({ unitServiceData }) {
       socket.emit('updated', {
         user,
         link: paths.unitservice.profile.root,
-        msg: `updated the service unit profile`,
+        msg: `updated the unit of service profile`,
       });
       refetch();
       console.info('DATA', dataToSend);
@@ -340,7 +341,7 @@ export default function AccountGeneral({ unitServiceData }) {
 
               <TextField
                 select
-                label={`${t('unit service type')} *`}
+                label={`${t('unit of service type')} *`}
                 fullWidth
                 disabled
                 name="US_type"

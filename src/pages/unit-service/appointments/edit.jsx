@@ -23,7 +23,7 @@ export default function AppointmentEditPage() {
   return (
     <ACLGuard category="unit_service" subcategory="appointments" acl="update">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : Edit Appointment</title>
+        <title>{serviceUnitName || 'unit of service'} : Edit Appointment</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

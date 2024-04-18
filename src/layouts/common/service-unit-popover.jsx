@@ -124,7 +124,7 @@ export default function ServiceUnitPopover() {
           <>
             {curLangAr
               ? 'ادخل كلمة المرور الخاصة بك لتبديل وحدة الخدمة'
-              : 'Enter your password to switch to different service unit'}
+              : 'Enter your password to switch to different unit of service'}
             <TextField
               name="password"
               type={showPassword.value ? 'text' : 'password'}

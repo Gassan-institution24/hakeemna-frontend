@@ -92,14 +92,14 @@ export default function JwtRegisterView() {
     us_name_arabic: Yup.string().required(t('required field')),
     us_name_english: Yup.string().required(t('required field')),
     // us_email: Yup.string()
-    //   .required('Service unit email is required')
-    //   .email('Service unit email must be a valid email address'),
+    //   .required('unit of service email is required')
+    //   .email('unit of service email must be a valid email address'),
     us_identification_num: Yup.string().required(t('required field')),
     us_country: Yup.string().nullable().required(t('required field')),
     us_city: Yup.string().required(t('required field')),
     // us_speciality: Yup.string().nullable(),
     us_sector_type: Yup.string().required(t('required field')),
-    // us_phone: Yup.string().required('Service unit phone is required'),
+    // us_phone: Yup.string().required('unit of service phone is required'),
 
     em_name_english: Yup.string()
       .required(t('required field'))
@@ -242,7 +242,7 @@ export default function JwtRegisterView() {
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 3, position: 'relative' }}>
       <Typography variant="h4">
-        {curLangAr ? 'التسجيل كوحدة خدمة' : 'Sign up as service unit'}
+        {curLangAr ? 'التسجيل كوحدة خدمة' : 'Sign up as unit of service'}
       </Typography>
       <Stack direction="row" spacing={0.5}>
         <Typography sx={{ mb: 3 }} variant="body2">
@@ -308,42 +308,42 @@ export default function JwtRegisterView() {
           <div dangerouslySetInnerHTML={{ __html: errorMsg }} />
         </Alert>
       )}
-      {/* <Alert severity="info">Service unit information</Alert> */}
+      {/* <Alert severity="info">unit of service information</Alert> */}
       {curLangAr && (
-        // <Tooltip placement="top" title="Service unit name in arabic">
+        // <Tooltip placement="top" title="unit of service name in arabic">
         <RHFTextField
           onChange={handleArabicInputChange}
           name="us_name_arabic"
-          label={t('Arabic name of service unit')}
+          label={t('Arabic name of unit of service')}
           placeholder="عيادة الدكتور أحمد"
         />
         // </Tooltip>
       )}
-      {/* <Tooltip placement="top" title="Service unit name in english"> */}
+      {/* <Tooltip placement="top" title="unit of service name in english"> */}
       <RHFTextField
         onChange={handleEnglishInputChange}
         name="us_name_english"
-        label={t('English name of service unit')}
+        label={t('English name of unit of service')}
         placeholder="Dr.Ahmad Clinic"
       />
       {/* </Tooltip> */}
       {!curLangAr && (
-        // <Tooltip placement="top" title="Service unit name in arabic">
+        // <Tooltip placement="top" title="unit of service name in arabic">
         <RHFTextField
           onChange={handleArabicInputChange}
           name="us_name_arabic"
-          label={t('Arabic name of service unit')}
+          label={t('Arabic name of unit of service')}
           placeholder="عيادة الدكتور أحمد"
         />
         // </Tooltip>
       )}
-      {/* <Tooltip placement="top" title="Identification number of service unit"> */}
+      {/* <Tooltip placement="top" title="Identification number of unit of service"> */}
       <RHFTextField
         name="us_identification_num"
-        label={t('The national number of the service unit')}
+        label={t('The national number of the unit of service')}
       />
       {/* </Tooltip> */}
-      {/* <Tooltip placement="top" title="Phone number of service unit">
+      {/* <Tooltip placement="top" title="Phone number of unit of service">
         <MuiTelInput
           forceCallingCode
           label={t('phone')}
@@ -357,12 +357,12 @@ export default function JwtRegisterView() {
       </Tooltip> */}
 
       {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <Tooltip placement="top" title="email address of service unit">
+        <Tooltip placement="top" title="email address of unit of service">
           <RHFTextField  name="us_email" label={t('email')} />
         </Tooltip>
       </Stack> */}
       {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}> */}
-      {/* <Tooltip placement="top" title="country which service unit placed"> */}
+      {/* <Tooltip placement="top" title="country which unit of service placed"> */}
       <RHFSelect onChange={handleCountryChange} name="us_country" label={t('region ( country )')}>
         {countriesData.map((country, idx) => (
           <MenuItem lang="ar" key={idx} value={country._id}>
@@ -371,7 +371,7 @@ export default function JwtRegisterView() {
         ))}
       </RHFSelect>
       {/* </Tooltip> */}
-      {/* <Tooltip placement="top" title="city which service unit placed"> */}
+      {/* <Tooltip placement="top" title="city which unit of service placed"> */}
       <RHFSelect name="us_city" label={t('region ( city )')}>
         {tableData.map((city, idx) => (
           <MenuItem lang="ar" key={idx} value={city._id}>
@@ -383,8 +383,8 @@ export default function JwtRegisterView() {
       {/* </Stack> */}
 
       {/* <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}> */}
-      {/* <Tooltip placement="top" title="type of the service unit">
-          <RHFSelect  name="US_type" label={t('service unit type')}>
+      {/* <Tooltip placement="top" title="type of the unit of service">
+          <RHFSelect  name="US_type" label={t('unit of service type')}>
             {unitserviceTypesData.map((type, idx) => (
               <MenuItem lang="ar"  key={idx} value={type._id}>
                 {curLangAr ? type.name_arabic : type.name_english}
@@ -392,7 +392,7 @@ export default function JwtRegisterView() {
             ))}
           </RHFSelect>
         </Tooltip> */}
-      {/* <Tooltip placement="top" title="unit service speciality">
+      {/* <Tooltip placement="top" title="unit of service speciality">
           <RHFSelect  name="us_speciality" label={t('speciality')}>
             {specialtiesData.map((specialty, idx) => (
               <MenuItem lang="ar"  key={idx} value={specialty._id}>
@@ -401,7 +401,7 @@ export default function JwtRegisterView() {
             ))}
           </RHFSelect>
         </Tooltip> */}
-      {/* <Tooltip placement="top" title="service unit sector type"> */}
+      {/* <Tooltip placement="top" title="unit of service sector type"> */}
       <RHFSelect name="us_sector_type" label={t('sector type')}>
         <MenuItem lang="ar" value="public">
           {t('Public')}
@@ -587,7 +587,7 @@ export default function JwtRegisterView() {
             name="visibility_US_page"
             label={
               <Typography sx={{ fontSize: 12 }}>
-                {t('visible on service unit online page')}
+                {t('visible on unit of service online page')}
               </Typography>
             }
           />
@@ -780,30 +780,30 @@ export default function JwtRegisterView() {
 <br/>
 <br/>
 
-<p>You will create a service unit account in 3 seperate steps :</p>
+<p>You will create a new account for a "unit of service" (institution related to the healthcare sector), this process includes in 3 separate steps:</p>
 <br/>
 <ul>
-<li> <strong> first step: </strong> You should add required information about the service unit itself</li>
-<li> <strong> second step: </strong> You should add required information about you (the manager of the service unit/ institution), in this step you create a new user account  that has a full access to the data related with your institution in this system.\n This manager account (user) is deigned to have the role of ¨Admin¨ of your institution. This manager could have administrative functions like secratery, healtcare provider like doctor or any other function. </li>
-<li> <strong> third step: </strong> You should add login information for the administrator user (unique email and password); and next select the appropriate free subscription offer for your institution. </li>
+<li> <strong> first step: </strong> You should write down required information about the new institution (like: name, and national number of the institution). </li>
+<li> <strong> second step: </strong> You should register your personal information as a supervisor of the "new healthcare institution" in "Hakeemna.com" system, in this step you create a new user account  that has the role of ¨Admin¨and has a full access to all data related with the new institution in this system. Note:You should determine the function/ role of the "admin/ supervisor" in the "Hakeemna.com" system, where it could be manager, secretary, accountant, doctor, nurse,  or any other role.</li>
+<li> <strong> third step: </strong> You should add login information for this Admin/supervisor user (unique email and password).</li>
 </ul>
 
 <br/>
 <br/>
 <br/>
-<p>To create a service unit account you will need to have :</p>
+<p>To create a  "unit of service" account, it is required to have the next information :</p>
 
 <br/>
 
 <ul>
   <li>
-    The national number of the service unit
+    The national number of the  new "unit of service"  (healthcare  institution) . 
   </li>
   <li>
-    The identification number of the manager of the service unit
+    The personal identification number of the admin/supervisor of the  new "unit of service" (healthcare  institution) . 
   </li>
   <li>
-    The profession practice number of the manager of the service unit -if doctor-
+    The profession practice (license) number of the  admin/supervisor (If it is mandatory to obtain this license to could practice the profession)
   </li>
 </ul>
 `;
@@ -824,7 +824,7 @@ export default function JwtRegisterView() {
               <Markdown children={curLangAr ? htmlContentAR : htmlContent} />
             </div>
             <span style={{ display: 'block', padding: 0.75, color: 'green', fontSize: 12 }}>
-              {t('select your service unit type')}
+              {t('select your unit of service type')}
             </span>
             <RHFSelect sx={{ pb: 2 }} name={t('US_type')}>
               {unitserviceTypesData.map((type, idx) => (

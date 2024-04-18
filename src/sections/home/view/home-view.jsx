@@ -5,14 +5,14 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import { Stack, Container } from '@mui/system';
 
-import { useLocales ,useTranslate} from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import ScrollProgress from 'src/components/scroll-progress';
 import { varFade, MotionViewport } from 'src/components/animate';
 
-import Whydoc from '../aboutUs';
 import Pupage from '../pupage';
+import Whydoc from '../aboutUs';
 import HomeHero from '../home-hero';
 import OurMission from '../ourMission';
 import Arrow from '../images/arrow.png';
@@ -25,7 +25,7 @@ export default function HomeView({ divRef, divRef2 }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
-  
+
   return (
     <>
       <ScrollProgress scrollYProgress={scrollYProgress} />

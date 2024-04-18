@@ -33,7 +33,7 @@ export default function App() {
   // const disableCopy = (e) => {
   //   e.preventDefault();
   // };
-  
+
   // useEffect(() => {
   //   document.addEventListener('screenshot', disablescreenshot);
   //   return () => {
@@ -49,7 +49,7 @@ export default function App() {
   // useEffect(() => {
   //   const handleScreenshot = () => {
   //     setScreenshotDetected(true);
-  //     setTimeout(() => setScreenshotDetected(false), 1000); 
+  //     setTimeout(() => setScreenshotDetected(false), 1000);
   //   };
 
   //   document.addEventListener('screenshot', handleScreenshot);

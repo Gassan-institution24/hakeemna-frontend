@@ -33,8 +33,8 @@ export default function CountriesTableRow({
   const {
     sequence_number,
     nationality,
-    first_name,
-    last_name,
+    name_english,
+    name_arabic,
     status,
     created_at,
     user_creation,
@@ -56,9 +56,8 @@ export default function CountriesTableRow({
       <TableCell align="center">
         {String(nationality?.code).padStart(3, '0')}-{sequence_number}
       </TableCell>
-      <TableCell align="center">
-        {first_name} {last_name}
-      </TableCell>
+      <TableCell align="center">{name_english}</TableCell>
+      <TableCell align="center">{name_arabic}</TableCell>
       <TableCell align="center">
         <Label
           variant="soft"
@@ -98,7 +97,7 @@ export default function CountriesTableRow({
           color: '#3F54EB',
           // textDecoration: 'underline',
         }}
-        onClick={showCommunications}
+        // onClick={showCommunications}
       >
         Communications
       </TableCell>

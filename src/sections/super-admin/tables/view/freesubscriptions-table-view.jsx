@@ -61,7 +61,7 @@ const TABLE_HEAD = [
   { id: 'name_arabic', label: 'arabic name' },
   { id: 'country', label: 'Country' },
   { id: 'city', label: 'City' },
-  { id: 'US_type', label: 'Unit Service Type' },
+  { id: 'US_type', label: 'unit of service Type' },
   { id: 'Speciality', label: 'Specialty' },
   { id: 'offer_date', label: 'Date' },
   { id: 'period_months_offer', label: 'Period in Months' },

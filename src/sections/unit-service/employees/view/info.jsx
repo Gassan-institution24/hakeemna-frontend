@@ -79,7 +79,7 @@ export default function EmployeeInfoContent({ employeeData }) {
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },
           {
-            label: t('unit service'),
+            label: t('unit of service'),
             value: curLangAr ? unit_service?.name_arabic : unit_service?.name_english,
             icon: <Iconify icon="solar:calendar-date-bold" />,
           },

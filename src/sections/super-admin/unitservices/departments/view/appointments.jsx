@@ -47,7 +47,7 @@ import {
 
 import AppointmentsRow from '../appointments/appointment-row';
 import PatientHistoryToolbar from '../appointments/appointment-toolbar';
-// import HistoryFiltersResult from '../appointments/appointment-filters-result';
+import HistoryFiltersResult from '../appointments/appointment-filters-result';
 import AddEmegencyAppointment from '../appointments/add-emergency-appointment';
 
 // ----------------------------------------------------------------------
@@ -400,9 +400,9 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
     [handleFilters]
   );
 
-  // const handleResetFilters = useCallback(() => {
-  //   setFilters(defaultFilters);
-  // }, []);
+  const handleResetFilters = useCallback(() => {
+    setFilters(defaultFilters);
+  }, []);
 
   return (
     <>
@@ -462,7 +462,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
             options={appointmenttypesData}
           />
 
-          {/* {canReset && (
+          {canReset && (
             <HistoryFiltersResult
               filters={filters}
               onFilters={handleFilters}
@@ -472,7 +472,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
               results={appointmentsData.length}
               sx={{ p: 2.5, pt: 0 }}
             />
-          )} */}
+          )}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction

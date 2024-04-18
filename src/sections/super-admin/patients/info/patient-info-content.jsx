@@ -15,8 +15,8 @@ import Label from 'src/components/label/label';
 
 export default function PatientInfoContent({ patientData }) {
   const {
-    first_name,
-    last_name,
+    name_english,
+    name_arabic,
     nationality,
     identification_num,
     blood_type,
@@ -107,7 +107,7 @@ export default function PatientInfoContent({ patientData }) {
   const renderContent = (
     <Stack component={Card} spacing={3} sx={{ p: 3 }}>
       <Typography variant="h4">
-        {first_name} {last_name}
+        {name_english} {name_arabic}
       </Typography>
       <Typography
         variant="h6"
@@ -128,7 +128,7 @@ export default function PatientInfoContent({ patientData }) {
         </Label>
       </Typography>
 
-      {drug_allergies.length > 0 && (
+      {drug_allergies?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ fontWeight: 600 }} variant="h6">
             Drug Allergies
@@ -140,7 +140,7 @@ export default function PatientInfoContent({ patientData }) {
           </Stack>
         </Stack>
       )}
-      {diseases.length > 0 && (
+      {diseases?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ fontWeight: 600 }} variant="h6">
             Diseases
@@ -152,7 +152,7 @@ export default function PatientInfoContent({ patientData }) {
           </Stack>
         </Stack>
       )}
-      {surgeries.length > 0 && (
+      {surgeries?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ fontWeight: 600 }} variant="h6">
             Surgeries
@@ -164,7 +164,7 @@ export default function PatientInfoContent({ patientData }) {
           </Stack>
         </Stack>
       )}
-      {medicines.length > 0 && (
+      {medicines?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ fontWeight: 600 }} variant="h6">
             Medicines
@@ -176,7 +176,7 @@ export default function PatientInfoContent({ patientData }) {
           </Stack>
         </Stack>
       )}
-      {insurance.length > 0 && (
+      {insurance?.length > 0 && (
         <Stack spacing={2}>
           <Typography style={{ fontWeight: 600 }} variant="h6">
             Insurance

@@ -8,7 +8,7 @@ export default function RegisterPage() {
   return (
     <>
       <Helmet>
-        <title> Hakeemna: Service unit registration</title>
+        <title> Hakeemna: unit of service registration</title>
         <meta name="description" content="meta" />
       </Helmet>
 

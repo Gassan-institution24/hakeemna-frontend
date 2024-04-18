@@ -55,7 +55,7 @@ export const StyledCalendar = styled('div')(({ theme }) => ({
       height: '100%',
       borderRadius: 6,
       position: 'absolute',
-      backgroundColor: 'currentColor',
+      // backgroundColor: 'currentColor',
       // transition: theme.transitions.create(['opacity']),
       // '&:hover': {
       //   '&:before': {
