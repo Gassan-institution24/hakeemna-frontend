@@ -15,7 +15,7 @@ export default function EmployeeTypeHomePage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="read">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : Employee Types</title>
+        <title>{serviceUnitName || 'unit of service'} : Employee Types</title>
         <meta name="description" content="meta" />
       </Helmet>
 

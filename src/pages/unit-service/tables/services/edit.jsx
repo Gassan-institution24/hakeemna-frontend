@@ -23,7 +23,7 @@ export default function ServiceEditPage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : Edit Service</title>
+        <title>{serviceUnitName || 'unit of service'} : Edit Service</title>
         <meta name="description" content="meta" />
       </Helmet>
 

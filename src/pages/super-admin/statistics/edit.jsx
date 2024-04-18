@@ -15,7 +15,7 @@ export default function AccountingEditPage() {
   const { id, acid } = params;
   const { data } = useGetUnitservice(id);
   const { licenseMovementData } = useGetLicenseMovement(acid);
-  const unitServiceName = data?.name_english || 'unit service';
+  const unitServiceName = data?.name_english || 'unit of service';
   return (
     <>
       <Helmet>

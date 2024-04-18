@@ -139,10 +139,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
           {existPatients?.map((patient, index, idx) => (
             <Alert key={idx} severity="info" sx={{ width: 1, marginBottom: 2 }}>
               {t('We found a record with similar information for ')}{' '}
-              <strong>
-                {patient.first_name} {patient.family_name}
-              </strong>
-              . {t('Is this you?')}
+              <strong>{patient.name_english}</strong>. {t('Is this you?')}
               <br />
               <button
                 type="button"

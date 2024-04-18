@@ -85,15 +85,16 @@ export default function TableNewEditForm() {
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting,errors },
+    formState: { isSubmitting, errors },
   } = methods;
 
   useEffect(() => {
     if (Object.keys(errors).length) {
-        Object.keys(errors)
-          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+      Object.keys(errors).forEach((key, idx) =>
+        enqueueSnackbar(errors?.[key]?.message, { variant: 'error' })
+      );
     }
-  }, [errors,enqueueSnackbar]);
+  }, [errors, enqueueSnackbar]);
 
   /* eslint-disable */
   useEffect(() => {
@@ -121,7 +122,7 @@ export default function TableNewEditForm() {
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.acl(id),
-        msg: `updated a service unit employee permissions`,
+        msg: `updated a unit of service employee permissions`,
       });
       enqueueSnackbar(t('updated successfully!'));
       // router.push(paths.superadmin.subscriptions.root);
@@ -145,7 +146,7 @@ export default function TableNewEditForm() {
             {t('giving or withdrowing permissions refered to all')}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {t('service unit and all its departments')}
+            {t('unit of service and all its departments')}
           </Typography>
         </Grid>
       )}
@@ -211,7 +212,7 @@ export default function TableNewEditForm() {
             </Stack>
             <Stack spacing={1}>
               <Typography textTransform="capitalize" variant="subtitle2">
-                {t('service unit info')}
+                {t('unit of service info')}
               </Typography>
               <RHFMultiCheckbox row spacing={4} name="unit_service_info" options={options} />
             </Stack>

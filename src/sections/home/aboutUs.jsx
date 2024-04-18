@@ -62,7 +62,12 @@ export default function Whydoc() {
         </Box>
       </div>
       <Typography sx={{ textAlign: 'center' }}>
-        <Button size="large" href={paths.pages.About} variant="contained" sx={{ textAlign: 'center', backgroundColor:'success.main' }}>
+        <Button
+          size="large"
+          href={paths.pages.About}
+          variant="contained"
+          sx={{ textAlign: 'center', backgroundColor: 'success.main' }}
+        >
           {t('Read more')}
         </Button>
       </Typography>

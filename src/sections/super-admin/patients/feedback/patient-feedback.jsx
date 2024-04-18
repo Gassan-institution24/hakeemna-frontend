@@ -143,13 +143,7 @@ export default function PatientFeedbackView({ patientData }) {
     },
     [handleFilters]
   );
-  const patientName =
-    (patientData?.first_name &&
-      patientData?.last_name &&
-      `${patientData?.first_name} ${patientData?.last_name}`) ||
-    (patientData?.first_name && patientData?.first_name) ||
-    (patientData?.last_name && patientData?.last_name) ||
-    'Patient';
+  const patientName = patientData?.name_english || 'Patient';
 
   if (loading) {
     return <LoadingScreen />;

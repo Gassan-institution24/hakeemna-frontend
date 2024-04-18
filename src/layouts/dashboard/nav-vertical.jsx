@@ -55,7 +55,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         disableBeacon: true,
         content: (
           <Typography sx={{ color: 'text.secondary' }}>
-            as a new service unit you should add new departments - if exist - to seperate every
+            as a new unit of service you should add new departments - if exist - to seperate every
             department management and services alone
           </Typography>
         ),
@@ -66,7 +66,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         disableBeacon: true,
         content: (
           <Typography sx={{ color: 'text.secondary' }}>
-            then you should add new Employees to your service unit either by adding an employees
+            then you should add new Employees to your unit of service either by adding an employees
             that has an account on our system or creating a new one..
           </Typography>
         ),
@@ -170,7 +170,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         </Box>
       )}
       {isEmployee && (
-        <Tooltip title={t('service unit code')}>
+        <Tooltip title={t('unit of service code')}>
           <Typography variant="caption" alignSelf="center" paddingLeft="4px">
             {String(USData?.country?.code).padStart(3, '0')}-{USData?.city?.sequence_number}-
             {USData?.sequence_number}

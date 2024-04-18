@@ -136,7 +136,7 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect name="unit_service" label="Unit Service type">
+              <RHFSelect name="unit_service" label="unit of service type">
                 {unitserviceTypesData.map((type, idx) => (
                   <MenuItem lang="ar" key={idx} value={type._id}>
                     {type.name_english}
@@ -144,7 +144,7 @@ export default function TableNewEditForm({ currentTable }) {
                 ))}
               </RHFSelect>
 
-              {/* <RHFSelect name="unit_service" label="Unit Service">
+              {/* <RHFSelect name="unit_service" label="unit of service">
                 {unitservicesData.map((unit_service, idx) => (
                   <MenuItem lang="ar"  key={idx} value={unit_service._id}>
                     {unit_service.name_english}

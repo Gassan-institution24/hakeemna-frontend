@@ -33,7 +33,7 @@ import QCTableFiltersResult from './quality-control-filters-result';
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'unit_service', label: 'Unit Service' },
+  { id: 'unit_service', label: 'unit of service' },
   { id: 'rate', label: 'Rate' },
   { id: 'count', label: 'Rates no.' },
   { id: 'read', label: 'Read Rates' },
@@ -131,14 +131,14 @@ export default function USsFeedbacks() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Unit Services Quality Control"
+        heading="unit of services Quality Control"
         links={[
           {
             name: 'dashboard',
             href: paths.superadmin.root,
           },
           {
-            name: 'Unit Services Quality Control',
+            name: 'unit of services Quality Control',
           },
         ]}
         sx={{

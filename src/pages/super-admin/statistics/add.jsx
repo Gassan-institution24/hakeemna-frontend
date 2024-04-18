@@ -14,7 +14,7 @@ export default function AccountingAddPage() {
   const params = useParams();
   const { id } = params;
   const { data } = useGetUnitservice(id);
-  const unitServiceName = data?.name_english || 'unit service';
+  const unitServiceName = data?.name_english || 'unit of service';
   return (
     <>
       <Helmet>

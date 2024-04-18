@@ -23,7 +23,7 @@ export default function RoomEditPage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : Edit Room</title>
+        <title>{serviceUnitName || 'unit of service'} : Edit Room</title>
         <meta name="description" content="meta" />
       </Helmet>
 

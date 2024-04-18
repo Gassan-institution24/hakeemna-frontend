@@ -24,7 +24,7 @@ export default function DepartmentEditPage() {
   return (
     <ACLGuard category="unit_service" subcategory="departments" acl="update">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : Edit Department </title>
+        <title>{serviceUnitName || 'unit of service'} : Edit Department </title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}

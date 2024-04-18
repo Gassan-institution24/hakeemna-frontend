@@ -15,7 +15,7 @@ export default function ActivityNewPage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="create">
       <Helmet>
-        <title>{serviceUnitName || 'Service unit'} : New Activity</title>
+        <title>{serviceUnitName || 'unit of service'} : New Activity</title>
         <meta name="description" content="meta" />
       </Helmet>
 

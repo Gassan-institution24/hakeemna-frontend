@@ -19,7 +19,7 @@ export default function USAppointmentEditView({ unitServiceData, licenseMovement
 
   const { t } = useTranslate();
 
-  const unitServiceName = unitServiceData?.name_english || 'Unit Service';
+  const unitServiceName = unitServiceData?.name_english || 'unit of service';
   const params = useParams();
   const { id } = params;
   return (

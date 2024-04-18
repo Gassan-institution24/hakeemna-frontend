@@ -67,7 +67,6 @@ export default function WhoAreWe() {
     },
   ];
 
-
   return (
     <Container
       component={MotionViewport}
@@ -108,10 +107,7 @@ export default function WhoAreWe() {
                 visibility: { md: 'visible', xs: 'hidden' },
               }}
             />
-            <span style={{ position: 'relative', top: -80 }}>
-              {' '}
-              {t('our mission')}
-            </span>
+            <span style={{ position: 'relative', top: -80 }}> {t('our mission')}</span>
           </Typography>
         </m.div>
         {/* <Typography
