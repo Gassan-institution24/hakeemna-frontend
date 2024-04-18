@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { m } from 'framer-motion';
-import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -81,7 +80,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function Header({ scrollToDiv, scrollToDiv2 }) {
+export default function Header() {
   const settings = useSettingsContext();
   const theme = useTheme();
 
@@ -127,15 +126,12 @@ export default function Header({ scrollToDiv, scrollToDiv2 }) {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          {mdUp && <NavDesktop data={navConfig} scrollToDiv2={scrollToDiv2} />}
+          {mdUp && <NavDesktop data={navConfig} />}
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
             {mdUp && <LoginButton />}
-            {mdUp && <SigupButton scrollToDiv={scrollToDiv} />}
+            {mdUp && <SigupButton />}
 
-            {/* <Stack sx={{ mr: 1 }}>
-              <Language />
-            </Stack> */}
             <m.div variants={varFade().inUp}>
               <FormControlLabel
                 control={
@@ -156,7 +152,3 @@ export default function Header({ scrollToDiv, scrollToDiv2 }) {
     </AppBar>
   );
 }
-Header.propTypes = {
-  scrollToDiv: PropTypes.func,
-  scrollToDiv2: PropTypes.func,
-};

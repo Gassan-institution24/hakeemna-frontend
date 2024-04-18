@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { m } from 'framer-motion';
 
 import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
@@ -9,7 +10,7 @@ import { paths } from 'src/routes/paths';
 import { useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
-import { MotionViewport } from 'src/components/animate';
+import { varFade, MotionViewport } from 'src/components/animate';
 
 import doctor from './images/doctor.png';
 
@@ -93,6 +94,8 @@ export default function Pupage() {
               Signup
             </Button>
           </Item>
+
+          <m.div variants={varFade().inUp}>
           <Image
             sx={{
               position: 'relative',
@@ -107,6 +110,8 @@ export default function Pupage() {
             }}
             src={doctor}
           />
+        </m.div>
+         
         </Grid>{' '}
       </Grid>
     </Container>

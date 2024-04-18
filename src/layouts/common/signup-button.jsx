@@ -4,11 +4,14 @@ import Button from '@mui/material/Button';
 
 import { RouterLink } from 'src/routes/components';
 
-export default function SigupButton({ sx, scrollToDiv }) {
+import { useTranslate } from 'src/locales';
+
+export default function SigupButton({ sx }) {
+  const { t } = useTranslate();
+
   return (
     <Button
       component={RouterLink}
-      onClick={scrollToDiv}
       variant="outlined"
       sx={{
         mr: 3,
@@ -21,12 +24,11 @@ export default function SigupButton({ sx, scrollToDiv }) {
         },
       }}
     >
-      Sign Up
+      {t('Sign Up')}
     </Button>
   );
 }
 
 SigupButton.propTypes = {
   sx: PropTypes.object,
-  scrollToDiv: PropTypes.func,
 };
