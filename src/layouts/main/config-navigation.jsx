@@ -3,6 +3,8 @@ import { paths } from 'src/routes/paths';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
+
+
 // ----------------------------------------------------------------------
 
 export const navConfig = [
@@ -15,13 +17,13 @@ export const navConfig = [
   {
     title: 'About',
     icon: <Iconify icon="mdi:about" />,
-    path: '#',
+    path: paths.pages.About,
     sectionId: 'About',
   },
   {
     title: 'Services',
     icon: <Iconify icon="medical-icon:social-services" />,
-    path: '#',
+    path: '/',
     sectionId: 'services',
   },
   {
@@ -33,7 +35,7 @@ export const navConfig = [
   {
     title: 'Training',
     icon: <Iconify icon="oui:training" />,
-    path: '#',
+    path: paths.comingSoon,
     sectionId: 'home',
   },
   {

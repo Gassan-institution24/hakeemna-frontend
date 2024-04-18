@@ -20,8 +20,10 @@ import { bgBlur, bgGradient, textGradient } from 'src/theme/css';
 import Iconify from 'src/components/iconify';
 import { varFade, MotionContainer } from 'src/components/animate';
 
-import Tall from './view/image.png';
-import Preview from './view/preview.png';
+import Tall from './images/Tall.png';
+import Tall2 from './images/Tall2.png';
+import Preview from './images/Preview.png';
+import Preview2 from './images/Preview2.png';
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
@@ -153,7 +155,7 @@ export default function HomeHero() {
   const transition = {
     repeatType: 'loop',
     ease: 'linear',
-    duration: 60 * 4,
+    duration: 20 * 4,
     repeat: Infinity,
   };
 
@@ -256,7 +258,7 @@ export default function HomeHero() {
         component={m.div}
         variants={varFade().in}
         sx={{
-          width: 344,
+          width: 444,
           position: 'relative',
         }}
       >
@@ -266,14 +268,14 @@ export default function HomeHero() {
           transition={transition}
           alt={lightMode ? 'light_1' : 'dark_1'}
           src={Preview}
-          sx={{ position: 'absolute', mt: -5 }}
+          sx={{ position: 'absolute', mt: 1 }}
         />
         <Box
           component={m.img}
           animate={{ y: ['-100%', '0%'] }}
           transition={transition}
           alt={lightMode ? 'light_1' : 'dark_1'}
-          src={Preview}
+          src={Preview2}
           sx={{ position: 'absolute' }}
         />
       </Stack>
@@ -289,14 +291,14 @@ export default function HomeHero() {
           transition={transition}
           alt={lightMode ? 'light_2' : 'dark_2'}
           src={Tall}
-          sx={{ position: 'absolute', mt: -5 }}
+          sx={{ position: 'absolute', mt: 0 }}
         />
         <Box
           component={m.img}
           animate={{ y: ['0%', '-100%'] }}
           transition={transition}
           alt={lightMode ? 'light_2' : 'dark_2'}
-          src={Tall}
+          src={Tall2}
           sx={{ position: 'absolute' }}
         />
       </Stack>

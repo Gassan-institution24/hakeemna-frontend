@@ -1,18 +1,17 @@
-import PropTypes from 'prop-types';
 import { m, useScroll } from 'framer-motion';
 
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import { Stack, Container } from '@mui/system';
 
-import { useLocales ,useTranslate} from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import ScrollProgress from 'src/components/scroll-progress';
 import { varFade, MotionViewport } from 'src/components/animate';
 
-import Whydoc from '../aboutUs';
 import Pupage from '../pupage';
+import Whydoc from '../aboutUs';
 import HomeHero from '../home-hero';
 import OurMission from '../ourMission';
 import Arrow from '../images/arrow.png';
@@ -20,17 +19,17 @@ import ArrowAr from '../images/arrowAr.png';
 import ServicesWeprovide from '../servicesweprovide';
 // ----------------------------------------------------------------------
 
-export default function HomeView({ divRef, divRef2 }) {
+export default function HomeView() {
   const { scrollYProgress } = useScroll();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
-  
+
   return (
     <>
       <ScrollProgress scrollYProgress={scrollYProgress} />
 
-      <HomeHero ref={divRef2} />
+      <HomeHero />
 
       <Box
         sx={{
@@ -63,7 +62,6 @@ export default function HomeView({ divRef, divRef2 }) {
         <ServicesWeprovide />
       </Box>
       <Box
-        ref={divRef}
         sx={{
           overflow: 'hidden',
           position: 'relative',
@@ -115,7 +113,3 @@ export default function HomeView({ divRef, divRef2 }) {
     </>
   );
 }
-HomeView.propTypes = {
-  divRef: PropTypes.object,
-  divRef2: PropTypes.object,
-};

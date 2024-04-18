@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
+
 import { Helmet } from 'react-helmet-async';
 
 import HomeView from 'src/sections/home/view/home-view';
 
 // ----------------------------------------------------------------------
 
-export default function HomePage({ divRef, divRef2 }) {
+export default function HomePage() {
   return (
     <>
       <Helmet>
@@ -13,11 +13,7 @@ export default function HomePage({ divRef, divRef2 }) {
         <meta name="description" content="meta" />
       </Helmet>
 
-      <HomeView divRef={divRef} divRef2={divRef2} />
+      <HomeView />
     </>
   );
 }
-HomePage.propTypes = {
-  divRef: PropTypes.object,
-  divRef2: PropTypes.object,
-};
