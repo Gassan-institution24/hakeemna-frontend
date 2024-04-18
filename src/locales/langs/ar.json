@@ -1,4 +1,5 @@
 {
+  "Sign Up": "التسجيل",
   "sign up": "التسجيل",
   "login": "تسجيل الدخول",
   "home": "الصفحة الرئيسية",
@@ -389,6 +390,9 @@
   "How To Use": "طريقة الأستخدام",
   "Available Offers": "العروض ألمتوفرة",
   "settings": "الإعدادات",
+  "About": "عنا",
+  "Services": "خدماتنا",
+  "Training": "التدريب",
   "It is time for digital transformation": "لقد حان وقت التحول الرقمي",
   "Hakeemna": "حكيمنا",
   "A platform that provides an integrated electronic system for personal medical and health records, organizing work between medical service providers and users in the private sector. This organization allows improving the quality and efficiency of medical services and enhances communication and cooperation between them, contributing to achieving sustainable development in the field of health care.": "منصة توفر نظامًا إلكترونيًا متكاملاً للسجلات الطبية والصحية الشخصية، وتنظيم العمل بين مقدمي الخدمات الطبية والمستخدمين في القطاع الخاص. تتيح هذه المنظمة تحسين جودة وكفاءة الخدمات الطبية وتعزيز التواصل والتعاون فيما بينها، مما يساهم في تحقيق التنمية المستدامة في مجال الرعاية الصحية.",
