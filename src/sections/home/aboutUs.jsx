@@ -8,22 +8,22 @@ import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import { varFade, MotionViewport } from 'src/components/animate';
 
 import Knowleg from './images/knowlegmap.png';
+import knowlegmapAR from './images/knowlegmapAR.png';
 
 export default function Whydoc() {
   const { t } = useTranslate();
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   const renderDescription = (
     <Stack spacing={3} id="About" sx={{ textAlign: 'center', mb: 5 }}>
       <m.div variants={varFade().inDown}>
-        <Typography variant="h2">
-          {t('Why Hakeemna')} <span style={{ color: 'green' }}>{t('?')}</span>
-        </Typography>
+        <Typography variant="h2">{t('About us')}</Typography>
       </m.div>
     </Stack>
   );
@@ -37,7 +37,14 @@ export default function Whydoc() {
             'The Hakeemna platform is the result of joint cooperation between the health sector and specialists in developing the performance of institutions that seek to achieve efficiency in work and production that is compatible with the goals of sustainability and environmental preservation.'
           )}
         </Typography>
-        <Typography sx={{ fontSize: 15, textAlign: 'center', marginTop: '10px' }}>
+        <Typography
+          sx={{
+            fontSize: 15,
+            textAlign: 'center',
+            marginTop: '10px',
+            display: { md: 'block', xs: 'none' },
+          }}
+        >
           {t(
             'The platform is characterized by being comprehensive for all individuals and institutions, whether the user (service provider, doctor or patient) subscribes to the services of insurance companies or not.'
           )}
@@ -54,10 +61,10 @@ export default function Whydoc() {
         >
           <Image
             sx={{
-              width: '40%',
-              height: '40%',
+              width: '55%',
+              height: '55%',
             }}
-            src={Knowleg}
+            src={curLangAr ? knowlegmapAR : Knowleg}
           />
         </Box>
       </div>
@@ -66,7 +73,7 @@ export default function Whydoc() {
           size="large"
           href={paths.pages.About}
           variant="contained"
-          sx={{ textAlign: 'center', backgroundColor: 'success.main' }}
+          sx={{ textAlign: 'center', backgroundColor: 'success.main', mb: 4 }}
         >
           {t('Read more')}
         </Button>

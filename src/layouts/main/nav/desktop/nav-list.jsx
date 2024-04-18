@@ -12,6 +12,7 @@ import { usePathname } from 'src/routes/hooks';
 import { useActiveLink } from 'src/routes/hooks/use-active-link';
 
 import { paper } from 'src/theme/css';
+import { useTranslate } from 'src/locales';
 
 import { HEADER } from '../../../config-layout';
 import { NavItem, NavItemDashboard } from './nav-item';
@@ -20,7 +21,7 @@ import { NavItem, NavItemDashboard } from './nav-item';
 
 export default function NavList({ data }) {
   const theme = useTheme();
-
+  const { t } = useTranslate();
   const pathname = usePathname();
 
   const active = useActiveLink(data.path, !!data.children);
@@ -51,14 +52,15 @@ export default function NavList({ data }) {
         onMouseEnter={handleOpenMenu}
         onMouseLeave={handleCloseMenu}
         //
-        title={data.title}
+        title={t(data.title)}
         path={data.path}
         //
-        onClick={() =>
+        onClick={() => {
+          setOpenMenu(false);
           document
             .getElementById(data.sectionId)
-            .scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
+            ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }}
         hasChild={!!data.children}
         externalLink={data.path.includes('http')}
         //
