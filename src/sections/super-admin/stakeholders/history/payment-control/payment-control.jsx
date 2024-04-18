@@ -43,7 +43,7 @@ import PaymentTableFiltersResult from './payment-control-filters-result';
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'unit_service', label: 'Unit Service' },
+  { id: 'unit_service', label: 'unit of service' },
   { id: 'stakeholder', label: 'Stakeholder' },
   { id: 'invoice', label: 'Invoice' },
   { id: 'required_amount', label: 'Required Amount' },

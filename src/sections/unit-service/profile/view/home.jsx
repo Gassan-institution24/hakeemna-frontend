@@ -31,10 +31,10 @@ export default function AccountView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading={t('unit service info')}
+        heading={t('unit of service info')}
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
-          { name: t('unit service info') },
+          { name: t('unit of service info') },
         ]}
         action={
           <Button

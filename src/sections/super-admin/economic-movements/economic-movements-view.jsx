@@ -42,7 +42,7 @@ import MovementTableFiltersResult from './movement-table-filters-result';
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'unit_service', label: 'Unit Service' },
+  { id: 'unit_service', label: 'unit of service' },
   { id: 'appointment', label: 'Appointment' },
   { id: 'work_shift', label: 'Work Shift' },
   { id: 'type', label: 'Type' },

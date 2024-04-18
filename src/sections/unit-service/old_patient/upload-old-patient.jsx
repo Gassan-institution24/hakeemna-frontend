@@ -60,14 +60,21 @@ export default function UploadOldPatient({ refetch }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
-  const { reset, handleSubmit, watch, setValue, formState: { errors }} = methods;
+  const {
+    reset,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = methods;
 
   useEffect(() => {
     if (Object.keys(errors).length) {
-        Object.keys(errors)
-          .forEach((key, idx) => enqueueSnackbar(errors?.[key]?.message,{variant:'error'}))
+      Object.keys(errors).forEach((key, idx) =>
+        enqueueSnackbar(errors?.[key]?.message, { variant: 'error' })
+      );
     }
-  }, [errors,enqueueSnackbar]);
+  }, [errors, enqueueSnackbar]);
 
   const values = watch();
 

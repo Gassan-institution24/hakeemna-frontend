@@ -628,7 +628,7 @@ export default function VerticalDividerText() {
       <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 10, md: 15 } }}>
         <m.div variants={varFade().inUp}>
           <Typography variant="h2" sx={{ my: 3 }}>
-            Join us and Get the right offer for your service unit
+            Join us and Get the right offer for your unit of service
           </Typography>
         </m.div>
         <Button

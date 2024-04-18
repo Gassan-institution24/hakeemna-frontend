@@ -70,8 +70,8 @@ export default function CalendarForm({ currentEvent, refetch, colorOptions, onCl
 
     try {
       if (!dateError) {
-        if (currentEvent?._id) {
-          await axiosInstance.patch(`${endpoints.calender.all}/${currentEvent?._id}`, eventData);
+        if (currentEvent?.id) {
+          await axiosInstance.patch(`${endpoints.calender.all}/${currentEvent?.id}`, eventData);
           enqueueSnackbar(t('updated successfully!'));
         } else {
           await axiosInstance.post(endpoints.calender.all, eventData);

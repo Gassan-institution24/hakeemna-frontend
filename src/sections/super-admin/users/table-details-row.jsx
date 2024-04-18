@@ -141,7 +141,7 @@ export default function CountriesTableRow({
           </MenuItem>
         )} */}
 
-        <MenuItem
+        {/* <MenuItem
           lang="ar"
           onClick={() => {
             onEditRow();
@@ -150,7 +150,7 @@ export default function CountriesTableRow({
         >
           <Iconify icon="fluent:edit-32-filled" />
           Edit
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           DDL

@@ -231,7 +231,7 @@ export default function WorkShiftsTableView() {
     <>
       <Container maxWidth="xl">
         <CustomBreadcrumbs
-          heading="Unit Service Types" /// edit
+          heading="unit of service Types" /// edit
           links={[
             {
               name: 'dashboard',
@@ -241,7 +241,7 @@ export default function WorkShiftsTableView() {
               name: 'Tables',
               href: paths.superadmin.tables.list,
             },
-            { name: 'Unit Service Types' },
+            { name: 'unit of service Types' },
           ]}
           action={
             <Button
@@ -250,7 +250,7 @@ export default function WorkShiftsTableView() {
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Unit Service Type
+              New unit of service Type
             </Button>
           }
           sx={{

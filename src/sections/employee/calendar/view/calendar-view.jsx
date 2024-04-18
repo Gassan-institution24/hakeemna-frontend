@@ -191,7 +191,7 @@ export default function CalendarView() {
                 minute: '2-digit',
                 meridiem: 'short',
               }}
-              eventBorderColor='white'
+              eventBorderColor="white"
               // eventContent={(info)=><div style={{width:'100%',padding:'2px',backgroundColor:info.event.backgroundColor}}><b>{fTime(info.event.start)}</b><i style={{marginLeft:4}}>{info.event.title}</i></div>}
               events={dataFiltered}
               headerToolbar={false}

@@ -88,9 +88,10 @@ export default function PatientInsuranceView({ patientData, refetch }) {
 
   const { insuranseCosData, loading } = useGetInsuranceCos();
 
-  const filteredInsuranceCos = insuranseCosData
-    .filter((company) => !patientData?.insurance?.some((data) => data._id === company._id))
-    .filter((data) => data.status === 'active');
+  const filteredInsuranceCos = insuranseCosData?.filter(
+    (company) => !patientData?.insurance?.some((data) => data._id === company._id)
+  );
+  // .filter((data) => data.status === 'active');
 
   const dateError =
     filters.startDate && filters.endDate
@@ -192,13 +193,7 @@ export default function PatientInsuranceView({ patientData, refetch }) {
     },
     [handleFilters]
   );
-  const patientName =
-    (patientData?.first_name &&
-      patientData?.last_name &&
-      `${patientData?.first_name} ${patientData?.last_name}`) ||
-    (patientData?.first_name && patientData?.first_name) ||
-    (patientData?.last_name && patientData?.last_name) ||
-    'Patient';
+  const patientName = patientData?.name_english || 'Patient';
 
   if (loading) {
     return <LoadingScreen />;
@@ -262,10 +257,14 @@ export default function PatientInsuranceView({ patientData, refetch }) {
                     }
                   >
                     {tab.value === 'all' && patientData?.insurance?.length}
-                    {tab.value === 'active' &&
-                      patientData?.insurance.filter((order) => order.status === 'active').length}
-                    {tab.value === 'inactive' &&
-                      patientData?.insurance.filter((order) => order.status === 'inactive').length}
+                    {(tab.value === 'active' &&
+                      patientData?.insurance?.filter((order) => order.status === 'active')
+                        ?.length) ||
+                      0}
+                    {(tab.value === 'inactive' &&
+                      patientData?.insurance?.filter((order) => order.status === 'inactive')
+                        ?.length) ||
+                      0}
                   </Label>
                 }
               />
@@ -301,7 +300,7 @@ export default function PatientInsuranceView({ patientData, refetch }) {
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
                   rowCount={dataFiltered?.length}
-                  numSelected={table.selected.length}
+                  numSelected={table.selected?.length}
                   onSort={table.onSort}
                   // onSelectAllRows={(checked) =>
                   //   table.onSelectAllRows(
@@ -334,7 +333,7 @@ export default function PatientInsuranceView({ patientData, refetch }) {
                     emptyRows={emptyRows(
                       table.page,
                       table.rowsPerPage,
-                      patientData?.insurance.length
+                      patientData?.insurance?.length
                     )}
                   />
 
@@ -393,7 +392,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   inputData = stabilizedThis?.map((el, idx) => el[0]);
 
   if (name) {
-    inputData = inputData.filter(
+    inputData = inputData?.filter(
       (data) =>
         (data?.name_english &&
           data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
@@ -409,7 +408,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
+    inputData = inputData?.filter((order) => order.status === status);
   }
 
   return inputData;

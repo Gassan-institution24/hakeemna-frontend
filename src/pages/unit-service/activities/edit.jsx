@@ -23,7 +23,7 @@ export default function ActivityEditPage() {
   return (
     <ACLGuard category="unit_service" subcategory="management_tables" acl="update">
       <Helmet>
-        <title> {serviceUnitName || 'Service unit'} : Edit Activity</title>
+        <title> {serviceUnitName || 'unit of service'} : Edit Activity</title>
         <meta name="description" content="meta" />
       </Helmet>
       {loading && <LoadingScreen />}
