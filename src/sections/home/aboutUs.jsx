@@ -37,18 +37,7 @@ export default function Whydoc() {
             'The Hakeemna platform is the result of joint cooperation between the health sector and specialists in developing the performance of institutions that seek to achieve efficiency in work and production that is compatible with the goals of sustainability and environmental preservation.'
           )}
         </Typography>
-        <Typography
-          sx={{
-            fontSize: 15,
-            textAlign: 'center',
-            marginTop: '10px',
-            display: { md: 'block', xs: 'none' },
-          }}
-        >
-          {t(
-            'The platform is characterized by being comprehensive for all individuals and institutions, whether the user (service provider, doctor or patient) subscribes to the services of insurance companies or not.'
-          )}
-        </Typography>
+
         <Box
           sx={{
             textAlign: 'center',
