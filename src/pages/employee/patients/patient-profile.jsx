@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { useTranslate } from 'src/locales';
 
-import PatientProfileView from 'src/sections/employee/patients/patient_profile';
+import PatientProfileView from 'src/sections/employee/patients/view/patient_profile';
 
 // ----------------------------------------------------------------------
 

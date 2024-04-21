@@ -158,7 +158,7 @@ export default function AppointmentsView({ unitServiceData, departmentData }) {
     },
     {
       value: 'processing',
-      label: t('processing'),
+      label: t('upcoming'),
       color: 'info',
       count: processing,
     },

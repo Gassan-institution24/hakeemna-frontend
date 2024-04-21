@@ -149,28 +149,28 @@ export default function AppointmentsView({ departmentData }) {
   const TABS = [
     // { value: 'all', label: t('all'), color: 'default', count: all },
     {
+      value: 'processing',
+      label: t('upcoming'),
+      color: 'info',
+      count: processing,
+    },
+    {
       value: 'pending',
       label: t('pending'),
       color: 'warning',
       count: pending,
     },
     {
-      value: 'processing',
-      label: t('processing'),
-      color: 'info',
-      count: processing,
+      value: 'finished',
+      label: t('finished'),
+      color: 'success',
+      count: finished,
     },
     {
       value: 'available',
       label: t('available'),
       color: 'secondary',
       count: available,
-    },
-    {
-      value: 'finished',
-      label: t('finished'),
-      color: 'success',
-      count: finished,
     },
     {
       value: 'canceled',

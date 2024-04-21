@@ -588,6 +588,10 @@ export const paths = {
       },
       acl: (id) => `${ROOTS.SUPERADMIN}/us/employees/${id}/acl`,
     },
+    patients: {
+      all: `${ROOTS.SUPERADMIN}/us/patients`,
+      info: (id) => `${ROOTS.SUPERADMIN}/us/patients/${id}`,
+    },
     appointments: {
       root: `${ROOTS.SUPERADMIN}/us/appointments`,
       new: `${ROOTS.SUPERADMIN}/us/appointments/new`,
@@ -699,7 +703,8 @@ export const paths = {
       },
     },
     patients: {
-      info: (id) => `${ROOTS.SUPERADMIN}/patients/${id}`,
+      info: (id) => `${ROOTS.SUPERADMIN}/mypatients/${id}`,
+      all: `${ROOTS.SUPERADMIN}/mypatients`,
     },
     entrancemanagement: {
       root: `${ROOTS.SUPERADMIN}/entrancemanagement`,
@@ -707,8 +712,9 @@ export const paths = {
       edit: (id) => `${ROOTS.SUPERADMIN}/entrancemanagement/${id}/edit`,
     },
     appointments: {
-      root: `${ROOTS.SUPERADMIN}/appointments`,
       book: `${ROOTS.SUPERADMIN}/book`,
+      root: `${ROOTS.SUPERADMIN}/appointments`,
+      edit: (id) => `${ROOTS.SUPERADMIN}/appointments/${id}`,
     },
     appointmentconfiguration: {
       root: `${ROOTS.SUPERADMIN}/appointmentconfig`,

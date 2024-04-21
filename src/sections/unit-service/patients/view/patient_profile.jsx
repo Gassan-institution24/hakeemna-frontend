@@ -1,21 +1,21 @@
-import React from 'react';
-// import { QRCodeSVG } from 'qrcode.react';
 import { useParams } from 'react-router';
-// import ReactCardFlip from 'react-card-flip';
+import React, { useState, useCallback } from 'react';
 
-// import { Box } from '@mui/system';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
+import { Tab, Tabs, Container } from '@mui/material';
 
-// import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetPatient, useGetPatientInsurance } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
+
+import AppointmentsHistory from '../appointment-history/appoint-history';
+
 // ----------------------------------------------------------------------
 
 export default function PatientProfile() {
@@ -27,6 +27,21 @@ export default function PatientProfile() {
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+
+  const [currentTab, setCurrentTab] = useState('home');
+  const handleChangeTab = useCallback((event, newValue) => {
+    setCurrentTab(newValue);
+  }, []);
+  const TABS = [
+    {
+      value: 'home',
+      label: 'home',
+    },
+    {
+      value: 'appointments',
+      label: 'appointments',
+    },
+  ];
 
   function calculateAge(birthDate) {
     if (birthDate) {
@@ -418,15 +433,31 @@ export default function PatientProfile() {
   );
 
   return (
-    <Grid container spacing={3}>
-      <Grid xs={12} md={4}>
-        {renderOverview}
-        {data.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
-      </Grid>
+    <Container maxWidth="xl">
+      <Tabs
+        value={currentTab}
+        onChange={handleChangeTab}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      >
+        {TABS.map((tab, idx) => (
+          <Tab key={idx} label={tab.label} value={tab.value} />
+        ))}
+      </Tabs>
+      {currentTab === 'home' && (
+        <Grid container spacing={3}>
+          <Grid xs={12} md={4}>
+            {renderOverview}
+            {data.gender === 'male' ? [renderMoreInfo] : [renderMoreInfoPregnant]}
+          </Grid>
 
-      <Grid xs={12} md={7}>
-        {renderContent}
-      </Grid>
-    </Grid>
+          <Grid xs={12} md={7}>
+            {renderContent}
+          </Grid>
+        </Grid>
+      )}
+      {currentTab === 'appointments' && <AppointmentsHistory />}
+    </Container>
   );
 }

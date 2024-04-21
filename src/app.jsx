@@ -33,7 +33,7 @@ export default function App() {
   // const disableCopy = (e) => {
   //   e.preventDefault();
   // };
-  
+
   // useEffect(() => {
   //   document.addEventListener('screenshot', disablescreenshot);
   //   return () => {
