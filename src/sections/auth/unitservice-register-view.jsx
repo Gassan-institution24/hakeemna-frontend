@@ -234,7 +234,7 @@ export default function JwtRegisterView() {
     if (Object.keys(errors).length) {
       setErrorMsg(
         Object.keys(errors)
-          .map((key, idx) => t(errors?.[key]?.message))
+          .map((key, idx) => t(`${key}: ${errors?.[key]?.message || 'error'}`))
           .join('<br>')
       );
     }

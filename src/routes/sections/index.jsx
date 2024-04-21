@@ -16,13 +16,12 @@ const Page404 = lazy(() => import('src/pages/errors/404'));
 // ----------------------------------------------------------------------
 
 export default function Router() {
-
   return useRoutes([
     {
       path: '/',
       element: (
         <MainLayout>
-          <HomePage  />
+          <HomePage />
         </MainLayout>
       ),
     },

@@ -215,6 +215,7 @@ export default function NewEditManyForm() {
                         <TableCell align="center">
                           <Autocomplete
                             variant="filled"
+                            value={one.time_zone || ''}
                             options={timezones.map((timeZone) => timeZone.tzCode)}
                             renderInput={(params) => (
                               <TextField

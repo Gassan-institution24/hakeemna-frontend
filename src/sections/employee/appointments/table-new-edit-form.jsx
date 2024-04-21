@@ -1,0 +1,176 @@
+import * as Yup from 'yup';
+import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
+import { useMemo, useEffect } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import { MenuItem } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
+import LoadingButton from '@mui/lab/LoadingButton';
+
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetAppointmentTypes, useGetUSActiveServiceTypes } from 'src/api';
+
+import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, {
+  RHFSelect,
+  RHFTimePicker,
+  RHFMultiSelect,
+} from 'src/components/hook-form';
+
+// ----------------------------------------------------------------------
+
+export default function TableNewEditForm({ currentTable }) {
+  // const router = useRouter();
+
+  const { user } = useAuthContext();
+
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const NewUserSchema = Yup.object().shape({
+    appointment_type: Yup.string().required(t('required field')),
+    service_types: Yup.array().required(t('required field')),
+    online_available: Yup.bool().required(t('required field')),
+    start_time: Yup.date().required(t('required field')),
+  });
+
+  const defaultValues = useMemo(
+    () => ({
+      appointment_type: currentTable?.appointment_type?._id || null,
+      start_time: currentTable?.start_time || null,
+      online_available: currentTable?.online_available || true,
+      service_types: currentTable?.service_types?.map((one) => one?._id) || [],
+    }),
+    [currentTable]
+  );
+
+  const { appointmenttypesData } = useGetAppointmentTypes();
+  const { serviceTypesData } = useGetUSActiveServiceTypes(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+  );
+
+  const methods = useForm({
+    mode: 'onTouched',
+    resolver: yupResolver(NewUserSchema),
+    defaultValues,
+  });
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+
+    if (arabicRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
+  const handleEnglishInputChange = (event) => {
+    // Validate the input based on English language rules
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
+
+    if (englishRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
+  const {
+    reset,
+    watch,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = methods;
+
+  useEffect(() => {
+    if (Object.keys(errors).length) {
+      Object.keys(errors).forEach((key, idx) =>
+        enqueueSnackbar(`${key}: ${errors?.[key]?.message || 'error'}`, { variant: 'error' })
+      );
+    }
+  }, [errors, enqueueSnackbar]);
+
+  const values = watch();
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      if (currentTable) {
+        await axiosInstance.patch(endpoints.appointments.one(currentTable._id), data);
+      } else {
+        await axiosInstance.post(endpoints.appointments.all, data);
+      }
+      reset();
+      enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
+      // router.push(paths.unitservice.tables.workshifts.root);
+    } catch (error) {
+      // error emitted in backend
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
+      console.error(error);
+    }
+  });
+
+  /* eslint-disable */
+  useEffect(() => {
+    reset({
+      appointment_type: currentTable?.appointment_type?._id || null,
+      start_time: currentTable?.start_time || null,
+      online_available: currentTable?.online_available || true,
+      service_types: currentTable?.appointment_type?._id || [],
+    });
+  }, [currentTable]);
+  /* eslint-enable */
+
+  return (
+    <FormProvider methods={methods} onSubmit={onSubmit}>
+      <Grid xs={12} maxWidth="md">
+        <Card sx={{ p: 3 }}>
+          <Box
+            rowGap={3}
+            columnGap={2}
+            display="grid"
+            gridTemplateColumns={{
+              xs: 'repeat(1, 1fr)',
+              sm: 'repeat(2, 1fr)',
+            }}
+          >
+            <RHFSelect name="appointment_type" label={t('appointment type')}>
+              {appointmenttypesData?.map((option, idx) => (
+                <MenuItem lang="ar" key={idx} value={option._id}>
+                  {curLangAr ? option?.name_arabic : option?.name_english}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+            {serviceTypesData && (
+              <RHFMultiSelect
+                checkbox
+                name="service_types"
+                label={t('service types')}
+                options={serviceTypesData}
+              />
+            )}
+            <RHFTimePicker name="start_time" label={t('start time')} />
+          </Box>
+
+          <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+            <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
+              {!currentTable ? t('create') : t('save changes')}
+            </LoadingButton>
+          </Stack>
+        </Card>
+      </Grid>
+    </FormProvider>
+  );
+}
+
+TableNewEditForm.propTypes = {
+  currentTable: PropTypes.object,
+};

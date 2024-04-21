@@ -96,22 +96,21 @@ export default function Pupage() {
           </Item>
 
           <m.div variants={varFade().inUp}>
-          <Image
-            sx={{
-              position: 'relative',
-              top: {
-                md: '-30vh',
-                lg: '-24vh',
-                xl: '-19vh',
-              },
-              zIndex: 1,
-              left: '-4vh',
-              visibility: { md: 'visible', xs: 'hidden' },
-            }}
-            src={doctor}
-          />
-        </m.div>
-         
+            <Image
+              sx={{
+                position: 'relative',
+                top: {
+                  md: '-30vh',
+                  lg: '-24vh',
+                  xl: '-19vh',
+                },
+                zIndex: 1,
+                left: '-4vh',
+                visibility: { md: 'visible', xs: 'hidden' },
+              }}
+              src={doctor}
+            />
+          </m.div>
         </Grid>{' '}
       </Grid>
     </Container>
