@@ -5,7 +5,7 @@ import 'src/global.css';
 import 'src/locales/i18n';
 
 // ----------------------------------------------------------------------
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AuthProvider } from 'src/auth/context/jwt';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
 import ProgressBar from 'src/components/progress-bar';
@@ -23,16 +23,16 @@ import ThemeProvider from 'src/theme';
 // ----------------------------------------------------------------------
 
 export default function App() {
-  // useEffect(() => {
-  //   document.addEventListener('copy', disableCopy);
-  //   return () => {
-  //     document.removeEventListener('copy', disableCopy);
-  //   };
-  // }, []);
+  useEffect(() => {
+    document.addEventListener('copy', disableCopy);
+    return () => {
+      document.removeEventListener('copy', disableCopy);
+    };
+  }, []);
 
-  // const disableCopy = (e) => {
-  //   e.preventDefault();
-  // };
+  const disableCopy = (e) => {
+    e.preventDefault();
+  };
 
   // useEffect(() => {
   //   document.addEventListener('screenshot', disablescreenshot);
