@@ -43,7 +43,7 @@ export default function Family() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            Add New
+            {t('Add new')}
           </Button>
         }
         sx={{ mb: { xs: 3, md: 5 } }}

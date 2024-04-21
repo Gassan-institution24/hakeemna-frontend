@@ -26,8 +26,8 @@ import { fNumber } from 'src/utils/format-number';
 import axios, { endpoints } from 'src/utils/axios';
 import { fTime, fDateAndTime } from 'src/utils/format-time';
 
-import { useLocales } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetAppointment,
   useGetEmployeeEngagement,
@@ -46,6 +46,7 @@ import FormProvider from 'src/components/hook-form/form-provider';
 export default function Doctorpage() {
   const params = useParams();
   const router = useRouter();
+  const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
@@ -68,14 +69,13 @@ export default function Doctorpage() {
     id,
     startDate: currentDateTime,
   });
-
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
     setTimeData(timeId);
     setSelectedTime(timeId);
   };
-  const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient._id));
+  const uniqueUserIds = new Set(feedbackData.map((feedback) => feedback?.patient?._id));
   const numberOfUsers = uniqueUserIds.size;
   const defaultValues = {
     patient: patientData,
@@ -214,7 +214,7 @@ export default function Doctorpage() {
               gap: '10px',
             }}
           >
-            <DialogTitle>Are you sure</DialogTitle>
+            <DialogTitle>{t('Are you sure')}</DialogTitle>
             <Image
               src={datacheeck?.unit_service?.company_logo}
               sx={{
@@ -230,15 +230,15 @@ export default function Doctorpage() {
           </div>
           <DialogContent>
             <Typography sx={{ ml: 2, mb: 1, fontSize: 15 }}>
-              please confirm your appointment
+              {t('please confirm your appointment')}
             </Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={dialog.onFalse} variant="outlined" color="inherit">
-              Cancel
+              {t('Cancel')}
             </Button>
             <Button variant="contained" onClick={() => handleBook(TimeData)}>
-              Book
+              {t('Book')}
             </Button>
           </DialogActions>
         </FormProvider>
@@ -258,7 +258,7 @@ export default function Doctorpage() {
       {appointmentsData.length > 0 ? (
         <Box>
           <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 'bold' }}>
-            SELECT TIME
+            {t('SELECT TIME')}
           </Typography>
 
           <Box sx={{ display: { md: 'flex', xs: 'block' }, mt: 2 }}>
@@ -301,11 +301,11 @@ export default function Doctorpage() {
                     sx={{ bgcolor: 'success.main' }}
                     onClick={dialog.onTrue}
                   >
-                    Book
+                    {t('Book')}
                   </Button>
                 ) : (
                   <Button disabled variant="contained" onClick={dialog.onFalse}>
-                    Book
+                    {t('Book')}
                   </Button>
                 )}
               </Box>

@@ -108,7 +108,7 @@ export default function Insuranceinfo() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            {t('Add New')}
+            {t('Add New insurance cards')}
           </Button>
         }
         sx={{ mb: { xs: 3, md: 5 } }}

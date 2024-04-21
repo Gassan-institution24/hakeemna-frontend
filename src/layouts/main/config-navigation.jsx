@@ -22,7 +22,7 @@ export const navConfig = [
   {
     title: 'Services',
     icon: <Iconify icon="medical-icon:social-services" />,
-    path: '/',
+    path: '#',
     sectionId: 'services',
   },
   {

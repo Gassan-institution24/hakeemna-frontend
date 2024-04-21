@@ -8,25 +8,16 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { useTranslate, useLocales } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 
-const stickySidebarStyle = {
-  display: 'flex',
-  right: 0,
-  zIndex: 1,
-  height: '35vh',
-  width: 'auto',
-  margin: 3,
-  position: 'fixed',
-  backgroundColor: 'rgba(255, 255, 255, 0.700)',
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.4)',
-  borderRadius: '15px 0px 0px 15px',
-};
-const insidestickySidebar = {
-  transform: 'translate(2%, 2%)',
-};
-
 export default function Sidebar() {
+  const { t } = useTranslate();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
   const router = useRouter();
   const gotoHome = () => {
     router.push(paths.dashboard.root);
@@ -40,9 +31,22 @@ export default function Sidebar() {
   const gotoAppointments = () => {
     router.push(paths.dashboard.user.patientsappointments);
   };
-  // const gotoHome = () => {
-  //   router.push(paths.dashboard.root);
-  // };
+  const stickySidebarStyle = {
+    display: 'flex',
+
+    zIndex: 1,
+    height: '35vh',
+    width: 'auto',
+    margin: 3,
+    position: 'fixed',
+    backgroundColor: 'rgba(255, 255, 255, 0.700)',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.4)',
+    ...(curLangAr ? { left: 0 } : { right: 0 }),
+    ...(curLangAr ? { borderRadius: '0px 15px 15px 0px' } : { borderRadius: '15px 0px 0px 15px' }),
+  };
+  const insidestickySidebar = {
+    transform: 'translate(2%, 2%)',
+  };
   return (
     <Box style={stickySidebarStyle}>
       <Box style={insidestickySidebar}>
@@ -57,7 +61,7 @@ export default function Sidebar() {
           onClick={gotoHome}
         >
           <Iconify sx={{ color: 'green', width: '40%', height: '10%' }} icon="cil:home" />
-          <Typography sx={{ fontSize: 10.5 }}>Home</Typography>
+          <Typography sx={{ fontSize: 10.5 }}>{t('Home')}</Typography>
         </Button>
 
         <Divider />
@@ -75,7 +79,7 @@ export default function Sidebar() {
             sx={{ color: 'green', width: '40%', height: '10%' }}
             icon="ph:calendar-duotone"
           />
-          <Typography sx={{ fontSize: 10.5 }}>Appointments</Typography>
+          <Typography sx={{ fontSize: 10.5 }}>{t('Appointments')}</Typography>
         </Button>
         <Divider />
         <Button
@@ -89,7 +93,7 @@ export default function Sidebar() {
           onClick={gotoProfile}
         >
           <Iconify sx={{ color: 'green', width: '40%', height: '10%' }} icon="gg:profile" />
-          <Typography sx={{ fontSize: 10.5 }}>Profile</Typography>
+          <Typography sx={{ fontSize: 10.5 }}>{t('Profile')}</Typography>
         </Button>
         <Divider />
         <Button
@@ -105,7 +109,7 @@ export default function Sidebar() {
             sx={{ color: 'green', width: '40%', height: '10%' }}
             icon="material-symbols:history"
           />
-          <Typography sx={{ fontSize: 10.5 }}>History</Typography>
+          <Typography sx={{ fontSize: 10.5 }}>{t('History')}</Typography>
         </Button>
         <Divider />
         <Button
@@ -122,7 +126,7 @@ export default function Sidebar() {
             sx={{ color: 'green', width: '40%', height: '10%' }}
             icon="ant-design:setting-outlined"
           />
-          <Typography sx={{ fontSize: 10.5 }}>Setting</Typography>
+          <Typography sx={{ fontSize: 10.5 }}>{t('Settings')}</Typography>
         </Button>
       </Box>
     </Box>
