@@ -8,7 +8,6 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useGetPatientAppointments } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-// import { useSettingsContext } from 'src/components/settings';
 
 import Currentappoinment from './apointmentscurrent';
 import FinishedAppoinment from './apointmentsfinished';
@@ -17,7 +16,6 @@ export default function AppointmentData() {
   const { user } = useAuthContext();
   const { appointmentsData, refetch } = useGetPatientAppointments(user?.patient?._id);
   const { t } = useTranslate();
-  // const settings = useSettingsContext();
 
   const [currentTab, setCurrentTab] = useState('upcoming');
   const handleChangeTab = useCallback((event, newValue) => {
@@ -26,6 +24,8 @@ export default function AppointmentData() {
 
   const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending');
   const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');
+
+
   const TABS = [
     {
       value: 'upcoming',
