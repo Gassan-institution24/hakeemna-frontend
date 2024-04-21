@@ -172,8 +172,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
     } catch (error) {
       // error emitted in backend
-      setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
+      // window.scrollTo({ top: 0, behavior: 'smooth' });
       saving.onFalse();
       confirm.onFalse();
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
@@ -202,8 +202,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       router.push(paths.unitservice.employees.appointmentconfig.root(id));
       // await refetch();
     } catch (error) {
-      setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
+      // window.scrollTo({ top: 0, behavior: 'smooth' });
       // error emitted in backend
       updating.onFalse();
       confirm.onFalse();
@@ -259,8 +259,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // setErrorMsg(curLangAr ? error.arabic_message || error.message : error.message);
+      // window.scrollTo({ top: 0, behavior: 'smooth' });
       // error emitted in backend
       updating.onFalse();
       loadingSend.onFalse();
@@ -274,7 +274,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   useEffect(() => {
     if (Object.keys(errors).length) {
       Object.keys(errors).forEach((key, idx) =>
-        enqueueSnackbar(errors?.[key]?.message, { variant: 'error' })
+        enqueueSnackbar(`${key}: ${errors?.[key]?.message || 'error'}`, { variant: 'error' })
       );
     }
   }, [errors, enqueueSnackbar]);
@@ -395,13 +395,23 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
                   : 'Do you want to change your existance appointments?'}
               </Typography> */}
               {curLangAr ? (
-                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
-                  اضغط <strong> نعم </strong> لتغيير المواعيد المنشأة
-                </Typography>
+                <>
+                  <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                    اضغط <strong> نعم </strong> لتغيير المواعيد المنشأة
+                  </Typography>
+                  <Typography variant="body2" component="p" sx={{ color: 'info.dark' }}>
+                    <strong> ملاحظة: </strong> لن يتم التعديل على أي من المواعيد المحجوزة
+                  </Typography>
+                </>
               ) : (
-                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
-                  press<strong> yes</strong> to change existance appointments
-                </Typography>
+                <>
+                  <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                    press<strong> yes</strong> to change existance appointments
+                  </Typography>
+                  <Typography variant="body2" component="p" sx={{ color: 'info.dark' }}>
+                    <strong> note:</strong> booked appointment will not change
+                  </Typography>
+                </>
               )}
               {curLangAr ? (
                 <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>

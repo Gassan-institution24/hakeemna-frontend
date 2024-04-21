@@ -16,6 +16,7 @@ const EntranceManagementEditPage = lazy(() => import('src/pages/employee/entranc
 
 // APPOINTMENTS
 const AppointmentsHomePage = lazy(() => import('src/pages/employee/appointments/home'));
+const AppointmentEditPage = lazy(() => import('src/pages/employee/appointments/edit'));
 const AppointmentsBookPage = lazy(() => import('src/pages/employee/appointments/book'));
 
 // ACCOUNTING
@@ -78,6 +79,7 @@ const NewAppointmentConfigPage = lazy(() =>
 const CalenderPage = lazy(() => import('src/pages/employee/calender/calender'));
 
 // PATIENT
+const PatientsPage = lazy(() => import('src/pages/employee/patients/patients_table'));
 const PatientInfoPage = lazy(() => import('src/pages/employee/patients/patient-profile'));
 
 // ----------------------------------------------------------------------
@@ -109,14 +111,17 @@ export const unitServiceEmployeeDashboardRoutes = [
       },
       {
         path: 'appointments',
-        children: [{ element: <AppointmentsHomePage />, index: true }],
+        children: [
+          { element: <AppointmentsHomePage />, index: true },
+          { path: ':id', element: <AppointmentEditPage /> },
+        ],
       },
       { path: 'book', element: <AppointmentsBookPage /> },
       {
-        path: 'patients/:id',
+        path: 'mypatients',
         children: [
-          { element: <PatientInfoPage />, index: true },
-          // { path: ':id/info', element: <AppointmentsBookPage /> },
+          { element: <PatientsPage />, index: true },
+          { path: ':id', element: <PatientInfoPage /> },
         ],
       },
       {

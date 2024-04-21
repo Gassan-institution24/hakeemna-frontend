@@ -85,7 +85,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
           !values.days_details.some((detail) => detail.day === option.value)
       )[0]?.value;
       if (!dayToCreate) {
-        throw Error('No valid date to create');
+        throw Error(t('No valid date to create'));
       }
       const defaultItem = {
         day: '',
@@ -112,7 +112,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       enqueueSnackbar(curLangAr ? e.arabic_message || e.message : e.message, {
         variant: 'error',
       });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values]);
@@ -131,19 +131,19 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
         clearErrors();
         if (!values.appointment_time) {
           setValue(`days_details[${index}].appointments`, []);
-          setError('appointment_time');
+          // setError('appointment_time');
           proccessing.onFalse();
           return;
         }
         if (!values.days_details[index].work_start_time) {
           setValue(`days_details[${index}].appointments`, []);
-          setError(`days_details[${index}].work_start_time`);
+          // setError(`days_details[${index}].work_start_time`);
           proccessing.onFalse();
           return;
         }
         if (!values.days_details[index].work_end_time) {
           setValue(`days_details[${index}].appointments`, []);
-          setError(`days_details[${index}].work_end_time`);
+          // setError(`days_details[${index}].work_end_time`);
           proccessing.onFalse();
           return;
         }

@@ -97,7 +97,7 @@ export default function TableNewEditForm({ currentTable }) {
   useEffect(() => {
     if (Object.keys(errors).length) {
       Object.keys(errors).forEach((key, idx) =>
-        enqueueSnackbar(errors?.[key]?.message, { variant: 'error' })
+        enqueueSnackbar(`${key}: ${errors?.[key]?.message || 'error'}`, { variant: 'error' })
       );
     }
   }, [errors, enqueueSnackbar]);

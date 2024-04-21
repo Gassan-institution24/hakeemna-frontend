@@ -28,7 +28,13 @@ const TIME_LABELS = {
 export default function OverviewAnalyticsView() {
   const settings = useSettingsContext();
   const theme = useTheme();
-  const {unitServicesNumber,employeesNumber,patientsNumber,usersNumber,specialitiesEmployees} = useGetStatistics()
+  const {
+    unitServicesNumber,
+    employeesNumber,
+    patientsNumber,
+    usersNumber,
+    specialitiesEmployees,
+  } = useGetStatistics();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       {/* <Typography
@@ -41,7 +47,7 @@ export default function OverviewAnalyticsView() {
       </Typography> */}
 
       <Grid container spacing={3}>
-                <Grid xs={12} sm={6} md={3}>
+        <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
             title="total users"
             total={usersNumber}
@@ -76,60 +82,60 @@ export default function OverviewAnalyticsView() {
           />
         </Grid>
         <Grid xs={12}>
-        <FileDataActivity
-              title="Data Activity"
-              chart={{
-                labels: TIME_LABELS,
-                colors: [
-                  theme.palette.primary.main,
-                  theme.palette.error.main,
-                  theme.palette.warning.main,
-                  theme.palette.text.disabled,
-                ],
-                series: [
-                  {
-                    type: 'Week',
-                    data: [
-                      { name: 'Images', data: [20, 34, 48, 65, 37, 48, 9] },
-                      { name: 'Media', data: [10, 34, 13, 26, 27, 28, 18] },
-                      { name: 'Documents', data: [10, 14, 13, 16, 17, 18, 28] },
-                      { name: 'Other', data: [5, 12, 6, 7, 8, 9, 48] },
-                    ],
-                  },
-                  {
-                    type: 'Month',
-                    data: [
-                      {
-                        name: 'Images',
-                        data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34],
-                      },
-                      {
-                        name: 'Media',
-                        data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34],
-                      },
-                      {
-                        name: 'Documents',
-                        data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34],
-                      },
-                      {
-                        name: 'Other',
-                        data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34],
-                      },
-                    ],
-                  },
-                  {
-                    type: 'Year',
-                    data: [
-                      { name: 'Images', data: [10, 34, 13, 56, 77] },
-                      { name: 'Media', data: [10, 34, 13, 56, 77] },
-                      { name: 'Documents', data: [10, 34, 13, 56, 77] },
-                      { name: 'Other', data: [10, 34, 13, 56, 77] },
-                    ],
-                  },
-                ],
-              }}
-            />
-            </Grid>
+          <FileDataActivity
+            title="Data Activity"
+            chart={{
+              labels: TIME_LABELS,
+              colors: [
+                theme.palette.primary.main,
+                theme.palette.error.main,
+                theme.palette.warning.main,
+                theme.palette.text.disabled,
+              ],
+              series: [
+                {
+                  type: 'Week',
+                  data: [
+                    { name: 'Images', data: [20, 34, 48, 65, 37, 48, 9] },
+                    { name: 'Media', data: [10, 34, 13, 26, 27, 28, 18] },
+                    { name: 'Documents', data: [10, 14, 13, 16, 17, 18, 28] },
+                    { name: 'Other', data: [5, 12, 6, 7, 8, 9, 48] },
+                  ],
+                },
+                {
+                  type: 'Month',
+                  data: [
+                    {
+                      name: 'Images',
+                      data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34],
+                    },
+                    {
+                      name: 'Media',
+                      data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34],
+                    },
+                    {
+                      name: 'Documents',
+                      data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34],
+                    },
+                    {
+                      name: 'Other',
+                      data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34],
+                    },
+                  ],
+                },
+                {
+                  type: 'Year',
+                  data: [
+                    { name: 'Images', data: [10, 34, 13, 56, 77] },
+                    { name: 'Media', data: [10, 34, 13, 56, 77] },
+                    { name: 'Documents', data: [10, 34, 13, 56, 77] },
+                    { name: 'Other', data: [10, 34, 13, 56, 77] },
+                  ],
+                },
+              ],
+            }}
+          />
+        </Grid>
 
         {/* <Grid xs={12}>
               <BookingStatistics
@@ -186,11 +192,10 @@ export default function OverviewAnalyticsView() {
           <AnalyticsCurrentVisits
             title="employees specialities"
             chart={{
-              series: specialitiesEmployees
+              series: specialitiesEmployees,
             }}
           />
         </Grid>
-
       </Grid>
     </Container>
   );

@@ -286,6 +286,12 @@ export function useNavData() {
         navItemId: 'USAppointmentsNav',
       },
       {
+        show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
+        title: t('institution patients'),
+        path: paths.unitservice.patients.all,
+        icon: <Iconify icon="streamline:health-care-2-solid" />,
+      },
+      {
         show:
           false && checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
         title: t('accounting'),
@@ -367,7 +373,7 @@ export function useNavData() {
     ];
     const unitServicesDashboars = [
       {
-        subheader: t('control panel'),
+        subheader: t('institution control panel'),
         items: unitServiceItems.filter((item) => item.show),
       },
     ];
@@ -396,7 +402,7 @@ export function useNavData() {
         show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }),
         title: t('book appointments'),
         path: paths.employee.appointments.book,
-        icon: <Iconify icon="fluent-mdl2:date-time-mirrored" />,
+        icon: <Iconify icon="material-symbols:add-ad" />,
         navItemId: 'EMAppointmentsNav',
       },
       {
@@ -405,6 +411,12 @@ export function useNavData() {
         path: paths.employee.appointmentconfiguration.root,
         icon: <Iconify icon="fluent:content-settings-16-regular" />,
         navItemId: 'EMAppointConfigNav',
+      },
+      {
+        show: checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'read' }),
+        title: t('my patients'),
+        path: paths.employee.patients.all,
+        icon: <Iconify icon="streamline:health-care-2-solid" />,
       },
       {
         show: true,

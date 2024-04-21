@@ -332,6 +332,8 @@ export const endpoints = {
   patients: {
     all: '/api/patient',
     find: `/api/patient/find`,
+    employee: (id) => `/api/patient/employee/${id}`,
+    unitservice: (id) => `/api/patient/unitservice/${id}`,
     // find: ({ identification_num, email, mobile_num1 }) =>
     //   `/api/patient/find?id=${identification_num}&&email=${email}&&mobile=${mobile_num1}`,
     findPatient: ({ identification_num, mobile_num1, first_name, name_arabic }) =>
@@ -644,6 +646,7 @@ export const endpoints = {
   // calendar: '/api/calendar',
   auth: {
     user: (id) => `/api/auth/${id}`,
+    patientUser: (id) => `/api/auth/patient/${id}`,
     users: '/api/auth',
     me: '/api/auth/me',
     login: '/api/auth/login',

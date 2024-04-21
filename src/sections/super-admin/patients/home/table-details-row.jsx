@@ -9,6 +9,8 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
+import { useGetPatientUser } from 'src/api';
+
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -31,6 +33,7 @@ export default function CountriesTableRow({
   showGeneralInfo,
 }) {
   const {
+    _id,
     sequence_number,
     nationality,
     name_english,
@@ -44,6 +47,8 @@ export default function CountriesTableRow({
     ip_address_user_modification,
     modifications_nums,
   } = row;
+
+  const { data } = useGetPatientUser(_id);
 
   const popover = usePopover();
   const DDL = usePopover();
@@ -67,6 +72,9 @@ export default function CountriesTableRow({
         >
           {status}
         </Label>
+      </TableCell>
+      <TableCell align="center">
+        <Iconify icon={data ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
       </TableCell>
       <TableCell
         align="center"

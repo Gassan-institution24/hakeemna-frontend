@@ -42,53 +42,19 @@ export function useGetUser(id) {
   return memoizedValue;
 }
 
-// export function useGetpatientAppointment() {
-//   const URL = `${endpoints.appointment.patientsappointments}`;
-//   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+export function useGetPatientUser(id) {
+  const URL = `${endpoints.auth.patientUser(id)}`;
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
-//   const memoizedValue = useMemo(
-//     () => ({
-//       data: data || [],
-//       Loading: isLoading,
-//       error,
-//       validating: isValidating,
-//     }),
-//     [data, error, isLoading, isValidating]
-//   );
+  const memoizedValue = useMemo(
+    () => ({
+      data,
+      Loading: isLoading,
+      error,
+      validating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
 
-//   return memoizedValue;
-// }
-
-// export function useGetStackholder() {
-//   const URL = `${endpoints.stakeholder.getstakeholder}`;
-//   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-
-//   const memoizedValue = useMemo(
-//     () => ({
-//       stakeholder: data || [],
-//       Loading: isLoading,
-//       error,
-//       validating: isValidating,
-//     }),
-//     [data, error, isLoading, isValidating]
-//   );
-//   const refetch = async () => {
-//     await mutate(URL);
-//   };
-//   return { ...memoizedValue, refetch };
-// }
-
-// export function useGetPaymentmethods() {
-//   const URL = `${endpoints.payment.getAllpaymentmethods}`;
-//   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-//   const memoizedValue = useMemo(
-//     () => ({
-//       paymentmethods: data || [],
-//       Loading: isLoading,
-//       error,
-//       validating: isValidating,
-//     }),
-//     [data, error, isLoading, isValidating]
-//   );
-//   return memoizedValue;
-// }
+  return memoizedValue;
+}

@@ -196,8 +196,10 @@ const ServicesNewPage = lazy(() => import('src/pages/unit-service/tables/service
 const ServicesEditPage = lazy(() => import('src/pages/unit-service/tables/services/edit'));
 // OLD PATIENT
 const OldPatientPage = lazy(() => import('src/pages/unit-service/old-patient/home'));
-// const WalkTourPage = lazy(() => import('src/pages/unit-service/walktour'));
-// const ChatPage = lazy(() => import('src/pages/dashboard/chat'));
+
+// PATIENTS
+const PatientsPage = lazy(() => import('src/pages/unit-service/patients/patients_table'));
+const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
 // ----------------------------------------------------------------------
 
 export const unitServiceDashboardRoutes = [
@@ -340,6 +342,13 @@ export const unitServiceDashboardRoutes = [
           { path: ':id/info', element: <AppointmentsInfoPage /> },
           { path: ':id/edit', element: <AppointmentsEditPage /> },
           { path: 'new', element: <AppointmentsNewPage /> },
+        ],
+      },
+      {
+        path: 'patients',
+        children: [
+          { element: <PatientsPage />, index: true },
+          { path: ':id', element: <PatientInfoPage /> },
         ],
       },
       {

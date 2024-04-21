@@ -1,12 +1,13 @@
-import { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 // import { useMockedUser } from 'src/hooks/use-mocked-user';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import { Tooltip, Typography } from '@mui/material';
+import { Button, Divider, Tooltip, Checkbox, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
@@ -14,15 +15,19 @@ import { RouterLink } from 'src/routes/components';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { useTranslate } from 'src/locales';
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 // import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import Doclogo from 'src/components/logo/doc.png';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import { NavSectionVertical } from 'src/components/nav-section';
 import Walktour, { useWalktour } from 'src/components/walktour';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import { NAV } from '../config-layout';
 import { useNavData } from './config-navigation';
@@ -41,9 +46,65 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   const { t } = useTranslate();
 
+  const popover = usePopover();
+
   const USData =
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
   const isEmployee = ['employee', 'admin'].includes(user?.role);
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [dialog, setDialog] = useState(!loading && !user.last_online && user.role === 'admin');
+  const [tables, setTables] = useState([]);
+
+  useEffect(() => {
+    setDialog(!loading && user.role === 'admin' && !user.last_online);
+  }, [user.role, user.last_online, loading]);
+
+  const onAcceptCreating = () => {
+    try {
+      if (tables.includes('department')) {
+        axiosInstance.post(endpoints.departments.all, {
+          unit_service: USData?._id,
+          name_english: 'main department',
+          name_arabic: 'القسم الرئيسي',
+        });
+      }
+      if (tables.includes('work shift')) {
+        const start_time = new Date();
+        start_time.setHours(8, 0, 0, 0);
+        const end_time = new Date();
+        end_time.setHours(15, 0, 0, 0);
+        axiosInstance.post(endpoints.work_shifts.all, {
+          unit_service: USData?._id,
+          start_time,
+          end_time,
+          name_english: 'morning work shift',
+          name_arabic: 'وردية عمل صباحية',
+        });
+      }
+      if (tables.includes('work group')) {
+        axiosInstance.post(endpoints.work_groups.all, {
+          unit_service: USData?._id,
+          employees: [
+            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+          ],
+          name_english: `${user.employee?.name_english} work group`,
+          name_arabic: `فريق عمل ${user.employee?.name_arabic}`,
+        });
+      }
+      window.location.reload();
+      setDialog(false);
+    } catch (error) {
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
+      setDialog(false);
+    }
+  };
 
   const walktour = useWalktour({
     defaultRun: !loading && user && !user.last_online,
@@ -119,10 +180,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
     ],
   });
 
-  // useEffect(() => {
-  //   if (!user?.last_online) walktour.setRun(true);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [user]);
+  useEffect(() => {
+    if (!user?.last_online) walktour.setRun(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   useEffect(() => {
     if (openNav) {
@@ -164,7 +225,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
             mb: -4,
             cursor: 'pointer',
           }}
-          onClick={() => walktour.setRun(true)}
+          onClick={popover.onOpen}
         >
           <Iconify width={23} icon="material-symbols:help-outline" />
         </Box>
@@ -210,40 +271,120 @@ export default function NavVertical({ openNav, onCloseNav }) {
   );
 
   return (
-    <Box
-      sx={{
-        flexShrink: { lg: 0 },
-        width: { lg: NAV.W_VERTICAL },
-        boxShadow: (theme) => theme.customShadows.z8,
-      }}
-    >
-      {/* <NavToggleButton /> */}
+    <>
+      <Box
+        sx={{
+          flexShrink: { lg: 0 },
+          width: { lg: NAV.W_VERTICAL },
+          boxShadow: (theme) => theme.customShadows.z8,
+        }}
+      >
+        {/* <NavToggleButton /> */}
 
-      {lgUp ? (
-        <Stack
-          sx={{
-            height: 1,
-            position: 'fixed',
-            width: NAV.W_VERTICAL,
-            borderRight: (theme) => `dashed 1px ${theme.palette.divider}`,
-          }}
-        >
-          {renderContent}
-        </Stack>
-      ) : (
-        <Drawer
-          open={openNav}
-          onClose={onCloseNav}
-          PaperProps={{
-            sx: {
+        {lgUp ? (
+          <Stack
+            sx={{
+              height: 1,
+              position: 'fixed',
               width: NAV.W_VERTICAL,
-            },
-          }}
+              borderRight: (theme) => `dashed 1px ${theme.palette.divider}`,
+            }}
+          >
+            {renderContent}
+          </Stack>
+        ) : (
+          <Drawer
+            open={openNav}
+            onClose={onCloseNav}
+            PaperProps={{
+              sx: {
+                width: NAV.W_VERTICAL,
+              },
+            }}
+          >
+            {renderContent}
+          </Drawer>
+        )}
+      </Box>
+      <ConfirmDialog
+        open={dialog}
+        onClose={() => setDialog(false)}
+        title={t('creating startup data')}
+        content={
+          <>
+            <Typography variant="subtitle1" paddingBottom="5px">
+              {t('Select types of data you want me to create')}
+            </Typography>
+
+            {USData && (!USData?.employees_number || USData?.employees_number > 3) && (
+              <Stack direction="row">
+                <Checkbox
+                  checked={tables.includes('department')}
+                  onChange={() =>
+                    tables.includes('department')
+                      ? setTables(tables.filter((one) => one !== 'department'))
+                      : setTables((prev) => [...prev, 'department'])
+                  }
+                />
+                <Typography variant="subtitle2" alignSelf="center">
+                  {t('department')}
+                </Typography>
+              </Stack>
+            )}
+
+            <Stack direction="row">
+              <Checkbox
+                checked={tables.includes('work group')}
+                onChange={() =>
+                  tables.includes('work group')
+                    ? setTables(tables.filter((one) => one !== 'work group'))
+                    : setTables((prev) => [...prev, 'work group'])
+                }
+              />
+              <Typography variant="subtitle2" alignSelf="center">
+                {t('work group')}
+              </Typography>
+            </Stack>
+
+            <Stack direction="row">
+              <Checkbox
+                checked={tables.includes('work shift')}
+                onChange={() =>
+                  tables.includes('work shift')
+                    ? setTables(tables.filter((one) => one !== 'work shift'))
+                    : setTables((prev) => [...prev, 'work shift'])
+                }
+              />
+              <Typography variant="subtitle2" alignSelf="center">
+                {t('work shift')}
+              </Typography>
+            </Stack>
+          </>
+        }
+        action={
+          <Button variant="contained" color="info" onClick={onAcceptCreating}>
+            {t('create')}
+          </Button>
+        }
+      />
+      <CustomPopover open={popover.open} onClose={popover.onClose}>
+        <MenuItem
+          lang="ar"
+          sx={{ fontSize: 13, color: 'secondary.dark' }}
+          onClick={() => walktour.setRun(true)}
         >
-          {renderContent}
-        </Drawer>
-      )}
-    </Box>
+          {t('walktour for first steps')}
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          lang="ar"
+          sx={{ fontSize: 13, color: 'secondary.dark' }}
+          onClick={() => setDialog(true)}
+        >
+          {t('create first time tables')}
+        </MenuItem>
+      </CustomPopover>
+    </>
   );
 }
 

@@ -229,8 +229,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       router.push(paths.employee.appointmentconfiguration.root);
     } catch (error) {
       console.error(error);
-      setErrorMsg(typeof error === 'string' ? error : error.message);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // setErrorMsg(typeof error === 'string' ? error : error.message);
+      // window.scrollTo({ top: 0, behavior: 'smooth' });
       // error emitted in backend
       saving.onFalse();
       confirm.onFalse();
@@ -253,8 +253,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       // await refetch();
     } catch (error) {
       console.error(error);
-      setErrorMsg(typeof error === 'string' ? error : error.message);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // setErrorMsg(typeof error === 'string' ? error : error.message);
+      // window.scrollTo({ top: 0, behavior: 'smooth' });
       // error emitted in backend
       updating.onFalse();
       confirm.onFalse();
@@ -306,8 +306,8 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       loadingSend.onFalse();
       console.info('DATA', JSON.stringify(data, null, 2));
     } catch (error) {
-      setErrorMsg(typeof error === 'string' ? error : error.message);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // setErrorMsg(typeof error === 'string' ? error : error.message);
+      // window.scrollTo({ top: 0, behavior: 'smooth' });
       console.error(error);
       updating.onFalse();
       // error emitted in backend
@@ -321,9 +321,10 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   useEffect(() => {
     setErrorMsg();
     if (Object.keys(errors).length) {
-      Object.keys(errors).forEach((key, idx) =>
-        enqueueSnackbar(errors?.[key]?.message, { variant: 'error' })
-      );
+      console.log('errors', errors);
+      Object.keys(errors).forEach((key, idx) => {
+        enqueueSnackbar(`${key}: ${errors?.[key]?.message || 'error'}`, { variant: 'error' });
+      });
     }
   }, [errors, enqueueSnackbar]);
 
@@ -473,20 +474,30 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
                   : 'Do you want to change your existance appointments?'}
               </Typography> */}
               {curLangAr ? (
-                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
-                  اضغط <strong> نعم </strong> لتغيير المواعيد المنشأة
-                </Typography>
+                <>
+                  <Typography variant="body1" component="p" sx={{ color: 'info.dark' }}>
+                    <strong> ملاحظة: </strong> لن يتم التعديل على أي من المواعيد المحجوزة
+                  </Typography>
+                  <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                    اضغط <strong> نعم </strong> لتغيير المواعيد المنشأة
+                  </Typography>
+                </>
               ) : (
-                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
-                  press<strong> yes</strong> to change existance appointments
-                </Typography>
+                <>
+                  <Typography variant="body1" component="p" sx={{ color: 'info.dark' }}>
+                    <strong> note:</strong> booked appointment will not change
+                  </Typography>
+                  <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                    press<strong> yes</strong> to change existance appointments
+                  </Typography>
+                </>
               )}
               {curLangAr ? (
-                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                <Typography variant="body2" component="p" sx={{ color: 'text.disabled' }}>
                   اضغط <strong> لا </strong> لحفظ الاعدادات للبدء من المواعيد التي يراد إنشائها
                 </Typography>
               ) : (
-                <Typography variant="body2" component="p" sx={{ mt: 1, color: 'text.disabled' }}>
+                <Typography variant="body2" component="p" sx={{ color: 'text.disabled' }}>
                   press<strong> No</strong> to start changing when creating new appointments
                 </Typography>
               )}
