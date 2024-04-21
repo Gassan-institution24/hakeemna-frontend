@@ -18,8 +18,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import axios, { endpoints } from 'src/utils/axios';
 import { fTime, fDateAndTime } from 'src/utils/format-time';
 
-import { useLocales } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
@@ -28,6 +28,7 @@ import { useSnackbar } from 'src/components/snackbar';
 // ----------------------------------------------------------------------
 
 export default function Currentappoinment({ pendingAppointments, refetch }) {
+  const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
   const [theId, setTheId] = useState();
   const { currentLang } = useLocales();
@@ -57,7 +58,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
       });
     }
   };
-
+  
   const savedId = async (id) => {
     setTheId(id);
     dialog.onTrue();
@@ -66,7 +67,7 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
   return pendingAppointments?.map((info, index) => (
     <>
       <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
-        <DialogTitle>Are you sure you want to cancel</DialogTitle>
+        <DialogTitle>{t('Are you sure you want to cancel')}</DialogTitle>
         <div
           style={{
             display: 'flex',
@@ -90,10 +91,10 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
 
         <DialogActions>
           <Button onClick={dialog.onFalse} variant="outlined" color="inherit">
-            No
+            {t('No')}
           </Button>
           <Button variant="contained" onClick={() => cancelBook()}>
-            Cancel
+            {t('Cancel')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -121,13 +122,20 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
                   doctor?.employee?.visibility_online_appointment === true ? (
                     <span style={{ color: 'inherit' }}>
                       {' '}
-                      Dr. {doctor?.employee?.employee?.name_english}
+                      {t('Dr.')} {curLangAr ? doctor?.employee?.employee?.name_arabic : doctor?.employee?.employee?.name_english}
                     </span>
                   ) : null
                 }
                 secondary={
                   doctor?.employee?.visibility_online_appointment === true ? (
-                    <span style={{ color: 'inherit' }}> {info?.unit_service?.name_english}</span>
+                    <>
+                    <span style={{ color: 'inherit' }}>
+                      {' '}
+                      {curLangAr ? doctor?.employee?.employee?.speciality?.name_arabic : doctor?.employee?.employee?.speciality?.name_english}
+                    </span>
+                    <br/>
+                    <span style={{ color: 'inherit' }}> {curLangAr ? info?.unit_service?.name_arabic : info?.unit_service?.name_english}</span>
+                  </>
                   ) : null
                 }
                 primaryTypographyProps={{
