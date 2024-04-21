@@ -10,10 +10,15 @@ import ListItemText from '@mui/material/ListItemText';
 
 import { fTime, fDateAndTime } from 'src/utils/format-time';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function FinishedAppoinment({ finishedAppointments }) {
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   return finishedAppointments.map((info, index) => (
     <Box>
       <Card key={index}>
@@ -25,19 +30,28 @@ export default function FinishedAppoinment({ finishedAppointments }) {
             sx={{ width: 48, height: 48, mb: 2 }}
           />
 
-          {info?.work_group?.employees?.map((doctor, name, idx) => (
+          {info?.work_group?.employees?.map((doctor, idx) => (
             <ListItemText
               key={idx}
               primary={
                 doctor?.employee?.visibility_online_appointment === true ? (
                   <span style={{ color: 'inherit' }}>
                     {' '}
-                    Dr. {doctor?.employee?.employee?.name_english}
+                    {t('Dr.')} {curLangAr ? doctor?.employee?.employee?.name_arabic : doctor?.employee?.employee?.name_english}
                   </span>
                 ) : null
               }
               secondary={
-                <span style={{ color: 'inherit' }}> {info?.unit_service?.name_english}</span>
+                doctor?.employee?.visibility_online_appointment === true ? (
+                  <>
+                  <span style={{ color: 'inherit' }}>
+                    {' '}
+                    {curLangAr ? doctor?.employee?.employee?.speciality?.name_arabic : doctor?.employee?.employee?.speciality?.name_english}
+                  </span>
+                  <br/>
+                  <span style={{ color: 'inherit' }}>  <span style={{ color: 'inherit' }}> {curLangAr ? info?.unit_service?.name_arabic : info?.unit_service?.name_english}</span></span>
+                </>
+                ) : null
               }
               primaryTypographyProps={{
                 typography: 'subtitle1',

@@ -56,27 +56,25 @@ export default function AccountGeneral({ data, refetch }) {
     email: Yup.string(),
     mobile_num1: Yup.string(),
     mobile_num2: Yup.string(),
-    nationality: Yup.string(),
+    is_on_eating_diet: Yup.string(),
     country: Yup.string(),
     city: Yup.string(),
     address: Yup.string(),
     sport_exercises: Yup.string(),
     smoking: Yup.string(),
-    // other_medication_notes: Yup.array(),
     profile_picture: Yup.string(),
   });
   const DATAFORMAP = ['not smoker', 'light smoker', 'heavy smoker'];
   const SECDATAFORMAP = ['0', 'once a week', 'twice a week', '3-4 times a week', 'often'];
+  const THERDDATAFORMAP = ['Yes', 'No'];
 
   const defaultValues = {
     name_english: data?.name_english || '',
-    // middle_name: data?.middle_name || '',
     name_arabic: data?.name_arabic || '',
-    // family_name: data?.family_name || '',
     email: data?.email || '',
     mobile_num1: data?.mobile_num1 || '',
     mobile_num2: data?.mobile_num2 || '',
-    nationality: user.patient?.nationality || null,
+    is_on_eating_diet: user.patient?.is_on_eating_diet || null,
     country: user.patient?.country?._id || null,
     city: user.patient?.city?._id || null,
     address: data?.address || '',
@@ -252,31 +250,16 @@ export default function AccountGeneral({ data, refetch }) {
               <RHFTextField
                 name="email"
                 label={t('Email Address')}
-                onChange={handleArabicInputChange}
+                // onChange={handleArabicInputChange}
+                disabled 
               />
-              <RHFTextField name="address" label={t('Address')} />
 
               <RHFSelect
-                label={t('nationality')}
-                fullWidth
-                name="nationality"
-                InputLabelProps={{ shrink: true }}
-                PaperPropsSx={{ textTransform: 'capitalize' }}
-              >
-                {countriesData.map((nationality, idx) => (
-                  <MenuItem lang="ar" key={idx} value={nationality._id}>
-                    {nationality.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-
-              <RHFSelect
-                label={t('country')}
+                label={t('residence country')}
                 fullWidth
                 name="country"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
-                // onChange={handleCountryChange}
               >
                 {countriesData.map((country, idx) => (
                   <MenuItem lang="ar" key={idx} value={country._id}>
@@ -298,6 +281,25 @@ export default function AccountGeneral({ data, refetch }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
+              <RHFTextField name="address" label={t('Address')} />
+              <RHFTextField
+                name="height"
+                label={
+                  <span>
+                    {t('Height')}
+                    <span style={{ color: 'green', fontWeight: 600 }}>/</span> {t('cm')}
+                  </span>
+                }
+              />
+              <RHFTextField
+                name="weight"
+                label={
+                  <span>
+                    {t('Weight')}
+                    <span style={{ color: 'green', fontWeight: 600 }}>/</span> {t('kg')}
+                  </span>
+                }
+              />
 
               <RHFSelect
                 label={t('Sport Exercises')}
@@ -307,6 +309,19 @@ export default function AccountGeneral({ data, refetch }) {
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >
                 {SECDATAFORMAP.map((test, idx) => (
+                  <MenuItem lang="ar" value={test} key={idx}>
+                    {test}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFSelect
+                label={t('Eating Diet')}
+                fullWidth
+                name="sport_exercises"
+                InputLabelProps={{ shrink: true }}
+                PaperPropsSx={{ textTransform: 'capitalize' }}
+              >
+                {THERDDATAFORMAP.map((test, idx) => (
                   <MenuItem lang="ar" value={test} key={idx}>
                     {test}
                   </MenuItem>

@@ -26,7 +26,7 @@ export function useNavData() {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
       ?.employees_number || 10;
 
-  console.log('employees_number', employees_number);
+  // console.log('employees_number', employees_number);
 
   const handleLogout = useCallback(async () => {
     try {
