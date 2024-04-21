@@ -49,6 +49,7 @@ const TABLE_HEAD = [
   { id: 'name_english', label: 'Name' },
   { id: 'name_arabic', label: 'Name in arabic' },
   { id: 'status', label: 'Status' },
+  { id: 'have_user_acc', label: 'has account' },
   { id: 'General-info', label: 'General Info' },
   { id: 'History', label: 'History' },
   { id: 'Communications', label: 'Communications' },

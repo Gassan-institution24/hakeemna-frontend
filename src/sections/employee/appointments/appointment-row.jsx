@@ -41,6 +41,7 @@ export default function AppointmentsTableRow({
   onDeleteRow,
 }) {
   const {
+    _id,
     appoint_number,
     unit_service,
     work_group,
@@ -120,7 +121,7 @@ export default function AppointmentsTableRow({
           }}
           onClick={() => router.push(paths.employee.patients.info(patient._id))}
         >
-          {patient?.name_english}
+          {curLangAr ? patient?.name_arabic : patient?.name_english}
         </TableCell>
         <TableCell align="center">{note}</TableCell>
         <TableCell align="center">
@@ -165,6 +166,18 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 155 }}
       >
+        {checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
+          <MenuItem
+            lang="ar"
+            onClick={() => {
+              router.push(paths.employee.appointments.edit(_id));
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="fluent:edit-32-filled" />
+            {t('edit')}
+          </MenuItem>
+        )}
         {status === 'available' &&
           checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
@@ -208,7 +221,7 @@ export default function AppointmentsTableRow({
             </MenuItem>
           )}
         {checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
-          <MenuItem lang="ar" onClick={confirmDelayOne.onTrue}>
+          <MenuItem lang="ar" sx={{ color: 'warning.main' }} onClick={confirmDelayOne.onTrue}>
             <Iconify icon="mdi:timer-sync" />
             {t('delay')}
           </MenuItem>

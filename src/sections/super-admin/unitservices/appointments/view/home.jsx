@@ -166,7 +166,7 @@ export default function AppointmentsView() {
     },
     {
       value: 'processing',
-      label: t('processing'),
+      label: t('upcoming'),
       color: 'info',
       count: processing,
     },

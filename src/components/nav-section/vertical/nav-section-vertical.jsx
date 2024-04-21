@@ -2,8 +2,11 @@ import PropTypes from 'prop-types';
 import { memo, useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
+import { Divider } from '@mui/material';
 import Collapse from '@mui/material/Collapse';
 import ListSubheader from '@mui/material/ListSubheader';
+
+import Iconify from 'src/components/iconify';
 
 import NavList from './nav-list';
 
@@ -11,17 +14,20 @@ import NavList from './nav-list';
 
 function NavSectionVertical({ data, slotProps, walktourRun, ...other }) {
   return (
-    <Stack component="nav" id="nav-section-vertical" {...other}>
+    <Stack component="nav" sx={{ pb: 5 }} id="nav-section-vertical" {...other}>
       {data
         .filter((item) => item.items.length)
         .map((group, idx) => (
-          <Group
-            key={idx}
-            walktourRun={walktourRun}
-            subheader={group.subheader}
-            items={group.items}
-            slotProps={slotProps}
-          />
+          <>
+            <Group
+              key={idx}
+              walktourRun={walktourRun}
+              subheader={group.subheader}
+              items={group.items}
+              slotProps={slotProps}
+            />
+            {data[idx + 1] && <Divider />}
+          </>
         ))}
     </Stack>
   );
@@ -61,15 +67,15 @@ function Group({ subheader, walktourRun, items, slotProps }) {
       {subheader ? (
         <>
           <ListSubheader
-            disableGutters
-            disableSticky
+            // disableGutters
+            // disableSticky
             onClick={handleToggle}
             sx={{
               fontSize: 11,
               cursor: 'pointer',
               typography: 'overline',
               display: 'inline-flex',
-              color: 'text.disabled',
+              color: 'secondary.darker',
               mb: `${slotProps?.gap || 4}px`,
               p: (theme) => theme.spacing(2, 1, 1, 1.5),
               transition: (theme) =>
@@ -83,6 +89,12 @@ function Group({ subheader, walktourRun, items, slotProps }) {
             }}
           >
             {subheader}
+            <Iconify
+              sx={{ mx: 1 }}
+              width={16}
+              className="arrow"
+              icon={open ? 'eva:arrow-ios-downward-fill' : 'eva:arrow-ios-forward-fill'}
+            />
           </ListSubheader>
 
           <Collapse in={open}>{renderContent}</Collapse>

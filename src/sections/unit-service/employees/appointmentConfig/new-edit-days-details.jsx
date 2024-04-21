@@ -118,17 +118,17 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
       clearErrors();
       if (!values.appointment_time) {
         setValue(`days_details[${index}].appointments`, []);
-        setError('appointment_time');
+        // setError('appointment_time');
         return;
       }
       if (!values.days_details[index].work_start_time) {
         setValue(`days_details[${index}].appointments`, []);
-        setError(`days_details[${index}].work_start_time`);
+        // setError(`days_details[${index}].work_start_time`);
         return;
       }
       if (!values.days_details[index].work_end_time) {
         setValue(`days_details[${index}].appointments`, []);
-        setError(`days_details[${index}].work_end_time`);
+        // setError(`days_details[${index}].work_end_time`);
         return;
       }
       const results = [];
