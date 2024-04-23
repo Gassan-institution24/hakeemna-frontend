@@ -105,7 +105,9 @@ export default function OverviewAppView() {
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <AppWelcome
-            title={`${greeting} \n ${user?.patient?.name_english} ${user?.patient?.family_name}`}
+            title={`${greeting} \n ${
+              curLangAr ? user?.patient?.name_arabic : user?.patient?.name_english
+            }`}
             description={
               curLangAr
                 ? 'قم بتغذية جسدك، وتمكين عقلك  فالعافية هي مفتاح الحياة النابضة بالحياة.'
