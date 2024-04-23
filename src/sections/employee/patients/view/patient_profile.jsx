@@ -34,11 +34,11 @@ export default function PatientProfile() {
   const TABS = [
     {
       value: 'home',
-      label: 'home',
+      label: t('home'),
     },
     {
       value: 'appointments',
-      label: 'appointments',
+      label: t('appointments'),
     },
   ];
 
@@ -271,7 +271,7 @@ export default function PatientProfile() {
           }}
         />
         <Typography variant="h4" sx={{ mt: 2 }}>
-          {curLangAr ? data.name_arabic : `${data?.name_english}`}
+          {curLangAr ? data.name_arabic : data?.name_english}
         </Typography>
       </div>
       {[
@@ -386,7 +386,7 @@ export default function PatientProfile() {
         },
         {
           label: t('Pregnant'),
-          value: data?.pregnant ? 'Yes' : 'No',
+          value: data?.pregnant ? t('Yes') : t('No'),
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {

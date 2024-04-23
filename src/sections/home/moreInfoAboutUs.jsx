@@ -77,7 +77,7 @@ export default function MoreInfoAboutUs() {
         </Box>
 
         {/* /////////////////////////////////// */}
-        <Box sx={{p:{md:0,xs:3}}} >
+        <Box sx={{ p: { md: 0, xs: 3 } }}>
           <Typography
             sx={{
               width: { md: '85%', xs: '100%' },
@@ -102,11 +102,15 @@ export default function MoreInfoAboutUs() {
                 display: { md: 'block', xs: 'none' },
               }}
             >
-              <Iconify icon="el:idea" width={35} sx={{
-                 '&:hover': {
-                  color:'#FBC02D'
-                },
-              }} />
+              <Iconify
+                icon="el:idea"
+                width={35}
+                sx={{
+                  '&:hover': {
+                    color: '#FBC02D',
+                  },
+                }}
+              />
               <Button
                 sx={{
                   position: 'relative',
