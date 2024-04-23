@@ -251,7 +251,7 @@ export default function AccountGeneral({ data, refetch }) {
                 name="email"
                 label={t('Email Address')}
                 // onChange={handleArabicInputChange}
-                disabled 
+                disabled
               />
 
               <RHFSelect

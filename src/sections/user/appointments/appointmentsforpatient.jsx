@@ -25,7 +25,6 @@ export default function AppointmentData() {
   const pendingAppointments = appointmentsData.filter((info) => info.status === 'pending');
   const finishedAppointments = appointmentsData.filter((info) => info.status === 'finished');
 
-
   const TABS = [
     {
       value: 'upcoming',

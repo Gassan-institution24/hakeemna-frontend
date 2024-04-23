@@ -163,7 +163,7 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 155 }}
       >
-        {status === 'available' &&
+        {/* {status === 'available' &&
           checkAcl({ category: 'department', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
               lang="ar"
@@ -176,7 +176,7 @@ export default function AppointmentsTableRow({
               <Iconify icon="mdi:register" />
               {t('book manually')}
             </MenuItem>
-          )}
+          )} */}
         {status === 'available' &&
           checkAcl({ category: 'department', subcategory: 'appointments', acl: 'delete' }) && (
             <MenuItem

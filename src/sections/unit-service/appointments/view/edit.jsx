@@ -1,93 +1,43 @@
-import PropTypes from 'prop-types';
+import { useParams } from 'react-router';
 
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import { alpha } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import InputAdornment from '@mui/material/InputAdornment';
-import { outlinedInputClasses } from '@mui/material/OutlinedInput';
+import Container from '@mui/material/Container';
 
-import { useCountdownDate } from 'src/hooks/use-countdown';
+import { paths } from 'src/routes/paths';
 
-import { ComingSoonIllustration } from 'src/assets/illustrations';
+import { useTranslate } from 'src/locales';
+import { useGetAppointment } from 'src/api';
+
+// import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+
+import TableNewEditForm from '../table-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function ComingSoonView() {
-  const { days, hours, minutes, seconds } = useCountdownDate(new Date('07/07/2024 21:30'));
-
+export default function TableEditView() {
+  const { id } = useParams();
+  const { t } = useTranslate();
+  const { data } = useGetAppointment(id);
   return (
-    <>
-      <Typography variant="h3" sx={{ mb: 2 }}>
-        Coming Soon!
-      </Typography>
-
-      <Typography sx={{ color: 'text.secondary' }}>
-        We are currently working hard on this page!
-      </Typography>
-
-      <ComingSoonIllustration sx={{ my: 10, height: 240 }} />
-
-      <Stack
-        direction="row"
-        justifyContent="center"
-        divider={<Box sx={{ mx: { xs: 1, sm: 2.5 } }}>:</Box>}
-        sx={{ typography: 'h2' }}
-      >
-        <TimeBlock label="Days" value={days} />
-
-        <TimeBlock label="Hours" value={hours} />
-
-        <TimeBlock label="Minutes" value={minutes} />
-
-        <TimeBlock label="Seconds" value={seconds} />
-      </Stack>
-
-      <TextField
-        fullWidth
-        placeholder="Enter your email"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <Button variant="contained" size="large">
-                Notify Me
-              </Button>
-            </InputAdornment>
-          ),
-          sx: {
-            pr: 0.5,
-            [`&.${outlinedInputClasses.focused}`]: {
-              boxShadow: (theme) => theme.customShadows.z20,
-              transition: (theme) =>
-                theme.transitions.create(['box-shadow'], {
-                  duration: theme.transitions.duration.shorter,
-                }),
-              [`& .${outlinedInputClasses.notchedOutline}`]: {
-                border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.32)}`,
-              },
-            },
+    <Container maxWidth="xl">
+      <CustomBreadcrumbs
+        heading={t('appointments')}
+        links={[
+          {
+            name: t('dashboard'),
+            href: paths.employee.root,
           },
+          {
+            name: t('appointments'),
+            href: paths.employee.appointments.root,
+          },
+          { name: t('edit') },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
         }}
-        sx={{ my: 5 }}
       />
-    </>
+      {data && <TableNewEditForm currentTable={data} />}
+    </Container>
   );
 }
-
-// ----------------------------------------------------------------------
-
-function TimeBlock({ label, value }) {
-  return (
-    <div>
-      <Box> {value} </Box>
-      <Box sx={{ color: 'text.secondary', typography: 'body1' }}>{label}</Box>
-    </div>
-  );
-}
-
-TimeBlock.propTypes = {
-  label: PropTypes.string,
-  value: PropTypes.string,
-};

@@ -402,7 +402,7 @@ export const endpoints = {
     },
     department: {
       one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 5, order = 'asc', filters }) =>
-        `/api/appointments/department/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
+        `/api/appointments/department/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}&&startTime=${filters?.startTime}&&endTime=${filters?.endTime}`,
     },
     unit_service: {
       one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 5, order = 'asc', filters }) =>

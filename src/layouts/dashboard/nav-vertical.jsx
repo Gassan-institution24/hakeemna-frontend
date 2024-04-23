@@ -28,6 +28,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { NavSectionVertical } from 'src/components/nav-section';
 import Walktour, { useWalktour } from 'src/components/walktour';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useGetUSDepartments, useGetUSWorkGroups, useGetUSWorkShifts } from 'src/api';
 
 import { NAV } from '../config-layout';
 import { useNavData } from './config-navigation';
@@ -63,6 +64,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
   useEffect(() => {
     setDialog(!loading && user.role === 'admin' && !user.last_online);
   }, [user.role, user.last_online, loading]);
+
+  const { departmentsData } = useGetUSDepartments(USData?._id)
+  const { workGroupsData } = useGetUSWorkGroups(USData?._id)
+  const { workShiftsData } = useGetUSWorkShifts(USData?._id)
 
   const onAcceptCreating = () => {
     try {
@@ -107,7 +112,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
   };
 
   const walktour = useWalktour({
-    defaultRun: !loading && user && !user.last_online,
+    defaultRun: !loading && user && !user.last_online && !dialog,
     showProgress: true,
     steps: [
       {
@@ -212,7 +217,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+      // scrollDuration={500}
       />
       {isEmployee && (
         <Box
@@ -311,14 +316,15 @@ export default function NavVertical({ openNav, onCloseNav }) {
         onClose={() => setDialog(false)}
         title={t('creating startup data')}
         content={
-          <>
-            <Typography variant="subtitle1" paddingBottom="5px">
+          <Stack sx={{ p: 1 }}>
+            <Typography variant="subtitle2" paddingBottom="5px">
               {t('Select types of data you want me to create')}
             </Typography>
 
             {USData && (!USData?.employees_number || USData?.employees_number > 3) && (
               <Stack direction="row">
                 <Checkbox
+                  disabled={departmentsData.length > 0}
                   checked={tables.includes('department')}
                   onChange={() =>
                     tables.includes('department')
@@ -329,11 +335,13 @@ export default function NavVertical({ openNav, onCloseNav }) {
                 <Typography variant="subtitle2" alignSelf="center">
                   {t('department')}
                 </Typography>
+                {departmentsData.length > 0 && <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant='caption'>{t('already created')}</Typography>}
               </Stack>
             )}
 
             <Stack direction="row">
               <Checkbox
+                disabled={workGroupsData.length > 0}
                 checked={tables.includes('work group')}
                 onChange={() =>
                   tables.includes('work group')
@@ -344,10 +352,12 @@ export default function NavVertical({ openNav, onCloseNav }) {
               <Typography variant="subtitle2" alignSelf="center">
                 {t('work group')}
               </Typography>
+              {workGroupsData.length > 0 && <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant='caption'>{t('already created')}</Typography>}
             </Stack>
 
             <Stack direction="row">
               <Checkbox
+                disabled={workShiftsData.length > 0}
                 checked={tables.includes('work shift')}
                 onChange={() =>
                   tables.includes('work shift')
@@ -358,8 +368,9 @@ export default function NavVertical({ openNav, onCloseNav }) {
               <Typography variant="subtitle2" alignSelf="center">
                 {t('work shift')}
               </Typography>
+              {workShiftsData.length > 0 && <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant='caption'>{t('already created')}</Typography>}
             </Stack>
-          </>
+          </Stack>
         }
         action={
           <Button variant="contained" color="info" onClick={onAcceptCreating}>
@@ -367,7 +378,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
           </Button>
         }
       />
-      <CustomPopover open={popover.open} onClose={popover.onClose}>
+      <CustomPopover arrow={curLangAr ? "right-top" : 'left-top'} open={popover.open} onClose={popover.onClose}>
         <MenuItem
           lang="ar"
           sx={{ fontSize: 13, color: 'secondary.dark' }}
