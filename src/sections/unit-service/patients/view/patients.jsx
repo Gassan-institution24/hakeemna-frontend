@@ -38,7 +38,7 @@ const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
   { id: 'name_english', label: 'Name' },
   { id: 'name_arabic', label: 'Name in arabic' },
-  { id: '', width: 88 },
+  // { id: '', width: 88 },
 ];
 
 const defaultFilters = {

@@ -33,12 +33,6 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'Name' },
-  { id: 'name_arabic', label: 'Name in arabic' },
-  { id: '', width: 88 },
-];
 
 const defaultFilters = {
   name: '',
@@ -52,6 +46,12 @@ export default function PatientTableView() {
 
   const { t } = useTranslate();
 
+  const TABLE_HEAD = [
+    { id: 'code', label: t('code') },
+    { id: 'name_english', label: t('name') },
+    { id: 'name_arabic', label: t('name in arabic') },
+    // { id: '', width: 88 },
+  ];
   const componentRef = useRef();
 
   const { user } = useAuthContext();
@@ -106,10 +106,10 @@ export default function PatientTableView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Patients" /// edit
+        heading={t("patients")} /// edit
         links={[
           {
-            name: 'dashboard',
+            name: t('dashboard'),
             href: paths.superadmin.root,
           },
           { name: t('my patients') }, /// edit
