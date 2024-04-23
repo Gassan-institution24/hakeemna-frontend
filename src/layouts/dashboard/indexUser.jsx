@@ -85,7 +85,7 @@ export default function UserDashboardLayout({ children }) {
 
         <Main>
           {children}
-          {isSmallScreen ? <SmallSidebar /> : <Sidebar />}
+          {/* {isSmallScreen ? <SmallSidebar /> : <Sidebar />} */}
         </Main>
       </Box>
     </>

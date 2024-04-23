@@ -9,7 +9,7 @@ import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
-import { Button, Typography } from '@mui/material';
+import { Badge, Button, IconButton, Tooltip, Typography } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -86,6 +86,43 @@ export default function Doctorpage() {
     category: 'patientbooking',
     type: 'patientbooking',
   };
+
+
+
+
+
+  const render = (
+    <Stack
+      direction="row"
+      alignItems="center"
+      justifyContent="space-between"
+      sx={{ py: 2, pr: 1, pl: 2.5 }}
+    >
+      <Typography variant="h6" sx={{ flexGrow: 1 }}>
+        {t('Filters')}
+      </Typography>
+
+      <Tooltip title="Reset">
+        <IconButton >
+          <Badge color="error" variant="dot" >
+            <Iconify icon="solar:restart-bold" />
+          </Badge>
+        </IconButton>
+      </Tooltip>
+
+      <IconButton >
+        <Iconify icon="mingcute:close-line" />
+      </IconButton>
+    </Stack>
+  );
+
+
+
+
+
+
+
+
   const handleBook = async (Data) => {
     try {
       await axios.patch(`${endpoints.appointments.one(Data)}/bookappointment`, {
@@ -243,7 +280,7 @@ export default function Doctorpage() {
           </DialogActions>
         </FormProvider>
       </Dialog>
-
+{render}
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <StaticDatePicker
           disablePast
