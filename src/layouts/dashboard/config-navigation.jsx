@@ -286,6 +286,12 @@ export function useNavData() {
         navItemId: 'USAppointmentsNav',
       },
       {
+        show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'update' }),
+        title: t('book appointments'),
+        path: paths.unitservice.appointments.book,
+        icon: <Iconify icon="material-symbols:add-ad" />,
+      },
+      {
         show: checkAcl({ category: 'unit_service', subcategory: 'old_patient', acl: 'read' }),
         title: t('institution patients'),
         path: paths.unitservice.patients.all,

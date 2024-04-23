@@ -39,9 +39,10 @@ export default function AppointmentsTableRow({
   onDelayRow,
   onCancelRow,
   onUnCancelRow,
-  onDeleteRow,
+  onBookAppoint,
 }) {
   const {
+    _id,
     appoint_number,
     unit_service,
     work_group,
@@ -163,13 +164,25 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 155 }}
       >
+        {checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'update' }) && (
+          <MenuItem
+            lang="ar"
+            onClick={() => {
+              router.push(paths.unitservice.appointments.edit(_id));
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="fluent:edit-32-filled" />
+            {t('edit')}
+          </MenuItem>
+        )}
         {status === 'available' &&
           checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'update' }) && (
             <MenuItem
               lang="ar"
               sx={{ color: 'success.main' }}
               onClick={() => {
-                Book.onTrue();
+                onBookAppoint();
                 popover.onClose();
               }}
             >
@@ -325,7 +338,7 @@ export default function AppointmentsTableRow({
 }
 
 AppointmentsTableRow.propTypes = {
-  onDeleteRow: PropTypes.func,
+  onBookAppoint: PropTypes.func,
   onCancelRow: PropTypes.func,
   onUnCancelRow: PropTypes.func,
   onSelectRow: PropTypes.func,

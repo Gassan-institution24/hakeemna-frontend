@@ -37,20 +37,33 @@ export default function FinishedAppoinment({ finishedAppointments }) {
                 doctor?.employee?.visibility_online_appointment === true ? (
                   <span style={{ color: 'inherit' }}>
                     {' '}
-                    {t('Dr.')} {curLangAr ? doctor?.employee?.employee?.name_arabic : doctor?.employee?.employee?.name_english}
+                    {t('Dr.')}{' '}
+                    {curLangAr
+                      ? doctor?.employee?.employee?.name_arabic
+                      : doctor?.employee?.employee?.name_english}
                   </span>
                 ) : null
               }
               secondary={
                 doctor?.employee?.visibility_online_appointment === true ? (
                   <>
-                  <span style={{ color: 'inherit' }}>
-                    {' '}
-                    {curLangAr ? doctor?.employee?.employee?.speciality?.name_arabic : doctor?.employee?.employee?.speciality?.name_english}
-                  </span>
-                  <br/>
-                  <span style={{ color: 'inherit' }}>  <span style={{ color: 'inherit' }}> {curLangAr ? info?.unit_service?.name_arabic : info?.unit_service?.name_english}</span></span>
-                </>
+                    <span style={{ color: 'inherit' }}>
+                      {' '}
+                      {curLangAr
+                        ? doctor?.employee?.employee?.speciality?.name_arabic
+                        : doctor?.employee?.employee?.speciality?.name_english}
+                    </span>
+                    <br />
+                    <span style={{ color: 'inherit' }}>
+                      {' '}
+                      <span style={{ color: 'inherit' }}>
+                        {' '}
+                        {curLangAr
+                          ? info?.unit_service?.name_arabic
+                          : info?.unit_service?.name_english}
+                      </span>
+                    </span>
+                  </>
                 ) : null
               }
               primaryTypographyProps={{

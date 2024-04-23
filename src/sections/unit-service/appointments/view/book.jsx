@@ -18,8 +18,8 @@ import {
   useFindPatient,
   useGetCountries,
   useGetCountryCities,
-  useGetEmployeeAppointments,
   useGetEmployeeActiveWorkGroups,
+  useGetUSAppointments,
 } from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
@@ -77,8 +77,8 @@ export default function TableCreateView() {
 
   const [selectedDate, setSelectedDate] = useState(day ? new Date(day) : new Date());
 
-  const { appointmentsData, AppointDates, loading } = useGetEmployeeAppointments({
-    id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+  const { appointmentsData, AppointDates, loading } = useGetUSAppointments({
+    id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
     filters: { ...filters, startDate: selectedDate },
   });
 
@@ -248,10 +248,10 @@ export default function TableCreateView() {
             rowGap={3}
             columnGap={2}
             display="flex"
-            // gridTemplateColumns={{
-            //   xs: 'repeat(1, 1fr)',
-            //   sm: 'repeat(3, 1fr)',
-            // }}
+          // gridTemplateColumns={{
+          //   xs: 'repeat(1, 1fr)',
+          //   sm: 'repeat(3, 1fr)',
+          // }}
           >
             <FormControl
               sx={{
@@ -265,14 +265,14 @@ export default function TableCreateView() {
                 onChange={(event) => setFilters((prev) => ({ ...prev, group: event.target.value }))}
                 size="small"
                 input={<OutlinedInput label={t('work group')} />}
-                // renderValue={(selected) =>
-                //   selected
-                // }
-                // MenuProps={{
-                //   PaperProps: {
-                //     sx: { maxHeight: 240 },
-                //   },
-                // }}
+              // renderValue={(selected) =>
+              //   selected
+              // }
+              // MenuProps={{
+              //   PaperProps: {
+              //     sx: { maxHeight: 240 },
+              //   },
+              // }}
               >
                 {workGroupsData.map((option, idx) => (
                   <MenuItem lang="ar" key={idx} value={option._id}>
@@ -336,7 +336,7 @@ export default function TableCreateView() {
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               list={appointmentsData}
-              // sx={{ mt: SPACING }}
+            // sx={{ mt: SPACING }}
             />
           )}
           <Typography

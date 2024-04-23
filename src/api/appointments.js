@@ -134,6 +134,7 @@ export function useGetUSAppointments({ id, page, sortBy, rowsPerPage, order, fil
       processing: data?.processing || 0,
       pending: data?.pending || 0,
       canceled: data?.canceled || 0,
+      AppointDates: data?.dates || [],
       loading: isLoading,
       error,
       validating: isValidating,

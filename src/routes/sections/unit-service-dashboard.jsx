@@ -100,9 +100,8 @@ const ActivitiesEditPage = lazy(() => import('src/pages/unit-service/activities/
 const ActivitiesNewPage = lazy(() => import('src/pages/unit-service/activities/new'));
 // APPOINTMENTS
 const AppointmentsHomePage = lazy(() => import('src/pages/unit-service/appointments/home'));
-const AppointmentsInfoPage = lazy(() => import('src/pages/unit-service/appointments/info'));
 const AppointmentsEditPage = lazy(() => import('src/pages/unit-service/appointments/edit'));
-const AppointmentsNewPage = lazy(() => import('src/pages/unit-service/appointments/new'));
+const AppointmentsBookPage = lazy(() => import('src/pages/unit-service/appointments/book'));
 
 // ACCOUNTING
 // ECONOMIC MOVEMENTS
@@ -339,11 +338,10 @@ export const unitServiceDashboardRoutes = [
         path: 'appointments',
         children: [
           { element: <AppointmentsHomePage />, index: true },
-          { path: ':id/info', element: <AppointmentsInfoPage /> },
           { path: ':id/edit', element: <AppointmentsEditPage /> },
-          { path: 'new', element: <AppointmentsNewPage /> },
         ],
       },
+      { path: 'book', element: <AppointmentsBookPage /> },
       {
         path: 'patients',
         children: [

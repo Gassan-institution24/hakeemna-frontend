@@ -594,7 +594,7 @@ export const paths = {
     },
     appointments: {
       root: `${ROOTS.SUPERADMIN}/us/appointments`,
-      new: `${ROOTS.SUPERADMIN}/us/appointments/new`,
+      book: `${ROOTS.SUPERADMIN}/us/book`,
       edit: (id) => `${ROOTS.SUPERADMIN}/us/appointments/${id}/edit`,
       info: (id) => `${ROOTS.SUPERADMIN}/us/appointments/${id}/info`,
     },

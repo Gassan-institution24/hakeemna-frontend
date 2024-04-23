@@ -197,6 +197,21 @@ export default function AppointmentsView({ employeeData }) {
     [table]
   );
 
+  const handleBookRow = useCallback(
+    async (row) => {
+      const queryParams = new URLSearchParams({
+        day: row.start_time,
+        appointment: row._id,
+      });
+
+      router.push({
+        pathname: paths.unitservice.appointments.book,
+        search: `?${queryParams.toString()}`,
+      });
+    },
+    [router]
+  );
+
   const handleCancelRow = useCallback(
     async (row) => {
       try {
@@ -565,6 +580,7 @@ export default function AppointmentsView({ employeeData }) {
                       onSelectRow={() => table.onSelectRow(row._id)}
                       onViewRow={() => handleViewRow(row._id)}
                       onDelayRow={handleDelayRow}
+                      onBookAppoint={() => handleBookRow(row)}
                       onCancelRow={() => handleCancelRow(row)}
                       onUnCancelRow={() => handleUnCancelRow(row)}
                     />
