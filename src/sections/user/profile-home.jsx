@@ -22,6 +22,8 @@ export default function ProfileHome() {
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
 
+  console.log(user,"user");
+
   // const accessToken = sessionStorage.getItem('accessToken');
 
   // Replace the placeholder with the actual token (you need to get or generate the token)
@@ -165,7 +167,7 @@ export default function ProfileHome() {
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
       )}
-      {user?.patient?.eating_diet && (
+      {user?.patient?.is_on_eating_diet && (
         <Stack spacing={2}>
           <Typography style={{ color: 'gray' }} variant="body1">
             <Iconify
@@ -175,7 +177,7 @@ export default function ProfileHome() {
             {t('Eating Diet')}
           </Typography>
           <li style={{ fontWeight: 500, fontSize: '17px', listStyle: 'none' }}>
-            -&nbsp; {user?.patient?.eating_diet?.name_english}
+            -&nbsp; {user?.patient?.is_on_eating_diet}
           </li>
           <Divider sx={{ borderStyle: 'dashed', borderColor: 'rgba(128, 128, 128, 0.512)' }} />
         </Stack>
@@ -323,6 +325,11 @@ export default function ProfileHome() {
           label: t('Marital Status'),
           value: user?.patient?.marital_status,
           icon: <Iconify icon="solar:calendar-date-bold" />,
+        },
+        {
+          label: t('nationality'),
+          value: user?.patient?.nationality?.name_english,
+          icon: <Iconify icon="solar:clock-circle-bold" />,
         },
         {
           label: t('Address'),

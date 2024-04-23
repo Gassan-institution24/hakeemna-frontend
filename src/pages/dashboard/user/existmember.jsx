@@ -7,12 +7,8 @@ import { TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
 
-// import { paths } from 'src/routes/paths';
-
-// import socket from 'src/socket';
 import { useFindPatients } from 'src/api';
 import { useTranslate } from 'src/locales';
-// import { useAuthContext } from 'src/auth/hooks';
 
 import { useTable, TableNoData, TableHeadCustom } from 'src/components/table';
 
@@ -25,9 +21,9 @@ export default function Exist() {
   // const { user} = useAuthContext()
   const TABLE_HEAD = [
     { id: 'identification_num', label: t('ID number') },
-    { id: 'first_name', label: t('First Name') },
-    // { id: 'name_arabic', label: t('Name Arabic') },
-    { id: 'mobile_num1', label: t('Phone') },
+    { id: 'name_english', label: t('Name in english') },
+    { id: 'name_arabic', label: t('Name Arabic') },
+    // { id: 'mobile_num1', label: t('Phone') },
     { id: 'options', label: t('options') },
   ];
 
@@ -35,8 +31,13 @@ export default function Exist() {
 
   const [filters, setFilters] = useState({});
 
+  // const handlePhoneInputChange = (event) => {
+  //   if (event.target.value) {
+  //     setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+  //   }
+  // };
+
   const theme = useTheme();
-  // const { patientNotifications } = useGetPatientNotifications(user?.patient?._id);
 
   const { page, rowsPerPage, selected } = table;
 
@@ -60,7 +61,7 @@ export default function Exist() {
 
   const { existPatient } = useFindPatients({
     identification_num: filters.identification_num || null,
-    mobile_num1: filters.mobile_num1,
+    // mobile_num1: filters.mobile_num1,
     name_english: filters.name_english,
     name_arabic: filters?.name_arabic,
   });
@@ -85,8 +86,8 @@ export default function Exist() {
           <TextField
             lang="en"
             onChange={handleEnglishInputChange}
-            name="first_name"
-            label={t('name in English')}
+            name="name_english"
+            label={t('Name in english')}
           />
           <TextField
             lang="en"
@@ -94,12 +95,12 @@ export default function Exist() {
             name="name_arabic"
             label={t('name in Arabic')}
           />
-          <TextField
-            onChange={handleEnglishInputChange}
-            name="mobile_num1"
-            label={t('phone')}
-            type="number"
-          />
+         {/* <TextField
+          name="mobile_num1"
+          label={t('phone')}
+          onChange={handlePhoneInputChange}
+          type='number'
+        /> */}
         </Box>
       </Card>
 

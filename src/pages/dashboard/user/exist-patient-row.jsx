@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button } from '@mui/material';
@@ -17,13 +18,14 @@ import axios, { endpoints } from 'src/utils/axios';
 // ----------------------------------------------------------------------
 
 export default function ExistPatientRow({ row, selected }) {
-  const { identification_num, mobile_num1, name_english } = row;
+  const { identification_num, mobile_num1, name_english, name_arabic } = row;
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
-
+  const [clicked, setClicked] = useState(0);
+  console.log(clicked, 'clicked');
   const defaultValues = {
     sender: user?.patient?._id,
     patient: row?._id,
@@ -39,7 +41,8 @@ export default function ExistPatientRow({ row, selected }) {
 
     try {
       await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
-      enqueueSnackbar(t('Invitation sent successfully'));
+      setClicked((prevClicked) => prevClicked + 1);
+      enqueueSnackbar(t('An invitation to join the family has been sent successfully'));
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
@@ -53,22 +56,24 @@ export default function ExistPatientRow({ row, selected }) {
     <TableRow selected={selected}>
       <TableCell align="center">{identification_num}</TableCell>
       <TableCell align="center">{name_english}</TableCell>
-      {/* <TableCell  align="center">
-        {name_arabic}
-      </TableCell> */}
+      <TableCell align="center">{name_arabic}</TableCell>
 
-      <TableCell align="center">{mobile_num1}</TableCell>
+      {/* <TableCell align="center">{mobile_num1}</TableCell> */}
       <TableCell align="center">
-        {/* <Button disabled variant="outlined">
-          {t('Waiting acceptation')} &nbsp; <Iconify sx={{  display:{md:'block', xs:'none'} }} icon="icon-park:time" />
-        </Button> */}
-        <Button variant="outlined" onClick={() => handleAddFamily()}>
-          {t('Request To Add')} &nbsp;{' '}
-          <Iconify
-            sx={{ mb: '5px', display: { md: 'block', xs: 'none' } }}
-            icon="icon-park:add-user"
-          />
-        </Button>
+        {clicked > 0 ? (
+          <Button disabled variant="outlined">
+            {t('Waiting acceptation')} &nbsp;{' '}
+            <Iconify sx={{ display: { md: 'block', xs: 'none' }, color:'info.main' }} icon="eos-icons:loading" />
+          </Button>
+        ) : (
+          <Button variant="outlined" onClick={() => handleAddFamily()}>
+            {t('Request To Add')} &nbsp;{' '}
+            <Iconify
+              sx={{ mb: '5px', display: { md: 'block', xs: 'none' } }}
+              icon="icon-park:add-user"
+            />
+          </Button>
+        )}
       </TableCell>
     </TableRow>
   );
@@ -84,9 +89,9 @@ export default function ExistPatientRow({ row, selected }) {
         width: {
           sm: '250%',
           xs: '200%',
-          md: '321.5%',
-          lg: '321.5%',
-          xl: '321.5%',
+          md: '300%',
+          lg: '300%',
+          xl: '300%',
         },
       }}
     />

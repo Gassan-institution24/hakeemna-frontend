@@ -89,7 +89,7 @@ export default function AppointmentsFilters({
         {t('Appointment Types')}
       </Typography>
       <Select onChange={handleFilterAppointtypes} name="appointment_type">
-        {appointmentTypeOptions.map((option, idx) => (
+        {appointmentTypeOptions?.map((option, idx) => (
           <MenuItem lang="ar" key={idx} value={option._id}>
             {option?.name_english}
           </MenuItem>
@@ -103,7 +103,7 @@ export default function AppointmentsFilters({
         {t('Countries')}
       </Typography>
       <Select onChange={handleFilterCountries} name="country">
-        {countriesOptions.map((option, idx) => (
+        {countriesOptions?.map((option, idx) => (
           <MenuItem lang="ar" key={idx} value={option._id}>
             {option?.name_english}
           </MenuItem>
@@ -118,7 +118,7 @@ export default function AppointmentsFilters({
         {t('insurance')}
       </Typography>
       <Select onChange={handleFiltedInsurance} name="insurance">
-        {insuranseCosData.map((option, idx) => (
+        {insuranseCosData?.map((option, idx) => (
           <MenuItem lang="ar" key={idx} value={option._id}>
             {option?.name_english}
           </MenuItem>

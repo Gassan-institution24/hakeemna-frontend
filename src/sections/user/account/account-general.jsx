@@ -50,10 +50,10 @@ export default function AccountGeneral({ data, refetch }) {
 
   const UpdateUserSchema = Yup.object().shape({
     name_english: Yup.string(),
-    // middle_name: Yup.string(),
     name_arabic: Yup.string(),
-    // family_name: Yup.string(),
     email: Yup.string(),
+    height: Yup.string(),
+    weight: Yup.string(),
     mobile_num1: Yup.string(),
     mobile_num2: Yup.string(),
     is_on_eating_diet: Yup.string(),
@@ -72,6 +72,8 @@ export default function AccountGeneral({ data, refetch }) {
     name_english: data?.name_english || '',
     name_arabic: data?.name_arabic || '',
     email: data?.email || '',
+    height: data?.height || '',
+    weight: data?.weight || '',
     mobile_num1: data?.mobile_num1 || '',
     mobile_num2: data?.mobile_num2 || '',
     is_on_eating_diet: user.patient?.is_on_eating_diet || null,
@@ -207,24 +209,16 @@ export default function AccountGeneral({ data, refetch }) {
             >
               <RHFTextField
                 name="name_english"
-                label={t('First Name')}
+                label={t('name in english')}
                 onChange={handleEnglishInputChange}
               />
-              {/* <RHFTextField
-                name="middle_name"
-                label={t('Middle name')}
-                onChange={handleEnglishInputChange}
-              /> */}
+  
               <RHFTextField
                 name="name_arabic"
                 label={t('Name in arabic')}
                 onChange={handleArabicInputChange}
               />
-              {/* <RHFTextField
-                name="family_name"
-                label={t('Last Name')}
-                onChange={handleEnglishInputChange}
-              /> */}
+     
               <MuiTelInput
                 label={`${t('Mobile Number')} *`}
                 forceCallingCode
@@ -315,9 +309,9 @@ export default function AccountGeneral({ data, refetch }) {
                 ))}
               </RHFSelect>
               <RHFSelect
-                label={t('Eating Diet')}
+                label={t('On Diet')}
                 fullWidth
-                name="sport_exercises"
+                name="is_on_eating_diet"
                 InputLabelProps={{ shrink: true }}
                 PaperPropsSx={{ textTransform: 'capitalize' }}
               >

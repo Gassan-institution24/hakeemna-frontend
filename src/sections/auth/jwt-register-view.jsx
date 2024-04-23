@@ -50,8 +50,8 @@ export default function JwtRegisterView() {
   const password = useBoolean();
 
   const RegisterSchema = Yup.object().shape({
-    first_name: Yup.string().required('First name required'),
-    last_name: Yup.string().required('Last name required'),
+    name_english: Yup.string().required('First name required'),
+    name_arabic: Yup.string().required('Last name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string()
@@ -60,13 +60,14 @@ export default function JwtRegisterView() {
     identification_num: Yup.string().required('Identification number is required'),
     mobile_num1: Yup.string().required('Mobile number is required'),
     gender: Yup.string().required('Gender is required'),
+    nationality: Yup.string().required('Nationality is required'),
     country: Yup.string().required('Country is required'),
     city: Yup.string().required('City is required'),
   });
 
   const defaultValues = {
-    first_name: '',
-    last_name: '',
+    name_english: '',
+    name_arabic: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -74,6 +75,7 @@ export default function JwtRegisterView() {
     identification_num: '',
     gender: '',
     country: null,
+    nationality: null,
     city: null,
   };
 
@@ -101,9 +103,25 @@ export default function JwtRegisterView() {
     // setCities(tableData.filter((data)=>data?.country?._id === event.target.value))
   };
 
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+    if (arabicRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
+  const handleEnglishInputChange = (event) => {
+    // Validate the input based on English language rules
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
+
+    if (englishRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await register?.({ userName: `${data.first_name} ${data.last_name}`, ...data });
+      await register?.({ userName: `${data.name_english} ${data.name_arabic}`, ...data });
 
       router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
     } catch (error) {
@@ -132,7 +150,7 @@ export default function JwtRegisterView() {
       </Stack>
 
       <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2"> I am unit of services </Typography>
+        <Typography variant="body2"> I am a services provider</Typography>
         <Link href={paths.auth.registersu} component={RouterLink} variant="subtitle2">
           Sign up
         </Link>
@@ -168,13 +186,28 @@ export default function JwtRegisterView() {
         {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFTextField name="first_name" label="First name" />
-          <RHFTextField name="last_name" label="Last name" />
+          <RHFTextField
+            name="name_english"
+            label="name in english"
+            onChange={handleEnglishInputChange}
+          />
+          <RHFTextField
+            name="name_arabic"
+            label="name in arabic"
+            onChange={handleArabicInputChange}
+          />
         </Stack>
 
         <RHFTextField name="email" label="Email address" />
         <RHFTextField name="identification_num" label="Identification number" />
         <RHFTextField name="mobile_num1" label={t('mobile number')} />
+        <RHFSelect name="nationality" label={t('nationality')}>
+            {countriesData?.map((country, idx) => (
+              <MenuItem lang="ar" key={idx} value={country?._id}>
+                {country?.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
             {countriesData?.map((country, idx) => (
@@ -199,6 +232,7 @@ export default function JwtRegisterView() {
             </MenuItem>
           </RHFSelect>
         </Stack>
+          
         <RHFTextField
           name="password"
           label="Password"
