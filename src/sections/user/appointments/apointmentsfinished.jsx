@@ -13,15 +13,24 @@ import { fTime, fDateAndTime } from 'src/utils/format-time';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
+import { IconButton } from '@mui/material';
 // ----------------------------------------------------------------------
 
 export default function FinishedAppoinment({ finishedAppointments }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  console.log(finishedAppointments);
   return finishedAppointments.map((info, index) => (
     <Box>
       <Card key={index}>
+      <IconButton
+            onClick={() => alert('under initialization')}
+            sx={{ position: 'absolute', top: 8, right: 8, '&:hover': { color: 'info.main' } }}
+            // title="book"
+          >
+            <Iconify icon="fa:repeat" />
+          </IconButton>
         <Stack sx={{ p: 3, pb: 2 }}>
           <Avatar
             alt={info?.name_english}
