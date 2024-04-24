@@ -406,7 +406,7 @@ export const endpoints = {
         `/api/appointments/department/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}&&startTime=${filters?.startTime}&&endTime=${filters?.endTime}`,
     },
     unit_service: {
-      one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 5, order = 'asc', filters }) =>
+      one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 100, order = 'asc', filters }) =>
         `/api/appointments/unitservice/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
       available: (id) => `/api/appointments/available/${id}`,
     },
@@ -460,6 +460,14 @@ export const endpoints = {
   systemErrors: {
     all: '/api/systemerrors',
     one: (id) => `/api/systemerrors/${id}`,
+  },
+  TicketCategories: {
+    all: '/api/tickets/categories',
+    one: (id) => `/api/tickets/categories/${id}`,
+  },
+  tickets: {
+    all: '/api/tickets',
+    one: (id) => `/api/tickets/${id}`,
   },
 
   tables: {

@@ -75,3 +75,5 @@ export * from './employee_engagements';
 export * from './companies_list';
 export * from './keywods';
 export * from './statistics';
+export * from './ticket-categories';
+export * from './tickets';

@@ -18,13 +18,11 @@ import {
   useFindPatient,
   useGetCountries,
   useGetCountryCities,
-  useGetEmployeeActiveWorkGroups,
   useGetUSAppointments,
+  useGetEmployeeActiveWorkGroups,
 } from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
-// import { LoadingScreen } from 'src/components/loading-screen';
-import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // import UploadOldPatient from '../upload-old-patient';
@@ -40,6 +38,8 @@ import { useUnitTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import Iconify from 'src/components/iconify';
+// import { LoadingScreen } from 'src/components/loading-screen';
+import { useSnackbar } from 'src/components/snackbar';
 // // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider from 'src/components/hook-form/form-provider';
@@ -77,7 +77,7 @@ export default function TableCreateView() {
 
   const [selectedDate, setSelectedDate] = useState(day ? new Date(day) : new Date());
 
-  const { appointmentsData, AppointDates, loading } = useGetUSAppointments({
+  const { appointmentsData, AppointDates, loading, refetch } = useGetUSAppointments({
     id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service?._id,
     filters: { ...filters, startDate: selectedDate },
   });
@@ -183,6 +183,7 @@ export default function TableCreateView() {
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
         variant: 'error',
       });
+      refetch();
       console.error(error);
     }
   });
@@ -248,10 +249,10 @@ export default function TableCreateView() {
             rowGap={3}
             columnGap={2}
             display="flex"
-          // gridTemplateColumns={{
-          //   xs: 'repeat(1, 1fr)',
-          //   sm: 'repeat(3, 1fr)',
-          // }}
+            // gridTemplateColumns={{
+            //   xs: 'repeat(1, 1fr)',
+            //   sm: 'repeat(3, 1fr)',
+            // }}
           >
             <FormControl
               sx={{
@@ -265,14 +266,14 @@ export default function TableCreateView() {
                 onChange={(event) => setFilters((prev) => ({ ...prev, group: event.target.value }))}
                 size="small"
                 input={<OutlinedInput label={t('work group')} />}
-              // renderValue={(selected) =>
-              //   selected
-              // }
-              // MenuProps={{
-              //   PaperProps: {
-              //     sx: { maxHeight: 240 },
-              //   },
-              // }}
+                // renderValue={(selected) =>
+                //   selected
+                // }
+                // MenuProps={{
+                //   PaperProps: {
+                //     sx: { maxHeight: 240 },
+                //   },
+                // }}
               >
                 {workGroupsData.map((option, idx) => (
                   <MenuItem lang="ar" key={idx} value={option._id}>
@@ -336,7 +337,7 @@ export default function TableCreateView() {
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               list={appointmentsData}
-            // sx={{ mt: SPACING }}
+              // sx={{ mt: SPACING }}
             />
           )}
           <Typography

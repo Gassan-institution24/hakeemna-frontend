@@ -46,7 +46,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from 'src/components/snackbar';
 
 import TableDetailRow from '../employees/table-details-row'; /// edit
 import TableDetailToolbar from '../employees/table-details-toolbar';

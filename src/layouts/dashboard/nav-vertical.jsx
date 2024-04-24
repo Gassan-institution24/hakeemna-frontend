@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from 'src/components/snackbar';
 import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import { Button, Divider, Tooltip, Checkbox, MenuItem, Typography } from '@mui/material';
+import { Button, Divider, Tooltip, Checkbox, MenuItem, Typography, IconButton, Dialog } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
@@ -32,6 +32,7 @@ import { useGetUSDepartments, useGetUSWorkGroups, useGetUSWorkShifts } from 'src
 
 import { NAV } from '../config-layout';
 import { useNavData } from './config-navigation';
+import TicketPopover from './ticketPopover';
 // import NavToggleButton from '../common/nav-toggle-button';
 
 // ----------------------------------------------------------------------
@@ -60,14 +61,15 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   const [dialog, setDialog] = useState(!loading && !user.last_online && user.role === 'admin');
   const [tables, setTables] = useState([]);
+  const [ticketDialog, setTicketDialog] = useState(false);
 
   useEffect(() => {
     setDialog(!loading && user.role === 'admin' && !user.last_online);
   }, [user.role, user.last_online, loading]);
 
-  const { departmentsData } = useGetUSDepartments(USData?._id)
-  const { workGroupsData } = useGetUSWorkGroups(USData?._id)
-  const { workShiftsData } = useGetUSWorkShifts(USData?._id)
+  const { departmentsData } = useGetUSDepartments(USData?._id);
+  const { workGroupsData } = useGetUSWorkGroups(USData?._id);
+  const { workShiftsData } = useGetUSWorkShifts(USData?._id);
 
   const onAcceptCreating = () => {
     try {
@@ -335,7 +337,15 @@ export default function NavVertical({ openNav, onCloseNav }) {
                 <Typography variant="subtitle2" alignSelf="center">
                   {t('department')}
                 </Typography>
-                {departmentsData.length > 0 && <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant='caption'>{t('already created')}</Typography>}
+                {departmentsData.length > 0 && (
+                  <Typography
+                    sx={{ p: 2, color: 'error.main' }}
+                    alignSelf="center"
+                    variant="caption"
+                  >
+                    {t('already created')}
+                  </Typography>
+                )}
               </Stack>
             )}
 
@@ -352,7 +362,11 @@ export default function NavVertical({ openNav, onCloseNav }) {
               <Typography variant="subtitle2" alignSelf="center">
                 {t('work group')}
               </Typography>
-              {workGroupsData.length > 0 && <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant='caption'>{t('already created')}</Typography>}
+              {workGroupsData.length > 0 && (
+                <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant="caption">
+                  {t('already created')}
+                </Typography>
+              )}
             </Stack>
 
             <Stack direction="row">
@@ -368,7 +382,11 @@ export default function NavVertical({ openNav, onCloseNav }) {
               <Typography variant="subtitle2" alignSelf="center">
                 {t('work shift')}
               </Typography>
-              {workShiftsData.length > 0 && <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant='caption'>{t('already created')}</Typography>}
+              {workShiftsData.length > 0 && (
+                <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant="caption">
+                  {t('already created')}
+                </Typography>
+              )}
             </Stack>
           </Stack>
         }
@@ -378,7 +396,11 @@ export default function NavVertical({ openNav, onCloseNav }) {
           </Button>
         }
       />
-      <CustomPopover arrow={curLangAr ? "right-top" : 'left-top'} open={popover.open} onClose={popover.onClose}>
+      <CustomPopover
+        arrow={curLangAr ? 'right-top' : 'left-top'}
+        open={popover.open}
+        onClose={popover.onClose}
+      >
         <MenuItem
           lang="ar"
           sx={{ fontSize: 13, color: 'secondary.dark' }}
@@ -395,6 +417,12 @@ export default function NavVertical({ openNav, onCloseNav }) {
           {t('create first time tables')}
         </MenuItem>
       </CustomPopover>
+      <Box sx={{ position: 'fixed', bottom: { md: 30, sm: 10 }, right: { md: 30, sm: 10 }, zIndex: 99 }}>
+        <IconButton onClick={() => setTicketDialog(true)} >
+          <Iconify sx={{ color: 'primary.main' }} width='70px' icon='mdi:customer-service' />
+        </IconButton>
+        <TicketPopover open={ticketDialog} onClose={() => setTicketDialog(false)} />
+      </Box>
     </>
   );
 }

@@ -96,6 +96,16 @@ const DepartmentEditPage = lazy(() => import('src/pages/super-admin/tables/depar
 const SpecialitiesTablePage = lazy(() => import('src/pages/super-admin/tables/specialities/table'));
 const SpecialityCreatePage = lazy(() => import('src/pages/super-admin/tables/specialities/new'));
 const SpecialityEditPage = lazy(() => import('src/pages/super-admin/tables/specialities/edit'));
+// TICKET CATEGORIES
+const TicketCategoriesTablePage = lazy(() =>
+  import('src/pages/super-admin/tables/ticket_categories/table')
+);
+const TicketCategoryCreatePage = lazy(() =>
+  import('src/pages/super-admin/tables/ticket_categories/new')
+);
+const TicketCategoryEditPage = lazy(() =>
+  import('src/pages/super-admin/tables/ticket_categories/edit')
+);
 // SUBSPECIALITIES
 const SubspecialitiesTablePage = lazy(() =>
   import('src/pages/super-admin/tables/subspecialities/table')
@@ -845,6 +855,15 @@ export const dashboardRoutes = [
               { path: 'list', element: <SpecialitiesTablePage /> },
               { path: 'new', element: <SpecialityCreatePage /> },
               { path: ':id/edit', element: <SpecialityEditPage /> },
+            ],
+          },
+          {
+            path: 'ticket_categories',
+            children: [
+              { element: <TicketCategoriesTablePage />, index: true },
+              { path: 'list', element: <TicketCategoriesTablePage /> },
+              { path: 'new', element: <TicketCategoryCreatePage /> },
+              { path: ':id/edit', element: <TicketCategoryEditPage /> },
             ],
           },
           {
