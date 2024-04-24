@@ -9,7 +9,7 @@ import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
-import { Badge, Button, IconButton, Tooltip, Typography } from '@mui/material';
+import { Button, MenuItem, Select, TextField, Typography } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -30,6 +30,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import {
   useGetAppointment,
+  useGetAppointmentTypes,
   useGetEmployeeEngagement,
   useGetEmployeeFeedbackes,
   useGetEmployeeSelectedAppointments,
@@ -49,7 +50,7 @@ export default function Doctorpage() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
+  const { appointmenttypesData } = useGetAppointmentTypes();
   const { id } = params;
   const { user } = useAuthContext();
   const [TimeData, setTimeData] = useState();
@@ -65,10 +66,15 @@ export default function Doctorpage() {
   const patientData = user?.patient?._id;
   const patientinfo = user?.patient;
   const patientEmail = user?.email;
-  const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
-    id,
-    startDate: currentDateTime,
-  });
+  const [selectedAppointmentType, setSelectedAppointmentType] = useState('');
+
+const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
+  id,
+  startDate: currentDateTime, // Date selected by the user
+  appointmentType: selectedAppointmentType, // Type selected by the user
+});
+
+// console.log(appointmentsData,"appointmentsData");
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
@@ -87,41 +93,13 @@ export default function Doctorpage() {
     type: 'patientbooking',
   };
 
+  const handleDateChange = (date) => {
+    setCurrentDateTime(date);
+  };
 
-
-
-
-  const render = (
-    <Stack
-      direction="row"
-      alignItems="center"
-      justifyContent="space-between"
-      sx={{ py: 2, pr: 1, pl: 2.5 }}
-    >
-      <Typography variant="h6" sx={{ flexGrow: 1 }}>
-        {t('Filters')}
-      </Typography>
-
-      <Tooltip title="Reset">
-        <IconButton >
-          <Badge color="error" variant="dot" >
-            <Iconify icon="solar:restart-bold" />
-          </Badge>
-        </IconButton>
-      </Tooltip>
-
-      <IconButton >
-        <Iconify icon="mingcute:close-line" />
-      </IconButton>
-    </Stack>
-  );
-
-
-
-
-
-
-
+  const handleAppointmentTypeChange = (event) => {
+    setSelectedAppointmentType(event.target.value);
+  };
 
   const handleBook = async (Data) => {
     try {
@@ -280,14 +258,40 @@ export default function Doctorpage() {
           </DialogActions>
         </FormProvider>
       </Dialog>
-{render}
+
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <StaticDatePicker
           disablePast
-          componentsProps={{ actionBar: { actions: ['clear', 'today'] } }}
-          onChange={(e) => setCurrentDateTime(e?.$d)}
+          componentsProps={{ actionBar: { actions: [''] } }}
+          value={selectedAppointmentType}
+          onChange={handleDateChange}
         />
       </LocalizationProvider>
+      <Box sx={{ ml: 2.9 }}>
+        <Typography variant="" sx={{ color: 'text.secondary', fontWeight: 'bold', mr: 5 }}>
+          {t('SELECT APPOINTMENT TYPE')}{' '}
+          <Iconify
+            icon="teenyicons:appointments-outline"
+            sx={{ ml: 1, position: 'relative', top: 1, color: '#00A76F' }}
+          />
+        </Typography>
+
+        <Select
+          value={selectedAppointmentType}
+          onChange={handleAppointmentTypeChange}
+          sx={{
+            width: 150,
+            height: 35,
+          }}
+        >
+          <MenuItem value="">{t('All')}</MenuItem>
+          {appointmenttypesData.map((type, test) => (
+            <MenuItem key={test} value={type._id}>
+              {type.name_english}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
     </Card>
   );
   const renderList = (
