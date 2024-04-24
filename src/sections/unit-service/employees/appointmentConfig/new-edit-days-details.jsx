@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useSnackbar } from 'notistack';
 import { useState, useEffect } from 'react';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
@@ -29,6 +28,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetAppointmentTypes, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import NewEditDayAppointmentsDetails from './new-edit-days-appointments-details';

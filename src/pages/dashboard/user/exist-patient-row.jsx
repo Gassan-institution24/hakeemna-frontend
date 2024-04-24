@@ -63,7 +63,10 @@ export default function ExistPatientRow({ row, selected }) {
         {clicked > 0 ? (
           <Button disabled variant="outlined">
             {t('Waiting acceptation')} &nbsp;{' '}
-            <Iconify sx={{ display: { md: 'block', xs: 'none' }, color:'info.main' }} icon="eos-icons:loading" />
+            <Iconify
+              sx={{ display: { md: 'block', xs: 'none' }, color: 'info.main' }}
+              icon="eos-icons:loading"
+            />
           </Button>
         ) : (
           <Button variant="outlined" onClick={() => handleAddFamily()}>

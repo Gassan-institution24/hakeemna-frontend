@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useSnackbar } from 'notistack';
 
 import { Stack } from '@mui/system';
 import { LoadingButton } from '@mui/lab';
@@ -18,6 +17,7 @@ import { PATH_AFTER_LOGIN } from 'src/config-global';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 

@@ -202,12 +202,12 @@ export default function JwtRegisterView() {
         <RHFTextField name="identification_num" label="Identification number" />
         <RHFTextField name="mobile_num1" label={t('mobile number')} />
         <RHFSelect name="nationality" label={t('nationality')}>
-            {countriesData?.map((country, idx) => (
-              <MenuItem lang="ar" key={idx} value={country?._id}>
-                {country?.name_english}
-              </MenuItem>
-            ))}
-          </RHFSelect>
+          {countriesData?.map((country, idx) => (
+            <MenuItem lang="ar" key={idx} value={country?._id}>
+              {country?.name_english}
+            </MenuItem>
+          ))}
+        </RHFSelect>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
             {countriesData?.map((country, idx) => (
@@ -232,7 +232,7 @@ export default function JwtRegisterView() {
             </MenuItem>
           </RHFSelect>
         </Stack>
-          
+
         <RHFTextField
           name="password"
           label="Password"

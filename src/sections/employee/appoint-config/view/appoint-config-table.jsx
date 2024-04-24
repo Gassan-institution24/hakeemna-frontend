@@ -1,4 +1,3 @@
-import { useSnackbar } from 'notistack';
 import { useState, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
@@ -28,6 +27,7 @@ import { useGetEmployeeAppointmentConfigs } from 'src/api';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';

@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useSnackbar } from 'notistack';
 
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
@@ -14,6 +13,8 @@ import axios, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+
+import { useSnackbar } from 'src/components/snackbar';
 
 // ----------------------------------------------------------------------
 

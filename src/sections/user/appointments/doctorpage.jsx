@@ -9,12 +9,12 @@ import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
-import { Badge, Button, IconButton, Tooltip, Typography } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import { Badge, Button, Tooltip, IconButton, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { paths } from 'src/routes/paths';
@@ -87,10 +87,6 @@ export default function Doctorpage() {
     type: 'patientbooking',
   };
 
-
-
-
-
   const render = (
     <Stack
       direction="row"
@@ -103,25 +99,18 @@ export default function Doctorpage() {
       </Typography>
 
       <Tooltip title="Reset">
-        <IconButton >
-          <Badge color="error" variant="dot" >
+        <IconButton>
+          <Badge color="error" variant="dot">
             <Iconify icon="solar:restart-bold" />
           </Badge>
         </IconButton>
       </Tooltip>
 
-      <IconButton >
+      <IconButton>
         <Iconify icon="mingcute:close-line" />
       </IconButton>
     </Stack>
   );
-
-
-
-
-
-
-
 
   const handleBook = async (Data) => {
     try {
@@ -280,7 +269,7 @@ export default function Doctorpage() {
           </DialogActions>
         </FormProvider>
       </Dialog>
-{render}
+      {render}
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <StaticDatePicker
           disablePast
