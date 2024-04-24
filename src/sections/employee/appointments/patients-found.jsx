@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useSnackbar } from 'notistack';
 
 import Table from '@mui/material/Table';
 import { useTheme } from '@mui/material/styles';
@@ -7,13 +6,16 @@ import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
+import { useSnackbar } from 'src/components/snackbar';
+
 // import { useRouter } from 'src/routes/hooks';
+
+import { useState } from 'react';
 
 import { addToCalendar } from 'src/utils/calender';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
-import { useState } from 'react';
 
 import Scrollbar from 'src/components/scrollbar';
 import {
@@ -74,6 +76,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
         variant: 'error',
       });
+      window.location.reload();
       console.error(error);
     }
   };
@@ -126,7 +129,13 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
           {oldPatients
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index, idx) => (
-              <PatientFoundRow key={idx} row={row} note={note} setNote={setNote} onEmploymentRow={() => handleEmployment(row)} />
+              <PatientFoundRow
+                key={idx}
+                row={row}
+                note={note}
+                setNote={setNote}
+                onEmploymentRow={() => handleEmployment(row)}
+              />
             ))}
 
           <TableNoData

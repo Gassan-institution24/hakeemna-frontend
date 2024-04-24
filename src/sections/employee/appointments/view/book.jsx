@@ -23,8 +23,6 @@ import {
 } from 'src/api';
 // import { useAclGuard } from 'src/auth/guard/acl-guard';
 
-// import { LoadingScreen } from 'src/components/loading-screen';
-import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // import UploadOldPatient from '../upload-old-patient';
@@ -40,6 +38,8 @@ import { useUnitTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import Iconify from 'src/components/iconify';
+// import { LoadingScreen } from 'src/components/loading-screen';
+import { useSnackbar } from 'src/components/snackbar';
 // // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider from 'src/components/hook-form/form-provider';
@@ -77,7 +77,7 @@ export default function TableCreateView() {
 
   const [selectedDate, setSelectedDate] = useState(day ? new Date(day) : new Date());
 
-  const { appointmentsData, AppointDates, loading } = useGetEmployeeAppointments({
+  const { appointmentsData, AppointDates, loading, refetch } = useGetEmployeeAppointments({
     id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
     filters: { ...filters, startDate: selectedDate },
   });
@@ -183,6 +183,7 @@ export default function TableCreateView() {
       enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
         variant: 'error',
       });
+      refetch();
       console.error(error);
     }
   });

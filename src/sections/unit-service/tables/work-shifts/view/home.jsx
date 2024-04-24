@@ -45,9 +45,9 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { useSnackbar } from 'notistack';
-
 import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useSnackbar } from 'src/components/snackbar';
 
 import TableDetailRow from '../table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';

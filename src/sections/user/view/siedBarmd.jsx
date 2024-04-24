@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useTranslate, useLocales } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 

@@ -341,6 +341,11 @@ export const paths = {
         new: `${ROOTS.SUPERADMIN}/tables/countries/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/countries/${id}/edit`,
       },
+      ticketCategories: {
+        root: `${ROOTS.SUPERADMIN}/tables/ticket_categories`,
+        new: `${ROOTS.SUPERADMIN}/tables/ticket_categories/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/ticket_categories/${id}/edit`,
+      },
       taxes: {
         root: `${ROOTS.SUPERADMIN}/tables/added_value_tax_GD`,
         new: `${ROOTS.SUPERADMIN}/tables/added_value_tax_GD/new`,

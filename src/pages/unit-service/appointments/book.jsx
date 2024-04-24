@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import ACLGuard from 'src/auth/guard/acl-guard';
 
-import AppointmentBookView from 'src/sections/employee/appointments/view/book';
+import AppointmentBookView from 'src/sections/unit-service/appointments/view/book';
 
 // ----------------------------------------------------------------------
 

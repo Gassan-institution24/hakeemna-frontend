@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[4538],{68707:(e,t,n)=>{n.r(t),n.d(t,{default:()=>c});var s=n(6907),a=n(27031),i=n(12732),r=n(80184);function c(){return(0,r.jsxs)(a.Z,{category:"work_group",subcategory:"appointments",acl:"read",children:[(0,r.jsxs)(s.ql,{children:[(0,r.jsx)("title",{children:" Book Appointment "}),(0,r.jsx)("meta",{name:"description",content:"meta"})]}),(0,r.jsx)(i.Z,{})]})}}}]);
-//# sourceMappingURL=4538.a5addcbc.chunk.js.map

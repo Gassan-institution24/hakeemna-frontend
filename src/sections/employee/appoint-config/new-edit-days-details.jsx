@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { enUS } from 'date-fns/locale';
-import { useSnackbar } from 'notistack';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { useState, useEffect, useCallback } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
@@ -31,6 +30,7 @@ import { useLocales, useTranslate } from 'src/locales';
 import { useGetAppointmentTypes, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
 // import { LoadingScreen } from 'src/components/loading-screen';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 

@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[7612],{14444:(e,t,n)=>{n.r(t),n.d(t,{default:()=>r});var i=n(6907),s=n(27031),a=n(12732),c=n(80184);function r(){return(0,c.jsxs)(s.Z,{category:"unit_service",subcategory:"appointments",acl:"read",children:[(0,c.jsxs)(i.ql,{children:[(0,c.jsx)("title",{children:" Book Appointment "}),(0,c.jsx)("meta",{name:"description",content:"meta"})]}),(0,c.jsx)(a.Z,{})]})}}}]);
-//# sourceMappingURL=7612.a5dd8fd6.chunk.js.map

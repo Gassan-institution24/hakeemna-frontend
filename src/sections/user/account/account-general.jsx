@@ -212,13 +212,13 @@ export default function AccountGeneral({ data, refetch }) {
                 label={t('name in english')}
                 onChange={handleEnglishInputChange}
               />
-  
+
               <RHFTextField
                 name="name_arabic"
                 label={t('Name in arabic')}
                 onChange={handleArabicInputChange}
               />
-     
+
               <MuiTelInput
                 label={`${t('Mobile Number')} *`}
                 forceCallingCode
