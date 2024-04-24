@@ -1,22 +1,18 @@
-import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-
-import { useMemo } from 'react';
-
-import { useForm, Controller } from 'react-hook-form';
-
+import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import axios, { endpoints } from 'src/utils/axios';
+import { Box, Stack, MenuItem } from '@mui/material';
 
-import { useSnackbar } from 'src/components/snackbar';
+import axios from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
 
+import { useSnackbar } from 'src/components/snackbar';
+import CustomPopover from 'src/components/custom-popover';
 // import CustomPopover from "src/components/custom-popover";
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { Box, MenuItem, Popover, PopoverPaper, Stack } from '@mui/material';
-import CustomPopover from 'src/components/custom-popover';
 
 export default function TicketPopover({ open, onClose }) {
     const { t } = useTranslate()
