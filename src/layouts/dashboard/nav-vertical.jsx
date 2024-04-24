@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useSnackbar } from 'src/components/snackbar';
 import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
@@ -7,7 +6,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import { Button, Divider, Tooltip, Checkbox, MenuItem, Typography, IconButton, Dialog } from '@mui/material';
+import { Button, Divider, Tooltip, Checkbox, MenuItem, Typography, IconButton } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
@@ -19,20 +18,21 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetUSWorkGroups, useGetUSWorkShifts, useGetUSDepartments } from 'src/api';
 
 // import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import Doclogo from 'src/components/logo/doc.png';
+import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { NavSectionVertical } from 'src/components/nav-section';
 import Walktour, { useWalktour } from 'src/components/walktour';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useGetUSDepartments, useGetUSWorkGroups, useGetUSWorkShifts } from 'src/api';
 
 import { NAV } from '../config-layout';
-import { useNavData } from './config-navigation';
 import TicketPopover from './ticketPopover';
+import { useNavData } from './config-navigation';
 // import NavToggleButton from '../common/nav-toggle-button';
 
 // ----------------------------------------------------------------------

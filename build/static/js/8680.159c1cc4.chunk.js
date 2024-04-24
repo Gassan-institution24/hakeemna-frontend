@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[8680],{18680:(e,s,i)=>{i.r(s),i.d(s,{default:()=>r});var n=i(6907),t=i(2805),a=i(80184);function r(){return(0,a.jsxs)(a.Fragment,{children:[(0,a.jsxs)(n.ql,{children:[(0,a.jsx)("title",{children:" Dashboard: unit of services Types Table"}),(0,a.jsx)("meta",{name:"description",content:"meta"})]}),(0,a.jsx)(t.JP,{})]})}}}]);
+//# sourceMappingURL=8680.159c1cc4.chunk.js.map
