@@ -95,7 +95,7 @@ export default function Exist() {
             name="name_arabic"
             label={t('name in Arabic')}
           />
-         {/* <TextField
+          {/* <TextField
           name="mobile_num1"
           label={t('phone')}
           onChange={handlePhoneInputChange}

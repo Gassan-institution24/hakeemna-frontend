@@ -1,6 +1,5 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import { useSnackbar } from 'notistack';
 import { useReactToPrint } from 'react-to-print';
 import { useRef, useState, useCallback } from 'react';
 
@@ -26,6 +25,7 @@ import { useGetUnitservice, useGetInsuranceCos } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { useSnackbar } from 'src/components/snackbar';
 // import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';

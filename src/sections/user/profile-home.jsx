@@ -22,7 +22,7 @@ export default function ProfileHome() {
   const { t } = useTranslate();
   const { patientInsuranseData } = useGetPatientInsurance(user?.patient?._id);
 
-  console.log(user,"user");
+  console.log(user, 'user');
 
   // const accessToken = sessionStorage.getItem('accessToken');
 

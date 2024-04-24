@@ -6,14 +6,19 @@ import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
+import { MenuItem, TextField } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
 import { StaticDatePicker } from '@mui/x-date-pickers';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useGetAppointmentTypes } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
 import TimeList from 'src/components/time-list/time-list';
 import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
 
@@ -220,6 +225,7 @@ BookDetails.propTypes = {
 
 function ReviewItem({ item }) {
   const {
+    _id,
     work_group,
     appointment_type,
     unit_service,
@@ -232,8 +238,26 @@ function ReviewItem({ item }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { appointmenttypesData } = useGetAppointmentTypes();
+
+  const [appointType, setAppointType] = useState(appointment_type?._id);
+
   const mdUp = useResponsive('up', 'md');
 
+  const handleChangeAppointType = (e) => {
+    try {
+      axiosInstance.patch(endpoints.appointments.one(_id), { appointment_type: e.target.value });
+      setAppointType(e.target.value);
+      enqueueSnackbar(t('updated successfully'));
+    } catch (error) {
+      console.log(error);
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
+    }
+  };
   return (
     <Stack
       dir={curLangAr ? 'rtl' : 'ltr'}
@@ -276,7 +300,23 @@ function ReviewItem({ item }) {
         {[
           {
             // label: t('appointment type'),
-            label: curLangAr ? appointment_type?.name_arabic : appointment_type?.name_english,
+            label: (
+              <TextField
+                variant="standard"
+                select
+                size="small"
+                sx={{ width: '170px', mx: 2 }}
+                value={appointType}
+                onChange={handleChangeAppointType}
+                placeholder={t('appointment type')}
+              >
+                {appointmenttypesData?.map((one, idx) => (
+                  <MenuItem key={idx} selected={appointType === one._id} value={one._id}>
+                    {curLangAr ? one?.name_arabic : one?.name_english}
+                  </MenuItem>
+                ))}
+              </TextField>
+            ),
             icon: <Iconify icon="streamline:waiting-appointments-calendar" />,
           },
           {

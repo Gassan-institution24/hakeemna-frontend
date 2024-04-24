@@ -9,7 +9,7 @@ import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
-import { Button, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Button, MenuItem, Select, TextField, IconButton, Tooltip, Typography } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -68,13 +68,13 @@ export default function Doctorpage() {
   const patientEmail = user?.email;
   const [selectedAppointmentType, setSelectedAppointmentType] = useState('');
 
-const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
-  id,
-  startDate: currentDateTime, // Date selected by the user
-  appointmentType: selectedAppointmentType, // Type selected by the user
-});
+  const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
+    id,
+    startDate: currentDateTime, // Date selected by the user
+    appointmentType: selectedAppointmentType, // Type selected by the user
+  });
 
-// console.log(appointmentsData,"appointmentsData");
+  // console.log(appointmentsData,"appointmentsData");
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
@@ -258,7 +258,6 @@ const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
           </DialogActions>
         </FormProvider>
       </Dialog>
-
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <StaticDatePicker
           disablePast
@@ -470,9 +469,9 @@ const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
           {renderFollows}
 
           {data?.unit_service?.country?.name_english ||
-          data?.unit_service?.city?.name_english ||
-          data?.unit_service?.name_english ||
-          data?.employee?.description
+            data?.unit_service?.city?.name_english ||
+            data?.unit_service?.name_english ||
+            data?.employee?.description
             ? renderAbout
             : ''}
 

@@ -9,9 +9,6 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import Sidebar from 'src/sections/user/view/siedBarmd';
-import SmallSidebar from 'src/sections/user/view/sideBarsm';
-
 import Main from './main';
 import Header from './header';
 import NavMini from './nav-mini';

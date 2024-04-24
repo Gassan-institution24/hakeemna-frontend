@@ -47,9 +47,9 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { useSnackbar } from 'notistack';
-
 import { StatusOptions } from 'src/assets/data/status-options';
+
+import { useSnackbar } from 'src/components/snackbar';
 
 import TableDetailRow from '../rooms/table-details-row'; /// edit
 import TableDetailToolbar from '../rooms/table-details-toolbar';

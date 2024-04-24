@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[4657],{14657:(e,n,s)=>{s.r(n),s.d(n,{default:()=>r});var t=s(6907),i=s(81164),a=s(49096),c=s(80184);function r(){const{t:e}=(0,i.qM)();return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsxs)(t.ql,{children:[(0,c.jsxs)("title",{children:[" ",e("insurance")," "]}),(0,c.jsx)("meta",{name:"description",content:"meta"})]}),(0,c.jsx)(a.iS,{})]})}}}]);
-//# sourceMappingURL=4657.3bc77ac7.chunk.js.map

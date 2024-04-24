@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { m } from 'framer-motion';
-import { useSnackbar } from 'notistack';
 
 import { LoadingButton } from '@mui/lab';
 import { Typography } from '@mui/material';
@@ -14,6 +13,7 @@ import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
+import { useSnackbar } from 'src/components/snackbar';
 
 // ----------------------------------------------------------------------
 
