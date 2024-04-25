@@ -247,11 +247,11 @@ export function useGetEmployeeAppointments({ id, page, sortBy, rowsPerPage, orde
   return { ...memoizedValue, refetch };
 }
 
-export function useGetEmployeeSelectedAppointments({ id, startDate,appointmentType }) {
+export function useGetEmployeeSelectedAppointments({ id, startDate, appointmentType }) {
   const URL = endpoints.appointments.employee.select({
     id,
     startDate,
-    appointmentType
+    appointmentType,
   });
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);

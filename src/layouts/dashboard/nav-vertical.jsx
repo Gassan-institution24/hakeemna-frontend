@@ -6,7 +6,15 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import { Button, Divider, Tooltip, Checkbox, MenuItem, Typography, IconButton } from '@mui/material';
+import {
+  Button,
+  Divider,
+  Tooltip,
+  Checkbox,
+  MenuItem,
+  Typography,
+  IconButton,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
@@ -219,7 +227,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-      // scrollDuration={500}
+        // scrollDuration={500}
       />
       {isEmployee && (
         <Box
@@ -417,9 +425,16 @@ export default function NavVertical({ openNav, onCloseNav }) {
           {t('create first time tables')}
         </MenuItem>
       </CustomPopover>
-      <Box sx={{ position: 'fixed', bottom: { md: 30, sm: 10 }, right: { md: 30, sm: 10 }, zIndex: 99 }}>
-        <IconButton onClick={() => setTicketDialog(true)} >
-          <Iconify sx={{ color: 'primary.main' }} width='70px' icon='mdi:customer-service' />
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: { md: 30, sm: 10 },
+          right: { md: 30, sm: 10 },
+          zIndex: 99,
+        }}
+      >
+        <IconButton onClick={() => setTicketDialog(true)}>
+          <Iconify sx={{ color: 'primary.main' }} width="70px" icon="mdi:customer-service" />
         </IconButton>
         <TicketPopover open={ticketDialog} onClose={() => setTicketDialog(false)} />
       </Box>

@@ -399,6 +399,9 @@ const SubscriptionsEditPage = lazy(() => import('src/pages/super-admin/subscript
 
 // COMMUNICATION
 const CommunicationHomePage = lazy(() => import('src/pages/super-admin/communications/home'));
+const CommunicationInfoPage = lazy(() =>
+  import('src/pages/super-admin/communications/ticket-info')
+);
 
 // ACCESS CONTROL LIST
 const AccessControleListHomePage = lazy(() =>
@@ -594,9 +597,9 @@ export const dashboardRoutes = [
         path: 'communication',
         children: [
           { element: <CommunicationHomePage />, index: true },
-          { path: ':id/info', element: <UnitserviceInsurancePage /> },
-          { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
-          { path: 'add', element: <UnitserviceFeedbackPage /> },
+          { path: ':id', element: <CommunicationInfoPage /> },
+          // { path: ':id/edit', element: <UnitserviceCommunicationsPage /> },
+          // { path: 'add', element: <UnitserviceFeedbackPage /> },
         ],
       },
       {

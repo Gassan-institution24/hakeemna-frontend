@@ -20,10 +20,10 @@ export default function InvoiceTableFiltersResult({
   ...other
 }) {
   const handleRemovePriority = () => {
-    onFilters('priority', '');
+    onFilters('priority', null);
   };
   const handleRemoveCategory = () => {
-    onFilters('category', '');
+    onFilters('category', null);
   };
 
   return (
@@ -36,10 +36,10 @@ export default function InvoiceTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {filters.category !== '' && (
+        {filters.category !== null && (
           <Chip size="small" label="category" onDelete={handleRemoveCategory} />
         )}
-        {filters.priority !== '' && (
+        {filters.priority !== null && (
           <Chip size="small" label={filters.priority} onDelete={handleRemovePriority} />
         )}
         <Button
