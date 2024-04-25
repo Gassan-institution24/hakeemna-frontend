@@ -68,13 +68,11 @@ export default function Doctorpage() {
   const patientEmail = user?.email;
   const [selectedAppointmentType, setSelectedAppointmentType] = useState('');
 
-  const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
+  const { appointmentsData,appointmentTypes, refetch } = useGetEmployeeSelectedAppointments({
     id,
     startDate: currentDateTime, // Date selected by the user
     appointmentType: selectedAppointmentType, // Type selected by the user
   });
-
-  // console.log(appointmentsData,"appointmentsData");
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
@@ -210,7 +208,7 @@ export default function Doctorpage() {
             <Iconify icon="icon-park:correct" width={24} />
           )}
 
-          <Box sx={{ typography: 'body2' }}>Available online</Box>
+          <Box sx={{ typography: 'body2' }}>{t('Available online')}</Box>
         </Stack>
       </Stack>
     </Card>
@@ -284,7 +282,7 @@ export default function Doctorpage() {
           }}
         >
           <MenuItem value="">{t('All')}</MenuItem>
-          {appointmenttypesData.map((type, test) => (
+          {appointmenttypesData.filter((one)=>appointmentTypes.includes(one._id)).map((type, test) => (
             <MenuItem key={test} value={type._id}>
               {type.name_english}
             </MenuItem>
