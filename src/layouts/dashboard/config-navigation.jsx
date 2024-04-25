@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo } from 'react';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -8,16 +8,16 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
-import { useSnackbar } from 'src/components/snackbar';
-import { usePopover } from 'src/components/custom-popover';
+// import { useSnackbar } from 'src/components/snackbar';
+// import { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
 export function useNavData() {
   const router = useRouter();
-  const { logout } = useAuthContext();
-  const popover = usePopover();
-  const { enqueueSnackbar } = useSnackbar();
+  // const { logout } = useAuthContext();
+  // const popover = usePopover();
+  // const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const checkAcl = useAclGuard();
@@ -28,16 +28,16 @@ export function useNavData() {
 
   // console.log('employees_number', employees_number);
 
-  const handleLogout = useCallback(async () => {
-    try {
-      popover.onClose();
-      logout();
-      router.replace('/login');
-    } catch (error) {
-      console.error(error);
-      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
-    }
-  }, [logout, popover, enqueueSnackbar, router]);
+  // const handleLogout = useCallback(async () => {
+  //   try {
+  //     popover.onClose();
+  //     logout();
+  //     router.replace('/login');
+  //   } catch (error) {
+  //     console.error(error);
+  //     enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+  //   }
+  // }, [logout, popover, enqueueSnackbar, router]);
 
   const data = useMemo(() => {
     const superAdminItems = [
@@ -500,6 +500,11 @@ export function useNavData() {
             icon: <Iconify icon="icon-park-outline:medicine-chest" />,
           },
           {
+            title: t('my health'),
+            path: paths.dashboard.user.health,
+            icon: <Iconify icon="solar:health-bold" sx={{ color: '#E73E7A' }} />,
+          },
+          {
             title: t('wating room'),
             path: paths.dashboard.user.watingroom,
             icon: <Iconify icon="medical-icon:i-waiting-area" />,
@@ -549,12 +554,12 @@ export function useNavData() {
             path: paths.dashboard.user.share,
             icon: <Iconify icon="bxs:share-alt" sx={{ color: 'success.main' }} />,
           },
-          {
-            title: t('logout'),
-            onClick: handleLogout,
-            path: paths.auth.login,
-            icon: <Iconify icon="tabler:logout" />,
-          },
+          // {
+          //   title: t('logout'),
+          //   onClick: handleLogout,
+          //   path: paths.auth.login,
+          //   icon: <Iconify icon="tabler:logout" />,
+          // },
         ],
       },
     ];
@@ -572,7 +577,7 @@ export function useNavData() {
       return [...employeeDashboard, ...unitServicesDashboars];
     }
     return [...userItems];
-  }, [t, user, handleLogout, router, checkAcl, employees_number]);
+  }, [t, user, router, checkAcl, employees_number]);
 
   return data;
 }

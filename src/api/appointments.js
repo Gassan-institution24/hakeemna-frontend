@@ -257,7 +257,8 @@ export function useGetEmployeeSelectedAppointments({ id, startDate,appointmentTy
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      appointmentsData: data || [],
+      appointmentsData: data?.appointments || [],
+      appointmentTypes: data?.types || [],
       loading: isLoading,
       error,
       validating: isValidating,

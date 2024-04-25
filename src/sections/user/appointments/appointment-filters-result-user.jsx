@@ -33,9 +33,9 @@ export default function JobFiltersResult({
     onFilters('end_date', null);
   };
 
-  const handleRemoveAppointmentTypes = () => {
-    onFilters('appointtypes', 'all');
-  };
+  // const handleRemoveAppointmentTypes = () => {
+  //   onFilters('appointtypes', 'all');
+  // };
 
   const handleRemovePaymentMethod = () => {
     onFilters('payment_methods', 'all');
@@ -63,7 +63,7 @@ export default function JobFiltersResult({
           </Block>
         )}
 
-        {filters.appointtypes !== 'all' && (
+        {/* {filters.appointtypes !== 'all' && (
           <Block label="Appointment Types:">
             <Chip
               size="small"
@@ -74,7 +74,7 @@ export default function JobFiltersResult({
               onDelete={handleRemoveAppointmentTypes}
             />
           </Block>
-        )}
+        )} */}
 
         {filters.payment_methods !== 'all' && (
           <Block label="Payment Methods:">
