@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Box, Stack, MenuItem } from '@mui/material';
+import { Box, Stack, MenuItem, Divider, Typography } from '@mui/material';
 
-import axios from 'src/utils/axios';
+import axios, { endpoints } from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -13,151 +13,120 @@ import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover from 'src/components/custom-popover';
 // import CustomPopover from "src/components/custom-popover";
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { useState } from 'react';
+import { useGetTicketCategories } from 'src/api';
+import { LoadingButton } from '@mui/lab';
 
 export default function TicketPopover({ open, onClose }) {
-    const { t } = useTranslate()
-    const { currentLang } = useLocales();
-    const curLangAr = currentLang.value === 'ar';
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
-    const { enqueueSnackbar } = useSnackbar();
+  // const [page, setPage] = useState(0)
 
-    const NewUserSchema = Yup.object().shape({
-        first_name: Yup.string().required(t('required field')),
-        family_name: Yup.string().required(t('required field')),
-        identification_num: Yup.string().required(t('required field')),
-        birth_date: Yup.date().nullable(),
-        marital_status: Yup.string(),
-        nationality: Yup.string().nullable(),
-        country: Yup.string().required(t('required field')),
-        city: Yup.string().required(t('required field')),
-        email: Yup.string().required(t('required field')),
-        mobile_num1: Yup.string().required(t('required field')),
-        mobile_num2: Yup.string(),
-        gender: Yup.string(),
-    });
+  const { enqueueSnackbar } = useSnackbar();
 
-    const methods = useForm({
-        mode: 'onTouched',
-        resolver: yupResolver(NewUserSchema),
-    });
+  const { ticketCategoriesData } = useGetTicketCategories();
 
-    const {
-        reset,
-        setValue,
-        watch,
-        handleSubmit,
-        formState: { errors },
-    } = methods;
+  const NewUserSchema = Yup.object().shape({
+    category: Yup.string(),
+    subject: Yup.string().required(t('required field')),
+    details: Yup.string(),
+  });
 
-    const onSubmit = handleSubmit(async (data) => {
-        try {
-            if (data._id) {
-                // await axios.patch(endpoints.appointments.book(appointment._id), {
-                //     patient: data._id,
-                // });
-            } else {
-                await axios.patch(
-                    // endpoints.appointments.patient.createPatientAndBookAppoint(appointment._id),
-                    data
-                );
-            }
-            // refetch();
+  const methods = useForm({
+    mode: 'onTouched',
+    resolver: yupResolver(NewUserSchema),
+  });
 
-            onClose();
-        } catch (error) {
-            // error emitted in backend
-            enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
-                variant: 'error',
-            });
-            console.error(error);
-        }
-    });
+  const {
+    reset,
+    setValue,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = methods;
 
-    return (
-        <CustomPopover
-            open={open}
-            arrow={curLangAr ? 'right-bot' : 'left-bottom'}
-            sx={{ backgroundColor: 'white' }}
-            // sx={{ position: 'fixed', bottom: {md: 30, sm: 10 }, right: {md: 30, sm: 10 }, zIndex: 99 }}
-            onClose={onClose}
-        >
-            <FormProvider methods={methods} onSubmit={onSubmit}>
-                <Stack sx={{ p: 3 }} spacing={2.5}>
-                    <Box
-                        rowGap={3}
-                        columnGap={2}
-                        display="grid"
-                        width="auto"
-                        gridTemplateColumns={{
-                            xs: 'repeat(1, 1fr)',
-                            sm: 'repeat(1, 1fr)',
-                        }}
-                    >
-                        <RHFTextField variant='standard' name="first_name" label={t('first name')} />
-                        <RHFTextField variant='standard' name="family_name" label={t('family name')} />
-                        {/* <RHFTextField variant='standard' name="email" label={t('email')} />
-                        <RHFTextField variant='standard' name="identification_num" label={t('ID number')} />
-                        <RHFTextField variant='standard' type="number" name="mobile_num1" label={t('mobile number')} />
-                        <RHFTextField variant='standard'
-                            type="number"
-                            name="mobile_num2"
-                            label={t('alternative mobile number')}
-                        /> */}
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await axios.post(endpoints.tickets.all, { ...data, URL: window.location.pathname });
+      // refetch();
 
-                        {/* <RHFSelect
-                                name="city"
-                                label="City"
-                                PaperPropsSx={{ textTransform: 'capitalize' }}
-                            // InputLabelProps={{ shrink: true }}
-                            >
-                                {tableData.map((option, index, idx) => (
-                                    <MenuItem lang="ar" key={idx} value={option._id}>
-                                        {curLangAr ? option?.name_arabic : option?.name_english}
-                                    </MenuItem>
-                                ))}
-                            </RHFSelect> */}
-                        <RHFSelect
-                            variant='standard'
-                            name="marital_status"
-                            label={t('marital status')}
-                        // InputLabelProps={{ shrink: true }}
-                        >
-                            <MenuItem lang="ar" value="single">
-                                {t('single')}
-                            </MenuItem>
-                            <MenuItem lang="ar" value="married">
-                                {t('married')}
-                            </MenuItem>
-                            <MenuItem lang="ar" value="widowed">
-                                {t('widowed')}
-                            </MenuItem>
-                            <MenuItem lang="ar" value="separated">
-                                {t('separated')}
-                            </MenuItem>
-                            <MenuItem lang="ar" value="divorced">
-                                {t('divorced')}{' '}
-                            </MenuItem>
-                        </RHFSelect>
-                        <RHFSelect
-                            variant='standard'
-                            name="gender"
-                            label={t('gender')}
-                        // InputLabelProps={{ shrink: true }}
-                        >
-                            <MenuItem lang="ar" value="male">
-                                {t('male')}
-                            </MenuItem>
-                            <MenuItem lang="ar" value="female">
-                                {t('female')}
-                            </MenuItem>
-                        </RHFSelect>
-                    </Box>
-                </Stack>
-            </FormProvider>
-        </CustomPopover>
-    )
+      onClose();
+    } catch (error) {
+      // error emitted in backend
+      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        variant: 'error',
+      });
+      console.error(error);
+    }
+  });
+
+  // const handleSelectCategory = (id) => {
+  //     setPage(1)
+  //     setValue('category', id)
+  // }
+
+  return (
+    <CustomPopover
+      open={open}
+      hiddenArrow
+      // arrow={curLangAr ? 'right-bot' : 'top-right'}
+      // sx={{ backgroundColor: 'white' }}
+      // sx={{ backgroundColor: 'primary.lighter' }}
+      onClose={onClose}
+    >
+      <FormProvider methods={methods} onSubmit={onSubmit}>
+        <Stack sx={{ p: 1 }} spacing={2.5}>
+          {/* {page === 0 && <Stack divider={<Divider />}>
+                        {ticketCategoriesData?.map((one, idx) => (
+                            <MenuItem onClick={() => handleSelectCategory(one._id)} key={idx} sx={{ px: 3, py: 1, fontSize: 14, fontWeight: 500, textTransform: 'capitalize' }}>{curLangAr ? one.name_arabic : one?.name_english}</MenuItem>
+                        ))}
+                    </Stack>} */}
+          <Box
+            rowGap={1}
+            columnGap={2}
+            display="grid"
+            width="auto"
+            gridTemplateColumns={{
+              xs: 'repeat(1, 1fr)',
+              sm: 'repeat(1, 1fr)',
+            }}
+            sx={{ p: 2 }}
+          >
+            <Typography sx={{ textTransform: 'capitalize', pb: 2 }} variant="h6">
+              {t('ticket')}
+            </Typography>
+            <Box>
+              <Typography variant="subtitle2">{t('category')}</Typography>
+              <RHFSelect size="small" name="category">
+                {ticketCategoriesData.map((one, idx) => (
+                  <MenuItem lang="ar" key={idx} value={one._id}>
+                    {curLangAr ? one.name_arabic : one?.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+            </Box>
+            <Box>
+              <Typography variant="subtitle2">{t('subject')}</Typography>
+              <RHFTextField sx={{ minWidth: 300 }} size="small" name="subject" />
+            </Box>
+            <Box>
+              <Typography variant="subtitle2">{t('details')}</Typography>
+              <RHFTextField size="small" multiline rows={4} name="details" />
+            </Box>
+            <Stack alignItems="flex-end" sx={{ mt: 2 }}>
+              <LoadingButton type="submit" tabIndex={-1} variant="contained">
+                {t('send')}
+              </LoadingButton>
+            </Stack>
+          </Box>
+        </Stack>
+      </FormProvider>
+    </CustomPopover>
+  );
 }
 TicketPopover.propTypes = {
-    open: PropTypes.bool,
-    onClose: PropTypes.func,
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
 };

@@ -290,7 +290,7 @@ export const paths = {
       root: `${ROOTS.SUPERADMIN}/communication`,
       new: `${ROOTS.SUPERADMIN}/communication/new`,
       edit: (id) => `${ROOTS.SUPERADMIN}/communication/${id}/edit`,
-      info: (id) => `${ROOTS.SUPERADMIN}/communication/${id}/info`,
+      info: (id) => `${ROOTS.SUPERADMIN}/communication/${id}`,
     },
     accessControlList: {
       root: `${ROOTS.SUPERADMIN}/acl`,
@@ -640,6 +640,7 @@ export const paths = {
     },
     communication: {
       root: `${ROOTS.SUPERADMIN}/us/communication`,
+      info: (id) => `${ROOTS.SUPERADMIN}/us/communication/${id}`,
     },
     qualityControl: {
       root: `${ROOTS.SUPERADMIN}/us/qc`,
