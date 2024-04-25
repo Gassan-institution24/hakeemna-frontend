@@ -28,8 +28,8 @@ import {
 } from 'src/components/table';
 
 import TicketsToolbar from '../tickets-toolbar';
-import AppointmentsRow from '../appointment-row';
-import HistoryFiltersResult from '../appointment-filters-result';
+import AppointmentsRow from '../ticket-row';
+import HistoryFiltersResult from '../ticket-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -48,7 +48,9 @@ const TABLE_HEAD = [
   { id: 'assigned_to', label: 'assigned to' },
   { id: 'status', label: 'status' },
   { id: 'user', label: 'user' },
-  // { id: '' },
+  { id: 'updated_at', label: 'last updated' },
+  { id: 'created_at', label: 'created at' },
+  { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -80,6 +82,7 @@ export default function AppointmentsView() {
     status: filters.status || null,
     priority: filters.priority || null,
     category: filters.category || null,
+    populate: 'category user_creation user_modification',
   });
 
   const dateError =
@@ -147,6 +150,13 @@ export default function AppointmentsView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  const handleViewTicket = useCallback(
+    (id) => {
+      router.push(paths.superadmin.communication.info(id));
+    },
+    [router]
+  );
 
   return (
     <Container maxWidth="xl">
@@ -228,6 +238,7 @@ export default function AppointmentsView() {
                     refetch={refetch}
                     key={idx}
                     row={row}
+                    onViewRow={() => handleViewTicket(row._id)}
                     selected={table.selected.includes(row._id)}
                     onSelectRow={() => table.onSelectRow(row._id)}
                   />

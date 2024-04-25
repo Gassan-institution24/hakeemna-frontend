@@ -64,7 +64,6 @@ export default function AppointmentsTableRow({
           sx={{
             cursor: 'pointer',
             color: '#3F54EB',
-            // textDecoration: 'underline',
           }}
           onClick={onViewRow}
           align="center"
