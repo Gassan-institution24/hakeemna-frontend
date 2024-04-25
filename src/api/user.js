@@ -3,8 +3,8 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetUsers() {
-  const URL = endpoints.auth.users;
+export function useGetUsers(query) {
+  const URL = [endpoints.auth.users, { params: query }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(

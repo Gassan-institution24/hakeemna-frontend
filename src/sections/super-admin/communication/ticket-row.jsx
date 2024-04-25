@@ -41,17 +41,13 @@ export default function AppointmentsTableRow({
   onDeleteRow,
 }) {
   const {
-    _id,
-    appoint_number,
-    unit_service,
-    work_group,
-    coming,
-    // work_shift,
-    appointment_type,
-    note,
-    patient,
-    start_time,
+    code,
+    subject,
+    priority,
+    category,
+    assigned_to,
     status,
+    user,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -65,25 +61,13 @@ export default function AppointmentsTableRow({
 
   const router = useRouter();
 
-  const checkAcl = useAclGuard();
-
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
-
   const popover = usePopover();
   const DDL = usePopover();
-  const confirmDelayOne = useBoolean();
-
-  const [minToDelay, setMinToDelay] = useState(0);
 
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
-
-        <TableCell align="center">
+        {/* <TableCell align="center">
           <ListItemText
             primary={
               isValid(new Date(start_time)) &&
@@ -108,47 +92,73 @@ export default function AppointmentsTableRow({
               typography: 'caption',
             }}
           />
-        </TableCell>
-        <TableCell align="center">{appoint_number}</TableCell>
-        <TableCell align="center">
-          {curLangAr ? appointment_type?.name_arabic : appointment_type?.name_english}
-        </TableCell>
+        </TableCell> */}
         <TableCell
-          align="center"
           sx={{
             cursor: 'pointer',
             color: '#3F54EB',
           }}
-          onClick={() => router.push(paths.employee.patients.info(patient._id))}
+          onClick={onViewRow}
+          align="center"
         >
-          {curLangAr ? patient?.name_arabic : patient?.name_english}
+          {code}
         </TableCell>
-        <TableCell align="center">{note}</TableCell>
-        <TableCell align="center">
-          <Iconify icon={coming ? 'eva:checkmark-fill' : 'mingcute:close-line'} width={16} />
+        <TableCell
+          sx={{
+            cursor: 'pointer',
+            color: '#3F54EB',
+          }}
+          onClick={onViewRow}
+          align="center"
+        >
+          {subject}
         </TableCell>
-        <TableCell align="center">
-          {curLangAr ? work_group?.name_arabic : work_group?.name_english}
+        <TableCell onClick={onViewRow} align="center">
+          {priority}
         </TableCell>
-        {/* <TableCell  align="center">
-          {curLangAr ? work_shift?.name_arabic : work_shift?.name_english}
-        </TableCell> */}
-
+        <TableCell onClick={onViewRow} align="center">
+          {category?.name_english}
+        </TableCell>
+        <TableCell onClick={onViewRow} align="center">
+          {assigned_to?.email}
+        </TableCell>
         <TableCell align="center">
           <Label
             variant="soft"
             color={
-              (status === 'available' && 'secondary') ||
               (status === 'pending' && 'warning') ||
-              (status === 'Processing' && 'info') ||
-              (status === 'finished' && 'success') ||
-              (status === 'canceled' && 'error') ||
-              (status === 'not booked' && 'secondary') ||
+              (status === 'waiting' && 'secondary') ||
+              (status === 'processing' && 'info') ||
+              (status === 'completed' && 'success') ||
+              (status === 'closed' && 'error') ||
               'default'
             }
           >
             {t(status)}
           </Label>
+        </TableCell>
+        <TableCell align="center">{user_creation?.email}</TableCell>
+        <TableCell align="center">
+          <ListItemText
+            primary={format(new Date(updated_at), 'dd MMM yyyy')}
+            secondary={format(new Date(updated_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </TableCell>
+        <TableCell align="center">
+          <ListItemText
+            primary={format(new Date(created_at), 'dd MMM yyyy')}
+            secondary={format(new Date(created_at), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1 }}>
@@ -166,66 +176,6 @@ export default function AppointmentsTableRow({
         arrow="right-top"
         sx={{ width: 155 }}
       >
-        {checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
-          <MenuItem
-            lang="ar"
-            onClick={() => {
-              router.push(paths.employee.appointments.edit(_id));
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="fluent:edit-32-filled" />
-            {t('edit')}
-          </MenuItem>
-        )}
-        {status === 'available' &&
-          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
-            <MenuItem
-              lang="ar"
-              sx={{ color: 'success.main' }}
-              onClick={() => {
-                onBookAppoint();
-                popover.onClose();
-              }}
-            >
-              <Iconify icon="mdi:register" />
-              {t('book manually')}
-            </MenuItem>
-          )}
-        {status === 'available' &&
-          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'delete' }) && (
-            <MenuItem
-              lang="ar"
-              onClick={() => {
-                onCancelRow();
-                popover.onClose();
-              }}
-              sx={{ color: 'error.main' }}
-            >
-              <Iconify icon="mdi:bell-cancel" />
-              {t('cancel')}
-            </MenuItem>
-          )}
-        {status === 'canceled' &&
-          checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
-            <MenuItem
-              lang="ar"
-              onClick={() => {
-                onUnCancelRow();
-                popover.onClose();
-              }}
-              sx={{ color: 'success.main' }}
-            >
-              <Iconify icon="material-symbols-light:notifications-active-rounded" />
-              {t('uncancel')}
-            </MenuItem>
-          )}
-        {checkAcl({ category: 'work_group', subcategory: 'appointments', acl: 'update' }) && (
-          <MenuItem lang="ar" sx={{ color: 'warning.main' }} onClick={confirmDelayOne.onTrue}>
-            <Iconify icon="mdi:timer-sync" />
-            {t('delay')}
-          </MenuItem>
-        )}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}
@@ -280,61 +230,6 @@ export default function AppointmentsTableRow({
           {t('modifications no')}: {modifications_nums}
         </Box>
       </CustomPopover>
-      <ConfirmDialog
-        open={confirmDelayOne.value}
-        onClose={confirmDelayOne.onFalse}
-        title={t('delay')}
-        content={
-          <>
-            {t('How many minutes do you want to delay?')}
-            <TextField
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Box sx={{ fontSize: '0.8rem' }}>{t('min')}</Box>
-                  </InputAdornment>
-                ),
-              }}
-              type="number"
-              sx={{ p: 2, width: '100%' }}
-              size="small"
-              onChange={(e) => setMinToDelay(e.target.value)}
-              helperText={t('knowing that you can type a negative value to make it earlier')}
-            />
-            {minToDelay !== 0 && (
-              <Typography variant="body2" sx={{ textAlign: 'center', color: 'error.main' }}>
-                {t('from')}&nbsp;
-                {new Date(start_time).toLocaleTimeString(t('en-US'), {
-                  timeZone: unit_service?.country?.time_zone,
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-                {/* {'     >>     '} */}
-                &nbsp;{t('to')}&nbsp;
-                {new Date(
-                  new Date(start_time).getTime() + minToDelay * 60 * 1000
-                ).toLocaleTimeString(t('en-US'), {
-                  timeZone: unit_service?.country?.time_zone,
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </Typography>
-            )}
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="info"
-            onClick={() => {
-              confirmDelayOne.onFalse();
-              onDelayRow(row, minToDelay);
-            }}
-          >
-            {t('delay')}
-          </Button>
-        }
-      />
     </>
   );
 }

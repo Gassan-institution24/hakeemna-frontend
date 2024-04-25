@@ -1,0 +1,165 @@
+import PropTypes from 'prop-types';
+
+import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import CardHeader from '@mui/material/CardHeader';
+import Typography from '@mui/material/Typography';
+
+import { useGetTicketCategories, useGetUsers } from 'src/api';
+import Iconify from 'src/components/iconify';
+import { Grid, ListItemText, MenuItem, Select, TextField } from '@mui/material';
+import { useState } from 'react';
+import axiosInstance, { endpoints } from 'src/utils/axios';
+import { useSnackbar } from 'notistack';
+
+// ----------------------------------------------------------------------
+
+const priorityOptions = ['very urgent', 'urgent', 'normal']
+
+export default function OrderDetailsInfo({ ticket }) {
+  const { enqueueSnackbar } = useSnackbar()
+
+  const { ticketCategoriesData } = useGetTicketCategories();
+  const { usersData } = useGetUsers({ role: 'superadmin' })
+
+  const [priority, setPriority] = useState(ticket.priority);
+  const [category, setCategory] = useState(ticket.category._id);
+  const [assignedTo, setAssignedTo] = useState(ticket.assigned_to?._id);
+
+  const handleCategoryChange = (e) => {
+    try {
+      axiosInstance.patch(endpoints.tickets.one(ticket._id), { category: e.target.value })
+      setCategory(e.target.value)
+      enqueueSnackbar('changed successfully!')
+    } catch (error) {
+      enqueueSnackbar(error.message)
+    }
+  }
+  const handlePriorityChange = (e) => {
+    try {
+      axiosInstance.patch(endpoints.tickets.one(ticket._id), { priority: e.target.value })
+      setPriority(e.target.value)
+      enqueueSnackbar('changed successfully!')
+    } catch (error) {
+      enqueueSnackbar(error.message)
+    }
+  }
+  const handleAssignedToChange = (e) => {
+    try {
+      axiosInstance.patch(endpoints.tickets.one(ticket._id), { assigned_to: e.target.value })
+      setAssignedTo(e.target.value)
+      enqueueSnackbar('changed successfully!')
+    } catch (error) {
+      enqueueSnackbar(error.message)
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader title="Ticket Info" />
+      <Stack direction="row" sx={{ p: 3 }}>
+        <Grid sx={{ p: 4 }} container spacing={3} rowGap={2}>
+          {[
+            {
+              label: 'user',
+              value: ticket?.user_creation?.email,
+            },
+            {
+              label: 'role',
+              value: ticket?.user_creation?.role,
+            },
+            {
+              label: 'category',
+              value: (
+                <TextField select variant='standard' size="small" sx={{ width: 150 }} value={category} onChange={handleCategoryChange}>
+                  {ticketCategoriesData.map((one, idx) => (
+                    <MenuItem key={idx} value={one._id}>
+                      {one.name_english}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              ),
+            },
+            {
+              label: 'priority',
+              value: (
+                <TextField select variant='standard' size="small" sx={{ width: 150 }} value={priority} onChange={handlePriorityChange}>
+                  {priorityOptions.map((one, idx) => (
+                    <MenuItem key={idx} value={one}>
+                      {one}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              ),
+            },
+            {
+              label: 'URL',
+              value: ticket?.URL,
+            },
+            {
+              label: 'assigned to',
+              value: (
+                <TextField select variant='standard' size="small" sx={{ width: 150 }} value={assignedTo} onChange={handleAssignedToChange}>
+                  {usersData.map((one, idx) => (
+                    <MenuItem key={idx} value={one._id}>
+                      {one.email}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              ),
+            },
+          ].map((item, idx) => (
+            <>
+              {/* {item.value && ( */}
+              <Grid xs={12} md={6}>
+                {/* {item.icon} */}
+                <ListItemText
+                  primary={item.label}
+                  secondary={item.value}
+                  primaryTypographyProps={{
+                    typography: 'body2',
+                    color: 'text.secondary',
+                    mb: 0.5,
+                  }}
+                  secondaryTypographyProps={{
+                    typography: 'subtitle2',
+                    color: 'text.primary',
+                    component: 'span',
+                  }}
+                />
+              </Grid>
+              {/* )} */}
+            </>
+          ))}
+          <Grid xs={12}>
+            {/* {item.icon} */}
+            <ListItemText
+              primary="details"
+              secondary={ticket.details}
+              primaryTypographyProps={{
+                typography: 'body2',
+                color: 'text.secondary',
+                mb: 0.5,
+              }}
+              secondaryTypographyProps={{
+                typography: 'subtitle2',
+                color: 'text.primary',
+                component: 'span',
+              }}
+            />
+          </Grid>
+        </Grid>
+      </Stack>
+    </Card>
+  );
+}
+
+OrderDetailsInfo.propTypes = {
+  ticket: PropTypes.object,
+};

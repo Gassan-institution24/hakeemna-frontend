@@ -24,13 +24,13 @@ export default function FinishedAppoinment({ finishedAppointments }) {
   return finishedAppointments.map((info, index) => (
     <Box>
       <Card key={index}>
-      <IconButton
-            onClick={() => alert('under initialization')}
-            sx={{ position: 'absolute', top: 8, right: 8, '&:hover': { color: 'info.main' } }}
-            // title="book"
-          >
-            <Iconify icon="fa:repeat" />
-          </IconButton>
+        <IconButton
+          onClick={() => alert('under initialization')}
+          sx={{ position: 'absolute', top: 8, right: 8, '&:hover': { color: 'info.main' } }}
+          // title="book"
+        >
+          <Iconify icon="fa:repeat" />
+        </IconButton>
         <Stack sx={{ p: 3, pb: 2 }}>
           <Avatar
             alt={info?.name_english}
