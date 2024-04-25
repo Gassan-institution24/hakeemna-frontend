@@ -34,6 +34,7 @@ const Medicalreports = lazy(() => import('src/pages/dashboard/user/Medicalreport
 const Emergency = lazy(() => import('src/pages/dashboard/user/emergency'));
 const Watingroom = lazy(() => import('src/pages/dashboard/user/waitingroom'));
 const BMI = lazy(() => import('src/sections/user/bmi'));
+const Myhealth = lazy(() => import('src/sections/user/view/user-myHealth-view'));
 const Oldpatientsdata = lazy(() => import('src/sections/user/oldpatientsdata'));
 const ProfileQr = lazy(() => import('src/sections/user/profile-qr'));
 
@@ -73,6 +74,7 @@ export const userRoutes = [
           { path: 'watingroom', element: <Watingroom /> },
           { path: 'prescriptions', element: <PatientPrescriptions /> },
           { path: 'bmi', element: <BMI /> },
+          { path: 'myhealth', element: <Myhealth /> },
           { path: 'oldpatientdata', element: <Oldpatientsdata /> },
           { path: 'appointments', element: <UserAppointmentsPage /> },
           { path: 'bookappointment/:id', element: <Booking /> },

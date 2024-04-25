@@ -133,7 +133,7 @@ export default function MedicalReport() {
           loading={isSubmitting}
           sx={{ ml: 'auto' }}
         >
-          Save Changes
+          {t('Save Changes')}
         </LoadingButton>
       </Stack>
     </FormProvider>

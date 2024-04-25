@@ -39,12 +39,12 @@ export default function AppointmentsFilters({
   dateError,
 }) {
   const { t } = useTranslate();
-  const handleFilterAppointtypes = useCallback(
-    (e) => {
-      onFilters('appointtypes', e.target.value);
-    },
-    [onFilters]
-  );
+  // const handleFilterAppointtypes = useCallback(
+  //   (e) => {
+  //     onFilters('appointtypes', e.target.value);
+  //   },
+  //   [onFilters]
+  // );
   const handleFilterCountries = useCallback(
     (e) => {
       onFilters('countries', e.target.value);
@@ -83,21 +83,21 @@ export default function AppointmentsFilters({
     </Stack>
   );
 
-  const renderappointtypes = (
-    <FormControl>
-      <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        {t('Appointment Types')}
-      </Typography>
-      <Select onChange={handleFilterAppointtypes} name="appointment_type">
-        {appointmentTypeOptions?.map((option, idx) => (
-          <MenuItem lang="ar" key={idx} value={option._id}>
-            {option?.name_english}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-  const renderCountries = (
+  // const renderappointtypes = (
+  //   <FormControl>
+  //     <Typography variant="subtitle2" sx={{ mb: 1 }}>
+  //       {t('Appointment Types')}
+  //     </Typography>
+  //     <Select onChange={handleFilterAppointtypes} name="appointment_type">
+  //       {appointmentTypeOptions?.map((option, idx) => (
+  //         <MenuItem lang="ar" key={idx} value={option._id}>
+  //           {option?.name_english}
+  //         </MenuItem>
+  //       ))}
+  //     </Select>
+  //   </FormControl>
+  // );
+  const renderCountries = ( 
     <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         {t('Countries')}
@@ -160,7 +160,6 @@ export default function AppointmentsFilters({
         <Scrollbar sx={{ px: 2.5, py: 3 }}>
           <Stack spacing={3}>
             {/* {renderDate} */}
-            {renderappointtypes}
 
             {renderCountries}
 
