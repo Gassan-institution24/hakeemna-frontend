@@ -34,7 +34,8 @@ export default function Create() {
   const { user } = useAuthContext();
   const password = useBoolean();
   const RegisterSchema = Yup.object().shape({
-    name_english: Yup.string().required('First name required'),
+    name_english: Yup.string().required('english name required'),
+    name_arabic: Yup.string().required('arabic name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string()
@@ -44,12 +45,15 @@ export default function Create() {
     birth_date: Yup.date().required('birth_date is required'),
     gender: Yup.string().required('Gender is required'),
     country: Yup.string().required('Country is required'),
+    nationality: Yup.string().required('Nationality is required'),
     city: Yup.string().required('City is required'),
   });
 
   const defaultValues = {
     name_english: '',
+    name_arabic: '',
     email: '',
+    nationality: '',
     family_members: user?.patient?._id,
     password: '',
     confirmPassword: '',
@@ -78,15 +82,35 @@ export default function Create() {
 
   const { tableData } = useGetCountryCities(values.country);
 
+  const handleArabicInputChange = (event) => {
+    // Validate the input based on Arabic language rules
+    const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
+    if (arabicRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
+
+  const handleEnglishInputChange = (event) => {
+    // Validate the input based on English language rules
+    const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
+
+    if (englishRegex.test(event.target.value)) {
+      methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
+    }
+  };
   const handleCountryChange = (event) => {
     const selectedCountryId = event.target.value;
     methods.setValue('country', selectedCountryId, { shouldValidate: true });
+  };
+  const handleNationalityChange = (event) => {
+    const selectedCountryId = event.target.value;
+    methods.setValue('nationality', selectedCountryId, { shouldValidate: true });
   };
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       await register?.({ userName: `${data.name_english}`, ...data });
-      router.push(paths.auth.verify(data.email));
+      router.push(paths.dashboard.user.exist);
     } catch (error) {
       console.error(error);
       reset();
@@ -102,16 +126,15 @@ export default function Create() {
             variant="h3"
             sx={{ textAlign: 'center', display: { md: 'none', xs: 'block' } }}
           >
-            Add Account
+            {t('Add Account')}
           </Typography>
 
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <RHFTextField name="name_english" label="First name" />
-            {/* <RHFTextField name="family_name" label="Last name" /> */}
+            <RHFTextField name="name_english" label={t("full name english")}  onChange={handleEnglishInputChange} />
+            <RHFTextField name="name_arabic" label={t("full name arabic")} onChange={handleArabicInputChange}  />
           </Stack>
 
-          <RHFTextField name="email" label="Email address" />
-          <RHFTextField name="identification_num" label="Identification number" />
+          <RHFTextField name="identification_num" label={t("Identification number")}/>
           <Controller
             name="birth_date"
             control={control}
@@ -133,6 +156,13 @@ export default function Create() {
               />
             )}
           />
+               <RHFSelect onChange={handleNationalityChange} name="nationality" label={t('nationality')}>
+              {countriesData?.map((country, idx) => (
+                <MenuItem lang="ar" key={idx}  value={country?._id}>
+                  {country?.name_english}
+                </MenuItem>
+              ))}
+            </RHFSelect>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
               {countriesData?.map((country, idx) => (
@@ -141,25 +171,27 @@ export default function Create() {
                 </MenuItem>
               ))}
             </RHFSelect>
-            <RHFSelect name="city" label="City">
+            <RHFSelect name="city" label={t("City")}>
               {tableData?.map((city, idx) => (
                 <MenuItem lang="ar" key={idx} value={city?._id}>
                   {city?.name_english}
                 </MenuItem>
               ))}
             </RHFSelect>
-            <RHFSelect name="gender" label="Gender">
+            <RHFSelect name="gender" label={t("Gender")}>
               <MenuItem lang="ar" value="male">
-                male
+                {t('male')}
               </MenuItem>
               <MenuItem lang="ar" value="female">
-                female
+                {t('female')}
               </MenuItem>
             </RHFSelect>
           </Stack>
+          <RHFTextField name="email" label={t("Email address")} />
+
           <RHFTextField
             name="password"
-            label="Password"
+            label={t("Password")}
             type={password.value ? 'text' : 'password'}
             InputProps={{
               endAdornment: (
@@ -173,7 +205,7 @@ export default function Create() {
           />
           <RHFTextField
             name="confirmPassword"
-            label="Confirm Password"
+            label={t("Confirm Password")}
             type={password.value ? 'text' : 'password'}
             InputProps={{
               endAdornment: (
@@ -194,16 +226,14 @@ export default function Create() {
             variant="contained"
             loading={isSubmitting}
           >
-            Create account
+            {t('Create account')}
           </LoadingButton>
         </Stack>
         <Stack sx={{ display: { md: 'block', xs: 'none' }, ml: 10, mt: 5 }}>
           <Typography variant="h3" sx={{ textAlign: 'center' }}>
-            Add Account
+            {t('Add Account')}
           </Typography>
-          {/* <Box > */}
           <Image src="https://www.sender.net/wp-content/uploads/2022/07/best-newsletter-software.webp" />
-          {/* </Box> */}
         </Stack>
       </Box>
     </FormProvider>

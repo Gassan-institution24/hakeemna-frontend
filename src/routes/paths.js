@@ -87,6 +87,7 @@ export const paths = {
       create: `${ROOTS.DASHBOARD}/user/create`,
       account: `${ROOTS.DASHBOARD}/user/account`,
       share: `${ROOTS.DASHBOARD}/user/share`,
+      health: `${ROOTS.DASHBOARD}/user/myhealth`,
 
       financilmovment: `${ROOTS.DASHBOARD}/user/financilmovment`,
       patientsappointments: `${ROOTS.DASHBOARD}/user/appointments`,
