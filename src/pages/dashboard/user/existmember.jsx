@@ -3,9 +3,9 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import { TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
+import { MenuItem, TextField, Typography } from '@mui/material';
 
 import { useFindPatients } from 'src/api';
 import { useTranslate } from 'src/locales';
@@ -23,9 +23,9 @@ export default function Exist() {
     { id: 'identification_num', label: t('ID number') },
     { id: 'name_english', label: t('Name in english') },
     { id: 'name_arabic', label: t('Name Arabic') },
-    // { id: 'mobile_num1', label: t('Phone') },
     { id: 'options', label: t('options') },
   ];
+  const Family = [`${t('GrandFather')}`,`${t('GrandMother')}`,`${t('Father')}`,`${t('Mother')}`,`${t('Sister')}`,`${t('Son')}`,`${t('Daughter')}`];
 
   const table = useTable({ defaultRowsPerPage: 10 });
 
@@ -61,12 +61,22 @@ export default function Exist() {
 
   const { existPatient } = useFindPatients({
     identification_num: filters.identification_num || null,
-    // mobile_num1: filters.mobile_num1,
     name_english: filters.name_english,
     name_arabic: filters?.name_arabic,
   });
+
   return (
     <Box>
+      <Box sx={{ display: 'inline-flex' }}>
+        <Typography sx={{position:'relative', top:10}} variant='h4'>{t('Relative Relation')}</Typography>
+{
+  Family.map((members,i)=>(
+    <MenuItem key={i} onClick={()=>alert("under initialization")} sx={{border:'#00A76F 1px solid', p:1, m:1}} lang="ar">{members}</MenuItem>
+  ))
+}
+        
+      </Box>
+
       <Card sx={{ p: 3 }}>
         <Box
           rowGap={3}
@@ -74,7 +84,7 @@ export default function Exist() {
           display="grid"
           gridTemplateColumns={{
             xs: 'repeat(1, 1fr)',
-            sm: 'repeat(4, 1fr)',
+            sm: 'repeat(3, 1fr)',
           }}
         >
           <TextField
@@ -95,12 +105,6 @@ export default function Exist() {
             name="name_arabic"
             label={t('name in Arabic')}
           />
-          {/* <TextField
-          name="mobile_num1"
-          label={t('phone')}
-          onChange={handlePhoneInputChange}
-          type='number'
-        /> */}
         </Box>
       </Card>
 

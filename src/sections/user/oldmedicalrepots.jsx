@@ -64,7 +64,6 @@ export default function OldMedicalReports() {
   const { user } = useAuthContext();
   const { specialtiesData } = useGetSpecialties();
   const { oldmedicalreportsdata, refetch } = useGetPatintoldmedicalreports(user?.patient?._id);
-  console.log(oldmedicalreportsdata, 'oldmedicalreportsdata');
 
   const handleHover = (id) => {
     setHoveredButtonId(id);
@@ -79,7 +78,7 @@ export default function OldMedicalReports() {
 
   const delteeFile = async () => {
     try {
-      await axios.patch(`/api/oldmedicalreports/${FileToDelete}`, {
+      await axios.patch(`/api/oldmedicalreports/${FileToDelete?._id}`, {
         Activation: 'Inactive',
       });
       enqueueSnackbar(
@@ -106,7 +105,7 @@ export default function OldMedicalReports() {
     date: '',
     file: [],
     name: '',
-    note: null,
+    note: '',
     patient: user?.patient?._id,
     agree: !checkChange,
     specialty: '',
@@ -189,7 +188,18 @@ export default function OldMedicalReports() {
   const handleAlertClose = () => {
     setShowAlert(false);
   };
+
+  const closing = () => {
+    setShowAlert(false);
+    dialog.onFalse()
+  };
+
+  const opening = () => {
+    setShowAlert(false);
+    dialog.onTrue()
+  };
   const downloadAsPDF = (report) => {
+    setShowAlert(false);
     // Create a new PDF instance
     const pdf = new JsPdf();
 
@@ -222,7 +232,6 @@ export default function OldMedicalReports() {
   };
 
   const fetchImageAsBase64 = async (url) => {
-    // const response = await fetch(`http://localhost:3000/uploaded-files/patients/old_medical_reports/${url}`);
     const response = await fetch(
       `http://localhost:3000/uploaded-files/patients/old_medical_reports/${url}`
     );
@@ -240,8 +249,7 @@ export default function OldMedicalReports() {
     const images = await Promise.all(imagePromises);
 
     images.forEach((base64data, index) => {
-      // Adjust the positioning and styling of the image here
-      doc.addImage(base64data, 'JPEG', 10, index * 10 + 60, 180, 200); // Adjust as needed
+      doc.addImage(base64data, 'JPEG', 10, index * 10 + 60, 180, 200);
       if (index < imageUrls.length - 1) {
         doc.addPage();
       }
@@ -270,7 +278,7 @@ export default function OldMedicalReports() {
                   }}
                   onClick={handleAlertClose}
                 >
-                  Cancel
+                  {t('Cancel')}
                 </Button>
 
                 <Button
@@ -285,17 +293,17 @@ export default function OldMedicalReports() {
                     delteeFile();
                   }}
                 >
-                  Confirm
+                  {t('Confirm')}
                 </Button>
               </>
             }
           >
-            Please confirm the delettion
+           {t('Please confirm the delettion of ')}{FileToDelete?.name}
           </Alert>
         </Grow>
       )}
-      <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ gap: 1, mb: 5 }}>
-        {t('Upload Your Perscription')}
+      <Button variant="outlined" color="success" onClick={opening} sx={{ gap: 1, mb: 5 }}>
+        {t('Upload Your old medical report')}
         <Iconify icon="mingcute:add-line" />
       </Button>
 
@@ -333,7 +341,7 @@ export default function OldMedicalReports() {
                 <DatePicker
                   {...field}
                   label={t('Date of making the medical report*')}
-                  maxDate={maxDate} // Set maxDate to prevent selecting dates bigger than today
+                  maxDate={maxDate}
                   sx={{ mb: 2 }}
                   slotProps={{
                     textField: {
@@ -383,7 +391,7 @@ export default function OldMedicalReports() {
             sx={{
               color: 'text.secondary',
               mt: { md: -2.5, xs: -2.3 },
-              ml: curLangAr ? { md: -31, xs: -5 } : { md: -10, xs: 4 },
+              ml: curLangAr ? { md: -31, xs: -5 } : { md: -7.5, xs: 4 },
               typography: 'caption',
               textAlign: 'center',
               fontSize: { md: 12, xs: 10 },
@@ -400,7 +408,7 @@ export default function OldMedicalReports() {
             .
           </Typography>
           <DialogActions>
-            <Button onClick={dialog.onFalse} variant="outlined" color="inherit">
+            <Button onClick={closing} variant="outlined" color="inherit">
               {t('Cancel')}
             </Button>
             {checkChange === false ? (
@@ -471,7 +479,7 @@ export default function OldMedicalReports() {
 
                   <Button
                     onClick={() => {
-                      setFileToDelete(info?._id);
+                      setFileToDelete(info);
                       setShowAlert(true);
                     }}
                   >

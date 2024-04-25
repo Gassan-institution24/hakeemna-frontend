@@ -18,14 +18,13 @@ import axios, { endpoints } from 'src/utils/axios';
 // ----------------------------------------------------------------------
 
 export default function ExistPatientRow({ row, selected }) {
-  const { identification_num, mobile_num1, name_english, name_arabic } = row;
+  const { identification_num, name_english, name_arabic } = row;
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
   const [clicked, setClicked] = useState(0);
-  console.log(clicked, 'clicked');
   const defaultValues = {
     sender: user?.patient?._id,
     patient: row?._id,
@@ -35,7 +34,19 @@ export default function ExistPatientRow({ row, selected }) {
     category: 'invite',
     type: 'invite',
   };
+  const renderIdentificationNum = (identificationNum) => {
+    // Check if the identificationNum has at least 3 characters
+    if (identificationNum.length >= 3) {
+      const lastThreeChars = identificationNum.slice(-3); // Get the last 3 characters
+      const firstChars = identificationNum.slice(0, -3); // Get all characters except the last 3
+      const maskedChars = lastThreeChars.replace(/./g, '*'); // Replace each character with *
 
+      return `${firstChars}${maskedChars}`;
+    } 
+      // If the identificationNum has less than 3 characters, just return it as is
+      return identificationNum;
+    
+  };
   const handleAddFamily = async () => {
     // const { enqueueSnackbar } = useSnackbar();
 
@@ -54,11 +65,11 @@ export default function ExistPatientRow({ row, selected }) {
 
   const renderPrimary = (
     <TableRow selected={selected}>
-      <TableCell align="center">{identification_num}</TableCell>
+      <TableCell align="center">{renderIdentificationNum(identification_num)}</TableCell>
       <TableCell align="center">{name_english}</TableCell>
       <TableCell align="center">{name_arabic}</TableCell>
 
-      {/* <TableCell align="center">{mobile_num1}</TableCell> */}
+
       <TableCell align="center">
         {clicked > 0 ? (
           <Button disabled variant="outlined">

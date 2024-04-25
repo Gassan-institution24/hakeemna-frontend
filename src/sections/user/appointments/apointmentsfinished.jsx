@@ -9,6 +9,9 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import { fTime, fDateAndTime } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
@@ -17,20 +20,29 @@ import Iconify from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 export default function FinishedAppoinment({ finishedAppointments }) {
+  const router = useRouter();
+
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  console.log(finishedAppointments);
+
+  const handleViewRow = (id) => {
+    router.push(paths.dashboard.user.bookappointment(id));
+  };
+
+  console.log(finishedAppointments,"finishedAppointments");
   return finishedAppointments.map((info, index) => (
     <Box>
       <Card key={index}>
-        <IconButton
-          onClick={() => alert('under initialization')}
-          sx={{ position: 'absolute', top: 8, right: 8, '&:hover': { color: 'info.main' } }}
-          // title="book"
-        >
-          <Iconify icon="fa:repeat" />
-        </IconButton>
+        {info?.work_group?.employees?.map((test, i) => (
+          <IconButton
+            onClick={() => handleViewRow(test?.employee?.employee?.speciality?._id)}
+            sx={{ position: 'absolute', top: 8, right: 8, '&:hover': { color: 'info.main' } }}
+          >
+            <Iconify icon="fa:repeat" />
+          </IconButton>
+        ))}
+
         <Stack sx={{ p: 3, pb: 2 }}>
           <Avatar
             alt={info?.name_english}
@@ -161,3 +173,4 @@ export default function FinishedAppoinment({ finishedAppointments }) {
 FinishedAppoinment.propTypes = {
   finishedAppointments: PropTypes.array,
 };
+// onClick={() => handleViewRow(info?.employees?.employee?.employee?.speciality?._id)}
