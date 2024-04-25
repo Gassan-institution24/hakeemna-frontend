@@ -158,23 +158,6 @@ export default function AppointmentBooking() {
     />
   );
 
-  // const TABS = [
-  //   {
-  //     value: 'inclinic',
-  //     label: t('In clinic'),
-  //     icon: <Iconify icon="fa6-regular:hospital" width={24} />,
-  //   },
-  //   // {
-  //   //   value: 'online',
-  //   //   label: t('Online'),
-  //   //   icon: <Iconify icon="streamline:online-medical-call-service" width={24} />,
-  //   // },
-  // ];
-  // const [currentTab, setCurrentTab] = useState('inclinic');
-  // const handleChangeTab = useCallback((event, newValue) => {
-  // setCurrentTab(newValue);
-  // }, []);
-
   return (
     <Container maxWidth="xl">
       <Stack
@@ -249,6 +232,5 @@ function applyFilter({ inputData, search, comparator, filters, sortBy }) {
     );
   }
 
-  // console.log('inputData',inputData)
   return inputData;
 }

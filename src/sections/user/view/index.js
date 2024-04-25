@@ -5,6 +5,7 @@ export { default as Pharmaces } from '../pharmacies';
 export { default as Family } from './user-family-view';
 export { default as specialities } from './specialities';
 export { default as UserEditView } from './contactUs-view';
+export { default as MyHealth } from './user-myHealth-view';
 export { default as Emergency } from './user-emergency-view';
 export { default as UserCreateView } from './user-create-view';
 export { default as UserAppointmentsPage } from './appointments';
