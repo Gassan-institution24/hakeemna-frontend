@@ -163,7 +163,7 @@ export default function EmployeesTableView({ departmentData }) {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
           variant: 'error',
         });
         console.error(error);
@@ -186,7 +186,7 @@ export default function EmployeesTableView({ departmentData }) {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
           variant: 'error',
         });
         console.error(error);
@@ -210,7 +210,7 @@ export default function EmployeesTableView({ departmentData }) {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);
@@ -247,7 +247,7 @@ export default function EmployeesTableView({ departmentData }) {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);
@@ -453,9 +453,9 @@ export default function EmployeesTableView({ departmentData }) {
               }
               color={
                 checkAcl({ category: 'department', subcategory: 'employees', acl: 'update' }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((info) => info.status === 'inactive')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((info) => info.status === 'inactive')
                   ? 'primary'
                   : 'error'
               }
@@ -601,7 +601,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.employee?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.country?.name_english &&
           data?.employee?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (data?.employee?.country?.name_arabic &&
           data?.employee?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.city?.name_english &&
@@ -610,10 +610,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.employee?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.employee?.nationality?.name_english &&
           data?.employee?.nationality?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         (data?.employee?.nationality?.name_arabic &&
           data?.employee?.nationality?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !==
-            -1) ||
+          -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

@@ -168,13 +168,12 @@ export default function WorkGroupsTableView({ departmentData }) {
         socket.emit('updated', {
           user,
           link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
-          msg: `activated work group <strong>${
-            row.name_english || ''
-          }</strong> in department <strong>${departmentData.name_english}</strong>`,
+          msg: `activated work group <strong>${row.name_english || ''
+            }</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
           variant: 'error',
         });
         console.error(error);
@@ -194,13 +193,12 @@ export default function WorkGroupsTableView({ departmentData }) {
         socket.emit('updated', {
           user,
           link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
-          msg: `inactivated work group <strong>${
-            row.name_english || ''
-          }</strong> in department <strong>${departmentData.name_english}</strong>`,
+          msg: `inactivated work group <strong>${row.name_english || ''
+            }</strong> in department <strong>${departmentData.name_english}</strong>`,
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
           variant: 'error',
         });
         console.error(error);
@@ -224,7 +222,7 @@ export default function WorkGroupsTableView({ departmentData }) {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);
@@ -261,7 +259,7 @@ export default function WorkGroupsTableView({ departmentData }) {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);
@@ -457,9 +455,9 @@ export default function WorkGroupsTableView({ departmentData }) {
                   subcategory: 'management_tables',
                   acl: 'update',
                 }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'inactive')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'inactive')
                   ? 'primary'
                   : 'error'
               }
