@@ -9,13 +9,12 @@ import IconButton from '@mui/material/IconButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import uuidv4 from 'src/utils/uuidv4';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { sendMessage, createConversation } from 'src/api/chat';
+import { useAuthContext } from 'src/auth/hooks';
+import { createConversation } from 'src/api/chat';
 
 import Iconify from 'src/components/iconify';
-import { useAuthContext } from 'src/auth/hooks';
-import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 

@@ -1,25 +1,15 @@
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
-import CardHeader from '@mui/material/CardHeader';
-import IconButton from '@mui/material/IconButton';
-import ListItemText from '@mui/material/ListItemText';
 
-import { Container } from '@mui/material';
-import { fCurrency } from 'src/utils/format-number';
+import socket from 'src/socket';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetConversation } from 'src/api/chat';
 
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
-import ChatHeaderDetail from 'src/components/chat/chat-header-detail';
 import ChatMessageList from 'src/components/chat/chat-message-list';
 import ChatMessageInput from 'src/components/chat/chat-message-input';
-import { useGetConversation } from 'src/api/chat';
-import { useAuthContext } from 'src/auth/hooks';
-import { useEffect } from 'react';
-import socket from 'src/socket';
 
 
 // ----------------------------------------------------------------------

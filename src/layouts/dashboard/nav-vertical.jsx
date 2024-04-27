@@ -14,7 +14,6 @@ import {
   MenuItem,
   Typography,
   IconButton,
-  Badge,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
