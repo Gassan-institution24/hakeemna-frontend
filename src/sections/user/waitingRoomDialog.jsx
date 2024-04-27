@@ -113,7 +113,7 @@ export default function WatingRoomDialog({ employeesData }) {
       }, 1000);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
     }

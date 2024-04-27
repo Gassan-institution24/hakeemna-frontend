@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 
 import { useGetTicketCategories, useGetUsers } from 'src/api';
 import Iconify from 'src/components/iconify';
-import { Grid, ListItemText, MenuItem, Select, TextField } from '@mui/material';
+import { Grid, ListItemText, MenuItem, Select, TextField, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useSnackbar } from 'notistack';
@@ -22,7 +22,7 @@ import { useSnackbar } from 'notistack';
 
 const priorityOptions = ['very urgent', 'urgent', 'normal']
 
-export default function OrderDetailsInfo({ ticket }) {
+export default function OrderDetailsInfo({ ticket, refetch }) {
   const { enqueueSnackbar } = useSnackbar()
 
   const { ticketCategoriesData } = useGetTicketCategories();
@@ -37,8 +37,10 @@ export default function OrderDetailsInfo({ ticket }) {
       axiosInstance.patch(endpoints.tickets.one(ticket._id), { category: e.target.value })
       setCategory(e.target.value)
       enqueueSnackbar('changed successfully!')
+      refetch()
     } catch (error) {
       enqueueSnackbar(error.message)
+      refetch()
     }
   }
   const handlePriorityChange = (e) => {
@@ -46,8 +48,10 @@ export default function OrderDetailsInfo({ ticket }) {
       axiosInstance.patch(endpoints.tickets.one(ticket._id), { priority: e.target.value })
       setPriority(e.target.value)
       enqueueSnackbar('changed successfully!')
+      refetch()
     } catch (error) {
       enqueueSnackbar(error.message)
+      refetch()
     }
   }
   const handleAssignedToChange = (e) => {
@@ -55,8 +59,10 @@ export default function OrderDetailsInfo({ ticket }) {
       axiosInstance.patch(endpoints.tickets.one(ticket._id), { assigned_to: e.target.value })
       setAssignedTo(e.target.value)
       enqueueSnackbar('changed successfully!')
+      refetch()
     } catch (error) {
       enqueueSnackbar(error.message)
+      refetch()
     }
   }
 
@@ -100,7 +106,7 @@ export default function OrderDetailsInfo({ ticket }) {
             },
             {
               label: 'URL',
-              value: ticket?.URL,
+              value: (<Tooltip title={ticket.URL.length > 20 && ticket.URL}> {ticket.URL.length > 20 ? `${ticket.URL.slice(0, 20)}..` : ticket.URL}</Tooltip>),
             },
             {
               label: 'assigned to',
@@ -126,6 +132,7 @@ export default function OrderDetailsInfo({ ticket }) {
                     typography: 'body2',
                     color: 'text.secondary',
                     mb: 0.5,
+                    mr: 2,
                   }}
                   secondaryTypographyProps={{
                     typography: 'subtitle2',
@@ -156,10 +163,11 @@ export default function OrderDetailsInfo({ ticket }) {
           </Grid>
         </Grid>
       </Stack>
-    </Card>
+    </Card >
   );
 }
 
 OrderDetailsInfo.propTypes = {
   ticket: PropTypes.object,
+  refetch: PropTypes.func,
 };

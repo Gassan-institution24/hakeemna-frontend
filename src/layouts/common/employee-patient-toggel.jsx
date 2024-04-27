@@ -36,7 +36,7 @@ export default function EmployeePatientToggel() {
     } catch (error) {
       setLoading(false);
       console.error(error);
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
     }

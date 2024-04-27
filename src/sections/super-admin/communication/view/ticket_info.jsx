@@ -20,7 +20,7 @@ import OrderDetailsHistory from '../order-details-history';
 
 // ----------------------------------------------------------------------
 
-export default function OrderDetailsView({ ticket }) {
+export default function OrderDetailsView({ ticket, refetch }) {
     const settings = useSettingsContext();
 
     const { enqueueSnackbar } = useSnackbar()
@@ -32,10 +32,12 @@ export default function OrderDetailsView({ ticket }) {
             axiosInstance.patch(endpoints.tickets.one(ticket._id), { status: newValue })
             setStatus(newValue);
             enqueueSnackbar('changed successfully!')
+            refetch()
         } catch (error) {
             enqueueSnackbar(error.message)
+            refetch()
         }
-    }, [ticket._id, enqueueSnackbar]);
+    }, [ticket._id, enqueueSnackbar, refetch]);
 
     return (
         <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -43,6 +45,7 @@ export default function OrderDetailsView({ ticket }) {
                 backLink={paths.superadmin.communication.root}
                 ticket={ticket}
                 status={status}
+                refetch={refetch}
                 onChangeStatus={handleChangeStatus}
                 statusOptions={['pending', 'processing', 'waiting', 'completed', 'closed']}
             />
@@ -50,19 +53,14 @@ export default function OrderDetailsView({ ticket }) {
             <Grid container spacing={3}>
                 <Grid xs={12} md={7}>
                     <Stack spacing={3} direction={{ xs: 'column-reverse', md: 'column' }}>
-                        <OrderDetailsInfo ticket={ticket} />
+                        <OrderDetailsInfo ticket={ticket} refetch={refetch} />
                         <OrderDetailsHistory history={ticket.history} />
                     </Stack>
                 </Grid>
 
                 <Grid xs={12} md={5}>
                     <OrderDetailsItems
-                        items={ticket.items}
-                        taxes={ticket.taxes}
-                        shipping={ticket.shipping}
-                        discount={ticket.discount}
-                        subTotal={ticket.subTotal}
-                        totalAmount={ticket.totalAmount}
+                        ticket={ticket}
                     />
                 </Grid>
             </Grid>
@@ -72,4 +70,5 @@ export default function OrderDetailsView({ ticket }) {
 
 OrderDetailsView.propTypes = {
     ticket: PropTypes.object,
+    refetch: PropTypes.func,
 };

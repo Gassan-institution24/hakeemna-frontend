@@ -158,7 +158,7 @@ export default function AppointConfigView() {
         refetch();
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
           variant: 'error',
         });
         console.error(error);
@@ -175,7 +175,7 @@ export default function AppointConfigView() {
         refetch();
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
           variant: 'error',
         });
         console.error(error);
@@ -193,7 +193,7 @@ export default function AppointConfigView() {
       refetch();
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);
@@ -221,7 +221,7 @@ export default function AppointConfigView() {
       refetch();
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);
@@ -322,7 +322,7 @@ export default function AppointConfigView() {
             onFilters={handleFilters}
             //
             dateError={dateError}
-            // serviceOptions={appointmenttypesData.map((option, idx)  => option)}
+          // serviceOptions={appointmenttypesData.map((option, idx)  => option)}
           />
 
           {canReset && (
@@ -379,9 +379,9 @@ export default function AppointConfigView() {
                   subcategory: 'appointment_configs',
                   acl: 'update',
                 }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'canceled')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'canceled')
                   ? 'primary'
                   : 'error'
               }
