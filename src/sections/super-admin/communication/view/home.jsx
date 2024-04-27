@@ -27,8 +27,8 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import TicketsToolbar from '../tickets-toolbar';
 import AppointmentsRow from '../ticket-row';
+import TicketsToolbar from '../tickets-toolbar';
 import HistoryFiltersResult from '../ticket-filters-result';
 
 // ----------------------------------------------------------------------

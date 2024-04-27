@@ -15,8 +15,8 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
-import { useAuthContext } from 'src/auth/hooks';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { clickConversation } from 'src/api/chat';
 
 import { useGetNavItem } from './hooks';

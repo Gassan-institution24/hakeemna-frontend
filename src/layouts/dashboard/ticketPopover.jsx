@@ -1,28 +1,28 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Box, Stack, MenuItem, Divider, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Box, Stack, Divider, MenuItem, Typography } from '@mui/material';
 
 import axios, { endpoints } from 'src/utils/axios';
 
+import socket from 'src/socket';
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetConversation } from 'src/api/chat';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetTickets, useGetTicketCategories } from 'src/api';
 
+import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover from 'src/components/custom-popover';
-// import CustomPopover from "src/components/custom-popover";
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useCallback, useEffect, useState } from 'react';
-import { useGetTicketCategories, useGetTickets } from 'src/api';
-import { LoadingButton } from '@mui/lab';
 import ChatMessageList from 'src/components/chat/chat-message-list';
 import ChatMessageInput from 'src/components/chat/chat-message-input';
 import ChatHeaderDetail from 'src/components/chat/chat-header-detail';
-import { useAuthContext } from 'src/auth/hooks';
-import Iconify from 'src/components/iconify';
-import { useGetConversation } from 'src/api/chat';
-import socket from 'src/socket';
+// import CustomPopover from "src/components/custom-popover";
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 export default function TicketPopover({ open, onClose }) {
   const { t } = useTranslate();

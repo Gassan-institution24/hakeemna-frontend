@@ -9,10 +9,12 @@ import { paths } from 'src/routes/paths';
 
 // import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
 
-import { useSettingsContext } from 'src/components/settings';
+import { useSnackbar } from 'notistack';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
-import { useSnackbar } from 'notistack';
+
+import { useSettingsContext } from 'src/components/settings';
+
 import OrderDetailsInfo from '../order-details-info';
 import OrderDetailsItems from '../order-details-item';
 import OrderDetailsToolbar from '../order-details-toolbar';

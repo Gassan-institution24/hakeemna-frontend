@@ -1,6 +1,8 @@
 import { Helmet } from 'react-helmet-async';
-import { useGetTicket } from 'src/api';
+
 import { useParams } from 'src/routes/hooks';
+
+import { useGetTicket } from 'src/api';
 
 import TicketInfo from 'src/sections/super-admin/communication/view/ticket_info';
 
