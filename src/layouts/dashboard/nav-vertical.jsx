@@ -14,6 +14,7 @@ import {
   MenuItem,
   Typography,
   IconButton,
+  Badge,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -114,7 +115,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       window.location.reload();
       setDialog(false);
     } catch (error) {
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       setDialog(false);
@@ -227,7 +228,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+      // scrollDuration={500}
       />
       {isEmployee && (
         <Box
@@ -428,13 +429,15 @@ export default function NavVertical({ openNav, onCloseNav }) {
       <Box
         sx={{
           position: 'fixed',
-          bottom: { md: 30, sm: 10 },
-          right: { md: 30, sm: 10 },
+          bottom: { md: 30, xs: 10 },
+          right: { md: 30, xs: 10 },
           zIndex: 99,
         }}
       >
         <IconButton onClick={() => setTicketDialog(true)}>
+          {/* <Badge badgeContent={1} color="error"> */}
           <Iconify sx={{ color: 'primary.main' }} width="70px" icon="mdi:customer-service" />
+          {/* </Badge> */}
         </IconButton>
         <TicketPopover open={ticketDialog} onClose={() => setTicketDialog(false)} />
       </Box>

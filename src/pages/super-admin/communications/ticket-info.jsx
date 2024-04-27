@@ -8,7 +8,7 @@ import TicketInfo from 'src/sections/super-admin/communication/view/ticket_info'
 
 export default function TicketInfoPage() {
   const { id } = useParams();
-  const { data } = useGetTicket(id);
+  const { data, refetch } = useGetTicket(id);
   return (
     <>
       <Helmet>
@@ -16,7 +16,7 @@ export default function TicketInfoPage() {
         <meta name="description" content="meta" />
       </Helmet>
 
-      {data && <TicketInfo ticket={data} />}
+      {data && <TicketInfo ticket={data} refetch={refetch} />}
     </>
   );
 }

@@ -253,7 +253,7 @@ function ReviewItem({ item }) {
       enqueueSnackbar(t('updated successfully'));
     } catch (error) {
       console.log(error);
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
     }

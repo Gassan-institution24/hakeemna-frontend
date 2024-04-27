@@ -68,7 +68,7 @@ export default function Doctorpage() {
   const patientEmail = user?.email;
   const [selectedAppointmentType, setSelectedAppointmentType] = useState('');
 
-  const { appointmentsData,appointmentTypes, refetch } = useGetEmployeeSelectedAppointments({
+  const { appointmentsData, appointmentTypes, refetch } = useGetEmployeeSelectedAppointments({
     id,
     startDate: currentDateTime, // Date selected by the user
     appointmentType: selectedAppointmentType, // Type selected by the user
@@ -118,7 +118,7 @@ export default function Doctorpage() {
       }, 1000);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
     }
@@ -282,7 +282,7 @@ export default function Doctorpage() {
           }}
         >
           <MenuItem value="">{t('All')}</MenuItem>
-          {appointmenttypesData.filter((one)=>appointmentTypes.includes(one._id)).map((type, test) => (
+          {appointmenttypesData.filter((one) => appointmentTypes.includes(one._id)).map((type, test) => (
             <MenuItem key={test} value={type._id}>
               {type.name_english}
             </MenuItem>
@@ -467,9 +467,9 @@ export default function Doctorpage() {
           {renderFollows}
 
           {data?.unit_service?.country?.name_english ||
-          data?.unit_service?.city?.name_english ||
-          data?.unit_service?.name_english ||
-          data?.employee?.description
+            data?.unit_service?.city?.name_english ||
+            data?.unit_service?.name_english ||
+            data?.employee?.description
             ? renderAbout
             : ''}
 

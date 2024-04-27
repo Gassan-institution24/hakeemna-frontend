@@ -172,7 +172,7 @@ export default function RoomsTableView() {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
           variant: 'error',
         });
         console.error(error);
@@ -196,7 +196,7 @@ export default function RoomsTableView() {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
           variant: 'error',
         });
         console.error(error);
@@ -220,7 +220,7 @@ export default function RoomsTableView() {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);
@@ -255,7 +255,7 @@ export default function RoomsTableView() {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);
@@ -444,9 +444,9 @@ export default function RoomsTableView() {
                   subcategory: 'management_tables',
                   acl: 'update',
                 }) &&
-                dataFiltered
-                  .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'inactive')
+                  dataFiltered
+                    .filter((row) => table.selected.includes(row._id))
+                    .some((data) => data.status === 'inactive')
                   ? 'primary'
                   : 'error'
               }
