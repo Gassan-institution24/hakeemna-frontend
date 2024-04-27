@@ -52,7 +52,7 @@ export default function ServiceUnitPopover() {
     } catch (error) {
       console.error(error);
       setErrorMsg(error);
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       loading.onFalse();
@@ -69,7 +69,7 @@ export default function ServiceUnitPopover() {
     } catch (error) {
       console.error(error);
       loading.onFalse();
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       popover.onClose();

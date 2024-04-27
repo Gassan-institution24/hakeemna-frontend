@@ -113,7 +113,7 @@ export default function TableNewEditForm() {
       //   router.push(paths.superadmin.subscriptions.root);
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);

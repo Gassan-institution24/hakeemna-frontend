@@ -107,7 +107,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
 
       onClose();
     } catch (error) {
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);
@@ -212,7 +212,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                 <RHFSelect
                   name="nationality"
                   label={t('nationality')}
-                  // InputLabelProps={{ shrink: true }}
+                // InputLabelProps={{ shrink: true }}
                 >
                   {countriesData.map((option, index, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -224,7 +224,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   // onChange={handleCountryChange}
                   name="country"
                   label={t('country')}
-                  // InputLabelProps={{ shrink: true }}
+                // InputLabelProps={{ shrink: true }}
                 >
                   {countriesData.map((option, index, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -236,7 +236,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                   name="city"
                   label="City"
                   PaperPropsSx={{ textTransform: 'capitalize' }}
-                  // InputLabelProps={{ shrink: true }}
+                // InputLabelProps={{ shrink: true }}
                 >
                   {tableData.map((option, index, idx) => (
                     <MenuItem lang="ar" key={idx} value={option._id}>
@@ -247,7 +247,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                 <RHFSelect
                   name="marital_status"
                   label={t('marital status')}
-                  // InputLabelProps={{ shrink: true }}
+                // InputLabelProps={{ shrink: true }}
                 >
                   <MenuItem lang="ar" value="single">
                     {t('single')}
@@ -268,7 +268,7 @@ export default function BookAppointmentManually({ refetch, appointment, onClose,
                 <RHFSelect
                   name="gender"
                   label={t('gender')}
-                  // InputLabelProps={{ shrink: true }}
+                // InputLabelProps={{ shrink: true }}
                 >
                   <MenuItem lang="ar" value="male">
                     {t('male')}

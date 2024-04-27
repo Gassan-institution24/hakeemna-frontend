@@ -42,10 +42,10 @@ export default function ExistPatientRow({ row, selected }) {
       const maskedChars = lastThreeChars.replace(/./g, '*'); // Replace each character with *
 
       return `${firstChars}${maskedChars}`;
-    } 
-      // If the identificationNum has less than 3 characters, just return it as is
-      return identificationNum;
-    
+    }
+    // If the identificationNum has less than 3 characters, just return it as is
+    return identificationNum;
+
   };
   const handleAddFamily = async () => {
     // const { enqueueSnackbar } = useSnackbar();
@@ -56,7 +56,7 @@ export default function ExistPatientRow({ row, selected }) {
       enqueueSnackbar(t('An invitation to join the family has been sent successfully'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);

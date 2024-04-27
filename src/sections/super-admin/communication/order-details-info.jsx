@@ -1,28 +1,22 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import CardHeader from '@mui/material/CardHeader';
-import Typography from '@mui/material/Typography';
+import { Grid, Tooltip, MenuItem, TextField, ListItemText } from '@mui/material';
 
-import { useGetTicketCategories, useGetUsers } from 'src/api';
-import Iconify from 'src/components/iconify';
-import { Grid, ListItemText, MenuItem, Select, TextField } from '@mui/material';
-import { useState } from 'react';
 import axiosInstance, { endpoints } from 'src/utils/axios';
-import { useSnackbar } from 'notistack';
+
+import { useGetUsers, useGetTicketCategories } from 'src/api';
+
 
 // ----------------------------------------------------------------------
 
 const priorityOptions = ['very urgent', 'urgent', 'normal']
 
-export default function OrderDetailsInfo({ ticket }) {
+export default function OrderDetailsInfo({ ticket, refetch }) {
   const { enqueueSnackbar } = useSnackbar()
 
   const { ticketCategoriesData } = useGetTicketCategories();
@@ -37,8 +31,10 @@ export default function OrderDetailsInfo({ ticket }) {
       axiosInstance.patch(endpoints.tickets.one(ticket._id), { category: e.target.value })
       setCategory(e.target.value)
       enqueueSnackbar('changed successfully!')
+      refetch()
     } catch (error) {
       enqueueSnackbar(error.message)
+      refetch()
     }
   }
   const handlePriorityChange = (e) => {
@@ -46,8 +42,10 @@ export default function OrderDetailsInfo({ ticket }) {
       axiosInstance.patch(endpoints.tickets.one(ticket._id), { priority: e.target.value })
       setPriority(e.target.value)
       enqueueSnackbar('changed successfully!')
+      refetch()
     } catch (error) {
       enqueueSnackbar(error.message)
+      refetch()
     }
   }
   const handleAssignedToChange = (e) => {
@@ -55,8 +53,10 @@ export default function OrderDetailsInfo({ ticket }) {
       axiosInstance.patch(endpoints.tickets.one(ticket._id), { assigned_to: e.target.value })
       setAssignedTo(e.target.value)
       enqueueSnackbar('changed successfully!')
+      refetch()
     } catch (error) {
       enqueueSnackbar(error.message)
+      refetch()
     }
   }
 
@@ -100,7 +100,7 @@ export default function OrderDetailsInfo({ ticket }) {
             },
             {
               label: 'URL',
-              value: ticket?.URL,
+              value: (<Tooltip title={ticket.URL.length > 20 && ticket.URL}> {ticket.URL.length > 20 ? `${ticket.URL.slice(0, 20)}..` : ticket.URL}</Tooltip>),
             },
             {
               label: 'assigned to',
@@ -126,6 +126,7 @@ export default function OrderDetailsInfo({ ticket }) {
                     typography: 'body2',
                     color: 'text.secondary',
                     mb: 0.5,
+                    mr: 2,
                   }}
                   secondaryTypographyProps={{
                     typography: 'subtitle2',
@@ -156,10 +157,11 @@ export default function OrderDetailsInfo({ ticket }) {
           </Grid>
         </Grid>
       </Stack>
-    </Card>
+    </Card >
   );
 }
 
 OrderDetailsInfo.propTypes = {
   ticket: PropTypes.object,
+  refetch: PropTypes.func,
 };
