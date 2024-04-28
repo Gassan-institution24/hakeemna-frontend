@@ -46,5 +46,10 @@ export function useGetTicket(id) {
     [data, error, isLoading, isValidating]
   );
 
-  return memoizedValue;
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
 }

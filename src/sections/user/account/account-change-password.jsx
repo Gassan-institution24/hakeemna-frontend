@@ -73,7 +73,7 @@ export default function AccountChangePassword() {
         enqueueSnackbar(response.data || `${t('Password update failed!')}`, { variant: 'error' });
       }
     } catch (error) {
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
     }

@@ -189,7 +189,7 @@ export default function OldMedicalReports() {
       refetch();
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
     }
@@ -308,8 +308,12 @@ export default function OldMedicalReports() {
               </>
             }
           >
+<<<<<<< HEAD
             {t('Please confirm the delettion of ')}
             {FileToDelete?.name}
+=======
+            {t('Please confirm the delettion of ')}{FileToDelete?.name}
+>>>>>>> master
           </Alert>
         </Grow>
       )}

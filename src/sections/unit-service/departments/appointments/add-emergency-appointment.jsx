@@ -122,7 +122,7 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
       onClose();
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);
@@ -158,7 +158,7 @@ export default function BookManually({ departmentData, onClose, refetch, ...othe
                         newValue,
                         user?.employee?.employee_engagements[user?.employee.selected_engagement]
                           ?.unit_service?.country?.time_zone ||
-                          Intl.DateTimeFormat().resolvedOptions().timeZone
+                        Intl.DateTimeFormat().resolvedOptions().timeZone
                       );
                       setValue('start_time', new Date(selectedTime));
                     }}

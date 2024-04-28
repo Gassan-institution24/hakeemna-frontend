@@ -60,23 +60,26 @@ export function useGetConversations() {
 // ----------------------------------------------------------------------
 
 export function useGetConversation(conversationId) {
-  const URL = conversationId
-    ? [endpoints.chat, { params: { conversationId, endpoint: 'conversation' } }]
-    : '';
+  const URL = endpoints.chat.one(conversationId);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, options);
 
   const memoizedValue = useMemo(
     () => ({
-      conversation: data?.conversation,
+      conversation: data,
       conversationLoading: isLoading,
       conversationError: error,
       conversationValidating: isValidating,
     }),
-    [data?.conversation, error, isLoading, isValidating]
+    [data, error, isLoading, isValidating]
   );
 
-  return memoizedValue;
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
 }
 
 // ----------------------------------------------------------------------
@@ -94,52 +97,9 @@ export async function sendMessage(conversationId, messageData) {
   /**
    * Work on server
    */
-  // const data = { conversationId, messageData };
-  // await axios.put(endpoints.chat, data);
+  const data = { conversationId, messageData };
+  await axios.put(endpoints.chat, data);
 
-  /**
-   * Work in local
-   */
-  mutate(
-    CONVERSATION_URL,
-    (currentData) => {
-      const { conversation: currentConversation } = currentData;
-
-      const conversation = {
-        ...currentConversation,
-        messages: [...currentConversation.messages, messageData],
-      };
-
-      return {
-        conversation,
-      };
-    },
-    false
-  );
-
-  /**
-   * Work in local
-   */
-  mutate(
-    CONVERSATIONS_URL,
-    (currentData) => {
-      const { conversations: currentConversations } = currentData;
-
-      const conversations = currentConversations.map((conversation, idx) =>
-        conversation.id === conversationId
-          ? {
-              ...conversation,
-              messages: [...conversation.messages, messageData],
-            }
-          : conversation
-      );
-
-      return {
-        conversations,
-      };
-    },
-    false
-  );
 }
 
 // ----------------------------------------------------------------------
