@@ -24,7 +24,6 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 export default function FamilyMembers() {
   const { user, login } = useAuthContext();
   const { Data } = useGetPatientFamily(user?.patient?._id);
-
   const popover = usePopover();
   const confirm = useBoolean();
   const showPassword = useBoolean();
