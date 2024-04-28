@@ -471,6 +471,10 @@ export const endpoints = {
     all: '/api/tickets',
     one: (id) => `/api/tickets/${id}`,
   },
+  chat: {
+    all: '/api/chat',
+    one: (id) => `/api/chat/${id}`,
+  },
 
   tables: {
     // countries: `/api/countries`,

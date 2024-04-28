@@ -133,7 +133,7 @@ export default function TableNewEditForm({ currentTable }) {
       // router.push(paths.unitservice.tables.rooms.root);
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? error.arabic_message || error.message : error.message, {
+      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
         variant: 'error',
       });
       console.error(error);

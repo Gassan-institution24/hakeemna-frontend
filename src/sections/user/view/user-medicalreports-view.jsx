@@ -13,7 +13,6 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import Bmi from '../bmi';
 import Medicalreports from '../medicalreports';
 import OldMedicalReports from '../oldmedicalrepots';
 // ----------------------------------------------------------------------

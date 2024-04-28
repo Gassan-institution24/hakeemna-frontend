@@ -15,9 +15,12 @@ import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';
 
 import { fDateTime } from 'src/utils/format-time';
 
+import Scrollbar from 'src/components/scrollbar';
+
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsHistory({ history }) {
+  console.log('history', history)
   const renderSummary = (
     <Stack
       spacing={2}
@@ -65,7 +68,7 @@ export default function OrderDetailsHistory({ history }) {
       {history?.map((item, index) => {
         const firstTimeline = index === 0;
 
-        const lastTimeline = index === history.timeline.length - 1;
+        const lastTimeline = index === history.length - 1;
 
         return (
           <TimelineItem key={item.note}>
@@ -76,10 +79,14 @@ export default function OrderDetailsHistory({ history }) {
 
             <TimelineContent>
               <Typography variant="subtitle2">{item.note}</Typography>
-
-              <Box sx={{ color: 'text.disabled', typography: 'caption', mt: 0.5 }}>
-                {fDateTime(item.note)}
-              </Box>
+              <Stack direction='row' gap={5}>
+                <Box sx={{ color: 'text.disabled', typography: 'caption', mt: 0.5 }}>
+                  {fDateTime(item.date)}
+                </Box>
+                <Box sx={{ color: 'text.disabled', typography: 'caption', mt: 0.5 }}>
+                  {item.user?.email}
+                </Box>
+              </Stack>
             </TimelineContent>
           </TimelineItem>
         );
@@ -90,16 +97,17 @@ export default function OrderDetailsHistory({ history }) {
   return (
     <Card>
       <CardHeader title="History" />
-      <Stack
+      <Scrollbar
         spacing={3}
         alignItems={{ md: 'flex-start' }}
         direction={{ xs: 'column-reverse', md: 'row' }}
-        sx={{ p: 3 }}
+        sx={{ p: 3, mt: 2, height: '400px' }}
+
       >
         {renderTimeline}
 
-        {renderSummary}
-      </Stack>
+        {/* {renderSummary} */}
+      </Scrollbar>
     </Card>
   );
 }
