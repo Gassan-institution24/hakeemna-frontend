@@ -130,11 +130,19 @@ export default function Create() {
           </Typography>
 
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <RHFTextField name="name_english" label={t("full name english")}  onChange={handleEnglishInputChange} />
-            <RHFTextField name="name_arabic" label={t("full name arabic")} onChange={handleArabicInputChange}  />
+            <RHFTextField
+              name="name_english"
+              label={t('full name english')}
+              onChange={handleEnglishInputChange}
+            />
+            <RHFTextField
+              name="name_arabic"
+              label={t('full name arabic')}
+              onChange={handleArabicInputChange}
+            />
           </Stack>
 
-          <RHFTextField name="identification_num" label={t("Identification number")}/>
+          <RHFTextField name="identification_num" label={t('Identification number')} />
           <Controller
             name="birth_date"
             control={control}
@@ -156,13 +164,13 @@ export default function Create() {
               />
             )}
           />
-               <RHFSelect onChange={handleNationalityChange} name="nationality" label={t('nationality')}>
-              {countriesData?.map((country, idx) => (
-                <MenuItem lang="ar" key={idx}  value={country?._id}>
-                  {country?.name_english}
-                </MenuItem>
-              ))}
-            </RHFSelect>
+          <RHFSelect onChange={handleNationalityChange} name="nationality" label={t('nationality')}>
+            {countriesData?.map((country, idx) => (
+              <MenuItem lang="ar" key={idx} value={country?._id}>
+                {country?.name_english}
+              </MenuItem>
+            ))}
+          </RHFSelect>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <RHFSelect onChange={handleCountryChange} name="country" label={t('country')}>
               {countriesData?.map((country, idx) => (
@@ -171,14 +179,14 @@ export default function Create() {
                 </MenuItem>
               ))}
             </RHFSelect>
-            <RHFSelect name="city" label={t("City")}>
+            <RHFSelect name="city" label={t('City')}>
               {tableData?.map((city, idx) => (
                 <MenuItem lang="ar" key={idx} value={city?._id}>
                   {city?.name_english}
                 </MenuItem>
               ))}
             </RHFSelect>
-            <RHFSelect name="gender" label={t("Gender")}>
+            <RHFSelect name="gender" label={t('Gender')}>
               <MenuItem lang="ar" value="male">
                 {t('male')}
               </MenuItem>
@@ -187,11 +195,11 @@ export default function Create() {
               </MenuItem>
             </RHFSelect>
           </Stack>
-          <RHFTextField name="email" label={t("Email address")} />
+          <RHFTextField name="email" label={t('Email address')} />
 
           <RHFTextField
             name="password"
-            label={t("Password")}
+            label={t('Password')}
             type={password.value ? 'text' : 'password'}
             InputProps={{
               endAdornment: (
@@ -205,7 +213,7 @@ export default function Create() {
           />
           <RHFTextField
             name="confirmPassword"
-            label={t("Confirm Password")}
+            label={t('Confirm Password')}
             type={password.value ? 'text' : 'password'}
             InputProps={{
               endAdornment: (

@@ -180,9 +180,12 @@ export default function TableCreateView() {
       // router.back();
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       refetch();
       console.error(error);
     }
@@ -249,10 +252,10 @@ export default function TableCreateView() {
             rowGap={3}
             columnGap={2}
             display="flex"
-          // gridTemplateColumns={{
-          //   xs: 'repeat(1, 1fr)',
-          //   sm: 'repeat(3, 1fr)',
-          // }}
+            // gridTemplateColumns={{
+            //   xs: 'repeat(1, 1fr)',
+            //   sm: 'repeat(3, 1fr)',
+            // }}
           >
             <FormControl
               sx={{
@@ -266,14 +269,14 @@ export default function TableCreateView() {
                 onChange={(event) => setFilters((prev) => ({ ...prev, group: event.target.value }))}
                 size="small"
                 input={<OutlinedInput label={t('work group')} />}
-              // renderValue={(selected) =>
-              //   selected
-              // }
-              // MenuProps={{
-              //   PaperProps: {
-              //     sx: { maxHeight: 240 },
-              //   },
-              // }}
+                // renderValue={(selected) =>
+                //   selected
+                // }
+                // MenuProps={{
+                //   PaperProps: {
+                //     sx: { maxHeight: 240 },
+                //   },
+                // }}
               >
                 {workGroupsData.map((option, idx) => (
                   <MenuItem lang="ar" key={idx} value={option._id}>
@@ -337,7 +340,7 @@ export default function TableCreateView() {
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               list={appointmentsData}
-            // sx={{ mt: SPACING }}
+              // sx={{ mt: SPACING }}
             />
           )}
           <Typography

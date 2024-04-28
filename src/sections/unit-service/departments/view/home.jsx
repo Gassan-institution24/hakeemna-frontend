@@ -161,9 +161,12 @@ export default function UnitServicesTableView() {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-          variant: 'error',
-        });
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
         console.error(error);
       }
       refetch();
@@ -184,9 +187,12 @@ export default function UnitServicesTableView() {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-          variant: 'error',
-        });
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
         console.error(error);
       }
       refetch();
@@ -208,9 +214,12 @@ export default function UnitServicesTableView() {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
     refetch();
@@ -243,9 +252,12 @@ export default function UnitServicesTableView() {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
     refetch();

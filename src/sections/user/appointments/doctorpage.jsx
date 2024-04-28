@@ -118,9 +118,12 @@ export default function Doctorpage() {
       }, 1000);
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
     }
   };
   const renderHead = (
@@ -282,11 +285,13 @@ export default function Doctorpage() {
           }}
         >
           <MenuItem value="">{t('All')}</MenuItem>
-          {appointmenttypesData.filter((one) => appointmentTypes.includes(one._id)).map((type, test) => (
-            <MenuItem key={test} value={type._id}>
-              {type.name_english}
-            </MenuItem>
-          ))}
+          {appointmenttypesData
+            .filter((one) => appointmentTypes.includes(one._id))
+            .map((type, test) => (
+              <MenuItem key={test} value={type._id}>
+                {type.name_english}
+              </MenuItem>
+            ))}
         </Select>
       </Box>
     </Card>
@@ -467,9 +472,9 @@ export default function Doctorpage() {
           {renderFollows}
 
           {data?.unit_service?.country?.name_english ||
-            data?.unit_service?.city?.name_english ||
-            data?.unit_service?.name_english ||
-            data?.employee?.description
+          data?.unit_service?.city?.name_english ||
+          data?.unit_service?.name_english ||
+          data?.employee?.description
             ? renderAbout
             : ''}
 

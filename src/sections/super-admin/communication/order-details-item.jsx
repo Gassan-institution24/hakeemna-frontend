@@ -11,30 +11,31 @@ import { useGetConversation } from 'src/api/chat';
 import ChatMessageList from 'src/components/chat/chat-message-list';
 import ChatMessageInput from 'src/components/chat/chat-message-input';
 
-
 // ----------------------------------------------------------------------
 
-export default function OrderDetailsItems({
-  ticket,
-}) {
-  const { user } = useAuthContext()
-  const { conversation, refetch } = useGetConversation(ticket.chat)
+export default function OrderDetailsItems({ ticket }) {
+  const { user } = useAuthContext();
+  const { conversation, refetch } = useGetConversation(ticket.chat);
 
   const participants = conversation
     ? conversation.participants?.filter((participant) => participant._id !== user._id)
     : [];
 
   useEffect(() => {
-    socket.on('message', (id) => { if (id === ticket.chat) refetch() })
+    socket.on('message', (id) => {
+      if (id === ticket.chat) refetch();
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   return (
-    <Card sx={{
-      width: 1,
-      height: 600,
-      overflow: 'hidden',
-    }}>
+    <Card
+      sx={{
+        width: 1,
+        height: 600,
+        overflow: 'hidden',
+      }}
+    >
       <Stack
         sx={{
           width: 1,
@@ -70,9 +71,7 @@ export default function OrderDetailsItems({
               overflow: 'hidden',
             }}
           >
-            <ChatMessageList
-              messages={conversation?.messages} participants={participants}
-            />
+            <ChatMessageList messages={conversation?.messages} participants={participants} />
 
             <ChatMessageInput
               // recipients={recipients}
@@ -80,13 +79,13 @@ export default function OrderDetailsItems({
               // //
               selectedConversationId={ticket.chat}
               refetch={refetch}
-            // disabled={!recipients.length && !selectedConversationId}
+              // disabled={!recipients.length && !selectedConversationId}
             />
           </Stack>
         </Stack>
       </Stack>
     </Card>
-  )
+  );
 }
 
 OrderDetailsItems.propTypes = {

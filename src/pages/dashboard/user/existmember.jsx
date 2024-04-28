@@ -31,7 +31,6 @@ export default function Exist() {
     { id: 'options', label: t('options') },
   ];
 
-
   const table = useTable({ defaultRowsPerPage: 10 });
 
   const [filters, setFilters] = useState({});

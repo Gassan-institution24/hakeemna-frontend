@@ -176,9 +176,12 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       // window.scrollTo({ top: 0, behavior: 'smooth' });
       saving.onFalse();
       confirm.onFalse();
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
   };
@@ -207,9 +210,12 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       // error emitted in backend
       updating.onFalse();
       confirm.onFalse();
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
   };
@@ -264,9 +270,12 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       // error emitted in backend
       updating.onFalse();
       loadingSend.onFalse();
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
   });

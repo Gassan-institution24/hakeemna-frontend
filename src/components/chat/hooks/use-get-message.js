@@ -2,7 +2,7 @@
 
 export default function useGetMessage({ message, participants, currentUserId }) {
   const sender = participants.find((participant) => participant._id === message.senderId);
-  console.log('sender', sender)
+  console.log('sender', sender);
   const senderDetails =
     message.senderId === currentUserId
       ? {
@@ -17,8 +17,11 @@ export default function useGetMessage({ message, participants, currentUserId }) 
 
   const hasImage = message.contentType === 'image';
 
+  const hasFile = message.contentType === 'file';
+
   return {
     hasImage,
+    hasFile,
     me,
     senderDetails,
   };

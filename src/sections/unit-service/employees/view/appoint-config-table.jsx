@@ -159,9 +159,12 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-          variant: 'error',
-        });
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
         console.error(error);
       }
       refetch();
@@ -181,9 +184,12 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-          variant: 'error',
-        });
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
         console.error(error);
       }
       refetch();
@@ -204,9 +210,12 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
     refetch();
@@ -239,9 +248,12 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
     refetch();
@@ -343,7 +355,7 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
             onAdd={handleAdd}
             //
             dateError={dateError}
-          // serviceOptions={appointmenttypesData.map((option, idx)  => option)}
+            // serviceOptions={appointmenttypesData.map((option, idx)  => option)}
           />
 
           {canReset && (
@@ -400,9 +412,9 @@ export default function AppointConfigView({ appointmentConfigData, refetch }) {
                   subcategory: 'appointment_configs',
                   acl: 'update',
                 }) &&
-                  dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'canceled')
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'canceled')
                   ? 'primary'
                   : 'error'
               }

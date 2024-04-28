@@ -1,7 +1,7 @@
 import JsPdf from 'jspdf';
 import * as Yup from 'yup';
 import { addDays } from 'date-fns';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -24,9 +24,9 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TextField,
   Typography,
   TableContainer,
-  TextField,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -189,9 +189,12 @@ export default function OldMedicalReports() {
       refetch();
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
     }
   };
 
@@ -308,12 +311,8 @@ export default function OldMedicalReports() {
               </>
             }
           >
-<<<<<<< HEAD
-            {t('Please confirm the delettion of ')}
-            {FileToDelete?.name}
-=======
+
             {t('Please confirm the delettion of ')}{FileToDelete?.name}
->>>>>>> master
           </Alert>
         </Grow>
       )}
