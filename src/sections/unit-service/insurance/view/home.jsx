@@ -160,9 +160,12 @@ export default function UnitServicesInsuranceView() {
         enqueueSnackbar('added successfully');
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-          variant: 'error',
-        });
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
         console.error(error);
       }
       refetch();
@@ -194,9 +197,12 @@ export default function UnitServicesInsuranceView() {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-          variant: 'error',
-        });
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
         console.error(error);
       }
       refetch();
@@ -339,12 +345,12 @@ export default function UnitServicesInsuranceView() {
                   rowCount={dataFiltered?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     dataFiltered?.map((row, idx)  => row._id)
-                //   )
-                // }
+                  // onSelectAllRows={(checked) =>
+                  //   table.onSelectAllRows(
+                  //     checked,
+                  //     dataFiltered?.map((row, idx)  => row._id)
+                  //   )
+                  // }
                 />
 
                 <TableBody>

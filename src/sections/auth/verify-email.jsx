@@ -65,9 +65,12 @@ export default function ClassicVerifyView() {
       router.push(paths.dashboard.root);
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
     }
   });
   const handleResendCode = useCallback(async () => {
@@ -76,9 +79,12 @@ export default function ClassicVerifyView() {
       await axios.post(endpoints.auth.resendActivation, { email });
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
     }
   }, [startCountdown, email, enqueueSnackbar, curLangAr]);
 

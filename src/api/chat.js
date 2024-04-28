@@ -99,7 +99,6 @@ export async function sendMessage(conversationId, messageData) {
    */
   const data = { conversationId, messageData };
   await axios.put(endpoints.chat, data);
-
 }
 
 // ----------------------------------------------------------------------

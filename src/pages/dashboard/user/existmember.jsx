@@ -25,7 +25,15 @@ export default function Exist() {
     { id: 'name_arabic', label: t('Name Arabic') },
     { id: 'options', label: t('options') },
   ];
-  const Family = [`${t('GrandFather')}`,`${t('GrandMother')}`,`${t('Father')}`,`${t('Mother')}`,`${t('Sister')}`,`${t('Son')}`,`${t('Daughter')}`];
+  const Family = [
+    `${t('GrandFather')}`,
+    `${t('GrandMother')}`,
+    `${t('Father')}`,
+    `${t('Mother')}`,
+    `${t('Sister')}`,
+    `${t('Son')}`,
+    `${t('Daughter')}`,
+  ];
 
   const table = useTable({ defaultRowsPerPage: 10 });
 
@@ -68,13 +76,19 @@ export default function Exist() {
   return (
     <Box>
       <Box sx={{ display: 'inline-flex' }}>
-        <Typography sx={{position:'relative', top:10}} variant='h4'>{t('Relative Relation')}</Typography>
-{
-  Family.map((members,i)=>(
-    <MenuItem key={i} onClick={()=>alert("under initialization")} sx={{border:'#00A76F 1px solid', p:1, m:1}} lang="ar">{members}</MenuItem>
-  ))
-}
-        
+        <Typography sx={{ position: 'relative', top: 10 }} variant="h4">
+          {t('Relative Relation')}
+        </Typography>
+        {Family.map((members, i) => (
+          <MenuItem
+            key={i}
+            onClick={() => alert('under initialization')}
+            sx={{ border: '#00A76F 1px solid', p: 1, m: 1 }}
+            lang="ar"
+          >
+            {members}
+          </MenuItem>
+        ))}
       </Box>
 
       <Card sx={{ p: 3 }}>

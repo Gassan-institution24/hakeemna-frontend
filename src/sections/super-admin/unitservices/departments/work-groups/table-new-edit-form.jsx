@@ -98,8 +98,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
-          msg: `updated work group <strong>${data.name_english || ''}</strong> in <strong>${departmentData.name_english
-            }</strong> department`,
+          msg: `updated work group <strong>${data.name_english || ''}</strong> in <strong>${
+            departmentData.name_english
+          }</strong> department`,
         });
       } else {
         await axiosInstance.post(endpoints.work_groups.all, data);
@@ -107,10 +108,12 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.superadmin.unitservices.departments.workGroups.root(id, departmentData._id),
-          msg: `created work group <strong>${data.name_english || ''}</strong> in <strong>${departmentData.name_english
-            }</strong> department`,
-          ar_msg: `إنشاء مجموعة عمل <strong>${data.name_arabic || ''}</strong> في قسم <strong>${departmentData.name_arabic
-            }</strong>`,
+          msg: `created work group <strong>${data.name_english || ''}</strong> in <strong>${
+            departmentData.name_english
+          }</strong> department`,
+          ar_msg: `إنشاء مجموعة عمل <strong>${data.name_arabic || ''}</strong> في قسم <strong>${
+            departmentData.name_arabic
+          }</strong>`,
         });
       }
       reset();
@@ -120,9 +123,12 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       );
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
   });

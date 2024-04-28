@@ -23,54 +23,55 @@ import OrderDetailsHistory from '../order-details-history';
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsView({ ticket, refetch }) {
-    const settings = useSettingsContext();
+  const settings = useSettingsContext();
 
-    const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
-    const [status, setStatus] = useState(ticket.status);
+  const [status, setStatus] = useState(ticket.status);
 
-    const handleChangeStatus = useCallback((newValue) => {
-        try {
-            axiosInstance.patch(endpoints.tickets.one(ticket._id), { status: newValue })
-            setStatus(newValue);
-            enqueueSnackbar('changed successfully!')
-            refetch()
-        } catch (error) {
-            enqueueSnackbar(error.message)
-            refetch()
-        }
-    }, [ticket._id, enqueueSnackbar, refetch]);
+  const handleChangeStatus = useCallback(
+    (newValue) => {
+      try {
+        axiosInstance.patch(endpoints.tickets.one(ticket._id), { status: newValue });
+        setStatus(newValue);
+        enqueueSnackbar('changed successfully!');
+        refetch();
+      } catch (error) {
+        enqueueSnackbar(error.message);
+        refetch();
+      }
+    },
+    [ticket._id, enqueueSnackbar, refetch]
+  );
 
-    return (
-        <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-            <OrderDetailsToolbar
-                backLink={paths.superadmin.communication.root}
-                ticket={ticket}
-                status={status}
-                refetch={refetch}
-                onChangeStatus={handleChangeStatus}
-                statusOptions={['pending', 'processing', 'waiting', 'completed', 'closed']}
-            />
+  return (
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <OrderDetailsToolbar
+        backLink={paths.superadmin.communication.root}
+        ticket={ticket}
+        status={status}
+        refetch={refetch}
+        onChangeStatus={handleChangeStatus}
+        statusOptions={['pending', 'processing', 'waiting', 'completed', 'closed']}
+      />
 
-            <Grid container spacing={3}>
-                <Grid xs={12} md={7}>
-                    <Stack spacing={3} direction={{ xs: 'column-reverse', md: 'column' }}>
-                        <OrderDetailsInfo ticket={ticket} refetch={refetch} />
-                        <OrderDetailsHistory history={ticket.history} />
-                    </Stack>
-                </Grid>
+      <Grid container spacing={3}>
+        <Grid xs={12} md={7}>
+          <Stack spacing={3} direction={{ xs: 'column-reverse', md: 'column' }}>
+            <OrderDetailsInfo ticket={ticket} refetch={refetch} />
+            <OrderDetailsHistory history={ticket.history} />
+          </Stack>
+        </Grid>
 
-                <Grid xs={12} md={5}>
-                    <OrderDetailsItems
-                        ticket={ticket}
-                    />
-                </Grid>
-            </Grid>
-        </Container>
-    );
+        <Grid xs={12} md={5}>
+          <OrderDetailsItems ticket={ticket} />
+        </Grid>
+      </Grid>
+    </Container>
+  );
 }
 
 OrderDetailsView.propTypes = {
-    ticket: PropTypes.object,
-    refetch: PropTypes.func,
+  ticket: PropTypes.object,
+  refetch: PropTypes.func,
 };

@@ -174,9 +174,12 @@ export default function ServicesTableView() {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-          variant: 'error',
-        });
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
         console.error(error);
       }
       refetch();
@@ -198,9 +201,12 @@ export default function ServicesTableView() {
         });
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-          variant: 'error',
-        });
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
         console.error(error);
       }
       refetch();
@@ -222,9 +228,12 @@ export default function ServicesTableView() {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
     refetch();
@@ -257,9 +266,12 @@ export default function ServicesTableView() {
       });
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
     refetch();
@@ -442,9 +454,9 @@ export default function ServicesTableView() {
                   subcategory: 'management_tables',
                   acl: 'update',
                 }) &&
-                  dataFiltered
-                    .filter((row) => table.selected.includes(row._id))
-                    .some((data) => data.status === 'inactive')
+                dataFiltered
+                  .filter((row) => table.selected.includes(row._id))
+                  .some((data) => data.status === 'inactive')
                   ? 'primary'
                   : 'error'
               }

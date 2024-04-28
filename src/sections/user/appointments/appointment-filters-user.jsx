@@ -97,7 +97,7 @@ export default function AppointmentsFilters({
   //     </Select>
   //   </FormControl>
   // );
-  const renderCountries = ( 
+  const renderCountries = (
     <FormControl>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         {t('Countries')}

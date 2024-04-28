@@ -45,7 +45,6 @@ export default function ExistPatientRow({ row, selected }) {
     }
     // If the identificationNum has less than 3 characters, just return it as is
     return identificationNum;
-
   };
   const handleAddFamily = async () => {
     // const { enqueueSnackbar } = useSnackbar();
@@ -56,9 +55,12 @@ export default function ExistPatientRow({ row, selected }) {
       enqueueSnackbar(t('An invitation to join the family has been sent successfully'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
   };
@@ -68,7 +70,6 @@ export default function ExistPatientRow({ row, selected }) {
       <TableCell align="center">{renderIdentificationNum(identification_num)}</TableCell>
       <TableCell align="center">{name_english}</TableCell>
       <TableCell align="center">{name_arabic}</TableCell>
-
 
       <TableCell align="center">
         {clicked > 0 ? (

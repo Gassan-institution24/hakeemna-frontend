@@ -52,9 +52,12 @@ export default function FamilyMembers() {
     } catch (error) {
       console.error(error);
       setErrorMsg(error);
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       loading.onFalse();
     }
   };

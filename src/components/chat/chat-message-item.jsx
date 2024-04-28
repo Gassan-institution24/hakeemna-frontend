@@ -7,9 +7,11 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
+import { Card, Link } from '@mui/material';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
+import { RouterLink } from 'src/routes/components';
 
 import { useGetMessage } from './hooks';
 
@@ -18,7 +20,7 @@ import { useGetMessage } from './hooks';
 export default function ChatMessageItem({ message, participants, onOpenLightbox }) {
   const { user } = useAuthContext();
 
-  const { me, senderDetails, hasImage } = useGetMessage({
+  const { me, senderDetails, hasImage, hasFile } = useGetMessage({
     message,
     participants,
     currentUserId: `${user?._id}`,
@@ -26,7 +28,25 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
 
   const { firstName, avatarUrl } = senderDetails;
 
-  const { body, createdAt } = message;
+  const { body, file_name, createdAt } = message;
+  // const handleDownload = () => {
+  //   const fileUrl = 'your_file_url_here'; // Replace 'your_file_url_here' with the actual URL
+
+  //   // Create a temporary anchor element
+  //   const link = document.createElement('a');
+  //   link.href = fileUrl;
+  //   link.download = 'filename'; // You can specify the file name here
+  //   link.target = '_blank';
+
+  //   // Append the anchor element to the document body
+  //   document.body.appendChild(link);
+
+  //   // Trigger a click event on the anchor element
+  //   link.click();
+
+  //   // Remove the anchor element from the document body
+  //   document.body.removeChild(link);
+  // };
 
   const renderInfo = (
     <Typography
@@ -64,13 +84,13 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
           ml: 3,
           bgcolor: 'primary.lighter',
         }),
-        ...(hasImage && {
+        ...((hasImage || hasFile) && {
           p: 0,
           bgcolor: 'transparent',
         }),
       }}
     >
-      {hasImage ? (
+      {hasImage && (
         <Box
           component="img"
           alt="attachment"
@@ -85,8 +105,21 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
             },
           }}
         />
-      ) : (
-        <Typography variant='body2' sx={{ overflowWrap: 'break-word' }}>{body}</Typography>
+      )}
+      {hasFile && (
+        <Link href={body} target="_blank" component={RouterLink} >
+          <Card sx={{ px: 3, py: 1, m: 1, backgroundColor: 'background.neutral' }}>
+            <Stack direction="row" justifyContent="space-around" alignItems="center">
+              <Iconify icon='mdi:file' />
+              <Typography color='text.disabled' sx={{ ml: 1 }}>{file_name || 'file'}</Typography>
+            </Stack>
+          </Card>
+        </Link>
+      )}
+      {!hasImage && !hasFile && (
+        <Typography variant="body2" sx={{ overflowWrap: 'break-word' }}>
+          {body}
+        </Typography>
       )}
     </Stack>
   );
@@ -127,8 +160,7 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
     <Stack direction="row" justifyContent={me ? 'flex-end' : 'unset'} sx={{ mb: 1 }}>
       {!me && <Avatar alt={firstName} src={avatarUrl} sx={{ width: 32, height: 32, mr: 2 }} />}
 
-      <Stack alignItems={me ? "flex-end" : "flex-start"}>
-
+      <Stack alignItems={me ? 'flex-end' : 'flex-start'}>
         <Stack
           direction="row"
           alignItems="center"
