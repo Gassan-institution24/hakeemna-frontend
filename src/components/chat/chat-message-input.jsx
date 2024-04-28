@@ -1,10 +1,11 @@
-import { sub } from 'date-fns';
 import PropTypes from 'prop-types';
 import { useRef, useMemo, useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
+import { LoadingButton } from '@mui/lab';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
+import { Box, Card, Dialog, Typography, DialogTitle } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -33,6 +34,13 @@ export default function ChatMessageInput({
   const fileRef = useRef(null);
 
   const [message, setMessage] = useState('');
+  const [attachment, setAttachment] = useState();
+  const [confirmAttach, setConfirmAttach] = useState();
+  const [recording, setRecording] = useState(false);
+  const [audioBlob, setAudioBlob] = useState(null);
+
+  const mediaRecorder = useRef(null);
+  const chunks = useRef([]);
 
   const myContact = useMemo(
     () => ({
@@ -54,9 +62,16 @@ export default function ChatMessageInput({
       attachments: [],
       body: message,
       contentType: 'text',
-      createdAt: sub(new Date(), { minutes: 1 }),
     }),
     [message]
+  );
+
+  const attachMessageData = useMemo(
+    () => ({
+      attachment,
+      contentType: /^image\//.test(attachment?.type) ? 'image' : 'file',
+    }),
+    [attachment]
   );
 
   const conversationData = useMemo(
@@ -67,7 +82,7 @@ export default function ChatMessageInput({
       type: recipients.length > 1 ? 'GROUP' : 'ONE_TO_ONE',
       unreadCount: 0,
     }),
-    [messageData, myContact, recipients, selectedConversationId]
+    [myContact, recipients, selectedConversationId, messageData]
   );
 
   const handleAttach = useCallback(() => {
@@ -76,9 +91,74 @@ export default function ChatMessageInput({
     }
   }, []);
 
+  const handleChangeAttach = useCallback((event) => {
+    const file = event.target.files[0];
+    const newFile = Object.assign(file, {
+      preview: URL.createObjectURL(file),
+    });
+    if (file) {
+      setAttachment(newFile);
+      setConfirmAttach(true);
+    }
+  }, []);
+
+  const handleCloseConfirm = useCallback(() => {
+    setConfirmAttach(false);
+    setAttachment();
+  }, []);
+
   const handleChangeMessage = useCallback((event) => {
     setMessage(event.target.value);
   }, []);
+
+
+
+  const toggleRecording = () => {
+    if (!recording) {
+      // eslint-disable-next-line
+      navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+        const mimeTypes = ["audio/mp4", "audio/webm"].filter((type) =>
+          MediaRecorder.isTypeSupported(type)
+        );
+
+        if (mimeTypes.length === 0) return alert("Browser not supported");
+        setRecording(true);
+        setAudioBlob(stream);
+        const recorder = new MediaRecorder(stream, { mimeType: mimeTypes[0] });
+        recorder.addEventListener("dataavailable", async (event) => {
+          console.log("cheking data available for send");
+          if (event.data.size > 0) {
+            console.log("sending audio");
+          } else {
+            console.log("no data avialable");
+          }
+        });
+        recorder.start(1000);
+      });
+    } else {
+      setRecording(false);
+      audioBlob.getTracks().forEach((track) => track.stop());
+      setRecording(false);
+      console.log('audioBlob', audioBlob)
+    }
+  };
+
+  const sendAudio = () => {
+    if (!audioBlob) return;
+
+    // Simulate sending audio to the backend (replace with actual backend endpoint)
+    fetch('https://example.com/upload-audio', {
+      method: 'POST',
+      body: audioBlob,
+    })
+      .then(response => {
+        // Handle response from backend
+        console.log('Audio sent successfully:', response);
+      })
+      .catch(error => {
+        console.error('Error sending audio:', error);
+      });
+  };
 
   const handleSendMessage = useCallback(
     async (event) => {
@@ -87,27 +167,54 @@ export default function ChatMessageInput({
           if (message) {
             if (selectedConversationId) {
               try {
-                await axiosInstance.post(endpoints.chat.all, conversationData);
-                refetch()
+                await axiosInstance.post(endpoints.chat.one(selectedConversationId), messageData);
+                refetch();
               } catch (e) {
-                console.log(e)
+                console.log(e);
               }
             } else {
               const res = await createConversation(conversationData);
-
               router.push(`${paths.dashboard.chat}?id=${res.conversation.id}`);
-
               onAddRecipients([]);
             }
           }
           setMessage('');
+        } else if (attachment) {
+          if (selectedConversationId) {
+            try {
+              const formData = new FormData();
+              Object.keys(attachMessageData).forEach((key) => {
+                formData.append(key, attachMessageData[key]);
+              });
+              await axiosInstance.post(endpoints.chat.one(selectedConversationId), formData);
+              refetch();
+              setAttachment();
+            } catch (e) {
+              console.log(e);
+            }
+          }
         }
       } catch (error) {
         console.error(error);
       }
     },
-    [conversationData, message, onAddRecipients, router, selectedConversationId, refetch]
+    [
+      conversationData,
+      message,
+      onAddRecipients,
+      router,
+      selectedConversationId,
+      refetch,
+      attachment,
+      attachMessageData,
+      messageData,
+    ]
   );
+
+  const HandleSendAttachment = useCallback(() => {
+    handleSendMessage('attachement');
+    setConfirmAttach(false);
+  }, [handleSendMessage]);
 
   return (
     <>
@@ -117,11 +224,11 @@ export default function ChatMessageInput({
         onChange={handleChangeMessage}
         placeholder="Type a message"
         disabled={disabled}
-        startAdornment={
-          <IconButton>
-            <Iconify icon="eva:smiling-face-fill" />
-          </IconButton>
-        }
+        // startAdornment={
+        //   <IconButton onClick={() => setShowIcons(true)}>
+        //     <Iconify icon="eva:smiling-face-fill" />
+        //   </IconButton>
+        // }
         endAdornment={
           <Stack direction="row" sx={{ flexShrink: 0 }}>
             <IconButton onClick={handleAttach}>
@@ -130,7 +237,7 @@ export default function ChatMessageInput({
             <IconButton onClick={handleAttach}>
               <Iconify icon="eva:attach-2-fill" />
             </IconButton>
-            <IconButton>
+            <IconButton sx={{ color: recording ? 'primary.main' : '' }} onClick={toggleRecording}>
               <Iconify icon="solar:microphone-bold" />
             </IconButton>
           </Stack>
@@ -143,7 +250,32 @@ export default function ChatMessageInput({
         }}
       />
 
-      <input type="file" ref={fileRef} style={{ display: 'none' }} />
+      <input type="file" ref={fileRef} onChange={handleChangeAttach} style={{ display: 'none' }} />
+      <Dialog open={confirmAttach} onClose={handleCloseConfirm}>
+        <Stack sx={{ px: 2, pb: 3 }}>
+          <DialogTitle> Send file</DialogTitle>
+          {/^image\//.test(attachment?.type) ? (
+            <Box
+              width={{ md: 400, xs: 200 }}
+              height={{ md: 400, xs: 200 }}
+              component="img"
+              src={attachment?.preview}
+            />
+          ) : (
+            <Card sx={{ px: 3, py: 1, m: 1, minWidth: 400 }}>
+              <Stack direction="row" justifyContent="space-around" alignItems="center">
+                <Typography>{attachment?.name}</Typography>
+                <Typography color='text.disabled' sx={{ ml: 1 }}>{attachment?.size} KB</Typography>
+              </Stack>
+            </Card>
+          )}
+          <Stack spacing={3} alignItems="flex-end" sx={{ mt: 2 }}>
+            <LoadingButton onClick={HandleSendAttachment} tabIndex={-1} variant="contained">
+              send
+            </LoadingButton>
+          </Stack>
+        </Stack>
+      </Dialog>
     </>
   );
 }

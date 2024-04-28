@@ -30,7 +30,7 @@ export default function FinishedAppoinment({ finishedAppointments }) {
     router.push(paths.dashboard.user.bookappointment(id));
   };
 
-  console.log(finishedAppointments,"finishedAppointments");
+  console.log(finishedAppointments, 'finishedAppointments');
   return finishedAppointments.map((info, index) => (
     <Box>
       <Card key={index}>

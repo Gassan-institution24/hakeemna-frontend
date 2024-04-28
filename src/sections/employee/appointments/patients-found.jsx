@@ -73,9 +73,12 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
       // router.back();
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       window.location.reload();
       console.error(error);
     }

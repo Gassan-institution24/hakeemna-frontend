@@ -20,7 +20,7 @@ import Scrollbar from 'src/components/scrollbar';
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsHistory({ history }) {
-  console.log('history', history)
+  console.log('history', history);
   const renderSummary = (
     <Stack
       spacing={2}
@@ -79,7 +79,7 @@ export default function OrderDetailsHistory({ history }) {
 
             <TimelineContent>
               <Typography variant="subtitle2">{item.note}</Typography>
-              <Stack direction='row' gap={5}>
+              <Stack direction="row" gap={5}>
                 <Box sx={{ color: 'text.disabled', typography: 'caption', mt: 0.5 }}>
                   {fDateTime(item.date)}
                 </Box>
@@ -102,7 +102,6 @@ export default function OrderDetailsHistory({ history }) {
         alignItems={{ md: 'flex-start' }}
         direction={{ xs: 'column-reverse', md: 'row' }}
         sx={{ p: 3, mt: 2, height: '400px' }}
-
       >
         {renderTimeline}
 

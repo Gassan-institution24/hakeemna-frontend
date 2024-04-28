@@ -7,7 +7,6 @@ import {
   Button,
   Dialog,
   MenuItem,
-  Typography,
   DialogTitle,
   DialogActions,
   DialogContent,
@@ -79,9 +78,12 @@ export default function ExistPatientRow({ row, selected }) {
       enqueueSnackbar(t('An invitation to join the family has been sent successfully'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
   };
