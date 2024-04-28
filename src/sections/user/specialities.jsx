@@ -1,5 +1,7 @@
+import { useState } from 'react';
+
 import Box from '@mui/material/Box';
-import { Button, Typography } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -19,6 +21,13 @@ export default function Specialities() {
   const handleViewRow = (id) => {
     router.push(paths.dashboard.user.bookappointment(id));
   };
+
+  const [filterforspecialties, setFilterforspecialties] = useState();
+
+  const dataFiltered = applyFilter({
+    inputData: specialtiesData,
+    filterforspecialties,
+  });
 
   return (
     <>
@@ -40,6 +49,17 @@ export default function Specialities() {
       >
         {t('What medical specialty are you looking for?')}
       </Typography>
+      <TextField
+        onChange={(e) => setFilterforspecialties(e.target.value)}
+        sx={{
+          mb: 5,
+          ml: { md: 14, xs: 11.5 },
+          width: { md: '20%', xs: '50%' },
+          border: 0.7,
+          borderRadius: 1,
+        }}
+        placeholder="Search..."
+      />
       <Box
         gap={{
           xs: 0,
@@ -64,7 +84,7 @@ export default function Specialities() {
           },
         }}
       >
-        {specialtiesData.map((data, idx) => (
+        {dataFiltered.map((data, idx) => (
           <Button
             key={idx}
             sx={{
@@ -95,4 +115,30 @@ export default function Specialities() {
       </Box>
     </>
   );
+}
+function normalizeArabicText(text) {
+  // Normalize Arabic text by replacing 'أ' with 'ا'
+  return text.replace(/أ/g, 'ا');
+}
+
+function applyFilter({ inputData, filterforspecialties }) {
+  if (!filterforspecialties) {
+    return inputData;
+  }
+
+  // Normalize the search term for comparison
+  const normalizedSearchTerm = normalizeArabicText(filterforspecialties.toLowerCase());
+
+  inputData = inputData?.filter((data) => {
+    const normalizedDataNameEnglish = normalizeArabicText(data?.name_english.toLowerCase());
+    const normalizedDataNameArabic = normalizeArabicText(data?.name_arabic.toLowerCase());
+    return (
+      normalizedDataNameEnglish.includes(normalizedSearchTerm) ||
+      normalizedDataNameArabic.includes(normalizedSearchTerm) ||
+      data?._id === filterforspecialties ||
+      JSON.stringify(data.code) === filterforspecialties
+    );
+  });
+
+  return inputData;
 }

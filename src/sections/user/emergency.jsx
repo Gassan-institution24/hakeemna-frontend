@@ -13,9 +13,6 @@ export default function Emergency() {
   // const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const test = () => {
-    alert('Dont :-(');
-  };
 
   return (
     <Container
@@ -136,7 +133,6 @@ export default function Emergency() {
           }}
         >
           <Button
-            onClick={test}
             sx={{
               border: '3px solid #4E6892',
               bgcolor: 'white',
@@ -165,7 +161,6 @@ export default function Emergency() {
             {curLangAr ? 'استشارة مدفوعة من المستخدم' : 'Private consultation covered by patient'}
           </Button>
           <Button
-            onClick={test}
             sx={{
               border: '3px solid #4E6892',
               bgcolor: 'white',
@@ -194,7 +189,6 @@ export default function Emergency() {
             {curLangAr ? 'استشارة مدفوعة من شركة تأمين' : 'Consultation covered by insurance'}
           </Button>
           <Button
-            onClick={test}
             sx={{
               border: '3px solid #4E6892',
               bgcolor: 'white',

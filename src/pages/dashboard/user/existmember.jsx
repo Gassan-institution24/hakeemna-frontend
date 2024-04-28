@@ -5,7 +5,12 @@ import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import { useTheme } from '@mui/material/styles';
 import TableBody from '@mui/material/TableBody';
-import { MenuItem, TextField, Typography } from '@mui/material';
+import {
+  // Button,
+
+  TextField,
+
+} from '@mui/material';
 
 import { useFindPatients } from 'src/api';
 import { useTranslate } from 'src/locales';
@@ -18,24 +23,20 @@ import ExistPatientRow from './exist-patient-row';
 
 export default function Exist() {
   const { t } = useTranslate();
-  // const { user} = useAuthContext()
+
   const TABLE_HEAD = [
     { id: 'identification_num', label: t('ID number') },
     { id: 'name_english', label: t('Name in english') },
     { id: 'name_arabic', label: t('Name Arabic') },
     { id: 'options', label: t('options') },
   ];
-  const Family = [`${t('GrandFather')}`,`${t('GrandMother')}`,`${t('Father')}`,`${t('Mother')}`,`${t('Sister')}`,`${t('Son')}`,`${t('Daughter')}`];
+
 
   const table = useTable({ defaultRowsPerPage: 10 });
 
   const [filters, setFilters] = useState({});
 
-  // const handlePhoneInputChange = (event) => {
-  //   if (event.target.value) {
-  //     setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-  //   }
-  // };
+  
 
   const theme = useTheme();
 
@@ -60,22 +61,18 @@ export default function Exist() {
   };
 
   const { existPatient } = useFindPatients({
-    identification_num: filters.identification_num || null,
-    name_english: filters.name_english,
+    identification_num: filters?.identification_num || null,
+    name_english: filters?.name_english,
     name_arabic: filters?.name_arabic,
   });
 
   return (
     <Box>
-      <Box sx={{ display: 'inline-flex' }}>
-        <Typography sx={{position:'relative', top:10}} variant='h4'>{t('Relative Relation')}</Typography>
-{
-  Family.map((members,i)=>(
-    <MenuItem key={i} onClick={()=>alert("under initialization")} sx={{border:'#00A76F 1px solid', p:1, m:1}} lang="ar">{members}</MenuItem>
-  ))
-}
-        
-      </Box>
+      {/* <Box sx={{ display: 'inline-flex' }}>
+        <Typography sx={{ position: 'relative', top: 10 }} variant="h4">
+          {t('Relative Relation')}
+        </Typography>
+      </Box> */}
 
       <Card sx={{ p: 3 }}>
         <Box
@@ -124,7 +121,7 @@ export default function Exist() {
           {existPatient
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             ?.map((row, idx) => (
-              <ExistPatientRow key={idx} row={row} />
+              <ExistPatientRow key={idx} row={row}  />
             ))}
 
           <TableNoData
