@@ -4,14 +4,15 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
+import { Card, Link } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
-import { Card, Link } from '@mui/material';
+import { RouterLink } from 'src/routes/components';
+
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
-import { RouterLink } from 'src/routes/components';
 
 import { useGetMessage } from './hooks';
 

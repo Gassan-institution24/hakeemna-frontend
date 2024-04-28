@@ -20,7 +20,6 @@ import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover from 'src/components/custom-popover';
 import ChatMessageList from 'src/components/chat/chat-message-list';
 import ChatMessageInput from 'src/components/chat/chat-message-input';
-import ChatHeaderDetail from 'src/components/chat/chat-header-detail';
 // import CustomPopover from "src/components/custom-popover";
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
