@@ -25,6 +25,7 @@ export default function NotificationItem({ notification, handleClick }) {
   const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
+  console.log(notification,"9808900657")
   const defaultValues = {
     sender: notification?.patient,
     patient: notification?.sender,
@@ -38,10 +39,13 @@ export default function NotificationItem({ notification, handleClick }) {
   const handleAddFamily = async () => {
     try {
       await axios.patch(endpoints.patients.one(user?.patient?._id), {
-        family_members: notification?.sender,
+        family_members:  [
+          {patient: notification?.sender},
+          {RelativeRelation: notification?.RelativeRelation}
+        ]
       });
       await axios.post(`${endpoints.notifications.all}/accept`, defaultValues);
-      enqueueSnackbar(t('Invitation sent successfully'));
+      enqueueSnackbar(t('Invitation Accepted'));
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {

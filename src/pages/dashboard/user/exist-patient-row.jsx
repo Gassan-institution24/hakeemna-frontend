@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import {
+  Button,
+  Dialog,
+  MenuItem,
+  Typography,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+} from '@mui/material';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -13,6 +21,8 @@ import { useSnackbar } from 'src/components/snackbar';
 import EmptyContent from 'src/components/empty-content/empty-content';
 // import socket from 'src/socket';
 // import { paths } from 'src/routes/paths';
+import { useBoolean } from 'src/hooks/use-boolean';
+
 import axios, { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
@@ -22,6 +32,9 @@ export default function ExistPatientRow({ row, selected }) {
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const { currentLang } = useLocales();
+  const dialog = useBoolean(false);
+  // const [RelativeRelation, setRelativeRelation] = useState();
+
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
   const [clicked, setClicked] = useState(0);
@@ -34,6 +47,17 @@ export default function ExistPatientRow({ row, selected }) {
     category: 'invite',
     type: 'invite',
   };
+
+  const Family = [
+    `${t('GrandFather')}`,
+    `${t('GrandMother')}`,
+    `${t('Father')}`,
+    `${t('Mother')}`,
+    `${t('Sister')}`,
+    `${t('Son')}`,
+    `${t('Daughter')}`,
+  ];
+
   const renderIdentificationNum = (identificationNum) => {
     // Check if the identificationNum has at least 3 characters
     if (identificationNum.length >= 3) {
@@ -45,11 +69,10 @@ export default function ExistPatientRow({ row, selected }) {
     }
     // If the identificationNum has less than 3 characters, just return it as is
     return identificationNum;
-
   };
-  const handleAddFamily = async () => {
-    // const { enqueueSnackbar } = useSnackbar();
-
+  const handleAddFamily = async (members) => {
+    dialog.onFalse();
+    // console.log(members, 'members');
     try {
       await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
       setClicked((prevClicked) => prevClicked + 1);
@@ -64,32 +87,53 @@ export default function ExistPatientRow({ row, selected }) {
   };
 
   const renderPrimary = (
-    <TableRow selected={selected}>
-      <TableCell align="center">{renderIdentificationNum(identification_num)}</TableCell>
-      <TableCell align="center">{name_english}</TableCell>
-      <TableCell align="center">{name_arabic}</TableCell>
-
-
-      <TableCell align="center">
-        {clicked > 0 ? (
-          <Button disabled variant="outlined">
-            {t('Waiting acceptation')} &nbsp;{' '}
-            <Iconify
-              sx={{ display: { md: 'block', xs: 'none' }, color: 'info.main' }}
-              icon="eos-icons:loading"
-            />
+    <>
+      <Dialog open={dialog.value} onClose={dialog.onTrue}>
+        <DialogTitle>{t('Select The Relative Relation')}</DialogTitle>
+        <DialogActions sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
+          {Family.map((members, i) => (
+            <MenuItem
+              key={i}
+              onClick={() => handleAddFamily(members)}
+              sx={{ border: '#00A76F 1px solid', p: 1, m: 1 }}
+              lang="ar"
+            >
+              {members}
+            </MenuItem>
+          ))}
+        </DialogActions>
+        <DialogContent>
+          <Button variant="contained" sx={{ mb: 2, float: 'right' }} onClick={dialog.onFalse} >
+            BACK &nbsp;<Iconify icon="lets-icons:back" />{' '}
           </Button>
-        ) : (
-          <Button variant="outlined" onClick={() => handleAddFamily()}>
-            {t('Request To Add')} &nbsp;{' '}
-            <Iconify
-              sx={{ mb: '5px', display: { md: 'block', xs: 'none' } }}
-              icon="icon-park:add-user"
-            />
-          </Button>
-        )}
-      </TableCell>
-    </TableRow>
+        </DialogContent>
+      </Dialog>
+      <TableRow selected={selected}>
+        <TableCell align="center">{renderIdentificationNum(identification_num)}</TableCell>
+        <TableCell align="center">{name_english}</TableCell>
+        <TableCell align="center">{name_arabic}</TableCell>
+
+        <TableCell align="center">
+          {clicked > 0 ? (
+            <Button disabled variant="outlined">
+              {t('Waiting acceptation')} &nbsp;{' '}
+              <Iconify
+                sx={{ display: { md: 'block', xs: 'none' }, color: 'info.main' }}
+                icon="eos-icons:loading"
+              />
+            </Button>
+          ) : (
+            <Button variant="outlined" onClick={dialog.onTrue}>
+              {t('Request To Add')} &nbsp;{' '}
+              <Iconify
+                sx={{ mb: '5px', display: { md: 'block', xs: 'none' } }}
+                icon="icon-park:add-user"
+              />
+            </Button>
+          )}
+        </TableCell>
+      </TableRow>
+    </>
   );
 
   return row?.family_members.length === 0 && row?._id !== user?.patient?._id ? (
