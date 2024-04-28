@@ -3,14 +3,7 @@ import PropTypes from 'prop-types';
 
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import {
-  Button,
-  Dialog,
-  MenuItem,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-} from '@mui/material';
+import { Button, Dialog, MenuItem, DialogTitle, DialogActions, DialogContent } from '@mui/material';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -23,6 +16,7 @@ import EmptyContent from 'src/components/empty-content/empty-content';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios, { endpoints } from 'src/utils/axios';
+import { useGetFamilyTypes } from 'src/api';
 
 // ----------------------------------------------------------------------
 
@@ -33,29 +27,11 @@ export default function ExistPatientRow({ row, selected }) {
   const { currentLang } = useLocales();
   const dialog = useBoolean(false);
   // const [RelativeRelation, setRelativeRelation] = useState();
-
+  const { Family } = useGetFamilyTypes();
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
   const [clicked, setClicked] = useState(0);
-  const defaultValues = {
-    sender: user?.patient?._id,
-    patient: row?._id,
-    title: `${user?.patient?.name_english} want to add you as a family member`,
-    title_arabic: `${user?.patient?.name_arabic} يريد اظافتك كفرد عائلة`,
-    photo_URL: 'https://cdn-icons-png.flaticon.com/512/6193/6193226.png',
-    category: 'invite',
-    type: 'invite',
-  };
 
-  const Family = [
-    `${t('GrandFather')}`,
-    `${t('GrandMother')}`,
-    `${t('Father')}`,
-    `${t('Mother')}`,
-    `${t('Sister')}`,
-    `${t('Son')}`,
-    `${t('Daughter')}`,
-  ];
 
   const renderIdentificationNum = (identificationNum) => {
     // Check if the identificationNum has at least 3 characters
@@ -70,8 +46,18 @@ export default function ExistPatientRow({ row, selected }) {
     return identificationNum;
   };
   const handleAddFamily = async (members) => {
+    const defaultValues = {
+      sender: user?.patient?._id,
+      patient: row?._id,
+      title: `${user?.patient?.name_english} want to add you as a family member`,
+      title_arabic: `${user?.patient?.name_arabic} يريد اظافتك كفرد عائلة`,
+      photo_URL: 'https://cdn-icons-png.flaticon.com/512/6193/6193226.png',
+      category: 'invite',
+      type: 'invite',
+      members
+    };
     dialog.onFalse();
-    // console.log(members, 'members');
+    console.log(members, 'members');
     try {
       await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
       setClicked((prevClicked) => prevClicked + 1);
@@ -96,17 +82,18 @@ export default function ExistPatientRow({ row, selected }) {
           {Family.map((members, i) => (
             <MenuItem
               key={i}
-              onClick={() => handleAddFamily(members)}
+              onClick={() => handleAddFamily(members?._id)}
               sx={{ border: '#00A76F 1px solid', p: 1, m: 1 }}
               lang="ar"
             >
-              {members}
+              {members?.name_english}
             </MenuItem>
           ))}
         </DialogActions>
         <DialogContent>
-          <Button variant="contained" sx={{ mb: 2, float: 'right' }} onClick={dialog.onFalse} >
-            BACK &nbsp;<Iconify icon="lets-icons:back" />{' '}
+          <Button variant="contained" sx={{ mb: 2, float: 'right' }} onClick={dialog.onFalse}>
+            BACK &nbsp;
+            <Iconify icon="lets-icons:back" />{' '}
           </Button>
         </DialogContent>
       </Dialog>
