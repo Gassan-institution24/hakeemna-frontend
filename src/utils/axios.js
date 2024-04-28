@@ -342,6 +342,7 @@ export const endpoints = {
     findPatient: ({ identification_num, mobile_num1, name_english, name_arabic }) =>
       `/api/patient/findpatient?id=${identification_num}&&mobile_num1=${mobile_num1}&&name_english=${name_english}&&name_arabic=${name_arabic}`,
     family: (id) => `/api/patient/myfamily/${id}`,
+    familyType: '/api/family',
     one: (id) => `/api/patient/${id}`,
   },
   oldpatient: {
