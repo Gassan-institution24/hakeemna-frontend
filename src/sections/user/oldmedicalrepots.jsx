@@ -179,9 +179,12 @@ export default function OldMedicalReports() {
       refetch();
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
     }
   };
 
@@ -191,12 +194,12 @@ export default function OldMedicalReports() {
 
   const closing = () => {
     setShowAlert(false);
-    dialog.onFalse()
+    dialog.onFalse();
   };
 
   const opening = () => {
     setShowAlert(false);
-    dialog.onTrue()
+    dialog.onTrue();
   };
   const downloadAsPDF = (report) => {
     setShowAlert(false);
@@ -298,7 +301,8 @@ export default function OldMedicalReports() {
               </>
             }
           >
-            {t('Please confirm the delettion of ')}{FileToDelete?.name}
+            {t('Please confirm the delettion of ')}
+            {FileToDelete?.name}
           </Alert>
         </Grow>
       )}

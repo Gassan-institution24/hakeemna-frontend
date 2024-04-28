@@ -214,9 +214,12 @@ export default function AppointmentsView() {
         enqueueSnackbar(t('canceled successfully!'));
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-          variant: 'error',
-        });
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
         console.error(error);
       }
       refetch();
@@ -234,9 +237,12 @@ export default function AppointmentsView() {
         enqueueSnackbar(t('delayed successfully!'));
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-          variant: 'error',
-        });
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
         console.error(error);
       }
       refetch();
@@ -253,9 +259,12 @@ export default function AppointmentsView() {
         enqueueSnackbar(t('uncanceled successfully!'));
       } catch (error) {
         // error emitted in backend
-        enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-          variant: 'error',
-        });
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
         console.error(error);
       }
       refetch();
@@ -272,9 +281,12 @@ export default function AppointmentsView() {
       enqueueSnackbar(t('canceled successfully!'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
     refetch();
@@ -304,9 +316,12 @@ export default function AppointmentsView() {
       enqueueSnackbar(t('delayed successfully!'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
     refetch();
@@ -337,9 +352,12 @@ export default function AppointmentsView() {
       enqueueSnackbar(t('uncanceled successfully!'));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
     refetch();

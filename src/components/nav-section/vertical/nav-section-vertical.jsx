@@ -67,8 +67,8 @@ function Group({ subheader, walktourRun, items, slotProps }) {
       {subheader ? (
         <>
           <ListSubheader
-            // disableGutters
-            // disableSticky
+            disableGutters
+            disableSticky
             onClick={handleToggle}
             sx={{
               fontSize: 11,

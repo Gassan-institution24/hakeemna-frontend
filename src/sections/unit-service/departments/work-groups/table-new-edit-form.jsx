@@ -106,8 +106,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.unitservice.departments.workGroups.root(departmentData._id),
-          msg: `updated work group <strong>${data.name_english || ''}</strong> in <strong>${departmentData.name_english
-            }</strong> department`,
+          msg: `updated work group <strong>${data.name_english || ''}</strong> in <strong>${
+            departmentData.name_english
+          }</strong> department`,
         });
       } else {
         await axiosInstance.post(endpoints.work_groups.all, data);
@@ -115,8 +116,9 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
           data,
           user,
           link: paths.unitservice.departments.workGroups.root(departmentData._id),
-          msg: `created work group <strong>${data.name_english || ''}</strong> in <strong>${departmentData.name_english
-            }</strong> department`,
+          msg: `created work group <strong>${data.name_english || ''}</strong> in <strong>${
+            departmentData.name_english
+          }</strong> department`,
         });
       }
       reset();
@@ -124,9 +126,12 @@ export default function TableNewEditForm({ departmentData, currentTable }) {
       // router.push(paths.unitservice.departments.workGroups.root(departmentData._id));
     } catch (error) {
       // error emitted in backend
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       console.error(error);
     }
   });

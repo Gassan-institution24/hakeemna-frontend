@@ -78,7 +78,6 @@ export default function UserCardList() {
       )}
 
       {currentTab === 'oldmedicaloeports' && <OldMedicalReports user={user?.patient._id} />}
-
     </Container>
   );
 }

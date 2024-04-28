@@ -114,9 +114,12 @@ export default function NavVertical({ openNav, onCloseNav }) {
       window.location.reload();
       setDialog(false);
     } catch (error) {
-      enqueueSnackbar(curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
       setDialog(false);
     }
   };
@@ -227,7 +230,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-      // scrollDuration={500}
+        // scrollDuration={500}
       />
       {isEmployee && (
         <Box

@@ -11,16 +11,15 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useGetUsers, useGetTicketCategories } from 'src/api';
 
-
 // ----------------------------------------------------------------------
 
-const priorityOptions = ['very urgent', 'urgent', 'normal']
+const priorityOptions = ['very urgent', 'urgent', 'normal'];
 
 export default function OrderDetailsInfo({ ticket, refetch }) {
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
   const { ticketCategoriesData } = useGetTicketCategories();
-  const { usersData } = useGetUsers({ role: 'superadmin' })
+  const { usersData } = useGetUsers({ role: 'superadmin' });
 
   const [priority, setPriority] = useState(ticket.priority);
   const [category, setCategory] = useState(ticket.category._id);
@@ -28,37 +27,37 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
 
   const handleCategoryChange = (e) => {
     try {
-      axiosInstance.patch(endpoints.tickets.one(ticket._id), { category: e.target.value })
-      setCategory(e.target.value)
-      enqueueSnackbar('changed successfully!')
-      refetch()
+      axiosInstance.patch(endpoints.tickets.one(ticket._id), { category: e.target.value });
+      setCategory(e.target.value);
+      enqueueSnackbar('changed successfully!');
+      refetch();
     } catch (error) {
-      enqueueSnackbar(error.message)
-      refetch()
+      enqueueSnackbar(error.message);
+      refetch();
     }
-  }
+  };
   const handlePriorityChange = (e) => {
     try {
-      axiosInstance.patch(endpoints.tickets.one(ticket._id), { priority: e.target.value })
-      setPriority(e.target.value)
-      enqueueSnackbar('changed successfully!')
-      refetch()
+      axiosInstance.patch(endpoints.tickets.one(ticket._id), { priority: e.target.value });
+      setPriority(e.target.value);
+      enqueueSnackbar('changed successfully!');
+      refetch();
     } catch (error) {
-      enqueueSnackbar(error.message)
-      refetch()
+      enqueueSnackbar(error.message);
+      refetch();
     }
-  }
+  };
   const handleAssignedToChange = (e) => {
     try {
-      axiosInstance.patch(endpoints.tickets.one(ticket._id), { assigned_to: e.target.value })
-      setAssignedTo(e.target.value)
-      enqueueSnackbar('changed successfully!')
-      refetch()
+      axiosInstance.patch(endpoints.tickets.one(ticket._id), { assigned_to: e.target.value });
+      setAssignedTo(e.target.value);
+      enqueueSnackbar('changed successfully!');
+      refetch();
     } catch (error) {
-      enqueueSnackbar(error.message)
-      refetch()
+      enqueueSnackbar(error.message);
+      refetch();
     }
-  }
+  };
 
   return (
     <Card>
@@ -77,7 +76,14 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
             {
               label: 'category',
               value: (
-                <TextField select variant='standard' size="small" sx={{ width: 150 }} value={category} onChange={handleCategoryChange}>
+                <TextField
+                  select
+                  variant="standard"
+                  size="small"
+                  sx={{ width: 150 }}
+                  value={category}
+                  onChange={handleCategoryChange}
+                >
                   {ticketCategoriesData.map((one, idx) => (
                     <MenuItem key={idx} value={one._id}>
                       {one.name_english}
@@ -89,7 +95,14 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
             {
               label: 'priority',
               value: (
-                <TextField select variant='standard' size="small" sx={{ width: 150 }} value={priority} onChange={handlePriorityChange}>
+                <TextField
+                  select
+                  variant="standard"
+                  size="small"
+                  sx={{ width: 150 }}
+                  value={priority}
+                  onChange={handlePriorityChange}
+                >
                   {priorityOptions.map((one, idx) => (
                     <MenuItem key={idx} value={one}>
                       {one}
@@ -100,12 +113,24 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
             },
             {
               label: 'URL',
-              value: (<Tooltip title={ticket.URL.length > 20 && ticket.URL}> {ticket.URL.length > 20 ? `${ticket.URL.slice(0, 20)}..` : ticket.URL}</Tooltip>),
+              value: (
+                <Tooltip title={ticket.URL.length > 20 && ticket.URL}>
+                  {' '}
+                  {ticket.URL.length > 20 ? `${ticket.URL.slice(0, 20)}..` : ticket.URL}
+                </Tooltip>
+              ),
             },
             {
               label: 'assigned to',
               value: (
-                <TextField select variant='standard' size="small" sx={{ width: 150 }} value={assignedTo} onChange={handleAssignedToChange}>
+                <TextField
+                  select
+                  variant="standard"
+                  size="small"
+                  sx={{ width: 150 }}
+                  value={assignedTo}
+                  onChange={handleAssignedToChange}
+                >
                   {usersData.map((one, idx) => (
                     <MenuItem key={idx} value={one._id}>
                       {one.email}
@@ -157,7 +182,7 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
           </Grid>
         </Grid>
       </Stack>
-    </Card >
+    </Card>
   );
 }
 
