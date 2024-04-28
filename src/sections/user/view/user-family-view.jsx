@@ -30,11 +30,11 @@ export default function Family() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading={t('family')}
+        heading={t('my family')}
         links={[
           { name: t('dashboard'), href: paths.dashboard.root },
           { name: t('user'), href: paths.dashboard.user.root },
-          { name: t('family') },
+          { name: t('my family') },
         ]}
         action={
           <Button
@@ -50,7 +50,7 @@ export default function Family() {
       />
 
       <Dialog open={dialog.value} onClose={dialog.onTrue}>
-        <DialogTitle>Does the user have an account?</DialogTitle>
+        <DialogTitle>{t('Does the user have an account?')}</DialogTitle>
         <DialogActions>
           <Button
             href={paths.dashboard.user.exist}
