@@ -480,7 +480,7 @@ export function useNavData() {
         items: [
           // USER
           {
-            title: t('profile'),
+            title: t('my profile'),
             path: paths.dashboard.user.profile,
             icon: <Iconify icon="iconamoon:profile-bold" />,
           },
@@ -515,27 +515,27 @@ export function useNavData() {
             icon: <Iconify icon="material-symbols:e911-emergency-outline" />,
           },
           {
-            title: t('medical reports'),
+            title: t('my medical reports'),
             path: paths.dashboard.user.medicalreports,
             icon: <Iconify icon="tabler:report-medical" />,
           },
           {
-            title: t('prescriptions'),
+            title: t('my prescriptions'),
             path: paths.dashboard.user.prescriptions,
             icon: <Iconify icon="material-symbols:prescriptions-outline" />,
           },
           {
-            title: t('family'),
+            title: t('my family'),
             path: paths.dashboard.user.family,
             icon: <Iconify icon="icon-park-twotone:family" />,
           },
           {
-            title: t('insurance'),
+            title: t('my insurance'),
             path: paths.dashboard.user.insurance,
             icon: <Iconify icon="streamline:insurance-hand" />,
           },
           {
-            title: t('History'),
+            title: t('my History'),
             path: '#',
             icon: <Iconify icon="material-symbols:history" />,
           },

@@ -24,6 +24,7 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TextField,
   Typography,
   TableContainer,
 } from '@mui/material';
@@ -68,6 +69,15 @@ export default function OldMedicalReports() {
   const handleHover = (id) => {
     setHoveredButtonId(id);
   };
+
+
+  const [filtersbyname, setFiltersbyname] = useState();
+
+
+  const dataFiltered = applyFilter({
+    inputData: oldmedicalreportsdata,
+    filtersbyname,
+  });
 
   const handleMouseOut = () => {
     setHoveredButtonId(null);
@@ -301,15 +311,36 @@ export default function OldMedicalReports() {
               </>
             }
           >
-            {t('Please confirm the delettion of ')}
-            {FileToDelete?.name}
+
+            {t('Please confirm the delettion of ')}{FileToDelete?.name}
           </Alert>
         </Grow>
       )}
-      <Button variant="outlined" color="success" onClick={opening} sx={{ gap: 1, mb: 5 }}>
+      <Button
+        variant="outlined"
+        color="success"
+        onClick={opening}
+        sx={{ gap: 1, mb: 5, display: { md: 'inline-flex', xs: 'none' } }}
+      >
         {t('Upload Your old medical report')}
         <Iconify icon="mingcute:add-line" />
       </Button>
+      <Button
+        variant="outlined"
+        color="success"
+        onClick={opening}
+        sx={{ gap: 1, mb: 5, m: 1, display: { md: 'none', xs: 'inline-flex' } }}
+      >
+        {t('new')}
+        <Iconify icon="mingcute:add-line" />
+      </Button>
+      <TextField
+        onChange={(e) => setFiltersbyname(e.target.value)}
+        name="name"
+        onClick={() => setShowAlert(false)}
+        sx={{ mb: 5, float: { md: 'right', xs: 'left' } }}
+        placeholder="Search..."
+      />
 
       <Dialog open={dialog.value} onClose={dialog.onFalse}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -428,7 +459,7 @@ export default function OldMedicalReports() {
         </FormProvider>
       </Dialog>
 
-      {oldmedicalreportsdata?.map((info, i) => (
+      {dataFiltered?.map((info, i) => (
         <TableContainer
           component={Paper}
           key={i}
@@ -497,4 +528,22 @@ export default function OldMedicalReports() {
       ))}
     </>
   );
+}
+function applyFilter({ inputData, filtersbyname }) {
+  if (!filtersbyname) {
+    return inputData;
+  }
+
+  console.log(inputData);
+  console.log(filtersbyname);
+  if (filtersbyname) {
+    inputData = inputData?.filter(
+      (data) =>
+        (data?.name && data?.name.toLowerCase().indexOf(filtersbyname?.toLowerCase()) !== -1) ||
+        data?._id === filtersbyname ||
+        JSON.stringify(data.code) === filtersbyname
+    );
+  }
+
+  return inputData;
 }
