@@ -187,7 +187,7 @@ export default function ChatMessageInput({
               const formData = new FormData();
               formData.append('body', audioBlob);
               formData.append('contentType', 'voice');
-              await axiosInstance.post(endpoints.chat.one(selectedConversationId), audioBlob);
+              await axiosInstance.post(endpoints.chat.one(selectedConversationId), formData);
               refetch();
               setAudioBlob();
             } catch (e) {
@@ -272,7 +272,6 @@ export default function ChatMessageInput({
               </Stack>
             </Card>
           )}
-          {JSON.stringify(audioBlob)}
           <Stack spacing={3} alignItems="flex-end" sx={{ mt: 2 }}>
             <LoadingButton onClick={HandleSendAttachment} tabIndex={-1} variant="contained">
               send
