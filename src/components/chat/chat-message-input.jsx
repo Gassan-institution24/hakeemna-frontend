@@ -184,13 +184,10 @@ export default function ChatMessageInput({
         } else if (audioBlob) {
           if (selectedConversationId) {
             try {
-              // const formData = new FormData();
-              // formData.append('body', audioBlob);
-              // formData.append('contentType', 'voice');
-              await axiosInstance.post(endpoints.chat.one(selectedConversationId), {
-                body: audioBlob,
-                contentType: 'text',
-              });
+              const formData = new FormData();
+              formData.append('body', audioBlob);
+              formData.append('contentType', 'voice');
+              await axiosInstance.post(endpoints.chat.one(selectedConversationId), audioBlob);
               refetch();
               setAudioBlob();
             } catch (e) {
