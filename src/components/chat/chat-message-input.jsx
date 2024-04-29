@@ -144,11 +144,12 @@ export default function ChatMessageInput({
     } else {
       setRecording(false);
       audioBlob.getTracks().forEach((track) => track.stop());
+      enqueueSnackbar(JSON.stringify(audioBlob))
       console.log('audioBlob', audioBlob)
       handleSendMessage('voice')
     }
   };
-
+  enqueueSnackbar(JSON.stringify(audioBlob))
   const handleSendMessage = useCallback(
     async (event) => {
       try {
