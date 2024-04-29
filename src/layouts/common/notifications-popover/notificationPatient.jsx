@@ -25,7 +25,7 @@ export default function NotificationItem({ notification, handleClick }) {
   const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
-  console.log(notification,"9808900657")
+
   const defaultValues = {
     sender: notification?.patient,
     patient: notification?.sender,
@@ -39,10 +39,16 @@ export default function NotificationItem({ notification, handleClick }) {
   const handleAddFamily = async () => {
     try {
       await axios.patch(endpoints.patients.one(user?.patient?._id), {
-        family_members:  [
-          {patient: notification?.sender},
-          {RelativeRelation: notification?.RelativeRelation}
-        ]
+        family_members: [
+          { patient: notification?.sender },
+          { RelativeRelation: notification?.members },
+        ],
+      });
+      await axios.patch(endpoints.patients.one(notification?.sender), {
+        family_members: [
+          { patient: notification?.patient },
+          { RelativeRelation: notification?.members },
+        ],
       });
       await axios.post(`${endpoints.notifications.all}/accept`, defaultValues);
       enqueueSnackbar(t('Invitation Accepted'));
@@ -102,10 +108,10 @@ export default function NotificationItem({ notification, handleClick }) {
           handleAddFamily();
         }}
       >
-        Accept
+        {t('Accept')}
       </Button>
       <Button size="small" variant="outlined">
-        Decline
+        {t('Decline')}
       </Button>
     </Stack>
   );
@@ -118,7 +124,7 @@ export default function NotificationItem({ notification, handleClick }) {
           handleConfirmation();
         }}
       >
-        yes
+        {t('yes')}
       </Button>
       <Button
         size="small"
@@ -127,7 +133,7 @@ export default function NotificationItem({ notification, handleClick }) {
           handleUnConfirmation();
         }}
       >
-        no
+        {t('no')}
       </Button>
     </Stack>
   );
