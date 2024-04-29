@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import { LoadingButton } from '@mui/lab';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
-import { Box, Card, Dialog, Typography, DialogTitle } from '@mui/material';
+import { Box, Card, Dialog, Typography, DialogTitle, Button, Divider } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -17,6 +17,7 @@ import { createConversation } from 'src/api/chat';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'notistack';
+import VoiceChat from './chat-voice-component';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +42,8 @@ export default function ChatMessageInput({
   const [confirmAttach, setConfirmAttach] = useState();
   const [recording, setRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
+  const [recorder, setRecorder] = useState(null);
+  const [previewAudio, setPreviewAudio] = useState();
 
   const myContact = useMemo(
     () => ({
@@ -112,40 +115,36 @@ export default function ChatMessageInput({
   }, []);
 
 
+  const toggleRecording = async () => {
+    try {
+      if (!recording) {
+        if (navigator.mediaDevices) {
+          setRecording(true)
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          const mediaRecorder = new MediaRecorder(stream);
+          setRecorder(mediaRecorder)
+          const chunks = [];
 
-  const toggleRecording = () => {
-    if (!recording) {
-      if (navigator.mediaDevices) {
-        try {
-          // eslint-disable-next-line
-          navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-            const mimeTypes = ["audio/mp4", "audio/webm"].filter((type) =>
-              MediaRecorder.isTypeSupported(type)
-            );
+          mediaRecorder.ondataavailable = (e) => {
+            chunks.push(e.data);
+          };
 
-            if (mimeTypes.length === 0) return alert("Browser not supported");
-            setRecording(true);
-            setAudioBlob(stream);
-            const recorder = new MediaRecorder(stream, { mimeType: mimeTypes[0] });
-            recorder.addEventListener("dataavailable", async (event) => {
-              console.log("cheking data available for send");
-              if (event.data.size > 0) {
-                console.log("sending audio");
-              } else {
-                console.log("no data avialable");
-              }
-            });
-            recorder.start(1000);
-          });
-        } catch (e) {
-          enqueueSnackbar(e.message, { variant: 'error' })
-        }
-      } else { enqueueSnackbar('no voice device found', { variant: 'error' }) }
-    } else {
-      setRecording(false);
-      audioBlob.getTracks().forEach((track) => track.stop());
-      console.log('audioBlob', audioBlob)
-      handleSendMessage('voice')
+          mediaRecorder.onstop = async () => {
+            const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
+            setAudioBlob(blob);
+            setPreviewAudio(URL.createObjectURL(blob))
+            setRecording(false)
+            await navigator.mediaDevices.getUserMedia({ audio: true })
+          };
+
+          mediaRecorder.start();
+        } else { enqueueSnackbar('no voice device found', { variant: 'error' }) }
+      } else {
+        // setRecording(false);
+        recorder.stop();
+      }
+    } catch (e) {
+      enqueueSnackbar(e.message, { variant: 'error' })
     }
   };
   const handleSendMessage = useCallback(
@@ -190,6 +189,7 @@ export default function ChatMessageInput({
               await axiosInstance.post(endpoints.chat.one(selectedConversationId), formData);
               refetch();
               setAudioBlob();
+              setPreviewAudio();
             } catch (e) {
               enqueueSnackbar(e.message, { variant: 'error' })
             }
@@ -221,7 +221,7 @@ export default function ChatMessageInput({
 
   return (
     <>
-      <InputBase
+      {!previewAudio && <InputBase
         value={message}
         onKeyUp={handleSendMessage}
         onChange={handleChangeMessage}
@@ -251,8 +251,8 @@ export default function ChatMessageInput({
           flexShrink: 0,
           borderTop: (theme) => `solid 1px ${theme.palette.divider}`,
         }}
-      />
-
+      />}
+      {previewAudio && <><Divider /><VoiceChat onSend={() => handleSendMessage('voice')} onCancel={() => setPreviewAudio()} src={previewAudio} /></>}
       <input type="file" ref={fileRef} onChange={handleChangeAttach} style={{ display: 'none' }} />
       <Dialog open={confirmAttach} onClose={handleCloseConfirm}>
         <Stack sx={{ px: 2, pb: 3 }}>
