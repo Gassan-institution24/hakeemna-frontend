@@ -144,12 +144,10 @@ export default function ChatMessageInput({
     } else {
       setRecording(false);
       audioBlob.getTracks().forEach((track) => track.stop());
-      enqueueSnackbar(JSON.stringify(audioBlob))
       console.log('audioBlob', audioBlob)
       handleSendMessage('voice')
     }
   };
-  enqueueSnackbar(JSON.stringify(audioBlob))
   const handleSendMessage = useCallback(
     async (event) => {
       try {
@@ -186,10 +184,13 @@ export default function ChatMessageInput({
         } else if (audioBlob) {
           if (selectedConversationId) {
             try {
-              const formData = new FormData();
-              formData.append('body', audioBlob);
-              formData.append('contentType', 'voice');
-              await axiosInstance.post(endpoints.chat.one(selectedConversationId), formData);
+              // const formData = new FormData();
+              // formData.append('body', audioBlob);
+              // formData.append('contentType', 'voice');
+              await axiosInstance.post(endpoints.chat.one(selectedConversationId), {
+                body: audioBlob,
+                contentType: 'text',
+              });
               refetch();
               setAudioBlob();
             } catch (e) {
@@ -274,6 +275,7 @@ export default function ChatMessageInput({
               </Stack>
             </Card>
           )}
+          {JSON.stringify(audioBlob)}
           <Stack spacing={3} alignItems="flex-end" sx={{ mt: 2 }}>
             <LoadingButton onClick={HandleSendAttachment} tabIndex={-1} variant="contained">
               send
