@@ -37,10 +37,10 @@ export default function ChatMessageInput({
   const [attachment, setAttachment] = useState();
   const [confirmAttach, setConfirmAttach] = useState();
   const [recording, setRecording] = useState(false);
-  const [audioBlob, setAudioBlob] = useState(null);
+  const [record, setRecord] = useState(null);
 
-  const mediaRecorder = useRef(null);
-  const chunks = useRef([]);
+  const audioChunk = useRef([]);
+  const mediaRecorderRef = useRef(null);
 
   const myContact = useMemo(
     () => ({
@@ -113,52 +113,52 @@ export default function ChatMessageInput({
 
 
 
-  const toggleRecording = () => {
+  const toggleRecording = async () => {
     if (!recording) {
-      // eslint-disable-next-line
-      navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-        const mimeTypes = ["audio/mp4", "audio/webm"].filter((type) =>
-          MediaRecorder.isTypeSupported(type)
-        );
-
-        if (mimeTypes.length === 0) return alert("Browser not supported");
-        setRecording(true);
-        setAudioBlob(stream);
-        const recorder = new MediaRecorder(stream, { mimeType: mimeTypes[0] });
-        recorder.addEventListener("dataavailable", async (event) => {
-          console.log("cheking data available for send");
-          if (event.data.size > 0) {
-            console.log("sending audio");
-          } else {
-            console.log("no data avialable");
+      if (navigator.mediaDevices) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+          const mediaRecorder = new MediaRecorder(stream)
+          mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) {
+              audioChunk.current.push()
+              setRecording(true)
+            }
           }
-        });
-        recorder.start(1000);
-      });
+          mediaRecorder.onstop = (e) => {
+            const audioBlob = new Blob(audioChunk.current, { type: "audio/wav" })
+            const audioURL = URL.createObjectURL(audioBlob)
+            setRecord(audioURL)
+          }
+          mediaRecorderRef.current = mediaRecorder
+        } catch (e) {
+          console.error(e)
+        }
+      } else {
+        console.error('device not found')
+      }
     } else {
-      setRecording(false);
-      audioBlob.getTracks().forEach((track) => track.stop());
-      setRecording(false);
-      console.log('audioBlob', audioBlob)
+      mediaRecorderRef.current.stop()
+      setRecording(false)
     }
-  };
+  }
 
-  const sendAudio = () => {
-    if (!audioBlob) return;
+  // const sendAudio = () => {
+  //   if (!audioBlob) return;
 
-    // Simulate sending audio to the backend (replace with actual backend endpoint)
-    fetch('https://example.com/upload-audio', {
-      method: 'POST',
-      body: audioBlob,
-    })
-      .then(response => {
-        // Handle response from backend
-        console.log('Audio sent successfully:', response);
-      })
-      .catch(error => {
-        console.error('Error sending audio:', error);
-      });
-  };
+  //   // Simulate sending audio to the backend (replace with actual backend endpoint)
+  //   fetch('https://example.com/upload-audio', {
+  //     method: 'POST',
+  //     body: audioBlob,
+  //   })
+  //     .then(response => {
+  //       // Handle response from backend
+  //       console.log('Audio sent successfully:', response);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error sending audio:', error);
+  //     });
+  // };
 
   const handleSendMessage = useCallback(
     async (event) => {
