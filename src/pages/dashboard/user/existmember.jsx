@@ -67,11 +67,7 @@ export default function Exist() {
 
   return (
     <Box>
-      {/* <Box sx={{ display: 'inline-flex' }}>
-        <Typography sx={{ position: 'relative', top: 10 }} variant="h4">
-          {t('Relative Relation')}
-        </Typography>
-      </Box> */}
+  
 
       <Card sx={{ p: 3 }}>
         <Box
