@@ -21,7 +21,7 @@ import { useGetMessage } from './hooks';
 export default function ChatMessageItem({ message, participants, onOpenLightbox }) {
   const { user } = useAuthContext();
 
-  const { me, senderDetails, hasImage, hasFile } = useGetMessage({
+  const { me, senderDetails, hasImage, hasFile, hasVoice } = useGetMessage({
     message,
     participants,
     currentUserId: `${user?._id}`,
@@ -30,24 +30,6 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
   const { firstName, avatarUrl } = senderDetails;
 
   const { body, file_name, createdAt } = message;
-  // const handleDownload = () => {
-  //   const fileUrl = 'your_file_url_here'; // Replace 'your_file_url_here' with the actual URL
-
-  //   // Create a temporary anchor element
-  //   const link = document.createElement('a');
-  //   link.href = fileUrl;
-  //   link.download = 'filename'; // You can specify the file name here
-  //   link.target = '_blank';
-
-  //   // Append the anchor element to the document body
-  //   document.body.appendChild(link);
-
-  //   // Trigger a click event on the anchor element
-  //   link.click();
-
-  //   // Remove the anchor element from the document body
-  //   document.body.removeChild(link);
-  // };
 
   const renderInfo = (
     <Typography
@@ -85,7 +67,7 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
           ml: 3,
           bgcolor: 'primary.lighter',
         }),
-        ...((hasImage || hasFile) && {
+        ...((hasImage || hasFile || hasVoice) && {
           p: 0,
           bgcolor: 'transparent',
         }),
@@ -117,7 +99,10 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
           </Card>
         </Link>
       )}
-      {!hasImage && !hasFile && (
+      {hasVoice && (
+        <audio controls src={body} ><track kind="captions" /></audio>
+      )}
+      {!hasImage && !hasFile && !hasVoice && (
         <Typography variant="body2" sx={{ overflowWrap: 'break-word' }}>
           {body}
         </Typography>
