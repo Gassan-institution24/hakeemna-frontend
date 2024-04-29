@@ -56,8 +56,7 @@ export default function ExistPatientRow({ row, selected }) {
       type: 'invite',
       members
     };
-    dialog.onFalse();
-    console.log(members, 'members');
+  
     try {
       await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
       setClicked((prevClicked) => prevClicked + 1);
@@ -92,7 +91,7 @@ export default function ExistPatientRow({ row, selected }) {
         </DialogActions>
         <DialogContent>
           <Button variant="contained" sx={{ mb: 2, float: 'right' }} onClick={dialog.onFalse}>
-            BACK &nbsp;
+            {t('BACK')} &nbsp;
             <Iconify icon="lets-icons:back" />{' '}
           </Button>
         </DialogContent>
