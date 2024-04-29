@@ -19,9 +19,12 @@ export default function useGetMessage({ message, participants, currentUserId }) 
 
   const hasFile = message.contentType === 'file';
 
+  const hasVoice = message.contentType === 'voice';
+
   return {
     hasImage,
     hasFile,
+    hasVoice,
     me,
     senderDetails,
   };
