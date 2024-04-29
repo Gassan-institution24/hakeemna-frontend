@@ -16,6 +16,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { createConversation } from 'src/api/chat';
 
 import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -33,14 +34,13 @@ export default function ChatMessageInput({
 
   const fileRef = useRef(null);
 
+  const { enqueueSnackbar } = useSnackbar()
+
   const [message, setMessage] = useState('');
   const [attachment, setAttachment] = useState();
   const [confirmAttach, setConfirmAttach] = useState();
   const [recording, setRecording] = useState(false);
-  const [record, setRecord] = useState(null);
-
-  const audioChunk = useRef([]);
-  const mediaRecorderRef = useRef(null);
+  const [audioBlob, setAudioBlob] = useState(null);
 
   const myContact = useMemo(
     () => ({
@@ -113,64 +113,53 @@ export default function ChatMessageInput({
 
 
 
-  const toggleRecording = async () => {
+  const toggleRecording = () => {
     if (!recording) {
       if (navigator.mediaDevices) {
         try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-          const mediaRecorder = new MediaRecorder(stream)
-          mediaRecorder.ondataavailable = (e) => {
-            if (e.data.size > 0) {
-              audioChunk.current.push()
-              setRecording(true)
-            }
-          }
-          mediaRecorder.onstop = (e) => {
-            const audioBlob = new Blob(audioChunk.current, { type: "audio/wav" })
-            const audioURL = URL.createObjectURL(audioBlob)
-            setRecord(audioURL)
-          }
-          mediaRecorderRef.current = mediaRecorder
+          // eslint-disable-next-line
+          navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+            const mimeTypes = ["audio/mp4", "audio/webm"].filter((type) =>
+              MediaRecorder.isTypeSupported(type)
+            );
+
+            if (mimeTypes.length === 0) return alert("Browser not supported");
+            setRecording(true);
+            setAudioBlob(stream);
+            const recorder = new MediaRecorder(stream, { mimeType: mimeTypes[0] });
+            recorder.addEventListener("dataavailable", async (event) => {
+              console.log("cheking data available for send");
+              if (event.data.size > 0) {
+                console.log("sending audio");
+              } else {
+                console.log("no data avialable");
+              }
+            });
+            recorder.start(1000);
+          });
         } catch (e) {
-          console.error(e)
+          enqueueSnackbar(e.message, { variant: 'error' })
         }
-      } else {
-        console.error('device not found')
-      }
+      } else { enqueueSnackbar('no voice device found', { variant: 'error' }) }
     } else {
-      mediaRecorderRef.current.stop()
-      setRecording(false)
+      setRecording(false);
+      audioBlob.getTracks().forEach((track) => track.stop());
+      console.log('audioBlob', audioBlob)
+      handleSendMessage('voice')
     }
-  }
-
-  // const sendAudio = () => {
-  //   if (!audioBlob) return;
-
-  //   // Simulate sending audio to the backend (replace with actual backend endpoint)
-  //   fetch('https://example.com/upload-audio', {
-  //     method: 'POST',
-  //     body: audioBlob,
-  //   })
-  //     .then(response => {
-  //       // Handle response from backend
-  //       console.log('Audio sent successfully:', response);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error sending audio:', error);
-  //     });
-  // };
+  };
 
   const handleSendMessage = useCallback(
     async (event) => {
       try {
-        if (event.key === 'Enter') {
+        if (event?.key === 'Enter') {
           if (message) {
             if (selectedConversationId) {
               try {
                 await axiosInstance.post(endpoints.chat.one(selectedConversationId), messageData);
                 refetch();
               } catch (e) {
-                console.log(e);
+                enqueueSnackbar(e.message, { variant: 'error' })
               }
             } else {
               const res = await createConversation(conversationData);
@@ -190,7 +179,20 @@ export default function ChatMessageInput({
               refetch();
               setAttachment();
             } catch (e) {
-              console.log(e);
+              enqueueSnackbar(e.message, { variant: 'error' })
+            }
+          }
+        } else if (audioBlob) {
+          if (selectedConversationId) {
+            try {
+              const formData = new FormData();
+              formData.append('body', audioBlob);
+              formData.append('contentType', 'voice');
+              await axiosInstance.post(endpoints.chat.one(selectedConversationId), formData);
+              refetch();
+              setAudioBlob();
+            } catch (e) {
+              enqueueSnackbar(e.message, { variant: 'error' })
             }
           }
         }
@@ -208,6 +210,8 @@ export default function ChatMessageInput({
       attachment,
       attachMessageData,
       messageData,
+      audioBlob,
+      enqueueSnackbar
     ]
   );
 
