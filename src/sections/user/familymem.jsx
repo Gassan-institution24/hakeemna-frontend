@@ -31,7 +31,7 @@ export default function FamilyMembers() {
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
-
+  // console.log(user?.patient, 'user');
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -77,6 +77,19 @@ export default function FamilyMembers() {
       popover.onClose();
     }
   };
+
+  const handleRemoveFamilyMember = async (patientId, test) => {
+    try {
+      await axios.patch(endpoints.patients.deleteFamilyMember(patientId));
+      await axios.patch(endpoints.patients.deleteFamilyMember(test));
+
+      enqueueSnackbar('Family member deleted successfully', { variant: 'success' });
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
+    }
+  };
+
   return Data?.map((info, index) => (
     <Card key={index}>
       <IconButton
@@ -92,14 +105,14 @@ export default function FamilyMembers() {
       <Stack sx={{ p: 3, pb: 2 }}>
         <Avatar
           alt={info?.name_english}
-          src={info?.unit_service?.company_logo}
+          src={info?.profile_picture}
           variant="rounded"
           sx={{ width: 48, height: 48, mb: 2 }}
         />
 
         <ListItemText
-          primary={<span style={{ color: 'inherit' }}>{info?.name_english}</span>}
-          // secondary={<span style={{ color: 'inherit' }}> <Iconify icon="flat-color-icons:cell-phone"/> {info?.mobile_num1}</span>}
+          primary={<span style={{ color: 'inherit' }}>{info?.name_english} </span>}
+          secondary={<span style={{ color: 'inherit' }}> {info?.email}</span>}
           primaryTypographyProps={{
             variant: 'subtitle1',
           }}
@@ -110,9 +123,12 @@ export default function FamilyMembers() {
             color: 'text.disabled',
           }}
         />
+        <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
+          {t('Relative Relation:')} {info?.family_members[1]?.RelativeRelation?.name_english}
+        </Stack>
 
         <Stack spacing={0.5} direction="row" alignItems="center" sx={{ typography: 'caption' }}>
-          IDno: {info?.identification_num}
+          {t('IDno: ')} {info?.identification_num}
         </Stack>
         <Stack
           spacing={0.5}
@@ -141,7 +157,15 @@ export default function FamilyMembers() {
           onClose={popover.onClose}
         >
           <Iconify icon="mdi:account-switch-outline" />
-          Switch account
+          {t('Switch account')}
+        </MenuItem>
+        <MenuItem
+          lang="ar"
+          onClick={() => handleRemoveFamilyMember(user?.patient?._id, info?._id)}
+          onClose={popover.onClose}
+        >
+          <Iconify icon="material-symbols:group-remove" />
+          {t('Remove')}
         </MenuItem>
       </CustomPopover>
       <ConfirmDialog
