@@ -49,7 +49,7 @@ export default function Doctorpage() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const { appointmenttypesData } = useGetAppointmentTypes();
+  // const { appointmenttypesData } = useGetAppointmentTypes();
   const { id } = params;
   const { user } = useAuthContext();
   const [TimeData, setTimeData] = useState();
@@ -67,15 +67,15 @@ export default function Doctorpage() {
   const patientEmail = user?.email;
   const [selectedAppointmentType, setSelectedAppointmentType] = useState('');
 
-  const { appointmentsData, appointmentTypes, refetch } = useGetEmployeeSelectedAppointments({
-    id,
-    startDate: currentDateTime, // Date selected by the user
-    appointmentType: selectedAppointmentType, // Type selected by the user
-  });
-  // const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
+  // const { appointmentsData, appointmentTypes, refetch } = useGetEmployeeSelectedAppointments({
   //   id,
   //   startDate: currentDateTime, // Date selected by the user
+  //   appointmentType: selectedAppointmentType, // Type selected by the user
   // });
+  const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
+    id,
+    startDate: currentDateTime, // Date selected by the user
+  });
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
@@ -281,7 +281,7 @@ export default function Doctorpage() {
           />
         </Typography>
 
-        <Select
+        {/* <Select
           value={selectedAppointmentType}
           onChange={handleAppointmentTypeChange}
           sx={{
@@ -297,7 +297,7 @@ export default function Doctorpage() {
                 {type.name_english}
               </MenuItem>
             ))}
-        </Select>
+        </Select> */}
       </Box>
     </Card>
   );
