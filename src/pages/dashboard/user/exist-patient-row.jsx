@@ -58,6 +58,7 @@ export default function ExistPatientRow({ row, selected }) {
     };
 
     try {
+      dialog.onFalse()
       await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
       setClicked((prevClicked) => prevClicked + 1);
       enqueueSnackbar(t('An invitation to join the family has been sent successfully'));

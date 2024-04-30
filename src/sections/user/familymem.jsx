@@ -30,6 +30,11 @@ export default function FamilyMembers() {
   const loading = useBoolean();
   const router = useRouter();
 
+  const today = new Date();
+  const dob = new Date(user?.patient?.birth_date);
+
+  const age = today.getFullYear() - dob.getFullYear();
+
   const { enqueueSnackbar } = useSnackbar();
   // console.log(user?.patient, 'user');
   const { t } = useTranslate();
@@ -84,6 +89,10 @@ export default function FamilyMembers() {
       await axios.patch(endpoints.patients.deleteFamilyMember(test));
 
       enqueueSnackbar('Family member deleted successfully', { variant: 'success' });
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error(error);
       enqueueSnackbar(typeof error === 'string' ? error : error.message, { variant: 'error' });
@@ -92,15 +101,19 @@ export default function FamilyMembers() {
 
   return Data?.map((info, index) => (
     <Card key={index}>
-      <IconButton
-        onClick={(event) => {
-          popover.onOpen(event);
-          setSelectedIndex(info?.email);
-        }}
-        sx={{ position: 'absolute', top: 8, right: 8 }}
-      >
-        <Iconify icon="flat-color-icons:info" />
-      </IconButton>
+      {age > 18 ? (
+        <IconButton
+          onClick={(event) => {
+            popover.onOpen(event);
+            setSelectedIndex(info?.email);
+          }}
+          sx={{ position: 'absolute', top: 8, right: 8 }}
+        >
+          <Iconify icon="flat-color-icons:info" />
+        </IconButton>
+      ) : (
+        ''
+      )}
 
       <Stack sx={{ p: 3, pb: 2 }}>
         <Avatar
@@ -145,20 +158,23 @@ export default function FamilyMembers() {
         arrow="right-bottom"
         sx={{ boxShadow: 'none', width: 'auto' }}
       >
-        <MenuItem
-          lang="ar"
-          onClick={() => {
-            // Close the popover
-            popover.onClose();
+        {info?.family_members[2]?.isendit === 'yes' ? (
+          <MenuItem
+            lang="ar"
+            onClick={() => {
+              popover.onClose();
 
-            // Open the ConfirmDialog
-            confirm.onTrue();
-          }}
-          onClose={popover.onClose}
-        >
-          <Iconify icon="mdi:account-switch-outline" />
-          {t('Switch account')}
-        </MenuItem>
+              confirm.onTrue();
+            }}
+            onClose={popover.onClose}
+          >
+            <Iconify icon="mdi:account-switch-outline" />
+            {t('Switch account')}
+          </MenuItem>
+        ) : (
+          ''
+        )}
+
         <MenuItem
           lang="ar"
           onClick={() => handleRemoveFamilyMember(user?.patient?._id, info?._id)}

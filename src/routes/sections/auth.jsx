@@ -37,7 +37,7 @@ export const authRoutes = [
   {
     path: 'register',
     element: (
-      <AuthClassicLayout title="Manage the job more effectively with Minimal">
+      <AuthClassicLayout title="your health medical record">
         <JwtRegisterPage />
       </AuthClassicLayout>
     ),
