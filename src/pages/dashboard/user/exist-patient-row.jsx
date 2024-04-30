@@ -54,10 +54,11 @@ export default function ExistPatientRow({ row, selected }) {
       photo_URL: 'https://cdn-icons-png.flaticon.com/512/6193/6193226.png',
       category: 'invite',
       type: 'invite',
-      members
+      members,
     };
   
     try {
+      dialog.onFalse()
       await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
       setClicked((prevClicked) => prevClicked + 1);
       enqueueSnackbar(t('An invitation to join the family has been sent successfully'));
