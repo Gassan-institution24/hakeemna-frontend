@@ -152,8 +152,11 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
           msg: `creating an employee <strong>${data.em_name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
           ar_msg: `إضافة موظف  <strong>${data.name_arabic}</strong> إلى قسم <strong>${departmentData.name_arabic}</strong>`,
         });
+        reset();
+        enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
+        router.push(paths.unitservice.departments.employees.root(departmentData._id));
       } else {
-        await axiosInstance.post(endpoints.auth.register, {
+        const submit = await axiosInstance.post(endpoints.auth.register, {
           role: 'employee',
           userName: data.name_english,
           ...data,
@@ -164,10 +167,17 @@ export default function TableNewEditForm({ currentTable, departmentData }) {
           link: paths.unitservice.departments.employees.root(departmentData._id),
           msg: `updating an employee <strong>${data.name_english}</strong> in <strong>${departmentData.name_english}</strong> department`,
         });
+        reset();
+        enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
+        router.push(
+          submit.data?.engagement?._id
+            ? paths.unitservice.departments.employees.acl(
+                departmentData._id,
+                submit.data?.engagement?._id
+              )
+            : paths.unitservice.departments.employees.root(departmentData._id)
+        );
       }
-      reset();
-      enqueueSnackbar(currentTable ? t('update success!') : t('create success!'));
-      router.push(paths.unitservice.departments.employees.root(departmentData._id));
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(

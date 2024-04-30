@@ -70,9 +70,7 @@ export default function OldMedicalReports() {
     setHoveredButtonId(id);
   };
 
-
   const [filtersbyname, setFiltersbyname] = useState();
-
 
   const dataFiltered = applyFilter({
     inputData: oldmedicalreportsdata,
@@ -311,8 +309,8 @@ export default function OldMedicalReports() {
               </>
             }
           >
-
-            {t('Please confirm the delettion of ')}{FileToDelete?.name}
+            {t('Please confirm the delettion of ')}
+            {FileToDelete?.name}
           </Alert>
         </Grow>
       )}

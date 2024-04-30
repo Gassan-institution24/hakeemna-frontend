@@ -1,0 +1,169 @@
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
+
+import { Stack, Button, Checkbox, Typography } from '@mui/material';
+
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useAuthContext } from 'src/auth/hooks';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
+import { useLocales, useTranslate } from 'src/locales';
+import { useGetUSWorkGroups, useGetUSWorkShifts, useGetUSDepartments } from 'src/api';
+
+import { ConfirmDialog } from 'src/components/custom-dialog';
+
+export default function StartupCreating({ open, onClose }) {
+  const { user } = useAuthContext();
+  const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslate();
+  const checkAcl = useAclGuard();
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
+
+  const USData =
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
+
+  const { departmentsData } = useGetUSDepartments(USData?._id);
+  const { workGroupsData } = useGetUSWorkGroups(USData?._id);
+  const { workShiftsData } = useGetUSWorkShifts(USData?._id);
+
+  const [tables, setTables] = useState([]);
+
+  const onAcceptCreating = () => {
+    try {
+      if (tables.includes('department')) {
+        axiosInstance.post(endpoints.departments.all, {
+          unit_service: USData?._id,
+          name_english: 'main department',
+          name_arabic: 'القسم الرئيسي',
+        });
+      }
+      if (tables.includes('work shift')) {
+        const start_time = new Date();
+        start_time.setHours(8, 0, 0, 0);
+        const end_time = new Date();
+        end_time.setHours(15, 0, 0, 0);
+        axiosInstance.post(endpoints.work_shifts.all, {
+          unit_service: USData?._id,
+          start_time,
+          end_time,
+          name_english: 'morning work shift',
+          name_arabic: 'وردية عمل صباحية',
+        });
+      }
+      if (tables.includes('work group')) {
+        axiosInstance.post(endpoints.work_groups.all, {
+          unit_service: USData?._id,
+          employees: [
+            user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
+          ],
+          name_english: `${user.employee?.name_english} work group`,
+          name_arabic: `فريق عمل ${user.employee?.name_arabic}`,
+        });
+      }
+      window.location.reload();
+      onclose();
+    } catch (error) {
+      enqueueSnackbar(
+        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+        {
+          variant: 'error',
+        }
+      );
+      onclose();
+    }
+  };
+  return (
+    <ConfirmDialog
+      open={open}
+      onClose={onClose}
+      title={t('creating startup data')}
+      content={
+        <Stack sx={{ p: 1 }}>
+          <Typography variant="subtitle2" paddingBottom="5px">
+            {t('Select types of data you want me to create')}
+          </Typography>
+
+          {USData &&
+            (!USData?.employees_number || USData?.employees_number > 3) &&
+            checkAcl({ category: 'unit_service', subcategory: 'departments', acl: 'create' }) && (
+              <Stack direction="row">
+                <Checkbox
+                  disabled={departmentsData.length > 0}
+                  checked={tables.includes('department')}
+                  onChange={() =>
+                    tables.includes('department')
+                      ? setTables(tables.filter((one) => one !== 'department'))
+                      : setTables((prev) => [...prev, 'department'])
+                  }
+                />
+                <Typography variant="subtitle2" alignSelf="center">
+                  {t('department')}
+                </Typography>
+                {departmentsData.length > 0 && (
+                  <Typography
+                    sx={{ p: 2, color: 'error.main' }}
+                    alignSelf="center"
+                    variant="caption"
+                  >
+                    {t('already created')}
+                  </Typography>
+                )}
+              </Stack>
+            )}
+
+          <Stack direction="row">
+            <Checkbox
+              disabled={workGroupsData.length > 0}
+              checked={tables.includes('work group')}
+              onChange={() =>
+                tables.includes('work group')
+                  ? setTables(tables.filter((one) => one !== 'work group'))
+                  : setTables((prev) => [...prev, 'work group'])
+              }
+            />
+            <Typography variant="subtitle2" alignSelf="center">
+              {t('work group')}
+            </Typography>
+            {workGroupsData.length > 0 && (
+              <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant="caption">
+                {t('already created')}
+              </Typography>
+            )}
+          </Stack>
+
+          <Stack direction="row">
+            <Checkbox
+              disabled={workShiftsData.length > 0}
+              checked={tables.includes('work shift')}
+              onChange={() =>
+                tables.includes('work shift')
+                  ? setTables(tables.filter((one) => one !== 'work shift'))
+                  : setTables((prev) => [...prev, 'work shift'])
+              }
+            />
+            <Typography variant="subtitle2" alignSelf="center">
+              {t('work shift')}
+            </Typography>
+            {workShiftsData.length > 0 && (
+              <Typography sx={{ p: 2, color: 'error.main' }} alignSelf="center" variant="caption">
+                {t('already created')}
+              </Typography>
+            )}
+          </Stack>
+        </Stack>
+      }
+      action={
+        <Button variant="contained" color="info" onClick={onAcceptCreating}>
+          {t('create')}
+        </Button>
+      }
+    />
+  );
+}
+StartupCreating.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
+};

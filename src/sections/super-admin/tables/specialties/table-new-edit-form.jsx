@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
-import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMemo, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -18,7 +18,7 @@ import { useRouter } from 'src/routes/hooks';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFTextField, RHFUploadAvatar } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +33,7 @@ export default function TableNewEditForm({ currentTable }) {
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
     description: Yup.string(),
+    speciality_image: Yup.mixed(),
     description_arabic: Yup.string().nullable(),
   });
 
@@ -42,6 +43,7 @@ export default function TableNewEditForm({ currentTable }) {
       name_english: currentTable?.name_english || '',
       description: currentTable?.description || '',
       description_arabic: currentTable?.description_arabic || null,
+      speciality_image: currentTable?.speciality_image || null,
     }),
     [currentTable]
   );
@@ -71,16 +73,21 @@ export default function TableNewEditForm({ currentTable }) {
 
   const {
     reset,
+    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      const formData = new FormData();
+      Object.keys(data).forEach((key) => {
+        formData.append(key, data[key]);
+      });
       if (currentTable) {
-        await axiosInstance.patch(endpoints.specialities.one(currentTable._id), data);
+        await axiosInstance.patch(endpoints.specialities.one(currentTable._id), formData);
       } else {
-        await axiosInstance.post(endpoints.specialities.all, data);
+        await axiosInstance.post(endpoints.specialities.all, formData);
       }
       reset();
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
@@ -90,12 +97,28 @@ export default function TableNewEditForm({ currentTable }) {
     }
   });
 
+  const handleDrop = useCallback(
+    (acceptedFiles) => {
+      const file = acceptedFiles[0];
+      // setCompanyLog(file);
+      const newFile = Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      });
+
+      if (file) {
+        setValue('speciality_image', newFile, { shouldValidate: true });
+      }
+    },
+    [setValue]
+  );
+
   /* eslint-disable */
   useEffect(() => {
     reset({
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
       description: currentTable?.description || '',
+      speciality_image: currentTable?.speciality_image || null,
       description_arabic: currentTable?.description_arabic || null,
     });
   }, [currentTable]);
@@ -106,6 +129,7 @@ export default function TableNewEditForm({ currentTable }) {
       <Grid container spacing={3}>
         <Grid xs={12} maxWidth="md">
           <Card sx={{ p: 3 }}>
+            <RHFUploadAvatar sx={{ mb: 3 }} name="speciality_image" onDrop={handleDrop} />
             <Box
               rowGap={3}
               columnGap={2}

@@ -247,7 +247,31 @@ export function useGetEmployeeAppointments({ id, page, sortBy, rowsPerPage, orde
   return { ...memoizedValue, refetch };
 }
 
-// export function useGetEmployeeSelectedAppointments({ id, startDate }) {
+export function useGetEmployeeSelectedAppointments({ id, startDate }) {
+  const URL = endpoints.appointments.employee.select({
+    id,
+    startDate,
+  });
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      appointmentsData: data?.appointments || [],
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+// export function useGetEmployeeSelectedAppointments({ id, startDate, appointmentType }) {
 //   const URL = endpoints.appointments.employee.select({
 //     id,
 //     startDate,
@@ -272,32 +296,32 @@ export function useGetEmployeeAppointments({ id, page, sortBy, rowsPerPage, orde
 
 //   return { ...memoizedValue, refetch };
 // }
-export function useGetEmployeeSelectedAppointments({ id, startDate, appointmentType }) {
-  const URL = endpoints.appointments.employee.select({
-    id,
-    startDate,
-    appointmentType,
-  });
+// export function useGetEmployeeSelectedAppointments({ id, startDate, appointmentType }) {
+//   const URL = endpoints.appointments.employee.select({
+//     id,
+//     startDate,
+//     appointmentType,
+//   });
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  const memoizedValue = useMemo(
-    () => ({
-      appointmentsData: data?.appointments || [],
-      appointmentTypes: data?.types || [],
-      loading: isLoading,
-      error,
-      validating: isValidating,
-      empty: !isLoading && !data?.length,
-    }),
-    [data, error, isLoading, isValidating]
-  );
-  const refetch = async () => {
-    // Use the mutate function to re-fetch the data for the specified key (URL)
-    await mutate(URL);
-  };
+//   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+//   const memoizedValue = useMemo(
+//     () => ({
+//       appointmentsData: data?.appointments || [],
+//       appointmentTypes: data?.types || [],
+//       loading: isLoading,
+//       error,
+//       validating: isValidating,
+//       empty: !isLoading && !data?.length,
+//     }),
+//     [data, error, isLoading, isValidating]
+//   );
+//   const refetch = async () => {
+//     // Use the mutate function to re-fetch the data for the specified key (URL)
+//     await mutate(URL);
+//   };
 
-  return { ...memoizedValue, refetch };
-}
+//   return { ...memoizedValue, refetch };
+// }
 
 export function useGetAppointment(id) {
   const URL = endpoints.appointments.one(id);

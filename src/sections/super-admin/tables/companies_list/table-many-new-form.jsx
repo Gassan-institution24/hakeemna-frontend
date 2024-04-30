@@ -27,7 +27,12 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { Upload } from 'src/components/upload';
 import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
-import { useTable, TableHeadCustom, TableSelectedAction } from 'src/components/table';
+import {
+  useTable,
+  TableHeadCustom,
+  TableSelectedAction,
+  TablePaginationCustom,
+} from 'src/components/table';
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
@@ -56,6 +61,7 @@ export default function NewEditManyForm() {
   const { enqueueSnackbar } = useSnackbar();
 
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // const handleArabicInputChange = (index, event) => {
   //   const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/;
@@ -69,7 +75,7 @@ export default function NewEditManyForm() {
   //   }
   // };
 
-  const handleEnglishInputChange = (index, event) => {
+  const handleEnglishInputChange = useCallback((index, event) => {
     // const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/;
 
     // if (englishRegex.test(event.target.value)) {
@@ -79,7 +85,7 @@ export default function NewEditManyForm() {
       return updated;
     });
     // }
-  };
+  }, []);
 
   // const handleSelect = (index, event) => {
   //   setData((prev) => {
@@ -103,32 +109,49 @@ export default function NewEditManyForm() {
 
   const handleDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
-
+    // setExcelFile(file)
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         const results = e.target.result;
         const workbook = XLSX.read(results, { type: 'binary' });
 
         const workSheets = workbook.Sheets[workbook.SheetNames[0]];
 
         const jsonData = XLSX.utils.sheet_to_json(workSheets);
-        setData(jsonData);
+        console.log('jsonData', jsonData);
+        const chunkSize = 10; // You can adjust this value based on performance testing
+        // const chunks = [];
+
+        for (let i = 0; i < jsonData.length; i += chunkSize) {
+          setData((prev) => [...prev, ...jsonData.slice(i, i + chunkSize)]);
+        }
+
+        // Process each chunk asynchronously
+        // setData(jsonData.slice(0, 5));
       };
       reader.readAsBinaryString(file);
     }
   }, []);
+  console.log('jsonData', data);
 
   const handleCreate = async () => {
-    // const isFormValid = data.every((one) => one.name_english && one.name_arabic && one.duration);
-
-    // if (!isFormValid) {
-    //   alert('Please fill in all required fields.');
-    //   return;
-    // }
     try {
-      await axiosInstance.post(endpoints.companies.many, data);
-      router.push(paths.superadmin.tables.companies.root); /// edit
+      setLoading(true);
+      const chunkSize = 50;
+      const totalChunks = Math.ceil(data.length / chunkSize);
+
+      const promises = Array.from({ length: totalChunks }, (_, index) => {
+        const startIndex = index * chunkSize;
+        const endIndex = Math.min(startIndex + chunkSize, data.length);
+        const chunkData = data.slice(startIndex, endIndex);
+
+        return axiosInstance.post(endpoints.companies.many, chunkData);
+      });
+
+      await Promise.all(promises);
+
+      router.push(paths.superadmin.tables.companies.root);
     } catch (e) {
       enqueueSnackbar(e, { variant: 'error' });
     }
@@ -199,16 +222,21 @@ export default function NewEditManyForm() {
                 />
 
                 <TableBody>
-                  {data.map((one, index, idx) => (
-                    <TableRow key={idx} hover selected={table.selected.includes(index)}>
-                      {/* <TableCell padding="checkbox">
+                  {data
+                    .slice(
+                      table.page * table.rowsPerPage,
+                      table.page * table.rowsPerPage + table.rowsPerPage
+                    )
+                    .map((one, index, idx) => (
+                      <TableRow key={idx} hover selected={table.selected.includes(index)}>
+                        {/* <TableCell padding="checkbox">
                           <Checkbox
                             checked={table.selected.includes(index)}
                             onClick={() => table.onSelectRow(index)}
                           />
                         </TableCell> */}
 
-                      {/* <TableCell align="center">
+                        {/* <TableCell align="center">
                           <Select
                             variant="filled"
                             required
@@ -225,134 +253,162 @@ export default function NewEditManyForm() {
                             ))}
                             </Select>
                           </TableCell> */}
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.unit_service_type}
-                          name="unit_service_type"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.country}
-                          name="country"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.city}
-                          name="city"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.sector}
-                          name="sector"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.commercial_name}
-                          name="commercial_name"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.province}
-                          name="province"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.address}
-                          name="address"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.phone_number_1}
-                          name="phone_number_1"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.Phone_number_2}
-                          name="Phone_number_2"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.work_shift}
-                          name="work_shift"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.constitution_objective}
-                          name="constitution_objective"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.type_of_specialty_1}
-                          name="type_of_specialty_1"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <TextField
-                          size="small"
-                          variant="filled"
-                          onChange={(e) => handleEnglishInputChange(index, e)}
-                          value={one.type_of_specialty_2}
-                          name="type_of_specialty_2"
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.unit_service_type}
+                            name="unit_service_type"
+                          />
+                          {/* {one.unit_service_type} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.country}
+                            name="country"
+                          />
+                          {/* {one.country} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.city}
+                            name="city"
+                          />
+                          {/* {one.city} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.sector}
+                            name="sector"
+                          />
+                          {/* {one.sector} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.commercial_name}
+                            name="commercial_name"
+                          />
+                          {/* {one.commercial_name} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.province}
+                            name="province"
+                          />
+                          {/* {one.province} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.address}
+                            name="address"
+                          />
+                          {/* {one.address} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.phone_number_1}
+                            name="phone_number_1"
+                          />
+                          {/* {one.phone_number_1} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.Phone_number_2}
+                            name="Phone_number_2"
+                          />
+                          {/* {one.Phone_number_2} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.work_shift}
+                            name="work_shift"
+                          />
+                          {/* {one.work_shift} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.constitution_objective}
+                            name="constitution_objective"
+                          />
+                          {/* {one.constitution_objective} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.type_of_specialty_1}
+                            name="type_of_specialty_1"
+                          />
+                          {/* {one.type_of_specialty_1} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.type_of_specialty_2}
+                            name="type_of_specialty_2"
+                          />
+                          {/* {one.type_of_specialty_2} */}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
+              <TablePaginationCustom
+                count={data.length}
+                page={table.page}
+                rowsPerPage={table.rowsPerPage}
+                onPageChange={table.onChangePage}
+                onRowsPerPageChange={table.onChangeRowsPerPage}
+                //
+                dense={table.dense}
+                onChangeDense={table.onChangeDense}
+              />
             </Scrollbar>
           </TableContainer>
         )}
 
         {data.length > 0 && (
           <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-            <LoadingButton onClick={handleCreate} tabIndex={-1} variant="contained">
+            <LoadingButton
+              onClick={handleCreate}
+              tabIndex={-1}
+              loading={loading}
+              variant="contained"
+            >
               Create All
             </LoadingButton>
           </Stack>
