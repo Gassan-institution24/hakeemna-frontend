@@ -116,6 +116,7 @@ export default function JwtRegisterView() {
         return words.length >= 3; // Return true if there are at least three words
       }),
     em_nationality: Yup.string().required(t('required field')),
+    em_gender: Yup.string().required(t('required field')),
     em_identification_num: Yup.string()
       .required(t('required field'))
       .min(8, `${t('must be at least')} 8`)
@@ -156,6 +157,7 @@ export default function JwtRegisterView() {
     em_identification_num: '',
     em_profrssion_practice_num: '',
     em_type: '',
+    em_gender: '',
     em_phone: '',
     em_speciality: null,
     visibility_US_page: false,
@@ -568,6 +570,13 @@ export default function JwtRegisterView() {
             </MenuItem>
           ))}
         </RHFSelect>
+        <RHFSelect name="em_gender" label={t('gender')}>
+          {['male', 'female'].map((gender, idx) => (
+            <MenuItem lang="ar" key={idx} value={gender}>
+              {t(gender)}
+            </MenuItem>
+          ))}
+        </RHFSelect>
         {/* </Tooltip> */}
         {/* <Tooltip placement="top" title="admin identification number"> */}
         <RHFTextField name="em_identification_num" label={t('identification number of manager')} />
@@ -605,6 +614,7 @@ export default function JwtRegisterView() {
         sx={{ mt: 4 }}
         fullWidth
         disabled={
+          !values.em_gender ||
           !values.em_name_arabic ||
           !values.em_name_english ||
           !values.em_identification_num ||

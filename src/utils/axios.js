@@ -79,8 +79,7 @@ export const endpoints = {
     all: '/api/oldmedicalreports/',
     patient: (id) => `/api/oldmedicalreports/patient/${id}`,
     one: (id) => `/api/oldmedicalreports/${id}`,
-    findReport: ({ name }) =>
-    `/api/oldmedicalreports/report?name=${name}`,
+    findReport: ({ name }) => `/api/oldmedicalreports/report?name=${name}`,
   },
   medfamilies: {
     all: '/api/drugfamilies/',
@@ -334,7 +333,7 @@ export const endpoints = {
   },
   patients: {
     all: '/api/patient',
-    deleteFamilyMember: (id)=> `/api/patient/deleteFamilyMember/${id}`,
+    deleteFamilyMember: (id) => `/api/patient/deleteFamilyMember/${id}`,
     find: `/api/patient/find`,
     employee: (id) => `/api/patient/employee/${id}`,
     unitservice: (id) => `/api/patient/unitservice/${id}`,
