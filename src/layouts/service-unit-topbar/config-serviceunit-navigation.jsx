@@ -52,33 +52,33 @@ export function useNavData() {
         path: paths.superadmin.unitservices.insurance(id),
         icon: <Iconify icon="eos-icons:activate-subscriptions" />,
       },
-      {
-        title: t('management tables'),
-        path: paths.unitservice.employees.acl(id),
-        icon: <Iconify icon="mdi:account-secure" />,
-        children: [
-          {
-            title: t('employee types'),
-            path: paths.unitservice.employees.acl(id),
-            icon: <Iconify icon="mdi:account-secure" />,
-          },
-          {
-            title: t('work shifts'),
-            path: paths.unitservice.employees.acl(id),
-            icon: <Iconify icon="mdi:account-secure" />,
-          },
-          {
-            title: t('work groups'),
-            path: paths.unitservice.employees.acl(id),
-            icon: <Iconify icon="mdi:account-secure" />,
-          },
-          {
-            title: t('rooms'),
-            path: paths.unitservice.employees.acl(id),
-            icon: <Iconify icon="mdi:account-secure" />,
-          },
-        ],
-      },
+      // {
+      //   title: t('management tables'),
+      //   path: paths.unitservice.employees.acl(id),
+      //   icon: <Iconify icon="mdi:account-secure" />,
+      //   children: [
+      //     {
+      //       title: t('employee types'),
+      //       path: paths.unitservice.employees.acl(id),
+      //       icon: <Iconify icon="mdi:account-secure" />,
+      //     },
+      //     {
+      //       title: t('work shifts'),
+      //       path: paths.unitservice.employees.acl(id),
+      //       icon: <Iconify icon="mdi:account-secure" />,
+      //     },
+      //     {
+      //       title: t('work groups'),
+      //       path: paths.unitservice.employees.acl(id),
+      //       icon: <Iconify icon="mdi:account-secure" />,
+      //     },
+      //     {
+      //       title: t('rooms'),
+      //       path: paths.unitservice.employees.acl(id),
+      //       icon: <Iconify icon="mdi:account-secure" />,
+      //     },
+      //   ],
+      // },
     ];
     const employeeSecDashboard = [
       {

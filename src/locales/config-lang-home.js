@@ -14,18 +14,18 @@ import { enUS as enUSDataGrid, arSD as arSDDataGrid } from '@mui/x-data-grid';
 
 export const langs = [
   {
-    label: 'English',
-    value: 'en',
-    systemValue: merge(enUSDate, enUSDataGrid, enUSCore),
-    adapterLocale: enUSAdapter,
-    icon: 'flagpack:gb-nir',
-  },
-  {
     label: 'العربية',
     value: 'ar',
     systemValue: merge(arSDDataGrid, arSACore),
     adapterLocale: arSAAdapter,
     icon: 'mdi:abjad-arabic',
+  },
+  {
+    label: 'English',
+    value: 'en',
+    systemValue: merge(enUSDate, enUSDataGrid, enUSCore),
+    adapterLocale: enUSAdapter,
+    icon: 'flagpack:gb-nir',
   },
   // {
   //   label: 'French',

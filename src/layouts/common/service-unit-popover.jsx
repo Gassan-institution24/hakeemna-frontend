@@ -84,38 +84,43 @@ export default function ServiceUnitPopover() {
 
   return (
     <>
-      {user?.employee?.employee_engagements?.length > 1 && (
-        <IconButton
-          component={m.button}
-          whileTap="tap"
-          whileHover="hover"
-          variants={varHover(1.05)}
-          onClick={popover.onOpen}
-          sx={{
-            width: 40,
-            height: 40,
-            ...(popover.open && {
-              bgcolor: 'action.selected',
-            }),
-          }}
-        >
-          <Typography variant="body1" sx={{ textAlign: 'center' }}>
-            {selected?.unit_service?.name_english
-              ?.split(' ')
-              .map((word, idx) => word.charAt(0).toUpperCase())
-              .join('')}
-          </Typography>
-        </IconButton>
-      )}
-      <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 160 }}>
+      {['employee', 'admin'].includes(user?.role) &&
+        user?.employee?.employee_engagements?.length > 1 && (
+          <IconButton
+            component={m.button}
+            whileTap="tap"
+            whileHover="hover"
+            variants={varHover(1.05)}
+            onClick={popover.onOpen}
+            sx={{
+              width: 40,
+              height: 40,
+              ...(popover.open && {
+                bgcolor: 'action.selected',
+              }),
+            }}
+          >
+            <Typography variant="body1" sx={{ textAlign: 'center' }}>
+              {selected?.unit_service?.name_english
+                ?.split(' ')
+                .map((word, idx) => word.charAt(0).toUpperCase())
+                .join('')}
+            </Typography>
+          </IconButton>
+        )}
+      <CustomPopover open={popover.open} onClose={popover.onClose}>
         {user?.employee?.employee_engagements?.map((option, index, idx) => (
           <MenuItem
             lang="ar"
             key={idx}
             selected={option?.unit_service?._id === selected?.unit_service?._id}
             onClick={() => {
-              setSelectedIndex(index);
-              confirm.onTrue();
+              if (index === user?.employee?.selected_engagement) {
+                popover.onClose();
+              } else {
+                setSelectedIndex(index);
+                confirm.onTrue();
+              }
             }}
           >
             {curLangAr ? option?.unit_service?.name_arabic : option?.unit_service?.name_english}

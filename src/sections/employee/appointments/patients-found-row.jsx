@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { Button, TextField, IconButton, Typography } from '@mui/material';
+import { Card, Button, TextField, IconButton, Typography } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+
+import { fDateTime } from 'src/utils/format-time';
 
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -14,7 +16,14 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 
 // ----------------------------------------------------------------------
 
-export default function PatientFoundRow({ row, note, setNote, selected, onEmploymentRow }) {
+export default function PatientFoundRow({
+  row,
+  note,
+  setNote,
+  selected,
+  onEmploymentRow,
+  SelectedAppointment,
+}) {
   const {
     sequence_number,
     name_english,
@@ -77,6 +86,14 @@ export default function PatientFoundRow({ row, note, setNote, selected, onEmploy
                 'Do you confirm checking patient data and check at least three values if they are true?'
               )}
             </Typography>
+            <Card sx={{ p: 2, m: 2 }}>
+              <Typography>
+                {t('patient')} : {curLangAr ? name_arabic : name_english}
+              </Typography>
+              <Typography>
+                {t('appoitment')} : {fDateTime(SelectedAppointment.start_time)}
+              </Typography>
+            </Card>
             <TextField
               multiline
               fullWidth
@@ -101,6 +118,7 @@ export default function PatientFoundRow({ row, note, setNote, selected, onEmploy
 PatientFoundRow.propTypes = {
   onEmploymentRow: PropTypes.func,
   row: PropTypes.object,
+  SelectedAppointment: PropTypes.object,
   selected: PropTypes.bool,
   note: PropTypes.string,
   setNote: PropTypes.func,

@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 import { useRef, useMemo, useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import { LoadingButton } from '@mui/lab';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
-import { Box, Card, Dialog, Typography, DialogTitle, Button, Divider } from '@mui/material';
+import { Box, Card, Dialog, Divider, Typography, DialogTitle } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -16,7 +17,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { createConversation } from 'src/api/chat';
 
 import Iconify from 'src/components/iconify';
-import { useSnackbar } from 'notistack';
+
 import VoiceChat from './chat-voice-component';
 
 // ----------------------------------------------------------------------
@@ -35,7 +36,7 @@ export default function ChatMessageInput({
 
   const fileRef = useRef(null);
 
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
   const [message, setMessage] = useState('');
   const [attachment, setAttachment] = useState();
@@ -114,15 +115,14 @@ export default function ChatMessageInput({
     setMessage(event.target.value);
   }, []);
 
-
   const toggleRecording = async () => {
     try {
       if (!recording) {
         if (navigator.mediaDevices) {
-          setRecording(true)
+          setRecording(true);
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
           const mediaRecorder = new MediaRecorder(stream);
-          setRecorder(mediaRecorder)
+          setRecorder(mediaRecorder);
           const chunks = [];
 
           mediaRecorder.ondataavailable = (e) => {
@@ -132,19 +132,21 @@ export default function ChatMessageInput({
           mediaRecorder.onstop = async () => {
             const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
             setAudioBlob(blob);
-            setPreviewAudio(URL.createObjectURL(blob))
-            setRecording(false)
-            await navigator.mediaDevices.getUserMedia({ audio: true })
+            setPreviewAudio(URL.createObjectURL(blob));
+            setRecording(false);
+            await navigator.mediaDevices.getUserMedia({ audio: true });
           };
 
           mediaRecorder.start();
-        } else { enqueueSnackbar('no voice device found', { variant: 'error' }) }
+        } else {
+          enqueueSnackbar('no voice device found', { variant: 'error' });
+        }
       } else {
         // setRecording(false);
         recorder.stop();
       }
     } catch (e) {
-      enqueueSnackbar(e.message, { variant: 'error' })
+      enqueueSnackbar(e.message, { variant: 'error' });
     }
   };
   const handleSendMessage = useCallback(
@@ -157,7 +159,7 @@ export default function ChatMessageInput({
                 await axiosInstance.post(endpoints.chat.one(selectedConversationId), messageData);
                 refetch();
               } catch (e) {
-                enqueueSnackbar(e.message, { variant: 'error' })
+                enqueueSnackbar(e.message, { variant: 'error' });
               }
             } else {
               const res = await createConversation(conversationData);
@@ -177,7 +179,7 @@ export default function ChatMessageInput({
               refetch();
               setAttachment();
             } catch (e) {
-              enqueueSnackbar(e.message, { variant: 'error' })
+              enqueueSnackbar(e.message, { variant: 'error' });
             }
           }
         } else if (audioBlob) {
@@ -191,7 +193,7 @@ export default function ChatMessageInput({
               setAudioBlob();
               setPreviewAudio();
             } catch (e) {
-              enqueueSnackbar(e.message, { variant: 'error' })
+              enqueueSnackbar(e.message, { variant: 'error' });
             }
           }
         }
@@ -210,7 +212,7 @@ export default function ChatMessageInput({
       attachMessageData,
       messageData,
       audioBlob,
-      enqueueSnackbar
+      enqueueSnackbar,
     ]
   );
 
@@ -221,38 +223,49 @@ export default function ChatMessageInput({
 
   return (
     <>
-      {!previewAudio && <InputBase
-        value={message}
-        onKeyUp={handleSendMessage}
-        onChange={handleChangeMessage}
-        placeholder="Type a message"
-        disabled={disabled}
-        // startAdornment={
-        //   <IconButton onClick={() => setShowIcons(true)}>
-        //     <Iconify icon="eva:smiling-face-fill" />
-        //   </IconButton>
-        // }
-        endAdornment={
-          <Stack direction="row" sx={{ flexShrink: 0 }}>
-            <IconButton onClick={handleAttach}>
-              <Iconify icon="solar:gallery-add-bold" />
-            </IconButton>
-            <IconButton onClick={handleAttach}>
-              <Iconify icon="eva:attach-2-fill" />
-            </IconButton>
-            <IconButton sx={{ color: recording ? 'primary.main' : '' }} onClick={toggleRecording}>
-              <Iconify icon="solar:microphone-bold" />
-            </IconButton>
-          </Stack>
-        }
-        sx={{
-          px: 1,
-          height: 56,
-          flexShrink: 0,
-          borderTop: (theme) => `solid 1px ${theme.palette.divider}`,
-        }}
-      />}
-      {previewAudio && <><Divider /><VoiceChat onSend={() => handleSendMessage('voice')} onCancel={() => setPreviewAudio()} src={previewAudio} /></>}
+      {!previewAudio && (
+        <InputBase
+          value={message}
+          onKeyUp={handleSendMessage}
+          onChange={handleChangeMessage}
+          placeholder="Type a message"
+          disabled={disabled}
+          // startAdornment={
+          //   <IconButton onClick={() => setShowIcons(true)}>
+          //     <Iconify icon="eva:smiling-face-fill" />
+          //   </IconButton>
+          // }
+          endAdornment={
+            <Stack direction="row" sx={{ flexShrink: 0 }}>
+              <IconButton onClick={handleAttach}>
+                <Iconify icon="solar:gallery-add-bold" />
+              </IconButton>
+              <IconButton onClick={handleAttach}>
+                <Iconify icon="eva:attach-2-fill" />
+              </IconButton>
+              <IconButton sx={{ color: recording ? 'primary.main' : '' }} onClick={toggleRecording}>
+                <Iconify icon="solar:microphone-bold" />
+              </IconButton>
+            </Stack>
+          }
+          sx={{
+            px: 1,
+            height: 56,
+            flexShrink: 0,
+            borderTop: (theme) => `solid 1px ${theme.palette.divider}`,
+          }}
+        />
+      )}
+      {previewAudio && (
+        <>
+          <Divider />
+          <VoiceChat
+            onSend={() => handleSendMessage('voice')}
+            onCancel={() => setPreviewAudio()}
+            src={previewAudio}
+          />
+        </>
+      )}
       <input type="file" ref={fileRef} onChange={handleChangeAttach} style={{ display: 'none' }} />
       <Dialog open={confirmAttach} onClose={handleCloseConfirm}>
         <Stack sx={{ px: 2, pb: 3 }}>
@@ -268,7 +281,9 @@ export default function ChatMessageInput({
             <Card sx={{ px: 3, py: 1, m: 1, minWidth: 400 }}>
               <Stack direction="row" justifyContent="space-around" alignItems="center">
                 <Typography>{attachment?.name}</Typography>
-                <Typography color='text.disabled' sx={{ ml: 1 }}>{attachment?.size} KB</Typography>
+                <Typography color="text.disabled" sx={{ ml: 1 }}>
+                  {attachment?.size} KB
+                </Typography>
               </Stack>
             </Card>
           )}

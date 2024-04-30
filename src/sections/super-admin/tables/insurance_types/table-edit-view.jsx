@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
-import { useGetInsuranceCo } from 'src/api';
+import { useGetInsuranceType } from 'src/api';
 
 // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -17,11 +17,11 @@ export default function TableEditView() {
 
   const params = useParams();
   const { id } = params;
-  const { isuranceData } = useGetInsuranceCo(id);
+  const { data } = useGetInsuranceType(id);
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Update Insurance Company"
+        heading="Update Insurance type"
         links={[
           {
             name: 'dashboard',
@@ -32,16 +32,16 @@ export default function TableEditView() {
             href: paths.superadmin.tables.list,
           },
           {
-            name: 'Insurance Companies',
-            href: paths.superadmin.tables.insurancecomapnies.root,
+            name: 'Insurance types',
+            href: paths.superadmin.tables.insuranceTypes.root,
           },
-          { name: 'Update Insurance Company' },
+          { name: 'Update' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
-      {isuranceData && <TableNewEditForm currentTable={isuranceData} />}
+      {data && <TableNewEditForm currentTable={data} />}
     </Container>
   );
 }

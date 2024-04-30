@@ -203,7 +203,6 @@ export function useGetUSPatient(id) {
   return { ...memoizedValue, refetch };
 }
 
-
 export function useGetFamilyTypes() {
   const URL = endpoints.patients.familyType;
 

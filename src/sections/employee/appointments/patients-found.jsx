@@ -137,6 +137,7 @@ export default function PatientsFound({ SelectedAppointment, reset, selected, ol
                 row={row}
                 note={note}
                 setNote={setNote}
+                SelectedAppointment={SelectedAppointment}
                 onEmploymentRow={() => handleEmployment(row)}
               />
             ))}
