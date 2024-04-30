@@ -73,7 +73,7 @@ export default function NotificationsPopoverPatient() {
   }, []);
   useEffect(() => {
     socket.on('invite', (data) => {
-      console.log(data,"data");
+      console.log(data, 'data');
       setAllNotifications([]);
       // setPage(1);
       refetch();

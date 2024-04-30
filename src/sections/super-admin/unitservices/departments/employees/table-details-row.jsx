@@ -115,7 +115,7 @@ export default function CountriesTableRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'active'
+        {/* {status === 'active'
           ? checkAcl({ category: 'department', subcategory: 'employees', acl: 'delete' }) && (
               <MenuItem
                 lang="ar"
@@ -145,7 +145,7 @@ export default function CountriesTableRow({
         <MenuItem lang="ar" onClick={onViewRow}>
           <Iconify icon="solar:eye-bold" />
           {t('view')}
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}

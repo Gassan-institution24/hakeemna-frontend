@@ -30,7 +30,7 @@ export default function TableNewEditForm({ currentSelected }) {
     country: Yup.string(),
     city: Yup.string(),
     sector: Yup.string(),
-    commercial_name: Yup.string(),
+    commercial_name: Yup.string().required('required field'),
     province: Yup.string(),
     address: Yup.string(),
     phone_number_1: Yup.string(),

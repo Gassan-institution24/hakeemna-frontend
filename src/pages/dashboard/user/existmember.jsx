@@ -9,7 +9,6 @@ import {
   // Button,
 
   TextField,
-
 } from '@mui/material';
 
 import { useFindPatients } from 'src/api';
@@ -34,8 +33,6 @@ export default function Exist() {
   const table = useTable({ defaultRowsPerPage: 10 });
 
   const [filters, setFilters] = useState({});
-
-  
 
   const theme = useTheme();
 
@@ -67,8 +64,6 @@ export default function Exist() {
 
   return (
     <Box>
-  
-
       <Card sx={{ p: 3 }}>
         <Box
           rowGap={3}
@@ -116,7 +111,7 @@ export default function Exist() {
           {existPatient
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             ?.map((row, idx) => (
-              <ExistPatientRow key={idx} row={row}  />
+              <ExistPatientRow key={idx} row={row} />
             ))}
 
           <TableNoData

@@ -40,7 +40,7 @@ export default function TableCreateView() {
           },
           {
             name: 'Insurance types',
-            href: paths.superadmin.tables.insurancecomapnies.root,
+            href: paths.superadmin.tables.insuranceTypes.root,
           },
           { name: 'New Insurance Company' },
         ]}

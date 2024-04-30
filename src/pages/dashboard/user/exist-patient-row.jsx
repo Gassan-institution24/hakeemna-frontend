@@ -16,6 +16,7 @@ import EmptyContent from 'src/components/empty-content/empty-content';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import axios, { endpoints } from 'src/utils/axios';
+
 import { useGetFamilyTypes } from 'src/api';
 
 // ----------------------------------------------------------------------
@@ -31,7 +32,6 @@ export default function ExistPatientRow({ row, selected }) {
   const curLangAr = currentLang.value === 'ar';
   const { t } = useTranslate();
   const [clicked, setClicked] = useState(0);
-
 
   const renderIdentificationNum = (identificationNum) => {
     // Check if the identificationNum has at least 3 characters
@@ -54,9 +54,9 @@ export default function ExistPatientRow({ row, selected }) {
       photo_URL: 'https://cdn-icons-png.flaticon.com/512/6193/6193226.png',
       category: 'invite',
       type: 'invite',
-      members
+      members,
     };
-  
+
     try {
       await axios.post(`${endpoints.notifications.all}/invite`, defaultValues);
       setClicked((prevClicked) => prevClicked + 1);

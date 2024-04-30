@@ -116,7 +116,7 @@ export default function UnitServiceEmployeesRow({
         arrow="right-top"
         sx={{ width: 140 }}
       >
-        {status === 'active'
+        {/* {status === 'active'
           ? checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'delete' }) && (
               <MenuItem
                 lang="ar"
@@ -142,11 +142,11 @@ export default function UnitServiceEmployeesRow({
                 <Iconify icon="bi:play-fill" />
                 {t('activate')}
               </MenuItem>
-            )}
-        <MenuItem lang="ar" onClick={onViewRow}>
+            )} */}
+        {/* <MenuItem lang="ar" onClick={onViewRow}>
           <Iconify icon="solar:eye-bold" />
           {t('view')}
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem lang="ar" onClick={DDL.onOpen}>
           <Iconify icon="carbon:data-quality-definition" />
           {t('DDL')}

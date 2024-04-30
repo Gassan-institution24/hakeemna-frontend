@@ -75,15 +75,15 @@ export default function AccountGeneral({ unitServiceData }) {
     country: Yup.string().required(t('required field')),
     city: Yup.string().required(t('required field')),
     US_type: Yup.string().required(t('required field')),
-    email: Yup.string().required(t('required field')),
+    email: Yup.string(),
     sector_type: Yup.string(),
     // speciality: Yup.string(),
     identification_num: Yup.string().required(t('required field')),
     address: Yup.string(),
     web_page: Yup.string(),
-    work_days: Yup.array().min(1, `${t('must be at least')} 1`),
-    work_start_time: Yup.date().required(t('required field')),
-    work_end_time: Yup.date().required(t('required field')),
+    work_days: Yup.array(),
+    work_start_time: Yup.date(),
+    work_end_time: Yup.date(),
     phone: Yup.string()
       .required(t('required field'))
       .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
@@ -284,7 +284,12 @@ export default function AccountGeneral({ unitServiceData }) {
                 value={values.name_arabic}
                 label={`${t('name arabic')}* :`}
               />
-              <RHFTextField type="email" variant="filled" name="email" label={`${t('email')}* :`} />
+              <RHFTextField
+                type="email"
+                variant="filled"
+                name="email"
+                label={`${t('institution email')}* :`}
+              />
               <RHFPhoneNumber name="phone" label={t('phone number')} />
               {/* <RHFTextField
                 

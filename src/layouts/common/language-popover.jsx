@@ -1,8 +1,8 @@
 import { m } from 'framer-motion';
 import { useEffect, useCallback } from 'react';
 
-import { Button } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
+import { Box, Button, Typography } from '@mui/material';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -68,10 +68,39 @@ export default function LanguagePopover() {
             selected={option.value === currentLang.value}
             onClick={() => handleChangeLang(option.value)}
           >
-            <Iconify icon={option.icon} sx={{ borderRadius: 0.65, width: 28 }} />
+            {option?.label === 'العربية' ? (
+              // <Iconify
+              //   icon={option.icon}
+              //   sx={{ borderRadius: 0.65, width: 28, backgroundColor: '#007B3A', color: 'white' }}
+              // />
+              <Box
+                sx={{
+                  borderRadius: 0.65,
+                  width: 30,
+                  backgroundColor: '#007B3A',
+                  color: 'white',
+                  textAlign: 'center',
+                  mr: 2,
+                }}
+              >
+                <Typography>ض</Typography>
+              </Box>
+            ) : (
+              <Iconify icon={option.icon} sx={{ borderRadius: 0.65, width: 28 }} />
+            )}
 
             {option.label}
           </MenuItem>
+          // <MenuItem
+          //   lang="ar"
+          //   key={idx}
+          //   selected={option.value === currentLang.value}
+          //   onClick={() => handleChangeLang(option.value)}
+          // >
+          //   <Iconify icon={option.icon} sx={{ borderRadius: 0.65, width: 28 }} />
+
+          //   {option.label}
+          // </MenuItem>
         ))}
       </CustomPopover>
     </>

@@ -90,17 +90,21 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
         />
       )}
       {hasFile && (
-        <Link href={body} target="_blank" component={RouterLink} >
+        <Link href={body} target="_blank" component={RouterLink}>
           <Card sx={{ px: 3, py: 1, m: 1, backgroundColor: 'background.neutral' }}>
             <Stack direction="row" justifyContent="space-around" alignItems="center">
-              <Iconify icon='mdi:file' />
-              <Typography color='text.disabled' sx={{ ml: 1 }}>{file_name || 'file'}</Typography>
+              <Iconify icon="mdi:file" />
+              <Typography color="text.disabled" sx={{ ml: 1 }}>
+                {file_name || 'file'}
+              </Typography>
             </Stack>
           </Card>
         </Link>
       )}
       {hasVoice && (
-        <audio controls src={body} ><track kind="captions" /></audio>
+        <audio controls src={body}>
+          <track kind="captions" />
+        </audio>
       )}
       {!hasImage && !hasFile && !hasVoice && (
         <Typography variant="body2" sx={{ overflowWrap: 'break-word' }}>

@@ -251,7 +251,6 @@ export function useGetEmployeeSelectedAppointments({ id, startDate }) {
   const URL = endpoints.appointments.employee.select({
     id,
     startDate,
-
   });
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
