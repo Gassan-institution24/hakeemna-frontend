@@ -24,7 +24,7 @@ import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFDatePicker } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -50,8 +50,20 @@ export default function JwtRegisterView() {
   const password = useBoolean();
 
   const RegisterSchema = Yup.object().shape({
-    name_english: Yup.string().required('First name required'),
-    name_arabic: Yup.string().required('Last name required'),
+    name_english: Yup.string()
+      .required('Englis name is required')
+      .test('at-least-three-words', t('must be at least three words'), (value) => {
+        if (!value) return false; // If no value, fail the validation
+        const words = value.trim().split(/\s+/); // Split the input by spaces
+        return words.length >= 3; // Return true if there are at least three words
+      }),
+    name_arabic: Yup.string()
+      .required('Arabic name is required')
+      .test('at-least-three-words', t('must be at least three words'), (value) => {
+        if (!value) return false; // If no value, fail the validation
+        const words = value.trim().split(/\s+/); // Split the input by spaces
+        return words.length >= 3; // Return true if there are at least three words
+      }),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string()
@@ -60,6 +72,7 @@ export default function JwtRegisterView() {
     identification_num: Yup.string().required('Identification number is required'),
     mobile_num1: Yup.string().required('Mobile number is required'),
     gender: Yup.string().required('Gender is required'),
+    birth_date: Yup.date().required('birth date is required'),
     nationality: Yup.string().required('Nationality is required'),
     country: Yup.string().required('Country is required'),
     city: Yup.string().required('City is required'),
@@ -74,6 +87,7 @@ export default function JwtRegisterView() {
     mobile_num1: '',
     identification_num: '',
     gender: '',
+    birth_date: '',
     country: null,
     nationality: null,
     city: null,
@@ -122,7 +136,6 @@ export default function JwtRegisterView() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       await register?.({ userName: `${data.name_english} ${data.name_arabic}`, ...data });
-
       router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
     } catch (error) {
       console.error(error);
@@ -130,29 +143,23 @@ export default function JwtRegisterView() {
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
-  // useEffect(() => {
-  //   setCities(
-  //     selectedCountry
-  //       ? tableData.filter((data) => data?.country?._id === selectedCountry)
-  //       : tableData
-  //   );
-  // }, [tableData, selectedCountry]);
+
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Typography variant="h4">Get started absolutely free</Typography>
+      <Typography variant="h4">{t('Get started absolutely free')}</Typography>
 
       <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2"> Already have an account? </Typography>
+        <Typography variant="body2"> {t('Already have an account?')} </Typography>
 
         <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
-          login
+          {t('login')}
         </Link>
       </Stack>
 
       <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2"> I am a services provider</Typography>
+        <Typography variant="body2"> {t('I am a services provider')}</Typography>
         <Link href={paths.auth.registersu} component={RouterLink} variant="subtitle2">
-          Sign up
+          {t('sign up')}
         </Link>
       </Stack>
     </Stack>
@@ -170,11 +177,11 @@ export default function JwtRegisterView() {
     >
       {'By signing up, I agree to '}
       <Link underline="always" color="text.primary">
-        Terms of Service
+        {t('Terms of Service')}
       </Link>
-      {' and '}
+      {t('and')}
       <Link underline="always" color="text.primary">
-        Privacy Policy
+        {t('Privacy Policy')}
       </Link>
       .
     </Typography>
@@ -188,18 +195,17 @@ export default function JwtRegisterView() {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFTextField
             name="name_english"
-            label="name in english"
+            label={t('name in english')}
             onChange={handleEnglishInputChange}
           />
           <RHFTextField
             name="name_arabic"
-            label="name in arabic"
+            label={t('name in arabic')}
             onChange={handleArabicInputChange}
           />
         </Stack>
 
-        <RHFTextField name="email" label="Email address" />
-        <RHFTextField name="identification_num" label="Identification number" />
+        <RHFTextField name="identification_num" label={t('Identification number')} />
         <RHFTextField name="mobile_num1" label={t('mobile number')} />
         <RHFSelect name="nationality" label={t('nationality')}>
           {countriesData?.map((country, idx) => (
@@ -216,26 +222,30 @@ export default function JwtRegisterView() {
               </MenuItem>
             ))}
           </RHFSelect>
-          <RHFSelect name="city" label="City">
+          <RHFSelect name="city" label={t('City')}>
             {tableData?.map((city, idx) => (
               <MenuItem lang="ar" key={idx} value={city?._id}>
                 {city?.name_english}
               </MenuItem>
             ))}
           </RHFSelect>
-          <RHFSelect name="gender" label="Gender">
+        </Stack>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <RHFSelect name="gender" label={t('Gender')}>
             <MenuItem lang="ar" value="male">
-              male
+              {t('male')}
             </MenuItem>
             <MenuItem lang="ar" value="female">
-              female
+              {t('female')}
             </MenuItem>
           </RHFSelect>
+          <RHFDatePicker name="birth_date" label={t('Date of birth')} />
         </Stack>
 
+        <RHFTextField name="email" label={t('Email address')} />
         <RHFTextField
           name="password"
-          label="Password"
+          label={t('Password')}
           type={password.value ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -249,7 +259,7 @@ export default function JwtRegisterView() {
         />
         <RHFTextField
           name="confirmPassword"
-          label="Confirm Password"
+          label={t('Confirm Password')}
           type={password.value ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -270,7 +280,7 @@ export default function JwtRegisterView() {
           variant="contained"
           loading={isSubmitting}
         >
-          Create account
+          {t('create account')}
         </LoadingButton>
       </Stack>
     </FormProvider>

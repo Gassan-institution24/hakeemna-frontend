@@ -49,7 +49,7 @@ export default function Doctorpage() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  // const { appointmenttypesData } = useGetAppointmentTypes();
+  const { appointmenttypesData } = useGetAppointmentTypes();
   const { id } = params;
   const { user } = useAuthContext();
   const [TimeData, setTimeData] = useState();
@@ -65,17 +65,17 @@ export default function Doctorpage() {
   const patientData = user?.patient?._id;
   const patientinfo = user?.patient;
   const patientEmail = user?.email;
-  // const [selectedAppointmentType, setSelectedAppointmentType] = useState('');
+  const [selectedAppointmentType, setSelectedAppointmentType] = useState('');
 
-  // const { appointmentsData, appointmentTypes, refetch } = useGetEmployeeSelectedAppointments({
-  //   id,
-  //   startDate: currentDateTime, // Date selected by the user
-  //   appointmentType: selectedAppointmentType, // Type selected by the user
-  // });
-  const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
+  const { appointmentsData, appointmentTypes, refetch } = useGetEmployeeSelectedAppointments({
     id,
     startDate: currentDateTime, // Date selected by the user
+    appointmentType: selectedAppointmentType, // Type selected by the user
   });
+  // const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
+  //   id,
+  //   startDate: currentDateTime, // Date selected by the user
+  // });
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
@@ -100,9 +100,9 @@ export default function Doctorpage() {
     setCurrentDateTime(date);
   };
 
-  // const handleAppointmentTypeChange = (event) => {
-  //   setSelectedAppointmentType(event.target.value);
-  // };
+  const handleAppointmentTypeChange = (event) => {
+    setSelectedAppointmentType(event.target.value);
+  };
 
   const handleBook = async (Data) => {
     try {
@@ -268,7 +268,7 @@ export default function Doctorpage() {
         <StaticDatePicker
           disablePast
           componentsProps={{ actionBar: { actions: [''] } }}
-          // value={selectedAppointmentType}
+          value={selectedAppointmentType}
           onChange={handleDateChange}
         />
       </LocalizationProvider>
@@ -281,7 +281,7 @@ export default function Doctorpage() {
           />
         </Typography>
 
-        {/* <Select
+        <Select
           value={selectedAppointmentType}
           onChange={handleAppointmentTypeChange}
           sx={{
@@ -297,7 +297,7 @@ export default function Doctorpage() {
                 {type.name_english}
               </MenuItem>
             ))}
-        </Select> */}
+        </Select>
       </Box>
     </Card>
   );
