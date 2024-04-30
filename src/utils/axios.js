@@ -402,10 +402,10 @@ export const endpoints = {
       one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 100, order = 'asc', filters }) =>
         `/api/appointments/employee/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}&&startTime=${filters?.startTime}&&endTime=${filters?.endTime}`,
       nearst: (id) => `/api/appointments/nearst/${id}`,
-      select: ({ id, startDate }) =>
-        `/api/appointments/employeeselect/${id}?startDate=${startDate}`,
-      // select: ({ id, startDate, appointmentType }) =>
-      //   `/api/appointments/employeeselect/${id}?startDate=${startDate}&&appointmentType=${appointmentType}`,
+      // select: ({ id, startDate }) =>
+      //   `/api/appointments/employeeselect/${id}?startDate=${startDate}`,
+      select: ({ id, startDate, appointmentType }) =>
+        `/api/appointments/employeeselect/${id}?startDate=${startDate}&&appointmentType=${appointmentType}`,
     },
     department: {
       one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 5, order = 'asc', filters }) =>
