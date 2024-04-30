@@ -403,8 +403,8 @@ export const endpoints = {
       nearst: (id) => `/api/appointments/nearst/${id}`,
       // select: ({ id, startDate }) =>
       //   `/api/appointments/employeeselect/${id}?startDate=${startDate}`,
-      select: ({ id, startDate, appointmentType }) =>
-        `/api/appointments/employeeselect/${id}?startDate=${startDate}&&appointmentType=${appointmentType}`,
+      select: ({ id, startDate }) =>
+        `/api/appointments/employeeselect/${id}?startDate=${startDate}`,
     },
     department: {
       one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 5, order = 'asc', filters }) =>
