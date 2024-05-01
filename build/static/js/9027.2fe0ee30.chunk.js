@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[9027],{39027:(e,n,a)=>{a.r(n),a.d(n,{default:()=>r});var i=a(6907),s=a(57498),t=a(80184);function r(){return(0,t.jsxs)(t.Fragment,{children:[(0,t.jsxs)(i.ql,{children:[(0,t.jsx)("title",{children:" Hakeemna: Login Page"}),(0,t.jsx)("meta",{name:"description",content:"meta"})]}),(0,t.jsx)(s.QS,{})]})}}}]);
+//# sourceMappingURL=9027.2fe0ee30.chunk.js.map
