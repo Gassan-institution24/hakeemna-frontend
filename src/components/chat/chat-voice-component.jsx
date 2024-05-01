@@ -1,94 +1,72 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import ReactPlayer from 'react-player';
 
-import { Stack } from '@mui/system';
-
-import Iconify from '../iconify';
-
-// ----------------------------------------------------------------------
+import { Card, IconButton, LinearProgress, Stack } from '@mui/material';
+import { PlayArrow, Pause } from '@mui/icons-material';
 
 export default function VoiceChat({ onCancel, onSend, src, sx }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [playedSeconds, setPlayedSeconds] = useState(0);
+  const [loadedSeconds, setLoadedSeconds] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handlePlayPause = () => {
-    const audioPlayer = document.getElementById('player');
-    if (audioPlayer && audioPlayer.paused) {
-      audioPlayer.play();
-      setIsPlaying(true);
-    } else if (audioPlayer) {
-      audioPlayer.pause();
-      setIsPlaying(false);
-    }
+    setIsPlaying((prevIsPlaying) => !prevIsPlaying);
   };
-  // eslint-disable-next-line
-  useEffect(() => {
-    const audioPlayer = document.getElementById('player');
-    console.log('audioPlayer', audioPlayer);
-    console.log('audioPlayer', audioPlayer.duration);
 
-    const handleAudioEnded = () => {
-      setIsPlaying(false);
-      setCurrentTime(0);
-    };
+  const handleProgress = (state) => {
+    setPlayedSeconds(state.playedSeconds);
+    // setLoadedSeconds(state.loadedSeconds);
+    setDuration(state.loadedSeconds);
+  };
 
-    const handleTimeUpdate = () => {
-      setCurrentTime(audioPlayer.currentTime);
-    };
-
-    const handleLoadedMetadata = () => {
-      setDuration(audioPlayer.duration);
-      setLoading(false); // Set loading to false when metadata is loaded
-    };
-
-    if (audioPlayer) {
-      audioPlayer.addEventListener('ended', handleAudioEnded);
-      audioPlayer.addEventListener('timeupdate', handleTimeUpdate);
-      audioPlayer.addEventListener('loadedmetadata', handleLoadedMetadata);
-      return () => {
-        audioPlayer.removeEventListener('ended', handleAudioEnded);
-        audioPlayer.removeEventListener('timeupdate', handleTimeUpdate);
-        audioPlayer.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      };
-    }
-  }, []);
+  const handleError = (err) => {
+    setError(err);
+    // Send the error to the parent component or perform any necessary actions
+  };
 
   return (
-    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ p: 2 }}>
-      {/* <IconButton sx={{ color: 'error.main' }} onClick={onCancel}> */}
-      <Iconify
-        sx={{ color: 'error.main', mr: 1, cursor: 'pointer' }}
-        onClick={onCancel}
-        icon="mdi:trash"
+    <Card sx={{ px: 2, py: 1, backgroundColor: 'info.lighter', width: 1 }}>
+      {/* <IconButton onClick={onCancel}>
+        <Pause sx={{ color: 'error.main' }} />
+      </IconButton> */}
+      <ReactPlayer
+        url={src}
+        playing={isPlaying}
+        onProgress={handleProgress}
+        onDuration={(d) => setLoadedSeconds(d)}
+        onEnded={() => {
+          setIsPlaying(false)
+          // setPlayedSeconds(0)
+        }}
+        onError={handleError}
+        width={0}
+        height={0}
+        style={{ display: 'none' }}
       />
-      {/* </IconButton> */}
-      <audio controls id="player" src={src}>
-        <track kind="captions" />
-      </audio>
-      {/* <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                {isPlaying ? (
-                    <Iconify icon='iconoir:pause-solid' onClick={handlePlayPause} />
-                ) : (
-                    <Iconify icon='solar:play-bold' onClick={handlePlayPause} />
-                )}
-                <LinearProgress color='info'
-                    variant="buffer"
-                    value={currentTime}
-                    valueBuffer={duration}
-                    sx={{ width: 200 }} />
-                {currentTime}{'----'}
-                {!loading && duration}
-            </Stack> */}
-      {/* <IconButton sx={{ color: 'success.main' }} onClick={onSend}> */}
-      <Iconify
-        sx={{ color: 'success.main', ml: 1, cursor: 'pointer' }}
-        onClick={onSend}
-        icon="streamline:mail-send-email-message-solid"
-      />
-      {/* </IconButton> */}
-    </Stack>
+      <Stack direction="row" justifyContent="space-between" gap={2} alignItems="center">
+        {isPlaying ? (
+          <Pause onClick={handlePlayPause} />
+        ) : (
+          <PlayArrow onClick={handlePlayPause} />
+        )}
+        {/* <LinearProgress
+          color="info"
+          variant="determinate"
+          value={(playedSeconds / duration) * 100}
+          sx={{ width: 200 }}
+        /> */}
+        {/* {!isPlaying && `${Math.floor(loadedSeconds / 60)}:${(loadedSeconds % 60).toFixed(0).padStart(2, '0')}`} */}
+        {/* {isPlaying && `${Math.floor(playedSeconds / 60)}:${(playedSeconds % 60).toFixed(0).padStart(2, '0')} - ${Math.floor(loadedSeconds / 60)}:${(loadedSeconds % 60).toFixed(0).padStart(2, '0')}`} */}
+        {Math.floor(playedSeconds / 60)}:{(playedSeconds % 60).toFixed(0).padStart(2, '0')} - {Math.floor(loadedSeconds / 60)}:{(loadedSeconds % 60).toFixed(0).padStart(2, '0')}
+      </Stack>
+      {/* <IconButton onClick={onSend}>
+        <PlayArrow sx={{ color: 'success.main' }} />
+      </IconButton> */}
+      {/* {error && <div>Error: {error.message}</div>} */}
+    </Card>
   );
 }
 

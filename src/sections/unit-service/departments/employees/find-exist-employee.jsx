@@ -14,7 +14,6 @@ import { paths } from 'src/routes/paths';
 
 import axios, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
 import { useFindEmployee } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -93,18 +92,26 @@ export default function TableNewEditForm({ departmentData }) {
 
   const handleEmployment = async (row) => {
     try {
-      await axios.post(endpoints.employee_engagements.ones, {
-        unit_service:
-          user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
-        department: departmentData._id,
-        employee: row._id,
+      const unitServiceData =
+        user?.employee.employee_engagements[user?.employee.selected_engagement]?.unit_service;
+      const SelectedUser = await axios.get(endpoints.auth.users, { params: { employee: row._id } });
+      await axios.post(`${endpoints.notifications.all}/invite`, {
+        user: SelectedUser.data[0]?._id,
+        title: `<p><strong>${user?.employee?.name_english}</strong> want to add you to his institution <strong>${unitServiceData?.name_english}</strong> as an employee</p>`,
+        title_arabic: `<p><strong>${user?.employee?.name_arabic}</strong> يريد اظافتك كموظف في منشأته <strong>${unitServiceData?.name_arabic}</strong></p>`,
+        category: 'invite',
+        type: 'invite',
+        onAccept: {
+          method: 'post',
+          route: endpoints.employee_engagements.all,
+          body: {
+            unit_service: unitServiceData?._id,
+            department: departmentData._id,
+            employee: row._id,
+          },
+        },
       });
-      socket.emit('updated', {
-        user,
-        link: paths.unitservice.departments.employees.root(departmentData._id),
-        msg: `employed an employee <strong>[ ${row.name_english} ]</strong> in department <strong>${departmentData.name_english}</strong>`,
-      });
-      enqueueSnackbar(t('employment successfully!'));
+      enqueueSnackbar(t('invitation sent!'));
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(
