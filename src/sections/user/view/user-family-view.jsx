@@ -1,4 +1,3 @@
-
 import { Box } from '@mui/system';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -52,8 +51,8 @@ export default function Family() {
       />
 
       <Dialog open={dialog.value} onClose={dialog.onTrue}>
-        <IconButton onClick={dialog.onFalse} sx={{ width:'12%',ml: 'auto', mt: 2}} >
-          <Iconify width={25} icon="iconoir:cancel" sx={{  }} />
+        <IconButton onClick={dialog.onFalse} sx={{ width: '12%', ml: 'auto', mt: 2 }}>
+          <Iconify width={25} icon="iconoir:cancel" sx={{}} />
         </IconButton>
 
         <DialogTitle>{t('Does the user have an account?')}</DialogTitle>
