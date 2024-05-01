@@ -15,6 +15,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import Iconify from 'src/components/iconify';
 
 import { useGetMessage } from './hooks';
+import VoiceChat from './chat-voice-component';
 
 // ----------------------------------------------------------------------
 
@@ -102,9 +103,10 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
         </Link>
       )}
       {hasVoice && (
-        <audio controls src={body}>
-          <track kind="captions" />
-        </audio>
+        <VoiceChat src={body} />
+        // <audio controls src={body}>
+        //   <track kind="captions" />
+        // </audio>
       )}
       {!hasImage && !hasFile && !hasVoice && (
         <Typography variant="body2" sx={{ overflowWrap: 'break-word' }}>
