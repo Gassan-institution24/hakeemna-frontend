@@ -67,15 +67,15 @@ export default function Doctorpage() {
   const patientEmail = user?.email;
   const [selectedAppointmentType, setSelectedAppointmentType] = useState('');
 
-  const { appointmentsData, appointmentTypes, refetch } = useGetEmployeeSelectedAppointments({
-    id,
-    startDate: currentDateTime, // Date selected by the user
-    appointmentType: selectedAppointmentType, // Type selected by the user
-  });
-  // const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
+  // const { appointmentsData, appointmentTypes, refetch } = useGetEmployeeSelectedAppointments({
   //   id,
   //   startDate: currentDateTime, // Date selected by the user
+  //   appointmentType: selectedAppointmentType, // Type selected by the user
   // });
+  const { appointmentsData, refetch } = useGetEmployeeSelectedAppointments({
+    id,
+    startDate: currentDateTime, // Date selected by the user
+  });
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeClick = (timeId) => {
