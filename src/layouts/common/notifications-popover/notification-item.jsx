@@ -10,9 +10,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 
 import { fToNow } from 'src/utils/format-time';
 
+import axios from 'src/utils/axios';
 // import { useAuthContext } from 'src/auth/hooks';
 // import { useGetPatientNotifications } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
+import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +24,22 @@ export default function NotificationItem({ notification, handleClick }) {
   const { currentLang } = useLocales();
   // const { patientNotifications } = useGetPatientNotifications(user?.patient?._id);
   const curLangAr = currentLang.value === 'ar';
+  //  eslint-disable-next-line
+  const handleAccept = async () => {
+    try {
+      const { method, route, body } = notification.onAccept || {};
+
+      if (!method || !['get', 'post', 'put', 'delete'].includes(method.toLowerCase())) {
+        throw new Error('Invalid method provided in notification');
+      }
+
+      const response = await axios[method.toLowerCase()](route, body);
+
+      console.log('Notification accepted:', response.data);
+    } catch (error) {
+      console.error('Error while accepting notification:', error);
+    }
+  };
   const renderAvatar = (
     <ListItemAvatar>
       {notification.avatarUrl ? (
@@ -104,6 +122,16 @@ export default function NotificationItem({ notification, handleClick }) {
         position: 'absolute',
       }}
     />
+  );
+  const friendAction = (
+    <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
+      <Button onClick={handleAccept} size="small" variant="contained">
+        Accept
+      </Button>
+      <Button size="small" variant="outlined">
+        Decline
+      </Button>
+    </Stack>
   );
 
   // const beAmember = (
@@ -268,11 +296,7 @@ export default function NotificationItem({ notification, handleClick }) {
       )} */}
       <Stack sx={{ flexWrap: 'wrap', wordWrap: 'break-word' }}>
         {renderText}
-        {/* {notification.type === 'friend' && friendAction}
-        {notification.type === 'project' && projectAction}
-        {notification.type === 'file' && fileAction}
-        {notification.type === 'tags' && tagsAction}
-        {notification.type === 'payment' && paymentAction} */}
+        {notification.type === 'invite' && notification.isUnRead && friendAction}
       </Stack>
     </ListItemButton>
   );
