@@ -58,3 +58,20 @@ export function useGetPatientUser(id) {
 
   return memoizedValue;
 }
+
+export function useGetUserByQuery(query) {
+  const URL = [endpoints.auth.users, { params: query }];
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      data,
+      Loading: isLoading,
+      error,
+      validating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}

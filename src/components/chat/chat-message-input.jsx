@@ -46,6 +46,8 @@ export default function ChatMessageInput({
   const [recorder, setRecorder] = useState(null);
   const [previewAudio, setPreviewAudio] = useState();
 
+  console.log('audioBlob', audioBlob)
+
   const myContact = useMemo(
     () => ({
       id: `${user?.id}`,
@@ -134,7 +136,6 @@ export default function ChatMessageInput({
             setAudioBlob(blob);
             setPreviewAudio(URL.createObjectURL(blob));
             setRecording(false);
-            await navigator.mediaDevices.getUserMedia({ audio: true });
           };
 
           mediaRecorder.start();
@@ -259,11 +260,27 @@ export default function ChatMessageInput({
       {previewAudio && (
         <>
           <Divider />
-          <VoiceChat
-            onSend={() => handleSendMessage('voice')}
-            onCancel={() => setPreviewAudio()}
-            src={previewAudio}
-          />
+          <Stack direction='row' justifyContent='space-between' alignItems='center' gap={1} sx={{ p: 1 }}>
+            {/* <IconButton sx={{ color: 'error.main' }} onClick={onCancel}> */}
+            <Iconify
+              sx={{ color: 'error.main', mr: 1, cursor: 'pointer', width: 40 }}
+              onClick={() => setPreviewAudio()}
+              icon="mdi:trash"
+            />
+            {/* </IconButton> */}
+            <VoiceChat
+              // onSend={() => handleSendMessage('voice')}
+              // onCancel={() => setPreviewAudio()}
+              src={previewAudio}
+            />
+            {/* <IconButton sx={{ color: 'success.main' }} onClick={onSend}> */}
+            <Iconify
+              sx={{ color: 'success.main', ml: 1, cursor: 'pointer', width: 40 }}
+              onClick={() => handleSendMessage('voice')}
+              icon="streamline:mail-send-email-message-solid"
+            />
+            {/* </IconButton> */}
+          </Stack>
         </>
       )}
       <input type="file" ref={fileRef} onChange={handleChangeAttach} style={{ display: 'none' }} />
