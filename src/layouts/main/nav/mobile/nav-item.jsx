@@ -86,7 +86,7 @@ const StyledNavItem = styled(ListItemButton, {
       },
     }),
     ...(opened && {
-      backgroundColor: theme.palette.action.hover,
+      // backgroundColor: theme.palette.action.hover,
     }),
   };
 });

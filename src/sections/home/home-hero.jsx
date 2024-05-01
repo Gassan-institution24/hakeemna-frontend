@@ -51,7 +51,8 @@ const StyledWrapper = styled('div')(({ theme }) => ({
 
 const StyledTextGradient = styled(m.h1)(({ theme }) => ({
   ...textGradient(
-    `300deg, ${theme.palette.primary.main} 0%, ${theme.palette.warning.main} 25%, ${theme.palette.primary.main} 50%, ${theme.palette.warning.main} 75%, ${theme.palette.primary.main} 100%`
+    `300deg, ${theme.palette.info.main} 0%, ${theme.palette.success.main} 25%, ${theme.palette.warning.main} 50%, ${theme.palette.success.main} 75%, ${theme.palette.info.main} 100%`
+    // `300deg, ${theme.palette.primary.main} 0%, ${theme.palette.warning.main} 25%, ${theme.palette.primary.main} 50%, ${theme.palette.warning.main} 75%, ${theme.palette.primary.main} 100%`
   ),
   padding: 0,
   marginTop: 8,
@@ -61,7 +62,7 @@ const StyledTextGradient = styled(m.h1)(({ theme }) => ({
   letterSpacing: 8,
   textAlign: 'center',
   backgroundSize: '400%',
-  fontSize: `${64 / 16}rem`,
+  fontSize: `${65 / 18}rem`,
   fontFamily: theme.typography.fontSecondaryFamily,
   [theme.breakpoints.up('md')]: {
     fontSize: `${96 / 16}rem`,
