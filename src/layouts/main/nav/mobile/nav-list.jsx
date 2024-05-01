@@ -7,6 +7,8 @@ import { listItemButtonClasses } from '@mui/material/ListItemButton';
 
 import { useActiveLink } from 'src/routes/hooks/use-active-link';
 
+import { useTranslate } from 'src/locales';
+
 import { NavSectionVertical } from 'src/components/nav-section';
 
 import { NavItem } from './nav-item';
@@ -15,7 +17,7 @@ import { NavItem } from './nav-item';
 
 export default function NavList({ data }) {
   const active = useActiveLink(data.path, !!data.children);
-
+  const { t } = useTranslate();
   const [openMenu, setOpenMenu] = useState(true);
 
   const handleToggleMenu = useCallback(() => {
@@ -30,10 +32,10 @@ export default function NavList({ data }) {
         open={openMenu}
         onClick={handleToggleMenu}
         //
-        title={data.title}
+        title={t(data.title)}
         path={data.path}
         icon={data.icon}
-        button={data.button}
+        button={t(data.button)}
         //
         hasChild={!!data.children}
         externalLink={data.path.includes('http')}
