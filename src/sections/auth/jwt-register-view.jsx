@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { matchIsValidTel } from 'mui-tel-input';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Link from '@mui/material/Link';
@@ -24,13 +25,14 @@ import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFTextField, RHFDatePicker } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField, RHFDatePicker, RHFPhoneNumber } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function JwtRegisterView() {
   const { register } = useAuthContext();
-
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const { t } = useTranslate();
 
   const router = useRouter();
@@ -70,9 +72,15 @@ export default function JwtRegisterView() {
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .min(8, 'Confirm password must be at least 8 characters'),
     identification_num: Yup.string().required('Identification number is required'),
-    mobile_num1: Yup.string().required('Mobile number is required'),
+    mobile_num1: Yup.string().required('Mobile number is required').test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
     gender: Yup.string().required('Gender is required'),
-    birth_date: Yup.date().required('birth date is required'),
+    birth_date: Yup.date()
+      .required('birth date is required')
+      .test('is-adult', 'You must be at least 18 years old', (value) => {
+        const oldage = new Date();
+        const minDate = new Date(oldage.getFullYear() - 18, oldage.getMonth(), oldage.getDate());
+        return value <= minDate;
+      }),
     nationality: Yup.string().required('Nationality is required'),
     country: Yup.string().required('Country is required'),
     city: Yup.string().required('City is required'),
@@ -87,7 +95,7 @@ export default function JwtRegisterView() {
     mobile_num1: '',
     identification_num: '',
     gender: '',
-    birth_date: '',
+    birth_date: today,
     country: null,
     nationality: null,
     city: null,
@@ -100,7 +108,6 @@ export default function JwtRegisterView() {
   });
 
   const {
-    reset,
     watch,
     handleSubmit,
     formState: { isSubmitting },
@@ -139,7 +146,7 @@ export default function JwtRegisterView() {
       router.push(paths.auth.verify(data.email) || returnTo || PATH_AFTER_SIGNUP);
     } catch (error) {
       console.error(error);
-      reset();
+      // reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
@@ -206,7 +213,7 @@ export default function JwtRegisterView() {
         </Stack>
 
         <RHFTextField name="identification_num" label={t('Identification number')} />
-        <RHFTextField name="mobile_num1" label={t('mobile number')} />
+        <RHFPhoneNumber name="mobile_num1" label={t('mobile number')} />
         <RHFSelect name="nationality" label={t('nationality')}>
           {countriesData?.map((country, idx) => (
             <MenuItem lang="ar" key={idx} value={country?._id}>

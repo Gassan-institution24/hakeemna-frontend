@@ -21,7 +21,7 @@ export default function Whydoc() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const renderDescription = (
-    <Stack spacing={3} id="About" sx={{ textAlign: 'center', mb: 5 }}>
+    <Stack spacing={3} sx={{ textAlign: 'center', mb: 5 }}>
       <m.div variants={varFade().inDown}>
         <Typography variant="h2">{t('About us')}</Typography>
       </m.div>
@@ -49,6 +49,7 @@ export default function Whydoc() {
           }}
         >
           <Image
+           id="About"
             sx={{
               width: '55%',
               height: '55%',

@@ -205,7 +205,7 @@ export default function HomeHero() {
       </m.div>
 
       <m.div variants={varFade().in}>
-        <Typography variant="body2" sx={{ textAlign: 'center' }}>
+        <Typography variant="body2"  sx={{ textAlign: 'center' }}>
           {t(
             'A platform that provides an integrated electronic system for personal medical and health records, organizing work between medical service providers and users in the private sector. This organization allows improving the quality and efficiency of medical services and enhances communication and cooperation between them, contributing to achieving sustainable development in the field of health care.'
           )}
