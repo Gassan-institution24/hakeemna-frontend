@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_minimal_kit_cra_js=self.webpackChunk_minimal_kit_cra_js||[]).push([[267],{20267:(e,s,i)=>{i.r(s),i.d(s,{default:()=>r});var n=i(6907),t=i(2805),a=i(80184);function r(){return(0,a.jsxs)(a.Fragment,{children:[(0,a.jsxs)(n.ql,{children:[(0,a.jsx)("title",{children:" Super Admin: Tables List"}),(0,a.jsx)("meta",{name:"description",content:"meta"})]}),(0,a.jsx)(t.d_,{})]})}}}]);
-//# sourceMappingURL=267.2acafebc.chunk.js.map

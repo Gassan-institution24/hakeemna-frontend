@@ -16,7 +16,7 @@ export const navConfig = [
   {
     title: 'About',
     icon: <Iconify icon="mdi:about" />,
-    path: paths.pages.About,
+    path: '#',
     sectionId: 'About',
   },
   {

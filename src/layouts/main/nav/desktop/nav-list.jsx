@@ -59,7 +59,7 @@ export default function NavList({ data }) {
           setOpenMenu(false);
           document
             .getElementById(data.sectionId)
-            ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            ?.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }}
         hasChild={!!data.children}
         externalLink={data.path.includes('http')}

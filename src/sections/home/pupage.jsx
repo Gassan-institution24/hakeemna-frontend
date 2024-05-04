@@ -55,7 +55,7 @@ export default function Pupage() {
                 },
               }}
             >
-              Signup
+              {t('Signup')}
             </Button>
           </Item>
         </Grid>
@@ -91,12 +91,13 @@ export default function Pupage() {
                 },
               }}
             >
-              Signup
+              {t('Signup')}
             </Button>
           </Item>
 
           <m.div variants={varFade().inUp}>
             <Image
+             id="signup" 
               sx={{
                 position: 'relative',
                 top: {

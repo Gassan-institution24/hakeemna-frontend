@@ -150,17 +150,41 @@ export default function UsPricing() {
           </Box>
         ))}
       </Card>
+      <m.div variants={varFade().in}>
+        <Box
+          sx={{
+            textAlign: 'center',
+            mt: {
+              xs: 5,
+              md: 10,
+            },
+          }}
+        >
+          <m.div variants={varFade().inDown}>
+            <Typography variant="h4">{t('Still have questions ?')}</Typography>
+          </m.div>
 
-      <Button
-        size="large"
-        color="inherit"
-        variant="outlined"
-        endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={24} />}
-        sx={{ mx: 'auto' }}
-        href={paths.auth.registersu}
-      >
-        {t('Show All')}
-      </Button>
+          <m.div variants={varFade().inDown}>
+            <Typography sx={{ mt: 2, mb: 5, color: 'text.secondary' }}>
+             {t('Please describe your case to receive the most accurate respons.')}
+            </Typography>
+          </m.div>
+
+          <m.div variants={varFade().inUp}>
+            <Button
+              color="inherit"
+              size="large"
+              variant="contained"
+              href="mailto:doctorna2023@gmail.com?subject=[Feedback] from Customer"
+            >
+              {t('contact us')}
+            </Button>
+          </m.div>
+
+            </Box>
+
+          </m.div>
+
     </Container>
   );
 }
