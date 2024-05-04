@@ -37,19 +37,20 @@ import {
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
   // { label: 'code', width: 'calc(100%/14)' },
-  { label: 'unit_service_type', width: 'calc(100%/13)' },
-  { label: 'country', width: 'calc(100%/13)' },
-  { label: 'city', width: 'calc(100%/13)' },
-  { label: 'sector', width: 'calc(100%/13)' },
-  { label: 'commercial_name', width: 'calc(100%/13)' },
-  { label: 'province', width: 'calc(100%/13)' },
-  { label: 'address', width: 'calc(100%/13)' },
-  { label: 'phone_number_1', width: 'calc(100%/13)' },
-  { label: 'Phone_number_2', width: 'calc(100%/13)' },
-  { label: 'work_shift', width: 'calc(100%/13)' },
-  { label: 'constitution_objective', width: 'calc(100%/13)' },
-  { label: 'type_of_specialty_1', width: 'calc(100%/13)' },
-  { label: 'type_of_specialty_2', width: 'calc(100%/13)' },
+  { label: 'unit_service_type', width: 'calc(100%/14)' },
+  { label: 'country', width: 'calc(100%/14)' },
+  { label: 'city', width: 'calc(100%/14)' },
+  { label: 'sector', width: 'calc(100%/14)' },
+  { label: 'commercial_name', width: 'calc(100%/14)' },
+  { label: 'province', width: 'calc(100%/14)' },
+  { label: 'address', width: 'calc(100%/14)' },
+  { label: 'phone_number_1', width: 'calc(100%/14)' },
+  { label: 'Phone_number_2', width: 'calc(100%/14)' },
+  { label: 'work_shift', width: 'calc(100%/14)' },
+  { label: 'constitution_objective', width: 'calc(100%/14)' },
+  { label: 'type_of_specialty_1', width: 'calc(100%/14)' },
+  { label: 'type_of_specialty_2', width: 'calc(100%/14)' },
+  { label: 'info', width: 'calc(100%/14)' },
 ];
 export default function NewEditManyForm() {
   const router = useRouter();
@@ -213,12 +214,12 @@ export default function NewEditManyForm() {
                   headLabel={TABLE_HEAD}
                   rowCount={data.length}
                   numSelected={table.selected.length}
-                  // onSelectAllRows={(checked) =>
-                  //   table.onSelectAllRows(
-                  //     checked,
-                  //     data.map((row, index, idx) => index)
-                  //   )
-                  // }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     data.map((row, index, idx) => index)
+                //   )
+                // }
                 />
 
                 <TableBody>
@@ -382,6 +383,16 @@ export default function NewEditManyForm() {
                             name="type_of_specialty_2"
                           />
                           {/* {one.type_of_specialty_2} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.info}
+                            name="info"
+                          />
+                          {/* {one.info} */}
                         </TableCell>
                       </TableRow>
                     ))}

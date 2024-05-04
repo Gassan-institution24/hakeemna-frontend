@@ -8,6 +8,8 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Iconify from 'src/components/iconify';
+import Label from 'src/components/label';
+import { useGetUnreadMsgs } from 'src/api/chat';
 // import { useSnackbar } from 'src/components/snackbar';
 // import { usePopover } from 'src/components/custom-popover';
 
@@ -103,6 +105,11 @@ export function useNavData() {
             title: t('communications'),
             path: paths.superadmin.communication.root,
             icon: <Iconify icon="solar:call-chat-bold" />,
+            info: (
+              <Label color="info" startIcon={<Iconify icon="solar:bell-bing-bold-duotone" />}>
+                NEW
+              </Label>
+            ),
           },
           {
             title: t('management tables'),

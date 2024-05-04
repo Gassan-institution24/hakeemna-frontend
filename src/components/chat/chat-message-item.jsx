@@ -30,7 +30,7 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
 
   const { firstName, avatarUrl } = senderDetails;
 
-  const { body, file_name, createdAt } = message;
+  const { body, file_name, duration, createdAt } = message;
 
   const renderInfo = (
     <Typography
@@ -103,7 +103,7 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
         </Link>
       )}
       {hasVoice && (
-        <VoiceChat src={body} />
+        <VoiceChat src={body} duration={duration} />
         // <audio controls src={body}>
         //   <track kind="captions" />
         // </audio>
@@ -116,37 +116,37 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
     </Stack>
   );
 
-  const renderActions = (
-    <Stack
-      direction="row"
-      className="message-actions"
-      sx={{
-        pt: 0.5,
-        opacity: 0,
-        top: '100%',
-        left: 0,
-        position: 'absolute',
-        transition: (theme) =>
-          theme.transitions.create(['opacity'], {
-            duration: theme.transitions.duration.shorter,
-          }),
-        ...(me && {
-          left: 'unset',
-          right: 0,
-        }),
-      }}
-    >
-      <IconButton size="small">
-        <Iconify icon="solar:reply-bold" width={16} />
-      </IconButton>
-      <IconButton size="small">
-        <Iconify icon="eva:smiling-face-fill" width={16} />
-      </IconButton>
-      <IconButton size="small">
-        <Iconify icon="solar:trash-bin-trash-bold" width={16} />
-      </IconButton>
-    </Stack>
-  );
+  // const renderActions = (
+  //   <Stack
+  //     direction="row"
+  //     className="message-actions"
+  //     sx={{
+  //       pt: 0.5,
+  //       opacity: 0,
+  //       top: '100%',
+  //       left: 0,
+  //       position: 'absolute',
+  //       transition: (theme) =>
+  //         theme.transitions.create(['opacity'], {
+  //           duration: theme.transitions.duration.shorter,
+  //         }),
+  //       ...(me && {
+  //         left: 'unset',
+  //         right: 0,
+  //       }),
+  //     }}
+  //   >
+  //     <IconButton size="small">
+  //       <Iconify icon="solar:reply-bold" width={16} />
+  //     </IconButton>
+  //     <IconButton size="small">
+  //       <Iconify icon="eva:smiling-face-fill" width={16} />
+  //     </IconButton>
+  //     <IconButton size="small">
+  //       <Iconify icon="solar:trash-bin-trash-bold" width={16} />
+  //     </IconButton>
+  //   </Stack>
+  // );
 
   return (
     <Stack direction="row" justifyContent={me ? 'flex-end' : 'unset'} sx={{ mb: 1 }}>
