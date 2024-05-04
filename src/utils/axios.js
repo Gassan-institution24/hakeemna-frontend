@@ -475,6 +475,8 @@ export const endpoints = {
   chat: {
     all: '/api/chat',
     one: (id) => `/api/chat/${id}`,
+    message: (id) => `/api/msg/${id}`,
+    unreadMsg: (id) => `/api/msg/unread/user/${id}`,
   },
 
   tables: {
