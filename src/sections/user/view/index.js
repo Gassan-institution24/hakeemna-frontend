@@ -1,3 +1,4 @@
+export { default as history } from './history';
 export { default as Share } from './share-view';
 export { default as Insurance } from './insurance';
 export { default as Doctorpage } from './doctorpage';
