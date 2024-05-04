@@ -45,8 +45,7 @@ export default function ChatMessageInput({
   const [audioBlob, setAudioBlob] = useState(null);
   const [recorder, setRecorder] = useState(null);
   const [previewAudio, setPreviewAudio] = useState();
-
-  console.log('audioBlob', audioBlob)
+  const [duration, setDuration] = useState();
 
   const myContact = useMemo(
     () => ({
@@ -126,12 +125,19 @@ export default function ChatMessageInput({
           const mediaRecorder = new MediaRecorder(stream);
           setRecorder(mediaRecorder);
           const chunks = [];
+          let startTime;
 
           mediaRecorder.ondataavailable = (e) => {
             chunks.push(e.data);
           };
 
+          mediaRecorder.onstart = () => {
+            startTime = Date.now();
+          };
+
           mediaRecorder.onstop = async () => {
+            const endTime = Date.now();
+            setDuration((endTime - startTime) / 1000);
             const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
             setAudioBlob(blob);
             setPreviewAudio(URL.createObjectURL(blob));
@@ -144,6 +150,7 @@ export default function ChatMessageInput({
         }
       } else {
         // setRecording(false);
+        recorder.stream.getTracks().forEach(track => track.stop())
         recorder.stop();
       }
     } catch (e) {
@@ -188,6 +195,7 @@ export default function ChatMessageInput({
             try {
               const formData = new FormData();
               formData.append('body', audioBlob);
+              formData.append('duration', duration);
               formData.append('contentType', 'voice');
               await axiosInstance.post(endpoints.chat.one(selectedConversationId), formData);
               refetch();
@@ -214,6 +222,7 @@ export default function ChatMessageInput({
       messageData,
       audioBlob,
       enqueueSnackbar,
+      duration
     ]
   );
 
@@ -269,8 +278,7 @@ export default function ChatMessageInput({
             />
             {/* </IconButton> */}
             <VoiceChat
-              // onSend={() => handleSendMessage('voice')}
-              // onCancel={() => setPreviewAudio()}
+              duration={duration}
               src={previewAudio}
             />
             {/* <IconButton sx={{ color: 'success.main' }} onClick={onSend}> */}

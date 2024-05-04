@@ -2,7 +2,6 @@
 
 export default function useGetMessage({ message, participants, currentUserId }) {
   const sender = participants.find((participant) => participant._id === message.senderId);
-  console.log('sender', sender);
   const senderDetails =
     message.senderId === currentUserId
       ? {
