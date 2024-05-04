@@ -117,8 +117,8 @@ export default function OverviewAppView() {
               <Image src="https://static.tildacdn.com/tild3963-3735-4335-b535-346338303236/Pulse2.gif" />
             }
             action={
-              <Button variant="contained" color="primary">
-                {curLangAr ? 'احسب مؤشر كتلة الجسم' : ' Calculate your BMI'}
+              <Button variant="contained" color="primary" href={paths.dashboard.user.health}>
+                {curLangAr ? 'صحتي' : ' my health'}
               </Button>
             }
           />

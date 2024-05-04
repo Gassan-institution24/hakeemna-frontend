@@ -1,3 +1,4 @@
+// import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -8,8 +9,11 @@ import { alpha, useTheme } from '@mui/material/styles';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgGradient } from 'src/theme/css';
+import { useTranslate } from 'src/locales';
 
 import Logo from 'src/components/logo';
+
+// import Logpage from 'src/sections/home/images/logpage.png';
 
 import LanguagePopover from '../common/language-popover';
 
@@ -17,9 +21,9 @@ import LanguagePopover from '../common/language-popover';
 
 export default function AuthClassicLayout({ children, image, title }) {
   const theme = useTheme();
-
+const {t} = useTranslate()
   const mdUp = useResponsive('up', 'md');
-
+  // const [isZoomed, setIsZoomed] = useState(false);
   const renderLogo = (
     <Logo
       sx={{
@@ -74,7 +78,7 @@ export default function AuthClassicLayout({ children, image, title }) {
       }}
     >
       <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
-        {title || 'Hi, Welcome back'}
+        {t(title) || 'Hi, Welcome back'}
       </Typography>
 
       <Box
@@ -82,34 +86,24 @@ export default function AuthClassicLayout({ children, image, title }) {
         alt="auth"
         src={image || '/assets/illustrations/illustration_dashboard.png'}
         sx={{
-          maxWidth: {
-            xs: 480,
-            lg: 560,
-            xl: 720,
-          },
+          // maxWidth: {
+          //   xs: 480,
+          //   lg: 560,
+          //   xl: 720,
+          // },
+          
+          // '&:hover': {
+          //   cursor: 'zoom-in',
+          // },
+          // // Apply zoom effect when isZoomed is true
+          // transform: isZoomed ? 'scale(1.2)' : 'scale(1)',
+          // transition: 'transform 0.3s ease-in-out',
         }}
+        // Toggle isZoomed state on mouse enter/leave
+        // onMouseEnter={() => setIsZoomed(true)}
+        // onMouseLeave={() => setIsZoomed(false)}
       />
 
-      {/* <Stack direction="row" spacing={2}>
-        {METHODS.map((option, idx)  => (
-          <Tooltip key={idx} title={option.label}>
-            <Link component={RouterLink} href={option.path}>
-              <Box
-                component="img"
-                alt={option.label}
-                src={option.icon}
-                sx={{
-                  width: 32,
-                  height: 32,
-                  ...(method !== option.id && {
-                    filter: 'grayscale(100%)',
-                  }),
-                }}
-              />
-            </Link>
-          </Tooltip>
-        ))}
-      </Stack> */}
     </Stack>
   );
 

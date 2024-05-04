@@ -8,14 +8,15 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import { varFade, MotionViewport } from 'src/components/animate';
 
 export default function VerticalDividerText() {
   const { t } = useTranslate();
-
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
   return (
     <>
       <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 8, md: 10 } }}>
@@ -628,17 +629,17 @@ export default function VerticalDividerText() {
       <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 10, md: 15 } }}>
         <m.div variants={varFade().inUp}>
           <Typography variant="h2" sx={{ my: 3 }}>
-            Join us and Get the right offer for your unit of service
+            {t('Join us and Get the right offer for your unit of service')}
           </Typography>
         </m.div>
         <Button
           size="large"
           variant="outlined"
-          endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={24} />}
+          endIcon={curLangAr ? <Iconify icon="icon-park-outline:left" width={24}  />:<Iconify icon="eva:arrow-ios-forward-fill" width={24}  />}
           sx={{ mx: 'auto', backgroundColor: 'success.main', color: 'white' }}
           href={paths.pages.UsPricing}
         >
-          Subscriptions
+          {t('Subscriptions')}
         </Button>
       </Container>
     </>

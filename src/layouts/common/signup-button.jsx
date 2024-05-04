@@ -11,6 +11,9 @@ export default function SigupButton({ sx }) {
 
   return (
     <Button
+      onClick={() => {
+        document.getElementById('signup')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }}
       component={RouterLink}
       variant="outlined"
       sx={{
@@ -24,7 +27,7 @@ export default function SigupButton({ sx }) {
         },
       }}
     >
-      {t('Sign Up')}
+      {t('sign up')}
     </Button>
   );
 }
