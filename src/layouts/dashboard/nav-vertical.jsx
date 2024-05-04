@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import { Divider, Tooltip, MenuItem, Typography, IconButton } from '@mui/material';
+import { Divider, Tooltip, MenuItem, Typography, IconButton, Badge } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
@@ -25,6 +25,7 @@ import Doclogo from 'src/components/logo/doc.png';
 import { NavSectionVertical } from 'src/components/nav-section';
 import Walktour, { useWalktour } from 'src/components/walktour';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useGetUnreadMsgs } from 'src/api/chat';
 
 import { NAV } from '../config-layout';
 import TicketPopover from './ticketPopover';
@@ -47,6 +48,9 @@ export default function NavVertical({ openNav, onCloseNav }) {
   const popover = usePopover();
 
   const checkAcl = useAclGuard();
+
+  const { messages } = useGetUnreadMsgs(user._id)
+
 
   const USData =
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
@@ -169,7 +173,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+      // scrollDuration={500}
       />
       {isEmployee && (
         <Box
@@ -280,17 +284,17 @@ export default function NavVertical({ openNav, onCloseNav }) {
           subcategory: 'management_tables',
           acl: 'create',
         }) && (
-          <>
-            <Divider />
-            <MenuItem
-              lang="ar"
-              sx={{ fontSize: 13, color: 'secondary.dark' }}
-              onClick={() => setDialog(true)}
-            >
-              {t('create first time tables')}
-            </MenuItem>
-          </>
-        )}
+            <>
+              <Divider />
+              <MenuItem
+                lang="ar"
+                sx={{ fontSize: 13, color: 'secondary.dark' }}
+                onClick={() => setDialog(true)}
+              >
+                {t('create first time tables')}
+              </MenuItem>
+            </>
+          )}
       </CustomPopover>
       <Box
         sx={{
@@ -301,11 +305,11 @@ export default function NavVertical({ openNav, onCloseNav }) {
         }}
       >
         <IconButton onClick={() => setTicketDialog(true)}>
-          {/* <Badge badgeContent={1} color="error"> */}
-          <Iconify sx={{ color: 'primary.main' }} width="70px" icon="mdi:customer-service" />
-          {/* </Badge> */}
+          <Badge badgeContent={messages?.reduce((acc, chat) => acc + chat.messages.length, 0)} color="error">
+            <Iconify sx={{ color: 'primary.main' }} width="70px" icon="mdi:customer-service" />
+          </Badge>
         </IconButton>
-        <TicketPopover open={ticketDialog} onClose={() => setTicketDialog(false)} />
+        <TicketPopover messagesLength={messages} open={ticketDialog} onClose={() => setTicketDialog(false)} />
       </Box>
     </>
   );

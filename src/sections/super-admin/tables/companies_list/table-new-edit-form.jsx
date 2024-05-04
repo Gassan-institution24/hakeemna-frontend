@@ -39,6 +39,7 @@ export default function TableNewEditForm({ currentSelected }) {
     constitution_objective: Yup.string(),
     type_of_specialty_1: Yup.string(),
     type_of_specialty_2: Yup.string(),
+    info: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -57,6 +58,7 @@ export default function TableNewEditForm({ currentSelected }) {
       constitution_objective: currentSelected?.constitution_objective || '',
       type_of_specialty_1: currentSelected?.type_of_specialty_1 || '',
       type_of_specialty_2: currentSelected?.type_of_specialty_2 || '',
+      info: currentSelected?.info || '',
     }),
     [currentSelected]
   );
@@ -217,6 +219,10 @@ export default function TableNewEditForm({ currentSelected }) {
                 onChange={handleEnglishInputChange}
                 name="type_of_specialty_2"
                 label="type_of_specialty_2"
+              />
+              <RHFTextField
+                name="info"
+                label="info"
               />
             </Box>
 
