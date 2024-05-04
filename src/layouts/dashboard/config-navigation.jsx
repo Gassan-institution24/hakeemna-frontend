@@ -536,7 +536,7 @@ export function useNavData() {
           },
           {
             title: t('my History'),
-            path: '#',
+            path: paths.dashboard.user.history,
             icon: <Iconify icon="material-symbols:history" />,
           },
           {
