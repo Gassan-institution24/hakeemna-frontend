@@ -1,6 +1,7 @@
 {
   "Sign Up": "التسجيل",
   "sign up": "التسجيل",
+  "Signup": "التسجيل",
   "login": "تسجيل الدخول",
   "home": "الصفحة الرئيسية",
   "R&D": "الأبحاث",
@@ -399,7 +400,7 @@
   "already created": "منشأ مسبقا",
 
   "Good Morning ☀️": "صباح الخير ☀️",
-  "Good Evening 🌑 ": "مساء الخير 🌑",
+  "Good Evening 🌑": "مساء الخير 🌑",
   "How To Use": "طريقة الأستخدام",
   "Available Offers": "العروض ألمتوفرة",
   "Upcoming Appointments": "مواعيدي القادمة",
@@ -410,6 +411,10 @@
   "I am a services provider": "انا مقدم خدمة ",
   "Date of birth": "تاريخ الميلاد",
   "About": "عنا",
+  "Join us and Get the right offer for your unit of service": "انضم الان للحصول على افضل الاشتراكات المناسبة لعيادتك",
+  "Subscriptions": "الاشتراكات",
+  "Still have questions ?": "هل لديك اسئلة ؟",
+  "Please describe your case to receive the most accurate respons.": "يرجى وصف حالتك للحصول على الردود الأكثر دقة.",
   "full name english": "الاسم الكامل باللغة الانجليزية",
   "full name arabic": "الاسم كامل باللغة العربية",
   "Identification number": "الرقم الوطني",
@@ -423,11 +428,13 @@
   "It is time for digital transformation": "لقد حان وقت التحول الرقمي",
   "An invitation to join the family has been sent successfully": "تم ارسال دعوة انضمام للعائلة بنجاح",
   "Hakeemna": "حكيمنا",
+  "card": "بطاقة",
   "Invitation Accepted": "تم قبول الدعوة",
   "Dr.": "د.",
   "A platform that provides an integrated electronic system for personal medical and health records, organizing work between medical service providers and users in the private sector. This organization allows improving the quality and efficiency of medical services and enhances communication and cooperation between them, contributing to achieving sustainable development in the field of health care.": "منصة توفر نظامًا إلكترونيًا متكاملاً للسجلات الطبية والصحية الشخصية، وتنظيم العمل بين مقدمي الخدمات الطبية والمستخدمين في القطاع الخاص. تتيح هذه المنظمة تحسين جودة وكفاءة الخدمات الطبية وتعزيز التواصل والتعاون فيما بينها، مما يساهم في تحقيق التنمية المستدامة في مجال الرعاية الصحية.",
   "my appointments": "مواعيدي",
   "Start Now": "ابدا الان",
+  "your health medical record": "سجلك الطبي الصحي",
   "View": "عرض",
   "On Diet": "اتبع حمية",
   "residence country": "مكان الاقامة",
