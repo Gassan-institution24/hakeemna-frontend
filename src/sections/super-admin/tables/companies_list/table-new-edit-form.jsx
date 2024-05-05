@@ -40,6 +40,10 @@ export default function TableNewEditForm({ currentSelected }) {
     type_of_specialty_1: Yup.string(),
     type_of_specialty_2: Yup.string(),
     info: Yup.string(),
+    email: Yup.string(),
+    insurance: Yup.string(),
+    subscribe_to: Yup.string(),
+    communication: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -59,6 +63,10 @@ export default function TableNewEditForm({ currentSelected }) {
       type_of_specialty_1: currentSelected?.type_of_specialty_1 || '',
       type_of_specialty_2: currentSelected?.type_of_specialty_2 || '',
       info: currentSelected?.info || '',
+      email: currentSelected?.email || '',
+      insurance: currentSelected?.insurance || '',
+      subscribe_to: currentSelected?.subscribe_to || '',
+      communication: currentSelected?.communication || '',
     }),
     [currentSelected]
   );
@@ -124,6 +132,11 @@ export default function TableNewEditForm({ currentSelected }) {
       constitution_objective: currentSelected?.constitution_objective || '',
       type_of_specialty_1: currentSelected?.type_of_specialty_1 || '',
       type_of_specialty_2: currentSelected?.type_of_specialty_2 || '',
+      info: currentSelected?.info || '',
+      email: currentSelected?.email || '',
+      insurance: currentSelected?.insurance || '',
+      subscribe_to: currentSelected?.subscribe_to || '',
+      communication: currentSelected?.communication || '',
     });
   }, [currentSelected]);
   /* eslint-enable */
@@ -144,85 +157,101 @@ export default function TableNewEditForm({ currentSelected }) {
             >
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="unit_service_type"
                 label="unit_service_type"
               />
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="country"
                 label="country"
               />
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="city"
                 label="city"
               />
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="sector"
                 label="sector"
               />
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="commercial_name"
                 label="commercial_name"
               />
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="province"
                 label="province"
               />
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="address"
                 label="address"
               />
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="phone_number_1"
                 label="phone_number_1"
               />
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="Phone_number_2"
                 label="Phone_number_2"
               />
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="work_shift"
                 label="work_shift"
               />
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="constitution_objective"
                 label="constitution_objective"
               />
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="type_of_specialty_1"
                 label="type_of_specialty_1"
               />
               <RHFTextField
                 lang="en"
-                onChange={handleEnglishInputChange}
+                // onChange={handleEnglishInputChange}
                 name="type_of_specialty_2"
                 label="type_of_specialty_2"
               />
               <RHFTextField
                 name="info"
                 label="info"
+              />
+              <RHFTextField
+                name="email"
+                label="email"
+              />
+              <RHFTextField
+                name="insurance"
+                label="insurance"
+              />
+              <RHFTextField
+                name="subscribe_to"
+                label="subscribe to"
+              />
+              <RHFTextField
+                name="communication"
+                label="communication"
               />
             </Box>
 

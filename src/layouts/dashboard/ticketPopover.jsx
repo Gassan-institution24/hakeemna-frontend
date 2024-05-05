@@ -11,7 +11,7 @@ import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetConversation, useGetUnreadMsgs } from 'src/api/chat';
+import { useGetConversation } from 'src/api/chat';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetTickets, useGetTicketCategories } from 'src/api';
 
@@ -24,7 +24,7 @@ import ChatMessageInput from 'src/components/chat/chat-message-input';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import Label from 'src/components/label';
 
-export default function TicketPopover({ messagesLength, open, onClose }) {
+export default function TicketPopover({ messagesLength, refetchLenght, open, onClose }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -42,8 +42,7 @@ export default function TicketPopover({ messagesLength, open, onClose }) {
 
   const { ticketCategoriesData } = useGetTicketCategories();
   const { conversation, refetch } = useGetConversation(chatId);
-  const { messages } = useGetUnreadMsgs(user._id)
-  console.log('messages', messages)
+
   const NewUserSchema = Yup.object().shape({
     category: Yup.string(),
     subject: Yup.string().required(t('required field')),
@@ -98,14 +97,18 @@ export default function TicketPopover({ messagesLength, open, onClose }) {
 
   useEffect(() => {
     socket.on('message', (id) => {
-      if (id === chatId) refetch();
+      if (id === chatId || messagesLength.some((one) => one._id === id)) {
+        refetchLenght()
+        refetch();
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatId]);
+  }, [chatId, messagesLength]);
   return (
     <CustomPopover
       open={open}
       hiddenArrow
+      arrow={curLangAr ? "top-left" : ''}
       onClose={onClose}
     >
       {page === 0 && (
@@ -166,7 +169,7 @@ export default function TicketPopover({ messagesLength, open, onClose }) {
             flexShrink={0}
             sx={{ pr: 1, pl: 2.5, py: 1, minHeight: 72 }}
           >
-            Customer service
+            {t('Customer service')}
           </Stack>
 
           <Stack
@@ -185,7 +188,7 @@ export default function TicketPopover({ messagesLength, open, onClose }) {
                 overflow: 'hidden',
               }}
             >
-              <ChatMessageList messages={conversation?.messages} participants={participants} />
+              <ChatMessageList messages={conversation?.messages} refetchLenght={refetchLenght} participants={participants} />
 
               <ChatMessageInput
                 refetch={refetch}
@@ -199,12 +202,11 @@ export default function TicketPopover({ messagesLength, open, onClose }) {
       {page === 2 && (
         <Stack>
           <Typography variant="subtitle1" textAlign="center" m={1}>
-            Select One
+            {t('Select one')}
           </Typography>
           <Divider sx={{ mb: 1 }} />
           {ticketsData.map((one, idx) => {
             const currLength = messagesLength.find((chat) => chat._id === one.chat)
-            console.log('currLength', currLength)
             return (<MenuItem
               onClick={() => {
                 setChatId(one.chat);
@@ -245,5 +247,6 @@ export default function TicketPopover({ messagesLength, open, onClose }) {
 TicketPopover.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
+  refetchLenght: PropTypes.func,
   messagesLength: PropTypes.array,
 };

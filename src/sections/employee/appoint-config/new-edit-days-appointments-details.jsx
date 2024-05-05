@@ -61,8 +61,8 @@ export default function NewEditDayAppointmentsDetails({
     };
     const existingData = values.days_details[ParentIndex].appointments
       ? values.days_details[ParentIndex].appointments[
-          values.days_details[ParentIndex].appointments.length - 1
-        ]
+      values.days_details[ParentIndex].appointments.length - 1
+      ]
       : null;
     const start_time = new Date(
       existingData ? existingData?.start_time : values.days_details[ParentIndex].work_start_time
@@ -140,7 +140,11 @@ export default function NewEditDayAppointmentsDetails({
                   render={({ field, fieldState: { error } }) => (
                     <MobileTimePicker
                       // ampmInClock
-                      orientation="landscape"
+                      closeOnSelect
+                      slots={{
+                        // toolbar:false,
+                        actionBar: 'cancel'
+                      }}
                       minutesStep="5"
                       label={t('start time')}
                       value={myunitTime(
@@ -151,7 +155,7 @@ export default function NewEditDayAppointmentsDetails({
                           newValue,
                           user?.employee?.employee_engagements[user?.employee.selected_engagement]
                             ?.unit_service?.country?.time_zone ||
-                            Intl.DateTimeFormat().resolvedOptions().timeZone
+                          Intl.DateTimeFormat().resolvedOptions().timeZone
                         );
                         field.onChange(selectedTime);
                       }}
@@ -245,7 +249,7 @@ export default function NewEditDayAppointmentsDetails({
             startIcon={<Iconify icon="tdesign:plus" />}
             sx={{ padding: 1 }}
             onClick={handleAdd}
-            // sx={{ flexShrink: 0 }}
+          // sx={{ flexShrink: 0 }}
           >
             {curLangAr ? 'إضافة مواعيد بالتفصيل' : 'Add Detailed Appointment'}
           </Button>

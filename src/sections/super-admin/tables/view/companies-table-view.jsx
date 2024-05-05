@@ -279,6 +279,28 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.name_arabic &&
           data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.commercial_name &&
+          data?.commercial_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.province &&
+          data?.province?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.country &&
+          data?.country?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city &&
+          data?.city?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.email &&
+          data?.email?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.phone_number_1 &&
+          data?.phone_number_1?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.type_of_specialty_1 &&
+          data?.type_of_specialty_1?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.type_of_specialty_2 &&
+          data?.type_of_specialty_2?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.unit_service_type &&
+          data?.unit_service_type?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.sector &&
+          data?.sector?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.info &&
+          data?.info?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

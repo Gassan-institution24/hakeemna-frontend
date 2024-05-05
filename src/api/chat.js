@@ -109,6 +109,31 @@ export function useGetUnreadMsgs(userId) {
 
 // ----------------------------------------------------------------------
 
+export function useGetSAUnreadMsgs(userId) {
+  const URL = endpoints.chat.unreadMsg(userId);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, options);
+
+  const memoizedValue = useMemo(
+    () => ({
+      messages: data || [],
+      messagesLoading: isLoading,
+      messagesError: error,
+      messagesValidating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  const refetch = async () => {
+    // Use the mutate function to re-fetch the data for the specified key (URL)
+    await mutate(URL);
+  };
+
+  return { ...memoizedValue, refetch };
+}
+
+// ----------------------------------------------------------------------
+
 export async function sendMessage(conversationId, messageData) {
   const CONVERSATIONS_URL = [endpoints.chat, { params: { endpoint: 'conversations' } }];
 
