@@ -345,6 +345,10 @@ export const endpoints = {
     familyType: '/api/family',
     one: (id) => `/api/patient/${id}`,
   },
+  history: {
+    all: '/api/history',
+    one: (id) => `/api/history/${id}`,
+  },
   oldpatient: {
     all: '/api/oldpatientsdata',
     details: '/api/oldpatientsdata/details',
