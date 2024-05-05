@@ -177,7 +177,11 @@ export default function TableNewEditForm({ currentTable }) {
                 render={({ field, fieldState: { error } }) => (
                   <MobileTimePicker
                     // ampmInClock
-                    orientation="landscape"
+                    closeOnSelect
+                    slots={{
+                      // toolbar:false,
+                      actionBar: 'cancel'
+                    }}
                     minutesStep="5"
                     label={t('start time')}
                     value={values.start_time ? new Date(values.start_time) : null}
@@ -201,7 +205,11 @@ export default function TableNewEditForm({ currentTable }) {
                 render={({ field, fieldState: { error } }) => (
                   <MobileTimePicker
                     // ampmInClock
-                    orientation="landscape"
+                    closeOnSelect
+                    slots={{
+                      // toolbar:false,
+                      actionBar: 'cancel'
+                    }}
                     minutesStep="5"
                     label={t('end time')}
                     value={values.end_time ? new Date(values.end_time) : null}

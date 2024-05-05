@@ -395,7 +395,11 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
                         // ampmInClock
-                        orientation="landscape"
+                        closeOnSelect
+                        slots={{
+                          // toolbar:false,
+                          actionBar: 'cancel'
+                        }}
                         minutesStep="5"
                         label={t('work start time')}
                         value={myunitTime(values.days_details[index]?.work_start_time)}
@@ -404,7 +408,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                             newValue,
                             user?.employee?.employee_engagements[user?.employee.selected_engagement]
                               ?.unit_service?.country?.time_zone ||
-                              Intl.DateTimeFormat().resolvedOptions().timeZone
+                            Intl.DateTimeFormat().resolvedOptions().timeZone
                           );
                           field.onChange(selectedTime);
                           setValue(`days_details[${index}].work_end_time`, null);
@@ -427,7 +431,11 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
                         // ampmInClock
-                        orientation="landscape"
+                        closeOnSelect
+                        slots={{
+                          // toolbar:false,
+                          actionBar: 'cancel'
+                        }}
                         minutesStep="5"
                         label={t('work end time')}
                         value={myunitTime(values.days_details[index]?.work_end_time)}
@@ -436,7 +444,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                             newValue,
                             user?.employee?.employee_engagements[user?.employee.selected_engagement]
                               ?.unit_service?.country?.time_zone ||
-                              Intl.DateTimeFormat().resolvedOptions().timeZone
+                            Intl.DateTimeFormat().resolvedOptions().timeZone
                           );
                           field.onChange(selectedTime);
                           processDayDetails(index);
@@ -458,7 +466,11 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
                         // ampmInClock
-                        orientation="landscape"
+                        closeOnSelect
+                        slots={{
+                          // toolbar:false,
+                          actionBar: 'cancel'
+                        }}
                         minutesStep="5"
                         label={t('break start time')}
                         value={myunitTime(values.days_details[index]?.break_start_time)}
@@ -467,7 +479,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                             newValue,
                             user?.employee?.employee_engagements[user?.employee.selected_engagement]
                               ?.unit_service?.country?.time_zone ||
-                              Intl.DateTimeFormat().resolvedOptions().timeZone
+                            Intl.DateTimeFormat().resolvedOptions().timeZone
                           );
                           setValue(`days_details[${index}].break_end_time`, null);
                           field.onChange(selectedTime);
@@ -490,7 +502,11 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     render={({ field, fieldState: { error } }) => (
                       <MobileTimePicker
                         // ampmInClock
-                        orientation="landscape"
+                        closeOnSelect
+                        slots={{
+                          // toolbar:false,
+                          actionBar: 'cancel'
+                        }}
                         minutesStep="5"
                         label={t('break end time')}
                         value={myunitTime(values.days_details[index]?.break_end_time)}
@@ -499,7 +515,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                             newValue,
                             user?.employee?.employee_engagements[user?.employee.selected_engagement]
                               ?.unit_service?.country?.time_zone ||
-                              Intl.DateTimeFormat().resolvedOptions().timeZone
+                            Intl.DateTimeFormat().resolvedOptions().timeZone
                           );
                           field.onChange(selectedTime);
                           processDayDetails(index);
@@ -570,7 +586,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
             startIcon={<Iconify icon="tdesign:plus" />}
             sx={{ padding: 1 }}
             onClick={handleAdd}
-            // sx={{ flexShrink: 0 }}
+          // sx={{ flexShrink: 0 }}
           >
             {curLangAr ? 'إضافة يوم جديد' : 'add new day'}
           </Button>

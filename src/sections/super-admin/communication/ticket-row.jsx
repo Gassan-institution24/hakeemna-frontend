@@ -8,13 +8,14 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import { useRouter } from 'src/routes/hooks';
+// import { useRouter } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { Badge, Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +30,7 @@ export default function AppointmentsTableRow({
   onCancelRow,
   onUnCancelRow,
   onDeleteRow,
+  unread
 }) {
   const {
     code,
@@ -37,7 +39,7 @@ export default function AppointmentsTableRow({
     category,
     assigned_to,
     status,
-    user,
+    // user,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -49,11 +51,11 @@ export default function AppointmentsTableRow({
 
   const { t } = useTranslate();
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const popover = usePopover();
   const DDL = usePopover();
-
+  console.log(unread)
   return (
     <>
       <TableRow hover selected={selected}>
@@ -101,7 +103,9 @@ export default function AppointmentsTableRow({
           onClick={onViewRow}
           align="center"
         >
-          {subject}
+          <Badge badgeContent={unread} color="error">
+            <Typography variant='body2' sx={{ p: unread ? 1 : 0 }}>{subject}</Typography>
+          </Badge>
         </TableCell>
         <TableCell onClick={onViewRow} align="center">
           {priority}
@@ -235,4 +239,5 @@ AppointmentsTableRow.propTypes = {
   refetch: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,
+  unread: PropTypes.number,
 };

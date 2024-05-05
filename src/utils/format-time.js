@@ -1,13 +1,13 @@
 import ar from 'date-fns/locale/ar-SA';
 import { format, getTime, isValid, formatDistanceToNow } from 'date-fns';
 
-import { useTranslate } from 'src/locales';
+// import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export const useUnitTime = () => {
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
   const { user } = useAuthContext();
   function myunitTime(date) {
     const formattedDate = date ? new Date(date) : null;
@@ -16,7 +16,7 @@ export const useUnitTime = () => {
         ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     const value = formattedDate
-      ? new Date(formattedDate.toLocaleString(t('en-US'), { timeZone }))
+      ? new Date(formattedDate.toLocaleString('en-US', { timeZone }))
       : null;
 
     return value;

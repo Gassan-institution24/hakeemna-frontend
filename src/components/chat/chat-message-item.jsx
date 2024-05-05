@@ -1,18 +1,17 @@
 import PropTypes from 'prop-types';
 import { formatDistanceToNowStrict } from 'date-fns';
+import { ar, enGB } from 'date-fns/locale'
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import { Card, Link } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
 import { RouterLink } from 'src/routes/components';
 
-import { useAuthContext } from 'src/auth/hooks';
-
 import Iconify from 'src/components/iconify';
+import { useLocales } from 'src/locales';
 
 import { useGetMessage } from './hooks';
 import VoiceChat from './chat-voice-component';
@@ -20,13 +19,14 @@ import VoiceChat from './chat-voice-component';
 // ----------------------------------------------------------------------
 
 export default function ChatMessageItem({ message, participants, onOpenLightbox }) {
-  const { user } = useAuthContext();
 
   const { me, senderDetails, hasImage, hasFile, hasVoice } = useGetMessage({
     message,
     participants,
-    currentUserId: `${user?._id}`,
   });
+
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const { firstName, avatarUrl } = senderDetails;
 
@@ -44,9 +44,10 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
         }),
       }}
     >
-      {!me && firstName && `${firstName},`} &nbsp;
+      {firstName && `${firstName},`} &nbsp;
       {formatDistanceToNowStrict(new Date(createdAt), {
         addSuffix: true,
+        locale: (curLangAr ? ar : enGB),
       })}
     </Typography>
   );
