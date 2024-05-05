@@ -33,7 +33,7 @@ export default function AppointmentData() {
     },
     {
       value: 'Finished',
-      label: t('Finished appoinment'),
+      label: t('Finished appointment'),
       icon: <Iconify icon="ep:finished" width={24} />,
     },
   ];

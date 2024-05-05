@@ -24,6 +24,7 @@ const Create = lazy(() => import('src/pages/dashboard/user/newmember'));
 const Doctorpage = lazy(() => import('src/pages/dashboard/user/doctorpage'));
 const Insurance = lazy(() => import('src/pages/dashboard/user/insurance'));
 const History = lazy(() => import('src/pages/dashboard/user/history'));
+const HistoryInfo = lazy(() => import('src/pages/dashboard/user/historyinfo'));
 const Share = lazy(() => import('src/pages/dashboard/user/share'));
 const FinancilMovment = lazy(() => import('src/pages/dashboard/user/FinancilMovment'));
 const Family = lazy(() => import('src/pages/dashboard/user/Family'));
@@ -88,6 +89,7 @@ export const userRoutes = [
           { path: 'account', element: <UserAccountPage /> },
           { path: 'share', element: <Share /> },
           { path: 'history', element: <History /> },
+          { path: 'historyinfo/:id', element: <HistoryInfo /> },
           { path: 'financilmovment', element: <FinancilMovment /> },
           { path: 'family', element: <Family /> },
         ],
