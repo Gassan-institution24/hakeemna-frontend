@@ -34,7 +34,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axios from 'src/utils/axios';
+import axios, { endpoints } from 'src/utils/axios';
 import { fDateAndTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -65,11 +65,11 @@ export default function OldMedicalReports() {
   const { user } = useAuthContext();
   const { specialtiesData } = useGetSpecialties();
   const { oldmedicalreportsdata, refetch } = useGetPatintoldmedicalreports(user?.patient?._id);
-
+  const [spName, setspName] = useState();
   const handleHover = (id) => {
     setHoveredButtonId(id);
   };
-
+  console.log(spName);
   const [filtersbyname, setFiltersbyname] = useState();
 
   const dataFiltered = applyFilter({
@@ -174,12 +174,21 @@ export default function OldMedicalReports() {
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
     });
+    console.log(data, 'data');
 
     if (ImgFiles) {
       ImgFiles.forEach((f) => formData.append('medicalreports[]', f));
     }
     try {
       await axios.post('/api/oldmedicalreports', formData);
+      await axios.post(endpoints.history.all, {
+        patient: user?.patient?._id,
+        name_english: 'a medical report has been created',
+        name_arabic: 'تم انشاء تقرير طبي',
+        sub_english: `${spName} medical report`,
+        sub_arabic: ` تقرير طبي لتخصص ال ${spName}`,
+        file:formData
+      });
       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
       dialog.onFalse();
       reset();
@@ -361,7 +370,13 @@ export default function OldMedicalReports() {
               sx={{ mb: 2 }}
             >
               {specialtiesData.map((test, idx) => (
-                <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
+                <MenuItem
+                  lang="ar"
+                  value={test?._id}
+                  key={idx}
+                  sx={{ mb: 1 }}
+                  onClick={() => setspName(test?.name_english)}
+                >
                   {curLangAr ? test?.name_arabic : test?.name_english}
                 </MenuItem>
               ))}
