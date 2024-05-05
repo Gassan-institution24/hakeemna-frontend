@@ -26,6 +26,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+import { useGetUnreadMsgs } from 'src/api/chat';
+import { useAuthContext } from 'src/auth/hooks';
 
 import AppointmentsRow from '../ticket-row';
 import TicketsToolbar from '../tickets-toolbar';
@@ -63,6 +65,10 @@ export default function AppointmentsView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const [filters, setFilters] = useState(defaultFilters);
+
+  const { user } = useAuthContext()
+
+  const { messages, refetch: refetchLenght } = useGetUnreadMsgs(user._id)
 
   const {
     ticketsData,
@@ -233,16 +239,20 @@ export default function AppointmentsView() {
               />
 
               <TableBody>
-                {ticketsData?.map((row, idx) => (
-                  <AppointmentsRow
-                    refetch={refetch}
-                    key={idx}
-                    row={row}
-                    onViewRow={() => handleViewTicket(row._id)}
-                    selected={table.selected.includes(row._id)}
-                    onSelectRow={() => table.onSelectRow(row._id)}
-                  />
-                ))}
+                {ticketsData?.map((row, idx) => {
+                  const unreadCount = messages.find((one) => one._id === row.chat)
+                  return (
+                    <AppointmentsRow
+                      refetch={refetch}
+                      key={idx}
+                      row={row}
+                      unread={unreadCount?.messages?.length}
+                      onViewRow={() => handleViewTicket(row._id)}
+                      selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                    />
+                  )
+                })}
 
                 <TableEmptyRows
                   height={denseHeight}

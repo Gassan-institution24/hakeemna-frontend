@@ -51,6 +51,10 @@ const TABLE_HEAD = [
   { label: 'type_of_specialty_1', width: 'calc(100%/14)' },
   { label: 'type_of_specialty_2', width: 'calc(100%/14)' },
   { label: 'info', width: 'calc(100%/14)' },
+  { label: 'email', width: 'calc(100%/14)' },
+  { label: 'insurance', width: 'calc(100%/14)' },
+  { label: 'subscribe to', width: 'calc(100%/14)' },
+  { label: 'communication', width: 'calc(100%/14)' },
 ];
 export default function NewEditManyForm() {
   const router = useRouter();
@@ -120,7 +124,6 @@ export default function NewEditManyForm() {
         const workSheets = workbook.Sheets[workbook.SheetNames[0]];
 
         const jsonData = XLSX.utils.sheet_to_json(workSheets);
-        console.log('jsonData', jsonData);
         const chunkSize = 10; // You can adjust this value based on performance testing
         // const chunks = [];
 
@@ -134,7 +137,6 @@ export default function NewEditManyForm() {
       reader.readAsBinaryString(file);
     }
   }, []);
-  console.log('jsonData', data);
 
   const handleCreate = async () => {
     try {
@@ -393,6 +395,46 @@ export default function NewEditManyForm() {
                             name="info"
                           />
                           {/* {one.info} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.email}
+                            name="email"
+                          />
+                          {/* {one.email} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.insurance}
+                            name="insurance"
+                          />
+                          {/* {one.insurance} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.subscribe_to}
+                            name="subscribe_to"
+                          />
+                          {/* {one.subscribe_to} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.communication}
+                            name="communication"
+                          />
+                          {/* {one.communication} */}
                         </TableCell>
                       </TableRow>
                     ))}

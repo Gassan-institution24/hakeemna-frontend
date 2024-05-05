@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -10,6 +10,7 @@ import { useAclGuard } from 'src/auth/guard/acl-guard';
 import Iconify from 'src/components/iconify';
 import Label from 'src/components/label';
 import { useGetUnreadMsgs } from 'src/api/chat';
+import socket from 'src/socket';
 // import { useSnackbar } from 'src/components/snackbar';
 // import { usePopover } from 'src/components/custom-popover';
 
@@ -23,6 +24,16 @@ export function useNavData() {
   const { t } = useTranslate();
   const { user } = useAuthContext();
   const checkAcl = useAclGuard();
+  const { messages, refetch } = useGetUnreadMsgs(user._id);
+
+  useEffect(() => {
+    socket.on('message', (id) => {
+      if (messages.some((one) => one._id === id)) {
+        refetch();
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages]);
 
   const employees_number =
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
@@ -107,7 +118,7 @@ export function useNavData() {
             icon: <Iconify icon="solar:call-chat-bold" />,
             info: (
               <Label color="info" startIcon={<Iconify icon="solar:bell-bing-bold-duotone" />}>
-                NEW
+                {messages?.reduce((acc, chat) => acc + chat.messages.length, 0)}
               </Label>
             ),
           },
@@ -584,7 +595,7 @@ export function useNavData() {
       return [...employeeDashboard, ...unitServicesDashboars];
     }
     return [...userItems];
-  }, [t, user, router, checkAcl, employees_number]);
+  }, [t, user, router, checkAcl, employees_number, messages]);
 
   return data;
 }
