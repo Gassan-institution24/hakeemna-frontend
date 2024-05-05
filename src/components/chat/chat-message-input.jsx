@@ -13,6 +13,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 import { createConversation } from 'src/api/chat';
 
@@ -37,6 +38,8 @@ export default function ChatMessageInput({
   const fileRef = useRef(null);
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const { t } = useTranslate()
 
   const [message, setMessage] = useState('');
   const [attachment, setAttachment] = useState();
@@ -238,7 +241,7 @@ export default function ChatMessageInput({
           value={message}
           onKeyUp={handleSendMessage}
           onChange={handleChangeMessage}
-          placeholder="Type a message"
+          placeholder={t("Type a message")}
           disabled={disabled}
           // startAdornment={
           //   <IconButton onClick={() => setShowIcons(true)}>
@@ -294,7 +297,7 @@ export default function ChatMessageInput({
       <input type="file" ref={fileRef} onChange={handleChangeAttach} style={{ display: 'none' }} />
       <Dialog open={confirmAttach} onClose={handleCloseConfirm}>
         <Stack sx={{ px: 2, pb: 3 }}>
-          <DialogTitle> Send file</DialogTitle>
+          <DialogTitle> {t('Send file')}</DialogTitle>
           {/^image\//.test(attachment?.type) ? (
             <Box
               width={{ md: 400, xs: 200 }}
@@ -314,7 +317,7 @@ export default function ChatMessageInput({
           )}
           <Stack spacing={3} alignItems="flex-end" sx={{ mt: 2 }}>
             <LoadingButton onClick={HandleSendAttachment} tabIndex={-1} variant="contained">
-              send
+              {t('send')}
             </LoadingButton>
           </Stack>
         </Stack>

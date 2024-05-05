@@ -20,6 +20,8 @@ export default function TablePaginationCustom({
   return (
     <Box sx={{ position: 'relative', ...sx }}>
       <TablePagination
+        showFirstButton
+        showLastButton
         rowsPerPageOptions={rowsPerPageOptions}
         component="div"
         {...other}

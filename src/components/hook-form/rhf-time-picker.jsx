@@ -3,6 +3,7 @@ import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { MobileTimePicker } from '@mui/x-date-pickers';
+import enLocale from 'date-fns/locale/en-US'; // Import English locale
 
 import { useUnitTime } from 'src/utils/format-time';
 
@@ -24,7 +25,6 @@ export default function RHFTimePicker({ name, helperText, type, ...other }) {
           {...field}
           fullWidth
           // ampmInClock
-          orientation="landscape"
           minutesStep="5"
           format="hh:mm a"
           value={myunitTime(field.value)}
@@ -43,6 +43,11 @@ export default function RHFTimePicker({ name, helperText, type, ...other }) {
               error: !!error,
               helperText: error ? error?.message : helperText,
             },
+          }}
+          closeOnSelect
+          slots={{
+            // toolbar:false,
+            actionBar: 'cancel'
           }}
           error={!!error}
           helperText={error ? error?.message : helperText}

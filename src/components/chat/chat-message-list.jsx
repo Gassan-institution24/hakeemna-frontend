@@ -6,14 +6,17 @@ import Box from '@mui/material/Box';
 import Scrollbar from 'src/components/scrollbar';
 import Lightbox, { useLightBox } from 'src/components/lightbox';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/hooks';
 
 import { useMessagesScroll } from './hooks';
 import ChatMessageItem from './chat-message-item';
 
 // ----------------------------------------------------------------------
 
-export default function ChatMessageList({ messages = [], participants }) {
+export default function ChatMessageList({ messages = [], refetchLenght, participants }) {
   const { messagesEndRef } = useMessagesScroll(messages);
+  const { user } = useAuthContext()
+
   const observer = useRef(null);
   const slides = messages
     .filter((message) => message.contentType === 'image')
@@ -27,15 +30,18 @@ export default function ChatMessageList({ messages = [], participants }) {
         console.log('entry', entry)
         if (entry.isIntersecting) {
           await axiosInstance.patch(endpoints.chat.message(entry.target.id), { isUnRead: false })
+          if (refetchLenght) {
+            refetchLenght()
+          }
         }
       });
     }, { threshold: 0.5 });
     return () => {
-      if (observer.current) {
-        observer.current.disconnect();
+      if (observer?.current) {
+        observer?.current?.disconnect();
       }
     };
-  }, []);
+  }, [refetchLenght]);
 
   return (
     <>
@@ -43,8 +49,8 @@ export default function ChatMessageList({ messages = [], participants }) {
         <Box>
           {messages.map((message) => (
             <div key={message._id} id={message._id} ref={(el) => {
-              if (el && message.isUnRead) {
-                observer.current.observe(el);
+              if (el && message.isUnRead && message?.senderId !== user?._id) {
+                observer?.current?.observe(el);
               }
             }}>
               <ChatMessageItem
@@ -70,4 +76,5 @@ export default function ChatMessageList({ messages = [], participants }) {
 ChatMessageList.propTypes = {
   messages: PropTypes.array,
   participants: PropTypes.array,
+  refetchLenght: PropTypes.func,
 };

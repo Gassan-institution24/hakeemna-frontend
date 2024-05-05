@@ -49,8 +49,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   const checkAcl = useAclGuard();
 
-  const { messages } = useGetUnreadMsgs(user._id)
-
+  const { messages, refetch } = useGetUnreadMsgs(user._id)
 
   const USData =
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
@@ -296,7 +295,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
             </>
           )}
       </CustomPopover>
-      <Box
+      {user.role !== 'superadmin' && <Box
         sx={{
           position: 'fixed',
           bottom: { md: 30, xs: 10 },
@@ -309,8 +308,8 @@ export default function NavVertical({ openNav, onCloseNav }) {
             <Iconify sx={{ color: 'primary.main' }} width="70px" icon="mdi:customer-service" />
           </Badge>
         </IconButton>
-        <TicketPopover messagesLength={messages} open={ticketDialog} onClose={() => setTicketDialog(false)} />
-      </Box>
+        <TicketPopover messagesLength={messages} refetchLenght={refetch} open={ticketDialog} onClose={() => setTicketDialog(false)} />
+      </Box>}
     </>
   );
 }
