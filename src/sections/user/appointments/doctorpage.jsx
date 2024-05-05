@@ -75,7 +75,6 @@ export default function Doctorpage() {
   });
 
   const [selectedTime, setSelectedTime] = useState(null);
-
   const handleTimeClick = (timeId) => {
     setTimeData(timeId);
     setSelectedTime(timeId);
@@ -111,6 +110,13 @@ export default function Doctorpage() {
         appointmentinfo: datacheeck,
         note: patientNote,
         info: defaultValues,
+      });
+      await axios.post(endpoints.history.all, {
+        patient: patientData,
+        name_english: 'an appointment has been created',
+        name_arabic: 'تم حجز موعد',
+        sub_english: `appointment in ${datacheeck?.unit_service?.name_english}`,
+        sub_arabic: `موعد في  ${datacheeck?.unit_service?.name_arabic}`,
       });
 
       refetch();
