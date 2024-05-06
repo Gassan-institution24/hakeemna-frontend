@@ -187,7 +187,7 @@ export default function OldMedicalReports() {
         name_arabic: 'تم انشاء تقرير طبي',
         sub_english: `${spName} medical report`,
         sub_arabic: ` تقرير طبي لتخصص ال ${spName}`,
-        file:formData
+        // file:formData
       });
       enqueueSnackbar('medical report uploaded successfully', { variant: 'success' });
       dialog.onFalse();

@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import { Card, Divider, TableBody, CardHeader, IconButton } from '@mui/material';
+import { Card, TableBody, CardHeader, IconButton } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -17,18 +17,18 @@ import { fMonth } from 'src/utils/format-time';
 import axios, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetHistoryData } from 'src/api/history';
 import { useLocales, useTranslate } from 'src/locales';
+import { useGetPatientHistoryData } from 'src/api/history';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 export default function HistoryHead() {
-  const { historyData, refetch } = useGetHistoryData();
   const { t } = useTranslate();
+  const { user } = useAuthContext();
+  const { historyData, refetch } = useGetPatientHistoryData(user?.patient?._id);
   const router = useRouter();
 
-  const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -62,30 +62,30 @@ export default function HistoryHead() {
           <CardHeader sx={{ mb: 4 }} title={`${user?.patient?.name_english} ${t('History')}`} />
         )}
 
-        {historyData?.map((data, i) => (
-          <>
-            {data?.status === 'active' ? (
-              <TableContainer key={i} sx={{ mt: 3, mb: 2 }}>
-                <Scrollbar>
-                  <Table sx={{ minWidth: 400 }}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>{t('Date')}</TableCell>
-                        <TableCell>{t('Subject')}</TableCell>
-                        <TableCell>{t('Info')}</TableCell>
-                        <TableCell>
-                          {curLangAr ? (
-                            <Iconify sx={{ color: '#2788EF' }} icon="icon-park-outline:left" />
-                          ) : (
-                            <Iconify sx={{ color: '#2788EF' }} icon="mingcute:right-fill" />
-                          )}
-                        </TableCell>
-                        <TableCell align="center">{t('Actions')}</TableCell>
-                      </TableRow>
-                    </TableHead>
+        <TableContainer sx={{ mt: 3, mb: 2 }}>
+          <Scrollbar>
+            <Table sx={{ minWidth: 400 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>{t('Date')}</TableCell>
+                  <TableCell>{t('Subject')}</TableCell>
+                  <TableCell>{t('Info')}</TableCell>
+                  <TableCell>
+                    {curLangAr ? (
+                      <Iconify sx={{ color: '#2788EF' }} icon="icon-park-outline:left" />
+                    ) : (
+                      <Iconify sx={{ color: '#2788EF' }} icon="mingcute:right-fill" />
+                    )}
+                  </TableCell>
+                  <TableCell align="center">{t('Actions')}</TableCell>
+                </TableRow>
+              </TableHead>
 
-                    <TableBody>
-                      <TableRow>
+              <TableBody>
+                {historyData?.map((data, i) => (
+                  <>
+                    {data?.status === 'active' ? (
+                      <TableRow key={i}>
                         <TableCell>{fMonth(data?.created_at)}</TableCell>
                         <TableCell>{curLangAr ? data?.name_arabic : data?.name_english}</TableCell>
                         <TableCell>{curLangAr ? data?.sub_arabic : data?.sub_english}</TableCell>
@@ -99,7 +99,7 @@ export default function HistoryHead() {
                           )}
                         </TableCell>
                         <TableCell align="center">
-                          <IconButton   onClick={() => handleView(data?._id)}>
+                          <IconButton onClick={() => handleView(data?._id)}>
                             <Iconify
                               sx={{ cursor: 'pointer', color: '#2788EF' }}
                               icon="carbon:view"
@@ -113,17 +113,15 @@ export default function HistoryHead() {
                           </IconButton>
                         </TableCell>
                       </TableRow>
-                    </TableBody>
-                  </Table>
-                </Scrollbar>
-              </TableContainer>
-            ) : (
-              ''
-            )}
-
-            <Divider />
-          </>
-        ))}
+                    ) : (
+                      ''
+                    )}
+                  </>
+                ))}
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
       </Card>
     </Container>
   );

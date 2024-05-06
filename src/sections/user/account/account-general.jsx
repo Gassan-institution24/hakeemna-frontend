@@ -49,8 +49,20 @@ export default function AccountGeneral({ data, refetch }) {
   };
 
   const UpdateUserSchema = Yup.object().shape({
-    name_english: Yup.string(),
-    name_arabic: Yup.string(),
+    name_english: Yup.string()
+      .required('Englis name is required')
+      .test('at-least-three-words', t('must be at least three words'), (value) => {
+        if (!value) return false; // If no value, fail the validation
+        const words = value.trim().split(/\s+/); // Split the input by spaces
+        return words.length >= 3; // Return true if there are at least three words
+      }),
+    name_arabic: Yup.string()
+      .required('Arabic name is required')
+      .test('at-least-three-words', t('must be at least three words'), (value) => {
+        if (!value) return false; // If no value, fail the validation
+        const words = value.trim().split(/\s+/); // Split the input by spaces
+        return words.length >= 3; // Return true if there are at least three words
+      }),
     email: Yup.string(),
     height: Yup.string(),
     weight: Yup.string(),
