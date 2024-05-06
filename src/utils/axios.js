@@ -348,6 +348,7 @@ export const endpoints = {
   history: {
     all: '/api/history',
     one: (id) => `/api/history/${id}`,
+    patient: (id) => `/api/history/patient/${id}`,
   },
   oldpatient: {
     all: '/api/oldpatientsdata',

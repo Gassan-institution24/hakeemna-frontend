@@ -42,3 +42,20 @@ export function useGetOneHistoryData(id) {
 
   return memoizedValue;
 }
+export function useGetPatientHistoryData(id) {
+  const URL = endpoints.history.patient(id);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      historyData: data,
+      loading: isLoading,
+      error,
+      validating: isValidating,
+      empty: !isLoading && !data?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
