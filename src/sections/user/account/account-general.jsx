@@ -68,7 +68,7 @@ export default function AccountGeneral({ data, refetch }) {
     weight: Yup.string(),
     mobile_num1: Yup.string(),
     mobile_num2: Yup.string(),
-    is_on_eating_diet: Yup.string(),
+    is_on_eating_diet: Yup.string().nullable(),
     country: Yup.string(),
     city: Yup.string(),
     address: Yup.string(),
@@ -88,7 +88,7 @@ export default function AccountGeneral({ data, refetch }) {
     weight: data?.weight || '',
     mobile_num1: data?.mobile_num1 || '',
     mobile_num2: data?.mobile_num2 || '',
-    is_on_eating_diet: user.patient?.is_on_eating_diet || null,
+    is_on_eating_diet: user.patient?.is_on_eating_diet || '',
     country: user.patient?.country?._id || null,
     city: user.patient?.city?._id || null,
     address: data?.address || '',
@@ -145,17 +145,15 @@ export default function AccountGeneral({ data, refetch }) {
   };
 
   const onSubmit = async (profileData) => {
-    if (data.other_medication_notes && data.other_medication_notes.length > 0) {
-      // Concatenate the new value to the old array
+    if (profileData.other_medication_notes && profileData.other_medication_notes.length > 0) {
+      // If new data is provided, concatenate it to the old array
       profileData.other_medication_notes = [
-        ...data.other_medication_notes,
-        profileData.other_medication_notes,
+        ...(profileData.other_medication_notes), // Existing data
+        ...(data.other_medication_notes || []), // New data, or an empty array if no new data
       ];
-    } else {
-      // If there is no old value, create a new array with the new value
-      profileData.other_medication_notes = [profileData.other_medication_notes];
     }
-
+  
+  
     // Create a new FormData object
     const formData = new FormData();
 
