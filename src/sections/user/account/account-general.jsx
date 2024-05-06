@@ -145,12 +145,15 @@ export default function AccountGeneral({ data, refetch }) {
   };
 
   const onSubmit = async (profileData) => {
-    if (profileData.other_medication_notes && profileData.other_medication_notes.length > 0) {
-      // If new data is provided, concatenate it to the old array
+    if (data.other_medication_notes && data.other_medication_notes.length > 0) {
+      // Concatenate the new value to the old array
       profileData.other_medication_notes = [
-        ...(profileData.other_medication_notes), // Existing data
-        ...(data.other_medication_notes || []), // New data, or an empty array if no new data
+        ...data.other_medication_notes,
+        profileData.other_medication_notes,
       ];
+    } else {
+      // If there is no old value, create a new array with the new value
+      profileData.other_medication_notes = [profileData.other_medication_notes];
     }
   
   
