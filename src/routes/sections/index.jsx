@@ -19,22 +19,22 @@ const JwtLoginPage = lazy(() => import('src/pages/auth/login'));
 
 export default function Router() {
   return useRoutes([
-    // {
-    //   path: '/',
-    //   element: (
-    //     <MainLayout>
-    //       <HomePage />
-    //     </MainLayout>
-    //   ),
-    // },
     {
       path: '/',
       element: (
-      <AuthClassicLayout>
-          <JwtLoginPage />
-        </AuthClassicLayout>
+        <MainLayout>
+          <HomePage />
+        </MainLayout>
       ),
     },
+    // {
+    //   path: '/',
+    //   element: (
+    //   <AuthClassicLayout>
+    //       <JwtLoginPage />
+    //     </AuthClassicLayout>
+    //   ),
+    // },
 
     // Auth routes
     ...authRoutes,
