@@ -94,7 +94,7 @@ export default function AccountGeneral({ data, refetch }) {
     address: data?.address || '',
     sport_exercises: data?.sport_exercises || '',
     smoking: data?.smoking || '',
-    other_medication_notes: [],
+    other_medication_notes: '',
     profile_picture: data?.profile_picture?.replace(/\\/g, '//') || '',
   };
 
@@ -145,7 +145,7 @@ export default function AccountGeneral({ data, refetch }) {
   };
 
   const onSubmit = async (profileData) => {
-    if (data.other_medication_notes && data.other_medication_notes.length > 0) {
+    if (data.other_medication_notes && data.other_medication_notes.length > 0  ) {
       // Concatenate the new value to the old array
       profileData.other_medication_notes = [
         ...data.other_medication_notes,
