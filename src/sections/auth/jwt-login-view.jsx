@@ -45,10 +45,12 @@ export default function JwtLoginView() {
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
+      .trim()
       .required(t('required field'))
       .email(t('Email must be a valid email address')),
     password: Yup.string().required(t('required field')),
   });
+  
 
   const defaultValues = {
     email: '',

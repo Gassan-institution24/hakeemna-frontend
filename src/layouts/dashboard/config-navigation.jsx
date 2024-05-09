@@ -484,6 +484,12 @@ export function useNavData() {
         icon: <Iconify icon="simple-line-icons:calender" />,
         navItemId: 'EMCalenderNav',
       },
+      {
+        show: true,
+        title: t('Appointments Today'),
+        path: '#',
+        icon: <Iconify icon="material-symbols:work-history-rounded" />,
+      },
     ];
     const employeeDashboard = [
       {
