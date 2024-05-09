@@ -25,7 +25,6 @@ export default function NotificationItem({ notification, handleClick }) {
   const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
-
   const defaultValues = {
     sender: notification?.patient,
     patient: notification?.sender,
@@ -66,13 +65,13 @@ export default function NotificationItem({ notification, handleClick }) {
     }
   };
 
-  const handleConfirmation = async () => {
-    await axios.patch(`${endpoints.appointments.one('660bd5e14233aa2084894779')}/coming`, {
+  const handleConfirmation = async (id) => {
+    await axios.patch(`${endpoints.appointments.one(id)}/coming`, {
       coming: 'true',
     });
   };
-  const handleUnConfirmation = async () => {
-    await axios.patch(`${endpoints.appointments.one('660bd5e14233aa2084894779')}/coming`, {
+  const handleUnConfirmation = async (id) => {
+    await axios.patch(`${endpoints.appointments.one(id)}/coming`, {
       coming: 'false',
     });
   };
@@ -119,24 +118,31 @@ export default function NotificationItem({ notification, handleClick }) {
   );
   const confirmation = (
     <Stack spacing={1} direction="row" sx={{ mt: 1.5 }}>
-      <Button
-        size="small"
-        variant="contained"
-        onClick={() => {
-          handleConfirmation();
-        }}
-      >
-        {t('yes')}
-      </Button>
-      <Button
-        size="small"
-        variant="outlined"
-        onClick={() => {
-          handleUnConfirmation();
-        }}
-      >
-        {t('no')}
-      </Button>
+      {notification?.content?.map((info, i) => (
+        <Button
+          key={i}
+          size="small"
+          variant="contained"
+          onClick={() => {
+            handleConfirmation(info?._id);
+          }}
+        >
+          {t('yes')}
+        </Button>
+      ))}
+
+      {notification?.content?.map((info, i) => (
+        <Button
+          key={i}
+          size="small"
+          variant="contained"
+          onClick={() => {
+            handleUnConfirmation(info?._id);
+          }}
+        >
+          {t('no')}
+        </Button>
+      ))}
     </Stack>
   );
   const renderText = (

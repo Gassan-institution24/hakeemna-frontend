@@ -66,7 +66,6 @@ export default function Currentappoinment({ pendingAppointments, refetch }) {
     setTheId(id);
     dialog.onTrue();
   };
-
   return pendingAppointments?.map((info, index) => (
     <>
       <Dialog open={dialog.value} maxWidth={maxWidth} onClose={dialog.onTrue} fullWidth={fullWidth}>
