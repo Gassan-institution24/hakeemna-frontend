@@ -172,7 +172,7 @@ export default function NotificationItem({ notification, handleClick }) {
           }
         >
           {fToNow(notification.created_at, curLangAr)}
-          {t(notification.category)}
+          {/* {t(notification.category)} */}
         </Stack>
       }
       primaryTypographyProps={{
