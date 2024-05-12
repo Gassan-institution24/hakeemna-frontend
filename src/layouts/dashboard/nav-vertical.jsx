@@ -30,6 +30,7 @@ import { useGetUnreadMsgs } from 'src/api/chat';
 import { NAV } from '../config-layout';
 import TicketPopover from './ticketPopover';
 import { useNavData } from './config-navigation';
+import StartupCreating from './startup-creating';
 // import NavToggleButton from '../common/nav-toggle-button';
 
 // ----------------------------------------------------------------------
@@ -153,7 +154,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
   }, [pathname]);
 
   const renderContent = (
-    <Scrollbar
+    <Stack
       sx={{
         height: 1,
         '& .simplebar-content': {
@@ -227,7 +228,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
       />
       <Box sx={{ flexGrow: 1 }} />
       {/* <NavUpgrade /> */}
-    </Scrollbar>
+    </Stack>
   );
 
   return (
@@ -242,7 +243,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         {/* <NavToggleButton /> */}
 
         {lgUp ? (
-          <Stack
+          <Scrollbar
             sx={{
               height: 1,
               position: 'fixed',
@@ -251,7 +252,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
             }}
           >
             {renderContent}
-          </Stack>
+          </Scrollbar>
         ) : (
           <Drawer
             open={openNav}
@@ -309,6 +310,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
           </Badge>
         </IconButton>
         <TicketPopover messagesLength={messages} refetchLenght={refetch} open={ticketDialog} onClose={() => setTicketDialog(false)} />
+        <StartupCreating open={dialog} onClose={()=>setDialog(false)} />
       </Box>}
     </>
   );
