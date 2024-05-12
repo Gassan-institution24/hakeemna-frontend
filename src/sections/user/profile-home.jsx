@@ -448,7 +448,7 @@ export default function ProfileHome() {
           <Typography sx={{ position: 'relative', left: 20 }} variant="body2">
             {t('card')}
           </Typography>
-          <Iconify
+          {/* <Iconify
             onClick={flipCard}
             width={30}
             sx={{
@@ -460,7 +460,7 @@ export default function ProfileHome() {
               },
             }}
             icon="bx:qr"
-          />
+          /> */}
         </Box>
 
         <Divider sx={{ borderWidth: 25, borderColor: '##EBE7E7', borderStyle: 'solid' }} />
@@ -491,10 +491,10 @@ export default function ProfileHome() {
           }}
         >
           <Typography sx={{ position: 'relative', left: 20, top: 5 }} variant="body2">
-            Hakeemna
+            {t('Hakeemna')}
           </Typography>
           <Typography sx={{ position: 'relative', left: 20 }} variant="body2">
-            card
+            {t('card')}
           </Typography>
           <Iconify
             onClick={flipCard}
