@@ -1,16 +1,17 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import socket from 'src/socket';
 import { useTranslate } from 'src/locales';
+import { useGetUnreadMsgs } from 'src/api/chat';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
-import Iconify from 'src/components/iconify';
 import Label from 'src/components/label';
-import { useGetUnreadMsgs } from 'src/api/chat';
-import socket from 'src/socket';
+import Iconify from 'src/components/iconify';
+
 // import { useSnackbar } from 'src/components/snackbar';
 // import { usePopover } from 'src/components/custom-popover';
 
@@ -487,7 +488,7 @@ export function useNavData() {
       {
         show: true,
         title: t('Appointments Today'),
-        path: '#',
+        path: paths.employee.appointmentsToday,
         icon: <Iconify icon="material-symbols:work-history-rounded" />,
       },
     ];

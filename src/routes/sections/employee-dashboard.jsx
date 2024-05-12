@@ -77,6 +77,7 @@ const NewAppointmentConfigPage = lazy(() =>
 
 // CALENDER
 const CalenderPage = lazy(() => import('src/pages/employee/calender/calender'));
+const AppointmentsToday = lazy(() => import('src/pages/employee/appointmentsToday/appintmentaToday'));
 
 // PATIENT
 const PatientsPage = lazy(() => import('src/pages/employee/patients/patients_table'));
@@ -204,6 +205,10 @@ export const unitServiceEmployeeDashboardRoutes = [
       {
         path: 'calender',
         element: <CalenderPage />,
+      },
+      {
+        path: 'appointmentsToday',
+        element: <AppointmentsToday />,
       },
     ],
   },
