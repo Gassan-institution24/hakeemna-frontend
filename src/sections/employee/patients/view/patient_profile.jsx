@@ -14,11 +14,14 @@ import { useGetPatient, useGetPatientInsurance } from 'src/api';
 import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
+import MedicalReports from '../medical-reports';
 import AppointmentsHistory from '../appointment-history/appoint-history';
+import PatientHistory from '../patient-history';
 // ----------------------------------------------------------------------
 
 export default function PatientProfile() {
   const { id } = useParams();
+  console.log(id)
   const { data } = useGetPatient(id);
 
   const { t } = useTranslate();
@@ -39,6 +42,14 @@ export default function PatientProfile() {
     {
       value: 'appointments',
       label: t('appointments'),
+    },
+    {
+      value: 'medicalReport',
+      label: t('medical reports'),
+    },
+    {
+      value: 'history',
+      label: t('history'),
     },
   ];
 
@@ -457,6 +468,8 @@ export default function PatientProfile() {
         </Grid>
       )}
       {currentTab === 'appointments' && <AppointmentsHistory />}
+      {currentTab === 'medicalReport' && <MedicalReports />}
+      {currentTab === 'history' && <PatientHistory />}
     </Container>
   );
 }
