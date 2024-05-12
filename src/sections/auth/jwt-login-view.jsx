@@ -50,7 +50,6 @@ export default function JwtLoginView() {
       .email(t('Email must be a valid email address')),
     password: Yup.string().required(t('required field')),
   });
-  
 
   const defaultValues = {
     email: '',
@@ -157,6 +156,15 @@ export default function JwtLoginView() {
       >
         {t('Login')}
       </LoadingButton>
+      <Link
+        sx={{  alignSelf: 'center' }}
+        component={RouterLink}
+        href='https://doctorna.online/'
+        variant="subtitle2"
+        underline="always"
+      >
+        {t('web page')}
+      </Link>
     </Stack>
   );
 
