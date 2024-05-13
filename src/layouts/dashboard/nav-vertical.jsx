@@ -316,10 +316,16 @@ export default function NavVertical({ openNav, onCloseNav }) {
             {/* <Iconify sx={{ color: 'primary.main' }} width="70px" icon="mdi:customer-service" /> */}
             <Image src={Services} width="210px" />
           </Badge>
-        {/* </IconButton> */}
-        <TicketPopover messagesLength={messages} refetchLenght={refetch} open={ticketDialog} onClose={() => setTicketDialog(false)} />
-        <StartupCreating open={dialog} onClose={()=>setDialog(false)} />
-      </Box>}
+
+          {/* </IconButton> */}
+          <TicketPopover
+            messagesLength={messages}
+            refetchLenght={refetch}
+            open={ticketDialog}
+            onClose={() => setTicketDialog(false)}
+          />
+        </Box>
+      )}
     </>
   );
 }
