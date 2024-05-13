@@ -96,6 +96,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         appointments: Yup.array(),
         service_types: Yup.array(),
         appointment_type: Yup.string().nullable(),
+        online_available: Yup.boolean(),
       })
     ),
   });
@@ -136,6 +137,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
           appointments: [],
           service_types: [],
           appointment_type: null,
+          online_available: true,
         },
       ],
     }),
