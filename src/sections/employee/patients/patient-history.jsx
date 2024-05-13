@@ -1,20 +1,21 @@
 // import React, { useState } from 'react';
 // import PropTypes from 'prop-types';
-import { useSnackbar } from 'notistack';
+// import { useSnackbar } from 'notistack';
+import { useParams } from 'react-router';
 
 import Table from '@mui/material/Table';
 import { Container } from '@mui/system';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
+import { Card, TableBody } from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
-import { Card, TableBody, CardHeader, IconButton } from '@mui/material';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+// import { paths } from 'src/routes/paths';
+// import { useRouter } from 'src/routes/hooks';
 
 import { fMonth } from 'src/utils/format-time';
-import axios, { endpoints } from 'src/utils/axios';
+// import axios, { endpoints } from 'src/utils/axios';
 
 // import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -22,37 +23,36 @@ import { useGetPatientHistoryData } from 'src/api/history';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { useParams } from 'react-router';
 
 export default function PatientHistory() {
   const { t } = useTranslate();
   const {id} = useParams()
 //   const { user } = useAuthContext();
-  const { historyData, refetch } = useGetPatientHistoryData(id);
-  const router = useRouter();
+  const { historyData } = useGetPatientHistoryData(id);
+  // const router = useRouter();
 
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const deletehistoryfeild = async (_id) => {
-    try {
-      await axios.patch(endpoints.history.one(_id));
+  // const deletehistoryfeild = async (_id) => {
+  //   try {
+  //     await axios.patch(endpoints.history.one(_id));
 
-      refetch();
-      enqueueSnackbar('Deleted successfully', { variant: 'success' });
-    } catch (error) {
-      console.error(error.message);
-      enqueueSnackbar(
-        curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
-        {
-          variant: 'error',
-        }
-      );
-    }
-  };
-  const handleView = async (_id) => {
-    router.push(paths.dashboard.user.historyinfo(_id));
-  };
+  //     refetch();
+  //     enqueueSnackbar('Deleted successfully', { variant: 'success' });
+  //   } catch (error) {
+  //     console.error(error.message);
+  //     enqueueSnackbar(
+  //       curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+  //       {
+  //         variant: 'error',
+  //       }
+  //     );
+  //   }
+  // };
+  // const handleView = async (_id) => {
+  //   router.push(paths.dashboard.user.historyinfo(_id));
+  // };
 
   return (
     <Container sx={{ backgroundImage: 'linear-gradient(to bottom, #2788EF, white)', p: 2 }}>

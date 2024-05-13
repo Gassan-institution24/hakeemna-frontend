@@ -28,6 +28,7 @@ export const fetcher = async (args) => {
 // ----------------------------------------------------------------------
 
 export const endpoints = {
+  mail:'/mail',
   allTables: '/tables',
   countries: {
     all: '/api/countries/',

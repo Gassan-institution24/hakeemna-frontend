@@ -7,8 +7,8 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
+import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -20,8 +20,6 @@ import OldMedicalReports from '../oldmedicalrepots';
 export default function UserCardList() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
   const [currentTab, setCurrentTab] = useState('Medicalreports');
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);

@@ -10,12 +10,13 @@ import ListItemText from '@mui/material/ListItemText';
 
 // import { useRouter } from 'src/routes/hooks';
 
+import { Badge, Typography } from '@mui/material';
+
 import { useTranslate } from 'src/locales';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { Badge, Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -55,7 +56,6 @@ export default function AppointmentsTableRow({
 
   const popover = usePopover();
   const DDL = usePopover();
-  console.log(unread)
   return (
     <>
       <TableRow hover selected={selected}>

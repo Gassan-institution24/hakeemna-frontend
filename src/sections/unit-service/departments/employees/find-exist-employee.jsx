@@ -10,8 +10,6 @@ import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
-import { paths } from 'src/routes/paths';
-
 import axios, { endpoints } from 'src/utils/axios';
 
 import { useFindEmployee } from 'src/api';

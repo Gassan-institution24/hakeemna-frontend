@@ -252,7 +252,6 @@ function ReviewItem({ item }) {
       setAppointType(e.target.value);
       enqueueSnackbar(t('updated successfully'));
     } catch (error) {
-      console.log(error);
       enqueueSnackbar(
         curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
         {

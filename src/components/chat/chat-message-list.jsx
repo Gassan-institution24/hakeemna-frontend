@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
-import { useEffect, useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import { useAuthContext } from 'src/auth/hooks';
+
 import Scrollbar from 'src/components/scrollbar';
 import Lightbox, { useLightBox } from 'src/components/lightbox';
-import axiosInstance, { endpoints } from 'src/utils/axios';
-import { useAuthContext } from 'src/auth/hooks';
 
 import { useMessagesScroll } from './hooks';
 import ChatMessageItem from './chat-message-item';
@@ -27,7 +29,6 @@ export default function ChatMessageList({ messages = [], refetchLenght, particip
   useEffect(() => {
     observer.current = new IntersectionObserver((entries) => {
       entries.forEach(async (entry) => {
-        console.log('entry', entry)
         if (entry.isIntersecting) {
           await axiosInstance.patch(endpoints.chat.message(entry.target.id), { isUnRead: false })
           if (refetchLenght) {

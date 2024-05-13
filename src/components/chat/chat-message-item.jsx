@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { formatDistanceToNowStrict } from 'date-fns';
 import { ar, enGB } from 'date-fns/locale'
+import { formatDistanceToNowStrict } from 'date-fns';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -10,8 +10,9 @@ import Typography from '@mui/material/Typography';
 
 import { RouterLink } from 'src/routes/components';
 
-import Iconify from 'src/components/iconify';
 import { useLocales } from 'src/locales';
+
+import Iconify from 'src/components/iconify';
 
 import { useGetMessage } from './hooks';
 import VoiceChat from './chat-voice-component';

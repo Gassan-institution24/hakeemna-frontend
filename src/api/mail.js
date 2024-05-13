@@ -7,7 +7,7 @@ import { fetcher, endpoints } from 'src/utils/axios';
 // ----------------------------------------------------------------------
 
 export function useGetLabels() {
-  const URL = endpoints.mail.labels;
+  const URL = endpoints.mail;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 

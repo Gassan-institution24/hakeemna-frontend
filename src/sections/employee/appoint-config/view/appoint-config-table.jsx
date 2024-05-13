@@ -31,6 +31,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { LoadingScreen } from 'src/components/loading-screen';
 import {
   useTable,
   emptyRows,
@@ -78,7 +79,7 @@ export default function AppointConfigView() {
 
   const { user } = useAuthContext();
 
-  const { appointmentConfigData, refetch } = useGetEmployeeAppointmentConfigs(
+  const { appointmentConfigData, refetch,loading } = useGetEmployeeAppointmentConfigs(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?._id
   );
 
@@ -270,6 +271,12 @@ export default function AppointConfigView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  if (loading) {
+    return(
+      <LoadingScreen />
+    )
+  }
 
   return (
     <>

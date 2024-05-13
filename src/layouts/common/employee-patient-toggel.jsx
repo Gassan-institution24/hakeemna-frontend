@@ -6,6 +6,8 @@ import { Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
+import { useResponsive } from 'src/hooks/use-responsive';
+
 import axios, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
@@ -14,7 +16,6 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
 import { useSnackbar } from 'src/components/snackbar';
-import { useResponsive } from 'src/hooks/use-responsive';
 
 // ----------------------------------------------------------------------
 

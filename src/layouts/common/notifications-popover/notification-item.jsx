@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
+// import { useAuthContext } from 'src/auth/hooks';
+import { Button } from '@mui/material';
 // import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
@@ -8,13 +10,11 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 
+import axios from 'src/utils/axios';
 import { fToNow } from 'src/utils/format-time';
 
-import axios from 'src/utils/axios';
-// import { useAuthContext } from 'src/auth/hooks';
 // import { useGetPatientNotifications } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
-import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -33,9 +33,8 @@ export default function NotificationItem({ notification, handleClick }) {
         throw new Error('Invalid method provided in notification');
       }
 
-      const response = await axios[method.toLowerCase()](route, body);
+      await axios[method.toLowerCase()](route, body);
 
-      console.log('Notification accepted:', response.data);
     } catch (error) {
       console.error('Error while accepting notification:', error);
     }
