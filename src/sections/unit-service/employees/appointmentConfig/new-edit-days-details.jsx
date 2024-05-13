@@ -29,7 +29,7 @@ import { useGetAppointmentTypes, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { RHFCheckbox, RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import NewEditDayAppointmentsDetails from './new-edit-days-appointments-details';
 
@@ -54,7 +54,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
     { value: 'friday', label: t('Friday') },
   ];
 
-  const { control, setValue, watch, setError, clearErrors } = useFormContext();
+  const { control, setValue, watch, clearErrors } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -91,6 +91,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
         appointments: [],
         service_types: [],
         appointment_type: null,
+        online_available: null,
       };
       const existingData = values.days_details
         ? values.days_details[values.days_details.length - 1]
@@ -115,6 +116,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   async function processDayDetails(index) {
     try {
+      setShowAppointments({})
       clearErrors();
       if (!values.appointment_time) {
         setValue(`days_details[${index}].appointments`, []);
@@ -163,8 +165,8 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
           results.push({
             appointment_type: currentDay.appointment_type,
             start_time: curr_start,
-            online_available: true,
             service_types: currentDay.service_types,
+            online_available: currentDay.online_available,
           });
           curr_start += appointment_time;
         } else {
@@ -398,7 +400,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         closeOnSelect
                         slots={{
                           // toolbar:false,
-                          actionBar: 'cancel'
+                          actionBar: 'cancel',
                         }}
                         minutesStep="5"
                         label={t('work start time')}
@@ -408,7 +410,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                             newValue,
                             user?.employee?.employee_engagements[user?.employee.selected_engagement]
                               ?.unit_service?.country?.time_zone ||
-                            Intl.DateTimeFormat().resolvedOptions().timeZone
+                              Intl.DateTimeFormat().resolvedOptions().timeZone
                           );
                           field.onChange(selectedTime);
                           setValue(`days_details[${index}].work_end_time`, null);
@@ -434,7 +436,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         closeOnSelect
                         slots={{
                           // toolbar:false,
-                          actionBar: 'cancel'
+                          actionBar: 'cancel',
                         }}
                         minutesStep="5"
                         label={t('work end time')}
@@ -444,7 +446,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                             newValue,
                             user?.employee?.employee_engagements[user?.employee.selected_engagement]
                               ?.unit_service?.country?.time_zone ||
-                            Intl.DateTimeFormat().resolvedOptions().timeZone
+                              Intl.DateTimeFormat().resolvedOptions().timeZone
                           );
                           field.onChange(selectedTime);
                           processDayDetails(index);
@@ -469,7 +471,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         closeOnSelect
                         slots={{
                           // toolbar:false,
-                          actionBar: 'cancel'
+                          actionBar: 'cancel',
                         }}
                         minutesStep="5"
                         label={t('break start time')}
@@ -479,7 +481,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                             newValue,
                             user?.employee?.employee_engagements[user?.employee.selected_engagement]
                               ?.unit_service?.country?.time_zone ||
-                            Intl.DateTimeFormat().resolvedOptions().timeZone
+                              Intl.DateTimeFormat().resolvedOptions().timeZone
                           );
                           setValue(`days_details[${index}].break_end_time`, null);
                           field.onChange(selectedTime);
@@ -505,7 +507,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         closeOnSelect
                         slots={{
                           // toolbar:false,
-                          actionBar: 'cancel'
+                          actionBar: 'cancel',
                         }}
                         minutesStep="5"
                         label={t('break end time')}
@@ -515,7 +517,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                             newValue,
                             user?.employee?.employee_engagements[user?.employee.selected_engagement]
                               ?.unit_service?.country?.time_zone ||
-                            Intl.DateTimeFormat().resolvedOptions().timeZone
+                              Intl.DateTimeFormat().resolvedOptions().timeZone
                           );
                           field.onChange(selectedTime);
                           processDayDetails(index);
@@ -530,6 +532,22 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                         }}
                       />
                     )}
+                  />
+                </Stack>
+                <Stack display="flex" alignItems="flex-end">
+                  <RHFCheckbox
+                    size="small"
+                    InputLabelProps={{ shrink: true }}
+                    name={`days_details[${index}].online_available`}
+                    onChange={(e) => {
+                      console.log(values.days_details[index].online_available);
+                      setValue(
+                        `days_details[${index}].online_available`,
+                        !values.days_details[index].online_available
+                      );
+                      processDayDetails(index);
+                    }}
+                    label={<Typography sx={{ fontSize: 12 }}>{t('online avaliable')}</Typography>}
                   />
                 </Stack>
                 <Stack
@@ -586,7 +604,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
             startIcon={<Iconify icon="tdesign:plus" />}
             sx={{ padding: 1 }}
             onClick={handleAdd}
-          // sx={{ flexShrink: 0 }}
+            // sx={{ flexShrink: 0 }}
           >
             {curLangAr ? 'إضافة يوم جديد' : 'add new day'}
           </Button>

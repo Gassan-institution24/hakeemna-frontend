@@ -14,11 +14,14 @@ import { useLocales, useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
 import { useSnackbar } from 'src/components/snackbar';
+import { useResponsive } from 'src/hooks/use-responsive';
 
 // ----------------------------------------------------------------------
 
 export default function EmployeePatientToggel() {
   const { enqueueSnackbar } = useSnackbar();
+
+  const lgUp = useResponsive('up', 'lg');
 
   const { user } = useAuthContext();
   const [loading, setLoading] = useState();
@@ -61,9 +64,11 @@ export default function EmployeePatientToggel() {
       }}
     >
       <Iconify icon="mage:exchange-b" />
-      <Typography variant="body2" textTransform="lowercase" sx={{ textAlign: 'center', ml: 1 }}>
-        {user.role === 'patient' ? t('switch to employee') : t('switch to patient')}
-      </Typography>
+      {lgUp && (
+        <Typography variant="body2" textTransform="lowercase" sx={{ textAlign: 'center', ml: 1 }}>
+          {user.role === 'patient' ? t('switch to employee') : t('switch to patient')}
+        </Typography>
+      )}
     </LoadingButton>
   );
 }
