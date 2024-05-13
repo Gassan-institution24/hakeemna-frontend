@@ -4,57 +4,57 @@ import { Container } from '@mui/system';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
+import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
-import { Tab, Tabs, Table, TableBody, Typography } from '@mui/material';
+import { Tab, Tabs, Table, TableBody, IconButton } from '@mui/material';
+
+import { fTime, fMonth } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetEmployeeTodayAppointment } from 'src/api';
 
+import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 export default function AppointmentsToday() {
+  const { user } = useAuthContext();
+
+  const { appointmentsData } = useGetEmployeeTodayAppointment(
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
+  );
+  const theme = useTheme();
+
+  console.log(appointmentsData);
   const TABS = [
     {
       value: 'one',
-      label: (
-        <>
-          Appointments Today &nbsp;
-          <Typography sx={{ bgcolor: 'lightGreen', p:0.5 }}>0</Typography>
-        </>
-      ),
+      label: 'Appointments Today',
+      color: 'info',
+      count: appointmentsData?.length,
     },
     {
       value: 'two',
-      label: (
-        <>
-          Upcoming &nbsp;
-          <Typography sx={{ bgcolor: 'lightGreen', p:0.5 }}>0</Typography>
-        </>
-      ),
+      label: 'Coming',
+      color: 'success',
+      count: appointmentsData?.length,
     },
     {
       value: 'three',
-      label: (
-        <>
-          Waiting &nbsp;
-          <Typography sx={{ bgcolor: 'lightGreen', p:0.5 }}>0</Typography>
-        </>
-      ),
+      label: 'Waiting',
+      color: 'warning',
+      count: appointmentsData?.length,
     },
     {
       value: 'four',
-      label: (
-        <>
-          Finished &nbsp;
-          <Typography sx={{ bgcolor: 'lightGreen', p:0.5 }}>0</Typography>
-        </>
-      ),
+      label: 'Finished',
+      color: 'error',
+      count: appointmentsData?.length,
     },
   ];
 
   const [currentTab, setCurrentTab] = useState('one');
-  const { user } = useAuthContext();
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
@@ -73,52 +73,64 @@ export default function AppointmentsToday() {
           mb: { xs: 3, md: 5 },
         }}
       />
-      <Tabs value={currentTab} onChange={handleChangeTab}>
-        {TABS.map((tab) => (
+      <Tabs
+        value={currentTab}
+        onChange={handleChangeTab}
+        sx={{
+          px: 2.5,
+          boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+        }}
+      >
+        {TABS.map((tab, idx) => (
           <Tab
-            iconPosition="end"
-            key={tab.value}
-            icon={tab.icon}
-            label={tab.label}
+            key={idx}
             value={tab.value}
+            label={tab.label}
+            iconPosition="end"
+            icon={<Label color={tab.color}>{tab.count}</Label>}
           />
         ))}
       </Tabs>
-      {/* <Card
-        sx={{
-          mt: 5,
-          p: 3,
-          //   gap: 5,
-        }}
-      > */}
       <TableContainer sx={{ mt: 3, mb: 2 }}>
         <Scrollbar>
           <Table sx={{ minWidth: 400 }}>
             <TableHead>
               <TableRow>
-                {/* <TableCell>{t('Date')}</TableCell>
-              
-
-                  {/* <TableCell align="center">{t('Actions')}</TableCell> */}
-                <TableCell>Info</TableCell>
-                <TableCell>Info</TableCell>
-                <TableCell>Info</TableCell>
-                <TableCell>Info</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Time</TableCell>
+                <TableCell>Patient</TableCell>
+                <TableCell>Patient Note</TableCell>
+                <TableCell>Options</TableCell>
               </TableRow>
             </TableHead>
-
-            <TableBody>
-              <TableRow>
-                <TableCell>Info</TableCell>
-                <TableCell>Info</TableCell>
-                <TableCell>Info</TableCell>
-                <TableCell>Info</TableCell>
-              </TableRow>
-            </TableBody>
+            {appointmentsData?.map((info) => (
+              <TableBody sx={{ borderBottom: 1 }}>
+                <TableRow>
+                  <TableCell>{fMonth(info?.start_time)}</TableCell>
+                  <TableCell>{fTime(info?.start_time)}</TableCell>
+                  <TableCell>{info?.patient?.name_english}</TableCell>
+                  <TableCell>{info?.note}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      sx={{
+                        p: 2,
+                      }}
+                      onClick={() => alert('test')}
+                    >
+                      <Iconify
+                        width={25}
+                        sx={{ cursor: 'pointer', color: '#2788EF' }}
+                        icon="teenyicons:next-solid"
+                      />
+                      <span style={{ fontSize: 18 }}>Proccess</span>
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            ))}
           </Table>
         </Scrollbar>
       </TableContainer>
-      {/* </Card> */}
     </Container>
   );
 }
