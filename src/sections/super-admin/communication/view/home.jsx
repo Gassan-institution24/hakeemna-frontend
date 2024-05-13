@@ -13,6 +13,8 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useGetTickets } from 'src/api';
+import { useGetUnreadMsgs } from 'src/api/chat';
+import { useAuthContext } from 'src/auth/hooks';
 
 import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
@@ -26,8 +28,6 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { useGetUnreadMsgs } from 'src/api/chat';
-import { useAuthContext } from 'src/auth/hooks';
 
 import AppointmentsRow from '../ticket-row';
 import TicketsToolbar from '../tickets-toolbar';
@@ -68,7 +68,7 @@ export default function AppointmentsView() {
 
   const { user } = useAuthContext()
 
-  const { messages, refetch: refetchLenght } = useGetUnreadMsgs(user._id)
+  const { messages } = useGetUnreadMsgs(user._id)
 
   const {
     ticketsData,

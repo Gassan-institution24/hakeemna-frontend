@@ -29,7 +29,7 @@ import { useGetAppointmentTypes, useGetUSActiveServiceTypes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import { RHFCheckbox, RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { RHFSelect, RHFCheckbox, RHFTextField } from 'src/components/hook-form';
 
 import NewEditDayAppointmentsDetails from './new-edit-days-appointments-details';
 
@@ -540,7 +540,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                     InputLabelProps={{ shrink: true }}
                     name={`days_details[${index}].online_available`}
                     onChange={(e) => {
-                      console.log(values.days_details[index].online_available);
                       setValue(
                         `days_details[${index}].online_available`,
                         !values.days_details[index].online_available

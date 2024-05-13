@@ -1,11 +1,9 @@
-const formatDate = (date) => {
-  console.log('date', date);
-  return new Date(date)
+const formatDate = (date) =>
+  new Date(date)
     .toISOString()
     .replace(/-/g, '')
     .replace(/:/g, '')
     .replace(/\.\d{3}/, '');
-};
 export async function addToCalendar(event) {
   try {
     const startTime = encodeURIComponent(formatDate(event.start_time));

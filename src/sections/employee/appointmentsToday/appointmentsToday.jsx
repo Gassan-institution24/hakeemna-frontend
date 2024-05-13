@@ -1,6 +1,7 @@
+import { useState, useCallback } from 'react';
+
 import { Tab, Tabs } from '@mui/material';
-import { Box } from 'iconoir-react';
-import { useCallback, useState } from 'react';
+
 import Iconify from 'src/components/iconify';
 
 export default function AppointmentsToday() {
@@ -44,8 +45,6 @@ export default function AppointmentsToday() {
     },
   ];
   const [currentTab, setCurrentTab] = useState('one');
-
-  const [scrollableTab, setScrollableTab] = useState('one');
 
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);

@@ -48,7 +48,7 @@ export default function TableNewEditForm({ currentTable }) {
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required(t('required field')),
     name_english: Yup.string().required(t('required field')),
-    department: Yup.string(),
+    department: Yup.string().nullable(),
     general_info: Yup.string(),
   });
 

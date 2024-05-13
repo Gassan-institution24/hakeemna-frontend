@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import { Divider, Tooltip, MenuItem, Typography, IconButton, Badge } from '@mui/material';
+import { Badge, Divider, Tooltip, MenuItem, Typography, IconButton } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
@@ -15,6 +15,7 @@ import { RouterLink } from 'src/routes/components';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetUnreadMsgs } from 'src/api/chat';
 import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
@@ -25,7 +26,6 @@ import Doclogo from 'src/components/logo/doc.png';
 import { NavSectionVertical } from 'src/components/nav-section';
 import Walktour, { useWalktour } from 'src/components/walktour';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useGetUnreadMsgs } from 'src/api/chat';
 
 import { NAV } from '../config-layout';
 import TicketPopover from './ticketPopover';
@@ -59,16 +59,16 @@ export default function NavVertical({ openNav, onCloseNav }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const [dialog, setDialog] = useState(!loading && !user.last_online && user.role === 'admin');
+  const [dialog, setDialog] = useState(false);
 
   const [ticketDialog, setTicketDialog] = useState(false);
 
-  useEffect(() => {
-    setDialog(!loading && user.role === 'admin' && !user.last_online);
-  }, [user.role, user.last_online, loading]);
+  // useEffect(() => {
+  //   setDialog(!loading && user.role === 'admin' && !user.last_online);
+  // }, [user.role, user.last_online, loading]);
 
   const walktour = useWalktour({
-    defaultRun: !loading && user && !user.last_online && !dialog,
+    // defaultRun: !loading && user && !user.last_online && !dialog,
     showProgress: true,
     steps: [
       {
@@ -124,6 +124,26 @@ export default function NavVertical({ openNav, onCloseNav }) {
           <Typography sx={{ color: 'text.secondary' }}>
             we recommend to add services in this step in order to improve your experiense by adding
             it in appointment configuration to calculate the starter price of the appointment
+          </Typography>
+        ),
+      },
+      {
+        target: '#USRoomsNav',
+        title: 'Creating rooms',
+        disableBeacon: true,
+        content: (
+          <Typography sx={{ color: 'text.secondary' }}>
+            we recommend to add Rooms names - or numbers - to your system in order to organize your unit of service account and to work with entrance management
+          </Typography>
+        ),
+      },
+      {
+        target: '#USActivitiesNav',
+        title: 'Creating activities',
+        disableBeacon: true,
+        content: (
+          <Typography sx={{ color: 'text.secondary' }}>
+            creating acticvities allows you to benefit from more features in our system like : entrance management
           </Typography>
         ),
       },

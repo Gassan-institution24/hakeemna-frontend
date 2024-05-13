@@ -332,7 +332,6 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
   useEffect(() => {
     setErrorMsg();
     if (Object.keys(errors).length) {
-      console.log('errors', errors);
       Object.keys(errors).forEach((key, idx) => {
         enqueueSnackbar(`${key}: ${errors?.[key]?.message || 'error'}`, { variant: 'error' });
       });

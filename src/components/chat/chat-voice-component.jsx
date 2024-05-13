@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import ReactPlayer from 'react-player';
 
 import { Card, Stack } from '@mui/material';
-import { PlayArrow, Pause } from '@mui/icons-material';
+import { Pause, PlayArrow } from '@mui/icons-material';
 
 export default function VoiceChat({ src, duration, sx }) {
   const [isPlaying, setIsPlaying] = useState(false);

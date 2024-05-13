@@ -54,7 +54,6 @@ export default function TableDetailsRow({
   const popover = usePopover();
   const DDL = usePopover();
 
-  // // console.log('employees',employees)
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">

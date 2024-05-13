@@ -15,13 +15,12 @@ import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 
 import MedicalReports from '../medical-reports';
-import AppointmentsHistory from '../appointment-history/appoint-history';
 import PatientHistory from '../patient-history';
+import AppointmentsHistory from '../appointment-history/appoint-history';
 // ----------------------------------------------------------------------
 
 export default function PatientProfile() {
   const { id } = useParams();
-  console.log(id)
   const { data } = useGetPatient(id);
 
   const { t } = useTranslate();

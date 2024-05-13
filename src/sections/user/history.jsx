@@ -49,7 +49,6 @@ export default function HistoryHead() {
     }
   };
   const handleView = async (id) => {
-    console.log(id);
     router.push(paths.dashboard.user.historyinfo(id));
   };
 

@@ -4,7 +4,6 @@ import useSWR, { mutate } from 'swr';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 export function useGetTickets(query) {
-  // console.log('query', query);
   const URL = query ? [endpoints.tickets.all, { params: query }] : endpoints.tickets.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
