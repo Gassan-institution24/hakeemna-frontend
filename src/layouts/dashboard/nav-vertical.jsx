@@ -65,7 +65,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   // useEffect(() => {
   //   setDialog(!loading && user.role === 'admin' && !user.last_online);
-  // }, [user.role, user.last_online, loading]);
+  // }, [user.role, user.last_online, loading])
 
   const walktour = useWalktour({
     // defaultRun: !loading && user && !user.last_online && !dialog,
