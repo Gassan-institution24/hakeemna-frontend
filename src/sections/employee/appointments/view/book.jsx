@@ -7,7 +7,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import { MobileTimePicker } from '@mui/x-date-pickers';
+import { TimePicker } from '@mui/x-date-pickers';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
 import { paths } from 'src/routes/paths';
@@ -291,7 +291,7 @@ export default function TableCreateView() {
                 ))}
               </Select>
             </FormControl>
-            <MobileTimePicker
+            <TimePicker
               // ampmInClock
               closeOnSelect
               slots={{
@@ -311,7 +311,7 @@ export default function TableCreateView() {
               }}
             />
 
-            <MobileTimePicker
+            <TimePicker
               // ampmInClock
               closeOnSelect
               slots={{

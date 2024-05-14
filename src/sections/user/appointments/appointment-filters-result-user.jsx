@@ -100,7 +100,7 @@ export default function JobFiltersResult({
           </Block>
         )}
         {filters.unitServices !== 'all' && (
-          <Block label="unit of services:">
+          <Block label="units of service:">
             <Chip
               size="small"
               label={

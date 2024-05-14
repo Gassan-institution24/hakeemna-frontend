@@ -95,7 +95,7 @@ export default function StakeholderInfoContent({ stakeholderData, offerData }) {
           icon: <Iconify icon="solar:calendar-date-bold" />,
         },
         {
-          label: 'unit of services Beneficiary',
+          label: 'units of service Beneficiary',
           value: unit_services_beneficiary
             .map((unitService, idx) => unitService.name_english)
             .join(', '),

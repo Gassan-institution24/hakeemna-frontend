@@ -28,7 +28,7 @@ export default function USAppointmentEditView({ unitServiceData, licenseMovement
             href: paths.superadmin.root,
           },
           {
-            name: 'unit of services',
+            name: 'units of service',
             href: paths.superadmin.unitservices.root,
           },
           {

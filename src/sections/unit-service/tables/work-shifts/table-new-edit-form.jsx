@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useMemo, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -9,7 +9,6 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 import { paths } from 'src/routes/paths';
 
@@ -20,7 +19,7 @@ import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFTextField, RHFTimePicker } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -79,7 +78,6 @@ export default function TableNewEditForm({ currentTable }) {
 
   const {
     reset,
-    watch,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
@@ -91,8 +89,6 @@ export default function TableNewEditForm({ currentTable }) {
       );
     }
   }, [errors, enqueueSnackbar]);
-
-  const values = watch();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -171,61 +167,23 @@ export default function TableNewEditForm({ currentTable }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <Controller
+              <RHFTimePicker
                 name="start_time"
-                // control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <MobileTimePicker
-                    // ampmInClock
-                    closeOnSelect
-                    slots={{
-                      // toolbar:false,
-                      actionBar: 'cancel'
-                    }}
-                    minutesStep="5"
-                    label={t('start time')}
-                    value={values.start_time ? new Date(values.start_time) : null}
-                    onChange={(newValue) => {
-                      field.onChange(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        lang: 'ar',
-                        fullWidth: true,
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
+                label={t('start time')}
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                  },
+                }}
               />
-              <Controller
+              <RHFTimePicker
                 name="end_time"
-                // control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <MobileTimePicker
-                    // ampmInClock
-                    closeOnSelect
-                    slots={{
-                      // toolbar:false,
-                      actionBar: 'cancel'
-                    }}
-                    minutesStep="5"
-                    label={t('end time')}
-                    value={values.end_time ? new Date(values.end_time) : null}
-                    onChange={(newValue) => {
-                      field.onChange(newValue);
-                    }}
-                    slotProps={{
-                      textField: {
-                        lang: 'ar',
-                        fullWidth: true,
-                        error: !!error,
-                        helperText: error?.message,
-                      },
-                    }}
-                  />
-                )}
+                label={t('end time')}
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                  },
+                }}
               />
             </Box>
           </Box>

@@ -8,7 +8,7 @@ export default function QualityControlPage() {
   return (
     <>
       <Helmet>
-        <title> unit of services Quality Control</title>
+        <title> units of service Quality Control</title>
         <meta name="description" content="meta" />
       </Helmet>
 
