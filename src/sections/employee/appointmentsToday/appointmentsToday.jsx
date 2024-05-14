@@ -1,3 +1,4 @@
+import { useSnackbar } from 'notistack';
 import { useState, useCallback } from 'react';
 
 import { Container } from '@mui/system';
@@ -6,12 +7,13 @@ import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
 import { alpha, useTheme } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
-import { Tab, Tabs, Table, TableBody, IconButton } from '@mui/material';
+import { Tab, Tabs, Table, Button, TableBody, IconButton } from '@mui/material';
 
-import { fTime, fMonth } from 'src/utils/format-time';
+import { fTime } from 'src/utils/format-time';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetEmployeeTodayAppointment } from 'src/api';
+import { useGetUsAppointmentsToday } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -20,13 +22,54 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcru
 
 export default function AppointmentsToday() {
   const { user } = useAuthContext();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const { appointmentsData } = useGetEmployeeTodayAppointment(
-    user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
+  const { appointmentsData, refetch } = useGetUsAppointmentsToday(
+    user?.employee?.employee_engagements?.[0]?.unit_service?._id
   );
+  
+  // console.log(appointmentsData,"fdldkldfkldf");
   const theme = useTheme();
 
-  console.log(appointmentsData);
+  const arivedyes = async (Data) => { 
+    try {
+      await axiosInstance.patch(`${endpoints.appointments.one(Data)}`, {
+        arrived: true,
+      });
+
+      refetch();
+      enqueueSnackbar('Patient Arrived', { variant: 'success' });
+    } catch (error) {
+      console.error(error.message);
+      // enqueueSnackbar(
+      //   curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+      //   {
+      //     variant: 'error',
+      //   }
+      // );
+      enqueueSnackbar('Call to make sure', { variant: 'success' });
+    }
+  };
+  const arivedno = async (Data) => {
+    try {
+      await axiosInstance.patch(`${endpoints.appointments.one(Data)}`, {
+        arrived: false,
+      });
+
+      refetch();
+      enqueueSnackbar('Patient Arrived', { variant: 'success' });
+    } catch (error) {
+      console.error(error.message);
+      // enqueueSnackbar(
+      //   curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+      //   {
+      //     variant: 'error',
+      //   }
+      // );
+      enqueueSnackbar('Call to make sure', { variant: 'error' });
+    }
+  };
+
   const TABS = [
     {
       value: 'one',
@@ -96,21 +139,76 @@ export default function AppointmentsToday() {
           <Table sx={{ minWidth: 400 }}>
             <TableHead>
               <TableRow>
-                <TableCell>Date</TableCell>
                 <TableCell>Time</TableCell>
                 <TableCell>Patient</TableCell>
                 <TableCell>Patient Note</TableCell>
+                <TableCell>Coming</TableCell>
+                <TableCell>Arrived</TableCell>
                 <TableCell>Options</TableCell>
               </TableRow>
             </TableHead>
-            {appointmentsData?.map((info) => (
-              <TableBody sx={{ borderBottom: 1 }}>
-                <TableRow>
-                  <TableCell>{fMonth(info?.start_time)}</TableCell>
+            {appointmentsData?.map((info, index) => (
+              <TableBody key={index} sx={{ borderBottom: 1 }}>
+                <TableRow key={index}>
                   <TableCell>{fTime(info?.start_time)}</TableCell>
                   <TableCell>{info?.patient?.name_english}</TableCell>
                   <TableCell>{info?.note}</TableCell>
+                  <TableCell>{info.coming ? 'Yes' : 'No'}</TableCell>
                   <TableCell>
+                    {info?.arrived === true ? (
+                      'YES'
+                    ) : (
+                      <>
+                        <Button
+                          sx={{
+                            p: 2,
+                          }}
+                          onClick={() => arivedyes(info?._id)}
+                        >
+                          Yes
+                        </Button>
+                        <Button
+                          sx={{
+                            p: 2,
+                          }}
+                          onClick={() => arivedno(info?._id)}
+                        >
+                          No
+                        </Button>
+                      </>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {info.coming === true ? (
+                      <IconButton
+                        sx={{
+                          p: 2,
+                        }}
+                        onClick={() => alert('test')}
+                      >
+                        <Iconify
+                          width={20}
+                          sx={{ cursor: 'pointer', mr: 1, color: '#2788EF' }}
+                          icon="teenyicons:next-solid"
+                        />
+                        <span style={{ fontSize: 16 }}>Start</span>
+                      </IconButton>
+                    ) : (
+                      <IconButton
+                        sx={{
+                          p: 2,
+                        }}
+                        disabled
+                      >
+                        <Iconify
+                          width={20}
+                          sx={{ cursor: 'pointer', mr: 1, color: '#2788EF' }}
+                          icon="teenyicons:next-solid"
+                        />
+                        <span style={{ fontSize: 16 }}>Start</span>
+                      </IconButton>
+                    )}
+
                     <IconButton
                       sx={{
                         p: 2,
@@ -118,11 +216,11 @@ export default function AppointmentsToday() {
                       onClick={() => alert('test')}
                     >
                       <Iconify
-                        width={25}
-                        sx={{ cursor: 'pointer', color: '#2788EF' }}
-                        icon="teenyicons:next-solid"
+                        width={20}
+                        sx={{ cursor: 'pointer', mr: 1, color: 'success.main' }}
+                        icon="material-symbols:call"
                       />
-                      <span style={{ fontSize: 18 }}>Proccess</span>
+                      <span style={{ fontSize: 16 }}>Call</span>
                     </IconButton>
                   </TableCell>
                 </TableRow>

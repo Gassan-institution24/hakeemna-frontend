@@ -419,6 +419,7 @@ export const endpoints = {
       one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 100, order = 'asc', filters }) =>
         `/api/appointments/unitservice/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}`,
       available: (id) => `/api/appointments/available/${id}`,
+      today: (id) => `/api/appointments/unitserviceappointments/${id}`,
     },
     patient: {
       many: (id) => `/api/appointments/patient/${id}`,

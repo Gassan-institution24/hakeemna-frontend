@@ -8,7 +8,7 @@ import Iconify from 'src/components/iconify';
 import Image from 'src/components/image/image';
 import { useSnackbar } from 'src/components/snackbar';
 
-import QR from './imges/QR.jpg';
+import QR from './imges/Qr.png';
 
 export default function Share() {
   const [link, setLink] = useState(
