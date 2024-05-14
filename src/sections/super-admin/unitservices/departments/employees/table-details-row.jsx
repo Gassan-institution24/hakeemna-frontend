@@ -10,7 +10,6 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
 import { useLocales, useTranslate } from 'src/locales';
-import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -47,8 +46,6 @@ export default function CountriesTableRow({
 
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  const checkAcl = useAclGuard();
 
   const popover = usePopover();
   const DDL = usePopover();

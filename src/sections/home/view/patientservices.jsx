@@ -3,12 +3,12 @@ import * as React from 'react';
 import { Box } from '@mui/system';
 import { Divider, Typography } from '@mui/material';
 
-import { useTranslate } from 'src/locales';
+// import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 
 export default function VerticalDividerText() {
-  const { t } = useTranslate();
+  // const { t } = useTranslate();
 
   return (
     <>

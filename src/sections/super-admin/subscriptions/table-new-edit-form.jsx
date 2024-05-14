@@ -120,7 +120,6 @@ export default function TableNewEditForm({ currentTable }) {
       //   package_old_files_Management: Boolean(data.package_old_files_Management),
       //   package_TAX_Income_reporting: Boolean(data.package_TAX_Income_reporting),
       // };
-      // // console.log("modifiedData",data)
       if (currentTable) {
         await axiosInstance.patch(endpoints.subscriptions.one(currentTable._id), data);
       } else {

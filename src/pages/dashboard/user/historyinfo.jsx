@@ -8,8 +8,8 @@ import { useParams } from 'src/routes/hooks';
 // import { fDate } from 'src/utils/format-time';
 import { fDateTime } from 'src/utils/format-time';
 
+import { useTranslate } from 'src/locales';
 import { useGetOneHistoryData } from 'src/api';
-import { useLocales, useTranslate } from 'src/locales';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify/iconify';
@@ -17,14 +17,10 @@ import Iconify from 'src/components/iconify/iconify';
 
 export default function HistorInfo() {
   const { t } = useTranslate();
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
   const { id } = useParams();
 
   const { historyData } = useGetOneHistoryData(id);
-  console.log(historyData);
   // const handleBackClick = () => {
-  //   console.log(historyData);
   // };
   return (
     <Stack

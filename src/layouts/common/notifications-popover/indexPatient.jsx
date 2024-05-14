@@ -65,7 +65,6 @@ export default function NotificationsPopoverPatient() {
   /* eslint-disable */
   useEffect(() => {
     socket.on('request', (data) => {
-      console.log(data);
       setAllNotifications([]);
       // setPage(1);
       refetch();
@@ -73,7 +72,6 @@ export default function NotificationsPopoverPatient() {
   }, []);
   useEffect(() => {
     socket.on('invite', (data) => {
-      console.log(data, 'data');
       setAllNotifications([]);
       // setPage(1);
       refetch();
@@ -81,7 +79,6 @@ export default function NotificationsPopoverPatient() {
   }, []);
   useEffect(() => {
     socket.on('accept', (data) => {
-      console.log(data);
       setAllNotifications([]);
       // setPage(1);
       refetch();
@@ -89,7 +86,6 @@ export default function NotificationsPopoverPatient() {
   }, []);
   useEffect(() => {
     socket.on('patientbooking', (data) => {
-      console.log(data);
       setAllNotifications([]);
       // setPage(1);
       refetch();

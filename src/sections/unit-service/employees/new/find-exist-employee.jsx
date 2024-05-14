@@ -9,12 +9,9 @@ import TableBody from '@mui/material/TableBody';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
 
-import { paths } from 'src/routes/paths';
-
 import axios, { endpoints } from 'src/utils/axios';
 
-import socket from 'src/socket';
-import { useFindEmployee, useGetUserByQuery } from 'src/api';
+import { useFindEmployee } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 

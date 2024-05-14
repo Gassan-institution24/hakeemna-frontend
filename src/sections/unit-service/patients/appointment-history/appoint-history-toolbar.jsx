@@ -7,7 +7,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import Iconify from 'src/components/iconify';
-import { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +18,6 @@ export default function InvoiceTableToolbar({
   dateError,
   serviceOptions,
 }) {
-  const popover = usePopover();
 
   const handleFilterName = useCallback(
     (event) => {

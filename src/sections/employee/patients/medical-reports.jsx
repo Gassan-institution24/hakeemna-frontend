@@ -6,10 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Link from '@mui/material/Link';
-import Grow from '@mui/material/Grow';
-import Alert from '@mui/material/Alert';
 import Dialog from '@mui/material/Dialog';
-import { alpha } from '@mui/material/styles';
 import Checkbox from '@mui/material/Checkbox';
 import { DatePicker } from '@mui/x-date-pickers';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -29,8 +26,7 @@ import {
   TableContainer,
 } from '@mui/material';
 
-import { paths } from 'src/routes/paths';
-import { useParams, useRouter } from 'src/routes/hooks';
+import { useParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -49,7 +45,7 @@ export default function MedicalReports() {
   // Inside the OldMedicalReports component
   const today = new Date();
 
-  const {id} = useParams()
+  const { id } = useParams();
 
   // Calculate max date as today's date
   const maxDate = addDays(today, 0); // You can adjust the offset if needed
@@ -58,20 +54,12 @@ export default function MedicalReports() {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const [ImgFiles, setImgFiles] = useState([]);
-  const [FileToDelete, setFileToDelete] = useState([]);
   const [checkChange, setCheckChange] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [hoveredButtonId, setHoveredButtonId] = useState(null);
-  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-//   const { user } = useAuthContext();
   const { specialtiesData } = useGetSpecialties();
   const { oldmedicalreportsdata, refetch } = useGetPatintoldmedicalreports(id);
-  console.log('oldmedicalreportsdata',oldmedicalreportsdata)
   const [spName, setspName] = useState();
-  const handleHover = (_id) => {
-    setHoveredButtonId(_id);
-  };
+
   const [filtersbyname, setFiltersbyname] = useState();
 
   const dataFiltered = applyFilter({
@@ -79,29 +67,6 @@ export default function MedicalReports() {
     filtersbyname,
   });
 
-  const handleMouseOut = () => {
-    setHoveredButtonId(null);
-  };
-  const handleViewClick = (_id) => {
-    router.push(paths.dashboard.user.oldmedicalreportsview(_id));
-  };
-
-  const delteeFile = async () => {
-    try {
-      await axios.patch(`/api/oldmedicalreports/${FileToDelete?._id}`, {
-        Activation: 'Inactive',
-      });
-      enqueueSnackbar(
-        `${curLangAr ? 'تم حذف التقرير بنجاح' : 'Medical report deleted successfully'}`,
-        { variant: 'success' }
-      );
-      refetch();
-    } catch (error) {
-      enqueueSnackbar(`${curLangAr ? 'حدث خطأ ما, الرجاء المحاوله لاحقا' : 'Unable to delete'}`, {
-        variant: 'error',
-      });
-    }
-  };
   const oldMedicalReportsSchema = Yup.object().shape({
     date: Yup.date().required('Date is required'),
     file: Yup.array().required(),
@@ -176,8 +141,6 @@ export default function MedicalReports() {
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
     });
-    console.log(data, 'data');
-
     if (ImgFiles) {
       ImgFiles.forEach((f) => formData.append('medicalreports', f));
     }
@@ -207,21 +170,17 @@ export default function MedicalReports() {
     }
   };
 
-  const handleAlertClose = () => {
-    setShowAlert(false);
-  };
-
   const closing = () => {
-    setShowAlert(false);
+    // setShowAlert(false);
     dialog.onFalse();
   };
 
   const opening = () => {
-    setShowAlert(false);
+    // setShowAlert(false);
     dialog.onTrue();
   };
   const downloadAsPDF = (report) => {
-    setShowAlert(false);
+    // setShowAlert(false);
     // Create a new PDF instance
     const pdf = new JsPdf();
 
@@ -254,16 +213,23 @@ export default function MedicalReports() {
   };
 
   const fetchImageAsBase64 = async (url) => {
-    const response = await fetch(
-      `http://localhost:3000/uploaded-files/patients/old_medical_reports/${url}`
-    );
-    const blob = await response.blob();
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
+    try {
+      const response = await axios.get(`/uploaded-files/patients/old_medical_reports/${url}`, {
+        responseType: 'blob',
+      });
+      const blob = response.data;
+
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    } catch (error) {
+      // Handle error
+      console.error('Error fetching image:', error);
+      throw error; // Rethrow the error if needed
+    }
   };
 
   const addImagesToPDF = async (doc, imageUrls) => {
@@ -282,49 +248,6 @@ export default function MedicalReports() {
 
   return (
     <>
-      {showAlert && (
-        <Grow in={showAlert} timeout={600}>
-          <Alert
-            severity="info"
-            variant="filled"
-            sx={{ width: '50%', mb: 2 }}
-            action={
-              <>
-                <Button
-                  color="inherit"
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    mr: 1,
-                    border: (theme) => `1px solid ${alpha(theme.palette.common.white, 0.48)}`,
-                  }}
-                  onClick={handleAlertClose}
-                >
-                  {t('Cancel')}
-                </Button>
-
-                <Button
-                  size="small"
-                  color="info"
-                  variant="contained"
-                  sx={{
-                    bgcolor: 'info.dark',
-                  }}
-                  onClick={() => {
-                    setShowAlert(false);
-                    delteeFile();
-                  }}
-                >
-                  {t('Confirm')}
-                </Button>
-              </>
-            }
-          >
-            {t('Please confirm the deletion of ')}
-            {FileToDelete?.name}
-          </Alert>
-        </Grow>
-      )}
       <Button
         variant="outlined"
         color="success"
@@ -346,7 +269,7 @@ export default function MedicalReports() {
       <TextField
         onChange={(e) => setFiltersbyname(e.target.value)}
         name="name"
-        onClick={() => setShowAlert(false)}
+        // onClick={() => setShowAlert(false)}
         sx={{ mb: 5, float: { md: 'right', xs: 'left' } }}
         placeholder="Search..."
       />
@@ -515,7 +438,7 @@ export default function MedicalReports() {
                   <Button onClick={() => downloadAsPDF(info)} variant="outlined" sx={{ mr: 1 }}>
                     {t('Download')} &nbsp; <Iconify icon="flat-color-icons:download" />
                   </Button>
-                  <Button
+                  {/* <Button
                     sx={{ mr: 1 }}
                     onMouseOver={() => handleHover(info?._id)}
                     onMouseOut={handleMouseOut}
@@ -534,7 +457,7 @@ export default function MedicalReports() {
                     }}
                   >
                     {t('Delete')} &nbsp; <Iconify icon="flat-color-icons:delete-database" />
-                  </Button>
+                  </Button> */}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -549,8 +472,6 @@ function applyFilter({ inputData, filtersbyname }) {
     return inputData;
   }
 
-  console.log(inputData);
-  console.log(filtersbyname);
   if (filtersbyname) {
     inputData = inputData?.filter(
       (data) =>

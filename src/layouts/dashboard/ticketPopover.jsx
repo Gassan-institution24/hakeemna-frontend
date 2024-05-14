@@ -15,6 +15,7 @@ import { useGetConversation } from 'src/api/chat';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetTickets, useGetTicketCategories } from 'src/api';
 
+import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover from 'src/components/custom-popover';
@@ -22,7 +23,6 @@ import ChatMessageList from 'src/components/chat/chat-message-list';
 import ChatMessageInput from 'src/components/chat/chat-message-input';
 // import CustomPopover from "src/components/custom-popover";
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import Label from 'src/components/label';
 
 export default function TicketPopover({ messagesLength, refetchLenght, open, onClose }) {
   const { t } = useTranslate();
@@ -54,18 +54,14 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
     resolver: yupResolver(NewUserSchema),
   });
 
-  const {
-    reset,
-    setValue,
-    watch,
-    handleSubmit,
-    formState: { errors },
-  } = methods;
+  const { handleSubmit } = methods;
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const Submitted = await axios.post(endpoints.tickets.all, { ...data, URL: window.location.pathname });
-      console.log(Submitted)
-      setChatId(Submitted.data?.chat)
+      const Submitted = await axios.post(endpoints.tickets.all, {
+        ...data,
+        URL: window.location.pathname,
+      });
+      setChatId(Submitted.data?.chat);
       setPage(1);
     } catch (error) {
       // error emitted in backend
@@ -98,19 +94,14 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
   useEffect(() => {
     socket.on('message', (id) => {
       if (id === chatId || messagesLength.some((one) => one._id === id)) {
-        refetchLenght()
+        refetchLenght();
         refetch();
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId, messagesLength]);
   return (
-    <CustomPopover
-      open={open}
-      hiddenArrow
-      arrow={curLangAr ? "top-left" : ''}
-      onClose={onClose}
-    >
+    <CustomPopover open={open} hiddenArrow arrow={curLangAr ? 'top-left' : ''} onClose={onClose}>
       {page === 0 && (
         <FormProvider methods={methods} onSubmit={onSubmit}>
           <Stack sx={{ p: 1 }} spacing={2.5}>
@@ -188,7 +179,11 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
                 overflow: 'hidden',
               }}
             >
-              <ChatMessageList messages={conversation?.messages} refetchLenght={refetchLenght} participants={participants} />
+              <ChatMessageList
+                messages={conversation?.messages}
+                refetchLenght={refetchLenght}
+                participants={participants}
+              />
 
               <ChatMessageInput
                 refetch={refetch}
@@ -206,20 +201,23 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
           </Typography>
           <Divider sx={{ mb: 1 }} />
           {ticketsData.map((one, idx) => {
-            const currLength = messagesLength.find((chat) => chat._id === one.chat)
-            return (<MenuItem
-              onClick={() => {
-                setChatId(one.chat);
-                setPage(1);
-              }}
-              key={idx}
-            >
-              {one.subject}
-              {currLength?.messages?.length && <Label sx={{ ml: 3 }} color="info" >
-                {currLength?.messages?.length}
-              </Label>
-              }
-            </MenuItem>)
+            const currLength = messagesLength.find((chat) => chat._id === one.chat);
+            return (
+              <MenuItem
+                onClick={() => {
+                  setChatId(one.chat);
+                  setPage(1);
+                }}
+                key={idx}
+              >
+                {one.subject}
+                {currLength?.messages?.length && (
+                  <Label sx={{ ml: 3 }} color="info">
+                    {currLength?.messages?.length}
+                  </Label>
+                )}
+              </MenuItem>
+            );
           })}
           <Divider />
           <MenuItem
@@ -239,9 +237,8 @@ export default function TicketPopover({ messagesLength, refetchLenght, open, onC
             <Iconify icon="ph:plus-bold" />
           </MenuItem>
         </Stack>
-      )
-      }
-    </CustomPopover >
+      )}
+    </CustomPopover>
   );
 }
 TicketPopover.propTypes = {

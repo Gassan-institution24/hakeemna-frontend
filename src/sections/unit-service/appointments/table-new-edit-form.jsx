@@ -44,7 +44,6 @@ export default function TableNewEditForm({ currentTable }) {
     online_available: Yup.bool().required(t('required field')),
     start_time: Yup.date().required(t('required field')),
   });
-  console.log('currentTable', currentTable);
   const defaultValues = useMemo(
     () => ({
       appointment_type: currentTable?.appointment_type?._id || null,
@@ -68,7 +67,6 @@ export default function TableNewEditForm({ currentTable }) {
 
   const {
     reset,
-    watch,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
@@ -80,9 +78,6 @@ export default function TableNewEditForm({ currentTable }) {
       );
     }
   }, [errors, enqueueSnackbar]);
-
-  const values = watch();
-  console.log('currentTable', values.service_types);
 
   const onSubmit = handleSubmit(async (data) => {
     try {

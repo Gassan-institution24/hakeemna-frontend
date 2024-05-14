@@ -322,21 +322,17 @@ export default function RoomsTableView() {
     <>
       <Container maxWidth="xl">
         <CustomBreadcrumbs
-          // heading={`${curLangAr?departmentData.name_arabic:departmentData.name_english || ''} ${t('department rooms')}`} /// edit
-          // links={[
-          //   {
-          //     name: t('dashboard'),
-          //     href: paths.unitservice.root,
-          //   },
-          //   {
-          //     name: t('departments'),
-          //     href: paths.unitservice.departments.root,
-          //   },
-          //   { name: t('department rooms') },
-          // ]}
+          heading={t('rooms')} /// edit
+          links={[
+            {
+              name: t('dashboard'),
+              href: paths.unitservice.root,
+            },
+            { name: t('rooms') },
+          ]}
           action={
             checkAcl({
-              category: 'department',
+              category: 'unit_service',
               subcategory: 'management_tables',
               acl: 'create',
             }) && (
