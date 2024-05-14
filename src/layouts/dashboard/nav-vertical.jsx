@@ -14,14 +14,12 @@ import { RouterLink } from 'src/routes/components';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { useGetUnreadMsgs } from 'src/api/chat';
 import { useAuthContext } from 'src/auth/hooks';
-// import { useGetUnreadMsgs } from 'src/api/chat';
+import { useGetUnreadMsgs } from 'src/api/chat';
 import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
 // import Logo from 'src/components/logo';
-import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import Doclogo from 'src/components/logo/doc.png';
@@ -29,7 +27,6 @@ import { NavSectionVertical } from 'src/components/nav-section';
 import Walktour, { useWalktour } from 'src/components/walktour';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import Services from './Srrvices.png';
 import { NAV } from '../config-layout';
 import TicketPopover from './ticketPopover';
 import { useNavData } from './config-navigation';
@@ -53,7 +50,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   const checkAcl = useAclGuard();
 
-  const { messages, refetch } = useGetUnreadMsgs(user._id);
+  const { messages, refetch } = useGetUnreadMsgs(user._id)
 
   const USData =
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
@@ -68,7 +65,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   // useEffect(() => {
   //   setDialog(!loading && user.role === 'admin' && !user.last_online);
-  // }, [user.role, user.last_online, loading])
+  // }, [user.role, user.last_online, loading]);
 
   const walktour = useWalktour({
     // defaultRun: !loading && user && !user.last_online && !dialog,
@@ -196,7 +193,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+      // scrollDuration={500}
       />
       {isEmployee && (
         <Box
@@ -307,46 +304,34 @@ export default function NavVertical({ openNav, onCloseNav }) {
           subcategory: 'management_tables',
           acl: 'create',
         }) && (
-          <>
-            <Divider />
-            <MenuItem
-              lang="ar"
-              sx={{ fontSize: 13, color: 'secondary.dark' }}
-              onClick={() => setDialog(true)}
-            >
-              {t('create first time tables')}
-            </MenuItem>
-          </>
-        )}
+            <>
+              <Divider />
+              <MenuItem
+                lang="ar"
+                sx={{ fontSize: 13, color: 'secondary.dark' }}
+                onClick={() => setDialog(true)}
+              >
+                {t('create first time tables')}
+              </MenuItem>
+            </>
+          )}
       </CustomPopover>
-      {user.role !== 'superadmin' && (
-        <Box
-          sx={{
-            position: 'fixed',
-            bottom: { md: -30, xs: 10 },
-            right: { md: -20, xs: -40 },
-            zIndex: 99,
-          }}
-        >
-          {/* <IconButton onClick={() => setTicketDialog(true)}> */}
-          <Badge
-            badgeContent={messages?.reduce((acc, chat) => acc + chat.messages.length, 0)}
-            color="error"
-            onClick={() => setTicketDialog(true)}
-          >
-            {/* <Iconify sx={{ color: 'primary.main' }} width="70px" icon="mdi:customer-service" /> */}
-            <Image src={Services} width="210px" />
+      {user.role !== 'superadmin' && <Box
+        sx={{
+          position: 'fixed',
+          bottom: { md: 30, xs: 10 },
+          right: { md: 30, xs: 10 },
+          zIndex: 99,
+        }}
+      >
+        <IconButton onClick={() => setTicketDialog(true)}>
+          <Badge badgeContent={messages?.reduce((acc, chat) => acc + chat.messages.length, 0)} color="error">
+            <Iconify sx={{ color: 'primary.main' }} width="70px" icon="mdi:customer-service" />
           </Badge>
-
-          {/* </IconButton> */}
-          <TicketPopover
-            messagesLength={messages}
-            refetchLenght={refetch}
-            open={ticketDialog}
-            onClose={() => setTicketDialog(false)}
-          />
-        </Box>
-      )}
+        </IconButton>
+        <TicketPopover messagesLength={messages} refetchLenght={refetch} open={ticketDialog} onClose={() => setTicketDialog(false)} />
+        <StartupCreating open={dialog} onClose={()=>setDialog(false)} />
+      </Box>}
     </>
   );
 }
