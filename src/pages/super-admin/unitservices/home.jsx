@@ -8,7 +8,7 @@ export default function TableDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> unit of services</title>
+        <title> units of service</title>
         <meta name="description" content="meta" />
       </Helmet>
 

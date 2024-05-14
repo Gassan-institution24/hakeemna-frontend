@@ -111,6 +111,13 @@
   "Send file": "ارسال ملف",
   "Please confirm the deletion of ": "تأكيد الحذف",
   "Upload medical report": "رفع الملف الطبي",
+  "clinic": "عيادة",
+  "hospital": "مستشفى",
+  "online": "مكالمة",
+  "tax": "الضريبة",
+  "place of service": "مكان تقديم الخدمة",
+  "measurement type": "نوع القياس",
+
 
   "suppliers offers": "عروض المنشاّت",
   "communication": "التواصل",

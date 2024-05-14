@@ -40,7 +40,6 @@ export function useNavData() {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
       ?.employees_number || 10;
 
-
   // const handleLogout = useCallback(async () => {
   //   try {
   //     popover.onClose();
@@ -68,7 +67,7 @@ export function useNavData() {
             icon: <Iconify icon="simple-line-icons:calender" />,
           },
           {
-            title: t('unit of services'),
+            title: t('units of service'),
             path: paths.superadmin.unitservices.root,
             icon: <Iconify icon="fa-solid:clinic-medical" />,
           },
@@ -113,7 +112,7 @@ export function useNavData() {
             icon: <Iconify icon="healthicons:world-care" />,
             children: [
               { title: t('Doctorna online'), path: paths.superadmin.qualityControl.doctorna },
-              { title: t('unit of services'), path: paths.superadmin.qualityControl.unitservices },
+              { title: t('units of service'), path: paths.superadmin.qualityControl.unitservices },
               { title: t('Stakeholders'), path: paths.superadmin.qualityControl.stakeholders },
             ],
           },
@@ -175,7 +174,7 @@ export function useNavData() {
           //     { title: t('diets'), path: paths.superadmin.tables.diets.root },
           //     { title: t('analyses'), path: paths.superadmin.tables.analysis.root },
           //     { title: t('insurance companies'), path: paths.superadmin.tables.insurancecomapnies.root },
-          //     { title: t('unit of services'), path: paths.superadmin.tables.unitservices.root },
+          //     { title: t('units of service'), path: paths.superadmin.tables.unitservices.root },
           //     { title: t('departments'), path: paths.superadmin.tables.departments.root },
           //     { title: t('specialities'), path: paths.superadmin.tables.specialities.root },
           //     { title: t('subspecialities'), path: paths.superadmin.tables.subspecialities.root },
@@ -321,8 +320,7 @@ export function useNavData() {
         icon: <Iconify icon="streamline:health-care-2-solid" />,
       },
       {
-        show:
-          false && checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
+        show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
         title: t('accounting'),
         path: paths.unitservice.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
@@ -409,7 +407,7 @@ export function useNavData() {
     const employeeItems = [
       {
         show:
-          false &&
+          // false &&
           checkAcl({
             category: 'work_group',
             subcategory: 'entrance_management',
@@ -455,7 +453,7 @@ export function useNavData() {
         navItemId: 'EMWorkGroupsNav',
       },
       {
-        show: false,
+        show: true,
         title: t('accounting'),
         path: paths.employee.accounting.root,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,

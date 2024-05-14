@@ -84,7 +84,7 @@ const InsuranceCoCreatePage = lazy(() =>
 const InsuranceCoEditPage = lazy(() =>
   import('src/pages/super-admin/tables/insurance-companies/edit')
 );
-// unit of serviceS
+// units of service
 const USsTablePage = lazy(() => import('src/pages/super-admin/tables/unit-services/table'));
 const USCreatePage = lazy(() => import('src/pages/super-admin/tables/unit-services/new'));
 const USEditPage = lazy(() => import('src/pages/super-admin/tables/unit-services/edit'));

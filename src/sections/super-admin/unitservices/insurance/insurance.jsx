@@ -209,7 +209,7 @@ export default function UnitServicesInsuranceView({ unitServiceData, refetch }) 
           //     href: paths.superadmin.root,
           //   },
           //   {
-          //     name: 'unit of services',
+          //     name: 'units of service',
           //     href: paths.superadmin.unitservices.root,
           //   },
           //   { name: t(`${unitserviceName} Insurance`) }, /// edit

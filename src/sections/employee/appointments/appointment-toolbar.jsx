@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
-import { MobileTimePicker } from '@mui/x-date-pickers';
+import { TimePicker } from '@mui/x-date-pickers';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
@@ -214,7 +214,7 @@ export default function AppointmentToolbar({
             width: { xs: 1, md: 200 },
           }}
         />
-        <MobileTimePicker
+        <TimePicker
           // // ampmInClock
           closeOnSelect
           slots={{
@@ -238,7 +238,7 @@ export default function AppointmentToolbar({
           }}
         />
 
-        <MobileTimePicker
+        <TimePicker
           // ampmInClock
           closeOnSelect
           slots={{

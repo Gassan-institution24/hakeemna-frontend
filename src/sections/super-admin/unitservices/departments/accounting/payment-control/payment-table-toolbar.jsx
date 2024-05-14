@@ -81,12 +81,12 @@ export default function PaymentTableToolbar({
             width: { xs: 1, md: 180 },
           }}
         >
-          <InputLabel>unit of services</InputLabel>
+          <InputLabel>units of service</InputLabel>
           <Select
             multiple
             value={filters.service}
             onChange={handleFilterService}
-            input={<OutlinedInput label="unit of services" />}
+            input={<OutlinedInput label="units of service" />}
             renderValue={(selected) => selected.map((value, idx) => value).join(', ')}
             sx={{ textTransform: 'capitalize' }}
             // MenuProps={{

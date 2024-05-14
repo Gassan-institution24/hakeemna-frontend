@@ -58,7 +58,7 @@ export default function OverviewAnalyticsView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="unit of services"
+            title="units of service"
             total={unitServicesNumber}
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
           />

@@ -27,7 +27,8 @@ export default function CitiesTableRow({
     code,
     name_english,
     name_arabic,
-    unit_service,
+    country,
+    city,
     status,
     created_at,
     user_creation,
@@ -54,7 +55,8 @@ export default function CitiesTableRow({
       <TableCell align="center">{name_english}</TableCell>
       <TableCell align="center">{name_arabic}</TableCell>
 
-      <TableCell align="center">{unit_service?.name_english}</TableCell>
+      <TableCell align="center">{country?.name_english}</TableCell>
+      <TableCell align="center">{city?.name_english}</TableCell>
       <TableCell align="center">
         <Label
           variant="soft"

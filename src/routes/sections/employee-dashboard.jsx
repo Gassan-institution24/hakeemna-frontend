@@ -11,6 +11,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 // ENTRANCE MANAGEMENT
 const EntranceManagementHomePage = lazy(() => import('src/pages/employee/entranceManagement/home'));
+const EntranceManagementAccPage = lazy(() => import('src/pages/employee/entranceManagement/accounting'));
 const EntranceManagementNewPage = lazy(() => import('src/pages/employee/entranceManagement/new'));
 const EntranceManagementEditPage = lazy(() => import('src/pages/employee/entranceManagement/edit'));
 
@@ -107,6 +108,7 @@ export const unitServiceEmployeeDashboardRoutes = [
         children: [
           { element: <EntranceManagementHomePage />, index: true },
           { path: 'new', element: <EntranceManagementNewPage /> },
+          { path: 'accounting', element: <EntranceManagementAccPage /> },
           { path: ':id/edit', element: <EntranceManagementEditPage /> },
         ],
       },

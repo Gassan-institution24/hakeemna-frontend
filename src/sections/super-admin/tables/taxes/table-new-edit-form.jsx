@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { MenuItem } from '@mui/material';
+import { InputAdornment, MenuItem } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -16,7 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetActiveUnitservices } from 'src/api';
+import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -26,21 +26,28 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function CitiesNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const { unitservicesData } = useGetActiveUnitservices();
+  const { countriesData } = useGetCountries();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    name_arabic: Yup.string().required('Name is required'),
-    name_english: Yup.string().required('Name is required'),
-    unit_service: Yup.string().required('unit of service is required'),
+    name_arabic: Yup.string().required('required field'),
+    name_english: Yup.string().required('required field'),
+    percentage: Yup.number()
+      .required('required field')
+      .min(0, 'must be at least 0')
+      .max(100, 'cannot be more than 100'),
+    country: Yup.string().required('required field'),
+    city: Yup.string().nullable(),
   });
 
   const defaultValues = useMemo(
     () => ({
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      unit_service: currentTable?.unit_service?._id || '',
+      percentage: currentTable?.percentage || '',
+      country: currentTable?.country?._id || '',
+      city: currentTable?.city?._id || null,
     }),
     [currentTable]
   );
@@ -70,9 +77,12 @@ export default function CitiesNewEditForm({ currentTable }) {
 
   const {
     reset,
+    watch,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+  const values = watch();
+  const { tableData } = useGetCountryCities(values.country);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -94,7 +104,9 @@ export default function CitiesNewEditForm({ currentTable }) {
     reset({
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      unit_service: currentTable?.unit_service?._id || '',
+      percentage: currentTable?.percentage || 0,
+      country: currentTable?.country?._id || '',
+      city: currentTable?.city?._id || null,
     });
   }, [currentTable]);
   /* eslint-enable */
@@ -114,7 +126,6 @@ export default function CitiesNewEditForm({ currentTable }) {
               }}
             >
               <RHFTextField
-                lang="en"
                 onChange={handleEnglishInputChange}
                 name="name_english"
                 label="name english"
@@ -124,11 +135,26 @@ export default function CitiesNewEditForm({ currentTable }) {
                 name="name_arabic"
                 label="name arabic"
               />
+              <RHFTextField
+                type="number"
+                name="percentage"
+                label="percentage"
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                }}
+              />
 
-              <RHFSelect name="unit_service" label="unit of service">
-                {unitservicesData.map((unit, idx) => (
-                  <MenuItem lang="ar" key={idx} value={unit._id}>
-                    {unit.name_english}
+              <RHFSelect name="country" label="country">
+                {countriesData.map((one, idx) => (
+                  <MenuItem lang="ar" key={idx} value={one._id}>
+                    {one.name_english}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFSelect name="city" label="city">
+                {tableData.map((one, idx) => (
+                  <MenuItem lang="ar" key={idx} value={one._id}>
+                    {one.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>

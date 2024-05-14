@@ -18,9 +18,9 @@ import { useNewScreen } from 'src/hooks/use-new-screen';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSActiveWorkShifts, useGetActiveMeasurmentTypes } from 'src/api';
+import { useGetUSActiveWorkShifts, useGetActiveMeasurmentTypes, useGetTaxes } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -34,6 +34,7 @@ export default function TableNewEditForm({ currentTable }) {
   const { user } = useAuthContext();
 
   const { measurmentTypesData } = useGetActiveMeasurmentTypes();
+  const { taxesData } = useGetTaxes();
   const { workShiftsData } = useGetUSActiveWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
@@ -43,6 +44,8 @@ export default function TableNewEditForm({ currentTable }) {
   const { handleAddNew } = useNewScreen();
 
   const { t } = useTranslate();
+  const { currentLang } = useLocales();
+  const curLangAr = currentLang.value === 'ar';
 
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required(t('required field')),
@@ -50,6 +53,8 @@ export default function TableNewEditForm({ currentTable }) {
     work_shift: Yup.string().nullable(),
     Measurement_type: Yup.string().required(t('required field')),
     Price_per_unit: Yup.string().required(t('required field')),
+    place_of_service: Yup.string(),
+    tax: Yup.string().required(t('required field')),
   });
 
   const defaultValues = useMemo(
@@ -150,18 +155,18 @@ export default function TableNewEditForm({ currentTable }) {
                 lang="en"
                 onChange={handleEnglishInputChange}
                 name="name_english"
-                label="name english"
+                label={t('name english')}
               />
               <RHFTextField
                 onChange={handleArabicInputChange}
                 name="name_arabic"
-                label="name arabic"
+                label={t('name arabic')}
               />
 
-              <RHFSelect name="work_shift" label="work_shift">
+              <RHFSelect name="work_shift" label={t('work shift')}>
                 {workShiftsData.map((work_shift, idx) => (
                   <MenuItem lang="ar" key={idx} value={work_shift._id}>
-                    {work_shift.name_english}
+                    {curLangAr ? work_shift.name_arabic : work_shift.name_english}
                   </MenuItem>
                 ))}
                 <Divider />
@@ -182,19 +187,37 @@ export default function TableNewEditForm({ currentTable }) {
                   <Iconify icon="material-symbols:new-window-sharp" />
                 </MenuItem>
               </RHFSelect>
-              <RHFSelect name="Measurement_type" label="Measurement type">
+              <RHFSelect name="Measurement_type" label={t('measurement type')}>
                 {measurmentTypesData.map((type, idx) => (
                   <MenuItem lang="ar" key={idx} value={type._id}>
-                    {type.name_english}
+                    {curLangAr ? type.name_arabic : type.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFTextField type="number" name="Price_per_unit" label="Price Per Unit" />
+              <RHFTextField type="number" name="Price_per_unit" label={t('price per unit')} />
+              <RHFSelect name="place_of_service" label={t('place of service')}>
+                <MenuItem lang="ar" value="clinic">
+                  {t('clinic')}
+                </MenuItem>
+                <MenuItem lang="ar" value="hospital">
+                  {t('hospital')}
+                </MenuItem>
+                <MenuItem lang="ar" value="online">
+                  {t('online')}
+                </MenuItem>
+              </RHFSelect>
+              <RHFSelect name="tax" label={t('tax')}>
+                {taxesData.map((one, idx) => (
+                  <MenuItem lang="ar" key={idx} value={one._id}>
+                    {curLangAr ? one.name_arabic : one.name_english} {one.percentage}%
+                  </MenuItem>
+                ))}
+              </RHFSelect>
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" tabIndex={-1} variant="contained" loading={isSubmitting}>
-                {!currentTable ? 'Create' : 'Save Changes'}
+                {!currentTable ? t('create') : t('save changes')}
               </LoadingButton>
             </Stack>
           </Card>

@@ -1,6 +1,4 @@
 import PropTypes from 'prop-types';
-import { enUS } from 'date-fns/locale';
-import { zonedTimeToUtc } from 'date-fns-tz';
 import { useState, useEffect, useCallback } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
@@ -16,14 +14,11 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useNewScreen } from 'src/hooks/use-new-screen';
-
-import { useUnitTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
@@ -32,7 +27,7 @@ import { useGetAppointmentTypes, useGetUSActiveServiceTypes } from 'src/api';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 // import { LoadingScreen } from 'src/components/loading-screen';
-import { RHFSelect, RHFCheckbox, RHFTextField } from 'src/components/hook-form';
+import { RHFSelect, RHFCheckbox, RHFTextField, RHFTimePicker } from 'src/components/hook-form';
 
 import NewEditDayAppointmentsDetails from './new-edit-days-appointments-details';
 
@@ -41,7 +36,6 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const { myunitTime } = useUnitTime();
 
   const proccessing = useBoolean();
 
@@ -416,149 +410,59 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                   spacing={2}
                   sx={{ width: '100%', mt: 2 }}
                 >
-                  <Controller
+                  <RHFTimePicker
                     name={`days_details[${index}].work_start_time`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <MobileTimePicker
-                        // ampmInClock
-                        closeOnSelect
-                        slots={{
-                          // toolbar:false,
-                          actionBar: 'cancel',
-                        }}
-                        locale={enUS}
-                        minutesStep="5"
-                        label={t('work start time')}
-                        format="hh:mm a"
-                        value={myunitTime(values.days_details[index]?.work_start_time)}
-                        onChange={(newValue) => {
-                          const selectedTime = zonedTimeToUtc(
-                            newValue,
-                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                              ?.unit_service?.country?.time_zone ||
-                              Intl.DateTimeFormat().resolvedOptions().timeZone
-                          );
-                          field.onChange(selectedTime);
-                          setValue(`days_details[${index}].work_end_time`, null);
-                          processDayDetails(index);
-                        }}
-                        slotProps={{
-                          textField: {
-                            size: 'small',
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                          },
-                        }}
-                      />
-                    )}
+                    label={t('work start time')}
+                    slotProps={{
+                      textField: {
+                        size: 'small',
+                        fullWidth: true,
+                      },
+                    }}
+                    onChange={() => {
+                      setValue(`days_details[${index}].work_end_time`, null);
+                      processDayDetails(index);
+                    }}
                   />
-                  <Controller
+                  <RHFTimePicker
                     name={`days_details[${index}].work_end_time`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <MobileTimePicker
-                        // ampmInClock
-                        closeOnSelect
-                        slots={{
-                          // toolbar:false,
-                          actionBar: 'cancel',
-                        }}
-                        minutesStep="5"
-                        label={t('work end time')}
-                        value={myunitTime(values.days_details[index]?.work_end_time)}
-                        onChange={(newValue) => {
-                          const selectedTime = zonedTimeToUtc(
-                            newValue,
-                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                              ?.unit_service?.country?.time_zone ||
-                              Intl.DateTimeFormat().resolvedOptions().timeZone
-                          );
-                          field.onChange(selectedTime);
-                          processDayDetails(index);
-                        }}
-                        slotProps={{
-                          textField: {
-                            size: 'small',
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                          },
-                        }}
-                      />
-                    )}
+                    label={t('work end time')}
+                    slotProps={{
+                      textField: {
+                        size: 'small',
+                        fullWidth: true,
+                      },
+                    }}
+                    onChange={() => {
+                      processDayDetails(index);
+                    }}
                   />
-                  <Controller
+                  <RHFTimePicker
                     name={`days_details[${index}].break_start_time`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <MobileTimePicker
-                        // ampmInClock
-                        closeOnSelect
-                        slots={{
-                          // toolbar:false,
-                          actionBar: 'cancel',
-                        }}
-                        minutesStep="5"
-                        label={t('break start time')}
-                        value={myunitTime(values.days_details[index]?.break_start_time)}
-                        onChange={(newValue) => {
-                          const selectedTime = zonedTimeToUtc(
-                            newValue,
-                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                              ?.unit_service?.country?.time_zone ||
-                              Intl.DateTimeFormat().resolvedOptions().timeZone
-                          );
-                          setValue(`days_details[${index}].break_end_time`, null);
-                          field.onChange(selectedTime);
-                          processDayDetails(index);
-                        }}
-                        slotProps={{
-                          textField: {
-                            size: 'small',
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                          },
-                        }}
-                      />
-                    )}
+                    label={t('break start time')}
+                    slotProps={{
+                      textField: {
+                        size: 'small',
+                        fullWidth: true,
+                      },
+                    }}
+                    onChange={() => {
+                      setValue(`days_details[${index}].work_end_time`, null);
+                      processDayDetails(index);
+                    }}
                   />
-                  <Controller
+                  <RHFTimePicker
                     name={`days_details[${index}].break_end_time`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <MobileTimePicker
-                        // ampmInClock
-                        closeOnSelect
-                        slots={{
-                          // toolbar:false,
-                          actionBar: 'cancel',
-                        }}
-                        minutesStep="5"
-                        label={t('break end time')}
-                        value={myunitTime(values.days_details[index]?.break_end_time)}
-                        onChange={(newValue) => {
-                          const selectedTime = zonedTimeToUtc(
-                            newValue,
-                            user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                              ?.unit_service?.country?.time_zone ||
-                              Intl.DateTimeFormat().resolvedOptions().timeZone
-                          );
-                          field.onChange(selectedTime);
-                          processDayDetails(index);
-                        }}
-                        slotProps={{
-                          textField: {
-                            size: 'small',
-                            fullWidth: true,
-                            error: !!error,
-                            helperText: error?.message,
-                          },
-                        }}
-                      />
-                    )}
+                    label={t('break end time')}
+                    slotProps={{
+                      textField: {
+                        size: 'small',
+                        fullWidth: true,
+                      },
+                    }}
+                    onChange={() => {
+                      processDayDetails(index);
+                    }}
                   />
                 </Stack>
                 <Stack display="flex" alignItems="flex-end">

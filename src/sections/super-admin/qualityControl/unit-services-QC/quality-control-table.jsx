@@ -131,14 +131,14 @@ export default function USsFeedbacks() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="unit of services Quality Control"
+        heading="units of service Quality Control"
         links={[
           {
             name: 'dashboard',
             href: paths.superadmin.root,
           },
           {
-            name: 'unit of services Quality Control',
+            name: 'units of service Quality Control',
           },
         ]}
         sx={{

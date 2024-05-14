@@ -216,7 +216,7 @@ export default function JobFilters({
   const renderUnitServices = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        unit of services
+        units of service
       </Typography>
       {unitServicesOptions.map((option, idx) => (
         <FormControlLabel

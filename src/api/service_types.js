@@ -93,7 +93,7 @@ export function useGetUSActiveServiceTypes(id) {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      serviceTypesData: data,
+      serviceTypesData: data || [],
       loading: isLoading,
       error,
       validating: isValidating,

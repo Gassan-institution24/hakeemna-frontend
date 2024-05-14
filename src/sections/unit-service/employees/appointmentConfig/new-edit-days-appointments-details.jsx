@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { zonedTimeToUtc } from 'date-fns-tz';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -15,15 +14,11 @@ import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
-import { useUnitTime } from 'src/utils/format-time';
-
-import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
-import { RHFSelect, RHFCheckbox } from 'src/components/hook-form';
+import { RHFSelect, RHFCheckbox, RHFTimePicker } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -37,10 +32,6 @@ export default function NewEditDayAppointmentsDetails({
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
-  const { myunitTime } = useUnitTime();
-
-  const { user } = useAuthContext();
 
   const { control, watch } = useFormContext();
 
@@ -134,41 +125,15 @@ export default function NewEditDayAppointmentsDetails({
                   ))}
                 </RHFSelect>
 
-                <Controller
+                <RHFTimePicker
                   name={`days_details[${ParentIndex}].appointments[${index}].start_time`}
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <MobileTimePicker
-                      // ampmInClock
-                      closeOnSelect
-                      slots={{
-                        // toolbar:false,
-                        actionBar: 'cancel'
-                      }}
-                      minutesStep="5"
-                      label={t('start time')}
-                      value={myunitTime(
-                        values.days_details[ParentIndex].appointments[index]?.start_time
-                      )}
-                      onChange={(newValue) => {
-                        const selectedTime = zonedTimeToUtc(
-                          newValue,
-                          user?.employee?.employee_engagements[user?.employee.selected_engagement]
-                            ?.unit_service?.country?.time_zone ||
-                          Intl.DateTimeFormat().resolvedOptions().timeZone
-                        );
-                        field.onChange(selectedTime);
-                      }}
-                      slotProps={{
-                        textField: {
-                          size: 'small',
-                          fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
-                        },
-                      }}
-                    />
-                  )}
+                  label={t('start time')}
+                  slotProps={{
+                    textField: {
+                      size: 'small',
+                      fullWidth: true,
+                    },
+                  }}
                 />
                 <Controller
                   name={`days_details[${ParentIndex}].appointments[${index}].service_types`}

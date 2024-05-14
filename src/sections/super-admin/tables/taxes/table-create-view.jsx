@@ -28,7 +28,7 @@ export default function TableCreateView() {
             name: 'Taxes',
             href: paths.superadmin.tables.taxes.root,
           },
-          { name: 'New Tax' },
+          { name: 'New' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
