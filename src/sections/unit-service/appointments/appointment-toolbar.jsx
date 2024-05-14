@@ -172,7 +172,6 @@ export default function AppointmentToolbar({
 
         <DatePicker
           label={t('date')}
-          onError={(err) => console.log(err)}
           value={filters.startDate}
           onChange={handleFilterStartDate}
           slotProps={{ textField: { fullWidth: true } }}
@@ -184,7 +183,6 @@ export default function AppointmentToolbar({
         <DatePicker
           label={t('end date')}
           value={filters.endDate}
-          onError={(err) => console.log(err)}
           onChange={handleFilterEndDate}
           slotProps={{
             textField: {

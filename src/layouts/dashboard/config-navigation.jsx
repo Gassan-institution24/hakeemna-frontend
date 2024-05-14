@@ -40,7 +40,6 @@ export function useNavData() {
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
       ?.employees_number || 10;
 
-  // console.log('employees_number', employees_number);
 
   // const handleLogout = useCallback(async () => {
   //   try {
@@ -103,6 +102,11 @@ export function useNavData() {
             path: paths.superadmin.subscriptions.root,
             icon: <Iconify icon="eos-icons:activate-subscriptions" />,
           },
+          // {
+          //   title: t('mail'),
+          //   path: paths.superadmin.mail,
+          //   icon: <Iconify icon="eos-icons:activate-subscriptions" />,
+          // },
           {
             title: t('quality control'),
             path: paths.superadmin.qualityControl.root,
@@ -244,27 +248,27 @@ export function useNavData() {
         path: paths.unitservice.tables.services.root,
         navItemId: 'USServicesNav',
       },
-      // {
-      //   show: checkAcl({
-      //     category: 'unit_service',
-      //     subcategory: 'management_tables',
-      //     acl: 'read',
-      //   }),
-      //   title: t('rooms'),
-      //   path: paths.unitservice.tables.rooms.root,
-      //   navItemId: 'USRoomsNav',
-      // },
-      // {
-      //   show: checkAcl({
-      //     category: 'unit_service',
-      //     subcategory: 'management_tables',
-      //     acl: 'read',
-      //   }),
-      //   title: t('activities'),
-      //   path: paths.unitservice.tables.activities.root,
-      //   navItemId: 'USActivitiesNav',
-      //   // icon: <Iconify icon="material-symbols:volunteer-activism" />,
-      // },
+      {
+        show: checkAcl({
+          category: 'unit_service',
+          subcategory: 'management_tables',
+          acl: 'read',
+        }),
+        title: t('rooms'),
+        path: paths.unitservice.tables.rooms.root,
+        navItemId: 'USRoomsNav',
+      },
+      {
+        show: checkAcl({
+          category: 'unit_service',
+          subcategory: 'management_tables',
+          acl: 'read',
+        }),
+        title: t('activities'),
+        path: paths.unitservice.tables.activities.root,
+        navItemId: 'USActivitiesNav',
+        // icon: <Iconify icon="material-symbols:volunteer-activism" />,
+      },
     ];
     const unitServiceItems = [
       {

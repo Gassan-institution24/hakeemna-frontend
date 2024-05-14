@@ -69,7 +69,6 @@ export default function OldMedicalReports() {
   const handleHover = (id) => {
     setHoveredButtonId(id);
   };
-  console.log(spName);
   const [filtersbyname, setFiltersbyname] = useState();
 
   const dataFiltered = applyFilter({
@@ -174,7 +173,6 @@ export default function OldMedicalReports() {
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
     });
-    console.log(data, 'data');
 
     if (ImgFiles) {
       ImgFiles.forEach((f) => formData.append('medicalreports[]', f));
@@ -547,8 +545,6 @@ function applyFilter({ inputData, filtersbyname }) {
     return inputData;
   }
 
-  console.log(inputData);
-  console.log(filtersbyname);
   if (filtersbyname) {
     inputData = inputData?.filter(
       (data) =>

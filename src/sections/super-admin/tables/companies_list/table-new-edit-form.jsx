@@ -92,15 +92,6 @@ export default function TableNewEditForm({ currentSelected }) {
   //   }
   // };
 
-  const handleEnglishInputChange = (event) => {
-    // Validate the input based on English language rules
-    // const englishRegex = /^[a-zA-Z0-9\s,@#$!*_\-&^%.()]*$/; // Only allow letters and spaces
-
-    // if (englishRegex.test(event.target.value)) {
-    methods.setValue(event.target.name, event.target.value, { shouldValidate: true });
-    // }
-  };
-
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentSelected) {

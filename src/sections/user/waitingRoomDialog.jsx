@@ -43,7 +43,6 @@ export default function WatingRoomDialog({ employeesData }) {
 
   const { user } = useAuthContext();
   const { appointmentsData } = useGetPatientOneAppointments(user?.patient?._id);
-  console.log(appointmentsData, 'appointmentsData');
   const skipfunction = async () => {
     try {
       await axios.patch(`api/appointments/${appointmentsData._id}`, {

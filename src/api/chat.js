@@ -135,14 +135,14 @@ export function useGetSAUnreadMsgs(userId) {
 // ----------------------------------------------------------------------
 
 export async function sendMessage(conversationId, messageData) {
-  const CONVERSATIONS_URL = [endpoints.chat, { params: { endpoint: 'conversations' } }];
+  // const CONVERSATIONS_URL = [endpoints.chat, { params: { endpoint: 'conversations' } }];
 
-  const CONVERSATION_URL = [
-    endpoints.chat,
-    {
-      params: { conversationId, endpoint: 'conversation' },
-    },
-  ];
+  // const CONVERSATION_URL = [
+  //   endpoints.chat,
+  //   {
+  //     params: { conversationId, endpoint: 'conversation' },
+  //   },
+  // ];
 
   /**
    * Work on server

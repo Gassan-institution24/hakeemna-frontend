@@ -38,7 +38,6 @@ import Walktour, { useWalktour } from 'src/components/walktour';
 
 export default function WalktourView() {
   const theme = useTheme();
-  console.log(document.getElementById('nav-section-vertical'));
 
   const walktour = useWalktour({
     defaultRun: true,

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Paper from '@mui/material/Paper';
+// import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Timeline from '@mui/lab/Timeline';
 import TimelineDot from '@mui/lab/TimelineDot';
@@ -20,39 +20,38 @@ import Scrollbar from 'src/components/scrollbar';
 // ----------------------------------------------------------------------
 
 export default function OrderDetailsHistory({ history }) {
-  console.log('history', history);
-  const renderSummary = (
-    <Stack
-      spacing={2}
-      component={Paper}
-      variant="outlined"
-      sx={{
-        p: 2.5,
-        minWidth: 260,
-        flexShrink: 0,
-        borderRadius: 2,
-        typography: 'body2',
-        borderStyle: 'dashed',
-      }}
-    >
-      <Stack spacing={0.5}>
-        <Box sx={{ color: 'text.disabled' }}>Order time</Box>
-        {fDateTime(history?.date)}
-      </Stack>
-      <Stack spacing={0.5}>
-        <Box sx={{ color: 'text.disabled' }}>Payment time</Box>
-        {fDateTime(history?.date)}
-      </Stack>
-      <Stack spacing={0.5}>
-        <Box sx={{ color: 'text.disabled' }}>Delivery time for the carrier</Box>
-        {fDateTime(history?.date)}
-      </Stack>
-      <Stack spacing={0.5}>
-        <Box sx={{ color: 'text.disabled' }}>Completion time</Box>
-        {fDateTime(history?.date)}
-      </Stack>
-    </Stack>
-  );
+  // const renderSummary = (
+  //   <Stack
+  //     spacing={2}
+  //     component={Paper}
+  //     variant="outlined"
+  //     sx={{
+  //       p: 2.5,
+  //       minWidth: 260,
+  //       flexShrink: 0,
+  //       borderRadius: 2,
+  //       typography: 'body2',
+  //       borderStyle: 'dashed',
+  //     }}
+  //   >
+  //     <Stack spacing={0.5}>
+  //       <Box sx={{ color: 'text.disabled' }}>Order time</Box>
+  //       {fDateTime(history?.date)}
+  //     </Stack>
+  //     <Stack spacing={0.5}>
+  //       <Box sx={{ color: 'text.disabled' }}>Payment time</Box>
+  //       {fDateTime(history?.date)}
+  //     </Stack>
+  //     <Stack spacing={0.5}>
+  //       <Box sx={{ color: 'text.disabled' }}>Delivery time for the carrier</Box>
+  //       {fDateTime(history?.date)}
+  //     </Stack>
+  //     <Stack spacing={0.5}>
+  //       <Box sx={{ color: 'text.disabled' }}>Completion time</Box>
+  //       {fDateTime(history?.date)}
+  //     </Stack>
+  //   </Stack>
+  // );
 
   const renderTimeline = (
     <Timeline

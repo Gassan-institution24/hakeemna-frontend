@@ -47,6 +47,7 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 import AppointmentsRow from '../appointment-row';
 import PatientHistoryToolbar from '../appointment-toolbar';
@@ -120,7 +121,7 @@ export default function AppointmentsView({ employeeData }) {
     canceled,
     finished,
     pending,
-    // loading,
+    loading,
   } = useGetEmployeeAppointments({
     id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?._id,
     page: table.page || 0,
@@ -252,7 +253,6 @@ export default function AppointmentsView({ employeeData }) {
         });
         enqueueSnackbar(t('delayed successfully!'));
       } catch (error) {
-        console.log('error', error);
         // error emitted in backend
         enqueueSnackbar(
           curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
@@ -408,6 +408,11 @@ export default function AppointmentsView({ employeeData }) {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+  if (loading) {
+    return(
+      <LoadingScreen />
+    )
+  }
 
   return (
     <>

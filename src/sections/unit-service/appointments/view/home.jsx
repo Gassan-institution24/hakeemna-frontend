@@ -37,7 +37,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
-// import { LoadingScreen } from 'src/components/loading-screen';
+import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
   useTable,
@@ -118,7 +118,7 @@ export default function AppointmentsView({ employeeData }) {
     canceled,
     finished,
     pending,
-    // loading,
+    loading,
   } = useGetUSAppointments({
     id: user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id,
     page: table.page || 0,
@@ -435,9 +435,9 @@ export default function AppointmentsView({ employeeData }) {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
-  // if (loading) {
-  //   return <LoadingScreen />;
-  // }
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

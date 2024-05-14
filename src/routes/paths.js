@@ -108,6 +108,7 @@ export const paths = {
   superadmin: {
     root: ROOTS.SUPERADMIN,
     ourCalendar: `${ROOTS.SUPERADMIN}/ourcalender`,
+    mail: `${ROOTS.SUPERADMIN}/mail`,
     unitservices: {
       root: `${ROOTS.SUPERADMIN}/unitservices`,
       list: `${ROOTS.SUPERADMIN}/unitservices/list`,

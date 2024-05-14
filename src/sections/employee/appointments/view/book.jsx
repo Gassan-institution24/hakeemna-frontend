@@ -38,12 +38,12 @@ import { useUnitTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import Iconify from 'src/components/iconify';
-// import { LoadingScreen } from 'src/components/loading-screen';
 import { useSnackbar } from 'src/components/snackbar';
 // // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFSelect, RHFTextField, RHFDatePicker, RHFPhoneNumber } from 'src/components/hook-form';
+import { LoadingScreen } from 'src/components/loading-screen';
 
 import BookDetails from '../book-details';
 import PatientsFound from '../patients-found';
@@ -225,6 +225,12 @@ export default function TableCreateView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  if (loading) {
+    return(
+      <LoadingScreen />
+    )
+  }
 
   return (
     <Container maxWidth="xl">

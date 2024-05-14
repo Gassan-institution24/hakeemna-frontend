@@ -42,6 +42,7 @@ import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 // // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { LoadingScreen } from 'src/components/loading-screen';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFSelect, RHFTextField, RHFDatePicker, RHFPhoneNumber } from 'src/components/hook-form';
 
@@ -225,6 +226,12 @@ export default function TableCreateView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  if (loading) {
+    return(
+      <LoadingScreen />
+    )
+  }
 
   return (
     <Container maxWidth="xl">

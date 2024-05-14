@@ -36,7 +36,6 @@ export default function FamilyMembers() {
   const age = today.getFullYear() - dob.getFullYear();
 
   const { enqueueSnackbar } = useSnackbar();
-  // console.log(user?.patient, 'user');
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';

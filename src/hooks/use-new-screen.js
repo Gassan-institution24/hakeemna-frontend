@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 
 export function useNewScreen() {
   const [newWin, setNewWin] = useState([]);
-  console.log('newWin', newWin);
 
   useEffect(() => {
     const handleClose = () => {
