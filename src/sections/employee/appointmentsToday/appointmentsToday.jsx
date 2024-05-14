@@ -1,49 +1,59 @@
 import { useState, useCallback } from 'react';
 
-import { Tab, Tabs } from '@mui/material';
+import { Container } from '@mui/system';
+import TableRow from '@mui/material/TableRow';
+import TableHead from '@mui/material/TableHead';
+import TableCell from '@mui/material/TableCell';
+import { alpha, useTheme } from '@mui/material/styles';
+import TableContainer from '@mui/material/TableContainer';
+import { Tab, Tabs, Table, TableBody, IconButton } from '@mui/material';
 
+import { fTime, fMonth } from 'src/utils/format-time';
+
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetEmployeeTodayAppointment } from 'src/api';
+
+import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import Scrollbar from 'src/components/scrollbar';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 export default function AppointmentsToday() {
+  const { user } = useAuthContext();
+
+  const { appointmentsData } = useGetEmployeeTodayAppointment(
+    user?.employee?.employee_engagements?.[user.employee.selected_engagement]._id
+  );
+  const theme = useTheme();
+
+  console.log(appointmentsData);
   const TABS = [
     {
       value: 'one',
-      icon: <Iconify icon="solar:phone-bold" width={24} />,
-      label: 'Item One',
+      label: 'Appointments Today',
+      color: 'info',
+      count: appointmentsData?.length,
     },
     {
       value: 'two',
-      icon: <Iconify icon="solar:heart-bold" width={24} />,
-      label: 'Item Two',
+      label: 'Coming',
+      color: 'success',
+      count: appointmentsData?.length,
     },
     {
       value: 'three',
-      icon: <Iconify icon="eva:headphones-fill" width={24} />,
-      label: 'Item Three',
-      disabled: true,
+      label: 'Waiting',
+      color: 'warning',
+      count: appointmentsData?.length,
     },
     {
       value: 'four',
-      icon: <Iconify icon="eva:headphones-fill" width={24} />,
-      label: 'Item Four',
-    },
-    {
-      value: 'five',
-      icon: <Iconify icon="eva:headphones-fill" width={24} />,
-      label: 'Item Five',
-      disabled: true,
-    },
-    {
-      value: 'six',
-      icon: <Iconify icon="eva:headphones-fill" width={24} />,
-      label: 'Item Six',
-    },
-    {
-      value: 'seven',
-      icon: <Iconify icon="eva:headphones-fill" width={24} />,
-      label: 'Item Seven',
+      label: 'Finished',
+      color: 'error',
+      count: appointmentsData?.length,
     },
   ];
+
   const [currentTab, setCurrentTab] = useState('one');
 
   const handleChangeTab = useCallback((event, newValue) => {
@@ -51,24 +61,76 @@ export default function AppointmentsToday() {
   }, []);
 
   return (
-    // <Box
-    //   sx={{
-    //     py: 5,
-    //     bgcolor: (theme) => (theme.palette.mode === 'light' ? 'grey.200' : 'grey.800'),
-    //   }}
-    // >
-      <Tabs value={currentTab} onChange={handleChangeTab}>
-        {TABS.slice(0, 3).map((tab) => (
+    <Container>
+      <CustomBreadcrumbs
+        heading="Appointments Today"
+        links={[
+          {
+            name: user.userName,
+          },
+        ]}
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
+      <Tabs
+        value={currentTab}
+        onChange={handleChangeTab}
+        sx={{
+          px: 2.5,
+          boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+        }}
+      >
+        {TABS.map((tab, idx) => (
           <Tab
-            iconPosition="end"
-            key={tab.value}
-            icon={tab.icon}
-            label={tab.label}
+            key={idx}
             value={tab.value}
-            // disabled={tab.disabled}
+            label={tab.label}
+            iconPosition="end"
+            icon={<Label color={tab.color}>{tab.count}</Label>}
           />
         ))}
       </Tabs>
-    // </Box>
+      <TableContainer sx={{ mt: 3, mb: 2 }}>
+        <Scrollbar>
+          <Table sx={{ minWidth: 400 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Date</TableCell>
+                <TableCell>Time</TableCell>
+                <TableCell>Patient</TableCell>
+                <TableCell>Patient Note</TableCell>
+                <TableCell>Options</TableCell>
+              </TableRow>
+            </TableHead>
+            {appointmentsData?.map((info) => (
+              <TableBody sx={{ borderBottom: 1 }}>
+                <TableRow>
+                  <TableCell>{fMonth(info?.start_time)}</TableCell>
+                  <TableCell>{fTime(info?.start_time)}</TableCell>
+                  <TableCell>{info?.patient?.name_english}</TableCell>
+                  <TableCell>{info?.note}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      sx={{
+                        p: 2,
+                      }}
+                      onClick={() => alert('test')}
+                    >
+                      <Iconify
+                        width={25}
+                        sx={{ cursor: 'pointer', color: '#2788EF' }}
+                        icon="teenyicons:next-solid"
+                      />
+                      <span style={{ fontSize: 18 }}>Proccess</span>
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            ))}
+          </Table>
+        </Scrollbar>
+      </TableContainer>
+    </Container>
   );
 }

@@ -407,6 +407,7 @@ export const endpoints = {
       one: ({ id, page = 0, sortBy = 'code', rowsPerPage = 100, order = 'asc', filters }) =>
         `/api/appointments/employee/${id}?page=${page}&&sortBy=${sortBy}&&rowsPerPage=${rowsPerPage}&&order=${order}&&status=${filters?.status}&&appointype=${filters?.types}&&startDate=${filters?.startDate}&&endDate=${filters?.endDate}&&group=${filters?.group}&&shift=${filters?.shift}&&startTime=${filters?.startTime}&&endTime=${filters?.endTime}`,
       nearst: (id) => `/api/appointments/nearst/${id}`,
+      employeetodayappointment: (id) => `/api/appointments/employeetodayappointment/${id}`,
       select: ({ id, startDate, appointmentType }) =>
         `/api/appointments/employeeselect/${id}?startDate=${startDate}&&appointmentType=${appointmentType}`,
     },
