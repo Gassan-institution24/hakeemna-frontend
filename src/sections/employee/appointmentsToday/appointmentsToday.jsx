@@ -27,11 +27,31 @@ export default function AppointmentsToday() {
   const { appointmentsData, refetch } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[0]?.unit_service?._id
   );
-  
-  // console.log(appointmentsData,"fdldkldfkldf");
+  // console.log(appointmentsData, 'fdldkldfkldf');
   const theme = useTheme();
+  const callPatient = (mobileNumber) => {
+    if ('contacts' in navigator && 'ContactsManager' in window) {
+      navigator.contacts.select(['phoneNumbers']).then((contact) => {
+        if (contact) {
+          const phoneNumber = contact.phoneNumbers[0].value;
+          window.location.href = `tel:${phoneNumber}`;
+        }
+      });
+    } else {
+      // If not supported, show an error message
+      enqueueSnackbar('Your browser does not support initiating phone calls.', {
+        variant: 'error',
+      });
+    }
+  };
 
-  const arivedyes = async (Data) => { 
+  const handleCallClick = (mobileNumber) => {
+  console.log(mobileNumber, 'fdldkldfkldf');
+
+    callPatient(mobileNumber);
+  };
+
+  const arivedyes = async (Data) => {
     try {
       await axiosInstance.patch(`${endpoints.appointments.one(Data)}`, {
         arrived: true,
@@ -87,7 +107,7 @@ export default function AppointmentsToday() {
       value: 'three',
       label: 'Waiting',
       color: 'warning',
-      count: appointmentsData?.length
+      count: appointmentsData?.length,
     },
     {
       value: 'four',
@@ -179,7 +199,7 @@ export default function AppointmentsToday() {
                     )}
                   </TableCell>
                   <TableCell>
-                    {info.coming === true ? (
+                    {info.arrived === true ? (
                       <IconButton
                         sx={{
                           p: 2,
@@ -213,7 +233,7 @@ export default function AppointmentsToday() {
                       sx={{
                         p: 2,
                       }}
-                      onClick={() => alert('test')}
+                      onClick={() => handleCallClick(info?.patient?.mobile_num1)}
                     >
                       <Iconify
                         width={20}
