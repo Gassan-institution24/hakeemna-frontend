@@ -38,16 +38,13 @@ export default function AppointmentsToday() {
         }
       });
     } else {
-      // If not supported, show an error message
-      enqueueSnackbar('Your browser does not support initiating phone calls.', {
-        variant: 'error',
-      });
+      alert(
+        'Your browser does not support initiating phone calls. Please use a different device or contact the patient using an alternative method.'
+      );
     }
   };
 
   const handleCallClick = (mobileNumber) => {
-  console.log(mobileNumber, 'fdldkldfkldf');
-
     callPatient(mobileNumber);
   };
 
