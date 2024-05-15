@@ -2,11 +2,10 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
-// import { useMockedUser } from 'src/hooks/use-mocked-user';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import { Badge, Divider, Tooltip, MenuItem, Typography, IconButton } from '@mui/material';
+import { Badge, Divider, Tooltip, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { usePathname } from 'src/routes/hooks';
@@ -19,7 +18,7 @@ import { useGetUnreadMsgs } from 'src/api/chat';
 import { useLocales, useTranslate } from 'src/locales';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 
-// import Logo from 'src/components/logo';
+import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import Doclogo from 'src/components/logo/doc.png';
@@ -27,16 +26,15 @@ import { NavSectionVertical } from 'src/components/nav-section';
 import Walktour, { useWalktour } from 'src/components/walktour';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
+import Services from './Srrvices.png';
 import { NAV } from '../config-layout';
 import TicketPopover from './ticketPopover';
 import { useNavData } from './config-navigation';
 import StartupCreating from './startup-creating';
-// import NavToggleButton from '../common/nav-toggle-button';
-
 // ----------------------------------------------------------------------
 
 export default function NavVertical({ openNav, onCloseNav }) {
-  const { user, loading } = useAuthContext();
+  const { user } = useAuthContext();
 
   const pathname = usePathname();
 
@@ -50,7 +48,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
   const checkAcl = useAclGuard();
 
-  const { messages, refetch } = useGetUnreadMsgs(user._id)
+  const { messages, refetch } = useGetUnreadMsgs(user._id);
 
   const USData =
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service;
@@ -133,7 +131,8 @@ export default function NavVertical({ openNav, onCloseNav }) {
         disableBeacon: true,
         content: (
           <Typography sx={{ color: 'text.secondary' }}>
-            we recommend to add Rooms names - or numbers - to your system in order to organize your unit of service account and to work with entrance management
+            we recommend to add Rooms names - or numbers - to your system in order to organize your
+            unit of service account and to work with entrance management
           </Typography>
         ),
       },
@@ -143,7 +142,8 @@ export default function NavVertical({ openNav, onCloseNav }) {
         disableBeacon: true,
         content: (
           <Typography sx={{ color: 'text.secondary' }}>
-            creating acticvities allows you to benefit from more features in our system like : entrance management
+            creating acticvities allows you to benefit from more features in our system like :
+            entrance management
           </Typography>
         ),
       },
@@ -193,7 +193,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-      // scrollDuration={500}
+        // scrollDuration={500}
       />
       {isEmployee && (
         <Box
@@ -304,34 +304,47 @@ export default function NavVertical({ openNav, onCloseNav }) {
           subcategory: 'management_tables',
           acl: 'create',
         }) && (
-            <>
-              <Divider />
-              <MenuItem
-                lang="ar"
-                sx={{ fontSize: 13, color: 'secondary.dark' }}
-                onClick={() => setDialog(true)}
-              >
-                {t('create first time tables')}
-              </MenuItem>
-            </>
-          )}
+          <>
+            <Divider />
+            <MenuItem
+              lang="ar"
+              sx={{ fontSize: 13, color: 'secondary.dark' }}
+              onClick={() => setDialog(true)}
+            >
+              {t('create first time tables')}
+            </MenuItem>
+          </>
+        )}
       </CustomPopover>
-      {user.role !== 'superadmin' && <Box
-        sx={{
-          position: 'fixed',
-          bottom: { md: 30, xs: 10 },
-          right: { md: 30, xs: 10 },
-          zIndex: 99,
-        }}
-      >
-        <IconButton onClick={() => setTicketDialog(true)}>
-          <Badge badgeContent={messages?.reduce((acc, chat) => acc + chat.messages.length, 0)} color="error">
-            <Iconify sx={{ color: 'primary.main' }} width="70px" icon="mdi:customer-service" />
+      {user.role !== 'superadmin' && (
+        <Box
+          sx={{
+            position: 'fixed',
+            bottom: { md: -30, xs: 10 },
+            right: { md: -20, xs: -40 },
+            zIndex: 99,
+          }}
+        >
+          {/* <IconButton onClick={() => setTicketDialog(true)}> */}
+          <Badge
+            badgeContent={messages?.reduce((acc, chat) => acc + chat.messages.length, 0)}
+            color="error"
+            onClick={() => setTicketDialog(true)}
+          >
+            {/* <Iconify sx={{ color: 'primary.main' }} width="70px" icon="mdi:customer-service" /> */}
+            <Image src={Services} width="210px" />
           </Badge>
-        </IconButton>
-        <TicketPopover messagesLength={messages} refetchLenght={refetch} open={ticketDialog} onClose={() => setTicketDialog(false)} />
-        <StartupCreating open={dialog} onClose={()=>setDialog(false)} />
-      </Box>}
+          {/* </IconButton> */}
+
+          <TicketPopover
+            messagesLength={messages}
+            refetchLenght={refetch}
+            open={ticketDialog}
+            onClose={() => setTicketDialog(false)}
+          />
+          <StartupCreating open={dialog} onClose={() => setDialog(false)} />
+        </Box>
+      )}
     </>
   );
 }
