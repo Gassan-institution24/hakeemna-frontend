@@ -87,7 +87,7 @@ export default function AppointmentsToday() {
       value: 'three',
       label: 'Waiting',
       color: 'warning',
-      count: appointmentsData?.length,
+      count: appointmentsData?.length
     },
     {
       value: 'four',
