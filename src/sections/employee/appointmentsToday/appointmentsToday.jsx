@@ -13,7 +13,7 @@ import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUsAppointmentsToday } from 'src/api';
+import { useGetUsAppointmentsToday, useGetUsAppointmentsComingpatients } from 'src/api';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -27,7 +27,11 @@ export default function AppointmentsToday() {
   const { appointmentsData, refetch } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[0]?.unit_service?._id
   );
-  // console.log(appointmentsData, 'fdldkldfkldf');
+  const { comingPatientData } = useGetUsAppointmentsComingpatients(
+    user?.employee?.employee_engagements?.[0]?.unit_service?._id
+  );
+
+  console.log(comingPatientData, 'fdldkldfkldf');
   const theme = useTheme();
   const callPatient = (mobileNumber) => {
     if ('contacts' in navigator && 'ContactsManager' in window) {
@@ -58,12 +62,6 @@ export default function AppointmentsToday() {
       enqueueSnackbar('Patient Arrived', { variant: 'success' });
     } catch (error) {
       console.error(error.message);
-      // enqueueSnackbar(
-      //   curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
-      //   {
-      //     variant: 'error',
-      //   }
-      // );
       enqueueSnackbar('Call to make sure', { variant: 'success' });
     }
   };
@@ -71,6 +69,32 @@ export default function AppointmentsToday() {
     try {
       await axiosInstance.patch(`${endpoints.appointments.one(Data)}`, {
         arrived: false,
+      });
+
+      refetch();
+      enqueueSnackbar('Patient Arrived', { variant: 'success' });
+    } catch (error) {
+      console.error(error.message);
+      enqueueSnackbar('Call to make sure', { variant: 'error' });
+    }
+  };
+  const comingyes = async (Data) => {
+    try {
+      await axiosInstance.patch(`${endpoints.appointments.one(Data)}`, {
+        coming: true,
+      });
+
+      refetch();
+      enqueueSnackbar('Patient Arrived', { variant: 'success' });
+    } catch (error) {
+      console.error(error.message);
+      enqueueSnackbar('Call to make sure', { variant: 'success' });
+    }
+  };
+  const comingno = async (Data) => {
+    try {
+      await axiosInstance.patch(`${endpoints.appointments.one(Data)}`, {
+        coming: false,
       });
 
       refetch();
@@ -93,12 +117,14 @@ export default function AppointmentsToday() {
       label: 'Appointments Today',
       color: 'info',
       count: appointmentsData?.length,
+      data: appointmentsData,
     },
     {
       value: 'two',
       label: 'Coming',
       color: 'success',
-      count: appointmentsData?.length,
+      count: comingPatientData?.length,
+      data: comingPatientData,
     },
     {
       value: 'three',
@@ -113,7 +139,6 @@ export default function AppointmentsToday() {
       count: appointmentsData?.length,
     },
   ];
-
   const [currentTab, setCurrentTab] = useState('one');
 
   const handleChangeTab = useCallback((event, newValue) => {
@@ -164,13 +189,36 @@ export default function AppointmentsToday() {
                 <TableCell>Options</TableCell>
               </TableRow>
             </TableHead>
-            {appointmentsData?.map((info, index) => (
+            {TABS.find((tab) => tab.value === currentTab)?.data?.map((info, index) => (
               <TableBody key={index} sx={{ borderBottom: 1 }}>
                 <TableRow key={index}>
                   <TableCell>{fTime(info?.start_time)}</TableCell>
                   <TableCell>{info?.patient?.name_english}</TableCell>
                   <TableCell>{info?.note}</TableCell>
-                  <TableCell>{info.coming ? 'Yes' : 'No'}</TableCell>
+                  <TableCell>
+                    {info?.coming === true ? (
+                      'YES'
+                    ) : (
+                      <>
+                        <Button
+                          sx={{
+                            p: 2,
+                          }}
+                          onClick={() => comingyes(info?._id)}
+                        >
+                          Yes
+                        </Button>
+                        <Button
+                          sx={{
+                            p: 2,
+                          }}
+                          onClick={() => comingno(info?._id)}
+                        >
+                          No
+                        </Button>
+                      </>
+                    )}
+                  </TableCell>
                   <TableCell>
                     {info?.arrived === true ? (
                       'YES'
