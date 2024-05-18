@@ -162,13 +162,13 @@ export default function AppointmentsView({ employeeData }) {
     // { value: 'all', label: t('all'), color: 'default', count: all },
     {
       value: 'processing',
-      label: t('upcoming'),
+      label: t('current appointments'),
       color: 'info',
       count: processing,
     },
     {
       value: 'pending',
-      label: t('pending'),
+      label: t('Booked Appointments'),
       color: 'warning',
       count: pending,
     },

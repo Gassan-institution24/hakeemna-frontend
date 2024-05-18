@@ -351,6 +351,12 @@ export const endpoints = {
     one: (id) => `/api/history/${id}`,
     patient: (id) => `/api/history/patient/${id}`,
   },
+  entranceManagement: {
+    all: '/api/entrance',
+    one: (id) => `/api/entrance/${id}`,
+    inwating: `/api/entrance/inwating`,
+    finishedAppointments: `/api/entrance/finishedAppointments`,
+  },
   oldpatient: {
     all: '/api/oldpatientsdata',
     details: '/api/oldpatientsdata/details',
