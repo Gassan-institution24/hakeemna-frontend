@@ -47,6 +47,7 @@ export * from './patients';
 export * from './payment_methods';
 export * from './rooms';
 export * from './history';
+export * from './entranceManagement';
 export * from './service_types';
 export * from './specialities';
 export * from './stakeholder_types';
