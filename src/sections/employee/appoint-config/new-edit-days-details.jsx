@@ -447,7 +447,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
                       },
                     }}
                     onChange={() => {
-                      setValue(`days_details[${index}].work_end_time`, null);
+                      setValue(`days_details[${index}].break_end_time`, null);
                       processDayDetails(index);
                     }}
                   />
