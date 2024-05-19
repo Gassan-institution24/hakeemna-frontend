@@ -203,8 +203,8 @@ export default function CompaniesTableView() {
           />
         )}
 
-        <TableContainer>
-          <Scrollbar>
+        <TableContainer >
+          <Scrollbar >
             <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
               <TableHeadCustom
                 order={table.order}

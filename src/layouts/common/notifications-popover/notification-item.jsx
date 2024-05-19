@@ -34,7 +34,7 @@ export default function NotificationItem({ notification, handleClick }) {
       }
 
       await axios[method.toLowerCase()](route, body);
-
+      window.location.reload();
     } catch (error) {
       console.error('Error while accepting notification:', error);
     }
