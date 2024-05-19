@@ -91,7 +91,7 @@ export default function AppointmentsView({ employeeData }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const table = useTable({ defaultOrderBy: 'code' });
+  const table = useTable({ defaultOrderBy: 'start_time' });
 
   const { user } = useAuthContext();
 
@@ -546,7 +546,7 @@ export default function AppointmentsView({ employeeData }) {
                         <Iconify icon="mdi:timer-sync" />
                       </IconButton>
                     </Tooltip>
-                    {/* {dataFiltered
+                    {dataFiltered
                       .filter((row) => table.selected.includes(row._id))
                       .some((data) => data.status === 'canceled') ? (
                       <Tooltip title="uncancel all">
@@ -560,7 +560,7 @@ export default function AppointmentsView({ employeeData }) {
                           <Iconify icon="mdi:bell-cancel" />
                         </IconButton>
                       </Tooltip>
-                    )} */}
+                    )}
                   </>
                 )
               }

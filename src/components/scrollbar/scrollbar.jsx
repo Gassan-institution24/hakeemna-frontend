@@ -20,9 +20,22 @@ const Scrollbar = forwardRef(({ children, sx, ...other }, ref) => {
     );
   }
 
+  const handleMouseWheel = (event) => {
+    // Calculate the horizontal scroll amount based on the deltaX property
+    const delta = -event.deltaY || event.deltaX * 20;
+  
+    // Find the underlying div element and scroll it horizontally
+    const scrollElement = event.currentTarget.querySelector('div');
+    scrollElement.scrollTo({
+      left: scrollElement.scrollLeft - delta,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <StyledRootScrollbar>
       <StyledScrollbar
+        onScroll={handleMouseWheel}
         scrollableNodeProps={{
           ref,
         }}

@@ -31,6 +31,7 @@ import { NAV } from '../config-layout';
 import TicketPopover from './ticketPopover';
 import { useNavData } from './config-navigation';
 import StartupCreating from './startup-creating';
+import NavToggleButton from '../common/nav-toggle-button';
 // ----------------------------------------------------------------------
 
 export default function NavVertical({ openNav, onCloseNav }) {
@@ -177,11 +178,11 @@ export default function NavVertical({ openNav, onCloseNav }) {
     <Stack
       sx={{
         height: 1,
-        '& .simplebar-content': {
-          height: 1,
-          display: 'flex',
-          flexDirection: 'column',
-        },
+        // '& .simplebar-content': {
+        //   height: 1,
+        //   display: 'flex',
+        //   flexDirection: 'column',
+        // },
       }}
     >
       <Walktour
@@ -260,7 +261,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
           boxShadow: (theme) => theme.customShadows.z8,
         }}
       >
-        {/* <NavToggleButton  /> */}
+        <NavToggleButton />
 
         {lgUp ? (
           <Scrollbar

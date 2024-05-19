@@ -74,7 +74,7 @@ export default function TableNewEditForm({ currentTable }) {
       if (currentTable) {
         await axiosInstance.patch(endpoints.measurment_types.one(currentTable._id), data);
       } else {
-        await axiosInstance.post(endpoints.measurment_types.ones, data);
+        await axiosInstance.post(endpoints.measurment_types.all, data);
       }
       reset();
       // if (response.status.includes(200, 304)) {

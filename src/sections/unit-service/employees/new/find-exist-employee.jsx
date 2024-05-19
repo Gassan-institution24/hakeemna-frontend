@@ -93,10 +93,10 @@ export default function TableNewEditForm() {
   const handleEmployment = async (row) => {
     try {
       const SelectedUser = await axios.get(endpoints.auth.users, { params: { employee: row._id } });
-      await axios.post(`${endpoints.notifications.all}/invite`, {
+      const data = {
         user: SelectedUser.data[0]?._id,
-        title: `<p><strong>${user?.employee?.name_english}</strong> want to add you to his institution <strong>${unitServiceData?.name_english}</strong> as an employee</p>`,
-        title_arabic: `<p><strong>${user?.employee?.name_arabic}</strong> يريد اظافتك كموظف في منشأته <strong>${unitServiceData?.name_arabic}</strong></p>`,
+        title: `${user?.employee?.name_english} want to add you to his institution ${unitServiceData?.name_english} as an employee `,
+        title_arabic: `${user?.employee?.name_arabic} يريد اظافتك كموظف في منشأته ${unitServiceData?.name_arabic}`,
         category: 'invite',
         type: 'invite',
         onAccept: {
@@ -107,7 +107,9 @@ export default function TableNewEditForm() {
             employee: row._id,
           },
         },
-      });
+      }
+      console.log('dataaa',data)
+      await axios.post(`${endpoints.notifications.all}/invite`, data);
       enqueueSnackbar(t('invitation sent!'));
     } catch (error) {
       // error emitted in backend
