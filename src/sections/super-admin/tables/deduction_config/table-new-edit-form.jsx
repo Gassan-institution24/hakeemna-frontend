@@ -16,7 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
-import { useGetEmployees, useGetActiveUnitservices, useGetActiveServiceTypes } from 'src/api';
+import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
@@ -26,21 +26,18 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 export default function TableNewEditForm({ currentTable }) {
   const router = useRouter();
 
-  const { unitservicesData } = useGetActiveUnitservices();
-  const { employeesData } = useGetEmployees();
-  const { serviceTypesData } = useGetActiveServiceTypes();
+  const { countriesData } = useGetCountries();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
     name_arabic: Yup.string().required('Name is required'),
     name_english: Yup.string().required('Name is required'),
-    unit_service: Yup.string(),
-    Employee: Yup.string().nullable(),
-    Service: Yup.string().nullable(),
-    Place_of_service: Yup.string(),
+    country: Yup.string().required('country is required'),
+    city: Yup.string().nullable(),
     type: Yup.string(),
     percentage: Yup.number(),
+    amount: Yup.number(),
     Comment: Yup.string(),
   });
 
@@ -48,12 +45,11 @@ export default function TableNewEditForm({ currentTable }) {
     () => ({
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      unit_service: currentTable?.unit_service?._id || null,
-      Employee: currentTable?.Employee?._id || null,
-      Service: currentTable?.Service?._id || null,
-      Place_of_service: currentTable?.Place_of_service || '',
+      country: currentTable?.country?._id || null,
+      city: currentTable?.city?._id || null,
       type: currentTable?.type || '',
-      percentage: currentTable?.percentage || '',
+      percentage: currentTable?.percentage || 0,
+      amount: currentTable?.amount || 0,
       Comment: currentTable?.Comment || '',
     }),
     [currentTable]
@@ -64,6 +60,7 @@ export default function TableNewEditForm({ currentTable }) {
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
+
   const handleArabicInputChange = (event) => {
     // Validate the input based on Arabic language rules
     const arabicRegex = /^[\u0600-\u06FF0-9\s!@#$%^&*_\-()]*$/; // Range for Arabic characters
@@ -88,6 +85,10 @@ export default function TableNewEditForm({ currentTable }) {
     formState: { isSubmitting },
   } = methods;
 
+  const values = methods.watch()
+
+  const {tableData} = useGetCountryCities(values.country)
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentTable) {
@@ -96,13 +97,7 @@ export default function TableNewEditForm({ currentTable }) {
         await axiosInstance.post(`${endpoints.deductions.all}`, data);
       }
       reset();
-      // if (response.status.includes(200, 304)) {
       enqueueSnackbar(currentTable ? 'Update success!' : 'Create success!');
-      // } else {
-      //   enqueueSnackbar('Please try again later!', {
-      //     variant: 'error',
-      //   });
-      // }
       router.push(paths.superadmin.tables.deductionconfig.root);
     } catch (error) {
       console.error(error);
@@ -114,12 +109,11 @@ export default function TableNewEditForm({ currentTable }) {
     reset({
       name_arabic: currentTable?.name_arabic || '',
       name_english: currentTable?.name_english || '',
-      unit_service: currentTable?.unit_service?._id || null,
-      Employee: currentTable?.Employee?._id || null,
-      Service: currentTable?.Service?._id || null,
-      Place_of_service: currentTable?.Place_of_service || '',
+      country: currentTable?.country?._id || null,
+      city: currentTable?.city?._id || null,
       type: currentTable?.type || '',
-      percentage: currentTable?.percentage || '',
+      percentage: currentTable?.percentage || 0,
+      amount: currentTable?.amount || 0,
       Comment: currentTable?.Comment || '',
     });
   }, [currentTable]);
@@ -151,24 +145,17 @@ export default function TableNewEditForm({ currentTable }) {
                 label="name arabic"
               />
 
-              <RHFSelect name="unit_service" label="unit of service">
-                {unitservicesData.map((unit_service, idx) => (
-                  <MenuItem lang="ar" key={idx} value={unit_service._id}>
-                    {unit_service.name_english}
+              <RHFSelect name="country" label="country">
+                {countriesData.map((one, idx) => (
+                  <MenuItem lang="ar" key={idx} value={one._id}>
+                    {one.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="Employee" label="Employee">
-                {employeesData.map((Employee, idx) => (
-                  <MenuItem lang="ar" key={idx} value={Employee._id}>
-                    {Employee.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
-              <RHFSelect name="Service" label="Service">
-                {serviceTypesData.map((type, idx) => (
-                  <MenuItem lang="ar" key={idx} value={type._id}>
-                    {type.name_english}
+              <RHFSelect name="city" label="city">
+                {tableData.map((one, idx) => (
+                  <MenuItem lang="ar" key={idx} value={one._id}>
+                    {one.name_english}
                   </MenuItem>
                 ))}
               </RHFSelect>
@@ -180,8 +167,8 @@ export default function TableNewEditForm({ currentTable }) {
                   from sales{' '}
                 </MenuItem>
               </RHFSelect>
-              <RHFTextField name="Place_of_service" label="Place of service" />
               <RHFTextField type="number" name="percentage" label="percentage %" />
+              <RHFTextField type="number" name="amount" label="amount $" />
               <RHFTextField name="Comment" label="Comment" />
             </Box>
 

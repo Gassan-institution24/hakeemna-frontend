@@ -2,12 +2,12 @@ import { useFormContext } from 'react-hook-form';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
+// import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useResponsive } from 'src/hooks/use-responsive';
+// import { useResponsive } from 'src/hooks/use-responsive';
 
 // import { _addressBooks } from 'src/_mock';
 
@@ -22,13 +22,13 @@ export default function InvoiceNewEditAddress() {
   const {
     watch,
     setValue,
-    formState: { errors },
+    // formState: { errors },
   } = useFormContext();
 
   const {user} = useAuthContext()
   const myUS = user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
 
-  const mdUp = useResponsive('up', 'md');
+  // const mdUp = useResponsive('up', 'md');
 
   const values = watch();
 
@@ -42,31 +42,22 @@ export default function InvoiceNewEditAddress() {
     <>
       <Stack
         spacing={{ xs: 3, md: 5 }}
-        direction={{ xs: 'column', md: 'row' }}
-        divider={
-          <Divider
-            flexItem
-            orientation={mdUp ? 'vertical' : 'horizontal'}
-            sx={{ borderStyle: 'dashed' }}
-          />
-        }
+        // direction={{ xs: 'column', md: 'row' }}
+        // divider={
+        //   <Divider
+        //     flexItem
+        //     orientation={mdUp ? 'vertical' : 'horizontal'}
+        //     sx={{ borderStyle: 'dashed' }}
+        //   />
+        // }
         sx={{ p: 3 }}
       >
         <Stack sx={{ width: 1 }}>
-          <Stack direction="row" alignItems="center" sx={{ mb: 1 }}>
-            <Typography variant="h6" sx={{ color: 'text.disabled', flexGrow: 1 }}>
-              From:
-            </Typography>
-
-            <IconButton onClick={from.onTrue}>
-              <Iconify icon="solar:pen-bold" />
-            </IconButton>
-          </Stack>
 
           <Stack spacing={1}>
-            <Typography variant="subtitle2">{invoiceFrom?.name}</Typography>
-            <Typography variant="body2">{invoiceFrom?.fullAddress}</Typography>
-            <Typography variant="body2"> {invoiceFrom?.phoneNumber}</Typography>
+            <Typography variant="h4">{invoiceFrom?.name || myUS.name_english}</Typography>
+            <Typography variant="body2">{invoiceFrom?.fullAddress || myUS.address}</Typography>
+            <Typography variant="body2"> {invoiceFrom?.phoneNumber || myUS.phone}</Typography>
           </Stack>
         </Stack>
 
@@ -83,9 +74,9 @@ export default function InvoiceNewEditAddress() {
 
           {/* {invoiceTo ? ( */}
             <Stack spacing={1}>
-              <Typography variant="subtitle2">{invoiceTo?.name_english || myUS.name_english}</Typography>
-              <Typography variant="body2">{invoiceTo?.address || myUS.address}</Typography>
-              <Typography variant="body2"> {invoiceTo?.phone || myUS.phone}</Typography>
+              <Typography variant="subtitle2">{invoiceTo?.name_english }</Typography>
+              <Typography variant="body2">{invoiceTo?.address }</Typography>
+              <Typography variant="body2"> {invoiceTo?.phone }</Typography>
             </Stack>
           {/* ) : (
             <Typography typography="caption" sx={{ color: 'error.main' }}>
@@ -94,7 +85,7 @@ export default function InvoiceNewEditAddress() {
           )} */}
         </Stack>
       </Stack>
-
+{/* 
       <AddressListDialog
         title="Customers"
         open={from.value}
@@ -111,9 +102,9 @@ export default function InvoiceNewEditAddress() {
             New
           </Button>
         }
-      />
+      /> */}
 
-      <AddressListDialog
+      {/* <AddressListDialog
         title="Customers"
         open={to.value}
         onClose={to.onFalse}
@@ -129,7 +120,7 @@ export default function InvoiceNewEditAddress() {
             New
           </Button>
         }
-      />
+      /> */}
     </>
   );
 }
