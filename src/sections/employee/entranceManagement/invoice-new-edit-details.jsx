@@ -16,24 +16,23 @@ import { fCurrency } from 'src/utils/format-number';
 // import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
-import { RHFAutocomplete, RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import { useGetUSActiveServiceTypes } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import { useLocales } from 'src/locales';
+// import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditDetails() {
-  const { currentLang } = useLocales();
-  const curLangAr = currentLang.value === 'ar';
+  // const { currentLang } = useLocales();
+  // const curLangAr = currentLang.value === 'ar';
 
   const { user } = useAuthContext();
   const { serviceTypesData } = useGetUSActiveServiceTypes(
     user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.unit_service?._id
   );
-  // const { taxesData } = useGetTaxes();
 
-  const { control, setValue, watch, resetField } = useFormContext();
+  const { control, setValue, watch } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -42,15 +41,35 @@ export default function InvoiceNewEditDetails() {
 
   const values = watch();
 
+  const subtotalOnRow = values.items.map((item) => item.subtotal);
   const totalOnRow = values.items.map((item) => item.total);
 
-  const subTotal = sum(totalOnRow);
+  const subTotal = sum(subtotalOnRow);
 
-  const totalAmount = subTotal * ((100 - values.taxes) / 100) - values.discount;
+  const totalAmount = sum(totalOnRow);
 
   useEffect(() => {
     setValue('totalAmount', totalAmount);
   }, [setValue, totalAmount]);
+
+  useEffect(() => {
+    const total = values.items?.reduce((acc, one) => acc + (one.tax / 100) * one.subtotal, 0);
+    setValue('taxes', total);
+
+    const deductiontotal = values.items?.reduce(
+      (acc, one) => acc + (one.deduction / 100) * one.subtotal,
+      0
+    );
+    setValue('deduction', deductiontotal);
+
+    const newTotal = values.items?.reduce((acc, one) => {
+      const selected = serviceTypesData?.find((service) => service._id === one.service);
+      return one.price !== Number(selected?.Price_per_unit) && selected
+        ? acc + (Number(selected.Price_per_unit) - one.price) * one.quantity
+        : acc;
+    }, 0);
+    setValue('discount', newTotal);
+  }, [totalAmount, setValue, values.items, serviceTypesData]);
 
   const handleAdd = () => {
     append({
@@ -67,16 +86,16 @@ export default function InvoiceNewEditDetails() {
     remove(index);
   };
 
-  const handleClearService = useCallback(
-    (index) => {
-      resetField(`items[${index}].quantity`);
-      resetField(`items[${index}].price`);
-      resetField(`items[${index}].subtotal`);
-      resetField(`items[${index}].tax`);
-      resetField(`items[${index}].total`);
-    },
-    [resetField]
-  );
+  // const handleClearService = useCallback(
+  //   (index) => {
+  //     resetField(`items[${index}].quantity`);
+  //     resetField(`items[${index}].price`);
+  //     resetField(`items[${index}].subtotal`);
+  //     resetField(`items[${index}].tax`);
+  //     resetField(`items[${index}].total`);
+  //   },
+  //   [resetField]
+  // );
 
   const handleSelectService = useCallback(
     (index, option) => {
@@ -87,24 +106,17 @@ export default function InvoiceNewEditDetails() {
         values.items.map((item) => item.quantity * item.price)[index]
       );
       setValue(`items[${index}].tax`, selected?.tax?.percentage || 0);
+      setValue(`items[${index}].deduction`, selected?.deduction?.percentage || 0);
       setValue(
         `items[${index}].total`,
-        values.items.map((item) => item.subtotal * ((100 - item.tax) / 100))[index]
+        values.items.map(
+          (item) =>
+            item.subtotal * ((100 + item.tax) / 100) + item.subtotal * (item.deduction / 100)
+        )[index]
       );
     },
     [setValue, values.items, serviceTypesData]
   );
-
-  // const handleSelectTax = useCallback(
-  //   (index, option) => {
-  //     setValue(`items[${index}].tax`, taxesData.find((tax) => tax._id === option)?.percentage);
-  //     setValue(
-  //       `items[${index}].total`,
-  //       values.items.map((item) => item.subtotal * ((100 - item.tax)/100))[index]
-  //     );
-  //   },
-  //   [setValue, values.items, taxesData]
-  // );
 
   const handleChangeQuantity = useCallback(
     (event, index) => {
@@ -115,7 +127,10 @@ export default function InvoiceNewEditDetails() {
       );
       setValue(
         `items[${index}].total`,
-        values.items.map((item) => item.subtotal * ((100 - item.tax) / 100))[index]
+        values.items.map(
+          (item) =>
+            item.subtotal * ((100 + item.tax) / 100) + item.subtotal * (item.deduction / 100)
+        )[index]
       );
     },
     [setValue, values.items]
@@ -130,7 +145,10 @@ export default function InvoiceNewEditDetails() {
       );
       setValue(
         `items[${index}].total`,
-        values.items.map((item) => item.subtotal * ((100 - item.tax) / 100))[index]
+        values.items.map(
+          (item) =>
+            item.subtotal * ((100 + item.tax) / 100) + item.subtotal * (item.deduction / 100)
+        )[index]
       );
     },
     [setValue, values.items]
@@ -142,11 +160,6 @@ export default function InvoiceNewEditDetails() {
       alignItems="flex-end"
       sx={{ mt: 3, textAlign: 'right', typography: 'body2' }}
     >
-      <Stack direction="row">
-        <Box sx={{ color: 'text.secondary' }}>Subtotal</Box>
-        <Box sx={{ width: 160, typography: 'subtitle2' }}>{fCurrency(subTotal) || '-'}</Box>
-      </Stack>
-
       <Stack direction="row">
         <Box sx={{ color: 'text.secondary' }}>Discount</Box>
         <Box
@@ -160,10 +173,18 @@ export default function InvoiceNewEditDetails() {
       </Stack>
 
       <Stack direction="row">
+        <Box sx={{ color: 'text.secondary' }}>Subtotal</Box>
+        <Box sx={{ width: 160, typography: 'subtitle2' }}>{fCurrency(subTotal) || '-'}</Box>
+      </Stack>
+
+      <Stack direction="row">
         <Box sx={{ color: 'text.secondary' }}>Taxes</Box>
-        <Box sx={{ width: 160, ...(values.taxes && { color: 'error.main' }) }}>
-          {values.taxes ? `- ${fCurrency(subTotal * (values.taxes / 100))}` : '-'}
-        </Box>
+        <Box sx={{ width: 160 }}>{values.taxes ? fCurrency(values.taxes) : '-'}</Box>
+      </Stack>
+
+      <Stack direction="row">
+        <Box sx={{ color: 'text.secondary' }}>Deduction</Box>
+        <Box sx={{ width: 160 }}>{values.deduction ? fCurrency(values.deduction) : '-'}</Box>
       </Stack>
 
       <Stack direction="row" sx={{ typography: 'subtitle1' }}>
@@ -304,26 +325,29 @@ export default function InvoiceNewEditDetails() {
                   },
                 }}
               />
-              {/* <RHFSelect
-                name={`items[${index}].tax`}
+              <RHFTextField
+                disabled
                 size="small"
-                label="tax"
-                InputLabelProps={{ shrink: true }}
-                sx={{
-                  maxWidth: { md: 160 },
+                type="number"
+                name={`items[${index}].deduction`}
+                label="deduction"
+                placeholder="00"
+                // value={values.items[index].total === 0 ? '' : values.items[index].total.toFixed(2)}
+                // onChange={(event) => handleChangePrice(event, index)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Box sx={{ typography: 'subtitle2', color: 'text.disabled' }}>%</Box>
+                    </InputAdornment>
+                  ),
                 }}
-              >
-                {taxesData.map((tax) => (
-                  <MenuItem
-                    key={tax._id}
-                    value={tax._id}
-                    onClick={() => handleSelectTax(index, tax._id)}
-                  >
-                    {tax.name_english}
-                  </MenuItem>
-                ))}
-              </RHFSelect> */}
-
+                sx={{
+                  maxWidth: { md: 150 },
+                  [`& .${inputBaseClasses.input}`]: {
+                    textAlign: { md: 'right' },
+                  },
+                }}
+              />
               <RHFTextField
                 disabled
                 size="small"
@@ -347,16 +371,10 @@ export default function InvoiceNewEditDetails() {
                   },
                 }}
               />
-            <Button
-              size="small"
-              color="error"
-              startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
-              onClick={() => handleRemove(index)}
-            >
-              Remove
-            </Button>
+              <Button size="small" color="error" onClick={() => handleRemove(index)}>
+                <Iconify icon="solar:trash-bin-trash-bold" />
+              </Button>
             </Stack>
-
           </Stack>
         ))}
       </Stack>
@@ -378,13 +396,14 @@ export default function InvoiceNewEditDetails() {
           Add Item
         </Button>
 
-        <Stack
+        {/* <Stack
           spacing={2}
           justifyContent="flex-end"
           direction={{ xs: 'column', md: 'row' }}
           sx={{ width: 1 }}
         >
           <RHFTextField
+            disabled
             size="small"
             label="Discount"
             name="discount"
@@ -393,13 +412,14 @@ export default function InvoiceNewEditDetails() {
           />
 
           <RHFTextField
+            disabled
             size="small"
-            label="Taxes (%)"
+            label="Tax"
             name="taxes"
             type="number"
             sx={{ maxWidth: { md: 120 } }}
           />
-        </Stack>
+        </Stack> */}
       </Stack>
 
       {renderTotal}

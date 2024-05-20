@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { Container } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { paths } from 'src/routes/paths';
@@ -53,6 +54,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     ),
     // not required
     taxes: Yup.number(),
+    deduction: Yup.number(),
     status: Yup.string(),
     discount: Yup.number(),
     shipping: Yup.number(),
@@ -67,6 +69,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       createDate: currentInvoice?.createDate || new Date(),
       dueDate: currentInvoice?.dueDate || null,
       taxes: currentInvoice?.taxes || 0,
+      deduction: currentInvoice?.deduction || 0,
       shipping: currentInvoice?.shipping || 0,
       status: currentInvoice?.status || 'draft',
       discount: currentInvoice?.discount || 0,
@@ -74,8 +77,8 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       invoiceTo: currentInvoice?.invoiceTo || null,
       items: currentInvoice?.items || [
         {
-        //   title: '',
-        //   description: '',
+          //   title: '',
+          //   description: '',
           service: null,
           quantity: 1,
           price: 0,
@@ -131,36 +134,38 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
   });
 
   return (
-    <FormProvider methods={methods}>
-      <Card>
-        <InvoiceNewEditAddress />
+    <Container maxWidth="xl">
+      <FormProvider methods={methods}>
+        <Card>
+          <InvoiceNewEditAddress />
 
-        <InvoiceNewEditStatusDate />
+          <InvoiceNewEditStatusDate />
 
-        <InvoiceNewEditDetails />
-      </Card>
+          <InvoiceNewEditDetails />
+        </Card>
 
-      <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
-        <LoadingButton
-          color="inherit"
-          size="large"
-          variant="outlined"
-          loading={loadingSave.value && isSubmitting}
-          onClick={handleSaveAsDraft}
-        >
-          Save as Draft
-        </LoadingButton>
+        <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
+          <LoadingButton
+            color="inherit"
+            size="large"
+            variant="outlined"
+            loading={loadingSave.value && isSubmitting}
+            onClick={handleSaveAsDraft}
+          >
+            Save as Draft
+          </LoadingButton>
 
-        <LoadingButton
-          size="large"
-          variant="contained"
-          loading={loadingSend.value && isSubmitting}
-          onClick={handleCreateAndSend}
-        >
-          {currentInvoice ? 'Update' : 'Create'} & Send
-        </LoadingButton>
-      </Stack>
-    </FormProvider>
+          <LoadingButton
+            size="large"
+            variant="contained"
+            loading={loadingSend.value && isSubmitting}
+            onClick={handleCreateAndSend}
+          >
+            {currentInvoice ? 'Update' : 'Create'} & Send
+          </LoadingButton>
+        </Stack>
+      </FormProvider>
+    </Container>
   );
 }
 

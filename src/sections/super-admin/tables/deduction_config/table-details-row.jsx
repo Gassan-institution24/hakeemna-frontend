@@ -29,12 +29,12 @@ export default function TableDetailsRow({
     code,
     name_english,
     name_arabic,
-    unit_service,
-    Employee,
-    Service,
+    country,
+    city,
     type,
     Comment,
     percentage,
+    amount,
     status,
     created_at,
     user_creation,
@@ -68,9 +68,9 @@ export default function TableDetailsRow({
           color: '#3F54EB',
           // textDecoration: 'underline',
         }}
-        onClick={() => setFilters({ ...filters, name: unit_service?.name_english })}
+        onClick={() => setFilters({ ...filters, name: country?.name_english })}
       >
-        {unit_service?.name_english}
+        {country?.name_english}
       </TableCell>
       <TableCell
         align="center"
@@ -79,20 +79,9 @@ export default function TableDetailsRow({
           color: '#3F54EB',
           // textDecoration: 'underline',
         }}
-        onClick={() => setFilters({ ...filters, name: Employee?.name_english })}
+        onClick={() => setFilters({ ...filters, name: city?.name_english })}
       >
-        {Employee?.name_english}
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          cursor: 'pointer',
-          color: '#3F54EB',
-          // textDecoration: 'underline',
-        }}
-        onClick={() => setFilters({ ...filters, name: Service?.name_english })}
-      >
-        {Service?.name_english}
+        {city?.name_english}
       </TableCell>
       <TableCell
         align="center"
@@ -107,6 +96,7 @@ export default function TableDetailsRow({
       </TableCell>
       <TableCell align="center">{Comment}</TableCell>
       <TableCell align="center">{percentage}</TableCell>
+      <TableCell align="center">{amount}</TableCell>
       <TableCell align="center">
         <Label
           variant="soft"

@@ -101,7 +101,7 @@ export default function TableNewEditForm() {
 
   const onSubmit = handleSubmit(async (submitData) => {
     try {
-      axios.patch(endpoints.work_groups.employee.acl(emid), { acl: submitData });
+      await axios.patch(endpoints.work_groups.employee.acl(emid), { acl: submitData });
       enqueueSnackbar(t('updated successfully!'));
       //   router.push(paths.superadmin.subscriptions.root);
     } catch (error) {

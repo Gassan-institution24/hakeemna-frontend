@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -9,7 +9,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Divider, MenuItem, Typography } from '@mui/material';
+import { Checkbox, Divider, FormControlLabel, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 // import { useRouter } from 'src/routes/hooks';
@@ -20,7 +20,12 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetUSActiveWorkShifts, useGetActiveMeasurmentTypes, useGetTaxes } from 'src/api';
+import {
+  useGetUSActiveWorkShifts,
+  useGetActiveMeasurmentTypes,
+  useGetTaxes,
+  useGetDeductions,
+} from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
@@ -33,8 +38,12 @@ export default function TableNewEditForm({ currentTable }) {
 
   const { user } = useAuthContext();
 
+  const [showTax, setShowTax] = useState(false);
+  const [showDeduction, setShowDeduction] = useState(false);
+
   const { measurmentTypesData } = useGetActiveMeasurmentTypes();
   const { taxesData } = useGetTaxes();
+  const { deductionsData } = useGetDeductions();
   const { workShiftsData } = useGetUSActiveWorkShifts(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
@@ -54,7 +63,8 @@ export default function TableNewEditForm({ currentTable }) {
     Measurement_type: Yup.string().required(t('required field')),
     Price_per_unit: Yup.string().required(t('required field')),
     place_of_service: Yup.string(),
-    tax: Yup.string().required(t('required field')),
+    tax: Yup.string(),
+    deduction: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -66,6 +76,8 @@ export default function TableNewEditForm({ currentTable }) {
       work_shift: currentTable?.work_shift?._id || null,
       Measurement_type: currentTable?.Measurement_type?._id || null,
       Price_per_unit: currentTable?.Price_per_unit || '',
+      tax: currentTable?.tax || '',
+      deduction: currentTable?.deduction || '',
     }),
     [currentTable, user]
   );
@@ -133,6 +145,8 @@ export default function TableNewEditForm({ currentTable }) {
       work_shift: currentTable?.work_shift?._id || null,
       Measurement_type: currentTable?.Measurement_type?._id || null,
       Price_per_unit: currentTable?.Price_per_unit || '',
+      tax: currentTable?.tax || '',
+      deduction: currentTable?.deduction || '',
     });
   }, [currentTable]);
   /* eslint-enable */
@@ -206,13 +220,35 @@ export default function TableNewEditForm({ currentTable }) {
                   {t('online')}
                 </MenuItem>
               </RHFSelect>
-              <RHFSelect name="tax" label={t('tax')}>
-                {taxesData.map((one, idx) => (
-                  <MenuItem lang="ar" key={idx} value={one._id}>
-                    {curLangAr ? one.name_arabic : one.name_english} {one.percentage}%
-                  </MenuItem>
-                ))}
-              </RHFSelect>
+              <FormControlLabel
+                sx={{ ml: 2 }}
+                control={<Checkbox onChange={() => setShowTax((prev) => !prev)} />}
+                label={t('tax')}
+              />
+              <FormControlLabel
+                sx={{ ml: 2 }}
+                control={<Checkbox onChange={() => setShowDeduction((prev) => !prev)} />}
+                label={t('deduction')}
+              />
+              {showTax && (
+                <RHFSelect name="tax" label={t('tax')}>
+                  {taxesData.map((one, idx) => (
+                    <MenuItem lang="ar" key={idx} value={one._id}>
+                      {curLangAr ? one.name_arabic : one.name_english} {one.percentage}%
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
+
+              {showDeduction && (
+                <RHFSelect name="deduction" label={t('deduction')}>
+                  {deductionsData.map((one, idx) => (
+                    <MenuItem lang="ar" key={idx} value={one._id}>
+                      {curLangAr ? one.name_arabic : one.name_english} {one.percentage}%
+                    </MenuItem>
+                  ))}
+                </RHFSelect>
+              )}
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
