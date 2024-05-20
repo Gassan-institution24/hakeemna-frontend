@@ -9,9 +9,9 @@ import { RHFSelect, RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditStatusDate() {
-  const { control, watch } = useFormContext();
+  const { control } = useFormContext();
 
-  const values = watch();
+  // const values = watch();
 
   return (
     <Stack
@@ -19,12 +19,12 @@ export default function InvoiceNewEditStatusDate() {
       direction={{ xs: 'column', sm: 'row' }}
       sx={{ p: 3, bgcolor: 'background.neutral' }}
     >
-      <RHFTextField
+      {/* <RHFTextField
         disabled
         name="invoiceNumber"
         label="Invoice number"
         value={values.invoiceNumber}
-      />
+      /> */}
 
       <RHFSelect
         fullWidth
