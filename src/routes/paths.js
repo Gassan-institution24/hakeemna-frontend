@@ -509,6 +509,7 @@ export const paths = {
     acl: `${ROOTS.SUPERADMIN}/us/acl`,
     oldPatient: `${ROOTS.SUPERADMIN}/us/oldpatient`,
     departments: {
+      processingPage: `${ROOTS.SUPERADMIN}/us/processingpage`,
       root: `${ROOTS.SUPERADMIN}/us/departments`,
       new: `${ROOTS.SUPERADMIN}/us/departments/new`,
       info: (id) => `${ROOTS.SUPERADMIN}/us/departments/${id}/info`,
