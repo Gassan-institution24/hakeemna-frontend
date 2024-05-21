@@ -294,12 +294,17 @@ export function useNavData() {
         icon: <Iconify icon="fluent:people-20-filled" />,
         navItemId: 'USEmployeesNav',
       },
-      // {
-      // show: checkAcl({ category: 'unit_service', subcategory: 'accounting', acl: 'read' }),
-      // title: t('access control'),
-      //   path: paths.unitservice.acl,
-      //   icon: <Iconify icon="mdi:account-secure" />,
-      // },
+      {
+        show: checkAcl({ category: 'unit_service', subcategory: 'permissions', acl: 'read' }),
+        title: t('permissions'),
+        path: paths.unitservice.acl.root,
+        icon: <Iconify icon="mdi:account-secure" />,
+        children: [
+          { title: t('unit of service level'), path: paths.unitservice.acl.unitservice },
+          { title: t('departments level'), path: paths.unitservice.acl.department },
+          { title: t('work groups level'), path: paths.unitservice.acl.workgroups },
+        ],
+      },
       {
         show: checkAcl({ category: 'unit_service', subcategory: 'appointments', acl: 'read' }),
         title: t('appointments'),
