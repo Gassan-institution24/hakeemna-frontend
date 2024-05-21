@@ -132,7 +132,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
       .required(t('required field'))
       .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
     mobile_num: Yup.string(),
-    speciality: Yup.string(),
+    speciality: Yup.string().nullable(),
     gender: Yup.string().required(t('required field')),
     birth_date: Yup.date().required(t('required field')),
     Bachelor_year_graduation: Yup.number(),

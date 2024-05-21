@@ -12,6 +12,8 @@ import USWorkGroupPermissionsBarLayout from 'src/layouts/US-workgroup-permission
 import DepartmentWorkGroupPermissionsBarLayout from 'src/layouts/department-workgroup-permission-minibar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
+import DepartmentsNavLayout from 'src/layouts/departments-topbar';
+import WorkGroupsNavLayout from 'src/layouts/workgroups-topbar';
 
 // ----------------------------------------------------------------------
 // DEPARTMENTS
@@ -199,6 +201,20 @@ const OldPatientPage = lazy(() => import('src/pages/unit-service/old-patient/hom
 // PATIENTS
 const PatientsPage = lazy(() => import('src/pages/unit-service/patients/patients_table'));
 const PatientInfoPage = lazy(() => import('src/pages/unit-service/patients/patient-profile'));
+
+// PERMISSIONS
+const USPermissions = lazy(() =>
+  import('src/pages/unit-service/permissions/unitservice-permission')
+);
+const DepartmentsListForPermission = lazy(() =>
+  import('src/pages/unit-service/permissions/departments-list')
+);
+const DepartmentsPermissions = lazy(() =>
+  import('src/pages/unit-service/permissions/departments-permission')
+);
+const WorkGroupsPermissions = lazy(() =>
+  import('src/pages/unit-service/permissions/workgroup-permission')
+);
 // ----------------------------------------------------------------------
 
 export const unitServiceDashboardRoutes = [
@@ -220,6 +236,52 @@ export const unitServiceDashboardRoutes = [
       // { path: '', element: < /> },
       // { path: 'tour', element: <WalkTourPage /> },
       // { path: 'chat', element: <ChatPage /> },
+      {
+        path: 'acl',
+        element: (
+          <EmployeeMinBarLayout>
+            <Outlet />
+          </EmployeeMinBarLayout>
+        ),
+        children: [
+          // { element: <DepartmentsPermissionsPage />, index: true },
+          {
+            path: 'unitservice',
+            element: <USPermissions />,
+            children: [{ path: ':id', element: <USPermissions /> }],
+          },
+          {
+            path: 'departments',
+            element: (
+              <DepartmentsNavLayout>
+                <DepartmentsPermissions />
+              </DepartmentsNavLayout>
+            ),
+            children: [
+              {
+                path: ':depId',
+                element: <DepartmentsPermissions />,
+                children: [{ path: ':emid', element: <DepartmentsPermissions /> }],
+              },
+            ],
+          },
+          {
+            path: 'workgroups',
+            element: (
+              <WorkGroupsNavLayout>
+                <WorkGroupsPermissions />
+              </WorkGroupsNavLayout>
+            ),
+            children: [
+              {
+                path: ':wgid',
+                element: <WorkGroupsPermissions />,
+                children: [{ path: ':emid', element: <WorkGroupsPermissions /> }],
+              },
+            ],
+          },
+        ],
+      },
       {
         path: 'departments',
         children: [
@@ -280,18 +342,6 @@ export const unitServiceDashboardRoutes = [
                     ],
                   },
                   { path: ':acid/edit', element: <DepartmentsEditWorkGroupsPage /> },
-                ],
-              },
-              {
-                path: 'acl',
-                element: (
-                  <DepartmentPermissionsBarLayout>
-                    <Outlet />
-                  </DepartmentPermissionsBarLayout>
-                ),
-                children: [
-                  { element: <DepartmentsPermissionsPage />, index: true },
-                  { path: ':emid', element: <DepartmentsEmployeePermissionsPage /> },
                 ],
               },
               { path: 'appointments', element: <DepartmentsAppointmentsPage /> },
