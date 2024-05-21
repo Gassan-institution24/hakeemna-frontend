@@ -16,6 +16,9 @@ import {
   TableContainer,
 } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import { fTime } from 'src/utils/format-time';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -36,15 +39,16 @@ export default function AppointmentsToday() {
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
+  const router = useRouter();
 
-  const { appointmentsData, refetch } = useGetUsAppointmentsToday(
+  const { appointmentsData } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[0]?.unit_service?._id
   );
   const { comingPatientData } = useGetUsAppointmentsComingpatients(
     user?.employee?.employee_engagements?.[0]?.unit_service?._id
   );
   const { entranceData } = useGetEntranceManagement();
-  const { finishedAppointmentsData } = useGetfinishedAppointments();
+  const { finishedAppointmentsData, refetch } = useGetfinishedAppointments();
 
   const TABS = [
     {
@@ -80,24 +84,25 @@ export default function AppointmentsToday() {
   const [currentTab, setCurrentTab] = useState('one');
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
 
-  const isEntranceTab = TABS.find((tab) => tab.value === currentTab)?.data === entranceData;
+  const currentTabData = TABS.find((tab) => tab.value === currentTab);
 
-  const updateArrivalStatus = async (id, status) => {
+  const goToProcessingPage = async (id) => {
     try {
-      await axiosInstance.patch(`${endpoints.appointments.one(id)}`, { arrived: status });
-      refetch();
-      enqueueSnackbar(`Patient Arrived: ${status}`, { variant: 'success' });
+      router.push(`${paths.unitservice.departments.processingPage}/${id}`);
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Error updating status', { variant: 'error' });
     }
   };
 
-  const updateComingStatus = async (id, status) => {
+  const updateStatus = async (id, status, type) => {
     try {
-      await axiosInstance.patch(`${endpoints.appointments.one(id)}`, { coming: status });
+      const endpoint = type === 'arrived' ? 'arrived' : 'coming';
+      await axiosInstance.patch(`${endpoints.appointments.one(id)}`, { [endpoint]: status });
       refetch();
-      enqueueSnackbar(`Patient Coming: ${status}`, { variant: 'success' });
+      enqueueSnackbar(`Patient ${type === 'arrived' ? 'Arrived' : 'Coming'}: ${status}`, {
+        variant: 'success',
+      });
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Error updating status', { variant: 'error' });
@@ -111,7 +116,10 @@ export default function AppointmentsToday() {
         patient_note: data?.note,
         start_time: new Date().toISOString(),
         wating: true,
+        Appointment_date: data?.start_time,
       });
+      refetch();
+      enqueueSnackbar('Appointment started', { variant: 'success' });
     } catch (error) {
       console.error(error.message);
       enqueueSnackbar('Error starting appointment', { variant: 'error' });
@@ -131,6 +139,59 @@ export default function AppointmentsToday() {
         'Your browser does not support initiating phone calls. Please use a different device or contact the patient using an alternative method.'
       );
     }
+  };
+
+  const renderOptions = (info) => {
+    if (currentTab === 'three') {
+      return (
+        <IconButton sx={{ p: 2 }} onClick={() => goToProcessingPage(info?._id)}>
+          <Iconify
+            width={20}
+            sx={{ cursor: 'pointer', mr: 1, color: 'info.main' }}
+            icon="mage:next-fill"
+          />
+          <span style={{ fontSize: 18 }}>Next</span>
+        </IconButton>
+      );
+    }
+
+    if (currentTab === 'four') {
+      return (
+        <IconButton sx={{ p: 2 }} onClick={() => alert('test')}>
+          <Iconify
+            width={20}
+            sx={{ cursor: 'pointer', mr: 1, color: 'info.main' }}
+            icon="carbon:view"
+          />
+          <span style={{ fontSize: 16 }}>View</span>
+        </IconButton>
+      );
+    }
+
+    return (
+      <>
+        <IconButton
+          sx={{ p: 2 }}
+          onClick={() => info.arrived && startAppointment(info)}
+          disabled={!info.arrived}
+        >
+          <Iconify
+            width={20}
+            sx={{ cursor: 'pointer', mr: 1, color: '#2788EF' }}
+            icon="teenyicons:next-solid"
+          />
+          <span style={{ fontSize: 16 }}>Start</span>
+        </IconButton>
+        <IconButton sx={{ p: 2 }} onClick={() => callPatient(info?.patient?.mobile_num1)}>
+          <Iconify
+            width={20}
+            sx={{ cursor: 'pointer', mr: 1, color: 'success.main' }}
+            icon="material-symbols:call"
+          />
+          <span style={{ fontSize: 16 }}>Call</span>
+        </IconButton>
+      </>
+    );
   };
 
   return (
@@ -163,7 +224,7 @@ export default function AppointmentsToday() {
                 <TableCell>Time</TableCell>
                 <TableCell>Patient</TableCell>
                 <TableCell>Patient Note</TableCell>
-                {!isEntranceTab && (
+                {currentTab !== 'three' && currentTab !== 'four' && currentTab !== 'two' && (
                   <>
                     <TableCell>Coming</TableCell>
                     <TableCell>Arrived</TableCell>
@@ -173,12 +234,12 @@ export default function AppointmentsToday() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {TABS.find((tab) => tab.value === currentTab)?.data?.map((info, index) => (
+              {currentTabData?.data?.map((info, index) => (
                 <TableRow key={index}>
                   <TableCell>{fTime(info?.start_time)}</TableCell>
                   <TableCell>{info?.patient?.name_english}</TableCell>
-                  <TableCell>{isEntranceTab ? info?.patient_note : info?.note}</TableCell>
-                  {!isEntranceTab && (
+                  <TableCell>{currentTab === 'three' ? info?.patient_note : info?.note}</TableCell>
+                  {currentTab !== 'three' && currentTab !== 'four' && currentTab !== 'two' && (
                     <>
                       <TableCell>
                         {info?.coming ? (
@@ -187,13 +248,13 @@ export default function AppointmentsToday() {
                           <>
                             <Button
                               sx={{ p: 2 }}
-                              onClick={() => updateComingStatus(info?._id, true)}
+                              onClick={() => updateStatus(info?._id, true, 'coming')}
                             >
                               Yes
                             </Button>
                             <Button
                               sx={{ p: 2 }}
-                              onClick={() => updateComingStatus(info?._id, false)}
+                              onClick={() => updateStatus(info?._id, false, 'coming')}
                             >
                               No
                             </Button>
@@ -207,13 +268,13 @@ export default function AppointmentsToday() {
                           <>
                             <Button
                               sx={{ p: 2 }}
-                              onClick={() => updateArrivalStatus(info?._id, true)}
+                              onClick={() => updateStatus(info?._id, true, 'arrived')}
                             >
                               Yes
                             </Button>
                             <Button
                               sx={{ p: 2 }}
-                              onClick={() => updateArrivalStatus(info?._id, false)}
+                              onClick={() => updateStatus(info?._id, false, 'arrived')}
                             >
                               No
                             </Button>
@@ -222,44 +283,7 @@ export default function AppointmentsToday() {
                       </TableCell>
                     </>
                   )}
-                  <TableCell>
-                    {isEntranceTab ? (
-                      <IconButton sx={{ p: 2 }} onClick={() => alert('test')}>
-                        <Iconify
-                          width={20}
-                          sx={{ cursor: 'pointer', mr: 1, color: 'info.main' }}
-                          icon="mage:next-fill"
-                        />
-                        <span style={{ fontSize: 18 }}>Next</span>
-                      </IconButton>
-                    ) : (
-                      <>
-                        <IconButton
-                          sx={{ p: 2 }}
-                          onClick={() => info.arrived && startAppointment(info)}
-                          disabled={!info.arrived}
-                        >
-                          <Iconify
-                            width={20}
-                            sx={{ cursor: 'pointer', mr: 1, color: '#2788EF' }}
-                            icon="teenyicons:next-solid"
-                          />
-                          <span style={{ fontSize: 16 }}>Start</span>
-                        </IconButton>
-                        <IconButton
-                          sx={{ p: 2 }}
-                          onClick={() => callPatient(info?.patient?.mobile_num1)}
-                        >
-                          <Iconify
-                            width={20}
-                            sx={{ cursor: 'pointer', mr: 1, color: 'success.main' }}
-                            icon="material-symbols:call"
-                          />
-                          <span style={{ fontSize: 16 }}>Call</span>
-                        </IconButton>
-                      </>
-                    )}
-                  </TableCell>
+                  <TableCell>{renderOptions(info)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
