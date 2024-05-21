@@ -19,6 +19,9 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
     unit_service_type,
     country,
     city,
+    email,
+    insurance,
+    info,
     sector,
     commercial_name,
     province,
@@ -49,6 +52,9 @@ export default function TableDetailsRow({ row, selected, onEditRow, onSelectRow 
       <TableCell align="center">{unit_service_type}</TableCell>
       <TableCell align="center">{country}</TableCell>
       <TableCell align="center">{city}</TableCell>
+      <TableCell align="center">{email}</TableCell>
+      <TableCell align="center">{insurance}</TableCell>
+      <TableCell align="center">{info}</TableCell>
       <TableCell align="center">{sector}</TableCell>
       <TableCell align="center">{commercial_name}</TableCell>
       <TableCell align="center">{province}</TableCell>

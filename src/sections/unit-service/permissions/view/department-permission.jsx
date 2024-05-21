@@ -15,8 +15,8 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useGetWorkGroup } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetEmployeeEngagement } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -36,9 +36,9 @@ export default function TableNewEditForm() {
     { label: t('delete'), value: 'delete' },
   ];
 
-  const { emid, wgid } = useParams();
+  const { emid } = useParams();
 
-  const { data } = useGetWorkGroup(wgid);
+  const { data } = useGetEmployeeEngagement(emid);
 
   const { user } = useAuthContext();
 
@@ -47,24 +47,26 @@ export default function TableNewEditForm() {
   const { enqueueSnackbar } = useSnackbar();
 
   const accessControlList = Yup.object().shape({
+    employees: Yup.array(),
+    management_tables: Yup.array(),
     appointments: Yup.array(),
     appointment_configs: Yup.array(),
     accounting: Yup.array(),
-    entrance_management: Yup.array(),
+    quality_control: Yup.array(),
     permissions: Yup.array(),
   });
 
   const defaultValues = useMemo(
     () => ({
-      appointments: data?.employees?.find((info) => info._id === emid)?.acl?.appointments || [],
-      appointment_configs:
-        data?.employees?.find((info) => info._id === emid)?.acl?.appointment_configs || [],
-      accounting: data?.employees?.find((info) => info._id === emid)?.acl?.accounting || [],
-      entrance_management:
-        data?.employees?.find((info) => info._id === emid)?.acl?.entrance_management || [],
-      permissions: data?.employees?.find((info) => info._id === emid)?.acl?.permissions || [],
+      employees: data?.acl?.department?.employees || [],
+      management_tables: data?.acl?.department?.management_tables || [],
+      appointments: data?.acl?.department?.appointments || [],
+      appointment_configs: data?.acl?.department?.appointment_configs || [],
+      accounting: data?.acl?.department?.accounting || [],
+      quality_control: data?.acl?.department?.quality_control || [],
+      permissions: data?.acl?.department?.permissions || [],
     }),
-    [data, emid]
+    [data]
   );
 
   const methods = useForm({
@@ -90,20 +92,22 @@ export default function TableNewEditForm() {
   /* eslint-disable */
   useEffect(() => {
     reset({
-      appointments: data?.employees?.find((info) => info._id === emid)?.acl?.appointments || [],
-      appointment_configs:
-        data?.employees?.find((info) => info._id === emid)?.acl?.appointment_configs || [],
-      accounting: data?.employees?.find((info) => info._id === emid)?.acl?.accounting || [],
-      entrance_management:
-        data?.employees?.find((info) => info._id === emid)?.acl?.entrance_management || [],
-      permissions: data?.employees?.find((info) => info._id === emid)?.acl?.permissions || [],
+      employees: data?.acl?.department?.employees || [],
+      management_tables: data?.acl?.department?.management_tables || [],
+      appointments: data?.acl?.department?.appointments || [],
+      appointment_configs: data?.acl?.department?.appointment_configs || [],
+      accounting: data?.acl?.department?.accounting || [],
+      quality_control: data?.acl?.department?.quality_control || [],
+      permissions: data?.acl?.department?.permissions || [],
     });
   }, [emid, data]);
   /* eslint-enable */
 
-  const onSubmit = handleSubmit(async (submitData) => {
+  const onSubmit = handleSubmit(async (submitedData) => {
     try {
-      await axios.patch(endpoints.work_groups.employee.acl(emid), { acl: submitData });
+      const newAcl = data.acl;
+      newAcl.department = submitedData;
+      axios.patch(endpoints.employee_engagements.one(emid), { acl: newAcl });
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.acl(emid),
@@ -127,14 +131,14 @@ export default function TableNewEditForm() {
     <>
       {mdUp && (
         <Grid md={4}>
-          <Typography variant="h6" sx={{ mb: 0.5 }}>
+          <Typography textTransform="capitalize" variant="h6" sx={{ mb: 0.5 }}>
             {t('permissions')}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             {t('giving or withdrowing permissions refered to all')}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {t('work group and all its employees')}
+            {t('department and all its work groups')}
           </Typography>
         </Grid>
       )}
@@ -144,6 +148,18 @@ export default function TableNewEditForm() {
           {!mdUp && <CardHeader title={t('permissions')} />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('employees')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="employees" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('management tables')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="management_tables" options={options} />
+            </Stack>
             <Stack spacing={1}>
               <Typography textTransform="capitalize" variant="subtitle2">
                 {t('appointments')}
@@ -164,9 +180,9 @@ export default function TableNewEditForm() {
             </Stack>
             <Stack spacing={1}>
               <Typography textTransform="capitalize" variant="subtitle2">
-                {t('entrance management')}
+                {t('quality control')}
               </Typography>
-              <RHFMultiCheckbox row spacing={4} name="entrance_management" options={options} />
+              <RHFMultiCheckbox row spacing={4} name="quality_control" options={options} />
             </Stack>
             <Stack spacing={1}>
               <Typography textTransform="capitalize" variant="subtitle2">
