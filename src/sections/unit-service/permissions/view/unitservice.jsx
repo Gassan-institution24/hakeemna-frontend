@@ -8,15 +8,15 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Grid, Card, Container, Typography, CardHeader } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-import { useParams } from 'src/routes/hooks';
+import { useParams, useRouter } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
-import { useGetWorkGroup } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetEmployeeEngagement, useGetUSActiveEmployeeEngs } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -36,35 +36,46 @@ export default function TableNewEditForm() {
     { label: t('delete'), value: 'delete' },
   ];
 
-  const { emid, wgid } = useParams();
-
-  const { data } = useGetWorkGroup(wgid);
+  const { id } = useParams();
 
   const { user } = useAuthContext();
+
+  const router = useRouter();
+
+  const { data } = useGetEmployeeEngagement(id);
 
   const mdUp = useResponsive('up', 'md');
 
   const { enqueueSnackbar } = useSnackbar();
 
   const accessControlList = Yup.object().shape({
+    departments: Yup.array(),
+    employees: Yup.array(),
+    management_tables: Yup.array(),
     appointments: Yup.array(),
     appointment_configs: Yup.array(),
     accounting: Yup.array(),
-    entrance_management: Yup.array(),
-    permissions: Yup.array(),
+    offers: Yup.array(),
+    quality_control: Yup.array(),
+    unit_service_info: Yup.array(),
+    old_patient: Yup.array(),
   });
 
   const defaultValues = useMemo(
     () => ({
-      appointments: data?.employees?.find((info) => info._id === emid)?.acl?.appointments || [],
-      appointment_configs:
-        data?.employees?.find((info) => info._id === emid)?.acl?.appointment_configs || [],
-      accounting: data?.employees?.find((info) => info._id === emid)?.acl?.accounting || [],
-      entrance_management:
-        data?.employees?.find((info) => info._id === emid)?.acl?.entrance_management || [],
-      permissions: data?.employees?.find((info) => info._id === emid)?.acl?.permissions || [],
+      departments: data?.acl?.unit_service?.departments || [],
+      employees: data?.acl?.unit_service?.employees || [],
+      management_tables: data?.acl?.unit_service?.management_tables || [],
+      appointments: data?.acl?.unit_service?.appointments || [],
+      appointment_configs: data?.acl?.unit_service?.appointment_configs || [],
+      accounting: data?.acl?.unit_service?.accounting || [],
+      offers: data?.acl?.unit_service?.offers || [],
+      quality_control: data?.acl?.unit_service?.quality_control || [],
+      unit_service_info: data?.acl?.unit_service?.unit_service_info || [],
+      old_patient: data?.acl?.unit_service?.old_patient || [],
+      permissions: data?.acl?.unit_service?.old_patient || [],
     }),
-    [data, emid]
+    [data]
   );
 
   const methods = useForm({
@@ -79,6 +90,15 @@ export default function TableNewEditForm() {
     formState: { isSubmitting, errors },
   } = methods;
 
+  const { employeesData, loading } = useGetUSActiveEmployeeEngs(
+    user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
+  );
+  useEffect(() => {
+    if (!id && !loading && employeesData?.[0]?._id) {
+      router.push(`${paths.unitservice.acl.unitservice}/${employeesData?.[0]?._id}`);
+    }
+  }, [id, employeesData, router, loading]);
+
   useEffect(() => {
     if (Object.keys(errors).length) {
       Object.keys(errors).forEach((key, idx) =>
@@ -90,27 +110,33 @@ export default function TableNewEditForm() {
   /* eslint-disable */
   useEffect(() => {
     reset({
-      appointments: data?.employees?.find((info) => info._id === emid)?.acl?.appointments || [],
-      appointment_configs:
-        data?.employees?.find((info) => info._id === emid)?.acl?.appointment_configs || [],
-      accounting: data?.employees?.find((info) => info._id === emid)?.acl?.accounting || [],
-      entrance_management:
-        data?.employees?.find((info) => info._id === emid)?.acl?.entrance_management || [],
-      permissions: data?.employees?.find((info) => info._id === emid)?.acl?.permissions || [],
+      departments: data?.acl?.unit_service?.departments || [],
+      employees: data?.acl?.unit_service?.employees || [],
+      management_tables: data?.acl?.unit_service?.management_tables || [],
+      appointments: data?.acl?.unit_service?.appointments || [],
+      appointment_configs: data?.acl?.unit_service?.appointment_configs || [],
+      accounting: data?.acl?.unit_service?.accounting || [],
+      offers: data?.acl?.unit_service?.offers || [],
+      quality_control: data?.acl?.unit_service?.quality_control || [],
+      unit_service_info: data?.acl?.unit_service?.unit_service_info || [],
+      old_patient: data?.acl?.unit_service?.old_patient || [],
+      permissions: data?.acl?.unit_service?.old_patient || [],
     });
-  }, [emid, data]);
+  }, [id, data]);
   /* eslint-enable */
 
-  const onSubmit = handleSubmit(async (submitData) => {
+  const onSubmit = handleSubmit(async (submittedData) => {
     try {
-      await axios.patch(endpoints.work_groups.employee.acl(emid), { acl: submitData });
+      const newAcl = data.acl;
+      newAcl.unit_service = submittedData;
+      axios.patch(endpoints.employee_engagements.one(id), { acl: newAcl });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.employees.acl(emid),
-        msg: `updated a department employee permissions`,
+        link: paths.unitservice.employees.acl(id),
+        msg: `updated a unit of service employee permissions`,
       });
       enqueueSnackbar(t('updated successfully!'));
-      //   router.push(paths.superadmin.subscriptions.root);
+      // router.push(paths.superadmin.subscriptions.root);
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(
@@ -134,7 +160,7 @@ export default function TableNewEditForm() {
             {t('giving or withdrowing permissions refered to all')}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {t('work group and all its employees')}
+            {t('unit of service and all its departments')}
           </Typography>
         </Grid>
       )}
@@ -144,6 +170,24 @@ export default function TableNewEditForm() {
           {!mdUp && <CardHeader title={t('permissions')} />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
+            <Stack spacing={1}>
+              <Typography title="Permissions" textTransform="capitalize" variant="subtitle2">
+                {t('departments')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="departments" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('employees')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="employees" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('management tables')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="management_tables" options={options} />
+            </Stack>
             <Stack spacing={1}>
               <Typography textTransform="capitalize" variant="subtitle2">
                 {t('appointments')}
@@ -164,9 +208,27 @@ export default function TableNewEditForm() {
             </Stack>
             <Stack spacing={1}>
               <Typography textTransform="capitalize" variant="subtitle2">
-                {t('entrance management')}
+                {t('offers')}
               </Typography>
-              <RHFMultiCheckbox row spacing={4} name="entrance_management" options={options} />
+              <RHFMultiCheckbox row spacing={4} name="offers" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('quality control')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="quality_control" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('old patient data')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="old_patient" options={options} />
+            </Stack>
+            <Stack spacing={1}>
+              <Typography textTransform="capitalize" variant="subtitle2">
+                {t('unit of service info')}
+              </Typography>
+              <RHFMultiCheckbox row spacing={4} name="unit_service_info" options={options} />
             </Stack>
             <Stack spacing={1}>
               <Typography textTransform="capitalize" variant="subtitle2">

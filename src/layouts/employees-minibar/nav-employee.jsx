@@ -9,14 +9,29 @@ import { NavSectionMini } from 'src/components/nav-section';
 
 import { NAV } from '../config-layout';
 import { useNavData } from './config-employee-navigation';
+import { useEmPermissionNavData } from './config-permission-us-navigation';
+import { usePermissionWGNavData } from './config-permission-wgs-navigation';
+import { usePermissionDepNavData } from './config-permission-department-navigation';
 // import NavToggleButton from '../common/nav-toggle-button';
 
 // ----------------------------------------------------------------------
 
 export default function NavMini() {
   const { user } = useAuthContext();
+  const path = window.location.pathname;
 
   const navData = useNavData();
+  const permissionUSData = useEmPermissionNavData();
+  const departmentNavData = usePermissionDepNavData();
+  const workGroupsNavData = usePermissionWGNavData();
+  let currData;
+  if (path.indexOf('/dashboard/us/acl/unitservice') !== -1) {
+    currData = permissionUSData;
+  } else if (path.indexOf('/dashboard/us/acl/departments') !== -1) {
+    currData = departmentNavData;
+  } else if (path.indexOf('/dashboard/us/acl/workgroups') !== -1) {
+    currData = workGroupsNavData;
+  } else currData = navData;
 
   return (
     <Box
@@ -38,7 +53,7 @@ export default function NavMini() {
           height: 1,
           position: 'fixed',
           right: 0,
-          top: 180,
+          top: 170,
           width: NAV.W_MINI,
           borderLeft: (theme) => `dashed 1px ${theme.palette.divider}`,
           // borderTop: (theme) => `dashed 1px ${theme.palette.divider}`,
@@ -48,7 +63,7 @@ export default function NavMini() {
         {/* <Logo sx={{ mx: 'auto', my: 2 }} /> */}
 
         <NavSectionMini
-          data={navData}
+          data={currData}
           slotProps={{
             currentRole: user?.role,
           }}

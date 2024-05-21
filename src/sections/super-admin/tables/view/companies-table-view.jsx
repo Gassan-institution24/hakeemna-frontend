@@ -42,6 +42,9 @@ const TABLE_HEAD = [
   { id: 'unit_service_type', label: 'unit_service_type' },
   { id: 'country', label: 'country' },
   { id: 'city', label: 'city' },
+  { id: 'email', label: 'email' },
+  { id: 'insurance', label: 'insurance' },
+  { id: 'info', label: 'info' },
   { id: 'sector', label: 'sector' },
   { id: 'commercial_name', label: 'commercial_name' },
   { id: 'province', label: 'province' },
@@ -203,8 +206,8 @@ export default function CompaniesTableView() {
           />
         )}
 
-        <TableContainer >
-          <Scrollbar >
+        <TableContainer>
+          <Scrollbar>
             <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
               <TableHeadCustom
                 order={table.order}
@@ -281,14 +284,10 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.commercial_name &&
           data?.commercial_name?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.province &&
-          data?.province?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.country &&
-          data?.country?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.city &&
-          data?.city?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.email &&
-          data?.email?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.province && data?.province?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.country && data?.country?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.city && data?.city?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.email && data?.email?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.phone_number_1 &&
           data?.phone_number_1?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.type_of_specialty_1 &&
@@ -297,10 +296,8 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.type_of_specialty_2?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.unit_service_type &&
           data?.unit_service_type?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.sector &&
-          data?.sector?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.info &&
-          data?.info?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.sector && data?.sector?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.info && data?.info?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );
