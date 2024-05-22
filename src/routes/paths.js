@@ -511,6 +511,7 @@ export const paths = {
       unitservice:`${ROOTS.SUPERADMIN}/us/acl/unitservice`,
       department:`${ROOTS.SUPERADMIN}/us/acl/departments`,
       workgroups:`${ROOTS.SUPERADMIN}/us/acl/workgroups`,
+      employees:`${ROOTS.SUPERADMIN}/us/acl/employees`,
     },
     oldPatient: `${ROOTS.SUPERADMIN}/us/oldpatient`,
     departments: {
