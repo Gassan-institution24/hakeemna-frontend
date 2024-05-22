@@ -303,6 +303,7 @@ export function useNavData() {
           { title: t('unit of service level'), path: paths.unitservice.acl.unitservice },
           { title: t('departments level'), path: paths.unitservice.acl.department },
           { title: t('work groups level'), path: paths.unitservice.acl.workgroups },
+          { title: t('employee permission'), path: paths.unitservice.acl.employees },
         ],
       },
       {

@@ -3,10 +3,10 @@ import { Helmet } from 'react-helmet-async';
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
 
-import DepartmentView from 'src/sections/unit-service/permissions/view/departments';
+import EmployeesView from 'src/sections/unit-service/permissions/view/employees-list';
 // ----------------------------------------------------------------------
 
-export default function DepartmentsListPage() {
+export default function EmployeesListPage() {
   const { user } = useAuthContext();
   const serviceUnitName =
     user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
@@ -14,11 +14,11 @@ export default function DepartmentsListPage() {
   return (
     <ACLGuard category="unit_service" subcategory="permissions" acl="read">
       <Helmet>
-        <title>{serviceUnitName || 'unit of service'} : departments List</title>
+        <title>{serviceUnitName || 'unit of service'} : employees List</title>
         <meta name="description" content="meta" />
       </Helmet>
 
-      <DepartmentView />
+      <EmployeesView />
     </ACLGuard>
   );
 }

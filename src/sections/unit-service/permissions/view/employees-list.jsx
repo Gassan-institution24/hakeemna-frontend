@@ -1,7 +1,5 @@
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
 import { useReactToPrint } from 'react-to-print';
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -17,21 +15,22 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import axiosInstance, { endpoints } from 'src/utils/axios';
-
-import socket from 'src/socket';
-import { useGetUSDepartments } from 'src/api';
+import { useGetUSEmployeeEngs } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
+import { useAclGuard } from 'src/auth/guard/acl-guard';
+import { StatusOptions } from 'src/assets/data/status-options';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-// import { useSettingsContext } from 'src/components/settings';
+// // import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -43,14 +42,15 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import { StatusOptions } from 'src/assets/data/status-options';
+import axiosInstance, { endpoints } from 'src/utils/axios';
+
+import socket from 'src/socket';
 
 import { useSnackbar } from 'src/components/snackbar';
-import { LoadingScreen } from 'src/components/loading-screen';
 
-import TableDetailRow from '../home-table-row';
-import TableDetailToolbar from '../home-table-toolbar';
-import TableDetailFiltersResult from '../home-table-filters-result';
+import TableDetailRow from '../table-details-row'; /// edit
+import TableDetailToolbar from '../table-details-toolbar';
+import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -61,38 +61,43 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function UnitServicesTableView() {
+export default function EmployeesTableView() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
   const TABLE_HEAD = [
-    /// to edit
-    // { id: 'code', label: t('code') },
     { id: 'sequence_number', label: t('number') },
+    { id: 'online', label: t('online') },
     { id: 'name_english', label: t('name') },
+    { id: 'employee_type', label: t('employee type') },
+    { id: 'email', label: t('email') },
+    { id: 'visibility_online_appointment', label: t('visibility online appointment') },
+    { id: 'visibility_US_page', label: t('visibility page') },
+    { id: 'adjust_schedual', label: t('adjust schedual') },
     { id: 'status', label: t('status') },
     { id: '', width: 88 },
   ];
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { STATUS_OPTIONS } = StatusOptions();
+  const checkAcl = useAclGuard();
 
+  const { STATUS_OPTIONS } = StatusOptions();
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
-  const { user } = useAuthContext();
-
   const componentRef = useRef();
 
-  // const settings = useSettingsContext();
+  const { user } = useAuthContext();
+
+  // // const settings = useSettingsContext();
 
   const confirmActivate = useBoolean();
   const confirmInactivate = useBoolean();
 
   const router = useRouter();
 
-  const { departmentsData, loading, refetch } = useGetUSDepartments(
+  const { employeesData, loading, refetch } = useGetUSEmployeeEngs(
     user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service._id
   );
 
@@ -104,7 +109,7 @@ export default function UnitServicesTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: departmentsData,
+    inputData: employeesData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -125,36 +130,88 @@ export default function UnitServicesTableView() {
     content: () => componentRef.current,
   });
 
-  const handleDownload = () => {
-    const excelBody = dataFiltered.reduce((acc, data) => {
-      acc.push({
-        code: data.code,
-        name: data.name_english,
-        category: data.category?.name_english,
-        symptoms: data.symptoms?.map((symptom, idx) => symptom?.name_english),
-      });
-      return acc;
-    }, []);
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(excelBody);
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
-    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    const data = new Blob([excelBuffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    });
-    saveAs(data, 'unitservicesTable.xlsx'); /// edit
-  };
-  
+  // const handleDownload = () => {
+  //   const excelBody = dataFiltered.reduce((acc, data) => {
+  //     acc.push({
+  //       code: data.code,
+  //       name: data.name_english,
+  //       category: data.category?.name_english,
+  //       symptoms: data.symptoms?.map((symptom, idx)  => symptom?.name_english),
+  //     });
+  //     return acc;
+  //   }, []);
+  //   const wb = XLSX.utils.book_new();
+  //   const ws = XLSX.utils.json_to_sheet(excelBody);
+  //   XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+  //   const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  //   const data = new Blob([excelBuffer], {
+  //     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  //   });
+  //   saveAs(data, 'unitservicesTable.xlsx'); /// edit
+  // };
+  const handleActivate = useCallback(
+    async (row) => {
+      try {
+        await axiosInstance.patch(`${endpoints.employee_engagements.one(row._id)}/updatestatus`, {
+          status: 'active',
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.employees.root,
+          msg: `activated an employee <strong>${row?.employee?.name_english}</strong>`,
+        });
+      } catch (error) {
+        // error emitted in backend
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
+        console.error(error);
+      }
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
+  );
+  const handleInactivate = useCallback(
+    async (row) => {
+      try {
+        await axiosInstance.patch(`${endpoints.employee_engagements.one(row._id)}/updatestatus`, {
+          status: 'inactive',
+        });
+        socket.emit('updated', {
+          user,
+          link: paths.unitservice.employees.root,
+          msg: `inactivated an employee <strong>${row?.employee?.name_english}</strong>`,
+        });
+      } catch (error) {
+        // error emitted in backend
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
+        console.error(error);
+      }
+      refetch();
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dataInPage.length, table, refetch, user, enqueueSnackbar, curLangAr]
+  );
+
   const handleActivateRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.departments.all}/updatestatus`, {
+      await axiosInstance.patch(`${endpoints.employee_engagements.ones}/updatestatus`, {
         status: 'active',
         ids: table.selected,
       });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.departments.root,
-        msg: `activating many departments`,
+        link: paths.unitservice.employees.root,
+        msg: `activated many employees`,
       });
     } catch (error) {
       // error emitted in backend
@@ -168,7 +225,7 @@ export default function UnitServicesTableView() {
     }
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: departmentsData.length,
+      totalRows: employeesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
@@ -176,7 +233,7 @@ export default function UnitServicesTableView() {
     dataFiltered.length,
     dataInPage.length,
     table,
-    departmentsData,
+    employeesData,
     refetch,
     user,
     curLangAr,
@@ -185,14 +242,14 @@ export default function UnitServicesTableView() {
 
   const handleInactivateRows = useCallback(async () => {
     try {
-      await axiosInstance.patch(`${endpoints.departments.all}/updatestatus`, {
+      await axiosInstance.patch(`${endpoints.employee_engagements.ones}/updatestatus`, {
         status: 'inactive',
         ids: table.selected,
       });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.departments.root,
-        msg: `inactivating many departments`,
+        link: paths.unitservice.employees.root,
+        msg: `inactivated many employees `,
       });
     } catch (error) {
       // error emitted in backend
@@ -206,7 +263,7 @@ export default function UnitServicesTableView() {
     }
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: departmentsData.length,
+      totalRows: employeesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
@@ -214,7 +271,7 @@ export default function UnitServicesTableView() {
     dataFiltered.length,
     dataInPage.length,
     table,
-    departmentsData,
+    employeesData,
     refetch,
     user,
     curLangAr,
@@ -232,9 +289,16 @@ export default function UnitServicesTableView() {
     [table]
   );
 
-  const handleShowRow = useCallback(
+  const handleEditRow = useCallback(
     (id) => {
-      router.push(`${paths.unitservice.acl.department}/${id}`); /// edit
+      router.push(paths.unitservice.employees.edit(id)); /// edit
+    },
+    [router]
+  );
+
+  const handleViewRow = useCallback(
+    (id) => {
+      router.push(`${paths.unitservice.acl.employees}/${id}/us`); /// edit
     },
     [router]
   );
@@ -243,18 +307,61 @@ export default function UnitServicesTableView() {
     setFilters(defaultFilters);
   }, []);
 
-  // const handleViewRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.order.details(id));
-  //   },
-  //   [router]
-  // );
+  const handleChangeVisPage = useCallback(
+    async (id) => {
+      try {
+        await axiosInstance.patch(endpoints.employee_engagements.one(id), {
+          visibility_US_page: !employeesData.find((employee) => employee._id === id)
+            .visibility_US_page,
+        });
+        refetch();
+        enqueueSnackbar(t('updated successfully!'));
+      } catch (error) {
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
+      }
+    },
+    [employeesData, refetch, t, enqueueSnackbar, curLangAr]
+  );
+  const handleChangeVisOnlineApp = useCallback(
+    async (id) => {
+      try {
+        await axiosInstance.patch(endpoints.employee_engagements.one(id), {
+          visibility_online_appointment: !employeesData.find((employee) => employee._id === id)
+            .visibility_online_appointment,
+        });
+        refetch();
+        enqueueSnackbar(t('updated successfully!'));
+      } catch (error) {
+        enqueueSnackbar(
+          curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+          {
+            variant: 'error',
+          }
+        );
+      }
+    },
+    [employeesData, refetch, t, enqueueSnackbar, curLangAr]
+  );
+
   const handleFilterStatus = useCallback(
     (event, newValue) => {
       handleFilters('status', newValue);
     },
     [handleFilters]
   );
+
+  /* eslint-disable */
+  useEffect(() => {
+    socket.on('employeeStatusUpdated', () => {
+      refetch();
+    });
+  }, []);
+  /* eslint-enable */
 
   if (loading) {
     return <LoadingScreen />;
@@ -264,7 +371,7 @@ export default function UnitServicesTableView() {
     <>
       <Container maxWidth="xl">
         <CustomBreadcrumbs
-          heading={t('departments')} /// edit
+          heading={t('employees')} /// edit
           links={[
             {
               name: t('dashboard'),
@@ -274,10 +381,23 @@ export default function UnitServicesTableView() {
               name: t('permissions'),
               href: paths.unitservice.acl.root,
             },
-            { name: t('departments') }, /// edit
+            { name: t('employees') }, /// edit
           ]}
+          action={
+            checkAcl({ category: 'unit_service', subcategory: 'employees', acl: 'create' }) && (
+              <Button
+                component={RouterLink}
+                href={paths.unitservice.employees.new} /// edit
+                variant="contained"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                {t('new employee')}
+              </Button>
+            ) /// edit
+          }
           sx={{
             mb: { xs: 3, md: 5 },
+            mt: { xs: 3, md: 5 },
           }}
         />
 
@@ -307,11 +427,11 @@ export default function UnitServicesTableView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && departmentsData.length}
+                    {tab.value === 'all' && employeesData.length}
                     {tab.value === 'active' &&
-                      departmentsData.filter((order) => order.status === 'active').length}
+                      employeesData.filter((employee) => employee.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      departmentsData.filter((order) => order.status === 'inactive').length}
+                      employeesData.filter((employee) => employee.status === 'inactive').length}
                   </Label>
                 }
               />
@@ -321,7 +441,7 @@ export default function UnitServicesTableView() {
             onPrint={printHandler}
             filters={filters}
             onFilters={handleFilters}
-            onDownload={handleDownload}
+            // onDownload={handleDownload}
             //
             canReset={canReset}
             onResetFilters={handleResetFilters}
@@ -372,7 +492,7 @@ export default function UnitServicesTableView() {
               color={
                 dataFiltered
                   .filter((row) => table.selected.includes(row._id))
-                  .some((data) => data.status === 'inactive')
+                  .some((info) => info.status === 'inactive')
                   ? 'primary'
                   : 'error'
               }
@@ -402,12 +522,25 @@ export default function UnitServicesTableView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row, idx) => (
-                      <TableDetailRow key={idx} row={row} onShow={() => handleShowRow(row._id)} />
+                      <TableDetailRow
+                        key={idx}
+                        row={row}
+                        filters={filters}
+                        setFilters={setFilters}
+                        selected={table.selected.includes(row._id)}
+                        onSelectRow={() => table.onSelectRow(row._id)}
+                        onActivate={() => handleActivate(row)}
+                        onViewRow={() => handleViewRow(row._id)}
+                        onInactivate={() => handleInactivate(row)}
+                        onEditRow={() => handleEditRow(row._id)}
+                        onChangeVisPage={() => handleChangeVisPage(row._id)}
+                        onChangeVisOnlineApp={() => handleChangeVisOnlineApp(row._id)}
+                      />
                     ))}
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, departmentsData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, employeesData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -495,10 +628,29 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.name_arabic &&
-          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.name_english &&
-          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.name_english &&
+          data?.employee?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.name_arabic &&
+          data?.employee?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.name_english &&
+          data?.employee?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.country?.name_english &&
+          data?.employee?.country?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
+            -1) ||
+        (data?.employee?.country?.name_arabic &&
+          data?.employee?.country?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.city?.name_english &&
+          data?.employee?.city?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.city?.name_arabic &&
+          data?.employee?.city?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.employee?.nationality?.name_english &&
+          data?.employee?.nationality?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !==
+            -1) ||
+        (data?.employee?.nationality?.name_arabic &&
+          data?.employee?.nationality?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !==
+            -1) ||
+        (data?.employee?.email &&
+          data?.employee?.email?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

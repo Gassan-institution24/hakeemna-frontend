@@ -38,6 +38,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const curLangAr = currentLang.value === 'ar';
 
   const proccessing = useBoolean();
+  const [show,setShow] = useState(true)
 
   const { handleAddNew } = useNewScreen();
 
@@ -114,9 +115,10 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   const handleRemove = (index) => {
     remove(index);
-    // const newDetails = values.days_details;
-    // newDetails.splice(index,1)
-    // setValue('days_details', values.days_details);
+    setShow(false)
+    setTimeout(()=>{
+      setShow(true)
+    },100)
   };
 
   const processDayDetails = useCallback(
@@ -144,15 +146,40 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
           return;
         }
         const results = [];
+        const now = new Date();
         const appointment_time = values.appointment_time * 60 * 1000;
         const currentDay = values.days_details[index];
-        const work_start = new Date(currentDay.work_start_time).getTime();
-        let work_end = new Date(currentDay.work_end_time).getTime();
+        const work_start = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          new Date(currentDay.work_start_time).getHours(),
+          new Date(currentDay.work_start_time).getMinutes()
+        ).getTime();
+        let work_end = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          new Date(currentDay.work_end_time).getHours(),
+          new Date(currentDay.work_end_time).getMinutes()
+        ).getTime();
         let break_start = currentDay.break_start_time
-          ? new Date(currentDay.break_start_time).getTime()
+          ? new Date(
+              now.getFullYear(),
+              now.getMonth(),
+              now.getDate(),
+              new Date(currentDay.break_start_time).getHours(),
+              new Date(currentDay.break_start_time).getMinutes()
+            ).getTime()
           : null;
         let break_end = currentDay.break_end_time
-          ? new Date(currentDay.break_end_time).getTime()
+          ? new Date(
+              now.getFullYear(),
+              now.getMonth(),
+              now.getDate(),
+              new Date(currentDay.break_end_time).getHours(),
+              new Date(currentDay.break_end_time).getMinutes()
+            ).getTime()
           : null;
 
         if (work_start >= work_end) {
@@ -276,7 +303,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   return (
     <>
       <Divider flexItem sx={{ borderStyle: 'solid' }} />
-      <Box sx={{ p: 3 }}>
+      {show && <Box sx={{ p: 3 }}>
         <Typography
           variant="p"
           sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
@@ -539,7 +566,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
             {curLangAr ? 'إضافة يوم جديد' : 'add new day'}
           </Button>
         </Stack>
-      </Box>
+      </Box>}
     </>
   );
 }

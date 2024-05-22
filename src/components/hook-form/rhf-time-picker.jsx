@@ -8,9 +8,11 @@ import { useUnitTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 
+import Iconify from '../iconify/iconify';
+
 // ----------------------------------------------------------------------
 
-export default function RHFTimePicker({ name, helperText, type,onChange, ...other }) {
+export default function RHFTimePicker({ name, helperText, type, onChange, ...other }) {
   const { control } = useFormContext();
   const { user } = useAuthContext();
   const { myunitTime } = useUnitTime();
@@ -23,8 +25,14 @@ export default function RHFTimePicker({ name, helperText, type,onChange, ...othe
         <TimePicker
           {...field}
           fullWidth
-          ampmInClock
-          
+          // ampmInClock
+          slots={{
+            clearIcon: (provided, props) => (
+              <Iconify icon="mingcute:close-line"  {...provided} />
+            ),
+            clearButton: <Iconify icon="mingcute:close-line" />,
+            actionBar: 'cancel',
+          }}
           minutesStep="5"
           format="hh:mm a"
           value={myunitTime(field.value)}
@@ -35,7 +43,7 @@ export default function RHFTimePicker({ name, helperText, type,onChange, ...othe
               user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
                 ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
             );
-            field.onChange(selectedTime)
+            field.onChange(selectedTime);
             if (onChange) {
               onChange();
             }
@@ -48,10 +56,6 @@ export default function RHFTimePicker({ name, helperText, type,onChange, ...othe
             },
           }}
           closeOnSelect
-          slots={{
-            // toolbar:false,
-            actionBar: 'cancel'
-          }}
           error={!!error}
           helperText={error ? error?.message : helperText}
           {...other}
