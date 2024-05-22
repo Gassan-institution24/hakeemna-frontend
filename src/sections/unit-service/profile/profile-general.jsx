@@ -92,6 +92,9 @@ export default function AccountGeneral({ unitServiceData }) {
     arabic_introduction_letter: Yup.string(),
     location_gps: Yup.string(),
     company_logo: Yup.mixed(),
+    facebook: Yup.mixed(),
+    instagram: Yup.mixed(),
+    other: Yup.mixed(),
   });
 
   // const handleCountryChange = (event) => {
@@ -129,6 +132,9 @@ export default function AccountGeneral({ unitServiceData }) {
     arabic_introduction_letter: data?.arabic_introduction_letter || '',
     location_gps: data?.location_gps || '',
     company_logo: data?.company_logo || '',
+    facebook: data?.facebook || '',
+    instagram: data?.instagram || '',
+    other: data?.other || '',
   };
 
   const methods = useForm({
@@ -200,7 +206,6 @@ export default function AccountGeneral({ unitServiceData }) {
         msg: `updated the unit of service profile`,
       });
       refetch();
-      console.info('DATA', dataToSend);
     } catch (error) {
       // error emitted in backend
       enqueueSnackbar(
@@ -408,6 +413,9 @@ export default function AccountGeneral({ unitServiceData }) {
                 )}
               />
               <RHFTextField name="location_gps" label={t('location GPS')} />
+              <RHFTextField name="facebook" label={t('facebook url')} />
+              <RHFTextField name="instagram" label={t('instagram url')} />
+              <RHFTextField name="other" label={t('other social media')} />
             </Box>
             <RHFAutocomplete
               sx={{ mt: 3 }}
