@@ -217,6 +217,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
+  console.log('errors',errors)
 
   const handleSaving = async () => {
     saving.onTrue();
