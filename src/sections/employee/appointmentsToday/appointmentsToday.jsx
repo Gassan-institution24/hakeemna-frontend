@@ -49,7 +49,6 @@ export default function AppointmentsToday() {
   );
   const { entranceData } = useGetEntranceManagement();
   const { finishedAppointmentsData, refetch } = useGetfinishedAppointments();
-
   const TABS = [
     {
       value: 'one',
@@ -238,7 +237,7 @@ export default function AppointmentsToday() {
                 <TableRow key={index}>
                   <TableCell>{fTime(info?.start_time)}</TableCell>
                   <TableCell>{info?.patient?.name_english}</TableCell>
-                  <TableCell>{currentTab === 'three' ? info?.patient_note : info?.note}</TableCell>
+                  <TableCell>{currentTab === 'three' || currentTab === 'four' ? info?.patient_note : info?.note}</TableCell>
                   {currentTab !== 'three' && currentTab !== 'four' && currentTab !== 'two' && (
                     <>
                       <TableCell>
