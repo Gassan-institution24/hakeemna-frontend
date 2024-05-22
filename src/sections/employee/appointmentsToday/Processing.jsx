@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 
+import Table from '@mui/material/Table';
 import { alpha } from '@mui/material/styles';
 import { DatePicker } from '@mui/x-date-pickers';
 import {
@@ -16,18 +17,28 @@ import {
   TimelineSeparator,
 } from '@mui/lab';
 import {
+  Card,
   Paper,
   Button,
   Dialog,
+  TableRow,
   Checkbox,
+  TableCell,
+  TableBody,
+  TableHead,
   Typography,
   DialogTitle,
   DialogActions,
   DialogContent,
+  TableContainer,
 } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import axiosInstance from 'src/utils/axios';
+import { fMonth } from 'src/utils/format-time';
+
+import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 import { useGetPatientHistoryData, useGetOneEntranceManagement } from 'src/api';
 
@@ -39,39 +50,57 @@ export default function Processing() {
   const { id } = params;
   const { Entrance } = useGetOneEntranceManagement(id);
   const { historyData } = useGetPatientHistoryData(Entrance?.patient?._id);
-
-  // Separate state for each dialog
+  const { user } = useAuthContext();
   const medicalReportDialog = useBoolean();
   const prescriptionDialog = useBoolean();
-
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
+  // const oldMedicalReportsSchema = Yup.object().shape({
+  //   date: Yup.date().required('Date is required'),
+  //   file: Yup.array().required(),
+  //   name: Yup.string().required('File name is required'),
+  //   note: Yup.string().nullable(),
+  //   agree: Yup.boolean().required(),
+  //   specialty: Yup.string().required(),
+  // });
 
-  const oldMedicalReportsSchema = Yup.object().shape({
-    date: Yup.date().required('Date is required'),
-    file: Yup.array().required(),
-    name: Yup.string().required('File name is required'),
-    note: Yup.string().nullable(),
-    agree: Yup.boolean().required(),
-    specialty: Yup.string().required(),
+  // const defaultValues = {
+  //   date: '',
+  //   file: [],
+  //   name: '',
+  //   note: '',
+  //   patient: Entrance?.patient?._id,
+  // };
+
+  const PrescriptionsSchema = Yup.object().shape({
+    employee: Yup.string(),
+    patient: Yup.string(),
+    // medicines: Yup.string(),
+    Num_days: Yup.number(),
+    // Start_time: Yup.string(),
+    // End_time: Yup.string(),
+    Frequency_per_day: Yup.string(),
+    Doctor_Comments: Yup.string(),
   });
 
   const defaultValues = {
-    date: '',
-    file: [],
-    name: '',
-    note: '',
+    employee: user?.employee?._id,
     patient: Entrance?.patient?._id,
+    // medicines: '',
+    Num_days: '',
+    // Start_time: '',
+    // End_time: '',
+    Frequency_per_day: '',
+    Doctor_Comments: '',
   };
+
   const methods = useForm({
     mode: 'onTouched',
-    resolver: yupResolver(oldMedicalReportsSchema),
-    defaultValues,
+    resolver: yupResolver(PrescriptionsSchema),
+    defaultValues
   });
   const {
-    setValue,
-    control,
     reset,
     watch,
     handleSubmit,
@@ -129,10 +158,16 @@ export default function Processing() {
       ),
     },
   ];
+  // console.log('valuesss', defaultValues);
 
   const renderMedicalReport = (
     <>
-      <Button variant="outlined" color="success" onClick={medicalReportDialog.onTrue} sx={{ mt: 1 }}>
+      <Button
+        variant="outlined"
+        color="success"
+        onClick={medicalReportDialog.onTrue}
+        sx={{ mt: 1 }}
+      >
         {t('Add medical report')}
         <Iconify icon="mingcute:add-line" />
       </Button>
@@ -211,7 +246,21 @@ export default function Processing() {
       </Dialog>
     </>
   );
+  const onSubmit = async (data) => {
+    // const formData = new FormData();
+    console.log(data, 'data');
+    // console.log(formData,"formData");
 
+    // Object.keys(data).forEach((key) => {
+    //   formData.append(key, data[key]);
+    // });
+    try {
+      await axiosInstance.post('/api/drugs', data);
+      reset();
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
   const renderPrescription = (
     <>
       <Button variant="outlined" color="success" onClick={prescriptionDialog.onTrue} sx={{ mt: 1 }}>
@@ -219,7 +268,7 @@ export default function Processing() {
         <Iconify icon="mingcute:add-line" />
       </Button>
       <Dialog open={prescriptionDialog.value} onClose={prescriptionDialog.onFalse}>
-        <FormProvider methods={methods}>
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
             {t('IMPORTANT')}
           </DialogTitle>
@@ -229,16 +278,60 @@ export default function Processing() {
                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
-            <RHFTextField lang="en" name="name" label={t('File name*')} sx={{ mb: 2 }} />
+            <RHFTextField lang="en" name="Num_days" label={t('Num days')} sx={{ mb: 2 }} />
+            <RHFTextField
+              lang="en"
+              name="Frequency_per_day"
+              label={t('Frequency pe day')}
+              sx={{ mb: 2 }}
+            />
+            <RHFTextField
+              lang="en"
+              name="Doctor_Comments"
+              label={t('Doctor Comments')}
+              sx={{ mb: 2 }}
+            />
           </DialogContent>
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={prescriptionDialog.onFalse}>
               {t('Cancel')}
             </Button>
+            <Button type="submit" loading={isSubmitting} variant="contained">
+              {t('Upload')}
+            </Button>
           </DialogActions>
         </FormProvider>
       </Dialog>
     </>
+  );
+
+  const renderHistory = (
+    <Card sx={{ mt: 2 }}>
+      <TableContainer sx={{ mb: 2, maxHeight: 200 }}>
+        <Table sx={{ minWidth: 400 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>{t('Date')}</TableCell>
+              <TableCell>{t('Subject')}</TableCell>
+              <TableCell>{t('Info')}</TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody sx={{ maxHeight: 200 }}>
+            {historyData?.map(
+              (data, i) =>
+                data?.status === 'active' && (
+                  <TableRow key={i}>
+                    <TableCell>{fMonth(data?.created_at)}</TableCell>
+                    <TableCell>{curLangAr ? data?.name_arabic : data?.name_english}</TableCell>
+                    <TableCell>{curLangAr ? data?.sub_arabic : data?.sub_english}</TableCell>
+                  </TableRow>
+                )
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Card>
   );
 
   return (
@@ -260,6 +353,8 @@ export default function Processing() {
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {item.title === 'medical report (optional)' && renderMedicalReport}
                 {item.title === 'prescription (optional)' && renderPrescription}
+                {item.title === `${Entrance?.patient?.name_english} medical history` &&
+                  renderHistory}
               </Typography>
             </Paper>
           </TimelineContent>
