@@ -1,4 +1,3 @@
-import React from 'react';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router';
@@ -21,6 +20,7 @@ import {
   Paper,
   Button,
   Dialog,
+  MenuItem,
   TableRow,
   Checkbox,
   TableCell,
@@ -40,73 +40,67 @@ import { fMonth } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetPatientHistoryData, useGetOneEntranceManagement } from 'src/api';
+import { useGetMedicines, useGetPatientHistoryData, useGetOneEntranceManagement } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFUpload, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
+import { enqueueSnackbar } from 'notistack';
 
 export default function Processing() {
   const params = useParams();
   const { id } = params;
+  const { medicines } = useGetMedicines();
+  const { user } = useAuthContext();
   const { Entrance } = useGetOneEntranceManagement(id);
   const { historyData } = useGetPatientHistoryData(Entrance?.patient?._id);
-  const { user } = useAuthContext();
   const medicalReportDialog = useBoolean();
   const prescriptionDialog = useBoolean();
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  // const oldMedicalReportsSchema = Yup.object().shape({
-  //   date: Yup.date().required('Date is required'),
-  //   file: Yup.array().required(),
-  //   name: Yup.string().required('File name is required'),
-  //   note: Yup.string().nullable(),
-  //   agree: Yup.boolean().required(),
-  //   specialty: Yup.string().required(),
-  // });
-
-  // const defaultValues = {
-  //   date: '',
-  //   file: [],
-  //   name: '',
-  //   note: '',
-  //   patient: Entrance?.patient?._id,
-  // };
 
   const PrescriptionsSchema = Yup.object().shape({
     employee: Yup.string(),
     patient: Yup.string(),
-    // medicines: Yup.string(),
     Num_days: Yup.number(),
-    // Start_time: Yup.string(),
-    // End_time: Yup.string(),
+    medicines: Yup.string(),
+    Start_time: Yup.date(),
+    End_time: Yup.date(),
     Frequency_per_day: Yup.string(),
     Doctor_Comments: Yup.string(),
+    description: Yup.string(),
   });
 
   const defaultValues = {
     employee: user?.employee?._id,
     patient: Entrance?.patient?._id,
-    // medicines: '',
-    Num_days: '',
-    // Start_time: '',
-    // End_time: '',
-    Frequency_per_day: '',
-    Doctor_Comments: '',
   };
 
   const methods = useForm({
     mode: 'onTouched',
     resolver: yupResolver(PrescriptionsSchema),
-    defaultValues
+    defaultValues,
   });
   const {
-    reset,
     watch,
+    reset,
     handleSubmit,
+    control,
     formState: { isSubmitting },
   } = methods;
-
+  console.log(watch(), 'data');
+  const onSubmit = async (data) => {
+    try {
+      await axiosInstance.post('/api/drugs', data);
+      await axiosInstance.post('/api/examination', data);
+      enqueueSnackbar('prescription uploaded successfully', { variant: 'success' });
+      prescriptionDialog.onFalse();
+      medicalReportDialog.onFalse();
+      reset();
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
   const TIMELINES = [
     {
       key: 1,
@@ -121,44 +115,27 @@ export default function Processing() {
       key: 2,
       title: 'last activity',
       color: 'primary',
-      icon: historyData ? (
-        <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
-      ) : (
-        <Iconify icon="cil:room" width={24} />
-      ),
+      icon: <Iconify icon="cil:room" width={24} />
     },
     {
       key: 3,
       title: 'Next activity',
       color: 'primary',
-      icon: historyData ? (
-        <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
-      ) : (
-        <Iconify icon="cil:room" width={24} />
-      ),
+      icon:<Iconify icon="cil:room" width={24} />
     },
     {
       key: 4,
       title: 'prescription (optional)',
       color: 'secondary',
-      icon: historyData ? (
-        <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
-      ) : (
-        <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />
-      ),
+      icon: <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />
     },
     {
       key: 5,
       title: 'medical report (optional)',
       color: 'info',
-      icon: historyData ? (
-        <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
-      ) : (
-        <Iconify icon="streamline:checkup-medical-report-clipboard" width={23} />
-      ),
+      icon: <Iconify icon="streamline:checkup-medical-report-clipboard" width={23} />,
     },
   ];
-  // console.log('valuesss', defaultValues);
 
   const renderMedicalReport = (
     <>
@@ -172,7 +149,7 @@ export default function Processing() {
         <Iconify icon="mingcute:add-line" />
       </Button>
       <Dialog open={medicalReportDialog.value} onClose={medicalReportDialog.onFalse}>
-        <FormProvider methods={methods}>
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle sx={{ color: 'red', position: 'relative', top: '10px' }}>
             {t('IMPORTANT')}
           </DialogTitle>
@@ -182,8 +159,8 @@ export default function Processing() {
                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
-            <RHFTextField lang="en" name="name" label={t('File name*')} sx={{ mb: 2 }} />
-            <Controller
+            {/* <RHFTextField lang="en" name="name" label={t('File name*')} sx={{ mb: 2 }} /> */}
+            {/* <Controller
               name="date"
               render={({ field, fieldState: { error } }) => (
                 <DatePicker
@@ -199,8 +176,8 @@ export default function Processing() {
                   }}
                 />
               )}
-            />
-            <RHFUpload
+            /> */}
+            {/* <RHFUpload
               autoFocus
               fullWidth
               name="file"
@@ -208,59 +185,22 @@ export default function Processing() {
               sx={{ mb: 2 }}
               variant="outlined"
               multiple
-            />
-            <RHFTextField lang="en" name="note" label={t('More information')} />
+            /> */}
+            <RHFTextField lang="en" name="description" label={t('description')} />
           </DialogContent>
-          <Checkbox
-            size="small"
-            name="agree"
-            color="success"
-            sx={{ position: 'relative', top: 5, left: 25 }}
-          />
-          <Typography
-            sx={{
-              color: 'text.secondary',
-              mt: { md: -2.5, xs: -2.3 },
-              ml: curLangAr ? { md: -31, xs: -5 } : { md: -7.5, xs: 4 },
-              typography: 'caption',
-              textAlign: 'center',
-              fontSize: { md: 12, xs: 10 },
-            }}
-          >
-            {t('I have read and agreed to these ')}&nbsp;
-            <Link underline="always" color="text.primary">
-              {t('Terms of Service ')}&nbsp;
-            </Link>
-            {t('And the ')}&nbsp;
-            <Link underline="always" color="text.primary">
-              {t('Privacy Policy')}
-            </Link>
-            .
-          </Typography>
           <DialogActions>
             <Button variant="outlined" color="inherit" onClick={medicalReportDialog.onFalse}>
               {t('Cancel')}
+            </Button>
+            <Button type="submit" loading={isSubmitting} variant="contained">
+              {t('Upload')}
             </Button>
           </DialogActions>
         </FormProvider>
       </Dialog>
     </>
   );
-  const onSubmit = async (data) => {
-    // const formData = new FormData();
-    console.log(data, 'data');
-    // console.log(formData,"formData");
 
-    // Object.keys(data).forEach((key) => {
-    //   formData.append(key, data[key]);
-    // });
-    try {
-      await axiosInstance.post('/api/drugs', data);
-      reset();
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
   const renderPrescription = (
     <>
       <Button variant="outlined" color="success" onClick={prescriptionDialog.onTrue} sx={{ mt: 1 }}>
@@ -278,13 +218,64 @@ export default function Processing() {
                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
-            <RHFTextField lang="en" name="Num_days" label={t('Num days')} sx={{ mb: 2 }} />
+            <RHFSelect
+              label={t('medicine*')}
+              fullWidth
+              name="medicines"
+              PaperPropsSx={{ textTransform: 'capitalize' }}
+              sx={{ mb: 2 }}
+            >
+              {medicines?.map((test, idx) => (
+                <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
+                  {test?.trade_name}
+                </MenuItem>
+              ))}
+            </RHFSelect>
             <RHFTextField
               lang="en"
               name="Frequency_per_day"
               label={t('Frequency pe day')}
               sx={{ mb: 2 }}
             />
+            <Controller
+              name="Start_time"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <DatePicker
+                  {...field}
+                  label={t('Start time*')}
+                  // maxDate={maxDate}
+                  sx={{ mb: 2 }}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      error: !!error,
+                      helperText: error?.message,
+                    },
+                  }}
+                />
+              )}
+            />
+            <Controller
+              name="End_time"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <DatePicker
+                  {...field}
+                  label={t('End time*')}
+                  // maxDate={maxDate}
+                  sx={{ mb: 2 }}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      error: !!error,
+                      helperText: error?.message,
+                    },
+                  }}
+                />
+              )}
+            />
+            <RHFTextField lang="en" name="Num_days" label={t('Num days')} sx={{ mb: 2 }} />
             <RHFTextField
               lang="en"
               name="Doctor_Comments"
