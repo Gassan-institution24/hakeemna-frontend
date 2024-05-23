@@ -22,6 +22,7 @@ import { fDateAndTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetPatintmedicalreports } from 'src/api/medical_repots';
 
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content/empty-content';
@@ -30,9 +31,9 @@ import Doclogo from '../../components/logo/doc.png';
 
 export default function Medicalreports() {
   const { t } = useTranslate();
-  // const { currentLang } = useLocales();
-  // const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
+  const { medicalreportsdata } = useGetPatintmedicalreports(user?.patient?._id);
+  console.log(medicalreportsdata);
   const styles = StyleSheet.create({
     icon: {
       color: 'blue',
@@ -140,8 +141,8 @@ export default function Medicalreports() {
       </Page>
     </Document>
   );
-  return user?.patient.Mediacalreports?.length > 0 ? (
-    user?.patient.Mediacalreports.map((info, index) => (
+  return medicalreportsdata?.length > 0 ? (
+    medicalreportsdata?.map((info, index) => (
       <Card
         key={index}
         sx={{
@@ -160,7 +161,7 @@ export default function Medicalreports() {
             sx={{ width: 48, height: 48, mb: 2 }}
           />
           <ListItemText
-            primary={<Link color="black">{info?.department?.name_english}</Link>}
+            // primary={<Link color="black">{info?.department?.name_english}</Link>}
             primaryTypographyProps={{
               typography: 'subtitle1',
             }}
@@ -177,7 +178,7 @@ export default function Medicalreports() {
           </Stack>
           <PDFDownloadLink
             style={styles.pdf}
-            document={<PrescriptionPDF medicines={[info]} />}
+            // document={<PrescriptionPDF medicines={[info]} />}
             fileName={`${user?.patient?.name_english} MediacalReport.pdf`}
           >
             {({ loading }) =>
