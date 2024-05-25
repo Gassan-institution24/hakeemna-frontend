@@ -217,7 +217,7 @@ export default function AccountGeneral({ employeeData, refetch }) {
   // const { arabicKeywordsData } = useGetArabicKeywrds();
 
   const handleDrop = useCallback(
-    (name, acceptedFiles) => {
+    async (name, acceptedFiles) => {
       const file = acceptedFiles[0];
       const newFile = Object.assign(file, {
         preview: URL.createObjectURL(file),
@@ -225,29 +225,41 @@ export default function AccountGeneral({ employeeData, refetch }) {
 
       if (file) {
         setValue(name, newFile, { shouldValidate: true });
+        try {
+          const formData = new FormData();
+          formData.append(name, newFile);
+          console.log(formData);
+          await axios.patch(
+            endpoints.employees.one(employeeData._id),
+            // ...data,
+            formData
+          );
+          enqueueSnackbar(t('updated successfully!'));
+          refetch();
+        } catch (error) {
+          // error emitted in backend
+          enqueueSnackbar(
+            curLangAr ? `${error.arabic_message}` || `${error.message}` : `${error.message}`,
+            {
+              variant: 'error',
+            }
+          );
+          console.error(error);
+        }
       }
     },
-    [setValue]
+    // eslint-disable-next-line
+    [setValue, curLangAr, employeeData, enqueueSnackbar, refetch, values, t]
   );
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const formData = new FormData();
-      Object.keys(data).forEach((key) => {
-        if (['scanned_identity', 'signature', 'stamp', 'picture'].includes(key)) {
-          if (Array.isArray(data[key])) {
-            data[key].forEach((value, index) => {
-              formData.append(`${key}[${index}]`, value);
-            });
-          } else if (data[key] !== defaultValues[key]) {
-            formData.append(key, data[key]);
-          }
-        }
-      });
-      await axios.patch(endpoints.employees.one(employeeData._id), {
-        ...data,
-        formData,
-      });
+      const dataToSubmit = data;
+      delete dataToSubmit.picture;
+      delete dataToSubmit.scanned_identity;
+      delete dataToSubmit.signature;
+      delete dataToSubmit.stamp;
+      await axios.patch(endpoints.employees.one(employeeData._id), dataToSubmit);
       enqueueSnackbar(t('updated successfully!'));
       refetch();
     } catch (error) {

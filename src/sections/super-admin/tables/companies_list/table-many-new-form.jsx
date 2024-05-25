@@ -54,6 +54,8 @@ const TABLE_HEAD = [
   { label: 'email', width: 'calc(100%/14)' },
   { label: 'insurance', width: 'calc(100%/14)' },
   { label: 'subscribe to', width: 'calc(100%/14)' },
+  { label: 'social network', width: 'calc(100%/14)' },
+  { label: 'notes', width: 'calc(100%/14)' },
   { label: 'communication', width: 'calc(100%/14)' },
 ];
 export default function NewEditManyForm() {
@@ -216,12 +218,12 @@ export default function NewEditManyForm() {
                   headLabel={TABLE_HEAD}
                   rowCount={data.length}
                   numSelected={table.selected.length}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     data.map((row, index, idx) => index)
-                //   )
-                // }
+                  // onSelectAllRows={(checked) =>
+                  //   table.onSelectAllRows(
+                  //     checked,
+                  //     data.map((row, index, idx) => index)
+                  //   )
+                  // }
                 />
 
                 <TableBody>
@@ -423,6 +425,26 @@ export default function NewEditManyForm() {
                             onChange={(e) => handleEnglishInputChange(index, e)}
                             value={one.subscribe_to}
                             name="subscribe_to"
+                          />
+                          {/* {one.subscribe_to} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.social_network}
+                            name="social_network"
+                          />
+                          {/* {one.subscribe_to} */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextField
+                            size="small"
+                            variant="filled"
+                            onChange={(e) => handleEnglishInputChange(index, e)}
+                            value={one.notes}
+                            name="notes"
                           />
                           {/* {one.subscribe_to} */}
                         </TableCell>
