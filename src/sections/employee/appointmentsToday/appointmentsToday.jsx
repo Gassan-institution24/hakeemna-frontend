@@ -41,14 +41,15 @@ export default function AppointmentsToday() {
   const theme = useTheme();
   const router = useRouter();
 
-  const { appointmentsData } = useGetUsAppointmentsToday(
+  const { appointmentsData, refetch: refetchAppointments } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[0]?.unit_service?._id
   );
-  const { comingPatientData } = useGetUsAppointmentsComingpatients(
+  const { comingPatientData, refetch: refetchComingPatients } = useGetUsAppointmentsComingpatients(
     user?.employee?.employee_engagements?.[0]?.unit_service?._id
   );
-  const { entranceData } = useGetEntranceManagement();
-  const { finishedAppointmentsData, refetch } = useGetfinishedAppointments();
+  const { entranceData, refetch: refetchEntrance } = useGetEntranceManagement();
+  const { finishedAppointmentsData, refetch: refetchFinishedAppointments } = useGetfinishedAppointments();
+  
   const TABS = [
     {
       value: 'one',
@@ -84,6 +85,13 @@ export default function AppointmentsToday() {
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
 
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
+  
+  const refetchAll = () => {
+    refetchAppointments();
+    refetchComingPatients();
+    refetchEntrance();
+    refetchFinishedAppointments();
+  };
 
   const goToProcessingPage = async (id) => {
     try {
@@ -98,7 +106,7 @@ export default function AppointmentsToday() {
     try {
       const endpoint = type === 'arrived' ? 'arrived' : 'coming';
       await axiosInstance.patch(`${endpoints.appointments.one(id)}`, { [endpoint]: status });
-      refetch();
+      refetchAll();
       enqueueSnackbar(`Patient ${type === 'arrived' ? 'Arrived' : 'Coming'}: ${status}`, {
         variant: 'success',
       });
@@ -116,8 +124,10 @@ export default function AppointmentsToday() {
         start_time: new Date().toISOString(),
         wating: true,
         Appointment_date: data?.start_time,
+        service_unit: data?.unit_service?._id,
       });
-      refetch();
+      refetchAll();
+      setCurrentTab('three')
       enqueueSnackbar('Appointment started', { variant: 'success' });
     } catch (error) {
       console.error(error.message);
@@ -237,7 +247,11 @@ export default function AppointmentsToday() {
                 <TableRow key={index}>
                   <TableCell>{fTime(info?.start_time)}</TableCell>
                   <TableCell>{info?.patient?.name_english}</TableCell>
-                  <TableCell>{currentTab === 'three' || currentTab === 'four' ? info?.patient_note : info?.note}</TableCell>
+                  <TableCell>
+                    {currentTab === 'three' || currentTab === 'four'
+                      ? info?.patient_note
+                      : info?.note}
+                  </TableCell>
                   {currentTab !== 'three' && currentTab !== 'four' && currentTab !== 'two' && (
                     <>
                       <TableCell>
