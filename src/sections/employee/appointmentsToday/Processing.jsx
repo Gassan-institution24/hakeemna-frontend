@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useParams } from 'react-router';
+import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 
@@ -22,7 +23,6 @@ import {
   Dialog,
   MenuItem,
   TableRow,
-  Checkbox,
   TableCell,
   TableBody,
   TableHead,
@@ -40,18 +40,23 @@ import { fMonth } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetMedicines, useGetPatientHistoryData, useGetOneEntranceManagement } from 'src/api';
+import {
+  useGetPatient,
+  useGetMedicines,
+  useGetPatientHistoryData,
+  useGetOneEntranceManagement,
+} from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFUpload, RHFTextField } from 'src/components/hook-form';
-import { enqueueSnackbar } from 'notistack';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 export default function Processing() {
   const params = useParams();
   const { id } = params;
-  const { medicines } = useGetMedicines();
+  const { medicinesData } = useGetMedicines();
   const { user } = useAuthContext();
-  const { Entrance } = useGetOneEntranceManagement(id);
+  const { Entrance, refetch } = useGetOneEntranceManagement(id);
+  const { data } = useGetPatient(Entrance?.patient?._id);
   const { historyData } = useGetPatientHistoryData(Entrance?.patient?._id);
   const medicalReportDialog = useBoolean();
   const prescriptionDialog = useBoolean();
@@ -69,11 +74,15 @@ export default function Processing() {
     Frequency_per_day: Yup.string(),
     Doctor_Comments: Yup.string(),
     description: Yup.string(),
+    department: Yup.string(),
+    Medical_sick_leave_start: Yup.date(),
+    Medical_sick_leave_end: Yup.date(),
   });
 
   const defaultValues = {
     employee: user?.employee?._id,
-    patient: Entrance?.patient?._id,
+    patient: data?._id,
+    service_unit: Entrance?.service_unit,
   };
 
   const methods = useForm({
@@ -82,18 +91,46 @@ export default function Processing() {
     defaultValues,
   });
   const {
-    watch,
     reset,
     handleSubmit,
     control,
     formState: { isSubmitting },
   } = methods;
-  console.log(watch(), 'data');
-  const onSubmit = async (data) => {
+
+  useEffect(() => {
+    reset({
+      employee: user?.employee?._id,
+      patient: Entrance?.patient?._id,
+      service_unit: Entrance?.service_unit,
+    });
+  }, [user, data, Entrance, reset]);
+
+  const onSubmit = async (submitData) => {
     try {
-      await axiosInstance.post('/api/drugs', data);
-      await axiosInstance.post('/api/examination', data);
-      enqueueSnackbar('prescription uploaded successfully', { variant: 'success' });
+      if (medicalReportDialog.value) {
+        const { Medical_sick_leave_start, Medical_sick_leave_end, description } = submitData;
+        await axiosInstance.post('/api/drugs', {
+          Medical_sick_leave_start,
+          Medical_sick_leave_end,
+          description,
+        });
+      }
+
+      if (prescriptionDialog.value) {
+        const { Frequency_per_day, medicines, Start_time, End_time, Num_days, Doctor_Comments } =
+          submitData;
+        await axiosInstance.post('/api/examination', {
+          Frequency_per_day,
+          Start_time,
+          End_time,
+          Num_days,
+          medicines,
+          Doctor_Comments,
+        });
+      }
+
+      enqueueSnackbar('Uploaded successfully', { variant: 'success' });
+      refetch();
       prescriptionDialog.onFalse();
       medicalReportDialog.onFalse();
       reset();
@@ -101,6 +138,7 @@ export default function Processing() {
       console.error(error.message);
     }
   };
+
   const TIMELINES = [
     {
       key: 1,
@@ -115,19 +153,19 @@ export default function Processing() {
       key: 2,
       title: 'last activity',
       color: 'primary',
-      icon: <Iconify icon="cil:room" width={24} />
+      icon: <Iconify icon="cil:room" width={24} />,
     },
     {
       key: 3,
       title: 'Next activity',
       color: 'primary',
-      icon:<Iconify icon="cil:room" width={24} />
+      icon: <Iconify icon="cil:room" width={24} />,
     },
     {
       key: 4,
       title: 'prescription (optional)',
       color: 'secondary',
-      icon: <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />
+      icon: <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />,
     },
     {
       key: 5,
@@ -159,9 +197,8 @@ export default function Processing() {
                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
-            {/* <RHFTextField lang="en" name="name" label={t('File name*')} sx={{ mb: 2 }} /> */}
-            {/* <Controller
-              name="date"
+            <Controller
+              name="Medical_sick_leave_start"
               render={({ field, fieldState: { error } }) => (
                 <DatePicker
                   {...field}
@@ -176,16 +213,24 @@ export default function Processing() {
                   }}
                 />
               )}
-            /> */}
-            {/* <RHFUpload
-              autoFocus
-              fullWidth
-              name="file"
-              margin="dense"
-              sx={{ mb: 2 }}
-              variant="outlined"
-              multiple
-            /> */}
+            />
+            <Controller
+              name="Medical_sick_leave_end"
+              render={({ field, fieldState: { error } }) => (
+                <DatePicker
+                  {...field}
+                  label={t('Date of making the medical report*')}
+                  sx={{ mb: 2 }}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      error: !!error,
+                      helperText: error?.message,
+                    },
+                  }}
+                />
+              )}
+            />
             <RHFTextField lang="en" name="description" label={t('description')} />
           </DialogContent>
           <DialogActions>
@@ -225,7 +270,7 @@ export default function Processing() {
               PaperPropsSx={{ textTransform: 'capitalize' }}
               sx={{ mb: 2 }}
             >
-              {medicines?.map((test, idx) => (
+              {medicinesData?.map((test, idx) => (
                 <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
                   {test?.trade_name}
                 </MenuItem>
@@ -234,7 +279,7 @@ export default function Processing() {
             <RHFTextField
               lang="en"
               name="Frequency_per_day"
-              label={t('Frequency pe day')}
+              label={t('Frequency per day')}
               sx={{ mb: 2 }}
             />
             <Controller
@@ -310,12 +355,16 @@ export default function Processing() {
 
           <TableBody sx={{ maxHeight: 200 }}>
             {historyData?.map(
-              (data, i) =>
-                data?.status === 'active' && (
+              (historydata, i) =>
+                historydata?.status === 'active' && (
                   <TableRow key={i}>
-                    <TableCell>{fMonth(data?.created_at)}</TableCell>
-                    <TableCell>{curLangAr ? data?.name_arabic : data?.name_english}</TableCell>
-                    <TableCell>{curLangAr ? data?.sub_arabic : data?.sub_english}</TableCell>
+                    <TableCell>{fMonth(historydata?.created_at)}</TableCell>
+                    <TableCell>
+                      {curLangAr ? historydata?.name_arabic : historydata?.name_english}
+                    </TableCell>
+                    <TableCell>
+                      {curLangAr ? historydata?.sub_arabic : historydata?.sub_english}
+                    </TableCell>
                   </TableRow>
                 )
             )}

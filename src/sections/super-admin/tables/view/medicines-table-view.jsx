@@ -84,7 +84,7 @@ export default function MedicinesTableView() {
 
   const router = useRouter();
 
-  const { medicines, loading, refetch } = useGetMedicines();
+  const { medicinesData, loading, refetch } = useGetMedicines();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -94,7 +94,7 @@ export default function MedicinesTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: medicines,
+    inputData: medicinesData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -162,11 +162,11 @@ export default function MedicinesTableView() {
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: medicines.length,
+      totalRows: medicinesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, medicines, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, medicinesData, refetch]);
 
   const handleInactivateRows = useCallback(async () => {
     axiosInstance.patch(`${endpoints.medicines.all}/updatestatus`, {
@@ -175,11 +175,11 @@ export default function MedicinesTableView() {
     });
     refetch();
     table.onUpdatePageDeleteRows({
-      totalRows: medicines.length,
+      totalRows: medicinesData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, medicines, refetch]);
+  }, [dataFiltered.length, dataInPage.length, table, medicinesData, refetch]);
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -277,11 +277,11 @@ export default function MedicinesTableView() {
                       'default'
                     }
                   >
-                    {tab.value === 'all' && medicines.length}
+                    {tab.value === 'all' && medicinesData.length}
                     {tab.value === 'active' &&
-                      medicines.filter((order) => order.status === 'active').length}
+                      medicinesData.filter((order) => order.status === 'active').length}
                     {tab.value === 'inactive' &&
-                      medicines.filter((order) => order.status === 'inactive').length}
+                      medicinesData.filter((order) => order.status === 'inactive').length}
                   </Label>
                 }
               />
@@ -387,7 +387,7 @@ export default function MedicinesTableView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, medicines.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, medicinesData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
