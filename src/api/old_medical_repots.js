@@ -3,8 +3,8 @@ import useSWR, { mutate } from 'swr';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-export function useGetmedicalreports() {
-  const URL = endpoints.medicalreports.all;
+export function useGetoldmedicalreports() {
+  const URL = endpoints.oldmedicalreports.all;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
@@ -24,13 +24,13 @@ export function useGetmedicalreports() {
 
   return { ...memoizedValue, refetch };
 }
-export function useGetPatintmedicalreports(id) {
-  const URL = endpoints.medicalreports.one(id);
+export function useGetPatintoldmedicalreports(id) {
+  const URL = endpoints.oldmedicalreports.patient(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      medicalreportsdata: data,
+      oldmedicalreportsdata: data,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -46,13 +46,13 @@ export function useGetPatintmedicalreports(id) {
   return { ...memoizedValue, refetch };
 }
 
-export function useGetOnemedicalreports(id) {
-  const URL = endpoints.medicalreports.one(id);
+export function useGetOneoldmedicalreports(id) {
+  const URL = endpoints.oldmedicalreports.one(id);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
-      medicalreports: data,
+      oldmedicalreports: data,
       loading: isLoading,
       error,
       validating: isValidating,
@@ -63,8 +63,8 @@ export function useGetOnemedicalreports(id) {
 
   return memoizedValue;
 }
-export function useFindmedicalreport({ name }) {
-  const URL = endpoints.medicalreports.findReport({
+export function useFindoldmedicalreport({ name }) {
+  const URL = endpoints.oldmedicalreports.findReport({
     name,
   });
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);

@@ -17,6 +17,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 
 import { fDateAndTime } from 'src/utils/format-time';
 
+import { useGetDrugs } from 'src/api';
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -28,7 +29,8 @@ export default function Prescriptions() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const { user } = useAuthContext();
   const { t } = useTranslate();
-
+  const { drugs } = useGetDrugs(user?.patient?._id);
+  // console.log(drugs);
   function calculateAge(birthDate) {
     if (birthDate) {
       const today = new Date();
@@ -173,17 +175,17 @@ export default function Prescriptions() {
                   </View>
                   <View style={styles.tableRow}>
                     <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>{med.medicine.trade_name}</Text>
+                      <Text style={styles.tableCell}>{med.medicines.trade_name}</Text>
                     </View>
-                    <View style={styles.tableCol}>
+                    {/* <View style={styles.tableCol}>
                       <Text style={styles.tableCell}>{med.dose}</Text>
-                    </View>
+                    </View> */}
                     <View style={styles.tableCol}>
-                      <Text style={styles.tableCell}>{med.frequently}</Text>
+                      <Text style={styles.tableCell}>{med.Frequency_per_day}</Text>
                     </View>
                     <View style={styles.tableCol}>
                       <Text style={styles.tableCell}>
-                        {calculateDuration(med.startdate, med.enddate)} Days
+                        {calculateDuration(med.Start_time, med.End_time)} Days
                       </Text>
                     </View>
                   </View>
@@ -199,30 +201,30 @@ export default function Prescriptions() {
 
   return (
     <div>
-      {user?.patient.medicines.map((med, idx) => (
-        <List key={idx} sx={{ bgcolor: 'aliceblue' }}>
+      {drugs?.map((med, idx) => (
+        <List key={idx} sx={{ bgcolor: 'aliceblue', mb:2 }}>
           <ListItem sx={{ mb: 1 }}>
             <ListItemAvatar sx={{ display: { xs: 'none', md: 'inline' } }}>
               <Avatar>
                 <Iconify icon="streamline-emojis:pill" />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={t('Name')} secondary={med.medicine.trade_name} sx={{ ml: 2 }} />
-            <ListItemText primary={t('Dose')} secondary={med.dose} />
-            <ListItemText primary={t('Frequently')} secondary={med.frequently} />
+            <ListItemText primary={t('Name')} secondary={med.medicines?.trade_name} sx={{ ml: 2 }} />
+            {/* <ListItemText primary={t('Dose')} secondary={med?.dose} /> */}
+            <ListItemText primary={t('Frequently')} secondary={med?.Frequency_per_day} />
             <ListItemText
               primary={t('Start Date')}
-              secondary={fDateAndTime(med.startdate)}
+              secondary={fDateAndTime(med?.Start_time)}
               sx={{ display: { xs: 'none', md: 'inline' } }}
             />
             <ListItemText
               primary={t('End Date')}
-              secondary={fDateAndTime(med.enddate)}
+              secondary={fDateAndTime(med?.End_time)}
               sx={{ display: { xs: 'none', md: 'inline' } }}
             />
             <PDFDownloadLink
               document={<PrescriptionPDF medicines={[med]} />}
-              fileName={`${user?.patient.name_english} prescription.pdf`}
+              fileName={`${user?.patient?.name_english} prescription.pdf`}
             >
               {({ loading }) =>
                 loading ? (
