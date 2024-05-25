@@ -43,6 +43,8 @@ export default function TableNewEditForm({ currentSelected }) {
     email: Yup.string(),
     insurance: Yup.string(),
     subscribe_to: Yup.string(),
+    social_network: Yup.string(),
+    notes: Yup.string(),
     communication: Yup.string(),
   });
 
@@ -66,6 +68,8 @@ export default function TableNewEditForm({ currentSelected }) {
       email: currentSelected?.email || '',
       insurance: currentSelected?.insurance || '',
       subscribe_to: currentSelected?.subscribe_to || '',
+      social_network: currentSelected?.social_network || '',
+      notes: currentSelected?.notes || '',
       communication: currentSelected?.communication || '',
     }),
     [currentSelected]
@@ -127,6 +131,8 @@ export default function TableNewEditForm({ currentSelected }) {
       email: currentSelected?.email || '',
       insurance: currentSelected?.insurance || '',
       subscribe_to: currentSelected?.subscribe_to || '',
+      social_network: currentSelected?.social_network || '',
+      notes: currentSelected?.notes || '',
       communication: currentSelected?.communication || '',
     });
   }, [currentSelected]);
@@ -239,6 +245,14 @@ export default function TableNewEditForm({ currentSelected }) {
               <RHFTextField
                 name="subscribe_to"
                 label="subscribe to"
+              />
+              <RHFTextField
+                name="social_network"
+                label="social network"
+              />
+              <RHFTextField
+                name="notes"
+                label="notes"
               />
               <RHFTextField
                 name="communication"

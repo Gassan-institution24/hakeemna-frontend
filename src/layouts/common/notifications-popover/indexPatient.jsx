@@ -41,6 +41,7 @@ export default function NotificationsPopoverPatient() {
   const { patientNotifications, hasMore, unread, refetch, loading } = useGetPatientNotifications(
     user?.patient?._id
   );
+  console.log('patientNotifications',patientNotifications)
 
   const smUp = useResponsive('up', 'sm');
 

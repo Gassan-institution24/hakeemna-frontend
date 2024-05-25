@@ -55,6 +55,9 @@ const TABLE_HEAD = [
   { id: 'constitution_objective', label: 'constitution_objective' },
   { id: 'type_of_specialty_1', label: 'type_of_specialty_1' },
   { id: 'type_of_specialty_2', label: 'type_of_specialty_2' },
+  { id: 'subscribe_to', label: 'subscribe_to' },
+  { id: 'social_network', label: 'social_network' },
+  { id: 'notes', label: 'notes' },
   { id: '', width: 88 },
 ];
 
