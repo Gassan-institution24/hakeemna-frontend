@@ -7,21 +7,23 @@ import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
+import { useGetEmployeeEngagement } from 'src/api';
 
 // ----------------------------------------------------------------------
 
 export function useNavData() {
   const params = useParams();
   const router = useRouter();
-
   // const checkAcl = useAclGuard();
 
   const { t } = useTranslate();
 
   const { user } = useAuthContext();
   const { id } = params;
-  const currEngagement = user?.employee?.employee_engagements?.[user.employee.selected_engagement]
-  console.log('currEngagement',currEngagement)
+  const { data: employee } = useGetEmployeeEngagement(id);
+
+  const currEngagement = user?.employee?.employee_engagements?.[user.employee.selected_engagement];
+  console.log('currEngagement', currEngagement);
 
   const data = useMemo(() => {
     const employeeItems = [
@@ -34,7 +36,7 @@ export function useNavData() {
       {
         // show: checkAcl({ category: 'department', subcategory: 'accounting', acl: 'read' }),
         title: t('department level'),
-        path: `${paths.unitservice.acl.employees}/${id}/departments/${user?.employee?.employee_engagements?.[user.employee.selected_engagement]?.department}`,
+        path: `${paths.unitservice.acl.employees}/${id}/departments/${employee?.department?._id}`,
         icon: <Iconify icon="fa6-solid:file-invoice-dollar" />,
       },
       {
@@ -68,7 +70,7 @@ export function useNavData() {
       return [...employeeSecDashboard];
     }
     return [...employeeSecDashboard];
-  }, [t, user, router, id]);
+  }, [t, user, router, id, employee]);
 
   return data;
 }
