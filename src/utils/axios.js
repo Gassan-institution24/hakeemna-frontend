@@ -82,6 +82,14 @@ export const endpoints = {
     one: (id) => `/api/oldmedicalreports/${id}`,
     findReport: ({ name }) => `/api/oldmedicalreports/report?name=${name}`,
   },
+  medicalreports: {
+    all: '/api/examination/',
+    one: (id) => `/api/examination/${id}`,
+  },
+  drugs: {
+    all: '/api/drugs/',
+    one: (id) => `/api/drugs/${id}`,
+  },
   medfamilies: {
     all: '/api/drugfamilies/',
     many: '/api/drugfamilies/many',
