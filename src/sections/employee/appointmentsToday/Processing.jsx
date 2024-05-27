@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import { useEffect } from 'react';
 import { useParams } from 'react-router';
+import { useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
@@ -26,12 +26,16 @@ import {
   TableCell,
   TableBody,
   TableHead,
+  TextField,
   Typography,
   DialogTitle,
   DialogActions,
   DialogContent,
   TableContainer,
 } from '@mui/material';
+
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -55,7 +59,7 @@ export default function Processing() {
   const { id } = params;
   const { medicinesData } = useGetMedicines();
   const { user } = useAuthContext();
-  const { Entrance, refetch } = useGetOneEntranceManagement(id);
+  const { Entrance } = useGetOneEntranceManagement(id);
   const { data } = useGetPatient(Entrance?.patient?._id);
   const { historyData } = useGetPatientHistoryData(Entrance?.patient?._id);
   const medicalReportDialog = useBoolean();
@@ -63,7 +67,10 @@ export default function Processing() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-
+  const [drugs, setDrugs] = useState(false);
+  const [report, setReport] = useState(false);
+  const [filterforspecialties, setFilterforspecialties] = useState();
+  const router = useRouter();
   const PrescriptionsSchema = Yup.object().shape({
     employee: Yup.string(),
     patient: Yup.string(),
@@ -105,45 +112,60 @@ export default function Processing() {
     });
   }, [user, data, Entrance, reset]);
 
-  const onSubmit = async (submitData) => {
+  const onSubmit = async (submitdata) => {
     try {
       if (medicalReportDialog.value) {
-        const { Medical_sick_leave_start, Medical_sick_leave_end, description } = submitData;
-        await axiosInstance.post('/api/drugs', {
-          Medical_sick_leave_start,
-          Medical_sick_leave_end,
-          description,
-        });
+        await axiosInstance.post('/api/examination', submitdata);
+        setReport(true);
+        enqueueSnackbar('prescription uploaded successfully', { variant: 'success' });
+        medicalReportDialog.onFalse();
+        reset();
       }
-
       if (prescriptionDialog.value) {
-        const { Frequency_per_day, medicines, Start_time, End_time, Num_days, Doctor_Comments } =
-          submitData;
-        await axiosInstance.post('/api/examination', {
-          Frequency_per_day,
-          Start_time,
-          End_time,
-          Num_days,
-          medicines,
-          Doctor_Comments,
-        });
+        await axiosInstance.post('/api/drugs', submitdata);
+        setDrugs(true);
+        enqueueSnackbar('prescription uploaded successfully', { variant: 'success' });
+        prescriptionDialog.onFalse();
+        reset();
       }
-
-      enqueueSnackbar('Uploaded successfully', { variant: 'success' });
-      refetch();
-      prescriptionDialog.onFalse();
-      medicalReportDialog.onFalse();
-      reset();
     } catch (error) {
       console.error(error.message);
     }
   };
 
+  const handleEndAppointment = async (entranceId) => {
+    try {
+      await axiosInstance.patch(`/api/entrance/${entranceId?._id}`, {
+        Patient_attended: true,
+        wating: false,
+      });
+      enqueueSnackbar('appointment finished', { variant: 'success' });
+      router.push(paths.employee.appointmentsToday);
+    } catch (error) {
+      console.error(error.message);
+      enqueueSnackbar('no', { variant: 'error' });
+    }
+  };
+  const dataFiltered = applyFilter({
+    inputData: historyData,
+    filterforspecialties,
+  });
   const TIMELINES = [
     {
       key: 1,
-      title: `${Entrance?.patient?.name_english} medical history`,
-      icon: historyData ? (
+      title: (
+        <>
+          {`${Entrance?.patient?.name_english} medical history`}
+          <TextField
+            onChange={(e) => setFilterforspecialties(e.target.value)}
+            variant="outlined"
+            size="small"
+            placeholder="Search details"
+            sx={{ ml: 2 }}
+          />
+        </>
+      ),
+      icon: dataFiltered ? (
         <Iconify sx={{ color: '#00A76F' }} icon="icon-park-outline:correct" width={24} />
       ) : (
         <Iconify icon="eva:folder-add-fill" width={24} />
@@ -151,28 +173,88 @@ export default function Processing() {
     },
     {
       key: 2,
-      title: 'last activity',
+      title: (
+        <>
+          last activity <br />
+          Dr message:
+          <Typography>the patient need a surgery now</Typography>
+        </>
+      ),
       color: 'primary',
-      icon: <Iconify icon="cil:room" width={24} />,
+      icon: <Iconify icon="bi:door-closed" width={23} />,
     },
     {
       key: 3,
-      title: 'Next activity',
+      title: (
+        <>
+          Next activity <br />
+          <Button
+            onClick={() => alert('test')}
+            variant="contained"
+            sx={{ bgcolor: 'success.main', mr: 1, mt: 1 }}
+          >
+            wating
+          </Button>
+          <Button
+            onClick={() => alert('test')}
+            variant="contained"
+            disabled
+            sx={{ bgcolor: 'success.main', mr: 1, mt: 1 }}
+          >
+            surgery
+          </Button>
+          <Button
+            onClick={() => handleEndAppointment(Entrance)}
+            variant="contained"
+            sx={{ bgcolor: 'error.main', mt: 1 }}
+          >
+            end appointment
+          </Button>
+        </>
+      ),
       color: 'primary',
       icon: <Iconify icon="cil:room" width={24} />,
     },
     {
       key: 4,
-      title: 'prescription (optional)',
-      color: 'secondary',
-      icon: <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />,
+      title: 'medical report (optional)',
+      color: 'info',
+
+      icon:
+        report === true ? (
+          <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
+        ) : (
+          <Iconify icon="streamline:checkup-medical-report-clipboard" width={23} />
+        ),
     },
     {
       key: 5,
-      title: 'medical report (optional)',
-      color: 'info',
-      icon: <Iconify icon="streamline:checkup-medical-report-clipboard" width={23} />,
+      title: 'prescription (optional)',
+      color: 'secondary',
+      icon:
+        drugs === true ? (
+          <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
+        ) : (
+          <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />
+        ),
     },
+    // {
+    //   key: 6,
+    //   title: (
+    //     <>
+    //       <Typography sx={{ mb: 2, color: 'error.main' }}>
+    //         End the appointment only if the patient has completed all procedures for his appointment
+    //       </Typography>
+    //       <Button
+    //         onClick={() => handleEndAppointment(Entrance)}
+    //         variant="contained"
+    //         sx={{ bgcolor: 'success.main' }}
+    //       >
+    //         End Appointment
+    //       </Button>
+    //     </>
+    //   ),
+    // },
   ];
 
   const renderMedicalReport = (
@@ -279,9 +361,11 @@ export default function Processing() {
             <RHFTextField
               lang="en"
               name="Frequency_per_day"
-              label={t('Frequency per day')}
+              label={t('Frequency pe day')}
               sx={{ mb: 2 }}
             />
+            <RHFTextField lang="en" name="Num_days" label={t('Number of days')} sx={{ mb: 2 }} />
+
             <Controller
               name="Start_time"
               control={control}
@@ -289,7 +373,6 @@ export default function Processing() {
                 <DatePicker
                   {...field}
                   label={t('Start time*')}
-                  // maxDate={maxDate}
                   sx={{ mb: 2 }}
                   slotProps={{
                     textField: {
@@ -308,7 +391,6 @@ export default function Processing() {
                 <DatePicker
                   {...field}
                   label={t('End time*')}
-                  // maxDate={maxDate}
                   sx={{ mb: 2 }}
                   slotProps={{
                     textField: {
@@ -320,7 +402,6 @@ export default function Processing() {
                 />
               )}
             />
-            <RHFTextField lang="en" name="Num_days" label={t('Num days')} sx={{ mb: 2 }} />
             <RHFTextField
               lang="en"
               name="Doctor_Comments"
@@ -353,8 +434,8 @@ export default function Processing() {
             </TableRow>
           </TableHead>
 
-          <TableBody sx={{ maxHeight: 200 }}>
-            {historyData?.map(
+          <TableBody sx={{ maxHeight: 400 }}>
+            {dataFiltered?.map(
               (historydata, i) =>
                 historydata?.status === 'active' && (
                   <TableRow key={i}>
@@ -393,8 +474,7 @@ export default function Processing() {
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {item.title === 'medical report (optional)' && renderMedicalReport}
                 {item.title === 'prescription (optional)' && renderPrescription}
-                {item.title === `${Entrance?.patient?.name_english} medical history` &&
-                  renderHistory}
+                {item.key === 1 && renderHistory}
               </Typography>
             </Paper>
           </TimelineContent>
@@ -402,4 +482,30 @@ export default function Processing() {
       ))}
     </Timeline>
   );
+}
+function normalizeArabicText(text) {
+  // Normalize Arabic text by replacing 'أ' with 'ا'
+  return text.replace(/أ/g, 'ا');
+}
+
+function applyFilter({ inputData, filterforspecialties }) {
+  if (!filterforspecialties) {
+    return inputData;
+  }
+
+  // Normalize the search term for comparison
+  const normalizedSearchTerm = normalizeArabicText(filterforspecialties.toLowerCase());
+
+  inputData = inputData?.filter((data) => {
+    const normalizedDataNameEnglish = normalizeArabicText(data?.name_english.toLowerCase());
+    const normalizedDataNameArabic = normalizeArabicText(data?.name_arabic.toLowerCase());
+    return (
+      normalizedDataNameEnglish.includes(normalizedSearchTerm) ||
+      normalizedDataNameArabic.includes(normalizedSearchTerm) ||
+      data?._id === filterforspecialties ||
+      JSON.stringify(data.code) === filterforspecialties
+    );
+  });
+
+  return inputData;
 }

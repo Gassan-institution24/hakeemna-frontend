@@ -125,6 +125,10 @@ export default function AppointmentsToday() {
         wating: true,
         Appointment_date: data?.start_time,
         service_unit: data?.unit_service?._id,
+        appointmentId: data?._id,
+      });
+      await axiosInstance.patch(endpoints.appointments.one(data?._id), {
+        started: true,
       });
       refetchAll();
       setCurrentTab('three')
@@ -166,7 +170,7 @@ export default function AppointmentsToday() {
 
     if (currentTab === 'four') {
       return (
-        <IconButton sx={{ p: 2 }} onClick={() => alert('test')}>
+        <IconButton sx={{ p: 2 }} onClick={() => router.push(`${paths.unitservice.departments.viewgPage}/${info?._id}`)}>
           <Iconify
             width={20}
             sx={{ cursor: 'pointer', mr: 1, color: 'info.main' }}
@@ -182,7 +186,7 @@ export default function AppointmentsToday() {
         <IconButton
           sx={{ p: 2 }}
           onClick={() => info.arrived && startAppointment(info)}
-          disabled={!info.arrived}
+          disabled={info?.started || !info.arrived}
         >
           <Iconify
             width={20}
