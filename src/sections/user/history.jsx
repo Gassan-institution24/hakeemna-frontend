@@ -1,5 +1,3 @@
-// import React, { useState } from 'react';
-// import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 
 import Table from '@mui/material/Table';
@@ -35,7 +33,6 @@ export default function HistoryHead() {
   const deletehistoryfeild = async (id) => {
     try {
       await axios.patch(endpoints.history.one(id));
-
       refetch();
       enqueueSnackbar('Deleted successfully', { variant: 'success' });
     } catch (error) {

@@ -30,7 +30,6 @@ export default function Prescriptions() {
   const { user } = useAuthContext();
   const { t } = useTranslate();
   const { drugs } = useGetDrugs(user?.patient?._id);
-  // console.log(drugs);
   function calculateAge(birthDate) {
     if (birthDate) {
       const today = new Date();

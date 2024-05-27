@@ -197,6 +197,7 @@ const ServicesHomePage = lazy(() => import('src/pages/unit-service/tables/servic
 const ServicesNewPage = lazy(() => import('src/pages/unit-service/tables/services/new'));
 const ServicesEditPage = lazy(() => import('src/pages/unit-service/tables/services/edit'));
 const Processing = lazy(() => import('src/sections/employee/appointmentsToday/Processing'));
+const Viewgpage = lazy(() => import('src/sections/employee/appointmentsToday/viewgpage'));
 
 // OLD PATIENT
 const OldPatientPage = lazy(() => import('src/pages/unit-service/old-patient/home'));
@@ -401,6 +402,7 @@ export const unitServiceDashboardRoutes = [
         ],
       },
       { path: 'processingpage/:id', element: <Processing /> },
+      { path: 'viewgpage/:id', element: <Viewgpage /> },
       {
         path: 'employees',
         children: [
