@@ -40,7 +40,7 @@ export default function AppointmentsToday() {
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const router = useRouter();
-
+  
   const { appointmentsData, refetch: refetchAppointments } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[0]?.unit_service?._id
   );
@@ -117,6 +117,7 @@ export default function AppointmentsToday() {
   };
 
   const startAppointment = async (data) => {
+  
     try {
       await axiosInstance.post(endpoints.entranceManagement.all, {
         patient: data?.patient?._id,

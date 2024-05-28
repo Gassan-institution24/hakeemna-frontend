@@ -8,7 +8,7 @@ import { useParams, useRouter } from 'src/routes/hooks';
 import { fDateTime } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
-import {  useGetOneEntranceManagement } from 'src/api';
+import { useGetOneEntranceManagement } from 'src/api';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify/iconify';
@@ -23,6 +23,7 @@ export default function ViewPage() {
   const handleBackClick = () => {
     router.push(paths.employee.appointmentsToday);
   };
+  console.log(Entrance);
   return (
     <Stack
       component={Card}
@@ -30,20 +31,21 @@ export default function ViewPage() {
       sx={{ p: 3, display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}
     >
       <Box>
+        <Typography variant="h3">{Entrance?.patient?.name_english}</Typography>
         <Typography sx={{ fontWeight: 600, p: 2 }}>
           {t('Date')}:&nbsp; &nbsp;
-          <span style={{ color: 'gray', fontWeight: 400 }}>
-            {fDateTime(Entrance?.created_at)}
-          </span>
+          <span style={{ color: 'gray', fontWeight: 400 }}>{fDateTime(Entrance?.created_at)}</span>
         </Typography>
         <Typography sx={{ fontWeight: 600, p: 2 }}>
-          {t('Subject')}:&nbsp; &nbsp;
-          <span style={{ color: 'gray', fontWeight: 400 }}>{Entrance?.name_english}</span>{' '}
+          {t('Appointment in ')}:&nbsp; &nbsp;
+          <span style={{ color: 'gray', fontWeight: 400 }}>
+            {Entrance?.service_unit?.name_english}
+          </span>
         </Typography>
 
         <Typography sx={{ fontWeight: 600, p: 2 }}>
-          {t('Info')}:&nbsp; &nbsp;
-          <span style={{ color: 'gray', fontWeight: 400 }}>{Entrance?.sub_english}</span>
+          {t('Note')}:&nbsp; &nbsp;
+          <span style={{ color: 'gray', fontWeight: 400 }}>{Entrance?.patient_note}</span>
         </Typography>
 
         <Button variant="outlined" sx={{ mt: 2 }} onClick={() => handleBackClick()}>
@@ -52,10 +54,7 @@ export default function ViewPage() {
         </Button>
       </Box>
       <Box sx={{ display: 'grid', gridTemplateColumns: { md: '1fr 1fr', xs: '1fr' } }}>
-        <Image
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOKJKeRhsfM8Xli9VSy3_q48nXRAQih_oLv0q8tta2fw&s"
-          sx={{ m: 1 }}
-        />
+        <Image src={Entrance?.patient?.profile_picture} sx={{ m: 1 }} />
       </Box>
     </Stack>
   );
