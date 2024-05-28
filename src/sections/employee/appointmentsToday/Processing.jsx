@@ -54,6 +54,9 @@ import {
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
+import Testpage from './testPage';
+import SickLeave from './sickLeave';
+
 export default function Processing() {
   const params = useParams();
   const { id } = params;
@@ -70,6 +73,7 @@ export default function Processing() {
   const [drugs, setDrugs] = useState(false);
   const [report, setReport] = useState(false);
   const [filterforspecialties, setFilterforspecialties] = useState();
+  const [itemsToShow, setItemsToShow] = useState(2);
   const router = useRouter();
   const PrescriptionsSchema = Yup.object().shape({
     employee: Yup.string(),
@@ -101,8 +105,13 @@ export default function Processing() {
     reset,
     handleSubmit,
     control,
+    watch,
+    setValue,
     formState: { isSubmitting },
   } = methods;
+
+  const watchStartTime = watch('Start_time');
+  const watchEndTime = watch('End_time');
 
   useEffect(() => {
     reset({
@@ -111,6 +120,15 @@ export default function Processing() {
       service_unit: Entrance?.service_unit,
     });
   }, [user, data, Entrance, reset]);
+
+  useEffect(() => {
+    if (watchStartTime && watchEndTime) {
+      const start = new Date(watchStartTime);
+      const end = new Date(watchEndTime);
+      const difference = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+      setValue('Num_days', difference > 0 ? difference : 0);
+    }
+  }, [watchStartTime, watchEndTime, setValue]);
 
   const onSubmit = async (submitdata) => {
     try {
@@ -161,12 +179,13 @@ export default function Processing() {
             variant="outlined"
             size="small"
             placeholder="Search details"
-            sx={{ ml: 2 }}
+            sx={{ ml: 2, mb: 2 }}
           />
         </>
       ),
+      color: 'primary',
       icon: dataFiltered ? (
-        <Iconify sx={{ color: '#00A76F' }} icon="icon-park-outline:correct" width={24} />
+        <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
       ) : (
         <Iconify icon="eva:folder-add-fill" width={24} />
       ),
@@ -180,11 +199,22 @@ export default function Processing() {
           <Typography>the patient need a surgery now</Typography>
         </>
       ),
-      color: 'primary',
+      color: 'info',
       icon: <Iconify icon="bi:door-closed" width={23} />,
     },
     {
       key: 3,
+      title: (
+        <>
+          Doctor Check List <br />
+          <Testpage />
+        </>
+      ),
+      color: 'primary',
+      icon: <Iconify icon="octicon:checklist-16" width={23} />,
+    },
+    {
+      key: 4,
       title: (
         <>
           Next activity <br />
@@ -212,13 +242,13 @@ export default function Processing() {
           </Button>
         </>
       ),
-      color: 'primary',
+      color: 'info',
       icon: <Iconify icon="cil:room" width={24} />,
     },
     {
-      key: 4,
+      key: 5,
       title: 'medical report (optional)',
-      color: 'info',
+      color: 'primary',
 
       icon:
         report === true ? (
@@ -228,9 +258,9 @@ export default function Processing() {
         ),
     },
     {
-      key: 5,
+      key: 6,
       title: 'prescription (optional)',
-      color: 'secondary',
+      color: 'info',
       icon:
         drugs === true ? (
           <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
@@ -238,23 +268,17 @@ export default function Processing() {
           <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />
         ),
     },
-    // {
-    //   key: 6,
-    //   title: (
-    //     <>
-    //       <Typography sx={{ mb: 2, color: 'error.main' }}>
-    //         End the appointment only if the patient has completed all procedures for his appointment
-    //       </Typography>
-    //       <Button
-    //         onClick={() => handleEndAppointment(Entrance)}
-    //         variant="contained"
-    //         sx={{ bgcolor: 'success.main' }}
-    //       >
-    //         End Appointment
-    //       </Button>
-    //     </>
-    //   ),
-    // },
+    {
+      key: 7,
+      title: (
+        <>
+          sick leave (optional) <br />
+          <SickLeave />
+        </>
+      ),
+      color: 'primary',
+      icon: <Iconify icon="pepicons-pencil:leave" width={24} />,
+    },
   ];
 
   const renderMedicalReport = (
@@ -423,19 +447,18 @@ export default function Processing() {
   );
 
   const renderHistory = (
-    <Card sx={{ mt: 2 }}>
-      <TableContainer sx={{ mb: 2, maxHeight: 200 }}>
-        <Table sx={{ minWidth: 400 }}>
+    <Card>
+      <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>{t('Date')}</TableCell>
+              <TableCell>{t('Name')}</TableCell>
               <TableCell>{t('Subject')}</TableCell>
-              <TableCell>{t('Info')}</TableCell>
             </TableRow>
           </TableHead>
-
-          <TableBody sx={{ maxHeight: 400 }}>
-            {dataFiltered?.map(
+          <TableBody>
+            {dataFiltered?.slice(0, itemsToShow).map(
               (historydata, i) =>
                 historydata?.status === 'active' && (
                   <TableRow key={i}>
@@ -451,6 +474,16 @@ export default function Processing() {
             )}
           </TableBody>
         </Table>
+        {dataFiltered?.length > itemsToShow && (
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => setItemsToShow(itemsToShow + itemsToShow)}
+            sx={{ m: 2 }}
+          >
+            {t('Load More')}
+          </Button>
+        )}
       </TableContainer>
     </Card>
   );
@@ -499,9 +532,13 @@ function applyFilter({ inputData, filterforspecialties }) {
   inputData = inputData?.filter((data) => {
     const normalizedDataNameEnglish = normalizeArabicText(data?.name_english.toLowerCase());
     const normalizedDataNameArabic = normalizeArabicText(data?.name_arabic.toLowerCase());
+    const normalizedDataSubArabic = normalizeArabicText(data?.sub_english.toLowerCase());
+    const normalizedDataSubEnglish = normalizeArabicText(data?.sub_arabic.toLowerCase());
     return (
       normalizedDataNameEnglish.includes(normalizedSearchTerm) ||
       normalizedDataNameArabic.includes(normalizedSearchTerm) ||
+      normalizedDataSubArabic.includes(normalizedSearchTerm) ||
+      normalizedDataSubEnglish.includes(normalizedSearchTerm) ||
       data?._id === filterforspecialties ||
       JSON.stringify(data.code) === filterforspecialties
     );
