@@ -3,7 +3,7 @@ import { useLocation } from 'react-router';
 
 import { useParams, useRouter } from 'src/routes/hooks';
 
-import { useGetWorkGroup } from 'src/api';
+import { useGetEmployeeWorkGroups, useGetWorkGroup } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
 import { useLocales, useTranslate } from 'src/locales';
 
@@ -19,24 +19,27 @@ export function usePermissionWGNavData() {
   const curLangAr = currentLang.value === 'ar';
   const { user } = useAuthContext();
 
-  const { wgid } = useParams();
-  const { data: wgData, loading } = useGetWorkGroup(wgid);
+  const { id } = useParams();
+
+  const { workGroupsData, loading } = useGetEmployeeWorkGroups(id);
+
+  console.log('workGroupsData', workGroupsData);
 
   const employeeItems = useMemo(() => {
-    if (loading || !wgData?.employees) {
+    if (loading || !workGroupsData) {
       return [];
     }
-    return wgData?.employees?.map((info, idx) => {
+    return workGroupsData?.map((info, idx) => {
       const currpath = location.pathname.split('/');
-      currpath[6] = info?._id;
+      currpath[7] = info?._id;
       const path = currpath.join('/');
       return {
-        title: curLangAr ? info.employee.employee.name_arabic : info.employee.employee.name_english,
+        title: curLangAr ? info.name_arabic : info.name_english,
         path,
         icon: <Iconify icon="ion:person" />,
       };
     });
-  }, [loading, wgData, curLangAr, location.pathname]);
+  }, [loading, workGroupsData, curLangAr, location.pathname]);
 
   const data = useMemo(() => {
     if (!user) {

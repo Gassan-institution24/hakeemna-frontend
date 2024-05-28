@@ -224,6 +224,9 @@ const EmployeeUSPermission = lazy(() =>
 const EmployeeDepartmentPermission = lazy(() =>
   import('src/pages/unit-service/permissions/employee-department-permissions')
 );
+const EmployeeWGPermission = lazy(() =>
+  import('src/pages/unit-service/permissions/employee-workgroup-permissions')
+);
 // ----------------------------------------------------------------------
 
 export const unitServiceDashboardRoutes = [
@@ -266,8 +269,8 @@ export const unitServiceDashboardRoutes = [
                       </EmployeePermissionWGLayout>
                     ),
                     children: [
-                      { element: <EmployeeDepartmentPermission />, index: true },
-                      { path: ':emid', element: <EmployeeDepartmentPermission /> },
+                      { element: <EmployeeWGPermission />, index: true },
+                      { path: ':wgid', element: <EmployeeWGPermission /> },
                     ],
                   },
                 ],
