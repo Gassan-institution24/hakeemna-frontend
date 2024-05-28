@@ -15,8 +15,8 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import axios, { endpoints } from 'src/utils/axios';
 
 import socket from 'src/socket';
+import { useGetWorkGroup } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetEmployeeEngagement } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -36,9 +36,11 @@ export default function TableNewEditForm() {
     { label: t('delete'), value: 'delete' },
   ];
 
-  const { id } = useParams();
+  const { id, wgid } = useParams();
 
-  const {data } = useGetEmployeeEngagement(id);
+  const { data } = useGetWorkGroup(wgid);
+
+  console.log('dataaaa', data);
 
   const { user } = useAuthContext();
 
@@ -47,26 +49,24 @@ export default function TableNewEditForm() {
   const { enqueueSnackbar } = useSnackbar();
 
   const accessControlList = Yup.object().shape({
-    employees: Yup.array(),
-    management_tables: Yup.array(),
     appointments: Yup.array(),
     appointment_configs: Yup.array(),
     accounting: Yup.array(),
-    quality_control: Yup.array(),
+    entrance_management: Yup.array(),
     permissions: Yup.array(),
   });
 
+  const currWGPermissions = data?.employees?.find((info) => info?.employee?._id === id)?.acl;
+  console.log('currWGPermissions', currWGPermissions);
   const defaultValues = useMemo(
     () => ({
-      employees: data?.acl?.department?.employees || [],
-      management_tables: data?.acl?.department?.management_tables || [],
-      appointments: data?.acl?.department?.appointments || [],
-      appointment_configs: data?.acl?.department?.appointment_configs || [],
-      accounting: data?.acl?.department?.accounting || [],
-      quality_control: data?.acl?.department?.quality_control || [],
-      permissions: data?.acl?.department?.permissions || [],
+      appointments: currWGPermissions?.appointments || [],
+      appointment_configs: currWGPermissions?.appointment_configs || [],
+      accounting: currWGPermissions?.accounting || [],
+      entrance_management: currWGPermissions?.entrance_management || [],
+      permissions: currWGPermissions?.permissions || [],
     }),
-    [data]
+    [currWGPermissions]
   );
 
   const methods = useForm({
@@ -92,22 +92,23 @@ export default function TableNewEditForm() {
   /* eslint-disable */
   useEffect(() => {
     reset({
-      employees: data?.acl?.department?.employees || [],
-      management_tables: data?.acl?.department?.management_tables || [],
-      appointments: data?.acl?.department?.appointments || [],
-      appointment_configs: data?.acl?.department?.appointment_configs || [],
-      accounting: data?.acl?.department?.accounting || [],
-      quality_control: data?.acl?.department?.quality_control || [],
-      permissions: data?.acl?.department?.permissions || [],
+      appointments: currWGPermissions?.appointments || [],
+      appointment_configs: currWGPermissions?.appointment_configs || [],
+      accounting: currWGPermissions?.accounting || [],
+      entrance_management: currWGPermissions?.entrance_management || [],
+      permissions: currWGPermissions?.permissions || [],
     });
   }, [id, data]);
   /* eslint-enable */
 
-  const onSubmit = handleSubmit(async (submitedData) => {
+  const onSubmit = handleSubmit(async (submitData) => {
     try {
-      const newAcl = data.acl;
-      newAcl.department = submitedData;
-      axios.patch(endpoints.employee_engagements.one(id), { acl: newAcl });
+      await axios.patch(
+        endpoints.work_groups.employee.acl(
+          data?.employees?.find((info) => info?.employee?._id === id)?._id
+        ),
+        { acl: submitData }
+      );
       socket.emit('updated', {
         user,
         link: paths.unitservice.employees.acl(id),
@@ -131,14 +132,14 @@ export default function TableNewEditForm() {
     <>
       {mdUp && (
         <Grid md={4}>
-          <Typography textTransform="capitalize" variant="h6" sx={{ mb: 0.5 }}>
+          <Typography variant="h6" sx={{ mb: 0.5 }}>
             {t('permissions')}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             {t('giving or withdrowing permissions refered to all')}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {t('department and all its work groups')}
+            {t('work group and all its employees')}
           </Typography>
         </Grid>
       )}
@@ -148,18 +149,6 @@ export default function TableNewEditForm() {
           {!mdUp && <CardHeader title={t('permissions')} />}
 
           <Stack spacing={3} sx={{ p: 3 }}>
-            <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
-                {t('employees')}
-              </Typography>
-              <RHFMultiCheckbox row spacing={4} name="employees" options={options} />
-            </Stack>
-            <Stack spacing={1}>
-              <Typography textTransform="capitalize" variant="subtitle2">
-                {t('management tables')}
-              </Typography>
-              <RHFMultiCheckbox row spacing={4} name="management_tables" options={options} />
-            </Stack>
             <Stack spacing={1}>
               <Typography textTransform="capitalize" variant="subtitle2">
                 {t('appointments')}
@@ -180,9 +169,9 @@ export default function TableNewEditForm() {
             </Stack>
             <Stack spacing={1}>
               <Typography textTransform="capitalize" variant="subtitle2">
-                {t('quality control')}
+                {t('entrance management')}
               </Typography>
-              <RHFMultiCheckbox row spacing={4} name="quality_control" options={options} />
+              <RHFMultiCheckbox row spacing={4} name="entrance_management" options={options} />
             </Stack>
             <Stack spacing={1}>
               <Typography textTransform="capitalize" variant="subtitle2">
