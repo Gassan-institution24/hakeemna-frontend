@@ -36,9 +36,9 @@ export default function TableNewEditForm() {
     { label: t('delete'), value: 'delete' },
   ];
 
-  const { emid } = useParams();
+  const { id } = useParams();
 
-  const { data } = useGetEmployeeEngagement(emid);
+  const {data } = useGetEmployeeEngagement(id);
 
   const { user } = useAuthContext();
 
@@ -100,17 +100,17 @@ export default function TableNewEditForm() {
       quality_control: data?.acl?.department?.quality_control || [],
       permissions: data?.acl?.department?.permissions || [],
     });
-  }, [emid, data]);
+  }, [id, data]);
   /* eslint-enable */
 
   const onSubmit = handleSubmit(async (submitedData) => {
     try {
       const newAcl = data.acl;
       newAcl.department = submitedData;
-      axios.patch(endpoints.employee_engagements.one(emid), { acl: newAcl });
+      axios.patch(endpoints.employee_engagements.one(id), { acl: newAcl });
       socket.emit('updated', {
         user,
-        link: paths.unitservice.employees.acl(emid),
+        link: paths.unitservice.employees.acl(id),
         msg: `updated a department employee permissions`,
       });
       enqueueSnackbar(t('updated successfully!'));
