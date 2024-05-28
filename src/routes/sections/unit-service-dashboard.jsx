@@ -15,6 +15,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import DepartmentsNavLayout from 'src/layouts/departments-topbar';
 import WorkGroupsNavLayout from 'src/layouts/workgroups-topbar';
 import PermissionsNavLayout from 'src/layouts/permissions-topbar';
+import EmployeePermissionWGLayout from 'src/layouts/permissions-minibar';
 
 // ----------------------------------------------------------------------
 // DEPARTMENTS
@@ -223,6 +224,9 @@ const EmployeeUSPermission = lazy(() =>
 const EmployeeDepartmentPermission = lazy(() =>
   import('src/pages/unit-service/permissions/employee-department-permissions')
 );
+const EmployeeWGPermission = lazy(() =>
+  import('src/pages/unit-service/permissions/employee-workgroup-permissions')
+);
 // ----------------------------------------------------------------------
 
 export const unitServiceDashboardRoutes = [
@@ -257,6 +261,18 @@ export const unitServiceDashboardRoutes = [
                 children: [
                   { path: 'us', element: <EmployeeUSPermission /> },
                   { path: 'departments/:depId', element: <EmployeeDepartmentPermission /> },
+                  {
+                    path: 'workgroups',
+                    element: (
+                      <EmployeePermissionWGLayout>
+                        <Outlet />
+                      </EmployeePermissionWGLayout>
+                    ),
+                    children: [
+                      { element: <EmployeeWGPermission />, index: true },
+                      { path: ':wgid', element: <EmployeeWGPermission /> },
+                    ],
+                  },
                 ],
               },
             ],
