@@ -1,0 +1,26 @@
+import { Helmet } from 'react-helmet-async';
+
+import ACLGuard from 'src/auth/guard/acl-guard';
+import { useAuthContext } from 'src/auth/hooks';
+import { useParams } from 'src/routes/hooks';
+
+import EmployeeWGPermissionsView from 'src/sections/unit-service/permissions/view/workgroup-permission';
+// ----------------------------------------------------------------------
+
+export default function EmployeeWGPermissionsPage() {
+  const { user } = useAuthContext();
+  const serviceUnitName =
+    user?.employee?.employee_engagements?.[user?.employee?.selected_engagement]?.unit_service
+      ?.name_english;
+  const { id, wgid } = useParams();
+  return (
+    <ACLGuard category="unit_service" subcategory="permissions" acl="read">
+      <Helmet>
+        <title>{serviceUnitName || 'unit of service'} : work groups permissions</title>
+        <meta name="description" content="meta" />
+      </Helmet>
+
+      {id && wgid && <EmployeeWGPermissionsView />}
+    </ACLGuard>
+  );
+}
