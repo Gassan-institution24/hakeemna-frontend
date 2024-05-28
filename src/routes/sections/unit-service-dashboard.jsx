@@ -15,6 +15,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import DepartmentsNavLayout from 'src/layouts/departments-topbar';
 import WorkGroupsNavLayout from 'src/layouts/workgroups-topbar';
 import PermissionsNavLayout from 'src/layouts/permissions-topbar';
+import EmployeePermissionWGLayout from 'src/layouts/permissions-minibar';
 
 // ----------------------------------------------------------------------
 // DEPARTMENTS
@@ -256,6 +257,18 @@ export const unitServiceDashboardRoutes = [
                 children: [
                   { path: 'us', element: <EmployeeUSPermission /> },
                   { path: 'departments/:depId', element: <EmployeeDepartmentPermission /> },
+                  {
+                    path: 'workgroups',
+                    element: (
+                      <EmployeePermissionWGLayout>
+                        <Outlet />
+                      </EmployeePermissionWGLayout>
+                    ),
+                    children: [
+                      { element: <EmployeeDepartmentPermission />, index: true },
+                      { path: ':emid', element: <EmployeeDepartmentPermission /> },
+                    ],
+                  },
                 ],
               },
             ],
