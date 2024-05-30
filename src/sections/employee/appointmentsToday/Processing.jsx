@@ -273,7 +273,7 @@ export default function Processing() {
       title: (
         <>
           sick leave (optional) <br />
-          <SickLeave />
+          <SickLeave patient = {data} />
         </>
       ),
       color: 'primary',
