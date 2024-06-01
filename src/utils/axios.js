@@ -359,6 +359,14 @@ export const endpoints = {
     one: (id) => `/api/history/${id}`,
     patient: (id) => `/api/history/patient/${id}`,
   },
+  generalCheckList: {
+    all: '/api/generlaCL',
+    one: (id) => `/api/generlaCL/${id}`,
+  },
+  localCheckList: {
+    all: '/api/localCL',
+    one: (id) => `/api/localCL/${id}`,
+  },
   entranceManagement: {
     all: '/api/entrance',
     one: (id) => `/api/entrance/${id}`,
