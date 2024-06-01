@@ -54,7 +54,7 @@ import {
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import Testpage from './testPage';
+import Testpage from './checkList';
 import SickLeave from './sickLeave';
 
 export default function Processing() {
@@ -206,7 +206,7 @@ export default function Processing() {
       key: 3,
       title: (
         <>
-          Doctor Check List <br />
+          Doctor Check List
           <Testpage />
         </>
       ),
@@ -273,7 +273,7 @@ export default function Processing() {
       title: (
         <>
           sick leave (optional) <br />
-          <SickLeave patient = {data} />
+          <SickLeave patient={data} />
         </>
       ),
       color: 'primary',
@@ -503,7 +503,7 @@ export default function Processing() {
                 bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
               }}
             >
-              <Typography variant="subtitle2">{item.title}</Typography>
+              <Typography variant="subtitle2" >{item.title}</Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {item.title === 'medical report (optional)' && renderMedicalReport}
                 {item.title === 'prescription (optional)' && renderPrescription}
