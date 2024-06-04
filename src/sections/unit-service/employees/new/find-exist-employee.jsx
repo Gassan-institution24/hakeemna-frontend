@@ -107,8 +107,8 @@ export default function TableNewEditForm() {
             employee: row._id,
           },
         },
-      }
-      console.log('dataaa',data)
+      };
+      console.log('dataaa', data);
       await axios.post(`${endpoints.notifications.all}/invite`, data);
       enqueueSnackbar(t('invitation sent!'));
     } catch (error) {

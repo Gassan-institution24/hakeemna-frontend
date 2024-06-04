@@ -157,9 +157,9 @@ export default function JwtLoginView() {
         {t('Login')}
       </LoadingButton>
       <Link
-        sx={{  alignSelf: 'center' }}
+        sx={{ alignSelf: 'center' }}
         component={RouterLink}
-        href='https://doctorna.online/'
+        href="https://doctorna.online/"
         variant="subtitle2"
         underline="always"
       >

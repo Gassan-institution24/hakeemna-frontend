@@ -3,8 +3,8 @@ import { useLocation } from 'react-router';
 
 import { useParams, useRouter } from 'src/routes/hooks';
 
-import { useGetEmployeeWorkGroups, useGetWorkGroup } from 'src/api';
 import { useAuthContext } from 'src/auth/hooks';
+import { useGetEmployeeWorkGroups } from 'src/api';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';

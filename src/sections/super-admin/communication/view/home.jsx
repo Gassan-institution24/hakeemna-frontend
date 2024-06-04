@@ -66,9 +66,9 @@ export default function AppointmentsView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
-  const { messages } = useGetUnreadMsgs(user._id)
+  const { messages } = useGetUnreadMsgs(user._id);
 
   const {
     ticketsData,
@@ -240,7 +240,7 @@ export default function AppointmentsView() {
 
               <TableBody>
                 {ticketsData?.map((row, idx) => {
-                  const unreadCount = messages.find((one) => one._id === row.chat)
+                  const unreadCount = messages.find((one) => one._id === row.chat);
                   return (
                     <AppointmentsRow
                       refetch={refetch}
@@ -251,7 +251,7 @@ export default function AppointmentsView() {
                       selected={table.selected.includes(row._id)}
                       onSelectRow={() => table.onSelectRow(row._id)}
                     />
-                  )
+                  );
                 })}
 
                 <TableEmptyRows

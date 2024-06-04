@@ -26,8 +26,8 @@ import Scrollbar from 'src/components/scrollbar';
 
 export default function PatientHistory() {
   const { t } = useTranslate();
-  const {id} = useParams()
-//   const { user } = useAuthContext();
+  const { id } = useParams();
+  //   const { user } = useAuthContext();
   const { historyData } = useGetPatientHistoryData(id);
   // const router = useRouter();
 

@@ -40,7 +40,7 @@ export default function AppointmentsToday() {
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const router = useRouter();
-  
+
   const { appointmentsData, refetch: refetchAppointments } = useGetUsAppointmentsToday(
     user?.employee?.employee_engagements?.[0]?.unit_service?._id
   );
@@ -48,8 +48,9 @@ export default function AppointmentsToday() {
     user?.employee?.employee_engagements?.[0]?.unit_service?._id
   );
   const { entranceData, refetch: refetchEntrance } = useGetEntranceManagement();
-  const { finishedAppointmentsData, refetch: refetchFinishedAppointments } = useGetfinishedAppointments();
-  
+  const { finishedAppointmentsData, refetch: refetchFinishedAppointments } =
+    useGetfinishedAppointments();
+
   const TABS = [
     {
       value: 'one',
@@ -85,7 +86,7 @@ export default function AppointmentsToday() {
   const handleChangeTab = useCallback((event, newValue) => setCurrentTab(newValue), []);
 
   const currentTabData = TABS.find((tab) => tab.value === currentTab);
-  
+
   const refetchAll = () => {
     refetchAppointments();
     refetchComingPatients();
@@ -117,7 +118,6 @@ export default function AppointmentsToday() {
   };
 
   const startAppointment = async (data) => {
-  
     try {
       await axiosInstance.post(endpoints.entranceManagement.all, {
         patient: data?.patient?._id,
@@ -132,7 +132,7 @@ export default function AppointmentsToday() {
         started: true,
       });
       refetchAll();
-      setCurrentTab('three')
+      setCurrentTab('three');
       enqueueSnackbar('Appointment started', { variant: 'success' });
     } catch (error) {
       console.error(error.message);
@@ -171,7 +171,10 @@ export default function AppointmentsToday() {
 
     if (currentTab === 'four') {
       return (
-        <IconButton sx={{ p: 2 }} onClick={() => router.push(`${paths.unitservice.departments.viewgPage}/${info?._id}`)}>
+        <IconButton
+          sx={{ p: 2 }}
+          onClick={() => router.push(`${paths.unitservice.departments.viewgPage}/${info?._id}`)}
+        >
           <Iconify
             width={20}
             sx={{ cursor: 'pointer', mr: 1, color: 'info.main' }}

@@ -18,7 +18,6 @@ export default function InvoiceTableToolbar({
   dateError,
   serviceOptions,
 }) {
-
   const handleFilterName = useCallback(
     (event) => {
       onFilters('name', event.target.value);

@@ -106,16 +106,27 @@ export default function NewEditManyForm() {
   }, []);
 
   const handleCreate = async () => {
-    const isFormValid = data.every((one) => one.name_english && one.name_arabic && one.time_zone);
+    const isFormValid = data.every((one) => one.name_english && one.name_arabic);
 
     if (!isFormValid) {
       alert('Please fill in all required fields.');
       return;
     }
     try {
-      await axiosInstance.post(endpoints.countries.many, data);
+      const uploadRec = await axiosInstance.post(endpoints.upload_records.all, {
+        type: 'countries',
+        mustUpload: data.length,
+      });
+      const insertedData = await axiosInstance.post(
+        endpoints.countries.many,
+        data.map((one) => ({ ...one, upload_record: uploadRec.data._id }))
+      );
+      await axiosInstance.patch(endpoints.upload_records.one(uploadRec.data._id), {
+        uploaded: insertedData.data,
+      });
       router.push(paths.superadmin.tables.countries.root); /// edit
     } catch (e) {
+      console.log('eeeee', e);
       enqueueSnackbar(e, { variant: 'error' });
     }
   };
@@ -217,11 +228,13 @@ export default function NewEditManyForm() {
                             variant="filled"
                             value={one.time_zone || ''}
                             options={timezones.map((timeZone) => timeZone.tzCode)}
+                            // onChange={(e) => handleSelect(index, e)}
                             renderInput={(params) => (
                               <TextField
                                 name="time_zone"
                                 variant="filled"
                                 {...params}
+                                onBlur={(e) => handleSelect(index, e)}
                                 onChange={(e) => handleSelect(index, e)}
                                 value={one.time_zone || ''}
                               />

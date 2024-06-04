@@ -21,7 +21,7 @@ import LanguagePopover from '../common/language-popover';
 
 export default function AuthClassicLayout({ children, image, title }) {
   const theme = useTheme();
-const {t} = useTranslate()
+  const { t } = useTranslate();
   const mdUp = useResponsive('up', 'md');
   // const [isZoomed, setIsZoomed] = useState(false);
   const renderLogo = (
@@ -85,25 +85,25 @@ const {t} = useTranslate()
         component="img"
         alt="auth"
         src={image || '/assets/illustrations/illustration_dashboard.png'}
-        sx={{
-          // maxWidth: {
-          //   xs: 480,
-          //   lg: 560,
-          //   xl: 720,
-          // },
-          
-          // '&:hover': {
-          //   cursor: 'zoom-in',
-          // },
-          // // Apply zoom effect when isZoomed is true
-          // transform: isZoomed ? 'scale(1.2)' : 'scale(1)',
-          // transition: 'transform 0.3s ease-in-out',
-        }}
+        sx={
+          {
+            // maxWidth: {
+            //   xs: 480,
+            //   lg: 560,
+            //   xl: 720,
+            // },
+            // '&:hover': {
+            //   cursor: 'zoom-in',
+            // },
+            // // Apply zoom effect when isZoomed is true
+            // transform: isZoomed ? 'scale(1.2)' : 'scale(1)',
+            // transition: 'transform 0.3s ease-in-out',
+          }
+        }
         // Toggle isZoomed state on mouse enter/leave
         // onMouseEnter={() => setIsZoomed(true)}
         // onMouseLeave={() => setIsZoomed(false)}
       />
-
     </Stack>
   );
 
