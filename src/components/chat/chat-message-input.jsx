@@ -39,7 +39,7 @@ export default function ChatMessageInput({
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { t } = useTranslate()
+  const { t } = useTranslate();
 
   const [message, setMessage] = useState('');
   const [attachment, setAttachment] = useState();
@@ -153,7 +153,7 @@ export default function ChatMessageInput({
         }
       } else {
         // setRecording(false);
-        recorder.stream.getTracks().forEach(track => track.stop())
+        recorder.stream.getTracks().forEach((track) => track.stop());
         recorder.stop();
       }
     } catch (e) {
@@ -225,7 +225,7 @@ export default function ChatMessageInput({
       messageData,
       audioBlob,
       enqueueSnackbar,
-      duration
+      duration,
     ]
   );
 
@@ -241,7 +241,7 @@ export default function ChatMessageInput({
           value={message}
           onKeyUp={handleSendMessage}
           onChange={handleChangeMessage}
-          placeholder={t("Type a message")}
+          placeholder={t('Type a message')}
           disabled={disabled}
           // startAdornment={
           //   <IconButton onClick={() => setShowIcons(true)}>
@@ -272,7 +272,13 @@ export default function ChatMessageInput({
       {previewAudio && (
         <>
           <Divider />
-          <Stack direction='row' justifyContent='space-between' alignItems='center' gap={1} sx={{ p: 1 }}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            gap={1}
+            sx={{ p: 1 }}
+          >
             {/* <IconButton sx={{ color: 'error.main' }} onClick={onCancel}> */}
             <Iconify
               sx={{ color: 'error.main', mr: 1, cursor: 'pointer', width: 40 }}
@@ -280,10 +286,7 @@ export default function ChatMessageInput({
               icon="mdi:trash"
             />
             {/* </IconButton> */}
-            <VoiceChat
-              duration={duration}
-              src={previewAudio}
-            />
+            <VoiceChat duration={duration} src={previewAudio} />
             {/* <IconButton sx={{ color: 'success.main' }} onClick={onSend}> */}
             <Iconify
               sx={{ color: 'success.main', ml: 1, cursor: 'pointer', width: 40 }}

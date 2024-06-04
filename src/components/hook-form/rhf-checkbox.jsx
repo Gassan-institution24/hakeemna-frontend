@@ -10,7 +10,7 @@ import FormControlLabel, { formControlLabelClasses } from '@mui/material/FormCon
 
 // ----------------------------------------------------------------------
 
-export function RHFCheckbox({ name, helperText,onChange, ...other }) {
+export function RHFCheckbox({ name, helperText, onChange, ...other }) {
   const { control } = useFormContext();
 
   return (
@@ -19,7 +19,10 @@ export function RHFCheckbox({ name, helperText,onChange, ...other }) {
       control={control}
       render={({ field, fieldState: { error } }) => (
         <div>
-          <FormControlLabel control={<Checkbox {...field} checked={field.value} onChange={onChange} />} {...other} />
+          <FormControlLabel
+            control={<Checkbox {...field} checked={field.value} onChange={onChange} />}
+            {...other}
+          />
 
           {(!!error || helperText) && (
             <FormHelperText error={!!error}>{error ? error?.message : helperText}</FormHelperText>

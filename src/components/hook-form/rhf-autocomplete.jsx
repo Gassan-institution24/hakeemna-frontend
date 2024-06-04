@@ -31,7 +31,7 @@ export default function RHFAutocomplete({
               placeholder={placeholder}
               error={!!error}
               helperText={error ? error?.message : helperText}
-              InputProps={{shrink:true}}
+              InputProps={{ shrink: true }}
               {...params}
             />
           )}

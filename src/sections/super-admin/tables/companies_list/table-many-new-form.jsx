@@ -143,6 +143,10 @@ export default function NewEditManyForm() {
   const handleCreate = async () => {
     try {
       setLoading(true);
+      const uploadRec = await axiosInstance.post(endpoints.upload_records.all, {
+        type: 'companies',
+        mustUpload: data.length,
+      });
       const chunkSize = 50;
       const totalChunks = Math.ceil(data.length / chunkSize);
 
@@ -151,7 +155,15 @@ export default function NewEditManyForm() {
         const endIndex = Math.min(startIndex + chunkSize, data.length);
         const chunkData = data.slice(startIndex, endIndex);
 
-        return axiosInstance.post(endpoints.companies.many, chunkData);
+        const insertedDataPromise = axiosInstance.post(
+          endpoints.companies.many,
+          chunkData.map((one) => ({ ...one, upload_record: uploadRec.data._id }))
+        );
+        return insertedDataPromise.then((insertedData) =>
+          axiosInstance.patch(endpoints.upload_records.one(uploadRec.data._id), {
+            uploaded: insertedData.data,
+          })
+        );
       });
 
       await Promise.all(promises);

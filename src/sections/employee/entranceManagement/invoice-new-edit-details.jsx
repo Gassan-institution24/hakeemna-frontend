@@ -15,10 +15,11 @@ import { fCurrency } from 'src/utils/format-number';
 
 // import { INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 
+import { useAuthContext } from 'src/auth/hooks';
+import { useGetUSActiveServiceTypes } from 'src/api';
+
 import Iconify from 'src/components/iconify';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useGetUSActiveServiceTypes } from 'src/api';
-import { useAuthContext } from 'src/auth/hooks';
 // import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------

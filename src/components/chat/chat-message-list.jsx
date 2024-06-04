@@ -17,7 +17,7 @@ import ChatMessageItem from './chat-message-item';
 
 export default function ChatMessageList({ messages = [], refetchLenght, participants }) {
   const { messagesEndRef } = useMessagesScroll(messages);
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
   const observer = useRef(null);
   const slides = messages
@@ -27,16 +27,19 @@ export default function ChatMessageList({ messages = [], refetchLenght, particip
   const lightbox = useLightBox(slides);
 
   useEffect(() => {
-    observer.current = new IntersectionObserver((entries) => {
-      entries.forEach(async (entry) => {
-        if (entry.isIntersecting) {
-          await axiosInstance.patch(endpoints.chat.message(entry.target.id), { isUnRead: false })
-          if (refetchLenght) {
-            refetchLenght()
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(async (entry) => {
+          if (entry.isIntersecting) {
+            await axiosInstance.patch(endpoints.chat.message(entry.target.id), { isUnRead: false });
+            if (refetchLenght) {
+              refetchLenght();
+            }
           }
-        }
-      });
-    }, { threshold: 0.5 });
+        });
+      },
+      { threshold: 0.5 }
+    );
     return () => {
       if (observer?.current) {
         observer?.current?.disconnect();
@@ -49,11 +52,15 @@ export default function ChatMessageList({ messages = [], refetchLenght, particip
       <Scrollbar ref={messagesEndRef} sx={{ px: 1, py: 3, height: 1 }}>
         <Box>
           {messages.map((message) => (
-            <div key={message._id} id={message._id} ref={(el) => {
-              if (el && message.isUnRead && message?.senderId !== user?._id) {
-                observer?.current?.observe(el);
-              }
-            }}>
+            <div
+              key={message._id}
+              id={message._id}
+              ref={(el) => {
+                if (el && message.isUnRead && message?.senderId !== user?._id) {
+                  observer?.current?.observe(el);
+                }
+              }}
+            >
               <ChatMessageItem
                 message={message}
                 participants={participants}

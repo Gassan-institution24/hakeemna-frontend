@@ -635,7 +635,13 @@ export default function VerticalDividerText() {
         <Button
           size="large"
           variant="outlined"
-          endIcon={curLangAr ? <Iconify icon="icon-park-outline:left" width={24}  />:<Iconify icon="eva:arrow-ios-forward-fill" width={24}  />}
+          endIcon={
+            curLangAr ? (
+              <Iconify icon="icon-park-outline:left" width={24} />
+            ) : (
+              <Iconify icon="eva:arrow-ios-forward-fill" width={24} />
+            )
+          }
           sx={{ mx: 'auto', backgroundColor: 'success.main', color: 'white' }}
           href={paths.pages.UsPricing}
         >

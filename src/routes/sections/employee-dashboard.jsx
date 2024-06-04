@@ -11,7 +11,9 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 // ENTRANCE MANAGEMENT
 const EntranceManagementHomePage = lazy(() => import('src/pages/employee/entranceManagement/home'));
-const EntranceManagementAccPage = lazy(() => import('src/pages/employee/entranceManagement/accounting'));
+const EntranceManagementAccPage = lazy(() =>
+  import('src/pages/employee/entranceManagement/accounting')
+);
 const EntranceManagementNewPage = lazy(() => import('src/pages/employee/entranceManagement/new'));
 const EntranceManagementEditPage = lazy(() => import('src/pages/employee/entranceManagement/edit'));
 
@@ -78,7 +80,9 @@ const NewAppointmentConfigPage = lazy(() =>
 
 // CALENDER
 const CalenderPage = lazy(() => import('src/pages/employee/calender/calender'));
-const AppointmentsToday = lazy(() => import('src/pages/employee/appointmentsToday/appintmentaToday'));
+const AppointmentsToday = lazy(() =>
+  import('src/pages/employee/appointmentsToday/appintmentaToday')
+);
 
 // PATIENT
 const PatientsPage = lazy(() => import('src/pages/employee/patients/patients_table'));

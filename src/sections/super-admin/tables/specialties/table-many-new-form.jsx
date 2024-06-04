@@ -113,7 +113,17 @@ export default function NewEditManyForm() {
         alert('Please fill in all required fields.');
         return;
       }
-      await axiosInstance.post(endpoints.specialities.many, data);
+      const uploadRec = await axiosInstance.post(endpoints.upload_records.all, {
+        type: 'specialities',
+        mustUpload: data.length,
+      });
+      const insertedData = await axiosInstance.post(
+        endpoints.specialities.many,
+        data.map((one) => ({ ...one, upload_record: uploadRec.data._id }))
+      );
+      await axiosInstance.patch(endpoints.upload_records.one(uploadRec.data._id), {
+        uploaded: insertedData.data,
+      });
       router.push(paths.superadmin.tables.specialities.root);
     } catch (e) {
       enqueueSnackbar(e, { variant: 'error' });

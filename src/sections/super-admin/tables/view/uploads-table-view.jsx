@@ -1,22 +1,19 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { useReactToPrint } from 'react-to-print';
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { RouterLink } from 'src/routes/components';
-import { useRouter, useSearchParams } from 'src/routes/hooks';
+import { useRouter } from 'src/routes/hooks';
 
-import { useGetCurrencies } from 'src/api';
+import { useGetUploads } from 'src/api';
 
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 // import { useSettingsContext } from 'src/components/settings';
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -30,37 +27,27 @@ import {
   TableHeadCustom,
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
-import TableDetailRow from '../currency/table-details-row'; /// edit
+import TableDetailRow from '../uploads/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  /// to edit
-  { id: 'code', label: 'Code' },
-  { id: 'symbol', label: 'symbol' },
-  { id: 'name_english', label: 'name' },
-  { id: 'name_arabic', label: 'arabic name' },
-  { id: 'relation_to_dollar', label: 'one dollar equals' },
-  // { id: 'created_at', label: 'Date Of Creation' },
-  // { id: 'user_creation', label: 'Creater' },
-  // { id: 'ip_address_user_creation', label: 'IP Of Creator' },
-  // { id: 'updated_at', label: 'Date Of Updating' },
-  // { id: 'user_modification', label: 'Last Modifier' },
-  // { id: 'ip_address_user_modification', label: 'IP Of Modifier' },
-  // { id: 'modifications_nums', label: 'No Of Modifications' },
+  { id: 'type', label: 'type' },
+  { id: 'mustUpload', label: 'must upload' },
+  { id: 'uploaded', label: 'uploaded' },
   { id: '', width: 88 },
 ];
 
 const defaultFilters = {
   name: '',
-  status: 'all',
+  // status: 'active',
 };
 
 // ----------------------------------------------------------------------
 
-export default function CurrencyTableView() {
+export default function UploadesTableView() {
   /// edit
   const table = useTable({ defaultOrderBy: 'code' });
 
@@ -70,19 +57,9 @@ export default function CurrencyTableView() {
 
   const router = useRouter();
 
-  const { currencies, loading } = useGetCurrencies();
+  const { uploadsData, loading } = useGetUploads();
 
   const [filters, setFilters] = useState(defaultFilters);
-
-  const searchParams = useSearchParams();
-
-  const upload_record = searchParams.get('upload_record');
-
-  useEffect(() => {
-    if (upload_record) {
-      setFilters((prev) => ({ ...prev, name: upload_record }));
-    }
-  }, [upload_record]);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -90,20 +67,16 @@ export default function CurrencyTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: currencies,
+    inputData: uploadsData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
   });
 
-  // const dataInPage = dataFiltered.slice(
-  //   table.page * table.rowsPerPage,
-  //   table.page * table.rowsPerPage + table.rowsPerPage
-  // );
-
   const denseHeight = table.dense ? 52 : 72;
 
-  const canReset = !!filters?.name || filters.status !== 'all';
+  const canReset = !!filters?.name;
+  // || filters.status !== 'active';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -115,9 +88,8 @@ export default function CurrencyTableView() {
     const excelBody = dataFiltered.reduce((acc, data) => {
       acc.push({
         code: data.code,
-        symbol: data.symbol,
         name: data.name_english,
-        relation_to_dollar: data.relation_to_dollar, /// edit
+        description: data.description, /// edit
       });
       return acc;
     }, []);
@@ -128,7 +100,7 @@ export default function CurrencyTableView() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'CurrenciesTable.xlsx'); /// edit
+    saveAs(data, 'symptomsTable.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -144,7 +116,7 @@ export default function CurrencyTableView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.currency.edit(id)); /// edit
+      router.push(paths.superadmin.tables.symptoms.edit(id)); /// edit
     },
     [router]
   );
@@ -153,13 +125,6 @@ export default function CurrencyTableView() {
     setFilters(defaultFilters);
   }, []);
 
-  // const handleViewRow = useCallback(
-  //   (id) => {
-  //     router.push(paths.dashboard.order.details(id));
-  //   },
-  //   [router]
-  // );
-
   if (loading) {
     return <LoadingScreen />;
   }
@@ -167,7 +132,7 @@ export default function CurrencyTableView() {
   return (
     <Container maxWidth="xl">
       <CustomBreadcrumbs
-        heading="Currency" /// edit
+        heading="uploads" /// edit
         links={[
           {
             name: 'dashboard',
@@ -177,18 +142,8 @@ export default function CurrencyTableView() {
             name: 'Tables',
             href: paths.superadmin.tables.list,
           },
-          { name: 'Currency' }, /// edit
+          { name: 'uploads' }, /// edit
         ]}
-        action={
-          <Button
-            component={RouterLink}
-            href={paths.superadmin.tables.currency.new} /// edit
-            variant="contained"
-            startIcon={<Iconify icon="mingcute:add-line" />}
-          >
-            New Currency
-          </Button> /// edit
-        }
         sx={{
           mb: { xs: 3, md: 5 },
         }}
@@ -247,7 +202,7 @@ export default function CurrencyTableView() {
 
                 <TableEmptyRows
                   height={denseHeight}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, currencies.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, uploadsData.length)}
                 />
 
                 <TableNoData notFound={notFound} />
@@ -274,9 +229,9 @@ export default function CurrencyTableView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, comparator, filters, dateError }) {
-  const { status, name } = filters;
+  const { name } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
+  const stabilizedThis = inputData.map((el, index, idx) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -284,25 +239,20 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el, idx) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
       (data) =>
-        (data?.name_english &&
-          data?.name_english?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
-        (data?.name_arabic &&
-          data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        (data?.type && data?.type?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
-        data?.upload_record === name ||
-        data?.symbol === name ||
         JSON.stringify(data.code) === name
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
-  }
+  // if (status !== 'all') {
+  //   inputData = inputData.filter((order) => order.status === status);
+  // }
 
   return inputData;
 }

@@ -1,8 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 
+import { useParams } from 'src/routes/hooks';
+
 import ACLGuard from 'src/auth/guard/acl-guard';
 import { useAuthContext } from 'src/auth/hooks';
-import { useParams } from 'src/routes/hooks';
 
 import EmployeeWGPermissionsView from 'src/sections/unit-service/permissions/view/workgroup-permission';
 // ----------------------------------------------------------------------

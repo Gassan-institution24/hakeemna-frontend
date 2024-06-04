@@ -127,6 +127,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       ],
       work_group: appointmentConfigData?.work_group?._id || null,
       work_shift: appointmentConfigData?.work_shift?._id || null,
+      online_available: appointmentConfigData?.online_available || true,
       days_details: appointmentConfigData?.days_details || [
         {
           day: 'saturday',
