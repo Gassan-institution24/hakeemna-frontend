@@ -85,9 +85,9 @@ export default function TableNewEditForm({ currentTable }) {
     formState: { isSubmitting },
   } = methods;
 
-  const values = methods.watch()
+  const values = methods.watch();
 
-  const {tableData} = useGetCountryCities(values.country)
+  const { tableData } = useGetCountryCities(values.country);
 
   const onSubmit = handleSubmit(async (data) => {
     try {

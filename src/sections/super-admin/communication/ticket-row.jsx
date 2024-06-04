@@ -31,7 +31,7 @@ export default function AppointmentsTableRow({
   onCancelRow,
   onUnCancelRow,
   onDeleteRow,
-  unread
+  unread,
 }) {
   const {
     code,
@@ -104,7 +104,9 @@ export default function AppointmentsTableRow({
           align="center"
         >
           <Badge badgeContent={unread} color="error">
-            <Typography variant='body2' sx={{ p: unread ? 1 : 0 }}>{subject}</Typography>
+            <Typography variant="body2" sx={{ p: unread ? 1 : 0 }}>
+              {subject}
+            </Typography>
           </Badge>
         </TableCell>
         <TableCell onClick={onViewRow} align="center">

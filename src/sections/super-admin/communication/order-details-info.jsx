@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import CardHeader from '@mui/material/CardHeader';
-import { Grid, Tooltip, MenuItem, TextField, ListItemText, Button } from '@mui/material';
+import { Grid, Button, Tooltip, MenuItem, TextField, ListItemText } from '@mui/material';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
@@ -20,7 +20,7 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
 
   const { ticketCategoriesData } = useGetTicketCategories();
   const { usersData } = useGetUsers({ role: 'superadmin' });
-  
+
   const [note, setNote] = useState(ticket.note);
   const [priority, setPriority] = useState(ticket.priority);
   const [category, setCategory] = useState(ticket.category._id);
@@ -190,15 +190,19 @@ export default function OrderDetailsInfo({ ticket, refetch }) {
                 component: 'span',
               }}
             />
-            <Stack direction='row' alignItems='flex-end'>
-            <TextField
-              variant="standard"
-              sx={{ width: 1,mt:2 }}
-              label='Note'
-              value={note}
-              onChange={(e)=>setNote(e.target.value)}
-            />
-            {note !== ticket.note&& <Button onClick={handleSendNote} sx={{height:30}}>✓</Button>}
+            <Stack direction="row" alignItems="flex-end">
+              <TextField
+                variant="standard"
+                sx={{ width: 1, mt: 2 }}
+                label="Note"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+              />
+              {note !== ticket.note && (
+                <Button onClick={handleSendNote} sx={{ height: 30 }}>
+                  ✓
+                </Button>
+              )}
             </Stack>
           </Grid>
         </Grid>

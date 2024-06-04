@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { useReactToPrint } from 'react-to-print';
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -16,8 +16,8 @@ import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -98,6 +98,16 @@ export default function InsuranceCompaniesTableView() {
   const { insuranseCosData, loading, refetch } = useGetInsuranceCos();
 
   const [filters, setFilters] = useState(defaultFilters);
+
+  const searchParams = useSearchParams();
+
+  const upload_record = searchParams.get('upload_record');
+
+  useEffect(() => {
+    if (upload_record) {
+      setFilters((prev) => ({ ...prev, name: upload_record }));
+    }
+  }, [upload_record]);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -508,6 +518,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         (data?.type?.name_arabic &&
           data?.type?.name_arabic.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
+        data?.upload_record === name ||
         JSON.stringify(data.code) === name
     );
   }

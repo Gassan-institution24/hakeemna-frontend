@@ -503,7 +503,7 @@ export default function Processing() {
                 bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
               }}
             >
-              <Typography variant="subtitle2" >{item.title}</Typography>
+              <Typography variant="subtitle2">{item.title}</Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {item.title === 'medical report (optional)' && renderMedicalReport}
                 {item.title === 'prescription (optional)' && renderPrescription}

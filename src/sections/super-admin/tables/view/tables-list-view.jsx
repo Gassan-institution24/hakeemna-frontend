@@ -101,6 +101,7 @@ export default function TablesListView() {
       { tableName: 'insurance_types', documents: [] }, //
       { tableName: 'companies', documents: [] }, //
       { tableName: 'ticket_categories', documents: [] }, //
+      { tableName: 'uploads', documents: [] }, //
     ],
     comparator: getComparator(table.order, table.orderBy),
     filters,

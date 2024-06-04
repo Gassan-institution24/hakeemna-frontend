@@ -201,14 +201,18 @@ export default function Prescriptions() {
   return (
     <div>
       {drugs?.map((med, idx) => (
-        <List key={idx} sx={{ bgcolor: 'aliceblue', mb:2 }}>
+        <List key={idx} sx={{ bgcolor: 'aliceblue', mb: 2 }}>
           <ListItem sx={{ mb: 1 }}>
             <ListItemAvatar sx={{ display: { xs: 'none', md: 'inline' } }}>
               <Avatar>
                 <Iconify icon="streamline-emojis:pill" />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={t('Name')} secondary={med.medicines?.trade_name} sx={{ ml: 2 }} />
+            <ListItemText
+              primary={t('Name')}
+              secondary={med.medicines?.trade_name}
+              sx={{ ml: 2 }}
+            />
             {/* <ListItemText primary={t('Dose')} secondary={med?.dose} /> */}
             <ListItemText primary={t('Frequently')} secondary={med?.Frequency_per_day} />
             <ListItemText

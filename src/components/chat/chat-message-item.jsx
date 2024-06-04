@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { ar, enGB } from 'date-fns/locale'
+import { ar, enGB } from 'date-fns/locale';
 import { formatDistanceToNowStrict } from 'date-fns';
 
 import Box from '@mui/material/Box';
@@ -20,7 +20,6 @@ import VoiceChat from './chat-voice-component';
 // ----------------------------------------------------------------------
 
 export default function ChatMessageItem({ message, participants, onOpenLightbox }) {
-
   const { me, senderDetails, hasImage, hasFile, hasVoice } = useGetMessage({
     message,
     participants,
@@ -48,7 +47,7 @@ export default function ChatMessageItem({ message, participants, onOpenLightbox 
       {firstName && `${firstName},`} &nbsp;
       {formatDistanceToNowStrict(new Date(createdAt), {
         addSuffix: true,
-        locale: (curLangAr ? ar : enGB),
+        locale: curLangAr ? ar : enGB,
       })}
     </Typography>
   );

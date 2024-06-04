@@ -230,34 +230,13 @@ export default function TableNewEditForm({ currentSelected }) {
                 name="type_of_specialty_2"
                 label="type_of_specialty_2"
               />
-              <RHFTextField
-                name="info"
-                label="info"
-              />
-              <RHFTextField
-                name="email"
-                label="email"
-              />
-              <RHFTextField
-                name="insurance"
-                label="insurance"
-              />
-              <RHFTextField
-                name="subscribe_to"
-                label="subscribe to"
-              />
-              <RHFTextField
-                name="social_network"
-                label="social network"
-              />
-              <RHFTextField
-                name="notes"
-                label="notes"
-              />
-              <RHFTextField
-                name="communication"
-                label="communication"
-              />
+              <RHFTextField name="info" label="info" />
+              <RHFTextField name="email" label="email" />
+              <RHFTextField name="insurance" label="insurance" />
+              <RHFTextField name="subscribe_to" label="subscribe to" />
+              <RHFTextField name="social_network" label="social network" />
+              <RHFTextField name="notes" label="notes" />
+              <RHFTextField name="communication" label="communication" />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

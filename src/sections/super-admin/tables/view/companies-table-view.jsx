@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { useReactToPrint } from 'react-to-print';
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -11,8 +11,8 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useGetCompanies } from 'src/api';
 
@@ -81,6 +81,16 @@ export default function CompaniesTableView() {
   const { companiesData, loading } = useGetCompanies();
 
   const [filters, setFilters] = useState(defaultFilters);
+
+  const searchParams = useSearchParams();
+
+  const upload_record = searchParams.get('upload_record');
+
+  useEffect(() => {
+    if (upload_record) {
+      setFilters((prev) => ({ ...prev, name: upload_record }));
+    }
+  }, [upload_record]);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -251,6 +261,7 @@ export default function CompaniesTableView() {
         <TablePaginationCustom
           count={dataFiltered.length}
           page={table.page}
+          setPage={table.setPage}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
           onRowsPerPageChange={table.onChangeRowsPerPage}
@@ -301,6 +312,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
           data?.unit_service_type?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.sector && data?.sector?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         (data?.info && data?.info?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
+        data?.upload_record === name ||
         data?._id === name ||
         JSON.stringify(data.code) === name
     );

@@ -85,8 +85,9 @@ const StyledNavItem = styled(ListItemButton, {
         backgroundColor: alpha(theme.palette.primary.main, 0.16),
       },
     }),
-    ...(opened && {
-      // backgroundColor: theme.palette.action.hover,
-    }),
+    ...(opened &&
+      {
+        // backgroundColor: theme.palette.action.hover,
+      }),
   };
 });
