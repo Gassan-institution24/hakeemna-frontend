@@ -97,7 +97,7 @@ export default function Pupage() {
 
           <m.div variants={varFade().inUp}>
             <Image
-             id="signup" 
+              id="signup"
               sx={{
                 position: 'relative',
                 top: {

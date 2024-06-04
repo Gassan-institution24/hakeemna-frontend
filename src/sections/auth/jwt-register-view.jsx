@@ -25,7 +25,12 @@ import { PATH_AFTER_SIGNUP } from 'src/config-global';
 import { useGetCountries, useGetCountryCities } from 'src/api';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFTextField, RHFDatePicker, RHFPhoneNumber } from 'src/components/hook-form';
+import FormProvider, {
+  RHFSelect,
+  RHFTextField,
+  RHFDatePicker,
+  RHFPhoneNumber,
+} from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -72,7 +77,9 @@ export default function JwtRegisterView() {
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .min(8, 'Confirm password must be at least 8 characters'),
     identification_num: Yup.string().required('Identification number is required'),
-    mobile_num1: Yup.string().required('Mobile number is required').test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
+    mobile_num1: Yup.string()
+      .required('Mobile number is required')
+      .test('is-valid-phone', t('Invalid phone number'), (value) => matchIsValidTel(value)),
     gender: Yup.string().required('Gender is required'),
     birth_date: Yup.date()
       .required('birth date is required')

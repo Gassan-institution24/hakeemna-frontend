@@ -27,7 +27,6 @@ import { RHFTextField } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/form-provider';
 
 export default function SickLeave({ patient }) {
-  
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
@@ -51,7 +50,7 @@ export default function SickLeave({ patient }) {
     resolver: yupResolver(PrescriptionsSchema),
     defaultValues,
   });
-  
+
   const {
     reset,
     handleSubmit,
@@ -65,8 +64,6 @@ export default function SickLeave({ patient }) {
       patient: patient?._id,
     });
   }, [user, reset, patient]);
-
-
 
   const onSubmit = async (submitdata) => {
     try {

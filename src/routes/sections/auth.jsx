@@ -23,9 +23,6 @@ const PatientNewUserPage = lazy(() => import('src/pages/auth/patient-new-user'))
 
 // ----------------------------------------------------------------------
 
-
-
-
 export const authRoutes = [
   {
     path: 'login',
@@ -40,7 +37,7 @@ export const authRoutes = [
   {
     path: 'register',
     element: (
-      <AuthClassicLayout title='your health medical record'>
+      <AuthClassicLayout title="your health medical record">
         <JwtRegisterPage />
       </AuthClassicLayout>
     ),
@@ -78,9 +75,8 @@ export const authRoutes = [
 ];
 
 // export const authRoutes = [
-  //   {
-    //     path: 'auth',
-    //     children: [authJwt],
-    //   },
-    // ]; 
-    
+//   {
+//     path: 'auth',
+//     children: [authJwt],
+//   },
+// ];

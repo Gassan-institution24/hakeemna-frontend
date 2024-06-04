@@ -24,22 +24,24 @@ export default function VoiceChat({ src, duration, sx }) {
         playing={isPlaying}
         onProgress={handleProgress}
         onEnded={() => {
-          setIsPlaying(false)
-          setPlayedSeconds(0)
+          setIsPlaying(false);
+          setPlayedSeconds(0);
         }}
         width={0}
         height={0}
         style={{ display: 'none' }}
       />
       <Stack direction="row" justifyContent="space-between" gap={2} alignItems="center">
-        {isPlaying ? (
-          <Pause onClick={handlePlayPause} />
-        ) : (
-          <PlayArrow onClick={handlePlayPause} />
-        )}
+        {isPlaying ? <Pause onClick={handlePlayPause} /> : <PlayArrow onClick={handlePlayPause} />}
 
-        {!isPlaying && `${Math.floor(duration / 60)}:${(duration % 60).toFixed(0).padStart(2, '0')}`}
-        {isPlaying && `${Math.floor(playedSeconds / 60)}:${(playedSeconds % 60).toFixed(0).padStart(2, '0')} - ${Math.floor(duration / 60)}:${(duration % 60).toFixed(0).padStart(2, '0')}`}
+        {!isPlaying &&
+          `${Math.floor(duration / 60)}:${(duration % 60).toFixed(0).padStart(2, '0')}`}
+        {isPlaying &&
+          `${Math.floor(playedSeconds / 60)}:${(playedSeconds % 60)
+            .toFixed(0)
+            .padStart(2, '0')} - ${Math.floor(duration / 60)}:${(duration % 60)
+            .toFixed(0)
+            .padStart(2, '0')}`}
         {/* {Math.floor(playedSeconds / 60)}:{(playedSeconds % 60).toFixed(0).padStart(2, '0')} - {Math.floor(duration / 60)}:{(duration % 60).toFixed(0).padStart(2, '0')} */}
       </Stack>
     </Card>

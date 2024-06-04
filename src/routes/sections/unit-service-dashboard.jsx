@@ -5,17 +5,16 @@ import DashboardLayout from 'src/layouts/dashboard';
 import { AuthGuard, RoleBasedGuard } from 'src/auth/guard';
 import SecondaryNavLayout from 'src/layouts/employee-topbar';
 import DepartmentNavLayout from 'src/layouts/department-topbar';
+import WorkGroupsNavLayout from 'src/layouts/workgroups-topbar';
 import EmployeeMinBarLayout from 'src/layouts/employees-minibar';
+import DepartmentsNavLayout from 'src/layouts/departments-topbar';
+import PermissionsNavLayout from 'src/layouts/permissions-topbar';
+import EmployeePermissionWGLayout from 'src/layouts/permissions-minibar';
 import RecieptsInfoPage from 'src/pages/employee/accounting/reciepts/info';
-import DepartmentPermissionsBarLayout from 'src/layouts/department-permission-minibar';
 import USWorkGroupPermissionsBarLayout from 'src/layouts/US-workgroup-permission-minibar';
 import DepartmentWorkGroupPermissionsBarLayout from 'src/layouts/department-workgroup-permission-minibar';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import DepartmentsNavLayout from 'src/layouts/departments-topbar';
-import WorkGroupsNavLayout from 'src/layouts/workgroups-topbar';
-import PermissionsNavLayout from 'src/layouts/permissions-topbar';
-import EmployeePermissionWGLayout from 'src/layouts/permissions-minibar';
 
 // ----------------------------------------------------------------------
 // DEPARTMENTS
@@ -69,12 +68,12 @@ const DepartmentsWorkGroupsEmployeePermissionPage = lazy(() =>
 const DepartmentsEditWorkGroupsPage = lazy(() =>
   import('src/pages/unit-service/departments/work-groups/edit')
 );
-const DepartmentsPermissionsPage = lazy(() =>
-  import('src/pages/unit-service/departments/permissions/home')
-);
-const DepartmentsEmployeePermissionsPage = lazy(() =>
-  import('src/pages/unit-service/departments/permissions/employee')
-);
+// const DepartmentsPermissionsPage = lazy(() =>
+//   import('src/pages/unit-service/departments/permissions/home')
+// );
+// const DepartmentsEmployeePermissionsPage = lazy(() =>
+//   import('src/pages/unit-service/departments/permissions/employee')
+// );
 const DepartmentsEditPage = lazy(() => import('src/pages/unit-service/departments/edit'));
 // EMPLOYEES
 const EmployeesHomePage = lazy(() => import('src/pages/unit-service/employees/home'));

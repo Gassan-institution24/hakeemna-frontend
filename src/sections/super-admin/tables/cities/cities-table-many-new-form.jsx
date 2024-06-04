@@ -112,7 +112,17 @@ export default function CitiesNewEditForm() {
 
   const handleCreate = async () => {
     try {
-      await axiosInstance.post(endpoints.cities.many, cities);
+      const uploadRec = await axiosInstance.post(endpoints.upload_records.all, {
+        type: 'cities',
+        mustUpload: cities.length,
+      });
+      const insertedData = await axiosInstance.post(
+        endpoints.cities.many,
+        cities.map((one) => ({ ...one, upload_record: uploadRec.data._id }))
+      );
+      await axiosInstance.patch(endpoints.upload_records.one(uploadRec.data._id), {
+        uploaded: insertedData.data,
+      });
       router.push(paths.superadmin.tables.cities.root);
     } catch (e) {
       enqueueSnackbar(e, { variant: 'error' });

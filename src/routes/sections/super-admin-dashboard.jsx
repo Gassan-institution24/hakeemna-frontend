@@ -448,6 +448,9 @@ const CalenderPage = lazy(() => import('src/pages/super-admin/calender/calender'
 // MAIL
 const MailPage = lazy(() => import('src/pages/super-admin/mail'));
 
+// UPLOADS
+const UploadsPage = lazy(() => import('src/pages/super-admin/tables/uploads'));
+
 // ----------------------------------------------------------------------
 
 export const dashboardRoutes = [
@@ -1009,6 +1012,13 @@ export const dashboardRoutes = [
               { path: 'list', element: <InsuranceTypesTablePage /> },
               { path: 'new', element: <InsuranceTypeCreatePage /> },
               { path: ':id/edit', element: <InsuranceTypeEditPage /> },
+            ],
+          },
+          {
+            path: 'uploads',
+            children: [
+              { element: <UploadsPage />, index: true },
+              { path: 'list', element: <UploadsPage /> },
             ],
           },
         ],

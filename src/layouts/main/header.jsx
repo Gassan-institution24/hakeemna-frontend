@@ -119,7 +119,7 @@ export default function Header() {
                 top: 8,
                 right: -16,
               },
-              display:{ md:'flex', xs:'none'}
+              display: { md: 'flex', xs: 'none' },
             }}
           >
             <Logo />
