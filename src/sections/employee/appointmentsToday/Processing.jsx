@@ -88,8 +88,7 @@ export default function Processing() {
     department: Yup.string(),
     Medical_sick_leave_start: Yup.date(),
     Medical_sick_leave_end: Yup.date(),
-  });
-
+  }); 
   const defaultValues = {
     employee: user?.employee?._id,
     patient: data?._id,

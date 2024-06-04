@@ -315,7 +315,6 @@ export default function TestPage() {
 //             </>
 //           )}
 //           {info?.answer_way === 'Check List' && (
-//             <>
 //               <Typography sx={{ m: 2 }}>
 //                 {info?.question_english || info?.question?.question_english}{' '}
 //                 <FormControlLabel
@@ -324,8 +323,6 @@ export default function TestPage() {
 //                   label="The answers"
 //                 />
 //               </Typography>
-//               <Divider />
-//             </>
 //           )}
 //           {info?.answer_way === 'Yes No' && (
 //             <>
