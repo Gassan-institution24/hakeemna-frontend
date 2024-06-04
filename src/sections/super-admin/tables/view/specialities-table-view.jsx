@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 // import Tab from '@mui/material/Tab';
 // import Tabs from '@mui/material/Tabs';
@@ -13,8 +13,8 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 // import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -92,6 +92,16 @@ export default function SpecialtiesTableView() {
   const { specialtiesData, loading } = useGetSpecialties();
 
   const [filters, setFilters] = useState(defaultFilters);
+
+  const searchParams = useSearchParams();
+
+  const upload_record = searchParams.get('upload_record');
+
+  useEffect(() => {
+    if (upload_record) {
+      setFilters((prev) => ({ ...prev, name: upload_record }));
+    }
+  }, [upload_record]);
 
   const dateError =
     filters.startDate && filters.endDate
@@ -421,6 +431,7 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
         (data?.name_arabic &&
           data?.name_arabic?.toLowerCase().indexOf(name.toLowerCase()) !== -1) ||
         data?._id === name ||
+        data?.upload_record === name ||
         JSON.stringify(data.code) === name
     );
   }

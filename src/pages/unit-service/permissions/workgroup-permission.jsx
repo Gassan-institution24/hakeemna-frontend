@@ -21,7 +21,7 @@ export default function WorkGroupPermissionsPage() {
         <meta name="description" content="meta" />
       </Helmet>
 
-      {emid && wgid &&<WorkGroupPermissionsView />}
+      {emid && wgid && <WorkGroupPermissionsView />}
     </ACLGuard>
   );
 }

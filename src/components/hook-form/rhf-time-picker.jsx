@@ -27,9 +27,7 @@ export default function RHFTimePicker({ name, helperText, type, onChange, ...oth
           fullWidth
           // ampmInClock
           slots={{
-            clearIcon: (provided, props) => (
-              <Iconify icon="mingcute:close-line"  {...provided} />
-            ),
+            clearIcon: (provided, props) => <Iconify icon="mingcute:close-line" {...provided} />,
             clearButton: <Iconify icon="mingcute:close-line" />,
             actionBar: 'cancel',
           }}

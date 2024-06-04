@@ -1,17 +1,18 @@
 import { Helmet } from 'react-helmet-async';
 
-import AppointmentsToday from 'src/sections/employee/appointmentsToday/appointmentsToday';
+import { UploadsTableView } from 'src/sections/super-admin/tables/view';
 
 // ----------------------------------------------------------------------
 
-export default function AppointmentsForToday() {
+export default function UploadsTablePage() {
   return (
     <>
       <Helmet>
-        <title>appointmentsToday</title>
+        <title> Dashboard: Uploads Table</title>
         <meta name="description" content="meta" />
       </Helmet>
-      <AppointmentsToday />
+
+      <UploadsTableView />
     </>
   );
 }

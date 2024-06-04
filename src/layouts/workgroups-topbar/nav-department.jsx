@@ -25,7 +25,7 @@ function NavDepartment() {
     <Box
       sx={{
         // m: 'auto',
-        top:0,
+        top: 0,
         width: `100%`,
         boxShadow: (design) => design.customShadows.z8,
         // position:'absolute'

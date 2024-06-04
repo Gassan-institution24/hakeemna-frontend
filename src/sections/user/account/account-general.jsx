@@ -145,7 +145,6 @@ export default function AccountGeneral({ data, refetch }) {
   };
 
   const onSubmit = async (profileData) => {
-
     const formData = new FormData();
 
     // Append each key-value pair to the formData

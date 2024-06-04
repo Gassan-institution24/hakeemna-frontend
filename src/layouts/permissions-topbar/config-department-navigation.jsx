@@ -5,10 +5,8 @@ import { useRouter, useParams } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
-import { useGetEmployeeEngagement, useGetEmployeeWorkGroups } from 'src/api';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
-
-import Iconify from 'src/components/iconify';
+import { useGetEmployeeEngagement, useGetEmployeeWorkGroups } from 'src/api';
 
 // ----------------------------------------------------------------------
 

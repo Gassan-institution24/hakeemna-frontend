@@ -246,9 +246,11 @@ function ReviewItem({ item }) {
 
   const mdUp = useResponsive('up', 'md');
 
-  const handleChangeAppointType = (e) => {
+  const handleChangeAppointType = async (e) => {
     try {
-      axiosInstance.patch(endpoints.appointments.one(_id), { appointment_type: e.target.value });
+      await axiosInstance.patch(endpoints.appointments.one(_id), {
+        appointment_type: e.target.value,
+      });
       setAppointType(e.target.value);
       enqueueSnackbar(t('updated successfully'));
     } catch (error) {

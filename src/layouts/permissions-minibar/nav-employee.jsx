@@ -17,7 +17,6 @@ export default function NavMini() {
   const { user } = useAuthContext();
   const workGroupsNavData = usePermissionWGNavData();
 
-
   return (
     <Box
       sx={{

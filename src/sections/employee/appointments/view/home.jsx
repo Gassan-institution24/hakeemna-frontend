@@ -36,6 +36,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 // import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 // import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import {
@@ -47,7 +48,6 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 import AppointmentsRow from '../appointment-row';
 import PatientHistoryToolbar from '../appointment-toolbar';
@@ -409,9 +409,7 @@ export default function AppointmentsView({ employeeData }) {
     setFilters(defaultFilters);
   }, []);
   if (loading) {
-    return(
-      <LoadingScreen />
-    )
+    return <LoadingScreen />;
   }
 
   return (

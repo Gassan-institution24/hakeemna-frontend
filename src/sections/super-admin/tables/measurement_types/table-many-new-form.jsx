@@ -118,7 +118,17 @@ export default function NewEditManyForm() {
       return;
     }
     try {
-      await axiosInstance.post(endpoints.measurment_types.many, data);
+      const uploadRec = await axiosInstance.post(endpoints.upload_records.all, {
+        type: 'measurment_types',
+        mustUpload: data.length,
+      });
+      const insertedData = await axiosInstance.post(
+        endpoints.measurment_types.many,
+        data.map((one) => ({ ...one, upload_record: uploadRec.data._id }))
+      );
+      await axiosInstance.patch(endpoints.upload_records.one(uploadRec.data._id), {
+        uploaded: insertedData.data,
+      });
       router.push(paths.superadmin.tables.measurementtypes.root); /// edit
     } catch (e) {
       enqueueSnackbar(e, { variant: 'error' });

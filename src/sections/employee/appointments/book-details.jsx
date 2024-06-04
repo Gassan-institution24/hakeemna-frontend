@@ -238,7 +238,7 @@ function ReviewItem({ item }) {
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
 
-  const { enqueueSnackbar } = useSnackbar;
+  const { enqueueSnackbar } = useSnackbar();
 
   const { appointmenttypesData } = useGetAppointmentTypes();
 

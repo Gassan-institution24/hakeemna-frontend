@@ -81,19 +81,16 @@
 //   );
 // }
 
-
-
-// // questions in service unit 
+// // questions in service unit
 import * as Yup from 'yup';
-import { useFieldArray, useForm } from 'react-hook-form';
 import { enqueueSnackbar } from 'notistack';
+import { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm, useFieldArray } from 'react-hook-form';
 
-import FormControlLabel from '@mui/material/FormControlLabel';
 import {
   Button,
   Dialog,
-  Checkbox,
   MenuItem,
   Typography,
   DialogTitle,
@@ -110,7 +107,6 @@ import { useGetGeneralCheckListData } from 'src/api/check_listQ';
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useEffect, useState } from 'react';
 
 // defaultChecked
 export default function TestPage() {
@@ -163,7 +159,12 @@ export default function TestPage() {
 
   return (
     <>
-      <Button variant="outlined" color="success" onClick={dialog.onTrue} sx={{ mt: 1, display: 'block' }}>
+      <Button
+        variant="outlined"
+        color="success"
+        onClick={dialog.onTrue}
+        sx={{ mt: 1, display: 'block' }}
+      >
         Edit Check list
         <Iconify icon="ic:outline-edit-note" sx={{ ml: 0.5 }} />
       </Button>
@@ -234,10 +235,6 @@ export default function TestPage() {
   );
 }
 
-
-
-
-
 // import * as Yup from 'yup';
 // import { useForm } from 'react-hook-form';
 // import { enqueueSnackbar } from 'notistack';
@@ -299,7 +296,7 @@ export default function TestPage() {
 //   return (
 //     <Box component={Paper} sx={{ p: 1 }}>
 //       {localListData?.localListData?.map((info, i) => (
-    
+
 //         <Box sx={{ display: 'block' }}>
 //           {info?.answer_way === 'Text' && (
 //             <>
