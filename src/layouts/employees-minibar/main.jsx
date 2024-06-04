@@ -9,7 +9,9 @@ import { useResponsive } from 'src/hooks/use-responsive';
 export default function Main({ children, sx, ...other }) {
   const lgUp = useResponsive('up', 'lg');
   const path = window.location.pathname;
-  const have2nav = path.indexOf('/dashboard/us/acl/departments') !== -1 || path.indexOf('/dashboard/us/acl/workgroups') !== -1;
+  const have2nav =
+    path.indexOf('/dashboard/us/acl/departments') !== -1 ||
+    path.indexOf('/dashboard/us/acl/workgroups') !== -1;
   return (
     <Box
       component="main"

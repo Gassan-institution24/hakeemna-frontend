@@ -49,7 +49,7 @@ export default function Whydoc() {
           }}
         >
           <Image
-           id="About"
+            id="About"
             sx={{
               width: '55%',
               height: '55%',

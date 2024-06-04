@@ -5,10 +5,10 @@ import { zonedTimeToUtc } from 'date-fns-tz';
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { TimePicker } from '@mui/x-date-pickers';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
-import { TimePicker } from '@mui/x-date-pickers';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
@@ -219,7 +219,7 @@ export default function AppointmentToolbar({
           closeOnSelect
           slots={{
             // toolbar:false,
-            actionBar: 'cancel'
+            actionBar: 'cancel',
           }}
           minutesStep="5"
           label={t('from time')}
@@ -230,6 +230,7 @@ export default function AppointmentToolbar({
               user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
                 ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
             );
+            console.log('selectedTime', selectedTime)
             handleFilterStartTime(selectedTime);
           }}
           slotProps={{ textField: { fullWidth: true } }}
@@ -243,7 +244,7 @@ export default function AppointmentToolbar({
           closeOnSelect
           slots={{
             // toolbar:false,
-            actionBar: 'cancel'
+            actionBar: 'cancel',
           }}
           minutesStep="5"
           label={t('to time')}
@@ -254,7 +255,7 @@ export default function AppointmentToolbar({
               user?.employee?.employee_engagements[user?.employee.selected_engagement]?.unit_service
                 ?.country?.time_zone || Intl.DateTimeFormat().resolvedOptions().timeZone
             );
-            handleFilterEndTime(selectedTime);
+            handleFilterEndTime(new Date(selectedTime));
           }}
           slotProps={{
             textField: {

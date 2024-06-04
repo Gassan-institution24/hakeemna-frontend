@@ -38,7 +38,7 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   const curLangAr = currentLang.value === 'ar';
 
   const proccessing = useBoolean();
-  const [show,setShow] = useState(true)
+  const [show, setShow] = useState(true);
 
   const { handleAddNew } = useNewScreen();
 
@@ -115,10 +115,10 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
 
   const handleRemove = (index) => {
     remove(index);
-    setShow(false)
-    setTimeout(()=>{
-      setShow(true)
-    },100)
+    setShow(false);
+    setTimeout(() => {
+      setShow(true);
+    }, 100);
   };
 
   const processDayDetails = useCallback(
@@ -303,270 +303,272 @@ export default function NewEditDayDetails({ setErrorMsg, appointTime }) {
   return (
     <>
       <Divider flexItem sx={{ borderStyle: 'solid' }} />
-      {show && <Box sx={{ p: 3 }}>
-        <Typography
-          variant="p"
-          sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
-        >
-          {curLangAr ? 'تفاصيل اليوم' : 'Days Details'}:
-        </Typography>
+      {show && (
+        <Box sx={{ p: 3 }}>
+          <Typography
+            variant="p"
+            sx={{ color: 'text.secondary', mb: 3, fontWeight: '700', textTransform: 'capitalize' }}
+          >
+            {curLangAr ? 'تفاصيل اليوم' : 'Days Details'}:
+          </Typography>
 
-        <Stack
-          sx={{ mt: 3 }}
-          divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
-          spacing={3}
-        >
-          {fields.map((item, index) => (
-            <Stack
-              key={index}
-              // alignItems="flex-start"
-              // flexWrap="wrap"
-              spacing={1.5}
-              sx={{ width: '100%' }}
-            >
+          <Stack
+            sx={{ mt: 3 }}
+            divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />}
+            spacing={3}
+          >
+            {fields.map((item, index) => (
               <Stack
-                direction={{ xs: 'column', md: 'column' }}
-                spacing={2}
-                sx={{ width: '100%', mt: 2 }}
+                key={index}
+                // alignItems="flex-start"
+                // flexWrap="wrap"
+                spacing={1.5}
+                sx={{ width: '100%' }}
               >
                 <Stack
-                  direction={{ xs: 'column', md: 'row' }}
+                  direction={{ xs: 'column', md: 'column' }}
                   spacing={2}
                   sx={{ width: '100%', mt: 2 }}
                 >
-                  <RHFSelect
-                    disabled={!values?.weekend?.includes(values.days_details[index]?.day)}
-                    InputLabelProps={{ shrink: true }}
-                    size="small"
-                    name={`days_details[${index}].day`}
-                    label={t('day')}
+                  <Stack
+                    direction={{ xs: 'column', md: 'row' }}
+                    spacing={2}
+                    sx={{ width: '100%', mt: 2 }}
                   >
-                    {weekDays
-                      .filter((option) => !values.weekend.includes(option.value))
-                      .map((option, idx) => (
-                        <MenuItem lang="ar" key={idx} value={option.value}>
-                          {option.label}
+                    <RHFSelect
+                      disabled={!values?.weekend?.includes(values.days_details[index]?.day)}
+                      InputLabelProps={{ shrink: true }}
+                      size="small"
+                      name={`days_details[${index}].day`}
+                      label={t('day')}
+                    >
+                      {weekDays
+                        .filter((option) => !values.weekend.includes(option.value))
+                        .map((option, idx) => (
+                          <MenuItem lang="ar" key={idx} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                    </RHFSelect>
+                    <RHFSelect
+                      size="small"
+                      InputLabelProps={{ shrink: true }}
+                      name={`days_details[${index}].appointment_type`}
+                      onChange={(e) => {
+                        setValue(`days_details[${index}].appointment_type`, e.target.value);
+                        processDayDetails(index);
+                      }}
+                      label={`${t('appointment type')} *`}
+                    >
+                      {appointmenttypesData?.map((option, idx) => (
+                        <MenuItem lang="ar" key={idx} value={option._id}>
+                          {curLangAr ? option?.name_arabic : option?.name_english}
                         </MenuItem>
                       ))}
-                  </RHFSelect>
-                  <RHFSelect
-                    size="small"
-                    InputLabelProps={{ shrink: true }}
-                    name={`days_details[${index}].appointment_type`}
-                    onChange={(e) => {
-                      setValue(`days_details[${index}].appointment_type`, e.target.value);
-                      processDayDetails(index);
-                    }}
-                    label={`${t('appointment type')} *`}
-                  >
-                    {appointmenttypesData?.map((option, idx) => (
-                      <MenuItem lang="ar" key={idx} value={option._id}>
-                        {curLangAr ? option?.name_arabic : option?.name_english}
-                      </MenuItem>
-                    ))}
-                  </RHFSelect>
-                  <Controller
-                    name={`days_details[${index}].service_types`}
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                      <FormControl
-                        error={!!error}
-                        size="small"
-                        sx={{ width: '100%', shrink: true }}
-                      >
-                        <InputLabel shrink> {t('service types')} </InputLabel>
-
-                        <Select
-                          {...field}
-                          multiple
-                          id={`multiple-days_details[${index}].service_types`}
-                          label={t('service types')}
-                          onChange={(e) => {
-                            setValue(`days_details[${index}].service_types`, e.target.value);
-                            processDayDetails(index);
-                          }}
-                          renderValue={renderValues}
+                    </RHFSelect>
+                    <Controller
+                      name={`days_details[${index}].service_types`}
+                      control={control}
+                      render={({ field, fieldState: { error } }) => (
+                        <FormControl
+                          error={!!error}
+                          size="small"
+                          sx={{ width: '100%', shrink: true }}
                         >
-                          {serviceTypesData?.map((option, idx) => {
-                            const selected = field?.value?.includes(option._id);
+                          <InputLabel shrink> {t('service types')} </InputLabel>
 
-                            return (
-                              <MenuItem lang="ar" key={idx} value={option._id}>
-                                <Checkbox size="small" disableRipple checked={selected} />
-
-                                {curLangAr ? option?.name_arabic : option?.name_english}
-                              </MenuItem>
-                            );
-                          })}
-                          <Divider />
-                          <MenuItem
-                            lang="ar"
-                            sx={{
-                              display: 'flex',
-                              justifyContent: 'flex-end',
-                              gap: 1,
-                              fontWeight: 600,
-                              // color: 'error.main',
+                          <Select
+                            {...field}
+                            multiple
+                            id={`multiple-days_details[${index}].service_types`}
+                            label={t('service types')}
+                            onChange={(e) => {
+                              setValue(`days_details[${index}].service_types`, e.target.value);
+                              processDayDetails(index);
                             }}
-                            onClick={() => handleAddNew(paths.unitservice.tables.services.new)}
+                            renderValue={renderValues}
                           >
-                            <Typography variant="body2" sx={{ color: 'info.main' }}>
-                              {t('Add new')}
-                            </Typography>
-                            <Iconify icon="material-symbols:new-window-sharp" />
-                          </MenuItem>
-                        </Select>
+                            {serviceTypesData?.map((option, idx) => {
+                              const selected = field?.value?.includes(option._id);
 
-                        {!!error && (
-                          <FormHelperText error={!!error}>{error?.message}</FormHelperText>
-                        )}
-                      </FormControl>
-                    )}
-                  />
-                  <RHFTextField
-                    disabled
-                    size="small"
-                    name={`days_details[${index}].appointment_number`}
-                    label={t('appointments number')}
-                    InputLabelProps={{ shrink: true }}
-                    value={appointmentsNum[index] || appointEstimatedNum(index)}
-                  />
-                </Stack>
-                <Stack
-                  direction={{ xs: 'column', md: 'row' }}
-                  spacing={2}
-                  sx={{ width: '100%', mt: 2 }}
-                >
-                  <RHFTimePicker
-                    name={`days_details[${index}].work_start_time`}
-                    label={t('work start time')}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                      },
-                    }}
-                    onChange={() => {
-                      setValue(`days_details[${index}].work_end_time`, null);
-                      processDayDetails(index);
-                    }}
-                  />
-                  <RHFTimePicker
-                    name={`days_details[${index}].work_end_time`}
-                    label={t('work end time')}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                      },
-                    }}
-                    onChange={() => {
-                      processDayDetails(index);
-                    }}
-                  />
-                  <RHFTimePicker
-                    name={`days_details[${index}].break_start_time`}
-                    label={t('break start time')}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                      },
-                    }}
-                    onChange={() => {
-                      setValue(`days_details[${index}].break_end_time`, null);
-                      processDayDetails(index);
-                    }}
-                  />
-                  <RHFTimePicker
-                    name={`days_details[${index}].break_end_time`}
-                    label={t('break end time')}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                      },
-                    }}
-                    onChange={() => {
-                      processDayDetails(index);
-                    }}
-                  />
-                </Stack>
-                <Stack display="flex" alignItems="flex-end">
-                  <RHFCheckbox
-                    size="small"
-                    InputLabelProps={{ shrink: true }}
-                    name={`days_details[${index}].online_available`}
-                    onChange={(e) => {
-                      setValue(
-                        `days_details[${index}].online_available`,
-                        !values.days_details[index].online_available
-                      );
-                      processDayDetails(index);
-                    }}
-                    label={<Typography sx={{ fontSize: 12 }}>{t('online avaliable')}</Typography>}
-                  />
-                </Stack>
-                <Stack
-                  direction={{ xs: 'column', md: 'row' }}
-                  spacing={0.2}
-                  sx={{ justifySelf: { xs: 'flex-end' }, alignSelf: { xs: 'flex-end' } }}
-                >
-                  <IconButton size="small" color="error" onClick={() => handleRemove(index)}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                  <IconButton size="small" onClick={() => processDayDetails(index)}>
-                    <Iconify icon="zondicons:refresh" />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={() =>
-                      setShowAppointments({
-                        [index]: !showAppointments[index],
-                      })
-                    }
-                  >
-                    <Iconify
-                      icon={
-                        showAppointments[index]
-                          ? 'eva:arrow-ios-upward-fill'
-                          : 'eva:arrow-ios-downward-fill'
-                      }
+                              return (
+                                <MenuItem lang="ar" key={idx} value={option._id}>
+                                  <Checkbox size="small" disableRipple checked={selected} />
+
+                                  {curLangAr ? option?.name_arabic : option?.name_english}
+                                </MenuItem>
+                              );
+                            })}
+                            <Divider />
+                            <MenuItem
+                              lang="ar"
+                              sx={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                gap: 1,
+                                fontWeight: 600,
+                                // color: 'error.main',
+                              }}
+                              onClick={() => handleAddNew(paths.unitservice.tables.services.new)}
+                            >
+                              <Typography variant="body2" sx={{ color: 'info.main' }}>
+                                {t('Add new')}
+                              </Typography>
+                              <Iconify icon="material-symbols:new-window-sharp" />
+                            </MenuItem>
+                          </Select>
+
+                          {!!error && (
+                            <FormHelperText error={!!error}>{error?.message}</FormHelperText>
+                          )}
+                        </FormControl>
+                      )}
                     />
-                  </IconButton>
+                    <RHFTextField
+                      disabled
+                      size="small"
+                      name={`days_details[${index}].appointment_number`}
+                      label={t('appointments number')}
+                      InputLabelProps={{ shrink: true }}
+                      value={appointmentsNum[index] || appointEstimatedNum(index)}
+                    />
+                  </Stack>
+                  <Stack
+                    direction={{ xs: 'column', md: 'row' }}
+                    spacing={2}
+                    sx={{ width: '100%', mt: 2 }}
+                  >
+                    <RHFTimePicker
+                      name={`days_details[${index}].work_start_time`}
+                      label={t('work start time')}
+                      slotProps={{
+                        textField: {
+                          size: 'small',
+                          fullWidth: true,
+                        },
+                      }}
+                      onChange={() => {
+                        setValue(`days_details[${index}].work_end_time`, null);
+                        processDayDetails(index);
+                      }}
+                    />
+                    <RHFTimePicker
+                      name={`days_details[${index}].work_end_time`}
+                      label={t('work end time')}
+                      slotProps={{
+                        textField: {
+                          size: 'small',
+                          fullWidth: true,
+                        },
+                      }}
+                      onChange={() => {
+                        processDayDetails(index);
+                      }}
+                    />
+                    <RHFTimePicker
+                      name={`days_details[${index}].break_start_time`}
+                      label={t('break start time')}
+                      slotProps={{
+                        textField: {
+                          size: 'small',
+                          fullWidth: true,
+                        },
+                      }}
+                      onChange={() => {
+                        setValue(`days_details[${index}].break_end_time`, null);
+                        processDayDetails(index);
+                      }}
+                    />
+                    <RHFTimePicker
+                      name={`days_details[${index}].break_end_time`}
+                      label={t('break end time')}
+                      slotProps={{
+                        textField: {
+                          size: 'small',
+                          fullWidth: true,
+                        },
+                      }}
+                      onChange={() => {
+                        processDayDetails(index);
+                      }}
+                    />
+                  </Stack>
+                  <Stack display="flex" alignItems="flex-end">
+                    <RHFCheckbox
+                      size="small"
+                      InputLabelProps={{ shrink: true }}
+                      name={`days_details[${index}].online_available`}
+                      onChange={(e) => {
+                        setValue(
+                          `days_details[${index}].online_available`,
+                          !values.days_details[index].online_available
+                        );
+                        processDayDetails(index);
+                      }}
+                      label={<Typography sx={{ fontSize: 12 }}>{t('online avaliable')}</Typography>}
+                    />
+                  </Stack>
+                  <Stack
+                    direction={{ xs: 'column', md: 'row' }}
+                    spacing={0.2}
+                    sx={{ justifySelf: { xs: 'flex-end' }, alignSelf: { xs: 'flex-end' } }}
+                  >
+                    <IconButton size="small" color="error" onClick={() => handleRemove(index)}>
+                      <Iconify icon="solar:trash-bin-trash-bold" />
+                    </IconButton>
+                    <IconButton size="small" onClick={() => processDayDetails(index)}>
+                      <Iconify icon="zondicons:refresh" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={() =>
+                        setShowAppointments({
+                          [index]: !showAppointments[index],
+                        })
+                      }
+                    >
+                      <Iconify
+                        icon={
+                          showAppointments[index]
+                            ? 'eva:arrow-ios-upward-fill'
+                            : 'eva:arrow-ios-downward-fill'
+                        }
+                      />
+                    </IconButton>
+                  </Stack>
                 </Stack>
+                <NewEditDayAppointmentsDetails
+                  setAppointmentsNum={setAppointmentsNum}
+                  serviceTypesData={serviceTypesData}
+                  appointmenttypesData={appointmenttypesData}
+                  open={showAppointments[index]}
+                  ParentIndex={index}
+                  unmountOnExit
+                />
               </Stack>
-              <NewEditDayAppointmentsDetails
-                setAppointmentsNum={setAppointmentsNum}
-                serviceTypesData={serviceTypesData}
-                appointmenttypesData={appointmenttypesData}
-                open={showAppointments[index]}
-                ParentIndex={index}
-                unmountOnExit
-              />
-            </Stack>
-          ))}
-        </Stack>
+            ))}
+          </Stack>
 
-        <Divider sx={{ mt: 3, mb: 1, borderStyle: 'dashed' }} />
+          <Divider sx={{ mt: 3, mb: 1, borderStyle: 'dashed' }} />
 
-        <Stack
-          spacing={3}
-          direction={{ xs: 'column', md: 'row' }}
-          alignItems={{ xs: 'flex-end', md: 'center' }}
-        >
-          <Button
-            size="small"
-            color="primary"
-            startIcon={<Iconify icon="tdesign:plus" />}
-            sx={{ padding: 1 }}
-            onClick={handleAdd}
-            // sx={{ flexShrink: 0 }}
+          <Stack
+            spacing={3}
+            direction={{ xs: 'column', md: 'row' }}
+            alignItems={{ xs: 'flex-end', md: 'center' }}
           >
-            {curLangAr ? 'إضافة يوم جديد' : 'add new day'}
-          </Button>
-        </Stack>
-      </Box>}
+            <Button
+              size="small"
+              color="primary"
+              startIcon={<Iconify icon="tdesign:plus" />}
+              sx={{ padding: 1 }}
+              onClick={handleAdd}
+              // sx={{ flexShrink: 0 }}
+            >
+              {curLangAr ? 'إضافة يوم جديد' : 'add new day'}
+            </Button>
+          </Stack>
+        </Box>
+      )}
     </>
   );
 }

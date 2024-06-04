@@ -29,7 +29,7 @@ export default function HomeView() {
     <>
       <ScrollProgress scrollYProgress={scrollYProgress} />
 
-      <HomeHero  id="home" />
+      <HomeHero id="home" />
 
       <Box
         sx={{

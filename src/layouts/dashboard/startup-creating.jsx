@@ -9,7 +9,13 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import { useAclGuard } from 'src/auth/guard/acl-guard';
 import { useLocales, useTranslate } from 'src/locales';
-import { useGetUSRooms, useGetUSWorkGroups, useGetUSWorkShifts, useGetUSActivities, useGetUSDepartments } from 'src/api';
+import {
+  useGetUSRooms,
+  useGetUSWorkGroups,
+  useGetUSWorkShifts,
+  useGetUSActivities,
+  useGetUSDepartments,
+} from 'src/api';
 
 import { ConfirmDialog } from 'src/components/custom-dialog';
 
@@ -28,12 +34,12 @@ export default function StartupCreating({ open, onClose }) {
   const { departmentsData } = useGetUSDepartments(USData?._id);
   const { workGroupsData } = useGetUSWorkGroups(USData?._id);
   const { workShiftsData } = useGetUSWorkShifts(USData?._id);
-  const {roomsData} = useGetUSRooms(USData?._id)
-  const {activitiesData} = useGetUSActivities(USData?._id)
+  const { roomsData } = useGetUSRooms(USData?._id);
+  const { activitiesData } = useGetUSActivities(USData?._id);
 
   const [tables, setTables] = useState([]);
 
-  const onAcceptCreating = async() => {
+  const onAcceptCreating = async () => {
     try {
       if (tables.includes('department')) {
         await axiosInstance.post(endpoints.departments.all, {

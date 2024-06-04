@@ -191,6 +191,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
       ],
       work_group: appointmentConfigData?.work_group?._id || null,
       work_shift: appointmentConfigData?.work_shift?._id || null,
+      online_available: appointmentConfigData?.online_available || true,
       days_details: appointmentConfigData?.days_details || [
         {
           day: 'saturday',
@@ -217,7 +218,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
-  console.log('errors',errors)
+  console.log('errors', errors);
 
   const handleSaving = async () => {
     saving.onTrue();
@@ -396,7 +397,7 @@ export default function AppointConfigNewEditForm({ appointmentConfigData, refetc
         run={walktour.run}
         callback={walktour.onCallback}
         getHelpers={walktour.setHelpers}
-        // scrollDuration={500}
+      // scrollDuration={500}
       />
       <Container maxWidth="lg">
         <CustomBreadcrumbs

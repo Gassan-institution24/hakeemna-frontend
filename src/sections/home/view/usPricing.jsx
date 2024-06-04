@@ -166,7 +166,7 @@ export default function UsPricing() {
 
           <m.div variants={varFade().inDown}>
             <Typography sx={{ mt: 2, mb: 5, color: 'text.secondary' }}>
-             {t('Please describe your case to receive the most accurate respons.')}
+              {t('Please describe your case to receive the most accurate respons.')}
             </Typography>
           </m.div>
 
@@ -180,11 +180,8 @@ export default function UsPricing() {
               {t('contact us')}
             </Button>
           </m.div>
-
-            </Box>
-
-          </m.div>
-
+        </Box>
+      </m.div>
     </Container>
   );
 }

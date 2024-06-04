@@ -176,10 +176,13 @@ export default function JwtRegisterView() {
 
   const {
     handleSubmit,
+    setValue,
     watch,
     formState: { isSubmitting, errors },
   } = methods;
   const values = watch();
+
+  console.log('valueees', values?.visibility_US_page, values?.visibility_online_appointment);
 
   const { tableData } = useGetCountryCities(values.us_country);
 
@@ -594,6 +597,7 @@ export default function JwtRegisterView() {
           <RHFCheckbox
             sx={{ px: 2 }}
             name="visibility_US_page"
+            onChange={() => setValue('visibility_US_page', !values.visibility_US_page)}
             label={
               <Typography sx={{ fontSize: 12 }}>
                 {t('visible on unit of service online page')}
@@ -603,6 +607,9 @@ export default function JwtRegisterView() {
           <RHFCheckbox
             sx={{ px: 2 }}
             name="visibility_online_appointment"
+            onChange={() =>
+              setValue('visibility_online_appointment', !values.visibility_online_appointment)
+            }
             label={
               <Typography sx={{ fontSize: 12 }}>{t('visible on online appointments')}</Typography>
             }

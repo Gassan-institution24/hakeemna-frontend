@@ -20,9 +20,7 @@ export default function WatingRoom({ employeeId }) {
   //   }
   // }, [appointmentsData]);
   // hasFeedback ? <WatingRoomDialog employeesData={employeeId} /> : <EmptyContent />;
-  return (
-    <h1>hello</h1>
-  )
+  return <h1>hello</h1>;
 }
 
 WatingRoom.propTypes = {

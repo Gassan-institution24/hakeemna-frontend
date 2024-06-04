@@ -4,10 +4,10 @@ import isEqual from 'lodash/isEqual';
 import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
+import { TimePicker } from '@mui/x-date-pickers';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import { TimePicker } from '@mui/x-date-pickers';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
 import { paths } from 'src/routes/paths';
@@ -39,11 +39,11 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
+import { LoadingScreen } from 'src/components/loading-screen';
 // // import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFSelect, RHFTextField, RHFDatePicker, RHFPhoneNumber } from 'src/components/hook-form';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 import BookDetails from '../book-details';
 import PatientsFound from '../patients-found';
@@ -227,9 +227,7 @@ export default function TableCreateView() {
   }, []);
 
   if (loading) {
-    return(
-      <LoadingScreen />
-    )
+    return <LoadingScreen />;
   }
 
   return (
@@ -258,10 +256,10 @@ export default function TableCreateView() {
             rowGap={3}
             columnGap={2}
             display="flex"
-          // gridTemplateColumns={{
-          //   xs: 'repeat(1, 1fr)',
-          //   sm: 'repeat(3, 1fr)',
-          // }}
+            // gridTemplateColumns={{
+            //   xs: 'repeat(1, 1fr)',
+            //   sm: 'repeat(3, 1fr)',
+            // }}
           >
             <FormControl
               sx={{
@@ -275,14 +273,14 @@ export default function TableCreateView() {
                 onChange={(event) => setFilters((prev) => ({ ...prev, group: event.target.value }))}
                 size="small"
                 input={<OutlinedInput label={t('work group')} />}
-              // renderValue={(selected) =>
-              //   selected
-              // }
-              // MenuProps={{
-              //   PaperProps: {
-              //     sx: { maxHeight: 240 },
-              //   },
-              // }}
+                // renderValue={(selected) =>
+                //   selected
+                // }
+                // MenuProps={{
+                //   PaperProps: {
+                //     sx: { maxHeight: 240 },
+                //   },
+                // }}
               >
                 {workGroupsData.map((option, idx) => (
                   <MenuItem lang="ar" key={idx} value={option._id}>
@@ -296,7 +294,7 @@ export default function TableCreateView() {
               closeOnSelect
               slots={{
                 // toolbar:false,
-                actionBar: 'cancel'
+                actionBar: 'cancel',
               }}
               minutesStep="5"
               label={t('from time')}
@@ -316,7 +314,7 @@ export default function TableCreateView() {
               closeOnSelect
               slots={{
                 // toolbar:false,
-                actionBar: 'cancel'
+                actionBar: 'cancel',
               }}
               minutesStep="5"
               label={t('to time')}
@@ -354,7 +352,7 @@ export default function TableCreateView() {
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               list={appointmentsData}
-            // sx={{ mt: SPACING }}
+              // sx={{ mt: SPACING }}
             />
           )}
           <Typography
