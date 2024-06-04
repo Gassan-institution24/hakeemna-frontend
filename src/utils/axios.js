@@ -367,6 +367,11 @@ export const endpoints = {
     all: '/api/localCL',
     one: (id) => `/api/localCL/${id}`,
   },
+  answers: {
+    all: '/api/answersandquestiones',
+    one: (id) => `/api/answersandquestiones/${id}`,
+    entrance: (id) => `/api/answersandquestiones/entrance/${id}`,
+  },
   entranceManagement: {
     all: '/api/entrance',
     one: (id) => `/api/entrance/${id}`,

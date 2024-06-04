@@ -54,7 +54,7 @@ import {
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import Testpage from './checkList';
+import CheckList from './checkList';
 import SickLeave from './sickLeave';
 
 export default function Processing() {
@@ -88,8 +88,7 @@ export default function Processing() {
     department: Yup.string(),
     Medical_sick_leave_start: Yup.date(),
     Medical_sick_leave_end: Yup.date(),
-  });
-
+  }); 
   const defaultValues = {
     employee: user?.employee?._id,
     patient: data?._id,
@@ -207,7 +206,7 @@ export default function Processing() {
       title: (
         <>
           Doctor Check List
-          <Testpage />
+          <CheckList />
         </>
       ),
       color: 'primary',
