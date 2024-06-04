@@ -19,6 +19,7 @@ import FormProvider from 'src/components/hook-form/form-provider';
 
 export default function TestPage() {
   const localListData = useGetlocalCheckListData();
+  // console.log(localListData);
 
   const onSubmit = async (submitdata) => {
     try {
@@ -35,12 +36,13 @@ export default function TestPage() {
     answer: Yup.mixed(),
   });
 
-  // Dynamically set the defaultValues based on localListData
-  const defaultValues = localListData?.localListData?.reduce((acc, info) => {
-    acc[`question_${info.id}`] = info?.question_english || '';
-    acc[`answer_${info.id}`] = '';
-    return acc;
-  }, {});
+  const defaultValues = {
+    // question: '',
+    // answer: '',
+  };
+
+//   question
+// answer
 
   const methods = useForm({
     mode: 'onTouched',
@@ -62,7 +64,7 @@ export default function TestPage() {
           {info?.answer_way === 'Text' && (
             <>
               <Controller
-                name={`answer_${info.id}`}
+                name={`answer_${info?._id}`}
                 control={control}
                 render={({ field }) => (
                   <TextField

@@ -129,14 +129,14 @@ export default function TestPage() {
     }
   };
   const questionSchema = Yup.object().shape({
-    question: Yup.string(),
+    // question: Yup.string(),
     question_english: Yup.string(),
     answer_way: Yup.string().required('Answer way is required'),
     options: Yup.array().of(Yup.mixed()),
   });
 
   const defaultValues = {
-    question: '',
+    // question: '',
     question_english: '',
     answer_way: '',
     options: [],
