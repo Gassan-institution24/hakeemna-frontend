@@ -7,12 +7,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import {
   Box,
+  Radio,
   Button,
-  Divider,
   Checkbox,
   TextField,
   FormGroup,
   Typography,
+  RadioGroup,
   FormControlLabel,
 } from '@mui/material';
 
@@ -32,10 +33,13 @@ export default function TestPage() {
   const { user } = useAuthContext();
   const { Entrance } = useGetOneEntranceManagement(id);
 
+  // console.log(localListData, 'Data');
+
   const onSubmit = async (answers) => {
     try {
       await axiosInstance.post('/api/answersandquestiones', answers);
       enqueueSnackbar('New question created successfully', { variant: 'success' });
+      reset();
       refetch();
     } catch (error) {
       console.error(error.message);
@@ -79,67 +83,90 @@ export default function TestPage() {
 
   return (
     <>
-      {data?.map((answers, keyI) => (
-        <Typography sx={{pt:2}} key={keyI}>
-          {answers?.question?.question_english} : {answers?.answer}
-        </Typography>
-      ))}
-<Divider/>
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        {localListData?.localListData?.map((info, i) => (
-          <Box key={i} sx={{ display: 'block' }}>
-            {info?.answer_way === 'Text' && (
-              <Controller
-                name={`answer_${info?._id}`}
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    sx={{ m: 2, width: '80%' }}
-                    fullWidth
-                    label={info?.question_english || info?.question?.question_english}
-                  />
-                )}
-              />
-            )}
-            {info?.answer_way === 'Check List' && (
-              <Box sx={{ m: 2 }}>
-                <Typography>{info?.question_english || info?.question?.question_english}</Typography>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', borderBottom:0.5,mt:2 }}>
+        {data?.map((answers, keyI) => (
+          <Box key={keyI} sx={{ width: 'calc(33.33% - 16px)', m: 1 }}>
+            <Typography>
+              {answers?.question?.question_english} : {answers?.answer}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+
+      <Box sx={{ height: '400px', overflowY: 'auto' }}>
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          {localListData?.localListData?.map((info, i) => (
+            <Box key={i} sx={{ display: 'block' }}>
+              {info?.answer_way === 'Text' && (
                 <Controller
                   name={`answer_${info?._id}`}
                   control={control}
                   render={({ field }) => (
-                    <FormGroup>
-                      {info?.options?.map((option, index) => (
-                        <FormControlLabel
-                          key={index}
-                          control={
-                            <Checkbox
-                              checked={field.value?.includes(option) || false}
-                              onChange={(e) => {
-                                const valueArray = field.value || [];
-                                if (e.target.checked) {
-                                  field.onChange([...valueArray, option]);
-                                } else {
-                                  field.onChange(valueArray.filter((item) => item !== option));
-                                }
-                              }}
-                            />
-                          }
-                          label={option}
-                        />
-                      ))}
-                    </FormGroup>
+                    <TextField
+                      {...field}
+                      sx={{ m: 2, width: '80%' }}
+                      fullWidth
+                      label={info?.question_english || info?.question?.question_english}
+                    />
                   )}
                 />
-              </Box>
-            )}
-          </Box>
-        ))}
-        <Button type="submit" disabled={isSubmitting} variant="contained">
-          Save
-        </Button>
-      </FormProvider>
+              )}
+              {info?.answer_way === 'Check List' && (
+                <Box sx={{ m: 2 }}>
+                  <Typography>{info?.question_english || info?.question?.question_english}</Typography>
+                  <Controller
+                    name={`answer_${info?._id}`}
+                    control={control}
+                    render={({ field }) => (
+                      <FormGroup>
+                        {info?.options?.map((option, index) => (
+                          <FormControlLabel
+                            key={index}
+                            control={
+                              <Checkbox
+                                checked={field.value?.includes(option) || false}
+                                onChange={(e) => {
+                                  const valueArray = field.value || [];
+                                  if (e.target.checked) {
+                                    field.onChange([...valueArray, option]);
+                                  } else {
+                                    field.onChange(valueArray.filter((item) => item !== option));
+                                  }
+                                }}
+                              />
+                            }
+                            label={option}
+                          />
+                        ))}
+                      </FormGroup>
+                    )}
+                  />
+                </Box>
+              )}
+              {info?.answer_way === 'Yes No' && (
+                <Box sx={{ m: 2, border: 1, p: 2 }}>
+                  <Typography sx={{ m: 2 }}>
+                    {info?.question_english || info?.question?.question_english}
+                  </Typography>
+                  <Controller
+                    name={`answer_${info?._id}`}
+                    control={control}
+                    render={({ field }) => (
+                      <RadioGroup {...field}>
+                        <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                        <FormControlLabel value="No" control={<Radio />} label="No" />
+                      </RadioGroup>
+                    )}
+                  />
+                </Box>
+              )}
+            </Box>
+          ))}
+          <Button type="submit" disabled={isSubmitting} variant="contained">
+            Save
+          </Button>
+        </FormProvider>
+      </Box>
     </>
   );
 }

@@ -50,7 +50,7 @@ export default function AppointmentsToday() {
   const { entranceData, refetch: refetchEntrance } = useGetEntranceManagement();
   const { finishedAppointmentsData, refetch: refetchFinishedAppointments } =
     useGetfinishedAppointments();
-
+  console.log(appointmentsData, 'appointmentsData');
   const TABS = [
     {
       value: 'one',
