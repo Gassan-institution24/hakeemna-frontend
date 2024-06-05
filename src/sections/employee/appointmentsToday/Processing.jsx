@@ -62,7 +62,7 @@ export default function Processing() {
   const { id } = params;
   const { medicinesData } = useGetMedicines();
   const { user } = useAuthContext();
-  const { Entrance } = useGetOneEntranceManagement(id);
+  const { Entrance,refetch } = useGetOneEntranceManagement(id);
   const { data } = useGetPatient(Entrance?.patient?._id);
   const { historyData } = useGetPatientHistoryData(Entrance?.patient?._id);
   const medicalReportDialog = useBoolean();
@@ -70,8 +70,6 @@ export default function Processing() {
   const { t } = useTranslate();
   const { currentLang } = useLocales();
   const curLangAr = currentLang.value === 'ar';
-  const [drugs, setDrugs] = useState(false);
-  const [report, setReport] = useState(false);
   const [filterforspecialties, setFilterforspecialties] = useState();
   const [itemsToShow, setItemsToShow] = useState(2);
   const router = useRouter();
@@ -86,12 +84,14 @@ export default function Processing() {
     Doctor_Comments: Yup.string(),
     description: Yup.string(),
     department: Yup.string(),
+    Drugs_report: Yup.string(),
+    medical_report: Yup.string(),
     Medical_sick_leave_start: Yup.date(),
     Medical_sick_leave_end: Yup.date(),
-  }); 
+  });
   const defaultValues = {
     employee: user?.employee?._id,
-    patient: data?._id,
+    patient: Entrance?.patient?._id,
     service_unit: Entrance?.service_unit,
   };
 
@@ -118,7 +118,7 @@ export default function Processing() {
       patient: Entrance?.patient?._id,
       service_unit: Entrance?.service_unit,
     });
-  }, [user, data, Entrance, reset]);
+  }, [user, Entrance, reset]);
 
   useEffect(() => {
     if (watchStartTime && watchEndTime) {
@@ -133,15 +133,21 @@ export default function Processing() {
     try {
       if (medicalReportDialog.value) {
         await axiosInstance.post('/api/examination', submitdata);
-        setReport(true);
+        await axiosInstance.patch(`/api/entrance/${id}`, {
+          medical_report_status: true,
+        });
         enqueueSnackbar('prescription uploaded successfully', { variant: 'success' });
+        refetch()
         medicalReportDialog.onFalse();
         reset();
       }
       if (prescriptionDialog.value) {
         await axiosInstance.post('/api/drugs', submitdata);
-        setDrugs(true);
+        await axiosInstance.patch(`/api/entrance/${id}`, {
+          Drugs_report_status: true,
+        });
         enqueueSnackbar('prescription uploaded successfully', { variant: 'success' });
+        refetch()
         prescriptionDialog.onFalse();
         reset();
       }
@@ -205,7 +211,11 @@ export default function Processing() {
       key: 3,
       title: (
         <>
-          Doctor Check List
+          <span
+            style={{ backgroundColor: '#22C55E', color: 'white', padding: 6, borderRadius: 10 }}
+          >
+            Doctor Check List
+          </span>
           <CheckList />
         </>
       ),
@@ -250,7 +260,7 @@ export default function Processing() {
       color: 'primary',
 
       icon:
-        report === true ? (
+        Entrance?.medical_report_status === true ? (
           <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
         ) : (
           <Iconify icon="streamline:checkup-medical-report-clipboard" width={23} />
@@ -261,7 +271,7 @@ export default function Processing() {
       title: 'prescription (optional)',
       color: 'info',
       icon:
-        drugs === true ? (
+        Entrance?.Drugs_report_status === true ? (
           <Iconify sx={{ color: '#fff' }} icon="icon-park-outline:correct" width={24} />
         ) : (
           <Iconify icon="material-symbols-light:prescriptions-outline" width={24} />
@@ -302,40 +312,6 @@ export default function Processing() {
                 ? 'لا ينبغي أن يتم تفسير النتائج وتقييمها بشكل فردي، بل بحضور الطبيب الذي يتم استشارته بشأن تلك النتائج مع مراعاة السياق الطبي الكامل لحالة المريض'
                 : 'The interpretation and evaluation of the results should not be done individually, but rather in the presence of a physician who is consulted on those results and taking into account the full medical context of the patient’s condition.'}
             </Typography>
-            <Controller
-              name="Medical_sick_leave_start"
-              render={({ field, fieldState: { error } }) => (
-                <DatePicker
-                  {...field}
-                  label={t('Date of making the medical report*')}
-                  sx={{ mb: 2 }}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                      error: !!error,
-                      helperText: error?.message,
-                    },
-                  }}
-                />
-              )}
-            />
-            <Controller
-              name="Medical_sick_leave_end"
-              render={({ field, fieldState: { error } }) => (
-                <DatePicker
-                  {...field}
-                  label={t('Date of making the medical report*')}
-                  sx={{ mb: 2 }}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                      error: !!error,
-                      helperText: error?.message,
-                    },
-                  }}
-                />
-              )}
-            />
             <RHFTextField lang="en" name="description" label={t('description')} />
           </DialogContent>
           <DialogActions>
