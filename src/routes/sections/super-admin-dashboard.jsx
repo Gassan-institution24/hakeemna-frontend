@@ -451,6 +451,16 @@ const MailPage = lazy(() => import('src/pages/super-admin/mail'));
 // UPLOADS
 const UploadsPage = lazy(() => import('src/pages/super-admin/tables/uploads'));
 
+// FAMILY RELATION
+const FamilyRelationPage = lazy(() => import('src/pages/super-admin/tables/family-relation/table'));
+const FamilyRelationNewPage = lazy(() => import('src/pages/super-admin/tables/family-relation/new'));
+const FamilyRelationEditPage = lazy(() => import('src/pages/super-admin/tables/family-relation/edit'));
+
+// CHECKLIST
+const ChecklistPage = lazy(() => import('src/pages/super-admin/tables/checklist/table'));
+const ChecklistNewPage = lazy(() => import('src/pages/super-admin/tables/checklist/new'));
+const ChecklistEditPage = lazy(() => import('src/pages/super-admin/tables/checklist/edit'));
+
 // ----------------------------------------------------------------------
 
 export const dashboardRoutes = [
@@ -1019,6 +1029,24 @@ export const dashboardRoutes = [
             children: [
               { element: <UploadsPage />, index: true },
               { path: 'list', element: <UploadsPage /> },
+            ],
+          },
+          {
+            path: 'family_relation',
+            children: [
+              { element: <FamilyRelationPage />, index: true },
+              { path: 'list', element: <FamilyRelationPage /> },
+              { path: 'new', element: <FamilyRelationNewPage /> },
+              { path: ':id/edit', element: <FamilyRelationEditPage /> },
+            ],
+          },
+          {
+            path: 'checklist',
+            children: [
+              { element: <ChecklistPage />, index: true },
+              { path: 'list', element: <ChecklistPage /> },
+              { path: 'new', element: <ChecklistNewPage /> },
+              { path: ':id/edit', element: <ChecklistEditPage /> },
             ],
           },
         ],

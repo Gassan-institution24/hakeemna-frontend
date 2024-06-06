@@ -28,11 +28,11 @@
 //   };
 //   const questionSchema = Yup.object().shape({
 //     question_arabic: Yup.string(),
-//     question_english: Yup.string(),
+//     question: Yup.string(),
 //   });
 //   const defaultValues = {
 //     question_arabic: '',
-//     question_english: '',
+//     question: '',
 //   };
 
 //   const dialog = useBoolean();
@@ -64,7 +64,7 @@
 //             <RHFTextField lang="ar" name="question_arabic" label="question_arabic" />
 //             <br />
 //             <br />
-//             <RHFTextField lang="en" name="question_english" label="question_english" />
+//             <RHFTextField lang="en" name="question" label="question" />
 //           </DialogContent>
 //           <DialogActions>
 //             <Button variant="outlined" color="inherit" onClick={dialog.onFalse}>
@@ -126,14 +126,14 @@ export default function TestPage() {
   };
   const questionSchema = Yup.object().shape({
     // question: Yup.string(),
-    question_english: Yup.string(),
+    question: Yup.string(),
     answer_way: Yup.string().required('Answer way is required'),
     options: Yup.array().of(Yup.mixed()),
   });
 
   const defaultValues = {
     // question: '',
-    question_english: '',
+    question: '',
     answer_way: '',
     options: [],
   };
@@ -179,7 +179,7 @@ export default function TestPage() {
             </Typography>
             <RHFTextField
               lang="en"
-              name="question_english"
+              name="question"
               label="Question English"
               sx={{ mb: 2 }}
             />
@@ -216,7 +216,7 @@ export default function TestPage() {
             <RHFSelect label="Choose a question to add" name="question" sx={{ mb: 2 }}>
               {CheckListData?.CheckListData?.map((test, idx) => (
                 <MenuItem lang="ar" value={test?._id} key={idx} sx={{ mb: 1 }}>
-                  {test?.question_english}
+                  {test?.question}
                 </MenuItem>
               ))}
             </RHFSelect>
