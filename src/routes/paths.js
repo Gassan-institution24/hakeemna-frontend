@@ -500,6 +500,16 @@ export const paths = {
         new: `${ROOTS.SUPERADMIN}/tables/rooms/new`,
         edit: (id) => `${ROOTS.SUPERADMIN}/tables/rooms/${id}/edit`,
       },
+      family_relation: {
+        root: `${ROOTS.SUPERADMIN}/tables/family_relation`,
+        new: `${ROOTS.SUPERADMIN}/tables/family_relation/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/family_relation/${id}/edit`,
+      },
+      checklist: {
+        root: `${ROOTS.SUPERADMIN}/tables/checklist`,
+        new: `${ROOTS.SUPERADMIN}/tables/checklist/new`,
+        edit: (id) => `${ROOTS.SUPERADMIN}/tables/checklist/${id}/edit`,
+      },
     },
   },
 

@@ -81,3 +81,4 @@ export * from './ticket-categories';
 export * from './tickets';
 export * from './drugs';
 export * from './uploads';
+export * from './check_listQ';
