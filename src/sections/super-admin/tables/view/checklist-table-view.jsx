@@ -14,7 +14,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useGetFamilyTypes } from 'src/api';
+import { useGetCheckLists } from 'src/api';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -30,7 +30,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table'; /// edit
 
-import TableDetailRow from '../family_relation/table-details-row'; /// edit
+import TableDetailRow from '../checklist/table-details-row'; /// edit
 import TableDetailToolbar from '../table-details-toolbar';
 import TableDetailFiltersResult from '../table-details-filters-result';
 
@@ -38,8 +38,9 @@ import TableDetailFiltersResult from '../table-details-filters-result';
 
 const TABLE_HEAD = [
   { id: 'code', label: 'Code' },
-  { id: 'name_english', label: 'name' },
-  { id: 'name_arabic', label: 'arabic name' },
+  { id: 'title', label: 'title' },
+  { id: 'speciality', label: 'speciality' },
+  { id: 'description', label: 'description' },
   { id: '', width: 88 },
 ];
 
@@ -49,7 +50,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function FamilyRelationTableView() {
+export default function ChecklistTableView() {
   const table = useTable({ defaultOrderBy: 'code' });
 
   const componentRef = useRef();
@@ -58,7 +59,7 @@ export default function FamilyRelationTableView() {
 
   const router = useRouter();
 
-  const { Family, loading } = useGetFamilyTypes();
+  const { CheckListData, loading } = useGetCheckLists();
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -68,7 +69,7 @@ export default function FamilyRelationTableView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: Family,
+    inputData: CheckListData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -101,7 +102,7 @@ export default function FamilyRelationTableView() {
     const data = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(data, 'RoomsTable.xlsx'); /// edit
+    saveAs(data, 'checklist.xlsx'); /// edit
   };
 
   const handleFilters = useCallback(
@@ -117,7 +118,7 @@ export default function FamilyRelationTableView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      router.push(paths.superadmin.tables.family_relation.edit(id));
+      router.push(paths.superadmin.tables.checklist.edit(id));
     },
     [router]
   );
@@ -131,109 +132,109 @@ export default function FamilyRelationTableView() {
   }
 
   return (
-      <Container maxWidth="xl">
-        <CustomBreadcrumbs
-          heading="Family relations" /// edit
-          links={[
-            {
-              name: 'dashboard',
-              href: paths.superadmin.root,
-            },
-            {
-              name: 'Tables',
-              href: paths.superadmin.tables.list,
-            },
-            { name: 'Family relations' },
-          ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.superadmin.tables.family_relation.new}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New family relation
-            </Button>
-          }
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
+    <Container maxWidth="xl">
+      <CustomBreadcrumbs
+        heading="checklist" /// edit
+        links={[
+          {
+            name: 'dashboard',
+            href: paths.superadmin.root,
+          },
+          {
+            name: 'Tables',
+            href: paths.superadmin.tables.list,
+          },
+          { name: 'checklist' },
+        ]}
+        action={
+          <Button
+            component={RouterLink}
+            href={paths.superadmin.tables.checklist.new}
+            variant="contained"
+            startIcon={<Iconify icon="mingcute:add-line" />}
+          >
+            New checklist
+          </Button>
+        }
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
+
+      <Card>
+        <TableDetailToolbar
+          onPrint={printHandler}
+          filters={filters}
+          onFilters={handleFilters}
+          onDownload={handleDownload}
+          //
+          canReset={canReset}
+          onResetFilters={handleResetFilters}
         />
 
-        <Card>
-          <TableDetailToolbar
-            onPrint={printHandler}
+        {canReset && (
+          <TableDetailFiltersResult
             filters={filters}
             onFilters={handleFilters}
-            onDownload={handleDownload}
             //
-            canReset={canReset}
             onResetFilters={handleResetFilters}
+            //
+            results={dataFiltered.length}
+            sx={{ p: 2.5, pt: 0 }}
           />
+        )}
 
-          {canReset && (
-            <TableDetailFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
+        <TableContainer>
+          <Scrollbar>
+            <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
+              <TableHeadCustom
+                order={table.order}
+                orderBy={table.orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={dataFiltered.length}
+                numSelected={table.selected.length}
+                onSort={table.onSort}
+              />
 
-          <TableContainer>
-            <Scrollbar>
-              <Table ref={componentRef} size={table.dense ? 'small' : 'medium'}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={dataFiltered.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
+              <TableBody>
+                {dataFiltered
+                  .slice(
+                    table.page * table.rowsPerPage,
+                    table.page * table.rowsPerPage + table.rowsPerPage
+                  )
+                  .map((row, idx) => (
+                    <TableDetailRow
+                      key={idx}
+                      row={row}
+                      selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                      onEditRow={() => handleEditRow(row._id)}
+                    />
+                  ))}
+
+                <TableEmptyRows
+                  height={denseHeight}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, CheckListData.length)}
                 />
 
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row, idx) => (
-                      <TableDetailRow
-                        key={idx}
-                        row={row}
-                        selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
-                      />
-                    ))}
+                <TableNoData notFound={notFound} />
+              </TableBody>
+            </Table>
+          </Scrollbar>
+        </TableContainer>
 
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, Family.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
-          />
-        </Card>
-      </Container>
+        <TablePaginationCustom
+          count={dataFiltered.length}
+          page={table.page}
+          rowsPerPage={table.rowsPerPage}
+          onPageChange={table.onChangePage}
+          onRowsPerPageChange={table.onChangeRowsPerPage}
+          //
+          dense={table.dense}
+          onChangeDense={table.onChangeDense}
+        />
+      </Card>
+    </Container>
 
   );
 }

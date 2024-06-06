@@ -364,6 +364,10 @@ export const endpoints = {
     all: '/api/generlaCL',
     one: (id) => `/api/generlaCL/${id}`,
   },
+  checklist: {
+    all: '/api/checklist',
+    one: (id) => `/api/checklist/${id}`,
+  },
   localCheckList: {
     all: '/api/localCL',
     one: (id) => `/api/localCL/${id}`,

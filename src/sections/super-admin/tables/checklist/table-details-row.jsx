@@ -20,8 +20,9 @@ export default function TableDetailsRow({
 }) {
   const {
     code,
-    name_english,
-    name_arabic,
+    title,
+    speciality,
+    description,
     created_at,
     user_creation,
     ip_address_user_creation,
@@ -41,8 +42,9 @@ export default function TableDetailsRow({
         <Box>{code}</Box>
       </TableCell>
 
-      <TableCell align="center">{name_english}</TableCell>
-      <TableCell align="center">{name_arabic}</TableCell>
+      <TableCell align="center">{title}</TableCell>
+      <TableCell align="center">{speciality?.name_english}</TableCell>
+      <TableCell align="center">{description}</TableCell>
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
 

@@ -2,6 +2,7 @@ export { default as TablesListView } from './tables-list-view';
 export { default as RoomsTableView } from './rooms-table-view';
 export { default as TablesDetailsView } from './cities-table-view';
 export { default as UploadsTableView } from './uploads-table-view';
+export { default as ChecklistTableView } from './checklist-table-view';
 export { default as HospitalsTableView } from './hospitals-table-view';
 export { default as ActivitiesTableView } from './activities-table-view';
 export { default as WorkShiftsTableView } from './work-shifts-table-view';
